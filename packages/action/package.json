@@ -1,0 +1,20 @@
+{
+  "name": "@repo-anti-rot/action",
+  "version": "0.0.0",
+  "description": "GitHub Action that scans a repo with Repo Anti-Rot and POSTs the report to a dashboard",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@repo-anti-rot/cli": "link:../cli",
+    "@repo-anti-rot/core": "link:../core"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.4.0"
+  }
+}

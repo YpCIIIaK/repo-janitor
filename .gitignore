@@ -1,0 +1,45 @@
+# --- dependencies ---
+node_modules/
+
+# --- build output ---
+.next/
+out/
+dist/
+build/
+*.tsbuildinfo
+next-env.d.ts
+
+# --- logs ---
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# --- scan artifacts (generated locally by the dashboard / CLI) ---
+.repo-anti-rot/
+.reporot/
+reports/
+real-report.json
+*.repo-anti-rot.json
+
+# --- environment / secrets ---
+.env
+.env.*
+!.env.example
+
+# --- editor / OS / tooling ---
+.claude/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+
+# --- v0 sandbox internal files ---
+__v0_runtime_loader.js
+__v0_devtools.tsx
+__v0_jsx-dev-runtime.ts
+.snowflake/
+.v0-trash/
+.vercel/

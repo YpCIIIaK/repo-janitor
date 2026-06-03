@@ -1,0 +1,33 @@
+name: "Repo Anti-Rot"
+description: "Scan repository health/decay and post the report to a Repo Anti-Rot dashboard"
+author: "Repo Anti-Rot"
+branding:
+  icon: "activity"
+  color: "purple"
+inputs:
+  path:
+    description: "Path to the repository to scan"
+    required: false
+    default: "."
+  dashboard-url:
+    description: "Base URL of the Repo Anti-Rot dashboard. The report is POSTed to <url>/api/ingest. Leave empty to skip upload."
+    required: false
+    default: ""
+  token:
+    description: "Bearer token for the dashboard ingest endpoint (matches REPO_ANTI_ROT_INGEST_TOKEN on the server)."
+    required: false
+    default: ""
+  fail-on:
+    description: "Fail the job when the grade is at or below this letter (A, B, C, D, F) or 'never' to never fail."
+    required: false
+    default: "never"
+outputs:
+  score:
+    description: "Health score 0-100"
+  grade:
+    description: "Letter grade A-F"
+  issues:
+    description: "Total number of issues found"
+runs:
+  using: "node20"
+  main: "dist/index.cjs"

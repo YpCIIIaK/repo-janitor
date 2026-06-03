@@ -1,0 +1,29 @@
+{
+  "name": "@repo-anti-rot/cli",
+  "version": "0.0.0",
+  "description": "Command-line interface for Repo Anti-Rot scanning engine",
+  "type": "module",
+  "bin": {
+    "repo-anti-rot": "./dist/index.js"
+  },
+  "exports": {
+    "./context": "./src/context.ts"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm,cjs --dts",
+    "dev": "tsx src/index.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@repo-anti-rot/core": "workspace:*",
+    "commander": "^12.1.0",
+    "fast-glob": "^3.3.2",
+    "simple-git": "^3.22.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.4.0"
+  }
+}
