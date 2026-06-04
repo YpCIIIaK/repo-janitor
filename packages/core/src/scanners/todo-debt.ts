@@ -9,11 +9,12 @@ import { type Node, parseFile } from "../ast"
  * (via `ScanContext.git.blameAgeDays`). Old debt is louder: a year-old TODO is a
  * warning, fresher ones are info.
  *
- * Comments are read from the parsed `File.comments` array (the AST walker skips
- * comment nodes on purpose). Files that fail to parse fall back to a line regex
- * so coverage never regresses.
+ * For JS/TS, comments are read from the parsed `File.comments` array (the AST
+ * walker skips comment nodes on purpose). Every other language — and any file
+ * babel can't parse — falls back to a line regex that understands hash, slash
+ * and block comment styles, so markers are found across the polyglot set.
  */
-const SOURCE_RE = /\.(ts|tsx|js|jsx|mjs|mts|cts)$/
+const SOURCE_RE = /\.(ts|tsx|js|jsx|mjs|mts|cts|py|go|rs|java|rb|php|c|cc|cpp|h|hpp|cs|kt|swift|scala)$/
 const MARKER_RE = /\b(TODO|FIXME|HACK|XXX)\b:?\s*(.*)/
 
 /** A year-old marker is a warning; anything younger is info. */

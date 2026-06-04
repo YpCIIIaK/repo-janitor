@@ -16,6 +16,12 @@ export interface ScanContext {
   files: string[]
   /** read a file relative to root; returns null if missing */
   readFile: (relPath: string) => Promise<string | null>
+  /**
+   * Optional: byte size of a file without reading its contents (fs.stat). Lets
+   * scanners flag large/binary blobs cheaply. Returns null if unavailable or on
+   * error; scanners must degrade (e.g. fall back to extension-only heuristics).
+   */
+  fileSize?: (relPath: string) => Promise<number | null>
   /** thin git adapter — wrap simple-git/isomorphic-git so it can be replaced */
   git: {
     blameAgeDays: (relPath: string, line: number) => Promise<number>
@@ -40,6 +46,12 @@ export interface ScanContext {
    * mode (lockfile/static analysis only) instead of failing.
    */
   fetchJson?: (url: string) => Promise<unknown | null>
+  /**
+   * Optional network adapter for JSON POST requests (e.g. the OSV vulnerability
+   * batch API). Returns parsed JSON or null on any failure. When omitted, scanners
+   * that need POST run in offline mode (skip the network-derived findings).
+   */
+  postJson?: (url: string, body: unknown) => Promise<unknown | null>
   /** structured logger; no-op in tests */
   log: (msg: string) => void
 }

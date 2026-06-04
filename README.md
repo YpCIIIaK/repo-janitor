@@ -1,10 +1,11 @@
 # Repo Anti-Rot
 
 A repository **health & decay monitor**. It scans a codebase for the kinds of rot
-that accumulate silently — undocumented env vars, abandoned dependencies, stale
-branches, aging TODOs, committed secrets, and dead code — scores it A–F, and shows
-everything in a dashboard. An optional AI pass adds a short, decisive verdict to
-each finding via OpenRouter.
+that accumulate silently — undocumented env vars, abandoned & vulnerable
+dependencies, stale branches, aging TODOs, committed secrets, dead & commented-out
+code, disabled tests, and binary bloat — scores it A–F, and shows everything in a
+dashboard. An optional AI pass adds a short, decisive verdict to each finding via
+OpenRouter.
 
 ## Structure
 
@@ -63,6 +64,10 @@ pnpm dev          # http://localhost:3000
 Paste one or more public git URLs into **New scan**, or **Rescan** a repo already
 in the sidebar. Reports are stored in the browser (localStorage); a real progress
 bar streams live clone → per-scanner → AI progress.
+
+Click any finding in the **Issues** tab to open a detail drawer with its full
+context, code evidence, an on-demand AI verdict (one cheap model call, cached),
+and quick actions — open the GitHub permalink, copy as Markdown, or snooze it.
 
 ## Use the CLI directly
 
@@ -129,6 +134,109 @@ It renders `repo anti-rot | <grade> <score>`, colored by grade (green → amber 
 red), and falls back to a neutral `unknown` badge for repos with no report (so a
 README image never 404s). Optional query params: `?label=health` (left text) and
 `?style=flat-square` (square corners).
+
+## Vulnerable dependencies (OSV)
+
+The `vulnerable-deps` scanner cross-references the project's dependencies against
+the public [OSV database](https://osv.dev) and flags packages with known security
+advisories (CVEs / GHSAs). **No API key is required.**
+
+It is **polyglot** — Python, Go, Rust, Ruby and PHP projects get real findings
+too, not just npm. Each ecosystem is read from its manifests and lockfiles:
+
+| Ecosystem  | Manifest (floor)                       | Lockfile (exact)                                  |
+| ---------- | -------------------------------------- | ------------------------------------------------- |
+| `npm`      | `package.json`                         | `package-lock.json`, `pnpm-lock.yaml`, `yarn.lock`, `npm-shrinkwrap.json` |
+| `PyPI`     | `requirements.txt`, `pyproject.toml`   | `poetry.lock`, `Pipfile.lock`                     |
+| `Go`       | `go.mod`                               | (versions are pinned in `go.mod`)                 |
+| `crates.io`| `Cargo.toml`                           | `Cargo.lock`                                       |
+| `RubyGems` | `Gemfile`                              | `Gemfile.lock`                                     |
+| `Packagist`| `composer.json`                        | `composer.lock`                                    |
+
+- **Precise versions** — the exact installed version is read from a committed
+  lockfile when present; otherwise it falls back to the floor of the declared
+  range, so the result is transparent but may over-report.
+- **Cheap** — the whole (cross-ecosystem) dependency set is checked in a single
+  batch request; advisory details are fetched only for the (usually few) packages
+  that match, so a clean repo costs ~1 network call.
+- **Severity-mapped** — GHSA `CRITICAL`/`HIGH` → critical, `MODERATE` → warning,
+  `LOW` → info; each finding links to the advisory on osv.dev, names the affected
+  ecosystem, and points at the fixed version to upgrade to.
+
+Like the other registry-backed checks, it degrades to a no-op offline (no network
+adapter) rather than failing the scan. npm dev dependencies are labelled.
+
+## Outdated & abandoned dependencies
+
+Separate from vulnerabilities, two scanners flag dependencies that are simply
+falling behind:
+
+- **npm** — `dependency-funeral` checks `package.json` deps for *unused* (static
+  import analysis), *deprecated*, *abandoned* (no release in 2+ years) and
+  *outdated* (major/minor behind) against the npm registry.
+- **PyPI, crates.io, RubyGems, Go, Packagist** — `outdated-deps` checks **direct**
+  deps from the manifest (`requirements.txt` / `pyproject.toml`, `Cargo.toml`,
+  `Gemfile`, `go.mod`, `composer.json`) against each registry: *outdated* (major →
+  warning, minor → info) and
+  *abandoned* where the registry exposes a publish date (PyPI, crates.io, Go;
+  RubyGems' single-call endpoint has none, so it's outdated-only).
+
+`outdated-deps` checks only direct dependencies (one registry call each, capped)
+and is a no-op offline. No API keys are required for any registry.
+
+## Hygiene checks
+
+Beyond the headline scanners, a set of lightweight `hygiene` checks catch everyday
+rot:
+
+- **Repo bloat** (`repo-bloat`) — binary artifacts and oversized files committed
+  to git: archives, compiled binaries, db dumps (flagged regardless of size) and
+  any file over 5 MB or heavy media over 2 MB. Sizes come from `fs.stat` (no file
+  read), ranked largest-first. Suggests `.gitignore` / Git LFS.
+- **Skipped & focused tests** (`skipped-tests`) — `it.skip` / `xit` / `it.todo`
+  and pytest `@skip` mark coverage that no longer runs (info); `it.only` / `fit` /
+  `fdescribe` are flagged as a **warning** because focusing silently disables every
+  other test in the file, so CI can stay green while almost nothing runs.
+- **Commented-out code** (`commented-code`) — blocks of commented-out *code* (not
+  prose). Git already remembers deleted code, so these are pure noise. The check is
+  deliberately conservative: it fires only on runs of 3+ consecutive `//` lines
+  with structural code punctuation, skipping doc comments, license headers, inline
+  back-ticked prose and directives.
+- **Dockerfile hygiene** (`dockerfile`) — scans `Dockerfile` / `*.dockerfile` for
+  an **unpinned base image** (`:latest` or no tag → non-reproducible builds,
+  warning), **running as root** (no non-root `USER`, info) and **`ADD` of a remote
+  URL** (info). Digest-pinned images, `scratch`, build-args and multi-stage aliases
+  are exempt.
+
+These join the existing hygiene scanners (missing project files / tests / CI,
+leftover `console`/`debugger`, broken doc links, bus-factor risk).
+
+## Language support
+
+Some checks are language-agnostic (git history, doc links, repo bloat); others are
+per-language. Coverage by scanner:
+
+| Scanner            | Languages                                                                 |
+| ------------------ | ------------------------------------------------------------------------- |
+| `vulnerable-deps`  | npm, PyPI, Go, crates.io, RubyGems, Packagist (see above)                 |
+| `env-lifecycle`    | JS/TS (AST), Python, Go, Ruby, PHP (incl. Laravel `env()`)               |
+| `leftover-debug`   | JS/TS (AST), Python, Go, Rust, Ruby, PHP                                  |
+| `todo-debt`        | JS/TS + Python, Go, Rust, Java, Ruby, PHP, C/C++, C#, Kotlin, Swift, Scala |
+| `skipped-tests`    | JS/TS, Python                                                             |
+| `commented-code`   | JS/TS, Java, C/C++, C#, Go, Rust, Swift, Kotlin, Scala, PHP               |
+| `bus-factor`       | all common source extensions                                             |
+| `dockerfile`       | `Dockerfile`, `*.dockerfile`                                              |
+| `lockfile-drift`   | npm (missing-lockfile + drift); Python, Rust, Ruby, Go, PHP (missing-lockfile) |
+| `outdated-deps`    | PyPI, crates.io, RubyGems, Go, Packagist (npm covered by `dependency-funeral`) |
+| `dead-code`, `dependency-funeral` | JS/TS only                                                |
+
+For env vars, the scanner understands the idiomatic readers per language —
+`process.env.X` (JS/TS), `os.environ` / `os.getenv` (Python), `os.Getenv` /
+`os.LookupEnv` (Go), `ENV["X"]` / `ENV.fetch` (Ruby), `getenv` / `$_ENV` / Laravel
+`env()` (PHP) —
+and compares them against the first of `.env.example`, `.env.sample`,
+`.env.template` or `.env.dist`. A reader with an in-code default is reported as
+*optional* (info); a required, undocumented var is a warning.
 
 ## Configuration (`.repo-anti-rot.json`)
 

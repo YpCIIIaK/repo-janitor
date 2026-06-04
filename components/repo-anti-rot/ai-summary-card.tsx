@@ -1,13 +1,15 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Sparkles, Loader2, RefreshCw, AlertTriangle } from "lucide-react"
+import { Sparkles, Loader2, RefreshCw, AlertTriangle, ChevronDown, ChevronUp } from "lucide-react"
 import type { Issue } from "@/lib/mock-data"
 import type { SeverityWeights } from "@/lib/score"
 import { useAiSettings } from "@/lib/ai-settings"
 import { generateSummary, getCachedSummary, type SummaryInput } from "@/lib/ai-summary"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+
+const COLLAPSE_KEY = "repo-anti-rot:ai-summary-collapsed:v1"
 
 interface Props {
   repoId: string
@@ -32,6 +34,28 @@ export function AiSummaryCard({ repoId, owner, name, issues, weights }: Props) {
   const [cached, setCached] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [collapsed, setCollapsed] = useState(false)
+
+  // Restore the collapsed preference after mount (avoids SSR hydration mismatch).
+  useEffect(() => {
+    try {
+      setCollapsed(localStorage.getItem(COLLAPSE_KEY) === "1")
+    } catch {
+      /* ignore unavailable storage */
+    }
+  }, [])
+
+  function toggleCollapsed() {
+    setCollapsed((prev) => {
+      const next = !prev
+      try {
+        localStorage.setItem(COLLAPSE_KEY, next ? "1" : "0")
+      } catch {
+        /* ignore unavailable storage */
+      }
+      return next
+    })
+  }
 
   // Reset to the cached summary whenever the repo, model, or finding set changes.
   const idsKey = issues.map((i) => i.id).join(",")
@@ -67,24 +91,38 @@ export function AiSummaryCard({ repoId, owner, name, issues, weights }: Props) {
 
   return (
     <Card>
-      <CardHeader className="flex-row items-center justify-between gap-3 pb-3">
+      <CardHeader className="flex flex-row items-center justify-between gap-3 pb-3">
         <CardTitle className="flex items-center gap-2 text-base">
           <Sparkles className="size-4 text-primary" />
           Executive summary
         </CardTitle>
-        {hasKey &&
-          (summary ? (
-            <Button variant="ghost" size="sm" onClick={() => run(true)} disabled={loading}>
-              {loading ? <Loader2 className="size-4 animate-spin" /> : <RefreshCw className="size-4" />}
-              Regenerate
-            </Button>
-          ) : (
-            <Button size="sm" onClick={() => run(false)} disabled={loading || issues.length === 0}>
-              {loading ? <Loader2 className="size-4 animate-spin" /> : <Sparkles className="size-4" />}
-              Generate
-            </Button>
-          ))}
+        <div className="flex items-center gap-1">
+          {hasKey &&
+            (summary ? (
+              <Button variant="ghost" size="sm" onClick={() => run(true)} disabled={loading}>
+                {loading ? <Loader2 className="size-4 animate-spin" /> : <RefreshCw className="size-4" />}
+                Regenerate
+              </Button>
+            ) : (
+              <Button size="sm" onClick={() => run(false)} disabled={loading || issues.length === 0}>
+                {loading ? <Loader2 className="size-4 animate-spin" /> : <Sparkles className="size-4" />}
+                Generate
+              </Button>
+            ))}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="size-8 text-muted-foreground"
+            onClick={toggleCollapsed}
+            aria-expanded={!collapsed}
+            aria-label={collapsed ? "Expand executive summary" : "Collapse executive summary"}
+            title={collapsed ? "Expand" : "Collapse"}
+          >
+            {collapsed ? <ChevronDown className="size-4" /> : <ChevronUp className="size-4" />}
+          </Button>
+        </div>
       </CardHeader>
+      {!collapsed && (
       <CardContent className="text-sm">
         {!hasKey ? (
           <p className="text-muted-foreground">
@@ -117,6 +155,7 @@ export function AiSummaryCard({ repoId, owner, name, issues, weights }: Props) {
           </p>
         )}
       </CardContent>
+      )}
     </Card>
   )
 }

@@ -107,6 +107,14 @@ export async function buildScanContext(root: string): Promise<ScanContext> {
     config,
     files,
     readFile: readRel,
+    fileSize: async (relPath: string): Promise<number | null> => {
+      try {
+        const stat = await fs.stat(join(root, relPath));
+        return stat.isFile() ? stat.size : null;
+      } catch {
+        return null;
+      }
+    },
     git: {
       blameAgeDays: async (relPath: string, line: number): Promise<number> => {
         try {
@@ -216,7 +224,27 @@ export async function buildScanContext(root: string): Promise<ScanContext> {
     },
     fetchJson: async (url: string): Promise<unknown | null> => {
       try {
-        const res = await fetch(url, { headers: { accept: "application/json" } });
+        const res = await fetch(url, {
+          headers: { accept: "application/json", "user-agent": "repo-anti-rot (https://github.com/YpCIIIaK/repo-janitor)" },
+        });
+        if (!res.ok) return null;
+        return await res.json();
+      } catch {
+        // offline / network error → caller degrades to offline mode
+        return null;
+      }
+    },
+    postJson: async (url: string, body: unknown): Promise<unknown | null> => {
+      try {
+        const res = await fetch(url, {
+          method: "POST",
+          headers: {
+            accept: "application/json",
+            "content-type": "application/json",
+            "user-agent": "repo-anti-rot (https://github.com/YpCIIIaK/repo-janitor)",
+          },
+          body: JSON.stringify(body),
+        });
         if (!res.ok) return null;
         return await res.json();
       } catch {

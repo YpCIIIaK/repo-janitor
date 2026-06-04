@@ -184,6 +184,22 @@ async function mapLimit<T>(items: T[], limit: number, fn: (item: T) => Promise<v
 // Public API
 // ---------------------------------------------------------------------------
 
+/**
+ * Analyze a single finding on demand (used by the issue detail drawer). Returns
+ * the verdict text, or null when no API key is set or the model gives nothing.
+ * Unlike the bulk pass, this ignores the per-category enable toggles — the user
+ * explicitly asked for this one. The caller is responsible for caching the result.
+ */
+export async function analyzeOneIssue(
+  issue: Issue,
+  settings: AiSettings,
+  signal?: AbortSignal,
+): Promise<string | null> {
+  if (!settings.apiKey.trim()) return null
+  const verdicts = await analyzeBatch(issue.category, [issue], settings, signal)
+  return verdicts.get(issue.id) ?? null
+}
+
 /** Issues that would trigger a NEW model call given current settings + cache. */
 export function aiTargetCount(report: ScanReport): number {
   const settings = readAiSettings()

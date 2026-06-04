@@ -6,12 +6,18 @@ import { staleBranchScanner } from "./scanners/stale-branch"
 import { todoDebtScanner } from "./scanners/todo-debt"
 import { secretsScanner } from "./scanners/secrets"
 import { dependencyFuneralScanner } from "./scanners/dependency-funeral"
+import { vulnerableDepsScanner } from "./scanners/vulnerable-deps"
+import { outdatedDepsScanner } from "./scanners/outdated-deps"
 import { lockfileDriftScanner } from "./scanners/lockfile-drift"
 import { projectHygieneScanner } from "./scanners/project-hygiene"
 import { leftoverDebugScanner } from "./scanners/leftover-debug"
 import { brokenDocLinksScanner } from "./scanners/broken-doc-links"
 import { busFactorScanner } from "./scanners/bus-factor"
 import { deadCodeScanner } from "./scanners/dead-code"
+import { repoBloatScanner } from "./scanners/repo-bloat"
+import { dockerfileScanner } from "./scanners/dockerfile"
+import { skippedTestsScanner } from "./scanners/skipped-tests"
+import { commentedCodeScanner } from "./scanners/commented-code"
 
 /** Default scanner registry. Add new scanners here as they are implemented. */
 export const defaultScanners: Scanner[] = [
@@ -20,12 +26,18 @@ export const defaultScanners: Scanner[] = [
   todoDebtScanner,
   secretsScanner,
   dependencyFuneralScanner,
+  vulnerableDepsScanner,
+  outdatedDepsScanner,
   lockfileDriftScanner,
   deadCodeScanner,
   projectHygieneScanner,
   leftoverDebugScanner,
   brokenDocLinksScanner,
   busFactorScanner,
+  repoBloatScanner,
+  dockerfileScanner,
+  skippedTestsScanner,
+  commentedCodeScanner,
 ]
 
 /** Severity penalties. info is half-weighted by default so a pile of low-signal

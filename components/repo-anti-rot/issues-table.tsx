@@ -8,11 +8,8 @@ import {
   ChevronDown,
   ChevronRight,
   Clipboard,
-  Github,
   LayoutList,
   Layers,
-  Link2,
-  Sparkles,
 } from "lucide-react"
 import {
   categoryLabels,
@@ -24,14 +21,10 @@ import {
 import { searchIssues } from "@/lib/issue-search"
 import { githubFileUrl } from "@/lib/github-link"
 import { useSnoozed, setSnoozed, snoozeKey, partitionSnoozed } from "@/lib/snooze-store"
+import { formatAge, issueAsMarkdown, severityStyle } from "@/lib/issue-format"
+import { IssueDrawer } from "@/components/repo-anti-rot/issue-drawer"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import {
   Select,
   SelectContent,
@@ -49,183 +42,63 @@ export interface TableRepo {
   defaultBranch?: string
 }
 
-const severityStyle: Record<Severity, string> = {
-  critical: "bg-destructive/15 text-destructive border-destructive/30",
-  warning: "bg-chart-2/15 text-chart-2 border-chart-2/30",
-  info: "bg-muted text-muted-foreground border-border",
-}
-
-function formatAge(days: number) {
-  if (days >= 365) return `${Math.floor(days / 365)}y`
-  if (days >= 30) return `${Math.floor(days / 30)}mo`
-  return `${days}d`
-}
-
-function fullAge(days: number) {
-  if (days >= 365) {
-    const y = Math.floor(days / 365)
-    return `${y} year${y === 1 ? "" : "s"} old`
-  }
-  if (days >= 30) {
-    const m = Math.floor(days / 30)
-    return `${m} month${m === 1 ? "" : "s"} old`
-  }
-  return `${days} day${days === 1 ? "" : "s"} old`
-}
-
-function issueAsMarkdown(issue: Issue) {
-  const lines = [
-    `- **[${severityLabels[issue.severity]}] ${issue.title}**`,
-    `  - Category: ${categoryLabels[issue.category]}`,
-    `  - Location: \`${issue.location}\``,
-    `  - Age: ${fullAge(issue.ageDays)}`,
-    `  - ${issue.detail}`,
-  ]
-  if (issue.evidence) {
-    lines.push(
-      issue.evidence.includes("\n")
-        ? `\n\`\`\`\n${issue.evidence}\n\`\`\``
-        : `  - \`${issue.evidence}\``,
-    )
-  }
-  if (issue.aiNote) lines.push(`  - 🤖 AI: ${issue.aiNote}`)
-  return lines.join("\n")
-}
-
 const severityWeight: Record<Severity, number> = { critical: 0, warning: 1, info: 2 }
 
-/** A single expandable issue row plus its detail panel. */
+/** A single issue row — clicking it opens the detail drawer. */
 function IssueRow({
   issue,
-  open,
-  onToggle,
-  githubUrl,
+  selected,
+  onSelect,
   snoozed,
-  onToggleSnooze,
 }: {
   issue: Issue
-  open: boolean
-  onToggle: () => void
-  githubUrl: string | null
+  selected: boolean
+  onSelect: () => void
   snoozed: boolean
-  onToggleSnooze: () => void
 }) {
   return (
-    <div className={cn(snoozed && "opacity-60")}>
-      <button
-        onClick={onToggle}
-        className="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-accent/50"
-      >
-        {open ? (
-          <ChevronDown className="size-4 shrink-0 text-muted-foreground" />
-        ) : (
-          <ChevronRight className="size-4 shrink-0 text-muted-foreground" />
-        )}
-        <span
-          className={cn(
-            "hidden w-20 shrink-0 rounded-full border px-2 py-0.5 text-center text-xs font-medium sm:inline-block",
-            severityStyle[issue.severity],
-          )}
-        >
-          {severityLabels[issue.severity]}
-        </span>
-        <span className="min-w-0 flex-1">
-          <span className="flex items-center gap-2">
-            <span className="truncate text-sm">{issue.title}</span>
-            {snoozed && (
-              <span className="shrink-0 rounded-full border border-border bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
-                Snoozed
-              </span>
-            )}
-          </span>
-          <span className="block truncate font-mono text-xs text-muted-foreground">
-            {issue.location}
-          </span>
-        </span>
-        <span className="hidden shrink-0 text-xs text-muted-foreground md:block">
-          {categoryLabels[issue.category]}
-        </span>
-        <span className="w-12 shrink-0 text-right font-mono text-xs tabular-nums text-muted-foreground">
-          {formatAge(issue.ageDays)}
-        </span>
-      </button>
-      {open && (
-        <div className="space-y-3 bg-secondary/40 px-4 pb-4 pl-11 pt-1">
-          <dl className="grid grid-cols-[max-content_1fr] gap-x-4 gap-y-1.5 text-xs">
-            <dt className="text-muted-foreground">Severity</dt>
-            <dd>
-              <span
-                className={cn(
-                  "inline-block rounded-full border px-2 py-0.5 font-medium",
-                  severityStyle[issue.severity],
-                )}
-              >
-                {severityLabels[issue.severity]}
-              </span>
-            </dd>
-            <dt className="text-muted-foreground">Category</dt>
-            <dd className="text-foreground">{categoryLabels[issue.category]}</dd>
-            <dt className="text-muted-foreground">Location</dt>
-            <dd className="break-all font-mono text-foreground">{issue.location}</dd>
-            <dt className="text-muted-foreground">Age</dt>
-            <dd className="text-foreground">{fullAge(issue.ageDays)}</dd>
-          </dl>
-          {issue.evidence && (
-            <pre className="overflow-x-auto rounded-md border border-border bg-background/60 px-3 py-2 font-mono text-xs leading-relaxed text-foreground/90">
-              <code>{issue.evidence}</code>
-            </pre>
-          )}
-          <p className="text-sm leading-relaxed text-foreground/90">{issue.detail}</p>
-          {issue.aiNote && (
-            <div className="rounded-md border border-primary/30 bg-primary/5 px-3 py-2">
-              <div className="mb-1 flex items-center gap-1.5 text-xs font-medium text-primary">
-                <Sparkles className="size-3.5" />
-                AI analysis
-              </div>
-              <p className="text-sm leading-relaxed text-foreground/90">{issue.aiNote}</p>
-            </div>
-          )}
-          <div className="flex flex-wrap gap-1">
-            {githubUrl && (
-              <Button
-                asChild
-                size="sm"
-                variant="ghost"
-                className="h-7 gap-1.5 px-2 text-xs text-muted-foreground hover:text-foreground"
-              >
-                <a href={githubUrl} target="_blank" rel="noopener noreferrer">
-                  <Github className="size-3.5" />
-                  Open on GitHub
-                </a>
-              </Button>
-            )}
-            <CopyMenu githubUrl={githubUrl} issue={issue} />
-            <Button
-              size="sm"
-              variant="ghost"
-              className="h-7 gap-1.5 px-2 text-xs text-muted-foreground hover:text-foreground"
-              onClick={onToggleSnooze}
-            >
-              {snoozed ? <Bell className="size-3.5" /> : <BellOff className="size-3.5" />}
-              {snoozed ? "Unsnooze" : "Snooze"}
-            </Button>
-          </div>
-        </div>
+    <button
+      onClick={onSelect}
+      className={cn(
+        "flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-accent/50",
+        selected && "bg-accent/60",
+        snoozed && "opacity-60",
       )}
-    </div>
+    >
+      <ChevronRight className="size-4 shrink-0 text-muted-foreground" />
+      <span
+        className={cn(
+          "hidden w-20 shrink-0 rounded-full border px-2 py-0.5 text-center text-xs font-medium sm:inline-block",
+          severityStyle[issue.severity],
+        )}
+      >
+        {severityLabels[issue.severity]}
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className="flex items-center gap-2">
+          <span className="truncate text-sm">{issue.title}</span>
+          {snoozed && (
+            <span className="shrink-0 rounded-full border border-border bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
+              Snoozed
+            </span>
+          )}
+        </span>
+        <span className="block truncate font-mono text-xs text-muted-foreground">
+          {issue.location}
+        </span>
+      </span>
+      <span className="hidden shrink-0 text-xs text-muted-foreground md:block">
+        {categoryLabels[issue.category]}
+      </span>
+      <span className="w-12 shrink-0 text-right font-mono text-xs tabular-nums text-muted-foreground">
+        {formatAge(issue.ageDays)}
+      </span>
+    </button>
   )
 }
 
 /** Small inline button that copies text and flips to a checkmark briefly. */
-function CopyButton({
-  value,
-  label,
-  icon: Icon = Clipboard,
-}: {
-  value: string
-  label: string
-  icon?: typeof Clipboard
-}) {
+function CopyButton({ value, label }: { value: string; label: string }) {
   const [copied, setCopied] = useState(false)
   return (
     <Button
@@ -242,58 +115,9 @@ function CopyButton({
         }
       }}
     >
-      {copied ? <Check className="size-3.5 text-primary" /> : <Icon className="size-3.5" />}
+      {copied ? <Check className="size-3.5 text-primary" /> : <Clipboard className="size-3.5" />}
       {copied ? "Copied" : label}
     </Button>
-  )
-}
-
-async function writeClipboard(value: string): Promise<void> {
-  try {
-    await navigator.clipboard.writeText(value)
-  } catch {
-    /* clipboard blocked — silently ignore */
-  }
-}
-
-/** Single "Copy ▾" menu collapsing the per-issue copy actions into one control. */
-function CopyMenu({ githubUrl, issue }: { githubUrl: string | null; issue: Issue }) {
-  const [copied, setCopied] = useState(false)
-  const copy = async (value: string) => {
-    await writeClipboard(value)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 1200)
-  }
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          size="sm"
-          variant="ghost"
-          className="h-7 gap-1.5 px-2 text-xs text-muted-foreground hover:text-foreground"
-        >
-          {copied ? <Check className="size-3.5 text-primary" /> : <Clipboard className="size-3.5" />}
-          {copied ? "Copied" : "Copy"}
-          <ChevronDown className="size-3" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="min-w-40">
-        {githubUrl && (
-          <DropdownMenuItem onSelect={() => copy(githubUrl)}>
-            <Link2 className="size-3.5" />
-            Copy link
-          </DropdownMenuItem>
-        )}
-        <DropdownMenuItem onSelect={() => copy(issue.location)}>
-          <Clipboard className="size-3.5" />
-          Copy location
-        </DropdownMenuItem>
-        <DropdownMenuItem onSelect={() => copy(issueAsMarkdown(issue))}>
-          <Clipboard className="size-3.5" />
-          Copy as Markdown
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
   )
 }
 
@@ -308,7 +132,8 @@ export function IssuesTable({
 }) {
   const [severity, setSeverity] = useState<string>("all")
   const [category, setCategory] = useState<string>("all")
-  const [expanded, setExpanded] = useState<string | null>(null)
+  const [selectedId, setSelectedId] = useState<string | null>(null)
+  const [drawerOpen, setDrawerOpen] = useState(false)
   const [grouped, setGrouped] = useState(false)
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set())
   const [showSnoozed, setShowSnoozed] = useState(false)
@@ -364,15 +189,23 @@ export function IssuesTable({
   const linkFor = (issue: Issue) =>
     githubFileUrl(repo?.url, repo?.commit, repo?.defaultBranch, issue.location)
 
+  const selectedIssue = useMemo(
+    () => issues.find((i) => i.id === selectedId) ?? null,
+    [issues, selectedId],
+  )
+
+  const openIssue = (issue: Issue) => {
+    setSelectedId(issue.id)
+    setDrawerOpen(true)
+  }
+
   const renderRow = (issue: Issue) => (
     <IssueRow
       key={issue.id}
       issue={issue}
-      open={expanded === issue.id}
-      onToggle={() => setExpanded(expanded === issue.id ? null : issue.id)}
-      githubUrl={linkFor(issue)}
+      selected={selectedId === issue.id && drawerOpen}
+      onSelect={() => openIssue(issue)}
       snoozed={isSnoozed(issue.id)}
-      onToggleSnooze={() => toggleSnooze(issue.id)}
     />
   )
 
@@ -409,10 +242,7 @@ export function IssuesTable({
             {grouped ? "Flat" : "Group"}
           </Button>
           {filtered.length > 0 && (
-            <CopyButton
-              value={filtered.map(issueAsMarkdown).join("\n")}
-              label="Copy all"
-            />
+            <CopyButton value={filtered.map(issueAsMarkdown).join("\n")} label="Copy all" />
           )}
           <Select value={severity} onValueChange={setSeverity}>
             <SelectTrigger className="h-8 w-[130px] bg-secondary text-sm">
@@ -498,6 +328,15 @@ export function IssuesTable({
           </div>
         )}
       </CardContent>
+
+      <IssueDrawer
+        issue={selectedIssue}
+        open={drawerOpen}
+        onOpenChange={setDrawerOpen}
+        githubUrl={selectedIssue ? linkFor(selectedIssue) : null}
+        snoozed={selectedIssue ? isSnoozed(selectedIssue.id) : false}
+        onToggleSnooze={() => selectedIssue && toggleSnooze(selectedIssue.id)}
+      />
     </Card>
   )
 }
