@@ -27,6 +27,11 @@ const CATEGORY_SYNONYMS: Record<IssueCategory, string[]> = {
   branch: ["branch", "branches", "stale", "merged", "abandoned", "prune", "behind"],
   todo: ["todo", "todos", "fixme", "debt", "tech"],
   "dead-code": ["dead", "deadcode", "unused", "unreferenced", "orphan", "export"],
+  hygiene: [
+    "hygiene", "readme", "license", "test", "tests", "testing", "ci", "pipeline",
+    "workflow", "console", "log", "debug", "debugger", "docs", "documentation",
+    "link", "links", "broken", "bus", "factor", "owner", "maintainer",
+  ],
 }
 
 function tokenize(text: string): string[] {

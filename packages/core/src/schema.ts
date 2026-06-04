@@ -22,6 +22,9 @@ export const categorySchema = z.enum([
   "todo",
   "secret",
   "dead-code",
+  // Umbrella for repo/code hygiene: missing standard files, no tests/CI,
+  // leftover debug statements, broken doc links, bus-factor risk.
+  "hygiene",
 ])
 export type IssueCategory = z.infer<typeof categorySchema>
 
@@ -55,10 +58,36 @@ export const scanReportSchema = z.object({
     owner: z.string(),
     name: z.string(),
     defaultBranch: z.string(),
+    /** HEAD commit SHA at scan time — powers stable GitHub permalinks. */
+    commit: z.string().optional(),
   }),
   generatedAt: z.string(), // ISO timestamp
   score: z.number().int().min(0).max(100),
   grade: gradeSchema,
   issues: z.array(issueSchema),
+  /**
+   * Effective scan configuration echoed into the report. Lets the dashboard
+   * recompute the score client-side (for Snooze) with the SAME weights the scan
+   * used, even when a repo overrides them via .repo-anti-rot.json.
+   */
+  config: z
+    .object({
+      weights: z.object({
+        critical: z.number().nonnegative(),
+        warning: z.number().nonnegative(),
+        info: z.number().nonnegative(),
+      }),
+    })
+    .optional(),
+  /**
+   * Repo size metrics, for normalized comparison (e.g. issues per 1000 lines) so
+   * a big repo isn't unfairly compared to a small one on raw issue count.
+   */
+  metrics: z
+    .object({
+      /** non-blank lines across recognised source files */
+      linesOfCode: z.number().int().nonnegative(),
+    })
+    .optional(),
 })
 export type ScanReport = z.infer<typeof scanReportSchema>

@@ -1,10 +1,16 @@
 import type { Scanner, ScanContext } from "./scanner"
 import { scanReportSchema, SCHEMA_VERSION, type Grade, type Issue, type ScanReport } from "./schema"
+import { DEFAULT_WEIGHTS, INLINE_IGNORE_MARKER, INLINE_IGNORE_NEXT_LINE_MARKER } from "./config"
 import { envLifecycleScanner } from "./scanners/env-lifecycle"
 import { staleBranchScanner } from "./scanners/stale-branch"
 import { todoDebtScanner } from "./scanners/todo-debt"
 import { secretsScanner } from "./scanners/secrets"
 import { dependencyFuneralScanner } from "./scanners/dependency-funeral"
+import { lockfileDriftScanner } from "./scanners/lockfile-drift"
+import { projectHygieneScanner } from "./scanners/project-hygiene"
+import { leftoverDebugScanner } from "./scanners/leftover-debug"
+import { brokenDocLinksScanner } from "./scanners/broken-doc-links"
+import { busFactorScanner } from "./scanners/bus-factor"
 import { deadCodeScanner } from "./scanners/dead-code"
 
 /** Default scanner registry. Add new scanners here as they are implemented. */
@@ -14,16 +20,21 @@ export const defaultScanners: Scanner[] = [
   todoDebtScanner,
   secretsScanner,
   dependencyFuneralScanner,
+  lockfileDriftScanner,
   deadCodeScanner,
+  projectHygieneScanner,
+  leftoverDebugScanner,
+  brokenDocLinksScanner,
+  busFactorScanner,
 ]
 
-// info is half-weighted (0.5) so a pile of low-signal notes (examples, fixtures,
-// "nice to know" findings) dents the score gently instead of tanking it.
-const SEVERITY_WEIGHT = { critical: 10, warning: 3, info: 0.5 } as const
+/** Severity penalties. info is half-weighted by default so a pile of low-signal
+ * notes dents the score gently; a repo can override these via .repo-anti-rot.json. */
+export type SeverityWeights = { critical: number; warning: number; info: number }
 
 /** 0–100 score: starts at 100, subtracts weighted penalties, rounds, clamps to 0. */
-export function computeScore(issues: Issue[]): number {
-  const penalty = issues.reduce((sum, i) => sum + SEVERITY_WEIGHT[i.severity], 0)
+export function computeScore(issues: Issue[], weights: SeverityWeights = DEFAULT_WEIGHTS): number {
+  const penalty = issues.reduce((sum, i) => sum + weights[i.severity], 0)
   return Math.max(0, Math.round(100 - penalty))
 }
 
@@ -43,6 +54,58 @@ export interface ScanProgress {
   completed: number
   /** total scanners that will run */
   total: number
+}
+
+// Source extensions counted toward lines-of-code (config/markdown/json excluded).
+const CODE_RE = /\.(ts|tsx|js|jsx|mjs|mts|cts|py|go|rs|java|rb|php|c|cc|cpp|h|hpp|cs|kt|swift|scala|vue|svelte)$/i
+
+/** Sum of non-blank lines across recognised source files. Best-effort: a file
+ * that can't be read is skipped. One extra read pass over source files. */
+async function countLinesOfCode(ctx: ScanContext): Promise<number> {
+  let loc = 0
+  for (const file of ctx.files) {
+    if (!CODE_RE.test(file.replace(/\\/g, "/"))) continue
+    const content = await ctx.readFile(file)
+    if (!content) continue
+    for (const line of content.split("\n")) if (line.trim()) loc++
+  }
+  return loc
+}
+
+const LOCATION_RE = /^(.+?):(\d+)$/
+
+/**
+ * Drop findings whose flagged line — or the line directly above it — carries the
+ * inline ignore marker (`// repo-anti-rot-ignore`). Centralized here so scanners
+ * stay marker-agnostic. Only findings with a `file:line` location can be inline-
+ * ignored; the rest pass through untouched. Files are read once and cached.
+ */
+async function applyInlineIgnores(issues: Issue[], ctx: ScanContext): Promise<Issue[]> {
+  const cache = new Map<string, string[] | null>()
+  const out: Issue[] = []
+  for (const issue of issues) {
+    const m = issue.location.match(LOCATION_RE)
+    const line = m ? parseInt(m[2], 10) : 0
+    if (!m || !line) {
+      out.push(issue)
+      continue
+    }
+    const file = m[1]
+    let lines = cache.get(file)
+    if (lines === undefined) {
+      const content = await ctx.readFile(file)
+      lines = content ? content.split(/\r?\n/) : null
+      cache.set(file, lines)
+    }
+    const onLine = lines?.[line - 1] ?? ""
+    const above = lines?.[line - 2] ?? ""
+    // Same-line marker (but not the -next-line variant, which targets the line below).
+    const sameLine = onLine.includes(INLINE_IGNORE_MARKER) && !onLine.includes(INLINE_IGNORE_NEXT_LINE_MARKER)
+    const nextLine = above.includes(INLINE_IGNORE_NEXT_LINE_MARKER)
+    if (sameLine || nextLine) continue
+    out.push(issue)
+  }
+  return out
 }
 
 /**
@@ -71,14 +134,20 @@ export async function runScan(
     onProgress?.({ scanner: scanner.id, completed, total })
   }
 
-  const score = computeScore(issues)
+  const weights = ctx.config?.weights ?? DEFAULT_WEIGHTS
+  const visible = await applyInlineIgnores(issues, ctx)
+  const score = computeScore(visible, weights)
+  const linesOfCode = await countLinesOfCode(ctx)
   const report: ScanReport = {
     schemaVersion: SCHEMA_VERSION,
     repo: ctx.repo,
     generatedAt: new Date().toISOString(),
     score,
     grade: scoreToGrade(score),
-    issues,
+    issues: visible,
+    // Echo effective weights so the dashboard recomputes the score identically.
+    config: { weights },
+    metrics: { linesOfCode },
   }
 
   // fail loudly if we ever drift from the shared schema

@@ -4,10 +4,13 @@ import { GitBranch, ArrowRight } from "lucide-react"
 import type { Grade } from "@/lib/mock-data"
 import {
   countSeverity,
+  issueDensity,
+  portfolioTrend,
   timeAgo,
   type StoredRepo,
 } from "@/lib/reports-store"
 import { Card } from "@/components/ui/card"
+import { PortfolioTrend } from "@/components/repo-anti-rot/portfolio-trend"
 import { cn } from "@/lib/utils"
 
 const gradeColor: Record<Grade, string> = {
@@ -44,6 +47,7 @@ export function ReposOverview({
     0,
   )
   const totalIssues = repos.reduce((sum, r) => sum + r.latest.issues.length, 0)
+  const trend = portfolioTrend(repos)
 
   const summary = [
     { label: "Repositories", value: String(total) },
@@ -76,6 +80,8 @@ export function ReposOverview({
         ))}
       </div>
 
+      {trend.length >= 2 && <PortfolioTrend data={trend} />}
+
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {repos.map((repo) => {
           const counts = {
@@ -83,6 +89,7 @@ export function ReposOverview({
             warning: countSeverity(repo.latest.issues, "warning"),
             info: countSeverity(repo.latest.issues, "info"),
           }
+          const density = issueDensity(repo, repo.latest.issues.length)
           return (
             <button
               key={repo.id}
@@ -129,9 +136,19 @@ export function ReposOverview({
                       </span>
                     ))}
                   </div>
-                  <span className="font-mono text-sm font-semibold tabular-nums">
-                    {repo.latest.score}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    {density && (
+                      <span
+                        className="font-mono text-xs tabular-nums text-muted-foreground"
+                        title={`${density.loc.toLocaleString()} lines of code`}
+                      >
+                        {density.perKloc.toFixed(1)}/kLOC
+                      </span>
+                    )}
+                    <span className="font-mono text-sm font-semibold tabular-nums">
+                      {repo.latest.score}
+                    </span>
+                  </div>
                 </div>
               </Card>
             </button>

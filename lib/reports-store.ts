@@ -13,11 +13,15 @@ import type { Grade, Issue, Severity, StatCard } from "@/lib/mock-data"
 
 export interface ScanReport {
   schemaVersion: number
-  repo: { owner: string; name: string; defaultBranch: string }
+  repo: { owner: string; name: string; defaultBranch: string; commit?: string }
   generatedAt: string
   score: number
   grade: Grade
   issues: Issue[]
+  /** Effective weights the scan used; lets the client recompute the score identically. */
+  config?: { weights: { critical: number; warning: number; info: number } }
+  /** Repo size metrics for normalized comparison (issues per 1000 lines). */
+  metrics?: { linesOfCode: number }
 }
 
 export interface TrendPoint {
@@ -37,6 +41,11 @@ export interface StoredRepo {
   latest: ScanReport
   history: TrendPoint[]
   scannedAt: string // ISO of latest scan
+  /**
+   * Issue ids from the PREVIOUS scan, captured when `latest` was last replaced.
+   * Lets the UI diff scans ("+N new / −M fixed"); undefined after the first scan.
+   */
+  prevIssueIds?: string[]
 }
 
 const KEY = "repo-anti-rot:reports:v1"
@@ -129,6 +138,8 @@ export function saveReport(report: ScanReport, url?: string): void {
   const list = readFresh()
   const existing = list.find((r) => r.id === id)
   if (existing) {
+    // Snapshot the outgoing scan's issue ids so the UI can diff old vs new.
+    existing.prevIssueIds = existing.latest.issues.map((i) => i.id)
     existing.latest = report
     existing.defaultBranch = defaultBranch
     existing.scannedAt = at
@@ -175,6 +186,7 @@ export function mergeServerRepos(serverRepos: StoredRepo[]): boolean {
 
     // newer scan wins as latest
     if (incoming.scannedAt > existing.scannedAt) {
+      existing.prevIssueIds = existing.latest.issues.map((i) => i.id)
       existing.latest = incoming.latest
       existing.scannedAt = incoming.scannedAt
       existing.defaultBranch = incoming.defaultBranch
@@ -198,8 +210,19 @@ export function clearAll(): void {
 // Selectors (pure — derive dashboard data from a stored repo)
 // ---------------------------------------------------------------------------
 
-export function repoStats(repo: StoredRepo): StatCard[] {
-  const issues = repo.latest.issues
+/**
+ * Derive the four dashboard stat cards.
+ *
+ * `liveIssues`/`liveScore` let the caller pass snooze-adjusted values so the
+ * cards reflect muted findings; they default to the stored report otherwise.
+ * Trend deltas always come from history (stored scans), so they stay stable.
+ */
+export function repoStats(
+  repo: StoredRepo,
+  liveIssues: Issue[] = repo.latest.issues,
+  liveScore: number = repo.latest.score,
+): StatCard[] {
+  const issues = liveIssues
   const h = repo.history
   const last = h[h.length - 1]
   const prev = h.length > 1 ? h[h.length - 2] : undefined
@@ -213,7 +236,7 @@ export function repoStats(repo: StoredRepo): StatCard[] {
   return [
     {
       label: "Health Score",
-      value: String(repo.latest.score),
+      value: String(liveScore),
       delta: scoreDelta,
       deltaLabel: prev ? "vs last scan" : "first scan",
       tone: scoreDelta > 0 ? "good" : scoreDelta < 0 ? "bad" : "neutral",
@@ -242,6 +265,46 @@ export function repoStats(repo: StoredRepo): StatCard[] {
   ]
 }
 
+/**
+ * Issue density: findings per 1000 lines of code. Lets you compare repos of very
+ * different sizes fairly (raw issue count favours small repos). Returns null when
+ * the scan didn't record a usable LOC count. Pass the live (snooze-adjusted)
+ * issue count so it stays consistent with the displayed score.
+ */
+export function issueDensity(
+  repo: StoredRepo,
+  issueCount: number,
+): { perKloc: number; loc: number } | null {
+  const loc = repo.latest.metrics?.linesOfCode
+  if (!loc || loc <= 0) return null
+  return { perKloc: (issueCount / loc) * 1000, loc }
+}
+
+export interface ScanDiff {
+  /** findings present now but not in the previous scan */
+  added: number
+  /** findings present in the previous scan but gone now (fixed) */
+  fixed: number
+  /** false when there's no previous scan to compare against */
+  hasPrev: boolean
+}
+
+/**
+ * Diff the latest scan against the previous one by issue id (ids are stable and
+ * content-derived, so they survive rescans). Returns added/fixed counts.
+ */
+export function repoDiff(repo: StoredRepo): ScanDiff {
+  const prev = repo.prevIssueIds
+  if (!prev) return { added: 0, fixed: 0, hasPrev: false }
+  const prevSet = new Set(prev)
+  const curSet = new Set(repo.latest.issues.map((i) => i.id))
+  let added = 0
+  for (const id of curSet) if (!prevSet.has(id)) added++
+  let fixed = 0
+  for (const id of prevSet) if (!curSet.has(id)) fixed++
+  return { added, fixed, hasPrev: true }
+}
+
 export interface ChartPoint {
   date: string
   score: number
@@ -265,6 +328,60 @@ export function repoTrend(repo: StoredRepo): ChartPoint[] {
     warning: p.warning,
     info: p.info,
   }))
+}
+
+export interface PortfolioPoint {
+  date: string
+  /** Average health score across all repos scanned by this point. */
+  avgScore: number
+  /** Total open issues across all repos as of this point. */
+  issues: number
+  /** Number of repos contributing to this point. */
+  repos: number
+}
+
+/**
+ * Cross-repo health over time. Repos are scanned at different moments, so for each
+ * distinct timestamp we forward-fill every repo's most recent score as of that
+ * moment and average them — a true portfolio trend rather than a jagged union.
+ * Returns at most the last `MAX_HISTORY` points; empty when nothing has history.
+ */
+export function portfolioTrend(repos: StoredRepo[]): PortfolioPoint[] {
+  // All distinct scan timestamps across the portfolio, ascending.
+  const times = [...new Set(repos.flatMap((r) => r.history.map((p) => p.at)))].sort((a, b) =>
+    a.localeCompare(b),
+  )
+  if (times.length === 0) return []
+
+  // Pre-sort each repo's history once for the forward-fill lookups.
+  const sorted = repos.map((r) => [...r.history].sort((a, b) => a.at.localeCompare(b.at)))
+
+  const points: PortfolioPoint[] = times.map((t) => {
+    let scoreSum = 0
+    let issues = 0
+    let count = 0
+    for (const hist of sorted) {
+      // latest point at or before t
+      let chosen: TrendPoint | undefined
+      for (const p of hist) {
+        if (p.at <= t) chosen = p
+        else break
+      }
+      if (chosen) {
+        scoreSum += chosen.score
+        issues += chosen.critical + chosen.warning + chosen.info
+        count++
+      }
+    }
+    return {
+      date: trendLabel(t),
+      avgScore: count ? Math.round(scoreSum / count) : 0,
+      issues,
+      repos: count,
+    }
+  })
+
+  return points.slice(-MAX_HISTORY)
 }
 
 /** Relative time like "3 hours ago" from an ISO timestamp. */

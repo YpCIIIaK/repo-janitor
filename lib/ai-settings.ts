@@ -29,6 +29,7 @@ export const ALL_CATEGORIES: IssueCategory[] = [
   "branch",
   "todo",
   "secret",
+  "hygiene",
 ]
 
 /** Suggested starter models — free/cheap. The field also accepts any custom id. */
@@ -46,6 +47,7 @@ const NO_CATEGORIES: Record<IssueCategory, boolean> = {
   branch: false,
   todo: false,
   secret: false,
+  hygiene: false,
 }
 
 export const DEFAULT_SETTINGS: AiSettings = {

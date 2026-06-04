@@ -1,0 +1,122 @@
+"use client"
+
+import { useEffect, useState } from "react"
+import { Sparkles, Loader2, RefreshCw, AlertTriangle } from "lucide-react"
+import type { Issue } from "@/lib/mock-data"
+import type { SeverityWeights } from "@/lib/score"
+import { useAiSettings } from "@/lib/ai-settings"
+import { generateSummary, getCachedSummary, type SummaryInput } from "@/lib/ai-summary"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+
+interface Props {
+  repoId: string
+  owner: string
+  name: string
+  issues: Issue[]
+  weights?: SeverityWeights
+}
+
+/**
+ * On-demand AI executive summary for the whole repo. Shows a cached summary
+ * instantly when the finding set is unchanged; otherwise the user clicks Generate
+ * to spend exactly one cheap model call. Gracefully degrades to a hint when no AI
+ * key is configured.
+ */
+export function AiSummaryCard({ repoId, owner, name, issues, weights }: Props) {
+  const settings = useAiSettings()
+  const hasKey = !!settings.apiKey.trim()
+  const model = settings.model
+
+  const [summary, setSummary] = useState<string | null>(null)
+  const [cached, setCached] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  // Reset to the cached summary whenever the repo, model, or finding set changes.
+  const idsKey = issues.map((i) => i.id).join(",")
+  useEffect(() => {
+    setError(null)
+    if (!hasKey) {
+      setSummary(null)
+      return
+    }
+    const hit = getCachedSummary(model, repoId, issues.map((i) => i.id))
+    setSummary(hit)
+    setCached(!!hit)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [repoId, model, idsKey, hasKey])
+
+  const input: SummaryInput = { repoId, owner, name, issues, weights }
+
+  async function run(force: boolean) {
+    setLoading(true)
+    setError(null)
+    try {
+      const res = await generateSummary(input, { force })
+      if (res) {
+        setSummary(res.summary)
+        setCached(res.cached)
+      } else {
+        setError("Could not generate a summary (model unavailable or rate-limited). Try again.")
+      }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <Card>
+      <CardHeader className="flex-row items-center justify-between gap-3 pb-3">
+        <CardTitle className="flex items-center gap-2 text-base">
+          <Sparkles className="size-4 text-primary" />
+          Executive summary
+        </CardTitle>
+        {hasKey &&
+          (summary ? (
+            <Button variant="ghost" size="sm" onClick={() => run(true)} disabled={loading}>
+              {loading ? <Loader2 className="size-4 animate-spin" /> : <RefreshCw className="size-4" />}
+              Regenerate
+            </Button>
+          ) : (
+            <Button size="sm" onClick={() => run(false)} disabled={loading || issues.length === 0}>
+              {loading ? <Loader2 className="size-4 animate-spin" /> : <Sparkles className="size-4" />}
+              Generate
+            </Button>
+          ))}
+      </CardHeader>
+      <CardContent className="text-sm">
+        {!hasKey ? (
+          <p className="text-muted-foreground">
+            Add an OpenRouter key in <span className="font-medium text-foreground">Settings</span> to
+            generate a one-paragraph health summary for this repo.
+          </p>
+        ) : loading && !summary ? (
+          <p className="flex items-center gap-2 text-muted-foreground">
+            <Loader2 className="size-4 animate-spin" />
+            Analyzing {issues.length} finding{issues.length === 1 ? "" : "s"}…
+          </p>
+        ) : error ? (
+          <p className="flex items-start gap-2 text-destructive">
+            <AlertTriangle className="mt-0.5 size-4 shrink-0" />
+            {error}
+          </p>
+        ) : summary ? (
+          <div className="space-y-2">
+            <p className="leading-relaxed text-foreground/90">{summary}</p>
+            <p className="text-[11px] text-muted-foreground">
+              {cached ? "Cached · " : "Fresh · "}
+              {model}
+            </p>
+          </div>
+        ) : (
+          <p className="text-muted-foreground">
+            {issues.length === 0
+              ? "No open issues — nothing to summarize."
+              : "Click Generate for a one-paragraph verdict on this repo's health."}
+          </p>
+        )}
+      </CardContent>
+    </Card>
+  )
+}

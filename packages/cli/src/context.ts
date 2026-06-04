@@ -1,7 +1,7 @@
 import { promises as fs } from "fs";
 import fg from "fast-glob";
 import simpleGit, { SimpleGit } from "simple-git";
-import { runScan } from "@repo-anti-rot/core";
+import { runScan, loadConfig } from "@repo-anti-rot/core";
 import type { ScanContext, ScanReport, ScanProgress } from "@repo-anti-rot/core";
 import { basename, join } from "path";
 
@@ -15,6 +15,8 @@ export interface RepoMetadata {
   owner: string;
   name: string;
   defaultBranch: string;
+  /** HEAD commit SHA at scan time (undefined if not a git repo) — for permalinks. */
+  commit?: string;
 }
 
 export async function getRepoMetadata(git: SimpleGit, root: string): Promise<RepoMetadata> {
@@ -32,6 +34,16 @@ export async function getRepoMetadata(git: SimpleGit, root: string): Promise<Rep
     }
   };
 
+  // Best-effort HEAD commit SHA — used to build frozen GitHub permalinks.
+  const headSha = async (): Promise<string | undefined> => {
+    try {
+      const sha = await git.revparse(["HEAD"]);
+      return sha.trim() || undefined;
+    } catch {
+      return undefined;
+    }
+  };
+
   try {
     const remotes = await git.getRemotes(true);
     const origin = remotes.find(r => r.name === 'origin');
@@ -44,12 +56,12 @@ export async function getRepoMetadata(git: SimpleGit, root: string): Promise<Rep
         remoteUrl.match(/[^\/]+:\/\/[^\/]+\/([^\/]+)\/([^\/]+?)(?:\.git)?$/);
       if (match) {
         const [, owner, name] = match;
-        return { owner, name, defaultBranch: await currentBranch() };
+        return { owner, name, defaultBranch: await currentBranch(), commit: await headSha() };
       }
     }
 
     // Git repo but no parseable remote → use the folder name under a "local" owner.
-    return { owner: "local", name: folderName, defaultBranch: await currentBranch() };
+    return { owner: "local", name: folderName, defaultBranch: await currentBranch(), commit: await headSha() };
   } catch {
     // Not a git repo (or git unavailable) → still produce a usable identity.
     return { owner: "local", name: folderName, defaultBranch: "main" };
@@ -62,7 +74,17 @@ export async function buildScanContext(root: string): Promise<ScanContext> {
   // Get repository metadata
   const repo = await getRepoMetadata(git, root);
 
-  // Get list of files (excluding node_modules, .git, etc.)
+  // Per-project config (.repo-anti-rot.json) — defaults when absent/invalid.
+  const readRel = async (relPath: string): Promise<string | null> => {
+    try {
+      return await fs.readFile(join(root, relPath), "utf-8");
+    } catch {
+      return null;
+    }
+  };
+  const config = await loadConfig(readRel, (msg) => console.warn(`[repo-anti-rot] ${msg}`));
+
+  // Get list of files (excluding node_modules, .git, etc. plus user ignore globs)
   const files = await fg([
     "**/*",
     "!**/node_modules/**",
@@ -75,21 +97,16 @@ export async function buildScanContext(root: string): Promise<ScanContext> {
   ], {
     cwd: root,
     dot: true,
-    onlyFiles: true
+    onlyFiles: true,
+    ignore: config.ignore,
   });
 
   return {
     root,
     repo,
+    config,
     files,
-    readFile: async (relPath: string): Promise<string | null> => {
-      try {
-        const content = await fs.readFile(join(root, relPath), "utf-8");
-        return content;
-      } catch (err) {
-        return null;
-      }
-    },
+    readFile: readRel,
     git: {
       blameAgeDays: async (relPath: string, line: number): Promise<number> => {
         try {
@@ -151,7 +168,51 @@ export async function buildScanContext(root: string): Promise<ScanContext> {
         } catch (err) {
           return [];
         }
-      }
+      },
+      fileOwnership: async (): Promise<Record<string, { authors: number; ageDays: number }>> => {
+        try {
+          // One pass over history. \x01 marks a commit header, \x02 splits
+          // author|timestamp — control chars so author names can't collide with
+          // the delimiter. core.quotePath=false keeps unicode paths readable.
+          const out = await git.raw([
+            '-c', 'core.quotePath=false',
+            'log', '--no-merges', '--format=%x01%an%x02%ct', '--name-only',
+          ]);
+
+          const acc = new Map<string, { authors: Set<string>; last: number }>();
+          let author = '';
+          let ts = 0;
+          for (const line of out.split('\n')) {
+            if (line.startsWith('\x01')) {
+              const [an, ct] = line.slice(1).split('\x02');
+              author = an ?? '';
+              ts = (parseInt(ct ?? '0', 10) || 0) * 1000;
+            } else {
+              const file = line.trim();
+              if (!file) continue;
+              let entry = acc.get(file);
+              if (!entry) {
+                entry = { authors: new Set<string>(), last: 0 };
+                acc.set(file, entry);
+              }
+              entry.authors.add(author);
+              if (ts > entry.last) entry.last = ts;
+            }
+          }
+
+          const now = Date.now();
+          const result: Record<string, { authors: number; ageDays: number }> = {};
+          for (const [file, entry] of acc) {
+            result[file] = {
+              authors: entry.authors.size,
+              ageDays: Math.max(0, Math.floor((now - entry.last) / (1000 * 60 * 60 * 24))),
+            };
+          }
+          return result;
+        } catch {
+          return {};
+        }
+      },
     },
     fetchJson: async (url: string): Promise<unknown | null> => {
       try {

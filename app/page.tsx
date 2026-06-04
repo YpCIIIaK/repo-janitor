@@ -8,12 +8,18 @@ import { HealthOverview } from "@/components/repo-anti-rot/health-overview"
 import { GradeCard } from "@/components/repo-anti-rot/grade-card"
 import { IssueBreakdown } from "@/components/repo-anti-rot/issue-breakdown"
 import { IssuesTable } from "@/components/repo-anti-rot/issues-table"
+import { CategoryScores } from "@/components/repo-anti-rot/category-scores"
+import { HotspotFiles } from "@/components/repo-anti-rot/hotspot-files"
+import { AiSummaryCard } from "@/components/repo-anti-rot/ai-summary-card"
+import { AgeHistogram } from "@/components/repo-anti-rot/age-histogram"
 import { TrendChart } from "@/components/repo-anti-rot/trend-chart"
 import { ReposOverview } from "@/components/repo-anti-rot/repos-overview"
 import { RescanButton } from "@/components/repo-anti-rot/rescan-button"
 import { NewScanDialog } from "@/components/repo-anti-rot/new-scan-dialog"
 import { WelcomeScreen } from "@/components/repo-anti-rot/welcome-screen"
-import { useRepos, removeRepo, repoStats, repoTrend, countSeverity, timeAgo } from "@/lib/reports-store"
+import { useRepos, removeRepo, repoStats, repoTrend, countSeverity, timeAgo, repoDiff, issueDensity } from "@/lib/reports-store"
+import { useSnoozed, partitionSnoozed, clearSnoozedForRepo } from "@/lib/snooze-store"
+import { computeScore, scoreToGrade } from "@/lib/score"
 import { cn } from "@/lib/utils"
 
 const severityChip: Record<"critical" | "warning" | "info", string> = {
@@ -27,6 +33,7 @@ const OVERVIEW = "__overview__"
 
 export default function Page() {
   const repos = useRepos()
+  const snoozed = useSnoozed()
   const [activeId, setActiveId] = useState<string>("")
   const [search, setSearch] = useState<string>("")
   const [scanOpen, setScanOpen] = useState(false)
@@ -44,32 +51,62 @@ export default function Page() {
     )
   }
 
-  const sidebarRepos: SidebarRepo[] = repos.map((r) => ({
-    id: r.id,
-    name: r.name,
-    defaultBranch: r.defaultBranch,
-    grade: r.latest.grade,
-    score: r.latest.score,
-    lastScan: timeAgo(r.scannedAt),
-  }))
+  // Snooze is "won't fix": muted findings drop out of counts and the score,
+  // which we recompute in the browser using the same weights as the engine.
+  const sidebarRepos: SidebarRepo[] = repos.map((r) => {
+    const { live } = partitionSnoozed(r.id, r.latest.issues, snoozed)
+    const score = computeScore(live, r.latest.config?.weights)
+    return {
+      id: r.id,
+      name: r.name,
+      defaultBranch: r.defaultBranch,
+      grade: scoreToGrade(score),
+      score,
+      lastScan: timeAgo(r.scannedAt),
+    }
+  })
+
+  const allIssues = current.latest.issues
+  const weights = current.latest.config?.weights
+  const { live: issues } = partitionSnoozed(current.id, allIssues, snoozed)
+  const liveScore = computeScore(issues, weights)
+  const liveGrade = scoreToGrade(liveScore)
 
   const repo = {
     id: current.id,
     owner: current.owner,
     name: current.name,
     defaultBranch: current.defaultBranch,
-    grade: current.latest.grade,
-    score: current.latest.score,
+    grade: liveGrade,
+    score: liveScore,
     lastScan: timeAgo(current.scannedAt),
   }
 
-  const stats = repoStats(current)
-  const issues = current.latest.issues
+  const stats = repoStats(current, issues, liveScore)
   const trend = repoTrend(current)
   const counts = {
     critical: countSeverity(issues, "critical"),
     warning: countSeverity(issues, "warning"),
     info: countSeverity(issues, "info"),
+  }
+
+  const handleRemove = (id: string) => {
+    clearSnoozedForRepo(id)
+    removeRepo(id)
+  }
+
+  // Scan-over-scan delta (new vs fixed findings) for the header badge.
+  const diff = repoDiff(current)
+
+  // Issue density (findings per 1000 LOC) — size-normalized health signal.
+  const density = issueDensity(current, issues.length)
+
+  // Context the issues table needs to build GitHub links and toggle snooze.
+  const tableRepo = {
+    id: current.id,
+    url: current.url,
+    commit: current.latest.repo.commit,
+    defaultBranch: current.defaultBranch,
   }
 
   return (
@@ -80,7 +117,7 @@ export default function Page() {
           repositories={sidebarRepos}
           activeId={showOverview ? OVERVIEW : current.id}
           onSelect={setActiveId}
-          onRemove={removeRepo}
+          onRemove={handleRemove}
           onNewScan={() => setScanOpen(true)}
           onShowOverview={repos.length > 1 ? () => setActiveId(OVERVIEW) : undefined}
         />
@@ -99,8 +136,30 @@ export default function Page() {
               <p className="mt-1 text-sm text-muted-foreground">
                 {issues.length === 0
                   ? "No open issues — last scan was clean."
-                  : `${issues.length} open issue${issues.length === 1 ? "" : "s"} · scanned ${repo.lastScan}`}
+                  : `${issues.length} open issue${issues.length === 1 ? "" : "s"}`}
+                {issues.length > 0 && density && (
+                  <span title={`${density.loc.toLocaleString()} lines of code`}>
+                    {" · "}
+                    {density.perKloc.toFixed(1)}/kLOC
+                  </span>
+                )}
+                {issues.length > 0 && ` · scanned ${repo.lastScan}`}
               </p>
+              {diff.hasPrev && (diff.added > 0 || diff.fixed > 0) && (
+                <div className="mt-1.5 flex flex-wrap items-center gap-1.5 text-xs">
+                  {diff.added > 0 && (
+                    <span className="rounded-full border border-destructive/30 bg-destructive/15 px-2 py-0.5 font-medium tabular-nums text-destructive">
+                      +{diff.added} new
+                    </span>
+                  )}
+                  {diff.fixed > 0 && (
+                    <span className="rounded-full border border-chart-1/30 bg-chart-1/15 px-2 py-0.5 font-medium tabular-nums text-chart-1">
+                      −{diff.fixed} fixed
+                    </span>
+                  )}
+                  <span className="text-muted-foreground">since last scan</span>
+                </div>
+              )}
             </div>
             <div className="flex flex-wrap items-center gap-3">
               <div className="flex gap-1.5 text-xs">
@@ -129,25 +188,39 @@ export default function Page() {
             </TabsList>
 
             <TabsContent value="overview" className="mt-6">
+              <div className="mb-6">
+                <AiSummaryCard
+                  repoId={current.id}
+                  owner={current.owner}
+                  name={current.name}
+                  issues={issues}
+                  weights={weights}
+                />
+              </div>
               <div className="grid gap-6 lg:grid-cols-[260px_1fr]">
                 <GradeCard grade={repo.grade} score={repo.score} lastScan={repo.lastScan} />
                 <IssueBreakdown issues={issues} />
               </div>
+              <div className="mt-6 grid gap-6 lg:grid-cols-2">
+                <CategoryScores issues={issues} weights={weights} />
+                <HotspotFiles issues={issues} weights={weights} repo={tableRepo} />
+              </div>
               <div className="mt-6">
                 <HealthOverview stats={stats} />
               </div>
-              <div className="mt-6">
+              <div className="mt-6 grid gap-6 lg:grid-cols-2">
                 <TrendChart data={trend} />
+                <AgeHistogram issues={issues} />
               </div>
               <div className="mt-6">
-                <IssuesTable issues={issues} query={search} />
+                <IssuesTable issues={allIssues} repo={tableRepo} query={search} />
               </div>
             </TabsContent>
 
             <TabsContent value="issues" className="mt-6">
               <HealthOverview stats={stats} />
               <div className="mt-6">
-                <IssuesTable issues={issues} query={search} />
+                <IssuesTable issues={allIssues} repo={tableRepo} query={search} />
               </div>
             </TabsContent>
 

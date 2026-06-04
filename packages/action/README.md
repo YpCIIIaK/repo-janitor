@@ -11,6 +11,8 @@ Runs the Repo Anti-Rot health scan in your CI, prints a report to the job summar
 | `dashboard-url` | `""`      | Base URL of the dashboard. Report is POSTed to `<url>/api/ingest`. Empty → no upload. |
 | `token`         | `""`      | Bearer token for the ingest endpoint (must match `REPO_ANTI_ROT_INGEST_TOKEN` on the server). |
 | `fail-on`       | `never`   | Fail the job when the grade is at or below this letter (`A`–`F`), or `never`. |
+| `github-token`  | `""`      | GitHub token (e.g. `${{ github.token }}`) for posting a sticky health comment on PRs. Needs `pull-requests: write`. Empty → no comment. |
+| `comment-on-pr` | `true`    | Post/update a summary comment on the PR (requires `github-token` and a `pull_request` event). |
 
 ## Outputs
 
@@ -25,6 +27,10 @@ on:
     - cron: "0 6 * * 1" # weekly, Monday 06:00 UTC
   pull_request:
 
+permissions:
+  contents: read
+  pull-requests: write # required for the sticky PR comment
+
 jobs:
   health:
     runs-on: ubuntu-latest
@@ -36,12 +42,14 @@ jobs:
         with:
           dashboard-url: https://repo-anti-rot.example.com
           token: ${{ secrets.REPO_ANTI_ROT_INGEST_TOKEN }}
+          github-token: ${{ github.token }}
           fail-on: D
 ```
 
 A scan report is written to the **job summary**, the score/grade/issues are exposed
 as step **outputs**, and the full report is uploaded to the dashboard when
-`dashboard-url` is set.
+`dashboard-url` is set. On pull requests, a single **sticky comment** (updated in
+place on each run) summarizes the grade, severity counts, and the top findings.
 
 ## Notes
 

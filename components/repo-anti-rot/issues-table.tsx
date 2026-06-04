@@ -1,7 +1,19 @@
 "use client"
 
 import { useMemo, useState } from "react"
-import { Check, ChevronDown, ChevronRight, Clipboard, LayoutList, Layers, Sparkles } from "lucide-react"
+import {
+  Bell,
+  BellOff,
+  Check,
+  ChevronDown,
+  ChevronRight,
+  Clipboard,
+  Github,
+  LayoutList,
+  Layers,
+  Link2,
+  Sparkles,
+} from "lucide-react"
 import {
   categoryLabels,
   severityLabels,
@@ -10,8 +22,16 @@ import {
   type Severity,
 } from "@/lib/mock-data"
 import { searchIssues } from "@/lib/issue-search"
+import { githubFileUrl } from "@/lib/github-link"
+import { useSnoozed, setSnoozed, snoozeKey, partitionSnoozed } from "@/lib/snooze-store"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import {
   Select,
   SelectContent,
@@ -20,6 +40,14 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { cn } from "@/lib/utils"
+
+/** Repo context needed to build GitHub links and key snooze state. */
+export interface TableRepo {
+  id: string
+  url?: string
+  commit?: string
+  defaultBranch?: string
+}
 
 const severityStyle: Record<Severity, string> = {
   critical: "bg-destructive/15 text-destructive border-destructive/30",
@@ -71,13 +99,19 @@ function IssueRow({
   issue,
   open,
   onToggle,
+  githubUrl,
+  snoozed,
+  onToggleSnooze,
 }: {
   issue: Issue
   open: boolean
   onToggle: () => void
+  githubUrl: string | null
+  snoozed: boolean
+  onToggleSnooze: () => void
 }) {
   return (
-    <div>
+    <div className={cn(snoozed && "opacity-60")}>
       <button
         onClick={onToggle}
         className="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-accent/50"
@@ -96,7 +130,14 @@ function IssueRow({
           {severityLabels[issue.severity]}
         </span>
         <span className="min-w-0 flex-1">
-          <span className="block truncate text-sm">{issue.title}</span>
+          <span className="flex items-center gap-2">
+            <span className="truncate text-sm">{issue.title}</span>
+            {snoozed && (
+              <span className="shrink-0 rounded-full border border-border bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
+                Snoozed
+              </span>
+            )}
+          </span>
           <span className="block truncate font-mono text-xs text-muted-foreground">
             {issue.location}
           </span>
@@ -145,8 +186,29 @@ function IssueRow({
             </div>
           )}
           <div className="flex flex-wrap gap-1">
-            <CopyButton value={issue.location} label="Copy location" />
-            <CopyButton value={issueAsMarkdown(issue)} label="Copy as Markdown" />
+            {githubUrl && (
+              <Button
+                asChild
+                size="sm"
+                variant="ghost"
+                className="h-7 gap-1.5 px-2 text-xs text-muted-foreground hover:text-foreground"
+              >
+                <a href={githubUrl} target="_blank" rel="noopener noreferrer">
+                  <Github className="size-3.5" />
+                  Open on GitHub
+                </a>
+              </Button>
+            )}
+            <CopyMenu githubUrl={githubUrl} issue={issue} />
+            <Button
+              size="sm"
+              variant="ghost"
+              className="h-7 gap-1.5 px-2 text-xs text-muted-foreground hover:text-foreground"
+              onClick={onToggleSnooze}
+            >
+              {snoozed ? <Bell className="size-3.5" /> : <BellOff className="size-3.5" />}
+              {snoozed ? "Unsnooze" : "Snooze"}
+            </Button>
           </div>
         </div>
       )}
@@ -155,7 +217,15 @@ function IssueRow({
 }
 
 /** Small inline button that copies text and flips to a checkmark briefly. */
-function CopyButton({ value, label }: { value: string; label: string }) {
+function CopyButton({
+  value,
+  label,
+  icon: Icon = Clipboard,
+}: {
+  value: string
+  label: string
+  icon?: typeof Clipboard
+}) {
   const [copied, setCopied] = useState(false)
   return (
     <Button
@@ -172,28 +242,98 @@ function CopyButton({ value, label }: { value: string; label: string }) {
         }
       }}
     >
-      {copied ? <Check className="size-3.5 text-primary" /> : <Clipboard className="size-3.5" />}
+      {copied ? <Check className="size-3.5 text-primary" /> : <Icon className="size-3.5" />}
       {copied ? "Copied" : label}
     </Button>
   )
 }
 
-export function IssuesTable({ issues, query = "" }: { issues: Issue[]; query?: string }) {
+async function writeClipboard(value: string): Promise<void> {
+  try {
+    await navigator.clipboard.writeText(value)
+  } catch {
+    /* clipboard blocked — silently ignore */
+  }
+}
+
+/** Single "Copy ▾" menu collapsing the per-issue copy actions into one control. */
+function CopyMenu({ githubUrl, issue }: { githubUrl: string | null; issue: Issue }) {
+  const [copied, setCopied] = useState(false)
+  const copy = async (value: string) => {
+    await writeClipboard(value)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 1200)
+  }
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          size="sm"
+          variant="ghost"
+          className="h-7 gap-1.5 px-2 text-xs text-muted-foreground hover:text-foreground"
+        >
+          {copied ? <Check className="size-3.5 text-primary" /> : <Clipboard className="size-3.5" />}
+          {copied ? "Copied" : "Copy"}
+          <ChevronDown className="size-3" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="start" className="min-w-40">
+        {githubUrl && (
+          <DropdownMenuItem onSelect={() => copy(githubUrl)}>
+            <Link2 className="size-3.5" />
+            Copy link
+          </DropdownMenuItem>
+        )}
+        <DropdownMenuItem onSelect={() => copy(issue.location)}>
+          <Clipboard className="size-3.5" />
+          Copy location
+        </DropdownMenuItem>
+        <DropdownMenuItem onSelect={() => copy(issueAsMarkdown(issue))}>
+          <Clipboard className="size-3.5" />
+          Copy as Markdown
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
+
+export function IssuesTable({
+  issues,
+  repo,
+  query = "",
+}: {
+  issues: Issue[]
+  repo?: TableRepo
+  query?: string
+}) {
   const [severity, setSeverity] = useState<string>("all")
   const [category, setCategory] = useState<string>("all")
   const [expanded, setExpanded] = useState<string | null>(null)
   const [grouped, setGrouped] = useState(false)
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set())
+  const [showSnoozed, setShowSnoozed] = useState(false)
+
+  const snoozed = useSnoozed()
+  const repoId = repo?.id ?? ""
+  const { live, muted } = useMemo(
+    () => partitionSnoozed(repoId, issues, snoozed),
+    [repoId, issues, snoozed],
+  )
+  // Hide snoozed findings by default; the toggle reveals them inline (greyed out).
+  const base = showSnoozed ? issues : live
+
+  const isSnoozed = (id: string) => snoozed.has(snoozeKey(repoId, id))
+  const toggleSnooze = (id: string) => setSnoozed(repoId, id, !isSnoozed(id))
 
   const filtered = useMemo(() => {
     // Semantic search ranks by relevance; preserve that order when a query is set,
     // otherwise fall back to oldest-first by age.
-    const ranked = searchIssues(issues, query)
+    const ranked = searchIssues(base, query)
     const result = ranked
       .filter((i) => (severity === "all" ? true : i.severity === severity))
       .filter((i) => (category === "all" ? true : i.category === category))
     return query.trim() ? result : result.sort((a, b) => b.ageDays - a.ageDays)
-  }, [issues, query, severity, category])
+  }, [base, query, severity, category])
 
   // Group the filtered issues by scanner category, ordered by worst severity
   // present then by count — so the most alarming scanners surface first.
@@ -221,6 +361,21 @@ export function IssuesTable({ issues, query = "" }: { issues: Issue[]; query?: s
       return next
     })
 
+  const linkFor = (issue: Issue) =>
+    githubFileUrl(repo?.url, repo?.commit, repo?.defaultBranch, issue.location)
+
+  const renderRow = (issue: Issue) => (
+    <IssueRow
+      key={issue.id}
+      issue={issue}
+      open={expanded === issue.id}
+      onToggle={() => setExpanded(expanded === issue.id ? null : issue.id)}
+      githubUrl={linkFor(issue)}
+      snoozed={isSnoozed(issue.id)}
+      onToggleSnooze={() => toggleSnooze(issue.id)}
+    />
+  )
+
   return (
     <Card>
       <CardHeader className="flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -231,6 +386,18 @@ export function IssuesTable({ issues, query = "" }: { issues: Issue[]; query?: s
           </span>
         </CardTitle>
         <div className="flex items-center gap-2">
+          {muted.length > 0 && (
+            <Button
+              size="sm"
+              variant="ghost"
+              className="h-8 gap-1.5 px-2 text-xs text-muted-foreground hover:text-foreground"
+              onClick={() => setShowSnoozed((s) => !s)}
+              title={showSnoozed ? "Hide snoozed findings" : "Show snoozed findings"}
+            >
+              {showSnoozed ? <BellOff className="size-4" /> : <Bell className="size-4" />}
+              {showSnoozed ? "Hide snoozed" : `Snoozed (${muted.length})`}
+            </Button>
+          )}
           <Button
             size="sm"
             variant="ghost"
@@ -319,16 +486,7 @@ export function IssuesTable({ issues, query = "" }: { issues: Issue[]; query?: s
                     </span>
                   </button>
                   {!isCollapsed && (
-                    <div className="divide-y divide-border">
-                      {list.map((issue) => (
-                        <IssueRow
-                          key={issue.id}
-                          issue={issue}
-                          open={expanded === issue.id}
-                          onToggle={() => setExpanded(expanded === issue.id ? null : issue.id)}
-                        />
-                      ))}
-                    </div>
+                    <div className="divide-y divide-border">{list.map(renderRow)}</div>
                   )}
                 </section>
               )
@@ -336,14 +494,7 @@ export function IssuesTable({ issues, query = "" }: { issues: Issue[]; query?: s
           </div>
         ) : (
           <div className="divide-y divide-border border-t border-border">
-            {filtered.map((issue) => (
-              <IssueRow
-                key={issue.id}
-                issue={issue}
-                open={expanded === issue.id}
-                onToggle={() => setExpanded(expanded === issue.id ? null : issue.id)}
-              />
-            ))}
+            {filtered.map(renderRow)}
           </div>
         )}
       </CardContent>

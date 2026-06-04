@@ -1,4 +1,5 @@
 import type { Issue, IssueCategory } from "./schema"
+import type { ResolvedConfig } from "./config"
 
 /**
  * Context handed to every scanner. Keep all IO (fs, git, network) behind this
@@ -8,7 +9,9 @@ export interface ScanContext {
   /** absolute path to the repository root */
   root: string
   /** repo metadata, usually derived from git remote */
-  repo: { owner: string; name: string; defaultBranch: string }
+  repo: { owner: string; name: string; defaultBranch: string; commit?: string }
+  /** resolved per-project config (.repo-anti-rot.json); defaults when absent */
+  config?: ResolvedConfig
   /** resolved list of project files (already glob-filtered, excludes node_modules/.git) */
   files: string[]
   /** read a file relative to root; returns null if missing */
@@ -24,6 +27,12 @@ export interface ScanContext {
     listBranches: () => Promise<
       { name: string; lastCommit: string; behind: number; ageDays: number }[]
     >
+    /**
+     * Optional ownership map for bus-factor analysis: repo-relative file path →
+     * distinct author count plus days since its last commit. Built from a single
+     * `git log` pass. Omitted when git is unavailable; callers must degrade.
+     */
+    fileOwnership?: () => Promise<Record<string, { authors: number; ageDays: number }>>
   }
   /**
    * Optional network adapter for registry lookups (e.g. npm). Returns parsed JSON

@@ -9,6 +9,7 @@ export type IssueCategory =
   | "todo"
   | "secret"
   | "dead-code"
+  | "hygiene"
 
 export interface Repository {
   id: string
@@ -57,6 +58,7 @@ export const categoryLabels: Record<IssueCategory, string> = {
   todo: "TODO Debt",
   secret: "Secret in History",
   "dead-code": "Dead Code",
+  hygiene: "Hygiene",
 }
 
 export const severityLabels: Record<Severity, string> = {

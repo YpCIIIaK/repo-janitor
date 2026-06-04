@@ -31,6 +31,7 @@ const CATEGORY_HINT: Record<string, string> = {
   branch: "Delete, merge, or keep a stale branch.",
   todo: "Is the TODO still actionable or stale?",
   secret: "Live credential vs placeholder + remediation (redacted input).",
+  hygiene: "Missing files, tests/CI, debug logs, docs — the concrete fix.",
 }
 
 export function SettingsDialog() {

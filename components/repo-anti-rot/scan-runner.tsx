@@ -28,7 +28,7 @@ import { Progress } from "@/components/ui/progress"
 
 type Grade = "A" | "B" | "C" | "D" | "F"
 type Severity = "critical" | "warning" | "info"
-type IssueCategory = "env" | "dependency" | "branch" | "todo" | "secret" | "dead-code"
+type IssueCategory = "env" | "dependency" | "branch" | "todo" | "secret" | "dead-code" | "hygiene"
 
 interface Issue {
   id: string
@@ -78,6 +78,7 @@ const categoryLabels: Record<IssueCategory, string> = {
   todo: "TODO Debt",
   secret: "Secret in History",
   "dead-code": "Dead Code",
+  hygiene: "Hygiene",
 }
 
 function formatAge(days: number) {

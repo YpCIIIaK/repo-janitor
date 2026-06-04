@@ -95,8 +95,94 @@ before it leaves the machine.
 A shared key can also be provided server-side via the `OPENROUTER_API_KEY`
 environment variable.
 
+### Executive summary
+
+The Overview tab has an on-demand **executive summary** — one short, decisive
+paragraph on the repo's overall health (verdict, the biggest concrete risks, and
+the single highest-leverage next action). It costs exactly one model call and is
+cached by model + the exact set of findings, so reopening the repo or rescanning
+with no changes never re-asks. Only finding metadata (title, location, category,
+severity) is sent — never the `evidence` snippet — so a redacted secret's masked
+value still never leaves the machine.
+
+### Per-finding enrichment
+
+The per-finding enrichment is tuned to stay cheap on small/free models:
+
+- **Cached** — verdicts are cached by model + stable issue id, so rescanning a
+  repo never re-asks for an unchanged finding.
+- **Batched** — findings of the same category go out in one request (one verdict
+  per finding) instead of one request each.
+- **Resilient** — rate-limited (429) or transient (5xx) responses back off and
+  retry; the prompt forbids hedging so even a small model commits to a verdict.
+
+## Health badge
+
+Once a repo's report has been ingested (via the GitHub Action's `dashboard-url`),
+the dashboard serves a live SVG badge for it:
+
+```
+![rot](https://your-deploy.example.com/api/badge/<owner>/<name>)
+```
+
+It renders `repo anti-rot | <grade> <score>`, colored by grade (green → amber →
+red), and falls back to a neutral `unknown` badge for repos with no report (so a
+README image never 404s). Optional query params: `?label=health` (left text) and
+`?style=flat-square` (square corners).
+
+## Configuration (`.repo-anti-rot.json`)
+
+An **optional** file at the repo root tunes the scanner for that project. It is
+committed with the repo, so its rules travel to CI and teammates (unlike Snooze,
+which is browser-local). Everything is optional and merges over the defaults — no
+file means default behaviour, and a partial file only overrides what it sets.
+
+```json
+{
+  "ignore": ["vendor/**", "**/*.generated.ts"],
+  "weights": { "critical": 20, "warning": 3, "info": 0 }
+}
+```
+
+- **`ignore`** — extra glob patterns excluded from the scanned file set (on top of
+  the built-in `node_modules`, `dist`, etc.). Affects all file-based scanners.
+- **`weights`** — override the per-severity score penalties. Partial is fine
+  (e.g. just `"info": 0`); unspecified severities keep their defaults. The
+  effective weights are echoed into the report so the dashboard recomputes the
+  score identically.
+
+Invalid JSON or unknown shapes are ignored with a warning (the scan never breaks).
+
+### Inline ignore
+
+Suppress a single false positive directly in code (eslint-style):
+
+```ts
+const legacyKey = process.env.OLD_TOKEN // repo-anti-rot-ignore
+
+// repo-anti-rot-ignore-next-line
+const noisy = computeThing()
+```
+
+- `// repo-anti-rot-ignore` — suppresses a finding on **that** line.
+- `// repo-anti-rot-ignore-next-line` — suppresses a finding on the **next** line.
+
+Only findings that resolve to a `file:line` location can be inline-ignored;
+file-level findings (e.g. `package.json`, branches) use `ignore` or Snooze.
+
 ## Scoring
 
 Starts at 100 and subtracts weighted penalties: **critical −10**, **warning −3**,
 **info −0.5**, then rounds and clamps to 0. Grades: **A** ≥ 90, **B** ≥ 75,
-**C** ≥ 60, **D** ≥ 40, else **F**.
+**C** ≥ 60, **D** ≥ 40, else **F**. Penalties are configurable per-repo via the
+`weights` field in `.repo-anti-rot.json` (see above).
+
+Alongside the score the dashboard shows **issue density** — findings per 1000
+lines of code — so repos of very different sizes can be compared fairly (raw
+issue count alone favours small repos). The scan records non-blank source
+lines in `report.metrics.linesOfCode`.
+
+The Overview tab also surfaces **hotspot files** — the source files attracting
+the most rot, ranked by weighted penalty — so a fix can be targeted at the few
+files where decay concentrates instead of chasing scattered findings. Each file
+links straight to the pinned commit on GitHub.

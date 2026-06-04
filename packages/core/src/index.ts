@@ -1,6 +1,7 @@
 export * from "./schema"
 export * from "./scanner"
 export * from "./engine"
+export * from "./config"
 export * from "./ast"
 export { envLifecycleScanner } from "./scanners/env-lifecycle"
 export { staleBranchScanner } from "./scanners/stale-branch"

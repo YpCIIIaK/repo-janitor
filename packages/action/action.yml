@@ -21,6 +21,14 @@ inputs:
     description: "Fail the job when the grade is at or below this letter (A, B, C, D, F) or 'never' to never fail."
     required: false
     default: "never"
+  github-token:
+    description: "GitHub token (usually ${{ github.token }}) used to post a sticky health comment on pull requests. Needs 'pull-requests: write'. Leave empty to disable PR comments."
+    required: false
+    default: ""
+  comment-on-pr:
+    description: "Post/update a summary comment on the pull request (requires github-token and a pull_request event)."
+    required: false
+    default: "true"
 outputs:
   score:
     description: "Health score 0-100"
