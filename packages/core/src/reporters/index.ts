@@ -2,10 +2,11 @@ import type { ScanReport } from "../schema"
 import { renderJson } from "./json"
 import { renderTerminal } from "./terminal"
 import { renderMarkdown } from "./markdown"
+import { renderSarif } from "./sarif"
 
-export { renderJson, renderTerminal, renderMarkdown }
+export { renderJson, renderTerminal, renderMarkdown, renderSarif }
 
-export type ReportFormat = "json" | "terminal" | "md"
+export type ReportFormat = "json" | "terminal" | "md" | "sarif"
 
 /** Aliases accepted on the CLI / Action so `markdown`, `text`, etc. all work. */
 const ALIASES: Record<string, ReportFormat> = {
@@ -14,6 +15,7 @@ const ALIASES: Record<string, ReportFormat> = {
   text: "terminal",
   md: "md",
   markdown: "md",
+  sarif: "sarif",
 }
 
 export function normalizeFormat(format: string): ReportFormat {
@@ -27,6 +29,8 @@ export function renderReport(report: ScanReport, format: string): string {
       return renderJson(report)
     case "md":
       return renderMarkdown(report)
+    case "sarif":
+      return renderSarif(report)
     default:
       return renderTerminal(report)
   }

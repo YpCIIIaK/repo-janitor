@@ -1,6 +1,6 @@
 import { promises as fs } from "fs"
 import { scanRepo } from "@repo-anti-rot/cli/context"
-import { renderMarkdown, renderTerminal } from "@repo-anti-rot/core"
+import { renderMarkdown, renderSarif, renderTerminal } from "@repo-anti-rot/core"
 import type { Grade, ScanReport } from "@repo-anti-rot/core"
 
 /**
@@ -40,6 +40,12 @@ async function setOutputs(report: ScanReport): Promise<void> {
 
 async function writeSummary(report: ScanReport): Promise<void> {
   await appendToFile("GITHUB_STEP_SUMMARY", `${renderMarkdown(report)}\n`)
+}
+
+/** Write a SARIF 2.1.0 file for upload to GitHub code scanning. */
+async function writeSarif(report: ScanReport, file: string): Promise<void> {
+  await fs.writeFile(file, renderSarif(report), "utf-8")
+  console.log(`Wrote SARIF report to ${file}`)
 }
 
 async function upload(report: ScanReport, url: string, token: string): Promise<void> {
@@ -192,6 +198,7 @@ async function main(): Promise<void> {
   const failOn = getInput("fail-on", "never")
   const githubToken = getInput("github-token")
   const prCommentEnabled = getInput("comment-on-pr", "true") !== "false"
+  const sarifFile = getInput("sarif-file")
 
   const root = await fs.realpath(path)
   console.log(`Repo Anti-Rot scanning ${root}`)
@@ -201,6 +208,10 @@ async function main(): Promise<void> {
 
   await setOutputs(report)
   await writeSummary(report)
+
+  if (sarifFile) {
+    await writeSarif(report, sarifFile)
+  }
 
   if (dashboardUrl) {
     await upload(report, dashboardUrl, token)

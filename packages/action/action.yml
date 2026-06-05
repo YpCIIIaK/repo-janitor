@@ -29,6 +29,10 @@ inputs:
     description: "Post/update a summary comment on the pull request (requires github-token and a pull_request event)."
     required: false
     default: "true"
+  sarif-file:
+    description: "Write findings as a SARIF 2.1.0 file at this path (e.g. repo-anti-rot.sarif) for upload via github/codeql-action/upload-sarif. Leave empty to skip."
+    required: false
+    default: ""
 outputs:
   score:
     description: "Health score 0-100"

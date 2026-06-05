@@ -100,9 +100,18 @@ export const deadCodeScanner: Scanner = {
   id: "dead-code",
   category: "dead-code",
   async run(ctx: ScanContext): Promise<Issue[]> {
+    const issues: Issue[] = []
+    // JS/TS — cross-module unused-export analysis (needs ≥2 files to graph).
     const sources = ctx.files.filter((f) => SOURCE_RE.test(f))
-    if (sources.length < 2) return [] // single-file projects: nothing meaningful to graph
+    if (sources.length >= 2) issues.push(...(await scanJsTsExports(ctx, sources)))
+    // Polyglot — textual "never referenced" symbols (Python, Go).
+    issues.push(...(await scanPolyglotSymbols(ctx)))
+    return issues
+  },
+}
 
+/** JS/TS unused-export analysis via a Babel-AST cross-module reference graph. */
+async function scanJsTsExports(ctx: ScanContext, sources: string[]): Promise<Issue[]> {
     const fileSet = new Set(sources)
     const exports: ExportSite[] = []
     const usedNames = new Set<string>() // names imported / re-exported anywhere
@@ -280,11 +289,181 @@ export const deadCodeScanner: Scanner = {
     }
 
     return issues
-  },
 }
 
 /** Best-effort 1-based line of a node from its loc. */
 function lineOf(node: Node): number {
   const loc = node.loc as { start?: { line?: number } } | undefined
   return loc?.start?.line ?? 0
+}
+
+// ---------------------------------------------------------------------------
+// Polyglot dead-symbol detection (Python, Go)
+// ---------------------------------------------------------------------------
+//
+// A whole-language textual reference count: a definition whose bare name occurs
+// exactly once across all files of its language — only at the definition site —
+// is reported as a likely-unused symbol. The frequency approach is self-
+// protecting: common or collision-prone names appear many times and are never
+// flagged, and ANY reference (call, import, type annotation, even a mention in
+// a string or comment) suppresses the finding, so it errs strongly toward
+// silence. Always `info`. Other dynamic languages (Ruby/PHP) are intentionally
+// excluded — their metaprogramming makes a low-false-positive textual heuristic
+// impossible — and Rust's own compiler already flags dead code.
+
+const PY_RE = /\.py$/i
+const GO_RE = /\.go$/i
+const PY_TEST_RE = /(^|\/)(test_[^/]*\.py|[^/]*_test\.py|conftest\.py)$|(^|\/)tests?\//i
+const GO_TEST_RE = /_test\.go$/i
+const IDENT_RE = /[A-Za-z_][A-Za-z0-9_]*/g
+const POLY_MAX = 40
+
+interface PolyDef {
+  name: string
+  line: number
+  kind: string
+  evidence: string
+}
+
+const toPosix = (p: string) => p.replace(/\\/g, "/")
+
+/** Tally every identifier occurrence in `content` into `freq`. */
+function countInto(content: string, freq: Map<string, number>): void {
+  IDENT_RE.lastIndex = 0
+  let m: RegExpExecArray | null
+  while ((m = IDENT_RE.exec(content))) freq.set(m[0], (freq.get(m[0]) ?? 0) + 1)
+}
+
+/** Names listed in a Python module's `__all__` — its declared public surface. */
+function pythonAllNames(content: string): string[] {
+  const out: string[] = []
+  const block = content.match(/__all__\s*=\s*[\[(]([\s\S]*?)[\])]/)
+  if (block) {
+    const re = /['"]([A-Za-z_][A-Za-z0-9_]*)['"]/g
+    let m: RegExpExecArray | null
+    while ((m = re.exec(block[1]))) out.push(m[1])
+  }
+  return out
+}
+
+/** Top-level (column-0) `def`/`class` definitions, skipping decorated, dunder,
+ * test-prefixed and `main` symbols. Methods/nested defs are deliberately ignored
+ * to avoid framework-override false positives. */
+function pythonDefs(content: string): PolyDef[] {
+  const lines = content.split(/\r?\n/)
+  const out: PolyDef[] = []
+  for (let i = 0; i < lines.length; i++) {
+    const m = lines[i].match(/^(?:async\s+)?(def|class)\s+([A-Za-z_]\w*)/)
+    if (!m) continue
+    const name = m[2]
+    if (name.startsWith("__") && name.endsWith("__")) continue
+    if (/^[Tt]est/.test(name) || name === "main") continue
+    // Decorated symbols are usually framework-registered (routes, fixtures,
+    // tasks, CLI commands) and have no explicit caller — never flag them.
+    let j = i - 1
+    while (j >= 0 && lines[j].trim() === "") j--
+    if (j >= 0 && lines[j].trim().startsWith("@")) continue
+    out.push({
+      name,
+      line: i + 1,
+      kind: m[1] === "class" ? "class" : "function",
+      evidence: lines[i].trim().slice(0, 140),
+    })
+  }
+  return out
+}
+
+/** Unexported (`lowercase`) Go function & method definitions. Exported names are
+ * a package's public API (or `Test*`/`Example*`) and may have external callers,
+ * so they are left alone; `main`/`init` are entrypoints. */
+function goDefs(content: string): PolyDef[] {
+  const lines = content.split(/\r?\n/)
+  const out: PolyDef[] = []
+  for (let i = 0; i < lines.length; i++) {
+    const m = lines[i].match(/^func\s+(?:\([^)]*\)\s*)?([A-Za-z_]\w*)\s*[([]/)
+    if (!m) continue
+    const name = m[1]
+    if (/^[A-Z]/.test(name) || name === "main" || name === "init") continue
+    out.push({ name, line: i + 1, kind: "function", evidence: lines[i].trim().slice(0, 140) })
+  }
+  return out
+}
+
+/** Generated Go files carry a standard header — never report their internals. */
+function isGeneratedGo(content: string): boolean {
+  return /^\/\/ Code generated .* DO NOT EDIT\.?$/m.test(content.split("\n").slice(0, 5).join("\n"))
+}
+
+function makeDeadIssue(file: string, def: PolyDef, lang: "python" | "go"): Issue {
+  const langName = lang === "python" ? "Python" : "Go"
+  const detail =
+    `${def.name} is defined in ${file} but its name is never referenced anywhere else in the ${langName} sources. ` +
+    (lang === "go" ? "It is unexported, so packages outside this module can't use it. " : "") +
+    "Verify before removing — dynamic dispatch, reflection or string-based calls can't be detected."
+  return {
+    id: `dead-symbol-${file}:${def.line}`,
+    category: "dead-code",
+    severity: "info",
+    title: `Unused ${def.kind} ${def.name}`,
+    location: `${file}:${def.line}`,
+    ageDays: 0,
+    detail,
+    evidence: def.evidence,
+  }
+}
+
+async function collectPythonDead(ctx: ScanContext, files: string[], issues: Issue[]): Promise<void> {
+  if (files.length === 0) return
+  const freq = new Map<string, number>()
+  const contents = new Map<string, string>()
+  const publicNames = new Set<string>()
+  for (const f of files) {
+    const c = await ctx.readFile(f)
+    if (c == null) continue
+    contents.set(f, c)
+    countInto(c, freq) // count refs from ALL files (tests included → counts as use)
+    for (const n of pythonAllNames(c)) publicNames.add(n)
+  }
+  for (const [file, content] of contents) {
+    const norm = toPosix(file)
+    if (PY_TEST_RE.test(norm)) continue
+    if (/(^|\/)__init__\.py$/.test(norm)) continue // package barrel: public API by convention
+    for (const def of pythonDefs(content)) {
+      if (publicNames.has(def.name)) continue
+      if ((freq.get(def.name) ?? 0) > 1) continue
+      issues.push(makeDeadIssue(file, def, "python"))
+    }
+  }
+}
+
+async function collectGoDead(ctx: ScanContext, files: string[], issues: Issue[]): Promise<void> {
+  if (files.length === 0) return
+  const freq = new Map<string, number>()
+  const contents = new Map<string, string>()
+  for (const f of files) {
+    const c = await ctx.readFile(f)
+    if (c == null) continue
+    contents.set(f, c)
+    countInto(c, freq)
+  }
+  for (const [file, content] of contents) {
+    if (GO_TEST_RE.test(toPosix(file))) continue
+    if (isGeneratedGo(content)) continue
+    for (const def of goDefs(content)) {
+      if ((freq.get(def.name) ?? 0) > 1) continue
+      issues.push(makeDeadIssue(file, def, "go"))
+    }
+  }
+}
+
+/** Polyglot entrypoint: textual unused-symbol detection for Python & Go. */
+async function scanPolyglotSymbols(ctx: ScanContext): Promise<Issue[]> {
+  const pyFiles = ctx.files.filter((f) => PY_RE.test(f))
+  const goFiles = ctx.files.filter((f) => GO_RE.test(f))
+  if (pyFiles.length === 0 && goFiles.length === 0) return []
+
+  const issues: Issue[] = []
+  await collectPythonDead(ctx, pyFiles, issues)
+  await collectGoDead(ctx, goFiles, issues)
+  return issues.slice(0, POLY_MAX)
 }

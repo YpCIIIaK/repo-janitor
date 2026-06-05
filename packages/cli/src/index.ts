@@ -35,7 +35,7 @@ async function discoverRepos(dir: string): Promise<{ name: string; path: string 
 /** Make a filesystem-safe report filename for a repo. */
 function reportFileName(dirName: string, format: string): string {
   const safe = dirName.replace(/[^a-zA-Z0-9_.-]/g, "_");
-  const ext = { json: "json", md: "md", terminal: "txt" }[normalizeFormat(format)];
+  const ext = { json: "json", md: "md", terminal: "txt", sarif: "sarif" }[normalizeFormat(format)];
   return `${safe}.${ext}`;
 }
 
@@ -44,7 +44,7 @@ function registerScan(program: Command) {
     .command("scan")
     .description("Scan a single repository for health and decay metrics")
     .option("-p, --path <path>", "Path to repository to scan", ".")
-    .option("-f, --format <format>", "Output format (json, terminal, md)", "terminal")
+    .option("-f, --format <format>", "Output format (json, terminal, md, sarif)", "terminal")
     .option("-o, --output <file>", "Output file path")
     .option("--progress", "Emit machine-readable progress events to stderr")
     .action(async (options) => {
@@ -80,7 +80,7 @@ function registerBatch(program: Command) {
     .command("batch")
     .description("Scan many repositories under a directory, one report per repo")
     .argument("<dir>", "Directory containing cloned repositories (each a subfolder)")
-    .option("-f, --format <format>", "Report format (json, terminal, md)", "json")
+    .option("-f, --format <format>", "Report format (json, terminal, md, sarif)", "json")
     .option("-o, --out-dir <dir>", "Write one report file per repo into this directory")
     .option("-r, --repos <names>", "Only scan these subfolders (comma-separated)")
     .option("-l, --limit <n>", "Scan at most N repositories", (v) => parseInt(v, 10))

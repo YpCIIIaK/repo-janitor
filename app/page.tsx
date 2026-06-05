@@ -15,6 +15,10 @@ import { AgeHistogram } from "@/components/repo-anti-rot/age-histogram"
 import { TrendChart } from "@/components/repo-anti-rot/trend-chart"
 import { ReposOverview } from "@/components/repo-anti-rot/repos-overview"
 import { RescanButton } from "@/components/repo-anti-rot/rescan-button"
+import { ExportMenu } from "@/components/repo-anti-rot/export-menu"
+import { CommandPalette, type PaletteTab } from "@/components/repo-anti-rot/command-palette"
+import { Button } from "@/components/ui/button"
+import { Command as CommandIcon } from "lucide-react"
 import { NewScanDialog } from "@/components/repo-anti-rot/new-scan-dialog"
 import { WelcomeScreen } from "@/components/repo-anti-rot/welcome-screen"
 import { useRepos, removeRepo, repoStats, repoTrend, countSeverity, timeAgo, repoDiff, issueDensity } from "@/lib/reports-store"
@@ -37,6 +41,8 @@ export default function Page() {
   const [activeId, setActiveId] = useState<string>("")
   const [search, setSearch] = useState<string>("")
   const [scanOpen, setScanOpen] = useState(false)
+  const [tab, setTab] = useState<PaletteTab>("overview")
+  const [paletteOpen, setPaletteOpen] = useState(false)
 
   const showOverview = activeId === OVERVIEW
   // Resolve the selected repo, falling back to the most recent one.
@@ -176,11 +182,23 @@ export default function Page() {
                   </span>
                 ))}
               </div>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => setPaletteOpen(true)}
+                title="Command palette (⌘K / Ctrl+K)"
+              >
+                <CommandIcon className="size-4" />
+                <kbd className="ml-1 hidden rounded bg-muted px-1 text-[10px] font-medium text-muted-foreground sm:inline">
+                  ⌘K
+                </kbd>
+              </Button>
+              <ExportMenu report={current.latest} />
               <RescanButton repo={current} />
             </div>
           </div>
 
-          <Tabs defaultValue="overview" className="w-full">
+          <Tabs value={tab} onValueChange={(v) => setTab(v as PaletteTab)} className="w-full">
             <TabsList>
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="issues">Issues</TabsTrigger>
@@ -240,6 +258,24 @@ export default function Page() {
         open={scanOpen}
         onOpenChange={setScanOpen}
         onOpenRepo={(id) => setActiveId(id)}
+      />
+
+      <CommandPalette
+        open={paletteOpen}
+        onOpenChange={setPaletteOpen}
+        repos={sidebarRepos.map((r) => {
+          const full = repos.find((x) => x.id === r.id)
+          return { id: r.id, owner: full?.owner ?? "", name: r.name, grade: r.grade, score: r.score }
+        })}
+        activeId={showOverview ? OVERVIEW : current.id}
+        onSelectRepo={setActiveId}
+        onShowOverview={repos.length > 1 ? () => setActiveId(OVERVIEW) : undefined}
+        onNewScan={() => setScanOpen(true)}
+        onGoToTab={(t) => {
+          setActiveId(current.id) // ensure we're on a repo (not the overview)
+          setTab(t)
+        }}
+        report={showOverview ? undefined : current.latest}
       />
     </div>
   )

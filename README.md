@@ -23,9 +23,16 @@ The dashboard's `/api/scan` route shells out to the **built** CLI
 
 ## Prerequisites
 
-- Node.js 20+
-- [pnpm](https://pnpm.io) (the repo is a pnpm workspace)
-- `git` on PATH (used by the scan engine)
+- Node.js 20+ (uses the built-in global `fetch`)
+- [pnpm](https://pnpm.io) (the repo is a pnpm workspace) — or just run
+  `corepack enable` and the pinned version (`packageManager` in `package.json`)
+  is provisioned automatically
+- `git` on PATH (used by the scan engine and by the dashboard to clone repos)
+
+Works the same on **macOS, Linux and Windows** — every command below is a
+portable `pnpm`/`node` invocation (no shell-specific syntax), the engine shells
+out to `git`/`node` directly (no `.cmd`/`.sh` wrappers), and all paths go through
+Node's `path`/`os.tmpdir()` so separators and temp dirs are handled per-OS.
 
 ## Setup
 
@@ -69,6 +76,15 @@ Click any finding in the **Issues** tab to open a detail drawer with its full
 context, code evidence, an on-demand AI verdict (one cheap model call, cached),
 and quick actions — open the GitHub permalink, copy as Markdown, or snooze it.
 
+Use **Export** (top-right, next to Rescan) to download the current report as
+**Markdown** (grouped by category, for PRs/docs), **CSV** (one row per finding,
+for spreadsheets) or **JSON** (the raw report). Everything is generated in the
+browser — nothing leaves your machine.
+
+Press **⌘K / Ctrl+K** (or the command button in the toolbar) to open the command
+palette: jump between repositories, switch tabs, start a new scan, or export the
+current report — all from the keyboard.
+
 ## Use the CLI directly
 
 ```bash
@@ -78,9 +94,14 @@ node packages/cli/dist/index.js scan --path . --format terminal
 # write a JSON report
 node packages/cli/dist/index.js scan --path . --format json --output report.json
 
+# write a SARIF file for GitHub code scanning
+node packages/cli/dist/index.js scan --path . --format sarif --output repo-anti-rot.sarif
+
 # scan many cloned repos under a directory
 node packages/cli/dist/index.js batch ./repos --out-dir ./reports
 ```
+
+Formats: `terminal` (default), `json`, `md`, `sarif`.
 
 During development you can run the CLI from source without building:
 
@@ -134,6 +155,42 @@ It renders `repo anti-rot | <grade> <score>`, colored by grade (green → amber 
 red), and falls back to a neutral `unknown` badge for repos with no report (so a
 README image never 404s). Optional query params: `?label=health` (left text) and
 `?style=flat-square` (square corners).
+
+## GitHub code scanning (SARIF)
+
+The scanner can emit [SARIF 2.1.0](https://sarifweb.azurewebsites.net/), the
+format GitHub code scanning consumes. Findings then appear as native annotations
+in the **Security ▸ Code scanning** tab and inline on pull-request diffs — no
+dashboard required.
+
+The Action writes a SARIF file when given a `sarif-file` input; pair it with
+`github/codeql-action/upload-sarif`:
+
+```yaml
+permissions:
+  contents: read
+  security-events: write # required for upload-sarif
+
+jobs:
+  anti-rot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 } # full history for git-blame ages
+      - uses: YpCIIIaK/repo-janitor@main
+        with:
+          sarif-file: repo-anti-rot.sarif
+      - uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: repo-anti-rot.sarif
+```
+
+Mapping: each finding becomes a SARIF result with `level` derived from severity
+(critical → `error`, warning → `warning`, info → `note`), grouped into one rule
+per category. File-anchored findings carry a `path:line` location; repo-level
+ones (stale branches, missing standard files) are still reported, just without a
+code location. A stable per-finding fingerprint lets GitHub track an alert across
+runs instead of reopening it each scan.
 
 ## Vulnerable dependencies (OSV)
 
@@ -228,7 +285,8 @@ per-language. Coverage by scanner:
 | `dockerfile`       | `Dockerfile`, `*.dockerfile`                                              |
 | `lockfile-drift`   | npm (missing-lockfile + drift); Python, Rust, Ruby, Go, PHP (missing-lockfile) |
 | `outdated-deps`    | PyPI, crates.io, RubyGems, Go, Packagist (npm covered by `dependency-funeral`) |
-| `dead-code`, `dependency-funeral` | JS/TS only                                                |
+| `dead-code`        | JS/TS (cross-module unused exports); Python, Go (unused symbols)          |
+| `dependency-funeral` | JS/TS only                                                              |
 
 For env vars, the scanner understands the idiomatic readers per language —
 `process.env.X` (JS/TS), `os.environ` / `os.getenv` (Python), `os.Getenv` /
