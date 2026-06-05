@@ -62,6 +62,58 @@ Rebuild the CLI any time you change `packages/core` or `packages/cli`:
 pnpm run build:cli
 ```
 
+## Tests
+
+The whole workspace is covered by [Vitest](https://vitest.dev) — suites in each
+package (`packages/*/test`) plus the dashboard's pure modules (`test/`). They
+exercise the scoring engine, every scanner and all reporters through an in-memory
+`ScanContext` (`packages/core/test/helpers.ts`) — no real filesystem, git, or
+network — plus the CLI/Action helpers and the dashboard's `lib/*` logic.
+Everything is fast and deterministic.
+
+```bash
+pnpm test                                # run everything (dashboard + all packages)
+pnpm test:dashboard                      # just the dashboard lib/* tests
+pnpm --filter @repo-anti-rot/core test   # scoped to the engine
+pnpm --filter @repo-anti-rot/cli test    # CLI helpers
+pnpm --filter @repo-anti-rot/action test # Action helpers
+```
+
+Coverage highlights (290+ tests):
+
+- **engine** — scoring, grade thresholds, per-scanner isolation on throw, inline
+  `repo-anti-rot-ignore` markers, config-driven weights, the lines-of-code metric
+  and progress callbacks
+- **scanners** — all 17 scanners, each with positive *and* negative
+  (no-false-positive) cases: secrets (incl. the redaction invariant — a raw key
+  never appears in evidence), env-lifecycle, todo-debt, dead-code (JS/TS +
+  Python/Go), leftover-debug, commented-code, skipped-tests, dockerfile,
+  repo-bloat, project-hygiene, broken-doc-links, bus-factor, stale-branch, and the
+  dependency scanners (vulnerable/outdated/funeral/lockfile-drift) driven through
+  stubbed OSV / npm / PyPI registry adapters
+- **config** — `.repo-anti-rot.json` loading, weight merge, ignore globs, and
+  graceful fallback on malformed/invalid input
+- **reporters** — JSON round-trip, Markdown escaping, and SARIF 2.1.0 shape
+  (severity→level mapping, one rule per category, physical locations, fingerprints)
+- **CLI** — git-remote → owner/name parsing (https & SSH, `.git` stripping, local
+  fallback) and safe report filenames
+- **Action** — input parsing, the `fail-on` grade threshold, the ingest endpoint
+  builder, and PR-comment rendering (severity breakdown, 10-row cap, pipe escaping)
+- **dashboard** — the pure `lib/*` modules: client score mirror, age histogram &
+  median, hotspot ranking, synonym/typo-tolerant issue search, report export
+  (JSON/Markdown/CSV with RFC-4180 escaping + UTF-8 BOM), schedule due-logic, and
+  GitHub permalink building
+- **dashboard AI & stores** — the localStorage-backed client stores and AI layer,
+  driven through an in-memory `window` stub and a mocked completion transport:
+  snooze/won't-fix partitioning, AI settings (normalize, legacy migration, enabled
+  categories), the verdict cache (model scoping + LRU eviction), the proxy client's
+  429/5xx retry-with-backoff, and the enrichment/summary orchestration (per-category
+  batching, cache re-use, order-independent fingerprints, graceful no-key/empty paths)
+
+Add a new scanner test under `packages/core/test/scanners/`, build a context with
+`makeContext` from `packages/core/test/helpers.ts`, and assert on the returned issues.
+Dashboard `lib/*` tests live in the root `test/` directory.
+
 ## Run the dashboard
 
 ```bash

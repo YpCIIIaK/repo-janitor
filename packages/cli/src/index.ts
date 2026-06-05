@@ -2,10 +2,11 @@
 
 import { Command } from "commander";
 import { promises as fs } from "fs";
-import { renderReport, normalizeFormat } from "@repo-anti-rot/core";
+import { renderReport } from "@repo-anti-rot/core";
 import type { ScanReport } from "@repo-anti-rot/core";
 import { join } from "path";
 import { scanRepo } from "./context";
+import { reportFileName } from "./naming";
 
 /** Render a report as the requested string format (json | terminal | md). */
 function serializeReport(report: ScanReport, format: string): string {
@@ -30,13 +31,6 @@ async function discoverRepos(dir: string): Promise<{ name: string; path: string 
     }
   }
   return repos.sort((a, b) => a.name.localeCompare(b.name));
-}
-
-/** Make a filesystem-safe report filename for a repo. */
-function reportFileName(dirName: string, format: string): string {
-  const safe = dirName.replace(/[^a-zA-Z0-9_.-]/g, "_");
-  const ext = { json: "json", md: "md", terminal: "txt", sarif: "sarif" }[normalizeFormat(format)];
-  return `${safe}.${ext}`;
 }
 
 function registerScan(program: Command) {

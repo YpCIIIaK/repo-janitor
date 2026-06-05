@@ -1,7 +1,15 @@
 import { promises as fs } from "fs"
 import { scanRepo } from "@repo-anti-rot/cli/context"
-import { renderMarkdown, renderSarif, renderTerminal } from "@repo-anti-rot/core"
-import type { Grade, ScanReport } from "@repo-anti-rot/core"
+import { renderSarif, renderTerminal } from "@repo-anti-rot/core"
+import type { ScanReport } from "@repo-anti-rot/core"
+import {
+  getInput,
+  ingestEndpoint,
+  shouldFail,
+  renderPrComment,
+  renderStepSummary,
+  COMMENT_MARKER,
+} from "./lib"
 
 /**
  * Repo Anti-Rot GitHub Action entrypoint.
@@ -13,11 +21,6 @@ import type { Grade, ScanReport } from "@repo-anti-rot/core"
  * Inputs arrive as `INPUT_<NAME>` env vars (the standard GitHub Actions contract),
  * so this needs no `@actions/core` dependency.
  */
-
-function getInput(name: string, fallback = ""): string {
-  const key = `INPUT_${name.toUpperCase().replace(/-/g, "_")}`
-  return (process.env[key] ?? fallback).trim()
-}
 
 /** GitHub workflow command: surfaces as an annotation in the run UI. */
 function logError(msg: string): void {
@@ -39,7 +42,7 @@ async function setOutputs(report: ScanReport): Promise<void> {
 }
 
 async function writeSummary(report: ScanReport): Promise<void> {
-  await appendToFile("GITHUB_STEP_SUMMARY", `${renderMarkdown(report)}\n`)
+  await appendToFile("GITHUB_STEP_SUMMARY", renderStepSummary(report))
 }
 
 /** Write a SARIF 2.1.0 file for upload to GitHub code scanning. */
@@ -49,7 +52,7 @@ async function writeSarif(report: ScanReport, file: string): Promise<void> {
 }
 
 async function upload(report: ScanReport, url: string, token: string): Promise<void> {
-  const endpoint = `${url.replace(/\/+$/, "")}/api/ingest`
+  const endpoint = ingestEndpoint(url)
   const res = await fetch(endpoint, {
     method: "POST",
     headers: {
@@ -69,10 +72,6 @@ async function upload(report: ScanReport, url: string, token: string): Promise<v
 // Pull-request sticky comment
 // ---------------------------------------------------------------------------
 
-const COMMENT_MARKER = "<!-- repo-anti-rot-report -->"
-
-const GRADE_EMOJI: Record<Grade, string> = { A: "🟢", B: "🟢", C: "🟡", D: "🟠", F: "🔴" }
-
 /** The PR number for the current event, or null when not a pull_request run. */
 async function getPrNumber(): Promise<number | null> {
   if (process.env.GITHUB_EVENT_NAME !== "pull_request") return null
@@ -87,48 +86,6 @@ async function getPrNumber(): Promise<number | null> {
   } catch {
     return null
   }
-}
-
-/** Build the markdown body of the PR comment (carries a hidden marker for upserts). */
-function renderPrComment(report: ScanReport, dashboardUrl: string): string {
-  const { repo, grade, score, issues } = report
-  const sev = (s: string) => issues.filter((i) => i.severity === s).length
-  const order: Record<string, number> = { critical: 0, warning: 1, info: 2 }
-  const top = [...issues].sort((a, b) => order[a.severity] - order[b.severity]).slice(0, 10)
-
-  const lines: string[] = [
-    COMMENT_MARKER,
-    `### ${GRADE_EMOJI[grade]} Repo Anti-Rot — grade **${grade}** (${score}/100)`,
-    "",
-    `**${issues.length}** open finding${issues.length === 1 ? "" : "s"}: ` +
-      `${sev("critical")} critical · ${sev("warning")} warning · ${sev("info")} info`,
-    "",
-  ]
-
-  if (issues.length === 0) {
-    lines.push("No rot detected — clean scan. ✅")
-  } else {
-    lines.push("| Severity | Finding | Location |", "| --- | --- | --- |")
-    for (const i of top) {
-      const loc = i.location.replace(/\|/g, "\\|")
-      const title = i.title.replace(/\|/g, "\\|")
-      lines.push(`| ${i.severity} | ${title} | \`${loc}\` |`)
-    }
-    if (issues.length > top.length) {
-      lines.push("", `…and ${issues.length - top.length} more.`)
-    }
-  }
-
-  if (dashboardUrl) {
-    const base = dashboardUrl.replace(/\/+$/, "")
-    lines.push(
-      "",
-      `[Full report](${base}) · ![grade](${base}/api/badge/${repo.owner}/${repo.name})`,
-    )
-  }
-
-  lines.push("", `<sub>Updated by Repo Anti-Rot at ${new Date().toISOString()}</sub>`)
-  return lines.join("\n")
 }
 
 /** Post a new sticky comment, or update the existing one if we already left one. */
@@ -180,15 +137,6 @@ async function commentOnPr(report: ScanReport, githubToken: string, dashboardUrl
     throw new Error(`PR comment failed: ${res.status} ${res.statusText} ${detail}`.trim())
   }
   console.log(`${existingId != null ? "Updated" : "Posted"} PR health comment on #${prNumber}.`)
-}
-
-const GRADE_RANK: Record<Grade, number> = { A: 5, B: 4, C: 3, D: 2, F: 1 }
-
-/** True when the report's grade is at or below the configured threshold. */
-function shouldFail(report: ScanReport, failOn: string): boolean {
-  const threshold = failOn.toUpperCase()
-  if (!(threshold in GRADE_RANK)) return false // "never" or invalid → never fail
-  return GRADE_RANK[report.grade] <= GRADE_RANK[threshold as Grade]
 }
 
 async function main(): Promise<void> {
