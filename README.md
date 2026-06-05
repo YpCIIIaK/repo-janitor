@@ -85,6 +85,21 @@ Press **⌘K / Ctrl+K** (or the command button in the toolbar) to open the comma
 palette: jump between repositories, switch tabs, start a new scan, or export the
 current report — all from the keyboard.
 
+### Scheduled scans
+
+In **Settings ▸ Scheduled scans** you can have the dashboard auto-rescan your
+tracked repos on a flexible schedule:
+
+- **Every N hours** — re-scan each repo N hours after *its* last scan (any value
+  from 15 min upward).
+- **Daily at a time** — re-scan once a day at any local `HH:MM`, with catch-up if
+  the tab was closed at that moment.
+
+Because repos and reports live in your browser, the scheduler runs **only while a
+tab is open** (it checks once a minute and shows a toast when it runs). For truly
+unattended scanning — machine asleep, no tab open — use the GitHub Action's
+`schedule:` trigger in CI instead.
+
 ## Use the CLI directly
 
 ```bash
@@ -191,6 +206,29 @@ per category. File-anchored findings carry a `path:line` location; repo-level
 ones (stale branches, missing standard files) are still reported, just without a
 code location. A stable per-finding fingerprint lets GitHub track an alert across
 runs instead of reopening it each scan.
+
+## Score-drop alerts (webhook)
+
+When a report is ingested via `POST /api/ingest` (i.e. from the GitHub Action in
+CI) and the repo's score is **lower than its previous scan**, the server can fire
+a webhook so the team is alerted to the regression immediately. Opt-in via env:
+
+| Variable | Description |
+| --- | --- |
+| `RAR_WEBHOOK_URL` | Destination URL. Unset → feature off. The body is Slack/Discord-compatible (`{ "text": "…" }`), which most custom receivers also accept. |
+| `RAR_WEBHOOK_MIN_DROP` | Minimum score drop to alert on (default `1`, i.e. any drop). Raise it to ignore small dips. |
+| `RAR_DASHBOARD_URL` | Optional; appended to the message as a link. |
+
+Example message:
+
+```
+🔴 acme/api health dropped: B (85) → D (52), −33. +2 new criticals. https://your-dashboard
+```
+
+It only fires on a real regression (score held or improved → silent), never on
+the first scan (nothing to compare), and a failed webhook never blocks ingestion.
+Note this is server-side: it works for reports POSTed to the dashboard (CI), not
+for local browser-only scans.
 
 ## Vulnerable dependencies (OSV)
 

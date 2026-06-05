@@ -3,10 +3,8 @@
 import { useState } from "react"
 import { Loader2, RotateCw } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { saveReport, type StoredRepo } from "@/lib/reports-store"
-import { enrichReport, aiTargetCount } from "@/lib/ai-enrich"
-import { readAiSettings, isAiEnabled } from "@/lib/ai-settings"
-import { runScanStream } from "@/lib/scan-client"
+import { type StoredRepo } from "@/lib/reports-store"
+import { rescanRepo } from "@/lib/rescan"
 import { Progress } from "@/components/ui/progress"
 import { cn } from "@/lib/utils"
 
@@ -30,32 +28,14 @@ export function RescanButton({ repo, className }: { repo: StoredRepo; className?
     setProgress(0)
     setProgressLabel("Starting…")
 
-    const aiOn = isAiEnabled(readAiSettings())
-    const scanSpan = aiOn ? 0.8 : 1
-
     try {
-      const results = await runScanStream([url], {
-        onProgress: (s) => {
-          setProgress(s.fraction * scanSpan)
-          setProgressLabel(s.label)
+      await rescanRepo(repo, {
+        onProgress: (fraction, label) => {
+          setProgress(fraction)
+          setProgressLabel(label)
         },
       })
-      const result = results[0]
-      if (result?.ok && result.report) {
-        if (aiOn) {
-          const total = aiTargetCount(result.report)
-          setProgressLabel("AI analysis…")
-          const report = await enrichReport(result.report, {
-            onProgress: (done) => setProgress(0.8 + 0.2 * (total > 0 ? done / total : 1)),
-          })
-          saveReport(report, url)
-        } else {
-          saveReport(result.report, url)
-        }
-        setProgress(1)
-      } else {
-        setError(result?.error ?? "Scan failed")
-      }
+      setProgress(1)
     } catch (err) {
       setError(String(err))
     } finally {

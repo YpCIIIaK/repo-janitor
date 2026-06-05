@@ -64,8 +64,16 @@ async function writeServerRepos(list: StoredRepo[]): Promise<void> {
   await fs.writeFile(FILE, JSON.stringify(list, null, 2), "utf-8")
 }
 
+/** Outcome of an upsert: the stored repo plus the report it replaced (if any),
+ * so callers can diff old → new (e.g. to fire a score-drop alert). */
+export interface UpsertResult {
+  repo: StoredRepo
+  /** the previously-stored latest report for this repo, or null on first ingest */
+  previous: ScanReport | null
+}
+
 /** Upsert a report: refresh the repo's latest and append a trend point. */
-export async function upsertServerReport(report: ScanReport): Promise<StoredRepo> {
+export async function upsertServerReport(report: ScanReport): Promise<UpsertResult> {
   const { owner, name, defaultBranch } = report.repo
   const id = `${owner}/${name}`
   const at = report.generatedAt || new Date().toISOString()
@@ -80,12 +88,13 @@ export async function upsertServerReport(report: ScanReport): Promise<StoredRepo
   const list = await readServerRepos()
   const existing = list.find((r) => r.id === id)
   if (existing) {
+    const previous = existing.latest // capture before overwrite
     existing.latest = report
     existing.defaultBranch = defaultBranch
     existing.scannedAt = at
     existing.history = [...existing.history.filter((p) => p.at !== at), point].slice(-MAX_HISTORY)
     await writeServerRepos(list)
-    return existing
+    return { repo: existing, previous }
   }
 
   const created: StoredRepo = {
@@ -99,5 +108,5 @@ export async function upsertServerReport(report: ScanReport): Promise<StoredRepo
   }
   list.unshift(created)
   await writeServerRepos(list)
-  return created
+  return { repo: created, previous: null }
 }

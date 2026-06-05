@@ -17,6 +17,7 @@ import { ReposOverview } from "@/components/repo-anti-rot/repos-overview"
 import { RescanButton } from "@/components/repo-anti-rot/rescan-button"
 import { ExportMenu } from "@/components/repo-anti-rot/export-menu"
 import { CommandPalette, type PaletteTab } from "@/components/repo-anti-rot/command-palette"
+import { ScanScheduler } from "@/components/repo-anti-rot/scan-scheduler"
 import { Button } from "@/components/ui/button"
 import { Command as CommandIcon } from "lucide-react"
 import { NewScanDialog } from "@/components/repo-anti-rot/new-scan-dialog"
@@ -277,6 +278,8 @@ export default function Page() {
         }}
         report={showOverview ? undefined : current.latest}
       />
+
+      <ScanScheduler />
     </div>
   )
 }

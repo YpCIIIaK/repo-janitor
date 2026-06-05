@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { scanReportSchema } from "@/packages/core/src/schema"
 import { upsertServerReport, type ScanReport } from "@/lib/server-store"
+import { notifyScoreDrop } from "@/lib/webhook"
 
 /**
  * Report ingestion endpoint.
@@ -45,8 +46,9 @@ export async function POST(request: Request) {
   }
 
   const report = parsed.data
+  let previous: ScanReport | null = null
   try {
-    await upsertServerReport(report as ScanReport)
+    ;({ previous } = await upsertServerReport(report as ScanReport))
   } catch (err) {
     // Read-only filesystem (e.g. some serverless hosts) — surface clearly.
     return NextResponse.json(
@@ -54,6 +56,9 @@ export async function POST(request: Request) {
       { status: 500 },
     )
   }
+
+  // Best-effort alert when health regressed vs the previous scan (opt-in via env).
+  await notifyScoreDrop(previous, report as ScanReport)
 
   return NextResponse.json({
     ok: true,

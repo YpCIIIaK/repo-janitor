@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Settings, Sparkles, Eye, EyeOff, Check } from "lucide-react"
+import { Settings, Sparkles, Eye, EyeOff, Check, Clock } from "lucide-react"
 import {
   Dialog,
   DialogContent,
@@ -23,6 +23,13 @@ import {
   type AiSettings,
 } from "@/lib/ai-settings"
 import { categoryLabels } from "@/lib/mock-data"
+import {
+  readSchedule,
+  saveSchedule,
+  describeSchedule,
+  MIN_INTERVAL_HOURS,
+  type ScheduleSettings,
+} from "@/lib/schedule-store"
 
 const CATEGORY_HINT: Record<string, string> = {
   "dead-code": "Is each unused export really safe to remove?",
@@ -37,6 +44,7 @@ const CATEGORY_HINT: Record<string, string> = {
 export function SettingsDialog() {
   const [open, setOpen] = useState(false)
   const [draft, setDraft] = useState<AiSettings>(readAiSettings)
+  const [sched, setSched] = useState<ScheduleSettings>(readSchedule)
   const [showKey, setShowKey] = useState(false)
   const [saved, setSaved] = useState(false)
 
@@ -44,6 +52,7 @@ export function SettingsDialog() {
   useEffect(() => {
     if (open) {
       setDraft(readAiSettings())
+      setSched(readSchedule())
       setShowKey(false)
       setSaved(false)
     }
@@ -51,6 +60,7 @@ export function SettingsDialog() {
 
   function save() {
     saveAiSettings(draft)
+    saveSchedule(sched)
     setSaved(true)
     setTimeout(() => {
       setSaved(false)
@@ -68,16 +78,27 @@ export function SettingsDialog() {
       <DialogContent className="flex max-h-[85vh] flex-col overflow-hidden sm:max-w-lg">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Sparkles className="size-4 text-primary" />
-            AI analysis
+            <Settings className="size-4 text-primary" />
+            Settings
           </DialogTitle>
           <DialogDescription>
-            Connect OpenRouter to enrich findings with an AI assessment. Your key is stored only in
-            this browser and sent through our own server — never directly to a third party.
+            Configure AI analysis and scheduled scans. Everything is stored only in this browser.
           </DialogDescription>
         </DialogHeader>
 
         <div className="-mx-1 flex-1 space-y-5 overflow-y-auto px-1 py-2">
+          {/* AI analysis */}
+          <div className="space-y-0.5">
+            <h3 className="flex items-center gap-1.5 text-sm font-semibold">
+              <Sparkles className="size-4 text-primary" />
+              AI analysis
+            </h3>
+            <p className="text-xs text-muted-foreground">
+              Connect OpenRouter to enrich findings with an AI assessment. Your key is sent through
+              our own server — never directly to a third party.
+            </p>
+          </div>
+
           {/* API key */}
           <div className="space-y-1.5">
             <Label htmlFor="ai-key">OpenRouter API key</Label>
@@ -176,6 +197,86 @@ export function SettingsDialog() {
                 </div>
               ))}
             </div>
+          </div>
+
+          {/* Scheduled scans */}
+          <div className="space-y-2 border-t border-border pt-5">
+            <div className="flex items-start justify-between gap-4">
+              <div className="min-w-0 space-y-0.5">
+                <Label htmlFor="sched-enabled" className="flex items-center gap-1.5">
+                  <Clock className="size-4 text-primary" />
+                  Scheduled scans
+                </Label>
+                <p className="text-xs text-muted-foreground">
+                  Auto-rescan tracked repos on a schedule while this tab is open.
+                </p>
+              </div>
+              <Switch
+                id="sched-enabled"
+                checked={sched.enabled}
+                onCheckedChange={(v) => setSched((s) => ({ ...s, enabled: v }))}
+              />
+            </div>
+
+            {sched.enabled && (
+              <div className="space-y-3 rounded-md border border-border p-3">
+                {/* Mode toggle */}
+                <div className="flex gap-1.5">
+                  {(["interval", "daily"] as const).map((m) => (
+                    <button
+                      key={m}
+                      type="button"
+                      onClick={() => setSched((s) => ({ ...s, mode: m }))}
+                      className={cn(
+                        "flex-1 rounded-md border px-2.5 py-1.5 text-xs font-medium transition-colors",
+                        sched.mode === m
+                          ? "border-primary/40 bg-primary/10 text-primary"
+                          : "border-border text-muted-foreground hover:bg-accent hover:text-foreground",
+                      )}
+                    >
+                      {m === "interval" ? "Every N hours" : "Daily at time"}
+                    </button>
+                  ))}
+                </div>
+
+                {sched.mode === "interval" ? (
+                  <div className="space-y-1.5">
+                    <Label htmlFor="sched-hours">Hours between scans (per repo)</Label>
+                    <Input
+                      id="sched-hours"
+                      type="number"
+                      min={MIN_INTERVAL_HOURS}
+                      step={0.25}
+                      value={sched.intervalHours}
+                      onChange={(e) => {
+                        const n = parseFloat(e.target.value)
+                        setSched((s) => ({ ...s, intervalHours: Number.isFinite(n) ? n : s.intervalHours }))
+                      }}
+                      onBlur={() =>
+                        setSched((s) => ({ ...s, intervalHours: Math.max(MIN_INTERVAL_HOURS, s.intervalHours) }))
+                      }
+                      className="w-28 text-sm"
+                    />
+                  </div>
+                ) : (
+                  <div className="space-y-1.5">
+                    <Label htmlFor="sched-time">Local time of day</Label>
+                    <Input
+                      id="sched-time"
+                      type="time"
+                      value={sched.dailyTime}
+                      onChange={(e) => setSched((s) => ({ ...s, dailyTime: e.target.value }))}
+                      className="w-32 text-sm"
+                    />
+                  </div>
+                )}
+
+                <p className="text-xs text-muted-foreground">
+                  {describeSchedule(sched)} · runs only while a tab is open. For unattended scans use
+                  the GitHub Action&apos;s <code>schedule:</code> trigger.
+                </p>
+              </div>
+            )}
           </div>
         </div>
 
