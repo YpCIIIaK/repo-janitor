@@ -1,0 +1,18 @@
+# Normalize all text files to LF in the repo and on checkout (every OS).
+# This keeps shell/JS shebangs (e.g. the CLI's `#!/usr/bin/env node`) valid on
+# macOS/Linux even if a contributor's git is set to core.autocrlf=true, and
+# avoids noisy CRLF/LF diffs across platforms.
+* text=auto eol=lf
+
+# Binary assets must never be line-ending–converted.
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.ico   binary
+*.webp  binary
+*.woff  binary
+*.woff2 binary
+*.ttf   binary
+*.otf   binary
+*.pdf   binary
