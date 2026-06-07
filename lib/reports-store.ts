@@ -22,6 +22,16 @@ export interface ScanReport {
   config?: { weights: { critical: number; warning: number; info: number } }
   /** Repo size metrics for normalized comparison (issues per 1000 lines). */
   metrics?: { linesOfCode: number }
+  /**
+   * What the codebase is made of — language breakdown and detected tooling.
+   * Optional: reports produced before profiling shipped won't carry it (the
+   * About tab prompts for a rescan in that case).
+   */
+  profile?: {
+    totalFiles: number
+    languages: { language: string; files: number; loc: number }[]
+    tools: string[]
+  }
 }
 
 export interface TrendPoint {

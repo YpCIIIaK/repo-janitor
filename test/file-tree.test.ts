@@ -1,5 +1,12 @@
 import { describe, it, expect } from "vitest"
-import { buildFileTree, countNodes, flattenTree, type TreeNode } from "@/lib/file-tree"
+import {
+  buildFileTree,
+  countNodes,
+  flattenTree,
+  collapsibleIds,
+  searchTree,
+  type TreeNode,
+} from "@/lib/file-tree"
 import { DEFAULT_WEIGHTS } from "@/lib/score"
 import { issue } from "./helpers"
 
@@ -29,6 +36,12 @@ describe("buildFileTree", () => {
     const file = dir.children[0]
     expect(file).toMatchObject({ kind: "file", name: "payments.ts", path: "lib/payments.ts" })
     expect(file.issues).toHaveLength(1)
+  })
+
+  it("normalizes Windows-style backslash paths to POSIX", () => {
+    const root = buildFileTree([issue({ location: "lib\\win\\a.ts:3" })])
+    const file = find(root, "lib/win/a.ts")
+    expect(file).toMatchObject({ kind: "file", name: "a.ts", path: "lib/win/a.ts" })
   })
 
   it("treats a repo-level path as a file at the root", () => {
@@ -112,6 +125,58 @@ describe("ordering", () => {
       issue({ category: "branch", severity: "critical", location: "origin/x" }),
     ])
     expect(root.children.map((c) => c.id)).toEqual(["heavy.ts", "light.ts", "bucket:branches"])
+  })
+})
+
+describe("collapsibleIds", () => {
+  it("lists directories with children, never files or leaf buckets", () => {
+    const root = buildFileTree([
+      issue({ id: "a", location: "lib/deep/a.ts:1" }),
+      issue({ id: "b", category: "branch", location: "origin/x" }),
+    ])
+    const ids = collapsibleIds(root)
+    expect(ids).toContain("dir:lib/deep") // compressed dir with a file child
+    // buckets hold issues directly (no child nodes) → not collapsible
+    expect(ids).not.toContain("bucket:branches")
+    // files are never collapsible
+    expect(ids).not.toContain("lib/deep/a.ts")
+  })
+})
+
+describe("searchTree", () => {
+  const tree = () =>
+    buildFileTree([
+      issue({ id: "a", location: "lib/payments.ts:1" }),
+      issue({ id: "b", location: "src/utils/date.ts:1" }),
+    ])
+
+  it("returns empty results for a blank query", () => {
+    const r = searchTree(tree(), "   ")
+    expect(r.matches.size).toBe(0)
+    expect(r.focusId).toBeNull()
+  })
+
+  it("matches by path substring and expands the ancestors", () => {
+    const r = searchTree(tree(), "payments")
+    expect(r.matches.has("lib/payments.ts")).toBe(true)
+    expect(r.expand.has("dir:lib")).toBe(true) // ancestor revealed
+    expect(r.focusId).toBe("lib/payments.ts")
+  })
+
+  it("is case-insensitive and can match a directory name", () => {
+    const r = searchTree(tree(), "SRC")
+    // "src/utils" is one compressed node whose path contains "src"
+    expect([...r.matches].some((id) => id.includes("src"))).toBe(true)
+  })
+
+  it("focuses the first match in pre-order (parent before child)", () => {
+    const root = buildFileTree([issue({ location: "app/app.ts:1" })])
+    // both the "app" dir and "app.ts" contain "app"; the dir comes first
+    expect(searchTree(root, "app").focusId).toBe("dir:app")
+  })
+
+  it("finds nothing for a non-matching query", () => {
+    expect(searchTree(tree(), "kubernetes").matches.size).toBe(0)
   })
 })
 

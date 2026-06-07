@@ -23,8 +23,9 @@ import { Button } from "@/components/ui/button"
 import { Command as CommandIcon } from "lucide-react"
 import { NewScanDialog } from "@/components/repo-anti-rot/new-scan-dialog"
 import { WelcomeScreen } from "@/components/repo-anti-rot/welcome-screen"
+import { RepoOverview } from "@/components/repo-anti-rot/repo-overview"
 import { useRepos, removeRepo, repoStats, repoTrend, countSeverity, timeAgo, repoDiff, issueDensity } from "@/lib/reports-store"
-import { Workflow } from "lucide-react"
+import { Workflow, Info } from "lucide-react"
 import { useSnoozed, partitionSnoozed, clearSnoozedForRepo } from "@/lib/snooze-store"
 import { computeScore, scoreToGrade } from "@/lib/score"
 import { cn } from "@/lib/utils"
@@ -223,6 +224,10 @@ export default function Page() {
                 <Workflow className="size-4" />
                 Tree
               </TabsTrigger>
+              <TabsTrigger value="about">
+                <Info className="size-4" />
+                About
+              </TabsTrigger>
               <TabsTrigger value="breakdown">Breakdown</TabsTrigger>
             </TabsList>
 
@@ -283,6 +288,23 @@ export default function Page() {
                 onViewInIssues={(file) => {
                   setSearch(file)
                   setTab("issues")
+                }}
+              />
+            </TabsContent>
+
+            <TabsContent value="about" className="mt-6">
+              <RepoOverview
+                profile={current.latest.profile}
+                linesOfCode={current.latest.metrics?.linesOfCode}
+                grade={repo.grade}
+                score={repo.score}
+                lastScan={repo.lastScan}
+                repo={{
+                  owner: current.owner,
+                  name: current.name,
+                  url: current.url,
+                  defaultBranch: current.defaultBranch,
+                  commit: current.latest.repo.commit,
                 }}
               />
             </TabsContent>

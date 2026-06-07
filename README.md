@@ -455,6 +455,24 @@ repo-wide findings sit in dedicated "Branches" / "Repository" buckets. Click a
 folder to expand or collapse it, or a file to open an in-canvas card listing its
 findings — with a jump straight to the filtered Issues tab or the file on GitHub.
 Large trees (30+ nodes) auto-switch to a left-to-right layout and collapse deep
-levels on first paint. The tree-building logic lives in `lib/file-tree.ts`
-(pure + unit-tested); the React Flow view is lazy-loaded so it stays out of the
-initial bundle.
+levels on first paint.
+
+A toolbar keeps the map manageable: **severity toggles** (mute info, or focus on
+criticals only — the tree rebuilds from just the active severities), a **path
+search** that expands ancestors and pans/zooms to the first match, **expand /
+collapse all**, and **export to PNG or SVG**. The tree-building, collapse and
+search logic lives in `lib/file-tree.ts` (pure + unit-tested); the React Flow view
+is lazy-loaded so it stays out of the initial bundle.
+
+### Repository profile (About tab)
+
+The **About** tab answers "what is this repo made of?" at a glance: a **language
+breakdown** (by file count and non-blank lines, with the long tail folded into an
+"Other" bucket) and the **ecosystems/tooling** detected from manifest files
+(Node.js, pnpm/Yarn/npm, TypeScript, Next.js, Vite, Tailwind, Docker, GitHub
+Actions, Go modules, pip/Poetry, Cargo, Bundler, Composer, Maven/Gradle, …), plus
+headline facts (files scanned, lines of code, grade). The data is produced by the
+engine during its single read pass and shipped in the report's optional `profile`
+field (`packages/core/src/profile.ts` — pure language/tool classification, unit-
+tested); the dashboard renders shares via `lib/repo-profile.ts`. Reports created
+before profiling shipped simply prompt for a rescan.

@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect } from "react"
-import { FileDown, FileJson, FileText, LayoutGrid, ListTree, PlusCircle, Boxes, GitBranch, Workflow } from "lucide-react"
+import { FileDown, FileJson, FileText, LayoutGrid, ListTree, PlusCircle, Boxes, GitBranch, Workflow, Info } from "lucide-react"
 import {
   CommandDialog,
   CommandEmpty,
@@ -16,7 +16,7 @@ import { downloadReport } from "@/lib/report-export"
 import type { ScanReport } from "@/lib/reports-store"
 import type { Grade } from "@/lib/mock-data"
 
-export type PaletteTab = "overview" | "issues" | "tree" | "breakdown"
+export type PaletteTab = "overview" | "issues" | "tree" | "about" | "breakdown"
 
 export interface PaletteRepo {
   id: string
@@ -94,6 +94,10 @@ export function CommandPalette({
             <CommandItem keywords={["tree", "map", "graph", "files"]} onSelect={run(() => onGoToTab("tree"))}>
               <Workflow />
               Tree
+            </CommandItem>
+            <CommandItem keywords={["about", "profile", "languages", "stack", "tech"]} onSelect={run(() => onGoToTab("about"))}>
+              <Info />
+              About
             </CommandItem>
             <CommandItem onSelect={run(() => onGoToTab("breakdown"))}>
               <Boxes />

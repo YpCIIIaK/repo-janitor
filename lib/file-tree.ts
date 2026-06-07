@@ -193,3 +193,46 @@ export function countNodes(node: TreeNode): number {
 export function flattenTree(node: TreeNode): TreeNode[] {
   return [node, ...node.children.flatMap(flattenTree)]
 }
+
+/** Every directory/bucket id that has children — the set "collapse all" toggles. */
+export function collapsibleIds(node: TreeNode): string[] {
+  const ids: string[] = []
+  const walk = (n: TreeNode) => {
+    if ((n.kind === "dir" || n.kind === "bucket") && n.children.length > 0) ids.push(n.id)
+    n.children.forEach(walk)
+  }
+  walk(node)
+  return ids
+}
+
+export interface TreeSearch {
+  /** Ids of nodes whose path or name matches the query. */
+  matches: Set<string>
+  /** Ancestor ids that must be expanded to reveal the matches. */
+  expand: Set<string>
+  /** First match in pre-order, to pan/zoom the view to — null when nothing matches. */
+  focusId: string | null
+}
+
+/**
+ * Find nodes matching a free-text query (case-insensitive substring over path
+ * and name). Returns the match set, the ancestors to expand so matches are
+ * visible, and a single focus target. Pure — the view drives collapse/pan from it.
+ */
+export function searchTree(root: TreeNode, query: string): TreeSearch {
+  const q = query.trim().toLowerCase()
+  const result: TreeSearch = { matches: new Set(), expand: new Set(), focusId: null }
+  if (!q) return result
+
+  const walk = (node: TreeNode, ancestors: string[]) => {
+    if (node.kind !== "root" && `${node.path}\n${node.name}`.toLowerCase().includes(q)) {
+      result.matches.add(node.id)
+      for (const a of ancestors) result.expand.add(a)
+      if (result.focusId === null) result.focusId = node.id
+    }
+    const nextAncestors = node.kind === "root" ? ancestors : [...ancestors, node.id]
+    node.children.forEach((child) => walk(child, nextAncestors))
+  }
+  walk(root, [])
+  return result
+}

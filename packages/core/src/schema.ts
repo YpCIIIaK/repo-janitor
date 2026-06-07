@@ -52,6 +52,27 @@ export const issueSchema = z.object({
 })
 export type Issue = z.infer<typeof issueSchema>
 
+/**
+ * Repo "profile" — what the codebase is made of: a language breakdown (by file
+ * count and non-blank lines) and the ecosystems/tooling detected from manifest
+ * files. Optional, so reports produced before profiling shipped still validate.
+ */
+export const repoProfileSchema = z.object({
+  /** Total files the scan walked (after ignore globs). */
+  totalFiles: z.number().int().nonnegative(),
+  /** Source languages, sorted by lines of code descending. */
+  languages: z.array(
+    z.object({
+      language: z.string(),
+      files: z.number().int().nonnegative(),
+      loc: z.number().int().nonnegative(),
+    }),
+  ),
+  /** Detected ecosystems/tooling (e.g. "Node.js", "Docker", "GitHub Actions"). */
+  tools: z.array(z.string()),
+})
+export type RepoProfile = z.infer<typeof repoProfileSchema>
+
 export const scanReportSchema = z.object({
   schemaVersion: z.literal(SCHEMA_VERSION),
   repo: z.object({
@@ -89,5 +110,7 @@ export const scanReportSchema = z.object({
       linesOfCode: z.number().int().nonnegative(),
     })
     .optional(),
+  /** What the codebase is made of — languages and detected tooling. */
+  profile: repoProfileSchema.optional(),
 })
 export type ScanReport = z.infer<typeof scanReportSchema>

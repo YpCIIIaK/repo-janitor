@@ -163,6 +163,29 @@ describe("runScan", () => {
     expect(report.metrics?.linesOfCode).toBe(3)
   })
 
+  it("builds a repo profile: languages by LOC plus detected tooling", async () => {
+    const ctx = makeContext({
+      files: {
+        "a.ts": "line1\n\nline2\n", // TypeScript, 2 LOC
+        "b.ts": "x\n", // TypeScript, 1 LOC
+        "main.go": "package main\n", // Go, 1 LOC
+        "package.json": "{}",
+        "Dockerfile": "FROM node",
+        "README.md": "# prose",
+      },
+    })
+    const report = await runScan(ctx, [])
+    expect(report.profile?.totalFiles).toBe(6)
+    // TypeScript (3 LOC across 2 files) ranks above Go (1 LOC)
+    expect(report.profile?.languages).toEqual([
+      { language: "TypeScript", files: 2, loc: 3 },
+      { language: "Go", files: 1, loc: 1 },
+    ])
+    expect(report.profile?.tools).toEqual(["Node.js", "Docker"])
+    // LOC metric stays consistent with the language breakdown
+    expect(report.metrics?.linesOfCode).toBe(4)
+  })
+
   it("fires progress callbacks: start tick then one per scanner", async () => {
     const ctx = makeContext({ files: {} })
     const events: { completed: number; total: number; scanner?: string }[] = []

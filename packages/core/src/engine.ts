@@ -1,5 +1,6 @@
 import type { Scanner, ScanContext } from "./scanner"
-import { scanReportSchema, SCHEMA_VERSION, type Grade, type Issue, type ScanReport } from "./schema"
+import { scanReportSchema, SCHEMA_VERSION, type Grade, type Issue, type RepoProfile, type ScanReport } from "./schema"
+import { extToLanguage, detectTools } from "./profile"
 import { DEFAULT_WEIGHTS, INLINE_IGNORE_MARKER, INLINE_IGNORE_NEXT_LINE_MARKER } from "./config"
 import { envLifecycleScanner } from "./scanners/env-lifecycle"
 import { staleBranchScanner } from "./scanners/stale-branch"
@@ -68,20 +69,38 @@ export interface ScanProgress {
   total: number
 }
 
-// Source extensions counted toward lines-of-code (config/markdown/json excluded).
-const CODE_RE = /\.(ts|tsx|js|jsx|mjs|mts|cts|py|go|rs|java|rb|php|c|cc|cpp|h|hpp|cs|kt|swift|scala|vue|svelte)$/i
+/**
+ * One read pass over source files that yields BOTH the lines-of-code metric and
+ * the language breakdown for the repo profile, plus the detected tooling (from
+ * the file list alone). Best-effort: a file that can't be read still counts
+ * toward its language's file tally, just with zero lines. Languages are sorted
+ * by lines of code descending.
+ */
+async function buildMetricsAndProfile(
+  ctx: ScanContext,
+): Promise<{ linesOfCode: number; profile: RepoProfile }> {
+  const langs = new Map<string, { files: number; loc: number }>()
 
-/** Sum of non-blank lines across recognised source files. Best-effort: a file
- * that can't be read is skipped. One extra read pass over source files. */
-async function countLinesOfCode(ctx: ScanContext): Promise<number> {
-  let loc = 0
   for (const file of ctx.files) {
-    if (!CODE_RE.test(file.replace(/\\/g, "/"))) continue
+    const language = extToLanguage(file)
+    if (!language) continue
+    const entry = langs.get(language) ?? { files: 0, loc: 0 }
+    entry.files++
     const content = await ctx.readFile(file)
-    if (!content) continue
-    for (const line of content.split("\n")) if (line.trim()) loc++
+    if (content) {
+      for (const line of content.split("\n")) if (line.trim()) entry.loc++
+    }
+    langs.set(language, entry)
   }
-  return loc
+
+  const languages = [...langs.entries()]
+    .map(([language, v]) => ({ language, files: v.files, loc: v.loc }))
+    .sort((a, b) => b.loc - a.loc || b.files - a.files || a.language.localeCompare(b.language))
+
+  return {
+    linesOfCode: languages.reduce((sum, l) => sum + l.loc, 0),
+    profile: { totalFiles: ctx.files.length, languages, tools: detectTools(ctx.files) },
+  }
 }
 
 const LOCATION_RE = /^(.+?):(\d+)$/
@@ -149,7 +168,7 @@ export async function runScan(
   const weights = ctx.config?.weights ?? DEFAULT_WEIGHTS
   const visible = await applyInlineIgnores(issues, ctx)
   const score = computeScore(visible, weights)
-  const linesOfCode = await countLinesOfCode(ctx)
+  const { linesOfCode, profile } = await buildMetricsAndProfile(ctx)
   const report: ScanReport = {
     schemaVersion: SCHEMA_VERSION,
     repo: ctx.repo,
@@ -160,6 +179,7 @@ export async function runScan(
     // Echo effective weights so the dashboard recomputes the score identically.
     config: { weights },
     metrics: { linesOfCode },
+    profile,
   }
 
   // fail loudly if we ever drift from the shared schema
