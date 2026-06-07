@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import dynamic from "next/dynamic"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { TopBar } from "@/components/repo-anti-rot/top-bar"
 import { RepoSidebar, type SidebarRepo } from "@/components/repo-anti-rot/repo-sidebar"
@@ -23,9 +24,24 @@ import { Command as CommandIcon } from "lucide-react"
 import { NewScanDialog } from "@/components/repo-anti-rot/new-scan-dialog"
 import { WelcomeScreen } from "@/components/repo-anti-rot/welcome-screen"
 import { useRepos, removeRepo, repoStats, repoTrend, countSeverity, timeAgo, repoDiff, issueDensity } from "@/lib/reports-store"
+import { Workflow } from "lucide-react"
 import { useSnoozed, partitionSnoozed, clearSnoozedForRepo } from "@/lib/snooze-store"
 import { computeScore, scoreToGrade } from "@/lib/score"
 import { cn } from "@/lib/utils"
+
+// React Flow is client-only and heavy — load the tree lazily so it stays out of
+// the initial bundle and only ships when the user opens the Tree tab.
+const RepoTree = dynamic(
+  () => import("@/components/repo-anti-rot/repo-tree").then((m) => m.RepoTree),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex h-[600px] items-center justify-center rounded-lg border border-border text-sm text-muted-foreground">
+        Loading map…
+      </div>
+    ),
+  },
+)
 
 const severityChip: Record<"critical" | "warning" | "info", string> = {
   critical: "bg-destructive/15 text-destructive border-destructive/30",
@@ -203,6 +219,10 @@ export default function Page() {
             <TabsList>
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="issues">Issues</TabsTrigger>
+              <TabsTrigger value="tree">
+                <Workflow className="size-4" />
+                Tree
+              </TabsTrigger>
               <TabsTrigger value="breakdown">Breakdown</TabsTrigger>
             </TabsList>
 
@@ -241,6 +261,30 @@ export default function Page() {
               <div className="mt-6">
                 <IssuesTable issues={allIssues} repo={tableRepo} query={search} />
               </div>
+            </TabsContent>
+
+            <TabsContent value="tree" className="mt-6">
+              <div className="mb-3 flex items-center justify-between gap-2">
+                <p className="text-sm text-muted-foreground">
+                  Repository map — files and branches that carry findings, colored by worst severity.
+                  Click a folder to expand, a file for details.
+                </p>
+              </div>
+              <RepoTree
+                issues={issues}
+                weights={weights}
+                repo={{
+                  owner: current.owner,
+                  name: current.name,
+                  url: current.url,
+                  commit: current.latest.repo.commit,
+                  defaultBranch: current.defaultBranch,
+                }}
+                onViewInIssues={(file) => {
+                  setSearch(file)
+                  setTab("issues")
+                }}
+              />
             </TabsContent>
 
             <TabsContent value="breakdown" className="mt-6 space-y-6">

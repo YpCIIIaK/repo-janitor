@@ -442,3 +442,19 @@ The Overview tab also surfaces **hotspot files** — the source files attracting
 the most rot, ranked by weighted penalty — so a fix can be targeted at the few
 files where decay concentrates instead of chasing scattered findings. Each file
 links straight to the pinned commit on GitHub.
+
+### Repository map (Tree view)
+
+The **Tree** tab visualizes a scan as an interactive graph (built on
+[React Flow](https://reactflow.dev)): only the *affected* paths are drawn, folded
+into a directory hierarchy, so you see exactly where rot concentrates without the
+clutter of the whole repo. Each node aggregates the subtree's severity counts and
+is colored by its worst finding; linear single-child directory chains are
+collapsed (`src/legacy/handler.js` → one `src/legacy` node), and stale branches /
+repo-wide findings sit in dedicated "Branches" / "Repository" buckets. Click a
+folder to expand or collapse it, or a file to open an in-canvas card listing its
+findings — with a jump straight to the filtered Issues tab or the file on GitHub.
+Large trees (30+ nodes) auto-switch to a left-to-right layout and collapse deep
+levels on first paint. The tree-building logic lives in `lib/file-tree.ts`
+(pure + unit-tested); the React Flow view is lazy-loaded so it stays out of the
+initial bundle.
