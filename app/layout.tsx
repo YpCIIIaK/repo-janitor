@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
-import { Analytics } from '@vercel/analytics/next'
 import { ServerSync } from '@/components/repo-anti-rot/server-sync'
 import { Toaster } from '@/components/ui/sonner'
 import './globals.css'
@@ -42,7 +41,6 @@ export default function RootLayout({
         <ServerSync />
         {children}
         <Toaster />
-        {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
   )
