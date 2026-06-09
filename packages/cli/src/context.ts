@@ -118,17 +118,25 @@ export async function buildScanContext(root: string): Promise<ScanContext> {
     git: {
       blameAgeDays: async (relPath: string, line: number): Promise<number> => {
         try {
-          // Use any type to avoid TS error until we fix typings
-          const blameOutput = await (git as any).blame([`-L${line},${line}`, relPath]);
-          if (!blameOutput || blameOutput.length === 0) {
-            return 0;
-          }
-
-          const commitTimestamp = blameOutput[0].date.getTime();
-          const now = Date.now();
-          const ageDays = Math.floor((now - commitTimestamp) / (1000 * 60 * 60 * 24));
+          // simple-git has no `.blame()` helper, so drive porcelain blame through
+          // `raw` and read the `committer-time` epoch from the header block. The
+          // `-L a,b` range limits blame to the single line we care about; `--`
+          // keeps paths that look like options unambiguous.
+          const out = await git.raw([
+            "blame",
+            "--porcelain",
+            "-L",
+            `${line},${line}`,
+            "--",
+            relPath,
+          ]);
+          const m = out.match(/^committer-time (\d+)/m);
+          if (!m) return 0;
+          const commitMs = parseInt(m[1], 10) * 1000;
+          const ageDays = Math.floor((Date.now() - commitMs) / (1000 * 60 * 60 * 24));
           return Math.max(0, ageDays);
-        } catch (err) {
+        } catch {
+          // uncommitted line, file not in git, or git unavailable → unknown age
           return 0;
         }
       },

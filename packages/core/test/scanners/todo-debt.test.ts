@@ -50,4 +50,18 @@ describe("todoDebtScanner", () => {
     const issues = await todoDebtScanner.run(ctx)
     expect(issues[0].title).toContain("handle null user")
   })
+
+  it("captures every marker in a multi-line block comment, at the right lines", async () => {
+    const ctx = makeContext({
+      files: {
+        "a.ts": "/*\n * TODO: first thing\n * FIXME: second thing\n */\nexport const x = 1\n",
+      },
+    })
+    const issues = await todoDebtScanner.run(ctx)
+    expect(issues).toHaveLength(2)
+    const todo = issues.find((i) => i.title.includes("first thing"))
+    const fixme = issues.find((i) => i.title.includes("second thing"))
+    expect(todo?.location).toBe("a.ts:2")
+    expect(fixme?.location).toBe("a.ts:3")
+  })
 })

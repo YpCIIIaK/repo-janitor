@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { AlertTriangle, Bell, BellOff, Check, Clipboard, Github, Link2, Loader2, Sparkles } from "lucide-react"
+import { AlertTriangle, Bell, BellOff, Bug, Check, Clipboard, Github, Link2, Loader2, Sparkles } from "lucide-react"
 import { categoryLabels, severityLabels, type Issue } from "@/lib/mock-data"
 import { fullAge, issueAsMarkdown, severityStyle } from "@/lib/issue-format"
 import { useAiSettings } from "@/lib/ai-settings"
@@ -16,6 +16,8 @@ interface Props {
   open: boolean
   onOpenChange: (open: boolean) => void
   githubUrl: string | null
+  /** Prefilled GitHub "new issue" URL for this finding, or null when unavailable. */
+  newIssueUrl: string | null
   snoozed: boolean
   onToggleSnooze: () => void
 }
@@ -48,7 +50,7 @@ function CopyButton({ value, label }: { value: string; label: string }) {
  * Sliding detail panel for a single finding: full metadata, evidence, an
  * on-demand AI verdict, and quick actions (GitHub permalink, copy, snooze).
  */
-export function IssueDrawer({ issue, open, onOpenChange, githubUrl, snoozed, onToggleSnooze }: Props) {
+export function IssueDrawer({ issue, open, onOpenChange, githubUrl, newIssueUrl, snoozed, onToggleSnooze }: Props) {
   const settings = useAiSettings()
   const hasKey = !!settings.apiKey.trim()
   const model = settings.model
@@ -180,6 +182,20 @@ export function IssueDrawer({ issue, open, onOpenChange, githubUrl, snoozed, onT
                   </Button>
                 )}
                 {githubUrl && <CopyButton value={githubUrl} label="Copy link" />}
+                {newIssueUrl && (
+                  <Button
+                    asChild
+                    size="sm"
+                    variant="ghost"
+                    className="h-8 gap-1.5 px-2 text-xs text-muted-foreground hover:text-foreground"
+                    title="Open GitHub's new-issue form, prefilled — you review and submit it there"
+                  >
+                    <a href={newIssueUrl} target="_blank" rel="noopener noreferrer">
+                      <Bug className="size-3.5" />
+                      Create issue
+                    </a>
+                  </Button>
+                )}
                 <CopyButton value={issueAsMarkdown({ ...issue, aiNote: note ?? issue.aiNote })} label="Copy Markdown" />
                 <Button
                   size="sm"

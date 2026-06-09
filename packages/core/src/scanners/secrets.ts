@@ -68,7 +68,9 @@ function isLowConfidenceSecretFile(file: string): boolean {
 function redactLine(line: string, token: string): string {
   const masked =
     token.length <= 4 ? "••••" : token.slice(0, 4) + "•".repeat(Math.min(token.length - 4, 12))
-  let out = line.replace(token, masked).trim()
+  // Replace EVERY occurrence — a token repeated on the line must not leak via a
+  // second copy. split/join avoids regex-escaping the (arbitrary) token.
+  let out = line.split(token).join(masked).trim()
   if (out.length > 120) out = out.slice(0, 117) + "…"
   return out
 }

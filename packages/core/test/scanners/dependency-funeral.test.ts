@@ -26,6 +26,35 @@ describe("dependencyFuneralScanner", () => {
     expect(await dependencyFuneralScanner.run(ctx)).toHaveLength(0)
   })
 
+  it("does not flag framework-implicit runtimes (react-dom) as unused", async () => {
+    const ctx = makeContext({
+      files: { "package.json": JSON.stringify({ dependencies: { "react-dom": "19.0.0" } }) },
+    })
+    expect(await dependencyFuneralScanner.run(ctx)).toHaveLength(0)
+  })
+
+  it("does not flag a dep referenced only by an npm script", async () => {
+    const ctx = makeContext({
+      files: {
+        "package.json": JSON.stringify({
+          dependencies: { vitest: "2.0.0" },
+          scripts: { test: "vitest run" },
+        }),
+      },
+    })
+    expect(await dependencyFuneralScanner.run(ctx)).toHaveLength(0)
+  })
+
+  it("does not flag a dep referenced only in a config file", async () => {
+    const ctx = makeContext({
+      files: {
+        "package.json": JSON.stringify({ dependencies: { autoprefixer: "10.0.0" } }),
+        "postcss.config.mjs": "export default { plugins: { autoprefixer: {} } }\n",
+      },
+    })
+    expect(await dependencyFuneralScanner.run(ctx)).toHaveLength(0)
+  })
+
   it("flags a deprecated package as warning", async () => {
     const ctx = makeContext({
       files: {
@@ -84,6 +113,78 @@ describe("dependencyFuneralScanner", () => {
     const issues = await dependencyFuneralScanner.run(ctx)
     expect(issues.find((i) => i.id === "dep-outdated-major")?.severity).toBe("warning")
     expect(issues.find((i) => i.id === "dep-outdated-minor")?.severity).toBe("info")
+  })
+
+  it("does NOT flag a caret range that already auto-accepts the newer minor", async () => {
+    const ctx = makeContext({
+      files: {
+        "package.json": JSON.stringify({ dependencies: { car: "^2.0.0" } }),
+        "a.ts": "import 'car'\n",
+      },
+      fetchJson: {
+        [reg("car")]: {
+          "dist-tags": { latest: "2.5.0" },
+          versions: { "2.5.0": {} },
+          time: { "2.5.0": new Date().toISOString() },
+        },
+      },
+    })
+    const issues = await dependencyFuneralScanner.run(ctx)
+    expect(issues.some((i) => i.id === "dep-outdated-car")).toBe(false)
+  })
+
+  it("flags a caret range that is behind by a MAJOR (caret can't cross it)", async () => {
+    const ctx = makeContext({
+      files: {
+        "package.json": JSON.stringify({ dependencies: { car: "^1.2.0" } }),
+        "a.ts": "import 'car'\n",
+      },
+      fetchJson: {
+        [reg("car")]: {
+          "dist-tags": { latest: "3.0.0" },
+          versions: { "3.0.0": {} },
+          time: { "3.0.0": new Date().toISOString() },
+        },
+      },
+    })
+    const issues = await dependencyFuneralScanner.run(ctx)
+    expect(issues.find((i) => i.id === "dep-outdated-car")?.severity).toBe("warning")
+  })
+
+  it("flags a tilde range behind by a minor (tilde only accepts patches)", async () => {
+    const ctx = makeContext({
+      files: {
+        "package.json": JSON.stringify({ dependencies: { til: "~2.0.0" } }),
+        "a.ts": "import 'til'\n",
+      },
+      fetchJson: {
+        [reg("til")]: {
+          "dist-tags": { latest: "2.5.0" },
+          versions: { "2.5.0": {} },
+          time: { "2.5.0": new Date().toISOString() },
+        },
+      },
+    })
+    const issues = await dependencyFuneralScanner.run(ctx)
+    expect(issues.find((i) => i.id === "dep-outdated-til")?.severity).toBe("info")
+  })
+
+  it("skips the outdated check for non-comparable ranges (>=, *, x)", async () => {
+    const ctx = makeContext({
+      files: {
+        "package.json": JSON.stringify({ dependencies: { open: ">=1.0.0" } }),
+        "a.ts": "import 'open'\n",
+      },
+      fetchJson: {
+        [reg("open")]: {
+          "dist-tags": { latest: "3.0.0" },
+          versions: { "3.0.0": {} },
+          time: { "3.0.0": new Date().toISOString() },
+        },
+      },
+    })
+    const issues = await dependencyFuneralScanner.run(ctx)
+    expect(issues.some((i) => i.id === "dep-outdated-open")).toBe(false)
   })
 
   it("returns nothing when package.json is absent or has no deps", async () => {

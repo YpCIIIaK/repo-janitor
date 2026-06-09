@@ -30,6 +30,25 @@ function parseSemver(v: string | undefined): SemVer | null {
   return { major: +m[1], minor: +m[2], patch: +m[3] }
 }
 
+/**
+ * Classify a declared version range so "outdated" reflects what `npm install`
+ * would actually leave behind — not just the floor:
+ *  - `caret`  (`^1.2.3`) auto-accepts minor+patch within the major → only a NEW
+ *    major counts as behind.
+ *  - `tilde`  (`~1.2.3`) accepts patch only → a new minor (or major) is behind.
+ *  - `exact`  (`1.2.3` / `=1.2.3`) is pinned → any newer minor/major is behind.
+ *  - `other`  (`>=`, `*`, `1.x`, `||`, `npm:`, `workspace:` …) can't be compared
+ *    meaningfully → skip the outdated check to avoid false positives.
+ */
+type RangeKind = "caret" | "tilde" | "exact" | "other"
+function rangeKind(decl: string): RangeKind {
+  const s = (decl ?? "").trim()
+  if (s.startsWith("^")) return "caret"
+  if (s.startsWith("~")) return "tilde"
+  if (/^=?\s*v?\d+\.\d+\.\d+(?:[-+][\w.-]+)?$/.test(s)) return "exact"
+  return "other"
+}
+
 /** Normalize an import specifier to its package name, or null for local imports. */
 function packageOf(spec: string): string | null {
   if (!spec || spec.startsWith(".") || spec.startsWith("/")) return null
@@ -39,6 +58,32 @@ function packageOf(spec: string): string | null {
     return parts.length >= 2 ? `${parts[0]}/${parts[1]}` : null
   }
   return clean.split("/")[0]
+}
+
+/**
+ * Packages consumed by a framework/runtime without an explicit source import, so
+ * a reference graph can't see them. Flagging these as "unused" is a false
+ * positive (e.g. Next.js renders with react-dom though app code never imports it).
+ */
+const FRAMEWORK_IMPLICIT = new Set(["react-dom"])
+
+/** Config files whose contents reference deps by name (often without an import). */
+const CONFIG_FILE_RE =
+  /(^|\/)(next|postcss|tailwind|vite|vitest|rollup|webpack|babel|jest|eslint|prettier|stylelint|playwright|cypress|tsup|drizzle|svelte|astro|nuxt)\.config\.[cm]?[jt]s$|(^|\/)\.(babelrc|eslintrc|prettierrc|stylelintrc)[\w.]*$/i
+
+/**
+ * Build a text blob of "tooling usage": npm-script bodies + the contents of build
+ * config files. A dep referenced only here (a CLI in scripts, a postcss plugin
+ * keyed by string, an eslint plugin) is genuinely used even with no source import.
+ */
+async function collectToolingText(ctx: ScanContext, scripts: Record<string, string>): Promise<string> {
+  let text = Object.values(scripts ?? {}).join("\n")
+  for (const file of ctx.files) {
+    if (!CONFIG_FILE_RE.test(file)) continue
+    const content = await ctx.readFile(file)
+    if (content) text += `\n${content}`
+  }
+  return text
 }
 
 /** Collect every package name imported/required across the source tree. */
@@ -108,7 +153,7 @@ export const dependencyFuneralScanner: Scanner = {
     const raw = await ctx.readFile("package.json")
     if (!raw) return []
 
-    let pkgJson: { dependencies?: Record<string, string> }
+    let pkgJson: { dependencies?: Record<string, string>; scripts?: Record<string, string> }
     try {
       pkgJson = JSON.parse(raw)
     } catch {
@@ -120,10 +165,16 @@ export const dependencyFuneralScanner: Scanner = {
 
     const issues: Issue[] = []
     const used = await collectImports(ctx)
+    const toolingText = await collectToolingText(ctx, pkgJson.scripts ?? {})
+
+    // A dep counts as used if imported in source, consumed by a framework runtime,
+    // or referenced by a build script / config file (CLIs, plugins keyed by name).
+    const isUsed = (name: string): boolean =>
+      used.has(name) || FRAMEWORK_IMPLICIT.has(name) || toolingText.includes(name)
 
     for (const name of names) {
       // 1) unused (static, works offline) — @types/* are never imported directly
-      if (!used.has(name) && !name.startsWith("@types/")) {
+      if (!isUsed(name) && !name.startsWith("@types/")) {
         issues.push({
           id: `dep-unused-${name}`,
           category: "dependency",
@@ -162,16 +213,23 @@ export const dependencyFuneralScanner: Scanner = {
         })
       }
 
-      // 3) outdated: compare declared range base to latest
+      // 3) outdated: compare declared range to latest, honoring the range operator
+      // so a caret/tilde that already auto-upgrades isn't reported as "behind".
       const current = parseSemver(deps[name])
       const latest = parseSemver(info.latest)
-      if (current && latest) {
+      const kindOf = rangeKind(deps[name])
+      if (current && latest && kindOf !== "other") {
         let severity: Severity | null = null
         let kind = ""
         if (latest.major > current.major) {
+          // No range short of a major-allowing one crosses a major boundary.
           severity = "warning"
           kind = "major"
-        } else if (latest.major === current.major && latest.minor > current.minor) {
+        } else if (
+          latest.major === current.major &&
+          latest.minor > current.minor &&
+          kindOf !== "caret" // caret already pulls newer minors on install
+        ) {
           severity = "info"
           kind = "minor"
         }

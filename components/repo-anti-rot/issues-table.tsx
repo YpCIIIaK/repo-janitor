@@ -20,6 +20,7 @@ import {
 } from "@/lib/mock-data"
 import { searchIssues } from "@/lib/issue-search"
 import { githubFileUrl } from "@/lib/github-link"
+import { githubNewIssueUrl } from "@/lib/github-issue"
 import { useSnoozed, setSnoozed, snoozeKey, partitionSnoozed } from "@/lib/snooze-store"
 import { formatAge, issueAsMarkdown, severityStyle } from "@/lib/issue-format"
 import { IssueDrawer } from "@/components/repo-anti-rot/issue-drawer"
@@ -189,6 +190,8 @@ export function IssuesTable({
   const linkFor = (issue: Issue) =>
     githubFileUrl(repo?.url, repo?.commit, repo?.defaultBranch, issue.location)
 
+  const newIssueFor = (issue: Issue) => githubNewIssueUrl(repo?.url, issue, linkFor(issue))
+
   const selectedIssue = useMemo(
     () => issues.find((i) => i.id === selectedId) ?? null,
     [issues, selectedId],
@@ -334,6 +337,7 @@ export function IssuesTable({
         open={drawerOpen}
         onOpenChange={setDrawerOpen}
         githubUrl={selectedIssue ? linkFor(selectedIssue) : null}
+        newIssueUrl={selectedIssue ? newIssueFor(selectedIssue) : null}
         snoozed={selectedIssue ? isSnoozed(selectedIssue.id) : false}
         onToggleSnooze={() => selectedIssue && toggleSnooze(selectedIssue.id)}
       />

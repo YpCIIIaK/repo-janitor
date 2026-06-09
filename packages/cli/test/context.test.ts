@@ -1,6 +1,10 @@
 import { describe, it, expect } from "vitest"
+import { execFileSync } from "node:child_process"
+import { mkdtempSync, rmSync, writeFileSync } from "node:fs"
+import { tmpdir } from "node:os"
+import { join } from "node:path"
 import type { SimpleGit } from "simple-git"
-import { getRepoMetadata } from "../src/context"
+import { buildScanContext, getRepoMetadata } from "../src/context"
 
 /**
  * Build a fake SimpleGit exposing only the methods getRepoMetadata calls.
@@ -80,5 +84,74 @@ describe("getRepoMetadata", () => {
     })
     const meta = await getRepoMetadata(git, "/tmp/b")
     expect(meta.defaultBranch).toBe("main")
+  })
+})
+
+/**
+ * Exercises the REAL git adapter (not a fake) against a throwaway repo, so a
+ * regression like "simple-git has no .blame()" — which silently made every age 0
+ * — is caught. Creates a repo with a back-dated commit and asserts the computed
+ * age matches.
+ */
+describe("buildScanContext git.blameAgeDays (real git)", () => {
+  function makeRepo(): string {
+    const dir = mkdtempSync(join(tmpdir(), "rar-blame-"))
+    const run = (...args: string[]) =>
+      execFileSync("git", args, {
+        cwd: dir,
+        stdio: "ignore",
+        env: { ...process.env, GIT_TERMINAL_PROMPT: "0" },
+      })
+    run("init", "-q")
+    run("config", "user.email", "test@example.com")
+    run("config", "user.name", "Test")
+    run("config", "commit.gpgsign", "false")
+    return dir
+  }
+
+  function commitFileAt(dir: string, name: string, body: string, isoDate: string) {
+    writeFileSync(join(dir, name), body)
+    execFileSync("git", ["add", name], { cwd: dir, stdio: "ignore" })
+    execFileSync("git", ["commit", "-q", "-m", `add ${name}`], {
+      cwd: dir,
+      stdio: "ignore",
+      env: {
+        ...process.env,
+        GIT_AUTHOR_DATE: isoDate,
+        GIT_COMMITTER_DATE: isoDate,
+      },
+    })
+  }
+
+  it("returns the real committed-line age in days", async () => {
+    const dir = makeRepo()
+    try {
+      // Commit a file dated 400 days ago.
+      const days = 400
+      const when = new Date(Date.now() - days * 86400_000).toISOString()
+      commitFileAt(dir, "a.txt", "hello\nworld\n", when)
+
+      const ctx = await buildScanContext(dir)
+      const age = await ctx.git.blameAgeDays("a.txt", 1)
+
+      // Allow a couple days of slack for date rounding / test-clock drift.
+      expect(age).toBeGreaterThanOrEqual(days - 2)
+      expect(age).toBeLessThanOrEqual(days + 2)
+    } finally {
+      rmSync(dir, { recursive: true, force: true })
+    }
+  })
+
+  it("returns 0 for a line that isn't committed / file missing", async () => {
+    const dir = makeRepo()
+    try {
+      commitFileAt(dir, "a.txt", "one\n", new Date().toISOString())
+      const ctx = await buildScanContext(dir)
+      // Line beyond the file and a non-existent file both degrade to 0, not throw.
+      expect(await ctx.git.blameAgeDays("a.txt", 999)).toBe(0)
+      expect(await ctx.git.blameAgeDays("nope.txt", 1)).toBe(0)
+    } finally {
+      rmSync(dir, { recursive: true, force: true })
+    }
   })
 })

@@ -95,19 +95,37 @@ function envLangOf(file: string): keyof typeof LANG_PATTERNS | null {
   return null
 }
 
-/** 1-based line number of a string index. */
-function lineAt(content: string, index: number): number {
-  return content.slice(0, index).split("\n").length
+/**
+ * Build a reusable index→line lookup for one file. Precomputes newline offsets
+ * once (O(n)) so each of the many regex matches costs O(log n) instead of the
+ * O(n) slice+split the old `lineAt` did per call (quadratic on large files).
+ */
+function makeLineLookup(content: string): (index: number) => number {
+  const offsets = [0]
+  for (let i = 0; i < content.length; i++) {
+    if (content.charCodeAt(i) === 10 /* \n */) offsets.push(i + 1)
+  }
+  return (index: number): number => {
+    let lo = 0
+    let hi = offsets.length - 1
+    while (lo < hi) {
+      const mid = (lo + hi + 1) >> 1
+      if (offsets[mid] <= index) lo = mid
+      else hi = mid - 1
+    }
+    return lo + 1 // 1-based
+  }
 }
 
 /** Populate `acc` from a non-JS source file using its language's regex patterns. */
 function analyzeWithRegexLang(content: string, file: string, lang: keyof typeof LANG_PATTERNS, acc: EnvUsage): void {
   const cfg = LANG_PATTERNS[lang]
+  const lineOf = makeLineLookup(content)
   for (const p of cfg.reads) {
     for (const m of content.matchAll(p.re)) {
       const name = m[1]
       if (!name) continue
-      recordUsage(acc, name, file, lineAt(content, m.index ?? 0))
+      recordUsage(acc, name, file, lineOf(m.index ?? 0))
       if (p.fallbackGroup && m[p.fallbackGroup]) acc.withFallback.add(name)
     }
   }
@@ -236,8 +254,9 @@ export const envLifecycleScanner: Scanner = {
         const ok = analyzeWithAst(content, file, acc)
         if (!ok) {
           // parse failed — degrade gracefully to the old regex sweep for this file
+          const lineOf = makeLineLookup(content)
           for (const match of content.matchAll(ENV_REGEX)) {
-            recordUsage(acc, match[1], file, lineAt(content, match.index ?? 0))
+            recordUsage(acc, match[1], file, lineOf(match.index ?? 0))
           }
         }
       } else if (lang) {

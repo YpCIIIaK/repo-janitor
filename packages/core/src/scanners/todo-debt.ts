@@ -42,8 +42,14 @@ function collectFromAst(ast: Node): Hit[] {
   const hits: Hit[] = []
   const comments = (ast.comments as Comment[] | undefined) ?? []
   for (const c of comments) {
-    const found = findMarker(c.value ?? "")
-    if (found) hits.push({ marker: found.marker, text: found.rest, line: c.loc?.start?.line ?? 0 })
+    const startLine = c.loc?.start?.line ?? 0
+    // A block comment can hold several markers on different lines; scan each line
+    // so none is missed, attributing it to the right source line.
+    const lines = (c.value ?? "").split("\n")
+    for (let i = 0; i < lines.length; i++) {
+      const found = findMarker(lines[i])
+      if (found) hits.push({ marker: found.marker, text: found.rest, line: startLine + i })
+    }
   }
   return hits
 }

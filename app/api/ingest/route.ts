@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { scanReportSchema } from "@/packages/core/src/schema"
 import { upsertServerReport, type ScanReport } from "@/lib/server-store"
 import { notifyScoreDrop } from "@/lib/webhook"
+import { checkBearer } from "@/lib/api-auth"
 
 /**
  * Report ingestion endpoint.
@@ -13,20 +14,11 @@ import { notifyScoreDrop } from "@/lib/webhook"
  */
 export const runtime = "nodejs"
 
-/**
- * Optional shared-secret auth. When `REPO_ANTI_ROT_INGEST_TOKEN` is set, callers must
- * send `Authorization: Bearer <token>`. When unset (local dev), auth is skipped.
- */
-function isAuthorized(request: Request): boolean {
-  const expected = process.env.REPO_ANTI_ROT_INGEST_TOKEN
-  if (!expected) return true
-  const header = request.headers.get("authorization") ?? ""
-  const token = header.replace(/^Bearer\s+/i, "")
-  return token === expected
-}
-
 export async function POST(request: Request) {
-  if (!isAuthorized(request)) {
+  // Optional shared-secret auth. When `REPO_ANTI_ROT_INGEST_TOKEN` is set, callers
+  // must send `Authorization: Bearer <token>` (compared in constant time). When
+  // unset (local dev), auth is skipped.
+  if (!checkBearer(request, process.env.REPO_ANTI_ROT_INGEST_TOKEN)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 

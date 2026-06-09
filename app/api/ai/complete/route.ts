@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import { checkBearer } from "@/lib/api-auth"
 
 /**
  * AI completion proxy (OpenRouter).
@@ -9,12 +10,16 @@ import { NextResponse } from "next/server"
  * (HTTPS body) → OpenRouter. We never log the key.
  *
  * The key may also come from the server env (OPENROUTER_API_KEY) so a deploy can
- * provide a shared key without each user pasting one.
+ * provide a shared key without each user pasting one. That shared-key path is
+ * abuse-hardened: it requires `Authorization: Bearer <RAR_AI_PROXY_TOKEN>` (so an
+ * anonymous caller can't spend the owner's credits) and an optional model
+ * allowlist (`OPENROUTER_ALLOWED_MODELS`). Either way `maxTokens` is clamped.
  */
 export const runtime = "nodejs"
 export const maxDuration = 60
 
 const ENDPOINT = "https://openrouter.ai/api/v1/chat/completions"
+const MAX_TOKENS_CAP = 4000
 
 interface Body {
   apiKey?: string
@@ -32,7 +37,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 })
   }
 
-  const apiKey = (body.apiKey || process.env.OPENROUTER_API_KEY || "").trim()
+  const userKey = (body.apiKey || "").trim()
+  const serverKey = (process.env.OPENROUTER_API_KEY || "").trim()
+  // The shared server key is only used when the caller didn't bring their own.
+  const usingServerKey = !userKey && !!serverKey
+  const apiKey = userKey || serverKey
   const model = (body.model || "").trim()
   const prompt = (body.prompt || "").trim()
 
@@ -45,6 +54,33 @@ export async function POST(request: Request) {
   if (!prompt) {
     return NextResponse.json({ error: "Empty prompt." }, { status: 400 })
   }
+
+  // Abuse-harden the shared-key path: spending the owner's credits requires a
+  // proxy token, and (optionally) a whitelisted model. Requests carrying the
+  // user's own key are unaffected — they pay for their own usage.
+  if (usingServerKey) {
+    const proxyToken = process.env.RAR_AI_PROXY_TOKEN
+    if (!proxyToken) {
+      return NextResponse.json(
+        { error: "Server AI key is set but RAR_AI_PROXY_TOKEN is not — refusing anonymous use." },
+        { status: 503 },
+      )
+    }
+    if (!checkBearer(request, proxyToken)) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+    const allowed = (process.env.OPENROUTER_ALLOWED_MODELS || "")
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean)
+    if (allowed.length > 0 && !allowed.includes(model)) {
+      return NextResponse.json({ error: `Model "${model}" is not allowed.` }, { status: 403 })
+    }
+  }
+
+  // Clamp output size so no caller (even with the shared key) can request a
+  // runaway/expensive completion.
+  const maxTokens = Math.min(MAX_TOKENS_CAP, Math.max(1, Math.floor(body.maxTokens ?? 1500)))
 
   const messages = [
     ...(body.system ? [{ role: "system" as const, content: body.system }] : []),
@@ -64,7 +100,7 @@ export async function POST(request: Request) {
       body: JSON.stringify({
         model,
         messages,
-        max_tokens: body.maxTokens ?? 1500,
+        max_tokens: maxTokens,
         temperature: 0.2,
       }),
     })

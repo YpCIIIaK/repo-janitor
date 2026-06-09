@@ -74,10 +74,21 @@ function dirname(file: string): string {
   return i === -1 ? "" : file.slice(0, i)
 }
 
-/** Resolve a relative import specifier to a project file, or null if external/unresolved. */
+/**
+ * Resolve an import specifier to a project file, or null if external/unresolved.
+ * Handles relative specifiers and the `@/*` → repo-root alias (the convention this
+ * project and most Next.js apps use), so dynamic-import/namespace targets written
+ * as `@/components/x` resolve correctly.
+ */
 function resolveModule(spec: string, fromFile: string, fileSet: Set<string>): string | null {
-  if (!spec.startsWith(".")) return null
-  const base = normalize(`${dirname(fromFile)}/${spec}`)
+  let base: string
+  if (spec.startsWith("@/")) {
+    base = normalize(spec.slice(2)) // root-relative
+  } else if (spec.startsWith(".")) {
+    base = normalize(`${dirname(fromFile)}/${spec}`)
+  } else {
+    return null
+  }
   for (const ext of EXT_CANDIDATES) {
     if (fileSet.has(base + ext)) return base + ext
   }
@@ -182,6 +193,21 @@ async function scanJsTsExports(ctx: ScanContext, sources: string[]): Promise<Iss
           const target = resolveModule((node.source as Node)?.value as string, file, fileSet)
           if (target) exemptFiles.add(target)
           return
+        }
+        // Dynamic `import("…")` / `require("…")` (incl. next/dynamic): we can't see
+        // which named exports the module object is used through (e.g.
+        // `import("./x").then(m => m.Foo)`), so exempt the whole target module.
+        if (node.type === "CallExpression") {
+          const callee = node.callee as Node | undefined
+          const isDynImport = callee?.type === "Import"
+          const isRequire = callee?.type === "Identifier" && callee.name === "require"
+          if (isDynImport || isRequire) {
+            const arg = (node.arguments as Node[] | undefined)?.[0]
+            if (arg?.type === "StringLiteral") {
+              const target = resolveModule(arg.value as string, file, fileSet)
+              if (target) exemptFiles.add(target)
+            }
+          }
         }
         if (node.type === "ExportNamedDeclaration" && node.source) {
           // re-export: `export { a, b } from './m'` → those names are used

@@ -3,6 +3,7 @@ import { spawn } from "child_process"
 import { mkdtemp, rm, readFile } from "fs/promises"
 import { tmpdir } from "os"
 import { join } from "path"
+import { isPublicGitUrl } from "@/lib/url-guard"
 
 // Cloning + scanning is real work — run on the Node runtime, allow time for it.
 export const runtime = "nodejs"
@@ -57,16 +58,6 @@ function run(
       resolve({ code, stdout, stderr })
     })
   })
-}
-
-/** Accept only http(s) git URLs so the API can't be coaxed into local/ssh remotes. */
-function isAllowedRepoUrl(url: string): boolean {
-  try {
-    const u = new URL(url)
-    return u.protocol === "https:" || u.protocol === "http:"
-  } catch {
-    return false
-  }
 }
 
 /** A progress/result event forwarded to the client over the NDJSON stream. */
@@ -148,10 +139,16 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Too many URLs (max 20 per request)." }, { status: 400 })
   }
 
-  const invalid = urls.filter((u) => !isAllowedRepoUrl(u))
-  if (invalid.length > 0) {
+  // SSRF guard: reject non-http(s), loopback/private hosts, and DNS names that
+  // resolve into private space — checked before any clone runs.
+  const checks = await Promise.all(urls.map((u) => isPublicGitUrl(u)))
+  const rejected = urls
+    .map((u, i) => ({ u, c: checks[i] }))
+    .filter((x) => !x.c.ok)
+    .map((x) => `${x.u} (${x.c.reason})`)
+  if (rejected.length > 0) {
     return NextResponse.json(
-      { error: `Only http(s) git URLs are allowed. Rejected: ${invalid.join(", ")}` },
+      { error: `Refusing to clone unsafe URL(s): ${rejected.join(", ")}` },
       { status: 400 },
     )
   }

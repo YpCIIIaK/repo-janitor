@@ -103,4 +103,38 @@ describe("deadCodeScanner (polyglot symbols)", () => {
     expect(issues).toHaveLength(1)
     expect(issues[0].title).toContain("orphan")
   })
+
+  it("does not flag a module pulled in via dynamic import().then(m => m.X)", async () => {
+    const ctx = makeContext({
+      files: {
+        "components/widget.ts": "export function Widget() { return 1 }\n",
+        "page.ts": 'const W = import("./components/widget").then((m) => m.Widget)\nconsole.log(W)\n',
+      },
+    })
+    const issues = await deadCodeScanner.run(ctx)
+    expect(issues.some((i) => i.title.includes("Widget"))).toBe(false)
+  })
+
+  it("resolves the @/ alias for dynamic-import exemption", async () => {
+    const ctx = makeContext({
+      files: {
+        "components/widget.ts": "export function Widget() { return 1 }\n",
+        "app/page.ts": 'const W = import("@/components/widget").then((m) => m.Widget)\nconsole.log(W)\n',
+      },
+    })
+    const issues = await deadCodeScanner.run(ctx)
+    expect(issues.some((i) => i.title.includes("Widget"))).toBe(false)
+  })
+
+  it("does not flag a module pulled in via require()", async () => {
+    const ctx = makeContext({
+      files: {
+        "lib/a.js": "exports.thing = 1\nmodule.exports.thing2 = function(){}\n",
+        "lib/b.js": 'const m = require("./a")\nconsole.log(m)\nexport const orphan = 2\n',
+      },
+    })
+    const issues = await deadCodeScanner.run(ctx)
+    // b.ts's own orphan is still flagged, but a.js (require target) is exempt.
+    expect(issues.some((i) => i.location.startsWith("lib/a.js"))).toBe(false)
+  })
 })

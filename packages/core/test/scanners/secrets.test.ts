@@ -17,6 +17,15 @@ describe("secretsScanner", () => {
     expect(issues[0].evidence).toContain("•")
   })
 
+  it("redacts EVERY occurrence of a token repeated on the same line", async () => {
+    const key = "AKIAIOSFODNN7EXAMPLE"
+    const ctx = makeContext({ files: { "config.ts": `const a = "${key}", b = "${key}"\n` } })
+    const issues = await secretsScanner.run(ctx)
+    expect(issues.length).toBeGreaterThanOrEqual(1)
+    // Neither copy of the raw key may survive in the evidence line.
+    expect(issues[0].evidence).not.toContain(key)
+  })
+
   it("flags a Stripe live key and a private key header", async () => {
     const ctx = makeContext({
       files: {

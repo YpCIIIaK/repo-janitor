@@ -1,5 +1,7 @@
 # Repo Anti-Rot
 
+[![CI](https://github.com/YpCIIIaK/repo-janitor/actions/workflows/ci.yml/badge.svg)](https://github.com/YpCIIIaK/repo-janitor/actions/workflows/ci.yml)
+
 A repository **health & decay monitor**. It scans a codebase for the kinds of rot
 that accumulate silently — undocumented env vars, abandoned & vulnerable
 dependencies, stale branches, aging TODOs, committed secrets, dead & commented-out
@@ -96,13 +98,15 @@ Coverage highlights (290+ tests):
 - **reporters** — JSON round-trip, Markdown escaping, and SARIF 2.1.0 shape
   (severity→level mapping, one rule per category, physical locations, fingerprints)
 - **CLI** — git-remote → owner/name parsing (https & SSH, `.git` stripping, local
-  fallback) and safe report filenames
+  fallback), safe report filenames, and the real git blame-age adapter (driven
+  against a throwaway repo with a back-dated commit, so finding ages can't
+  silently regress to zero)
 - **Action** — input parsing, the `fail-on` grade threshold, the ingest endpoint
   builder, and PR-comment rendering (severity breakdown, 10-row cap, pipe escaping)
 - **dashboard** — the pure `lib/*` modules: client score mirror, age histogram &
   median, hotspot ranking, synonym/typo-tolerant issue search, report export
-  (JSON/Markdown/CSV with RFC-4180 escaping + UTF-8 BOM), schedule due-logic, and
-  GitHub permalink building
+  (JSON/Markdown/CSV with RFC-4180 escaping + UTF-8 BOM), schedule due-logic,
+  GitHub permalink building, and prefilled new-issue URL composition
 - **dashboard AI & stores** — the localStorage-backed client stores and AI layer,
   driven through an in-memory `window` stub and a mocked completion transport:
   snooze/won't-fix partitioning, AI settings (normalize, legacy migration, enabled
@@ -113,6 +117,12 @@ Coverage highlights (290+ tests):
 Add a new scanner test under `packages/core/test/scanners/`, build a context with
 `makeContext` from `packages/core/test/helpers.ts`, and assert on the returned issues.
 Dashboard `lib/*` tests live in the root `test/` directory.
+
+**Continuous integration.** `.github/workflows/ci.yml` builds the packages,
+typechecks, runs the full test suite and builds the dashboard on a matrix of
+**Ubuntu, macOS and Windows** (Node 20) for every push and pull request — so the
+cross-platform support (path/line-ending normalization, the CLI shebang, git
+invocation) is verified continuously, not just claimed.
 
 ## Run the dashboard
 
@@ -126,7 +136,12 @@ bar streams live clone → per-scanner → AI progress.
 
 Click any finding in the **Issues** tab to open a detail drawer with its full
 context, code evidence, an on-demand AI verdict (one cheap model call, cached),
-and quick actions — open the GitHub permalink, copy as Markdown, or snooze it.
+and quick actions — open the GitHub permalink, copy as Markdown, snooze it, or
+**Create issue**. The last opens GitHub's own new-issue form with the title,
+body (severity, category, detail, evidence and a permalink) and labels
+(`repo-anti-rot`, severity) prefilled, so a finding becomes a tracked task in one
+click. No token and no API call are involved — the link just prefills the form,
+and you review and submit it on GitHub yourself.
 
 Use **Export** (top-right, next to Rescan) to download the current report as
 **Markdown** (grouped by category, for PRs/docs), **CSV** (one row per finding,
@@ -186,7 +201,11 @@ never directly to a third party. For secret findings the snippet is redacted
 before it leaves the machine.
 
 A shared key can also be provided server-side via the `OPENROUTER_API_KEY`
-environment variable.
+environment variable. To stop that shared key from becoming an open, billable
+proxy, the shared-key path requires `Authorization: Bearer <RAR_AI_PROXY_TOKEN>`
+and (optionally) an `OPENROUTER_ALLOWED_MODELS` whitelist; requests that carry
+the user's own key are unaffected. Output size is always clamped. See
+[Security & hardening](#security--hardening).
 
 ### Executive summary
 
@@ -282,6 +301,23 @@ the first scan (nothing to compare), and a failed webhook never blocks ingestion
 Note this is server-side: it works for reports POSTed to the dashboard (CI), not
 for local browser-only scans.
 
+## Security & hardening
+
+The server-side API routes are written to be safe to expose:
+
+| Concern | Mitigation |
+| --- | --- |
+| **SSRF via `/api/scan`** | The clone target must be a public `http(s)` URL. Loopback, private (`10/8`, `172.16/12`, `192.168/16`), link-local (`169.254/16`, incl. cloud metadata), CGNAT and reserved ranges are rejected — for IP literals **and** for DNS names whose resolved addresses land in private space (which also blunts DNS rebinding). |
+| **Open AI proxy / billing abuse** | Using the shared `OPENROUTER_API_KEY` requires `Authorization: Bearer <RAR_AI_PROXY_TOKEN>`; an optional `OPENROUTER_ALLOWED_MODELS` whitelist restricts models; `maxTokens` is clamped. Requests with the user's own key are unaffected. |
+| **Report ingestion** | `POST /api/ingest` accepts a `Bearer` token in `REPO_ANTI_ROT_INGEST_TOKEN` (constant-time compared). Unset → open (local dev). |
+| **Report read access** | `GET /api/reports` returns full reports (paths + redacted evidence). Set `REPO_ANTI_ROT_READ_TOKEN` to require a `Bearer` token for reads; unset → open so the in-browser dashboard works. (The badge endpoint stays open — it exposes only grade + score.) |
+| **Secrets → AI** | For `secret` findings the evidence snippet is redacted by the scanner before it ever reaches the AI proxy, and the executive summary sends finding metadata only — never `evidence`. |
+| **Command injection** | `git`/`node` are spawned with an argv array (no shell), and the clone URL must parse as `http(s)`, so it can't be coerced into a flag. |
+
+All tokens are compared in constant time (`crypto.timingSafeEqual` over hashed
+inputs). Token-gated checks are **default-off** so local development needs no
+configuration; set the relevant env var to switch each one on.
+
 ## Vulnerable dependencies (OSV)
 
 The `vulnerable-deps` scanner cross-references the project's dependencies against
@@ -320,7 +356,13 @@ falling behind:
 
 - **npm** — `dependency-funeral` checks `package.json` deps for *unused* (static
   import analysis), *deprecated*, *abandoned* (no release in 2+ years) and
-  *outdated* (major/minor behind) against the npm registry.
+  *outdated* (major/minor behind) against the npm registry. The *unused* check
+  also counts deps referenced only by an npm script or a build-config file
+  (postcss/eslint/etc.) and skips framework-implicit runtimes (e.g. `react-dom`),
+  so build tools and renderers aren't mistaken for dead deps. The *outdated*
+  check is range-aware — a caret (`^`) that already auto-accepts a newer minor
+  isn't reported as behind; only a true major gap (or a pinned/tilde dep behind
+  by a minor) is flagged.
 - **PyPI, crates.io, RubyGems, Go, Packagist** — `outdated-deps` checks **direct**
   deps from the manifest (`requirements.txt` / `pyproject.toml`, `Cargo.toml`,
   `Gemfile`, `go.mod`, `composer.json`) against each registry: *outdated* (major →
@@ -375,7 +417,7 @@ per-language. Coverage by scanner:
 | `dockerfile`       | `Dockerfile`, `*.dockerfile`                                              |
 | `lockfile-drift`   | npm (missing-lockfile + drift); Python, Rust, Ruby, Go, PHP (missing-lockfile) |
 | `outdated-deps`    | PyPI, crates.io, RubyGems, Go, Packagist (npm covered by `dependency-funeral`) |
-| `dead-code`        | JS/TS (cross-module unused exports); Python, Go (unused symbols)          |
+| `dead-code`        | JS/TS (cross-module unused exports, incl. dynamic `import()`/`require` and the `@/` alias); Python, Go (unused symbols) |
 | `dependency-funeral` | JS/TS only                                                              |
 
 For env vars, the scanner understands the idiomatic readers per language —
