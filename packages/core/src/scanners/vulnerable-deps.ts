@@ -28,8 +28,8 @@ import { collectManifestDeps, type OsvEcosystem } from "../manifests"
 const OSV_BATCH_URL = "https://api.osv.dev/v1/querybatch"
 const OSV_VULN_URL = "https://api.osv.dev/v1/vulns/"
 const MAX_DETAILS = 60 // cap advisory-detail fetches so a pathological repo can't spam OSV
-
-const LOCKFILES = ["package-lock.json", "npm-shrinkwrap.json", "pnpm-lock.yaml", "yarn.lock"]
+const OSV_BATCH_MAX = 1000 // OSV querybatch accepts up to 1000 queries per request
+const MAX_QUERIES = 6000 // overall ceiling so a giant lockfile can't spam OSV
 
 interface OsvBatchResponse {
   results?: { vulns?: { id: string }[] }[]
@@ -185,17 +185,98 @@ interface QueryItem {
   manifest: string
   /** npm dev dependency (other ecosystems: always false — not tracked) */
   dev: boolean
+  /** declared directly in the manifest (false = pulled in transitively) */
+  direct: boolean
+}
+
+/**
+ * Enumerate EVERY installed npm package (direct + transitive) with its exact
+ * version from a committed lockfile, so `npm audit`-style transitive
+ * vulnerabilities are caught — not just the handful in package.json. Returns null
+ * when no recognized npm lockfile is present, signalling the caller to fall back
+ * to declared-only floors.
+ */
+async function enumerateNpmInstalled(
+  ctx: ScanContext,
+  fileSet: Set<string>,
+): Promise<Map<string, { version: string; dev: boolean }> | null> {
+  const installed = new Map<string, { version: string; dev: boolean }>()
+  let sawLockfile = false
+
+  const add = (name: string, version: string, dev: boolean) => {
+    if (!name || !version) return
+    const existing = installed.get(name)
+    // Prefer a non-dev record if we see the same package both ways.
+    if (!existing) installed.set(name, { version, dev })
+    else if (existing.dev && !dev) installed.set(name, { version: existing.version, dev: false })
+  }
+
+  // package-lock.json / npm-shrinkwrap.json — structured JSON, most reliable.
+  for (const lf of ["package-lock.json", "npm-shrinkwrap.json"]) {
+    if (!fileSet.has(lf)) continue
+    const txt = await ctx.readFile(lf)
+    if (!txt) continue
+    sawLockfile = true
+    try {
+      const json = JSON.parse(txt) as {
+        packages?: Record<string, { version?: string; dev?: boolean }>
+        dependencies?: Record<string, { version?: string; dev?: boolean; dependencies?: unknown }>
+      }
+      // npm v7+: flat `packages` map keyed by install path; every node_modules
+      // entry (nested or not) is an installed package.
+      for (const [key, val] of Object.entries(json.packages ?? {})) {
+        const m = key.match(/(?:^|\/)node_modules\/((?:@[^/]+\/)?[^/]+)$/)
+        if (m && typeof val?.version === "string") add(m[1], val.version, val.dev === true)
+      }
+      // npm v6: nested `dependencies` tree — walk it depth-first.
+      const walk = (deps: Record<string, { version?: string; dev?: boolean; dependencies?: unknown }> | undefined) => {
+        for (const [name, val] of Object.entries(deps ?? {})) {
+          if (typeof val?.version === "string") add(name, val.version, val.dev === true)
+          walk(val?.dependencies as typeof deps)
+        }
+      }
+      walk(json.dependencies)
+    } catch {
+      /* malformed lockfile — try the next source */
+    }
+  }
+
+  // pnpm-lock.yaml — enumerate every `packages:` entry key. Handles both the
+  // leading-slash form (`/name@1.2.3:`) and the slashless v9 form (`name@1.2.3:`).
+  if (fileSet.has("pnpm-lock.yaml")) {
+    const txt = await ctx.readFile("pnpm-lock.yaml")
+    if (txt) {
+      sawLockfile = true
+      const re = /(?:^|\n) {2,}\/?((?:@[^/\s@]+\/)?[^/\s@]+)@(\d+\.\d+\.\d+[^\s:(]*)(?:\([^)]*\))?:/g
+      let m: RegExpExecArray | null
+      while ((m = re.exec(txt))) add(m[1], m[2], false)
+    }
+  }
+
+  // yarn.lock — each block header `name@range:` is followed by `version "x"`.
+  if (fileSet.has("yarn.lock")) {
+    const txt = await ctx.readFile("yarn.lock")
+    if (txt) {
+      sawLockfile = true
+      const re = /(?:^|\n)"?((?:@[^/\s@]+\/)?[^@\s,"]+)@[^\n]*(?:,[^\n]*)*\n(?:[^\n]*\n)*?\s+version:?\s+"?(\d+\.\d+\.\d+[^\s"]*)/g
+      let m: RegExpExecArray | null
+      while ((m = re.exec(txt))) add(m[1], m[2], false)
+    }
+  }
+
+  return sawLockfile ? installed : null
 }
 
 export const vulnerableDepsScanner: Scanner = {
   id: "vulnerable-deps",
-  category: "dependency",
+  category: "security",
   async run(ctx: ScanContext): Promise<Issue[]> {
     if (!ctx.postJson) return [] // offline → no vulnerability data available
 
     const queryList: QueryItem[] = []
 
     // 1) npm — resolve exact versions from package.json + JS lockfiles.
+    const fileSet = new Set(ctx.files)
     const raw = await ctx.readFile("package.json")
     if (raw) {
       try {
@@ -210,10 +291,25 @@ export const vulnerableDepsScanner: Scanner = {
           ...(pkgJson.optionalDependencies ?? {}),
         }
         const devNames = new Set(Object.keys(pkgJson.devDependencies ?? {}))
-        if (Object.keys(declared).length > 0) {
+        const declaredNames = new Set(Object.keys(declared))
+        // Prefer the FULL installed tree from a lockfile (transitive included,
+        // like `npm audit`); fall back to declared-only floors with no lockfile.
+        const installed = await enumerateNpmInstalled(ctx, fileSet)
+        if (installed) {
+          for (const [name, { version, dev }] of installed) {
+            queryList.push({
+              ecosystem: "npm",
+              name,
+              version,
+              manifest: "package.json",
+              dev: dev || devNames.has(name),
+              direct: declaredNames.has(name),
+            })
+          }
+        } else if (Object.keys(declared).length > 0) {
           const versions = await resolveVersions(ctx, declared)
           for (const [name, version] of versions) {
-            queryList.push({ ecosystem: "npm", name, version, manifest: "package.json", dev: devNames.has(name) })
+            queryList.push({ ecosystem: "npm", name, version, manifest: "package.json", dev: devNames.has(name), direct: true })
           }
         }
       } catch {
@@ -223,20 +319,27 @@ export const vulnerableDepsScanner: Scanner = {
 
     // 2) Polyglot — Python / Go / Rust / Ruby manifests & lockfiles.
     for (const d of await collectManifestDeps(ctx)) {
-      queryList.push({ ecosystem: d.ecosystem, name: d.name, version: d.version, manifest: d.manifest, dev: false })
+      queryList.push({ ecosystem: d.ecosystem, name: d.name, version: d.version, manifest: d.manifest, dev: false, direct: true })
     }
 
     if (queryList.length === 0) return []
+    if (queryList.length > MAX_QUERIES) queryList.length = MAX_QUERIES
 
-    // One batch request for the whole (polyglot) dependency set.
-    const batch = (await ctx.postJson(OSV_BATCH_URL, {
-      queries: queryList.map((q) => ({ package: { ecosystem: q.ecosystem, name: q.name }, version: q.version })),
-    })) as OsvBatchResponse | null
-    if (!batch?.results) return [] // network failure or unexpected shape → degrade quietly
+    // Batch the (possibly large, transitive) set in OSV-sized chunks and
+    // concatenate the results so they stay aligned with the query order.
+    const results: NonNullable<OsvBatchResponse["results"]> = []
+    for (let i = 0; i < queryList.length; i += OSV_BATCH_MAX) {
+      const chunk = queryList.slice(i, i + OSV_BATCH_MAX)
+      const batch = (await ctx.postJson(OSV_BATCH_URL, {
+        queries: chunk.map((q) => ({ package: { ecosystem: q.ecosystem, name: q.name }, version: q.version })),
+      })) as OsvBatchResponse | null
+      if (!batch?.results) return [] // network failure or unexpected shape → degrade quietly
+      results.push(...batch.results)
+    }
 
     // Collect hits, aligned to the query order.
     const hits: (QueryItem & { vulnId: string })[] = []
-    batch.results.forEach((res, i) => {
+    results.forEach((res, i) => {
       const q = queryList[i]
       if (!q) return
       for (const v of res.vulns ?? []) {
@@ -273,14 +376,19 @@ export const vulnerableDepsScanner: Scanner = {
       const fixHint = fixed
         ? `Fixed in ${fixed} — upgrade to ${fixed} or later.`
         : "No fixed version has been published yet."
+      const kindNote = hit.direct
+        ? hit.dev
+          ? " (dev dependency)"
+          : ""
+        : " (transitive dependency)"
       const detail =
         `${summary ? `${summary} ` : ""}${hit.name}@${hit.version} (${hit.ecosystem}) is affected by ${id}` +
         `${label ? ` (${label.toLowerCase()} severity)` : ""}. ${fixHint}` +
-        `${hit.dev ? " (dev dependency)" : ""} Advisory: https://osv.dev/${hit.vulnId}`
+        `${kindNote} Advisory: https://osv.dev/${hit.vulnId}`
 
       issues.push({
         id: `vuln-${hit.name}-${hit.vulnId}`,
-        category: "dependency",
+        category: "security",
         severity: mapSeverity(label),
         title: `${hit.name}@${hit.version} has a known vulnerability (${id})`,
         location: hit.manifest,

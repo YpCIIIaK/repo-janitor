@@ -19,7 +19,7 @@ describe("reportToMarkdown", () => {
 
   it("groups findings under category headings", () => {
     const md = reportToMarkdown(
-      report([issue({ category: "secret" }), issue({ category: "todo" })]),
+      report([issue({ category: "security" }), issue({ category: "todo" })]),
     )
     // categoryLabels are used as section titles; both categories appear as "## "
     const headings = md.split("\n").filter((l) => l.startsWith("## "))

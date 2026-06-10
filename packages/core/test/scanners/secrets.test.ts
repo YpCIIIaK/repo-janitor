@@ -9,7 +9,7 @@ describe("secretsScanner", () => {
     const issues = await secretsScanner.run(ctx)
     expect(issues).toHaveLength(1)
     expect(issues[0].severity).toBe("critical")
-    expect(issues[0].category).toBe("secret")
+    expect(issues[0].category).toBe("security")
     // The raw secret must NEVER appear in the evidence (redaction invariant).
     expect(issues[0].evidence).toBeDefined()
     expect(issues[0].evidence).not.toContain(key)
@@ -92,5 +92,86 @@ describe("secretsScanner", () => {
     })
     const issues = await secretsScanner.run(ctx)
     expect(issues[0].ageDays).toBe(42)
+  })
+
+  // --- git history pass ------------------------------------------------------
+
+  const daysAgoMs = (d: number) => Date.now() - d * 24 * 3600 * 1000
+
+  it("flags a secret that exists only in git history (deleted from the tree)", async () => {
+    const key = "AKIAIOSFODNN7EXAMPLE"
+    const ctx = makeContext({
+      files: {}, // gone from the working tree
+      historyAdditions: [
+        { commit: "abc1234", date: daysAgoMs(30), file: "scripts/seed.ts", text: `const k = "${key}"` },
+      ],
+    })
+    const issues = await secretsScanner.run(ctx)
+    expect(issues).toHaveLength(1)
+    expect(issues[0].severity).toBe("critical")
+    expect(issues[0].id).toContain("secret-history-")
+    expect(issues[0].location).toBe("scripts/seed.ts @ abc1234")
+    expect(issues[0].ageDays).toBeGreaterThanOrEqual(29)
+    expect(issues[0].ageDays).toBeLessThanOrEqual(31)
+    expect(issues[0].evidence).not.toContain(key) // redaction invariant holds in history too
+  })
+
+  it("does NOT double-report a history secret that is still in the working tree", async () => {
+    const key = "AKIAIOSFODNN7EXAMPLE"
+    const ctx = makeContext({
+      files: { "config.ts": `const k = "${key}"\n` },
+      historyAdditions: [
+        { commit: "abc1234", date: daysAgoMs(30), file: "config.ts", text: `const k = "${key}"` },
+      ],
+    })
+    const issues = await secretsScanner.run(ctx)
+    expect(issues).toHaveLength(1)
+    expect(issues[0].id).not.toContain("history") // the surviving working-tree finding wins
+  })
+
+  it("reports a history secret only once even when many commits added it", async () => {
+    const key = "AKIAIOSFODNN7EXAMPLE"
+    const ctx = makeContext({
+      files: {},
+      historyAdditions: [
+        { commit: "ccc3333", date: daysAgoMs(5), file: "a.ts", text: `k="${key}"` },
+        { commit: "bbb2222", date: daysAgoMs(20), file: "a.ts", text: `k="${key}"` },
+        { commit: "aaa1111", date: daysAgoMs(40), file: "a.ts", text: `k="${key}"` },
+      ],
+    })
+    const issues = await secretsScanner.run(ctx)
+    expect(issues).toHaveLength(1)
+    expect(issues[0].location).toBe("a.ts @ ccc3333") // newest commit wins (additions newest-first)
+  })
+
+  it("downgrades a history secret in a test/example path to info", async () => {
+    const key = "AKIAIOSFODNN7EXAMPLE"
+    const ctx = makeContext({
+      files: {},
+      historyAdditions: [
+        { commit: "abc1234", date: daysAgoMs(10), file: "test/fixtures/auth.ts", text: `const k = "${key}"` },
+      ],
+    })
+    const issues = await secretsScanner.run(ctx)
+    expect(issues).toHaveLength(1)
+    expect(issues[0].severity).toBe("info")
+  })
+
+  it("skips history additions in lockfiles / .env.example", async () => {
+    const key = "AKIAIOSFODNN7EXAMPLE"
+    const ctx = makeContext({
+      files: {},
+      historyAdditions: [
+        { commit: "abc1234", date: daysAgoMs(10), file: "pnpm-lock.yaml", text: `key: "${key}"` },
+        { commit: "abc1234", date: daysAgoMs(10), file: ".env.example", text: `AWS_KEY=${key}` },
+      ],
+    })
+    expect(await secretsScanner.run(ctx)).toHaveLength(0)
+  })
+
+  it("is a no-op for history when no git adapter is wired", async () => {
+    // makeContext omits git.historyAdditions unless provided → working-tree only.
+    const ctx = makeContext({ files: {} })
+    expect(await secretsScanner.run(ctx)).toHaveLength(0)
   })
 })

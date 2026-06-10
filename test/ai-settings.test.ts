@@ -23,7 +23,7 @@ const settings = (
 
 describe("isAiEnabled", () => {
   it("is false without a key", () => {
-    expect(isAiEnabled(settings({ apiKey: "", categories: { secret: true } }))).toBe(false)
+    expect(isAiEnabled(settings({ apiKey: "", categories: { security: true } }))).toBe(false)
   })
 
   it("is false with a key but no enabled category", () => {
@@ -31,11 +31,11 @@ describe("isAiEnabled", () => {
   })
 
   it("is true with a key and at least one category", () => {
-    expect(isAiEnabled(settings({ apiKey: "k", categories: { secret: true } }))).toBe(true)
+    expect(isAiEnabled(settings({ apiKey: "k", categories: { security: true } }))).toBe(true)
   })
 
   it("treats a whitespace-only key as unset", () => {
-    expect(isAiEnabled(settings({ apiKey: "   ", categories: { secret: true } }))).toBe(false)
+    expect(isAiEnabled(settings({ apiKey: "   ", categories: { security: true } }))).toBe(false)
   })
 })
 
@@ -57,11 +57,11 @@ describe("readAiSettings / saveAiSettings", () => {
 
   it("round-trips through localStorage", () => {
     installWindow()
-    saveAiSettings(settings({ apiKey: "sk-test", model: "m", categories: { secret: true } }))
+    saveAiSettings(settings({ apiKey: "sk-test", model: "m", categories: { security: true } }))
     const read = readAiSettings()
     expect(read.apiKey).toBe("sk-test")
     expect(read.model).toBe("m")
-    expect(read.categories.secret).toBe(true)
+    expect(read.categories.security).toBe(true)
   })
 
   it("normalizes an empty model back to the default", () => {
@@ -74,6 +74,15 @@ describe("readAiSettings / saveAiSettings", () => {
     const storage = installWindow()
     storage.setItem("repo-anti-rot:ai-settings:v1", JSON.stringify({ apiKey: "k", deadCodeEnabled: true }))
     expect(readAiSettings().categories["dead-code"]).toBe(true)
+  })
+
+  it("migrates the legacy `secret` category toggle into `security`", () => {
+    const storage = installWindow()
+    storage.setItem(
+      "repo-anti-rot:ai-settings:v1",
+      JSON.stringify({ apiKey: "k", categories: { secret: true } }),
+    )
+    expect(readAiSettings().categories.security).toBe(true)
   })
 
   it("recovers from corrupt JSON", () => {

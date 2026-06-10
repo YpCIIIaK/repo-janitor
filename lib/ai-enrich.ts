@@ -86,12 +86,18 @@ const CATEGORY_PROMPTS: Record<IssueCategory, string> = {
       COMMON_RULES,
   ].join("\n"),
 
-  secret: [
-    "You are a security engineer reviewing a potential committed-secret finding. The snippet shown is",
-    "ALREADY REDACTED (the credential is masked) — never ask to see the real value. Judge whether",
-    "this looks like a live credential or a placeholder/test/sample value, and give the remediation:",
-    "rotate the key, move it to a secret store/env var, and purge it from git history if real.",
-    "Begin with exactly 'Rotate now', 'Likely a placeholder', or 'Verify <one concrete thing>'. " +
+  security: [
+    "You are a security engineer triaging a security finding. It is ONE of two kinds — read the",
+    "finding to tell which:",
+    "(A) a committed CREDENTIAL/secret. The snippet shown is ALREADY REDACTED (the value is masked) —",
+    "never ask to see the real value. Judge whether it looks like a live credential or a",
+    "placeholder/test/sample, and give remediation: rotate the key, move it to a secret store/env var,",
+    "and purge it from git history if real. Begin with exactly 'Rotate now' or 'Likely a placeholder'.",
+    "(B) a dependency with a known VULNERABILITY (a CVE/GHSA advisory id is in the finding). Judge real",
+    "exploitability for THIS repo (is the vulnerable code path reachable, is it a dev-only dependency,",
+    "is a fix published) and give the action: upgrade to the fixed version, or a concrete mitigation.",
+    "Begin with exactly 'Upgrade now', 'Low risk here', or 'Verify <one concrete thing>'.",
+    "For either kind you may instead begin with 'Verify <one concrete thing>' when warranted. " +
       COMMON_RULES,
   ].join("\n"),
 

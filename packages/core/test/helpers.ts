@@ -1,4 +1,4 @@
-import type { ScanContext } from "../src/scanner"
+import type { HistoryAddition, ScanContext } from "../src/scanner"
 import type { ResolvedConfig } from "../src/config"
 import { defaultConfig } from "../src/config"
 
@@ -27,6 +27,8 @@ export interface FakeContextOptions {
   branches?: Awaited<ReturnType<ScanContext["git"]["listBranches"]>>
   /** git.fileOwnership result; omitted (undefined) by default */
   ownership?: Record<string, { authors: number; ageDays: number }>
+  /** git.historyAdditions result; omitted adapter when not provided */
+  historyAdditions?: HistoryAddition[]
   /** fetchJson responses keyed by url; omitted adapter when not provided */
   fetchJson?: Record<string, unknown>
   /** postJson responses keyed by url; omitted adapter when not provided */
@@ -68,6 +70,9 @@ export function makeContext(opts: FakeContextOptions = {}): ScanContext {
       },
       listBranches: async () => opts.branches ?? [],
       ...(opts.ownership ? { fileOwnership: async () => opts.ownership! } : {}),
+      ...(opts.historyAdditions
+        ? { historyAdditions: async () => opts.historyAdditions! }
+        : {}),
     },
     ...(opts.fetchJson
       ? { fetchJson: async (url: string) => opts.fetchJson![url] ?? null }

@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest"
 import { execFileSync } from "node:child_process"
-import { mkdtempSync, rmSync, writeFileSync } from "node:fs"
+import { mkdtempSync, rmSync, writeFileSync, unlinkSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 import type { SimpleGit } from "simple-git"
@@ -150,6 +150,74 @@ describe("buildScanContext git.blameAgeDays (real git)", () => {
       // Line beyond the file and a non-existent file both degrade to 0, not throw.
       expect(await ctx.git.blameAgeDays("a.txt", 999)).toBe(0)
       expect(await ctx.git.blameAgeDays("nope.txt", 1)).toBe(0)
+    } finally {
+      rmSync(dir, { recursive: true, force: true })
+    }
+  })
+})
+
+/**
+ * Exercises the REAL git history adapter: commit a file, then delete it in a
+ * later commit, and assert `historyAdditions` still surfaces the line introduced
+ * by the first commit (the basis for finding secrets removed from the tree).
+ */
+describe("buildScanContext git.historyAdditions (real git)", () => {
+  function makeRepo(): string {
+    const dir = mkdtempSync(join(tmpdir(), "rar-hist-"))
+    const run = (...args: string[]) =>
+      execFileSync("git", args, {
+        cwd: dir,
+        stdio: "ignore",
+        env: { ...process.env, GIT_TERMINAL_PROMPT: "0" },
+      })
+    run("init", "-q")
+    run("config", "user.email", "test@example.com")
+    run("config", "user.name", "Test")
+    run("config", "commit.gpgsign", "false")
+    return dir
+  }
+
+  const commit = (dir: string, msg: string) =>
+    execFileSync("git", ["commit", "-q", "-m", msg], { cwd: dir, stdio: "ignore" })
+  const add = (dir: string, name: string) =>
+    execFileSync("git", ["add", "-A", name], { cwd: dir, stdio: "ignore" })
+
+  it("surfaces a line introduced by a past commit even after the file is deleted", async () => {
+    const dir = makeRepo()
+    try {
+      const secret = 'const k = "AKIAIOSFODNN7EXAMPLE"'
+      writeFileSync(join(dir, "seed.ts"), `${secret}\n`)
+      add(dir, "seed.ts")
+      commit(dir, "add seed")
+
+      // Delete the file in a later commit — gone from the working tree.
+      unlinkSync(join(dir, "seed.ts"))
+      add(dir, "seed.ts")
+      commit(dir, "remove seed")
+
+      const ctx = await buildScanContext(dir)
+      const additions = ctx.git.historyAdditions
+        ? await ctx.git.historyAdditions({ maxCommits: 50 })
+        : []
+
+      const hit = additions.find((a) => a.text.includes("AKIAIOSFODNN7EXAMPLE"))
+      expect(hit).toBeDefined()
+      expect(hit!.file).toBe("seed.ts")
+      expect(hit!.commit).toMatch(/^[0-9a-f]{7,}$/)
+      expect(hit!.date).toBeGreaterThan(0)
+    } finally {
+      rmSync(dir, { recursive: true, force: true })
+    }
+  })
+
+  it("returns [] for a non-git directory (degrades, never throws)", async () => {
+    const dir = mkdtempSync(join(tmpdir(), "rar-nogit-"))
+    try {
+      const ctx = await buildScanContext(dir)
+      const additions = ctx.git.historyAdditions
+        ? await ctx.git.historyAdditions()
+        : []
+      expect(additions).toEqual([])
     } finally {
       rmSync(dir, { recursive: true, force: true })
     }

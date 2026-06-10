@@ -10,7 +10,7 @@ const series = [
   { key: "info", label: "Info", color: "var(--chart-5)" },
 ] as const
 
-const ORDER: IssueCategory[] = ["secret", "env", "dependency", "branch", "todo", "dead-code", "hygiene"]
+const ORDER: IssueCategory[] = ["security", "env", "dependency", "branch", "todo", "dead-code", "hygiene"]
 
 function BreakdownTooltip({ active, payload, label }: any) {
   if (!active || !payload?.length) return null

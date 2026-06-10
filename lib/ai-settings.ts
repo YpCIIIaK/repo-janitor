@@ -28,12 +28,14 @@ export const ALL_CATEGORIES: IssueCategory[] = [
   "dependency",
   "branch",
   "todo",
-  "secret",
+  "security",
   "hygiene",
 ]
 
 /** Suggested starter models — free/cheap. The field also accepts any custom id. */
 export const MODEL_PRESETS: { id: string; label: string }[] = [
+  { id: "openai/gpt-oss-120b:free", label: "GPT-OSS 120B (free, best for code)" },
+  { id: "openai/gpt-oss-20b:free", label: "GPT-OSS 20B (free, lighter)" },
   { id: "google/gemini-2.0-flash-exp:free", label: "Gemini 2.0 Flash (free)" },
   { id: "meta-llama/llama-3.3-70b-instruct:free", label: "Llama 3.3 70B (free)" },
   { id: "qwen/qwen-2.5-coder-32b-instruct", label: "Qwen 2.5 Coder 32B (cheap)" },
@@ -46,7 +48,7 @@ const NO_CATEGORIES: Record<IssueCategory, boolean> = {
   dependency: false,
   branch: false,
   todo: false,
-  secret: false,
+  security: false,
   hygiene: false,
 }
 
@@ -63,11 +65,14 @@ function normalize(raw: unknown): AiSettings {
   const o = (raw ?? {}) as Partial<AiSettings> & { deadCodeEnabled?: boolean }
   const categories = { ...NO_CATEGORIES }
   if (o.categories && typeof o.categories === "object") {
+    const saved = o.categories as Record<string, unknown>
     for (const c of ALL_CATEGORIES) {
-      if (typeof (o.categories as Record<string, unknown>)[c] === "boolean") {
-        categories[c] = (o.categories as Record<IssueCategory, boolean>)[c]
+      if (typeof saved[c] === "boolean") {
+        categories[c] = saved[c] as boolean
       }
     }
+    // Migrate the legacy `secret` toggle into the broader `security` category.
+    if (typeof saved.secret === "boolean") categories.security = saved.secret as boolean
   } else if (typeof o.deadCodeEnabled === "boolean") {
     // migrate the old single-toggle shape
     categories["dead-code"] = o.deadCodeEnabled

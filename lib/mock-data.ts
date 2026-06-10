@@ -7,7 +7,7 @@ export type IssueCategory =
   | "dependency"
   | "branch"
   | "todo"
-  | "secret"
+  | "security"
   | "dead-code"
   | "hygiene"
 
@@ -56,7 +56,7 @@ export const categoryLabels: Record<IssueCategory, string> = {
   dependency: "Dependency Funeral",
   branch: "Stale Branch",
   todo: "TODO Debt",
-  secret: "Secret in History",
+  security: "Security",
   "dead-code": "Dead Code",
   hygiene: "Hygiene",
 }
@@ -115,7 +115,7 @@ const issuesByRepo: Record<string, Issue[]> = {
   "repo-1": [
     {
       id: "r1-i1",
-      category: "secret",
+      category: "security",
       severity: "critical",
       title: "Stripe restricted key committed in git history",
       location: "scripts/seed.ts @ 7b2c1a9",
@@ -218,7 +218,7 @@ const issuesByRepo: Record<string, Issue[]> = {
   "repo-3": [
     {
       id: "r3-i1",
-      category: "secret",
+      category: "security",
       severity: "critical",
       title: "AWS access key committed in git history",
       location: "config/deploy.sh @ a3f91c2",
@@ -227,7 +227,7 @@ const issuesByRepo: Record<string, Issue[]> = {
     },
     {
       id: "r3-i2",
-      category: "secret",
+      category: "security",
       severity: "critical",
       title: "Database password in committed docker-compose.yml",
       location: "docker-compose.yml:18 @ 4c1aa90",

@@ -12,9 +12,10 @@ import { categoryLabels, type Issue, type IssueCategory } from "@/lib/mock-data"
  */
 
 const CATEGORY_SYNONYMS: Record<IssueCategory, string[]> = {
-  secret: [
-    "secret", "secrets", "key", "keys", "credential", "credentials", "token", "tokens",
+  security: [
+    "security", "secret", "secrets", "key", "keys", "credential", "credentials", "token", "tokens",
     "password", "passwords", "apikey", "leak", "leaked", "exposed", "aws", "stripe",
+    "vulnerability", "vulnerable", "vuln", "cve", "ghsa", "advisory", "exploit",
   ],
   env: [
     "env", "environment", "config", "configuration", "variable", "variables", "dotenv",

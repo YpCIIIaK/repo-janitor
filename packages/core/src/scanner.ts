@@ -2,6 +2,22 @@ import type { Issue, IssueCategory } from "./schema"
 import type { ResolvedConfig } from "./config"
 
 /**
+ * One line INTRODUCED by a past commit (a `+` line in that commit's diff). Used
+ * by the secrets scanner to catch credentials that were committed and later
+ * removed from the working tree but still live in history.
+ */
+export interface HistoryAddition {
+  /** short commit sha that introduced the line */
+  commit: string
+  /** the introducing commit's author date, epoch milliseconds */
+  date: number
+  /** repo-relative path the line was added to */
+  file: string
+  /** the added line content (leading `+` stripped) */
+  text: string
+}
+
+/**
  * Context handed to every scanner. Keep all IO (fs, git, network) behind this
  * object so scanners stay pure and easy to test / swap implementations.
  */
@@ -39,6 +55,14 @@ export interface ScanContext {
      * `git log` pass. Omitted when git is unavailable; callers must degrade.
      */
     fileOwnership?: () => Promise<Record<string, { authors: number; ageDays: number }>>
+    /**
+     * Optional: lines INTRODUCED by past commits (diff additions), newest commit
+     * first and bounded by `maxCommits`. Lets the secrets scanner find credentials
+     * that were committed and later deleted — gone from the working tree but still
+     * recoverable from history. Omitted when git is unavailable, in which case the
+     * secrets scanner degrades to a working-tree-only scan.
+     */
+    historyAdditions?: (opts?: { maxCommits?: number }) => Promise<HistoryAddition[]>
   }
   /**
    * Optional network adapter for registry lookups (e.g. npm). Returns parsed JSON

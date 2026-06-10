@@ -38,7 +38,7 @@ const CATEGORY_META: Record<IssueCategory, { name: string; description: string }
   },
   dependency: {
     name: "Dependencies",
-    description: "Vulnerable, outdated, abandoned, unused or missing-lockfile dependency problems.",
+    description: "Outdated, abandoned, unused or missing-lockfile dependency problems.",
   },
   branch: {
     name: "Stale branches",
@@ -48,9 +48,10 @@ const CATEGORY_META: Record<IssueCategory, { name: string; description: string }
     name: "TODO debt",
     description: "Aging TODO / FIXME / HACK markers left in the source.",
   },
-  secret: {
-    name: "Committed secrets",
-    description: "Credentials or tokens that appear to be committed to the repository (evidence is redacted).",
+  security: {
+    name: "Security",
+    description:
+      "Security findings: credentials or tokens committed to the repository (working tree or git history; evidence is redacted), and dependencies with known vulnerabilities (CVE/GHSA).",
   },
   "dead-code": {
     name: "Dead code",

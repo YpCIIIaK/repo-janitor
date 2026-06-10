@@ -4,7 +4,7 @@ import type { Issue } from "@/lib/mock-data"
 
 const baseIssue: Issue = {
   id: "i1",
-  category: "secret",
+  category: "security",
   severity: "critical",
   title: "Stripe key committed in history",
   location: "scripts/seed.ts @ 7b2c1a9",
@@ -16,7 +16,7 @@ describe("buildIssueDraft", () => {
   it("uses the finding title and a labelled severity/category header", () => {
     const draft = buildIssueDraft(baseIssue)
     expect(draft.title).toBe("Stripe key committed in history")
-    expect(draft.body).toContain("**Severity:** Critical · **Category:** Secret in History")
+    expect(draft.body).toContain("**Severity:** Critical · **Category:** Security")
     expect(draft.body).toContain("Matched a live restricted key.")
     expect(draft.body).toContain("**Location:** `scripts/seed.ts @ 7b2c1a9`")
     expect(draft.body).toContain("**Age:** 1 day")

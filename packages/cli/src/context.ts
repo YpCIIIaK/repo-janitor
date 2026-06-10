@@ -2,7 +2,7 @@ import { promises as fs } from "fs";
 import fg from "fast-glob";
 import simpleGit, { SimpleGit } from "simple-git";
 import { runScan, loadConfig } from "@repo-anti-rot/core";
-import type { ScanContext, ScanReport, ScanProgress } from "@repo-anti-rot/core";
+import type { ScanContext, ScanReport, ScanProgress, HistoryAddition } from "@repo-anti-rot/core";
 import { basename, join } from "path";
 
 /**
@@ -182,6 +182,61 @@ export async function buildScanContext(root: string): Promise<ScanContext> {
           }
           return result;
         } catch (err) {
+          return [];
+        }
+      },
+      historyAdditions: async (opts?: { maxCommits?: number }): Promise<HistoryAddition[]> => {
+        const maxCommits = opts?.maxCommits ?? 1000;
+        // Safety caps so a giant repo can't exhaust memory/time.
+        const MAX_LINES = 100_000; // total additions returned
+        const MAX_LINE_LEN = 4000; // skip minified/blob lines
+        try {
+          // `-U0` drops diff context so only true additions appear; the custom
+          // --format emits ONLY a parseable header (sha + author epoch) per
+          // commit, so commit messages can't leak in as fake "+ " lines.
+          const out = await git.raw([
+            "-c", "core.quotePath=false",
+            "log",
+            "--no-merges",
+            "-U0",
+            `-n`, String(maxCommits),
+            "--format=%x01%h%x02%at",
+            "-p",
+          ]);
+
+          const additions: HistoryAddition[] = [];
+          let commit = "";
+          let date = 0;
+          let file: string | null = null;
+          for (const line of out.split("\n")) {
+            if (line.startsWith("\x01")) {
+              const [sha, at] = line.slice(1).split("\x02");
+              commit = sha ?? "";
+              date = (parseInt(at ?? "0", 10) || 0) * 1000;
+              file = null;
+              continue;
+            }
+            if (line.startsWith("diff --git")) {
+              file = null;
+              continue;
+            }
+            if (line.startsWith("+++ ")) {
+              const path = line.slice(4).trim();
+              file = path === "/dev/null" ? null : path.replace(/^b\//, "");
+              continue;
+            }
+            // An added line (but not the `+++` file header).
+            if (line.startsWith("+") && !line.startsWith("+++") && file && commit) {
+              const text = line.slice(1);
+              if (text.length <= MAX_LINE_LEN) {
+                additions.push({ commit, date, file, text });
+                if (additions.length >= MAX_LINES) break;
+              }
+            }
+          }
+          return additions;
+        } catch {
+          // not a git repo / git unavailable → secrets scanner stays working-tree only
           return [];
         }
       },

@@ -5,7 +5,7 @@ import { issue } from "./helpers"
 // Explicit multi-char locations: the default "src/a.ts:10" tokenizes to a bare
 // "a", which a short query like "aws" would match by prefix and skew the tests.
 const issues = [
-  issue({ id: "s1", category: "secret", title: "AWS access key committed", detail: "rotate it", location: "config.ts:3" }),
+  issue({ id: "s1", category: "security", title: "AWS access key committed", detail: "rotate it", location: "config.ts:3" }),
   issue({ id: "d1", category: "dependency", title: "lodash is outdated", detail: "upgrade", location: "deps.ts:1" }),
   issue({ id: "t1", category: "todo", title: "TODO: refactor", detail: "tech debt", location: "core.ts:9" }),
   issue({ id: "h1", category: "hygiene", title: "No README", detail: "add docs", location: "readme.ts:1" }),

@@ -83,7 +83,7 @@ describe("renderSarif", () => {
     const sarif = JSON.parse(
       renderSarif(
         report([
-          issue({ id: "c", category: "secret", severity: "critical", location: "a.ts:1" }),
+          issue({ id: "c", category: "security", severity: "critical", location: "a.ts:1" }),
           issue({ id: "w", category: "hygiene", severity: "warning", location: "b.ts:2" }),
           issue({ id: "i", category: "todo", severity: "info", location: "c.ts:3" }),
         ]),
@@ -91,7 +91,7 @@ describe("renderSarif", () => {
     )
     const byRule: Record<string, string> = {}
     for (const res of sarif.runs[0].results) byRule[res.ruleId] = res.level
-    expect(byRule.secret).toBe("error")
+    expect(byRule.security).toBe("error")
     expect(byRule.hygiene).toBe("warning")
     expect(byRule.todo).toBe("note")
   })
@@ -100,14 +100,14 @@ describe("renderSarif", () => {
     const sarif = JSON.parse(
       renderSarif(
         report([
-          issue({ id: "a", category: "secret", location: "a.ts:1" }),
-          issue({ id: "b", category: "secret", location: "b.ts:1" }),
+          issue({ id: "a", category: "security", location: "a.ts:1" }),
+          issue({ id: "b", category: "security", location: "b.ts:1" }),
           issue({ id: "c", category: "todo", location: "c.ts:1" }),
         ]),
       ),
     )
     const ruleIds = sarif.runs[0].tool.driver.rules.map((r: { id: string }) => r.id)
-    expect(ruleIds).toEqual(["secret", "todo"])
+    expect(ruleIds).toEqual(["security", "todo"])
   })
 
   it("attaches a physicalLocation with startLine for file-anchored findings", () => {
@@ -138,7 +138,7 @@ describe("renderSarif", () => {
 
   it("keeps redacted evidence in the message", () => {
     const sarif = JSON.parse(
-      renderSarif(report([issue({ category: "secret", evidence: "key = AKIA••••" })])),
+      renderSarif(report([issue({ category: "security", evidence: "key = AKIA••••" })])),
     )
     expect(sarif.runs[0].results[0].message.text).toContain("AKIA••••")
   })

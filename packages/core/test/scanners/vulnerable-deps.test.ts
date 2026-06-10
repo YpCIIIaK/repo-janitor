@@ -36,7 +36,7 @@ describe("vulnerableDepsScanner", () => {
     })
     const issues = await vulnerableDepsScanner.run(ctx)
     expect(issues).toHaveLength(1)
-    expect(issues[0].category).toBe("dependency")
+    expect(issues[0].category).toBe("security")
     expect(issues[0].severity).toBe("critical") // HIGH → critical
     expect(issues[0].title).toContain("CVE-2021-23337") // CVE alias preferred
     expect(issues[0].detail).toContain("Fixed in 4.17.21")
@@ -74,6 +74,51 @@ describe("vulnerableDepsScanner", () => {
     const b = issues.find((i) => i.id === "vuln-b-V-B")
     expect(a?.severity).toBe("warning")
     expect(b?.severity).toBe("warning") // unknown severity → warning, never dropped
+  })
+
+  it("flags a TRANSITIVE vulnerable package from package-lock.json (not in package.json)", async () => {
+    const ctx = makeContext({
+      files: {
+        "package.json": JSON.stringify({ dependencies: { app: "1.0.0" } }),
+        "package-lock.json": JSON.stringify({
+          packages: {
+            "": { name: "root" },
+            "node_modules/app": { version: "1.0.0" },
+            "node_modules/badlib": { version: "2.0.0" }, // pulled in transitively by app
+          },
+        }),
+      },
+      // query order follows lockfile enumeration: [app, badlib]
+      postJson: { [BATCH_URL]: { results: [{ vulns: [] }, { vulns: [{ id: "V" }] }] } },
+      fetchJson: {
+        [`${VULN_URL}V`]: { id: "V", affected: [{ package: { ecosystem: "npm", name: "badlib" } }] },
+      },
+    })
+    const issues = await vulnerableDepsScanner.run(ctx)
+    expect(issues).toHaveLength(1)
+    expect(issues[0].id).toBe("vuln-badlib-V")
+    expect(issues[0].title).toContain("badlib@2.0.0")
+    expect(issues[0].detail).toContain("(transitive dependency)")
+  })
+
+  it("enumerates the full tree from pnpm-lock.yaml", async () => {
+    const ctx = makeContext({
+      files: {
+        "package.json": JSON.stringify({ dependencies: { app: "^1.0.0" } }),
+        "pnpm-lock.yaml":
+          "packages:\n" +
+          "  /app@1.0.0:\n    resolution: {integrity: aaa}\n" +
+          "  /badlib@2.0.0:\n    resolution: {integrity: bbb}\n",
+      },
+      postJson: { [BATCH_URL]: { results: [{ vulns: [] }, { vulns: [{ id: "V" }] }] } },
+      fetchJson: {
+        [`${VULN_URL}V`]: { id: "V", affected: [{ package: { ecosystem: "npm", name: "badlib" } }] },
+      },
+    })
+    const issues = await vulnerableDepsScanner.run(ctx)
+    expect(issues).toHaveLength(1)
+    expect(issues[0].title).toContain("badlib@2.0.0")
+    expect(issues[0].detail).toContain("(transitive dependency)")
   })
 
   it("prefers the exact installed version from package-lock.json", async () => {

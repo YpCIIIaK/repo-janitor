@@ -195,7 +195,9 @@ pnpm --filter @repo-anti-rot/cli dev -- scan --path .
 
 Open the **Settings** (gear icon), paste an
 [OpenRouter API key](https://openrouter.ai/keys), pick a model id (free presets
-provided), and enable the scanner categories you want analyzed. The key is stored
+provided — `openai/gpt-oss-120b:free` is the recommended free default and the
+strongest of the free options for code reasoning), and enable the scanner
+categories you want analyzed. The key is stored
 only in your browser and is sent through the app's own `/api/ai/complete` proxy —
 never directly to a third party. For secret findings the snippet is redacted
 before it leaves the machine.
@@ -311,12 +313,34 @@ The server-side API routes are written to be safe to expose:
 | **Open AI proxy / billing abuse** | Using the shared `OPENROUTER_API_KEY` requires `Authorization: Bearer <RAR_AI_PROXY_TOKEN>`; an optional `OPENROUTER_ALLOWED_MODELS` whitelist restricts models; `maxTokens` is clamped. Requests with the user's own key are unaffected. |
 | **Report ingestion** | `POST /api/ingest` accepts a `Bearer` token in `REPO_ANTI_ROT_INGEST_TOKEN` (constant-time compared). Unset → open (local dev). |
 | **Report read access** | `GET /api/reports` returns full reports (paths + redacted evidence). Set `REPO_ANTI_ROT_READ_TOKEN` to require a `Bearer` token for reads; unset → open so the in-browser dashboard works. (The badge endpoint stays open — it exposes only grade + score.) |
-| **Secrets → AI** | For `secret` findings the evidence snippet is redacted by the scanner before it ever reaches the AI proxy, and the executive summary sends finding metadata only — never `evidence`. |
+| **Secrets → AI** | For committed-secret findings the evidence snippet is redacted by the scanner before it ever reaches the AI proxy, and the executive summary sends finding metadata only — never `evidence`. |
 | **Command injection** | `git`/`node` are spawned with an argv array (no shell), and the clone URL must parse as `http(s)`, so it can't be coerced into a flag. |
 
 All tokens are compared in constant time (`crypto.timingSafeEqual` over hashed
 inputs). Token-gated checks are **default-off** so local development needs no
 configuration; set the relevant env var to switch each one on.
+
+## Committed secrets
+
+The `secrets` scanner flags credentials committed to the repo using
+high-confidence provider patterns (AWS, Stripe, GitHub, Slack, Google, private
+keys) plus a generic high-entropy fallback for `secret = "…"`-style assignments.
+It runs **two passes**, both reported under the **Security** category:
+
+- **Working tree** — every line of the current checkout.
+- **Git history** — lines introduced by past commits (via `git log -p`). This
+  catches a credential that was committed and **later deleted**: gone from the
+  tree, but still recoverable from history. History findings are located as
+  `path @ <short-sha>`, deduped (one finding per credential, newest commit wins),
+  and never double-reported when the secret still lives in the working tree. The
+  pass is bounded (recent commits, capped findings) and degrades to a no-op when
+  git isn't available — so a non-git directory still gets the working-tree scan.
+
+Evidence is **always redacted** (a 4-char prefix, the rest masked) before it
+leaves the machine, in both passes. Secrets in test/example/fixture paths are
+downgraded to `info` rather than dropped; `.env.example` and lockfiles are
+skipped. A history secret is still `critical`: it remains in history until the
+repo is rewritten (`git filter-repo` / BFG) and the key is rotated.
 
 ## Vulnerable dependencies (OSV)
 
@@ -336,18 +360,26 @@ too, not just npm. Each ecosystem is read from its manifests and lockfiles:
 | `RubyGems` | `Gemfile`                              | `Gemfile.lock`                                     |
 | `Packagist`| `composer.json`                        | `composer.lock`                                    |
 
+- **Transitive (npm)** — when an npm lockfile is committed the **entire installed
+  tree** is checked (direct *and* transitive deps, like `npm audit`), not just the
+  handful in `package.json`. Transitive findings are labelled as such. Without a
+  lockfile it falls back to the declared deps only.
 - **Precise versions** — the exact installed version is read from a committed
   lockfile when present; otherwise it falls back to the floor of the declared
   range, so the result is transparent but may over-report.
-- **Cheap** — the whole (cross-ecosystem) dependency set is checked in a single
-  batch request; advisory details are fetched only for the (usually few) packages
-  that match, so a clean repo costs ~1 network call.
+- **Cheap** — the dependency set is checked in OSV-sized batches (1000/req);
+  advisory details are fetched only for the (usually few) packages that match, so
+  a clean repo costs ~1 network call.
 - **Severity-mapped** — GHSA `CRITICAL`/`HIGH` → critical, `MODERATE` → warning,
   `LOW` → info; each finding links to the advisory on osv.dev, names the affected
   ecosystem, and points at the fixed version to upgrade to.
 
 Like the other registry-backed checks, it degrades to a no-op offline (no network
 adapter) rather than failing the scan. npm dev dependencies are labelled.
+
+> Vulnerability findings and committed-secret findings share a single **Security**
+> category in the dashboard and reports, so everything that is a genuine security
+> risk surfaces together — separate from ordinary dependency-health issues.
 
 ## Outdated & abandoned dependencies
 
@@ -407,6 +439,7 @@ per-language. Coverage by scanner:
 
 | Scanner            | Languages                                                                 |
 | ------------------ | ------------------------------------------------------------------------- |
+| `secrets`          | language-agnostic (provider patterns + entropy); working tree + git history |
 | `vulnerable-deps`  | npm, PyPI, Go, crates.io, RubyGems, Packagist (see above)                 |
 | `env-lifecycle`    | JS/TS (AST), Python, Go, Ruby, PHP (incl. Laravel `env()`)               |
 | `leftover-debug`   | JS/TS (AST), Python, Go, Rust, Ruby, PHP                                  |

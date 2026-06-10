@@ -42,16 +42,16 @@ describe("scoreToGrade", () => {
 describe("categoryScores", () => {
   it("grades each category independently and returns only non-empty ones, worst first", () => {
     const result = categoryScores([
-      issue({ category: "secret", severity: "critical" }), // secret: 90
+      issue({ category: "security", severity: "critical" }), // security: 90
       issue({ category: "todo", severity: "info" }), // todo: 100 → 100? 100-0.5=99.5→100
       issue({ category: "hygiene", severity: "warning" }),
       issue({ category: "hygiene", severity: "warning" }), // hygiene: 100-6=94
     ])
-    expect(result.map((c) => c.category)).toEqual(["secret", "hygiene", "todo"])
-    const secret = result.find((c) => c.category === "secret")!
-    expect(secret.score).toBe(90)
-    expect(secret.grade).toBe("A")
-    expect(secret.count).toBe(1)
+    expect(result.map((c) => c.category)).toEqual(["security", "hygiene", "todo"])
+    const security = result.find((c) => c.category === "security")!
+    expect(security.score).toBe(90)
+    expect(security.grade).toBe("A")
+    expect(security.count).toBe(1)
     const hygiene = result.find((c) => c.category === "hygiene")!
     expect(hygiene.count).toBe(2)
   })

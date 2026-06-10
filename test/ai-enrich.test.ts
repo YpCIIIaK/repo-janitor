@@ -57,7 +57,7 @@ describe("enrichReport", () => {
     enableAi(["hygiene"])
     fetchCompletion.mockResolvedValue("1: Add it")
     const out = await enrichReport(
-      report([issue({ id: "a", category: "hygiene" }), issue({ id: "b", category: "secret" })]),
+      report([issue({ id: "a", category: "hygiene" }), issue({ id: "b", category: "security" })]),
     )
     expect(out.issues.find((i) => i.id === "b")?.aiNote).toBeUndefined()
   })
@@ -90,7 +90,7 @@ describe("aiTargetCount", () => {
 
   it("counts uncached findings in enabled categories", async () => {
     enableAi(["hygiene"])
-    const r = report([issue({ id: "a", category: "hygiene" }), issue({ id: "b", category: "secret" })])
+    const r = report([issue({ id: "a", category: "hygiene" }), issue({ id: "b", category: "security" })])
     expect(aiTargetCount(r)).toBe(1) // only the hygiene one
     fetchCompletion.mockResolvedValue("1: Add it")
     await enrichReport(r)
@@ -107,6 +107,6 @@ describe("analyzeOneIssue", () => {
   it("returns the single verdict, ignoring category toggles", async () => {
     fetchCompletion.mockResolvedValue("Rotate now")
     const settings = { ...DEFAULT_SETTINGS, apiKey: "sk-test" }
-    expect(await analyzeOneIssue(issue({ id: "x", category: "secret" }), settings)).toBe("Rotate now")
+    expect(await analyzeOneIssue(issue({ id: "x", category: "security" }), settings)).toBe("Rotate now")
   })
 })

@@ -20,7 +20,9 @@ export const categorySchema = z.enum([
   "dependency",
   "branch",
   "todo",
-  "secret",
+  // Umbrella for security findings: committed secrets (working tree + git
+  // history) and dependencies with known vulnerabilities (CVE/GHSA).
+  "security",
   "dead-code",
   // Umbrella for repo/code hygiene: missing standard files, no tests/CI,
   // leftover debug statements, broken doc links, bus-factor risk.
@@ -28,9 +30,20 @@ export const categorySchema = z.enum([
 ])
 export type IssueCategory = z.infer<typeof categorySchema>
 
+/**
+ * Back-compat for reports written before the `secret` category was folded into
+ * the broader `security` category (schema stayed v1 — only an enum value was
+ * renamed). Old ingested reports carry `"secret"`; map it forward on parse so
+ * they still validate and render under the new category.
+ */
+const categoryInput = z.preprocess(
+  (v) => (v === "secret" ? "security" : v),
+  categorySchema,
+)
+
 export const issueSchema = z.object({
   id: z.string(),
-  category: categorySchema,
+  category: categoryInput,
   severity: severitySchema,
   title: z.string(),
   /** human-readable location, e.g. "src/server/db.ts:42" or "package.json" */
