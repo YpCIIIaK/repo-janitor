@@ -7,6 +7,9 @@ import {
   readAiSettings,
   saveAiSettings,
   aiCacheModel,
+  aiBudget,
+  isLargeContextModel,
+  modelContextTokens,
   type AiSettings,
 } from "@/lib/ai-settings"
 import type { IssueCategory } from "@/lib/mock-data"
@@ -113,6 +116,37 @@ describe("web search", () => {
   it("aiCacheModel namespaces web verdicts apart from non-web", () => {
     expect(aiCacheModel(settings({ model: "m", webSearch: false }))).toBe("m")
     expect(aiCacheModel(settings({ model: "m", webSearch: true }))).toBe("m::web")
+  })
+})
+
+describe("context budget", () => {
+  it("reports the exact window for a known preset", () => {
+    expect(modelContextTokens("nvidia/nemotron-3-ultra-550b-a55b:free")).toBe(1_000_000)
+    expect(modelContextTokens("qwen/qwen-2.5-coder-32b-instruct")).toBe(32_768)
+  })
+
+  it("infers a window from size hints in a custom id", () => {
+    expect(modelContextTokens("vendor/some-1m-model")).toBe(1_000_000)
+    expect(modelContextTokens("vendor/model-200k")).toBe(200_000)
+  })
+
+  it("assumes a conservative window for an unknown id", () => {
+    expect(modelContextTokens("vendor/mystery")).toBe(128_000)
+  })
+
+  it("flags large-context models and not small ones", () => {
+    expect(isLargeContextModel("nvidia/nemotron-3-ultra-550b-a55b:free")).toBe(true)
+    expect(isLargeContextModel("google/gemini-2.0-flash-exp:free")).toBe(true)
+    expect(isLargeContextModel("openai/gpt-oss-120b:free")).toBe(false)
+    expect(isLargeContextModel("qwen/qwen-2.5-coder-32b-instruct")).toBe(false)
+  })
+
+  it("gives a large model a bigger budget than a small one", () => {
+    const big = aiBudget(settings({ model: "nvidia/nemotron-3-ultra-550b-a55b:free" }))
+    const small = aiBudget(settings({ model: "openai/gpt-oss-120b:free" }))
+    expect(big.maxIssues).toBeGreaterThan(small.maxIssues)
+    expect(big.batchSize).toBeGreaterThan(small.batchSize)
+    expect(big.summaryTopFindings).toBeGreaterThan(small.summaryTopFindings)
   })
 })
 

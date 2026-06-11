@@ -4,7 +4,7 @@ import type { Grade, Issue, Severity } from "@/lib/mock-data"
 import { categoryLabels } from "@/lib/mock-data"
 import { categoryScores, scoreToGrade, computeScore, type SeverityWeights } from "@/lib/score"
 import { hotspotFiles } from "@/lib/hotspots"
-import { readAiSettings, aiCacheModel } from "@/lib/ai-settings"
+import { readAiSettings, aiCacheModel, aiBudget } from "@/lib/ai-settings"
 import { fetchCompletion } from "@/lib/ai-client"
 
 /**
@@ -97,7 +97,7 @@ function count(issues: Issue[], sev: Severity): number {
 }
 
 /** Compact, evidence-free digest of the repo's health for the model. */
-function buildDigest(input: SummaryInput): string {
+function buildDigest(input: SummaryInput, topFindings: number): string {
   const { owner, name, issues, weights } = input
   const score = computeScore(issues, weights)
   const grade = scoreToGrade(score)
@@ -122,9 +122,10 @@ function buildDigest(input: SummaryInput): string {
     )
   }
 
-  // Most severe findings first; cap so the request stays small/cheap.
+  // Most severe findings first; cap to the model's budget (a large-context model
+  // sees far more of the report, so it can ground the summary in more specifics).
   const order: Record<Severity, number> = { critical: 0, warning: 1, info: 2 }
-  const top = [...issues].sort((a, b) => order[a.severity] - order[b.severity]).slice(0, 12)
+  const top = [...issues].sort((a, b) => order[a.severity] - order[b.severity]).slice(0, topFindings)
   if (top.length > 0) {
     lines.push("Top findings:")
     for (const i of top) {
@@ -159,10 +160,11 @@ export async function generateSummary(
     if (hit) return { summary: hit, cached: true }
   }
 
+  const budget = aiBudget(settings)
   const grade = scoreToGrade(computeScore(input.issues, input.weights))
   const prompt =
     `Here is the rot scan for a repository graded ${grade}. Write the executive ` +
-    `summary as instructed.\n\n${buildDigest(input)}`
+    `summary as instructed.\n\n${buildDigest(input, budget.summaryTopFindings)}`
 
   // Web search only pays off when there's an advisory-bearing finding to look up.
   const wantWeb =
@@ -175,7 +177,7 @@ export async function generateSummary(
       model: settings.model,
       system: SYSTEM,
       prompt,
-      maxTokens: 500,
+      maxTokens: budget.summaryMaxTokens,
       web: wantWeb,
     },
     opts.signal,

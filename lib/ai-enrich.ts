@@ -2,7 +2,7 @@
 
 import type { Issue, IssueCategory } from "@/lib/mock-data"
 import type { ScanReport } from "@/lib/reports-store"
-import { readAiSettings, enabledCategories, aiCacheModel, type AiSettings } from "@/lib/ai-settings"
+import { readAiSettings, enabledCategories, aiCacheModel, aiBudget, type AiSettings } from "@/lib/ai-settings"
 import { getCachedNotes, putCachedNotes } from "@/lib/ai-cache"
 import { fetchCompletion } from "@/lib/ai-client"
 
@@ -25,9 +25,9 @@ import { fetchCompletion } from "@/lib/ai-client"
  *    commits to a verdict.
  */
 
-// Bound cost/time: cap total NEW analyses, batch size, and parallel requests.
-const MAX_ISSUES = 40
-const BATCH_SIZE = 5
+// Bound cost/time: how many parallel requests we allow. The per-pass issue cap and
+// batch size come from `aiBudget(settings)` so a large-context model analyzes far
+// more findings (in bigger batches) than a small one.
 const CONCURRENCY = 3
 
 // Categories whose findings reference EXTERNAL advisories (CVE/GHSA pages, package
@@ -169,7 +169,8 @@ async function analyzeBatch(
       model: settings.model,
       system: CATEGORY_PROMPTS[category],
       // Generous headroom: free models are verbose and may add a reasoning preamble.
-      maxTokens: Math.min(3000, Math.max(400, 240 * issues.length)),
+      // The ceiling scales with the model's context budget (bigger batches need more).
+      maxTokens: Math.min(aiBudget(settings).enrichTokenCap, Math.max(400, 240 * issues.length)),
       prompt,
       // Web search only for advisory-bearing categories, and only when enabled.
       web: settings.webSearch && WEB_SEARCH_CATEGORIES.has(category),
@@ -226,7 +227,7 @@ export function aiTargetCount(report: ScanReport): number {
   const targets = report.issues.filter((i) => enabled.has(i.category))
   const cached = getCachedNotes(aiCacheModel(settings), targets.map((i) => i.id))
   const misses = targets.filter((i) => !cached.has(i.id)).length
-  return Math.min(misses, MAX_ISSUES)
+  return Math.min(misses, aiBudget(settings).maxIssues)
 }
 
 export interface EnrichOptions {
@@ -249,10 +250,11 @@ export async function enrichReport(report: ScanReport, opts: EnrichOptions = {})
   const targets = report.issues.filter((i) => enabled.has(i.category))
   if (targets.length === 0) return report
 
-  // 1) Re-use cached verdicts; only fetch the misses (capped).
+  // 1) Re-use cached verdicts; only fetch the misses (capped to the model's budget).
+  const budget = aiBudget(settings)
   const cacheModel = aiCacheModel(settings)
   const cached = getCachedNotes(cacheModel, targets.map((i) => i.id))
-  const misses = targets.filter((i) => !cached.has(i.id)).slice(0, MAX_ISSUES)
+  const misses = targets.filter((i) => !cached.has(i.id)).slice(0, budget.maxIssues)
 
   const noteById = new Map<string, string>(cached)
 
@@ -265,8 +267,8 @@ export async function enrichReport(report: ScanReport, opts: EnrichOptions = {})
   }
   const batches: { category: IssueCategory; issues: Issue[] }[] = []
   for (const [category, list] of byCategory) {
-    for (let i = 0; i < list.length; i += BATCH_SIZE) {
-      batches.push({ category, issues: list.slice(i, i + BATCH_SIZE) })
+    for (let i = 0; i < list.length; i += budget.batchSize) {
+      batches.push({ category, issues: list.slice(i, i + budget.batchSize) })
     }
   }
 

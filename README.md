@@ -204,8 +204,9 @@ pnpm --filter @repo-anti-rot/cli dev -- scan --path .
 Open the **Settings** (gear icon), paste an
 [OpenRouter API key](https://openrouter.ai/keys), pick a model id (free presets
 provided — `openai/gpt-oss-120b:free` is the recommended free default and the
-strongest of the free options for code reasoning), and enable the scanner
-categories you want analyzed. The key is stored
+strongest of the free options for code reasoning, or
+`nvidia/nemotron-3-ultra-550b-a55b:free` for a 1M-token window), and enable the
+scanner categories you want analyzed. The key is stored
 only in your browser and is sent through the app's own `/api/ai/complete` proxy —
 never directly to a third party. For secret findings the snippet is redacted
 before it leaves the machine.
@@ -253,6 +254,11 @@ The per-finding enrichment is tuned to stay cheap on small/free models:
   per finding) instead of one request each.
 - **Resilient** — rate-limited (429) or transient (5xx) responses back off and
   retry; the prompt forbids hedging so even a small model commits to a verdict.
+- **Context-aware** — the amount fed to the model scales to its context window. A
+  large-context model (≥400K tokens, e.g. Nemotron 3 Ultra at 1M or Gemini Flash)
+  gets far more findings per pass, bigger batches, and a longer, more grounded
+  executive summary; a small model keeps the lean, cheap budget. The Settings panel
+  shows a "Large context" hint when the picked model qualifies.
 
 ## Health badge
 

@@ -39,15 +39,20 @@ export const ALL_CATEGORIES: IssueCategory[] = [
   "hygiene",
 ]
 
-/** Suggested starter models — free/cheap. The field also accepts any custom id. */
-export const MODEL_PRESETS: { id: string; label: string }[] = [
-  { id: "openai/gpt-oss-120b:free", label: "GPT-OSS 120B (free, best for code)" },
-  { id: "nvidia/nemotron-3-ultra-550b-a55b:free", label: "Nemotron 3 Ultra 550B (free, 1M context)" },
-  { id: "openai/gpt-oss-20b:free", label: "GPT-OSS 20B (free, lighter)" },
-  { id: "google/gemini-2.0-flash-exp:free", label: "Gemini 2.0 Flash (free)" },
-  { id: "meta-llama/llama-3.3-70b-instruct:free", label: "Llama 3.3 70B (free)" },
-  { id: "qwen/qwen-2.5-coder-32b-instruct", label: "Qwen 2.5 Coder 32B (cheap)" },
-  { id: "anthropic/claude-3.5-haiku", label: "Claude 3.5 Haiku (cheap)" },
+/**
+ * Suggested starter models — free/cheap. The field also accepts any custom id.
+ * `contextTokens` is the model's context window; the AI pass uses it to scale how
+ * much it feeds the model (see `aiBudget`) — a 1M-token model gets far more
+ * findings per request than a 32K one.
+ */
+export const MODEL_PRESETS: { id: string; label: string; contextTokens: number }[] = [
+  { id: "openai/gpt-oss-120b:free", label: "GPT-OSS 120B (free, best for code)", contextTokens: 131_072 },
+  { id: "nvidia/nemotron-3-ultra-550b-a55b:free", label: "Nemotron 3 Ultra 550B (free, 1M context)", contextTokens: 1_000_000 },
+  { id: "openai/gpt-oss-20b:free", label: "GPT-OSS 20B (free, lighter)", contextTokens: 131_072 },
+  { id: "google/gemini-2.0-flash-exp:free", label: "Gemini 2.0 Flash (free)", contextTokens: 1_000_000 },
+  { id: "meta-llama/llama-3.3-70b-instruct:free", label: "Llama 3.3 70B (free)", contextTokens: 131_072 },
+  { id: "qwen/qwen-2.5-coder-32b-instruct", label: "Qwen 2.5 Coder 32B (cheap)", contextTokens: 32_768 },
+  { id: "anthropic/claude-3.5-haiku", label: "Claude 3.5 Haiku (cheap)", contextTokens: 200_000 },
 ]
 
 const NO_CATEGORIES: Record<IssueCategory, boolean> = {
@@ -101,6 +106,72 @@ function normalize(raw: unknown): AiSettings {
  */
 export function aiCacheModel(s: AiSettings): string {
   return s.webSearch ? `${s.model}::web` : s.model
+}
+
+// ---------------------------------------------------------------------------
+// Context budget — scale how much we feed the model to its context window.
+// ---------------------------------------------------------------------------
+
+/** A model at/above this many context tokens is treated as "large context". */
+const LARGE_CONTEXT_TOKENS = 400_000
+
+/**
+ * Best-effort context window for a model id. Known presets report it exactly;
+ * for a custom id we read common size hints from the name ("1m", "200k", "128k"),
+ * otherwise assume a conservative small window so we never overrun an unknown model.
+ */
+export function modelContextTokens(modelId: string): number {
+  const preset = MODEL_PRESETS.find((m) => m.id === modelId)
+  if (preset) return preset.contextTokens
+  const id = modelId.toLowerCase()
+  if (/\b\d+\s*m\b|[:-]1m\b|1m-/.test(id)) return 1_000_000
+  const k = id.match(/(\d{2,4})\s*k\b/)
+  if (k) return Number(k[1]) * 1000
+  return 128_000
+}
+
+/**
+ * How much the AI pass may feed a model, scaled to its context window. Large-context
+ * models get many more findings per request (and bigger batches / longer summaries)
+ * so they can reason across the whole report at once instead of a narrow slice.
+ */
+export interface AiBudget {
+  /** Enrichment: cap on NEW per-finding analyses in one pass. */
+  maxIssues: number
+  /** Enrichment: findings sent in a single request. */
+  batchSize: number
+  /** Enrichment: hard ceiling on the per-batch response token budget. */
+  enrichTokenCap: number
+  /** Executive summary: how many top findings to list in the digest. */
+  summaryTopFindings: number
+  /** Executive summary: response token budget. */
+  summaryMaxTokens: number
+}
+
+const SMALL_BUDGET: AiBudget = {
+  maxIssues: 40,
+  batchSize: 5,
+  enrichTokenCap: 3000,
+  summaryTopFindings: 12,
+  summaryMaxTokens: 500,
+}
+
+const LARGE_BUDGET: AiBudget = {
+  maxIssues: 200,
+  batchSize: 20,
+  enrichTokenCap: 8000,
+  summaryTopFindings: 60,
+  summaryMaxTokens: 900,
+}
+
+/** True when the model's context window is big enough for the generous budget. */
+export function isLargeContextModel(modelId: string): boolean {
+  return modelContextTokens(modelId) >= LARGE_CONTEXT_TOKENS
+}
+
+/** The context budget for the active model. */
+export function aiBudget(s: AiSettings): AiBudget {
+  return isLargeContextModel(s.model) ? LARGE_BUDGET : SMALL_BUDGET
 }
 
 /** True when a key is set and at least one category is enabled. */

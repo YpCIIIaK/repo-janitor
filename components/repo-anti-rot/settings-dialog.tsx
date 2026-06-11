@@ -20,6 +20,8 @@ import {
   MODEL_PRESETS,
   readAiSettings,
   saveAiSettings,
+  isLargeContextModel,
+  modelContextTokens,
   type AiSettings,
 } from "@/lib/ai-settings"
 import { categoryLabels } from "@/lib/mock-data"
@@ -166,6 +168,13 @@ export function SettingsDialog() {
             </div>
             <p className="text-xs text-muted-foreground">
               Paste any OpenRouter model id, or pick a preset above.
+              {isLargeContextModel(draft.model) ? (
+                <span className="text-primary">
+                  {" "}
+                  Large context ({(modelContextTokens(draft.model) / 1_000_000).toFixed(1)}M) — analyzing
+                  more findings per pass.
+                </span>
+              ) : null}
             </p>
           </div>
 
