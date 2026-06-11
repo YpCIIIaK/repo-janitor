@@ -18,6 +18,43 @@ describe("envLifecycleScanner", () => {
     expect(issues.some((i) => i.id === "env-missing-KNOWN")).toBe(false)
   })
 
+  it("does not flag platform/CI env vars as undocumented (with .env.example)", async () => {
+    const ctx = makeContext({
+      files: {
+        ".env.example": "APP_KEY=\n",
+        "a.ts":
+          "const r = process.env.GITHUB_REPOSITORY\n" +
+          "const c = process.env.CI\n" +
+          "const n = process.env.NODE_ENV\n" +
+          "const i = process.env.INPUT_FAIL_ON\n" +
+          "const k = process.env.APP_KEY\n" +
+          "const s = process.env.SECRET_TOKEN\n",
+      },
+    })
+    const issues = await envLifecycleScanner.run(ctx)
+    const missing = issues.filter((i) => i.id.startsWith("env-missing-")).map((i) => i.id)
+    // Only the genuine project var is flagged; platform vars are excluded.
+    expect(missing).toEqual(["env-missing-SECRET_TOKEN"])
+  })
+
+  it("excludes platform/CI vars from the no-example summary count", async () => {
+    const ctx = makeContext({
+      files: {
+        "a.ts":
+          "const r = process.env.GITHUB_EVENT_NAME\n" +
+          "const x = process.env.NO_COLOR\n" +
+          "const real = process.env.MY_API_URL\n",
+      },
+    })
+    const issues = await envLifecycleScanner.run(ctx)
+    const note = issues.find((i) => i.id === "env-no-example")
+    expect(note).toBeDefined()
+    expect(note?.title).toContain("1 env var")
+    expect(note?.detail).toContain("MY_API_URL")
+    expect(note?.detail).not.toContain("GITHUB_EVENT_NAME")
+    expect(note?.detail).not.toContain("NO_COLOR")
+  })
+
   it("downgrades an undocumented var WITH an in-code fallback to info", async () => {
     const ctx = makeContext({
       files: {

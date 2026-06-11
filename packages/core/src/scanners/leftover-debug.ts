@@ -26,6 +26,74 @@ const DEBUG_METHODS = new Set(["log", "debug", "trace", "dir", "table"])
 const MAX_PER_FILE = 8
 const MAX_TOTAL = 50
 
+// Source extensions a built entrypoint (dist/*.js) maps back to.
+const ENTRY_SRC_EXTS = ["ts", "tsx", "mts", "cts", "js", "jsx", "mjs", "cjs"]
+
+/** Join a dir and a (possibly `./`-prefixed) relative path, resolving . and .. */
+function joinPath(dir: string, rel: string): string {
+  const parts = `${dir}/${rel}`.split("/")
+  const out: string[] = []
+  for (const p of parts) {
+    if (p === "" || p === ".") continue
+    if (p === "..") out.pop()
+    else out.push(p)
+  }
+  return out.join("/")
+}
+
+/**
+ * Map a built entrypoint path (e.g. `packages/cli/dist/index.js`) to the source
+ * files the scanner actually sees (`packages/cli/src/index.{ts,…}`): dist/ is
+ * git-ignored, so manifests point at outputs we never scan. Returns every
+ * plausible source path; membership is tested against the real file list.
+ */
+function entrySourceCandidates(distPath: string): string[] {
+  const noExt = distPath.replace(/\.[^./]+$/, "")
+  const srcified = noExt.replace(/(^|\/)dist(\/)/, "$1src$2")
+  return ENTRY_SRC_EXTS.map((e) => `${srcified}.${e}`)
+}
+
+/**
+ * Collect the source files that are *program entrypoints* — CLIs and GitHub
+ * Actions — from their manifests (`bin` in package.json, `runs.main` in
+ * action.yml). In an entrypoint, `console.log` is the program's output channel,
+ * not leftover debug, so we don't flag it there.
+ */
+async function collectEntrypoints(ctx: ScanContext): Promise<Set<string>> {
+  const entries = new Set<string>()
+  for (const file of ctx.files) {
+    const norm = file.replace(/\\/g, "/")
+    const lower = norm.toLowerCase()
+    const dir = norm.includes("/") ? norm.slice(0, norm.lastIndexOf("/")) : ""
+
+    if (lower === "package.json" || lower.endsWith("/package.json")) {
+      const txt = await ctx.readFile(file)
+      if (!txt) continue
+      let json: { bin?: unknown }
+      try {
+        json = JSON.parse(txt)
+      } catch {
+        continue
+      }
+      const bin = json.bin
+      const paths =
+        typeof bin === "string"
+          ? [bin]
+          : bin && typeof bin === "object"
+            ? Object.values(bin as Record<string, unknown>).map(String)
+            : []
+      for (const p of paths)
+        for (const c of entrySourceCandidates(joinPath(dir, p))) entries.add(c)
+    } else if (lower.endsWith("/action.yml") || lower.endsWith("/action.yaml") || lower === "action.yml" || lower === "action.yaml") {
+      const txt = await ctx.readFile(file)
+      if (!txt) continue
+      const m = txt.match(/(?:^|\n)\s*main:\s*["']?([^"'\n#]+?)["']?\s*(?:#.*)?$/m)
+      if (m) for (const c of entrySourceCandidates(joinPath(dir, m[1].trim()))) entries.add(c)
+    }
+  }
+  return entries
+}
+
 interface DebugRule {
   re: RegExp
   severity: Severity
@@ -134,6 +202,7 @@ export const leftoverDebugScanner: Scanner = {
   category: "hygiene",
   async run(ctx: ScanContext): Promise<Issue[]> {
     const issues: Issue[] = []
+    const entrypoints = await collectEntrypoints(ctx)
 
     for (const file of ctx.files) {
       if (issues.length >= MAX_TOTAL) break
@@ -154,12 +223,17 @@ export const leftoverDebugScanner: Scanner = {
         const ast = parseFile(content, file)
         if (!ast) continue
 
+        // In a CLI / Action entrypoint, console.log IS the program's output, not
+        // leftover debug — only a stray `debugger` is worth flagging there.
+        const isEntrypoint = content.startsWith("#!") || entrypoints.has(norm)
+
         let perFile = 0
         const found: { line: number; label: string }[] = []
         walk(ast, (n) => {
           if (perFile >= MAX_PER_FILE) return
           const label = debugLabel(n)
           if (!label) return
+          if (isEntrypoint && label !== "debugger") return
           found.push({ line: lineOf(n), label })
           perFile++
         })

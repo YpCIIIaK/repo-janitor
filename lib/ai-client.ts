@@ -20,6 +20,8 @@ export interface CompletionBody {
   system: string
   prompt: string
   maxTokens: number
+  /** Enable OpenRouter's web-search plugin for this completion (opt-in, costs extra). */
+  web?: boolean
 }
 
 /** One proxied completion with retry/backoff. Returns the text, or null on failure. */

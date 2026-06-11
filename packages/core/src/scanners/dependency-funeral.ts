@@ -8,7 +8,7 @@ import { parseFile, walk } from "../ast"
  * Detects dependencies that are:
  *  - **unused**     — declared in `dependencies` but never imported (AST-based, like env scanner)
  *  - **deprecated** — npm-deprecated latest version (registry)
- *  - **abandoned**  — no publish in over two years (registry)
+ *  - **abandoned**  — no publish in 2-3 years (info) or 3+ years (warning) (registry)
  *  - **outdated**   — behind latest by a major (warning) or minor (info) version (registry)
  *
  * Registry lookups go through the optional `ctx.fetchJson`. With no network adapter
@@ -16,7 +16,11 @@ import { parseFile, walk } from "../ast"
  * skips the registry-derived findings.
  */
 const SOURCE_RE = /\.(ts|tsx|js|jsx|mjs|mts|cts)$/
-const ABANDONED_MS = 2 * 365 * 24 * 60 * 60 * 1000
+const YEAR_MS = 365 * 24 * 60 * 60 * 1000
+// A 2-year publish gap is a soft note (many micro-libs are simply feature-complete);
+// only a 3+ year gap is loud enough to call a likely-unmaintained risk.
+const ABANDONED_INFO_MS = 2 * YEAR_MS
+const ABANDONED_WARN_MS = 3 * YEAR_MS
 
 interface SemVer {
   major: number
@@ -200,16 +204,24 @@ export const dependencyFuneralScanner: Scanner = {
           ageDays: 0,
           detail: `The latest published version of ${name} is marked deprecated on npm. Plan a migration.`,
         })
-      } else if (info.lastPublishMs && Date.now() - info.lastPublishMs > ABANDONED_MS) {
-        const years = Math.floor((Date.now() - info.lastPublishMs) / (365 * 24 * 60 * 60 * 1000))
+      } else if (info.lastPublishMs && Date.now() - info.lastPublishMs > ABANDONED_INFO_MS) {
+        const gap = Date.now() - info.lastPublishMs
+        const years = Math.floor(gap / YEAR_MS)
+        // 3+ years → likely unmaintained (warning); 2-3 years → soft note (info),
+        // since a stable micro-lib may just be feature-complete.
+        const severity: Severity = gap > ABANDONED_WARN_MS ? "warning" : "info"
         issues.push({
           id: `dep-abandoned-${name}`,
           category: "dependency",
-          severity: "warning",
+          severity,
           title: `${name} looks abandoned (no release in ${years}+ years)`,
           location: "package.json",
           ageDays: 0,
-          detail: `${name} has not published a new version in over ${years} years. It may be unmaintained.`,
+          detail:
+            severity === "warning"
+              ? `${name} has not published a new version in over ${years} years. It may be unmaintained.`
+              : `${name} has not published a new version in ${years}+ years. It may simply be ` +
+                `feature-complete — confirm it's still maintained if you depend on it heavily.`,
         })
       }
 

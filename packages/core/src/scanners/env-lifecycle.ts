@@ -30,6 +30,34 @@ const ENV_REGEX = /process\.env\.([A-Z0-9_]+)/g
 // Example/template files that document required env vars, in preference order.
 const EXAMPLE_FILES = [".env.example", ".env.sample", ".env.template", ".env.dist"]
 
+// Env vars injected by the platform/runtime/CI, or GitHub Action inputs. Code
+// legitimately reads these, but they are NEVER documented in a project's
+// `.env.example` (CI provides them; action inputs live in `action.yml`). Flagging
+// them as "undocumented" is a false positive, so they're excluded from that check.
+const PLATFORM_ENV_PREFIXES = ["GITHUB_", "RUNNER_", "INPUT_", "CI_", "VERCEL_", "NETLIFY_"]
+const PLATFORM_ENV_EXACT = new Set([
+  "CI",
+  "NODE_ENV",
+  "NO_COLOR",
+  "FORCE_COLOR",
+  "TERM",
+  "TZ",
+  "LANG",
+  "LC_ALL",
+  "HOME",
+  "PATH",
+  "PWD",
+  "SHELL",
+  "USER",
+  "HOSTNAME",
+  "TMPDIR",
+])
+
+/** True for env vars supplied by the platform/CI rather than the project. */
+function isPlatformEnv(name: string): boolean {
+  return PLATFORM_ENV_EXACT.has(name) || PLATFORM_ENV_PREFIXES.some((p) => name.startsWith(p))
+}
+
 /**
  * Non-JS env access, matched by regex per language. JS/TS keeps its precise
  * AST analysis above; these cover the common `os.environ` / `os.Getenv` / `ENV[]`
@@ -292,7 +320,7 @@ export const envLifecycleScanner: Scanner = {
       return at ? `${at.file}:${at.line}` : exampleName
     }
 
-    const undocumented = [...acc.used].filter((n) => !declared.has(n)).sort()
+    const undocumented = [...acc.used].filter((n) => !declared.has(n) && !isPlatformEnv(n)).sort()
 
     if (hasExample) {
       // The repo uses the .env.example convention — each undocumented var read in

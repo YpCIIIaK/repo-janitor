@@ -2,7 +2,7 @@
 
 import type { Issue, IssueCategory } from "@/lib/mock-data"
 import type { ScanReport } from "@/lib/reports-store"
-import { readAiSettings, enabledCategories, type AiSettings } from "@/lib/ai-settings"
+import { readAiSettings, enabledCategories, aiCacheModel, type AiSettings } from "@/lib/ai-settings"
 import { getCachedNotes, putCachedNotes } from "@/lib/ai-cache"
 import { fetchCompletion } from "@/lib/ai-client"
 
@@ -29,6 +29,11 @@ import { fetchCompletion } from "@/lib/ai-client"
 const MAX_ISSUES = 40
 const BATCH_SIZE = 5
 const CONCURRENCY = 3
+
+// Categories whose findings reference EXTERNAL advisories (CVE/GHSA pages, package
+// registries). Only these benefit from web search, so the (paid) web plugin is
+// requested for them alone — repo-internal categories never trigger a web call.
+const WEB_SEARCH_CATEGORIES = new Set<IssueCategory>(["security", "dependency"])
 
 /** Shared tail appended to every category prompt: be decisive, no fluff, always answer. */
 const COMMON_RULES =
@@ -66,6 +71,8 @@ const CATEGORY_PROMPTS: Record<IssueCategory, string> = {
     "un-locked dependency). Judge whether it is safe to drop or replace: is it a build/runtime/peer/dev",
     "dependency, is it used implicitly (CLI, plugin, type-only, config), and what is the migration",
     "risk? Note a well-known modern replacement only if one clearly applies.",
+    "If web results are available, check the package's current status (latest release, deprecation,",
+    "maintained fork) before judging it abandoned or recommending a replacement.",
     "Begin with exactly 'Safe to remove', 'Keep', 'Replace with <x>', or 'Verify <one concrete thing>'. " +
       COMMON_RULES,
   ].join("\n"),
@@ -96,6 +103,8 @@ const CATEGORY_PROMPTS: Record<IssueCategory, string> = {
     "(B) a dependency with a known VULNERABILITY (a CVE/GHSA advisory id is in the finding). Judge real",
     "exploitability for THIS repo (is the vulnerable code path reachable, is it a dev-only dependency,",
     "is a fix published) and give the action: upgrade to the fixed version, or a concrete mitigation.",
+    "If web results are available, consult the linked advisory (OSV/GHSA/NVD) to state what the flaw",
+    "ACTUALLY allows and which versions are affected — do not merely restate the finding text.",
     "Begin with exactly 'Upgrade now', 'Low risk here', or 'Verify <one concrete thing>'.",
     "For either kind you may instead begin with 'Verify <one concrete thing>' when warranted. " +
       COMMON_RULES,
@@ -162,6 +171,8 @@ async function analyzeBatch(
       // Generous headroom: free models are verbose and may add a reasoning preamble.
       maxTokens: Math.min(3000, Math.max(400, 240 * issues.length)),
       prompt,
+      // Web search only for advisory-bearing categories, and only when enabled.
+      web: settings.webSearch && WEB_SEARCH_CATEGORIES.has(category),
     },
     signal,
   )
@@ -213,7 +224,7 @@ export function aiTargetCount(report: ScanReport): number {
   const enabled = new Set(enabledCategories(settings))
   if (enabled.size === 0) return 0
   const targets = report.issues.filter((i) => enabled.has(i.category))
-  const cached = getCachedNotes(settings.model, targets.map((i) => i.id))
+  const cached = getCachedNotes(aiCacheModel(settings), targets.map((i) => i.id))
   const misses = targets.filter((i) => !cached.has(i.id)).length
   return Math.min(misses, MAX_ISSUES)
 }
@@ -239,7 +250,8 @@ export async function enrichReport(report: ScanReport, opts: EnrichOptions = {})
   if (targets.length === 0) return report
 
   // 1) Re-use cached verdicts; only fetch the misses (capped).
-  const cached = getCachedNotes(settings.model, targets.map((i) => i.id))
+  const cacheModel = aiCacheModel(settings)
+  const cached = getCachedNotes(cacheModel, targets.map((i) => i.id))
   const misses = targets.filter((i) => !cached.has(i.id)).slice(0, MAX_ISSUES)
 
   const noteById = new Map<string, string>(cached)
@@ -272,7 +284,7 @@ export async function enrichReport(report: ScanReport, opts: EnrichOptions = {})
     done += batch.issues.length
     opts.onProgress?.(done, total)
   })
-  putCachedNotes(settings.model, fresh)
+  putCachedNotes(cacheModel, fresh)
 
   if (noteById.size === 0) return report
   return {

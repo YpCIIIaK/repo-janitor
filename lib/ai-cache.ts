@@ -11,7 +11,7 @@
  */
 
 const KEY = "repo-anti-rot:ai-cache:v1"
-const CACHE_VERSION = "1"
+const CACHE_VERSION = "2"
 const MAX_ENTRIES = 2000
 
 function entryKey(model: string, issueId: string): string {

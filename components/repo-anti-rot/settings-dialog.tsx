@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Settings, Sparkles, Eye, EyeOff, Check, Clock } from "lucide-react"
+import { Settings, Sparkles, Eye, EyeOff, Check, Clock, Globe } from "lucide-react"
 import {
   Dialog,
   DialogContent,
@@ -37,7 +37,7 @@ const CATEGORY_HINT: Record<string, string> = {
   dependency: "Safe to drop/replace a dependency, and the risk.",
   branch: "Delete, merge, or keep a stale branch.",
   todo: "Is the TODO still actionable or stale?",
-  secret: "Live credential vs placeholder + remediation (redacted input).",
+  security: "Live credential vs placeholder, or CVE exploitability + remediation.",
   hygiene: "Missing files, tests/CI, debug logs, docs — the concrete fix.",
 }
 
@@ -167,6 +167,26 @@ export function SettingsDialog() {
             <p className="text-xs text-muted-foreground">
               Paste any OpenRouter model id, or pick a preset above.
             </p>
+          </div>
+
+          {/* Web search */}
+          <div className="flex items-start justify-between gap-4 rounded-md border border-border px-3 py-2.5">
+            <div className="min-w-0 space-y-0.5">
+              <Label htmlFor="ai-web" className="flex items-center gap-1.5">
+                <Globe className="size-4 text-primary" />
+                Web search for advisories
+              </Label>
+              <p className="text-xs text-muted-foreground">
+                Let the model read live CVE/GHSA advisories and package status for security &
+                dependency findings — including ones newer than its training data. Uses OpenRouter&apos;s
+                web plugin (billed per use), so it&apos;s off by default.
+              </p>
+            </div>
+            <Switch
+              id="ai-web"
+              checked={draft.webSearch}
+              onCheckedChange={(v) => setDraft((d) => ({ ...d, webSearch: v }))}
+            />
           </div>
 
           {/* Per-category toggles */}

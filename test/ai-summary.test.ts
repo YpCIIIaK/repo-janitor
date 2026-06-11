@@ -57,6 +57,43 @@ describe("generateSummary", () => {
   })
 })
 
+describe("web search", () => {
+  it("requests web search when enabled AND an advisory-bearing finding is present", async () => {
+    saveAiSettings({ ...DEFAULT_SETTINGS, apiKey: "sk-test", model: "m", webSearch: true })
+    fetchCompletion.mockResolvedValue("summary")
+    await generateSummary(input({ issues: [issue({ id: "a", category: "security" })] }))
+    expect(fetchCompletion.mock.calls[0][0]).toMatchObject({ web: true })
+  })
+
+  it("does NOT request web search when no security/dependency finding is present", async () => {
+    saveAiSettings({ ...DEFAULT_SETTINGS, apiKey: "sk-test", model: "m", webSearch: true })
+    fetchCompletion.mockResolvedValue("summary")
+    await generateSummary(input({ issues: [issue({ id: "a", category: "hygiene" })] }))
+    expect(fetchCompletion.mock.calls[0][0]).toMatchObject({ web: false })
+  })
+
+  it("does NOT request web search when the toggle is off", async () => {
+    saveAiSettings({ ...DEFAULT_SETTINGS, apiKey: "sk-test", model: "m", webSearch: false })
+    fetchCompletion.mockResolvedValue("summary")
+    await generateSummary(input({ issues: [issue({ id: "a", category: "security" })] }))
+    expect(fetchCompletion.mock.calls[0][0]).toMatchObject({ web: false })
+  })
+
+  it("caches web summaries apart from non-web (toggling re-asks)", async () => {
+    const sec = [issue({ id: "a", category: "security" })]
+    saveAiSettings({ ...DEFAULT_SETTINGS, apiKey: "sk-test", model: "m", webSearch: false })
+    fetchCompletion.mockResolvedValue("non-web summary")
+    await generateSummary(input({ issues: sec }))
+    // Flip web on: the non-web summary lives under a different namespace.
+    saveAiSettings({ ...DEFAULT_SETTINGS, apiKey: "sk-test", model: "m", webSearch: true })
+    fetchCompletion.mockClear()
+    fetchCompletion.mockResolvedValue("web summary")
+    const res = await generateSummary(input({ issues: sec }))
+    expect(fetchCompletion).toHaveBeenCalledOnce()
+    expect(res).toEqual({ summary: "web summary", cached: false })
+  })
+})
+
 describe("getCachedSummary fingerprint", () => {
   it("is order-independent over the finding set", async () => {
     saveAiSettings({ ...DEFAULT_SETTINGS, apiKey: "sk-test", model: "m" })

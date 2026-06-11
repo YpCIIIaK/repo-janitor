@@ -4,7 +4,7 @@ import type { Grade, Issue, Severity } from "@/lib/mock-data"
 import { categoryLabels } from "@/lib/mock-data"
 import { categoryScores, scoreToGrade, computeScore, type SeverityWeights } from "@/lib/score"
 import { hotspotFiles } from "@/lib/hotspots"
-import { readAiSettings } from "@/lib/ai-settings"
+import { readAiSettings, aiCacheModel } from "@/lib/ai-settings"
 import { fetchCompletion } from "@/lib/ai-client"
 
 /**
@@ -18,7 +18,7 @@ import { fetchCompletion } from "@/lib/ai-client"
  */
 
 const KEY = "repo-anti-rot:ai-summary:v1"
-const CACHE_VERSION = "1"
+const CACHE_VERSION = "2"
 
 const SYSTEM =
   "You are a staff engineer giving a repository's maintainer a brutally honest, " +
@@ -27,7 +27,9 @@ const SYSTEM =
   "Lead with the overall verdict tied to the grade, name the 1-2 biggest concrete " +
   "risks (reference the actual findings/files), and end with the single highest-" +
   "leverage next action. NO hedging ('likely', 'maybe'); be specific to THIS repo, " +
-  "not generic advice. If the repo is clean, say so plainly and briefly."
+  "not generic advice. If the repo is clean, say so plainly and briefly. " +
+  "If web results are available, use them to gauge the real severity of any CVE/" +
+  "dependency finding rather than assuming from the title."
 
 // ---------------------------------------------------------------------------
 // Cache (keyed by model + a fingerprint of the finding set)
@@ -149,9 +151,11 @@ export async function generateSummary(
   const settings = readAiSettings()
   if (!settings.apiKey.trim()) return null
 
+  // Cache namespace folds in the web-search toggle (see aiCacheModel).
+  const cacheModel = aiCacheModel(settings)
   const ids = input.issues.map((i) => i.id)
   if (!opts.force) {
-    const hit = getCachedSummary(settings.model, input.repoId, ids)
+    const hit = getCachedSummary(cacheModel, input.repoId, ids)
     if (hit) return { summary: hit, cached: true }
   }
 
@@ -160,6 +164,11 @@ export async function generateSummary(
     `Here is the rot scan for a repository graded ${grade}. Write the executive ` +
     `summary as instructed.\n\n${buildDigest(input)}`
 
+  // Web search only pays off when there's an advisory-bearing finding to look up.
+  const wantWeb =
+    settings.webSearch &&
+    input.issues.some((i) => i.category === "security" || i.category === "dependency")
+
   const text = await fetchCompletion(
     {
       apiKey: settings.apiKey,
@@ -167,12 +176,13 @@ export async function generateSummary(
       system: SYSTEM,
       prompt,
       maxTokens: 500,
+      web: wantWeb,
     },
     opts.signal,
   )
   if (!text) return null
 
   const summary = text.trim()
-  putCachedSummary(settings.model, input.repoId, ids, summary)
+  putCachedSummary(cacheModel, input.repoId, ids, summary)
   return { summary, cached: false }
 }

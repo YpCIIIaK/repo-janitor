@@ -58,10 +58,18 @@ pnpm install          # installs deps and links the workspace packages
 pnpm run build:cli    # builds packages/cli/dist (required for dashboard scans)
 ```
 
-Rebuild the CLI any time you change `packages/core` or `packages/cli`:
+The CLI is rebuilt **automatically** before the dashboard starts: `pnpm dev`
+runs a fast ESM-only rebuild first (`predev` → `build:cli` without type
+declarations, ~50 ms), and `pnpm build` runs the full build (`prebuild`). This
+means the dashboard always scans with the **current** engine — no more "I changed
+a scanner but the dashboard still shows the old score" (the dashboard executes the
+bundled `packages/cli/dist/index.js`, which otherwise goes stale silently).
+
+To rebuild by hand after changing `packages/core` or `packages/cli`:
 
 ```bash
-pnpm run build:cli
+pnpm run build:cli      # full build (esm + cjs + .d.ts)
+pnpm --filter @repo-anti-rot/cli build:fast   # fast esm-only (what predev uses)
 ```
 
 ## Tests
@@ -209,6 +217,20 @@ and (optionally) an `OPENROUTER_ALLOWED_MODELS` whitelist; requests that carry
 the user's own key are unaffected. Output size is always clamped. See
 [Security & hardening](#security--hardening).
 
+### Web search for advisories (optional)
+
+Findings in the **security** and **dependency** categories point at external
+advisories (CVE/GHSA pages, package registries) that may be newer than the model's
+training data — so the model can end up just paraphrasing the finding text. Toggle
+**Web search for advisories** in Settings to let it consult the live advisory via
+OpenRouter's web plugin: it then describes what the vulnerability *actually* allows
+and which versions are affected, instead of echoing the finding.
+
+It's **off by default** (the web plugin is billed per use) and only ever fires for
+those two advisory-bearing categories — repo-internal findings (dead code, TODOs,
+hygiene) never trigger a web call. Web-informed verdicts are cached in a separate
+namespace, so toggling the option re-asks rather than serving a stale answer.
+
 ### Executive summary
 
 The Overview tab has an on-demand **executive summary** — one short, decisive
@@ -217,7 +239,9 @@ the single highest-leverage next action). It costs exactly one model call and is
 cached by model + the exact set of findings, so reopening the repo or rescanning
 with no changes never re-asks. Only finding metadata (title, location, category,
 severity) is sent — never the `evidence` snippet — so a redacted secret's masked
-value still never leaves the machine.
+value still never leaves the machine. When **web search** is on and the repo has a
+security or dependency finding, the summary call also consults live advisories to
+weight CVE severity accurately.
 
 ### Per-finding enrichment
 
@@ -387,8 +411,10 @@ Separate from vulnerabilities, two scanners flag dependencies that are simply
 falling behind:
 
 - **npm** — `dependency-funeral` checks `package.json` deps for *unused* (static
-  import analysis), *deprecated*, *abandoned* (no release in 2+ years) and
-  *outdated* (major/minor behind) against the npm registry. The *unused* check
+  import analysis), *deprecated*, *abandoned* and *outdated* (major/minor behind)
+  against the npm registry. *Abandoned* is graduated by publish gap: a 2-3 year
+  gap is an `info` note (many micro-libs are simply feature-complete), only a 3+
+  year gap is a `warning`. The *unused* check
   also counts deps referenced only by an npm script or a build-config file
   (postcss/eslint/etc.) and skips framework-implicit runtimes (e.g. `react-dom`),
   so build tools and renderers aren't mistaken for dead deps. The *outdated*
@@ -459,7 +485,17 @@ For env vars, the scanner understands the idiomatic readers per language —
 `env()` (PHP) —
 and compares them against the first of `.env.example`, `.env.sample`,
 `.env.template` or `.env.dist`. A reader with an in-code default is reported as
-*optional* (info); a required, undocumented var is a warning.
+*optional* (info); a required, undocumented var is a warning. Platform/CI-provided
+vars (`GITHUB_*`, `RUNNER_*`, `INPUT_*`, `CI`, `NODE_ENV`, `NO_COLOR`, …) are
+excluded — they're injected by the runtime, not documented in `.env.example`.
+
+`leftover-debug` treats `console.log` as the program's output (not debug) inside
+**CLI / GitHub Action entrypoints** — files with a `#!` shebang, or the `bin` /
+`action.yml` `runs.main` target of their package — so a CLI that prints results
+isn't flagged. A stray `debugger` is still reported everywhere. `todo-debt` only
+counts a marker that **leads** the comment (mirroring eslint `no-warning-comments`
+with `location: "start"`), so prose that merely mentions "TODO" mid-sentence is
+ignored.
 
 ## Configuration (`.repo-anti-rot.json`)
 

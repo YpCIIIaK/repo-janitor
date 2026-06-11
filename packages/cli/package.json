@@ -11,6 +11,7 @@
   },
   "scripts": {
     "build": "tsup src/index.ts --format esm,cjs --dts",
+    "build:fast": "tsup src/index.ts --format esm --no-dts",
     "dev": "tsx src/index.ts",
     "test": "vitest run",
     "typecheck": "tsc --noEmit"

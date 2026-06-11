@@ -6,6 +6,7 @@ import {
   enabledCategories,
   readAiSettings,
   saveAiSettings,
+  aiCacheModel,
   type AiSettings,
 } from "@/lib/ai-settings"
 import type { IssueCategory } from "@/lib/mock-data"
@@ -89,6 +90,29 @@ describe("readAiSettings / saveAiSettings", () => {
     const storage = installWindow()
     storage.setItem("repo-anti-rot:ai-settings:v1", "{not json")
     expect(readAiSettings()).toEqual(DEFAULT_SETTINGS)
+  })
+})
+
+describe("web search", () => {
+  it("defaults to off", () => {
+    expect(DEFAULT_SETTINGS.webSearch).toBe(false)
+  })
+
+  it("round-trips the webSearch toggle through localStorage", () => {
+    installWindow()
+    saveAiSettings(settings({ apiKey: "k", webSearch: true }))
+    expect(readAiSettings().webSearch).toBe(true)
+  })
+
+  it("defaults webSearch to false for legacy settings that lack it", () => {
+    const storage = installWindow()
+    storage.setItem("repo-anti-rot:ai-settings:v1", JSON.stringify({ apiKey: "k", model: "m" }))
+    expect(readAiSettings().webSearch).toBe(false)
+  })
+
+  it("aiCacheModel namespaces web verdicts apart from non-web", () => {
+    expect(aiCacheModel(settings({ model: "m", webSearch: false }))).toBe("m")
+    expect(aiCacheModel(settings({ model: "m", webSearch: true }))).toBe("m::web")
   })
 })
 

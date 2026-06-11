@@ -54,4 +54,46 @@ describe("leftoverDebugScanner", () => {
     expect(issues).toHaveLength(1)
     expect(issues[0].severity).toBe("info")
   })
+
+  it("does NOT flag console.log in a shebang CLI entrypoint, but still flags debugger", async () => {
+    const ctx = makeContext({
+      files: {
+        "cli.ts": "#!/usr/bin/env node\nconsole.log('result')\ndebugger\n",
+      },
+    })
+    const issues = await leftoverDebugScanner.run(ctx)
+    expect(issues.map((i) => i.title)).toEqual(["Leftover debugger in source"])
+  })
+
+  it("does NOT flag console.log in a package.json `bin` entrypoint", async () => {
+    const ctx = makeContext({
+      files: {
+        "packages/cli/package.json": JSON.stringify({ bin: { foo: "./dist/index.js" } }),
+        "packages/cli/src/index.ts": "console.log('hello from CLI')\n",
+      },
+    })
+    expect(await leftoverDebugScanner.run(ctx)).toHaveLength(0)
+  })
+
+  it("does NOT flag console.log in a GitHub Action `runs.main` entrypoint", async () => {
+    const ctx = makeContext({
+      files: {
+        "packages/action/action.yml": "runs:\n  using: node20\n  main: \"dist/index.cjs\"\n",
+        "packages/action/src/index.ts": "console.log('::set-output::')\n",
+      },
+    })
+    expect(await leftoverDebugScanner.run(ctx)).toHaveLength(0)
+  })
+
+  it("still flags console.log in a normal (non-entrypoint) source file", async () => {
+    const ctx = makeContext({
+      files: {
+        "packages/cli/package.json": JSON.stringify({ bin: "./dist/index.js" }),
+        "packages/cli/src/helper.ts": "console.log('debug')\n",
+      },
+    })
+    const issues = await leftoverDebugScanner.run(ctx)
+    expect(issues).toHaveLength(1)
+    expect(issues[0].title).toContain("console.log")
+  })
 })

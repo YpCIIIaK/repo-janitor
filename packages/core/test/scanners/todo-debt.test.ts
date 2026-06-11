@@ -51,6 +51,26 @@ describe("todoDebtScanner", () => {
     expect(issues[0].title).toContain("handle null user")
   })
 
+  it("ignores a marker word mentioned mid-sentence in prose", async () => {
+    const ctx = makeContext({
+      files: {
+        "a.ts":
+          "// This finds TODO / FIXME markers and ranks them by age\n" +
+          "/**\n * A year-old TODO is a warning, fresher ones are info.\n */\n",
+      },
+    })
+    expect(await todoDebtScanner.run(ctx)).toHaveLength(0)
+  })
+
+  it("still flags a leading marker in a trailing comment (non-JS text fallback)", async () => {
+    const ctx = makeContext({
+      files: { "main.py": "x = 1  # TODO: fix the off-by-one\n" },
+    })
+    const issues = await todoDebtScanner.run(ctx)
+    expect(issues).toHaveLength(1)
+    expect(issues[0].title).toContain("fix the off-by-one")
+  })
+
   it("captures every marker in a multi-line block comment, at the right lines", async () => {
     const ctx = makeContext({
       files: {

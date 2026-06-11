@@ -3,7 +3,9 @@ import { dependencyFuneralScanner } from "../../src/index"
 import { makeContext } from "../helpers"
 
 const reg = (name: string) => `https://registry.npmjs.org/${name}`
-const threeYearsAgo = new Date(Date.now() - 3 * 365 * 24 * 3600 * 1000).toISOString()
+const threeYearsAgo = new Date(Date.now() - 3.2 * 365 * 24 * 3600 * 1000).toISOString()
+const twoYearsAgo = new Date(Date.now() - 2.5 * 365 * 24 * 3600 * 1000).toISOString()
+const oneYearAgo = new Date(Date.now() - 1 * 365 * 24 * 3600 * 1000).toISOString()
 
 describe("dependencyFuneralScanner", () => {
   it("flags an installed-but-never-imported dependency (works offline)", async () => {
@@ -73,7 +75,7 @@ describe("dependencyFuneralScanner", () => {
     expect(issues.find((i) => i.id === "dep-deprecated-left")?.severity).toBe("warning")
   })
 
-  it("flags an abandoned package (no release in 2+ years)", async () => {
+  it("warns on a long-abandoned package (3+ years since last release)", async () => {
     const ctx = makeContext({
       files: {
         "package.json": JSON.stringify({ dependencies: { old: "1.0.0" } }),
@@ -88,7 +90,43 @@ describe("dependencyFuneralScanner", () => {
       },
     })
     const issues = await dependencyFuneralScanner.run(ctx)
-    expect(issues.some((i) => i.id === "dep-abandoned-old")).toBe(true)
+    expect(issues.find((i) => i.id === "dep-abandoned-old")?.severity).toBe("warning")
+  })
+
+  it("downgrades a 2-3 year publish gap to info (likely feature-complete)", async () => {
+    const ctx = makeContext({
+      files: {
+        "package.json": JSON.stringify({ dependencies: { stable: "1.0.0" } }),
+        "a.ts": "import 'stable'\n",
+      },
+      fetchJson: {
+        [reg("stable")]: {
+          "dist-tags": { latest: "1.0.0" },
+          versions: { "1.0.0": {} },
+          time: { "1.0.0": twoYearsAgo },
+        },
+      },
+    })
+    const issues = await dependencyFuneralScanner.run(ctx)
+    expect(issues.find((i) => i.id === "dep-abandoned-stable")?.severity).toBe("info")
+  })
+
+  it("does not flag a package published within the last 2 years", async () => {
+    const ctx = makeContext({
+      files: {
+        "package.json": JSON.stringify({ dependencies: { fresh: "1.0.0" } }),
+        "a.ts": "import 'fresh'\n",
+      },
+      fetchJson: {
+        [reg("fresh")]: {
+          "dist-tags": { latest: "1.0.0" },
+          versions: { "1.0.0": {} },
+          time: { "1.0.0": oneYearAgo },
+        },
+      },
+    })
+    const issues = await dependencyFuneralScanner.run(ctx)
+    expect(issues.some((i) => i.id === "dep-abandoned-fresh")).toBe(false)
   })
 
   it("flags a major-behind package as warning and minor as info", async () => {

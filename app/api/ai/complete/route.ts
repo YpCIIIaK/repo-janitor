@@ -27,7 +27,12 @@ interface Body {
   system?: string
   prompt?: string
   maxTokens?: number
+  /** When true, attach OpenRouter's web-search plugin so the model can read live advisories. */
+  web?: boolean
 }
+
+// OpenRouter web plugin: a few results is plenty to read an advisory and keeps cost down.
+const WEB_MAX_RESULTS = 3
 
 export async function POST(request: Request) {
   let body: Body
@@ -102,6 +107,9 @@ export async function POST(request: Request) {
         messages,
         max_tokens: maxTokens,
         temperature: 0.2,
+        // Opt-in web search: lets the model consult live advisories (e.g. a CVE
+        // published after its training cutoff) instead of echoing the prompt.
+        ...(body.web ? { plugins: [{ id: "web", max_results: WEB_MAX_RESULTS }] } : {}),
       }),
     })
   } catch (err) {

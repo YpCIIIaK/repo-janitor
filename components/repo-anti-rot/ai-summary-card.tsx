@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { Sparkles, Loader2, RefreshCw, AlertTriangle, ChevronDown, ChevronUp } from "lucide-react"
 import type { Issue } from "@/lib/mock-data"
 import type { SeverityWeights } from "@/lib/score"
-import { useAiSettings } from "@/lib/ai-settings"
+import { useAiSettings, aiCacheModel } from "@/lib/ai-settings"
 import { generateSummary, getCachedSummary, type SummaryInput } from "@/lib/ai-summary"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -28,7 +28,8 @@ interface Props {
 export function AiSummaryCard({ repoId, owner, name, issues, weights }: Props) {
   const settings = useAiSettings()
   const hasKey = !!settings.apiKey.trim()
-  const model = settings.model
+  // Cache namespace folds in the web-search toggle (see aiCacheModel).
+  const model = aiCacheModel(settings)
 
   const [summary, setSummary] = useState<string | null>(null)
   const [cached, setCached] = useState(false)

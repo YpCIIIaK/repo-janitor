@@ -3,11 +3,15 @@ import type { Issue, Severity } from "../schema"
 import { type Node, parseFile } from "../ast"
 
 /**
- * TODO Debt scanner.
+ * Stale-comment debt scanner.
  *
- * Finds TODO / FIXME / HACK / XXX markers in comments and ranks them by age
- * (via `ScanContext.git.blameAgeDays`). Old debt is louder: a year-old TODO is a
- * warning, fresher ones are info.
+ * Finds debt markers (the four shouty ones) at the START of a comment and ranks
+ * them by age (via `ScanContext.git.blameAgeDays`). Old debt is louder: a marker
+ * open for over a year is a warning, fresher ones are info.
+ *
+ * The marker must lead the comment — prose that merely mentions a marker word
+ * mid-sentence (like this very docstring) is not debt and is ignored. This
+ * mirrors eslint's `no-warning-comments` with `location: "start"`.
  *
  * For JS/TS, comments are read from the parsed `File.comments` array (the AST
  * walker skips comment nodes on purpose). Every other language — and any file
@@ -15,7 +19,9 @@ import { type Node, parseFile } from "../ast"
  * and block comment styles, so markers are found across the polyglot set.
  */
 const SOURCE_RE = /\.(ts|tsx|js|jsx|mjs|mts|cts|py|go|rs|java|rb|php|c|cc|cpp|h|hpp|cs|kt|swift|scala)$/
-const MARKER_RE = /\b(TODO|FIXME|HACK|XXX)\b:?\s*(.*)/
+// Marker must be the first word of the comment body, after any decoration
+// (whitespace and `* > ! -`). A trailing `:` is optional.
+const MARKER_RE = /^[\s*>!-]*(TODO|FIXME|HACK|XXX)\b:?\s*(.*)$/
 
 /** A year-old marker is a warning; anything younger is info. */
 const STALE_DAYS = 365
@@ -36,6 +42,19 @@ function findMarker(text: string): { marker: string; rest: string } | null {
   const m = text.match(MARKER_RE)
   if (!m) return null
   return { marker: m[1], rest: m[2].trim() }
+}
+
+/**
+ * Reduce a raw source line to the comment body so the leading-marker rule applies
+ * to the comment, not the code before it (handles trailing comments like
+ * `x = 1  # TODO: fix`). Lines without an opener (block-comment continuations
+ * like ` * TODO …`) are returned as-is for the decoration strip in MARKER_RE.
+ */
+function commentBodyOf(line: string): string {
+  const openers = [line.indexOf("//"), line.indexOf("#"), line.indexOf("/*")].filter((i) => i >= 0)
+  if (openers.length === 0) return line
+  const first = Math.min(...openers)
+  return line.slice(first).replace(/^(\/\/+|\/\*+|#+)/, "")
 }
 
 function collectFromAst(ast: Node): Hit[] {
@@ -60,7 +79,7 @@ function collectFromText(content: string): Hit[] {
   for (let i = 0; i < lines.length; i++) {
     // only treat it as a marker when it sits in a comment-ish context
     if (!/(\/\/|\/\*|\*|#)/.test(lines[i])) continue
-    const found = findMarker(lines[i])
+    const found = findMarker(commentBodyOf(lines[i]))
     if (found) hits.push({ marker: found.marker, text: found.rest, line: i + 1 })
   }
   return hits

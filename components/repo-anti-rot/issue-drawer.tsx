@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { AlertTriangle, Bell, BellOff, Bug, Check, Clipboard, Github, Link2, Loader2, Sparkles } from "lucide-react"
 import { categoryLabels, severityLabels, type Issue } from "@/lib/mock-data"
 import { fullAge, issueAsMarkdown, severityStyle } from "@/lib/issue-format"
-import { useAiSettings } from "@/lib/ai-settings"
+import { useAiSettings, aiCacheModel } from "@/lib/ai-settings"
 import { analyzeOneIssue } from "@/lib/ai-enrich"
 import { getCachedNotes, putCachedNotes } from "@/lib/ai-cache"
 import { Button } from "@/components/ui/button"
@@ -53,7 +53,8 @@ function CopyButton({ value, label }: { value: string; label: string }) {
 export function IssueDrawer({ issue, open, onOpenChange, githubUrl, newIssueUrl, snoozed, onToggleSnooze }: Props) {
   const settings = useAiSettings()
   const hasKey = !!settings.apiKey.trim()
-  const model = settings.model
+  // Cache namespace folds in the web-search toggle (see aiCacheModel).
+  const model = aiCacheModel(settings)
 
   const [note, setNote] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)

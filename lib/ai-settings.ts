@@ -17,6 +17,13 @@ export interface AiSettings {
   apiKey: string
   /** OpenRouter model id, e.g. "google/gemini-2.0-flash-exp:free". */
   model: string
+  /**
+   * Let the model search the web (OpenRouter web plugin) when triaging findings
+   * that reference external advisories — security CVEs and dependency status. Lets
+   * it read the ACTUAL advisory, including ones published after its training cutoff.
+   * Costs extra per OpenRouter's web pricing, so it's opt-in and off by default.
+   */
+  webSearch: boolean
   /** Which scanner categories get an AI assessment after a scan. */
   categories: Record<IssueCategory, boolean>
 }
@@ -35,6 +42,7 @@ export const ALL_CATEGORIES: IssueCategory[] = [
 /** Suggested starter models — free/cheap. The field also accepts any custom id. */
 export const MODEL_PRESETS: { id: string; label: string }[] = [
   { id: "openai/gpt-oss-120b:free", label: "GPT-OSS 120B (free, best for code)" },
+  { id: "nvidia/nemotron-3-ultra-550b-a55b:free", label: "Nemotron 3 Ultra 550B (free, 1M context)" },
   { id: "openai/gpt-oss-20b:free", label: "GPT-OSS 20B (free, lighter)" },
   { id: "google/gemini-2.0-flash-exp:free", label: "Gemini 2.0 Flash (free)" },
   { id: "meta-llama/llama-3.3-70b-instruct:free", label: "Llama 3.3 70B (free)" },
@@ -55,6 +63,7 @@ const NO_CATEGORIES: Record<IssueCategory, boolean> = {
 export const DEFAULT_SETTINGS: AiSettings = {
   apiKey: "",
   model: MODEL_PRESETS[0].id,
+  webSearch: false,
   categories: { ...NO_CATEGORIES },
 }
 
@@ -80,8 +89,18 @@ function normalize(raw: unknown): AiSettings {
   return {
     apiKey: typeof o.apiKey === "string" ? o.apiKey : DEFAULT_SETTINGS.apiKey,
     model: typeof o.model === "string" && o.model.trim() ? o.model : DEFAULT_SETTINGS.model,
+    webSearch: typeof o.webSearch === "boolean" ? o.webSearch : DEFAULT_SETTINGS.webSearch,
     categories,
   }
+}
+
+/**
+ * Cache namespace for AI verdicts. Folds the web-search toggle into the model key
+ * so a web-informed verdict is never confused with a non-web one (toggling web
+ * yields a fresh answer instead of a stale cache hit).
+ */
+export function aiCacheModel(s: AiSettings): string {
+  return s.webSearch ? `${s.model}::web` : s.model
 }
 
 /** True when a key is set and at least one category is enabled. */

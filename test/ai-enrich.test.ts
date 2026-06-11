@@ -83,6 +83,61 @@ describe("enrichReport", () => {
   })
 })
 
+describe("web search", () => {
+  function enableAiWeb(categories: string[], webSearch: boolean) {
+    saveAiSettings({
+      ...DEFAULT_SETTINGS,
+      apiKey: "sk-test",
+      model: "m",
+      webSearch,
+      categories: { ...DEFAULT_SETTINGS.categories, ...Object.fromEntries(categories.map((c) => [c, true])) } as never,
+    })
+    clearAiCache()
+  }
+
+  it("requests web search for security findings when enabled", async () => {
+    enableAiWeb(["security"], true)
+    fetchCompletion.mockResolvedValue("1: Upgrade now")
+    await enrichReport(report([issue({ id: "a", category: "security" })]))
+    expect(fetchCompletion.mock.calls[0][0]).toMatchObject({ web: true })
+  })
+
+  it("does NOT request web search for repo-internal categories (hygiene)", async () => {
+    enableAiWeb(["hygiene"], true)
+    fetchCompletion.mockResolvedValue("1: Fix it")
+    await enrichReport(report([issue({ id: "a", category: "hygiene" })]))
+    expect(fetchCompletion.mock.calls[0][0]).toMatchObject({ web: false })
+  })
+
+  it("does NOT request web search when the toggle is off", async () => {
+    enableAiWeb(["security"], false)
+    fetchCompletion.mockResolvedValue("1: Upgrade now")
+    await enrichReport(report([issue({ id: "a", category: "security" })]))
+    expect(fetchCompletion.mock.calls[0][0]).toMatchObject({ web: false })
+  })
+
+  it("caches web verdicts separately from non-web (toggling re-asks)", async () => {
+    enableAiWeb(["security"], false)
+    fetchCompletion.mockResolvedValue("1: Low risk here")
+    const r = report([issue({ id: "a", category: "security" })])
+    await enrichReport(r)
+    // Flip web ON *without* clearing the cache: the non-web verdict lives under a
+    // different namespace, so the model must be asked again.
+    saveAiSettings({
+      ...DEFAULT_SETTINGS,
+      apiKey: "sk-test",
+      model: "m",
+      webSearch: true,
+      categories: { ...DEFAULT_SETTINGS.categories, security: true } as never,
+    })
+    fetchCompletion.mockClear()
+    fetchCompletion.mockResolvedValue("1: Upgrade now")
+    const out = await enrichReport(r)
+    expect(fetchCompletion).toHaveBeenCalledOnce()
+    expect(out.issues[0].aiNote).toBe("Upgrade now")
+  })
+})
+
 describe("aiTargetCount", () => {
   it("is 0 without a key or enabled category", () => {
     expect(aiTargetCount(report([issue()]))).toBe(0)
