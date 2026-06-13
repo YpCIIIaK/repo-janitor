@@ -53,6 +53,15 @@ describe("computeScore", () => {
     expect(computeScore(issues, { critical: 10, warning: 3, info: 10 })).toBe(90)
   })
 
+  it("caps low-severity pile-ups so they can't outweigh a real critical", () => {
+    // Linearly 200 info = 100 points (score 0); capped at 15 → score 85.
+    const info = Array.from({ length: 200 }, () => issue({ severity: "info" }))
+    expect(computeScore(info)).toBe(85)
+    // Warnings cap at 40; criticals stay uncapped.
+    const warnings = Array.from({ length: 100 }, () => issue({ severity: "warning" }))
+    expect(computeScore(warnings)).toBe(60)
+  })
+
   it("matches DEFAULT_WEIGHTS shape", () => {
     expect(DEFAULT_WEIGHTS).toMatchObject({ critical: 10, warning: 3, info: 0.5 })
   })

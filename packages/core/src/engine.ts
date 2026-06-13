@@ -45,9 +45,30 @@ export const defaultScanners: Scanner[] = [
  * notes dents the score gently; a repo can override these via .repo-anti-rot.json. */
 export type SeverityWeights = { critical: number; warning: number; info: number }
 
-/** 0–100 score: starts at 100, subtracts weighted penalties, rounds, clamps to 0. */
+/**
+ * Maximum total points each severity tier can subtract. Below the cap the penalty
+ * is exactly linear (`count * weight`), so typical repos score as before; the cap
+ * only bites on pile-ups, stopping a swarm of low-signal notes from sinking a repo
+ * harder than a real critical. Critical is uncapped on purpose — security findings
+ * *should* be able to tank the score.
+ */
+export const SEVERITY_PENALTY_CAP: Record<keyof SeverityWeights, number> = {
+  critical: Infinity,
+  warning: 40,
+  info: 15,
+}
+
+/**
+ * 0–100 score: starts at 100, subtracts each severity tier's penalty
+ * (`count * weight`, capped per tier), rounds, clamps to 0.
+ */
 export function computeScore(issues: Issue[], weights: SeverityWeights = DEFAULT_WEIGHTS): number {
-  const penalty = issues.reduce((sum, i) => sum + weights[i.severity], 0)
+  const counts: Record<keyof SeverityWeights, number> = { critical: 0, warning: 0, info: 0 }
+  for (const i of issues) counts[i.severity]++
+  let penalty = 0
+  for (const sev of ["critical", "warning", "info"] as const) {
+    penalty += Math.min(counts[sev] * weights[sev], SEVERITY_PENALTY_CAP[sev])
+  }
   return Math.max(0, Math.round(100 - penalty))
 }
 

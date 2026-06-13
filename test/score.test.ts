@@ -22,6 +22,19 @@ describe("computeScore (client mirror of the engine)", () => {
     expect(computeScore(many)).toBe(0)
   })
 
+  it("caps the penalty a pile of info can inflict", () => {
+    // 200 info would be 100 points linearly (→ score 0); the cap holds it to 15.
+    const many = Array.from({ length: 200 }, () => issue({ severity: "info" }))
+    expect(computeScore(many)).toBe(85)
+  })
+
+  it("caps warnings but lets criticals still tank the score", () => {
+    const warnings = Array.from({ length: 100 }, () => issue({ severity: "warning" }))
+    expect(computeScore(warnings)).toBe(60) // capped at 40, not 100
+    const criticals = Array.from({ length: 50 }, () => issue({ severity: "critical" }))
+    expect(computeScore(criticals)).toBe(0) // uncapped
+  })
+
   it("mirrors the engine's default weights exactly", () => {
     expect(DEFAULT_WEIGHTS).toEqual({ critical: 10, warning: 3, info: 0.5 })
   })
