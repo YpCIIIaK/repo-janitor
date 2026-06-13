@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { spawn } from "child_process"
-import { mkdtemp, rm, readFile } from "fs/promises"
+import { mkdtemp, rm, readFile, readdir, stat } from "fs/promises"
 import { tmpdir } from "os"
 import { join } from "path"
 import { isPublicGitUrl } from "@/lib/url-guard"
@@ -10,6 +10,45 @@ export const runtime = "nodejs"
 export const maxDuration = 300
 
 const CLI_DIST = join(process.cwd(), "packages", "cli", "dist", "index.js")
+
+// Hard cap on a cloned working tree. `git clone` itself enforces no size limit, so
+// even with --depth 1 a hostile or accidentally-huge repo could fill the disk; the
+// watchdog below aborts the clone once the tree crosses this line.
+const MAX_CLONE_BYTES = 500 * 1024 * 1024 // 500 MB
+const SIZE_POLL_MS = 2_000
+
+/**
+ * Sum the byte size of a directory tree, short-circuiting as soon as `limit` is
+ * exceeded so we never walk an already-too-big tree to completion. Best-effort:
+ * unreadable/transient entries (a clone is writing underneath us) are skipped.
+ */
+async function dirSizeExceeds(dir: string, limit: number): Promise<boolean> {
+  let total = 0
+  const stack = [dir]
+  while (stack.length > 0) {
+    const current = stack.pop()!
+    let entries
+    try {
+      entries = await readdir(current, { withFileTypes: true })
+    } catch {
+      continue
+    }
+    for (const entry of entries) {
+      const full = join(current, entry.name)
+      if (entry.isDirectory()) {
+        stack.push(full)
+      } else if (entry.isFile()) {
+        try {
+          total += (await stat(full)).size
+          if (total > limit) return true
+        } catch {
+          /* file vanished mid-walk — ignore */
+        }
+      }
+    }
+  }
+  return false
+}
 
 interface RunResult {
   code: number | null
@@ -25,10 +64,10 @@ interface RunResult {
 function run(
   cmd: string,
   args: string[],
-  opts: { timeoutMs?: number; onStderrLine?: (line: string) => void } = {},
+  opts: { timeoutMs?: number; onStderrLine?: (line: string) => void; signal?: AbortSignal } = {},
 ): Promise<RunResult> {
   return new Promise((resolve) => {
-    const child = spawn(cmd, args, { windowsHide: true })
+    const child = spawn(cmd, args, { windowsHide: true, signal: opts.signal })
     let stdout = ""
     let stderr = ""
     let buf = "" // partial-line buffer for stderr
@@ -71,11 +110,35 @@ async function cloneAndScan(url: string, emit: (ev: ScanEvent) => void): Promise
   const dir = await mkdtemp(join(tmpdir(), "repo-anti-rot-"))
   try {
     emit({ type: "phase", url, phase: "clone" })
-    const clone = await run(
-      "git",
-      ["clone", "--depth", "1", "--single-branch", url, dir],
-      { timeoutMs: 120_000 },
-    )
+    // Watchdog: poll the tree size during the clone and abort if it blows past the
+    // cap, so a huge repo can't fill the disk before the timeout would fire.
+    const sizeGuard = new AbortController()
+    let abortedForSize = false
+    const watchdog = setInterval(async () => {
+      if (await dirSizeExceeds(dir, MAX_CLONE_BYTES)) {
+        abortedForSize = true
+        sizeGuard.abort()
+      }
+    }, SIZE_POLL_MS)
+    let clone: RunResult
+    try {
+      clone = await run(
+        "git",
+        ["clone", "--depth", "1", "--single-branch", url, dir],
+        { timeoutMs: 120_000, signal: sizeGuard.signal },
+      )
+    } finally {
+      clearInterval(watchdog)
+    }
+    if (abortedForSize) {
+      emit({
+        type: "repo-done",
+        url,
+        ok: false,
+        error: `repository exceeds the ${Math.round(MAX_CLONE_BYTES / (1024 * 1024))} MB clone limit`,
+      })
+      return
+    }
     if (clone.code !== 0) {
       emit({ type: "repo-done", url, ok: false, error: `git clone failed: ${clone.stderr.trim() || `exit ${clone.code}`}` })
       return
