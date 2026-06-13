@@ -11,10 +11,11 @@ import {
 } from "recharts"
 import type { PortfolioPoint } from "@/lib/reports-store"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import type { ChartTooltipProps } from "@/lib/chart-tooltip"
 
-function ChartTooltip({ active, payload, label }: any) {
+function ChartTooltip({ active, payload, label }: ChartTooltipProps<PortfolioPoint>) {
   if (!active || !payload?.length) return null
-  const p = payload[0]?.payload as PortfolioPoint | undefined
+  const p = payload[0]?.payload
   return (
     <div className="rounded-lg border border-border bg-popover px-3 py-2 text-xs shadow-lg">
       <p className="mb-1.5 font-medium">{label}</p>

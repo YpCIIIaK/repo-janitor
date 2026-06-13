@@ -3,6 +3,7 @@
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
 import { categoryLabels, type Issue, type IssueCategory } from "@/lib/mock-data"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import type { ChartTooltipProps } from "@/lib/chart-tooltip"
 
 const series = [
   { key: "critical", label: "Critical", color: "var(--chart-4)" },
@@ -12,15 +13,15 @@ const series = [
 
 const ORDER: IssueCategory[] = ["security", "env", "dependency", "branch", "todo", "dead-code", "hygiene"]
 
-function BreakdownTooltip({ active, payload, label }: any) {
+function BreakdownTooltip({ active, payload, label }: ChartTooltipProps) {
   if (!active || !payload?.length) return null
   return (
     <div className="rounded-lg border border-border bg-popover px-3 py-2 text-xs shadow-lg">
       <p className="mb-1.5 font-medium">{label}</p>
       <div className="flex flex-col gap-1">
         {payload
-          .filter((p: any) => p.value > 0)
-          .map((p: any) => (
+          .filter((p) => (p.value ?? 0) > 0)
+          .map((p) => (
             <div key={p.dataKey} className="flex items-center justify-between gap-4">
               <span className="flex items-center gap-1.5 capitalize text-muted-foreground">
                 <span className="size-2 rounded-full" style={{ background: p.color }} />

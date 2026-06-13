@@ -52,8 +52,8 @@ export async function getRepoMetadata(git: SimpleGit, root: string): Promise<Rep
     if (remoteUrl) {
       // git@github.com:owner/repo.git  OR  https://host/owner/repo.git
       const match =
-        remoteUrl.match(/git@[^:]+:([^\/]+)\/([^\/]+?)(?:\.git)?$/) ||
-        remoteUrl.match(/[^\/]+:\/\/[^\/]+\/([^\/]+)\/([^\/]+?)(?:\.git)?$/);
+        remoteUrl.match(/git@[^:]+:([^/]+)\/([^/]+?)(?:\.git)?$/) ||
+        remoteUrl.match(/[^/]+:\/\/[^/]+\/([^/]+)\/([^/]+?)(?:\.git)?$/);
       if (match) {
         const [, owner, name] = match;
         return { owner, name, defaultBranch: await currentBranch(), commit: await headSha() };
@@ -152,7 +152,7 @@ export async function buildScanContext(root: string): Promise<ScanContext> {
             try {
               // Last commit hash + timestamp on this branch → ageDays since inactivity
               const logResult = await git.log([branchName, '-1', '--format=%H,%ct']);
-              const logLines = (logResult as any).all || [];
+              const logLines = (logResult as unknown as { all?: string[] }).all || [];
               if (logLines.length === 0) {
                 result.push({ name: branchName, lastCommit: "unknown", behind: 0, ageDays: 0 });
                 continue;
@@ -176,12 +176,12 @@ export async function buildScanContext(root: string): Promise<ScanContext> {
               }
 
               result.push({ name: branchName, lastCommit: hash, behind, ageDays });
-            } catch (err) {
+            } catch {
               result.push({ name: branchName, lastCommit: "unknown", behind: 0, ageDays: 0 });
             }
           }
           return result;
-        } catch (err) {
+        } catch {
           return [];
         }
       },

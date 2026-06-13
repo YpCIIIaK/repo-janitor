@@ -140,7 +140,7 @@ function findingBlock(issue: Issue): string {
 function parseBatch(text: string, n: number): string[] {
   const out = new Array<string>(n).fill("")
   for (const line of text.split("\n")) {
-    const m = line.match(/^\s*\[?(\d+)\]?\s*[:.)\-]\s*(.+)$/)
+    const m = line.match(/^\s*\[?(\d+)\]?\s*[:.)-]\s*(.+)$/)
     if (!m) continue
     const idx = Number(m[1]) - 1
     if (idx >= 0 && idx < n && !out[idx]) out[idx] = m[2].trim()

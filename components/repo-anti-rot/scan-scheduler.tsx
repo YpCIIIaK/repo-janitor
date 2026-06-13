@@ -30,11 +30,14 @@ export function ScanScheduler() {
   const schedule = useSchedule()
 
   // Keep the latest values reachable from the interval closure without resetting
-  // the timer on every store change.
+  // the timer on every store change. Refs are written in an effect (not during
+  // render) so render stays pure.
   const reposRef = useRef<StoredRepo[]>(repos)
   const scheduleRef = useRef<ScheduleSettings>(schedule)
-  reposRef.current = repos
-  scheduleRef.current = schedule
+  useEffect(() => {
+    reposRef.current = repos
+    scheduleRef.current = schedule
+  }, [repos, schedule])
 
   useEffect(() => {
     async function tick() {

@@ -372,6 +372,8 @@ function RepoTreeInner({ issues, weights, repo, onViewInIssues }: RepoTreeProps)
   // Reveal the ancestors of any search match so the matches become visible.
   useEffect(() => {
     if (searchResult.expand.size === 0) return
+    // Expanding ancestors in response to a new search result is the intended effect.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCollapsed((prev) => {
       let changed = false
       const next = new Set(prev)

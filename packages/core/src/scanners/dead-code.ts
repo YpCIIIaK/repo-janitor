@@ -363,7 +363,7 @@ function countInto(content: string, freq: Map<string, number>): void {
 /** Names listed in a Python module's `__all__` — its declared public surface. */
 function pythonAllNames(content: string): string[] {
   const out: string[] = []
-  const block = content.match(/__all__\s*=\s*[\[(]([\s\S]*?)[\])]/)
+  const block = content.match(/__all__\s*=\s*[[(]([\s\S]*?)[\])]/)
   if (block) {
     const re = /['"]([A-Za-z_][A-Za-z0-9_]*)['"]/g
     let m: RegExpExecArray | null

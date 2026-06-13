@@ -1,6 +1,6 @@
 "use client"
 
-import type { Grade, Issue, Severity } from "@/lib/mock-data"
+import type { Issue, Severity } from "@/lib/mock-data"
 import { categoryLabels } from "@/lib/mock-data"
 import { categoryScores, scoreToGrade, computeScore, type SeverityWeights } from "@/lib/score"
 import { hotspotFiles } from "@/lib/hotspots"

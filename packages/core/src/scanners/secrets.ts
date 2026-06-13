@@ -60,7 +60,7 @@ const MAX_BYTES = 1_000_000
 const LOW_CONFIDENCE_DIR =
   /(?:^|\/)(?:tests?|__tests__|__mocks__|spec|specs?|e2e|fixtures?|__fixtures__|testdata|mocks?|examples?|samples?|docs?)\//i
 const LOW_CONFIDENCE_NAME =
-  /(?:^|[\/._-])(?:test|tests|spec|specs|example|examples|sample|samples|fixture|fixtures|mock|mocks|dummy|stub|demo)\.[a-z0-9]+$/i
+  /(?:^|[/._-])(?:test|tests|spec|specs|example|examples|sample|samples|fixture|fixtures|mock|mocks|dummy|stub|demo)\.[a-z0-9]+$/i
 
 /** True when a path looks like test/example/fixture/docs content. */
 function isLowConfidenceSecretFile(file: string): boolean {

@@ -62,6 +62,8 @@ export function IssueDrawer({ issue, open, onOpenChange, githubUrl, newIssueUrl,
 
   // When the selected finding changes, reset to its known/cached verdict.
   useEffect(() => {
+    // Intentional re-sync of derived state to the newly selected finding.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setError(null)
     setLoading(false)
     if (!issue) {

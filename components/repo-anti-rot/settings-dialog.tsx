@@ -53,6 +53,8 @@ export function SettingsDialog() {
   // Re-sync the draft from storage whenever the dialog is opened.
   useEffect(() => {
     if (open) {
+      // Intentional: re-sync the draft from storage each time the dialog opens.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setDraft(readAiSettings())
       setSched(readSchedule())
       setShowKey(false)

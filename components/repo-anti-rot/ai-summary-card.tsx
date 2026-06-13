@@ -40,6 +40,9 @@ export function AiSummaryCard({ repoId, owner, name, issues, weights }: Props) {
   // Restore the collapsed preference after mount (avoids SSR hydration mismatch).
   useEffect(() => {
     try {
+      // Post-mount read of a client-only value — intentionally deferred to avoid an
+      // SSR hydration mismatch; the synchronous setState here is the point.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setCollapsed(localStorage.getItem(COLLAPSE_KEY) === "1")
     } catch {
       /* ignore unavailable storage */
@@ -61,6 +64,9 @@ export function AiSummaryCard({ repoId, owner, name, issues, weights }: Props) {
   // Reset to the cached summary whenever the repo, model, or finding set changes.
   const idsKey = issues.map((i) => i.id).join(",")
   useEffect(() => {
+    // Resetting derived state when the repo/model/finding set changes is the intended
+    // behavior here; this effect re-syncs the view to the cached summary on those keys.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setError(null)
     if (!hasKey) {
       setSummary(null)

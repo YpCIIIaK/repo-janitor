@@ -17,6 +17,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import type { ChartTooltipProps } from "@/lib/chart-tooltip"
 
 const series = [
   { key: "critical", label: "Critical", color: "var(--chart-4)" },
@@ -24,13 +25,13 @@ const series = [
   { key: "info", label: "Info", color: "var(--chart-5)" },
 ] as const
 
-function ChartTooltip({ active, payload, label }: any) {
+function ChartTooltip({ active, payload, label }: ChartTooltipProps) {
   if (!active || !payload?.length) return null
   return (
     <div className="rounded-lg border border-border bg-popover px-3 py-2 text-xs shadow-lg">
       <p className="mb-1.5 font-medium">{label}</p>
       <div className="flex flex-col gap-1">
-        {payload.map((p: any) => (
+        {payload.map((p) => (
           <div key={p.dataKey} className="flex items-center justify-between gap-4">
             <span className="flex items-center gap-1.5 capitalize text-muted-foreground">
               <span className="size-2 rounded-full" style={{ background: p.color }} />
