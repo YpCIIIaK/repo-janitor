@@ -3,8 +3,11 @@ import type { ScanReport, Issue } from "@repo-anti-rot/core"
 import {
   getInput,
   ingestEndpoint,
+  reportsEndpoint,
   shouldFail,
   renderPrComment,
+  scanDelta,
+  renderDeltaLine,
   COMMENT_MARKER,
 } from "../src/lib"
 
@@ -125,5 +128,49 @@ describe("renderPrComment", () => {
     const md = renderPrComment(report(), "https://dash.example.com/")
     expect(md).toContain("[Full report](https://dash.example.com)")
     expect(md).toContain("/api/badge/acme/widget")
+  })
+
+  it("omits the delta line when no baseline is given", () => {
+    const md = renderPrComment(report(), "")
+    expect(md).not.toContain("vs base")
+  })
+
+  it("renders a score/finding delta when a baseline is given", () => {
+    const md = renderPrComment(
+      report({ score: 85, issues: [issue({ id: "keep" }), issue({ id: "new" })] }),
+      "",
+      { score: 80, issueIds: ["keep", "gone"] },
+    )
+    expect(md).toContain("score **+5**")
+    expect(md).toContain("**1** new")
+    expect(md).toContain("**1** fixed")
+  })
+})
+
+describe("reportsEndpoint", () => {
+  it("appends /api/reports and trims trailing slashes", () => {
+    expect(reportsEndpoint("https://x.com")).toBe("https://x.com/api/reports")
+    expect(reportsEndpoint("https://x.com///")).toBe("https://x.com/api/reports")
+  })
+})
+
+describe("scanDelta", () => {
+  it("computes score delta and added/fixed by stable id", () => {
+    const r = report({ score: 90, issues: [issue({ id: "keep" }), issue({ id: "new" })] })
+    expect(scanDelta(r, { score: 75, issueIds: ["keep", "gone"] })).toEqual({
+      scoreDelta: 15,
+      added: 1,
+      fixed: 1,
+    })
+  })
+})
+
+describe("renderDeltaLine", () => {
+  it("reports no change when nothing moved", () => {
+    expect(renderDeltaLine({ scoreDelta: 0, added: 0, fixed: 0 })).toBe("No change vs the base scan.")
+  })
+
+  it("shows a negative score delta", () => {
+    expect(renderDeltaLine({ scoreDelta: -4, added: 2, fixed: 0 })).toContain("score **-4**")
   })
 })

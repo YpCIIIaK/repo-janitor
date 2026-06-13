@@ -5,10 +5,12 @@ import type { ScanReport } from "@repo-anti-rot/core"
 import {
   getInput,
   ingestEndpoint,
+  reportsEndpoint,
   shouldFail,
   renderPrComment,
   renderStepSummary,
   COMMENT_MARKER,
+  type Baseline,
 } from "./lib"
 
 /**
@@ -88,8 +90,41 @@ async function getPrNumber(): Promise<number | null> {
   }
 }
 
+/**
+ * Fetch the dashboard's last stored scan for this repo, to show a score/finding
+ * delta in the PR comment. Best-effort: returns null when there's no dashboard, no
+ * prior scan, or the read fails (the comment still renders without a delta).
+ */
+async function fetchBaseline(
+  report: ScanReport,
+  dashboardUrl: string,
+  readToken: string,
+): Promise<Baseline | null> {
+  if (!dashboardUrl) return null
+  try {
+    const res = await fetch(reportsEndpoint(dashboardUrl), {
+      headers: readToken ? { authorization: `Bearer ${readToken}` } : {},
+    })
+    if (!res.ok) return null
+    const data = (await res.json()) as {
+      repos?: { owner: string; name: string; latest?: { score: number; issues: { id: string }[] } }[]
+    }
+    const id = `${report.repo.owner}/${report.repo.name}`
+    const match = data.repos?.find((r) => `${r.owner}/${r.name}` === id)
+    if (!match?.latest) return null
+    return { score: match.latest.score, issueIds: match.latest.issues.map((i) => i.id) }
+  } catch {
+    return null
+  }
+}
+
 /** Post a new sticky comment, or update the existing one if we already left one. */
-async function commentOnPr(report: ScanReport, githubToken: string, dashboardUrl: string): Promise<void> {
+async function commentOnPr(
+  report: ScanReport,
+  githubToken: string,
+  dashboardUrl: string,
+  baseline: Baseline | null,
+): Promise<void> {
   const prNumber = await getPrNumber()
   if (prNumber == null) {
     console.log("Not a pull_request event (or no PR number) — skipping PR comment.")
@@ -108,7 +143,7 @@ async function commentOnPr(report: ScanReport, githubToken: string, dashboardUrl
     "content-type": "application/json",
     "x-github-api-version": "2022-11-28",
   }
-  const body = renderPrComment(report, dashboardUrl)
+  const body = renderPrComment(report, dashboardUrl, baseline)
 
   // Find a previous comment of ours (paginate a little; most PRs have few comments).
   let existingId: number | null = null
@@ -145,6 +180,7 @@ async function main(): Promise<void> {
   const token = getInput("token")
   const failOn = getInput("fail-on", "never")
   const githubToken = getInput("github-token")
+  const readToken = getInput("read-token")
   const prCommentEnabled = getInput("comment-on-pr", "true") !== "false"
   const sarifFile = getInput("sarif-file")
 
@@ -161,6 +197,13 @@ async function main(): Promise<void> {
     await writeSarif(report, sarifFile)
   }
 
+  // Read the prior stored scan BEFORE uploading, so the PR delta compares against
+  // the previous scan rather than the one we're about to ingest.
+  const baseline =
+    prCommentEnabled && githubToken
+      ? await fetchBaseline(report, dashboardUrl, readToken)
+      : null
+
   if (dashboardUrl) {
     await upload(report, dashboardUrl, token)
   } else {
@@ -169,7 +212,7 @@ async function main(): Promise<void> {
 
   if (prCommentEnabled && githubToken) {
     // A failed comment shouldn't fail the whole job — log and continue.
-    await commentOnPr(report, githubToken, dashboardUrl).catch((err) =>
+    await commentOnPr(report, githubToken, dashboardUrl, baseline).catch((err) =>
       console.log(`::warning::PR comment skipped: ${String(err)}`),
     )
   }

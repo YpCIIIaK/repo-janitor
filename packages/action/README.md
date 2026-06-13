@@ -12,7 +12,9 @@ Runs the Repo Anti-Rot health scan in your CI, prints a report to the job summar
 | `token`         | `""`      | Bearer token for the ingest endpoint (must match `REPO_ANTI_ROT_INGEST_TOKEN` on the server). |
 | `fail-on`       | `never`   | Fail the job when the grade is at or below this letter (`A`–`F`), or `never`. |
 | `github-token`  | `""`      | GitHub token (e.g. `${{ github.token }}`) for posting a sticky health comment on PRs. Needs `pull-requests: write`. Empty → no comment. |
-| `comment-on-pr` | `true`    | Post/update a summary comment on the PR (requires `github-token` and a `pull_request` event). |
+| `comment-on-pr` | `true`    | Post/update a summary comment on the PR (requires `github-token` and a `pull_request` event). When a baseline is available the comment shows a score/finding delta vs the last stored scan. |
+| `read-token`    | `""`      | Bearer token for reading stored reports (must match `REPO_ANTI_ROT_READ_TOKEN`). Lets the PR comment compute a delta against the dashboard's last scan; only needed when the read endpoint is gated. |
+| `sarif-file`    | `""`      | Write findings as SARIF 2.1.0 to this path for `github/codeql-action/upload-sarif`. Empty → skip. |
 
 ## Outputs
 

@@ -33,6 +33,10 @@ inputs:
     description: "Write findings as a SARIF 2.1.0 file at this path (e.g. repo-anti-rot.sarif) for upload via github/codeql-action/upload-sarif. Leave empty to skip."
     required: false
     default: ""
+  read-token:
+    description: "Bearer token for reading the dashboard's stored reports (matches REPO_ANTI_ROT_READ_TOKEN). Lets the PR comment show a score delta vs the last stored scan; only needed when the read endpoint is gated."
+    required: false
+    default: ""
 outputs:
   score:
     description: "Health score 0-100"
