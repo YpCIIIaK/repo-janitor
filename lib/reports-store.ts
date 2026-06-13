@@ -54,8 +54,15 @@ export interface StoredRepo {
   /**
    * Issue ids from the PREVIOUS scan, captured when `latest` was last replaced.
    * Lets the UI diff scans ("+N new / −M fixed"); undefined after the first scan.
+   * Kept for back-compat with reports stored before `prevIssues` shipped.
    */
   prevIssueIds?: string[]
+  /**
+   * Full findings from the PREVIOUS scan. Lets the UI show *which* findings were
+   * fixed (not just a count) and flag new ones. Undefined after the first scan or
+   * for reports stored before this shipped (the UI falls back to `prevIssueIds`).
+   */
+  prevIssues?: Issue[]
 }
 
 const KEY = "repo-anti-rot:reports:v1"
@@ -148,7 +155,8 @@ export function saveReport(report: ScanReport, url?: string): void {
   const list = readFresh()
   const existing = list.find((r) => r.id === id)
   if (existing) {
-    // Snapshot the outgoing scan's issue ids so the UI can diff old vs new.
+    // Snapshot the outgoing scan's findings so the UI can diff old vs new.
+    existing.prevIssues = existing.latest.issues
     existing.prevIssueIds = existing.latest.issues.map((i) => i.id)
     existing.latest = report
     existing.defaultBranch = defaultBranch
@@ -196,6 +204,7 @@ export function mergeServerRepos(serverRepos: StoredRepo[]): boolean {
 
     // newer scan wins as latest
     if (incoming.scannedAt > existing.scannedAt) {
+      existing.prevIssues = existing.latest.issues
       existing.prevIssueIds = existing.latest.issues.map((i) => i.id)
       existing.latest = incoming.latest
       existing.scannedAt = incoming.scannedAt
@@ -299,20 +308,65 @@ export interface ScanDiff {
   hasPrev: boolean
 }
 
+/** Issue ids from the previous scan, preferring full `prevIssues` and falling back
+ * to the legacy `prevIssueIds`. Returns null when there's no previous scan. */
+function prevIds(repo: StoredRepo): Set<string> | null {
+  if (repo.prevIssues) return new Set(repo.prevIssues.map((i) => i.id))
+  if (repo.prevIssueIds) return new Set(repo.prevIssueIds)
+  return null
+}
+
 /**
  * Diff the latest scan against the previous one by issue id (ids are stable and
  * content-derived, so they survive rescans). Returns added/fixed counts.
  */
 export function repoDiff(repo: StoredRepo): ScanDiff {
-  const prev = repo.prevIssueIds
-  if (!prev) return { added: 0, fixed: 0, hasPrev: false }
-  const prevSet = new Set(prev)
+  const prevSet = prevIds(repo)
+  if (!prevSet) return { added: 0, fixed: 0, hasPrev: false }
   const curSet = new Set(repo.latest.issues.map((i) => i.id))
   let added = 0
   for (const id of curSet) if (!prevSet.has(id)) added++
   let fixed = 0
   for (const id of prevSet) if (!curSet.has(id)) fixed++
   return { added, fixed, hasPrev: true }
+}
+
+/** Per-finding diff: which current findings are new vs carried over, and which
+ * previous findings were fixed. `fixed` is only populated when the full previous
+ * findings were stored (`prevIssues`); legacy id-only history yields an empty list. */
+export interface ScanDiffDetail {
+  /** current findings not present in the previous scan */
+  added: Issue[]
+  /** current findings that were also in the previous scan */
+  unchanged: Issue[]
+  /** previous findings gone from the latest scan (resolved) */
+  fixed: Issue[]
+  /** false when there's no previous scan to compare against */
+  hasPrev: boolean
+}
+
+export function repoDiffDetail(repo: StoredRepo): ScanDiffDetail {
+  const prevSet = prevIds(repo)
+  if (!prevSet) {
+    return { added: [], unchanged: repo.latest.issues, fixed: [], hasPrev: false }
+  }
+  const added: Issue[] = []
+  const unchanged: Issue[] = []
+  for (const issue of repo.latest.issues) {
+    if (prevSet.has(issue.id)) unchanged.push(issue)
+    else added.push(issue)
+  }
+  const curSet = new Set(repo.latest.issues.map((i) => i.id))
+  const fixed = (repo.prevIssues ?? []).filter((i) => !curSet.has(i.id))
+  return { added, unchanged, fixed, hasPrev: true }
+}
+
+/** Ids of findings new in the latest scan, for per-row "New" badges. Empty on a
+ * first scan (nothing to compare against). */
+export function newIssueIds(repo: StoredRepo): Set<string> {
+  const prevSet = prevIds(repo)
+  if (!prevSet) return new Set()
+  return new Set(repo.latest.issues.filter((i) => !prevSet.has(i.id)).map((i) => i.id))
 }
 
 export interface ChartPoint {

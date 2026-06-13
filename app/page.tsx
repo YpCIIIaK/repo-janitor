@@ -24,7 +24,7 @@ import { Command as CommandIcon } from "lucide-react"
 import { NewScanDialog } from "@/components/repo-anti-rot/new-scan-dialog"
 import { WelcomeScreen } from "@/components/repo-anti-rot/welcome-screen"
 import { RepoOverview } from "@/components/repo-anti-rot/repo-overview"
-import { useRepos, removeRepo, repoStats, repoTrend, countSeverity, timeAgo, repoDiff, issueDensity } from "@/lib/reports-store"
+import { useRepos, removeRepo, repoStats, repoTrend, countSeverity, timeAgo, repoDiff, repoDiffDetail, newIssueIds, issueDensity } from "@/lib/reports-store"
 import { Workflow, Info } from "lucide-react"
 import { useSnoozed, partitionSnoozed, clearSnoozedForRepo } from "@/lib/snooze-store"
 import { computeScore, scoreToGrade } from "@/lib/score"
@@ -121,6 +121,9 @@ export default function Page() {
 
   // Scan-over-scan delta (new vs fixed findings) for the header badge.
   const diff = repoDiff(current)
+  // Per-finding diff for the issues table: badge new findings, list fixed ones.
+  const newIds = newIssueIds(current)
+  const fixedIssues = repoDiffDetail(current).fixed
 
   // Issue density (findings per 1000 LOC) — size-normalized health signal.
   const density = issueDensity(current, issues.length)
@@ -257,14 +260,14 @@ export default function Page() {
                 <AgeHistogram issues={issues} />
               </div>
               <div className="mt-6">
-                <IssuesTable issues={allIssues} repo={tableRepo} query={search} />
+                <IssuesTable issues={allIssues} repo={tableRepo} query={search} newIds={newIds} fixed={fixedIssues} />
               </div>
             </TabsContent>
 
             <TabsContent value="issues" className="mt-6">
               <HealthOverview stats={stats} />
               <div className="mt-6">
-                <IssuesTable issues={allIssues} repo={tableRepo} query={search} />
+                <IssuesTable issues={allIssues} repo={tableRepo} query={search} newIds={newIds} fixed={fixedIssues} />
               </div>
             </TabsContent>
 

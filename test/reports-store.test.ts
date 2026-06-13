@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { countSeverity, issueDensity, repoDiff, repoStats } from "@/lib/reports-store"
+import { countSeverity, issueDensity, repoDiff, repoDiffDetail, newIssueIds, repoStats } from "@/lib/reports-store"
 import { issue, report, storedRepo } from "./helpers"
 
 describe("countSeverity", () => {
@@ -33,6 +33,60 @@ describe("repoDiff", () => {
       prevIssueIds: ["keep", "gone"],
     })
     expect(repoDiff(repo)).toEqual({ added: 1, fixed: 1, hasPrev: true })
+  })
+
+  it("prefers full prevIssues over the legacy prevIssueIds", () => {
+    const repo = storedRepo({
+      latest: report([issue({ id: "keep" })]),
+      prevIssues: [issue({ id: "keep" }), issue({ id: "gone" })],
+      prevIssueIds: ["stale"], // would give a wrong diff if used
+    })
+    expect(repoDiff(repo)).toEqual({ added: 0, fixed: 1, hasPrev: true })
+  })
+})
+
+describe("repoDiffDetail", () => {
+  it("treats every finding as unchanged when there is no previous scan", () => {
+    const latest = report([issue({ id: "a" }), issue({ id: "b" })])
+    const detail = repoDiffDetail(storedRepo({ latest, prevIssueIds: undefined }))
+    expect(detail.hasPrev).toBe(false)
+    expect(detail.added).toEqual([])
+    expect(detail.fixed).toEqual([])
+    expect(detail.unchanged.map((i) => i.id)).toEqual(["a", "b"])
+  })
+
+  it("splits findings into added, unchanged, and fixed", () => {
+    const repo = storedRepo({
+      latest: report([issue({ id: "keep" }), issue({ id: "new" })]),
+      prevIssues: [issue({ id: "keep" }), issue({ id: "gone" })],
+    })
+    const detail = repoDiffDetail(repo)
+    expect(detail.added.map((i) => i.id)).toEqual(["new"])
+    expect(detail.unchanged.map((i) => i.id)).toEqual(["keep"])
+    expect(detail.fixed.map((i) => i.id)).toEqual(["gone"])
+  })
+
+  it("cannot list fixed findings from id-only history", () => {
+    const repo = storedRepo({
+      latest: report([issue({ id: "keep" })]),
+      prevIssueIds: ["keep", "gone"],
+    })
+    // No prevIssues snapshot → the fixed finding's details are unrecoverable.
+    expect(repoDiffDetail(repo).fixed).toEqual([])
+  })
+})
+
+describe("newIssueIds", () => {
+  it("is empty on a first scan", () => {
+    expect(newIssueIds(storedRepo({ prevIssueIds: undefined })).size).toBe(0)
+  })
+
+  it("returns only findings absent from the previous scan", () => {
+    const repo = storedRepo({
+      latest: report([issue({ id: "keep" }), issue({ id: "new" })]),
+      prevIssueIds: ["keep"],
+    })
+    expect([...newIssueIds(repo)]).toEqual(["new"])
   })
 })
 

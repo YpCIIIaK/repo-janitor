@@ -8,6 +8,7 @@ import {
   ChevronDown,
   ChevronRight,
   Clipboard,
+  GitCompare,
   LayoutList,
   Layers,
 } from "lucide-react"
@@ -51,11 +52,13 @@ function IssueRow({
   selected,
   onSelect,
   snoozed,
+  isNew = false,
 }: {
   issue: Issue
   selected: boolean
   onSelect: () => void
   snoozed: boolean
+  isNew?: boolean
 }) {
   return (
     <button
@@ -78,6 +81,11 @@ function IssueRow({
       <span className="min-w-0 flex-1">
         <span className="flex items-center gap-2">
           <span className="truncate text-sm">{issue.title}</span>
+          {isNew && (
+            <span className="shrink-0 rounded-full border border-primary/40 bg-primary/10 px-1.5 py-0.5 text-[10px] font-medium text-primary">
+              New
+            </span>
+          )}
           {snoozed && (
             <span className="shrink-0 rounded-full border border-border bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
               Snoozed
@@ -126,10 +134,16 @@ export function IssuesTable({
   issues,
   repo,
   query = "",
+  newIds,
+  fixed = [],
 }: {
   issues: Issue[]
   repo?: TableRepo
   query?: string
+  /** Ids of findings new since the previous scan — rendered with a "New" badge. */
+  newIds?: Set<string>
+  /** Findings resolved since the previous scan — listed in a collapsed section. */
+  fixed?: Issue[]
 }) {
   const [severity, setSeverity] = useState<string>("all")
   const [category, setCategory] = useState<string>("all")
@@ -138,6 +152,11 @@ export function IssuesTable({
   const [grouped, setGrouped] = useState(false)
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set())
   const [showSnoozed, setShowSnoozed] = useState(false)
+  const [changesOnly, setChangesOnly] = useState(false)
+  const [showFixed, setShowFixed] = useState(false)
+
+  const isNew = (id: string) => !!newIds?.has(id)
+  const hasChanges = (newIds?.size ?? 0) > 0 || fixed.length > 0
 
   const snoozed = useSnoozed()
   const repoId = repo?.id ?? ""
@@ -158,8 +177,9 @@ export function IssuesTable({
     const result = ranked
       .filter((i) => (severity === "all" ? true : i.severity === severity))
       .filter((i) => (category === "all" ? true : i.category === category))
+      .filter((i) => (changesOnly ? newIds?.has(i.id) : true))
     return query.trim() ? result : result.sort((a, b) => b.ageDays - a.ageDays)
-  }, [base, query, severity, category])
+  }, [base, query, severity, category, changesOnly, newIds])
 
   // Group the filtered issues by scanner category, ordered by worst severity
   // present then by count — so the most alarming scanners surface first.
@@ -209,6 +229,7 @@ export function IssuesTable({
       selected={selectedId === issue.id && drawerOpen}
       onSelect={() => openIssue(issue)}
       snoozed={isSnoozed(issue.id)}
+      isNew={isNew(issue.id)}
     />
   )
 
@@ -222,6 +243,18 @@ export function IssuesTable({
           </span>
         </CardTitle>
         <div className="flex items-center gap-2">
+          {hasChanges && (
+            <Button
+              size="sm"
+              variant={changesOnly ? "secondary" : "ghost"}
+              className="h-8 gap-1.5 px-2 text-xs"
+              onClick={() => setChangesOnly((c) => !c)}
+              title={changesOnly ? "Show all findings" : "Show only findings new since the last scan"}
+            >
+              <GitCompare className="size-4" />
+              {changesOnly ? "All" : `Changes (${newIds?.size ?? 0})`}
+            </Button>
+          )}
           {muted.length > 0 && (
             <Button
               size="sm"
@@ -329,6 +362,43 @@ export function IssuesTable({
           <div className="divide-y divide-border border-t border-border">
             {filtered.map(renderRow)}
           </div>
+        )}
+
+        {fixed.length > 0 && (
+          <section className="border-t border-border">
+            <button
+              onClick={() => setShowFixed((s) => !s)}
+              className="flex w-full items-center gap-2 bg-muted/30 px-4 py-2 text-left transition-colors hover:bg-muted/50"
+            >
+              {showFixed ? (
+                <ChevronDown className="size-4 shrink-0 text-muted-foreground" />
+              ) : (
+                <ChevronRight className="size-4 shrink-0 text-muted-foreground" />
+              )}
+              <Check className="size-4 shrink-0 text-emerald-500" />
+              <span className="text-sm font-medium">Fixed since last scan</span>
+              <span className="font-mono text-xs text-muted-foreground">{fixed.length}</span>
+            </button>
+            {showFixed && (
+              <ul className="divide-y divide-border">
+                {fixed.map((issue) => (
+                  <li
+                    key={issue.id}
+                    className="flex items-center gap-3 px-4 py-3 text-muted-foreground"
+                  >
+                    <Check className="size-4 shrink-0 text-emerald-500" />
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate text-sm line-through">{issue.title}</span>
+                      <span className="block truncate font-mono text-xs">{issue.location}</span>
+                    </span>
+                    <span className="hidden shrink-0 text-xs md:block">
+                      {categoryLabels[issue.category]}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
         )}
       </CardContent>
 
