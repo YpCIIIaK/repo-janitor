@@ -4,7 +4,7 @@ import { makeContext } from "../helpers"
 
 describe("secretsScanner", () => {
   it("flags an AWS access key as critical and redacts the evidence", async () => {
-    const key = "AKIAIOSFODNN7EXAMPLE"
+    const key = "AKIA1234567890ABCDEF"
     const ctx = makeContext({ files: { "config.ts": `const k = "${key}"\n` } })
     const issues = await secretsScanner.run(ctx)
     expect(issues).toHaveLength(1)
@@ -17,8 +17,15 @@ describe("secretsScanner", () => {
     expect(issues[0].evidence).toContain("•")
   })
 
+  it("does not flag canonical documentation example keys (AWS 'EXAMPLE' convention)", async () => {
+    const ctx = makeContext({
+      files: { "config.ts": `const k = "AKIAIOSFODNN7EXAMPLE"\n` },
+    })
+    expect(await secretsScanner.run(ctx)).toHaveLength(0)
+  })
+
   it("redacts EVERY occurrence of a token repeated on the same line", async () => {
-    const key = "AKIAIOSFODNN7EXAMPLE"
+    const key = "AKIA1234567890ABCDEF"
     const ctx = makeContext({ files: { "config.ts": `const a = "${key}", b = "${key}"\n` } })
     const issues = await secretsScanner.run(ctx)
     expect(issues.length).toBeGreaterThanOrEqual(1)
@@ -40,7 +47,7 @@ describe("secretsScanner", () => {
   })
 
   it("downgrades secrets in test/example files to info", async () => {
-    const key = "AKIAIOSFODNN7EXAMPLE"
+    const key = "AKIA1234567890ABCDEF"
     const ctx = makeContext({ files: { "src/__tests__/auth.test.ts": `const k = "${key}"\n` } })
     const issues = await secretsScanner.run(ctx)
     expect(issues).toHaveLength(1)
@@ -49,7 +56,7 @@ describe("secretsScanner", () => {
   })
 
   it("skips .env.example entirely", async () => {
-    const ctx = makeContext({ files: { ".env.example": "AWS_KEY=AKIAIOSFODNN7EXAMPLE\n" } })
+    const ctx = makeContext({ files: { ".env.example": "AWS_KEY=AKIA1234567890ABCDEF\n" } })
     expect(await secretsScanner.run(ctx)).toHaveLength(0)
   })
 
@@ -77,15 +84,15 @@ describe("secretsScanner", () => {
   it("skips lockfiles and binary assets", async () => {
     const ctx = makeContext({
       files: {
-        "pnpm-lock.yaml": `key: "AKIAIOSFODNN7EXAMPLE"\n`,
-        "logo.png": `AKIAIOSFODNN7EXAMPLE`,
+        "pnpm-lock.yaml": `key: "AKIA1234567890ABCDEF"\n`,
+        "logo.png": `AKIA1234567890ABCDEF`,
       },
     })
     expect(await secretsScanner.run(ctx)).toHaveLength(0)
   })
 
   it("propagates git blame age to the finding", async () => {
-    const key = "AKIAIOSFODNN7EXAMPLE"
+    const key = "AKIA1234567890ABCDEF"
     const ctx = makeContext({
       files: { "config.ts": `const k = "${key}"\n` },
       blameAges: { "config.ts:1": 42 },
@@ -99,7 +106,7 @@ describe("secretsScanner", () => {
   const daysAgoMs = (d: number) => Date.now() - d * 24 * 3600 * 1000
 
   it("flags a secret that exists only in git history (deleted from the tree)", async () => {
-    const key = "AKIAIOSFODNN7EXAMPLE"
+    const key = "AKIA1234567890ABCDEF"
     const ctx = makeContext({
       files: {}, // gone from the working tree
       historyAdditions: [
@@ -117,7 +124,7 @@ describe("secretsScanner", () => {
   })
 
   it("does NOT double-report a history secret that is still in the working tree", async () => {
-    const key = "AKIAIOSFODNN7EXAMPLE"
+    const key = "AKIA1234567890ABCDEF"
     const ctx = makeContext({
       files: { "config.ts": `const k = "${key}"\n` },
       historyAdditions: [
@@ -130,7 +137,7 @@ describe("secretsScanner", () => {
   })
 
   it("reports a history secret only once even when many commits added it", async () => {
-    const key = "AKIAIOSFODNN7EXAMPLE"
+    const key = "AKIA1234567890ABCDEF"
     const ctx = makeContext({
       files: {},
       historyAdditions: [
@@ -145,7 +152,7 @@ describe("secretsScanner", () => {
   })
 
   it("downgrades a history secret in a test/example path to info", async () => {
-    const key = "AKIAIOSFODNN7EXAMPLE"
+    const key = "AKIA1234567890ABCDEF"
     const ctx = makeContext({
       files: {},
       historyAdditions: [
@@ -158,7 +165,7 @@ describe("secretsScanner", () => {
   })
 
   it("skips history additions in lockfiles / .env.example", async () => {
-    const key = "AKIAIOSFODNN7EXAMPLE"
+    const key = "AKIA1234567890ABCDEF"
     const ctx = makeContext({
       files: {},
       historyAdditions: [

@@ -44,6 +44,13 @@ const ASSIGN_RE =
 // Obvious non-secrets we never want to flag via the entropy path.
 const PLACEHOLDER_RE = /^(your|example|changeme|placeholder|redacted|dummy|test|sample|xxx+|<|\$\{|process\.env)/i
 
+// Canonical documentation example credentials. AWS (and the docs that copy it)
+// append the literal "EXAMPLE" to sample keys precisely so scanners skip them —
+// e.g. `AKIAIOSFODNN7EXAMPLE`, `wJalrXUtnFEMI/…/bPxRfiCYEXAMPLEKEY`. Other secret
+// scanners (gitleaks, trufflehog) allowlist these too; a real high-entropy key
+// spelling "EXAMPLE" by chance is vanishingly unlikely.
+const KNOWN_EXAMPLE_RE = /EXAMPLE/
+
 // Skip binary / vendored / lockfile content where matches are noise or unreadable.
 const BINARY_EXT = /\.(png|jpe?g|gif|webp|ico|bmp|pdf|zip|gz|tar|woff2?|ttf|eot|mp[34]|mov|wasm)$/i
 const SKIP_NAME = /(?:^|\/)(package-lock\.json|pnpm-lock\.yaml|yarn\.lock)$/
@@ -115,14 +122,17 @@ function findSecretsInLine(line: string): LineHit[] {
   const hits: LineHit[] = []
   for (const det of DETECTORS) {
     const hit = det.re.exec(line)
-    if (hit) hits.push({ id: det.id, token: hit[0], label: det.label, entropyHit: false })
+    // Skip canonical documentation example keys (AWS's "EXAMPLE" convention).
+    if (hit && !KNOWN_EXAMPLE_RE.test(hit[0])) {
+      hits.push({ id: det.id, token: hit[0], label: det.label, entropyHit: false })
+    }
   }
   if (hits.length > 0) return hits // don't double-flag a named hit via entropy
 
   const m = line.match(ASSIGN_RE)
   if (m) {
     const value = m[2]
-    if (!PLACEHOLDER_RE.test(value) && entropy(value) >= 4.0) {
+    if (!PLACEHOLDER_RE.test(value) && !KNOWN_EXAMPLE_RE.test(value) && entropy(value) >= 4.0) {
       hits.push({ id: "entropy", token: value, label: m[1], entropyHit: true })
     }
   }
