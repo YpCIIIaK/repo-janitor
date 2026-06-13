@@ -1,4 +1,5 @@
 import { z } from "zod"
+import { categorySchema, type Issue } from "./schema"
 
 /**
  * Per-project configuration: an optional `.repo-anti-rot.json` at the repo root.
@@ -29,23 +30,91 @@ const weightsSchema = z
   })
   .partial()
 
+/**
+ * A mute rule suppresses already-produced findings (post-scan) — unlike `ignore`,
+ * which drops whole files from the scanned set before scanners run. Use it to
+ * accept a specific finding you've reviewed without hiding the rest of its file.
+ *
+ * A rule matches a finding when EVERY field it specifies matches:
+ *  - `id`       : exact match against the finding's stable id (the surgical option)
+ *  - `category` : the finding's category (env, dead-code, todo, security, …)
+ *  - `path`     : glob against the finding's file path (`*`, `**`, `?`)
+ * A rule with none of the above matches nothing (a stray `reason`-only entry is inert).
+ */
+const muteRuleSchema = z
+  .object({
+    id: z.string().optional(),
+    category: categorySchema.optional(),
+    path: z.string().optional(),
+    reason: z.string().optional(),
+  })
+  .refine((r) => r.id != null || r.category != null || r.path != null, {
+    message: "a mute rule needs at least one of id, category, or path",
+  })
+
 // Lenient on unknown keys (forward-compat) but strict on the shapes we know.
 const configSchema = z.object({
   ignore: z.array(z.string()).optional(),
+  mute: z.array(muteRuleSchema).optional(),
   weights: weightsSchema.optional(),
 })
+
+export type MuteRule = z.infer<typeof muteRuleSchema>
 
 export type RawConfig = z.infer<typeof configSchema>
 
 export interface ResolvedConfig {
   /** extra glob patterns excluded from the scanned file set */
   ignore: string[]
+  /** rules that suppress individual findings post-scan (reviewed/accepted) */
+  mute: MuteRule[]
   /** effective severity weights (defaults merged with any overrides) */
   weights: { critical: number; warning: number; info: number }
 }
 
 export function defaultConfig(): ResolvedConfig {
-  return { ignore: [], weights: { ...DEFAULT_WEIGHTS } }
+  return { ignore: [], mute: [], weights: { ...DEFAULT_WEIGHTS } }
+}
+
+/** Strip a trailing `:line` suffix and normalize separators to a forward-slash path. */
+function issueFilePath(issue: Issue): string {
+  const loc = (issue.location ?? "").trim()
+  const m = loc.match(/^(.+):(\d+)$/)
+  return (m ? m[1] : loc).replace(/\\/g, "/").replace(/^\.\//, "")
+}
+
+/** Compile a glob (`*`, `**`, `?`) to an anchored RegExp. `**` spans path separators. */
+function globToRegExp(glob: string): RegExp {
+  let re = ""
+  for (let i = 0; i < glob.length; i++) {
+    const c = glob[i]
+    if (c === "*") {
+      if (glob[i + 1] === "*") {
+        re += ".*"
+        i++
+        if (glob[i + 1] === "/") i++ // `**/` also matches zero leading segments
+      } else {
+        re += "[^/]*"
+      }
+    } else if (c === "?") {
+      re += "[^/]"
+    } else {
+      re += c.replace(/[.+^${}()|[\]\\]/g, "\\$&")
+    }
+  }
+  return new RegExp(`^${re}$`)
+}
+
+/** True when a finding matches any mute rule (every field a rule sets must match). */
+export function isMuted(issue: Issue, rules: MuteRule[]): boolean {
+  if (rules.length === 0) return false
+  const path = issueFilePath(issue)
+  return rules.some((rule) => {
+    if (rule.id != null && rule.id !== issue.id) return false
+    if (rule.category != null && rule.category !== issue.category) return false
+    if (rule.path != null && !globToRegExp(rule.path).test(path)) return false
+    return true
+  })
 }
 
 /**
@@ -77,6 +146,7 @@ export async function loadConfig(
   const cfg = result.data
   return {
     ignore: cfg.ignore ?? [],
+    mute: cfg.mute ?? [],
     weights: { ...DEFAULT_WEIGHTS, ...(cfg.weights ?? {}) },
   }
 }

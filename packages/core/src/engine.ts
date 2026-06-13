@@ -1,7 +1,7 @@
 import type { Scanner, ScanContext } from "./scanner"
 import { scanReportSchema, SCHEMA_VERSION, type Grade, type Issue, type RepoProfile, type ScanReport } from "./schema"
 import { extToLanguage, detectTools } from "./profile"
-import { DEFAULT_WEIGHTS, INLINE_IGNORE_MARKER, INLINE_IGNORE_NEXT_LINE_MARKER } from "./config"
+import { DEFAULT_WEIGHTS, INLINE_IGNORE_MARKER, INLINE_IGNORE_NEXT_LINE_MARKER, isMuted } from "./config"
 import { envLifecycleScanner } from "./scanners/env-lifecycle"
 import { staleBranchScanner } from "./scanners/stale-branch"
 import { todoDebtScanner } from "./scanners/todo-debt"
@@ -187,7 +187,11 @@ export async function runScan(
   }
 
   const weights = ctx.config?.weights ?? DEFAULT_WEIGHTS
-  const visible = await applyInlineIgnores(issues, ctx)
+  const mute = ctx.config?.mute ?? []
+  // Two suppression layers: inline markers in source, then config `mute` rules
+  // (reviewed/accepted findings). Both drop findings before they reach the score.
+  const inlineVisible = await applyInlineIgnores(issues, ctx)
+  const visible = mute.length ? inlineVisible.filter((i) => !isMuted(i, mute)) : inlineVisible
   const score = computeScore(visible, weights)
   const { linesOfCode, profile } = await buildMetricsAndProfile(ctx)
   const report: ScanReport = {

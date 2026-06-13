@@ -101,8 +101,8 @@ Coverage highlights (290+ tests):
   repo-bloat, project-hygiene, broken-doc-links, bus-factor, stale-branch, and the
   dependency scanners (vulnerable/outdated/funeral/lockfile-drift) driven through
   stubbed OSV / npm / PyPI registry adapters
-- **config** — `.repo-anti-rot.json` loading, weight merge, ignore globs, and
-  graceful fallback on malformed/invalid input
+- **config** — `.repo-anti-rot.json` loading, weight merge, ignore globs, mute-rule
+  matching (id / category / path glob), and graceful fallback on malformed input
 - **reporters** — JSON round-trip, Markdown escaping, and SARIF 2.1.0 shape
   (severity→level mapping, one rule per category, physical locations, fingerprints)
 - **CLI** — git-remote → owner/name parsing (https & SSH, `.git` stripping, local
@@ -519,12 +519,26 @@ file means default behaviour, and a partial file only overrides what it sets.
 ```json
 {
   "ignore": ["vendor/**", "**/*.generated.ts"],
+  "mute": [
+    { "id": "todo-src/legacy.ts:42", "reason": "tracked in JIRA-1234" },
+    { "category": "dead-code", "path": "src/legacy/**" }
+  ],
   "weights": { "critical": 20, "warning": 3, "info": 0 }
 }
 ```
 
 - **`ignore`** — extra glob patterns excluded from the scanned file set (on top of
   the built-in `node_modules`, `dist`, etc.). Affects all file-based scanners.
+- **`mute`** — suppress *individual findings* you've reviewed and accepted, without
+  hiding the rest of their file (which is all `ignore` can do). Each rule matches a
+  finding when **every** field it sets matches; `reason` is free-text for your team.
+  - `id` — the finding's stable id (the surgical option; copy it from the report).
+  - `category` — mute a whole category (`todo`, `dead-code`, `security`, …).
+  - `path` — glob (`*`, `**`, `?`) against the finding's file path. `**` spans
+    directories. Combine with `category` to mute, say, only TODOs under `legacy/**`.
+
+  Muted findings are dropped before scoring, exactly like inline ignores — they
+  don't count against the score and don't appear in the report or SARIF output.
 - **`weights`** — override the per-severity score penalties. Partial is fine
   (e.g. just `"info": 0`); unspecified severities keep their defaults. The
   effective weights are echoed into the report so the dashboard recomputes the

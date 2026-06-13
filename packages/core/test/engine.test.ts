@@ -148,10 +148,29 @@ describe("runScan", () => {
     expect(report.issues.map((i) => i.id)).toEqual(["branchy"])
   })
 
+  it("drops findings matched by a config mute rule and rescores without them", async () => {
+    const ctx = makeContext({
+      files: {},
+      config: {
+        ignore: [],
+        mute: [{ category: "todo", path: "legacy/**" }],
+        weights: { critical: 10, warning: 3, info: 0.5 },
+      },
+    })
+    const report = await runScan(ctx, [
+      fixedScanner("s", [
+        issue({ id: "muted", category: "todo", severity: "warning", location: "legacy/x.ts:1" }),
+        issue({ id: "kept", category: "todo", severity: "warning", location: "src/x.ts:1" }),
+      ]),
+    ])
+    expect(report.issues.map((i) => i.id)).toEqual(["kept"])
+    expect(report.score).toBe(97) // only the kept warning (−3) counts
+  })
+
   it("uses weights from ctx.config when scoring", async () => {
     const ctx = makeContext({
       files: {},
-      config: { ignore: [], weights: { critical: 50, warning: 3, info: 0.5 } },
+      config: { ignore: [], mute: [], weights: { critical: 50, warning: 3, info: 0.5 } },
     })
     const report = await runScan(ctx, [
       fixedScanner("s", [issue({ severity: "critical" })]),
