@@ -269,6 +269,12 @@ the dashboard serves a live SVG badge for it:
 ![rot](https://your-deploy.example.com/api/badge/<owner>/<name>)
 ```
 
+Or make it clickable, linking back to the dashboard:
+
+```
+[![rot](https://your-deploy.example.com/api/badge/<owner>/<name>)](https://your-deploy.example.com)
+```
+
 It renders `repo anti-rot | <grade> <score>`, colored by grade (green → amber →
 red), and falls back to a neutral `unknown` badge for repos with no report (so a
 README image never 404s). Optional query params: `?label=health` (left text) and
@@ -549,6 +555,11 @@ Starts at 100 and subtracts weighted penalties: **critical −10**, **warning �
 **info −0.5**, then rounds and clamps to 0. Grades: **A** ≥ 90, **B** ≥ 75,
 **C** ≥ 60, **D** ≥ 40, else **F**. Penalties are configurable per-repo via the
 `weights` field in `.repo-anti-rot.json` (see above).
+
+Each severity tier's total penalty is **capped** (warning ≤ 40, info ≤ 15;
+critical is uncapped) so a swarm of low-signal notes can't sink a repo harder
+than a genuine critical. Below the cap the penalty is exactly linear, so typical
+repos score the same — the cap only bites on pile-ups.
 
 Alongside the score the dashboard shows **issue density** — findings per 1000
 lines of code — so repos of very different sizes can be compared fairly (raw
