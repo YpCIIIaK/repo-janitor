@@ -27,6 +27,20 @@ describe("deadCodeScanner (JS/TS unused exports)", () => {
     expect(await deadCodeScanner.run(ctx)).toHaveLength(0)
   })
 
+  it("does not flag an export that is used within its own module", async () => {
+    // EMOJI is never imported elsewhere but is read in-module, so it isn't dead —
+    // removing it would break a.ts. genuinelyDead (used nowhere) still flags.
+    const ctx = makeContext({
+      files: {
+        "a.ts":
+          "export const EMOJI = { A: '🟢' }\nexport const genuinelyDead = 2\nexport function label(g) { return EMOJI[g] }\n",
+        "b.ts": "import { label } from './a'\nlabel('A')\n",
+      },
+    })
+    const issues = await deadCodeScanner.run(ctx)
+    expect(issues.map((i) => i.title)).toEqual(["Unused export genuinelyDead"])
+  })
+
   it("never flags exports from an index barrel", async () => {
     const ctx = makeContext({
       files: {
