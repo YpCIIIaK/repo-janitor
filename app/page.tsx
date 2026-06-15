@@ -25,7 +25,7 @@ import { NewScanDialog } from "@/components/repo-anti-rot/new-scan-dialog"
 import { WelcomeScreen } from "@/components/repo-anti-rot/welcome-screen"
 import { RepoOverview } from "@/components/repo-anti-rot/repo-overview"
 import { useRepos, removeRepo, repoStats, repoTrend, countSeverity, timeAgo, repoDiff, repoDiffDetail, newIssueIds, issueDensity } from "@/lib/reports-store"
-import { Workflow, Info } from "lucide-react"
+import { Workflow, Info, GitGraph } from "lucide-react"
 import { useSnoozed, partitionSnoozed, clearSnoozedForRepo } from "@/lib/snooze-store"
 import { computeScore, scoreToGrade } from "@/lib/score"
 import { cn } from "@/lib/utils"
@@ -39,6 +39,19 @@ const RepoTree = dynamic(
     loading: () => (
       <div className="flex h-[600px] items-center justify-center rounded-lg border border-border text-sm text-muted-foreground">
         Loading map…
+      </div>
+    ),
+  },
+)
+
+// Same lazy treatment for the commit-history tree (also React Flow based).
+const CommitTree = dynamic(
+  () => import("@/components/repo-anti-rot/commit-tree").then((m) => m.CommitTree),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex h-[640px] items-center justify-center rounded-lg border border-border text-sm text-muted-foreground">
+        Loading history…
       </div>
     ),
   },
@@ -227,6 +240,10 @@ export default function Page() {
                 <Workflow className="size-4" />
                 Tree
               </TabsTrigger>
+              <TabsTrigger value="history">
+                <GitGraph className="size-4" />
+                History
+              </TabsTrigger>
               <TabsTrigger value="about">
                 <Info className="size-4" />
                 About
@@ -293,6 +310,10 @@ export default function Page() {
                   setTab("issues")
                 }}
               />
+            </TabsContent>
+
+            <TabsContent value="history" className="mt-6">
+              <CommitTree initialUrl={current.url} />
             </TabsContent>
 
             <TabsContent value="about" className="mt-6">
