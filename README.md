@@ -606,6 +606,27 @@ collapse all**, and **export to PNG or SVG**. The tree-building, collapse and
 search logic lives in `lib/file-tree.ts` (pure + unit-tested); the React Flow view
 is lazy-loaded so it stays out of the initial bundle.
 
+### Commit health tree (History tab)
+
+The **History** tab answers "*when* did this rot set in?" Rather than scanning one
+snapshot, it clones a repo's history, **samples** its commits, and scans each —
+then draws them as an interactive tree (also [React Flow](https://reactflow.dev)),
+newest at the top. Each node shows that commit's grade, score, severity counts and
+a `+added / −fixed` delta versus the previous scanned commit; click one to open a
+side panel with its full finding list. Tagged releases and merge commits are
+marked, so you can see health shift at the moments it most plausibly did.
+
+Scanning every commit would be far too slow, so the sampling
+([`lib/commit-sampling.ts`](lib/commit-sampling.ts), pure + unit-tested) keeps a
+fixed budget (default 18, configurable up to 40): it anchors both ends of history,
+prioritizes tagged and merge commits, then fills with one commit per week for an
+even spread. The clone is a partial (`--filter=blob:none`) clone so the whole
+commit graph comes cheaply and file blobs are fetched lazily per checkout, and
+every commit's report is cached by sha ([`lib/scan-cache.ts`](lib/scan-cache.ts)) —
+re-opening the tree only rescans commits it hasn't seen. The endpoint
+(`POST /api/scan/history`) streams NDJSON so the graph renders immediately and
+fills in as each commit finishes.
+
 ### Repository profile (About tab)
 
 The **About** tab answers "what is this repo made of?" at a glance: a **language
