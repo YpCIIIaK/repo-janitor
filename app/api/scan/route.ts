@@ -1,103 +1,20 @@
 import { NextResponse } from "next/server"
-import { spawn } from "child_process"
-import { mkdtemp, rm, readFile, readdir, stat } from "fs/promises"
+import { mkdtemp, rm, readFile } from "fs/promises"
 import { tmpdir } from "os"
 import { join } from "path"
 import { isPublicGitUrl } from "@/lib/url-guard"
+import {
+  CLI_DIST,
+  MAX_CLONE_BYTES,
+  SIZE_POLL_MS,
+  run,
+  dirSizeExceeds,
+  type RunResult,
+} from "@/lib/clone-runner"
 
 // Cloning + scanning is real work — run on the Node runtime, allow time for it.
 export const runtime = "nodejs"
 export const maxDuration = 300
-
-const CLI_DIST = join(process.cwd(), "packages", "cli", "dist", "index.js")
-
-// Hard cap on a cloned working tree. `git clone` itself enforces no size limit, so
-// even with --depth 1 a hostile or accidentally-huge repo could fill the disk; the
-// watchdog below aborts the clone once the tree crosses this line.
-const MAX_CLONE_BYTES = 500 * 1024 * 1024 // 500 MB
-const SIZE_POLL_MS = 2_000
-
-/**
- * Sum the byte size of a directory tree, short-circuiting as soon as `limit` is
- * exceeded so we never walk an already-too-big tree to completion. Best-effort:
- * unreadable/transient entries (a clone is writing underneath us) are skipped.
- */
-async function dirSizeExceeds(dir: string, limit: number): Promise<boolean> {
-  let total = 0
-  const stack = [dir]
-  while (stack.length > 0) {
-    const current = stack.pop()!
-    let entries
-    try {
-      entries = await readdir(current, { withFileTypes: true })
-    } catch {
-      continue
-    }
-    for (const entry of entries) {
-      const full = join(current, entry.name)
-      if (entry.isDirectory()) {
-        stack.push(full)
-      } else if (entry.isFile()) {
-        try {
-          total += (await stat(full)).size
-          if (total > limit) return true
-        } catch {
-          /* file vanished mid-walk — ignore */
-        }
-      }
-    }
-  }
-  return false
-}
-
-interface RunResult {
-  code: number | null
-  stdout: string
-  stderr: string
-}
-
-/**
- * Run a command to completion, capturing output and streaming stderr lines to an
- * optional callback as they arrive (used to forward live scan progress). Never
- * rejects on non-zero exit.
- */
-function run(
-  cmd: string,
-  args: string[],
-  opts: { timeoutMs?: number; onStderrLine?: (line: string) => void; signal?: AbortSignal } = {},
-): Promise<RunResult> {
-  return new Promise((resolve) => {
-    const child = spawn(cmd, args, { windowsHide: true, signal: opts.signal })
-    let stdout = ""
-    let stderr = ""
-    let buf = "" // partial-line buffer for stderr
-    const timeout = opts.timeoutMs
-      ? setTimeout(() => child.kill("SIGKILL"), opts.timeoutMs)
-      : null
-    child.stdout.on("data", (d) => (stdout += d.toString()))
-    child.stderr.on("data", (d) => {
-      const text = d.toString()
-      stderr += text
-      if (!opts.onStderrLine) return
-      buf += text
-      let nl: number
-      while ((nl = buf.indexOf("\n")) !== -1) {
-        const line = buf.slice(0, nl)
-        buf = buf.slice(nl + 1)
-        opts.onStderrLine(line)
-      }
-    })
-    child.on("error", (err) => {
-      if (timeout) clearTimeout(timeout)
-      resolve({ code: -1, stdout, stderr: stderr + String(err) })
-    })
-    child.on("close", (code) => {
-      if (timeout) clearTimeout(timeout)
-      if (buf && opts.onStderrLine) opts.onStderrLine(buf)
-      resolve({ code, stdout, stderr })
-    })
-  })
-}
 
 /** A progress/result event forwarded to the client over the NDJSON stream. */
 type ScanEvent =
