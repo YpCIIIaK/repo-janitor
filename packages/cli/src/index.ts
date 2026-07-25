@@ -8,6 +8,10 @@ import { join } from "path";
 import { scanRepo } from "./context";
 import { reportFileName } from "./naming";
 
+// Injected at build time from package.json by tsup (see tsup.config.ts).
+declare const __CLI_VERSION__: string;
+const version = typeof __CLI_VERSION__ === "string" ? __CLI_VERSION__ : "0.0.0";
+
 /** Render a report as the requested string format (json | terminal | md). */
 function serializeReport(report: ScanReport, format: string): string {
   return renderReport(report, format);
@@ -165,7 +169,7 @@ async function main() {
   program
     .name("repo-anti-rot")
     .description("CLI for Repo Anti-Rot repository health scanning")
-    .version("0.0.0");
+    .version(version);
 
   registerScan(program);
   registerBatch(program);

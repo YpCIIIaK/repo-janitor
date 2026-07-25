@@ -1,5 +1,5 @@
 import { promises as fs } from "fs"
-import { scanRepo } from "@repo-anti-rot/cli/context"
+import { scanRepo } from "repo-anti-rot/context"
 import { renderSarif, renderTerminal } from "@repo-anti-rot/core"
 import type { ScanReport } from "@repo-anti-rot/core"
 import {
