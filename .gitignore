@@ -19,7 +19,8 @@ yarn-error.log*
 # --- scan artifacts (generated locally by the dashboard / CLI) ---
 .repo-anti-rot/
 .reporot/
-reports/
+# anchored: only the repo-root output dir, never e.g. app/api/reports/
+/reports/
 real-report.json
 *.repo-anti-rot.json
 # ...but the per-project CONFIG file is meant to be committed
