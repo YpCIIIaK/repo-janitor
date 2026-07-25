@@ -15,6 +15,7 @@ packages/core/
     engine.ts       # runScan(), computeScore(), scoreToGrade(), scanner registry
     config.ts       # .repo-anti-rot.json: ignores, thresholds, mute rules, inline ignores
     ast.ts          # shared @babel/parser walker
+    lockgraph.ts    # lockfile dependency graph → "does a prod install reach this?"
     scanners/       # 17 scanners, each registered in defaultScanners
     reporters/      # json | terminal | markdown | sarif, behind renderReport()
     index.ts        # barrel exports
@@ -38,6 +39,18 @@ packages/core/
 Start 100, subtract weighted penalties (critical 10 / warning 3 / info 1), clamp to 0.
 Grade: A≥90, B≥75, C≥60, D≥40, else F. Weights live in `engine.ts`; per-rule severity
 and thresholds are overridable via `.repo-anti-rot.json`.
+
+**Severity must stay calibrated.** A tool that grades a repo F over a DoS in a package
+reachable only through eslint is not believed a second time. Two rules, both enforced in
+`scanners/vulnerable-deps.ts`:
+
+- `HIGH` is not `CRITICAL`. It reaches `critical` only with a demonstrated runtime path —
+  a direct production dependency.
+- Findings on build/test-only paths drop one step. Reachability comes from
+  `lockgraph.ts`, which walks the lockfile itself. Do **not** reintroduce a dependency on
+  an audit tool's `dev` flag: `pnpm audit` in a workspace reports `dev: false` for
+  everything, eslint and vitest included. `null` from the graph means *unknown* — leave
+  the severity as published rather than guessing.
 
 ## Consumers
 
