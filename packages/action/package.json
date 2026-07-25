@@ -10,7 +10,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@repo-anti-rot/cli": "link:../cli",
+    "repo-anti-rot": "link:../cli",
     "@repo-anti-rot/core": "link:../core"
   },
   "devDependencies": {

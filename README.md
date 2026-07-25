@@ -16,7 +16,7 @@ This is a monorepo:
 | Path | Package | Role |
 | --- | --- | --- |
 | `packages/core` | `@repo-anti-rot/core` | Scanner engine, scoring, report schema, reporters |
-| `packages/cli` | `@repo-anti-rot/cli` | `repo-anti-rot` CLI — clones/scans a repo, emits a report |
+| `packages/cli` | `repo-anti-rot` | `repo-anti-rot` CLI — clones/scans a repo, emits a report (published to npm) |
 | `packages/action` | `@repo-anti-rot/action` | GitHub Action wrapper around the CLI |
 | `app/`, `components/`, `lib/` | — | Next.js dashboard (App Router) |
 
@@ -69,7 +69,7 @@ To rebuild by hand after changing `packages/core` or `packages/cli`:
 
 ```bash
 pnpm run build:cli      # full build (esm + cjs + .d.ts)
-pnpm --filter @repo-anti-rot/cli build:fast   # fast esm-only (what predev uses)
+pnpm --filter repo-anti-rot build:fast   # fast esm-only (what predev uses)
 ```
 
 ## Tests
@@ -85,7 +85,7 @@ Everything is fast and deterministic.
 pnpm test                                # run everything (dashboard + all packages)
 pnpm test:dashboard                      # just the dashboard lib/* tests
 pnpm --filter @repo-anti-rot/core test   # scoped to the engine
-pnpm --filter @repo-anti-rot/cli test    # CLI helpers
+pnpm --filter repo-anti-rot test    # CLI helpers
 pnpm --filter @repo-anti-rot/action test # Action helpers
 ```
 
@@ -177,6 +177,20 @@ unattended scanning — machine asleep, no tab open — use the GitHub Action's
 
 ## Use the CLI directly
 
+The CLI is published to npm as [`repo-anti-rot`](https://www.npmjs.com/package/repo-anti-rot),
+so you can run it against any checkout without cloning this repo:
+
+```bash
+# one-off, no install
+npx repo-anti-rot scan --path . --format terminal
+
+# or install globally
+npm i -g repo-anti-rot
+repo-anti-rot scan --path . --format sarif --output repo-anti-rot.sarif
+```
+
+Or run the workspace build directly from a checkout of this repo:
+
 ```bash
 # scan a local checkout
 node packages/cli/dist/index.js scan --path . --format terminal
@@ -196,7 +210,7 @@ Formats: `terminal` (default), `json`, `md`, `sarif`.
 During development you can run the CLI from source without building:
 
 ```bash
-pnpm --filter @repo-anti-rot/cli dev -- scan --path .
+pnpm --filter repo-anti-rot dev -- scan --path .
 ```
 
 ## AI analysis (optional)

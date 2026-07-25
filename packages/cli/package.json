@@ -1,31 +1,74 @@
 {
-  "name": "@repo-anti-rot/cli",
-  "version": "0.0.0",
-  "description": "Command-line interface for Repo Anti-Rot scanning engine",
+  "name": "repo-anti-rot",
+  "version": "0.1.0",
+  "description": "Repository health & decay monitor — scans a codebase for committed secrets, vulnerable/abandoned dependencies, dead code, stale branches, aging TODOs and more, then scores it A–F. Emits terminal, JSON, Markdown or SARIF.",
   "type": "module",
+  "license": "MIT",
+  "author": "YpCIIIaK",
+  "homepage": "https://github.com/YpCIIIaK/repo-janitor#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YpCIIIaK/repo-janitor.git",
+    "directory": "packages/cli"
+  },
+  "bugs": {
+    "url": "https://github.com/YpCIIIaK/repo-janitor/issues"
+  },
+  "keywords": [
+    "cli",
+    "repository",
+    "health",
+    "code-quality",
+    "secrets",
+    "sarif",
+    "vulnerabilities",
+    "osv",
+    "dependencies",
+    "dead-code",
+    "technical-debt",
+    "linter",
+    "static-analysis"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
   "bin": {
     "repo-anti-rot": "./dist/index.js"
   },
   "exports": {
-    "./context": "./src/context.ts"
+    "./context": {
+      "types": "./dist/context.d.ts",
+      "import": "./dist/context.js",
+      "require": "./dist/context.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
-    "build": "tsup src/index.ts --format esm,cjs --dts",
-    "build:fast": "tsup src/index.ts --format esm --no-dts",
+    "build": "tsup",
+    "build:fast": "tsup --format esm --no-dts",
     "dev": "tsx src/index.ts",
     "test": "vitest run",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "pnpm run build"
   },
   "dependencies": {
-    "@repo-anti-rot/core": "workspace:*",
     "commander": "^12.1.0",
     "fast-glob": "^3.3.2",
     "simple-git": "^3.22.0",
     "zod": "^3.23.0"
   },
   "devDependencies": {
+    "@repo-anti-rot/core": "workspace:*",
     "@types/node": "^20.0.0",
     "tsup": "^8.0.0",
+    "tsx": "^4.0.0",
     "typescript": "^5.4.0",
     "vitest": "^3.2.0"
   }
