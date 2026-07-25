@@ -1,0 +1,26 @@
+version: 2
+
+# Security patches only. The whole `next: 16.2.6` → 16.2.11 gap that produced nine
+# advisories existed because a pinned version never received its patch releases;
+# this closes that class permanently without the noise of routine version bumps.
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "fix(deps)"
+    # Only patch/minor security-relevant bumps of what we depend on directly;
+    # transitive fixes still arrive through the `pnpm.overrides` floors.
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - version-update:semver-major
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    commit-message:
+      prefix: "ci"

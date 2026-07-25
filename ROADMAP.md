@@ -15,7 +15,7 @@ Effort: **S** ≈ hours · **M** ≈ a day · **L** ≈ multi-day.
 
 | Category | Scanners |
 | --- | --- |
-| Security | `secrets` (working tree + git history, with allowlists), `vulnerable-deps` (OSV, 6 ecosystems) |
+| Security | `secrets` (working tree + git history, with allowlists), `vulnerable-deps` (OSV, 6 ecosystems, severity calibrated by production reachability) |
 | Dependencies | `dependency-funeral` (unused / deprecated / abandoned), `outdated-deps`, `lockfile-drift` |
 | Decay | `todo-debt` (age-ranked via `git blame`), `dead-code`, `commented-code`, `skipped-tests`, `leftover-debug` |
 | Repo health | `stale-branch`, `repo-bloat`, `bus-factor`, `project-hygiene`, `broken-doc-links` |
@@ -55,6 +55,15 @@ the reasoning and the phase gates.
 
 ### Phase A — housekeeping (in progress)
 
+- [x] **Severity calibration** — HIGH no longer collapses into CRITICAL; it reaches
+      `critical` only on a direct production dependency (a demonstrated runtime path)
+- [x] **Production reachability from the lockfile graph** (`packages/core/src/lockgraph.ts`) —
+      findings on build/test-only paths drop a step. Audit tooling's own `dev` flag is
+      not trusted: `pnpm audit` in a workspace marks everything `dev: false`
+- [x] Fixture: a repo whose only CVEs are dev-only must not be graded F
+- [x] Own dependency tree patched — `next` 16.2.6 → 16.2.11 plus CVE floors in
+      `pnpm.overrides`; `pnpm audit --prod` clean (22 advisories → 0)
+- [x] `.github/dependabot.yml` for security updates
 - [x] `GET /api/reports` route + tests — closes the CI → dashboard loop
 - [x] Root package renamed off the `my-project` scaffold; `images.unoptimized` dropped
 - [x] CLI package prepared for npm (`repo-anti-rot`, metadata, `files`, `prepublishOnly`)
