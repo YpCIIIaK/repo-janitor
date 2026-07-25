@@ -1,6 +1,7 @@
 import type { Scanner, ScanContext } from "../scanner"
 import type { Issue, Severity } from "../schema"
 import { collectManifestDeps, type OsvEcosystem } from "../manifests"
+import { computeNpmProdSet } from "../lockgraph"
 
 /**
  * Vulnerable Dependencies scanner ⭐.
@@ -21,6 +22,9 @@ import { collectManifestDeps, type OsvEcosystem } from "../manifests"
  * The whole dependency set is checked in a single `querybatch` POST; advisory
  * details are then fetched only for the (usually few) packages that actually
  * matched, keeping the network cost to ~1 request for a clean repo.
+ *
+ * Severity is calibrated, not copied: HIGH is kept apart from CRITICAL, and
+ * findings on build/test-only paths are lowered a step. See {@link mapSeverity}.
  *
  * Needs `ctx.postJson` (POST). With no network adapter the scanner is a no-op.
  */
@@ -137,21 +141,51 @@ async function resolveVersions(
   return resolved
 }
 
-/** Map an OSV/GHSA severity label to our three-level scale. */
-function mapSeverity(label: string | undefined): Severity {
+/** One step down our three-level scale. */
+function downgrade(sev: Severity): Severity {
+  return sev === "critical" ? "warning" : "info"
+}
+
+/**
+ * Map an OSV/GHSA severity label to our three-level scale.
+ *
+ * Two calibrations matter more than the mapping itself, because both otherwise
+ * manufacture false criticals and destroy trust in the score:
+ *
+ *  1. **HIGH is not CRITICAL.** Collapsing them makes every `high` advisory tank
+ *     the grade. HIGH only reaches `critical` when there is a demonstrated runtime
+ *     path — i.e. the package is a *direct production* dependency, so the affected
+ *     code is one hop from code the project actually wrote.
+ *  2. **Build-only paths are not production risk.** A DoS in a package reachable
+ *     only through eslint/vitest/tsup cannot run in the deployed artefact, so it
+ *     drops a step. `runtime === null` means the lockfile graph was unreadable —
+ *     we do not guess, and leave the severity as published.
+ */
+function mapSeverity(
+  label: string | undefined,
+  opts: { runtime: boolean | null; direct: boolean },
+): Severity {
+  const inProd = opts.runtime !== false
+  let sev: Severity
   switch ((label ?? "").toUpperCase()) {
     case "CRITICAL":
+      sev = "critical"
+      break
     case "HIGH":
-      return "critical"
+      sev = inProd && opts.direct ? "critical" : "warning"
+      break
     case "MODERATE":
     case "MEDIUM":
-      return "warning"
+      sev = "warning"
+      break
     case "LOW":
-      return "info"
+      sev = "info"
+      break
     default:
       // It is still a real, confirmed vulnerability — never silently drop it.
-      return "warning"
+      sev = "warning"
   }
+  return opts.runtime === false ? downgrade(sev) : sev
 }
 
 /** Pick the human severity label OSV exposes (top-level first, then per-affected). */
@@ -183,8 +217,12 @@ interface QueryItem {
   version: string
   /** manifest the dependency was declared in — becomes the finding location */
   manifest: string
-  /** npm dev dependency (other ecosystems: always false — not tracked) */
-  dev: boolean
+  /**
+   * Does a production install reach this package? Computed from the lockfile
+   * graph (see `../lockgraph`), not from any tool's `dev` flag. `null` = the
+   * graph could not be read, so the question is genuinely unanswered.
+   */
+  runtime: boolean | null
   /** declared directly in the manifest (false = pulled in transitively) */
   direct: boolean
 }
@@ -291,25 +329,36 @@ export const vulnerableDepsScanner: Scanner = {
           ...(pkgJson.optionalDependencies ?? {}),
         }
         const devNames = new Set(Object.keys(pkgJson.devDependencies ?? {}))
+        const prodNames = new Set(Object.keys(pkgJson.dependencies ?? {}))
         const declaredNames = new Set(Object.keys(declared))
+        // Production reachability from the lockfile graph; null when unreadable.
+        const prodSet = await computeNpmProdSet(ctx, fileSet)
+        const isRuntime = (name: string): boolean | null => {
+          // A package declared in this manifest's `dependencies` ships, full stop.
+          if (prodNames.has(name)) return true
+          if (prodSet) return prodSet.has(name)
+          // No graph: the manifest still tells us about its own direct deps.
+          if (devNames.has(name)) return false
+          return null
+        }
         // Prefer the FULL installed tree from a lockfile (transitive included,
         // like `npm audit`); fall back to declared-only floors with no lockfile.
         const installed = await enumerateNpmInstalled(ctx, fileSet)
         if (installed) {
-          for (const [name, { version, dev }] of installed) {
+          for (const [name, { version }] of installed) {
             queryList.push({
               ecosystem: "npm",
               name,
               version,
               manifest: "package.json",
-              dev: dev || devNames.has(name),
+              runtime: isRuntime(name),
               direct: declaredNames.has(name),
             })
           }
         } else if (Object.keys(declared).length > 0) {
           const versions = await resolveVersions(ctx, declared)
           for (const [name, version] of versions) {
-            queryList.push({ ecosystem: "npm", name, version, manifest: "package.json", dev: devNames.has(name), direct: true })
+            queryList.push({ ecosystem: "npm", name, version, manifest: "package.json", runtime: isRuntime(name), direct: true })
           }
         }
       } catch {
@@ -319,7 +368,8 @@ export const vulnerableDepsScanner: Scanner = {
 
     // 2) Polyglot — Python / Go / Rust / Ruby manifests & lockfiles.
     for (const d of await collectManifestDeps(ctx)) {
-      queryList.push({ ecosystem: d.ecosystem, name: d.name, version: d.version, manifest: d.manifest, dev: false, direct: true })
+      // Non-npm manifests carry no dev/prod split we can trust → unknown.
+      queryList.push({ ecosystem: d.ecosystem, name: d.name, version: d.version, manifest: d.manifest, runtime: null, direct: true })
     }
 
     if (queryList.length === 0) return []
@@ -376,20 +426,21 @@ export const vulnerableDepsScanner: Scanner = {
       const fixHint = fixed
         ? `Fixed in ${fixed} — upgrade to ${fixed} or later.`
         : "No fixed version has been published yet."
-      const kindNote = hit.direct
-        ? hit.dev
-          ? " (dev dependency)"
+      const kindNote = hit.direct ? "" : " (transitive dependency)"
+      // Say plainly why a high-severity advisory may be scored below its label.
+      const pathNote =
+        hit.runtime === false
+          ? " Build/test-only path — not reachable from the production install, so severity is lowered."
           : ""
-        : " (transitive dependency)"
       const detail =
         `${summary ? `${summary} ` : ""}${hit.name}@${hit.version} (${hit.ecosystem}) is affected by ${id}` +
         `${label ? ` (${label.toLowerCase()} severity)` : ""}. ${fixHint}` +
-        `${kindNote} Advisory: https://osv.dev/${hit.vulnId}`
+        `${kindNote}${pathNote} Advisory: https://osv.dev/${hit.vulnId}`
 
       issues.push({
         id: `vuln-${hit.name}-${hit.vulnId}`,
         category: "security",
-        severity: mapSeverity(label),
+        severity: mapSeverity(label, { runtime: hit.runtime, direct: hit.direct }),
         title: `${hit.name}@${hit.version} has a known vulnerability (${id})`,
         location: hit.manifest,
         ageDays: 0,
