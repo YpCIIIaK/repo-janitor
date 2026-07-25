@@ -10,7 +10,7 @@ import { checkBearer } from "@/lib/api-auth"
  * CI (the GitHub Action in `packages/action`) POSTs a `ScanReport` here. We
  * validate it against the shared zod schema — the single source of truth —
  * persist it to the server store, and acknowledge. The dashboard reads it back
- * via `/api/reports` and merges it into its view (ROADMAP D1/D3).
+ * via `/api/reports` and merges it into its view.
  */
 export const runtime = "nodejs"
 
