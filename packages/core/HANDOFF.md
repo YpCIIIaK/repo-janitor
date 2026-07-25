@@ -1,64 +1,58 @@
-# Repo Anti-Rot — Core Engine Handoff
+# Repo Anti-Rot — Core Engine
 
-This is a **starter scaffold** for the scanning engine. Any AI/engineer can continue from here.
+Architecture notes for `@repo-anti-rot/core`: the contracts to respect when adding
+scanners or changing the report shape. Product direction lives in the repo-root
+[ROADMAP.md](../../ROADMAP.md) and [PLAN.md](../../PLAN.md).
 
-## What exists now
+## Layout
 
 ```
 packages/core/
-  package.json                  # @repo-anti-rot/core, deps: zod (tsup/vitest dev)
+  package.json
   src/
-    schema.ts                   # zod ScanReport schema (SCHEMA_VERSION=1) — shared source of truth
-    scanner.ts                  # Scanner plugin interface + ScanContext (all IO behind it)
-    engine.ts                   # runScan(), computeScore(), scoreToGrade(), scanner registry
-    scanners/
-      env-lifecycle.ts          # first reference scanner (regex stub, works end-to-end)
-    example.ts                  # in-memory smoke test (npx tsx packages/core/src/example.ts)
-    index.ts                    # barrel exports
+    schema.ts       # zod ScanReport schema (SCHEMA_VERSION) — shared source of truth
+    scanner.ts      # Scanner plugin interface + ScanContext (all IO behind it)
+    engine.ts       # runScan(), computeScore(), scoreToGrade(), scanner registry
+    config.ts       # .repo-anti-rot.json: ignores, thresholds, mute rules, inline ignores
+    ast.ts          # shared @babel/parser walker
+    scanners/       # 17 scanners, each registered in defaultScanners
+    reporters/      # json | terminal | markdown | sarif, behind renderReport()
+    index.ts        # barrel exports
 ```
 
 ## Key contracts (do not break lightly)
 
-- **`ScanReport` shape == dashboard `lib/mock-data.ts`.** The UI already renders this shape.
-  Changing it requires bumping `SCHEMA_VERSION` and updating the dashboard.
-- **All IO lives behind `ScanContext`** (fs/git/network). Scanners stay pure → easy to test and swap libs.
-- **Scanners are plugins** implementing `Scanner`. Register in `defaultScanners` (engine.ts). No engine edits needed.
+- **`ScanReport` shape == dashboard `lib/mock-data.ts`.** The UI renders this shape
+  directly. Changing it requires bumping `SCHEMA_VERSION` and updating the dashboard,
+  the CLI, the Action and `/api/ingest` (which validates against `scanReportSchema`).
+- **All IO lives behind `ScanContext`** (fs / git / network). Scanners stay pure → easy
+  to test and to swap implementations. The real context is `packages/cli/src/context.ts`,
+  re-exported as `repo-anti-rot/context` and reused by the Action.
+- **Scanners are plugins** implementing `Scanner`. Register in `defaultScanners`
+  (`engine.ts`). No engine edits needed.
 - **Per-scanner isolation:** a thrown scanner error is logged and skipped, never fatal.
+- **Secrets never leave the process unredacted** — evidence is redacted before any AI call.
 
 ## Scoring
 
 Start 100, subtract weighted penalties (critical 10 / warning 3 / info 1), clamp to 0.
-Grade: A≥90, B≥75, C≥60, D≥40, else F. Tune weights in `engine.ts`.
+Grade: A≥90, B≥75, C≥60, D≥40, else F. Weights live in `engine.ts`; per-rule severity
+and thresholds are overridable via `.repo-anti-rot.json`.
 
-## Done (was "next steps")
+## Consumers
 
-1. ✅ **Real `ScanContext`** in `packages/cli` (`src/context.ts`, reused by the Action):
-   fast-glob files, simple-git `blameAgeDays`/`listBranches`, `fetchJson` for registry,
-   commander CLI (`scan` + `batch`, `--format json|terminal|md`).
-2. ✅ **AST env scanner** (`@babel/parser`); shared walker extracted to `src/ast.ts`.
-3. ✅ **All 6 scanners** in `scanners/`, registered in `defaultScanners`:
-   `env-lifecycle`, `stale-branch`, `todo-debt`, `secrets` (working tree), `dependency-funeral`
-   (offline + npm registry), `dead-code` (conservative import-graph).
-4. ✅ **Reporters** in `src/reporters/`: `json`, `terminal` (ANSI, no dep), `markdown` (PR/issue);
-   `renderReport(report, format)` dispatcher.
-5. ✅ **GitHub Action** (`packages/action`): scans in CI, writes job summary + outputs,
-   POSTs the report to dashboard `/api/ingest`. Bundled to `dist/index.cjs` (self-contained).
+| Consumer | Entry point |
+| --- | --- |
+| CLI (`repo-anti-rot`) | `packages/cli` — `scan`, `batch` |
+| GitHub Action | `packages/action` — SARIF + PR comment delta + POST to `/api/ingest` |
+| Dashboard | `app/api/scan` (live clone+scan), `app/api/ingest` (write), `app/api/reports` (read) |
 
-### Remaining (intentionally deferred)
-- **`/api/ingest` is endpoint-only**: it validates against `scanReportSchema` and acks, but does
-  **not** persist. The dashboard still reads its own localStorage. To truly replace the mocks,
-  add a server store + a GET read-path (ROADMAP D1/D3) — the report shape already matches the UI.
-- **secrets history scan** (`git log -p`) needs a `ScanContext` extension; today it's working-tree only.
-- Scanner unit tests / fixture repos (ROADMAP B5).
+Reports POSTed to `/api/ingest` are persisted server-side (`lib/server-store.ts`, JSON
+file under `.repo-anti-rot/`) and read back by the dashboard through `/api/reports`.
 
-## Stack flexibility
-
-Primary choices are swappable — see chat for the full flexible-stack table.
-Fixed only: **TypeScript, zod report schema, SQL-compatible DB (Neon by default)**.
-
-## Verify the scaffold
+## Verify
 
 ```bash
-cd packages/core && pnpm install
-npx tsx src/example.ts   # prints a scored ScanReport JSON
+pnpm --filter @repo-anti-rot/core test
+npx tsx packages/core/src/example.ts   # prints a scored ScanReport JSON
 ```
