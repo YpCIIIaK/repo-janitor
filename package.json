@@ -59,7 +59,7 @@
     "html-to-image": "^1.11.13",
     "input-otp": "1.4.2",
     "lucide-react": "^0.564.0",
-    "next": "16.2.6",
+    "next": "16.2.11",
     "next-themes": "^0.4.6",
     "radix-ui": "^1.4.3",
     "react": "^19",
@@ -89,8 +89,14 @@
     "vitest": "^3.2.0"
   },
   "pnpm": {
+    "comment": "CVE floors. Use `>=`, not `^`: a caret range that the already-locked version satisfies does not force an upgrade, so pnpm keeps the vulnerable resolution. Prefer an unversioned key — a `name@<exact-version>` selector writes the vulnerable string into the lockfile and the vulnerable-deps scanner reads it back. Deliberately absent: brace-expansion. GHSA-mh99-v99m-4gvg is fixed only in 5.0.8 with no backport, and forcing every consumer onto 5.x breaks minimatch@3 (`expand is not a function`), which eslint pulls in. The only path to it is eslint, so it cannot run in the deployed artefact — `pnpm audit --prod` is clean. This is exactly the build-only case the vulnerable-deps scanner now scores as info rather than critical.",
     "overrides": {
-      "postcss": "^8.5.10"
+      "postcss": ">=8.5.18",
+      "lodash": ">=4.18.0",
+      "sharp": ">=0.35.0",
+      "js-yaml": ">=4.3.0",
+      "vite": ">=7.3.6",
+      "esbuild": ">=0.28.1"
     }
   }
 }
