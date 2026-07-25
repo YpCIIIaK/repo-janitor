@@ -1,19 +1,21 @@
 {
-  "name": "my-project",
+  "name": "repo-anti-rot-dashboard",
   "version": "0.1.0",
   "private": true,
+  "description": "Next.js dashboard for Repo Anti-Rot — repository health & decay monitoring",
+  "license": "MIT",
   "packageManager": "pnpm@10.12.1",
   "engines": {
     "node": ">=20"
   },
   "scripts": {
-    "predev": "pnpm --filter @repo-anti-rot/cli build:fast",
+    "predev": "pnpm --filter repo-anti-rot build:fast",
     "dev": "next dev",
     "prebuild": "pnpm run build:cli",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "build:cli": "pnpm --filter @repo-anti-rot/cli build",
+    "build:cli": "pnpm --filter repo-anti-rot build",
     "build:packages": "pnpm --filter \"@repo-anti-rot/*\" build",
     "test": "vitest run && pnpm -r --if-present test",
     "test:dashboard": "vitest run",
