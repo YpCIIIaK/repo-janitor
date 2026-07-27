@@ -11,6 +11,15 @@ import {
   dirSizeExceeds,
   type RunResult,
 } from "@/lib/clone-runner"
+import {
+  QueueFullError,
+  QueueTimeoutError,
+  checkRateLimit,
+  clientIp,
+  limitsFromEnv,
+  queueDepth,
+  withScanSlot,
+} from "@/lib/scan-limits"
 
 // Cloning + scanning is real work — run on the Node runtime, allow time for it.
 export const runtime = "nodejs"
@@ -18,6 +27,7 @@ export const maxDuration = 300
 
 /** A progress/result event forwarded to the client over the NDJSON stream. */
 type ScanEvent =
+  | { type: "queued"; url: string; position: number }
   | { type: "phase"; url: string; phase: "clone" | "scan" }
   | { type: "scanner"; url: string; scanner?: string; completed: number; total: number }
   | { type: "repo-done"; url: string; ok: true; report: unknown }
@@ -98,6 +108,21 @@ async function cloneAndScan(url: string, emit: (ev: ScanEvent) => void): Promise
 }
 
 export async function POST(request: Request) {
+  const limits = limitsFromEnv()
+
+  // Rate limit first: cheapest check, and it must run before we parse or resolve
+  // anything an attacker controls.
+  const ip = clientIp(request, limits.trustedProxyHops)
+  const rate = checkRateLimit(ip, limits)
+  if (!rate.ok) {
+    return NextResponse.json(
+      {
+        error: `Rate limit exceeded — ${limits.maxPerWindow} scans per ${Math.round(limits.windowMs / 60000)} minutes. Try again in ${rate.retryAfterSec}s.`,
+      },
+      { status: 429, headers: { "Retry-After": String(rate.retryAfterSec) } },
+    )
+  }
+
   let body: unknown
   try {
     body = await request.json()
@@ -115,8 +140,11 @@ export async function POST(request: Request) {
   if (urls.length === 0) {
     return NextResponse.json({ error: "Provide one or more repository URLs in `urls`." }, { status: 400 })
   }
-  if (urls.length > 20) {
-    return NextResponse.json({ error: "Too many URLs (max 20 per request)." }, { status: 400 })
+  if (urls.length > limits.maxUrlsPerRequest) {
+    return NextResponse.json(
+      { error: `Too many URLs (max ${limits.maxUrlsPerRequest} per request).` },
+      { status: 400 },
+    )
   }
 
   // SSRF guard: reject non-http(s), loopback/private hosts, and DNS names that
@@ -143,8 +171,22 @@ export async function POST(request: Request) {
       const send = (obj: unknown) => controller.enqueue(encoder.encode(JSON.stringify(obj) + "\n"))
       send({ type: "start", total: urls.length })
       for (let i = 0; i < urls.length; i++) {
-        send({ type: "repo-start", url: urls[i], index: i, total: urls.length })
-        await cloneAndScan(urls[i], send)
+        const url = urls[i]
+        send({ type: "repo-start", url, index: i, total: urls.length })
+        // Hold a slot only around the actual work. Failing to get one is a
+        // per-repo outcome, not a dead stream: the client still gets a reason.
+        try {
+          if (queueDepth() > 0) send({ type: "queued", url, position: queueDepth() })
+          await withScanSlot(limits, () => cloneAndScan(url, send), request.signal)
+        } catch (err) {
+          const error =
+            err instanceof QueueFullError
+              ? "Server is busy — too many scans queued. Try again shortly."
+              : err instanceof QueueTimeoutError
+                ? "Timed out waiting for a scan slot. Try again shortly."
+                : String(err)
+          send({ type: "repo-done", url, ok: false, error })
+        }
       }
       send({ type: "done" })
       controller.close()
