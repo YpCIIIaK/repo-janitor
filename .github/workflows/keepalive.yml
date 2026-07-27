@@ -1,0 +1,65 @@
+name: Keep-alive
+
+# Free hosting tiers (Render, Fly, Koyeb…) spin an idle instance down and pay for
+# it with a cold start of tens of seconds on the next request. A scan request is
+# already long, so a cold start on top makes the public demo feel broken.
+#
+# The ping has to come from OUTSIDE: a sleeping instance cannot wake itself, so
+# any in-process setInterval dies with the instance it was meant to keep alive.
+#
+# Set the repository variable KEEPALIVE_URL to the deployed /api/health URL
+# (Settings → Secrets and variables → Actions → Variables). With it unset the job
+# exits quietly, so forks and local clones are unaffected.
+#
+# Caveats worth knowing before relying on this:
+#  - GitHub's scheduled runs are best-effort and can be delayed by many minutes
+#    under load. For a demo that must never be cold, an uptime pinger
+#    (cron-job.org, UptimeRobot, Better Stack) is more punctual.
+#  - Scheduled workflows are disabled automatically after ~60 days without
+#    repository activity.
+#  - Staying awake around the clock consumes a full month of free instance hours.
+#    Check that against your plan before pointing this at production.
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: keepalive
+  cancel-in-progress: true
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Ping the health endpoint
+        env:
+          URL: ${{ vars.KEEPALIVE_URL }}
+        run: |
+          if [ -z "$URL" ]; then
+            echo "KEEPALIVE_URL is not set — nothing to ping."
+            exit 0
+          fi
+
+          # A cold start can take well over a minute; retry rather than reporting
+          # a failure that is really just the instance waking up.
+          for attempt in 1 2 3; do
+            code=$(curl -sS -o /tmp/health.json -w '%{http_code}' --max-time 120 "$URL" || echo 000)
+            if [ "$code" = "200" ]; then
+              echo "OK (attempt $attempt)"
+              cat /tmp/health.json
+              # Surface a host that is up but cannot actually scan — the whole
+              # point of the health endpoint.
+              if grep -q '"canScan":false' /tmp/health.json; then
+                echo "::warning::Instance is awake but cannot run scans — see the checks above."
+              fi
+              exit 0
+            fi
+            echo "attempt $attempt: HTTP $code"
+            sleep 15
+          done
+
+          echo "::error::Health endpoint did not respond with 200 after 3 attempts."
+          exit 1
