@@ -8,7 +8,9 @@ import { parseFile, walk } from "../ast"
  * Detects dependencies that are:
  *  - **unused**     — declared in `dependencies` but never imported (AST-based, like env scanner)
  *  - **deprecated** — npm-deprecated latest version (registry)
- *  - **abandoned**  — no publish in 2-3 years (info) or 3+ years (warning) (registry)
+ *  - **abandoned**  — no publish in 2-3 years (info) or 3+ years (warning), qualified
+ *                     by package size and monthly downloads so finished micro-libs
+ *                     are not mistaken for dead ones (registry)
  *  - **outdated**   — behind latest by a major (warning) or minor (info) version (registry)
  *
  * Registry lookups go through the optional `ctx.fetchJson`. With no network adapter
@@ -21,6 +23,22 @@ const YEAR_MS = 365 * 24 * 60 * 60 * 1000
 // only a 3+ year gap is loud enough to call a likely-unmaintained risk.
 const ABANDONED_INFO_MS = 2 * YEAR_MS
 const ABANDONED_WARN_MS = 3 * YEAR_MS
+
+/**
+ * A publish gap alone does not mean abandonment. `clsx` has shipped nothing since
+ * 2024 because it is *finished*: 8 KB of code doing one thing, pulled 445M times a
+ * month. Calling that abandoned brands half the ecosystem and is precisely the kind
+ * of false positive that costs a scanner its credibility.
+ *
+ * So the age signal is qualified by size and reach, both cheap to obtain:
+ *  - tiny **and** heavily depended on → feature-complete, report nothing;
+ *  - heavily depended on but substantial → a stalled release cadence on a large
+ *    surface is worth a soft note, never a warning.
+ *
+ * Neither number is available offline, in which case the age-only rule stands.
+ */
+const MICRO_LIB_BYTES = 50 * 1024
+const WIDELY_USED_DOWNLOADS = 1_000_000
 
 interface SemVer {
   major: number
@@ -129,6 +147,17 @@ interface RegistryInfo {
   latest?: string
   deprecated: boolean
   lastPublishMs?: number
+  /** unpacked size of the latest release, when the registry reports it */
+  unpackedSize?: number
+}
+
+/** Monthly downloads from the npm API; null when offline or unavailable. */
+async function monthlyDownloads(ctx: ScanContext, pkg: string): Promise<number | null> {
+  if (!ctx.fetchJson) return null
+  const data = (await ctx.fetchJson(
+    `https://api.npmjs.org/downloads/point/last-month/${pkg}`,
+  )) as { downloads?: number } | null
+  return typeof data?.downloads === "number" ? data.downloads : null
 }
 
 /** Look up registry metadata for a package; null when offline or on failure. */
@@ -137,7 +166,7 @@ async function lookup(ctx: ScanContext, pkg: string): Promise<RegistryInfo | nul
   const data = (await ctx.fetchJson(`https://registry.npmjs.org/${pkg}`)) as
     | {
         "dist-tags"?: { latest?: string }
-        versions?: Record<string, { deprecated?: string }>
+        versions?: Record<string, { deprecated?: string; dist?: { unpackedSize?: number } }>
         time?: Record<string, string>
       }
     | null
@@ -147,7 +176,8 @@ async function lookup(ctx: ScanContext, pkg: string): Promise<RegistryInfo | nul
   const deprecated = !!(latest && data.versions?.[latest]?.deprecated)
   const stamp = (latest && data.time?.[latest]) || data.time?.modified
   const lastPublishMs = stamp ? new Date(stamp).getTime() : undefined
-  return { latest, deprecated, lastPublishMs }
+  const unpackedSize = latest ? data.versions?.[latest]?.dist?.unpackedSize : undefined
+  return { latest, deprecated, lastPublishMs, unpackedSize }
 }
 
 export const dependencyFuneralScanner: Scanner = {
@@ -209,20 +239,33 @@ export const dependencyFuneralScanner: Scanner = {
         const years = Math.floor(gap / YEAR_MS)
         // 3+ years → likely unmaintained (warning); 2-3 years → soft note (info),
         // since a stable micro-lib may just be feature-complete.
-        const severity: Severity = gap > ABANDONED_WARN_MS ? "warning" : "info"
-        issues.push({
-          id: `dep-abandoned-${name}`,
-          category: "dependency",
-          severity,
-          title: `${name} looks abandoned (no release in ${years}+ years)`,
-          location: "package.json",
-          ageDays: 0,
-          detail:
-            severity === "warning"
-              ? `${name} has not published a new version in over ${years} years. It may be unmaintained.`
-              : `${name} has not published a new version in ${years}+ years. It may simply be ` +
-                `feature-complete — confirm it's still maintained if you depend on it heavily.`,
-        })
+        let severity: Severity = gap > ABANDONED_WARN_MS ? "warning" : "info"
+
+        // Qualify by reach and size before calling anything abandoned — see the
+        // MICRO_LIB_BYTES note. Only fetched for packages that trip the age gate.
+        const downloads = await monthlyDownloads(ctx, name)
+        const widelyUsed = downloads !== null && downloads >= WIDELY_USED_DOWNLOADS
+        const tiny = info.unpackedSize !== undefined && info.unpackedSize <= MICRO_LIB_BYTES
+        const finished = widelyUsed && tiny // not abandoned — done
+        if (widelyUsed) severity = "info"
+
+        const reach = downloads !== null ? ` It still sees ${downloads.toLocaleString("en-US")} downloads a month.` : ""
+        // NB: not `continue` — the outdated check below must still run.
+        if (!finished) {
+          issues.push({
+            id: `dep-abandoned-${name}`,
+            category: "dependency",
+            severity,
+            title: `${name} looks abandoned (no release in ${years}+ years)`,
+            location: "package.json",
+            ageDays: 0,
+            detail:
+              severity === "warning"
+                ? `${name} has not published a new version in over ${years} years. It may be unmaintained.${reach}`
+                : `${name} has not published a new version in ${years}+ years. It may simply be ` +
+                  `feature-complete — confirm it's still maintained if you depend on it heavily.${reach}`,
+          })
+        }
       }
 
       // 3) outdated: compare declared range to latest, honoring the range operator

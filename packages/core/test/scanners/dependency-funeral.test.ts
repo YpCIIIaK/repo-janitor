@@ -111,6 +111,114 @@ describe("dependencyFuneralScanner", () => {
     expect(issues.find((i) => i.id === "dep-abandoned-stable")?.severity).toBe("info")
   })
 
+  /**
+   * Regression guard for a real false positive: the scanner called `clsx`
+   * abandoned. clsx is 8 KB pulled 445M times a month — it is finished, not dead.
+   * Branding packages like that is how a scanner loses its reader.
+   */
+  describe("abandonment is qualified by size and reach", () => {
+    const dl = (p: string) => `https://api.npmjs.org/downloads/point/last-month/${p}`
+
+    it("says nothing about a tiny, heavily-used package that stopped releasing", async () => {
+      const ctx = makeContext({
+        files: {
+          "package.json": JSON.stringify({ dependencies: { clsx: "2.1.1" } }),
+          "a.ts": "import 'clsx'\n",
+        },
+        fetchJson: {
+          [reg("clsx")]: {
+            "dist-tags": { latest: "2.1.1" },
+            versions: { "2.1.1": { dist: { unpackedSize: 8555 } } },
+            time: { "2.1.1": threeYearsAgo },
+          },
+          [dl("clsx")]: { downloads: 445_050_433 },
+        },
+      })
+      const issues = await dependencyFuneralScanner.run(ctx)
+      expect(issues.some((i) => i.id === "dep-abandoned-clsx")).toBe(false)
+    })
+
+    it("keeps a soft note for a large, heavily-used package with a stalled cadence", async () => {
+      const ctx = makeContext({
+        files: {
+          "package.json": JSON.stringify({ dependencies: { big: "1.0.0" } }),
+          "a.ts": "import 'big'\n",
+        },
+        fetchJson: {
+          [reg("big")]: {
+            "dist-tags": { latest: "1.0.0" },
+            versions: { "1.0.0": { dist: { unpackedSize: 4_000_000 } } },
+            time: { "1.0.0": threeYearsAgo },
+          },
+          [dl("big")]: { downloads: 50_000_000 },
+        },
+      })
+      const issues = await dependencyFuneralScanner.run(ctx)
+      const found = issues.find((i) => i.id === "dep-abandoned-big")
+      expect(found?.severity).toBe("info") // demoted from warning by reach alone
+      expect(found?.detail).toContain("50,000,000 downloads a month")
+    })
+
+    it("still warns on a tiny package nobody uses", async () => {
+      const ctx = makeContext({
+        files: {
+          "package.json": JSON.stringify({ dependencies: { obscure: "1.0.0" } }),
+          "a.ts": "import 'obscure'\n",
+        },
+        fetchJson: {
+          [reg("obscure")]: {
+            "dist-tags": { latest: "1.0.0" },
+            versions: { "1.0.0": { dist: { unpackedSize: 4000 } } },
+            time: { "1.0.0": threeYearsAgo },
+          },
+          [dl("obscure")]: { downloads: 120 },
+        },
+      })
+      const issues = await dependencyFuneralScanner.run(ctx)
+      expect(issues.find((i) => i.id === "dep-abandoned-obscure")?.severity).toBe("warning")
+    })
+
+    it("falls back to the age-only rule when download data is unavailable", async () => {
+      const ctx = makeContext({
+        files: {
+          "package.json": JSON.stringify({ dependencies: { unknown: "1.0.0" } }),
+          "a.ts": "import 'unknown'\n",
+        },
+        fetchJson: {
+          [reg("unknown")]: {
+            "dist-tags": { latest: "1.0.0" },
+            versions: { "1.0.0": { dist: { unpackedSize: 4000 } } },
+            time: { "1.0.0": threeYearsAgo },
+          },
+          // no downloads endpoint → null
+        },
+      })
+      const issues = await dependencyFuneralScanner.run(ctx)
+      const found = issues.find((i) => i.id === "dep-abandoned-unknown")
+      expect(found?.severity).toBe("warning")
+      expect(found?.detail).not.toContain("downloads a month")
+    })
+
+    it("does not let reach mask an explicitly deprecated package", async () => {
+      const ctx = makeContext({
+        files: {
+          "package.json": JSON.stringify({ dependencies: { gone: "1.0.0" } }),
+          "a.ts": "import 'gone'\n",
+        },
+        fetchJson: {
+          [reg("gone")]: {
+            "dist-tags": { latest: "1.0.0" },
+            versions: { "1.0.0": { deprecated: "use x", dist: { unpackedSize: 900 } } },
+            time: { "1.0.0": threeYearsAgo },
+          },
+          [dl("gone")]: { downloads: 90_000_000 },
+        },
+      })
+      const issues = await dependencyFuneralScanner.run(ctx)
+      expect(issues.find((i) => i.id === "dep-deprecated-gone")?.severity).toBe("warning")
+    })
+  })
+
   it("does not flag a package published within the last 2 years", async () => {
     const ctx = makeContext({
       files: {
