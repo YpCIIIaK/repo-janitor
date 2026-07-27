@@ -1,18 +1,19 @@
 import "server-only"
 import type { ScanReport } from "@/lib/server-store"
+import { readEnv } from "@/lib/env"
 
 /**
  * Score-drop webhook (opt-in, server-side).
  *
  * When a freshly ingested report scores lower than the repo's previous report,
- * POST a short message to `RAR_WEBHOOK_URL`. The body is Slack/Discord-compatible
+ * POST a short message to the configured URL. The body is Slack/Discord-compatible
  * (`{ "text": "…" }`), which most custom receivers also accept.
  *
- * Config (env):
- *  - `RAR_WEBHOOK_URL`      — destination; unset → feature off (no-op).
- *  - `RAR_WEBHOOK_MIN_DROP` — minimum score drop to alert on (default 1, i.e.
- *                             any drop). Raise it to avoid noise from tiny dips.
- *  - `RAR_DASHBOARD_URL`    — optional; appended as a link if set.
+ * Config (env; the older `RAR_*` spellings still work — see `lib/env.ts`):
+ *  - `REPO_ANTI_ROT_WEBHOOK_URL`      — destination; unset → feature off (no-op).
+ *  - `REPO_ANTI_ROT_WEBHOOK_MIN_DROP` — minimum score drop to alert on (default 1,
+ *                                       i.e. any drop). Raise it to cut noise.
+ *  - `REPO_ANTI_ROT_DASHBOARD_URL`    — optional; appended as a link if set.
  *
  * Best-effort: never throws and never blocks ingestion on failure.
  */
@@ -32,7 +33,7 @@ function buildMessage(previous: ScanReport, report: ScanReport): string {
     `🔴 ${slug} health dropped: ${previous.grade} (${previous.score}) → ${report.grade} (${report.score}), −${drop}.`,
   ]
   if (newCriticals > 0) parts.push(`+${newCriticals} new critical${newCriticals === 1 ? "" : "s"}.`)
-  const dash = process.env.RAR_DASHBOARD_URL?.replace(/\/+$/, "")
+  const dash = readEnv("REPO_ANTI_ROT_DASHBOARD_URL")?.replace(/\/+$/, "")
   if (dash) parts.push(dash)
   return parts.join(" ")
 }
@@ -43,10 +44,10 @@ function buildMessage(previous: ScanReport, report: ScanReport): string {
  * or when the score held/improved.
  */
 export async function notifyScoreDrop(previous: ScanReport | null, report: ScanReport): Promise<void> {
-  const url = process.env.RAR_WEBHOOK_URL
+  const url = readEnv("REPO_ANTI_ROT_WEBHOOK_URL")
   if (!url || !previous) return
 
-  const minDrop = Math.max(1, parseInt(process.env.RAR_WEBHOOK_MIN_DROP ?? "1", 10) || 1)
+  const minDrop = Math.max(1, parseInt(readEnv("REPO_ANTI_ROT_WEBHOOK_MIN_DROP") ?? "1", 10) || 1)
   const drop = previous.score - report.score
   if (drop < minDrop) return
 

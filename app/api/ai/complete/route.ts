@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { checkBearer } from "@/lib/api-auth"
+import { readEnv } from "@/lib/env"
 
 /**
  * AI completion proxy (OpenRouter).
@@ -11,9 +12,10 @@ import { checkBearer } from "@/lib/api-auth"
  *
  * The key may also come from the server env (OPENROUTER_API_KEY) so a deploy can
  * provide a shared key without each user pasting one. That shared-key path is
- * abuse-hardened: it requires `Authorization: Bearer <RAR_AI_PROXY_TOKEN>` (so an
- * anonymous caller can't spend the owner's credits) and an optional model
+ * abuse-hardened: it requires `Authorization: Bearer <REPO_ANTI_ROT_AI_PROXY_TOKEN>`
+ * (so an anonymous caller can't spend the owner's credits) and an optional model
  * allowlist (`OPENROUTER_ALLOWED_MODELS`). Either way `maxTokens` is clamped.
+ * The older `RAR_AI_PROXY_TOKEN` spelling still resolves — see `lib/env.ts`.
  */
 export const runtime = "nodejs"
 export const maxDuration = 60
@@ -64,10 +66,13 @@ export async function POST(request: Request) {
   // proxy token, and (optionally) a whitelisted model. Requests carrying the
   // user's own key are unaffected — they pay for their own usage.
   if (usingServerKey) {
-    const proxyToken = process.env.RAR_AI_PROXY_TOKEN
+    const proxyToken = readEnv("REPO_ANTI_ROT_AI_PROXY_TOKEN")
     if (!proxyToken) {
       return NextResponse.json(
-        { error: "Server AI key is set but RAR_AI_PROXY_TOKEN is not — refusing anonymous use." },
+        {
+          error:
+            "Server AI key is set but REPO_ANTI_ROT_AI_PROXY_TOKEN is not — refusing anonymous use.",
+        },
         { status: 503 },
       )
     }

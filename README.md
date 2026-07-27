@@ -239,7 +239,7 @@ before it leaves the machine.
 
 A shared key can also be provided server-side via the `OPENROUTER_API_KEY`
 environment variable. To stop that shared key from becoming an open, billable
-proxy, the shared-key path requires `Authorization: Bearer <RAR_AI_PROXY_TOKEN>`
+proxy, the shared-key path requires `Authorization: Bearer <REPO_ANTI_ROT_AI_PROXY_TOKEN>`
 and (optionally) an `OPENROUTER_ALLOWED_MODELS` whitelist; requests that carry
 the user's own key are unaffected. Output size is always clamped. See
 [Security & hardening](#security--hardening).
@@ -350,9 +350,9 @@ a webhook so the team is alerted to the regression immediately. Opt-in via env:
 
 | Variable | Description |
 | --- | --- |
-| `RAR_WEBHOOK_URL` | Destination URL. Unset → feature off. The body is Slack/Discord-compatible (`{ "text": "…" }`), which most custom receivers also accept. |
-| `RAR_WEBHOOK_MIN_DROP` | Minimum score drop to alert on (default `1`, i.e. any drop). Raise it to ignore small dips. |
-| `RAR_DASHBOARD_URL` | Optional; appended to the message as a link. |
+| `REPO_ANTI_ROT_WEBHOOK_URL` | Destination URL. Unset → feature off. The body is Slack/Discord-compatible (`{ "text": "…" }`), which most custom receivers also accept. |
+| `REPO_ANTI_ROT_WEBHOOK_MIN_DROP` | Minimum score drop to alert on (default `1`, i.e. any drop). Raise it to ignore small dips. |
+| `REPO_ANTI_ROT_DASHBOARD_URL` | Optional; appended to the message as a link. |
 
 Example message:
 
@@ -372,7 +372,7 @@ The server-side API routes are written to be safe to expose:
 | Concern | Mitigation |
 | --- | --- |
 | **SSRF via `/api/scan`** | The clone target must be a public `http(s)` URL. Loopback, private (`10/8`, `172.16/12`, `192.168/16`), link-local (`169.254/16`, incl. cloud metadata), CGNAT and reserved ranges are rejected — for IP literals **and** for DNS names whose resolved addresses land in private space (which also blunts DNS rebinding). |
-| **Open AI proxy / billing abuse** | Using the shared `OPENROUTER_API_KEY` requires `Authorization: Bearer <RAR_AI_PROXY_TOKEN>`; an optional `OPENROUTER_ALLOWED_MODELS` whitelist restricts models; `maxTokens` is clamped. Requests with the user's own key are unaffected. |
+| **Open AI proxy / billing abuse** | Using the shared `OPENROUTER_API_KEY` requires `Authorization: Bearer <REPO_ANTI_ROT_AI_PROXY_TOKEN>`; an optional `OPENROUTER_ALLOWED_MODELS` whitelist restricts models; `maxTokens` is clamped. Requests with the user's own key are unaffected. |
 | **Report ingestion** | `POST /api/ingest` accepts a `Bearer` token in `REPO_ANTI_ROT_INGEST_TOKEN` (constant-time compared). Unset → open (local dev). |
 | **Report read access** | `GET /api/reports` returns full reports (paths + redacted evidence). Set `REPO_ANTI_ROT_READ_TOKEN` to require a `Bearer` token for reads; unset → open so the in-browser dashboard works. (The badge endpoint stays open — it exposes only grade + score.) |
 | **Secrets → AI** | For committed-secret findings the evidence snippet is redacted by the scanner before it ever reaches the AI proxy, and the executive summary sends finding metadata only — never `evidence`. |
