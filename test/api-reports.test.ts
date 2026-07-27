@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
+import { GET } from "@/app/api/reports/route"
 import type { StoredRepo } from "@/lib/server-store"
 
 /**
@@ -7,13 +8,13 @@ import type { StoredRepo } from "@/lib/server-store"
  * (`reportsEndpoint()`) both call.
  *
  * The store is mocked so the test stays pure: what's under test is the auth gate
- * and the response envelope, not the filesystem.
+ * and the response envelope, not the filesystem. `server-only` is stubbed too — it
+ * throws outside a React Server Component. `vi.mock` is hoisted above the imports,
+ * so the route is imported statically rather than with a top-level `await import`.
  */
-const readServerRepos = vi.fn<[], Promise<StoredRepo[]>>()
+const readServerRepos = vi.fn<() => Promise<StoredRepo[]>>()
 vi.mock("server-only", () => ({}))
 vi.mock("@/lib/server-store", () => ({ readServerRepos: () => readServerRepos() }))
-
-const { GET } = await import("@/app/api/reports/route")
 
 const req = (auth?: string) =>
   new Request("https://dash.example/api/reports", auth ? { headers: { authorization: auth } } : undefined)
