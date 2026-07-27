@@ -10,7 +10,7 @@ import type { Grade, Issue, Severity } from "@/lib/mock-data"
  * devices; `/api/reports` reads it back for the dashboard to merge into its store.
  * Shape mirrors the client's `StoredRepo` (lib/reports-store) so the UI consumes it
  * unchanged. Single JSON file under `.repo-anti-rot/` — simple and inspectable; swap for
- * SQLite/Postgres when history/query volume actually grows (see ROADMAP, infra backlog).
+ * SQLite/Postgres when history/query volume actually grows.
  */
 
 export interface ScanReport {

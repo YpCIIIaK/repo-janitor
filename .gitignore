@@ -26,6 +26,14 @@ real-report.json
 # ...but the per-project CONFIG file is meant to be committed
 !.repo-anti-rot.json
 
+# --- internal, not for the public repo ---
+# PLAN.md is product/commercial reasoning; ROADMAP.md tracked internal sequencing.
+# Both live on locally and in history — untracking them only stops new changes.
+PLAN.md
+ROADMAP.md
+# Local scanner fixture, never a deliverable.
+sample-repo/
+
 # --- environment / secrets ---
 .env
 .env.*

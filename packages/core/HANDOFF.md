@@ -1,8 +1,7 @@
 # Repo Anti-Rot — Core Engine
 
 Architecture notes for `@repo-anti-rot/core`: the contracts to respect when adding
-scanners or changing the report shape. Product direction lives in the repo-root
-[ROADMAP.md](../../ROADMAP.md) and [PLAN.md](../../PLAN.md).
+scanners or changing the report shape.
 
 ## Layout
 
