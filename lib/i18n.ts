@@ -50,9 +50,11 @@ const en = {
   // Consent. The wording has to match what the code actually stores — see
   // `lib/share-report.ts`. Promising more privacy than we deliver would be the
   // worst possible bug in a tool that reports on security.
+  // Must describe `toSharedReport` in lib/share-report.ts exactly. Change one,
+  // change the other in the same commit.
   "consent.label": "Save this result so it can be shared by link",
   "consent.body":
-    "Stores the grade, score, category breakdown and finding titles. Code snippets, matched secret values and line contents are stripped before anything is written — they never leave your browser.",
+    "Stores the grade, score, counts per category and the titles of the top 10 findings. File paths, line numbers, code snippets and matched secret values are never written — they stay in this browser.",
   "consent.optional": "Optional. Leave it off and the report stays in this browser only.",
 
   "share.copy": "Copy link",
@@ -100,7 +102,7 @@ const ru: Messages = {
 
   "consent.label": "Сохранить результат, чтобы им можно было поделиться по ссылке",
   "consent.body":
-    "Сохраняются оценка, грейд, разбивка по категориям и заголовки находок. Фрагменты кода, найденные значения секретов и содержимое строк вырезаются до записи — они не покидают ваш браузер.",
+    "Сохраняются оценка, грейд, количество находок по категориям и заголовки 10 главных. Пути к файлам, номера строк, фрагменты кода и найденные значения секретов не записываются — они остаются в этом браузере.",
   "consent.optional":
     "По желанию. Если не отмечать, отчёт останется только в этом браузере.",
 
