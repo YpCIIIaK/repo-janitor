@@ -9,6 +9,18 @@ code, disabled tests, and binary bloat — scores it A–F, and shows everything
 dashboard. An optional AI pass adds a short, decisive verdict to each finding via
 OpenRouter.
 
+## Try it
+
+```bash
+npx repo-anti-rot scan .
+```
+
+No clone, no install, no signup — a grade and a ranked list of findings for the
+repo you're standing in. `--format json|md|sarif` and `--output <file>` if you
+want it in a file or in CI.
+
+Everything below is for working on Repo Anti-Rot itself.
+
 ## Structure
 
 This is a monorepo:

@@ -41,13 +41,19 @@ function registerScan(program: Command) {
   program
     .command("scan")
     .description("Scan a single repository for health and decay metrics")
-    .option("-p, --path <path>", "Path to repository to scan", ".")
+    // Positional path, because `repo-anti-rot scan .` is how everyone will type it
+    // (and it's the first line of the README). Without this commander accepts the
+    // argument and silently discards it, scanning the cwd instead — the worst
+    // possible outcome for a tool whose whole output is about a specific repo.
+    .argument("[path]", "Path to repository to scan", ".")
+    .option("-p, --path <path>", "Path to repository to scan (same as the positional argument)")
     .option("-f, --format <format>", "Output format (json, terminal, md, sarif)", "terminal")
     .option("-o, --output <file>", "Output file path")
     .option("--progress", "Emit machine-readable progress events to stderr")
-    .action(async (options) => {
+    .action(async (pathArg: string, options) => {
       try {
-        const root = await fs.realpath(options.path);
+        // `--path` wins when given explicitly, so existing scripts keep working.
+        const root = await fs.realpath(options.path ?? pathArg);
         console.log(`Scanning repository at: ${root}`);
 
         // With --progress, stream one NDJSON line per scanner to stderr so a parent
