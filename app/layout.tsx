@@ -1,7 +1,10 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
+import { cookies, headers } from 'next/headers'
 import { ServerSync } from '@/components/repo-anti-rot/server-sync'
+import { LocaleProvider } from '@/components/i18n/locale-provider'
 import { Toaster } from '@/components/ui/sonner'
+import { LOCALE_COOKIE, resolveLocale } from '@/lib/i18n'
 import './globals.css'
 
 const _geist = Geist({ subsets: ["latin"] });
@@ -30,17 +33,27 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  // Resolved on the server so the first paint is already in the reader's
+  // language: a shared link opened cold must not flash English and then swap.
+  const [cookieStore, headerList] = await Promise.all([cookies(), headers()])
+  const locale = resolveLocale(
+    cookieStore.get(LOCALE_COOKIE)?.value,
+    headerList.get("accept-language"),
+  )
+
   return (
-    <html lang="en" className="bg-background">
+    <html lang={locale} className="bg-background">
       <body className="font-sans antialiased">
-        <ServerSync />
-        {children}
-        <Toaster />
+        <LocaleProvider initial={locale}>
+          <ServerSync />
+          {children}
+          <Toaster />
+        </LocaleProvider>
       </body>
     </html>
   )
