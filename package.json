@@ -16,7 +16,7 @@
     "start": "next start",
     "lint": "eslint .",
     "build:cli": "pnpm --filter repo-anti-rot build",
-    "build:packages": "pnpm --filter \"@repo-anti-rot/*\" build",
+    "build:packages": "pnpm --filter @repo-anti-rot/core build && pnpm --filter repo-anti-rot build && pnpm --filter @repo-anti-rot/action build",
     "test": "vitest run && pnpm -r --if-present test",
     "test:dashboard": "vitest run",
     "setup": "pnpm install && pnpm run build:cli"

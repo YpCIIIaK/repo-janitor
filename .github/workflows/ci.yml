@@ -35,6 +35,10 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile
 
+      # Order matters and is spelled out in the script: the Action imports
+      # `repo-anti-rot/context`, which only exists once the CLI's dist/ is built.
+      # A glob filter silently skipped the CLI (its name is unscoped) and this
+      # only ever failed on a clean checkout, where no stale dist/ was lying around.
       - name: Build packages (engine, CLI, Action)
         run: pnpm run build:packages
 
