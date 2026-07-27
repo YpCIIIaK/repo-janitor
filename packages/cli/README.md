@@ -56,6 +56,23 @@ score with an A–F grade. Tune it per-repo with an optional
 (ignore globs, mute rules, custom weights) or inline `// repo-anti-rot-ignore`
 markers.
 
+## Programmatic use
+
+The package is importable as well as executable — the scan API is the root export:
+
+```js
+import { scanRepo, buildScanContext } from "repo-anti-rot"
+
+const report = await scanRepo("/path/to/repo")
+console.log(report.score, report.grade, report.issues.length)
+```
+
+`repo-anti-rot/context` resolves to the same module and stays supported.
+
+Note that the CLI entry point is reachable only through the `repo-anti-rot`
+binary, never by import: it parses `argv` and exits on load, so importing it
+would run the command line rather than hand you an API.
+
 ## More
 
 This CLI is the engine behind the **Repo Anti-Rot** dashboard and GitHub Action.
