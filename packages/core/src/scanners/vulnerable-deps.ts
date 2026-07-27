@@ -141,6 +141,8 @@ async function resolveVersions(
   return resolved
 }
 
+const SEVERITY_RANK: Record<Severity, number> = { info: 1, warning: 2, critical: 3 }
+
 /** One step down our three-level scale. */
 function downgrade(sev: Severity): Severity {
   return sev === "critical" ? "warning" : "info"
@@ -410,7 +412,12 @@ export const vulnerableDepsScanner: Scanner = {
       }),
     )
 
-    const issues: Issue[] = []
+    // Keyed by what the reader actually sees — package + displayed advisory id —
+    // so the same CVE reported under two GHSA rows collapses into one finding.
+    // The GitHub advisory database really does carry duplicates: lodash 4.17.20
+    // matches both GHSA-35jh-r3h4-6jhm and GHSA-r5fr-rjxr-66jc, and both are
+    // CVE-2021-23337. Listing it twice looks like the scanner cannot count.
+    const byDisplayId = new Map<string, Issue>()
     const seen = new Set<string>()
     for (const hit of hits) {
       const key = `${hit.name}::${hit.vulnId}`
@@ -437,17 +444,27 @@ export const vulnerableDepsScanner: Scanner = {
         `${label ? ` (${label.toLowerCase()} severity)` : ""}. ${fixHint}` +
         `${kindNote}${pathNote} Advisory: https://osv.dev/${hit.vulnId}`
 
-      issues.push({
-        id: `vuln-${hit.name}-${hit.vulnId}`,
+      const issue: Issue = {
+        // Stable across the duplicate rows: derived from the displayed id, not
+        // from whichever GHSA happened to come back first.
+        id: `vuln-${hit.name}-${id}`,
         category: "security",
         severity: mapSeverity(label, { runtime: hit.runtime, direct: hit.direct }),
         title: `${hit.name}@${hit.version} has a known vulnerability (${id})`,
         location: hit.manifest,
         ageDays: 0,
         detail,
-      })
+      }
+
+      const dupeKey = `${hit.name}::${id}`
+      const existing = byDisplayId.get(dupeKey)
+      // Duplicate rows can disagree on severity and on whether a fix is recorded.
+      // Keep the worse one — under-reporting a vulnerability is the costlier error.
+      if (!existing || SEVERITY_RANK[issue.severity] > SEVERITY_RANK[existing.severity]) {
+        byDisplayId.set(dupeKey, issue)
+      }
     }
 
-    return issues
+    return [...byDisplayId.values()]
   },
 }

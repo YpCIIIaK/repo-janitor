@@ -140,6 +140,68 @@ describe("vulnerableDepsScanner", () => {
 })
 
 /**
+ * Regression guard from the first real run of the published package: scanning a
+ * repo pinned to lodash 4.17.20 listed CVE-2021-23337 twice and CVE-2025-13465
+ * twice. The GitHub advisory database carries duplicate rows aliasing one CVE,
+ * and dedup keyed on the OSV id let both through.
+ */
+describe("vulnerableDepsScanner — duplicate advisory rows", () => {
+  it("reports one finding per CVE even when two GHSA rows alias it", async () => {
+    const ctx = makeContext({
+      files: { "package.json": JSON.stringify({ dependencies: { lodash: "4.17.20" } }) },
+      postJson: {
+        [BATCH_URL]: { results: [{ vulns: [{ id: "GHSA-aaaa" }, { id: "GHSA-bbbb" }] }] },
+      },
+      fetchJson: {
+        [`${VULN_URL}GHSA-aaaa`]: {
+          id: "GHSA-aaaa",
+          aliases: ["CVE-2021-23337"],
+          database_specific: { severity: "MODERATE" },
+          affected: [{ package: { ecosystem: "npm", name: "lodash" } }],
+        },
+        [`${VULN_URL}GHSA-bbbb`]: {
+          id: "GHSA-bbbb",
+          aliases: ["CVE-2021-23337"], // same CVE, different advisory row
+          database_specific: { severity: "HIGH" },
+          affected: [{ package: { ecosystem: "npm", name: "lodash" } }],
+        },
+      },
+    })
+    const issues = await vulnerableDepsScanner.run(ctx)
+    expect(issues).toHaveLength(1)
+    expect(issues[0].id).toBe("vuln-lodash-CVE-2021-23337")
+    // The rows disagreed; the worse one wins — under-reporting costs more.
+    expect(issues[0].severity).toBe("critical")
+  })
+
+  it("still reports genuinely different CVEs on the same package separately", async () => {
+    const ctx = makeContext({
+      files: { "package.json": JSON.stringify({ dependencies: { lodash: "4.17.20" } }) },
+      postJson: {
+        [BATCH_URL]: { results: [{ vulns: [{ id: "GHSA-aaaa" }, { id: "GHSA-cccc" }] }] },
+      },
+      fetchJson: {
+        [`${VULN_URL}GHSA-aaaa`]: {
+          id: "GHSA-aaaa",
+          aliases: ["CVE-2021-23337"],
+          affected: [{ package: { ecosystem: "npm", name: "lodash" } }],
+        },
+        [`${VULN_URL}GHSA-cccc`]: {
+          id: "GHSA-cccc",
+          aliases: ["CVE-2020-28500"],
+          affected: [{ package: { ecosystem: "npm", name: "lodash" } }],
+        },
+      },
+    })
+    const issues = await vulnerableDepsScanner.run(ctx)
+    expect(issues.map((i) => i.id).sort()).toEqual([
+      "vuln-lodash-CVE-2020-28500",
+      "vuln-lodash-CVE-2021-23337",
+    ])
+  })
+})
+
+/**
  * Severity calibration. These are the false positives that cost the tool its
  * credibility on first run: a HIGH advisory scored as CRITICAL, and a build-only
  * package dragging the grade down for code that never ships.
