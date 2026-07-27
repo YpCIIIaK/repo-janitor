@@ -25,6 +25,7 @@ import { enrichReport, aiTargetCount } from "@/lib/ai-enrich"
 import { readAiSettings, isAiEnabled } from "@/lib/ai-settings"
 import { runScanStream } from "@/lib/scan-client"
 import { Progress } from "@/components/ui/progress"
+import { ShareBox } from "./share-box"
 
 type Grade = "A" | "B" | "C" | "D" | "F"
 type Severity = "critical" | "warning" | "info"
@@ -314,6 +315,10 @@ function ResultCard({ result, onOpen }: { result: ScanResult; onOpen?: (repoId: 
             {copied ? "Copied" : "Copy JSON"}
           </Button>
         </div>
+
+        {/* Opt-in publishing. Deliberately below the results: the user decides
+            after seeing what they would be sharing, not before. */}
+        <ShareBox report={report} />
       </CardContent>
     </Card>
   )
