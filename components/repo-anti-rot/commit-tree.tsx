@@ -1,6 +1,8 @@
 "use client"
 
 import { useCallback, useMemo, useState } from "react"
+import { CalendarHeatmap } from "@/components/charts/calendar-heatmap"
+import { timeAgo } from "@/lib/reports-store"
 import {
   ReactFlow,
   ReactFlowProvider,
@@ -31,7 +33,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
-import { streamHistory, type CommitNode, type CommitSkeleton } from "@/lib/history-client"
+import {
+  streamHistory,
+  type ActivityDay,
+  type CommitNode,
+  type CommitSkeleton,
+} from "@/lib/history-client"
 import type { Grade, Issue, Severity } from "@/lib/mock-data"
 
 // ---------------------------------------------------------------------------
@@ -271,6 +278,7 @@ function CommitTreeInner({ initialUrl = "" }: { initialUrl?: string }) {
   const [status, setStatus] = useState("")
   const [error, setError] = useState<string | null>(null)
   const [commits, setCommits] = useState<CommitSkeleton[]>([])
+  const [activity, setActivity] = useState<ActivityDay[]>([])
   // sha → scanned node (or error). State (not a ref) so React Flow re-renders as
   // each commit's scan streams in.
   const [data, setData] = useState<Map<string, { node?: CommitNode; error?: string }>>(new Map())
@@ -313,6 +321,7 @@ function CommitTreeInner({ initialUrl = "" }: { initialUrl?: string }) {
     setLoading(true)
     setError(null)
     setCommits([])
+    setActivity([])
     setSelectedSha(null)
     setData(new Map())
     setStatus("Cloning history…")
@@ -326,6 +335,7 @@ function CommitTreeInner({ initialUrl = "" }: { initialUrl?: string }) {
           setCommits(cs)
           setStatus(`Scanning ${total} commits…`)
         },
+        onActivity: setActivity,
         onNode: (sha, node) => {
           done++
           setStatus(`Scanned ${done}/${total} commits…`)
@@ -347,8 +357,35 @@ function CommitTreeInner({ initialUrl = "" }: { initialUrl?: string }) {
 
   const hasTree = commits.length > 0
 
+  // Days since the last commit. A repository that stopped being committed to is
+  // the plainest decay signal there is, and it is the one thing the heatmap
+  // shows at a glance that a list of commits does not.
+  const latestCommitDay = useMemo(
+    () => (activity.length === 0 ? null : activity.reduce((a, b) => (a.date > b.date ? a : b)).date),
+    [activity],
+  )
+  // Reuses the app's own relative-time helper rather than reading the clock
+  // here: same wording as every other timestamp in the dashboard, and the
+  // clock read stays out of the render body where it is not a pure input.
+  const lastCommitAgo = latestCommitDay ? timeAgo(`${latestCommitDay}T00:00:00Z`) : null
+
   return (
     <div className="space-y-4">
+      {activity.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Commit activity</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            <CalendarHeatmap data={activity} />
+            <p className="text-xs text-muted-foreground">
+              Every commit in the history, not just the scanned sample.
+              {lastCommitAgo && ` Last commit ${lastCommitAgo}.`}
+            </p>
+          </CardContent>
+        </Card>
+      )}
+
       <Card>
         <CardHeader>
           <CardTitle className="text-base">Commit health tree</CardTitle>

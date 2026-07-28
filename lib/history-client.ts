@@ -27,9 +27,16 @@ export interface CommitNode {
   cached: boolean
 }
 
+/** One calendar day (UTC, YYYY-MM-DD) and how many commits landed on it. */
+export interface ActivityDay {
+  date: string
+  value: number
+}
+
 type HistoryEvent =
   | { type: "start"; url: string }
   | { type: "commits"; commits: CommitSkeleton[] }
+  | { type: "activity"; days: ActivityDay[] }
   | { type: "node"; sha: string; node: CommitNode }
   | { type: "node-error"; sha: string; error: string }
   | { type: "done" }
@@ -38,6 +45,8 @@ type HistoryEvent =
 export interface StreamHistoryHandlers {
   /** the sampled commit skeleton, sent up front so the graph can render early */
   onCommits?: (commits: CommitSkeleton[]) => void
+  /** commits per UTC day across the WHOLE history, not just the scanned sample */
+  onActivity?: (days: ActivityDay[]) => void
   /** a scanned commit's full report + diff vs the previous (older) scanned node */
   onNode?: (sha: string, node: CommitNode) => void
   /** a commit that failed to scan (checkout/scan error) */
@@ -71,6 +80,9 @@ export async function streamHistory(
     switch (ev.type) {
       case "commits":
         handlers.onCommits?.(ev.commits)
+        break
+      case "activity":
+        handlers.onActivity?.(ev.days)
         break
       case "node":
         handlers.onNode?.(ev.sha, ev.node)

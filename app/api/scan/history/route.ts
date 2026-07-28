@@ -45,9 +45,31 @@ function skeleton(c: Commit) {
   }
 }
 
+/**
+ * Commits per calendar day across the WHOLE history, not the scanned sample.
+ *
+ * The sample is chosen to be interesting (releases, merges, spread over time);
+ * counting it would describe the sampler rather than the repository. The full
+ * log is already parsed by then, so this costs one pass over an array and no
+ * extra git work.
+ *
+ * UTC days, which is what `toISOString` gives the client-side heatmap. A commit
+ * near midnight can land on the neighbouring day for some viewer; consistency
+ * between server and client matters more here than any one commit's local date.
+ */
+function activityDays(commits: Commit[]): { date: string; value: number }[] {
+  const byDay = new Map<string, number>()
+  for (const c of commits) {
+    const day = new Date(c.date).toISOString().slice(0, 10)
+    byDay.set(day, (byDay.get(day) ?? 0) + 1)
+  }
+  return [...byDay.entries()].map(([date, value]) => ({ date, value }))
+}
+
 type HistoryEvent =
   | { type: "start"; url: string }
   | { type: "commits"; commits: ReturnType<typeof skeleton>[] }
+  | { type: "activity"; days: { date: string; value: number }[] }
   | { type: "node"; sha: string; node: NodeReport }
   | { type: "node-error"; sha: string; error: string }
   | { type: "done" }
@@ -140,6 +162,7 @@ async function buildHistory(
     }
     const selected = selectCommits(commits, all ? Math.min(commits.length, ALL_CAP) : sample)
     emit({ type: "commits", commits: selected.map(skeleton) })
+    emit({ type: "activity", days: activityDays(commits) })
 
     // Scan oldest→newest so each node can diff against the previous (older) one.
     const chronological = [...selected].reverse()
