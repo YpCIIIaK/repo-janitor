@@ -31,11 +31,6 @@ const en = {
   "welcome.title": "Welcome to Repo Anti-Rot",
   "welcome.lead":
     "Point Repo Anti-Rot at any public git repo and it will measure the decay — secrets, stale branches, dead code and dependency rot — then hand you a health grade.",
-  "welcome.cta": "Run your first scan",
-
-  "scan.title": "Run your first scan",
-  "scan.lead": "Paste a public repository URL — Repo Anti-Rot clones it and grades its health.",
-  "scan.back": "Back",
 
   "feature.secrets.title": "Secrets & env drift",
   "feature.secrets.body":
@@ -87,12 +82,6 @@ const ru: Messages = {
   "welcome.title": "Repo Anti-Rot",
   "welcome.lead":
     "Укажите любой публичный git-репозиторий, и Repo Anti-Rot измерит его распад — секреты, заброшенные ветки, мёртвый код и гниль зависимостей — и выставит оценку здоровья.",
-  "welcome.cta": "Запустить первый скан",
-
-  "scan.title": "Запустить первый скан",
-  "scan.lead":
-    "Вставьте ссылку на публичный репозиторий — Repo Anti-Rot склонирует его и оценит здоровье.",
-  "scan.back": "Назад",
 
   "feature.secrets.title": "Секреты и env",
   "feature.secrets.body":

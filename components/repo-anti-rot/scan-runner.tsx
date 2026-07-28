@@ -399,7 +399,9 @@ export function ScanRunner({ onOpen }: { onOpen?: (repoId: string) => void }) {
 
   return (
     <div className="space-y-6">
-      <Card>
+      {/* Elevated: on the landing page this card is the one thing to do, and it
+          has to read as the focus rather than as the first of several panels. */}
+      <Card className="border-border/80 shadow-lg shadow-primary/5 ring-1 ring-primary/5">
         <CardHeader>
           <CardTitle className="text-base">Run a real scan</CardTitle>
         </CardHeader>
