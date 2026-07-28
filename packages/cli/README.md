@@ -43,11 +43,12 @@ repo-anti-rot batch ./repos --out-dir ./reports
 
 ## What it checks
 
-Committed secrets · vulnerable dependencies (OSV, across npm/PyPI/Go/crates.io/
+Committed secrets · insecure code (injection, disabled TLS, unsafe
+deserialisation) · vulnerable dependencies (OSV, across npm/PyPI/Go/crates.io/
 RubyGems/Packagist) · outdated & abandoned & unused dependencies · undocumented
 env vars · dead code · commented-out code · leftover `console`/`debugger` ·
 skipped/focused tests · Dockerfile hygiene · stale branches · aging TODOs ·
-broken doc links · bus-factor risk · repo bloat.
+broken doc links · dead external links · bus-factor risk · repo bloat.
 
 Findings are grouped into categories, each scored by severity
 (**critical −10 · warning −3 · info −0.25**), then rounded and clamped to a 0–100

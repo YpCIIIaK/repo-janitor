@@ -15,7 +15,7 @@ packages/core/
     config.ts       # .repo-anti-rot.json: ignores, thresholds, mute rules, inline ignores
     ast.ts          # shared @babel/parser walker
     lockgraph.ts    # lockfile dependency graph → "does a prod install reach this?"
-    scanners/       # 17 scanners, each registered in defaultScanners
+    scanners/       # 19 scanners, each registered in defaultScanners
     reporters/      # json | terminal | markdown | sarif, behind renderReport()
     index.ts        # barrel exports
 ```

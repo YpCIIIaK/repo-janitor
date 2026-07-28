@@ -33,6 +33,13 @@ export interface FakeContextOptions {
   fetchJson?: Record<string, unknown>
   /** postJson responses keyed by url; omitted adapter when not provided */
   postJson?: Record<string, unknown>
+  /**
+   * headUrl responses keyed by url; omitted adapter when not provided. A `null`
+   * value means "request failed entirely" (DNS/timeout), which the dead-link
+   * scanner reports differently from a 404. An unlisted URL defaults to 200 so
+   * tests only have to state the links they care about.
+   */
+  headUrl?: Record<string, { status: number; url?: string } | null>
   /** collect log lines here if provided */
   logs?: string[]
 }
@@ -79,6 +86,12 @@ export function makeContext(opts: FakeContextOptions = {}): ScanContext {
       : {}),
     ...(opts.postJson
       ? { postJson: async (url: string) => opts.postJson![url] ?? null }
+      : {}),
+    ...(opts.headUrl
+      ? {
+          headUrl: async (url: string) =>
+            url in opts.headUrl! ? opts.headUrl![url] : { status: 200 },
+        }
       : {}),
     log: (msg) => {
       opts.logs?.push(msg)

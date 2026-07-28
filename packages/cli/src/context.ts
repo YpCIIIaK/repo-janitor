@@ -315,6 +315,37 @@ export async function buildScanContext(root: string): Promise<ScanContext> {
         return null;
       }
     },
+    headUrl: async (url: string): Promise<{ status: number; url?: string } | null> => {
+      // A per-request timeout matters more here than anywhere else: a link
+      // scanner without one hangs the whole scan on the first unresponsive host.
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 8000);
+      try {
+        // Some servers reject HEAD outright (405) while serving GET fine, so a
+        // rejected HEAD is retried as a GET before believing it.
+        let res = await fetch(url, {
+          method: "HEAD",
+          redirect: "follow",
+          headers: { "user-agent": "repo-anti-rot (https://github.com/YpCIIIaK/repo-janitor)" },
+          signal: controller.signal,
+        });
+        if (res.status === 405 || res.status === 501) {
+          res = await fetch(url, {
+            method: "GET",
+            redirect: "follow",
+            headers: { "user-agent": "repo-anti-rot (https://github.com/YpCIIIaK/repo-janitor)" },
+            signal: controller.signal,
+          });
+        }
+        return { status: res.status, url: res.url };
+      } catch {
+        // DNS failure, refused connection, or the timeout above. Reported as
+        // "unreachable", which the scanner treats differently from a 404.
+        return null;
+      } finally {
+        clearTimeout(timer);
+      }
+    },
     log: (msg: string) => {
       console.log(`[repo-anti-rot] ${msg}`);
     }

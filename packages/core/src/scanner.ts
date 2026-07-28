@@ -76,6 +76,14 @@ export interface ScanContext {
    * that need POST run in offline mode (skip the network-derived findings).
    */
   postJson?: (url: string, body: unknown) => Promise<unknown | null>
+  /**
+   * Optional adapter for checking whether a URL still resolves. Returns the HTTP
+   * status, or `null` when the request could not be made at all (DNS failure,
+   * connection refused, timeout) — a distinction the dead-link scanner reports
+   * differently, because "the domain is gone" and "the page moved" call for
+   * different fixes. When omitted, link liveness is not checked.
+   */
+  headUrl?: (url: string) => Promise<{ status: number; url?: string } | null>
   /** structured logger; no-op in tests */
   log: (msg: string) => void
 }

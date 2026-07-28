@@ -19,6 +19,8 @@ import { repoBloatScanner } from "./scanners/repo-bloat"
 import { dockerfileScanner } from "./scanners/dockerfile"
 import { skippedTestsScanner } from "./scanners/skipped-tests"
 import { commentedCodeScanner } from "./scanners/commented-code"
+import { insecureCodeScanner } from "./scanners/insecure-code"
+import { deadLinksScanner } from "./scanners/dead-links"
 
 /** Default scanner registry. Add new scanners here as they are implemented. */
 export const defaultScanners: Scanner[] = [
@@ -39,6 +41,8 @@ export const defaultScanners: Scanner[] = [
   dockerfileScanner,
   skippedTestsScanner,
   commentedCodeScanner,
+  insecureCodeScanner,
+  deadLinksScanner,
 ]
 
 /** Severity penalties. info is deliberately near-cosmetic — a quarter of a point

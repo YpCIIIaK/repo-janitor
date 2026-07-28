@@ -106,13 +106,16 @@ Coverage highlights (290+ tests):
 - **engine** — scoring, grade thresholds, per-scanner isolation on throw, inline
   `repo-anti-rot-ignore` markers, config-driven weights, the lines-of-code metric
   and progress callbacks
-- **scanners** — all 17 scanners, each with positive *and* negative
+- **scanners** — all 19 scanners, each with positive *and* negative
   (no-false-positive) cases: secrets (incl. the redaction invariant — a raw key
   never appears in evidence), env-lifecycle, todo-debt, dead-code (JS/TS +
   Python/Go), leftover-debug, commented-code, skipped-tests, dockerfile,
-  repo-bloat, project-hygiene, broken-doc-links, bus-factor, stale-branch, and the
-  dependency scanners (vulnerable/outdated/funeral/lockfile-drift) driven through
-  stubbed OSV / npm / PyPI registry adapters
+  repo-bloat, project-hygiene, broken-doc-links, bus-factor, stale-branch,
+  insecure-code (incl. the string/regex-literal guard — a description of code is
+  not code), dead-links (incl. the refusal to request private or loopback
+  addresses), and the dependency scanners
+  (vulnerable/outdated/funeral/lockfile-drift) driven through stubbed OSV / npm /
+  PyPI registry adapters
 - **config** — `.repo-anti-rot.json` loading, weight merge, ignore globs, mute-rule
   matching (id / category / path glob), and graceful fallback on malformed input
 - **reporters** — JSON round-trip, Markdown escaping, and SARIF 2.1.0 shape
@@ -492,6 +495,22 @@ rot:
   warning), **running as root** (no non-root `USER`, info) and **`ADD` of a remote
   URL** (info). Digest-pinned images, `scratch`, build-args and multi-stage aliases
   are exempt.
+
+- **Insecure code** (`insecure-code`) — dangerous constructs in your own source:
+  `eval`/`new Function` on non-literals, shell commands and SQL built by string
+  interpolation, disabled TLS verification, `pickle`/`yaml.load`, weak hashes and
+  `Math.random` used for secrets. Deliberately high-precision rather than
+  exhaustive — every rule that could fire on safe code requires evidence of
+  *dynamic* input, matches inside strings, regexes and comments are ignored (a
+  description of code is not code), and findings in test files drop one severity
+  step. JS/TS and Python.
+- **Dead links** (`dead-links`) — the external http(s) links your repo publishes,
+  checked one HEAD each: 404/410 are reported as dead, unreachable hosts are
+  reported separately because "the site is gone" and "the page moved" call for
+  different fixes. Collected from markdown, `package.json` metadata and code
+  *comments* only — a URL in a string literal is an API endpoint, not a link
+  anyone follows. Private, loopback and reserved-documentation addresses are
+  never requested. Sibling to `broken-doc-links`, which covers relative paths.
 
 These join the existing hygiene scanners (missing project files / tests / CI,
 leftover `console`/`debugger`, broken doc links, bus-factor risk).
