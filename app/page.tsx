@@ -254,15 +254,14 @@ export default function Page() {
             </TabsList>
 
             <TabsContent value="overview" className="mt-6">
-              <div className="mb-6">
-                <AiSummaryCard
-                  repoId={current.id}
-                  owner={current.owner}
-                  name={current.name}
-                  issues={issues}
-                  weights={weights}
-                />
-              </div>
+              <AiSummaryCard
+                repoId={current.id}
+                owner={current.owner}
+                name={current.name}
+                issues={issues}
+                weights={weights}
+              />
+
               <div className="grid gap-6 lg:grid-cols-[260px_1fr]">
                 <GradeCard grade={repo.grade} score={repo.score} lastScan={repo.lastScan} />
                 <IssueBreakdown issues={issues} />

@@ -1,9 +1,14 @@
 "use client"
 
-import { GitBranch, Trash2, ScanLine, LayoutGrid } from "lucide-react"
+import { useEffect, useState } from "react"
+import { GitBranch, Trash2, ScanLine, LayoutGrid, PanelLeftClose, PanelLeftOpen } from "lucide-react"
 import type { Grade } from "@/lib/mock-data"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+
+/** Persisted so the choice survives a reload — a layout preference you have to
+ * re-make every visit is not a preference. */
+const COLLAPSE_KEY = "repo-anti-rot:sidebar-collapsed:v1"
 
 export interface SidebarRepo {
   id: string
@@ -38,34 +43,79 @@ export function RepoSidebar({
   onShowOverview?: () => void
 }) {
   const overviewActive = activeId === "__overview__"
+  const [collapsed, setCollapsed] = useState(false)
+
+  // Read after mount: localStorage does not exist during SSR, and reading it in
+  // render would hydrate to a different width than the server drew.
+  useEffect(() => {
+    try {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setCollapsed(localStorage.getItem(COLLAPSE_KEY) === "1")
+    } catch {
+      /* ignore unavailable storage */
+    }
+  }, [])
+
+  function toggleCollapsed() {
+    setCollapsed((prev) => {
+      const next = !prev
+      try {
+        localStorage.setItem(COLLAPSE_KEY, next ? "1" : "0")
+      } catch {
+        /* ignore unavailable storage */
+      }
+      return next
+    })
+  }
+
   return (
-    <aside className="sticky top-14 hidden h-[calc(100vh-3.5rem)] w-64 shrink-0 flex-col border-r border-border lg:flex">
+    <aside
+      className={cn(
+        "sticky top-14 hidden h-[calc(100vh-3.5rem)] shrink-0 flex-col border-r border-border transition-[width] duration-200 lg:flex",
+        collapsed ? "w-14" : "w-64",
+      )}
+    >
+      <div className={cn("flex px-2 pt-3", collapsed ? "justify-center" : "justify-end")}>
+        <button
+          onClick={toggleCollapsed}
+          aria-expanded={!collapsed}
+          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          className="rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-accent/60 hover:text-foreground"
+        >
+          {collapsed ? <PanelLeftOpen className="size-4" /> : <PanelLeftClose className="size-4" />}
+        </button>
+      </div>
       {onShowOverview && (
-        <div className="px-2 pt-3">
+        <div className="px-2 pt-1">
           <button
             onClick={onShowOverview}
+            title={collapsed ? "All repositories" : undefined}
             className={cn(
-              "flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors",
+              "flex w-full items-center gap-2 rounded-md py-2 text-sm transition-colors",
+              collapsed ? "justify-center px-0" : "px-3",
               overviewActive ? "bg-accent text-foreground" : "text-foreground/90 hover:bg-accent/60",
             )}
           >
             <LayoutGrid className="size-4 shrink-0 text-muted-foreground" />
-            All repositories
+            {!collapsed && "All repositories"}
           </button>
         </div>
       )}
-      <div className="px-4 py-3">
-        <p className="px-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
-          Repositories
-          {repositories.length > 0 && (
-            <span className="ml-1.5 font-mono normal-case text-muted-foreground/70">
-              {repositories.length}
-            </span>
-          )}
-        </p>
-      </div>
-      <nav className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-2">
-        {repositories.length === 0 && (
+      {!collapsed && (
+        <div className="px-4 py-3">
+          <p className="px-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+            Repositories
+            {repositories.length > 0 && (
+              <span className="ml-1.5 font-mono normal-case text-muted-foreground/70">
+                {repositories.length}
+              </span>
+            )}
+          </p>
+        </div>
+      )}
+      <nav className={cn("flex flex-1 flex-col gap-0.5 overflow-y-auto px-2", collapsed && "pt-2")}>
+        {repositories.length === 0 && !collapsed && (
           <p className="px-2 py-2 text-xs text-muted-foreground">No repositories scanned yet.</p>
         )}
         {repositories.map((repo) => {
@@ -80,7 +130,13 @@ export function RepoSidebar({
             >
               <button
                 onClick={() => onSelect(repo.id)}
-                className="flex min-w-0 flex-1 items-center gap-3 px-2 py-2 text-left text-sm"
+                // Collapsed the row is a grade badge only, so the title carries
+                // the name and score the label no longer has room for.
+                title={collapsed ? `${repo.name} · ${repo.score}` : undefined}
+                className={cn(
+                  "flex min-w-0 flex-1 items-center py-2 text-left text-sm",
+                  collapsed ? "justify-center px-0" : "gap-3 px-2",
+                )}
               >
                 <span
                   className={cn(
@@ -90,22 +146,24 @@ export function RepoSidebar({
                 >
                   {repo.grade}
                 </span>
-                <span className="min-w-0 flex-1">
-                  <span className={cn("block truncate", active ? "text-foreground" : "text-foreground/90")}>
-                    {repo.name}
+                {!collapsed && (
+                  <span className="min-w-0 flex-1">
+                    <span className={cn("block truncate", active ? "text-foreground" : "text-foreground/90")}>
+                      {repo.name}
+                    </span>
+                    <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <GitBranch className="size-3 shrink-0" />
+                      <span className="truncate">{repo.defaultBranch}</span>
+                      <span className="text-muted-foreground/50">·</span>
+                      <span className="font-mono tabular-nums">{repo.score}</span>
+                    </span>
+                    <span className="block truncate text-[11px] text-muted-foreground/70">
+                      {repo.lastScan}
+                    </span>
                   </span>
-                  <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                    <GitBranch className="size-3 shrink-0" />
-                    <span className="truncate">{repo.defaultBranch}</span>
-                    <span className="text-muted-foreground/50">·</span>
-                    <span className="font-mono tabular-nums">{repo.score}</span>
-                  </span>
-                  <span className="block truncate text-[11px] text-muted-foreground/70">
-                    {repo.lastScan}
-                  </span>
-                </span>
+                )}
               </button>
-              {onRemove && (
+              {onRemove && !collapsed && (
                 <button
                   onClick={() => onRemove(repo.id)}
                   aria-label={`Remove ${repo.name}`}
@@ -121,10 +179,15 @@ export function RepoSidebar({
       </nav>
 
       {onNewScan && (
-        <div className="border-t border-border p-3">
-          <Button onClick={onNewScan} variant="secondary" className="w-full justify-start gap-2">
+        <div className={cn("border-t border-border", collapsed ? "p-2" : "p-3")}>
+          <Button
+            onClick={onNewScan}
+            variant="secondary"
+            title={collapsed ? "New scan" : undefined}
+            className={cn("w-full gap-2", collapsed ? "justify-center px-0" : "justify-start")}
+          >
             <ScanLine className="size-4" />
-            New scan
+            {!collapsed && "New scan"}
           </Button>
         </div>
       )}

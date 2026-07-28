@@ -80,6 +80,12 @@ export function AiSummaryCard({ repoId, owner, name, issues, weights }: Props) {
 
   const input: SummaryInput = { repoId, owner, name, issues, weights }
 
+  // Without a key this card can never show anything but an ad for Settings, and
+  // it sits above the grade — the thing people actually came for. A feature that
+  // is unavailable should occupy the space it earns, which is none. The Settings
+  // dialog still explains what the key buys.
+  if (!hasKey) return null
+
   async function run(force: boolean) {
     setLoading(true)
     setError(null)
@@ -97,7 +103,9 @@ export function AiSummaryCard({ repoId, owner, name, issues, weights }: Props) {
   }
 
   return (
-    <Card>
+    // Own the bottom margin: the card can render nothing, and a wrapper in the
+    // parent would leave a 24px hole where it used to be.
+    <Card className="mb-6">
       <CardHeader className="flex flex-row items-center justify-between gap-3 pb-3">
         <CardTitle className="flex items-center gap-2 text-base">
           <Sparkles className="size-4 text-primary" />
@@ -131,12 +139,7 @@ export function AiSummaryCard({ repoId, owner, name, issues, weights }: Props) {
       </CardHeader>
       {!collapsed && (
       <CardContent className="text-sm">
-        {!hasKey ? (
-          <p className="text-muted-foreground">
-            Add an OpenRouter key in <span className="font-medium text-foreground">Settings</span> to
-            generate a one-paragraph health summary for this repo.
-          </p>
-        ) : loading && !summary ? (
+        {loading && !summary ? (
           <p className="flex items-center gap-2 text-muted-foreground">
             <Loader2 className="size-4 animate-spin" />
             Analyzing {issues.length} finding{issues.length === 1 ? "" : "s"}…
