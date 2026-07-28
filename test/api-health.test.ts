@@ -11,6 +11,9 @@ import { GET } from "@/app/api/health/route"
  * above the imports, so the route is imported statically — a top-level
  * `await import` would need target ES2017+ and this tsconfig targets ES6.
  */
+// Reached transitively through the share-store check; throws outside an RSC.
+vi.mock("server-only", () => ({}))
+
 const run = vi.fn()
 vi.mock("@/lib/clone-runner", () => ({
   CLI_DIST: "/nonexistent/packages/cli/dist/index.js",
@@ -20,12 +23,18 @@ vi.mock("@/lib/clone-runner", () => ({
 type Body = {
   ok: boolean
   canScan: boolean
-  checks: Record<"git" | "cli" | "tmp", { ok: boolean; detail: string }>
+  durableShares: boolean
+  checks: Record<"git" | "cli" | "tmp" | "shareStore", { ok: boolean; detail: string }>
   hint?: string
 }
 
+const savedEnv = { ...process.env }
+
 beforeEach(() => {
   run.mockReset()
+  process.env = { ...savedEnv }
+  delete process.env.SUPABASE_URL
+  delete process.env.SUPABASE_SERVICE_ROLE_KEY
 })
 
 describe("GET /api/health", () => {
@@ -64,6 +73,41 @@ describe("GET /api/health", () => {
     run.mockResolvedValue({ code: 0, stdout: "git version 2.43.0", stderr: "" })
     const body = (await (await GET()).json()) as Body
     expect(body.checks.tmp.ok).toBe(true)
+  })
+
+  /**
+   * Both share backends behave identically from outside, so a deploy that
+   * silently fell back to the filesystem looks fine right up until a redeploy
+   * wipes every posted link. The endpoint has to say which one is live.
+   */
+  it("warns when share links are stored somewhere ephemeral", async () => {
+    run.mockResolvedValue({ code: 0, stdout: "git version 2.43.0", stderr: "" })
+    const body = (await (await GET()).json()) as Body
+
+    expect(body.durableShares).toBe(false)
+    expect(body.checks.shareStore.detail).toContain("EPHEMERAL")
+    expect(body.checks.shareStore.detail).toContain("SUPABASE_URL")
+  })
+
+  it("reports a durable share store once Supabase is configured", async () => {
+    process.env.SUPABASE_URL = "https://proj.supabase.co"
+    process.env.SUPABASE_SERVICE_ROLE_KEY = "service-key"
+    run.mockResolvedValue({ code: 0, stdout: "git version 2.43.0", stderr: "" })
+    const body = (await (await GET()).json()) as Body
+
+    expect(body.durableShares).toBe(true)
+    expect(body.checks.shareStore.detail).toContain("supabase")
+    // The secret must not travel in a public health response.
+    expect(JSON.stringify(body)).not.toContain("service-key")
+  })
+
+  it("keeps scan readiness independent of the share backend", async () => {
+    // A host can be perfectly good at scanning while storing links somewhere
+    // that forgets them; conflating the two would hide a real scan failure.
+    run.mockResolvedValue({ code: 0, stdout: "git version 2.43.0", stderr: "" })
+    const body = (await (await GET()).json()) as Body
+    expect(body.durableShares).toBe(false)
+    expect(body.checks.git.ok).toBe(true)
   })
 
   it("is never cached — a cached health check is worse than none", async () => {

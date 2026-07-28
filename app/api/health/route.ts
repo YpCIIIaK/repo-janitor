@@ -3,6 +3,7 @@ import { access, mkdtemp, rm, writeFile } from "fs/promises"
 import { tmpdir } from "os"
 import { join } from "path"
 import { CLI_DIST, run } from "@/lib/clone-runner"
+import { supabaseConfig } from "@/lib/share-db"
 
 /**
  * Deployment health check.
@@ -70,15 +71,38 @@ async function checkTmp(): Promise<Check> {
   }
 }
 
+/**
+ * Which share backend is live.
+ *
+ * Both backends behave identically from outside, so a deploy that silently fell
+ * back to the filesystem looks exactly like a working one — right up until a
+ * redeploy wipes every link people have posted. Report it rather than leaving it
+ * to be discovered. Names the backend only; the URL and key stay server-side.
+ */
+function checkShareStore(): Check {
+  return supabaseConfig()
+    ? { ok: true, detail: "supabase (durable)" }
+    : {
+        ok: false,
+        detail:
+          "filesystem (EPHEMERAL) — share links will not survive a redeploy. "
+          + "Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY.",
+      }
+}
+
 export async function GET() {
   const [git, cli, tmp] = await Promise.all([checkGit(), checkCli(), checkTmp()])
+  const shareStore = checkShareStore()
+  // Scanning does not depend on the share backend — a host can be perfectly good
+  // at scanning while storing links somewhere that forgets them.
   const canScan = git.ok && cli.ok && tmp.ok
 
   return NextResponse.json(
     {
       ok: true, // the app itself is up; `canScan` is the interesting part
       canScan,
-      checks: { git, cli, tmp },
+      durableShares: shareStore.ok,
+      checks: { git, cli, tmp, shareStore },
       node: process.version,
       uptimeSec: Math.round(process.uptime()),
       hint: canScan
