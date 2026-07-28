@@ -7,6 +7,7 @@ import { filterMode, type IssueMode } from "@/lib/issue-modes"
 import { severityStyle } from "@/lib/issue-format"
 import { useSnoozed, partitionSnoozed } from "@/lib/snooze-store"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { EmptyState } from "@/components/ui/empty-state"
 import { IssuesTable, type TableRepo } from "./issues-table"
 import { cn } from "@/lib/utils"
 
@@ -88,12 +89,14 @@ export function ModePanel({
         </CardHeader>
         <CardContent>
           {live.length === 0 ? (
-            // An empty state that says what was checked, so "nothing here" reads
-            // as a result rather than as a scanner that failed to run.
-            <p className="flex items-start gap-2 text-sm text-muted-foreground">
-              <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-chart-1" />
-              {copy.clean}
-            </p>
+            // Says what was checked, so "nothing here" reads as a result rather
+            // than as a scanner that failed to run.
+            <EmptyState
+              icon={<CheckCircle2 className="text-success" />}
+              title={`${copy.title}: all clear`}
+              description={copy.clean}
+              className="border-success/25 bg-success/5"
+            />
           ) : (
             <div className="flex flex-wrap items-center gap-2">
               <span className="font-mono text-2xl font-semibold tabular-nums">{live.length}</span>

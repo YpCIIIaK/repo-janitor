@@ -13,6 +13,7 @@ import {
   LayoutList,
   Layers,
   MoreHorizontal,
+  SearchX,
 } from "lucide-react"
 import {
   categoryLabels,
@@ -29,6 +30,8 @@ import { formatAge, issueAsMarkdown, severityStyle } from "@/lib/issue-format"
 import { IssueDrawer } from "@/components/repo-anti-rot/issue-drawer"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { EmptyState } from "@/components/ui/empty-state"
+import { Segmented } from "@/components/ui/segmented"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -322,20 +325,25 @@ export function IssuesTable({
               )}
             </DropdownMenuContent>
           </DropdownMenu>
-          <Select value={severity} onValueChange={setSeverity}>
-            <SelectTrigger className="h-8 w-[130px] bg-secondary text-sm">
-              <SelectValue placeholder="Severity" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All severity</SelectItem>
-              <SelectItem value="actionable">Actionable only</SelectItem>
-              {(Object.keys(severityLabels) as Severity[]).map((s) => (
-                <SelectItem key={s} value={s}>
-                  {severityLabels[s]}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          {/* Severity has four options and gets changed constantly, so it is a
+              segmented control rather than a dropdown: the current value and the
+              alternatives are both visible, and switching is one click instead
+              of two. Category stays a Select — it has too many options to lay
+              out flat. */}
+          <Segmented
+            aria-label="Filter by severity"
+            size="sm"
+            value={severity}
+            onChange={setSeverity}
+            items={[
+              { value: "all", label: "All" },
+              { value: "actionable", label: "Actionable" },
+              ...(Object.keys(severityLabels) as Severity[]).map((s) => ({
+                value: s,
+                label: severityLabels[s],
+              })),
+            ]}
+          />
           <Select value={category} onValueChange={setCategory}>
             <SelectTrigger className="h-8 w-[150px] bg-secondary text-sm">
               <SelectValue placeholder="Category" />
@@ -353,9 +361,18 @@ export function IssuesTable({
       </CardHeader>
       <CardContent className="p-0">
         {filtered.length === 0 ? (
-          <p className="border-t border-border px-4 py-10 text-center text-sm text-muted-foreground">
-            No issues match these filters.
-          </p>
+          <div className="border-t border-border p-4">
+            <EmptyState
+              icon={<SearchX />}
+              title="No matching findings"
+              description={
+                base.length === 0
+                  ? "This scan found nothing at all — which is the good outcome."
+                  : "Nothing matches the current filters. Widen the severity or category, or clear the search."
+              }
+              className="border-0 py-8"
+            />
+          </div>
         ) : grouped ? (
           <div className="border-t border-border">
             {groups.map(({ cat, list }) => {
