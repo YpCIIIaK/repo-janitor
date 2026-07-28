@@ -17,6 +17,11 @@ import { ShareBox } from "./share-box"
  *
  * A popover rather than a bare button: publishing needs the consent text in view
  * at the moment of the decision, not on a page the user has already left.
+ *
+ * This is the one place in the otherwise-English dashboard that is translated,
+ * and deliberately so — see the boundary rules in `lib/i18n.ts`. Agreeing to
+ * something you cannot read is not consent, so the consent rule outranks the
+ * "dashboard is English" rule rather than being an exception to it.
  */
 export function ShareButton({ report }: { report: unknown }) {
   const { t } = useLocale()

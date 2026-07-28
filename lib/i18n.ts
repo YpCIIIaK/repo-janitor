@@ -2,14 +2,31 @@
  * Localisation for the public-facing pages.
  *
  * Deliberately a plain typed dictionary rather than an i18n library. The public
- * surface — welcome screen, scan form, consent notice, shared report — is a few
- * dozen strings; a runtime, a loader and a message-format parser would be more
- * dependency than content. The dependency tree of this project is a thing we
- * report on, so it is a thing we keep honest.
+ * surface is a few dozen strings; a runtime, a loader and a message-format
+ * parser would be more dependency than content. The dependency tree of this
+ * project is a thing we report on, so it is a thing we keep honest.
  *
- * The dashboard itself stays English. Translating 500 strings of table headers
- * and settings, and re-translating them on every feature, buys nothing until
- * somebody actually asks.
+ * ## Where the boundary runs
+ *
+ * Three rules, in this order:
+ *
+ *  1. **Public pages are translated.** The landing page, the scan form embedded
+ *     in it, the results it shows, and the shared-report page at `/r/…`. These
+ *     are what a stranger who followed a link sees, and they see them before
+ *     deciding whether this tool is for them.
+ *
+ *  2. **Consent text is translated wherever it appears** — including inside the
+ *     English dashboard. Agreeing to something you cannot read is not consent,
+ *     so this rule outranks rule 3 rather than being an exception to it.
+ *
+ *  3. **The dashboard is English.** Translating several hundred strings of table
+ *     headers, filters and settings — and re-translating them with every feature
+ *     — buys nothing until somebody actually asks.
+ *
+ * Scanner and category names (`Dependency Funeral`, `Env Lifecycle`) stay in
+ * English everywhere: they are identifiers that appear in the CLI, the JSON
+ * report and the config file, and a translated name would not match what the
+ * user greps for.
  *
  * Adding a locale is one object here. Missing a key is a compile error, not a
  * blank space at runtime: every locale is typed against the English dictionary.
@@ -31,6 +48,25 @@ const en = {
   "welcome.title": "Welcome to Repo Anti-Rot",
   "welcome.lead":
     "Point Repo Anti-Rot at any public git repo and it will measure the decay — secrets, stale branches, dead code and dependency rot — then hand you a health grade.",
+
+  // The scan form. It sits on the landing page, so it is rule 1, not rule 3.
+  "scan.formTitle": "Run a real scan",
+  "scan.formLead":
+    "Paste one or more public git repository URLs, one per line. Each is cloned and scanned by the Repo Anti-Rot engine — no mock data.",
+  "scan.run": "Run scan",
+  "scan.running": "Scanning…",
+  "scan.urls": "{count} URL · max {max} per run",
+  "scan.starting": "Starting…",
+  "scan.working": "Working…",
+  "scan.failed": "Scan failed",
+  "scan.summary": "{total} scanned · {ok} succeeded",
+  "scan.downloadAll": "Download all (JSON)",
+  "scan.copyJson": "Copy JSON",
+  "scan.copied": "Copied",
+  "scan.downloadJson": "Download JSON",
+  "scan.downloadMarkdown": "Download Markdown",
+  "scan.openDashboard": "Open in dashboard",
+  "scan.clean": "No issues detected — clean scan.",
 
   "feature.secrets.title": "Secrets & env drift",
   "feature.secrets.body":
@@ -82,6 +118,24 @@ const ru: Messages = {
   "welcome.title": "Repo Anti-Rot",
   "welcome.lead":
     "Укажите любой публичный git-репозиторий, и Repo Anti-Rot измерит его распад — секреты, заброшенные ветки, мёртвый код и гниль зависимостей — и выставит оценку здоровья.",
+
+  "scan.formTitle": "Запустить настоящий скан",
+  "scan.formLead":
+    "Вставьте ссылки на публичные git-репозитории, по одной в строке. Каждый будет склонирован и просканирован движком Repo Anti-Rot — без выдуманных данных.",
+  "scan.run": "Запустить скан",
+  "scan.running": "Сканируем…",
+  "scan.urls": "ссылок: {count} · не больше {max} за раз",
+  "scan.starting": "Начинаем…",
+  "scan.working": "Работаем…",
+  "scan.failed": "Скан не удался",
+  "scan.summary": "просканировано: {total} · успешно: {ok}",
+  "scan.downloadAll": "Скачать всё (JSON)",
+  "scan.copyJson": "Скопировать JSON",
+  "scan.copied": "Скопировано",
+  "scan.downloadJson": "Скачать JSON",
+  "scan.downloadMarkdown": "Скачать Markdown",
+  "scan.openDashboard": "Открыть в дашборде",
+  "scan.clean": "Ничего не найдено — репозиторий чист.",
 
   "feature.secrets.title": "Секреты и env",
   "feature.secrets.body":

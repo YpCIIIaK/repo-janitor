@@ -19,6 +19,36 @@ describe("message tables", () => {
     }
   })
 
+  /**
+   * The boundary documented at the top of lib/i18n.ts: public pages are
+   * translated, the dashboard is English, and consent text is translated
+   * wherever it appears. It drifted once already — the scan form moved onto the
+   * landing page and stayed English, so half the page was translated and half
+   * was not, which is worse than a consistently English page.
+   *
+   * This asserts the two components that sit on public pages actually call `t`,
+   * so the next person to add a string there finds out from a test rather than
+   * from a screenshot.
+   */
+  it("keeps every string on the public pages translated", async () => {
+    const fs = await import("node:fs/promises")
+    const publicComponents = [
+      "components/repo-anti-rot/welcome-screen.tsx",
+      "components/repo-anti-rot/scan-runner.tsx",
+      "components/repo-anti-rot/share-box.tsx",
+    ]
+
+    for (const file of publicComponents) {
+      const src = await fs.readFile(file, "utf-8")
+      // Visible text sits between JSX tags. Anything left as a bare English
+      // sentence there is a string that skipped the dictionary.
+      const bareText = [...src.matchAll(/>\s*([A-Z][a-z]+(?:\s+[A-Za-z,'—-]+){2,})\s*</g)].map(
+        (m) => m[1],
+      )
+      expect(bareText, `${file} has untranslated visible text`).toEqual([])
+    }
+  })
+
   it("has no empty translations", () => {
     for (const locale of LOCALES) {
       for (const [key, value] of Object.entries(messages[locale])) {

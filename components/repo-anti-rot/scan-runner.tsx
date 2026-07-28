@@ -26,6 +26,7 @@ import { readAiSettings, isAiEnabled } from "@/lib/ai-settings"
 import { runScanStream } from "@/lib/scan-client"
 import { Progress } from "@/components/ui/progress"
 import { ShareBox } from "./share-box"
+import { useLocale } from "@/components/i18n/locale-provider"
 
 type Grade = "A" | "B" | "C" | "D" | "F"
 type Severity = "critical" | "warning" | "info"
@@ -143,6 +144,7 @@ function reportToMarkdown(report: ScanReport): string {
 }
 
 function ResultCard({ result, onOpen }: { result: ScanResult; onOpen?: (repoId: string) => void }) {
+  const { t } = useLocale()
   const [expanded, setExpanded] = useState<string | null>(null)
   const [copied, setCopied] = useState(false)
 
@@ -153,7 +155,7 @@ function ResultCard({ result, onOpen }: { result: ScanResult; onOpen?: (repoId: 
           <AlertTriangle className="mt-0.5 size-4 shrink-0 text-destructive" />
           <div className="min-w-0">
             <p className="truncate font-mono text-sm">{result.url}</p>
-            <p className="mt-1 break-words text-xs text-destructive">{result.error ?? "Scan failed"}</p>
+            <p className="mt-1 break-words text-xs text-destructive">{result.error ?? t("scan.failed")}</p>
           </div>
         </CardContent>
       </Card>
@@ -215,13 +217,13 @@ function ResultCard({ result, onOpen }: { result: ScanResult; onOpen?: (repoId: 
         {/* Severity counts */}
         <div className="flex gap-2 text-xs">
           <span className={cn("rounded-full border px-2 py-0.5", severityStyle.critical)}>
-            {counts.critical} critical
+            {counts.critical} {t("issues.critical")}
           </span>
           <span className={cn("rounded-full border px-2 py-0.5", severityStyle.warning)}>
-            {counts.warning} warning
+            {counts.warning} {t("issues.warning")}
           </span>
           <span className={cn("rounded-full border px-2 py-0.5", severityStyle.info)}>
-            {counts.info} info
+            {counts.info} {t("issues.info")}
           </span>
         </div>
 
@@ -282,7 +284,7 @@ function ResultCard({ result, onOpen }: { result: ScanResult; onOpen?: (repoId: 
           </div>
         ) : (
           <p className="rounded-md border border-border py-6 text-center text-sm text-muted-foreground">
-            No issues detected — clean scan.
+            {t("scan.clean")}
           </p>
         )}
 
@@ -291,7 +293,7 @@ function ResultCard({ result, onOpen }: { result: ScanResult; onOpen?: (repoId: 
           {onOpen && (
             <Button size="sm" onClick={() => onOpen(`${repo.owner}/${repo.name}`)}>
               <Maximize2 className="size-4" />
-              Open in dashboard
+              {t("scan.openDashboard")}
             </Button>
           )}
           <Button
@@ -300,7 +302,7 @@ function ResultCard({ result, onOpen }: { result: ScanResult; onOpen?: (repoId: 
             onClick={() => downloadFile(`${slug}.repo-anti-rot.json`, JSON.stringify(report, null, 2), "application/json")}
           >
             <FileJson className="size-4" />
-            Download JSON
+            {t("scan.downloadJson")}
           </Button>
           <Button
             variant="outline"
@@ -308,11 +310,11 @@ function ResultCard({ result, onOpen }: { result: ScanResult; onOpen?: (repoId: 
             onClick={() => downloadFile(`${slug}.repo-anti-rot.md`, reportToMarkdown(report), "text/markdown")}
           >
             <FileText className="size-4" />
-            Download Markdown
+            {t("scan.downloadMarkdown")}
           </Button>
           <Button variant="ghost" size="sm" onClick={copyJson}>
             {copied ? <Check className="size-4" /> : <Copy className="size-4" />}
-            {copied ? "Copied" : "Copy JSON"}
+            {copied ? t("scan.copied") : t("scan.copyJson")}
           </Button>
         </div>
 
@@ -325,6 +327,7 @@ function ResultCard({ result, onOpen }: { result: ScanResult; onOpen?: (repoId: 
 }
 
 export function ScanRunner({ onOpen }: { onOpen?: (repoId: string) => void }) {
+  const { t } = useLocale()
   const [input, setInput] = useState("")
   const [loading, setLoading] = useState(false)
   const [progress, setProgress] = useState(0) // 0..1 overall
@@ -349,7 +352,7 @@ export function ScanRunner({ onOpen }: { onOpen?: (repoId: string) => void }) {
     setError(null)
     setResults(null)
     setProgress(0)
-    setProgressLabel("Starting…")
+    setProgressLabel(t("scan.starting"))
 
     // Reserve the last 20% of the bar for the AI pass when it's enabled.
     const aiOn = isAiEnabled(readAiSettings())
@@ -403,13 +406,10 @@ export function ScanRunner({ onOpen }: { onOpen?: (repoId: string) => void }) {
           has to read as the focus rather than as the first of several panels. */}
       <Card className="border-border/80 shadow-lg shadow-primary/5 ring-1 ring-primary/5">
         <CardHeader>
-          <CardTitle className="text-base">Run a real scan</CardTitle>
+          <CardTitle className="text-base">{t("scan.formTitle")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
-          <p className="text-sm text-muted-foreground">
-            Paste one or more public git repository URLs (one per line). Each is cloned and scanned by the
-            Repo Anti-Rot engine — no mock data.
-          </p>
+          <p className="text-sm text-muted-foreground">{t("scan.formLead")}</p>
           <Textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -420,18 +420,18 @@ export function ScanRunner({ onOpen }: { onOpen?: (repoId: string) => void }) {
           />
           <div className="flex items-center justify-between">
             <span className="text-xs text-muted-foreground">
-              {urls.length} URL{urls.length === 1 ? "" : "s"} · max 20 per run
+              {t("scan.urls", { count: urls.length, max: 20 })}
             </span>
             <Button onClick={runScan} disabled={loading || urls.length === 0}>
               {loading ? (
                 <>
                   <Loader2 className="size-4 animate-spin" />
-                  Scanning…
+                  {t("scan.running")}
                 </>
               ) : (
                 <>
                   <Play className="size-4" />
-                  Run scan
+                  {t("scan.run")}
                 </>
               )}
             </Button>
@@ -443,7 +443,7 @@ export function ScanRunner({ onOpen }: { onOpen?: (repoId: string) => void }) {
       {loading && (
         <div className="space-y-2">
           <div className="flex items-center justify-between text-xs text-muted-foreground">
-            <span className="truncate">{progressLabel || "Working…"}</span>
+            <span className="truncate">{progressLabel || t("scan.working")}</span>
             <span className="tabular-nums">{Math.round(progress * 100)}%</span>
           </div>
           <Progress value={progress * 100} />
@@ -455,11 +455,11 @@ export function ScanRunner({ onOpen }: { onOpen?: (repoId: string) => void }) {
           {okResults.length > 1 && (
             <div className="flex items-center justify-between gap-3">
               <p className="text-sm text-muted-foreground">
-                {results.length} scanned · {okResults.length} succeeded
+                {t("scan.summary", { total: results.length, ok: okResults.length })}
               </p>
               <Button variant="outline" size="sm" onClick={downloadAll}>
                 <Download className="size-4" />
-                Download all (JSON)
+                {t("scan.downloadAll")}
               </Button>
             </div>
           )}

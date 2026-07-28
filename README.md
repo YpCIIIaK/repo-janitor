@@ -515,6 +515,27 @@ rot:
 These join the existing hygiene scanners (missing project files / tests / CI,
 leftover `console`/`debugger`, broken doc links, bus-factor risk).
 
+## Interface languages
+
+The **public pages** — the landing page, the scan form on it, its results, and
+the shared-report page at `/r/…` — are available in English and Russian, chosen
+from `Accept-Language` and overridable with the switcher (the choice is kept in
+the `rar_locale` cookie).
+
+The **dashboard is English only**, on purpose: several hundred strings of table
+headers, filters and settings, re-translated with every feature, buys nothing
+until somebody asks. One exception, which is really a stronger rule — the
+**consent text is translated wherever it appears**, including in the dashboard,
+because agreeing to something you cannot read is not consent.
+
+Scanner and category names (`Dependency Funeral`, `Env Lifecycle`) stay English
+everywhere: they are identifiers that also appear in the CLI, the JSON report and
+`.repo-anti-rot.json`, so a translated name would not match what you grep for.
+
+Adding a locale is one object in [`lib/i18n.ts`](lib/i18n.ts) — every locale is
+typed against the English table, so a missing key is a compile error rather than
+a blank space at runtime.
+
 ## Language support
 
 Some checks are language-agnostic (git history, doc links, repo bloat); others are
