@@ -33,6 +33,8 @@ export interface Issue {
   evidence?: string
   /** Optional AI assessment, attached client-side when AI analysis is enabled. */
   aiNote?: string
+  /** Id of the scanner that produced this finding; absent in pre-v1.1 reports. */
+  scanner?: string
 }
 
 export interface TrendPoint {

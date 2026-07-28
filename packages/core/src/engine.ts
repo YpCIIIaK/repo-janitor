@@ -191,7 +191,12 @@ export async function runScan(
   let completed = 0
   for (const scanner of scanners) {
     try {
-      issues.push(...(await scanner.run(ctx)))
+      // Stamp the producing scanner here rather than asking every scanner to set
+      // it: one place, impossible to forget, and a scanner cannot claim to be
+      // another one.
+      for (const issue of await scanner.run(ctx)) {
+        issues.push({ ...issue, scanner: scanner.id })
+      }
     } catch (err) {
       ctx.log(`[repo-anti-rot] scanner "${scanner.id}" failed: ${String(err)}`)
     }

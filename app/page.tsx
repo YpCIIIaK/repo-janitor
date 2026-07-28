@@ -26,7 +26,9 @@ import { NewScanDialog } from "@/components/repo-anti-rot/new-scan-dialog"
 import { WelcomeScreen } from "@/components/repo-anti-rot/welcome-screen"
 import { RepoOverview } from "@/components/repo-anti-rot/repo-overview"
 import { useRepos, removeRepo, repoStats, repoTrend, countSeverity, timeAgo, repoDiff, repoDiffDetail, newIssueIds, issueDensity } from "@/lib/reports-store"
-import { Workflow, Info, GitGraph } from "lucide-react"
+import { Workflow, Info, GitGraph, ShieldCheck, Link as LinkIcon } from "lucide-react"
+import { ModePanel } from "@/components/repo-anti-rot/mode-panel"
+import { filterMode } from "@/lib/issue-modes"
 import { useSnoozed, partitionSnoozed, clearSnoozedForRepo } from "@/lib/snooze-store"
 import { computeScore, scoreToGrade } from "@/lib/score"
 import { cn } from "@/lib/utils"
@@ -109,6 +111,13 @@ export default function Page() {
   const { live: issues } = partitionSnoozed(current.id, allIssues, snoozed)
   const liveScore = computeScore(issues, weights)
   const liveGrade = scoreToGrade(liveScore)
+
+  // Tab badges count LIVE findings, so snoozing the last one empties the badge
+  // instead of promising something the tab no longer shows.
+  const modeCounts = {
+    security: filterMode(issues, "security").length,
+    links: filterMode(issues, "links").length,
+  }
 
   const repo = {
     id: current.id,
@@ -238,6 +247,27 @@ export default function Page() {
             <TabsList>
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="issues">Issues</TabsTrigger>
+              {/* Modes: one question each, over the same scan. Counts live on the
+                  trigger so you can see there is something to look at without
+                  opening the tab. */}
+              <TabsTrigger value="security">
+                <ShieldCheck className="size-4" />
+                Security
+                {modeCounts.security > 0 && (
+                  <span className="ml-1 rounded-full bg-muted px-1.5 font-mono text-[10px] tabular-nums">
+                    {modeCounts.security}
+                  </span>
+                )}
+              </TabsTrigger>
+              <TabsTrigger value="links">
+                <LinkIcon className="size-4" />
+                Links
+                {modeCounts.links > 0 && (
+                  <span className="ml-1 rounded-full bg-muted px-1.5 font-mono text-[10px] tabular-nums">
+                    {modeCounts.links}
+                  </span>
+                )}
+              </TabsTrigger>
               <TabsTrigger value="tree">
                 <Workflow className="size-4" />
                 Tree
@@ -293,6 +323,14 @@ export default function Page() {
               <div className="mt-6">
                 <IssuesTable issues={allIssues} repo={tableRepo} query={search} newIds={newIds} fixed={fixedIssues} />
               </div>
+            </TabsContent>
+
+            <TabsContent value="security" className="mt-6">
+              <ModePanel mode="security" issues={allIssues} repo={tableRepo} query={search} />
+            </TabsContent>
+
+            <TabsContent value="links" className="mt-6">
+              <ModePanel mode="links" issues={allIssues} repo={tableRepo} query={search} />
             </TabsContent>
 
             <TabsContent value="tree" className="mt-6">

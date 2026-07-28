@@ -62,6 +62,15 @@ export const issueSchema = z.object({
    * AI analysis is enabled; the core scanners never populate it.
    */
   aiNote: z.string().optional(),
+  /**
+   * Id of the scanner that produced this finding, stamped by the engine.
+   *
+   * Consumers that need to group findings by their source — the dashboard's
+   * per-mode views, for one — would otherwise have to infer it from the shape of
+   * `id`, which silently breaks the day an id format changes. Optional because
+   * reports written before this field existed are still valid.
+   */
+  scanner: z.string().optional(),
 })
 export type Issue = z.infer<typeof issueSchema>
 

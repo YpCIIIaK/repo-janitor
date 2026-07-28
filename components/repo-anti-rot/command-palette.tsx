@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect } from "react"
-import { FileDown, FileJson, FileText, LayoutGrid, ListTree, PlusCircle, Boxes, GitBranch, Workflow, Info, GitGraph } from "lucide-react"
+import { FileDown, FileJson, FileText, LayoutGrid, Link as LinkIcon, ListTree, PlusCircle, Boxes, GitBranch, ShieldCheck, Workflow, Info, GitGraph } from "lucide-react"
 import {
   CommandDialog,
   CommandEmpty,
@@ -16,7 +16,15 @@ import { downloadReport } from "@/lib/report-export"
 import type { ScanReport } from "@/lib/reports-store"
 import type { Grade } from "@/lib/mock-data"
 
-export type PaletteTab = "overview" | "issues" | "tree" | "history" | "about" | "breakdown"
+export type PaletteTab =
+  | "overview"
+  | "issues"
+  | "security"
+  | "links"
+  | "tree"
+  | "history"
+  | "about"
+  | "breakdown"
 
 export interface PaletteRepo {
   id: string
@@ -90,6 +98,20 @@ export function CommandPalette({
             <CommandItem onSelect={run(() => onGoToTab("issues"))}>
               <ListTree />
               Issues
+            </CommandItem>
+            <CommandItem
+              keywords={["security", "vulnerabilities", "secrets", "cve", "injection", "xss"]}
+              onSelect={run(() => onGoToTab("security"))}
+            >
+              <ShieldCheck />
+              Security
+            </CommandItem>
+            <CommandItem
+              keywords={["links", "urls", "404", "dead", "broken"]}
+              onSelect={run(() => onGoToTab("links"))}
+            >
+              <LinkIcon />
+              Links
             </CommandItem>
             <CommandItem keywords={["tree", "map", "graph", "files"]} onSelect={run(() => onGoToTab("tree"))}>
               <Workflow />
