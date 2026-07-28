@@ -263,7 +263,13 @@ export default function Page() {
               />
 
               <div className="grid gap-6 lg:grid-cols-[260px_1fr]">
-                <GradeCard grade={repo.grade} score={repo.score} lastScan={repo.lastScan} />
+                <GradeCard
+                  grade={repo.grade}
+                  score={repo.score}
+                  lastScan={repo.lastScan}
+                  issues={issues}
+                  weights={weights}
+                />
                 <IssueBreakdown issues={issues} />
               </div>
               <div className="mt-6 grid gap-6 lg:grid-cols-2">
@@ -336,7 +342,13 @@ export default function Page() {
 
             <TabsContent value="breakdown" className="mt-6 space-y-6">
               <div className="grid gap-6 lg:grid-cols-[260px_1fr]">
-                <GradeCard grade={repo.grade} score={repo.score} lastScan={repo.lastScan} />
+                <GradeCard
+                  grade={repo.grade}
+                  score={repo.score}
+                  lastScan={repo.lastScan}
+                  issues={issues}
+                  weights={weights}
+                />
                 <IssueBreakdown issues={issues} />
               </div>
               <TrendChart data={trend} />

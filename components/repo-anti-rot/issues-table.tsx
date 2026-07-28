@@ -9,8 +9,10 @@ import {
   ChevronRight,
   Clipboard,
   GitCompare,
+  Info,
   LayoutList,
   Layers,
+  MoreHorizontal,
 } from "lucide-react"
 import {
   categoryLabels,
@@ -27,6 +29,12 @@ import { formatAge, issueAsMarkdown, severityStyle } from "@/lib/issue-format"
 import { IssueDrawer } from "@/components/repo-anti-rot/issue-drawer"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import {
   Select,
   SelectContent,
@@ -106,29 +114,6 @@ function IssueRow({
   )
 }
 
-/** Small inline button that copies text and flips to a checkmark briefly. */
-function CopyButton({ value, label }: { value: string; label: string }) {
-  const [copied, setCopied] = useState(false)
-  return (
-    <Button
-      size="sm"
-      variant="ghost"
-      className="h-7 gap-1.5 px-2 text-xs text-muted-foreground hover:text-foreground"
-      onClick={async () => {
-        try {
-          await navigator.clipboard.writeText(value)
-          setCopied(true)
-          setTimeout(() => setCopied(false), 1200)
-        } catch {
-          /* clipboard blocked — silently ignore */
-        }
-      }}
-    >
-      {copied ? <Check className="size-3.5 text-primary" /> : <Clipboard className="size-3.5" />}
-      {copied ? "Copied" : label}
-    </Button>
-  )
-}
 
 export function IssuesTable({
   issues,
@@ -209,6 +194,22 @@ export function IssuesTable({
       .sort((a, b) => a.worst - b.worst || b.list.length - a.list.length)
   }, [filtered])
 
+  /**
+   * Info findings are worth reading but not worth acting on — they barely move
+   * the score by design. Interleaved with criticals they pad the list and bury
+   * the things that matter, so they get their own collapsed section at the foot,
+   * the same treatment "Fixed since last scan" gets.
+   *
+   * Only when no severity filter is set: asking for "info" and getting a
+   * collapsed box would be the filter arguing with you. Grouped mode already
+   * organises by category, so it is left alone too.
+   */
+  const splitNotes = severity === "all" && !grouped
+  const mainList = splitNotes ? filtered.filter((i) => i.severity !== "info") : filtered
+  const notes = splitNotes ? filtered.filter((i) => i.severity === "info") : []
+  const [showNotes, setShowNotes] = useState(false)
+  const [copyState, setCopyState] = useState<"idle" | "copied" | "failed">("idle")
+
   const toggleSection = (cat: string) =>
     setCollapsed((prev) => {
       const next = new Set(prev)
@@ -265,31 +266,62 @@ export function IssuesTable({
               {changesOnly ? "All" : `Changes (${newIds?.size ?? 0})`}
             </Button>
           )}
-          {muted.length > 0 && (
-            <Button
-              size="sm"
-              variant="ghost"
-              className="h-8 gap-1.5 px-2 text-xs text-muted-foreground hover:text-foreground"
-              onClick={() => setShowSnoozed((s) => !s)}
-              title={showSnoozed ? "Hide snoozed findings" : "Show snoozed findings"}
-            >
-              {showSnoozed ? <BellOff className="size-4" /> : <Bell className="size-4" />}
-              {showSnoozed ? "Hide snoozed" : `Snoozed (${muted.length})`}
-            </Button>
-          )}
-          <Button
-            size="sm"
-            variant="ghost"
-            className="h-8 gap-1.5 px-2 text-xs text-muted-foreground hover:text-foreground"
-            onClick={() => setGrouped((g) => !g)}
-            title={grouped ? "Show as a flat list" : "Group by scanner"}
-          >
-            {grouped ? <LayoutList className="size-4" /> : <Layers className="size-4" />}
-            {grouped ? "Flat" : "Group"}
-          </Button>
-          {filtered.length > 0 && (
-            <CopyButton value={filtered.map(issueAsMarkdown).join("\n")} label="Copy all" />
-          )}
+          {/* Grouping, snoozed visibility and bulk copy are occasional actions.
+              In a row of seven controls they competed with the two filters people
+              reach for constantly, so they moved behind one button. */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                size="sm"
+                variant="ghost"
+                className="h-8 px-2 text-muted-foreground hover:text-foreground"
+                aria-label="More list options"
+                title="More options"
+              >
+                <MoreHorizontal className="size-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuItem onSelect={() => setGrouped((g) => !g)}>
+                {grouped ? <LayoutList className="size-4" /> : <Layers className="size-4" />}
+                {grouped ? "Show as a flat list" : "Group by scanner"}
+              </DropdownMenuItem>
+              {muted.length > 0 && (
+                <DropdownMenuItem onSelect={() => setShowSnoozed((s) => !s)}>
+                  {showSnoozed ? <BellOff className="size-4" /> : <Bell className="size-4" />}
+                  {showSnoozed ? "Hide snoozed" : `Show snoozed (${muted.length})`}
+                </DropdownMenuItem>
+              )}
+              {filtered.length > 0 && (
+                <DropdownMenuItem
+                  // preventDefault keeps the menu open, so the outcome is visible:
+                  // the clipboard write is async and can be denied by permissions,
+                  // and a copy that silently did nothing is the worst version.
+                  onSelect={async (e) => {
+                    e.preventDefault()
+                    try {
+                      await navigator.clipboard.writeText(filtered.map(issueAsMarkdown).join("\n"))
+                      setCopyState("copied")
+                    } catch {
+                      setCopyState("failed")
+                    }
+                    setTimeout(() => setCopyState("idle"), 1500)
+                  }}
+                >
+                  {copyState === "copied" ? (
+                    <Check className="size-4 text-primary" />
+                  ) : (
+                    <Clipboard className="size-4" />
+                  )}
+                  {copyState === "copied"
+                    ? "Copied"
+                    : copyState === "failed"
+                      ? "Clipboard blocked"
+                      : "Copy all as Markdown"}
+                </DropdownMenuItem>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
           <Select value={severity} onValueChange={setSeverity}>
             <SelectTrigger className="h-8 w-[130px] bg-secondary text-sm">
               <SelectValue placeholder="Severity" />
@@ -369,10 +401,38 @@ export function IssuesTable({
               )
             })}
           </div>
+        ) : mainList.length === 0 ? (
+          // Notes exist but nothing actionable does — say so, rather than showing
+          // an empty list above a collapsed box.
+          <p className="border-t border-border px-4 py-10 text-center text-sm text-muted-foreground">
+            Nothing actionable — only low-signal notes below.
+          </p>
         ) : (
           <div className="divide-y divide-border border-t border-border">
-            {filtered.map(renderRow)}
+            {mainList.map(renderRow)}
           </div>
+        )}
+
+        {notes.length > 0 && (
+          <section className="border-t border-border">
+            <button
+              onClick={() => setShowNotes((s) => !s)}
+              className="flex w-full items-center gap-2 bg-muted/30 px-4 py-2 text-left transition-colors hover:bg-muted/50"
+            >
+              {showNotes ? (
+                <ChevronDown className="size-4 shrink-0 text-muted-foreground" />
+              ) : (
+                <ChevronRight className="size-4 shrink-0 text-muted-foreground" />
+              )}
+              <Info className="size-4 shrink-0 text-muted-foreground" />
+              <span className="text-sm font-medium">Notes</span>
+              <span className="font-mono text-xs text-muted-foreground">{notes.length}</span>
+              <span className="ml-auto text-xs text-muted-foreground">
+                low signal · barely affects the score
+              </span>
+            </button>
+            {showNotes && <div className="divide-y divide-border">{notes.map(renderRow)}</div>}
+          </section>
         )}
 
         {fixed.length > 0 && (

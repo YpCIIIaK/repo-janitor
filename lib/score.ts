@@ -18,17 +18,46 @@ export const DEFAULT_WEIGHTS: SeverityWeights = { critical: 10, warning: 3, info
  */
 export const SEVERITY_PENALTY_CAP: SeverityWeights = { critical: Infinity, warning: 40, info: 8 }
 
+export interface SeverityPenalty {
+  severity: Severity
+  count: number
+  /** Points this tier actually subtracted, after its cap. */
+  penalty: number
+  /** True when the cap bit — i.e. more findings would cost nothing further. */
+  capped: boolean
+}
+
+/**
+ * Per-tier penalty, in the exact terms the score is computed from.
+ *
+ * `computeScore` is defined in terms of this rather than repeating the
+ * arithmetic, so the number shown to the user and the number that made the grade
+ * cannot drift apart.
+ */
+export function penaltyBreakdown(
+  issues: Issue[],
+  weights: SeverityWeights = DEFAULT_WEIGHTS,
+): SeverityPenalty[] {
+  const counts: Record<Severity, number> = { critical: 0, warning: 0, info: 0 }
+  for (const i of issues) counts[i.severity]++
+
+  return (["critical", "warning", "info"] as const).map((severity) => {
+    // Mirrors the engine: a cap never clips a single finding below its own weight.
+    const cap = Math.max(SEVERITY_PENALTY_CAP[severity], weights[severity])
+    const raw = counts[severity] * weights[severity]
+    return {
+      severity,
+      count: counts[severity],
+      penalty: Math.min(raw, cap),
+      capped: raw > cap,
+    }
+  })
+}
+
 /** 0–100: start at 100, subtract each severity tier's penalty (count * weight,
  * capped per tier), round, clamp to 0. */
 export function computeScore(issues: Issue[], weights: SeverityWeights = DEFAULT_WEIGHTS): number {
-  const counts: Record<Severity, number> = { critical: 0, warning: 0, info: 0 }
-  for (const i of issues) counts[i.severity]++
-  let penalty = 0
-  for (const sev of ["critical", "warning", "info"] as const) {
-    // Mirrors the engine: a cap never clips a single finding below its own weight.
-    const cap = Math.max(SEVERITY_PENALTY_CAP[sev], weights[sev])
-    penalty += Math.min(counts[sev] * weights[sev], cap)
-  }
+  const penalty = penaltyBreakdown(issues, weights).reduce((sum, p) => sum + p.penalty, 0)
   return Math.max(0, Math.round(100 - penalty))
 }
 

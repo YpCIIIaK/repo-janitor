@@ -1,5 +1,11 @@
 import { describe, it, expect } from "vitest"
-import { computeScore, scoreToGrade, categoryScores, DEFAULT_WEIGHTS } from "@/lib/score"
+import {
+  computeScore,
+  scoreToGrade,
+  categoryScores,
+  penaltyBreakdown,
+  DEFAULT_WEIGHTS,
+} from "@/lib/score"
 import { issue } from "./helpers"
 
 describe("computeScore (client mirror of the engine)", () => {
@@ -51,6 +57,50 @@ describe("computeScore (client mirror of the engine)", () => {
 
   it("mirrors the engine's default weights exactly", () => {
     expect(DEFAULT_WEIGHTS).toEqual({ critical: 10, warning: 3, info: 0.25 })
+  })
+})
+
+describe("penaltyBreakdown", () => {
+  it("reports each tier's count and the points it actually cost", () => {
+    const result = penaltyBreakdown([
+      issue({ severity: "critical" }),
+      issue({ severity: "warning" }),
+      issue({ severity: "warning" }),
+      issue({ severity: "info" }),
+    ])
+    expect(result).toEqual([
+      { severity: "critical", count: 1, penalty: 10, capped: false },
+      { severity: "warning", count: 2, penalty: 6, capped: false },
+      { severity: "info", count: 1, penalty: 0.25, capped: false },
+    ])
+  })
+
+  it("flags a tier whose cap has bitten — further findings there are free", () => {
+    const many = Array.from({ length: 100 }, () => issue({ severity: "info" }))
+    const info = penaltyBreakdown(many).find((p) => p.severity === "info")!
+    expect(info.penalty).toBe(8)
+    expect(info.capped).toBe(true)
+    expect(info.count).toBe(100) // the count is honest even though the charge stopped
+  })
+
+  /**
+   * The whole point of deriving one from the other: a breakdown that summed to
+   * something other than the score would be a lie told in the most visible place
+   * on the dashboard.
+   */
+  it("always sums to exactly the points the score is missing", () => {
+    const sets = [
+      [],
+      [issue({ severity: "info" })],
+      Array.from({ length: 40 }, () => issue({ severity: "warning" })),
+      Array.from({ length: 300 }, (_, i) =>
+        issue({ severity: (["critical", "warning", "info"] as const)[i % 3] }),
+      ),
+    ]
+    for (const set of sets) {
+      const total = penaltyBreakdown(set).reduce((sum, p) => sum + p.penalty, 0)
+      expect(computeScore(set)).toBe(Math.max(0, Math.round(100 - total)))
+    }
   })
 })
 
