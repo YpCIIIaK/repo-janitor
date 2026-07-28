@@ -77,15 +77,27 @@ export default function Page() {
   const [scanOpen, setScanOpen] = useState(false)
   const [tab, setTab] = useState<PaletteTab>("overview")
   const [paletteOpen, setPaletteOpen] = useState(false)
+  /**
+   * Explicit request to see the landing page again.
+   *
+   * The dashboard replaces the landing page as soon as one report exists, so
+   * without this the scan form becomes unreachable after the first scan — the
+   * only way back was clearing storage. Kept separate from `activeId` because it
+   * is not a selection: it says "show me the front door", and picking a repo or
+   * starting a scan takes you back through it.
+   */
+  const [showHome, setShowHome] = useState(false)
 
   const showOverview = activeId === OVERVIEW
   // Resolve the selected repo, falling back to the most recent one.
   const current = repos.find((r) => r.id === activeId) ?? repos[0]
 
-  if (repos.length === 0 || !current) {
+  if (repos.length === 0 || !current || showHome) {
     return (
       <div className="min-h-screen">
-        <TopBar />
+        {/* Already home, so the logo is inert here. What is needed instead is a
+            way back to the reports that still exist. */}
+        <TopBar onBackToDashboard={repos.length > 0 ? () => setShowHome(false) : undefined} />
         <WelcomeScreen />
       </div>
     )
@@ -161,7 +173,7 @@ export default function Page() {
 
   return (
     <div className="min-h-screen">
-      <TopBar repo={repo} search={search} onSearch={setSearch} />
+      <TopBar repo={repo} search={search} onSearch={setSearch} onHome={() => setShowHome(true)} />
       <div className="flex">
         <RepoSidebar
           repositories={sidebarRepos}
