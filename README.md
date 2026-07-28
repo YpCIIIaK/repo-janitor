@@ -592,13 +592,14 @@ file-level findings (e.g. `package.json`, branches) use `ignore` or Snooze.
 ## Scoring
 
 Starts at 100 and subtracts weighted penalties: **critical −10**, **warning −3**,
-**info −0.5**, then rounds and clamps to 0. Grades: **A** ≥ 90, **B** ≥ 75,
+**info −0.25**, then rounds and clamps to 0. Grades: **A** ≥ 90, **B** ≥ 75,
 **C** ≥ 60, **D** ≥ 40, else **F**. Penalties are configurable per-repo via the
 `weights` field in `.repo-anti-rot.json` (see above).
 
-Each severity tier's total penalty is **capped** (warning ≤ 40, info ≤ 15;
+Each severity tier's total penalty is **capped** (warning ≤ 40, info ≤ 8;
 critical is uncapped) so a swarm of low-signal notes can't sink a repo harder
-than a genuine critical. Below the cap the penalty is exactly linear, so typical
+than a genuine critical. The info cap is below the narrowest grade band (10
+points), so info findings alone can never move you down a grade. Below the cap the penalty is exactly linear, so typical
 repos score the same — the cap only bites on pile-ups.
 
 Alongside the score the dashboard shows **issue density** — findings per 1000

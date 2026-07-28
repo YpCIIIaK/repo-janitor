@@ -14,7 +14,7 @@ describe("computeScore (client mirror of the engine)", () => {
         issue({ severity: "warning" }),
         issue({ severity: "info" }),
       ]),
-    ).toBe(87) // 100 - 13.5 → 87
+    ).toBe(87) // 100 - 13.25 → 87
   })
 
   it("clamps at 0", () => {
@@ -23,9 +23,9 @@ describe("computeScore (client mirror of the engine)", () => {
   })
 
   it("caps the penalty a pile of info can inflict", () => {
-    // 200 info would be 100 points linearly (→ score 0); the cap holds it to 15.
+    // 200 info would be 50 points linearly (→ score 50); the cap holds it to 8.
     const many = Array.from({ length: 200 }, () => issue({ severity: "info" }))
-    expect(computeScore(many)).toBe(85)
+    expect(computeScore(many)).toBe(92)
   })
 
   it("caps warnings but lets criticals still tank the score", () => {
@@ -35,8 +35,22 @@ describe("computeScore (client mirror of the engine)", () => {
     expect(computeScore(criticals)).toBe(0) // uncapped
   })
 
+  /**
+   * The point of the info tier is "worth knowing", not "counts against you".
+   * The narrowest grade band is 10 points wide, so as long as the info cap stays
+   * under that, no quantity of info findings can drop a repo a grade on its own.
+   * This asserts the property rather than the constant, so it keeps holding if
+   * someone retunes the weight.
+   */
+  it("never lets info findings alone cost a grade band", () => {
+    for (const count of [1, 10, 100, 1000]) {
+      const many = Array.from({ length: count }, () => issue({ severity: "info" }))
+      expect(scoreToGrade(computeScore(many))).toBe("A")
+    }
+  })
+
   it("mirrors the engine's default weights exactly", () => {
-    expect(DEFAULT_WEIGHTS).toEqual({ critical: 10, warning: 3, info: 0.5 })
+    expect(DEFAULT_WEIGHTS).toEqual({ critical: 10, warning: 3, info: 0.25 })
   })
 })
 

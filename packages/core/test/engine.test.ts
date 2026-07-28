@@ -54,16 +54,26 @@ describe("computeScore", () => {
   })
 
   it("caps low-severity pile-ups so they can't outweigh a real critical", () => {
-    // Linearly 200 info = 100 points (score 0); capped at 15 → score 85.
+    // Linearly 200 info = 50 points (score 50); capped at 8 → score 92, which is
+    // still an A: info alone must never cost a grade band.
     const info = Array.from({ length: 200 }, () => issue({ severity: "info" }))
-    expect(computeScore(info)).toBe(85)
+    expect(computeScore(info)).toBe(92)
     // Warnings cap at 40; criticals stay uncapped.
     const warnings = Array.from({ length: 100 }, () => issue({ severity: "warning" }))
     expect(computeScore(warnings)).toBe(60)
   })
 
+  it("lets an explicit weight override outrank a lower default cap", () => {
+    // The info cap is 8. A repo that deliberately sets `info: 10` must still get
+    // 10 for one finding, or the cap would silently veto its config.
+    expect(computeScore([issue({ severity: "info" })], { critical: 10, warning: 3, info: 10 })).toBe(90)
+    // Two of them are still capped — the cap governs pile-ups, not the first hit.
+    const two = [issue({ severity: "info" }), issue({ severity: "info" })]
+    expect(computeScore(two, { critical: 10, warning: 3, info: 10 })).toBe(90)
+  })
+
   it("matches DEFAULT_WEIGHTS shape", () => {
-    expect(DEFAULT_WEIGHTS).toMatchObject({ critical: 10, warning: 3, info: 0.5 })
+    expect(DEFAULT_WEIGHTS).toMatchObject({ critical: 10, warning: 3, info: 0.25 })
   })
 })
 

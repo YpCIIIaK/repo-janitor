@@ -10,13 +10,13 @@ import { categoryLabels, type Grade, type Issue, type IssueCategory, type Severi
 export type SeverityWeights = Record<Severity, number>
 
 /** Built-in defaults — must mirror the engine (packages/core/src/config.ts). */
-export const DEFAULT_WEIGHTS: SeverityWeights = { critical: 10, warning: 3, info: 0.5 }
+export const DEFAULT_WEIGHTS: SeverityWeights = { critical: 10, warning: 3, info: 0.25 }
 
 /**
  * Per-tier penalty caps — must mirror the engine (packages/core/src/engine.ts).
  * Below the cap the penalty is exactly linear, so the cap only affects pile-ups.
  */
-export const SEVERITY_PENALTY_CAP: SeverityWeights = { critical: Infinity, warning: 40, info: 15 }
+export const SEVERITY_PENALTY_CAP: SeverityWeights = { critical: Infinity, warning: 40, info: 8 }
 
 /** 0–100: start at 100, subtract each severity tier's penalty (count * weight,
  * capped per tier), round, clamp to 0. */
@@ -25,7 +25,9 @@ export function computeScore(issues: Issue[], weights: SeverityWeights = DEFAULT
   for (const i of issues) counts[i.severity]++
   let penalty = 0
   for (const sev of ["critical", "warning", "info"] as const) {
-    penalty += Math.min(counts[sev] * weights[sev], SEVERITY_PENALTY_CAP[sev])
+    // Mirrors the engine: a cap never clips a single finding below its own weight.
+    const cap = Math.max(SEVERITY_PENALTY_CAP[sev], weights[sev])
+    penalty += Math.min(counts[sev] * weights[sev], cap)
   }
   return Math.max(0, Math.round(100 - penalty))
 }

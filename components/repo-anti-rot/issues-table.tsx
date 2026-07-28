@@ -175,7 +175,17 @@ export function IssuesTable({
     // otherwise fall back to oldest-first by age.
     const ranked = searchIssues(base, query)
     const result = ranked
-      .filter((i) => (severity === "all" ? true : i.severity === severity))
+      // "actionable" is a pseudo-severity: everything that isn't a low-signal
+      // note. Info findings barely move the score, so the common need is to read
+      // the list without them — without hiding them by default, which would make
+      // findings vanish with no visible reason.
+      .filter((i) =>
+        severity === "all"
+          ? true
+          : severity === "actionable"
+            ? i.severity !== "info"
+            : i.severity === severity,
+      )
       .filter((i) => (category === "all" ? true : i.category === category))
       .filter((i) => (changesOnly ? newIds?.has(i.id) : true))
     return query.trim() ? result : result.sort((a, b) => b.ageDays - a.ageDays)
@@ -286,6 +296,7 @@ export function IssuesTable({
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All severity</SelectItem>
+              <SelectItem value="actionable">Actionable only</SelectItem>
               {(Object.keys(severityLabels) as Severity[]).map((s) => (
                 <SelectItem key={s} value={s}>
                   {severityLabels[s]}

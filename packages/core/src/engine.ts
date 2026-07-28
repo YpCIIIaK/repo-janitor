@@ -41,8 +41,9 @@ export const defaultScanners: Scanner[] = [
   commentedCodeScanner,
 ]
 
-/** Severity penalties. info is half-weighted by default so a pile of low-signal
- * notes dents the score gently; a repo can override these via .repo-anti-rot.json. */
+/** Severity penalties. info is deliberately near-cosmetic — a quarter of a point
+ * each, capped at 8 total — so a pile of low-signal notes cannot meaningfully
+ * move the grade; a repo can override these via .repo-anti-rot.json. */
 export type SeverityWeights = { critical: number; warning: number; info: number }
 
 /**
@@ -51,11 +52,15 @@ export type SeverityWeights = { critical: number; warning: number; info: number 
  * only bites on pile-ups, stopping a swarm of low-signal notes from sinking a repo
  * harder than a real critical. Critical is uncapped on purpose — security findings
  * *should* be able to tank the score.
+ *
+ * The info cap is 8, not a round 10, so that info alone can never cost a whole
+ * grade band: the narrowest band is 10 points wide (A≥90, B≥75, C≥60), so a repo
+ * whose only findings are info-level keeps the grade its real problems earned it.
  */
 export const SEVERITY_PENALTY_CAP: Record<keyof SeverityWeights, number> = {
   critical: Infinity,
   warning: 40,
-  info: 15,
+  info: 8,
 }
 
 /**
@@ -67,7 +72,11 @@ export function computeScore(issues: Issue[], weights: SeverityWeights = DEFAULT
   for (const i of issues) counts[i.severity]++
   let penalty = 0
   for (const sev of ["critical", "warning", "info"] as const) {
-    penalty += Math.min(counts[sev] * weights[sev], SEVERITY_PENALTY_CAP[sev])
+    // The cap never clips a *single* finding below the weight configured for it.
+    // Otherwise lowering a default cap would silently override an explicit
+    // `weights` override — a repo asking for `info: 10` would get 8.
+    const cap = Math.max(SEVERITY_PENALTY_CAP[sev], weights[sev])
+    penalty += Math.min(counts[sev] * weights[sev], cap)
   }
   return Math.max(0, Math.round(100 - penalty))
 }

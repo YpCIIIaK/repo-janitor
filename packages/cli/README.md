@@ -50,7 +50,7 @@ skipped/focused tests · Dockerfile hygiene · stale branches · aging TODOs ·
 broken doc links · bus-factor risk · repo bloat.
 
 Findings are grouped into categories, each scored by severity
-(**critical −10 · warning −3 · info −0.5**), then rounded and clamped to a 0–100
+(**critical −10 · warning −3 · info −0.25**), then rounded and clamped to a 0–100
 score with an A–F grade. Tune it per-repo with an optional
 [`.repo-anti-rot.json`](https://github.com/YpCIIIaK/repo-janitor#configuration-repo-anti-rotjson)
 (ignore globs, mute rules, custom weights) or inline `// repo-anti-rot-ignore`

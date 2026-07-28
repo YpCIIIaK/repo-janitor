@@ -30,7 +30,7 @@ describe("loadConfig", () => {
 
   it("merges weight overrides over the defaults", async () => {
     const cfg = await loadConfig(reader(JSON.stringify({ weights: { critical: 20 } })))
-    expect(cfg.weights).toEqual({ critical: 20, warning: 3, info: 0.5 })
+    expect(cfg.weights).toEqual({ critical: 20, warning: 3, info: 0.25 })
   })
 
   it("reads ignore globs", async () => {
