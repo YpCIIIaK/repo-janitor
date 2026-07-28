@@ -3,21 +3,27 @@ import { randomBytes } from "crypto"
 import { promises as fs } from "fs"
 import { join } from "path"
 import { assertShareable, type SharedReport } from "@/lib/share-report"
+import { dbGetShare, dbPutShare, supabaseConfig } from "@/lib/share-db"
 
 /**
  * Storage for shared report links.
  *
- * One JSON file per share, keyed by an unguessable token. The path carries
- * owner/name for readability, but the token is what authorises the read: a
- * shared report should not be discoverable by typing someone's repo name, even
- * though it holds no paths or evidence (see lib/share-report.ts).
+ * Two backends, chosen by configuration:
  *
- * KNOWN LIMITATION: this writes to the container filesystem, which is ephemeral
- * on most hosts — including Render's free tier, where there is no persistent
- * disk at all. Shared links do not survive a redeploy or a restart. That is
- * survivable while testing whether anyone shares at all, and unacceptable once
- * links are posted publicly; moving to a real store is the fix, not a longer
- * retention here.
+ *  - **Supabase** when `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are set.
+ *    Use this anywhere the links are meant to outlive a deploy.
+ *  - **Filesystem** otherwise — one JSON file per share. Local development and
+ *    self-hosting need no account, and the tests need no network.
+ *
+ * The filesystem path is only viable where the disk survives: a container
+ * filesystem is ephemeral on most hosts, and on Render's free tier there is no
+ * persistent disk at all, so a redeploy silently breaks every link already
+ * posted. That is the reason the database backend exists, and the reason it is
+ * the one to configure before announcing anything publicly.
+ *
+ * Either way the token authorises the read. The path carries owner/name for
+ * readability only: a shared report should not be discoverable by guessing a
+ * repo name, even though it holds no paths or evidence (see lib/share-report.ts).
  */
 
 const DIR = join(process.cwd(), ".repo-anti-rot", "shared")
@@ -70,6 +76,14 @@ export async function putShare(report: SharedReport): Promise<StoredShare> {
     report,
   }
 
+  const cfg = supabaseConfig()
+  if (cfg) {
+    // Let the error propagate: a share link that silently was not stored is
+    // worse than a visible failure, because the user copies a dead URL.
+    await dbPutShare(cfg, share.token, report)
+    return share
+  }
+
   await fs.mkdir(DIR, { recursive: true })
   await fs.writeFile(fileFor(share.token), JSON.stringify(share), "utf-8")
   await evictOldest().catch(() => {}) // best-effort: never fail a write over cleanup
@@ -79,6 +93,16 @@ export async function putShare(report: SharedReport): Promise<StoredShare> {
 /** Read a shared report. Returns null for an unknown, malformed or unreadable token. */
 export async function getShare(token: string): Promise<StoredShare | null> {
   if (!isValidShareToken(token)) return null
+
+  const cfg = supabaseConfig()
+  if (cfg) {
+    try {
+      return await dbGetShare(cfg, token)
+    } catch {
+      return null // a database hiccup renders as "no such report", never as a 500
+    }
+  }
+
   try {
     const raw = await fs.readFile(fileFor(token), "utf-8")
     const parsed = JSON.parse(raw) as StoredShare
