@@ -6,6 +6,7 @@ import type { Grade, Issue } from "@/lib/mock-data"
 import { penaltyBreakdown, type SeverityWeights } from "@/lib/score"
 import { severityStyle } from "@/lib/issue-format"
 import { cn } from "@/lib/utils"
+import { Gauge } from "@/components/charts/gauge"
 
 const gradeMeta: Record<Grade, { color: string; label: string }> = {
   A: { color: "var(--chart-1)", label: "Pristine" },
@@ -38,34 +39,21 @@ export function GradeCard({
   const meta = gradeMeta[grade]
   // Only tiers that actually cost something — a "−0 info" row is noise.
   const breakdown = issues ? penaltyBreakdown(issues, weights).filter((p) => p.penalty > 0) : []
-  const circumference = 2 * Math.PI * 52
-  const offset = circumference - (score / 100) * circumference
 
   return (
     <Card>
       <CardContent className="flex flex-col items-center gap-4 p-6">
-        <div className="relative size-32">
-          <svg viewBox="0 0 120 120" className="size-full -rotate-90">
-            <circle cx="60" cy="60" r="52" fill="none" stroke="var(--border)" strokeWidth="8" />
-            <circle
-              cx="60"
-              cy="60"
-              r="52"
-              fill="none"
-              stroke={meta.color}
-              strokeWidth="8"
-              strokeLinecap="round"
-              strokeDasharray={circumference}
-              strokeDashoffset={offset}
-            />
-          </svg>
-          <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="font-mono text-4xl font-bold" style={{ color: meta.color }}>
-              {grade}
-            </span>
-            <span className="font-mono text-xs tabular-nums text-muted-foreground">{score}/100</span>
-          </div>
-        </div>
+        {/* An open 270° arc rather than the closed ring this used to draw: a full
+            circle reads as complete at every value, so a bad score still looked
+            like a finished thing. The gap gives the needle somewhere to be. */}
+        <Gauge value={score} size={168} thickness={14} color={meta.color}>
+          <span className="font-mono text-4xl font-bold leading-none" style={{ color: meta.color }}>
+            {grade}
+          </span>
+          <span className="mt-1 font-mono text-xs tabular-nums text-muted-foreground">
+            {score}/100
+          </span>
+        </Gauge>
 
         <div className="text-center">
           <p className="text-sm font-medium">{meta.label}</p>

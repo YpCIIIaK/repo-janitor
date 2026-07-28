@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { GitBranch, Trash2, ScanLine, LayoutGrid, PanelLeftClose, PanelLeftOpen } from "lucide-react"
 import type { Grade } from "@/lib/mock-data"
 import { Button } from "@/components/ui/button"
+import { Sparkline } from "@/components/charts/sparkline"
 import { cn } from "@/lib/utils"
 
 /** Persisted so the choice survives a reload — a layout preference you have to
@@ -17,6 +18,17 @@ export interface SidebarRepo {
   grade: Grade
   score: number
   lastScan: string
+  /** Score at each past scan, oldest first. Fewer than two points draws nothing. */
+  scoreHistory?: number[]
+}
+
+/** Chart token per grade, so the sparkline matches the badge beside it. */
+const gradeChart: Record<Grade, string> = {
+  A: "chart-1",
+  B: "chart-2",
+  C: "chart-2",
+  D: "chart-3",
+  F: "chart-4",
 }
 
 const gradeColor: Record<Grade, string> = {
@@ -157,8 +169,23 @@ export function RepoSidebar({
                       <span className="text-muted-foreground/50">·</span>
                       <span className="font-mono tabular-nums">{repo.score}</span>
                     </span>
-                    <span className="block truncate text-[11px] text-muted-foreground/70">
-                      {repo.lastScan}
+                    <span className="flex items-center justify-between gap-2">
+                      <span className="truncate text-[11px] text-muted-foreground/70">
+                        {repo.lastScan}
+                      </span>
+                      {/* Direction of travel, which the grade alone never shows:
+                          a C that was an F is a different situation from a C
+                          that was an A. */}
+                      {repo.scoreHistory && repo.scoreHistory.length > 1 && (
+                        <Sparkline
+                          data={repo.scoreHistory}
+                          width={52}
+                          height={16}
+                          showDot={false}
+                          color={`var(--${gradeChart[repo.grade]})`}
+                          className="shrink-0 opacity-80"
+                        />
+                      )}
                     </span>
                   </span>
                 )}

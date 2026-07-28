@@ -28,6 +28,7 @@ import { RepoOverview } from "@/components/repo-anti-rot/repo-overview"
 import { useRepos, removeRepo, repoStats, repoTrend, countSeverity, timeAgo, repoDiff, repoDiffDetail, newIssueIds, issueDensity } from "@/lib/reports-store"
 import { Workflow, Info, GitGraph, ShieldCheck, Link as LinkIcon } from "lucide-react"
 import { ModePanel } from "@/components/repo-anti-rot/mode-panel"
+import { ScanHistory } from "@/components/repo-anti-rot/scan-history"
 import { filterMode } from "@/lib/issue-modes"
 import { useSnoozed, partitionSnoozed, clearSnoozedForRepo } from "@/lib/snooze-store"
 import { computeScore, scoreToGrade } from "@/lib/score"
@@ -115,6 +116,10 @@ export default function Page() {
       grade: scoreToGrade(score),
       score,
       lastScan: timeAgo(r.scannedAt),
+      // Stored history holds the score as scanned; the live score above can
+      // differ once findings are snoozed. Appending the live value keeps the
+      // last point of the line agreeing with the number printed next to it.
+      scoreHistory: [...r.history.slice(0, -1).map((p) => p.score), score],
     }
   })
 
@@ -369,7 +374,8 @@ export default function Page() {
               />
             </TabsContent>
 
-            <TabsContent value="history" className="mt-6">
+            <TabsContent value="history" className="mt-6 space-y-6">
+              <ScanHistory history={current.history} />
               <CommitTree initialUrl={current.url} />
             </TabsContent>
 
