@@ -17,6 +17,7 @@ import { TrendChart } from "@/components/repo-anti-rot/trend-chart"
 import { ReposOverview } from "@/components/repo-anti-rot/repos-overview"
 import { RescanButton } from "@/components/repo-anti-rot/rescan-button"
 import { ExportMenu } from "@/components/repo-anti-rot/export-menu"
+import { ShareButton } from "@/components/repo-anti-rot/share-button"
 import { CommandPalette, type PaletteTab } from "@/components/repo-anti-rot/command-palette"
 import { ScanScheduler } from "@/components/repo-anti-rot/scan-scheduler"
 import { Button } from "@/components/ui/button"
@@ -227,6 +228,7 @@ export default function Page() {
                   ⌘K
                 </kbd>
               </Button>
+              <ShareButton report={current.latest} />
               <ExportMenu report={current.latest} />
               <RescanButton repo={current} />
             </div>

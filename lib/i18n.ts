@@ -57,6 +57,7 @@ const en = {
     "Stores the grade, score, counts per category and the titles of the top 10 findings. File paths, line numbers, code snippets and matched secret values are never written — they stay in this browser.",
   "consent.optional": "Optional. Leave it off and the report stays in this browser only.",
 
+  "share.action": "Share",
   "share.create": "Create share link",
   "share.creating": "Creating…",
   "share.failed": "Could not create the link. Try again.",
@@ -109,6 +110,7 @@ const ru: Messages = {
   "consent.optional":
     "По желанию. Если не отмечать, отчёт останется только в этом браузере.",
 
+  "share.action": "Поделиться",
   "share.create": "Создать ссылку",
   "share.creating": "Создаём…",
   "share.failed": "Не удалось создать ссылку. Попробуйте ещё раз.",
