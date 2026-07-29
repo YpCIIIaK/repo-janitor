@@ -171,3 +171,42 @@ export function compactCount(n: number): string {
   const m = n / 1_000_000
   return `${m < 10 ? m.toFixed(1).replace(/\.0$/, "") : Math.round(m)}M`
 }
+
+// ---------------------------------------------------------------------------
+// Size, judged against what the server will actually accept
+// ---------------------------------------------------------------------------
+
+/**
+ * What GitHub's `size` can and cannot tell us.
+ *
+ * It is the repository's size on GitHub's side — the whole history — reported in
+ * KB. We clone `--depth 1 --single-branch`, so what actually lands on disk is
+ * usually a good deal smaller: a repository with ten years of history and a
+ * small working tree looks alarming here and scans fine.
+ *
+ * That makes this an upper bound, and a warning rather than a refusal. Blocking
+ * a scan on it would turn a rough number into a wrong verdict, and the server
+ * already has a real defence — the clone watchdog aborts the moment the tree on
+ * disk crosses the limit, whatever any API claimed beforehand.
+ *
+ * And it is GitHub-only. For any other host the answer is genuinely not knowable
+ * before cloning, which is exactly why the watchdog exists.
+ */
+export type SizeVerdict = "ok" | "large" | "over"
+
+/** Fraction of the clone limit at which a repository is worth mentioning. */
+const WARN_FRACTION = 0.4
+
+export function sizeVerdict(sizeKb: number, maxCloneMb: number): SizeVerdict {
+  if (!Number.isFinite(sizeKb) || sizeKb <= 0 || !Number.isFinite(maxCloneMb) || maxCloneMb <= 0) {
+    return "ok"
+  }
+  const mb = sizeKb / 1024
+  if (mb >= maxCloneMb) return "over"
+  return mb >= maxCloneMb * WARN_FRACTION ? "large" : "ok"
+}
+
+/** "496 MB" / "1.2 GB", from GitHub's KB. */
+export function formatSizeKb(kb: number): string {
+  return kb >= 1024 * 1024 ? `${(kb / 1024 / 1024).toFixed(1)} GB` : `${Math.round(kb / 1024)} MB`
+}

@@ -3,7 +3,7 @@
 import { Star, GitFork, CircleDot, Scale, Archive, GitBranch, Plus, Check, HardDrive } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import { compactCount, type GithubRepo } from "@/lib/github-repo"
+import { compactCount, formatSizeKb, sizeVerdict, type GithubRepo } from "@/lib/github-repo"
 import { useLocale } from "@/components/i18n/locale-provider"
 
 /**
@@ -44,20 +44,6 @@ const LANGUAGE_COLOR: Record<string, string> = {
   Haskell: "#5e5086",
   Lua: "#000080",
   Zig: "#ec915c",
-}
-
-/**
- * Size at which a repository is worth a warning, in KB as GitHub reports it.
- *
- * Not a hard limit — the server has its own, and plenty of large repositories
- * scan fine. This is the number that turns "the scan failed after four minutes"
- * into "this one is 500 MB, expect trouble", which is the difference between a
- * bug report and an informed decision.
- */
-const LARGE_REPO_KB = 200 * 1024
-
-function formatSize(kb: number): string {
-  return kb >= 1024 * 1024 ? `${(kb / 1024 / 1024).toFixed(1)} GB` : `${Math.round(kb / 1024)} MB`
 }
 
 /** Deterministic tint for the initials tile, so one owner always looks the same. */
@@ -107,10 +93,13 @@ export function GithubRepoCard({
   repo,
   onAdd,
   added,
+  maxCloneMb,
   compact,
   className,
 }: {
   repo: GithubRepo
+  /** Clone limit this server enforces, so the size badge is a real verdict. */
+  maxCloneMb?: number
   /** Shown as an Add button. Omitted for rows that are already chosen. */
   onAdd?: (cloneUrl: string) => void
   /** Already in the selection — the card says so instead of offering to add. */
@@ -121,6 +110,7 @@ export function GithubRepoCard({
 }) {
   const { t, locale } = useLocale()
   const hue = ownerHue(repo.owner)
+  const verdict = maxCloneMb ? sizeVerdict(repo.sizeKb, maxCloneMb) : "ok"
   const pushed = relativeTime(repo.pushedAt, locale)
 
   return (
@@ -162,13 +152,20 @@ export function GithubRepoCard({
                 {t("repo.archived")}
               </span>
             )}
-            {repo.sizeKb >= LARGE_REPO_KB && (
+            {verdict !== "ok" && (
               <span
-                className="flex items-center gap-1 rounded-full border border-chart-3/40 bg-chart-3/10 px-2 py-0.5 text-[10px] font-medium text-chart-3"
-                title={t("repo.largeHint")}
+                className={cn(
+                  "flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-medium",
+                  verdict === "over"
+                    ? "border-destructive/40 bg-destructive/10 text-destructive"
+                    : "border-chart-3/40 bg-chart-3/10 text-chart-3",
+                )}
+                title={t(verdict === "over" ? "repo.overHint" : "repo.largeHint", {
+                  max: maxCloneMb ?? 0,
+                })}
               >
                 <HardDrive className="size-3" />
-                {formatSize(repo.sizeKb)}
+                {formatSizeKb(repo.sizeKb)}
               </span>
             )}
             {repo.fork && (

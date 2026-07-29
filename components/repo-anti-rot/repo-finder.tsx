@@ -50,6 +50,7 @@ export function RepoFinder({
   onPick,
   isAdded,
   canAdd = true,
+  maxCloneMb,
 }: {
   /** The line currently being edited. */
   text: string
@@ -60,6 +61,8 @@ export function RepoFinder({
   isAdded?: (cloneUrl: string) => boolean
   /** False once the selection is full — results stay visible but inert. */
   canAdd?: boolean
+  /** Clone limit this server enforces, for the size badge. */
+  maxCloneMb?: number
 }) {
   const { t } = useLocale()
   const key = lookupKey(text)
@@ -141,6 +144,7 @@ export function RepoFinder({
       <GithubRepoCard
         repo={repo}
         added={already}
+        maxCloneMb={maxCloneMb}
         onAdd={canAdd && !already ? () => onPick(repo.cloneUrl, repo) : undefined}
       />
     )
@@ -166,7 +170,7 @@ export function RepoFinder({
               // is the normal case, not the exotic one.
               className="block w-full text-left disabled:cursor-default"
             >
-              <GithubRepoCard repo={repo} added={already} compact />
+              <GithubRepoCard repo={repo} added={already} maxCloneMb={maxCloneMb} compact />
             </button>
           )
         })}

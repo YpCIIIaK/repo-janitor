@@ -5,6 +5,8 @@ import {
   looksLikeQuery,
   parseRepoRef,
   projectRepo,
+  sizeVerdict,
+  formatSizeKb,
 } from "@/lib/github-repo"
 
 describe("parseRepoRef", () => {
@@ -155,5 +157,52 @@ describe("compactCount", () => {
     [1_234_567, "1.2M"],
   ])("%i → %s", (n, expected) => {
     expect(compactCount(n)).toBe(expected)
+  })
+})
+
+describe("sizeVerdict", () => {
+  // The server's clone limit, as /api/scan/limits reports it.
+  const MAX = 500
+
+  it("says nothing about an ordinary repository", () => {
+    expect(sizeVerdict(20 * 1024, MAX)).toBe("ok")
+  })
+
+  it("warns well before the limit, not at it", () => {
+    // A warning that only fires at 100% arrives after the decision is made.
+    expect(sizeVerdict(199 * 1024, MAX)).toBe("ok")
+    expect(sizeVerdict(250 * 1024, MAX)).toBe("large")
+  })
+
+  it("calls a repository over the limit what it is", () => {
+    expect(sizeVerdict(600 * 1024, MAX)).toBe("over")
+    expect(sizeVerdict(MAX * 1024, MAX)).toBe("over")
+  })
+
+  it("still warns about the repository that actually killed the instance", () => {
+    // rotki: 507571 KB, which is 495.7 MB — just UNDER a 500 MB clone cap. It
+    // did not fail on cloning at all, it exhausted memory while scanning. So a
+    // verdict pinned only to the clone limit would have said nothing about the
+    // one repository that took the service down; the warning band is what
+    // catches it.
+    expect(sizeVerdict(507_571, MAX)).toBe("large")
+  })
+
+  it("stays quiet when the limit is unknown or the size is missing", () => {
+    // Better silent than confidently wrong: a repository GitHub did not size,
+    // or a server that did not answer, must not look like a refusal.
+    expect(sizeVerdict(0, MAX)).toBe("ok")
+    expect(sizeVerdict(900_000, 0)).toBe("ok")
+    expect(sizeVerdict(Number.NaN, MAX)).toBe("ok")
+  })
+})
+
+describe("formatSizeKb", () => {
+  it.each([
+    [507_571, "496 MB"],
+    [2_100_000, "2.0 GB"],
+    [512, "1 MB"],
+  ])("%i KB → %s", (kb, expected) => {
+    expect(formatSizeKb(kb)).toBe(expected)
   })
 })

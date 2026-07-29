@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { limitsFromEnv } from "@/lib/scan-limits"
 import { isOwner } from "@/lib/owner"
+import { MAX_CLONE_BYTES, SCAN_HEAP_MB } from "@/lib/clone-runner"
 
 /**
  * Ceiling shown to the operator. Not infinity: each URL is a clone, and a form
@@ -34,6 +35,10 @@ export async function GET(request: Request) {
     {
       maxUrlsPerRequest: owner ? OWNER_MAX_URLS : limits.maxUrlsPerRequest,
       maxConcurrent: limits.maxConcurrent,
+      // So the form can judge a repository's size against the real ceiling
+      // instead of a number guessed in the client.
+      maxCloneMb: Math.round(MAX_CLONE_BYTES / (1024 * 1024)),
+      scanHeapMb: SCAN_HEAP_MB,
       owner,
     },
     // Not cached at all. The answer depends on who is asking, and it changes the

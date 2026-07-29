@@ -45,17 +45,25 @@ export const MAX_SELECTED = 20
  * meant unlocking in Settings left the form still enforcing the public cap until
  * a reload — the limit was lifted on the server and the form went on refusing.
  */
-function useMaxSelected(): number {
-  const [max, setMax] = useState(MAX_SELECTED)
+function useServerLimits(): { maxSelected: number; maxCloneMb?: number } {
+  const [limits, setLimits] = useState<{ maxSelected: number; maxCloneMb?: number }>({
+    maxSelected: MAX_SELECTED,
+  })
 
   useEffect(() => {
     let alive = true
     const ask = () => {
       void fetch("/api/scan/limits", { cache: "no-store" })
         .then((res) => (res.ok ? res.json() : null))
-        .then((data: { maxUrlsPerRequest?: number } | null) => {
-          const n = data?.maxUrlsPerRequest
-          if (alive && typeof n === "number" && n > 0) setMax(n)
+        .then((data: { maxUrlsPerRequest?: number; maxCloneMb?: number } | null) => {
+          if (!alive || !data) return
+          setLimits({
+            maxSelected:
+              typeof data.maxUrlsPerRequest === "number" && data.maxUrlsPerRequest > 0
+                ? data.maxUrlsPerRequest
+                : MAX_SELECTED,
+            maxCloneMb: typeof data.maxCloneMb === "number" ? data.maxCloneMb : undefined,
+          })
         })
         .catch(() => {})
     }
@@ -67,7 +75,7 @@ function useMaxSelected(): number {
     }
   }, [])
 
-  return max
+  return limits
 }
 
 /** Normalise anything acceptable into the clone URL that will be scanned. */
@@ -84,16 +92,18 @@ function RepoRow({
   item,
   onRemove,
   disabled,
+  maxCloneMb,
 }: {
   item: SelectedRepo
   onRemove: () => void
   disabled?: boolean
+  maxCloneMb?: number
 }) {
   const { t } = useLocale()
   return (
     <div className="relative">
       {item.repo ? (
-        <GithubRepoCard repo={item.repo} compact />
+        <GithubRepoCard repo={item.repo} maxCloneMb={maxCloneMb} compact />
       ) : (
         // A non-GitHub remote, or one GitHub could not describe. Shown plainly
         // rather than hidden: it is still going to be cloned.
@@ -130,7 +140,7 @@ export function RepoPicker({
   const [text, setText] = useState("")
   const [notice, setNotice] = useState<string | null>(null)
 
-  const maxSelected = useMaxSelected()
+  const { maxSelected, maxCloneMb } = useServerLimits()
   const full = selected.length >= maxSelected
   const chosen = new Set(selected.map((s) => s.url))
 
@@ -249,6 +259,7 @@ export function RepoPicker({
         <RepoFinder
           text={text}
           canAdd={!full}
+          maxCloneMb={maxCloneMb}
           isAdded={(url) => chosen.has(toCloneUrl(url) ?? url)}
           onPick={(cloneUrl, repo) => addMany([{ url: cloneUrl, repo }])}
         />
@@ -283,6 +294,7 @@ export function RepoPicker({
                 key={item.url}
                 item={item}
                 disabled={disabled}
+                maxCloneMb={maxCloneMb}
                 onRemove={() => onChange((prev) => prev.filter((s) => s.url !== item.url))}
               />
             ))}

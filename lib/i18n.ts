@@ -105,7 +105,9 @@ const en = {
   "repo.scanThis": "Scan",
   "repo.archived": "Archived",
   "repo.largeHint":
-    "A large repository. Cloning and scanning it takes longer, and may fail on a small server.",
+    "A large repository — cloning and scanning it takes longer, and may fail on a small server. GitHub reports the whole history; a shallow clone is usually smaller.",
+  "repo.overHint":
+    "Bigger than this server's {max} MB clone limit, so the scan will probably be refused part-way. GitHub reports the whole history, so a shallow clone may still fit — but expect trouble.",
   "repo.fork": "Fork",
   "repo.stars": "Stars",
   "repo.forks": "Forks",
@@ -226,7 +228,9 @@ const ru: Messages = {
   "repo.scanThis": "Сканировать",
   "repo.archived": "В архиве",
   "repo.largeHint":
-    "Большой репозиторий. Клонирование и скан займут больше времени и могут не пройти на маленьком сервере.",
+    "Большой репозиторий — клонирование и скан займут больше времени и могут не пройти на маленьком сервере. GitHub считает всю историю, поверхностный клон обычно меньше.",
+  "repo.overHint":
+    "Больше, чем лимит клона на этом сервере ({max} МБ), — скан скорее всего оборвётся на середине. GitHub считает всю историю, так что поверхностный клон может и уместиться, но рассчитывать на это не стоит.",
   "repo.fork": "Форк",
   "repo.stars": "Звёзды",
   "repo.forks": "Форки",
