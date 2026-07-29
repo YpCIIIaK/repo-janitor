@@ -5,6 +5,7 @@ import { putShare } from "@/lib/share-store"
 import type { ScanReport } from "@/lib/server-store"
 import { checkRateLimit, clientIp, limitsFromEnv } from "@/lib/scan-limits"
 import { isPublicGitUrl } from "@/lib/url-guard"
+import { recordUsage, visitorFrom } from "@/lib/usage"
 
 /**
  * Create a share link for a scan result.
@@ -69,6 +70,10 @@ export async function POST(request: Request) {
   }
 
   const { owner, name } = shared.repo
+  // The share token is never recorded: it is the capability that opens the
+  // report, and an analytics table is not where capabilities belong.
+  const visitor = visitorFrom(request)
+  if (visitor) recordUsage({ visitor, event: "share-create", repo: `${owner}/${name}` })
   return NextResponse.json({
     token,
     path: `/r/${encodeURIComponent(owner)}/${encodeURIComponent(name)}/${token}`,

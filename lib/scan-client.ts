@@ -1,6 +1,7 @@
 "use client"
 
 import type { ScanReport } from "@/lib/reports-store"
+import { usageHeaders } from "@/lib/visitor"
 
 /**
  * Client for the streaming `/api/scan` endpoint.
@@ -50,7 +51,7 @@ export async function runScanStream(
 ): Promise<ScanResult[]> {
   const res = await fetch("/api/scan", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...usageHeaders() },
     body: JSON.stringify({ urls }),
     signal: handlers.signal,
   })

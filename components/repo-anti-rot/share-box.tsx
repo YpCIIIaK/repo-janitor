@@ -5,6 +5,7 @@ import { Check, Copy, Link2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useLocale } from "@/components/i18n/locale-provider"
+import { usageHeaders } from "@/lib/visitor"
 
 /**
  * Consent + share-link creation for a finished scan.
@@ -31,7 +32,7 @@ export function ShareBox({ report, repoUrl }: { report: unknown; repoUrl?: strin
     try {
       const res = await fetch("/api/share", {
         method: "POST",
-        headers: { "content-type": "application/json" },
+        headers: { "content-type": "application/json", ...usageHeaders() },
         body: JSON.stringify({ report, repoUrl }),
       })
       if (!res.ok) throw new Error(String(res.status))

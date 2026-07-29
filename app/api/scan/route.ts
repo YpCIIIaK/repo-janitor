@@ -20,6 +20,7 @@ import {
   queueDepth,
   withScanSlot,
 } from "@/lib/scan-limits"
+import { recordRepoUsage } from "@/lib/usage"
 
 // Cloning + scanning is real work — run on the Node runtime, allow time for it.
 export const runtime = "nodejs"
@@ -168,7 +169,17 @@ export async function POST(request: Request) {
   const encoder = new TextEncoder()
   const stream = new ReadableStream<Uint8Array>({
     async start(controller) {
-      const send = (obj: unknown) => controller.enqueue(encoder.encode(JSON.stringify(obj) + "\n"))
+      const send = (obj: unknown) => {
+        // Usage is recorded from the outcome the server actually produced, not
+        // from anything the client says happened. `recordRepoUsage` stores the
+        // host and owner/name only — never this URL as given, which can carry
+        // credentials — and never any part of the report.
+        const ev = obj as { type?: string; url?: string; ok?: boolean }
+        if (ev.type === "repo-done" && ev.url) {
+          recordRepoUsage(request, "scan", ev.url, { ok: ev.ok })
+        }
+        controller.enqueue(encoder.encode(JSON.stringify(obj) + "\n"))
+      }
       send({ type: "start", total: urls.length })
       for (let i = 0; i < urls.length; i++) {
         const url = urls[i]

@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Settings, Sparkles, Eye, EyeOff, Check, Clock, Globe } from "lucide-react"
+import { Settings, Sparkles, Eye, EyeOff, Check, Clock, Globe, BarChart3 } from "lucide-react"
 import {
   Dialog,
   DialogContent,
@@ -32,6 +32,7 @@ import {
   MIN_INTERVAL_HOURS,
   type ScheduleSettings,
 } from "@/lib/schedule-store"
+import { setUsageOptedOut, useUsageOptedOut } from "@/lib/visitor"
 
 const CATEGORY_HINT: Record<string, string> = {
   "dead-code": "Is each unused export really safe to remove?",
@@ -54,6 +55,10 @@ export function SettingsDialog({ trigger }: { trigger?: React.ReactNode } = {}) 
   const [sched, setSched] = useState<ScheduleSettings>(readSchedule)
   const [showKey, setShowKey] = useState(false)
   const [saved, setSaved] = useState(false)
+  // Not part of the draft: this one takes effect the moment it is flipped, with
+  // no Save. Consent that only applies once you find the right button is not
+  // consent, and the id is deleted the instant the switch goes off.
+  const optedOut = useUsageOptedOut()
 
   // Re-sync the draft from storage whenever the dialog is opened.
   useEffect(() => {
@@ -315,6 +320,31 @@ export function SettingsDialog({ trigger }: { trigger?: React.ReactNode } = {}) 
                 </p>
               </div>
             )}
+          </div>
+
+          {/* Usage statistics */}
+          <div className="space-y-2 border-t border-border pt-5">
+            <div className="flex items-start justify-between gap-4">
+              <div className="min-w-0 space-y-0.5">
+                <Label htmlFor="usage-stats" className="flex items-center gap-1.5">
+                  <BarChart3 className="size-4 text-primary" />
+                  Usage statistics
+                </Label>
+                {/* Says exactly what is recorded, in the place where it can be
+                    switched off. A vaguer sentence would be easier to write and
+                    would make the switch impossible to judge. */}
+                <p className="text-xs text-muted-foreground">
+                  Counts how often this service is used: a random id for this browser, the
+                  event, and the repository&apos;s address. Never your findings, scores, file
+                  paths or IP address. Takes effect immediately — Cancel does not undo it.
+                </p>
+              </div>
+              <Switch
+                id="usage-stats"
+                checked={!optedOut}
+                onCheckedChange={(v) => setUsageOptedOut(!v)}
+              />
+            </div>
           </div>
         </div>
 

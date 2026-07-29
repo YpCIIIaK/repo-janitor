@@ -20,7 +20,7 @@ import {
 } from "lucide-react"
 import type { Grade } from "@/lib/mock-data"
 import { Sparkline } from "@/components/charts/sparkline"
-import { NavChild, NavGroup, NavItem, NavSectionLabel } from "./sidebar-nav"
+import { NavItem, NavSectionLabel } from "./sidebar-nav"
 import { cn } from "@/lib/utils"
 
 /** Persisted so the choice survives a reload — a layout preference you have to
@@ -253,49 +253,52 @@ export function RepoSidebar({
                 onClick={go("issues")}
               />
 
-              <NavGroup icon={<ShieldCheck />} label="Findings">
-                <NavChild
-                  icon={<ShieldCheck />}
-                  label="Security"
-                  count={counts?.security}
-                  active={section === "security"}
-                  onClick={go("security")}
-                />
-                <NavChild
-                  icon={<LinkIcon />}
-                  label="Links"
-                  count={counts?.links}
-                  active={section === "links"}
-                  onClick={go("links")}
-                />
-                <NavChild
-                  icon={<Boxes />}
-                  label="Breakdown"
-                  active={section === "breakdown"}
-                  onClick={go("breakdown")}
-                />
-              </NavGroup>
+              {/* Flat, not collapsible groups. A group is worth its cost when a
+                  list is too long to scan; seven destinations are not, and the
+                  group turned every one of them into two clicks — plus a guess
+                  about which heading it was filed under. The headings stay as
+                  labels, doing the grouping without hiding anything. */}
+              <NavSectionLabel>Findings</NavSectionLabel>
+              <NavItem
+                icon={<ShieldCheck />}
+                label="Security"
+                count={counts?.security}
+                active={section === "security"}
+                onClick={go("security")}
+              />
+              <NavItem
+                icon={<LinkIcon />}
+                label="Links"
+                count={counts?.links}
+                active={section === "links"}
+                onClick={go("links")}
+              />
+              <NavItem
+                icon={<Boxes />}
+                label="Breakdown"
+                active={section === "breakdown"}
+                onClick={go("breakdown")}
+              />
 
-              <NavGroup icon={<Workflow />} label="Repository">
-                <NavChild
-                  icon={<Workflow />}
-                  label="Tree"
-                  active={section === "tree"}
-                  onClick={go("tree")}
-                />
-                <NavChild
-                  icon={<GitGraph />}
-                  label="History"
-                  active={section === "history"}
-                  onClick={go("history")}
-                />
-                <NavChild
-                  icon={<Info />}
-                  label="About"
-                  active={section === "about"}
-                  onClick={go("about")}
-                />
-              </NavGroup>
+              <NavSectionLabel>Repository</NavSectionLabel>
+              <NavItem
+                icon={<Workflow />}
+                label="Tree"
+                active={section === "tree"}
+                onClick={go("tree")}
+              />
+              <NavItem
+                icon={<GitGraph />}
+                label="History"
+                active={section === "history"}
+                onClick={go("history")}
+              />
+              <NavItem
+                icon={<Info />}
+                label="About"
+                active={section === "about"}
+                onClick={go("about")}
+              />
             </>
           )}
 

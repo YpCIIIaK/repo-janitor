@@ -6,6 +6,7 @@ import { getShare } from "@/lib/share-store"
 import { LOCALE_COOKIE, resolveLocale, t } from "@/lib/i18n"
 import type { SharedReport } from "@/lib/share-report"
 import { FreshScanCta } from "@/components/repo-anti-rot/fresh-scan-cta"
+import { ViewBeacon } from "@/components/repo-anti-rot/view-beacon"
 
 /**
  * A shared scan result.
@@ -110,6 +111,7 @@ export default async function SharedReportPage({ params }: { params: Promise<Par
 
   return (
     <main className="mx-auto w-full max-w-3xl px-4 py-12 md:px-6">
+      <ViewBeacon owner={owner} name={name} />
       <p className="text-sm text-muted-foreground">{tr("share.heading")}</p>
       <h1 className="mt-1 text-balance text-2xl font-semibold tracking-tight break-words">
         {owner}/{name}

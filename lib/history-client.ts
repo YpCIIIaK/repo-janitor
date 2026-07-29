@@ -2,6 +2,7 @@
 
 import type { ScanReport } from "@/lib/reports-store"
 import type { CommitWithStats } from "@/lib/commit-sampling"
+import { usageHeaders } from "@/lib/visitor"
 
 export type { CommitWithStats }
 
@@ -98,7 +99,7 @@ export async function streamHistory(
         : { url, sample: scope.sample }
   const res = await fetch("/api/scan/history", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...usageHeaders() },
     body: JSON.stringify(body),
     signal: handlers.signal,
   })

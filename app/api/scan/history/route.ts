@@ -12,6 +12,7 @@ import {
 } from "@/lib/clone-runner"
 import { parseLog, selectCommits, type Commit } from "@/lib/commit-sampling"
 import { getCachedScan, putCachedScan } from "@/lib/scan-cache"
+import { recordRepoUsage } from "@/lib/usage"
 
 // Cloning + scanning many commits is heavy — Node runtime, generous budget.
 export const runtime = "nodejs"
@@ -263,7 +264,21 @@ export async function POST(request: Request) {
         }
       }
       emit({ type: "start", url })
-      await buildHistory(url, sample, all, emit, () => cancelled, shas)
+      // Counted from the nodes actually produced, so a scan the user stopped
+      // halfway is recorded as the work it really did.
+      let scanned = 0
+      await buildHistory(
+        url,
+        sample,
+        all,
+        (ev) => {
+          if (ev.type === "node") scanned++
+          emit(ev)
+        },
+        () => cancelled,
+        shas,
+      )
+      recordRepoUsage(request, "commit-scan", url, { amount: scanned, ok: scanned > 0 })
       if (!cancelled) controller.close()
     },
     // Fired when the client aborts the fetch or the connection drops. This is
