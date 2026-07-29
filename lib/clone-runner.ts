@@ -18,6 +18,56 @@ export const CLI_DIST = join(process.cwd(), "packages", "cli", "dist", "index.js
 export const MAX_CLONE_BYTES = 500 * 1024 * 1024 // 500 MB
 export const SIZE_POLL_MS = 2_000
 
+/**
+ * Heap ceiling for the scanner child process, in MB.
+ *
+ * Without one, a large repository grows the child until the CONTAINER runs out
+ * of memory, and the platform kills the whole service — every other request in
+ * flight dies with it and the instance restarts. With one, the child hits its
+ * own limit first and dies alone, leaving the server up and the caller with an
+ * explanation.
+ *
+ * The default assumes the smallest instance worth deploying on (512 MB) and
+ * leaves room for the Next.js server itself. Raise it on a bigger box.
+ */
+export const SCAN_HEAP_MB = Math.max(
+  128,
+  Number.parseInt(process.env.REPO_ANTI_ROT_SCAN_HEAP_MB ?? "", 10) || 320,
+)
+
+/** Progress lines the CLI writes to stderr; never part of an error message. */
+const PROGRESS_PREFIX = "@@PROGRESS@@"
+
+/**
+ * Turn a failed child's stderr into something worth showing a user.
+ *
+ * The raw stream is not it. When the scanner is killed mid-run — by the heap
+ * limit, by the timeout, by the platform — stderr holds mostly progress lines,
+ * so the "error" a user saw was a wall of `@@PROGRESS@@{"completed":3,…}` and no
+ * hint of what went wrong. Progress is dropped, the tail is kept (the failure is
+ * at the end, not the start), and the whole thing is bounded.
+ */
+export function describeFailure(result: RunResult): string {
+  const lines = result.stderr
+    .split(/\r?\n/)
+    .map((l) => l.trim())
+    .filter((l) => l && !l.startsWith(PROGRESS_PREFIX))
+
+  const text = lines.join(" ").toLowerCase()
+
+  // The two ways a big repository ends this, both worth naming plainly: there is
+  // nothing the user can fix in their URL, and "exit 134" tells them nothing.
+  if (text.includes("heap out of memory") || text.includes("allocation failed")) {
+    return `repository is too large to scan on this instance (the scanner ran out of memory at ${SCAN_HEAP_MB} MB)`
+  }
+  if (result.code === null || result.code === 137 || result.code === 134) {
+    return "scan was stopped — it ran out of memory or time. This usually means the repository is very large."
+  }
+
+  const detail = lines.slice(-4).join(" ").slice(0, 400)
+  return detail ? `scan failed: ${detail}` : `scan failed (exit ${result.code})`
+}
+
 export interface RunResult {
   code: number | null
   stdout: string

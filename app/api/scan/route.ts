@@ -6,7 +6,9 @@ import { isPublicGitUrl } from "@/lib/url-guard"
 import {
   CLI_DIST,
   MAX_CLONE_BYTES,
+  SCAN_HEAP_MB,
   SIZE_POLL_MS,
+  describeFailure,
   run,
   dirSizeExceeds,
   type RunResult,
@@ -77,7 +79,21 @@ async function cloneAndScan(url: string, emit: (ev: ScanEvent) => void): Promise
     const reportPath = join(dir, "repo-anti-rot-report.json")
     const scan = await run(
       "node",
-      [CLI_DIST, "scan", "--path", dir, "--format", "json", "--output", reportPath, "--progress"],
+      [
+        // Cap the child's heap so a huge repository kills the scanner and not
+        // the whole service. Without this the container hits its limit and the
+        // platform restarts everything, taking every other request with it.
+        `--max-old-space-size=${SCAN_HEAP_MB}`,
+        CLI_DIST,
+        "scan",
+        "--path",
+        dir,
+        "--format",
+        "json",
+        "--output",
+        reportPath,
+        "--progress",
+      ],
       {
         timeoutMs: 120_000,
         onStderrLine: (line) => {
@@ -96,7 +112,7 @@ async function cloneAndScan(url: string, emit: (ev: ScanEvent) => void): Promise
       },
     )
     if (scan.code !== 0) {
-      emit({ type: "repo-done", url, ok: false, error: `scan failed: ${scan.stderr.trim() || `exit ${scan.code}`}` })
+      emit({ type: "repo-done", url, ok: false, error: describeFailure(scan) })
       return
     }
 

@@ -6,7 +6,9 @@ import { isPublicGitUrl } from "@/lib/url-guard"
 import {
   CLI_DIST,
   MAX_CLONE_BYTES,
+  SCAN_HEAP_MB,
   SIZE_POLL_MS,
+  describeFailure,
   run,
   dirSizeExceeds,
 } from "@/lib/clone-runner"
@@ -97,11 +99,23 @@ async function scanCommit(url: string, dir: string, sha: string): Promise<unknow
   const reportPath = join(dir, "repo-anti-rot-report.json")
   const scan = await run(
     "node",
-    [CLI_DIST, "scan", "--path", dir, "--format", "json", "--output", reportPath],
+    [
+      // Same heap cap as the single-repo route: one oversized commit must not
+      // take the whole service down mid-history.
+      `--max-old-space-size=${SCAN_HEAP_MB}`,
+      CLI_DIST,
+      "scan",
+      "--path",
+      dir,
+      "--format",
+      "json",
+      "--output",
+      reportPath,
+    ],
     { timeoutMs: 120_000 },
   )
   if (scan.code !== 0) {
-    throw new Error(`scan failed: ${scan.stderr.trim() || `exit ${scan.code}`}`)
+    throw new Error(describeFailure(scan))
   }
   const report = JSON.parse(await readFile(reportPath, "utf-8"))
   await putCachedScan(url, sha, report)

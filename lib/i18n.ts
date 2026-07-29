@@ -104,6 +104,8 @@ const en = {
   "repo.searchError": "Could not reach GitHub. You can still paste a URL and scan.",
   "repo.scanThis": "Scan",
   "repo.archived": "Archived",
+  "repo.largeHint":
+    "A large repository. Cloning and scanning it takes longer, and may fail on a small server.",
   "repo.fork": "Fork",
   "repo.stars": "Stars",
   "repo.forks": "Forks",
@@ -223,6 +225,8 @@ const ru: Messages = {
   "repo.searchError": "GitHub недоступен. Ссылку можно вставить и просканировать как обычно.",
   "repo.scanThis": "Сканировать",
   "repo.archived": "В архиве",
+  "repo.largeHint":
+    "Большой репозиторий. Клонирование и скан займут больше времени и могут не пройти на маленьком сервере.",
   "repo.fork": "Форк",
   "repo.stars": "Звёзды",
   "repo.forks": "Форки",
