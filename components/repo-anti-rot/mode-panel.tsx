@@ -6,6 +6,7 @@ import type { Issue } from "@/lib/mock-data"
 import { filterMode, type IssueMode } from "@/lib/issue-modes"
 import { severityStyle } from "@/lib/issue-format"
 import { useSnoozed, partitionSnoozed } from "@/lib/snooze-store"
+import type { SeverityWeights } from "@/lib/score"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { EmptyState } from "@/components/ui/empty-state"
 import { IssuesTable, type TableRepo } from "./issues-table"
@@ -50,11 +51,13 @@ export function ModePanel({
   issues,
   repo,
   query,
+  weights,
 }: {
   mode: IssueMode
   issues: Issue[]
   repo?: TableRepo
   query?: string
+  weights?: SeverityWeights
 }) {
   const copy = COPY[mode]
   const scoped = useMemo(() => filterMode(issues, mode), [issues, mode])
@@ -121,7 +124,9 @@ export function ModePanel({
         </CardContent>
       </Card>
 
-      {scoped.length > 0 && <IssuesTable issues={scoped} repo={repo} query={query} />}
+      {scoped.length > 0 && (
+        <IssuesTable issues={scoped} repo={repo} query={query} weights={weights} />
+      )}
       {scoped.length > 0 && live.length === 0 && (
         <p className="text-xs text-muted-foreground">
           All {scoped.length} finding{scoped.length === 1 ? " is" : "s are"} snoozed — use the list

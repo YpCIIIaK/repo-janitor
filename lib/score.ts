@@ -61,6 +61,56 @@ export function computeScore(issues: Issue[], weights: SeverityWeights = DEFAULT
   return Math.max(0, Math.round(100 - penalty))
 }
 
+/**
+ * What each individual finding costs the score, keyed by issue id.
+ *
+ * Below a tier's cap this is simply its weight. Above the cap the tier's total
+ * is fixed, so the findings in it *share* that total — twenty info notes past
+ * an 8-point cap cost 0.4 each, not 0.25. Any other split would be a number
+ * that does not add up: the per-finding costs have to sum to the tier penalty,
+ * because that is the only reading of "this is what it costs you" that survives
+ * someone checking the arithmetic.
+ *
+ * A consequence worth knowing rather than hiding: inside a capped tier, fixing
+ * one finding does not raise the score by its listed cost — the remaining ones
+ * absorb it. The UI says so where it shows these numbers.
+ */
+export function issueCosts(
+  issues: Issue[],
+  weights: SeverityWeights = DEFAULT_WEIGHTS,
+): Map<string, number> {
+  const byTier = new Map(penaltyBreakdown(issues, weights).map((p) => [p.severity, p]))
+  const costs = new Map<string, number>()
+  for (const issue of issues) {
+    const tier = byTier.get(issue.severity)
+    costs.set(issue.id, tier && tier.count > 0 ? tier.penalty / tier.count : 0)
+  }
+  return costs
+}
+
+/** Points each category is responsible for, worst first. */
+export function categoryCosts(
+  issues: Issue[],
+  weights: SeverityWeights = DEFAULT_WEIGHTS,
+): { category: IssueCategory; label: string; cost: number; count: number }[] {
+  const costs = issueCosts(issues, weights)
+  const byCat = new Map<IssueCategory, { cost: number; count: number }>()
+  for (const issue of issues) {
+    const acc = byCat.get(issue.category) ?? { cost: 0, count: 0 }
+    acc.cost += costs.get(issue.id) ?? 0
+    acc.count++
+    byCat.set(issue.category, acc)
+  }
+  return [...byCat.entries()]
+    .map(([category, { cost, count }]) => ({
+      category,
+      label: categoryLabels[category],
+      cost,
+      count,
+    }))
+    .sort((a, b) => b.cost - a.cost || b.count - a.count)
+}
+
 export function scoreToGrade(score: number): Grade {
   if (score >= 90) return "A"
   if (score >= 75) return "B"

@@ -28,7 +28,8 @@ jobs:
           dashboard-url: \${{ secrets.REPO_ANTI_ROT_URL }}
           dashboard-token: \${{ secrets.REPO_ANTI_ROT_TOKEN }}`
 
-export function OnboardingDialog() {
+/** `trigger` lets the sidebar rail supply a rail-shaped button. See SettingsDialog. */
+export function OnboardingDialog({ trigger }: { trigger?: React.ReactNode } = {}) {
   const [copied, setCopied] = useState(false)
 
   const copy = async () => {
@@ -40,10 +41,12 @@ export function OnboardingDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button size="sm" className="h-8 gap-1.5">
-          <Plus className="size-4" />
-          Add repo
-        </Button>
+        {trigger ?? (
+          <Button size="sm" className="h-8 gap-1.5">
+            <Plus className="size-4" />
+            Add repo
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>

@@ -43,7 +43,12 @@ const CATEGORY_HINT: Record<string, string> = {
   hygiene: "Missing files, tests/CI, debug logs, docs — the concrete fix.",
 }
 
-export function SettingsDialog() {
+/**
+ * `trigger` lets the caller supply its own button — the sidebar rail needs a
+ * rail-shaped one. Passing the whole dialog around beats duplicating its
+ * contents next to a second trigger.
+ */
+export function SettingsDialog({ trigger }: { trigger?: React.ReactNode } = {}) {
   const [open, setOpen] = useState(false)
   const [draft, setDraft] = useState<AiSettings>(readAiSettings)
   const [sched, setSched] = useState<ScheduleSettings>(readSchedule)
@@ -75,9 +80,11 @@ export function SettingsDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="icon" className="size-8" title="Settings">
-          <Settings className="size-4" />
-        </Button>
+        {trigger ?? (
+          <Button variant="ghost" size="icon" className="size-8" title="Settings">
+            <Settings className="size-4" />
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="flex max-h-[85vh] flex-col overflow-hidden sm:max-w-lg">
         <DialogHeader>

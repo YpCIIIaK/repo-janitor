@@ -87,6 +87,15 @@ export function GradeCard({
                 </span>
               </div>
             ))}
+            {/* Without this, the per-finding numbers elsewhere look wrong: inside
+                a capped tier they are a share of a fixed total, so fixing one
+                finding hands its points to the others rather than to you. */}
+            {breakdown.some((p) => p.capped) && (
+              <p className="pt-1 text-[11px] leading-snug text-muted-foreground/70">
+                A tier at its maximum has stopped charging — clearing one finding
+                there raises the score only once the whole tier drops below the cap.
+              </p>
+            )}
           </div>
         )}
       </CardContent>

@@ -3,8 +3,6 @@
 import { Activity, ChevronsUpDown, LayoutDashboard, Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { OnboardingDialog } from "./onboarding-dialog"
-import { SettingsDialog } from "./settings-dialog"
 import type { Repository } from "@/lib/mock-data"
 
 export function TopBar({
@@ -78,8 +76,8 @@ export function TopBar({
               className="h-8 w-56 bg-secondary pl-8 text-sm"
             />
           </div>
-          <SettingsDialog />
-          <OnboardingDialog />
+          {/* Settings and "connect a repository" moved to the sidebar rail. Two
+              buttons opening the same dialog is two places to look. */}
         </div>
       </div>
     </header>

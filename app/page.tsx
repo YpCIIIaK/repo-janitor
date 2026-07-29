@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import dynamic from "next/dynamic"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Tabs, TabsContent } from "@/components/ui/tabs"
 import { TopBar } from "@/components/repo-anti-rot/top-bar"
 import { RepoSidebar, type SidebarRepo } from "@/components/repo-anti-rot/repo-sidebar"
 import { HealthOverview } from "@/components/repo-anti-rot/health-overview"
@@ -26,7 +26,9 @@ import { NewScanDialog } from "@/components/repo-anti-rot/new-scan-dialog"
 import { WelcomeScreen } from "@/components/repo-anti-rot/welcome-screen"
 import { RepoOverview } from "@/components/repo-anti-rot/repo-overview"
 import { useRepos, removeRepo, repoStats, repoTrend, countSeverity, timeAgo, repoDiff, repoDiffDetail, newIssueIds, issueDensity } from "@/lib/reports-store"
-import { Workflow, Info, GitGraph, ShieldCheck, Link as LinkIcon } from "lucide-react"
+import { Settings as SettingsIcon, HelpCircle } from "lucide-react"
+import { SettingsDialog } from "@/components/repo-anti-rot/settings-dialog"
+import { OnboardingDialog } from "@/components/repo-anti-rot/onboarding-dialog"
 import { ModePanel } from "@/components/repo-anti-rot/mode-panel"
 import { ScanHistory } from "@/components/repo-anti-rot/scan-history"
 import { filterMode } from "@/lib/issue-modes"
@@ -177,17 +179,60 @@ export default function Page() {
   }
 
   return (
-    <div className="min-h-screen">
-      <TopBar repo={repo} search={search} onSearch={setSearch} onHome={() => setShowHome(true)} />
-      <div className="flex">
-        <RepoSidebar
-          repositories={sidebarRepos}
-          activeId={showOverview ? OVERVIEW : current.id}
-          onSelect={setActiveId}
-          onRemove={handleRemove}
-          onNewScan={() => setScanOpen(true)}
-          onShowOverview={repos.length > 1 ? () => setActiveId(OVERVIEW) : undefined}
-        />
+    // App shell: the sidebar owns the full height, so the rail is continuous and
+    // the header belongs to the content rather than spanning both.
+    <div className="flex min-h-screen">
+      <RepoSidebar
+        repositories={sidebarRepos}
+        activeId={showOverview ? OVERVIEW : current.id}
+        onSelect={(id) => {
+          setActiveId(id)
+          setTab("overview")
+        }}
+        onRemove={handleRemove}
+        onNewScan={() => setScanOpen(true)}
+        onShowOverview={repos.length > 1 ? () => setActiveId(OVERVIEW) : undefined}
+        onHome={() => setShowHome(true)}
+        section={showOverview ? undefined : tab}
+        onSelectSection={(s) => {
+          setActiveId(current.id)
+          setTab(s)
+        }}
+        counts={{
+          issues: issues.length,
+          security: modeCounts.security,
+          links: modeCounts.links,
+        }}
+        railExtras={
+          <>
+            <SettingsDialog
+              trigger={
+                <button
+                  title="Settings"
+                  aria-label="Settings"
+                  className="flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent/50 hover:text-foreground"
+                >
+                  <SettingsIcon className="size-4" />
+                </button>
+              }
+            />
+            <OnboardingDialog
+              trigger={
+                <button
+                  title="Connect a repository"
+                  aria-label="Connect a repository"
+                  className="flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent/50 hover:text-foreground"
+                >
+                  <HelpCircle className="size-4" />
+                </button>
+              }
+            />
+          </>
+        }
+      />
+
+      <div className="flex min-w-0 flex-1 flex-col">
+        <TopBar repo={repo} search={search} onSearch={setSearch} onHome={() => setShowHome(true)} />
 
         {showOverview ? (
           <main className="min-w-0 flex-1 px-4 py-6 md:px-6">
@@ -260,45 +305,10 @@ export default function Page() {
             </div>
           </div>
 
+          {/* No TabsList: the sections live in the sidebar now. Radix drives the
+              panels from `value` alone, so the tab strip is gone without the
+              content plumbing changing. */}
           <Tabs value={tab} onValueChange={(v) => setTab(v as PaletteTab)} className="w-full">
-            <TabsList>
-              <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="issues">Issues</TabsTrigger>
-              {/* Modes: one question each, over the same scan. Counts live on the
-                  trigger so you can see there is something to look at without
-                  opening the tab. */}
-              <TabsTrigger value="security">
-                <ShieldCheck className="size-4" />
-                Security
-                {modeCounts.security > 0 && (
-                  <span className="ml-1 rounded-full bg-muted px-1.5 font-mono text-[10px] tabular-nums">
-                    {modeCounts.security}
-                  </span>
-                )}
-              </TabsTrigger>
-              <TabsTrigger value="links">
-                <LinkIcon className="size-4" />
-                Links
-                {modeCounts.links > 0 && (
-                  <span className="ml-1 rounded-full bg-muted px-1.5 font-mono text-[10px] tabular-nums">
-                    {modeCounts.links}
-                  </span>
-                )}
-              </TabsTrigger>
-              <TabsTrigger value="tree">
-                <Workflow className="size-4" />
-                Tree
-              </TabsTrigger>
-              <TabsTrigger value="history">
-                <GitGraph className="size-4" />
-                History
-              </TabsTrigger>
-              <TabsTrigger value="about">
-                <Info className="size-4" />
-                About
-              </TabsTrigger>
-              <TabsTrigger value="breakdown">Breakdown</TabsTrigger>
-            </TabsList>
 
             <TabsContent value="overview" className="mt-6">
               <AiSummaryCard
@@ -331,23 +341,23 @@ export default function Page() {
                 <AgeHistogram issues={issues} />
               </div>
               <div className="mt-6">
-                <IssuesTable issues={allIssues} repo={tableRepo} query={search} newIds={newIds} fixed={fixedIssues} />
+                <IssuesTable issues={allIssues} repo={tableRepo} query={search} newIds={newIds} fixed={fixedIssues} weights={weights} />
               </div>
             </TabsContent>
 
             <TabsContent value="issues" className="mt-6">
               <HealthOverview stats={stats} />
               <div className="mt-6">
-                <IssuesTable issues={allIssues} repo={tableRepo} query={search} newIds={newIds} fixed={fixedIssues} />
+                <IssuesTable issues={allIssues} repo={tableRepo} query={search} newIds={newIds} fixed={fixedIssues} weights={weights} />
               </div>
             </TabsContent>
 
             <TabsContent value="security" className="mt-6">
-              <ModePanel mode="security" issues={allIssues} repo={tableRepo} query={search} />
+              <ModePanel mode="security" issues={allIssues} repo={tableRepo} query={search} weights={weights} />
             </TabsContent>
 
             <TabsContent value="links" className="mt-6">
-              <ModePanel mode="links" issues={allIssues} repo={tableRepo} query={search} />
+              <ModePanel mode="links" issues={allIssues} repo={tableRepo} query={search} weights={weights} />
             </TabsContent>
 
             <TabsContent value="tree" className="mt-6">

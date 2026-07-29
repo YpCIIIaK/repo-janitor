@@ -23,6 +23,7 @@ import {
   type Severity,
 } from "@/lib/mock-data"
 import { searchIssues } from "@/lib/issue-search"
+import { issueCosts, type SeverityWeights } from "@/lib/score"
 import { githubFileUrl } from "@/lib/github-link"
 import { githubNewIssueUrl } from "@/lib/github-issue"
 import { useSnoozed, setSnoozed, snoozeKey, partitionSnoozed } from "@/lib/snooze-store"
@@ -57,6 +58,13 @@ export interface TableRepo {
 
 const severityWeight: Record<Severity, number> = { critical: 0, warning: 1, info: 2 }
 
+/** Round for display without printing "0" for something that does cost points. */
+function formatCost(cost: number): string {
+  if (cost === 0) return "0"
+  const rounded = Math.round(cost * 100) / 100
+  return rounded === 0 ? "0.01" : String(rounded)
+}
+
 /** A single issue row — clicking it opens the detail drawer. */
 function IssueRow({
   issue,
@@ -64,12 +72,15 @@ function IssueRow({
   onSelect,
   snoozed,
   isNew = false,
+  cost,
 }: {
   issue: Issue
   selected: boolean
   onSelect: () => void
   snoozed: boolean
   isNew?: boolean
+  /** Points this finding takes off the score; omitted when unknown. */
+  cost?: number
 }) {
   return (
     <button
@@ -110,6 +121,17 @@ function IssueRow({
       <span className="hidden shrink-0 text-xs text-muted-foreground md:block">
         {categoryLabels[issue.category]}
       </span>
+      {/* What this one finding costs. Snoozed findings cost nothing — they are
+          already out of the score — so showing a number there would be a lie. */}
+      <span
+        className={cn(
+          "hidden w-12 shrink-0 text-right font-mono text-xs tabular-nums sm:block",
+          snoozed ? "text-muted-foreground/40" : "text-destructive/70",
+        )}
+        title={snoozed ? "Snoozed — not counted against the score" : "Points off the score"}
+      >
+        {snoozed ? "—" : cost === undefined ? "" : `−${formatCost(cost)}`}
+      </span>
       <span className="w-12 shrink-0 text-right font-mono text-xs tabular-nums text-muted-foreground">
         {formatAge(issue.ageDays)}
       </span>
@@ -124,6 +146,7 @@ export function IssuesTable({
   query = "",
   newIds,
   fixed = [],
+  weights,
 }: {
   issues: Issue[]
   repo?: TableRepo
@@ -132,6 +155,8 @@ export function IssuesTable({
   newIds?: Set<string>
   /** Findings resolved since the previous scan — listed in a collapsed section. */
   fixed?: Issue[]
+  /** Effective scan weights, so per-finding costs match the score exactly. */
+  weights?: SeverityWeights
 }) {
   const [severity, setSeverity] = useState<string>("all")
   const [category, setCategory] = useState<string>("all")
@@ -236,10 +261,16 @@ export function IssuesTable({
     setDrawerOpen(true)
   }
 
+  // Costs are computed over the LIVE set, because that is the set the score was
+  // computed from. Including snoozed findings would dilute a capped tier with
+  // findings that are not being charged for.
+  const costs = useMemo(() => issueCosts(live, weights), [live, weights])
+
   const renderRow = (issue: Issue) => (
     <IssueRow
       key={issue.id}
       issue={issue}
+      cost={costs.get(issue.id)}
       selected={selectedId === issue.id && drawerOpen}
       onSelect={() => openIssue(issue)}
       snoozed={isSnoozed(issue.id)}

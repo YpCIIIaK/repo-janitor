@@ -3,6 +3,8 @@ import {
   computeScore,
   scoreToGrade,
   categoryScores,
+  categoryCosts,
+  issueCosts,
   penaltyBreakdown,
   DEFAULT_WEIGHTS,
 } from "@/lib/score"
@@ -101,6 +103,61 @@ describe("penaltyBreakdown", () => {
       const total = penaltyBreakdown(set).reduce((sum, p) => sum + p.penalty, 0)
       expect(computeScore(set)).toBe(Math.max(0, Math.round(100 - total)))
     }
+  })
+})
+
+describe("issueCosts", () => {
+  it("charges each finding its tier weight below the cap", () => {
+    const costs = issueCosts([
+      issue({ id: "a", severity: "critical" }),
+      issue({ id: "b", severity: "warning" }),
+      issue({ id: "c", severity: "info" }),
+    ])
+    expect(costs.get("a")).toBe(10)
+    expect(costs.get("b")).toBe(3)
+    expect(costs.get("c")).toBe(0.25)
+  })
+
+  it("shares a capped tier's total between its findings", () => {
+    // 100 info would be 25 points linearly; the cap holds the tier to 8, so each
+    // finding is responsible for 0.08 — not the 0.25 the weight suggests.
+    const many = Array.from({ length: 100 }, (_, i) => issue({ id: `i${i}`, severity: "info" }))
+    const costs = issueCosts(many)
+    expect(costs.get("i0")).toBeCloseTo(0.08, 10)
+  })
+
+  /**
+   * The number shown against a finding is a claim about the score. If the claims
+   * did not add up to the points actually missing, every one of them would be
+   * wrong by an amount nobody could work out.
+   */
+  it("always sums to exactly the points the score is missing", () => {
+    const sets = [
+      [issue({ id: "x", severity: "critical" })],
+      Array.from({ length: 60 }, (_, i) => issue({ id: `w${i}`, severity: "warning" })),
+      Array.from({ length: 200 }, (_, i) =>
+        issue({ id: `m${i}`, severity: (["critical", "warning", "info"] as const)[i % 3] }),
+      ),
+    ]
+    for (const set of sets) {
+      const total = [...issueCosts(set).values()].reduce((a, b) => a + b, 0)
+      expect(computeScore(set)).toBe(Math.max(0, Math.round(100 - total)))
+    }
+  })
+})
+
+describe("categoryCosts", () => {
+  it("attributes points to categories, worst first", () => {
+    const result = categoryCosts([
+      issue({ id: "a", category: "security", severity: "critical" }),
+      issue({ id: "b", category: "todo", severity: "info" }),
+      issue({ id: "c", category: "hygiene", severity: "warning" }),
+      issue({ id: "d", category: "hygiene", severity: "warning" }),
+    ])
+    expect(result.map((c) => c.category)).toEqual(["security", "hygiene", "todo"])
+    expect(result[0].cost).toBe(10)
+    expect(result[1].cost).toBe(6)
+    expect(result[1].count).toBe(2)
   })
 })
 
