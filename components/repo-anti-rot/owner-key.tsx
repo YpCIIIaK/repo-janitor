@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { OWNER_CHANGED_EVENT } from "@/lib/owner-events"
 import { KeyRound, Check, Loader2 } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -47,6 +48,10 @@ export function OwnerKey() {
       // in a React tree is exactly what httpOnly was chosen to avoid.
       setKey("")
       setState((prev) => ({ configured: prev?.configured ?? true, owner: Boolean(data?.owner) }))
+      // Anything showing a limit has to ask again: unlocking changes the answer,
+      // and a form still holding the public cap will refuse work the server
+      // would now accept.
+      window.dispatchEvent(new Event(OWNER_CHANGED_EVENT))
     } catch (err) {
       setError(String(err))
     } finally {

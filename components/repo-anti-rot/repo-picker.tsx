@@ -8,6 +8,7 @@ import { GithubRepoCard } from "./github-repo-card"
 import { RepoFinder } from "./repo-finder"
 import { parseRepoRef, type GithubRepo } from "@/lib/github-repo"
 import { useLocale } from "@/components/i18n/locale-provider"
+import { OWNER_CHANGED_EVENT } from "@/lib/owner-events"
 
 /**
  * Choosing what to scan, explicitly.
@@ -37,22 +38,35 @@ export interface SelectedRepo {
  */
 export const MAX_SELECTED = 20
 
-/** Ask the server what it will accept. Falls back to the constant above. */
+/**
+ * Ask the server what it will accept. Falls back to the constant above.
+ *
+ * Re-asked whenever the operator key is claimed or dropped. Asking only on mount
+ * meant unlocking in Settings left the form still enforcing the public cap until
+ * a reload — the limit was lifted on the server and the form went on refusing.
+ */
 function useMaxSelected(): number {
   const [max, setMax] = useState(MAX_SELECTED)
+
   useEffect(() => {
     let alive = true
-    void fetch("/api/scan/limits")
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data: { maxUrlsPerRequest?: number } | null) => {
-        const n = data?.maxUrlsPerRequest
-        if (alive && typeof n === "number" && n > 0) setMax(n)
-      })
-      .catch(() => {})
+    const ask = () => {
+      void fetch("/api/scan/limits", { cache: "no-store" })
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data: { maxUrlsPerRequest?: number } | null) => {
+          const n = data?.maxUrlsPerRequest
+          if (alive && typeof n === "number" && n > 0) setMax(n)
+        })
+        .catch(() => {})
+    }
+    ask()
+    window.addEventListener(OWNER_CHANGED_EVENT, ask)
     return () => {
       alive = false
+      window.removeEventListener(OWNER_CHANGED_EVENT, ask)
     }
   }, [])
+
   return max
 }
 

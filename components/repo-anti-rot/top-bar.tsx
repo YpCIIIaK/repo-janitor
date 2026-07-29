@@ -3,6 +3,7 @@
 import { Activity, ChevronsUpDown, LayoutDashboard, Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import type { ReactNode } from "react"
 import type { Repository } from "@/lib/mock-data"
 
 export function TopBar({
@@ -11,6 +12,7 @@ export function TopBar({
   onSearch,
   onHome,
   onBackToDashboard,
+  extras,
 }: {
   repo?: Repository
   search?: string
@@ -19,6 +21,8 @@ export function TopBar({
   onHome?: () => void
   /** Leave the landing page for the stored reports. Omitted when there are none. */
   onBackToDashboard?: () => void
+  /** Rendered at the right end. Used on the landing page, which has no rail. */
+  extras?: ReactNode
 }) {
   // The logo is the conventional way home, so it becomes a button wherever
   // there is somewhere to go — and stays plain text where there is not, rather
@@ -76,8 +80,11 @@ export function TopBar({
               className="h-8 w-56 bg-secondary pl-8 text-sm"
             />
           </div>
-          {/* Settings and "connect a repository" moved to the sidebar rail. Two
-              buttons opening the same dialog is two places to look. */}
+          {/* Settings and "connect a repository" live in the sidebar rail — two
+              buttons opening the same dialog is two places to look. Except on
+              the landing page, which has no rail: there this is the only way in,
+              and Settings is where the operator key is claimed. */}
+          {extras}
         </div>
       </div>
     </header>

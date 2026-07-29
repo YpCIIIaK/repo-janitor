@@ -127,7 +127,10 @@ export default function Page() {
       <div className="min-h-screen">
         {/* Already home, so the logo is inert here. What is needed instead is a
             way back to the reports that still exist. */}
-        <TopBar onBackToDashboard={repos.length > 0 ? () => setShowHome(false) : undefined} />
+        <TopBar
+          onBackToDashboard={repos.length > 0 ? () => setShowHome(false) : undefined}
+          extras={<SettingsDialog />}
+        />
         <WelcomeScreen />
       </div>
     )

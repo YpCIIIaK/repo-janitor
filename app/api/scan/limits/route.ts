@@ -36,9 +36,10 @@ export async function GET(request: Request) {
       maxConcurrent: limits.maxConcurrent,
       owner,
     },
-    // Per-caller now, so it must not be cached in a shared proxy — the owner's
-    // answer landing in a stranger's browser would show them a limit that does
-    // not apply to them.
-    { headers: { "cache-control": "private, max-age=60" } },
+    // Not cached at all. The answer depends on who is asking, and it changes the
+    // moment they unlock — a cached "max 1" survived the unlock and made the
+    // form keep refusing work the server would have accepted. One tiny request
+    // per page load is a fair price for an answer that is never stale.
+    { headers: { "cache-control": "no-store" } },
   )
 }
