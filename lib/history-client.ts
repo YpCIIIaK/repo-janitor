@@ -1,6 +1,9 @@
 "use client"
 
 import type { ScanReport } from "@/lib/reports-store"
+import type { CommitWithStats } from "@/lib/commit-sampling"
+
+export type { CommitWithStats }
 
 /**
  * Client for the streaming `/api/scan/history` endpoint.
@@ -54,8 +57,32 @@ export interface StreamHistoryHandlers {
   signal?: AbortSignal
 }
 
-/** How many commits to scan: a fixed sample budget, or every commit in the history. */
-export type HistoryScope = { all: true } | { all?: false; sample: number }
+/**
+ * Which commits to scan: a fixed sample budget, every commit, or an explicit
+ * hand-picked set from the commit picker.
+ */
+export type HistoryScope =
+  | { all: true }
+  | { shas: string[] }
+  | { all?: false; sample: number }
+
+/** Fetch the commit log with per-commit diff stats — no scanning, one clone. */
+export async function fetchCommits(
+  url: string,
+  signal?: AbortSignal,
+): Promise<{ commits: CommitWithStats[]; capped: boolean }> {
+  const res = await fetch("/api/scan/commits", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ url }),
+    signal,
+  })
+  const data = (await res.json().catch(() => null)) as
+    | { commits?: CommitWithStats[]; capped?: boolean; error?: string }
+    | null
+  if (!res.ok) throw new Error(data?.error ?? `Request failed (${res.status})`)
+  return { commits: data?.commits ?? [], capped: Boolean(data?.capped) }
+}
 
 /** POST a repo URL to /api/scan/history and stream the per-commit scan tree. */
 export async function streamHistory(
@@ -63,7 +90,12 @@ export async function streamHistory(
   scope: HistoryScope,
   handlers: StreamHistoryHandlers = {},
 ): Promise<void> {
-  const body = scope.all ? { url, all: true } : { url, sample: scope.sample }
+  const body =
+    "shas" in scope
+      ? { url, shas: scope.shas }
+      : scope.all
+        ? { url, all: true }
+        : { url, sample: scope.sample }
   const res = await fetch("/api/scan/history", {
     method: "POST",
     headers: { "Content-Type": "application/json" },

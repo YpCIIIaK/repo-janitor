@@ -172,6 +172,60 @@ export function saveReport(report: ScanReport, url?: string): void {
 }
 
 /**
+ * Fold historical scan results into a repo's trend, dated by COMMIT date.
+ *
+ * Scanning old commits produces real measurements of the past, and they belong
+ * on the same timeline as the present. `saveReport` cannot do this: it stamps
+ * every point with the moment the scan ran, so a hundred commits scanned this
+ * afternoon would pile up on today and describe nothing.
+ *
+ * Two rules make this safe to call with anything:
+ *
+ *  - `latest` is never touched. Scanning a commit from 2019 says what the repo
+ *    looked like in 2019; treating it as the current state would be a lie the
+ *    grade, the sidebar and every diff would then repeat.
+ *  - points are merged by timestamp and re-sorted. Consumers read `history` as
+ *    chronological — the sparkline takes the last entry as the most recent — so
+ *    inserting mid-timeline without sorting would draw a line that zig-zags
+ *    through time.
+ *
+ * Does nothing when the repo is not in the store: there is no timeline to
+ * insert into, and inventing an entry with no `latest` report would produce a
+ * repo the dashboard cannot render.
+ */
+export function mergeHistoryPoints(repoId: string, points: TrendPoint[]): boolean {
+  if (points.length === 0) return false
+  const list = readFresh()
+  const repo = list.find((r) => r.id === repoId)
+  if (!repo) return false
+
+  const byAt = new Map(repo.history.map((p) => [p.at, p]))
+  let changed = false
+  for (const p of points) {
+    const existing = byAt.get(p.at)
+    if (existing && existing.score === p.score) continue
+    byAt.set(p.at, p)
+    changed = true
+  }
+  if (!changed) return false
+
+  repo.history = [...byAt.values()].sort((a, b) => a.at.localeCompare(b.at)).slice(-MAX_HISTORY)
+  writeAll(list)
+  return true
+}
+
+/** Build a trend point from a report measured AT a given time (e.g. a commit date). */
+export function trendPointAt(report: ScanReport, at: string): TrendPoint {
+  return {
+    at,
+    score: report.score,
+    critical: countSeverity(report.issues, "critical"),
+    warning: countSeverity(report.issues, "warning"),
+    info: countSeverity(report.issues, "info"),
+  }
+}
+
+/**
  * Merge server-stored repos (from `/api/reports`) into the local store. Used on
  * load so CI-ingested reports appear in the UI. Histories are unioned by timestamp
  * and the newer scan wins as `latest`, so local scans and server ingests coexist.

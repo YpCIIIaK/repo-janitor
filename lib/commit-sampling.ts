@@ -48,6 +48,95 @@ export function parseLog(stdout: string): Commit[] {
     .filter((c): c is Commit => c !== null)
 }
 
+/** How a file was touched, from `git log --name-status`. */
+export type FileStatus = "added" | "modified" | "deleted" | "renamed" | "copied" | "other"
+
+/** One file touched by a commit. */
+export interface FileChange {
+  path: string
+  status: FileStatus
+}
+
+/**
+ * A commit plus which files it touched.
+ *
+ * Deliberately no ±line counts. Getting those needs `--numstat`, which reads
+ * file *contents* — and the clone behind this is blobless on purpose. Measured
+ * on this repository: `--numstat` over 250 commits took 67 seconds and pulled
+ * the repo from 190 KB to 1.6 MB as git lazily fetched every blob, against
+ * 233 ms for `--name-status`, which only walks trees. A 289× cost for a number
+ * that does not change which commits are worth scanning.
+ */
+export interface CommitWithStats extends Commit {
+  files: FileChange[]
+  /** Total files touched, which can exceed `files.length` when truncated. */
+  filesChanged: number
+  /** True when `files` was truncated — `filesChanged` still counts them all. */
+  truncated: boolean
+}
+
+function toStatus(code: string): FileStatus {
+  switch (code[0]) {
+    case "A":
+      return "added"
+    case "M":
+      return "modified"
+    case "D":
+      return "deleted"
+    case "R":
+      return "renamed"
+    case "C":
+      return "copied"
+    default:
+      return "other"
+  }
+}
+
+/** Record separator between commits in the stats log format. */
+export const COMMIT_RS = "\x1e"
+/** Cap on files listed per commit; a merge of a thousand files helps nobody. */
+const MAX_FILES_PER_COMMIT = 20
+
+/**
+ * Parse `git log --name-status --format=%x1e%H%x1f%ct%x1f%P%x1f%D%x1f%s`.
+ *
+ * `--name-status` prints `<status>\t<path>` per file, and `R<score>\t<old>\t<new>`
+ * for renames and copies — three fields, not two, which is the case a naive
+ * split silently mangles into a path of "old".
+ *
+ * Records are separated by RS (0x1e) rather than newlines because subjects and
+ * paths can both contain almost anything else.
+ */
+export function parseLogWithStats(stdout: string): CommitWithStats[] {
+  const out: CommitWithStats[] = []
+
+  for (const record of stdout.split(COMMIT_RS)) {
+    if (!record.trim()) continue
+    const [headerLine, ...rest] = record.split("\n")
+    const base = parseLogLine(headerLine.trim())
+    if (!base) continue
+
+    const files: FileChange[] = []
+    let filesChanged = 0
+
+    for (const line of rest) {
+      if (!line.trim()) continue
+      const parts = line.split("\t")
+      if (parts.length < 2) continue
+      const status = toStatus(parts[0])
+      // A rename reports both names; the destination is the file that now exists.
+      const path = parts.length >= 3 ? parts[2] : parts[1]
+      if (!path) continue
+      filesChanged++
+      if (files.length < MAX_FILES_PER_COMMIT) files.push({ path, status })
+    }
+
+    out.push({ ...base, files, filesChanged, truncated: filesChanged > files.length })
+  }
+
+  return out
+}
+
 const isMerge = (c: Commit) => c.parents.length >= 2
 
 /** ISO-week-ish bucket key: the integer week index since the epoch (UTC). */

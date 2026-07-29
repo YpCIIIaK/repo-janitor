@@ -122,6 +122,8 @@ async function buildHistory(
   all: boolean,
   emit: (ev: HistoryEvent) => void,
   cancelled: () => boolean,
+  /** Explicit selection from the commit picker; overrides sampling entirely. */
+  shas?: string[],
 ): Promise<void> {
   const dir = await mkdtemp(join(tmpdir(), "repo-anti-rot-hist-"))
   try {
@@ -169,7 +171,17 @@ async function buildHistory(
       emit({ type: "error", error: "no commits found in history" })
       return
     }
-    const selected = selectCommits(commits, all ? Math.min(commits.length, ALL_CAP) : sample)
+    // A hand-picked set is honoured as given — filtered against the real log so
+    // a stale or forged sha cannot send us checking out something arbitrary,
+    // and ordered by the log rather than by the request.
+    const selected = shas?.length
+      ? commits.filter((c) => shas.includes(c.sha)).slice(0, ALL_CAP)
+      : selectCommits(commits, all ? Math.min(commits.length, ALL_CAP) : sample)
+
+    if (selected.length === 0) {
+      emit({ type: "error", error: "none of the selected commits exist in this history" })
+      return
+    }
     emit({ type: "commits", commits: selected.map(skeleton) })
     emit({ type: "activity", days: activityDays(commits) })
 
@@ -219,6 +231,11 @@ export async function POST(request: Request) {
   }
 
   const all = Boolean((body as { all?: unknown })?.all)
+  const rawShas = (body as { shas?: unknown })?.shas
+  // Validated here rather than trusted: these become `git checkout` arguments.
+  const shas = Array.isArray(rawShas)
+    ? rawShas.filter((s): s is string => typeof s === "string" && /^[0-9a-f]{7,40}$/i.test(s))
+    : undefined
   const rawSample = Number((body as { sample?: unknown })?.sample)
   const sample = Number.isFinite(rawSample)
     ? Math.max(1, Math.min(MAX_SAMPLE, Math.floor(rawSample)))
@@ -246,7 +263,7 @@ export async function POST(request: Request) {
         }
       }
       emit({ type: "start", url })
-      await buildHistory(url, sample, all, emit, () => cancelled)
+      await buildHistory(url, sample, all, emit, () => cancelled, shas)
       if (!cancelled) controller.close()
     },
     // Fired when the client aborts the fetch or the connection drops. This is

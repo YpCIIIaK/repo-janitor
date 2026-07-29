@@ -29,17 +29,24 @@ import {
   ArrowDown,
   Clock,
   Square,
+  ListChecks,
 } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Segmented } from "@/components/ui/segmented"
 import { cn } from "@/lib/utils"
 import {
+  fetchCommits,
   streamHistory,
   type ActivityDay,
   type CommitNode,
   type CommitSkeleton,
+  type CommitWithStats,
+  type HistoryScope,
 } from "@/lib/history-client"
+import { CommitPicker } from "./commit-picker"
+import { mergeHistoryPoints, trendPointAt } from "@/lib/reports-store"
 import type { Grade, Issue, Severity } from "@/lib/mock-data"
 
 // ---------------------------------------------------------------------------
@@ -273,7 +280,10 @@ const MAX_SAMPLE = 40
 function CommitTreeInner({ initialUrl = "" }: { initialUrl?: string }) {
   const { resolvedTheme } = useTheme()
   const [url, setUrl] = useState(initialUrl)
-  const [scope, setScope] = useState<"sample" | "all">("sample")
+  const [scope, setScope] = useState<"sample" | "all" | "pick">("sample")
+  const [pool, setPool] = useState<CommitWithStats[]>([])
+  const [picked, setPicked] = useState<Set<string>>(new Set())
+  const [loadingPool, setLoadingPool] = useState(false)
   const [sample, setSample] = useState(DEFAULT_SAMPLE)
   const [loading, setLoading] = useState(false)
   const [status, setStatus] = useState("")
@@ -338,6 +348,36 @@ function CommitTreeInner({ initialUrl = "" }: { initialUrl?: string }) {
     abortRef.current?.abort()
   }
 
+  /**
+   * Load the commit log so the picker has something to show. Cheap next to a
+   * scan: one blobless clone and one `git log`, no checkouts.
+   */
+  async function loadPool() {
+    const controller = new AbortController()
+    abortRef.current = controller
+    setLoadingPool(true)
+    setError(null)
+    setStatus("Reading commit log…")
+    try {
+      const { commits: cs, capped } = await fetchCommits(url.trim(), controller.signal)
+      setPool(cs)
+      setPicked(new Set())
+      setStatus(
+        capped
+          ? `${cs.length} commits (capped) — pick the ones worth scanning.`
+          : `${cs.length} commits — pick the ones worth scanning.`,
+      )
+    } catch (err) {
+      if (!controller.signal.aborted) {
+        setError(String(err instanceof Error ? err.message : err))
+        setStatus("")
+      }
+    } finally {
+      setLoadingPool(false)
+      abortRef.current = null
+    }
+  }
+
   async function build() {
     const controller = new AbortController()
     abortRef.current = controller
@@ -353,11 +393,23 @@ function CommitTreeInner({ initialUrl = "" }: { initialUrl?: string }) {
     let done = 0
     let total = 0
     try {
-      await streamHistory(url.trim(), scope === "all" ? { all: true } : { sample }, {
+      const requested: HistoryScope =
+        scope === "pick"
+          ? { shas: [...picked] }
+          : scope === "all"
+            ? { all: true }
+            : { sample }
+
+      // Commit dates, so each scanned report can be filed at the moment it
+      // describes rather than at the moment we measured it.
+      const dateOf = new Map<string, number>()
+
+      await streamHistory(url.trim(), requested, {
         signal: controller.signal,
         onCommits: (cs) => {
           total = cs.length
           setCommits(cs)
+          for (const c of cs) dateOf.set(c.sha, c.date)
           setStatus(`Scanning ${total} commits…`)
         },
         onActivity: setActivity,
@@ -365,6 +417,19 @@ function CommitTreeInner({ initialUrl = "" }: { initialUrl?: string }) {
           done++
           setStatus(`Scanned ${done}/${total} commits…`)
           setData((prev) => new Map(prev).set(sha, { node }))
+
+          // Fold the measurement into the repo's timeline, dated by the commit.
+          // Best-effort: a repo that has never been scanned normally has no
+          // timeline to insert into, and that is not an error worth surfacing
+          // in the middle of a run.
+          const at = dateOf.get(sha)
+          const rep = node.report
+          if (at && rep?.repo) {
+            mergeHistoryPoints(
+              `${rep.repo.owner}/${rep.repo.name}`,
+              [trendPointAt(rep, new Date(at).toISOString())],
+            )
+          }
         },
         onNodeError: (sha, err) => {
           done++
@@ -436,30 +501,17 @@ function CommitTreeInner({ initialUrl = "" }: { initialUrl?: string }) {
               disabled={loading}
             />
             <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-              <div className="flex rounded-md border border-border p-0.5">
-                <button
-                  type="button"
-                  onClick={() => setScope("sample")}
-                  disabled={loading}
-                  className={cn(
-                    "rounded px-2 py-1 text-xs font-medium transition-colors disabled:opacity-50",
-                    scope === "sample" ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:text-foreground",
-                  )}
-                >
-                  Sample
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setScope("all")}
-                  disabled={loading}
-                  className={cn(
-                    "rounded px-2 py-1 text-xs font-medium transition-colors disabled:opacity-50",
-                    scope === "all" ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:text-foreground",
-                  )}
-                >
-                  All
-                </button>
-              </div>
+              <Segmented
+                aria-label="Which commits to scan"
+                size="sm"
+                value={scope}
+                onChange={(v) => setScope(v as typeof scope)}
+                items={[
+                  { value: "sample", label: "Sample" },
+                  { value: "pick", label: "Pick" },
+                  { value: "all", label: "All" },
+                ]}
+              />
               {scope === "sample" && (
                 <label className="flex items-center gap-1.5">
                   commits
@@ -479,18 +531,36 @@ function CommitTreeInner({ initialUrl = "" }: { initialUrl?: string }) {
                 a disabled Building… — "every commit" can queue hundreds of
                 clones, and the moment you realise you picked too many is the
                 moment you need a way out, not a spinner. */}
-            {loading ? (
+            {loading || loadingPool ? (
               <Button variant="destructive" onClick={stop}>
                 <Square className="size-4" />
                 Stop
               </Button>
+            ) : scope === "pick" && pool.length === 0 ? (
+              <Button onClick={loadPool} disabled={!url.trim()}>
+                <ListChecks className="size-4" />
+                Load commits
+              </Button>
             ) : (
-              <Button onClick={build} disabled={!url.trim()}>
+              <Button
+                onClick={build}
+                disabled={!url.trim() || (scope === "pick" && picked.size === 0)}
+              >
                 <Play className="size-4" />
-                Build tree
+                {scope === "pick" ? `Scan ${picked.size} selected` : "Build tree"}
               </Button>
             )}
           </div>
+
+          {scope === "pick" && pool.length > 0 && (
+            <CommitPicker
+              commits={pool}
+              selected={picked}
+              onChange={setPicked}
+              disabled={loading}
+            />
+          )}
+
           {status && <p className="text-xs text-muted-foreground">{status}</p>}
           {error && <p className="text-sm text-destructive">{error}</p>}
         </CardContent>
