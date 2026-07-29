@@ -107,12 +107,21 @@ async function scanCommit(url: string, dir: string, sha: string): Promise<unknow
   return report
 }
 
-/** Clone history, sample commits, and scan each — emitting progress as it goes. */
+/**
+ * Clone history, sample commits, and scan each — emitting progress as it goes.
+ *
+ * `cancelled` is checked between commits. A client that walks away is not
+ * hypothetical here: "scan every commit" can queue 250 clones and scans, and
+ * without this the server finishes all of them for a browser that stopped
+ * listening — the whole point of offering a Stop button is that the work stops,
+ * not just the progress bar.
+ */
 async function buildHistory(
   url: string,
   sample: number,
   all: boolean,
   emit: (ev: HistoryEvent) => void,
+  cancelled: () => boolean,
 ): Promise<void> {
   const dir = await mkdtemp(join(tmpdir(), "repo-anti-rot-hist-"))
   try {
@@ -168,6 +177,10 @@ async function buildHistory(
     const chronological = [...selected].reverse()
     let prevIds: string[] | null = null
     for (const c of chronological) {
+      // Between commits, not inside one: a checkout or scan already running is
+      // left to finish rather than killed halfway, which would leave the temp
+      // clone in a state the cleanup below has to guess at.
+      if (cancelled()) return
       try {
         const report = await scanCommit(url, dir, c.sha)
         const ids = issueIds(report)
@@ -217,13 +230,29 @@ export async function POST(request: Request) {
   }
 
   const encoder = new TextEncoder()
+  let cancelled = false
+
   const stream = new ReadableStream<Uint8Array>({
     async start(controller) {
-      const emit = (ev: HistoryEvent) =>
-        controller.enqueue(encoder.encode(JSON.stringify(ev) + "\n"))
+      const emit = (ev: HistoryEvent) => {
+        // Once the client is gone the controller is closed; enqueueing on it
+        // throws, and that error would surface as a scan failure rather than
+        // the deliberate stop it actually is.
+        if (cancelled) return
+        try {
+          controller.enqueue(encoder.encode(JSON.stringify(ev) + "\n"))
+        } catch {
+          cancelled = true
+        }
+      }
       emit({ type: "start", url })
-      await buildHistory(url, sample, all, emit)
-      controller.close()
+      await buildHistory(url, sample, all, emit, () => cancelled)
+      if (!cancelled) controller.close()
+    },
+    // Fired when the client aborts the fetch or the connection drops. This is
+    // the signal that lets the per-commit loop above stop early.
+    cancel() {
+      cancelled = true
     },
   })
 

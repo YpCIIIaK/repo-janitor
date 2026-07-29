@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { CalendarHeatmap } from "@/components/charts/calendar-heatmap"
 import { timeAgo } from "@/lib/reports-store"
 import {
@@ -28,6 +28,7 @@ import {
   ArrowUp,
   ArrowDown,
   Clock,
+  Square,
 } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -279,6 +280,9 @@ function CommitTreeInner({ initialUrl = "" }: { initialUrl?: string }) {
   const [error, setError] = useState<string | null>(null)
   const [commits, setCommits] = useState<CommitSkeleton[]>([])
   const [activity, setActivity] = useState<ActivityDay[]>([])
+  // Held in a ref, not state: aborting must not depend on a re-render having
+  // happened, and the controller is not something the UI reads.
+  const abortRef = useRef<AbortController | null>(null)
   // sha → scanned node (or error). State (not a ref) so React Flow re-renders as
   // each commit's scan streams in.
   const [data, setData] = useState<Map<string, { node?: CommitNode; error?: string }>>(new Map())
@@ -314,10 +318,30 @@ function CommitTreeInner({ initialUrl = "" }: { initialUrl?: string }) {
 
   const onNodeClick = useCallback((_: unknown, n: Node) => setSelectedSha(n.id), [])
 
+  // Leaving the tab is a stop too. Without this, switching away mid-run leaves
+  // the server scanning hundreds of commits for a component that no longer
+  // exists — the same waste the Stop button exists to prevent, just silent.
+  useEffect(() => () => abortRef.current?.abort(), [])
+
   const selected = selectedSha ? commits.find((c) => c.sha === selectedSha) : undefined
   const selectedData = selectedSha ? data.get(selectedSha) : undefined
 
+  /**
+   * Stop the run in progress.
+   *
+   * Aborting the fetch closes the response stream, which the route treats as its
+   * cue to stop scanning — so this ends the server's work too, not just the
+   * progress bar. Whatever has already been scanned stays on screen: a partial
+   * tree is the useful half of a run you cut short.
+   */
+  function stop() {
+    abortRef.current?.abort()
+  }
+
   async function build() {
+    const controller = new AbortController()
+    abortRef.current = controller
+
     setLoading(true)
     setError(null)
     setCommits([])
@@ -330,6 +354,7 @@ function CommitTreeInner({ initialUrl = "" }: { initialUrl?: string }) {
     let total = 0
     try {
       await streamHistory(url.trim(), scope === "all" ? { all: true } : { sample }, {
+        signal: controller.signal,
         onCommits: (cs) => {
           total = cs.length
           setCommits(cs)
@@ -348,10 +373,17 @@ function CommitTreeInner({ initialUrl = "" }: { initialUrl?: string }) {
       })
       setStatus(total > 0 ? `Done — ${total} commits scanned.` : "")
     } catch (err) {
-      setError(String(err instanceof Error ? err.message : err))
-      setStatus("")
+      // Stopping is something the user did, not something that went wrong.
+      // Reporting it as an error would make a deliberate act look like a bug.
+      if (controller.signal.aborted) {
+        setStatus(done > 0 ? `Stopped — ${done} of ${total} commits scanned.` : "Stopped.")
+      } else {
+        setError(String(err instanceof Error ? err.message : err))
+        setStatus("")
+      }
     } finally {
       setLoading(false)
+      abortRef.current = null
     }
   }
 
@@ -443,10 +475,21 @@ function CommitTreeInner({ initialUrl = "" }: { initialUrl?: string }) {
                 </label>
               )}
             </div>
-            <Button onClick={build} disabled={loading || !url.trim()}>
-              {loading ? <Loader2 className="size-4 animate-spin" /> : <Play className="size-4" />}
-              {loading ? "Building…" : "Build tree"}
-            </Button>
+            {/* While a run is going the primary button becomes Stop rather than
+                a disabled Building… — "every commit" can queue hundreds of
+                clones, and the moment you realise you picked too many is the
+                moment you need a way out, not a spinner. */}
+            {loading ? (
+              <Button variant="destructive" onClick={stop}>
+                <Square className="size-4" />
+                Stop
+              </Button>
+            ) : (
+              <Button onClick={build} disabled={!url.trim()}>
+                <Play className="size-4" />
+                Build tree
+              </Button>
+            )}
           </div>
           {status && <p className="text-xs text-muted-foreground">{status}</p>}
           {error && <p className="text-sm text-destructive">{error}</p>}
