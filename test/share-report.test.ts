@@ -49,6 +49,33 @@ describe("toSharedReport", () => {
     expect(json).toContain("AWS access key committed")
   })
 
+  /**
+   * The repo URL was added so the shared page can offer a fresh scan. It is the
+   * one field that is a *location*, so it gets the same scrutiny as the rest:
+   * only what the caller passed, never derived, and absent when unknown.
+   */
+  it("carries the repo URL only when given one", () => {
+    expect(toSharedReport(report([issue()])).repoUrl).toBeUndefined()
+    expect(
+      toSharedReport(report([issue()]), "https://github.com/acme/widget.git").repoUrl,
+    ).toBe("https://github.com/acme/widget.git")
+  })
+
+  it("does not invent a URL from owner and name", () => {
+    // Guessing github.com/<owner>/<name> would send readers of a GitLab or
+    // self-hosted repo to somebody else's page of the same name.
+    const json = JSON.stringify(toSharedReport(report([issue()])))
+    expect(json).not.toContain("github.com")
+  })
+
+  it("still leaks nothing once a URL is included", () => {
+    const json = JSON.stringify(
+      toSharedReport(report([issue()]), "https://github.com/acme/widget.git"),
+    )
+    expect(json).not.toContain(SECRET)
+    expect(json).not.toContain(PATH)
+  })
+
   it("drops an AI note, which is free-form text over the same source", () => {
     const json = JSON.stringify(
       toSharedReport(report([issue({ aiNote: `rotate the key in ${PATH}` })])),

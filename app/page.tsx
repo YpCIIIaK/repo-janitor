@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import dynamic from "next/dynamic"
 import { Tabs, TabsContent } from "@/components/ui/tabs"
 import { TopBar } from "@/components/repo-anti-rot/top-bar"
@@ -72,6 +72,24 @@ const severityChip: Record<"critical" | "warning" | "info", string> = {
 // Sentinel id selecting the cross-repo overview instead of a single repo.
 const OVERVIEW = "__overview__"
 
+/**
+ * Did we arrive with a repository to scan in the query string?
+ *
+ * The "scan this yourself" button on a shared report links to `/?url=…`. Without
+ * this, anyone who had already scanned something landed on their dashboard and
+ * the parameter was silently dropped — the link worked for first-time visitors
+ * and quietly did nothing for everyone else, which is the worst way for a link
+ * to be broken.
+ */
+function hasUrlParam(): boolean {
+  if (typeof window === "undefined") return false
+  try {
+    return Boolean(new URLSearchParams(window.location.search).get("url"))
+  } catch {
+    return false
+  }
+}
+
 export default function Page() {
   const repos = useRepos()
   const snoozed = useSnoozed()
@@ -90,6 +108,15 @@ export default function Page() {
    * starting a scan takes you back through it.
    */
   const [showHome, setShowHome] = useState(false)
+
+  // Post-mount for the same reason the scan box reads its query string there:
+  // the server cannot see `?url=`, so deciding which screen to render from it
+  // during the first client render is a hydration mismatch — and this one would
+  // swap the entire page, not one label.
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (hasUrlParam()) setShowHome(true)
+  }, [])
 
   const showOverview = activeId === OVERVIEW
   // Resolve the selected repo, falling back to the most recent one.
@@ -299,7 +326,7 @@ export default function Page() {
                   ⌘K
                 </kbd>
               </Button>
-              <ShareButton report={current.latest} />
+              <ShareButton report={current.latest} repoUrl={current.url} />
               <ExportMenu report={current.latest} />
               <RescanButton repo={current} />
             </div>

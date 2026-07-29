@@ -35,6 +35,16 @@ export interface SharedIssue {
 export interface SharedReport {
   /** Owner/name of a PUBLIC repository — sharing is only offered for those. */
   repo: { owner: string; name: string }
+  /**
+   * Clone URL of that public repository, when known.
+   *
+   * Stored so a reader can run their own scan of the same repo from the shared
+   * page. It reveals nothing the page did not already: owner/name are printed at
+   * the top, and the repository is public by construction — the scanner refuses
+   * anything else. Deriving it from owner/name instead would silently assume
+   * GitHub and send GitLab readers to a 404.
+   */
+  repoUrl?: string
   generatedAt: string
   score: number
   grade: Grade
@@ -74,7 +84,7 @@ function countByCategory(issues: Issue[]): { category: IssueCategory; count: num
  * Note this reads named fields off each issue rather than spreading it. Spreading
  * and deleting would carry `evidence` into the output the day someone renames it.
  */
-export function toSharedReport(report: ScanReport): SharedReport {
+export function toSharedReport(report: ScanReport, repoUrl?: string): SharedReport {
   const issues = report.issues ?? []
 
   const topIssues: SharedIssue[] = [...issues]
@@ -97,6 +107,7 @@ export function toSharedReport(report: ScanReport): SharedReport {
 
   return {
     repo: { owner: report.repo.owner, name: report.repo.name },
+    ...(repoUrl ? { repoUrl } : {}),
     generatedAt: report.generatedAt,
     score: report.score,
     grade: report.grade,

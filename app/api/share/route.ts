@@ -4,6 +4,7 @@ import { toSharedReport } from "@/lib/share-report"
 import { putShare } from "@/lib/share-store"
 import type { ScanReport } from "@/lib/server-store"
 import { checkRateLimit, clientIp, limitsFromEnv } from "@/lib/scan-limits"
+import { isPublicGitUrl } from "@/lib/url-guard"
 
 /**
  * Create a share link for a scan result.
@@ -46,7 +47,18 @@ export async function POST(request: Request) {
     )
   }
 
-  const shared = toSharedReport(parsed.data as ScanReport)
+  // The repo URL is stored so the shared page can offer a fresh scan. Re-checked
+  // here rather than trusted: this value ends up on a public page and is handed
+  // straight back to the scanner, so a private or internal address must not be
+  // able to make the round trip through a share link.
+  const rawRepoUrl = String((body as { repoUrl?: unknown })?.repoUrl ?? "").trim()
+  let repoUrl: string | undefined
+  if (rawRepoUrl) {
+    const safe = await isPublicGitUrl(rawRepoUrl)
+    if (safe.ok) repoUrl = rawRepoUrl
+  }
+
+  const shared = toSharedReport(parsed.data as ScanReport, repoUrl)
 
   let token: string
   try {

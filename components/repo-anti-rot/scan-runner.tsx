@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import {
   Loader2,
   Play,
@@ -320,15 +320,43 @@ function ResultCard({ result, onOpen }: { result: ScanResult; onOpen?: (repoId: 
 
         {/* Opt-in publishing. Deliberately below the results: the user decides
             after seeing what they would be sharing, not before. */}
-        <ShareBox report={report} />
+        <ShareBox report={report} repoUrl={result.url} />
       </CardContent>
     </Card>
   )
 }
 
+/**
+ * Read a repository URL out of `?url=`, so a link can land someone on the form
+ * with the box already filled — that is how the "scan this yourself" button on a
+ * shared report hands over.
+ *
+ * Only used as an initial value. It is displayed and then submitted to the
+ * scanner, which does its own public-URL check, so nothing here is trusted.
+ */
+function urlFromQuery(): string {
+  if (typeof window === "undefined") return ""
+  try {
+    const raw = new URLSearchParams(window.location.search).get("url") ?? ""
+    return /^https?:\/\//i.test(raw) ? raw : ""
+  } catch {
+    return ""
+  }
+}
+
 export function ScanRunner({ onOpen }: { onOpen?: (repoId: string) => void }) {
   const { t } = useLocale()
   const [input, setInput] = useState("")
+
+  // After mount, not during render. The server has no query string to read, so
+  // seeding the state directly makes the first client render disagree with the
+  // server HTML — React reports a hydration mismatch and throws the markup away.
+  // The visible cost is the box filling in a frame late.
+  useEffect(() => {
+    const fromQuery = urlFromQuery()
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (fromQuery) setInput(fromQuery)
+  }, [])
   const [loading, setLoading] = useState(false)
   const [progress, setProgress] = useState(0) // 0..1 overall
   const [progressLabel, setProgressLabel] = useState("")

@@ -5,6 +5,7 @@ import { notFound } from "next/navigation"
 import { getShare } from "@/lib/share-store"
 import { LOCALE_COOKIE, resolveLocale, t } from "@/lib/i18n"
 import type { SharedReport } from "@/lib/share-report"
+import { FreshScanCta } from "@/components/repo-anti-rot/fresh-scan-cta"
 
 /**
  * A shared scan result.
@@ -32,6 +33,27 @@ const SEVERITY_TONE: Record<string, string> = {
   critical: "text-red-500",
   warning: "text-amber-500",
   info: "text-muted-foreground",
+}
+
+/**
+ * Age at which the snapshot gets called out explicitly. A week is roughly the
+ * point where "this is current" stops being a safe assumption for a repository
+ * anyone is actively working on.
+ */
+const STALE_AFTER_DAYS = 7
+
+/**
+ * Whole days between a scan and now, or null for an unparseable date.
+ *
+ * Outside the component on purpose: this page is `force-dynamic`, so reading the
+ * clock per request is the intent, but doing it inline makes the component
+ * impure — and an impure render is exactly the thing that bites later when
+ * someone tries to cache this page.
+ */
+function ageInDays(iso: string, now: number = Date.now()): number | null {
+  const t = new Date(iso).getTime()
+  if (Number.isNaN(t)) return null
+  return Math.max(0, Math.floor((now - t) / 86_400_000))
 }
 
 type Params = { owner: string; name: string; token: string }
@@ -76,6 +98,7 @@ export default async function SharedReportPage({ params }: { params: Promise<Par
 
   const report: SharedReport = share.report
   const scanned = new Date(report.generatedAt)
+  const ageDays = ageInDays(report.generatedAt)
   // Fixed locale formatting so the server and the client agree — a date rendered
   // from the machine's locale hydrates differently and React complains.
   const scannedLabel = scanned.toLocaleDateString(locale === "ru" ? "ru-RU" : "en-GB", {
@@ -93,7 +116,15 @@ export default async function SharedReportPage({ params }: { params: Promise<Par
       </h1>
       <p className="mt-1 text-xs text-muted-foreground">
         {tr("share.scannedAt", { date: scannedLabel })}
+        {ageDays !== null && ` · ${tr("share.ageDays", { days: ageDays })}`}
       </p>
+      {/* Said plainly and near the numbers, because everything below is a claim
+          about a repository as it was, not as it is. */}
+      {ageDays !== null && ageDays >= STALE_AFTER_DAYS && (
+        <p className="mt-3 rounded-lg border border-chart-3/30 bg-chart-3/10 px-3 py-2 text-xs text-foreground/90">
+          {tr("share.snapshot", { date: scannedLabel })}
+        </p>
+      )}
 
       <section className="mt-8 flex flex-wrap items-center gap-6">
         <div
@@ -157,6 +188,10 @@ export default async function SharedReportPage({ params }: { params: Promise<Par
             .map((l) => `${l.language} ${l.loc.toLocaleString("en-US")}`)
             .join(" · ")}
         </section>
+      )}
+
+      {report.repoUrl && (
+        <FreshScanCta repoUrl={report.repoUrl} repoLabel={`${owner}/${name}`} />
       )}
 
       <div className="mt-12 border-t border-border pt-6">

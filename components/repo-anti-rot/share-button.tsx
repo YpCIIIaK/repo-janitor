@@ -23,7 +23,7 @@ import { ShareBox } from "./share-box"
  * something you cannot read is not consent, so the consent rule outranks the
  * "dashboard is English" rule rather than being an exception to it.
  */
-export function ShareButton({ report }: { report: unknown }) {
+export function ShareButton({ report, repoUrl }: { report: unknown; repoUrl?: string }) {
   const { t } = useLocale()
 
   return (
@@ -35,7 +35,7 @@ export function ShareButton({ report }: { report: unknown }) {
         </Button>
       </PopoverTrigger>
       <PopoverContent align="end" className="w-96 p-0">
-        <ShareBox report={report} />
+        <ShareBox report={report} repoUrl={repoUrl} />
       </PopoverContent>
     </Popover>
   )

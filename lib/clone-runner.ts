@@ -32,10 +32,20 @@ export interface RunResult {
 export function run(
   cmd: string,
   args: string[],
-  opts: { timeoutMs?: number; onStderrLine?: (line: string) => void; signal?: AbortSignal } = {},
+  opts: {
+    timeoutMs?: number
+    onStderrLine?: (line: string) => void
+    signal?: AbortSignal
+    /** Extra environment for the child, merged over the parent's. */
+    env?: Record<string, string>
+  } = {},
 ): Promise<RunResult> {
   return new Promise((resolve) => {
-    const child = spawn(cmd, args, { windowsHide: true, signal: opts.signal })
+    const child = spawn(cmd, args, {
+      windowsHide: true,
+      signal: opts.signal,
+      ...(opts.env ? { env: { ...process.env, ...opts.env } } : {}),
+    })
     let stdout = ""
     let stderr = ""
     let buf = "" // partial-line buffer for stderr

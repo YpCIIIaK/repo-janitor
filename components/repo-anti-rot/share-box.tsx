@@ -17,7 +17,7 @@ import { useLocale } from "@/components/i18n/locale-provider"
  * wording next to the checkbox describes that reduction exactly — if one
  * changes, so does the other.
  */
-export function ShareBox({ report }: { report: unknown }) {
+export function ShareBox({ report, repoUrl }: { report: unknown; repoUrl?: string }) {
   const { t } = useLocale()
   const [consented, setConsented] = useState(false)
   const [busy, setBusy] = useState(false)
@@ -32,7 +32,7 @@ export function ShareBox({ report }: { report: unknown }) {
       const res = await fetch("/api/share", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ report }),
+        body: JSON.stringify({ report, repoUrl }),
       })
       if (!res.ok) throw new Error(String(res.status))
       const data = (await res.json()) as { path?: string }

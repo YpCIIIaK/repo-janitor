@@ -85,7 +85,7 @@ const en = {
   // change the other in the same commit.
   "consent.label": "Save this result so it can be shared by link",
   "consent.body":
-    "Stores the grade, score, counts per category and the titles of the top 10 findings. File paths, line numbers, code snippets and matched secret values are never written — they stay in this browser.",
+    "Stores the grade, score, counts per category, the titles of the top 10 findings, and the repository's public address. File paths, line numbers, code snippets and matched secret values are never written — they stay in this browser.",
   "consent.optional": "Optional. Leave it off and the report stays in this browser only.",
 
   "share.action": "Share",
@@ -97,6 +97,15 @@ const en = {
   "share.heading": "Repository health",
   "share.scannedAt": "Scanned {date}",
   "share.rescan": "Scan another repository",
+  "share.snapshot": "This is a snapshot from {date}. The repository has moved on since.",
+  "share.ageDays": "{days} days old",
+  "share.freshTitle": "See it as it is today",
+  "share.freshLead":
+    "Run the same scan yourself against the current code. Nothing is stored unless you ask for a link.",
+  "share.freshAction": "Scan {repo} now",
+  "share.checking": "Checking whether the repository is still public…",
+  "share.gone":
+    "This repository can no longer be cloned — it may have been made private, renamed or deleted.",
   "share.notFound": "No shared report at this address.",
   "share.redactedNote":
     "This is a shared summary: code evidence and secret values are not included.",
@@ -149,7 +158,7 @@ const ru: Messages = {
 
   "consent.label": "Сохранить результат, чтобы им можно было поделиться по ссылке",
   "consent.body":
-    "Сохраняются оценка, грейд, количество находок по категориям и заголовки 10 главных. Пути к файлам, номера строк, фрагменты кода и найденные значения секретов не записываются — они остаются в этом браузере.",
+    "Сохраняются оценка, грейд, количество находок по категориям, заголовки 10 главных и публичный адрес репозитория. Пути к файлам, номера строк, фрагменты кода и найденные значения секретов не записываются — они остаются в этом браузере.",
   "consent.optional":
     "По желанию. Если не отмечать, отчёт останется только в этом браузере.",
 
@@ -162,6 +171,15 @@ const ru: Messages = {
   "share.heading": "Здоровье репозитория",
   "share.scannedAt": "Скан от {date}",
   "share.rescan": "Просканировать другой репозиторий",
+  "share.snapshot": "Это снимок от {date}. С тех пор репозиторий изменился.",
+  "share.ageDays": "прошло дней: {days}",
+  "share.freshTitle": "Посмотреть, как обстоят дела сейчас",
+  "share.freshLead":
+    "Запустите тот же скан по текущему коду. Ничего не сохраняется, пока вы сами не попросите ссылку.",
+  "share.freshAction": "Просканировать {repo}",
+  "share.checking": "Проверяем, публичен ли ещё репозиторий…",
+  "share.gone":
+    "Этот репозиторий больше нельзя склонировать — возможно, его сделали приватным, переименовали или удалили.",
   "share.notFound": "По этому адресу отчёта нет.",
   "share.redactedNote":
     "Это краткая сводка: фрагменты кода и значения секретов в неё не входят.",
