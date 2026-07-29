@@ -19,6 +19,8 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
+import { RepoFinder } from "./repo-finder"
+import { parseRepoRef } from "@/lib/github-repo"
 import { cn } from "@/lib/utils"
 import { saveReport, type ScanReport as StoredScanReport } from "@/lib/reports-store"
 import { enrichReport, aiTargetCount } from "@/lib/ai-enrich"
@@ -344,6 +346,14 @@ function urlFromQuery(): string {
   }
 }
 
+/** Index of the last non-empty line, or -1 when the text is blank. */
+function lastLineIndex(lines: string[]): number {
+  for (let i = lines.length - 1; i >= 0; i--) {
+    if (lines[i].trim()) return i
+  }
+  return -1
+}
+
 export function ScanRunner({ onOpen }: { onOpen?: (repoId: string) => void }) {
   const { t } = useLocale()
   const [input, setInput] = useState("")
@@ -363,10 +373,26 @@ export function ScanRunner({ onOpen }: { onOpen?: (repoId: string) => void }) {
   const [results, setResults] = useState<ScanResult[] | null>(null)
   const [error, setError] = useState<string | null>(null)
 
+  // Only lines that are actually scannable. A search query left in the box used
+  // to count as a URL and leave Run enabled, so pressing it spent a request
+  // trying to clone "repo rot scanner". A bare `owner/name` is expanded rather
+  // than dropped — people type it, and the scan endpoint only takes http(s).
   const urls = input
     .split("\n")
     .map((l) => l.trim())
     .filter(Boolean)
+    .map((line) => {
+      if (/^https?:\/\//i.test(line)) return line
+      const ref = parseRepoRef(line)
+      return ref ? `https://github.com/${ref.owner}/${ref.name}.git` : null
+    })
+    .filter((u): u is string => u !== null)
+
+  // The last non-empty line is what the preview follows. Not the caret position:
+  // reading that would make the card jump around while someone edits a list, and
+  // the line being added is the one they are deciding about.
+  const inputLines = input.split("\n")
+  const lastLine = inputLines[lastLineIndex(inputLines)]?.trim() ?? ""
 
   const okResults = results?.filter((r) => r.ok && r.report) ?? []
 
@@ -446,9 +472,25 @@ export function ScanRunner({ onOpen }: { onOpen?: (repoId: string) => void }) {
             className="font-mono text-sm"
             disabled={loading}
           />
+          {/* Preview for the line being edited. Driven by the box rather than
+              owning a search field of its own: one input means there is never a
+              question about which of two things gets scanned. */}
+          {!loading && (
+            <RepoFinder
+              text={lastLine}
+              onPick={(cloneUrl) => {
+                // Replace the line that produced the search, keeping any URLs
+                // already listed above it.
+                const lines = input.split("\n")
+                const idx = lastLineIndex(lines)
+                lines[idx === -1 ? lines.length : idx] = cloneUrl
+                setInput(lines.join("\n"))
+              }}
+            />
+          )}
           <div className="flex items-center justify-between">
             <span className="text-xs text-muted-foreground">
-              {t("scan.urls", { count: urls.length, max: 20 })}
+              {input.trim() ? t("scan.urls", { count: urls.length, max: 20 }) : t("repo.searchHint")}
             </span>
             <Button onClick={runScan} disabled={loading || urls.length === 0}>
               {loading ? (

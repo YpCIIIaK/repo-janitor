@@ -68,6 +68,22 @@ const en = {
   "scan.openDashboard": "Open in dashboard",
   "scan.clean": "No issues detected — clean scan.",
 
+  // The GitHub preview card and search. Part of the scan form, so rule 1.
+  "repo.searchHint": "Type a name to search GitHub, or paste a repository URL.",
+  "repo.searching": "Searching GitHub…",
+  "repo.notFound": "No such repository on GitHub — check the owner and name.",
+  "repo.noResults": "Nothing found on GitHub for that.",
+  "repo.searchError": "Could not reach GitHub. You can still paste a URL and scan.",
+  "repo.scanThis": "Scan",
+  "repo.archived": "Archived",
+  "repo.fork": "Fork",
+  "repo.stars": "Stars",
+  "repo.forks": "Forks",
+  "repo.openIssues": "Open issues",
+  "repo.license": "License",
+  "repo.lastPush": "Last push {when}",
+  "repo.results": "Results from GitHub",
+
   "feature.secrets.title": "Secrets & env drift",
   "feature.secrets.body":
     "Finds leaked keys in history and env vars referenced but missing from your example file.",
@@ -145,6 +161,21 @@ const ru: Messages = {
   "scan.downloadMarkdown": "Скачать Markdown",
   "scan.openDashboard": "Открыть в дашборде",
   "scan.clean": "Ничего не найдено — репозиторий чист.",
+
+  "repo.searchHint": "Введите название, чтобы найти на GitHub, или вставьте ссылку.",
+  "repo.searching": "Ищем на GitHub…",
+  "repo.notFound": "На GitHub такого репозитория нет — проверьте владельца и название.",
+  "repo.noResults": "На GitHub ничего не нашлось.",
+  "repo.searchError": "GitHub недоступен. Ссылку можно вставить и просканировать как обычно.",
+  "repo.scanThis": "Сканировать",
+  "repo.archived": "В архиве",
+  "repo.fork": "Форк",
+  "repo.stars": "Звёзды",
+  "repo.forks": "Форки",
+  "repo.openIssues": "Открытые issue",
+  "repo.license": "Лицензия",
+  "repo.lastPush": "Последний коммит {when}",
+  "repo.results": "Результаты с GitHub",
 
   "feature.secrets.title": "Секреты и env",
   "feature.secrets.body":
