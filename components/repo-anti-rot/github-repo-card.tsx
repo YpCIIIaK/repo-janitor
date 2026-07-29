@@ -1,6 +1,6 @@
 "use client"
 
-import { Star, GitFork, CircleDot, Scale, Archive, GitBranch, Plus } from "lucide-react"
+import { Star, GitFork, CircleDot, Scale, Archive, GitBranch, Plus, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { compactCount, type GithubRepo } from "@/lib/github-repo"
@@ -92,12 +92,15 @@ function Stat({ icon, value, title }: { icon: React.ReactNode; value: string; ti
 export function GithubRepoCard({
   repo,
   onAdd,
+  added,
   compact,
   className,
 }: {
   repo: GithubRepo
   /** Shown as an Add button. Omitted for rows that are already chosen. */
   onAdd?: (cloneUrl: string) => void
+  /** Already in the selection — the card says so instead of offering to add. */
+  added?: boolean
   /** Row density: no topics, no last-push line. */
   compact?: boolean
   className?: string
@@ -110,7 +113,9 @@ export function GithubRepoCard({
     <div
       className={cn(
         "rounded-xl border border-border bg-card/60 p-4 transition-colors",
-        compact && "p-3 hover:border-primary/40 hover:bg-accent/40",
+        compact && "p-3",
+        compact && !added && "hover:border-primary/40 hover:bg-accent/40",
+        added && "border-primary/40 bg-primary/5",
         className,
       )}
     >
@@ -198,11 +203,20 @@ export function GithubRepoCard({
           )}
         </div>
 
-        {onAdd && (
-          <Button size="sm" onClick={() => onAdd(repo.cloneUrl)} className="shrink-0">
-            <Plus className="size-4" />
-            {t("scan.add")}
-          </Button>
+        {added ? (
+          // Stays in place rather than disappearing: in a list of search results
+          // the tick is what tells you which ones you already took.
+          <span className="flex shrink-0 items-center gap-1 rounded-md bg-primary/10 px-2 py-1 text-xs font-medium text-primary">
+            <Check className="size-3.5" />
+            {t("scan.added")}
+          </span>
+        ) : (
+          onAdd && (
+            <Button size="sm" onClick={() => onAdd(repo.cloneUrl)} className="shrink-0">
+              <Plus className="size-4" />
+              {t("scan.add")}
+            </Button>
+          )
         )}
       </div>
 

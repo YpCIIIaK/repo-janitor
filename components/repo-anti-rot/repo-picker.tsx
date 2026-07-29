@@ -28,8 +28,33 @@ export interface SelectedRepo {
   repo?: GithubRepo
 }
 
-/** Matches REPO_ANTI_ROT_SCAN_MAX_URLS' default; the server enforces its own. */
+/**
+ * Fallback cap, used until the server says otherwise.
+ *
+ * The real number comes from /api/scan/limits, because it is configurable per
+ * deployment (REPO_ANTI_ROT_SCAN_MAX_URLS) and a form that offers twenty where
+ * the server takes one is a promise it cannot keep.
+ */
 export const MAX_SELECTED = 20
+
+/** Ask the server what it will accept. Falls back to the constant above. */
+function useMaxSelected(): number {
+  const [max, setMax] = useState(MAX_SELECTED)
+  useEffect(() => {
+    let alive = true
+    void fetch("/api/scan/limits")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: { maxUrlsPerRequest?: number } | null) => {
+        const n = data?.maxUrlsPerRequest
+        if (alive && typeof n === "number" && n > 0) setMax(n)
+      })
+      .catch(() => {})
+    return () => {
+      alive = false
+    }
+  }, [])
+  return max
+}
 
 /** Normalise anything acceptable into the clone URL that will be scanned. */
 export function toCloneUrl(raw: string): string | null {
@@ -91,7 +116,9 @@ export function RepoPicker({
   const [text, setText] = useState("")
   const [notice, setNotice] = useState<string | null>(null)
 
-  const full = selected.length >= MAX_SELECTED
+  const maxSelected = useMaxSelected()
+  const full = selected.length >= maxSelected
+  const chosen = new Set(selected.map((s) => s.url))
 
   /**
    * Fill in cards for rows that arrived without one — typed by hand, or handed
@@ -147,8 +174,8 @@ export function RepoPicker({
         duplicate = true
         continue
       }
-      if (selected.length + fresh.length >= MAX_SELECTED) {
-        setNotice(t("scan.limit", { max: MAX_SELECTED }))
+      if (selected.length + fresh.length >= maxSelected) {
+        setNotice(t("scan.limit", { max: maxSelected }))
         break
       }
       seen.add(url)
@@ -198,23 +225,25 @@ export function RepoPicker({
       </div>
 
       {notice && <p className="text-xs text-chart-3">{notice}</p>}
-      {full && <p className="text-xs text-muted-foreground">{t("scan.limit", { max: MAX_SELECTED })}</p>}
+      {full && <p className="text-xs text-muted-foreground">{t("scan.limit", { max: maxSelected })}</p>}
 
       {/* Search results and previews. Clicking one adds it rather than filling
-          the box, so there is one action, not two. */}
-      {!disabled && !full && (
+          the box, so there is one action, not two — and the results stay on
+          screen afterwards, because picking several from one search is the
+          normal case. */}
+      {!disabled && (
         <RepoFinder
           text={text}
-          onPick={(cloneUrl, repo) => {
-            if (addMany([{ url: cloneUrl, repo }]) > 0) setText("")
-          }}
+          canAdd={!full}
+          isAdded={(url) => chosen.has(toCloneUrl(url) ?? url)}
+          onPick={(cloneUrl, repo) => addMany([{ url: cloneUrl, repo }])}
         />
       )}
 
       <div className="space-y-2 border-t border-border pt-3">
         <div className="flex items-center justify-between">
           <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-            {t("scan.selectedTitle", { count: selected.length, max: MAX_SELECTED })}
+            {t("scan.selectedTitle", { count: selected.length, max: maxSelected })}
           </p>
           {selected.length > 1 && (
             <button

@@ -71,6 +71,7 @@ const en = {
   // The explicit selection list. What gets scanned is what is shown in it.
   "scan.inputPlaceholder": "Search GitHub, or paste a repository URL",
   "scan.add": "Add",
+  "scan.added": "Added",
   "scan.remove": "Remove from the list",
   "scan.clearAll": "Clear",
   "scan.selectedTitle": "Selected — {count} of {max}",
@@ -176,6 +177,7 @@ const ru: Messages = {
 
   "scan.inputPlaceholder": "Найти на GitHub или вставить ссылку",
   "scan.add": "Добавить",
+  "scan.added": "Добавлен",
   "scan.remove": "Убрать из списка",
   "scan.clearAll": "Очистить",
   "scan.selectedTitle": "Выбрано — {count} из {max}",

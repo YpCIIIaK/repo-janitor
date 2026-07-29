@@ -48,12 +48,18 @@ function lookupKey(text: string): string {
 export function RepoFinder({
   text,
   onPick,
+  isAdded,
+  canAdd = true,
 }: {
   /** The line currently being edited. */
   text: string
   /** Called when a result is chosen; the metadata rides along so the chosen
    * row can render its card immediately instead of re-fetching it. */
   onPick: (cloneUrl: string, repo: GithubRepo) => void
+  /** True when this result is already in the selection. */
+  isAdded?: (cloneUrl: string) => boolean
+  /** False once the selection is full — results stay visible but inert. */
+  canAdd?: boolean
 }) {
   const { t } = useLocale()
   const key = lookupKey(text)
@@ -130,7 +136,14 @@ export function RepoFinder({
 
   if (state.kind === "repo") {
     const repo = state.repo
-    return <GithubRepoCard repo={repo} onAdd={() => onPick(repo.cloneUrl, repo)} />
+    const already = isAdded?.(repo.cloneUrl) ?? false
+    return (
+      <GithubRepoCard
+        repo={repo}
+        added={already}
+        onAdd={canAdd && !already ? () => onPick(repo.cloneUrl, repo) : undefined}
+      />
+    )
   }
 
   return (
@@ -140,16 +153,23 @@ export function RepoFinder({
         {t("repo.results")}
       </p>
       <div className="space-y-1.5">
-        {state.repos.map((repo) => (
-          <button
-            key={repo.fullName}
-            type="button"
-            onClick={() => onPick(repo.cloneUrl, repo)}
-            className="block w-full text-left"
-          >
-            <GithubRepoCard repo={repo} compact />
-          </button>
-        ))}
+        {state.repos.map((repo) => {
+          const already = isAdded?.(repo.cloneUrl) ?? false
+          return (
+            <button
+              key={repo.fullName}
+              type="button"
+              onClick={() => onPick(repo.cloneUrl, repo)}
+              disabled={already || !canAdd}
+              // The list stays put after a pick. Clearing it would mean one
+              // search per repository, and choosing four from one set of results
+              // is the normal case, not the exotic one.
+              className="block w-full text-left disabled:cursor-default"
+            >
+              <GithubRepoCard repo={repo} added={already} compact />
+            </button>
+          )
+        })}
       </div>
     </div>
   )
