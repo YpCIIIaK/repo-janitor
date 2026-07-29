@@ -68,6 +68,21 @@ const en = {
   "scan.openDashboard": "Open in dashboard",
   "scan.clean": "No issues detected — clean scan.",
 
+  // The multi-repository summary, shown above the individual reports.
+  "batch.title": "{count} repositories, together",
+  "batch.findings": "findings in total",
+  "batch.averageScore": "average score",
+  "batch.repository": "Repository",
+  "batch.grade": "Grade",
+  "batch.score": "Score",
+  "batch.mostly": "Mostly",
+  "batch.sharedTitle": "Present in more than one repository",
+  "batch.sharedLead":
+    "One repository with a problem is a mistake; several is a convention. Fixing these where they come from fixes them everywhere.",
+  "batch.inRepos": "{count} repos",
+  "batch.failedTitle": "{count} could not be scanned",
+  "batch.downloadMarkdown": "Download summary (Markdown)",
+
   // The explicit selection list. What gets scanned is what is shown in it.
   "scan.inputPlaceholder": "Search GitHub, or paste a repository URL",
   "scan.add": "Add",
@@ -174,6 +189,20 @@ const ru: Messages = {
   "scan.downloadMarkdown": "Скачать Markdown",
   "scan.openDashboard": "Открыть в дашборде",
   "scan.clean": "Ничего не найдено — репозиторий чист.",
+
+  "batch.title": "Репозиториев вместе: {count}",
+  "batch.findings": "находок всего",
+  "batch.averageScore": "средний балл",
+  "batch.repository": "Репозиторий",
+  "batch.grade": "Оценка",
+  "batch.score": "Балл",
+  "batch.mostly": "В основном",
+  "batch.sharedTitle": "Встречается больше чем в одном репозитории",
+  "batch.sharedLead":
+    "Одна проблема в одном репозитории — случайность, в нескольких — привычка. Если починить там, откуда это берётся, починится везде.",
+  "batch.inRepos": "репозиториев: {count}",
+  "batch.failedTitle": "не удалось просканировать: {count}",
+  "batch.downloadMarkdown": "Скачать сводку (Markdown)",
 
   "scan.inputPlaceholder": "Найти на GitHub или вставить ссылку",
   "scan.add": "Добавить",

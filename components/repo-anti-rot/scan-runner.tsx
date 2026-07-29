@@ -19,6 +19,8 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { RepoPicker, useInitialUrl, type SelectedRepo } from "./repo-picker"
+import { BatchSummaryCard, repoAnchor } from "./batch-summary"
+import { summariseBatch } from "@/lib/multi-report"
 import { cn } from "@/lib/utils"
 import { saveReport, type ScanReport as StoredScanReport } from "@/lib/reports-store"
 import { enrichReport, aiTargetCount } from "@/lib/ai-enrich"
@@ -452,19 +454,37 @@ export function ScanRunner({ onOpen }: { onOpen?: (repoId: string) => void }) {
 
       {results && (
         <div className="space-y-4">
-          {okResults.length > 1 && (
-            <div className="flex items-center justify-between gap-3">
-              <p className="text-sm text-muted-foreground">
-                {t("scan.summary", { total: results.length, ok: okResults.length })}
-              </p>
-              <Button variant="outline" size="sm" onClick={downloadAll}>
-                <Download className="size-4" />
-                {t("scan.downloadAll")}
-              </Button>
-            </div>
+          {results.length > 1 && (
+            <>
+              {/* The batch as one thing, above the individual reports. Reading
+                  five cards in a row does not answer "which is worst" or "what
+                  is wrong with all of them". */}
+              <BatchSummaryCard
+                summary={summariseBatch(
+                  results as unknown as Parameters<typeof summariseBatch>[0],
+                )}
+              />
+              <div className="flex items-center justify-between gap-3">
+                <p className="text-sm text-muted-foreground">
+                  {t("scan.summary", { total: results.length, ok: okResults.length })}
+                </p>
+                <Button variant="outline" size="sm" onClick={downloadAll}>
+                  <Download className="size-4" />
+                  {t("scan.downloadAll")}
+                </Button>
+              </div>
+            </>
           )}
           {results.map((r) => (
-            <ResultCard key={r.url} result={r} onOpen={onOpen} />
+            <div
+              key={r.url}
+              // Scroll target for the summary table, so a row leads to the full
+              // report rather than to a second copy of the same numbers.
+              id={r.report ? repoAnchor(`${r.report.repo.owner}/${r.report.repo.name}`) : undefined}
+              className="scroll-mt-4"
+            >
+              <ResultCard result={r} onOpen={onOpen} />
+            </div>
           ))}
         </div>
       )}
