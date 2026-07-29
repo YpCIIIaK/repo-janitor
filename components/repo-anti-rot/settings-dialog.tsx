@@ -33,6 +33,7 @@ import {
   type ScheduleSettings,
 } from "@/lib/schedule-store"
 import { setUsageOptedOut, useUsageOptedOut } from "@/lib/visitor"
+import { OwnerKey } from "./owner-key"
 
 const CATEGORY_HINT: Record<string, string> = {
   "dead-code": "Is each unused export really safe to remove?",
@@ -321,6 +322,8 @@ export function SettingsDialog({ trigger }: { trigger?: React.ReactNode } = {}) 
               </div>
             )}
           </div>
+
+          <OwnerKey />
 
           {/* Usage statistics */}
           <div className="space-y-2 border-t border-border pt-5">

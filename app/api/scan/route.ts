@@ -21,6 +21,7 @@ import {
   withScanSlot,
 } from "@/lib/scan-limits"
 import { recordRepoUsage } from "@/lib/usage"
+import { isOwner } from "@/lib/owner"
 
 // Cloning + scanning is real work — run on the Node runtime, allow time for it.
 export const runtime = "nodejs"
@@ -113,8 +114,12 @@ export async function POST(request: Request) {
 
   // Rate limit first: cheapest check, and it must run before we parse or resolve
   // anything an attacker controls.
+  // The operator of this instance is exempt from the allowance meant for
+  // strangers — but not from the concurrency cap below, which is what protects
+  // the machine's memory rather than its fairness.
+  const owner = isOwner(request)
   const ip = clientIp(request, limits.trustedProxyHops)
-  const rate = checkRateLimit(ip, limits)
+  const rate = owner ? { ok: true as const, retryAfterSec: 0 } : checkRateLimit(ip, limits)
   if (!rate.ok) {
     return NextResponse.json(
       {
@@ -141,7 +146,7 @@ export async function POST(request: Request) {
   if (urls.length === 0) {
     return NextResponse.json({ error: "Provide one or more repository URLs in `urls`." }, { status: 400 })
   }
-  if (urls.length > limits.maxUrlsPerRequest) {
+  if (!owner && urls.length > limits.maxUrlsPerRequest) {
     return NextResponse.json(
       { error: `Too many URLs (max ${limits.maxUrlsPerRequest} per request).` },
       { status: 400 },
