@@ -193,6 +193,14 @@ export function RepoSidebar({
           />
         )}
         {onNewScan && <RailButton icon={<ScanLine />} label="New scan" onClick={onNewScan} />}
+        {/* Reopening lives in the rail because the rail is the only thing still
+            on screen when the panel is shut. It used to be an absolutely
+            positioned button next to the rail, which rendered and reported
+            itself visible but sat underneath the sticky page header — so the
+            sidebar could be collapsed and never reopened. */}
+        {collapsed && (
+          <RailButton icon={<PanelLeftOpen />} label="Expand sidebar" onClick={toggleCollapsed} />
+        )}
         <div className="mt-auto flex flex-col items-center gap-1">{railExtras}</div>
       </div>
 
@@ -371,18 +379,6 @@ export function RepoSidebar({
         </nav>
       </aside>
 
-      {/* Reopening has to live outside the panel, which is zero-width when shut. */}
-      {collapsed && (
-        <button
-          onClick={toggleCollapsed}
-          aria-expanded={false}
-          aria-label="Expand sidebar"
-          title="Expand sidebar"
-          className="absolute left-14 top-3 ml-1 rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-accent/60 hover:text-foreground"
-        >
-          <PanelLeftOpen className="size-4" />
-        </button>
-      )}
     </div>
   )
 }
