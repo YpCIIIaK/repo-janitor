@@ -52,7 +52,7 @@ const en = {
   // The scan form. It sits on the landing page, so it is rule 1, not rule 3.
   "scan.formTitle": "Run a real scan",
   "scan.formLead":
-    "Paste one or more public git repository URLs, one per line. Each is cloned and scanned by the Repo Anti-Rot engine — no mock data.",
+    "Search GitHub or paste a repository URL, then add it to the list. Everything in the list is cloned and scanned by the Repo Anti-Rot engine — no mock data.",
   "scan.run": "Run scan",
   "scan.running": "Scanning…",
   "scan.urls": "{count} URL · max {max} per run",
@@ -67,6 +67,18 @@ const en = {
   "scan.downloadMarkdown": "Download Markdown",
   "scan.openDashboard": "Open in dashboard",
   "scan.clean": "No issues detected — clean scan.",
+
+  // The explicit selection list. What gets scanned is what is shown in it.
+  "scan.inputPlaceholder": "Search GitHub, or paste a repository URL",
+  "scan.add": "Add",
+  "scan.remove": "Remove from the list",
+  "scan.clearAll": "Clear",
+  "scan.selectedTitle": "Selected — {count} of {max}",
+  "scan.selectedEmpty": "Nothing selected yet. Search above, or paste a repository URL.",
+  "scan.duplicate": "Already in the list.",
+  "scan.limit": "That is the limit of {max} repositories per run.",
+  "scan.willScan": "{count} will be cloned and scanned",
+  "scan.runCount": "Scan {count}",
 
   // The GitHub preview card and search. Part of the scan form, so rule 1.
   "repo.searchHint": "Type a name to search GitHub, or paste a repository URL.",
@@ -146,7 +158,7 @@ const ru: Messages = {
 
   "scan.formTitle": "Запустить настоящий скан",
   "scan.formLead":
-    "Вставьте ссылки на публичные git-репозитории, по одной в строке. Каждый будет склонирован и просканирован движком Repo Anti-Rot — без выдуманных данных.",
+    "Найдите репозиторий на GitHub или вставьте ссылку и добавьте в список. Всё, что в списке, будет склонировано и просканировано движком Repo Anti-Rot — без выдуманных данных.",
   "scan.run": "Запустить скан",
   "scan.running": "Сканируем…",
   "scan.urls": "ссылок: {count} · не больше {max} за раз",
@@ -161,6 +173,17 @@ const ru: Messages = {
   "scan.downloadMarkdown": "Скачать Markdown",
   "scan.openDashboard": "Открыть в дашборде",
   "scan.clean": "Ничего не найдено — репозиторий чист.",
+
+  "scan.inputPlaceholder": "Найти на GitHub или вставить ссылку",
+  "scan.add": "Добавить",
+  "scan.remove": "Убрать из списка",
+  "scan.clearAll": "Очистить",
+  "scan.selectedTitle": "Выбрано — {count} из {max}",
+  "scan.selectedEmpty": "Пока ничего не выбрано. Найдите выше или вставьте ссылку.",
+  "scan.duplicate": "Уже в списке.",
+  "scan.limit": "Это предел — {max} репозиториев за раз.",
+  "scan.willScan": "будет склонировано и просканировано: {count}",
+  "scan.runCount": "Сканировать: {count}",
 
   "repo.searchHint": "Введите название, чтобы найти на GitHub, или вставьте ссылку.",
   "repo.searching": "Ищем на GitHub…",

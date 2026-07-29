@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import {
   Loader2,
   Play,
@@ -18,9 +18,7 @@ import {
 } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
-import { RepoFinder } from "./repo-finder"
-import { parseRepoRef } from "@/lib/github-repo"
+import { RepoPicker, useInitialUrl, type SelectedRepo } from "./repo-picker"
 import { cn } from "@/lib/utils"
 import { saveReport, type ScanReport as StoredScanReport } from "@/lib/reports-store"
 import { enrichReport, aiTargetCount } from "@/lib/ai-enrich"
@@ -328,71 +326,20 @@ function ResultCard({ result, onOpen }: { result: ScanResult; onOpen?: (repoId: 
   )
 }
 
-/**
- * Read a repository URL out of `?url=`, so a link can land someone on the form
- * with the box already filled — that is how the "scan this yourself" button on a
- * shared report hands over.
- *
- * Only used as an initial value. It is displayed and then submitted to the
- * scanner, which does its own public-URL check, so nothing here is trusted.
- */
-function urlFromQuery(): string {
-  if (typeof window === "undefined") return ""
-  try {
-    const raw = new URLSearchParams(window.location.search).get("url") ?? ""
-    return /^https?:\/\//i.test(raw) ? raw : ""
-  } catch {
-    return ""
-  }
-}
-
-/** Index of the last non-empty line, or -1 when the text is blank. */
-function lastLineIndex(lines: string[]): number {
-  for (let i = lines.length - 1; i >= 0; i--) {
-    if (lines[i].trim()) return i
-  }
-  return -1
-}
-
 export function ScanRunner({ onOpen }: { onOpen?: (repoId: string) => void }) {
   const { t } = useLocale()
-  const [input, setInput] = useState("")
-
-  // After mount, not during render. The server has no query string to read, so
-  // seeding the state directly makes the first client render disagree with the
-  // server HTML — React reports a hydration mismatch and throws the markup away.
-  // The visible cost is the box filling in a frame late.
-  useEffect(() => {
-    const fromQuery = urlFromQuery()
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (fromQuery) setInput(fromQuery)
-  }, [])
+  const [selected, setSelected] = useState<SelectedRepo[]>([])
   const [loading, setLoading] = useState(false)
   const [progress, setProgress] = useState(0) // 0..1 overall
   const [progressLabel, setProgressLabel] = useState("")
   const [results, setResults] = useState<ScanResult[] | null>(null)
   const [error, setError] = useState<string | null>(null)
 
-  // Only lines that are actually scannable. A search query left in the box used
-  // to count as a URL and leave Run enabled, so pressing it spent a request
-  // trying to clone "repo rot scanner". A bare `owner/name` is expanded rather
-  // than dropped — people type it, and the scan endpoint only takes http(s).
-  const urls = input
-    .split("\n")
-    .map((l) => l.trim())
-    .filter(Boolean)
-    .map((line) => {
-      if (/^https?:\/\//i.test(line)) return line
-      const ref = parseRepoRef(line)
-      return ref ? `https://github.com/${ref.owner}/${ref.name}.git` : null
-    })
-    .filter((u): u is string => u !== null)
+  // A shared link lands here with ?url=…; it goes into the list like anything
+  // else, so the same rule holds — what gets scanned is what is shown.
+  useInitialUrl((url) => setSelected((prev) => (prev.length ? prev : [{ url }])))
 
-  // The last non-empty line is what the preview follows. Not the caret position:
-  // reading that would make the card jump around while someone edits a list, and
-  // the line being added is the one they are deciding about.
-  const inputLines = input.split("\n")
-  const lastLine = inputLines[lastLineIndex(inputLines)]?.trim() ?? ""
+  const urls = selected.map((s) => s.url)
 
   const okResults = results?.filter((r) => r.ok && r.report) ?? []
 
@@ -464,33 +411,14 @@ export function ScanRunner({ onOpen }: { onOpen?: (repoId: string) => void }) {
         </CardHeader>
         <CardContent className="space-y-3">
           <p className="text-sm text-muted-foreground">{t("scan.formLead")}</p>
-          <Textarea
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder={"https://github.com/owner/repo.git\nhttps://github.com/owner/another.git"}
-            rows={4}
-            className="font-mono text-sm"
-            disabled={loading}
-          />
-          {/* Preview for the line being edited. Driven by the box rather than
-              owning a search field of its own: one input means there is never a
-              question about which of two things gets scanned. */}
-          {!loading && (
-            <RepoFinder
-              text={lastLine}
-              onPick={(cloneUrl) => {
-                // Replace the line that produced the search, keeping any URLs
-                // already listed above it.
-                const lines = input.split("\n")
-                const idx = lastLineIndex(lines)
-                lines[idx === -1 ? lines.length : idx] = cloneUrl
-                setInput(lines.join("\n"))
-              }}
-            />
-          )}
-          <div className="flex items-center justify-between">
+
+          <RepoPicker selected={selected} onChange={setSelected} disabled={loading} />
+
+          <div className="flex items-center justify-between gap-3 border-t border-border pt-3">
             <span className="text-xs text-muted-foreground">
-              {input.trim() ? t("scan.urls", { count: urls.length, max: 20 }) : t("repo.searchHint")}
+              {selected.length === 0
+                ? t("repo.searchHint")
+                : t("scan.willScan", { count: selected.length })}
             </span>
             <Button onClick={runScan} disabled={loading || urls.length === 0}>
               {loading ? (
@@ -501,7 +429,9 @@ export function ScanRunner({ onOpen }: { onOpen?: (repoId: string) => void }) {
               ) : (
                 <>
                   <Play className="size-4" />
-                  {t("scan.run")}
+                  {selected.length > 1
+                    ? t("scan.runCount", { count: selected.length })
+                    : t("scan.run")}
                 </>
               )}
             </Button>

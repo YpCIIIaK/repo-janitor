@@ -51,8 +51,9 @@ export function RepoFinder({
 }: {
   /** The line currently being edited. */
   text: string
-  /** Called with a clone URL when a search result is chosen. */
-  onPick: (cloneUrl: string) => void
+  /** Called when a result is chosen; the metadata rides along so the chosen
+   * row can render its card immediately instead of re-fetching it. */
+  onPick: (cloneUrl: string, repo: GithubRepo) => void
 }) {
   const { t } = useLocale()
   const key = lookupKey(text)
@@ -128,7 +129,8 @@ export function RepoFinder({
   }
 
   if (state.kind === "repo") {
-    return <GithubRepoCard repo={state.repo} />
+    const repo = state.repo
+    return <GithubRepoCard repo={repo} onAdd={() => onPick(repo.cloneUrl, repo)} />
   }
 
   return (
@@ -142,7 +144,7 @@ export function RepoFinder({
           <button
             key={repo.fullName}
             type="button"
-            onClick={() => onPick(repo.cloneUrl)}
+            onClick={() => onPick(repo.cloneUrl, repo)}
             className="block w-full text-left"
           >
             <GithubRepoCard repo={repo} compact />

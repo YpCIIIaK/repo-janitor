@@ -1,6 +1,6 @@
 "use client"
 
-import { Star, GitFork, CircleDot, Scale, Archive, GitBranch, Play } from "lucide-react"
+import { Star, GitFork, CircleDot, Scale, Archive, GitBranch, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { compactCount, type GithubRepo } from "@/lib/github-repo"
@@ -91,14 +91,14 @@ function Stat({ icon, value, title }: { icon: React.ReactNode; value: string; ti
 
 export function GithubRepoCard({
   repo,
-  onScan,
+  onAdd,
   compact,
   className,
 }: {
   repo: GithubRepo
-  /** Omitted on search results that are chosen rather than run directly. */
-  onScan?: (cloneUrl: string) => void
-  /** Search-result density: no topics row, no scan button. */
+  /** Shown as an Add button. Omitted for rows that are already chosen. */
+  onAdd?: (cloneUrl: string) => void
+  /** Row density: no topics, no last-push line. */
   compact?: boolean
   className?: string
 }) {
@@ -198,10 +198,10 @@ export function GithubRepoCard({
           )}
         </div>
 
-        {onScan && (
-          <Button size="sm" onClick={() => onScan(repo.cloneUrl)} className="shrink-0">
-            <Play className="size-4" />
-            {t("repo.scanThis")}
+        {onAdd && (
+          <Button size="sm" onClick={() => onAdd(repo.cloneUrl)} className="shrink-0">
+            <Plus className="size-4" />
+            {t("scan.add")}
           </Button>
         )}
       </div>
