@@ -239,6 +239,11 @@ export function RepoSidebar({
         <nav className="flex-1 space-y-0.5 overflow-y-auto px-2 pb-2">
           {current && onSelectSection && !overviewActive && (
             <>
+              {/* One flat list, in the order asked for. The section headings
+                  ("Findings", "Repository") are gone: with eight destinations
+                  the grouping was a second thing to read before finding the one
+                  you wanted, and it split Breakdown away from the other views of
+                  the same findings. */}
               <NavItem
                 icon={<LayoutDashboard />}
                 label="Overview"
@@ -252,13 +257,6 @@ export function RepoSidebar({
                 active={section === "issues"}
                 onClick={go("issues")}
               />
-
-              {/* Flat, not collapsible groups. A group is worth its cost when a
-                  list is too long to scan; seven destinations are not, and the
-                  group turned every one of them into two clicks — plus a guess
-                  about which heading it was filed under. The headings stay as
-                  labels, doing the grouping without hiding anything. */}
-              <NavSectionLabel>Findings</NavSectionLabel>
               <NavItem
                 icon={<ShieldCheck />}
                 label="Security"
@@ -273,14 +271,6 @@ export function RepoSidebar({
                 active={section === "links"}
                 onClick={go("links")}
               />
-              <NavItem
-                icon={<Boxes />}
-                label="Breakdown"
-                active={section === "breakdown"}
-                onClick={go("breakdown")}
-              />
-
-              <NavSectionLabel>Repository</NavSectionLabel>
               <NavItem
                 icon={<Workflow />}
                 label="Tree"
@@ -298,6 +288,12 @@ export function RepoSidebar({
                 label="About"
                 active={section === "about"}
                 onClick={go("about")}
+              />
+              <NavItem
+                icon={<Boxes />}
+                label="Breakdown"
+                active={section === "breakdown"}
+                onClick={go("breakdown")}
               />
             </>
           )}
