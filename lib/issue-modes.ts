@@ -28,7 +28,10 @@ const MODES: Record<IssueMode, ModeSpec> = {
   security: {
     // Three different kinds of problem that a reader thinks of as one question:
     // "is anything here going to get me owned?"
-    scanners: ["insecure-code", "secrets", "vulnerable-deps"],
+    // The workflow scanner belongs here rather than in a CI section of its own:
+    // a stranger reading your secrets out of a pull request is the same question
+    // as a hard-coded key, however different the file it lives in.
+    scanners: ["insecure-code", "secrets", "vulnerable-deps", "workflow-security"],
     legacyPrefixes: ["insecure-", "secret-", "vuln-"],
   },
   links: {
