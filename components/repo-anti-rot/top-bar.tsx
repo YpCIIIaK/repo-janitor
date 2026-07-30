@@ -71,15 +71,21 @@ export function TopBar({
               <span className="hidden sm:inline">Dashboard</span>
             </Button>
           )}
-          <div className="relative hidden md:block">
-            <Search className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              value={search}
-              onChange={(e) => onSearch?.(e.target.value)}
-              placeholder="Search issues..."
-              className="h-8 w-56 bg-secondary pl-8 text-sm"
-            />
-          </div>
+          {/* Only where there are findings to search. The landing page passes no
+              handler, and used to get the box anyway — a search field that
+              silently does nothing, in the header of the first page a stranger
+              sees. */}
+          {onSearch && (
+            <div className="relative hidden md:block">
+              <Search className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                value={search}
+                onChange={(e) => onSearch(e.target.value)}
+                placeholder="Search issues..."
+                className="h-8 w-56 bg-secondary pl-8 text-sm"
+              />
+            </div>
+          )}
           {/* Settings and "connect a repository" live in the sidebar rail — two
               buttons opening the same dialog is two places to look. Except on
               the landing page, which has no rail: there this is the only way in,

@@ -1,6 +1,7 @@
 "use client"
 
 import { Activity, GitBranch, KeyRound, Boxes } from "lucide-react"
+import { useRouter } from "next/navigation"
 import { LanguageSwitcher } from "@/components/i18n/language-switcher"
 import { useLocale } from "@/components/i18n/locale-provider"
 import type { MessageKey } from "@/lib/i18n"
@@ -26,6 +27,7 @@ const features: { icon: typeof KeyRound; title: MessageKey; body: MessageKey }[]
  */
 export function WelcomeScreen() {
   const { t } = useLocale()
+  const router = useRouter()
 
   return (
     <div className="relative isolate min-h-screen overflow-hidden">
@@ -59,7 +61,12 @@ export function WelcomeScreen() {
         </div>
 
         <div className="mt-10">
-          <ScanRunner />
+          {/* The result cards offer "Open" only when there is somewhere to open
+              into. There is now: the dashboard is its own route, so the report
+              can be handed over by id instead of hoping it sorts to the top. */}
+          <ScanRunner
+            onOpen={(repoId) => router.push(`/app?repo=${encodeURIComponent(repoId)}`)}
+          />
         </div>
 
         <div className="mt-16 grid gap-4 text-left sm:grid-cols-3">
