@@ -22,6 +22,7 @@ import { commentedCodeScanner } from "./scanners/commented-code"
 import { insecureCodeScanner } from "./scanners/insecure-code"
 import { deadLinksScanner } from "./scanners/dead-links"
 import { workflowSecurityScanner } from "./scanners/workflow-security"
+import { eolRuntimeScanner } from "./scanners/eol-runtime"
 
 /** Default scanner registry. Add new scanners here as they are implemented. */
 export const defaultScanners: Scanner[] = [
@@ -45,6 +46,7 @@ export const defaultScanners: Scanner[] = [
   insecureCodeScanner,
   deadLinksScanner,
   workflowSecurityScanner,
+  eolRuntimeScanner,
 ]
 
 /** Severity penalties. info is deliberately near-cosmetic — a quarter of a point
