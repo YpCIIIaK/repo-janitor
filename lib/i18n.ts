@@ -189,6 +189,11 @@ const en = {
   "issues.info": "info",
 
   "lang.label": "Language",
+
+  "theme.label": "Theme",
+  "theme.moss": "Moss",
+  "theme.ocean": "Ocean",
+  "theme.aurora": "Aurora",
 } as const
 
 /** Every locale must provide exactly the English key set. */
@@ -327,6 +332,11 @@ const ru: Messages = {
   "issues.info": "инфо",
 
   "lang.label": "Язык",
+
+  "theme.label": "Тема",
+  "theme.moss": "Мох",
+  "theme.ocean": "Океан",
+  "theme.aurora": "Аврора",
 }
 
 export const messages: Record<Locale, Messages> = { en, ru }

@@ -3,59 +3,124 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/*
+ * Shared semantic / data-viz colours.
+ *
+ * Severity and grade colours stay fixed across themes so the same fact never
+ * gets two hues. Only chrome (backgrounds, borders, primary accent) shifts.
+ */
 :root {
+  --destructive: oklch(0.62 0.21 22);
+  --destructive-foreground: oklch(0.98 0.004 285);
+  --success: oklch(0.72 0.17 152);
+  --success-foreground: oklch(0.16 0.02 152);
+  --warning: oklch(0.78 0.16 85);
+  --warning-foreground: oklch(0.18 0.02 85);
+  --info: oklch(0.68 0.08 245);
+  --info-foreground: oklch(0.16 0.02 245);
+
+  --chart-1: oklch(0.72 0.17 152);
+  --chart-2: oklch(0.78 0.16 85);
+  --chart-3: oklch(0.7 0.18 45);
+  --chart-4: oklch(0.62 0.21 22);
+  --chart-5: oklch(0.68 0.08 245);
+  --chart-6: oklch(0.66 0.12 305);
+
+  --radius: 0.5rem;
+}
+
+/* Default = Moss (green accent on cool charcoal). Also applied as .theme-moss. */
+:root,
+.theme-moss {
   --background: oklch(0.16 0.004 285);
   --foreground: oklch(0.92 0.004 285);
   --card: oklch(0.19 0.004 285);
   --card-foreground: oklch(0.92 0.004 285);
   --popover: oklch(0.2 0.004 285);
   --popover-foreground: oklch(0.92 0.004 285);
-  --primary: oklch(0.72 0.17 152);
+  --primary: oklch(0.72 0.14 152);
   --primary-foreground: oklch(0.16 0.02 152);
   --secondary: oklch(0.24 0.004 285);
   --secondary-foreground: oklch(0.92 0.004 285);
   --muted: oklch(0.24 0.004 285);
   --muted-foreground: oklch(0.6 0.004 285);
-  --accent: oklch(0.26 0.004 285);
+  --accent: oklch(0.26 0.008 152);
   --accent-foreground: oklch(0.92 0.004 285);
-  --destructive: oklch(0.62 0.21 22);
-  --destructive-foreground: oklch(0.98 0.004 285);
   --border: oklch(0.26 0.004 285);
   --input: oklch(0.26 0.004 285);
-  --ring: oklch(0.72 0.17 152);
-
-  /* Semantic status colours, matching the personal UI kit's token names so its
-     components drop in unedited. Deliberately aliased onto the existing chart
-     palette rather than given new hues: success must be the same green the A
-     grade already uses, or the same fact gets two colours. */
-  --success: oklch(0.72 0.17 152);
-  --success-foreground: oklch(0.16 0.02 152);
-  --warning: oklch(0.78 0.16 85);
-  --warning-foreground: oklch(0.18 0.02 85);
-  --info: oklch(0.6 0.06 250);
-  --info-foreground: oklch(0.98 0.004 285);
-
-  /* severity / data-viz palette */
-  --chart-1: oklch(0.72 0.17 152);
-  --chart-2: oklch(0.78 0.16 85);
-  --chart-3: oklch(0.7 0.18 45);
-  --chart-4: oklch(0.62 0.21 22);
-  --chart-5: oklch(0.6 0.06 250);
-  --chart-6: oklch(0.66 0.15 305);
-
-  --radius: 0.5rem;
-  /* Shadows are tinted with this rather than plain black: on a dark surface a
-     black shadow is invisible, so the kit's shadow scale needs a hue to work. */
+  --ring: oklch(0.72 0.14 152);
   --shadow-color: 285 20% 4%;
 
-  --sidebar: oklch(0.17 0.004 285);
+  --sidebar: oklch(0.14 0.004 285);
   --sidebar-foreground: oklch(0.92 0.004 285);
-  --sidebar-primary: oklch(0.72 0.17 152);
+  --sidebar-primary: oklch(0.72 0.14 152);
   --sidebar-primary-foreground: oklch(0.16 0.02 152);
-  --sidebar-accent: oklch(0.24 0.004 285);
+  --sidebar-accent: oklch(0.22 0.01 152);
   --sidebar-accent-foreground: oklch(0.92 0.004 285);
   --sidebar-border: oklch(0.26 0.004 285);
-  --sidebar-ring: oklch(0.72 0.17 152);
+  --sidebar-ring: oklch(0.72 0.14 152);
+}
+
+/* Ocean — deep blue-grey, muted azure accent. */
+.theme-ocean {
+  --background: oklch(0.16 0.02 250);
+  --foreground: oklch(0.92 0.01 250);
+  --card: oklch(0.19 0.022 250);
+  --card-foreground: oklch(0.92 0.01 250);
+  --popover: oklch(0.2 0.024 250);
+  --popover-foreground: oklch(0.92 0.01 250);
+  --primary: oklch(0.7 0.1 245);
+  --primary-foreground: oklch(0.16 0.03 245);
+  --secondary: oklch(0.24 0.02 250);
+  --secondary-foreground: oklch(0.92 0.01 250);
+  --muted: oklch(0.24 0.018 250);
+  --muted-foreground: oklch(0.62 0.02 250);
+  --accent: oklch(0.26 0.03 245);
+  --accent-foreground: oklch(0.92 0.01 250);
+  --border: oklch(0.28 0.022 250);
+  --input: oklch(0.28 0.022 250);
+  --ring: oklch(0.7 0.1 245);
+  --shadow-color: 250 28% 5%;
+
+  --sidebar: oklch(0.135 0.022 250);
+  --sidebar-foreground: oklch(0.92 0.01 250);
+  --sidebar-primary: oklch(0.7 0.1 245);
+  --sidebar-primary-foreground: oklch(0.16 0.03 245);
+  --sidebar-accent: oklch(0.22 0.03 245);
+  --sidebar-accent-foreground: oklch(0.92 0.01 250);
+  --sidebar-border: oklch(0.28 0.022 250);
+  --sidebar-ring: oklch(0.7 0.1 245);
+}
+
+/* Aurora — teal dusk, quiet mix of green and blue. */
+.theme-aurora {
+  --background: oklch(0.155 0.018 195);
+  --foreground: oklch(0.92 0.01 195);
+  --card: oklch(0.185 0.02 195);
+  --card-foreground: oklch(0.92 0.01 195);
+  --popover: oklch(0.2 0.022 195);
+  --popover-foreground: oklch(0.92 0.01 195);
+  --primary: oklch(0.7 0.09 185);
+  --primary-foreground: oklch(0.15 0.03 185);
+  --secondary: oklch(0.235 0.02 195);
+  --secondary-foreground: oklch(0.92 0.01 195);
+  --muted: oklch(0.235 0.018 195);
+  --muted-foreground: oklch(0.62 0.02 195);
+  --accent: oklch(0.26 0.028 185);
+  --accent-foreground: oklch(0.92 0.01 195);
+  --border: oklch(0.28 0.02 195);
+  --input: oklch(0.28 0.02 195);
+  --ring: oklch(0.7 0.09 185);
+  --shadow-color: 195 25% 5%;
+
+  --sidebar: oklch(0.13 0.02 195);
+  --sidebar-foreground: oklch(0.92 0.01 195);
+  --sidebar-primary: oklch(0.7 0.09 185);
+  --sidebar-primary-foreground: oklch(0.15 0.03 185);
+  --sidebar-accent: oklch(0.22 0.028 185);
+  --sidebar-accent-foreground: oklch(0.92 0.01 195);
+  --sidebar-border: oklch(0.28 0.02 195);
+  --sidebar-ring: oklch(0.7 0.09 185);
 }
 
 @theme inline {

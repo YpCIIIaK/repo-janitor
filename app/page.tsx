@@ -3,7 +3,9 @@
 import { useRouter } from "next/navigation"
 import { TopBar } from "@/components/repo-anti-rot/top-bar"
 import { WelcomeScreen } from "@/components/repo-anti-rot/welcome-screen"
+import { LanguageSwitcher } from "@/components/i18n/language-switcher"
 import { SettingsDialog } from "@/components/repo-anti-rot/settings-dialog"
+import { ThemeSwitcher } from "@/components/theme-switcher"
 import { useRepos } from "@/lib/reports-store"
 
 /**
@@ -30,7 +32,13 @@ export default function LandingPage() {
           scan the dashboard is an empty room. */}
       <TopBar
         onBackToDashboard={repos.length > 0 ? () => router.push("/app") : undefined}
-        extras={<SettingsDialog />}
+        extras={
+          <>
+            <ThemeSwitcher />
+            <LanguageSwitcher />
+            <SettingsDialog />
+          </>
+        }
       />
       <WelcomeScreen />
     </div>

@@ -1,7 +1,8 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Settings, Sparkles, Eye, EyeOff, Check, Clock, Globe, BarChart3 } from "lucide-react"
+import { Settings, Sparkles, Eye, EyeOff, Check, Clock, Globe, BarChart3, Palette } from "lucide-react"
+import { ThemePicker } from "@/components/theme-switcher"
 import {
   Dialog,
   DialogContent,
@@ -104,8 +105,23 @@ export function SettingsDialog({ trigger }: { trigger?: React.ReactNode } = {}) 
         </DialogHeader>
 
         <div className="-mx-1 flex-1 space-y-5 overflow-y-auto px-1 py-2">
+          {/* Appearance — applies immediately, no Save */}
+          <div className="space-y-2">
+            <div className="space-y-0.5">
+              <h3 className="flex items-center gap-1.5 text-sm font-semibold">
+                <Palette className="size-4 text-primary" />
+                Appearance
+              </h3>
+              <p className="text-xs text-muted-foreground">
+                Colour themes for this browser. All themes are dark; the choice takes effect
+                immediately.
+              </p>
+            </div>
+            <ThemePicker />
+          </div>
+
           {/* AI analysis */}
-          <div className="space-y-0.5">
+          <div className="space-y-0.5 border-t border-border pt-5">
             <h3 className="flex items-center gap-1.5 text-sm font-semibold">
               <Sparkles className="size-4 text-primary" />
               AI analysis

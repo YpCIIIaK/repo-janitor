@@ -18,7 +18,6 @@ import {
 } from "@xyflow/react"
 import "@xyflow/react/dist/style.css"
 import { toPng, toSvg } from "html-to-image"
-import { useTheme } from "next-themes"
 import {
   Boxes,
   ChevronDown,
@@ -340,7 +339,6 @@ interface RepoTreeProps {
 }
 
 function RepoTreeInner({ issues, weights, repo, onViewInIssues }: RepoTreeProps) {
-  const { resolvedTheme } = useTheme()
   const { fitView, getNodes } = useReactFlow()
   const wrapperRef = useRef<HTMLDivElement>(null)
 
@@ -448,8 +446,11 @@ function RepoTreeInner({ issues, weights, repo, onViewInIssues }: RepoTreeProps)
       const vp = getViewportForBounds(bounds, width, height, 0.2, 2, 0.1)
       const el = wrapperRef.current?.querySelector(".react-flow__viewport") as HTMLElement | null
       if (!el) return
+      const bg =
+        getComputedStyle(document.documentElement).getPropertyValue("--background").trim() ||
+        "#242428"
       const opts = {
-        backgroundColor: resolvedTheme === "dark" ? "#0a0a0a" : "#ffffff",
+        backgroundColor: bg,
         width,
         height,
         style: {
@@ -465,7 +466,7 @@ function RepoTreeInner({ issues, weights, repo, onViewInIssues }: RepoTreeProps)
           /* export is best-effort */
         })
     },
-    [getNodes, resolvedTheme, repo.owner, repo.name],
+    [getNodes, repo.owner, repo.name],
   )
 
   const selected = selectedId ? nodeById.get(selectedId) : null
@@ -564,7 +565,7 @@ function RepoTreeInner({ issues, weights, repo, onViewInIssues }: RepoTreeProps)
               edges={edges}
               nodeTypes={nodeTypes}
               onNodeClick={onNodeClick}
-              colorMode={(resolvedTheme as "light" | "dark") ?? "light"}
+              colorMode="dark"
               fitView
               fitViewOptions={{ padding: 0.2 }}
               minZoom={0.2}

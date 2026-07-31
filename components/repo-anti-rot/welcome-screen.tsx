@@ -2,7 +2,6 @@
 
 import { Activity, GitBranch, KeyRound, Boxes } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { LanguageSwitcher } from "@/components/i18n/language-switcher"
 import { useLocale } from "@/components/i18n/locale-provider"
 import type { MessageKey } from "@/lib/i18n"
 import { ScanRunner } from "./scan-runner"
@@ -41,10 +40,6 @@ export function WelcomeScreen() {
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[32rem] opacity-[0.18] [mask-image:radial-gradient(ellipse_70%_60%_at_50%_0%,black,transparent)] [background-image:linear-gradient(to_right,var(--color-border)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border)_1px,transparent_1px)] [background-size:56px_56px]"
       />
-
-      <div className="absolute right-4 top-4 z-10">
-        <LanguageSwitcher />
-      </div>
 
       <main className="mx-auto w-full max-w-3xl px-4 py-16 md:py-24">
         <div className="flex flex-col items-center text-center">

@@ -16,7 +16,6 @@ import {
   type NodeProps,
 } from "@xyflow/react"
 import "@xyflow/react/dist/style.css"
-import { useTheme } from "next-themes"
 import {
   GitCommitVertical,
   GitMerge,
@@ -278,7 +277,6 @@ const DEFAULT_SAMPLE = 18
 const MAX_SAMPLE = 40
 
 function CommitTreeInner({ initialUrl = "" }: { initialUrl?: string }) {
-  const { resolvedTheme } = useTheme()
   const [url, setUrl] = useState(initialUrl)
   const [scope, setScope] = useState<"sample" | "all" | "pick">("sample")
   const [pool, setPool] = useState<CommitWithStats[]>([])
@@ -573,7 +571,7 @@ function CommitTreeInner({ initialUrl = "" }: { initialUrl?: string }) {
             edges={edges}
             nodeTypes={nodeTypes}
             onNodeClick={onNodeClick}
-            colorMode={(resolvedTheme as "light" | "dark") ?? "light"}
+            colorMode="dark"
             fitView
             fitViewOptions={{ padding: 0.25 }}
             minZoom={0.2}

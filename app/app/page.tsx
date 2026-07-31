@@ -30,6 +30,7 @@ import { useRepos, removeRepo, repoStats, repoTrend, countSeverity, timeAgo, rep
 import { Settings as SettingsIcon, HelpCircle } from "lucide-react"
 import { SettingsDialog } from "@/components/repo-anti-rot/settings-dialog"
 import { OnboardingDialog } from "@/components/repo-anti-rot/onboarding-dialog"
+import { ThemeSwitcher } from "@/components/theme-switcher"
 import { ModePanel } from "@/components/repo-anti-rot/mode-panel"
 import { ScanHistory } from "@/components/repo-anti-rot/scan-history"
 import { filterMode } from "@/lib/issue-modes"
@@ -245,6 +246,7 @@ export default function DashboardPage() {
         }}
         railExtras={
           <>
+            <ThemeSwitcher variant="rail" />
             <SettingsDialog
               trigger={
                 <button

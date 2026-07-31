@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import { cookies, headers } from 'next/headers'
 import { ServerSync } from '@/components/repo-anti-rot/server-sync'
 import { LocaleProvider } from '@/components/i18n/locale-provider'
+import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/sonner'
 import { LOCALE_COOKIE, resolveLocale } from '@/lib/i18n'
 import './globals.css'
@@ -47,13 +48,15 @@ export default async function RootLayout({
   )
 
   return (
-    <html lang={locale} className="bg-background">
+    <html lang={locale} className="bg-background" suppressHydrationWarning>
       <body className="font-sans antialiased">
-        <LocaleProvider initial={locale}>
-          <ServerSync />
-          {children}
-          <Toaster />
-        </LocaleProvider>
+        <ThemeProvider>
+          <LocaleProvider initial={locale}>
+            <ServerSync />
+            {children}
+            <Toaster />
+          </LocaleProvider>
+        </ThemeProvider>
       </body>
     </html>
   )
