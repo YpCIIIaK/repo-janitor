@@ -291,8 +291,26 @@ The per-finding enrichment is tuned to stay cheap on small/free models:
 
 ## Health badge
 
-Once a repo's report has been ingested (via the GitHub Action's `dashboard-url`),
-the dashboard serves a live SVG badge for it:
+Two ways to get one, because they suit different people.
+
+**From a scan you shared.** Scan a repository, tick the consent box, create a
+share link — the badge markdown is offered right there, ready to paste. No
+account, no Action, no self-hosting. The link's token is what the badge reads,
+so it shows the grade of that shared report and updates when you share a newer
+scan:
+
+```
+[![Repo Anti-Rot](https://your-deploy.example.com/api/badge/<owner>/<name>?token=<token>)](https://your-deploy.example.com/r/<owner>/<name>/<token>)
+```
+
+The token grants strictly less through the badge than through the share page it
+already opens: a grade and a score, and no findings. A token belonging to a
+different repository renders `unknown` rather than that repository's grade — a
+badge sits at the top of a README, and one project's score under another
+project's name would make it a way to misrepresent.
+
+**From CI.** Once a repo's report has been ingested (via the GitHub Action's
+`dashboard-url`), the same endpoint serves a badge with no token at all:
 
 ```
 ![rot](https://your-deploy.example.com/api/badge/<owner>/<name>)

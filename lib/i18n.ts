@@ -142,6 +142,10 @@ const en = {
   "share.failed": "Could not create the link. Try again.",
   "share.copy": "Copy link",
   "share.copied": "Copied",
+  "share.badgeTitle": "Badge for your README",
+  "share.badgeLead":
+    "A live image showing this grade. It reads from the shared report, so it updates when you share a newer scan.",
+  "share.badgeCopy": "Copy markdown",
   "share.heading": "Repository health",
   "share.scannedAt": "Scanned {date}",
   "share.rescan": "Scan another repository",
@@ -261,6 +265,10 @@ const ru: Messages = {
   "share.failed": "Не удалось создать ссылку. Попробуйте ещё раз.",
   "share.copy": "Скопировать ссылку",
   "share.copied": "Скопировано",
+  "share.badgeTitle": "Бейдж для README",
+  "share.badgeLead":
+    "Живая картинка с этой оценкой. Читает расшаренный отчёт, поэтому обновится, когда вы поделитесь новым сканом.",
+  "share.badgeCopy": "Скопировать markdown",
   "share.heading": "Здоровье репозитория",
   "share.scannedAt": "Скан от {date}",
   "share.rescan": "Просканировать другой репозиторий",

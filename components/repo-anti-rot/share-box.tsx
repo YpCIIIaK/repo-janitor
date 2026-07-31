@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useLocale } from "@/components/i18n/locale-provider"
 import { usageHeaders } from "@/lib/visitor"
+import { badgeMarkdown, badgeUrl, parseSharePath } from "@/lib/badge-markdown"
 
 /**
  * Consent + share-link creation for a finished scan.
@@ -24,7 +25,9 @@ export function ShareBox({ report, repoUrl }: { report: unknown; repoUrl?: strin
   const [busy, setBusy] = useState(false)
   const [url, setUrl] = useState<string | null>(null)
   const [failed, setFailed] = useState(false)
-  const [copied, setCopied] = useState(false)
+  // Which value was copied last, so the two buttons confirm independently
+  // rather than both flipping to "Copied" when either is pressed.
+  const [copied, setCopied] = useState<"link" | "badge" | null>(null)
 
   async function createLink() {
     setBusy(true)
@@ -46,20 +49,23 @@ export function ShareBox({ report, repoUrl }: { report: unknown; repoUrl?: strin
     }
   }
 
-  async function copy() {
-    if (!url) return
+  async function copyText(value: string, which: "link" | "badge") {
     try {
-      await navigator.clipboard.writeText(url)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
+      await navigator.clipboard.writeText(value)
+      setCopied(which)
+      setTimeout(() => setCopied(null), 2000)
     } catch {
-      /* clipboard blocked — the link is on screen and selectable anyway */
+      /* clipboard blocked — the value is on screen and selectable anyway */
     }
   }
 
   if (url) {
+    const origin = window.location.origin
+    const markdown = badgeMarkdown(origin, url)
+    const target = parseSharePath(url)
+
     return (
-      <div className="rounded-lg border border-border bg-card/40 p-3">
+      <div className="space-y-3 rounded-lg border border-border bg-card/40 p-3">
         <div className="flex items-center gap-2">
           <Link2 className="size-4 shrink-0 text-muted-foreground" />
           <input
@@ -68,11 +74,40 @@ export function ShareBox({ report, repoUrl }: { report: unknown; repoUrl?: strin
             onFocus={(e) => e.currentTarget.select()}
             className="min-w-0 flex-1 bg-transparent font-mono text-xs text-muted-foreground outline-none"
           />
-          <Button size="sm" variant="ghost" onClick={copy}>
-            {copied ? <Check className="size-4" /> : <Copy className="size-4" />}
-            {t(copied ? "share.copied" : "share.copy")}
+          <Button size="sm" variant="ghost" onClick={() => copyText(url, "link")}>
+            {copied === "link" ? <Check className="size-4" /> : <Copy className="size-4" />}
+            {t(copied === "link" ? "share.copied" : "share.copy")}
           </Button>
         </div>
+
+        {/* The other half of the point. A shared report says "here is what I
+            found"; the badge is how someone whose repository came out well gets
+            to say so, in the place people actually look. */}
+        {markdown && target && (
+          <div className="border-t border-border pt-3">
+            <p className="text-sm font-medium">{t("share.badgeTitle")}</p>
+            <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+              {t("share.badgeLead")}
+            </p>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={badgeUrl(origin, target)}
+              alt=""
+              className="mt-2 h-5"
+              width={120}
+              height={20}
+            />
+            <div className="mt-2 flex items-center gap-2">
+              <code className="min-w-0 flex-1 truncate rounded bg-muted px-2 py-1 font-mono text-[11px] text-muted-foreground">
+                {markdown}
+              </code>
+              <Button size="sm" variant="ghost" onClick={() => copyText(markdown, "badge")}>
+                {copied === "badge" ? <Check className="size-4" /> : <Copy className="size-4" />}
+                {t(copied === "badge" ? "share.copied" : "share.badgeCopy")}
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
     )
   }
