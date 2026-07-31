@@ -113,8 +113,7 @@ export function SettingsDialog({ trigger }: { trigger?: React.ReactNode } = {}) 
                 Appearance
               </h3>
               <p className="text-xs text-muted-foreground">
-                Colour themes for this browser. All themes are dark; the choice takes effect
-                immediately.
+                Colour themes for this browser. The choice takes effect immediately.
               </p>
             </div>
             <ThemePicker />

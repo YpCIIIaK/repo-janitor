@@ -17,7 +17,9 @@ import {
   type NodeProps,
 } from "@xyflow/react"
 import "@xyflow/react/dist/style.css"
+import { useTheme } from "next-themes"
 import { toPng, toSvg } from "html-to-image"
+import { isDarkTheme } from "@/lib/themes"
 import {
   Boxes,
   ChevronDown,
@@ -339,8 +341,10 @@ interface RepoTreeProps {
 }
 
 function RepoTreeInner({ issues, weights, repo, onViewInIssues }: RepoTreeProps) {
+  const { theme } = useTheme()
   const { fitView, getNodes } = useReactFlow()
   const wrapperRef = useRef<HTMLDivElement>(null)
+  const colorMode = isDarkTheme(theme) ? "dark" : "light"
 
   // Severity filter — toggle a severity off to drop those findings (and any node
   // that only held them) from the map.
@@ -565,7 +569,7 @@ function RepoTreeInner({ issues, weights, repo, onViewInIssues }: RepoTreeProps)
               edges={edges}
               nodeTypes={nodeTypes}
               onNodeClick={onNodeClick}
-              colorMode="dark"
+              colorMode={colorMode}
               fitView
               fitViewOptions={{ padding: 0.2 }}
               minZoom={0.2}

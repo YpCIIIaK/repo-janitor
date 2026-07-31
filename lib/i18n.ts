@@ -191,9 +191,16 @@ const en = {
   "lang.label": "Language",
 
   "theme.label": "Theme",
+  "theme.group.dark": "Dark",
+  "theme.group.light": "Light",
   "theme.moss": "Moss",
   "theme.ocean": "Ocean",
   "theme.aurora": "Aurora",
+  "theme.ember": "Ember",
+  "theme.plum": "Plum",
+  "theme.rose": "Rose",
+  "theme.paper": "Paper",
+  "theme.chalk": "Chalk",
 } as const
 
 /** Every locale must provide exactly the English key set. */
@@ -334,9 +341,16 @@ const ru: Messages = {
   "lang.label": "Язык",
 
   "theme.label": "Тема",
+  "theme.group.dark": "Тёмные",
+  "theme.group.light": "Светлые",
   "theme.moss": "Мох",
   "theme.ocean": "Океан",
   "theme.aurora": "Аврора",
+  "theme.ember": "Янтарь",
+  "theme.plum": "Слива",
+  "theme.rose": "Роза",
+  "theme.paper": "Бумага",
+  "theme.chalk": "Мел",
 }
 
 export const messages: Record<Locale, Messages> = { en, ru }

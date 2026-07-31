@@ -1,11 +1,13 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
+import Script from 'next/script'
 import { cookies, headers } from 'next/headers'
 import { ServerSync } from '@/components/repo-anti-rot/server-sync'
 import { LocaleProvider } from '@/components/i18n/locale-provider'
 import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/sonner'
 import { LOCALE_COOKIE, resolveLocale } from '@/lib/i18n'
+import { themeInitScript } from '@/lib/themes'
 import './globals.css'
 
 const _geist = Geist({ subsets: ["latin"] });
@@ -48,8 +50,11 @@ export default async function RootLayout({
   )
 
   return (
-    <html lang={locale} className="dark bg-background" suppressHydrationWarning>
+    <html lang={locale} className="bg-background" suppressHydrationWarning>
       <body className="font-sans antialiased">
+        <Script id="theme-init" strategy="beforeInteractive">
+          {themeInitScript()}
+        </Script>
         <ThemeProvider>
           <LocaleProvider initial={locale}>
             <ServerSync />
