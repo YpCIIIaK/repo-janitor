@@ -23,7 +23,7 @@ import { ShareButton } from "@/components/repo-anti-rot/share-button"
 import { CommandPalette, type PaletteTab } from "@/components/repo-anti-rot/command-palette"
 import { ScanScheduler } from "@/components/repo-anti-rot/scan-scheduler"
 import { Button } from "@/components/ui/button"
-import { Command as CommandIcon } from "lucide-react"
+import { ArrowRight, Command as CommandIcon } from "lucide-react"
 import { NewScanDialog } from "@/components/repo-anti-rot/new-scan-dialog"
 import { RepoOverview } from "@/components/repo-anti-rot/repo-overview"
 import { useRepos, removeRepo, repoStats, repoTrend, countSeverity, timeAgo, repoDiff, repoDiffDetail, newIssueIds, issueDensity } from "@/lib/reports-store"
@@ -357,7 +357,10 @@ export default function DashboardPage() {
               content plumbing changing. */}
           <Tabs value={tab} onValueChange={(v) => setTab(v as PaletteTab)} className="w-full">
 
-            <TabsContent value="overview" className="mt-6">
+            {/* Overview is the summary: score, AI, charts. The full findings
+                list lives on Issues — keeping both places was two scrolls of
+                the same table with different surrounding chrome. */}
+            <TabsContent value="overview" className="mt-6 space-y-6">
               <AiSummaryCard
                 repoId={current.id}
                 owner={current.owner}
@@ -377,27 +380,38 @@ export default function DashboardPage() {
                 />
                 <IssueBreakdown issues={issues} />
               </div>
-              <div className="mt-6 grid gap-6 lg:grid-cols-2">
+
+              <HealthOverview stats={stats} />
+
+              <div className="grid gap-6 lg:grid-cols-2">
                 <CategoryScores issues={issues} weights={weights} />
                 <HotspotFiles issues={issues} weights={weights} repo={tableRepo} />
               </div>
-              <div className="mt-6">
-                <HealthOverview stats={stats} />
-              </div>
-              <div className="mt-6 grid gap-6 lg:grid-cols-2">
+
+              <div className="grid gap-6 lg:grid-cols-2">
                 <TrendChart data={trend} />
                 <AgeHistogram issues={issues} />
               </div>
-              <div className="mt-6">
-                <IssuesTable issues={allIssues} repo={tableRepo} query={search} newIds={newIds} fixed={fixedIssues} weights={weights} />
+
+              <div className="flex justify-end">
+                <Button variant="outline" size="sm" onClick={() => setTab("issues")}>
+                  {issues.length === 0
+                    ? "Open issues"
+                    : `View all ${issues.length} issue${issues.length === 1 ? "" : "s"}`}
+                  <ArrowRight className="size-4" />
+                </Button>
               </div>
             </TabsContent>
 
             <TabsContent value="issues" className="mt-6">
-              <HealthOverview stats={stats} />
-              <div className="mt-6">
-                <IssuesTable issues={allIssues} repo={tableRepo} query={search} newIds={newIds} fixed={fixedIssues} weights={weights} />
-              </div>
+              <IssuesTable
+                issues={allIssues}
+                repo={tableRepo}
+                query={search}
+                newIds={newIds}
+                fixed={fixedIssues}
+                weights={weights}
+              />
             </TabsContent>
 
             <TabsContent value="security" className="mt-6">
