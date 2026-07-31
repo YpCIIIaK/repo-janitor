@@ -29,9 +29,9 @@
   --radius: 0.5rem;
 }
 
-/* Default = Moss (green accent on cool charcoal). Also applied as .theme-moss. */
+/* Default = Moss (green accent on cool charcoal). */
 :root,
-.theme-moss {
+[data-theme="moss"] {
   --background: oklch(0.16 0.004 285);
   --foreground: oklch(0.92 0.004 285);
   --card: oklch(0.19 0.004 285);
@@ -62,7 +62,7 @@
 }
 
 /* Ocean — deep blue-grey, muted azure accent. */
-.theme-ocean {
+[data-theme="ocean"] {
   --background: oklch(0.16 0.02 250);
   --foreground: oklch(0.92 0.01 250);
   --card: oklch(0.19 0.022 250);
@@ -93,7 +93,7 @@
 }
 
 /* Aurora — teal dusk, quiet mix of green and blue. */
-.theme-aurora {
+[data-theme="aurora"] {
   --background: oklch(0.155 0.018 195);
   --foreground: oklch(0.92 0.01 195);
   --card: oklch(0.185 0.02 195);

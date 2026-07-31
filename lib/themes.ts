@@ -1,22 +1,15 @@
 /**
  * Named colour themes for the dashboard.
  *
- * All themes are dark — there is no light palette. next-themes stores the id
- * ("moss" / "ocean" / "aurora"); the `value` map expands that into the `dark`
- * class (for `dark:` utilities) plus a `theme-*` class that owns the tokens.
+ * All themes are dark — there is no light palette. next-themes writes the id
+ * onto `<html data-theme="…">`; the `dark` class stays permanent for `dark:`
+ * utilities (multi-token class values are invalid for DOMTokenList).
  */
 
 export const THEME_IDS = ["moss", "ocean", "aurora"] as const
 export type ThemeId = (typeof THEME_IDS)[number]
 
 export const DEFAULT_THEME: ThemeId = "moss"
-
-/** Classes written onto `<html>` for each theme id. */
-export const THEME_CLASS_MAP: Record<ThemeId, string> = {
-  moss: "dark theme-moss",
-  ocean: "dark theme-ocean",
-  aurora: "dark theme-aurora",
-}
 
 export type ThemeMeta = {
   id: ThemeId

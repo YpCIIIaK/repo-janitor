@@ -48,7 +48,7 @@ export default async function RootLayout({
   )
 
   return (
-    <html lang={locale} className="bg-background" suppressHydrationWarning>
+    <html lang={locale} className="dark bg-background" suppressHydrationWarning>
       <body className="font-sans antialiased">
         <ThemeProvider>
           <LocaleProvider initial={locale}>
