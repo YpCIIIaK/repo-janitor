@@ -147,6 +147,20 @@ const en = {
     "A live image showing this grade. It reads from the shared report, so it updates when you share a newer scan.",
   "share.badgeCopy": "Copy markdown",
   "share.heading": "Repository health",
+  // The good-news wording. Every one of these states something the scan
+  // actually established — what was read, and what was not found in it. None
+  // claims the code is good, which is not something this tool measures.
+  "verdict.clean.title": "Came back clean",
+  "verdict.clean.body":
+    "Nothing was found across {scope}. That covers secrets, known vulnerabilities, end-of-life runtimes, CI workflow security, dead code and dependency rot.",
+  "verdict.strong.title": "In good shape",
+  "verdict.strong.body":
+    "No critical or warning-level findings across {scope} — only {count} minor notes.",
+  "verdict.strong.bodyOne":
+    "No critical or warning-level findings across {scope} — just one minor note.",
+  "verdict.noScope.clean":
+    "Nothing was found. That covers secrets, known vulnerabilities, end-of-life runtimes, CI workflow security, dead code and dependency rot.",
+  "verdict.noScope.strong": "No critical or warning-level findings — only {count} minor notes.",
   "share.scannedAt": "Scanned {date}",
   "share.rescan": "Scan another repository",
   "share.snapshot": "This is a snapshot from {date}. The repository has moved on since.",
@@ -164,6 +178,9 @@ const en = {
 
   "grade.score": "{score}/100",
   "issues.count": "{count} findings",
+  // English needs the singular spelled out. Russian sidesteps it with the
+  // "находок: N" shape, which is why there is no matching key there.
+  "issues.countOne": "1 finding",
   "issues.critical": "critical",
   "issues.warning": "warning",
   "issues.info": "info",
@@ -270,6 +287,17 @@ const ru: Messages = {
     "Живая картинка с этой оценкой. Читает расшаренный отчёт, поэтому обновится, когда вы поделитесь новым сканом.",
   "share.badgeCopy": "Скопировать markdown",
   "share.heading": "Здоровье репозитория",
+  "verdict.clean.title": "Скан чист",
+  "verdict.clean.body":
+    "Ничего не найдено на объёме {scope}. Проверялись секреты, известные уязвимости, протухшие рантаймы, безопасность CI-воркфлоу, мёртвый код и гниль зависимостей.",
+  "verdict.strong.title": "В хорошей форме",
+  "verdict.strong.body":
+    "Ни критичных, ни предупреждений на объёме {scope} — только мелких заметок: {count}.",
+  "verdict.strong.bodyOne":
+    "Ни критичных, ни предупреждений на объёме {scope} — только одна мелкая заметка.",
+  "verdict.noScope.clean":
+    "Ничего не найдено. Проверялись секреты, известные уязвимости, протухшие рантаймы, безопасность CI-воркфлоу, мёртвый код и гниль зависимостей.",
+  "verdict.noScope.strong": "Ни критичных, ни предупреждений — только мелких заметок: {count}.",
   "share.scannedAt": "Скан от {date}",
   "share.rescan": "Просканировать другой репозиторий",
   "share.snapshot": "Это снимок от {date}. С тех пор репозиторий изменился.",
@@ -287,6 +315,10 @@ const ru: Messages = {
 
   "grade.score": "{score}/100",
   "issues.count": "находок: {count}",
+  // Unused at runtime — the "находок: N" shape above already reads correctly at
+  // one. It exists so the dictionary stays complete, which is what the type
+  // checks and what stops a key silently falling back to English.
+  "issues.countOne": "находок: 1",
   "issues.critical": "критично",
   "issues.warning": "предупреждение",
   "issues.info": "инфо",

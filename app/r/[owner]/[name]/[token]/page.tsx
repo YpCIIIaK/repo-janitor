@@ -7,6 +7,7 @@ import { LOCALE_COOKIE, resolveLocale, t } from "@/lib/i18n"
 import type { SharedReport } from "@/lib/share-report"
 import { FreshScanCta } from "@/components/repo-anti-rot/fresh-scan-cta"
 import { ViewBeacon } from "@/components/repo-anti-rot/view-beacon"
+import { verdictOf, isBoastworthy, scopeLine } from "@/lib/verdict"
 
 /**
  * A shared scan result.
@@ -98,6 +99,8 @@ export default async function SharedReportPage({ params }: { params: Promise<Par
     t(locale, key, vars)
 
   const report: SharedReport = share.report
+  const verdict = verdictOf(report.counts, report.totalIssues, report.score)
+  const scope = scopeLine(report.profile, locale === "ru" ? "ru-RU" : "en-GB")
   const scanned = new Date(report.generatedAt)
   const ageDays = ageInDays(report.generatedAt)
   // Fixed locale formatting so the server and the client agree — a date rendered
@@ -141,17 +144,54 @@ export default async function SharedReportPage({ params }: { params: Promise<Par
             {tr("grade.score", { score: report.score })}
           </p>
           <p className="mt-1 text-sm text-muted-foreground">
-            {tr("issues.count", { count: report.totalIssues })}
+            {report.totalIssues === 1 && locale === "en"
+              ? tr("issues.countOne")
+              : tr("issues.count", { count: report.totalIssues })}
           </p>
           <p className="mt-2 flex flex-wrap gap-3 text-xs">
             {(["critical", "warning", "info"] as const).map((sev) => (
-              <span key={sev} className={SEVERITY_TONE[sev]}>
+              // A zero is good news and must not be painted like bad news. Red
+              // "0 critical" next to "Came back clean" reads as an alarm the eye
+              // catches before the words, which is the whole message undone by a
+              // colour token.
+              <span
+                key={sev}
+                className={report.counts[sev] > 0 ? SEVERITY_TONE[sev] : "text-muted-foreground/50"}
+              >
                 {report.counts[sev]} {tr(`issues.${sev}` as Parameters<typeof t>[1])}
               </span>
             ))}
           </p>
         </div>
       </section>
+
+      {/* The good news, said as news.
+          Everything below this point is a list of what is wrong, which reads as
+          an accusation even when the list is empty — an empty list states an
+          absence, and an absence is not something anyone shows a colleague. The
+          wording here is built only out of what the scan established: how much
+          was read, and what was not found in it. */}
+      {isBoastworthy(verdict) && (
+        <section className="mt-8 rounded-xl border border-primary/30 bg-primary/10 px-4 py-3.5">
+          <p className="text-sm font-semibold">
+            {tr(verdict === "clean" ? "verdict.clean.title" : "verdict.strong.title")}
+          </p>
+          <p className="mt-1 text-sm leading-relaxed text-foreground/80">
+            {scope
+              ? tr(
+                  verdict === "clean"
+                    ? "verdict.clean.body"
+                    : report.totalIssues === 1
+                      ? "verdict.strong.bodyOne"
+                      : "verdict.strong.body",
+                  { scope, count: report.totalIssues },
+                )
+              : tr(verdict === "clean" ? "verdict.noScope.clean" : "verdict.noScope.strong", {
+                  count: report.totalIssues,
+                })}
+          </p>
+        </section>
+      )}
 
       {report.byCategory.length > 0 && (
         <section className="mt-10">

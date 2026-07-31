@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og"
 import { getShare } from "@/lib/share-store"
+import { verdictOf, isBoastworthy } from "@/lib/verdict"
 
 /**
  * Link preview for a shared report.
@@ -37,6 +38,19 @@ export default async function Image({
   const total = share?.report.totalIssues ?? 0
   const critical = share?.report.counts.critical ?? 0
   const tone = TONE[grade] ?? "#94a3b8"
+
+  // In a feed nobody clicks, so the image has to carry the verdict itself.
+  // "0 findings" is a number a reader has to interpret; "No critical findings"
+  // is the thing they would have concluded, said once.
+  const verdict = share
+    ? verdictOf(share.report.counts, share.report.totalIssues, share.report.score)
+    : "poor"
+  const good = Boolean(share) && isBoastworthy(verdict)
+  const headline = good
+    ? verdict === "clean"
+      ? "Clean scan — nothing found"
+      : "No critical or warning findings"
+    : `${total} findings`
 
   return new ImageResponse(
     (
@@ -80,7 +94,7 @@ export default async function Image({
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             <div style={{ fontSize: 72, fontWeight: 700 }}>{`${score}/100`}</div>
-            <div style={{ fontSize: 32, color: "#94a3b8" }}>{`${total} findings`}</div>
+            <div style={{ fontSize: 32, color: good ? tone : "#94a3b8" }}>{headline}</div>
             {critical > 0 && (
               <div style={{ fontSize: 32, color: "#f87171" }}>{`${critical} critical`}</div>
             )}

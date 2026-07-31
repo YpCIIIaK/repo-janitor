@@ -28,6 +28,7 @@ export function GradeCard({
   lastScan,
   issues,
   weights,
+  scope,
 }: {
   grade: Grade
   score: number
@@ -35,6 +36,8 @@ export function GradeCard({
   /** Optional: supply to show where the missing points went. */
   issues?: Issue[]
   weights?: SeverityWeights
+  /** "1,240 files · 182,431 lines" — what a clean result is clean across. */
+  scope?: string | null
 }) {
   const meta = gradeMeta[grade]
   // Only tiers that actually cost something — a "−0 info" row is noise.
@@ -62,6 +65,19 @@ export function GradeCard({
             Scanned {lastScan}
           </p>
         </div>
+
+        {/* With nothing costing points there is no breakdown to draw, and the
+            card used to simply stop — a good result got less on screen than a
+            bad one, which is backwards. This says what the clean result covers,
+            in the only terms the scan can back. */}
+        {breakdown.length === 0 && (
+          <div className="w-full border-t border-border pt-4">
+            <p className="text-center text-xs leading-relaxed text-muted-foreground">
+              No secrets, known vulnerabilities, end-of-life runtimes or workflow
+              security issues found{scope ? ` across ${scope}` : ""}.
+            </p>
+          </div>
+        )}
 
         {/* Where the missing points went. The grade on its own says you have a
             problem; this says which pile of findings is the problem, which is

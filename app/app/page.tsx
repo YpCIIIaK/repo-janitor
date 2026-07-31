@@ -35,6 +35,7 @@ import { ScanHistory } from "@/components/repo-anti-rot/scan-history"
 import { filterMode } from "@/lib/issue-modes"
 import { useSnoozed, partitionSnoozed, clearSnoozedForRepo } from "@/lib/snooze-store"
 import { computeScore, scoreToGrade } from "@/lib/score"
+import { scopeLine } from "@/lib/verdict"
 import { cn } from "@/lib/utils"
 
 // React Flow is client-only and heavy — load the tree lazily so it stays out of
@@ -160,6 +161,10 @@ export default function DashboardPage() {
     }
   })
 
+  // What a clean result is clean across. "Nothing found" is equally true of an
+  // empty repository and a large one, and only this tells them apart.
+  const scanScope = scopeLine(current.latest.profile)
+
   const allIssues = current.latest.issues
   const weights = current.latest.config?.weights
   const { live: issues } = partitionSnoozed(current.id, allIssues, snoozed)
@@ -281,8 +286,13 @@ export default function DashboardPage() {
                 {repo.owner}/{repo.name}
               </h1>
               <p className="mt-1 text-sm text-muted-foreground">
+                {/* "No open issues" states an absence. What was actually
+                    established is that a specific amount of code was read and
+                    nothing came back — so say the amount. */}
                 {issues.length === 0
-                  ? "No open issues — last scan was clean."
+                  ? scanScope
+                    ? `Clean scan across ${scanScope}`
+                    : "Clean scan — nothing found"
                   : `${issues.length} open issue${issues.length === 1 ? "" : "s"}`}
                 {issues.length > 0 && density && (
                   <span title={`${density.loc.toLocaleString()} lines of code`}>
@@ -361,6 +371,7 @@ export default function DashboardPage() {
                   lastScan={repo.lastScan}
                   issues={issues}
                   weights={weights}
+                  scope={scanScope}
                 />
                 <IssueBreakdown issues={issues} />
               </div>
@@ -449,6 +460,7 @@ export default function DashboardPage() {
                   lastScan={repo.lastScan}
                   issues={issues}
                   weights={weights}
+                  scope={scanScope}
                 />
                 <IssueBreakdown issues={issues} />
               </div>
