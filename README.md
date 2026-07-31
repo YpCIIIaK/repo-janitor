@@ -295,9 +295,13 @@ Two ways to get one, because they suit different people.
 
 **From a scan you shared.** Scan a repository, tick the consent box, create a
 share link — the badge markdown is offered right there, ready to paste. No
-account, no Action, no self-hosting. The link's token is what the badge reads,
-so it shows the grade of that shared report and updates when you share a newer
-scan:
+account, no Action, no self-hosting.
+
+It is a **snapshot, not a live badge**. The token names one stored report, and
+sharing a newer scan mints a new token — so you get a new line to paste, and the
+old badge keeps showing the scan it was made from. A badge that tracks a
+repository over time needs a stable per-repo address, which is what the CI form
+below provides.
 
 ```
 [![Repo Anti-Rot](https://your-deploy.example.com/api/badge/<owner>/<name>?token=<token>)](https://your-deploy.example.com/r/<owner>/<name>/<token>)
@@ -308,6 +312,17 @@ already opens: a grade and a score, and no findings. A token belonging to a
 different repository renders `unknown` rather than that repository's grade — a
 badge sits at the top of a README, and one project's score under another
 project's name would make it a way to misrepresent.
+
+Two things to get right before pasting one anywhere public:
+
+- **Create the link on the deployed site, not locally.** The URL is built from
+  the address you are on, so a badge made at `localhost:3000` points at your own
+  machine and renders for nobody else.
+- **Configure Supabase first** (`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`).
+  Without it, shares are written to the container filesystem, which is ephemeral
+  on most hosts — a redeploy silently kills every link already posted. That is
+  bad for a link and worse for a badge, which lives at the top of a README and
+  degrades to `unknown` in front of everyone.
 
 **From CI.** Once a repo's report has been ingested (via the GitHub Action's
 `dashboard-url`), the same endpoint serves a badge with no token at all:

@@ -143,8 +143,11 @@ const en = {
   "share.copy": "Copy link",
   "share.copied": "Copied",
   "share.badgeTitle": "Badge for your README",
+  // Says snapshot, because that is what it is. Sharing a newer scan mints a new
+  // token and therefore a new badge URL — this one keeps showing this scan.
+  // The earlier wording promised it would update, which it never does.
   "share.badgeLead":
-    "A live image showing this grade. It reads from the shared report, so it updates when you share a newer scan.",
+    "Shows this scan's grade, and keeps showing it. Share a newer scan and you get a new badge to paste — this one stays as it is.",
   "share.badgeCopy": "Copy markdown",
   "share.heading": "Repository health",
   // The good-news wording. Every one of these states something the scan
@@ -284,7 +287,7 @@ const ru: Messages = {
   "share.copied": "Скопировано",
   "share.badgeTitle": "Бейдж для README",
   "share.badgeLead":
-    "Живая картинка с этой оценкой. Читает расшаренный отчёт, поэтому обновится, когда вы поделитесь новым сканом.",
+    "Показывает оценку этого скана — и продолжит показывать её. Поделитесь новым сканом, и получите новый бейдж; этот останется прежним.",
   "share.badgeCopy": "Скопировать markdown",
   "share.heading": "Здоровье репозитория",
   "verdict.clean.title": "Скан чист",
