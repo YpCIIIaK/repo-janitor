@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { batchToMarkdown, type BatchSummary } from "@/lib/multi-report"
 import { categoryLabels } from "@/lib/mock-data"
+import { gradeBadgeClass } from "@/lib/grade-style"
 import { useLocale } from "@/components/i18n/locale-provider"
 
 /**
@@ -19,14 +20,6 @@ import { useLocale } from "@/components/i18n/locale-provider"
  * scrolls to that repository's full card rather than opening anything new: one
  * set of facts, two levels of zoom.
  */
-
-const GRADE_TONE: Record<string, string> = {
-  A: "text-chart-1 bg-chart-1/10 border-chart-1/30",
-  B: "text-chart-1 bg-chart-1/10 border-chart-1/30",
-  C: "text-chart-2 bg-chart-2/10 border-chart-2/30",
-  D: "text-chart-3 bg-chart-3/10 border-chart-3/30",
-  F: "text-destructive bg-destructive/10 border-destructive/30",
-}
 
 const SEVERITY_TONE: Record<string, string> = {
   critical: "text-destructive",
@@ -101,7 +94,7 @@ export function BatchSummaryCard({ summary }: { summary: BatchSummary }) {
                 key={grade}
                 className={cn(
                   "flex items-center gap-1 rounded-md border px-2 py-1 text-xs font-medium",
-                  GRADE_TONE[grade] ?? GRADE_TONE.F,
+                  gradeBadgeClass(grade),
                 )}
               >
                 {count}× {grade}
@@ -143,7 +136,7 @@ export function BatchSummaryCard({ summary }: { summary: BatchSummary }) {
                     <span
                       className={cn(
                         "inline-flex size-6 items-center justify-center rounded border font-mono text-xs font-bold",
-                        GRADE_TONE[repo.grade] ?? GRADE_TONE.F,
+                        gradeBadgeClass(repo.grade),
                       )}
                     >
                       {repo.grade}

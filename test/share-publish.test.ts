@@ -126,4 +126,32 @@ describe("publishShare / revokeShare (filesystem)", () => {
     if (!again.ok) return
     expect(again.share.token).not.toBe(created.share.token)
   })
+
+  it("looks up the live share by repo key case-insensitively", async () => {
+    const { publishShare, getShareByRepoKey } = await import("@/lib/share-store")
+    const created = await publishShare(report("Acme", "ByKey"))
+    expect(created.ok).toBe(true)
+    if (!created.ok) return
+
+    const hit = await getShareByRepoKey("acme/bykey")
+    expect(hit?.token).toBe(created.share.token)
+    expect(hit?.report.score).toBe(72)
+  })
+
+  it("updates updatedAt when the snapshot is refreshed", async () => {
+    const { publishShare } = await import("@/lib/share-store")
+    const created = await publishShare(report("Acme", "Stamp"))
+    expect(created.ok).toBe(true)
+    if (!created.ok) return
+    const firstUpdated = created.share.updatedAt
+
+    await new Promise((r) => setTimeout(r, 5))
+    const updated = await publishShare(report("Acme", "Stamp", 80), {
+      manageKey: created.manageKey,
+    })
+    expect(updated.ok).toBe(true)
+    if (!updated.ok) return
+    expect(updated.share.updatedAt >= firstUpdated).toBe(true)
+    expect(updated.share.createdAt).toBe(created.share.createdAt)
+  })
 })

@@ -26,6 +26,13 @@
   --chart-5: oklch(0.55 0.1 245);
   --chart-6: oklch(0.55 0.12 305);
 
+  /* Grade scale A→F: five distinct hues (B ≠ C). */
+  --grade-a: oklch(0.55 0.14 152);
+  --grade-b: oklch(0.62 0.13 130);
+  --grade-c: oklch(0.7 0.14 75);
+  --grade-d: oklch(0.65 0.16 45);
+  --grade-f: oklch(0.55 0.2 25);
+
   --radius: 0.5rem;
 }
 
@@ -46,6 +53,12 @@
   --chart-4: oklch(0.62 0.21 22);
   --chart-5: oklch(0.68 0.08 245);
   --chart-6: oklch(0.66 0.12 305);
+
+  --grade-a: oklch(0.72 0.17 152);
+  --grade-b: oklch(0.76 0.14 130);
+  --grade-c: oklch(0.78 0.16 85);
+  --grade-d: oklch(0.7 0.18 45);
+  --grade-f: oklch(0.62 0.21 22);
 }
 
 /* Default = Moss (green accent on cool charcoal). */
@@ -325,6 +338,11 @@
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
   --color-chart-6: var(--chart-6);
+  --color-grade-a: var(--grade-a);
+  --color-grade-b: var(--grade-b);
+  --color-grade-c: var(--grade-c);
+  --color-grade-d: var(--grade-d);
+  --color-grade-f: var(--grade-f);
   --color-success: var(--success);
   --color-success-foreground: var(--success-foreground);
   --color-warning: var(--warning);

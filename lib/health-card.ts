@@ -1,4 +1,5 @@
 import type { Grade } from "@/lib/mock-data"
+import { GRADE_HEX, UNKNOWN_GRADE_HEX, gradeHex } from "@/lib/grade-style"
 import { isBoastworthy, verdictOf, type VerdictCounts } from "@/lib/verdict"
 
 /**
@@ -12,16 +13,10 @@ import { isBoastworthy, verdictOf, type VerdictCounts } from "@/lib/verdict"
 export const CARD_WIDTH = 480
 export const CARD_HEIGHT = 196
 
-/** Grade → accent. Chosen for contrast on the dark card, same family as the badge. */
-export const GRADE_COLOR: Record<Grade, string> = {
-  A: "#3fb950",
-  B: "#56d364",
-  C: "#d29922",
-  D: "#db6d28",
-  F: "#f85149",
-}
+/** @deprecated Prefer {@link GRADE_HEX} / {@link gradeHex} from `lib/grade-style`. */
+export const GRADE_COLOR = GRADE_HEX
 
-const UNKNOWN_COLOR = "#8b949e"
+const UNKNOWN_COLOR = UNKNOWN_GRADE_HEX
 
 export type HealthCardData = {
   owner: string
@@ -103,7 +98,7 @@ export function renderHealthCardSvg(
 </svg>`
   }
 
-  const color = GRADE_COLOR[data.grade] ?? UNKNOWN_COLOR
+  const color = gradeHex(data.grade)
   const headline = cardHeadline(data)
   const boast = isBoastworthy(verdictOf(data.counts, data.totalIssues, data.score))
   const scanned = formatScannedAt(data.generatedAt)

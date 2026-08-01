@@ -12,6 +12,7 @@ import { verdictOf, isBoastworthy, scopeLine } from "@/lib/verdict"
 import { percentileFor } from "@/lib/percentile"
 import { percentileCopy } from "@/lib/percentile-copy"
 import { sizeBucket } from "@/lib/scan-stats"
+import { gradeBadgeClass } from "@/lib/grade-style"
 
 /**
  * A shared scan result.
@@ -27,17 +28,9 @@ import { sizeBucket } from "@/lib/scan-stats"
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
 
-const GRADE_TONE: Record<string, string> = {
-  A: "text-emerald-500 border-emerald-500/30 bg-emerald-500/10",
-  B: "text-lime-500 border-lime-500/30 bg-lime-500/10",
-  C: "text-amber-500 border-amber-500/30 bg-amber-500/10",
-  D: "text-orange-500 border-orange-500/30 bg-orange-500/10",
-  F: "text-red-500 border-red-500/30 bg-red-500/10",
-}
-
 const SEVERITY_TONE: Record<string, string> = {
-  critical: "text-red-500",
-  warning: "text-amber-500",
+  critical: "text-destructive",
+  warning: "text-warning",
   info: "text-muted-foreground",
 }
 
@@ -154,9 +147,7 @@ export default async function SharedReportPage({ params }: { params: Promise<Par
 
         <section className="mt-8 flex flex-wrap items-center gap-6">
           <div
-            className={`flex size-24 items-center justify-center rounded-2xl border text-5xl font-semibold ${
-              GRADE_TONE[report.grade] ?? GRADE_TONE.F
-            }`}
+            className={`flex size-24 items-center justify-center rounded-2xl border text-5xl font-semibold ${gradeBadgeClass(report.grade)}`}
           >
             {report.grade}
           </div>
@@ -174,7 +165,7 @@ export default async function SharedReportPage({ params }: { params: Promise<Par
             {pct && (
               <p className="mt-2 text-sm">
                 <span
-                  className={pct.direction === "worse" ? "text-amber-500" : "text-emerald-500"}
+                  className={pct.direction === "worse" ? "text-warning" : "text-success"}
                 >
                   {tr(pct.key, { percent: pct.percent, language: primaryLanguage ?? "" })}
                 </span>{" "}

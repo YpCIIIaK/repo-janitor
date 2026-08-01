@@ -23,7 +23,8 @@ import { ShareButton } from "@/components/repo-anti-rot/share-button"
 import { CommandPalette, type PaletteTab } from "@/components/repo-anti-rot/command-palette"
 import { ScanScheduler } from "@/components/repo-anti-rot/scan-scheduler"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, Command as CommandIcon } from "lucide-react"
+import { EmptyState } from "@/components/ui/empty-state"
+import { ArrowRight, Command as CommandIcon, ScanLine } from "lucide-react"
 import { NewScanDialog } from "@/components/repo-anti-rot/new-scan-dialog"
 import { RepoOverview } from "@/components/repo-anti-rot/repo-overview"
 import { useRepos, removeRepo, repoStats, repoTrend, countSeverity, timeAgo, repoDiff, repoDiffDetail, newIssueIds, issueDensity } from "@/lib/reports-store"
@@ -127,17 +128,20 @@ export default function DashboardPage() {
     return (
       <div className="min-h-screen">
         <TopBar />
-        <main className="mx-auto w-full max-w-md px-4 py-24 text-center">
-          <h1 className="text-xl font-semibold tracking-tight">Nothing scanned yet</h1>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Reports are kept in this browser. Scan a repository and it will show up here.
-          </p>
-          <Link
-            href="/"
-            className="mt-6 inline-flex h-9 items-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
-          >
-            Scan a repository
-          </Link>
+        <main className="mx-auto w-full max-w-lg px-4 py-24">
+          <EmptyState
+            icon={<ScanLine />}
+            title="Nothing scanned yet"
+            description="Reports are kept in this browser. Scan a repository and it will show up here."
+            action={
+              <Link
+                href="/"
+                className="inline-flex h-9 items-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+              >
+                Scan a repository
+              </Link>
+            }
+          />
         </main>
       </div>
     )
@@ -252,7 +256,7 @@ export default function DashboardPage() {
                 <button
                   title="Settings"
                   aria-label="Settings"
-                  className="flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent/50 hover:text-foreground"
+                  className="flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent/50 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 >
                   <SettingsIcon className="size-4" />
                 </button>
@@ -263,7 +267,7 @@ export default function DashboardPage() {
                 <button
                   title="Connect a repository"
                   aria-label="Connect a repository"
-                  className="flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent/50 hover:text-foreground"
+                  className="flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent/50 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 >
                   <HelpCircle className="size-4" />
                 </button>
@@ -274,7 +278,14 @@ export default function DashboardPage() {
       />
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <TopBar repo={repo} search={search} onSearch={setSearch} onHome={goHome} />
+        <TopBar
+          repo={repo}
+          repos={repos.map((r) => ({ id: r.id, owner: r.owner, name: r.name }))}
+          onSelectRepo={setActiveId}
+          search={search}
+          onSearch={setSearch}
+          onHome={goHome}
+        />
 
         {showOverview ? (
           <main className="min-w-0 flex-1 px-4 py-6 md:px-6">

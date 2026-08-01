@@ -19,7 +19,9 @@ import {
   Workflow,
 } from "lucide-react"
 import type { Grade } from "@/lib/mock-data"
+import { GRADE_BADGE_CLASS, GRADE_CSS_VAR } from "@/lib/grade-style"
 import { Sparkline } from "@/components/charts/sparkline"
+import { EmptyState } from "@/components/ui/empty-state"
 import { NavItem, NavSectionLabel } from "./sidebar-nav"
 import { cn } from "@/lib/utils"
 
@@ -36,23 +38,6 @@ export interface SidebarRepo {
   lastScan: string
   /** Score at each past scan, oldest first. Fewer than two points draws nothing. */
   scoreHistory?: number[]
-}
-
-/** Chart token per grade, so the sparkline matches the badge beside it. */
-const gradeChart: Record<Grade, string> = {
-  A: "chart-1",
-  B: "chart-2",
-  C: "chart-2",
-  D: "chart-3",
-  F: "chart-4",
-}
-
-const gradeColor: Record<Grade, string> = {
-  A: "text-primary border-primary/30 bg-primary/10",
-  B: "text-chart-2 border-chart-2/30 bg-chart-2/10",
-  C: "text-chart-2 border-chart-2/30 bg-chart-2/10",
-  D: "text-chart-3 border-chart-3/30 bg-chart-3/10",
-  F: "text-destructive border-destructive/30 bg-destructive/10",
 }
 
 /** Section ids — mirrors PaletteTab so the palette and the sidebar agree. */
@@ -90,7 +75,7 @@ function RailButton({
       title={label}
       aria-label={label}
       className={cn(
-        "flex size-9 items-center justify-center rounded-lg transition-colors [&_svg]:size-4",
+        "flex size-9 items-center justify-center rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring [&_svg]:size-4",
         active
           ? "bg-accent text-foreground"
           : "text-muted-foreground hover:bg-accent/50 hover:text-foreground",
@@ -180,7 +165,7 @@ export function RepoSidebar({
           onClick={onHome}
           title="Repo Anti-Rot — back to the start"
           aria-label="Back to the start"
-          className="mb-2 flex size-9 items-center justify-center rounded-lg bg-primary/15 text-primary transition-colors hover:bg-primary/25"
+          className="mb-2 flex size-9 items-center justify-center rounded-lg bg-primary/15 text-primary transition-colors hover:bg-primary/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           <Activity className="size-4" />
         </button>
@@ -217,7 +202,7 @@ export function RepoSidebar({
               <span
                 className={cn(
                   "flex size-8 shrink-0 items-center justify-center rounded-md border font-mono text-xs font-semibold",
-                  gradeColor[current.grade],
+                  GRADE_BADGE_CLASS[current.grade],
                 )}
               >
                 {current.grade}
@@ -238,7 +223,7 @@ export function RepoSidebar({
             aria-expanded
             aria-label="Collapse sidebar"
             title="Collapse sidebar"
-            className="shrink-0 rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-accent/60 hover:text-foreground"
+            className="shrink-0 rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-accent/60 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             <PanelLeftClose className="size-4" />
           </button>
@@ -316,7 +301,11 @@ export function RepoSidebar({
           </NavSectionLabel>
 
           {repositories.length === 0 && (
-            <p className="px-2.5 py-2 text-xs text-muted-foreground">No repositories scanned yet.</p>
+            <EmptyState
+              title="No repositories yet"
+              description="Run a scan and it will show up here."
+              className="mx-1 gap-2 rounded-lg border-dashed px-3 py-6"
+            />
           )}
 
           {repositories.map((repo) => {
@@ -336,7 +325,7 @@ export function RepoSidebar({
                   <span
                     className={cn(
                       "flex size-6 shrink-0 items-center justify-center rounded border font-mono text-[10px] font-semibold",
-                      gradeColor[repo.grade],
+                      GRADE_BADGE_CLASS[repo.grade],
                     )}
                   >
                     {repo.grade}
@@ -356,7 +345,7 @@ export function RepoSidebar({
                           width={44}
                           height={14}
                           showDot={false}
-                          color={`var(--${gradeChart[repo.grade]})`}
+                          color={GRADE_CSS_VAR[repo.grade]}
                           className="shrink-0 opacity-80"
                         />
                       )}

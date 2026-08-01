@@ -8,13 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { EmptyState } from "@/components/ui/empty-state"
 import { Timeline, type TimelineItem } from "@/components/ui/timeline"
 
-const gradeChart: Record<string, string> = {
-  A: "var(--chart-1)",
-  B: "var(--chart-2)",
-  C: "var(--chart-2)",
-  D: "var(--chart-3)",
-  F: "var(--chart-4)",
-}
+import { gradeCssVar } from "@/lib/grade-style"
 
 function formatWhen(iso: string): string {
   const d = new Date(iso)
@@ -52,14 +46,14 @@ export function ScanHistory({ history }: { history: TrendPoint[] }) {
       return {
         title: (
           <span className="flex items-center gap-2">
-            <span className="font-mono font-semibold" style={{ color: gradeChart[grade] }}>
+            <span className="font-mono font-semibold" style={{ color: gradeCssVar(grade) }}>
               {grade}
             </span>
             <span className="font-mono tabular-nums">{p.score}/100</span>
             {delta !== null && delta !== 0 && (
               <span
                 className="font-mono text-xs tabular-nums"
-                style={{ color: delta > 0 ? "var(--chart-1)" : "var(--chart-4)" }}
+                style={{ color: delta > 0 ? "var(--grade-a)" : "var(--grade-f)" }}
               >
                 {delta > 0 ? "+" : ""}
                 {delta}
@@ -70,7 +64,7 @@ export function ScanHistory({ history }: { history: TrendPoint[] }) {
         time: formatWhen(p.at),
         description: `${p.critical} critical · ${p.warning} warning · ${p.info} info`,
         icon: <Icon />,
-        color: gradeChart[grade],
+        color: gradeCssVar(grade),
       }
     })
   }, [history])
