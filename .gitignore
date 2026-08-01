@@ -22,6 +22,7 @@ yarn-error.log*
 # anchored: only the repo-root output dir, never e.g. app/api/reports/
 /reports/
 real-report.json
+dogfood-scan.json
 *.repo-anti-rot.json
 # ...but the per-project CONFIG file is meant to be committed
 !.repo-anti-rot.json

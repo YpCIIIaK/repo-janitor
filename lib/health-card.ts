@@ -1,5 +1,5 @@
 import type { Grade } from "@/lib/mock-data"
-import { GRADE_HEX, UNKNOWN_GRADE_HEX, gradeHex } from "@/lib/grade-style"
+import { UNKNOWN_GRADE_HEX, gradeHex } from "@/lib/grade-style"
 import { isBoastworthy, verdictOf, type VerdictCounts } from "@/lib/verdict"
 
 /**
@@ -12,9 +12,6 @@ import { isBoastworthy, verdictOf, type VerdictCounts } from "@/lib/verdict"
 
 export const CARD_WIDTH = 480
 export const CARD_HEIGHT = 196
-
-/** @deprecated Prefer {@link GRADE_HEX} / {@link gradeHex} from `lib/grade-style`. */
-export const GRADE_COLOR = GRADE_HEX
 
 const UNKNOWN_COLOR = UNKNOWN_GRADE_HEX
 

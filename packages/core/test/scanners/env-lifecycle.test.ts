@@ -133,4 +133,16 @@ describe("envLifecycleScanner", () => {
     const issues = await envLifecycleScanner.run(ctx)
     expect(issues.find((i) => i.id === "env-missing-PY_VAR")).toBeDefined()
   })
+
+  it("does not flag undocumented vars that only appear in test files", async () => {
+    const ctx = makeContext({
+      files: {
+        ".env.example": "APP_KEY=\n",
+        "src/app.ts": "const k = process.env.APP_KEY\n",
+        "test/env.test.ts": "process.env.LEGACY_ONLY_IN_TEST = 'x'\n",
+      },
+    })
+    const issues = await envLifecycleScanner.run(ctx)
+    expect(issues.some((i) => i.id === "env-missing-LEGACY_ONLY_IN_TEST")).toBe(false)
+  })
 })

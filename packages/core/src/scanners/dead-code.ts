@@ -35,6 +35,8 @@ const CONVENTION_EXPORTS = new Set([
   "fetchCache", "runtime", "preferredRegion", "maxDuration", "config", "middleware",
   // Route Handler HTTP verbs
   "GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS",
+  // opengraph-image / icon / apple-icon route segment exports
+  "alt", "size", "contentType",
 ])
 
 /**

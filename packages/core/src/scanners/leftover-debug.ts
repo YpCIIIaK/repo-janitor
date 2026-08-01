@@ -21,6 +21,8 @@ const SOURCE_RE = /\.(ts|tsx|js|jsx|mjs|mts|cts)$/
 // Polyglot test-file detection — debug output in tests/fixtures is expected.
 const TEST_RE =
   /(^|\/)(?:__tests__|tests?|specs?)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test_[^/]+\.py$|_test\.(?:py|go|rb)$|_spec\.rb$|(?:^|\/)conftest\.py$/i
+/** Smoke / demo scripts whose whole point is to print a report to stdout. */
+const EXAMPLE_RE = /(^|\/)examples?\/|(?:^|\/)example\.[cm]?[jt]sx?$/i
 const DEBUG_METHODS = new Set(["log", "debug", "trace", "dir", "table"])
 
 const MAX_PER_FILE = 8
@@ -207,7 +209,7 @@ export const leftoverDebugScanner: Scanner = {
     for (const file of ctx.files) {
       if (issues.length >= MAX_TOTAL) break
       const norm = file.replace(/\\/g, "/")
-      if (TEST_RE.test(norm)) continue
+      if (TEST_RE.test(norm) || EXAMPLE_RE.test(norm)) continue
 
       const isJs = SOURCE_RE.test(norm)
       const lang = isJs ? null : debugLangOf(norm)

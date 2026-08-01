@@ -313,6 +313,13 @@ const LOWER: Record<Severity, Severity> = {
   info: "info",
 }
 
+/**
+ * Rules that almost always fire on purpose in tests (fixtures that exercise
+ * eval / Function / the scanner itself). Reporting them even at lowered severity
+ * is noise — the finding is the test, not a vulnerability.
+ */
+const SKIP_IN_TEST = new Set(["new-function", "eval-dynamic"])
+
 export interface CodeHit {
   rule: VulnRule
   line: number
@@ -388,6 +395,7 @@ export const insecureCodeScanner: Scanner = {
       let perFile = 0
       for (const hit of scanSource(content, lang)) {
         if (issues.length >= MAX_TOTAL || perFile >= MAX_PER_FILE) break
+        if (isTest && SKIP_IN_TEST.has(hit.rule.id)) continue
         perFile++
 
         // Blame gives the finding an age, so a fresh regression is visible next

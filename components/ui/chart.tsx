@@ -80,6 +80,9 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
 
   return (
     <style
+      // CSS custom properties only — no user HTML. Kept as innerHTML because a
+      // <style> child cannot take a React style object for arbitrary selectors.
+      // repo-anti-rot-ignore-next-line
       dangerouslySetInnerHTML={{
         __html: Object.entries(THEMES)
           .map(

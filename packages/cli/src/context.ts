@@ -347,7 +347,9 @@ export async function buildScanContext(root: string): Promise<ScanContext> {
       }
     },
     log: (msg: string) => {
-      console.log(`[repo-anti-rot] ${msg}`);
+      // stderr: leftover-debug treats console.log as a leftover, and CLI
+      // diagnostics belong on stderr next to --progress anyway.
+      console.error(`[repo-anti-rot] ${msg}`);
     }
   };
 }

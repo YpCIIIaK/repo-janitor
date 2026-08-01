@@ -30,7 +30,7 @@
     "static-analysis"
   ],
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "bin": {
     "repo-anti-rot": "./dist/index.js"
