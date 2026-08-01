@@ -107,7 +107,7 @@ Coverage highlights (850+ tests):
 - **engine** — scoring, grade thresholds, per-scanner isolation on throw, inline
   `repo-anti-rot-ignore` markers, config-driven weights, the lines-of-code metric
   and progress callbacks
-- **scanners** — all 23 scanners, each with positive *and* negative
+- **scanners** — all 26 scanners, each with positive *and* negative
   (no-false-positive) cases: secrets (incl. the redaction invariant — a raw key
   never appears in evidence), env-lifecycle, todo-debt, dead-code (JS/TS +
   Python/Go), leftover-debug, commented-code, skipped-tests, dockerfile,
@@ -565,6 +565,17 @@ rot:
   committed lockfile contradicts. Commands are only read inside fenced blocks or
   behind a shell prompt, so prose that happens to start with "pnpm" is not an
   instruction.
+- **Duplicate code** (`duplicate-code`) — blocks that appear more than once,
+  verbatim. Matching is deliberately exact rather than structural: whitespace and
+  comments are dropped, noise lines (braces, imports) are ignored, and then the
+  remaining text must be **identical**. A renamed copy therefore goes unreported —
+  the trade is on purpose, because "these two blocks are the same" can be checked
+  by opening both, while "these are structurally similar" starts an argument, and
+  a tool that starts arguments gets switched off. Eight significant lines minimum.
+  Excluded: tests (a table of near-identical cases is a good suite), generated and
+  vendored trees, migrations, scaffolding templates and playgrounds (parallel
+  copies are their job), TypeScript overload signatures and pasted inline SVG —
+  in all of those, the repetition is required rather than chosen.
 - **CI health** (`ci-health`) — whether anything is actually being *checked*. A
   repo with tests, a workflow and a green badge can be running nothing: the test
   job left the trigger during a migration, a flaky step got `continue-on-error:

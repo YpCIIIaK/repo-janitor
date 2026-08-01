@@ -27,6 +27,7 @@ import { docsDriftScanner } from "./scanners/docs-drift"
 import { configConflictScanner } from "./scanners/config-conflict"
 import { licenseRiskScanner } from "./scanners/license-risk"
 import { ciHealthScanner } from "./scanners/ci-health"
+import { duplicateCodeScanner } from "./scanners/duplicate-code"
 
 /** Default scanner registry. Add new scanners here as they are implemented. */
 export const defaultScanners: Scanner[] = [
@@ -55,6 +56,7 @@ export const defaultScanners: Scanner[] = [
   configConflictScanner,
   licenseRiskScanner,
   ciHealthScanner,
+  duplicateCodeScanner,
 ]
 
 /** Severity penalties. info is deliberately near-cosmetic — a quarter of a point
