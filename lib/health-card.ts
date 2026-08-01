@@ -11,9 +11,15 @@ import { isBoastworthy, verdictOf, type VerdictCounts } from "@/lib/verdict"
  */
 
 export const CARD_WIDTH = 480
-export const CARD_HEIGHT = 196
+/** Tall enough for chips + footer without the meta line sitting on the badges. */
+export const CARD_HEIGHT = 220
 
 const UNKNOWN_COLOR = UNKNOWN_GRADE_HEX
+
+/** Left padding / content start. */
+const PAD_X = 28
+/** Vertical gap reserved under severity chips for the meta footer. */
+const FOOTER_BAND = 36
 
 export type HealthCardData = {
   owner: string
@@ -38,15 +44,28 @@ export function truncateLabel(s: string, max = 36): string {
   return `${s.slice(0, Math.max(1, max - 1))}…`
 }
 
-export function cardHeadline(data: Pick<HealthCardData, "counts" | "totalIssues" | "score">): string {
-  const verdict = verdictOf(data.counts, data.totalIssues, data.score)
-  if (verdict === "clean") return "Clean scan — nothing found"
-  if (isBoastworthy(verdict)) return "No critical or warning findings"
-  if (data.totalIssues === 1) return "1 finding"
-  return `${data.totalIssues} findings`
+/** Compact "43591" → "44k" so the meta line fits beside the grade plaque. */
+export function compactCount(n: number): string {
+  if (!Number.isFinite(n) || n < 0) return "0"
+  if (n < 1000) return String(Math.round(n))
+  if (n < 10_000) return `${(n / 1000).toFixed(1).replace(/\.0$/, "")}k`
+  if (n < 1_000_000) return `${Math.round(n / 1000)}k`
+  return `${(n / 1_000_000).toFixed(1).replace(/\.0$/, "")}M`
 }
 
-function formatScannedAt(iso: string | undefined): string | null {
+/**
+ * Shorten a scopeLine() string ("1,240 files · 182,431 lines") for tight plaques.
+ */
+export function compactScope(scope: string | null | undefined): string | null {
+  if (!scope) return null
+  // "385 files · 43,591 lines" → "385 files · 44k lines"
+  return scope.replace(/(\d{1,3}(?:,\d{3})+|\d{4,})/g, (raw) => {
+    const n = Number(raw.replace(/,/g, ""))
+    return Number.isFinite(n) ? compactCount(n) : raw
+  })
+}
+
+export function formatScannedAt(iso: string | undefined): string | null {
   if (!iso) return null
   const t = new Date(iso).getTime()
   if (Number.isNaN(t)) return null
@@ -57,6 +76,33 @@ function formatScannedAt(iso: string | undefined): string | null {
     day: "numeric",
     timeZone: "UTC",
   })
+}
+
+/**
+ * One-line meta for card/embed footers. Keeps chips readable by staying short.
+ */
+export function formatCardFoot(
+  scope: string | null | undefined,
+  generatedAt: string | undefined,
+  maxLen = 48,
+): string {
+  const parts = [
+    compactScope(scope),
+    (() => {
+      const d = formatScannedAt(generatedAt)
+      return d ? `Scanned ${d}` : null
+    })(),
+  ].filter(Boolean) as string[]
+  if (parts.length === 0) return "Snapshot of a published scan"
+  return truncateLabel(parts.join(" · "), maxLen)
+}
+
+export function cardHeadline(data: Pick<HealthCardData, "counts" | "totalIssues" | "score">): string {
+  const verdict = verdictOf(data.counts, data.totalIssues, data.score)
+  if (verdict === "clean") return "Clean scan — nothing found"
+  if (isBoastworthy(verdict)) return "No critical or warning findings"
+  if (data.totalIssues === 1) return "1 finding"
+  return `${data.totalIssues} findings`
 }
 
 /**
@@ -88,19 +134,18 @@ export function renderHealthCardSvg(
     </linearGradient>
   </defs>
   <rect width="${w}" height="${h}" rx="12" fill="url(#bg)" stroke="#30363d" stroke-width="1"/>
-  <text x="28" y="40" fill="#8b949e" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="13" font-weight="600">Repo Anti-Rot</text>
-  <text x="28" y="78" fill="#e6edf3" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="22" font-weight="700">${esc(title)}</text>
-  <text x="28" y="120" fill="${UNKNOWN_COLOR}" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="28" font-weight="700">unknown</text>
-  <text x="28" y="${h - 28}" fill="#6e7681" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="12">No published scan for this repository</text>
+  <text x="${PAD_X}" y="40" fill="#8b949e" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="13" font-weight="600">Repo Anti-Rot</text>
+  <text x="${PAD_X}" y="78" fill="#e6edf3" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="22" font-weight="700">${esc(title)}</text>
+  <text x="${PAD_X}" y="120" fill="${UNKNOWN_COLOR}" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="28" font-weight="700">unknown</text>
+  <text x="${PAD_X}" y="${h - 22}" fill="#6e7681" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="12">No published scan for this repository</text>
 </svg>`
   }
 
   const color = gradeHex(data.grade)
   const headline = cardHeadline(data)
   const boast = isBoastworthy(verdictOf(data.counts, data.totalIssues, data.score))
-  const scanned = formatScannedAt(data.generatedAt)
   const { critical, warning, info } = data.counts
-  const scope = data.scope ? truncateLabel(data.scope, 42) : null
+  const foot = formatCardFoot(data.scope, data.generatedAt, 52)
 
   // Severity chips — muted when zero so a clean result does not look alarmed.
   const chip = (label: string, n: number, fill: string, x: number) => {
@@ -129,6 +174,11 @@ export function renderHealthCardSvg(
     chipX += cw + 8
   }
 
+  // Layout bands (top → bottom): brand, title, score/headline, chips, footer.
+  // Chips sit above a dedicated footer band so the meta line cannot cover them.
+  const chipY = h - FOOTER_BAND - 26 - 10
+  const footY = h - 18
+
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(aria)}">
   <title>${esc(aria)}</title>
@@ -146,20 +196,18 @@ export function renderHealthCardSvg(
   <rect x="0" y="0" width="6" height="${h}" rx="3" fill="${color}"/>
   <rect x="6" y="0" width="160" height="${h}" fill="url(#glow)"/>
 
-  <text x="28" y="36" fill="#8b949e" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="12" font-weight="600" letter-spacing="0.04em">REPO ANTI-ROT</text>
-  <text x="28" y="68" fill="#e6edf3" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="20" font-weight="700">${esc(title)}</text>
+  <text x="${PAD_X}" y="34" fill="#8b949e" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="12" font-weight="600" letter-spacing="0.04em">REPO ANTI-ROT</text>
+  <text x="${PAD_X}" y="62" fill="#e6edf3" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="20" font-weight="700">${esc(title)}</text>
 
-  <!-- Grade plaque -->
-  <rect x="${w - 132}" y="28" width="100" height="100" rx="18" fill="#0d1117" stroke="${color}" stroke-width="3"/>
-  <text x="${w - 82}" y="96" text-anchor="middle" fill="${color}" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="56" font-weight="800">${esc(data.grade)}</text>
+  <!-- Grade plaque — stops above the chip row -->
+  <rect x="${w - 124}" y="24" width="92" height="92" rx="16" fill="#0d1117" stroke="${color}" stroke-width="3"/>
+  <text x="${w - 78}" y="88" text-anchor="middle" fill="${color}" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="52" font-weight="800">${esc(data.grade)}</text>
 
-  <text x="28" y="108" fill="#e6edf3" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="28" font-weight="700">${data.score}<tspan fill="#8b949e" font-size="16" font-weight="600">/100</tspan></text>
-  <text x="28" y="134" fill="${boast ? color : "#c9d1d9"}" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="13" font-weight="600">${esc(headline)}</text>
+  <text x="${PAD_X}" y="102" fill="#e6edf3" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="28" font-weight="700">${data.score}<tspan fill="#8b949e" font-size="16" font-weight="600">/100</tspan></text>
+  <text x="${PAD_X}" y="126" fill="${boast ? color : "#c9d1d9"}" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="13" font-weight="600">${esc(headline)}</text>
 
-  <g transform="translate(28,148)">${chips.join("")}</g>
+  <g transform="translate(${PAD_X},${chipY})">${chips.join("")}</g>
 
-  <text x="28" y="${h - 14}" fill="#6e7681" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="11">${esc(
-    [scope, scanned ? `Scanned ${scanned}` : null].filter(Boolean).join(" · ") || "Snapshot of a published scan",
-  )}</text>
+  <text x="${PAD_X}" y="${footY}" fill="#6e7681" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="11">${esc(foot)}</text>
 </svg>`
 }

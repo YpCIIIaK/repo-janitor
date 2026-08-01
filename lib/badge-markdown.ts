@@ -83,7 +83,8 @@ export function cardMarkdown(origin: string, shareUrl: string): string | null {
 
 /** Default iframe size — matches the compact embed plaque. */
 export const EMBED_WIDTH = 420
-export const EMBED_HEIGHT = 200
+/** Room for chips + two-line meta without clipping inside the frame. */
+export const EMBED_HEIGHT = 228
 
 /** Absolute embed page URL for a share target. */
 export function embedUrl(origin: string, t: ShareTarget): string {

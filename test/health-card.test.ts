@@ -3,6 +3,9 @@ import {
   CARD_HEIGHT,
   CARD_WIDTH,
   cardHeadline,
+  compactCount,
+  compactScope,
+  formatCardFoot,
   renderHealthCardSvg,
   truncateLabel,
   type HealthCardData,
@@ -45,6 +48,25 @@ describe("truncateLabel", () => {
   })
 })
 
+describe("compact meta line", () => {
+  it("compacts large counts", () => {
+    expect(compactCount(385)).toBe("385")
+    expect(compactCount(43591)).toBe("44k")
+    expect(compactCount(182431)).toBe("182k")
+  })
+
+  it("compacts a scopeLine string", () => {
+    expect(compactScope("385 files · 43,591 lines")).toBe("385 files · 44k lines")
+  })
+
+  it("builds a short foot that fits the plaque", () => {
+    const foot = formatCardFoot("385 files · 43,591 lines", "2026-08-01T12:00:00.000Z", 52)
+    expect(foot).toContain("44k")
+    expect(foot).toContain("Scanned")
+    expect(foot.length).toBeLessThanOrEqual(52)
+  })
+})
+
 describe("renderHealthCardSvg", () => {
   it("renders a known report with grade and score", () => {
     const svg = renderHealthCardSvg("acme", "widget", sample)
@@ -55,6 +77,13 @@ describe("renderHealthCardSvg", () => {
     expect(svg).toContain("acme/widget")
     expect(svg).toContain("0 critical")
     expect(svg.startsWith("<?xml")).toBe(true)
+    // Meta line uses compact counts so it does not collide with chips.
+    expect(svg).toContain("182k")
+    // Chips sit above the footer band (chip translate Y < footer text Y).
+    const chipY = Number(svg.match(/translate\(28,(\d+)\)/)?.[1])
+    const footY = Number(svg.match(/y="(\d+)" fill="#6e7681"[^>]*>[^<]*Scanned/)?.[1])
+    expect(chipY).toBeGreaterThan(0)
+    expect(footY).toBeGreaterThan(chipY + 26)
   })
 
   it("never shows another repo's grade under this path", () => {
