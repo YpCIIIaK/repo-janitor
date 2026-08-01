@@ -565,6 +565,17 @@ rot:
   committed lockfile contradicts. Commands are only read inside fenced blocks or
   behind a shell prompt, so prose that happens to start with "pnpm" is not an
   instruction.
+- **License risk** (`license-risk`) — the licenses of your **direct** dependencies,
+  compared against the one the project claims for itself (from `package.json`, or
+  sniffed from the root `LICENSE` when the manifest is silent). AGPL/SSPL in a
+  shipped dependency is critical — its obligations trigger on network use, which
+  is what most products do; GPL is a warning; LGPL/MPL is info. A copyleft project
+  gets **no** copyleft findings, because GPL-on-GPL is the point of the GPL, and a
+  dev dependency drops one level because a build tool is not distributed. Licenses
+  are read from the installed `node_modules` copy first (exact and offline) and
+  from the registry only as a fallback. SPDX expressions are resolved properly:
+  `MIT OR GPL-2.0` imposes nothing, because the choice is yours. Nothing here is
+  legal advice, and every finding says so.
 - **Config conflicts** (`config-conflict`) — two files configuring the same thing,
   where one is silently ignored: an `.eslintrc.*` left beside a flat
   `eslint.config.*` (ESLint 9 does not load it, and does not say so), a
