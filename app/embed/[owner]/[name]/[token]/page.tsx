@@ -29,7 +29,7 @@ export default async function EmbedPage({ params }: { params: Promise<Params> })
 
   if (!isValidShareToken(token)) {
     return (
-      <main className="box-border h-screen p-1">
+      <main className="box-border h-screen p-0.5">
         <EmbedUnknown pathOwner={pathOwner} pathName={pathName} />
       </main>
     )
@@ -43,7 +43,7 @@ export default async function EmbedPage({ params }: { params: Promise<Params> })
 
   if (!match || !share) {
     return (
-      <main className="box-border h-screen p-1">
+      <main className="box-border h-screen p-0.5">
         <EmbedUnknown pathOwner={pathOwner} pathName={pathName} />
       </main>
     )
@@ -52,7 +52,7 @@ export default async function EmbedPage({ params }: { params: Promise<Params> })
   const reportHref = `/r/${encodeURIComponent(pathOwner)}/${encodeURIComponent(pathName)}/${token}`
 
   return (
-    <main className="box-border h-screen p-1">
+    <main className="box-border h-screen p-0.5">
       <EmbedWidget
         report={share.report}
         reportHref={reportHref}

@@ -252,7 +252,7 @@ export function ShareBox({ report, repoUrl }: { report: unknown; repoUrl?: strin
               alt=""
               className="mt-2 w-full max-w-[480px] rounded-md border border-border"
               width={480}
-              height={196}
+              height={220}
             />
             <div className="mt-2 flex items-center gap-2">
               <code className="min-w-0 flex-1 truncate rounded bg-muted px-2 py-1 font-mono text-[11px] text-muted-foreground">
@@ -276,7 +276,7 @@ export function ShareBox({ report, repoUrl }: { report: unknown; repoUrl?: strin
               src={embedUrl(origin, target)}
               title="Repo Anti-Rot embed preview"
               className="mt-2 w-full rounded-xl border border-border bg-transparent"
-              style={{ height: 200 }}
+              style={{ height: 228 }}
               loading="lazy"
             />
             <div className="mt-2 flex items-center gap-2">
