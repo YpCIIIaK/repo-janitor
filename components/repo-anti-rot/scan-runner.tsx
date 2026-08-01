@@ -28,6 +28,7 @@ import { readAiSettings, isAiEnabled } from "@/lib/ai-settings"
 import { runScanStream } from "@/lib/scan-client"
 import { Progress } from "@/components/ui/progress"
 import { ShareBox } from "./share-box"
+import { PercentileLine } from "./percentile-line"
 import { useLocale } from "@/components/i18n/locale-provider"
 
 type Grade = "A" | "B" | "C" | "D" | "F"
@@ -52,6 +53,13 @@ interface ScanReport {
   score: number
   grade: Grade
   issues: Issue[]
+  /**
+   * Language and tooling breakdown. Optional because reports stored by older
+   * versions predate it, and the only thing that reads it here — the percentile
+   * line — treats its absence as "compare against everything" rather than as an
+   * error.
+   */
+  profile?: { languages?: { language?: string; loc?: number }[] }
 }
 
 interface ScanResult {
@@ -215,6 +223,12 @@ function ResultCard({ result, onOpen }: { result: ScanResult; onOpen?: (repoId: 
             {formatTimestamp(generatedAt)}
           </span>
         </div>
+
+        {/* Where this score stands. Under the metadata rather than beside the
+            grade: it arrives after the card has already rendered, and a line
+            that appears next to the number would shift the layout under the
+            reader's eye. */}
+        <PercentileLine score={score} languages={report.profile?.languages} />
 
         {/* Severity counts */}
         <div className="flex gap-2 text-xs">

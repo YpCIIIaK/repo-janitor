@@ -350,11 +350,21 @@ export function SettingsDialog({ trigger }: { trigger?: React.ReactNode } = {}) 
                 </Label>
                 {/* Says exactly what is recorded, in the place where it can be
                     switched off. A vaguer sentence would be easier to write and
-                    would make the switch impossible to judge. */}
+                    would make the switch impossible to judge.
+                    This text and lib/scan-stats.ts change together: the moment
+                    one describes something the other does not do, the switch is
+                    a lie with a nice UI. */}
                 <p className="text-xs text-muted-foreground">
-                  Counts how often this service is used: a random id for this browser, the
-                  event, and the repository&apos;s address. Never your findings, scores, file
-                  paths or IP address. Takes effect immediately — Cancel does not undo it.
+                  Writes two rows, into two tables that cannot be joined.{" "}
+                  <strong className="font-medium text-foreground/80">Usage:</strong> a random id
+                  for this browser, the event, and the repository&apos;s address — no score.{" "}
+                  <strong className="font-medium text-foreground/80">Result shape:</strong> the
+                  score, grade, main language, a size band and the count of findings per
+                  severity — no repository name, no address, no browser id, and nothing from
+                  inside your code. That second row is what makes &ldquo;better than 71% of
+                  comparable repositories&rdquo; possible, and it is dated to the day rather
+                  than the second so the two cannot be lined up. Never your file paths, code or
+                  IP address. Takes effect immediately — Cancel does not undo it.
                 </p>
               </div>
               <Switch

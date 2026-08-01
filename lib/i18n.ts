@@ -121,6 +121,19 @@ const en = {
   // cards for a tool that runs 26 checks, which undersold it and told a visitor
   // nothing they could judge. Scanner ids are printed verbatim: they are the
   // same strings the CLI, the JSON report and .repo-anti-rot.json use.
+  // Where a score stands. Four cuts × two directions, written out rather than
+  // assembled from fragments — a sentence stitched from clauses reads like one,
+  // and this one is the first thing on the report.
+  "pct.worse.languageSize": "Worse than {percent}% of {language} repositories this size",
+  "pct.worse.language": "Worse than {percent}% of {language} repositories scanned",
+  "pct.worse.size": "Worse than {percent}% of repositories this size",
+  "pct.worse.all": "Worse than {percent}% of everything scanned",
+  "pct.better.languageSize": "Better than {percent}% of {language} repositories this size",
+  "pct.better.language": "Better than {percent}% of {language} repositories scanned",
+  "pct.better.size": "Better than {percent}% of repositories this size",
+  "pct.better.all": "Better than {percent}% of everything scanned",
+  "pct.sample": "out of {count} scans",
+
   "landing.checks.title": "{count} checks, in six families",
   "landing.checks.lead":
     "Every one is calibrated against real repositories before it ships — the rule only stays if it stays quiet on projects that are doing it right.",
@@ -153,7 +166,7 @@ const en = {
   "landing.privacy.report":
     "The report stays in this browser. It is stored on the server only if you tick the share box, and then only as a summary — no file paths, no snippets.",
   "landing.privacy.usage":
-    "One usage row is recorded per scan: a random per-browser id, the event name, the repository owner and name. Never scores, findings, paths, IP addresses or user agents.",
+    "Two rows per scan, in two tables that cannot be joined. One counts usage: a random browser id, the event, and the repository name — no score. The other records the result's shape — score, grade, main language, size band, findings per severity — with no name, no address and no browser id, so a score is never attached to a project. Never file paths, code, IP addresses or user agents.",
 
   "landing.ci.title": "Run it in CI instead",
   "landing.ci.lead":
@@ -312,6 +325,16 @@ const ru: Messages = {
   "repo.results": "Результаты с GitHub",
 
 
+  "pct.worse.languageSize": "Хуже, чем {percent}% {language}-репозиториев такого же размера",
+  "pct.worse.language": "Хуже, чем {percent}% просканированных {language}-репозиториев",
+  "pct.worse.size": "Хуже, чем {percent}% репозиториев такого же размера",
+  "pct.worse.all": "Хуже, чем {percent}% всего просканированного",
+  "pct.better.languageSize": "Лучше, чем {percent}% {language}-репозиториев такого же размера",
+  "pct.better.language": "Лучше, чем {percent}% просканированных {language}-репозиториев",
+  "pct.better.size": "Лучше, чем {percent}% репозиториев такого же размера",
+  "pct.better.all": "Лучше, чем {percent}% всего просканированного",
+  "pct.sample": "из {count} сканов",
+
   "landing.checks.title": "{count} проверок, шесть семейств",
   "landing.checks.lead":
     "Каждая откалибрована на живых репозиториях до выхода: правило остаётся, только если молчит на проектах, где всё сделано правильно.",
@@ -344,7 +367,7 @@ const ru: Messages = {
   "landing.privacy.report":
     "Отчёт остаётся в этом браузере. На сервер он попадает, только если вы отметите галочку «поделиться», и только выжимкой — без путей к файлам и фрагментов кода.",
   "landing.privacy.usage":
-    "На скан пишется одна строка статистики: случайный идентификатор браузера, название события, владелец и имя репозитория. Никогда — оценки, находки, пути, IP-адреса и user-agent.",
+    "На скан пишутся две строки, в две таблицы, которые нельзя связать. Первая считает использование: случайный идентификатор браузера, событие и имя репозитория — без оценки. Вторая — форму результата: оценку, грейд, основной язык, класс размера, количество находок по severity — без имени, адреса и идентификатора браузера, так что оценка ни к какому проекту не привязывается. Никогда — пути к файлам, код, IP-адреса и user-agent.",
 
   "landing.ci.title": "Или запускайте в CI",
   "landing.ci.lead":
