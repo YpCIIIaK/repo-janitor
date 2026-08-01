@@ -565,6 +565,19 @@ rot:
   committed lockfile contradicts. Commands are only read inside fenced blocks or
   behind a shell prompt, so prose that happens to start with "pnpm" is not an
   instruction.
+- **CI health** (`ci-health`) — whether anything is actually being *checked*. A
+  repo with tests, a workflow and a green badge can be running nothing: the test
+  job left the trigger during a migration, a flaky step got `continue-on-error:
+  true` "for now" in 2023, someone appended `|| true` to get a release out. Each
+  leaves CI green forever, which is worse than no CI — a missing check is a known
+  gap, a green check that verifies nothing is a false statement the whole team
+  relies on. Reports silenced failures, `if: false` steps, discarded test exit
+  codes, a suite that exists but no workflow runs, and (info) workflows that run
+  on push but never on `pull_request`. Deliberately quiet where it cannot be sure:
+  nothing at all when there is no CI (that is `project-hygiene`'s finding), when
+  another provider's config is present (nest runs its whole suite on CircleCI), on
+  workflows that never trigger on a change, and on steps that regenerate fixtures
+  rather than verify them.
 - **License risk** (`license-risk`) — the licenses of your **direct** dependencies,
   compared against the one the project claims for itself (from `package.json`, or
   sniffed from the root `LICENSE` when the manifest is silent). AGPL/SSPL in a
