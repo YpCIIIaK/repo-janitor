@@ -107,8 +107,17 @@ export function isDarkTheme(id: unknown): boolean {
   return isThemeId(id) ? themeMode(id) === "dark" : true
 }
 
-/** Inline script: apply stored theme + `dark` class before first paint. */
+/**
+ * Inline script: apply stored theme + `dark` class before first paint.
+ *
+ * The wrapping is `(function(){…})()`, not `(!function(){…})()`. The latter
+ * parses fine and throws at run time — it negates the function to `false` and
+ * then calls the boolean — so the whole script died on the first statement, the
+ * `catch` inside it never ran, and every page loaded with no `data-theme` until
+ * React hydrated. The symptom was a theme flash on load, and a TypeError in the
+ * console that looked like it belonged to a framework chunk.
+ */
 export function themeInitScript(): string {
   const darkIds = DARK_THEMES.map((t) => t.id)
-  return `(!function(){try{var d=document.documentElement;var t=localStorage.getItem("theme");var dark=${JSON.stringify(darkIds)};var all=${JSON.stringify([...THEME_IDS])};if(!t||all.indexOf(t)===-1)t=${JSON.stringify(DEFAULT_THEME)};d.setAttribute("data-theme",t);d.classList.toggle("dark",dark.indexOf(t)!==-1);}catch(e){document.documentElement.classList.add("dark");document.documentElement.setAttribute("data-theme",${JSON.stringify(DEFAULT_THEME)});}})();`
+  return `(function(){try{var d=document.documentElement;var t=localStorage.getItem("theme");var dark=${JSON.stringify(darkIds)};var all=${JSON.stringify([...THEME_IDS])};if(!t||all.indexOf(t)===-1)t=${JSON.stringify(DEFAULT_THEME)};d.setAttribute("data-theme",t);d.classList.toggle("dark",dark.indexOf(t)!==-1);}catch(e){document.documentElement.classList.add("dark");document.documentElement.setAttribute("data-theme",${JSON.stringify(DEFAULT_THEME)});}})();`
 }
