@@ -189,22 +189,33 @@ const en = {
   "share.create": "Create share link",
   "share.creating": "Creating…",
   "share.failed": "Could not create the link. Try again.",
+  "share.existsOtherDevice":
+    "A share link already exists for this repository. Open it from the browser that created it to update or revoke.",
   "share.copy": "Copy link",
   "share.copied": "Copied",
+  "share.liveTitle": "Live share link",
+  "share.liveLead":
+    "One stable URL for this repository. New scans from this browser refresh the snapshot — README badges stay the same.",
+  "share.update": "Update snapshot",
+  "share.updating": "Updating…",
+  "share.updated": "Snapshot updated.",
+  "share.revoke": "Revoke link",
+  "share.revokeFailed": "Could not revoke the link. Try again.",
+  "share.revoked": "Share link revoked. You can create a new one below.",
+  "share.rotate": "New URL",
+  "share.rotateHint":
+    "“New URL” invalidates the old link (and any README badge pointing at it). Prefer Update when you only need a fresher snapshot.",
   "share.cardTitle": "Card for your README",
   "share.cardLead":
-    "A larger plaque — grade, score and severity counts. Snapshot of this scan; share a newer one for a new card.",
+    "A larger plaque — grade, score and severity counts. Same stable URL: it refreshes when this browser updates the share.",
   "share.cardCopy": "Copy markdown",
   "share.embedTitle": "Embed on a website",
   "share.embedLead":
     "Mini dashboard iframe for docs or a status page. GitHub READMEs strip iframes — use the card above there.",
   "share.embedCopy": "Copy HTML",
   "share.badgeTitle": "Small badge",
-  // Says snapshot, because that is what it is. Sharing a newer scan mints a new
-  // token and therefore a new badge URL — this one keeps showing this scan.
-  // The earlier wording promised it would update, which it never does.
   "share.badgeLead":
-    "Shields-style strip for the title line. Same snapshot rules as the card.",
+    "Shields-style strip for the title line. Paste once — it tracks the live share for this repo.",
   "share.badgeCopy": "Copy markdown",
   "share.heading": "Repository health",
   // The good-news wording. Every one of these states something the scan
@@ -394,11 +405,25 @@ const ru: Messages = {
   "share.create": "Создать ссылку",
   "share.creating": "Создаём…",
   "share.failed": "Не удалось создать ссылку. Попробуйте ещё раз.",
+  "share.existsOtherDevice":
+    "Ссылка для этого репозитория уже есть. Откройте её в браузере, где создавали, чтобы обновить или отозвать.",
   "share.copy": "Скопировать ссылку",
   "share.copied": "Скопировано",
+  "share.liveTitle": "Живая ссылка",
+  "share.liveLead":
+    "Один стабильный URL на репозиторий. Новые сканы из этого браузера обновляют снимок — бейджи в README не меняются.",
+  "share.update": "Обновить снимок",
+  "share.updating": "Обновляем…",
+  "share.updated": "Снимок обновлён.",
+  "share.revoke": "Отозвать ссылку",
+  "share.revokeFailed": "Не удалось отозвать ссылку. Попробуйте ещё раз.",
+  "share.revoked": "Ссылка отозвана. Ниже можно создать новую.",
+  "share.rotate": "Новый URL",
+  "share.rotateHint":
+    "«Новый URL» инвалидирует старую ссылку (и бейдж в README на неё). Если нужен только свежий снимок — жмите «Обновить».",
   "share.cardTitle": "Карточка для README",
   "share.cardLead":
-    "Крупная плашка — оценка, балл и счётчики severity. Снимок этого скана; для нового результата поделитесь снова.",
+    "Крупная плашка — оценка, балл и счётчики severity. Тот же стабильный URL: обновляется, когда этот браузер обновляет share.",
   "share.cardCopy": "Скопировать markdown",
   "share.embedTitle": "Встроить на сайт",
   "share.embedLead":
@@ -406,7 +431,7 @@ const ru: Messages = {
   "share.embedCopy": "Скопировать HTML",
   "share.badgeTitle": "Маленький бейдж",
   "share.badgeLead":
-    "Узкая полоска в стиле shields для строки заголовка. Те же правила снимка, что у карточки.",
+    "Узкая полоска в стиле shields для строки заголовка. Вставьте один раз — она следит за живым share этого репо.",
   "share.badgeCopy": "Скопировать markdown",
   "share.heading": "Здоровье репозитория",
   "verdict.clean.title": "Скан чист",

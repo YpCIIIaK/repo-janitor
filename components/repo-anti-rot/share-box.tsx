@@ -1,11 +1,18 @@
 "use client"
 
-import { useState } from "react"
-import { Check, Copy, Link2 } from "lucide-react"
+import { useCallback, useEffect, useRef, useState } from "react"
+import { Check, Copy, Link2, RefreshCw, RotateCcw, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useLocale } from "@/components/i18n/locale-provider"
 import { usageHeaders } from "@/lib/visitor"
+import {
+  clearShareHandle,
+  loadShareHandle,
+  repoFromReport,
+  saveShareHandle,
+  type ShareHandle,
+} from "@/lib/share-handle"
 import {
   badgeMarkdown,
   badgeUrl,
@@ -16,58 +23,167 @@ import {
   parseSharePath,
 } from "@/lib/badge-markdown"
 
+type CopyTarget = "link" | "card" | "embed" | "badge"
+
 /**
- * Consent + share-link creation for a finished scan.
+ * Consent + stable share-link management for a finished scan.
  *
- * The checkbox is unticked by default and nothing is sent until it is ticked and
- * the button pressed: publishing is an action the user takes, not a default they
- * have to notice and undo.
- *
- * The full report is POSTed and reduced server-side (lib/share-report.ts). The
- * wording next to the checkbox describes that reduction exactly — if one
- * changes, so does the other.
+ * One live URL per repository: re-publishing with the manage key (kept in
+ * localStorage) refreshes the snapshot so README badges keep working. Revoke
+ * deletes the link; rotate mints a new public token when the old URL leaked.
  */
 export function ShareBox({ report, repoUrl }: { report: unknown; repoUrl?: string }) {
   const { t } = useLocale()
+  const repo = repoFromReport(report)
   const [consented, setConsented] = useState(false)
   const [busy, setBusy] = useState(false)
-  const [url, setUrl] = useState<string | null>(null)
-  const [failed, setFailed] = useState(false)
-  // Which value was copied last, so the buttons confirm independently.
-  const [copied, setCopied] = useState<"link" | "card" | "embed" | "badge" | null>(null)
+  const [handle, setHandle] = useState<ShareHandle | null>(null)
+  const [failed, setFailed] = useState<string | null>(null)
+  const [copied, setCopied] = useState<CopyTarget | null>(null)
+  const [status, setStatus] = useState<"idle" | "updated" | "revoked">("idle")
+  const autoKey = useRef<string | null>(null)
 
-  async function createLink() {
+  useEffect(() => {
+    if (!repo) return
+    setHandle(loadShareHandle(repo.owner, repo.name))
+  }, [repo?.owner, repo?.name])
+
+  const persist = useCallback(
+    (data: {
+      token: string
+      manageKey: string
+      path: string
+      updatedAt: string
+      owner: string
+      name: string
+    }) => {
+      const next: ShareHandle = {
+        token: data.token,
+        manageKey: data.manageKey,
+        path: data.path,
+        updatedAt: data.updatedAt,
+        owner: data.owner,
+        name: data.name,
+      }
+      saveShareHandle(next)
+      setHandle(next)
+      return next
+    },
+    [],
+  )
+
+  const publish = useCallback(
+    async (opts: { manageKey?: string; rotate?: boolean } = {}) => {
+      if (!repo) return
+      setBusy(true)
+      setFailed(null)
+      setStatus("idle")
+      try {
+        const res = await fetch("/api/share", {
+          method: "POST",
+          headers: { "content-type": "application/json", ...usageHeaders() },
+          body: JSON.stringify({
+            report,
+            repoUrl,
+            manageKey: opts.manageKey,
+            rotate: opts.rotate === true,
+          }),
+        })
+        const data = (await res.json().catch(() => ({}))) as {
+          path?: string
+          token?: string
+          manageKey?: string
+          updatedAt?: string
+          error?: string
+          code?: string
+        }
+        if (!res.ok) {
+          if (data.code === "missing_key") {
+            setFailed(t("share.existsOtherDevice"))
+          } else {
+            setFailed(data.error || t("share.failed"))
+          }
+          return
+        }
+        if (!data.path || !data.token || !data.manageKey) throw new Error("incomplete")
+        const absolute = new URL(data.path, window.location.origin).toString()
+        persist({
+          token: data.token,
+          manageKey: data.manageKey,
+          path: absolute,
+          updatedAt: data.updatedAt ?? new Date().toISOString(),
+          owner: repo.owner,
+          name: repo.name,
+        })
+        if (opts.manageKey && !opts.rotate) setStatus("updated")
+      } catch {
+        setFailed(t("share.failed"))
+      } finally {
+        setBusy(false)
+      }
+    },
+    [persist, report, repo, repoUrl, t],
+  )
+
+  // After a new scan, refresh the published snapshot automatically when this
+  // browser still holds the manage key — README URLs stay put.
+  useEffect(() => {
+    if (!repo || !handle) return
+    const generatedAt =
+      typeof (report as { generatedAt?: unknown })?.generatedAt === "string"
+        ? (report as { generatedAt: string }).generatedAt
+        : ""
+    const key = `${handle.token}:${generatedAt}`
+    if (autoKey.current === key) return
+    autoKey.current = key
+    if (handle.updatedAt && generatedAt && handle.updatedAt >= generatedAt) return
+    void publish({ manageKey: handle.manageKey })
+  }, [handle, publish, report, repo])
+
+  async function revoke() {
+    if (!repo || !handle) return
     setBusy(true)
-    setFailed(false)
+    setFailed(null)
     try {
       const res = await fetch("/api/share", {
-        method: "POST",
+        method: "DELETE",
         headers: { "content-type": "application/json", ...usageHeaders() },
-        body: JSON.stringify({ report, repoUrl }),
+        body: JSON.stringify({
+          token: handle.token,
+          manageKey: handle.manageKey,
+          owner: repo.owner,
+          name: repo.name,
+        }),
       })
-      if (!res.ok) throw new Error(String(res.status))
-      const data = (await res.json()) as { path?: string }
-      if (!data.path) throw new Error("no path")
-      setUrl(new URL(data.path, window.location.origin).toString())
+      if (!res.ok && res.status !== 404) {
+        const data = (await res.json().catch(() => ({}))) as { error?: string }
+        setFailed(data.error || t("share.revokeFailed"))
+        return
+      }
+      clearShareHandle(repo.owner, repo.name)
+      setHandle(null)
+      setConsented(false)
+      setStatus("revoked")
     } catch {
-      setFailed(true)
+      setFailed(t("share.revokeFailed"))
     } finally {
       setBusy(false)
     }
   }
 
-  async function copyText(value: string, which: "link" | "card" | "embed" | "badge") {
+  async function copyText(value: string, which: CopyTarget) {
     try {
       await navigator.clipboard.writeText(value)
       setCopied(which)
       setTimeout(() => setCopied(null), 2000)
     } catch {
-      /* clipboard blocked — the value is on screen and selectable anyway */
+      /* clipboard blocked — value is on screen */
     }
   }
 
-  if (url) {
-    const origin = window.location.origin
+  if (handle) {
+    const origin = typeof window !== "undefined" ? window.location.origin : ""
+    const url = handle.path
     const cardMd = cardMarkdown(origin, url)
     const embedHtml = embedSnippet(origin, url)
     const badgeMd = badgeMarkdown(origin, url)
@@ -75,6 +191,14 @@ export function ShareBox({ report, repoUrl }: { report: unknown; repoUrl?: strin
 
     return (
       <div className="space-y-3 rounded-lg border border-border bg-card/40 p-3">
+        <div className="space-y-1">
+          <p className="text-sm font-medium">{t("share.liveTitle")}</p>
+          <p className="text-xs leading-relaxed text-muted-foreground">{t("share.liveLead")}</p>
+          {status === "updated" && (
+            <p className="text-xs text-success">{t("share.updated")}</p>
+          )}
+        </div>
+
         <div className="flex items-center gap-2">
           <Link2 className="size-4 shrink-0 text-muted-foreground" />
           <input
@@ -89,8 +213,33 @@ export function ShareBox({ report, repoUrl }: { report: unknown; repoUrl?: strin
           </Button>
         </div>
 
-        {/* Large card first: this is the README plaque people actually want to
-            show. The shields strip stays below for title-line use. */}
+        <div className="flex flex-wrap gap-2">
+          <Button
+            size="sm"
+            variant="outline"
+            disabled={busy}
+            onClick={() => publish({ manageKey: handle.manageKey })}
+          >
+            <RefreshCw className="size-4" />
+            {t(busy ? "share.updating" : "share.update")}
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            disabled={busy}
+            onClick={() => publish({ manageKey: handle.manageKey, rotate: true })}
+          >
+            <RotateCcw className="size-4" />
+            {t("share.rotate")}
+          </Button>
+          <Button size="sm" variant="ghost" disabled={busy} onClick={() => void revoke()}>
+            <Trash2 className="size-4" />
+            {t("share.revoke")}
+          </Button>
+        </div>
+        <p className="text-[11px] leading-relaxed text-muted-foreground/80">{t("share.rotateHint")}</p>
+        {failed && <p className="text-xs text-destructive">{failed}</p>}
+
         {cardMd && target && (
           <div className="border-t border-border pt-3">
             <p className="text-sm font-medium">{t("share.cardTitle")}</p>
@@ -99,7 +248,7 @@ export function ShareBox({ report, repoUrl }: { report: unknown; repoUrl?: strin
             </p>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={cardUrl(origin, target)}
+              src={`${cardUrl(origin, target)}${handle.updatedAt ? `&t=${encodeURIComponent(handle.updatedAt)}` : ""}`}
               alt=""
               className="mt-2 w-full max-w-[480px] rounded-md border border-border"
               width={480}
@@ -150,7 +299,7 @@ export function ShareBox({ report, repoUrl }: { report: unknown; repoUrl?: strin
             </p>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={badgeUrl(origin, target)}
+              src={`${badgeUrl(origin, target)}${handle.updatedAt ? `&t=${encodeURIComponent(handle.updatedAt)}` : ""}`}
               alt=""
               className="mt-2 h-5"
               width={120}
@@ -173,6 +322,9 @@ export function ShareBox({ report, repoUrl }: { report: unknown; repoUrl?: strin
 
   return (
     <div className="rounded-lg border border-border bg-card/40 p-3">
+      {status === "revoked" && (
+        <p className="mb-3 text-xs text-muted-foreground">{t("share.revoked")}</p>
+      )}
       <label className="flex cursor-pointer items-start gap-3">
         <Checkbox
           checked={consented}
@@ -191,11 +343,15 @@ export function ShareBox({ report, repoUrl }: { report: unknown; repoUrl?: strin
       </label>
 
       <div className="mt-3 flex items-center gap-3">
-        <Button size="sm" disabled={!consented || busy} onClick={createLink}>
+        <Button
+          size="sm"
+          disabled={!consented || busy || !repo}
+          onClick={() => void publish({})}
+        >
           <Link2 className="size-4" />
           {t(busy ? "share.creating" : "share.create")}
         </Button>
-        {failed && <span className="text-xs text-destructive">{t("share.failed")}</span>}
+        {failed && <span className="text-xs text-destructive">{failed}</span>}
       </div>
     </div>
   )

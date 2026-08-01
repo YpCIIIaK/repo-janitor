@@ -26,6 +26,7 @@ import { saveReport, type ScanReport as StoredScanReport } from "@/lib/reports-s
 import { enrichReport, aiTargetCount } from "@/lib/ai-enrich"
 import { readAiSettings, isAiEnabled } from "@/lib/ai-settings"
 import { runScanStream } from "@/lib/scan-client"
+import { refreshPublishedShare } from "@/lib/share-refresh"
 import { Progress } from "@/components/ui/progress"
 import { ShareBox } from "./share-box"
 import { PercentileLine } from "./percentile-line"
@@ -403,9 +404,13 @@ export function ScanRunner({ onOpen }: { onOpen?: (repoId: string) => void }) {
           doneGlobal += totals[i]
           r.report = report // reflect notes in the on-screen result cards too
           saveReport(report as StoredScanReport, r.url)
+          await refreshPublishedShare(report, r.url).catch(() => "failed")
         }
       } else {
-        for (const r of okResults) saveReport(r.report as StoredScanReport, r.url)
+        for (const r of okResults) {
+          saveReport(r.report as StoredScanReport, r.url)
+          await refreshPublishedShare(r.report, r.url).catch(() => "failed")
+        }
       }
 
       setProgress(1)

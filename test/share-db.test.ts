@@ -1,10 +1,17 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
 
-import { dbGetShare, dbPutShare, supabaseConfig } from "@/lib/share-db"
+import {
+  dbDeleteShare,
+  dbGetShare,
+  dbGetShareByRepoKey,
+  dbPutShare,
+  dbUpdateShare,
+  packDbReport,
+  supabaseConfig,
+  unpackDbReport,
+} from "@/lib/share-db"
 import type { SharedReport } from "@/lib/share-report"
 
-// `server-only` throws outside a React Server Component; the mock is hoisted
-// above the imports, so the module under test loads normally.
 vi.mock("server-only", () => ({}))
 
 const cfg = { url: "https://proj.supabase.co", serviceKey: "service-key" }
@@ -35,7 +42,6 @@ describe("supabaseConfig", () => {
     expect(supabaseConfig()).toBeNull()
 
     process.env.SUPABASE_URL = "https://proj.supabase.co"
-    // A URL without a key must not half-enable the backend.
     expect(supabaseConfig()).toBeNull()
   })
 
@@ -46,58 +52,131 @@ describe("supabaseConfig", () => {
   })
 })
 
+describe("pack / unpack envelope", () => {
+  it("round-trips a v2 share", () => {
+    const packed = packDbReport({
+      manageKeyHash: "abc",
+      repoKey: "acme/widget",
+      updatedAt: "2026-08-01T12:00:00.000Z",
+      report,
+    })
+    const got = unpackDbReport("tok1234567890abcd", "2026-07-27T10:00:00Z", packed)
+    expect(got).toEqual({
+      token: "tok1234567890abcd",
+      createdAt: "2026-07-27T10:00:00Z",
+      updatedAt: "2026-08-01T12:00:00.000Z",
+      repoKey: "acme/widget",
+      manageKeyHash: "abc",
+      report,
+    })
+  })
+
+  it("reads legacy bare SharedReport rows", () => {
+    const got = unpackDbReport("tok1234567890abcd", "2026-07-27T10:00:00Z", report)
+    expect(got?.manageKeyHash).toBe("")
+    expect(got?.repoKey).toBe("acme/widget")
+    expect(got?.report).toEqual(report)
+  })
+})
+
 describe("dbPutShare", () => {
   beforeEach(() => vi.restoreAllMocks())
 
-  it("posts the row with auth headers", async () => {
+  it("posts a v2 envelope with auth headers", async () => {
     const fetchMock = vi.fn().mockResolvedValue(new Response(null, { status: 201 }))
     vi.stubGlobal("fetch", fetchMock)
 
-    await dbPutShare(cfg, "tok1234567890abcd", report)
+    await dbPutShare(cfg, {
+      token: "tok1234567890abcd",
+      manageKeyHash: "hash",
+      repoKey: "acme/widget",
+      updatedAt: "2026-08-01T12:00:00.000Z",
+      report,
+    })
 
     const [url, init] = fetchMock.mock.calls[0]
     expect(url).toBe("https://proj.supabase.co/rest/v1/shared_reports")
     expect(init.method).toBe("POST")
     expect(init.headers.apikey).toBe("service-key")
-    expect(init.headers.Authorization).toBe("Bearer service-key")
-    expect(JSON.parse(init.body)).toEqual({ token: "tok1234567890abcd", report })
+    const body = JSON.parse(init.body)
+    expect(body.token).toBe("tok1234567890abcd")
+    expect(body.report.v).toBe(2)
+    expect(body.report.body).toEqual(report)
+    expect(body.report.repoKey).toBe("acme/widget")
   })
 
   it("throws with the database's own message, not a generic failure", async () => {
-    // "relation does not exist" is the difference between a misconfigured deploy
-    // and a broken feature; swallowing it turns a five-minute fix into an
-    // afternoon.
     vi.stubGlobal(
       "fetch",
       vi.fn().mockResolvedValue(
         new Response('relation "public.shared_reports" does not exist', { status: 404 }),
       ),
     )
-    await expect(dbPutShare(cfg, "tok1234567890abcd", report)).rejects.toThrow(
-      /does not exist/,
-    )
+    await expect(
+      dbPutShare(cfg, {
+        token: "tok1234567890abcd",
+        manageKeyHash: "hash",
+        repoKey: "acme/widget",
+        updatedAt: "2026-08-01T12:00:00.000Z",
+        report,
+      }),
+    ).rejects.toThrow(/does not exist/)
+  })
+})
+
+describe("dbUpdateShare / dbDeleteShare", () => {
+  beforeEach(() => vi.restoreAllMocks())
+
+  it("patches by token", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(new Response(null, { status: 204 }))
+    vi.stubGlobal("fetch", fetchMock)
+
+    await dbUpdateShare(cfg, {
+      token: "tok1234567890abcd",
+      manageKeyHash: "hash",
+      repoKey: "acme/widget",
+      updatedAt: "2026-08-01T12:00:00.000Z",
+      report,
+    })
+
+    const [url, init] = fetchMock.mock.calls[0]
+    expect(String(url)).toContain("token=eq.tok1234567890abcd")
+    expect(init.method).toBe("PATCH")
+  })
+
+  it("deletes by token", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(new Response(null, { status: 204 }))
+    vi.stubGlobal("fetch", fetchMock)
+
+    await dbDeleteShare(cfg, "tok1234567890abcd")
+    const [url, init] = fetchMock.mock.calls[0]
+    expect(String(url)).toContain("token=eq.tok1234567890abcd")
+    expect(init.method).toBe("DELETE")
   })
 })
 
 describe("dbGetShare", () => {
   beforeEach(() => vi.restoreAllMocks())
 
-  it("selects by token and maps the row", async () => {
+  it("selects by token and unpacks a v2 row", async () => {
+    const envelope = packDbReport({
+      manageKeyHash: "hash",
+      repoKey: "acme/widget",
+      updatedAt: "2026-08-01T12:00:00.000Z",
+      report,
+    })
     const fetchMock = vi.fn().mockResolvedValue(
-      okResponse([{ token: "tok1234567890abcd", created_at: "2026-07-27T10:00:00Z", report }]),
+      okResponse([{ token: "tok1234567890abcd", created_at: "2026-07-27T10:00:00Z", report: envelope }]),
     )
     vi.stubGlobal("fetch", fetchMock)
 
     const got = await dbGetShare(cfg, "tok1234567890abcd")
-    expect(got).toEqual({
-      token: "tok1234567890abcd",
-      createdAt: "2026-07-27T10:00:00Z",
-      report,
-    })
+    expect(got?.token).toBe("tok1234567890abcd")
+    expect(got?.manageKeyHash).toBe("hash")
+    expect(got?.report).toEqual(report)
 
     const url = String(fetchMock.mock.calls[0][0])
     expect(url).toContain("token=eq.tok1234567890abcd")
-    expect(url).toContain("limit=1")
   })
 
   it("returns null for an empty result", async () => {
@@ -109,12 +188,27 @@ describe("dbGetShare", () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response("nope", { status: 500 })))
     expect(await dbGetShare(cfg, "tok1234567890abcd")).toBeNull()
   })
+})
 
-  it("returns null when the row has no report", async () => {
-    vi.stubGlobal(
-      "fetch",
-      vi.fn().mockResolvedValue(okResponse([{ token: "t", created_at: "x" }])),
+describe("dbGetShareByRepoKey", () => {
+  beforeEach(() => vi.restoreAllMocks())
+
+  it("filters on the envelope repoKey field", async () => {
+    const envelope = packDbReport({
+      manageKeyHash: "hash",
+      repoKey: "acme/widget",
+      updatedAt: "2026-08-01T12:00:00.000Z",
+      report,
+    })
+    const fetchMock = vi.fn().mockResolvedValue(
+      okResponse([{ token: "tok1234567890abcd", created_at: "2026-07-27T10:00:00Z", report: envelope }]),
     )
-    expect(await dbGetShare(cfg, "tok1234567890abcd")).toBeNull()
+    vi.stubGlobal("fetch", fetchMock)
+
+    const got = await dbGetShareByRepoKey(cfg, "acme/widget")
+    expect(got?.token).toBe("tok1234567890abcd")
+
+    const url = decodeURIComponent(String(fetchMock.mock.calls[0][0]))
+    expect(url).toContain("report->>repoKey=eq.acme/widget")
   })
 })

@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import {
   Bell,
   BellOff,
@@ -23,6 +23,16 @@ import {
   type Severity,
 } from "@/lib/mock-data"
 import { searchIssues } from "@/lib/issue-search"
+import {
+  filterIssues,
+  type CategoryFilter,
+  type SeverityFilter,
+} from "@/lib/issue-filters"
+import {
+  presentScannersInCategory,
+  resolveScanner,
+  scannerLabel,
+} from "@/lib/scanners"
 import { issueCosts, type SeverityWeights } from "@/lib/score"
 import { githubFileUrl } from "@/lib/github-link"
 import { githubNewIssueUrl } from "@/lib/github-issue"
@@ -82,6 +92,12 @@ function IssueRow({
   /** Points this finding takes off the score; omitted when unknown. */
   cost?: number
 }) {
+  const scannerId = resolveScanner(issue)
+  const kindLabel = scannerId ? scannerLabel(scannerId) : categoryLabels[issue.category]
+  const kindTitle = scannerId
+    ? `${kindLabel} · ${categoryLabels[issue.category]}`
+    : categoryLabels[issue.category]
+
   return (
     <button
       onClick={onSelect}
@@ -118,8 +134,11 @@ function IssueRow({
           {issue.location}
         </span>
       </span>
-      <span className="hidden shrink-0 text-xs text-muted-foreground md:block">
-        {categoryLabels[issue.category]}
+      <span
+        className="hidden max-w-[9rem] shrink-0 truncate text-xs text-muted-foreground lg:block"
+        title={kindTitle}
+      >
+        {kindLabel}
       </span>
       {/* What this one finding costs. Snoozed findings cost nothing — they are
           already out of the score — so showing a number there would be a lie. */}
@@ -158,8 +177,9 @@ export function IssuesTable({
   /** Effective scan weights, so per-finding costs match the score exactly. */
   weights?: SeverityWeights
 }) {
-  const [severity, setSeverity] = useState<string>("all")
-  const [category, setCategory] = useState<string>("all")
+  const [severity, setSeverity] = useState<SeverityFilter>("all")
+  const [category, setCategory] = useState<CategoryFilter>("all")
+  const [scanner, setScanner] = useState<string>("all")
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [grouped, setGrouped] = useState(false)
@@ -183,44 +203,70 @@ export function IssuesTable({
   const isSnoozed = (id: string) => snoozed.has(snoozeKey(repoId, id))
   const toggleSnooze = (id: string) => setSnoozed(repoId, id, !isSnoozed(id))
 
+  // Scanners that appear under the current category lens — keeps the Select
+  // short and stops "ci-health" showing up while Category = Dependency.
+  const scannerOptions = useMemo(
+    () => presentScannersInCategory(base, category),
+    [base, category],
+  )
+
+  // After a rescan (or a category change that already cleared it), a selected
+  // scanner that is no longer present must not stick as a ghost empty filter.
+  useEffect(() => {
+    if (scanner !== "all" && !scannerOptions.some((s) => s.id === scanner)) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- sync derived filter validity
+      setScanner("all")
+    }
+  }, [scanner, scannerOptions])
+
   const filtered = useMemo(() => {
     // Semantic search ranks by relevance; preserve that order when a query is set,
     // otherwise fall back to oldest-first by age.
     const ranked = searchIssues(base, query)
-    const result = ranked
-      // "actionable" is a pseudo-severity: everything that isn't a low-signal
-      // note. Info findings barely move the score, so the common need is to read
-      // the list without them — without hiding them by default, which would make
-      // findings vanish with no visible reason.
-      .filter((i) =>
-        severity === "all"
-          ? true
-          : severity === "actionable"
-            ? i.severity !== "info"
-            : i.severity === severity,
-      )
-      .filter((i) => (category === "all" ? true : i.category === category))
-      .filter((i) => (changesOnly ? newIds?.has(i.id) : true))
+    const result = filterIssues(ranked, {
+      severity,
+      category,
+      scanner,
+      changesOnly,
+      newIds,
+    })
     return query.trim() ? result : result.sort((a, b) => b.ageDays - a.ageDays)
-  }, [base, query, severity, category, changesOnly, newIds])
+  }, [base, query, severity, category, scanner, changesOnly, newIds])
 
-  // Group the filtered issues by scanner category, ordered by worst severity
-  // present then by count — so the most alarming scanners surface first.
+  // Group by the real scanner id (not the 7 umbrella categories). The menu used
+  // to say "Group by scanner" while grouping by category — that hid ci-health /
+  // docs-drift / license-risk inside one Hygiene bucket.
   const groups = useMemo(() => {
-    const map = new Map<IssueCategory, Issue[]>()
+    const map = new Map<string, Issue[]>()
     for (const issue of filtered) {
-      const list = map.get(issue.category)
+      const key = resolveScanner(issue) ?? "unknown"
+      const list = map.get(key)
       if (list) list.push(issue)
-      else map.set(issue.category, [issue])
+      else map.set(key, [issue])
     }
     return [...map.entries()]
-      .map(([cat, list]) => ({
-        cat,
+      .map(([id, list]) => ({
+        id,
+        label: id === "unknown" ? "Unknown scanner" : scannerLabel(id),
         list,
         worst: Math.min(...list.map((i) => severityWeight[i.severity])),
       }))
-      .sort((a, b) => a.worst - b.worst || b.list.length - a.list.length)
+      .sort(
+        (a, b) =>
+          a.worst - b.worst || b.list.length - a.list.length || a.label.localeCompare(b.label),
+      )
   }, [filtered])
+
+  function onCategoryChange(next: string) {
+    const cat = next as CategoryFilter
+    setCategory(cat)
+    // Drop a scanner that cannot appear under the new category, so the table
+    // does not go empty with no obvious reason.
+    if (scanner !== "all") {
+      const stillThere = presentScannersInCategory(base, cat).some((s) => s.id === scanner)
+      if (!stillThere) setScanner("all")
+    }
+  }
 
   /**
    * Info findings are worth reading but not worth acting on — they barely move
@@ -287,7 +333,7 @@ export function IssuesTable({
             {filtered.length}
           </span>
         </CardTitle>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           {hasChanges && (
             <Button
               size="sm"
@@ -301,8 +347,8 @@ export function IssuesTable({
             </Button>
           )}
           {/* Grouping, snoozed visibility and bulk copy are occasional actions.
-              In a row of seven controls they competed with the two filters people
-              reach for constantly, so they moved behind one button. */}
+              In a row of controls they competed with the filters people reach for
+              constantly, so they moved behind one button. */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
@@ -356,16 +402,14 @@ export function IssuesTable({
               )}
             </DropdownMenuContent>
           </DropdownMenu>
-          {/* Severity has four options and gets changed constantly, so it is a
-              segmented control rather than a dropdown: the current value and the
-              alternatives are both visible, and switching is one click instead
-              of two. Category stays a Select — it has too many options to lay
-              out flat. */}
+          {/* Severity is a segmented control (few options, frequent). Category and
+              Scanner stay Selects — too many options to lay out flat, and Scanner
+              is what splits Hygiene into ci-health / docs-drift / …. */}
           <Segmented
             aria-label="Filter by severity"
             size="sm"
             value={severity}
-            onChange={setSeverity}
+            onChange={(v) => setSeverity(v as SeverityFilter)}
             items={[
               { value: "all", label: "All" },
               { value: "actionable", label: "Actionable" },
@@ -375,8 +419,8 @@ export function IssuesTable({
               })),
             ]}
           />
-          <Select value={category} onValueChange={setCategory}>
-            <SelectTrigger className="h-8 w-[150px] bg-secondary text-sm">
+          <Select value={category} onValueChange={onCategoryChange}>
+            <SelectTrigger className="h-8 w-[150px] bg-secondary text-sm" aria-label="Filter by category">
               <SelectValue placeholder="Category" />
             </SelectTrigger>
             <SelectContent>
@@ -384,6 +428,24 @@ export function IssuesTable({
               {(Object.keys(categoryLabels) as IssueCategory[]).map((c) => (
                 <SelectItem key={c} value={c}>
                   {categoryLabels[c]}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Select
+            value={scanner}
+            onValueChange={setScanner}
+            disabled={scannerOptions.length === 0}
+          >
+            <SelectTrigger className="h-8 w-[170px] bg-secondary text-sm" aria-label="Filter by scanner">
+              <SelectValue placeholder="Scanner" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All scanners</SelectItem>
+              {scannerOptions.map((s) => (
+                <SelectItem key={s.id} value={s.id}>
+                  {s.label}
+                  <span className="ml-1.5 font-mono text-muted-foreground">{s.count}</span>
                 </SelectItem>
               ))}
             </SelectContent>
@@ -399,24 +461,24 @@ export function IssuesTable({
               description={
                 base.length === 0
                   ? "This scan found nothing at all — which is the good outcome."
-                  : "Nothing matches the current filters. Widen the severity or category, or clear the search."
+                  : "Nothing matches the current filters. Widen severity, category or scanner, or clear the search."
               }
               className="border-0 py-8"
             />
           </div>
         ) : grouped ? (
           <div className="border-t border-border">
-            {groups.map(({ cat, list }) => {
-              const isCollapsed = collapsed.has(cat)
+            {groups.map(({ id, label, list }) => {
+              const isCollapsed = collapsed.has(id)
               const counts = {
                 critical: list.filter((i) => i.severity === "critical").length,
                 warning: list.filter((i) => i.severity === "warning").length,
                 info: list.filter((i) => i.severity === "info").length,
               }
               return (
-                <section key={cat} className="border-b border-border last:border-b-0">
+                <section key={id} className="border-b border-border last:border-b-0">
                   <button
-                    onClick={() => toggleSection(cat)}
+                    onClick={() => toggleSection(id)}
                     className="flex w-full items-center gap-2 bg-muted/30 px-4 py-2 text-left transition-colors hover:bg-muted/50"
                   >
                     {isCollapsed ? (
@@ -424,7 +486,12 @@ export function IssuesTable({
                     ) : (
                       <ChevronDown className="size-4 shrink-0 text-muted-foreground" />
                     )}
-                    <span className="text-sm font-medium">{categoryLabels[cat]}</span>
+                    <span className="text-sm font-medium">{label}</span>
+                    {id !== "unknown" && (
+                      <span className="hidden font-mono text-[10px] text-muted-foreground sm:inline">
+                        {id}
+                      </span>
+                    )}
                     <span className="font-mono text-xs text-muted-foreground">{list.length}</span>
                     <span className="ml-auto flex gap-1 text-[10px]">
                       {(["critical", "warning", "info"] as const)

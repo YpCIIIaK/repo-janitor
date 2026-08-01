@@ -6,6 +6,7 @@ import { getShare } from "@/lib/share-store"
 import { LOCALE_COOKIE, resolveLocale, t } from "@/lib/i18n"
 import type { SharedReport } from "@/lib/share-report"
 import { FreshScanCta } from "@/components/repo-anti-rot/fresh-scan-cta"
+import { ShareChrome } from "@/components/repo-anti-rot/share-chrome"
 import { ViewBeacon } from "@/components/repo-anti-rot/view-beacon"
 import { verdictOf, isBoastworthy, scopeLine } from "@/lib/verdict"
 import { percentileFor } from "@/lib/percentile"
@@ -129,148 +130,155 @@ export default async function SharedReportPage({ params }: { params: Promise<Par
   })
 
   return (
-    <main className="mx-auto w-full max-w-3xl px-4 py-12 md:px-6">
-      <ViewBeacon owner={owner} name={name} />
-      <p className="text-sm text-muted-foreground">{tr("share.heading")}</p>
-      <h1 className="mt-1 text-balance text-2xl font-semibold tracking-tight break-words">
-        {owner}/{name}
-      </h1>
-      <p className="mt-1 text-xs text-muted-foreground">
-        {tr("share.scannedAt", { date: scannedLabel })}
-        {ageDays !== null && ` · ${tr("share.ageDays", { days: ageDays })}`}
-      </p>
-      {/* Said plainly and near the numbers, because everything below is a claim
-          about a repository as it was, not as it is. */}
-      {ageDays !== null && ageDays >= STALE_AFTER_DAYS && (
-        <p className="mt-3 rounded-lg border border-chart-3/30 bg-chart-3/10 px-3 py-2 text-xs text-foreground/90">
-          {tr("share.snapshot", { date: scannedLabel })}
+    <div className="min-h-screen">
+      {/* Same chrome family as the landing page: brand home + theme/language.
+          Keeps a cold shared link feeling like the product, not a bare printout. */}
+      <ShareChrome />
+      <main className="mx-auto w-full max-w-3xl px-4 py-10 md:px-6 md:py-12">
+        <ViewBeacon owner={owner} name={name} />
+        <p className="text-sm text-muted-foreground">{tr("share.heading")}</p>
+        <h1 className="mt-1 text-balance text-2xl font-semibold tracking-tight break-words">
+          {owner}/{name}
+        </h1>
+        <p className="mt-1 text-xs text-muted-foreground">
+          {tr("share.scannedAt", { date: scannedLabel })}
+          {ageDays !== null && ` · ${tr("share.ageDays", { days: ageDays })}`}
         </p>
-      )}
+        {/* Said plainly and near the numbers, because everything below is a claim
+            about a repository as it was, not as it is. */}
+        {ageDays !== null && ageDays >= STALE_AFTER_DAYS && (
+          <p className="mt-3 rounded-lg border border-chart-3/30 bg-chart-3/10 px-3 py-2 text-xs text-foreground/90">
+            {tr("share.snapshot", { date: scannedLabel })}
+          </p>
+        )}
 
-      <section className="mt-8 flex flex-wrap items-center gap-6">
-        <div
-          className={`flex size-24 items-center justify-center rounded-2xl border text-5xl font-semibold ${
-            GRADE_TONE[report.grade] ?? GRADE_TONE.F
-          }`}
-        >
-          {report.grade}
-        </div>
-        <div>
-          <p className="text-3xl font-semibold tabular-nums">
-            {tr("grade.score", { score: report.score })}
-          </p>
-          <p className="mt-1 text-sm text-muted-foreground">
-            {report.totalIssues === 1 && locale === "en"
-              ? tr("issues.countOne")
-              : tr("issues.count", { count: report.totalIssues })}
-          </p>
-          {/* The comparison sits with the score, not in a box of its own: it is
-              a reading of that number, and away from it it becomes trivia. */}
-          {pct && (
-            <p className="mt-2 text-sm">
-              <span
-                className={pct.direction === "worse" ? "text-amber-500" : "text-emerald-500"}
-              >
-                {tr(pct.key, { percent: pct.percent, language: primaryLanguage ?? "" })}
-              </span>{" "}
-              <span className="text-xs text-muted-foreground">
-                {tr("pct.sample", { count: percentile?.sample ?? 0 })}
-              </span>
+        <section className="mt-8 flex flex-wrap items-center gap-6">
+          <div
+            className={`flex size-24 items-center justify-center rounded-2xl border text-5xl font-semibold ${
+              GRADE_TONE[report.grade] ?? GRADE_TONE.F
+            }`}
+          >
+            {report.grade}
+          </div>
+          <div>
+            <p className="text-3xl font-semibold tabular-nums">
+              {tr("grade.score", { score: report.score })}
             </p>
-          )}
-          <p className="mt-2 flex flex-wrap gap-3 text-xs">
-            {(["critical", "warning", "info"] as const).map((sev) => (
-              // A zero is good news and must not be painted like bad news. Red
-              // "0 critical" next to "Came back clean" reads as an alarm the eye
-              // catches before the words, which is the whole message undone by a
-              // colour token.
-              <span
-                key={sev}
-                className={report.counts[sev] > 0 ? SEVERITY_TONE[sev] : "text-muted-foreground/50"}
-              >
-                {report.counts[sev]} {tr(`issues.${sev}` as Parameters<typeof t>[1])}
-              </span>
-            ))}
-          </p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {report.totalIssues === 1 && locale === "en"
+                ? tr("issues.countOne")
+                : tr("issues.count", { count: report.totalIssues })}
+            </p>
+            {/* The comparison sits with the score, not in a box of its own: it is
+                a reading of that number, and away from it it becomes trivia. */}
+            {pct && (
+              <p className="mt-2 text-sm">
+                <span
+                  className={pct.direction === "worse" ? "text-amber-500" : "text-emerald-500"}
+                >
+                  {tr(pct.key, { percent: pct.percent, language: primaryLanguage ?? "" })}
+                </span>{" "}
+                <span className="text-xs text-muted-foreground">
+                  {tr("pct.sample", { count: percentile?.sample ?? 0 })}
+                </span>
+              </p>
+            )}
+            <p className="mt-2 flex flex-wrap gap-3 text-xs">
+              {(["critical", "warning", "info"] as const).map((sev) => (
+                // A zero is good news and must not be painted like bad news. Red
+                // "0 critical" next to "Came back clean" reads as an alarm the eye
+                // catches before the words, which is the whole message undone by a
+                // colour token.
+                <span
+                  key={sev}
+                  className={
+                    report.counts[sev] > 0 ? SEVERITY_TONE[sev] : "text-muted-foreground/50"
+                  }
+                >
+                  {report.counts[sev]} {tr(`issues.${sev}` as Parameters<typeof t>[1])}
+                </span>
+              ))}
+            </p>
+          </div>
+        </section>
+
+        {/* The good news, said as news.
+            Everything below this point is a list of what is wrong, which reads as
+            an accusation even when the list is empty — an empty list states an
+            absence, and an absence is not something anyone shows a colleague. The
+            wording here is built only out of what the scan established: how much
+            was read, and what was not found in it. */}
+        {isBoastworthy(verdict) && (
+          <section className="mt-8 rounded-xl border border-primary/30 bg-primary/10 px-4 py-3.5">
+            <p className="text-sm font-semibold">
+              {tr(verdict === "clean" ? "verdict.clean.title" : "verdict.strong.title")}
+            </p>
+            <p className="mt-1 text-sm leading-relaxed text-foreground/80">
+              {scope
+                ? tr(
+                    verdict === "clean"
+                      ? "verdict.clean.body"
+                      : report.totalIssues === 1
+                        ? "verdict.strong.bodyOne"
+                        : "verdict.strong.body",
+                    { scope, count: report.totalIssues },
+                  )
+                : tr(verdict === "clean" ? "verdict.noScope.clean" : "verdict.noScope.strong", {
+                    count: report.totalIssues,
+                  })}
+            </p>
+          </section>
+        )}
+
+        {report.byCategory.length > 0 && (
+          <section className="mt-10">
+            <ul className="grid gap-2 sm:grid-cols-2">
+              {report.byCategory.map(({ category, count }) => (
+                <li
+                  key={category}
+                  className="flex items-center justify-between rounded-lg border border-border bg-card/40 px-3 py-2 text-sm"
+                >
+                  <span className="capitalize">{category.replace(/-/g, " ")}</span>
+                  <span className="tabular-nums text-muted-foreground">{count}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        {report.topIssues.length > 0 && (
+          <section className="mt-10">
+            <ul className="divide-y divide-border rounded-lg border border-border">
+              {report.topIssues.map((issue, i) => (
+                <li key={`${issue.title}-${i}`} className="flex gap-3 px-3 py-2.5 text-sm">
+                  <span className={`mt-0.5 text-xs ${SEVERITY_TONE[issue.severity]}`}>●</span>
+                  <span className="break-words">{issue.title}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-3 text-xs text-muted-foreground">{tr("share.redactedNote")}</p>
+          </section>
+        )}
+
+        {report.profile && report.profile.languages.length > 0 && (
+          <section className="mt-8 text-xs text-muted-foreground">
+            {report.profile.languages
+              .slice(0, 5)
+              .map((l) => `${l.language} ${l.loc.toLocaleString("en-US")}`)
+              .join(" · ")}
+          </section>
+        )}
+
+        {report.repoUrl && (
+          <FreshScanCta repoUrl={report.repoUrl} repoLabel={`${owner}/${name}`} />
+        )}
+
+        <div className="mt-12 border-t border-border pt-6">
+          <Link href="/" className="text-sm text-primary underline-offset-4 hover:underline">
+            {tr("share.rescan")}
+          </Link>
         </div>
-      </section>
-
-      {/* The good news, said as news.
-          Everything below this point is a list of what is wrong, which reads as
-          an accusation even when the list is empty — an empty list states an
-          absence, and an absence is not something anyone shows a colleague. The
-          wording here is built only out of what the scan established: how much
-          was read, and what was not found in it. */}
-      {isBoastworthy(verdict) && (
-        <section className="mt-8 rounded-xl border border-primary/30 bg-primary/10 px-4 py-3.5">
-          <p className="text-sm font-semibold">
-            {tr(verdict === "clean" ? "verdict.clean.title" : "verdict.strong.title")}
-          </p>
-          <p className="mt-1 text-sm leading-relaxed text-foreground/80">
-            {scope
-              ? tr(
-                  verdict === "clean"
-                    ? "verdict.clean.body"
-                    : report.totalIssues === 1
-                      ? "verdict.strong.bodyOne"
-                      : "verdict.strong.body",
-                  { scope, count: report.totalIssues },
-                )
-              : tr(verdict === "clean" ? "verdict.noScope.clean" : "verdict.noScope.strong", {
-                  count: report.totalIssues,
-                })}
-          </p>
-        </section>
-      )}
-
-      {report.byCategory.length > 0 && (
-        <section className="mt-10">
-          <ul className="grid gap-2 sm:grid-cols-2">
-            {report.byCategory.map(({ category, count }) => (
-              <li
-                key={category}
-                className="flex items-center justify-between rounded-lg border border-border bg-card/40 px-3 py-2 text-sm"
-              >
-                <span className="capitalize">{category.replace(/-/g, " ")}</span>
-                <span className="tabular-nums text-muted-foreground">{count}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-
-      {report.topIssues.length > 0 && (
-        <section className="mt-10">
-          <ul className="divide-y divide-border rounded-lg border border-border">
-            {report.topIssues.map((issue, i) => (
-              <li key={`${issue.title}-${i}`} className="flex gap-3 px-3 py-2.5 text-sm">
-                <span className={`mt-0.5 text-xs ${SEVERITY_TONE[issue.severity]}`}>●</span>
-                <span className="break-words">{issue.title}</span>
-              </li>
-            ))}
-          </ul>
-          <p className="mt-3 text-xs text-muted-foreground">{tr("share.redactedNote")}</p>
-        </section>
-      )}
-
-      {report.profile && report.profile.languages.length > 0 && (
-        <section className="mt-8 text-xs text-muted-foreground">
-          {report.profile.languages
-            .slice(0, 5)
-            .map((l) => `${l.language} ${l.loc.toLocaleString("en-US")}`)
-            .join(" · ")}
-        </section>
-      )}
-
-      {report.repoUrl && (
-        <FreshScanCta repoUrl={report.repoUrl} repoLabel={`${owner}/${name}`} />
-      )}
-
-      <div className="mt-12 border-t border-border pt-6">
-        <Link href="/" className="text-sm text-primary underline-offset-4 hover:underline">
-          {tr("share.rescan")}
-        </Link>
-      </div>
-    </main>
+      </main>
+    </div>
   )
 }
