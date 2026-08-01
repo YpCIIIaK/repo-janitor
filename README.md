@@ -102,19 +102,21 @@ pnpm --filter repo-anti-rot test    # CLI helpers
 pnpm --filter @repo-anti-rot/action test # Action helpers
 ```
 
-Coverage highlights (290+ tests):
+Coverage highlights (850+ tests):
 
 - **engine** — scoring, grade thresholds, per-scanner isolation on throw, inline
   `repo-anti-rot-ignore` markers, config-driven weights, the lines-of-code metric
   and progress callbacks
-- **scanners** — all 19 scanners, each with positive *and* negative
+- **scanners** — all 23 scanners, each with positive *and* negative
   (no-false-positive) cases: secrets (incl. the redaction invariant — a raw key
   never appears in evidence), env-lifecycle, todo-debt, dead-code (JS/TS +
   Python/Go), leftover-debug, commented-code, skipped-tests, dockerfile,
   repo-bloat, project-hygiene, broken-doc-links, bus-factor, stale-branch,
   insecure-code (incl. the string/regex-literal guard — a description of code is
   not code), dead-links (incl. the refusal to request private or loopback
-  addresses), and the dependency scanners
+  addresses), workflow-security, eol-runtime, docs-drift, config-conflict (each
+  of the latter three carrying regression tests named after the real project
+  whose false positive produced the rule), and the dependency scanners
   (vulnerable/outdated/funeral/lockfile-drift) driven through stubbed OSV / npm /
   PyPI registry adapters
 - **config** — `.repo-anti-rot.json` loading, weight merge, ignore globs, mute-rule
@@ -545,6 +547,34 @@ rot:
   *comments* only — a URL in a string literal is an API endpoint, not a link
   anyone follows. Private, loopback and reserved-documentation addresses are
   never requested. Sibling to `broken-doc-links`, which covers relative paths.
+
+- **Workflow security** (`workflow-security`) — GitHub Actions workflows that hand
+  out more trust than they need: `pull_request_target` checking out the PR's own
+  code, untrusted `github.event` values interpolated straight into `run:`, actions
+  pinned to a mutable tag, and a missing top-level `permissions:` block.
+- **End-of-life runtimes** (`eol-runtime`) — Node, Python and GitHub-hosted runner
+  images the project is pinned to that no longer receive security patches, read
+  from `.nvmrc`, `engines`, `requires-python`, Dockerfiles and workflows. The EOL
+  table is bundled rather than fetched, so it works offline; an unknown version is
+  always silence, never a finding, which means a stale table under-reports instead
+  of crying wolf. A pin to a dead runtime is a warning; a `>=` floor that merely
+  *allows* one is info.
+- **Docs drift** (`docs-drift`) — what the README claims, checked against the repo:
+  a documented `npm run <script>` that no `package.json` defines, a CI badge for a
+  workflow file that is not there, install instructions in a package manager the
+  committed lockfile contradicts. Commands are only read inside fenced blocks or
+  behind a shell prompt, so prose that happens to start with "pnpm" is not an
+  instruction.
+- **Config conflicts** (`config-conflict`) — two files configuring the same thing,
+  where one is silently ignored: an `.eslintrc.*` left beside a flat
+  `eslint.config.*` (ESLint 9 does not load it, and does not say so), a
+  `package.json` `prettier`/`jest` key beside a dedicated config file, `.babelrc`
+  beside `babel.config.js`, and an abandoned CI provider's config beside
+  `.github/workflows`. Plus the one case where *nothing* is ignored and that is
+  worse: two managers' lockfiles in one directory, which is two dependency trees
+  from one commit. Conflicts are only paired within a single directory, and
+  fixture / test / example trees are skipped entirely — a repository whose test
+  data deliberately contains two lockfiles is not drifting.
 
 These join the existing hygiene scanners (missing project files / tests / CI,
 leftover `console`/`debugger`, broken doc links, bus-factor risk).
