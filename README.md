@@ -1,7 +1,7 @@
 # Repo Anti-Rot
 
 [![CI](https://github.com/YpCIIIaK/repo-janitor/actions/workflows/ci.yml/badge.svg)](https://github.com/YpCIIIaK/repo-janitor/actions/workflows/ci.yml)
-[![Repo Anti-Rot](https://repo-anti-rot.onrender.com/api/badge/YpCIIIaK/repo-janitor?token=xfiXJJAdYsBL-rLw)](https://repo-anti-rot.onrender.com/r/YpCIIIaK/repo-janitor/xfiXJJAdYsBL-rLw)
+[![Repo Anti-Rot](https://repo-anti-rot.onrender.com/api/badge/YpCIIIaK/repo-janitor?token=6vrFaCeAInuIPVm1)](https://repo-anti-rot.onrender.com/r/YpCIIIaK/repo-janitor/6vrFaCeAInuIPVm1)
 
 [![Repo Anti-Rot](https://repo-anti-rot.onrender.com/api/card/YpCIIIaK/repo-janitor?token=6vrFaCeAInuIPVm1)](https://repo-anti-rot.onrender.com/r/YpCIIIaK/repo-janitor/6vrFaCeAInuIPVm1)
 
