@@ -22,7 +22,8 @@ import {
   queueDepth,
   withScanSlot,
 } from "@/lib/scan-limits"
-import { recordRepoUsage } from "@/lib/usage"
+import { recordRepoUsage, visitorFrom } from "@/lib/usage"
+import { recordScanStat } from "@/lib/percentile"
 import { isOwner } from "@/lib/owner"
 
 // Cloning + scanning is real work — run on the Node runtime, allow time for it.
@@ -195,9 +196,15 @@ export async function POST(request: Request) {
         // from anything the client says happened. `recordRepoUsage` stores the
         // host and owner/name only — never this URL as given, which can carry
         // credentials — and never any part of the report.
-        const ev = obj as { type?: string; url?: string; ok?: boolean }
+        const ev = obj as { type?: string; url?: string; ok?: boolean; report?: unknown }
         if (ev.type === "repo-done" && ev.url) {
           recordRepoUsage(request, "scan", ev.url, { ok: ev.ok })
+          // The result's shape goes to a different table, which has no column
+          // for a repository name — so the score recorded here cannot be
+          // attached to the repository recorded above. See lib/scan-stats.ts.
+          if (ev.ok && ev.report) {
+            recordScanStat(ev.report, visitorFrom(request) === null)
+          }
         }
         controller.enqueue(encoder.encode(JSON.stringify(obj) + "\n"))
       }

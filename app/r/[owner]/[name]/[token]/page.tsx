@@ -8,6 +8,9 @@ import type { SharedReport } from "@/lib/share-report"
 import { FreshScanCta } from "@/components/repo-anti-rot/fresh-scan-cta"
 import { ViewBeacon } from "@/components/repo-anti-rot/view-beacon"
 import { verdictOf, isBoastworthy, scopeLine } from "@/lib/verdict"
+import { percentileFor } from "@/lib/percentile"
+import { percentileCopy } from "@/lib/percentile-copy"
+import { sizeBucket } from "@/lib/scan-stats"
 
 /**
  * A shared scan result.
@@ -100,6 +103,19 @@ export default async function SharedReportPage({ params }: { params: Promise<Par
 
   const report: SharedReport = share.report
   const verdict = verdictOf(report.counts, report.totalIssues, report.score)
+
+  // Where this score stands. A grade on its own is a number nobody can read;
+  // "67/100" starts meaning something at "worse than 71% of comparable
+  // repositories". Null — too few comparable scans — renders nothing at all
+  // rather than a hedged sentence, because a percentile drawn from nine repos is
+  // a coincidence with a percent sign.
+  const primaryLanguage = report.profile?.languages?.[0]?.language ?? null
+  const totalLoc = (report.profile?.languages ?? []).reduce((n, l) => n + (l.loc || 0), 0)
+  const percentile = await percentileFor(report.score, {
+    language: primaryLanguage,
+    size: totalLoc > 0 ? sizeBucket(totalLoc) : undefined,
+  })
+  const pct = percentile ? percentileCopy(percentile) : null
   const scope = scopeLine(report.profile, locale === "ru" ? "ru-RU" : "en-GB")
   const scanned = new Date(report.generatedAt)
   const ageDays = ageInDays(report.generatedAt)
@@ -148,6 +164,20 @@ export default async function SharedReportPage({ params }: { params: Promise<Par
               ? tr("issues.countOne")
               : tr("issues.count", { count: report.totalIssues })}
           </p>
+          {/* The comparison sits with the score, not in a box of its own: it is
+              a reading of that number, and away from it it becomes trivia. */}
+          {pct && (
+            <p className="mt-2 text-sm">
+              <span
+                className={pct.direction === "worse" ? "text-amber-500" : "text-emerald-500"}
+              >
+                {tr(pct.key, { percent: pct.percent, language: primaryLanguage ?? "" })}
+              </span>{" "}
+              <span className="text-xs text-muted-foreground">
+                {tr("pct.sample", { count: percentile?.sample ?? 0 })}
+              </span>
+            </p>
+          )}
           <p className="mt-2 flex flex-wrap gap-3 text-xs">
             {(["critical", "warning", "info"] as const).map((sev) => (
               // A zero is good news and must not be painted like bad news. Red
