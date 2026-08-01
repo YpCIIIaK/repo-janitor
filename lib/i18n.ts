@@ -191,12 +191,20 @@ const en = {
   "share.failed": "Could not create the link. Try again.",
   "share.copy": "Copy link",
   "share.copied": "Copied",
-  "share.badgeTitle": "Badge for your README",
+  "share.cardTitle": "Card for your README",
+  "share.cardLead":
+    "A larger plaque — grade, score and severity counts. Snapshot of this scan; share a newer one for a new card.",
+  "share.cardCopy": "Copy markdown",
+  "share.embedTitle": "Embed on a website",
+  "share.embedLead":
+    "Mini dashboard iframe for docs or a status page. GitHub READMEs strip iframes — use the card above there.",
+  "share.embedCopy": "Copy HTML",
+  "share.badgeTitle": "Small badge",
   // Says snapshot, because that is what it is. Sharing a newer scan mints a new
   // token and therefore a new badge URL — this one keeps showing this scan.
   // The earlier wording promised it would update, which it never does.
   "share.badgeLead":
-    "Shows this scan's grade, and keeps showing it. Share a newer scan and you get a new badge to paste — this one stays as it is.",
+    "Shields-style strip for the title line. Same snapshot rules as the card.",
   "share.badgeCopy": "Copy markdown",
   "share.heading": "Repository health",
   // The good-news wording. Every one of these states something the scan
@@ -388,9 +396,17 @@ const ru: Messages = {
   "share.failed": "Не удалось создать ссылку. Попробуйте ещё раз.",
   "share.copy": "Скопировать ссылку",
   "share.copied": "Скопировано",
-  "share.badgeTitle": "Бейдж для README",
+  "share.cardTitle": "Карточка для README",
+  "share.cardLead":
+    "Крупная плашка — оценка, балл и счётчики severity. Снимок этого скана; для нового результата поделитесь снова.",
+  "share.cardCopy": "Скопировать markdown",
+  "share.embedTitle": "Встроить на сайт",
+  "share.embedLead":
+    "Мини-дашборд в iframe для документации или status page. В README GitHub iframe вырезает — там используйте карточку выше.",
+  "share.embedCopy": "Скопировать HTML",
+  "share.badgeTitle": "Маленький бейдж",
   "share.badgeLead":
-    "Показывает оценку этого скана — и продолжит показывать её. Поделитесь новым сканом, и получите новый бейдж; этот останется прежним.",
+    "Узкая полоска в стиле shields для строки заголовка. Те же правила снимка, что у карточки.",
   "share.badgeCopy": "Скопировать markdown",
   "share.heading": "Здоровье репозитория",
   "verdict.clean.title": "Скан чист",

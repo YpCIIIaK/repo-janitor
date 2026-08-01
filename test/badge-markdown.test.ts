@@ -1,5 +1,14 @@
 import { describe, it, expect } from "vitest"
-import { parseSharePath, badgeUrl, badgeMarkdown } from "@/lib/badge-markdown"
+import {
+  parseSharePath,
+  badgeUrl,
+  badgeMarkdown,
+  cardMarkdown,
+  embedSnippet,
+  embedUrl,
+  EMBED_HEIGHT,
+  EMBED_WIDTH,
+} from "@/lib/badge-markdown"
 
 const ORIGIN = "https://anti-rot.example.com"
 
@@ -68,5 +77,29 @@ describe("badgeMarkdown", () => {
 
   it("returns null rather than half a badge for an unusable link", () => {
     expect(badgeMarkdown(ORIGIN, "/app")).toBeNull()
+  })
+})
+
+describe("embedSnippet", () => {
+  it("builds an iframe pointing at /embed/…", () => {
+    expect(embedUrl(ORIGIN, { owner: "acme", name: "widget", token: "tok123" })).toBe(
+      `${ORIGIN}/embed/acme/widget/tok123`,
+    )
+    const html = embedSnippet(ORIGIN, `${ORIGIN}/r/acme/widget/tok123`)
+    expect(html).toContain(`src="${ORIGIN}/embed/acme/widget/tok123"`)
+    expect(html).toContain(`width="${EMBED_WIDTH}"`)
+    expect(html).toContain(`height="${EMBED_HEIGHT}"`)
+    expect(html).toContain("loading=\"lazy\"")
+  })
+
+  it("escapes quotes in the title attribute", () => {
+    const html = embedSnippet(ORIGIN, `${ORIGIN}/r/acme/wid%22get/tok123`)
+    expect(html).toContain('title="Repo Anti-Rot — acme/wid&quot;get"')
+    expect(html).not.toContain('title="Repo Anti-Rot — acme/wid"get"')
+  })
+
+  it("returns null for a non-share URL", () => {
+    expect(embedSnippet(ORIGIN, "/app")).toBeNull()
+    expect(cardMarkdown(ORIGIN, "/app")).toBeNull()
   })
 })

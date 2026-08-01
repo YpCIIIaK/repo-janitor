@@ -294,29 +294,48 @@ The per-finding enrichment is tuned to stay cheap on small/free models:
   executive summary; a small model keeps the lean, cheap budget. The Settings panel
   shows a "Large context" hint when the picked model qualifies.
 
-## Health badge
+## Health badge & README card
 
-Two ways to get one, because they suit different people.
+Two sizes, same sources.
 
-**From a scan you shared.** Scan a repository, tick the consent box, create a
-share link — the badge markdown is offered right there, ready to paste. No
-account, no Action, no self-hosting.
+**Large card** (README plaque — grade, score, severity counts, verdict):
 
-It is a **snapshot, not a live badge**. The token names one stored report, and
-sharing a newer scan mints a new token — so you get a new line to paste, and the
-old badge keeps showing the scan it was made from. A badge that tracks a
-repository over time needs a stable per-repo address, which is what the CI form
-below provides.
+```
+[![Repo Anti-Rot](https://your-deploy.example.com/api/card/<owner>/<name>?token=<token>)](https://your-deploy.example.com/r/<owner>/<name>/<token>)
+```
+
+**Small badge** (shields strip for the title line):
 
 ```
 [![Repo Anti-Rot](https://your-deploy.example.com/api/badge/<owner>/<name>?token=<token>)](https://your-deploy.example.com/r/<owner>/<name>/<token>)
 ```
 
-The token grants strictly less through the badge than through the share page it
-already opens: a grade and a score, and no findings. A token belonging to a
-different repository renders `unknown` rather than that repository's grade — a
-badge sits at the top of a README, and one project's score under another
-project's name would make it a way to misrepresent.
+GitHub READMEs cannot host iframes, so the card and badge are SVG images. Click
+through to the shared report.
+
+**Website embed** (docs / status page — not GitHub README):
+
+```
+<iframe src="https://your-deploy.example.com/embed/<owner>/<name>/<token>" title="Repo Anti-Rot" width="420" height="200" style="border:0;border-radius:12px;overflow:hidden" loading="lazy"></iframe>
+```
+
+Offered as “Copy HTML” in the Share dialog after you create a link.
+
+**From a scan you shared.** Scan a repository, tick the consent box, create a
+share link — card and badge markdown are offered right there, ready to paste. No
+account, no Action, no self-hosting.
+
+It is a **snapshot, not a live widget**. The token names one stored report, and
+sharing a newer scan mints a new token — so you get a new line to paste, and the
+old image keeps showing the scan it was made from. A badge that tracks a
+repository over time needs a stable per-repo address, which is what the CI form
+below provides.
+
+The token grants no more through the card than the share page already shows
+(grade, score, counts — no finding titles). A token belonging to a different
+repository renders `unknown` rather than that repository's grade — a card sits
+at the top of a README, and one project's score under another project's name
+would make it a way to misrepresent.
 
 Two things to get right before pasting one anywhere public:
 
