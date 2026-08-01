@@ -39,6 +39,55 @@ import type { Issue, Severity } from "../schema"
 /** Cap so a large monorepo cannot fill a report with directory-level noise. */
 const MAX_ISSUES = 25
 
+/**
+ * Directory names whose contents are not the project.
+ *
+ * Every rule below asks "did someone leave two configs here by accident", and
+ * inside these directories the answer is always no: the two configs ARE the
+ * test. Running the first draft across twelve well-known repositories produced
+ * nine findings and every one of them came from here — pnpm's
+ * `__fixtures__/workspace-has-shared-yarn-lock/` (a fixture whose entire purpose
+ * is a yarn.lock in a pnpm workspace), five `.eslintrc` files under eslint's own
+ * `tests/fixtures/`, one under babel's. Accusing a tool of the thing it is
+ * testing for is the most embarrassing false positive available here.
+ *
+ * `examples` and `templates` are in the list for a weaker but sufficient reason:
+ * they are sample projects, deliberately standalone, and their configs are
+ * meant to differ from the parent's.
+ */
+const NOT_THE_PROJECT = new Set([
+  "__fixtures__",
+  "fixtures",
+  "fixture",
+  "__tests__",
+  "__mocks__",
+  "test",
+  "tests",
+  "e2e",
+  "spec",
+  "testdata",
+  "playground",
+  "playgrounds",
+  "sandbox",
+  "example",
+  "examples",
+  "template",
+  "templates",
+  "node_modules",
+])
+
+/** How long an unused CI config must sit untouched before it counts as left behind. */
+const ABANDONED_CI_DAYS = 365
+
+/** Does any segment of this path name a directory that is not the project? */
+export function isFixturePath(file: string): boolean {
+  return file
+    .replace(/\\/g, "/")
+    .split("/")
+    .slice(0, -1)
+    .some((seg) => NOT_THE_PROJECT.has(seg.toLowerCase()))
+}
+
 /** Lockfiles by the manager that writes them. */
 const LOCKFILES: Record<string, string> = {
   "package-lock.json": "npm",
@@ -151,7 +200,7 @@ function byDirectory(files: string[]): Map<string, Map<string, string>> {
  * against a realistic layout rather than against the message it produces.
  */
 export function findFilenameConflicts(files: string[]): ConfigConflict[] {
-  const dirs = byDirectory(files)
+  const dirs = byDirectory(files.filter((f) => !isFixturePath(f)))
   const out: ConfigConflict[] = []
   // Stable output regardless of how the file walker ordered things: shallowest
   // directory first, so the root conflict leads the report.
@@ -318,12 +367,13 @@ function describe(c: ConfigConflict): { severity: Severity; title: string; detai
     case "ci":
       return {
         severity: "info",
-        title: `${c.labels[0]} config still present alongside GitHub Actions`,
+        title: `Untouched ${c.labels[0]} config sits alongside GitHub Actions`,
         detail:
-          `${c.files[0]} declares a ${c.labels[0]} pipeline while .github/workflows also defines one. If ` +
-          `the project moved to Actions, this file is a leftover that still looks authoritative to anyone ` +
-          `reading the repo — and its steps have quietly diverged from the ones that actually run. If both ` +
-          `are live, ignore this.`,
+          `${c.files[0]} declares a ${c.labels[0]} pipeline while .github/workflows also defines one, and ` +
+          `nobody has edited it in over a year. Either it stopped running when the project moved to ` +
+          `Actions — in which case it is a leftover that still looks authoritative to anyone reading the ` +
+          `repo, with steps that have quietly diverged from the ones that actually run — or it is still ` +
+          `running unattended, which is worse.`,
       }
     case "ts-strict":
       return {
@@ -338,10 +388,19 @@ function describe(c: ConfigConflict): { severity: Severity; title: string; detai
   }
 }
 
-/** Files worth opening — the content rules only need these. */
+/**
+ * Files worth opening — the content rules only need these.
+ *
+ * `tsconfig.json` at the ROOT only. A nested one is a package's own stance in a
+ * monorepo or, as often, a corner of the repo that is not the product at all:
+ * vite ships `playground/tsconfig.json` with strict off, which is correct for a
+ * playground and was the last false positive this scanner produced. The root
+ * config is the project's answer to the question; the rest are details.
+ */
 function isReadable(file: string): boolean {
-  const base = baseOf(file.replace(/\\/g, "/"))
-  return base === "package.json" || /^tsconfig(\.[\w.-]+)?\.json$/.test(base)
+  const norm = file.replace(/\\/g, "/")
+  if (norm === "tsconfig.json") return true
+  return baseOf(norm) === "package.json" && !isFixturePath(norm)
 }
 
 export const configConflictScanner: Scanner = {
@@ -367,9 +426,6 @@ export const configConflictScanner: Scanner = {
         continue
       }
 
-      // Only the primary tsconfig. `tsconfig.build.json` and friends are
-      // deliberate variants and routinely relax settings on purpose.
-      if (baseOf(file) !== "tsconfig.json") continue
       const line = findStrictOff(content)
       if (line !== null) {
         conflicts.push({ kind: "ts-strict", dir: dirOf(file), files: [`${file}:${line}`], labels: [] })
@@ -388,6 +444,14 @@ export const configConflictScanner: Scanner = {
       } catch {
         /* blame is a nicety; a finding without an age is still a finding */
       }
+
+      // Two CI systems in one repo is a legitimate setup — babel and nest both
+      // run CircleCI beside Actions on purpose, and reporting them said nothing
+      // true. What makes this a finding is not the second file's existence but
+      // its abandonment, and the only evidence of abandonment available here is
+      // that nobody has touched it in a year. With no git (age 0) the rule goes
+      // quiet, which is the safe direction.
+      if (c.kind === "ci" && ageDays < ABANDONED_CI_DAYS) continue
 
       issues.push({
         id: `config-conflict-${c.kind}-${c.dir || "root"}`,

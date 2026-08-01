@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest"
 import {
+  isFixturePath,
   findFilenameConflicts,
   findPackageKeyConflicts,
   findStrictOff,
@@ -8,6 +9,66 @@ import {
 import type { ScanContext } from "../../src/scanner"
 
 const kinds = (files: string[]) => findFilenameConflicts(files).map((c) => c.kind)
+
+describe("isFixturePath", () => {
+  it("recognises a fixture directory", () => {
+    expect(isFixturePath("pnpm11/__fixtures__/workspace-has-shared-yarn-lock/yarn.lock")).toBe(true)
+  })
+
+  it("recognises a test tree", () => {
+    expect(isFixturePath("tests/fixtures/max-warnings/.eslintrc")).toBe(true)
+  })
+
+  it("leaves ordinary source paths alone", () => {
+    expect(isFixturePath("packages/api/package.json")).toBe(false)
+  })
+
+  it("does not match a file merely named like one", () => {
+    // Only directory segments count — `test.json` at the root is a real file.
+    expect(isFixturePath("test.json")).toBe(false)
+  })
+})
+
+describe("fixtures are not the project", () => {
+  it("ignores competing lockfiles inside a fixture", () => {
+    // Straight from pnpm's own repo, where a yarn.lock in a pnpm workspace is
+    // the point of the fixture. Flagging it accuses the tool of the thing it
+    // is testing for.
+    expect(
+      kinds([
+        "pnpm11/__fixtures__/workspace-has-shared-yarn-lock/pnpm-lock.yaml",
+        "pnpm11/__fixtures__/workspace-has-shared-yarn-lock/yarn.lock",
+      ]),
+    ).toEqual([])
+  })
+
+  it("ignores an eslintrc under tests/fixtures", () => {
+    // Five of these came from eslint's own repository.
+    expect(kinds(["tests/fixtures/max-warnings/.eslintrc", "tests/fixtures/max-warnings/eslint.config.js"])).toEqual([])
+  })
+
+  it("ignores a duplicated jest config under e2e", async () => {
+    // jest's own `e2e/multiple-configs/` exists precisely to have two.
+    const issues = await configConflictScanner.run({
+      root: "/repo",
+      repo: { owner: "a", name: "b", defaultBranch: "main" },
+      files: ["e2e/multiple-configs/package.json", "e2e/multiple-configs/jest.config.js"],
+      readFile: async () => JSON.stringify({ jest: {} }),
+      git: { blameAgeDays: async () => 400, listBranches: async () => [] },
+    } as unknown as ScanContext)
+    expect(issues).toEqual([])
+  })
+
+  it("ignores a .babelrc under a fixture tree", () => {
+    // From babel's packages/babel-core/test/fixtures/config/.
+    expect(
+      kinds([
+        "packages/babel-core/test/fixtures/config/.babelrc",
+        "packages/babel-core/test/fixtures/config/babel.config.js",
+      ]),
+    ).toEqual([])
+  })
+})
 
 describe("findFilenameConflicts — lockfiles", () => {
   it("reports two managers' lockfiles in one directory", () => {
@@ -75,6 +136,8 @@ describe("findFilenameConflicts — babel", () => {
 })
 
 describe("findFilenameConflicts — CI providers", () => {
+  // Note these are candidates only: the scanner drops a `ci` conflict whose
+  // file has been edited within the year (see the scanner tests below).
   it("reports a Travis file left beside Actions", () => {
     const [c] = findFilenameConflicts([".github/workflows/ci.yml", ".travis.yml"])
     expect(c).toMatchObject({ kind: "ci", labels: ["Travis CI"] })
@@ -156,13 +219,13 @@ describe("findStrictOff", () => {
 })
 
 describe("configConflictScanner", () => {
-  const ctx = (files: Record<string, string>): ScanContext =>
+  const ctx = (files: Record<string, string>, ageDays = 400): ScanContext =>
     ({
       root: "/repo",
       repo: { owner: "acme", name: "widget", defaultBranch: "main" },
       files: Object.keys(files),
       readFile: async (p: string) => files[p] ?? null,
-      git: { blameAgeDays: async () => 400, listBranches: async () => [] },
+      git: { blameAgeDays: async () => ageDays, listBranches: async () => [] },
     }) as unknown as ScanContext
 
   it("says nothing about a repository with one config each", async () => {
@@ -212,6 +275,40 @@ describe("configConflictScanner", () => {
     // tsconfig.build.json relaxing a setting is a deliberate variant, not decay.
     const issues = await configConflictScanner.run(
       ctx({ "tsconfig.build.json": '{"compilerOptions":{"strict":false}}' }),
+    )
+    expect(issues).toEqual([])
+  })
+
+  it("does not read a nested tsconfig", async () => {
+    // vite's playground/tsconfig.json turns strict off, correctly — a nested
+    // config is a corner of the repo, not the project's stance.
+    const issues = await configConflictScanner.run(
+      ctx({ "playground/tsconfig.json": '{"compilerOptions":{"strict":false}}' }),
+    )
+    expect(issues).toEqual([])
+  })
+
+  it("reports an abandoned CI config", async () => {
+    const [issue] = await configConflictScanner.run(
+      ctx({ ".github/workflows/ci.yml": "on: push", ".travis.yml": "language: node_js" }, 900),
+    )
+    expect(issue.severity).toBe("info")
+    expect(issue.title).toMatch(/Untouched Travis CI/)
+  })
+
+  it("says nothing about a CI config that is still being edited", async () => {
+    // babel and nest both run CircleCI beside Actions on purpose. Existence is
+    // not the finding; abandonment is.
+    const issues = await configConflictScanner.run(
+      ctx({ ".github/workflows/ci.yml": "on: push", ".circleci/config.yml": "version: 2.1" }, 30),
+    )
+    expect(issues).toEqual([])
+  })
+
+  it("says nothing about a CI config when git is unavailable", async () => {
+    // No blame → age 0 → silence, rather than a guess.
+    const issues = await configConflictScanner.run(
+      ctx({ ".github/workflows/ci.yml": "on: push", ".travis.yml": "language: node_js" }, 0),
     )
     expect(issues).toEqual([])
   })
