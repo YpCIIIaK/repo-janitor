@@ -1,16 +1,10 @@
 "use client"
 
-import { Activity, GitBranch, KeyRound, Boxes } from "lucide-react"
+import { Activity } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useLocale } from "@/components/i18n/locale-provider"
-import type { MessageKey } from "@/lib/i18n"
 import { ScanRunner } from "./scan-runner"
-
-const features: { icon: typeof KeyRound; title: MessageKey; body: MessageKey }[] = [
-  { icon: KeyRound, title: "feature.secrets.title", body: "feature.secrets.body" },
-  { icon: Boxes, title: "feature.dead.title", body: "feature.dead.body" },
-  { icon: GitBranch, title: "feature.branches.title", body: "feature.branches.body" },
-]
+import { LandingSections } from "./landing-sections"
 
 /**
  * The first thing a visitor sees.
@@ -41,8 +35,12 @@ export function WelcomeScreen() {
         className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[32rem] opacity-[0.18] [mask-image:radial-gradient(ellipse_70%_60%_at_50%_0%,black,transparent)] [background-image:linear-gradient(to_right,var(--color-border)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border)_1px,transparent_1px)] [background-size:56px_56px]"
       />
 
-      <main className="mx-auto w-full max-w-3xl px-4 py-16 md:py-24">
-        <div className="flex flex-col items-center text-center">
+      {/* Two widths on purpose: the hero and the scan form stay in a narrow
+          column, because a centred headline and a single input read badly when
+          stretched, while the sections below carry six dense cards and want the
+          room. */}
+      <main className="mx-auto w-full max-w-5xl px-4 py-16 md:py-24">
+        <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
           <div className="flex size-16 items-center justify-center rounded-2xl border border-primary/20 bg-primary/15 text-primary shadow-sm">
             <Activity className="size-8" />
           </div>
@@ -55,7 +53,7 @@ export function WelcomeScreen() {
           </p>
         </div>
 
-        <div className="mt-10">
+        <div className="mx-auto mt-10 max-w-3xl">
           {/* The result cards offer "Open" only when there is somewhere to open
               into. There is now: the dashboard is its own route, so the report
               can be handed over by id instead of hoping it sorts to the top. */}
@@ -64,20 +62,7 @@ export function WelcomeScreen() {
           />
         </div>
 
-        <div className="mt-16 grid gap-4 text-left sm:grid-cols-3">
-          {features.map((f) => (
-            <div
-              key={f.title}
-              className="rounded-xl border border-border bg-card/50 p-5 backdrop-blur-sm transition-colors hover:border-primary/30 hover:bg-card"
-            >
-              <div className="flex size-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                <f.icon className="size-5" />
-              </div>
-              <p className="mt-3.5 text-sm font-medium">{t(f.title)}</p>
-              <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">{t(f.body)}</p>
-            </div>
-          ))}
-        </div>
+        <LandingSections />
       </main>
     </div>
   )

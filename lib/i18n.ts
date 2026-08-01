@@ -116,15 +116,51 @@ const en = {
   "repo.lastPush": "Last push {when}",
   "repo.results": "Results from GitHub",
 
-  "feature.secrets.title": "Secrets & env drift",
-  "feature.secrets.body":
-    "Finds leaked keys in history and env vars referenced but missing from your example file.",
-  "feature.dead.title": "Dead weight",
-  "feature.dead.body":
-    "Surfaces unused dependencies, dead exports and TODO debt that quietly rot the codebase.",
-  "feature.branches.title": "Stale branches",
-  "feature.branches.body":
-    "Flags abandoned branches and decay trends so you know exactly what to prune.",
+
+  // What the scan actually covers. The landing page used to show three vague
+  // cards for a tool that runs 26 checks, which undersold it and told a visitor
+  // nothing they could judge. Scanner ids are printed verbatim: they are the
+  // same strings the CLI, the JSON report and .repo-anti-rot.json use.
+  "landing.checks.title": "{count} checks, in six families",
+  "landing.checks.lead":
+    "Every one is calibrated against real repositories before it ships — the rule only stays if it stays quiet on projects that are doing it right.",
+  "landing.cat.security.title": "Security",
+  "landing.cat.security.body":
+    "Credentials committed to the working tree or buried in history, dependencies with published advisories, dangerous constructs in your own code, and workflows that hand a stranger your token.",
+  "landing.cat.deps.title": "Dependencies",
+  "landing.cat.deps.body":
+    "Packages that stopped being maintained, runtimes past their end-of-life date, lockfiles that disagree with the manifest, and licenses that are incompatible with the one you ship under.",
+  "landing.cat.ci.title": "CI & configuration",
+  "landing.cat.ci.body":
+    "Whether the green badge means anything: silenced failures, tests no workflow runs, and two config files where one is silently ignored.",
+  "landing.cat.docs.title": "Documentation",
+  "landing.cat.docs.body":
+    "Instructions that no longer work — a documented script that does not exist, a badge for a deleted workflow, links that have gone dead.",
+  "landing.cat.decay.title": "Decay over time",
+  "landing.cat.decay.body":
+    "The findings that appear on their own, with no commit behind them: branches nobody came back to, TODOs that aged into archaeology, files only one person has ever touched.",
+  "landing.cat.code.title": "Code weight",
+  "landing.cat.code.body":
+    "Exports nothing imports, blocks duplicated verbatim, commented-out code, forgotten debug statements and disabled tests.",
+
+  "landing.grade.title": "How the grade is worked out",
+  "landing.grade.lead":
+    "A score out of 100, starting at 100 and losing points per finding: {critical} for a critical, {warning} for a warning, {info} for an info note. Info is capped so that a pile of small notes can never cost a whole grade band.",
+
+  "landing.privacy.title": "What happens to your code",
+  "landing.privacy.clone":
+    "The repository is cloned into a temporary directory on the server, read, and deleted when the scan finishes. Nothing is kept.",
+  "landing.privacy.report":
+    "The report stays in this browser. It is stored on the server only if you tick the share box, and then only as a summary — no file paths, no snippets.",
+  "landing.privacy.usage":
+    "One usage row is recorded per scan: a random per-browser id, the event name, the repository owner and name. Never scores, findings, paths, IP addresses or user agents.",
+
+  "landing.ci.title": "Run it in CI instead",
+  "landing.ci.lead":
+    "The same engine runs as a GitHub Action on every push: it fails the build below a grade you choose, uploads SARIF so findings appear in the Security tab, and comments the breakdown on the pull request.",
+  "landing.ci.badge":
+    "Scans from CI also keep a health badge current — the one at the top of this project's own README.",
+  "landing.ci.repo": "Setup is in the README",
 
   // Consent. The wording has to match what the code actually stores — see
   // `lib/share-report.ts`. Promising more privacy than we deliver would be the
@@ -275,15 +311,47 @@ const ru: Messages = {
   "repo.lastPush": "Последний коммит {when}",
   "repo.results": "Результаты с GitHub",
 
-  "feature.secrets.title": "Секреты и env",
-  "feature.secrets.body":
-    "Находит утёкшие ключи в истории и переменные окружения, которые используются, но не описаны в примере.",
-  "feature.dead.title": "Мёртвый груз",
-  "feature.dead.body":
-    "Показывает неиспользуемые зависимости, мёртвые экспорты и долг из TODO, который тихо копится.",
-  "feature.branches.title": "Заброшенные ветки",
-  "feature.branches.body":
-    "Отмечает брошенные ветки и динамику распада, чтобы было ясно, что можно удалять.",
+
+  "landing.checks.title": "{count} проверок, шесть семейств",
+  "landing.checks.lead":
+    "Каждая откалибрована на живых репозиториях до выхода: правило остаётся, только если молчит на проектах, где всё сделано правильно.",
+  "landing.cat.security.title": "Безопасность",
+  "landing.cat.security.body":
+    "Ключи в рабочем дереве и в истории коммитов, зависимости с опубликованными адвизори, опасные конструкции в вашем коде и воркфлоу, отдающие токен постороннему.",
+  "landing.cat.deps.title": "Зависимости",
+  "landing.cat.deps.body":
+    "Пакеты, которые перестали поддерживать; рантаймы, снятые с поддержки; локфайл, разошедшийся с манифестом; лицензии, несовместимые с вашей собственной.",
+  "landing.cat.ci.title": "CI и конфигурация",
+  "landing.cat.ci.body":
+    "Значит ли что-нибудь зелёная галка: заглушённые падения, тесты, которых не гоняет ни один воркфлоу, и два конфига, один из которых молча игнорируется.",
+  "landing.cat.docs.title": "Документация",
+  "landing.cat.docs.body":
+    "Инструкции, которые больше не работают: описанный скрипт, которого нет; бейдж удалённого воркфлоу; ссылки, которые больше не открываются.",
+  "landing.cat.decay.title": "Распад во времени",
+  "landing.cat.decay.body":
+    "Находки, которые появляются сами, без единого коммита: ветки, к которым не вернулись; TODO, состарившиеся до археологии; файлы, которые трогал один человек.",
+  "landing.cat.code.title": "Вес кода",
+  "landing.cat.code.body":
+    "Экспорты, которые никто не импортирует; дословно продублированные блоки; закомментированный код, забытая отладка и отключённые тесты.",
+
+  "landing.grade.title": "Как считается оценка",
+  "landing.grade.lead":
+    "Сто баллов, из которых вычитается за каждую находку: {critical} за критичную, {warning} за предупреждение, {info} за заметку. У заметок есть потолок — россыпь мелочи не может стоить целой ступени грейда.",
+
+  "landing.privacy.title": "Что происходит с вашим кодом",
+  "landing.privacy.clone":
+    "Репозиторий клонируется во временную папку на сервере, читается и удаляется по завершении скана. Ничего не остаётся.",
+  "landing.privacy.report":
+    "Отчёт остаётся в этом браузере. На сервер он попадает, только если вы отметите галочку «поделиться», и только выжимкой — без путей к файлам и фрагментов кода.",
+  "landing.privacy.usage":
+    "На скан пишется одна строка статистики: случайный идентификатор браузера, название события, владелец и имя репозитория. Никогда — оценки, находки, пути, IP-адреса и user-agent.",
+
+  "landing.ci.title": "Или запускайте в CI",
+  "landing.ci.lead":
+    "Тот же движок работает GitHub Action на каждый пуш: роняет сборку ниже выбранного грейда, выгружает SARIF — находки появляются во вкладке Security — и комментирует разбивку в пул-реквесте.",
+  "landing.ci.badge":
+    "Сканы из CI держат бейдж здоровья актуальным — тот самый, что стоит в README этого проекта.",
+  "landing.ci.repo": "Настройка описана в README",
 
   "consent.label": "Сохранить результат, чтобы им можно было поделиться по ссылке",
   "consent.body":
