@@ -5,10 +5,11 @@ import { issue } from "./helpers"
 // Explicit multi-char locations: the default "src/a.ts:10" tokenizes to a bare
 // "a", which a short query like "aws" would match by prefix and skew the tests.
 const issues = [
-  issue({ id: "s1", category: "security", title: "AWS access key committed", detail: "rotate it", location: "config.ts:3" }),
-  issue({ id: "d1", category: "dependency", title: "lodash is outdated", detail: "upgrade", location: "deps.ts:1" }),
-  issue({ id: "t1", category: "todo", title: "TODO: refactor", detail: "tech debt", location: "core.ts:9" }),
-  issue({ id: "h1", category: "hygiene", title: "No README", detail: "add docs", location: "readme.ts:1" }),
+  issue({ id: "s1", category: "security", title: "AWS access key committed", detail: "rotate it", location: "config.ts:3", scanner: "secrets" }),
+  issue({ id: "d1", category: "dependency", title: "lodash is outdated", detail: "upgrade", location: "deps.ts:1", scanner: "outdated-deps" }),
+  issue({ id: "t1", category: "todo", title: "TODO: refactor", detail: "tech debt", location: "core.ts:9", scanner: "todo-debt" }),
+  issue({ id: "h1", category: "hygiene", title: "No README", detail: "add docs", location: "readme.ts:1", scanner: "project-hygiene" }),
+  issue({ id: "c1", category: "hygiene", title: "Workflow never runs tests", detail: "ci gap", location: ".github/workflows/ci.yml:1", scanner: "ci-health" }),
 ]
 
 describe("searchIssues", () => {
@@ -44,5 +45,10 @@ describe("searchIssues", () => {
 
   it("returns nothing when no issue matches", () => {
     expect(searchIssues(issues, "kubernetes")).toEqual([])
+  })
+
+  it("matches a scanner id or its label", () => {
+    expect(searchIssues(issues, "ci-health").map((i) => i.id)).toEqual(["c1"])
+    expect(searchIssues(issues, "CI Health").map((i) => i.id)).toEqual(["c1"])
   })
 })

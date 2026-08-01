@@ -4,6 +4,7 @@ import { saveReport, type ScanReport, type StoredRepo } from "@/lib/reports-stor
 import { enrichReport, aiTargetCount } from "@/lib/ai-enrich"
 import { readAiSettings, isAiEnabled } from "@/lib/ai-settings"
 import { runScanStream } from "@/lib/scan-client"
+import { refreshPublishedShare } from "@/lib/share-refresh"
 
 /**
  * Shared re-scan pipeline used by the manual Rescan button AND the background
@@ -51,5 +52,7 @@ export async function rescanRepo(repo: StoredRepo, hooks: RescanHooks = {}): Pro
   }
 
   saveReport(report, url)
+  // Keep a previously published README badge / share URL on this browser in sync.
+  await refreshPublishedShare(report, url).catch(() => "failed")
   return report
 }

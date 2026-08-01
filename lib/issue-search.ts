@@ -1,4 +1,5 @@
 import { categoryLabels, type Issue, type IssueCategory } from "@/lib/mock-data"
+import { resolveScanner, scannerLabel } from "@/lib/scanners"
 
 /**
  * Lightweight "semantic" issue search — no embeddings, no network.
@@ -98,6 +99,7 @@ function scoreTerm(term: string, haystack: string, hayTokens: string[], issue: I
 }
 
 function scoreIssue(issue: Issue, terms: string[]): number {
+  const scanner = resolveScanner(issue)
   const haystack = [
     issue.title,
     issue.detail,
@@ -105,6 +107,10 @@ function scoreIssue(issue: Issue, terms: string[]): number {
     issue.category,
     categoryLabels[issue.category],
     issue.severity,
+    // So "ci-health" / "CI Health" / "license" find the right check, not just
+    // the Hygiene umbrella that used to swallow them.
+    scanner ?? "",
+    scanner ? scannerLabel(scanner) : "",
   ]
     .join(" ")
     .toLowerCase()

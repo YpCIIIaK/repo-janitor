@@ -17,7 +17,18 @@ import { useLocale } from "./locale-provider"
  * Labels are written in their own language — a reader looking for Russian scans
  * for "Русский", not for "Russian", which they may not recognise at a glance.
  */
-export function LanguageSwitcher({ className }: { className?: string }) {
+export function LanguageSwitcher({
+  className,
+  reloadOnChange = false,
+}: {
+  className?: string
+  /**
+   * Reload after picking a language. Needed on server-rendered public pages
+   * (shared report) whose body is translated at request time from the cookie —
+   * updating React context alone would leave the page in the old locale.
+   */
+  reloadOnChange?: boolean
+}) {
   const { locale, setLocale, t } = useLocale()
 
   return (
@@ -37,7 +48,11 @@ export function LanguageSwitcher({ className }: { className?: string }) {
         {LOCALES.map((code) => (
           <DropdownMenuItem
             key={code}
-            onSelect={() => setLocale(code)}
+            onSelect={() => {
+              if (code === locale) return
+              setLocale(code)
+              if (reloadOnChange) window.location.reload()
+            }}
             className={code === locale ? "font-medium" : undefined}
           >
             {LOCALE_LABELS[code]}

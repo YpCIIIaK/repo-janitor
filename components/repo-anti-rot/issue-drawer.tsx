@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { AlertTriangle, Bell, BellOff, Bug, Check, Clipboard, Github, Link2, Loader2, Sparkles } from "lucide-react"
 import { categoryLabels, severityLabels, type Issue } from "@/lib/mock-data"
+import { resolveScanner, scannerLabel } from "@/lib/scanners"
 import { fullAge, issueAsMarkdown, severityStyle } from "@/lib/issue-format"
 import { useAiSettings, aiCacheModel } from "@/lib/ai-settings"
 import { analyzeOneIssue } from "@/lib/ai-enrich"
@@ -91,6 +92,8 @@ export function IssueDrawer({ issue, open, onOpenChange, githubUrl, newIssueUrl,
     }
   }
 
+  const scannerId = issue ? resolveScanner(issue) : null
+
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent side="right" className="w-full gap-0 overflow-y-auto sm:max-w-md">
@@ -112,6 +115,15 @@ export function IssueDrawer({ issue, open, onOpenChange, githubUrl, newIssueUrl,
               <dl className="grid grid-cols-[max-content_1fr] gap-x-4 gap-y-1.5 text-xs">
                 <dt className="text-muted-foreground">Category</dt>
                 <dd className="text-foreground">{categoryLabels[issue.category]}</dd>
+                {scannerId && (
+                  <>
+                    <dt className="text-muted-foreground">Scanner</dt>
+                    <dd className="text-foreground">
+                      <span>{scannerLabel(scannerId)}</span>
+                      <span className="ml-1.5 font-mono text-muted-foreground">{scannerId}</span>
+                    </dd>
+                  </>
+                )}
                 <dt className="text-muted-foreground">Location</dt>
                 <dd className="break-all font-mono text-foreground">{issue.location}</dd>
                 <dt className="text-muted-foreground">Age</dt>

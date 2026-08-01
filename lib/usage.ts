@@ -38,7 +38,14 @@ export const VISITOR_OPT_OUT = "opt-out"
 /** Bucket for callers with no id at all — one shared row, not a fresh "user" each time. */
 export const VISITOR_ANONYMOUS = "anonymous"
 
-export type UsageEventName = "scan" | "commit-scan" | "share-create" | "share-view"
+export type UsageEventName =
+  | "scan"
+  | "commit-scan"
+  | "share-create"
+  | "share-update"
+  | "share-rotate"
+  | "share-revoke"
+  | "share-view"
 
 export interface UsageEvent {
   visitor: string
