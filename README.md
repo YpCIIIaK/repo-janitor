@@ -114,9 +114,11 @@ Coverage highlights (850+ tests):
   repo-bloat, project-hygiene, broken-doc-links, bus-factor, stale-branch,
   insecure-code (incl. the string/regex-literal guard — a description of code is
   not code), dead-links (incl. the refusal to request private or loopback
-  addresses), workflow-security, eol-runtime, docs-drift, config-conflict (each
-  of the latter three carrying regression tests named after the real project
-  whose false positive produced the rule), and the dependency scanners
+  addresses), workflow-security, eol-runtime, docs-drift, config-conflict,
+  license-risk, ci-health and duplicate-code (each of the last six carrying
+  regression tests named after the real project whose false positive produced the
+  rule — pnpm's cache steps, nest's CircleCI, babel's fixture bots, redux's
+  overload signatures, vite's scaffolds), and the dependency scanners
   (vulnerable/outdated/funeral/lockfile-drift) driven through stubbed OSV / npm /
   PyPI registry adapters
 - **config** — `.repo-anti-rot.json` loading, weight merge, ignore globs, mute-rule
