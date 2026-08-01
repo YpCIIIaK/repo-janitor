@@ -151,4 +151,15 @@ describe("deadCodeScanner (polyglot symbols)", () => {
     // b.ts's own orphan is still flagged, but a.js (require target) is exempt.
     expect(issues.some((i) => i.location.startsWith("lib/a.js"))).toBe(false)
   })
+
+  it("does not flag Next.js opengraph-image convention exports", async () => {
+    const ctx = makeContext({
+      files: {
+        "app/r/opengraph-image.tsx":
+          "export const alt = 'preview'\nexport const size = { width: 1200, height: 630 }\nexport const contentType = 'image/png'\nexport default function Image() { return null }\n",
+      },
+    })
+    const issues = await deadCodeScanner.run(ctx)
+    expect(issues.some((i) => /alt|size|contentType/.test(i.title))).toBe(false)
+  })
 })

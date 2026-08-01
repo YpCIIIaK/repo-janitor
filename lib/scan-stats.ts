@@ -42,15 +42,6 @@ const SIZE_EDGES: { bucket: SizeBucket; upTo: number }[] = [
   { bucket: "l", upTo: 1_000_000 },
 ]
 
-/** Human labels for the size classes, for the sentence the user reads. */
-export const SIZE_LABEL: Record<SizeBucket, string> = {
-  xs: "under 1k lines",
-  s: "1k–10k lines",
-  m: "10k–100k lines",
-  l: "100k–1M lines",
-  xl: "over 1M lines",
-}
-
 export function sizeBucket(linesOfCode: number): SizeBucket {
   for (const { bucket, upTo } of SIZE_EDGES) if (linesOfCode < upTo) return bucket
   return "xl"

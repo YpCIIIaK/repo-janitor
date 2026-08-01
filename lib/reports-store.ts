@@ -275,10 +275,6 @@ export function removeRepo(id: string): void {
   writeAll(readFresh().filter((r) => r.id !== id))
 }
 
-export function clearAll(): void {
-  writeAll([])
-}
-
 // ---------------------------------------------------------------------------
 // Selectors (pure — derive dashboard data from a stored repo)
 // ---------------------------------------------------------------------------

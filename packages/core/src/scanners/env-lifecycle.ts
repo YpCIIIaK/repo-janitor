@@ -162,9 +162,15 @@ function analyzeWithRegexLang(content: string, file: string, lang: keyof typeof 
   }
 }
 
+/** Paths where reading an undocumented env var is not an onboarding gap. */
+const TEST_PATH_RE =
+  /(^|\/)(?:__tests__|tests?|specs?|fixtures?)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test_[^/]+\.py$|_test\.py$|(?:^|\/)conftest\.py$/i
+
 interface EnvUsage {
   /** vars statically proven to be read from process.env */
   used: Set<string>
+  /** vars read from at least one non-test source file */
+  usedOutsideTests: Set<string>
   /** first source site (file:line) each var is read at — used for issue location */
   usedAt: Map<string, { file: string; line: number }>
   /** subset of `used` that has an in-code fallback default (?? / || / = default) */
@@ -182,7 +188,13 @@ function lineOf(node: Node): number {
 /** Record a var as used, remembering the first place we saw it. */
 function recordUsage(acc: EnvUsage, name: string, file: string, line: number): void {
   acc.used.add(name)
-  if (!acc.usedAt.has(name)) acc.usedAt.set(name, { file, line })
+  const norm = file.replace(/\\/g, "/")
+  if (!TEST_PATH_RE.test(norm)) acc.usedOutsideTests.add(name)
+  // Prefer a non-test location for the finding site when both exist.
+  const prev = acc.usedAt.get(name)
+  if (!prev || (TEST_PATH_RE.test(prev.file.replace(/\\/g, "/")) && !TEST_PATH_RE.test(norm))) {
+    acc.usedAt.set(name, { file: norm, line })
+  }
 }
 
 function isProcessEnv(n: unknown): n is Node {
@@ -269,7 +281,13 @@ export const envLifecycleScanner: Scanner = {
   category: "env",
   async run(ctx: ScanContext): Promise<Issue[]> {
     const issues: Issue[] = []
-    const acc: EnvUsage = { used: new Set(), usedAt: new Map(), withFallback: new Set(), dynamic: false }
+    const acc: EnvUsage = {
+      used: new Set(),
+      usedOutsideTests: new Set(),
+      usedAt: new Map(),
+      withFallback: new Set(),
+      dynamic: false,
+    }
 
     for (const file of ctx.files) {
       const isJs = /\.(ts|tsx|js|jsx|mjs|mts|cts)$/.test(file)
@@ -320,7 +338,11 @@ export const envLifecycleScanner: Scanner = {
       return at ? `${at.file}:${at.line}` : exampleName
     }
 
-    const undocumented = [...acc.used].filter((n) => !declared.has(n) && !isPlatformEnv(n)).sort()
+    // Vars that only appear in tests (legacy spellings, fixtures) are not an
+    // onboarding gap — nobody deploys from a test file.
+    const undocumented = [...acc.usedOutsideTests]
+      .filter((n) => !declared.has(n) && !isPlatformEnv(n))
+      .sort()
 
     if (hasExample) {
       // The repo uses the .env.example convention — each undocumented var read in

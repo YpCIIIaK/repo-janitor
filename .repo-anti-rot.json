@@ -5,6 +5,11 @@
       "category": "security",
       "path": "packages/core/test/scanners/secrets.test.ts",
       "reason": "These ARE the secret-detector's fixtures. The scanner is right to see them; a detector that missed its own test data would be broken. Fourteen accepted findings, muted in config rather than deleted, so the suppression is reviewable."
+    },
+    {
+      "category": "dead-code",
+      "path": "components/ui**",
+      "reason": "shadcn/ui kit is installed as a catalogue; unused primitives are expected. The scanner already collapses them to one info — mute keeps dogfood focused on this repo's own code."
     }
   ]
 }

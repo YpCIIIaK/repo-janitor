@@ -69,7 +69,7 @@ export const severityLabels: Record<Severity, string> = {
   info: "Info",
 }
 
-export const demoRepositories: Repository[] = [
+const demoRepositories: Repository[] = [
   {
     id: "repo-1",
     owner: "acme",
@@ -350,45 +350,3 @@ export function getTrend(repoId: string): TrendPoint[] {
   return trendByRepo[repoId] ?? []
 }
 
-export function getStats(repoId: string): StatCard[] {
-  const repo = repositories.find((r) => r.id === repoId)
-  const list = getIssues(repoId)
-  const t = getTrend(repoId)
-  const last = t[t.length - 1]
-  const prev = t[t.length - 2] ?? last
-  const scoreDelta = last && prev ? last.score - prev.score : 0
-  const critical = countBySeverity(list, "critical")
-  const critPrev = prev?.critical ?? critical
-  const branches = list.filter((i) => i.category === "branch").length
-
-  return [
-    {
-      label: "Health Score",
-      value: String(repo?.score ?? last?.score ?? 0),
-      delta: scoreDelta,
-      deltaLabel: "vs last month",
-      tone: scoreDelta > 0 ? "good" : scoreDelta < 0 ? "bad" : "neutral",
-    },
-    {
-      label: "Critical Issues",
-      value: String(critical),
-      delta: critical - critPrev,
-      deltaLabel: critical >= critPrev ? "new this month" : "resolved",
-      tone: critical > 0 ? "bad" : "good",
-    },
-    {
-      label: "Open Issues",
-      value: String(list.length),
-      delta: 0,
-      deltaLabel: "tracked",
-      tone: list.length === 0 ? "good" : "neutral",
-    },
-    {
-      label: "Stale Branches",
-      value: String(branches),
-      delta: 0,
-      deltaLabel: branches === 0 ? "all clean" : "needs pruning",
-      tone: branches > 0 ? "neutral" : "good",
-    },
-  ]
-}

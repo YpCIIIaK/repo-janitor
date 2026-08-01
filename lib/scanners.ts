@@ -1,5 +1,4 @@
 import type { Issue, IssueCategory } from "@/lib/mock-data"
-import { CHECK_FAMILIES } from "@/lib/landing-facts"
 
 /**
  * Human labels and helpers for the engine's scanner ids.
@@ -73,9 +72,6 @@ const LEGACY_PREFIXES: { prefix: string; scanner: string }[] = [
   { prefix: "lockfile-", scanner: "lockfile-drift" },
   { prefix: "eol-", scanner: "eol-runtime" },
 ]
-
-/** Every scanner id the landing page (and therefore the engine) claims. */
-export const KNOWN_SCANNERS: readonly string[] = CHECK_FAMILIES.flatMap((f) => f.scanners)
 
 export function scannerLabel(id: string): string {
   if (LABEL_OVERRIDES[id]) return LABEL_OVERRIDES[id]

@@ -127,6 +127,11 @@ describe("insecureCodeScanner", () => {
     expect(issues[0].detail).toContain("test file")
   })
 
+  it("skips eval / new Function in tests — those are usually the thing under test", async () => {
+    expect(await run({ "src/theme-init.test.ts": "new Function(script)()\n" })).toHaveLength(0)
+    expect(await run({ "src/eval.test.ts": "eval(userInput)\n" })).toHaveLength(0)
+  })
+
   it("ignores vendored and generated code, which is not ours to fix", async () => {
     expect(
       await run({
