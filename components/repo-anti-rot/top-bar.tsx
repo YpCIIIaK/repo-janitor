@@ -1,13 +1,28 @@
 "use client"
 
-import { Activity, ChevronsUpDown, LayoutDashboard, Search } from "lucide-react"
+import { Activity, Check, ChevronsUpDown, LayoutDashboard, Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import type { ReactNode } from "react"
 import type { Repository } from "@/lib/mock-data"
+import { cn } from "@/lib/utils"
+
+export type TopBarRepoOption = {
+  id: string
+  owner: string
+  name: string
+}
 
 export function TopBar({
   repo,
+  repos,
+  onSelectRepo,
   search = "",
   onSearch,
   onHome,
@@ -15,6 +30,9 @@ export function TopBar({
   extras,
 }: {
   repo?: Repository
+  /** When more than one repo is available, the name becomes a real switcher. */
+  repos?: TopBarRepoOption[]
+  onSelectRepo?: (id: string) => void
   search?: string
   onSearch?: (value: string) => void
   /** Return to the landing page. Omitted when already there. */
@@ -36,6 +54,9 @@ export function TopBar({
     </>
   )
 
+  const switchable =
+    Boolean(repo && onSelectRepo && repos && repos.length > 1)
+
   return (
     <header className="sticky top-0 z-30 border-b border-border bg-background/80 backdrop-blur">
       <div className="flex h-14 items-center gap-3 px-4 md:px-6">
@@ -44,7 +65,7 @@ export function TopBar({
             onClick={onHome}
             title="Back to the start — scan another repository"
             aria-label="Back to the start"
-            className="-mx-2 flex items-center gap-2 rounded-md px-2 py-1 transition-colors hover:bg-accent"
+            className="-mx-2 flex items-center gap-2 rounded-md px-2 py-1 transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             {brand}
           </button>
@@ -57,10 +78,38 @@ export function TopBar({
             <span className="text-border">/</span>
             <span className="rounded-md px-2 py-1 text-sm text-muted-foreground">{repo.owner}</span>
             <span className="text-border">/</span>
-            <button className="flex items-center gap-1.5 rounded-md px-2 py-1 text-sm font-medium transition-colors hover:bg-accent">
-              {repo.name}
-              <ChevronsUpDown className="size-3.5 text-muted-foreground" />
-            </button>
+            {switchable ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    className="flex items-center gap-1.5 rounded-md px-2 py-1 text-sm font-medium transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    aria-label="Switch repository"
+                  >
+                    {repo.name}
+                    <ChevronsUpDown className="size-3.5 text-muted-foreground" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="min-w-[12rem]">
+                  {repos!.map((r) => {
+                    const selected = r.owner === repo.owner && r.name === repo.name
+                    return (
+                      <DropdownMenuItem
+                        key={r.id}
+                        onSelect={() => onSelectRepo?.(r.id)}
+                        className={cn("gap-2", selected && "font-medium")}
+                      >
+                        <span className="min-w-0 flex-1 truncate font-mono text-xs">
+                          {r.owner}/{r.name}
+                        </span>
+                        {selected ? <Check className="size-3.5 text-primary" /> : null}
+                      </DropdownMenuItem>
+                    )
+                  })}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <span className="rounded-md px-2 py-1 text-sm font-medium">{repo.name}</span>
+            )}
           </>
         )}
 

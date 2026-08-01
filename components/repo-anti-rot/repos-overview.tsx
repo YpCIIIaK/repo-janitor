@@ -1,7 +1,6 @@
 "use client"
 
 import { GitBranch, ArrowRight } from "lucide-react"
-import type { Grade } from "@/lib/mock-data"
 import {
   countSeverity,
   issueDensity,
@@ -9,17 +8,10 @@ import {
   timeAgo,
   type StoredRepo,
 } from "@/lib/reports-store"
+import { GRADE_BADGE_CLASS } from "@/lib/grade-style"
 import { Card } from "@/components/ui/card"
 import { PortfolioTrend } from "@/components/repo-anti-rot/portfolio-trend"
 import { cn } from "@/lib/utils"
-
-const gradeColor: Record<Grade, string> = {
-  A: "text-primary border-primary/30 bg-primary/10",
-  B: "text-chart-2 border-chart-2/30 bg-chart-2/10",
-  C: "text-chart-2 border-chart-2/30 bg-chart-2/10",
-  D: "text-chart-3 border-chart-3/30 bg-chart-3/10",
-  F: "text-destructive border-destructive/30 bg-destructive/10",
-}
 
 const severityChip: Record<"critical" | "warning" | "info", string> = {
   critical: "bg-destructive/15 text-destructive border-destructive/30",
@@ -101,7 +93,7 @@ export function ReposOverview({
                   <span
                     className={cn(
                       "flex size-10 shrink-0 items-center justify-center rounded-md border font-mono text-base font-semibold",
-                      gradeColor[repo.latest.grade],
+                      GRADE_BADGE_CLASS[repo.latest.grade],
                     )}
                   >
                     {repo.latest.grade}

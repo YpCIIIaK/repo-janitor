@@ -1,5 +1,6 @@
 import { readServerRepos } from "@/lib/server-store"
 import { getShare } from "@/lib/share-store"
+import { UNKNOWN_GRADE_HEX, gradeHex } from "@/lib/grade-style"
 import type { Grade } from "@/lib/mock-data"
 
 /**
@@ -32,15 +33,7 @@ import type { Grade } from "@/lib/mock-data"
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
 
-// Grade → shields color. Healthy greens → amber → red.
-const GRADE_COLOR: Record<Grade, string> = {
-  A: "#3fb950",
-  B: "#4c9a2a",
-  C: "#dfb317",
-  D: "#fe7d37",
-  F: "#e05d44",
-}
-const UNKNOWN_COLOR = "#9f9f9f"
+const UNKNOWN_COLOR = UNKNOWN_GRADE_HEX
 
 // Approximate Verdana width per char at 11px — good enough for badge spacing.
 function textWidth(s: string): number {
@@ -112,7 +105,7 @@ export async function GET(
   }
 
   const message = found ? `${found.grade} ${found.score}` : "unknown"
-  const color = found ? GRADE_COLOR[found.grade] ?? UNKNOWN_COLOR : UNKNOWN_COLOR
+  const color = found ? gradeHex(found.grade) : UNKNOWN_COLOR
 
   const svg = badgeSvg(label, message, color, square)
   return new Response(svg, {

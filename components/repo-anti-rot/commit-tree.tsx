@@ -49,6 +49,7 @@ import {
 import { CommitPicker } from "./commit-picker"
 import { mergeHistoryPoints, trendPointAt } from "@/lib/reports-store"
 import type { Grade, Issue, Severity } from "@/lib/mock-data"
+import { GRADE_CSS_VAR } from "@/lib/grade-style"
 
 // ---------------------------------------------------------------------------
 // Visual constants
@@ -56,15 +57,6 @@ import type { Grade, Issue, Severity } from "@/lib/mock-data"
 
 const NODE_W = 248
 const ROW_GAP = 128
-
-/** Grade → CSS chart color (mirrors the rest of the dashboard). */
-const GRADE_COLOR: Record<Grade, string> = {
-  A: "var(--chart-1)",
-  B: "var(--chart-1)",
-  C: "var(--chart-2)",
-  D: "var(--chart-3)",
-  F: "var(--chart-4)",
-}
 
 const severityStyle: Record<Severity, string> = {
   critical: "bg-destructive/15 text-destructive border-destructive/30",
@@ -100,7 +92,7 @@ function CommitFlowNode({ data }: NodeProps<Node<CommitNodeData>>) {
   const { commit, node, error, selected } = data
   const report = node?.report
   const grade = report?.grade
-  const color = grade ? GRADE_COLOR[grade] : "var(--muted-foreground)"
+  const color = grade ? GRADE_CSS_VAR[grade] : "var(--muted-foreground)"
   const counts = report ? severityCounts(report.issues) : null
   const diff = node?.diffVsParent
 
@@ -229,8 +221,8 @@ function NodeScanDetail({
               <span
                 className="flex size-9 items-center justify-center rounded-md font-mono text-base font-bold"
                 style={{
-                  color: GRADE_COLOR[report.grade],
-                  backgroundColor: `color-mix(in oklab, ${GRADE_COLOR[report.grade]} 15%, transparent)`,
+                  color: GRADE_CSS_VAR[report.grade],
+                  backgroundColor: `color-mix(in oklab, ${GRADE_CSS_VAR[report.grade]} 15%, transparent)`,
                 }}
               >
                 {report.grade}

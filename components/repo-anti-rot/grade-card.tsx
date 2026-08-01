@@ -3,18 +3,11 @@
 import { Clock } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import type { Grade, Issue } from "@/lib/mock-data"
+import { GRADE_CSS_VAR, GRADE_LABEL } from "@/lib/grade-style"
 import { penaltyBreakdown, type SeverityWeights } from "@/lib/score"
 import { severityStyle } from "@/lib/issue-format"
 import { cn } from "@/lib/utils"
 import { Gauge } from "@/components/charts/gauge"
-
-const gradeMeta: Record<Grade, { color: string; label: string }> = {
-  A: { color: "var(--chart-1)", label: "Pristine" },
-  B: { color: "var(--chart-2)", label: "Healthy" },
-  C: { color: "var(--chart-2)", label: "Aging" },
-  D: { color: "var(--chart-3)", label: "Rotting" },
-  F: { color: "var(--chart-4)", label: "Critical decay" },
-}
 
 const severityNoun: Record<string, string> = {
   critical: "critical",
@@ -39,7 +32,7 @@ export function GradeCard({
   /** "1,240 files · 182,431 lines" — what a clean result is clean across. */
   scope?: string | null
 }) {
-  const meta = gradeMeta[grade]
+  const color = GRADE_CSS_VAR[grade]
   // Only tiers that actually cost something — a "−0 info" row is noise.
   const breakdown = issues ? penaltyBreakdown(issues, weights).filter((p) => p.penalty > 0) : []
 
@@ -49,8 +42,8 @@ export function GradeCard({
         {/* An open 270° arc rather than the closed ring this used to draw: a full
             circle reads as complete at every value, so a bad score still looked
             like a finished thing. The gap gives the needle somewhere to be. */}
-        <Gauge value={score} size={168} thickness={14} color={meta.color}>
-          <span className="font-mono text-4xl font-bold leading-none" style={{ color: meta.color }}>
+        <Gauge value={score} size={168} thickness={14} color={color}>
+          <span className="font-mono text-4xl font-bold leading-none" style={{ color }}>
             {grade}
           </span>
           <span className="mt-1 font-mono text-xs tabular-nums text-muted-foreground">
@@ -59,7 +52,7 @@ export function GradeCard({
         </Gauge>
 
         <div className="text-center">
-          <p className="text-sm font-medium">{meta.label}</p>
+          <p className="text-sm font-medium">{GRADE_LABEL[grade]}</p>
           <p className="mt-1 flex items-center justify-center gap-1 text-xs text-muted-foreground">
             <Clock className="size-3" />
             Scanned {lastScan}

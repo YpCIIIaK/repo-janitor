@@ -1,8 +1,10 @@
 "use client"
 
+import { CheckCircle2 } from "lucide-react"
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
 import { categoryLabels, type Issue, type IssueCategory } from "@/lib/mock-data"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { EmptyState } from "@/components/ui/empty-state"
 import type { ChartTooltipProps } from "@/lib/chart-tooltip"
 
 const series = [
@@ -71,9 +73,12 @@ export function IssueBreakdown({ issues }: { issues: Issue[] }) {
       </CardHeader>
       <CardContent>
         {data.length === 0 ? (
-          <div className="flex h-40 items-center justify-center rounded-md border border-dashed border-border text-sm text-muted-foreground">
-            Clean scan — nothing to break down. 🎉
-          </div>
+          <EmptyState
+            icon={<CheckCircle2 className="text-success" />}
+            title="Clean scan"
+            description="Nothing to break down — no findings in any category."
+            className="h-40 border-success/25 bg-success/5 py-8"
+          />
         ) : (
           <div style={{ height: chartHeight }} className="w-full">
             <ResponsiveContainer width="100%" height="100%">

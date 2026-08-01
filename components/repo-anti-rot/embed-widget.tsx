@@ -1,6 +1,7 @@
 import Link from "next/link"
 import type { SharedReport } from "@/lib/share-report"
-import { cardHeadline, GRADE_COLOR } from "@/lib/health-card"
+import { cardHeadline } from "@/lib/health-card"
+import { gradeHex } from "@/lib/grade-style"
 import { scopeLine } from "@/lib/verdict"
 import { cn } from "@/lib/utils"
 
@@ -37,7 +38,7 @@ export function EmbedWidget({
   pathOwner: string
   pathName: string
 }) {
-  const color = GRADE_COLOR[report.grade] ?? "#8b949e"
+  const color = gradeHex(report.grade)
   const headline = cardHeadline(report)
   const scope = scopeLine(report.profile)
   const scanned = formatScannedAt(report.generatedAt)

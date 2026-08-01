@@ -27,6 +27,7 @@ import { enrichReport, aiTargetCount } from "@/lib/ai-enrich"
 import { readAiSettings, isAiEnabled } from "@/lib/ai-settings"
 import { runScanStream } from "@/lib/scan-client"
 import { refreshPublishedShare } from "@/lib/share-refresh"
+import { GRADE_CSS_VAR } from "@/lib/grade-style"
 import { Progress } from "@/components/ui/progress"
 import { ShareBox } from "./share-box"
 import { PercentileLine } from "./percentile-line"
@@ -68,14 +69,6 @@ interface ScanResult {
   ok: boolean
   report?: ScanReport
   error?: string
-}
-
-const gradeColor: Record<Grade, string> = {
-  A: "var(--chart-1)",
-  B: "var(--chart-2)",
-  C: "var(--chart-2)",
-  D: "var(--chart-3)",
-  F: "var(--chart-4)",
 }
 
 const severityStyle: Record<Severity, string> = {
@@ -206,7 +199,7 @@ function ResultCard({ result, onOpen }: { result: ScanResult; onOpen?: (repoId: 
           <span className="font-mono text-xs tabular-nums text-muted-foreground">{score}/100</span>
           <span
             className="flex size-8 items-center justify-center rounded-md font-mono text-sm font-bold"
-            style={{ color: gradeColor[grade], backgroundColor: `color-mix(in oklab, ${gradeColor[grade]} 15%, transparent)` }}
+            style={{ color: GRADE_CSS_VAR[grade], backgroundColor: `color-mix(in oklab, ${GRADE_CSS_VAR[grade]} 15%, transparent)` }}
           >
             {grade}
           </span>

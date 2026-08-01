@@ -62,7 +62,7 @@ export function PercentileLine({ score, languages }: Props) {
 
   return (
     <p className="text-xs">
-      <span className={copy.direction === "worse" ? "text-amber-500" : "text-emerald-500"}>
+      <span className={copy.direction === "worse" ? "text-warning" : "text-success"}>
         {t(copy.key, { percent: copy.percent, language: primary?.language ?? "" })}
       </span>{" "}
       <span className="text-muted-foreground">{t("pct.sample", { count: hit.sample })}</span>
