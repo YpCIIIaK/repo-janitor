@@ -15,4 +15,11 @@ export default defineConfig({
   noExternal: ["@repo-anti-rot/core"],
   // Stamp the CLI's --version from package.json at build time.
   define: { __CLI_VERSION__: JSON.stringify(version) },
+  // Wipe dist first. Without this, tsup leaves every previous build's
+  // content-hashed chunk behind and `files: ["dist"]` publishes the lot: the
+  // 0.2.0 tarball was 26 files and 13 MB unpacked, of which fifteen were dead
+  // copies of the engine from earlier builds. Nothing imports them, so nothing
+  // ever failed — the package just quietly grew by a megabyte per release,
+  // which is precisely the kind of decay this tool reports on.
+  clean: true,
 })
