@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useSyncExternalStore } from "react"
 import { Check, Palette } from "lucide-react"
 import { useTheme } from "next-themes"
 import { Button } from "@/components/ui/button"
@@ -23,6 +23,15 @@ import {
 } from "@/lib/themes"
 import { useLocale } from "@/components/i18n/locale-provider"
 import type { MessageKey } from "@/lib/i18n"
+
+/** True after hydration — avoids flashing the wrong selected theme from SSR. */
+function useMounted(): boolean {
+  return useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  )
+}
 
 const THEME_LABEL_KEY: Record<ThemeId, MessageKey> = {
   moss: "theme.moss",
@@ -60,8 +69,7 @@ export function ThemeSwitcher({
 }) {
   const { theme, setTheme } = useTheme()
   const { t } = useLocale()
-  const [mounted, setMounted] = useState(false)
-  useEffect(() => setMounted(true), [])
+  const mounted = useMounted()
 
   const current: ThemeId = isThemeId(theme) ? theme : DEFAULT_THEME
 
@@ -134,8 +142,7 @@ export function ThemeSwitcher({
  */
 export function ThemePicker({ className }: { className?: string }) {
   const { theme, setTheme } = useTheme()
-  const [mounted, setMounted] = useState(false)
-  useEffect(() => setMounted(true), [])
+  const mounted = useMounted()
 
   const current: ThemeId = isThemeId(theme) ? theme : DEFAULT_THEME
 
