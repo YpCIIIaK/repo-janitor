@@ -1,7 +1,8 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { AlertTriangle, Bell, BellOff, Bug, Check, Clipboard, Github, Link2, Loader2, Sparkles } from "lucide-react"
+import { AlertTriangle, Bell, BellOff, Bug, Check, Clipboard, Link2, Loader2, Sparkles } from "lucide-react"
+import { Github } from "@/components/icons/github"
 import { categoryLabels, severityLabels, type Issue } from "@/lib/mock-data"
 import { resolveScanner, scannerLabel } from "@/lib/scanners"
 import { fullAge, issueAsMarkdown, severityStyle } from "@/lib/issue-format"

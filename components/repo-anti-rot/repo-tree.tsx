@@ -29,7 +29,6 @@ import {
   FileCode,
   Folder,
   GitBranch,
-  Github,
   ImageDown,
   ListFilter,
   Maximize2,
@@ -37,6 +36,7 @@ import {
   Search,
   X,
 } from "lucide-react"
+import { Github } from "@/components/icons/github"
 import type { Issue, Severity } from "@/lib/mock-data"
 import { categoryLabels, severityLabels } from "@/lib/mock-data"
 import {

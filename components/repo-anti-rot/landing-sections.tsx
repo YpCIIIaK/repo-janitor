@@ -8,8 +8,8 @@ import {
   Hourglass,
   Scissors,
   Lock,
-  Github,
-} from "lucide-react"
+  } from "lucide-react"
+import { Github } from "@/components/icons/github"
 import { useLocale } from "@/components/i18n/locale-provider"
 import type { MessageKey } from "@/lib/i18n"
 import {
