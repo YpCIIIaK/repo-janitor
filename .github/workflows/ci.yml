@@ -61,3 +61,47 @@ jobs:
 
       - name: Build dashboard
         run: pnpm build
+
+      # Scan ourselves and send the result to the dashboard, which is what keeps
+      # the tokenless health badge in the README current. Linux only: three
+      # platforms would ingest three reports per push and the badge would show
+      # whichever finished last.
+      #
+      # `fail-on: never` on purpose — this repository's own grade is a thing to
+      # watch, not a merge gate, and a scanner that can block its own development
+      # is a scanner people delete. The push-only condition keeps it off forks and
+      # pull requests, where the secret is not available anyway.
+      #
+      # Skipped entirely until REPO_ANTI_ROT_INGEST_TOKEN exists as a repository
+      # secret. Without it the upload would be unauthenticated, and if the server
+      # also has no token set then /api/ingest accepts anything — meaning anyone
+      # could forge this badge. Silence is the correct behaviour for a missing
+      # secret; a half-configured upload is not.
+      - name: Report health to the dashboard
+        if: >-
+          matrix.os == 'ubuntu-latest' &&
+          github.event_name == 'push' &&
+          github.repository == 'YpCIIIaK/repo-janitor'
+        env:
+          INGEST_TOKEN: ${{ secrets.REPO_ANTI_ROT_INGEST_TOKEN }}
+        # Failure is swallowed in the script rather than with `continue-on-error`,
+        # and that is dogfooding rather than style: this repo's own `ci-health`
+        # scanner reports a literal `continue-on-error: true` on any step that
+        # runs a command, and it would be right to. Publishing a badge is not a
+        # check that could have failed — it is an upload — and saying so in the
+        # shell states the intent where the reader can see it, instead of hiding
+        # it behind a key that also silences real checks.
+        run: |
+          if [ -z "$INGEST_TOKEN" ]; then
+            echo "REPO_ANTI_ROT_INGEST_TOKEN is not set — skipping upload."
+            exit 0
+          fi
+          node packages/cli/dist/index.js scan --path . --format json --output report.json || {
+            echo "Self-scan failed; not uploading."
+            exit 0
+          }
+          curl --fail --silent --show-error \
+            -X POST "https://repo-anti-rot.onrender.com/api/ingest" \
+            -H "Authorization: Bearer $INGEST_TOKEN" \
+            -H "content-type: application/json" \
+            --data-binary @report.json || echo "Upload failed; the badge keeps its last value."
