@@ -20,7 +20,7 @@ function embedChrome(theme: "dark" | "light") {
  * stored report or the widget renders `unknown`.
  *
  * Built for docs sites / status pages — not GitHub READMEs (those strip iframes;
- * use `/api/card` there instead). Appearance: `?theme=`, `?hide=`, `?size=`.
+ * use `/api/card` there instead). Appearance: `?theme=light`.
  */
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
@@ -83,7 +83,6 @@ export default async function EmbedPage({
         reportHref={reportHref}
         pathOwner={pathOwner}
         pathName={pathName}
-        options={options}
       />
     </main>
   )

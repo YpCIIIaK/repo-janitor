@@ -46,15 +46,18 @@ want it in a file or in CI. Add `--fix` to print the top quick-wins first.
 [![Repo Anti-Rot](https://repo-anti-rot.onrender.com/api/badge/<owner>/<name>?token=<token>)](https://repo-anti-rot.onrender.com/r/<owner>/<name>/<token>)
 ```
 
-Optional query params (kept in the URL so the README remembers your layout):
-`theme=light`, `hide=chips,meta,headline`, `message=grade|score|grade-score`,
-`style=flat-square`, `label=health`, `size=roomy` (embed only),
-`motion=off` (keeps the texture, stops the drift).
+Two optional query params: `theme=light` for a light README, and `motion=off`
+to stop the drifting background shapes. There used to be five more — layout
+switches for the card and the badge — and they are gone: a picture with one good
+layout does not need a control panel, and the panel was competing for attention
+with the snippet people actually came for.
 
 The badge and the card both draw faint grey shapes that drift behind the text —
-small and sparse on the badge, larger and slower on the card. The arrangement is
-seeded from `owner/name`, so every project looks a little different and any one
-project always looks the same. `prefers-reduced-motion` is honoured when the SVG
+small and sparse on the badge, larger and slower on the card. The card's
+background colour is seeded the same way: the hue identifies the repository and
+the saturation follows the grade, so an A is quietly tinted and an F is drained
+to near grey. Every project looks a little different and any one project always
+looks the same. `prefers-reduced-motion` is honoured when the SVG
 is opened on its own, but browsers do not pass that preference into an image
 embedded in a page — which is how a README shows it — so `?motion=off` is the
 reliable way to turn the movement off.
@@ -414,9 +417,9 @@ Or make it clickable, linking back to the dashboard:
 
 It renders `repo anti-rot | <grade> <score>`, colored by grade (green → amber →
 red), and falls back to a neutral `unknown` badge for repos with no report (so a
-README image never 404s). Optional query params: `?label=health` (left text),
-`?style=flat-square` (square corners) and `?motion=off` (stops the drifting
-background shapes — also accepted by `/api/card`; see the badge section above).
+README image never 404s). Optional query params: `?theme=light` and
+`?motion=off` (stops the drifting background shapes); both are accepted by
+`/api/card` too.
 
 ## GitHub code scanning (SARIF)
 
