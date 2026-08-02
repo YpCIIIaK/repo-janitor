@@ -99,6 +99,13 @@ export async function buildScanContext(root: string): Promise<ScanContext> {
     "!**/build/**",
     "!**/coverage/**",
     "!**/.next/**",
+    // This tool's own state directory: saved reports, share snapshots, watch
+    // subscriptions. It is runtime output, not source, and reading it produces
+    // findings about ourselves — CI scored this repository 83 instead of 93 on
+    // a "high-entropy secret" that was a subscription id written by our own
+    // test run minutes earlier. The config FILE (.repo-anti-rot.json, no
+    // trailing slash) is deliberately still scanned; it is committed source.
+    "!**/.repo-anti-rot/**",
     "!**/*.log"
   ], {
     cwd: root,
