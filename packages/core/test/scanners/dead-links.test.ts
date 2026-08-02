@@ -13,6 +13,30 @@ describe("false positives found by dogfooding", () => {
     expect(isCheckable("https://registry.npmjs.org/%s")).toBe(false)
   })
 
+  it("does not report the stump left when an <angle> placeholder is cut off", async () => {
+    // This project's own README, in the section explaining how to install the
+    // badge. `URL_RE` excludes `<`, so the template was amputated to a bare
+    // prefix that really does 404 — and four of them were reported as dead
+    // links in the one section a new user is guaranteed to read.
+    const md =
+      "[![Repo Anti-Rot](https://repo-anti-rot.onrender.com/api/card/<owner>/<name>?token=<token>)]" +
+      "(https://repo-anti-rot.onrender.com/r/<owner>/<name>/<token>)\n"
+    expect(extractUrls(md)).toEqual([])
+
+    const ctx = makeContext({
+      files: { "README.md": md },
+      headUrl: { "https://repo-anti-rot.onrender.com/api/card/": { status: 404 } },
+    })
+    expect(await deadLinksScanner.run(ctx)).toHaveLength(0)
+  })
+
+  it("still reports a real dead link in the same document", () => {
+    // The guard keys on the placeholder, not on the file being markdown.
+    expect(extractUrls("see https://acme.dev/gone and https://x.dev/a/<id>\n")).toEqual([
+      "https://acme.dev/gone",
+    ])
+  })
+
   it("strips markdown emphasis glued to a link", () => {
     expect(extractUrls("**https://acme.dev/x**")).toEqual(["https://acme.dev/x"])
   })
