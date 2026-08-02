@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest"
 import { execFileSync } from "node:child_process"
-import { mkdtempSync, rmSync, writeFileSync, unlinkSync } from "node:fs"
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync, unlinkSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 import type { SimpleGit } from "simple-git"
@@ -218,6 +218,34 @@ describe("buildScanContext git.historyAdditions (real git)", () => {
         ? await ctx.git.historyAdditions()
         : []
       expect(additions).toEqual([])
+    } finally {
+      rmSync(dir, { recursive: true, force: true })
+    }
+  })
+})
+
+describe("buildScanContext file collection", () => {
+  it("does not scan this tool's own state directory", async () => {
+    // CI scored this repository 83 instead of 93 on a "high-entropy secret"
+    // that was a watch-subscription id our own test run had written to
+    // .repo-anti-rot/ minutes earlier. A tool that reports its own runtime
+    // output as a finding in the project it is scanning is measuring itself.
+    const dir = mkdtempSync(join(tmpdir(), "rar-state-"))
+    try {
+      mkdirSync(join(dir, ".repo-anti-rot", "shared"), { recursive: true })
+      writeFileSync(join(dir, ".repo-anti-rot", "watch-subscriptions.json"), "{}")
+      writeFileSync(join(dir, ".repo-anti-rot", "shared", "abc.json"), "{}")
+      writeFileSync(join(dir, "src.ts"), "export const x = 1\n")
+      // The CONFIG file has no trailing slash and is committed source: it must
+      // stay visible, or per-project configuration stops being scannable.
+      writeFileSync(join(dir, ".repo-anti-rot.json"), "{}")
+
+      const ctx = await buildScanContext(dir)
+      const files = ctx.files.map((f) => f.replace(/\\/g, "/"))
+
+      expect(files.some((f) => f.startsWith(".repo-anti-rot/"))).toBe(false)
+      expect(files).toContain("src.ts")
+      expect(files).toContain(".repo-anti-rot.json")
     } finally {
       rmSync(dir, { recursive: true, force: true })
     }
