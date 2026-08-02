@@ -217,6 +217,41 @@ export function decorLayer(shapes: DecorShape[], fill: string, animate = true): 
   return `<style>${keyframes}${rules}@media (prefers-reduced-motion:reduce){${parked}}</style><g>${nodesOf()}</g>`
 }
 
+/**
+ * A hue for this repository, in degrees.
+ *
+ * Drawn from a different part of the seed than the shapes so that two projects
+ * whose textures happen to look alike still get different colours.
+ */
+export function hueFromSeed(seed: number): number {
+  const rand = makeRandom(seed ^ 0x9e3779b9)
+  return Math.round(rand() * 360)
+}
+
+/** HSL → `#rrggbb`. SVG renderers vary in their support for `hsl()`; hex does not. */
+export function hslToHex(h: number, s: number, l: number): string {
+  const hh = ((h % 360) + 360) % 360
+  const ss = Math.max(0, Math.min(1, s))
+  const ll = Math.max(0, Math.min(1, l))
+  const c = (1 - Math.abs(2 * ll - 1)) * ss
+  const x = c * (1 - Math.abs(((hh / 60) % 2) - 1))
+  const m = ll - c / 2
+  const seg = Math.floor(hh / 60) % 6
+  const [r, g, b] = [
+    [c, x, 0],
+    [x, c, 0],
+    [0, c, x],
+    [0, x, c],
+    [x, 0, c],
+    [c, 0, x],
+  ][seg]
+  const hex = (v: number) =>
+    clamp255((v + m) * 255)
+      .toString(16)
+      .padStart(2, "0")
+  return `#${hex(r)}${hex(g)}${hex(b)}`
+}
+
 function clamp255(n: number): number {
   return Math.max(0, Math.min(255, Math.round(n)))
 }
