@@ -1,5 +1,5 @@
 import "server-only"
-import type { SupabaseConfig } from "@/lib/share-db"
+import { restHeaders, withTimeout, type SupabaseConfig } from "@/lib/share-db"
 import type { ScanStat, SizeBucket } from "@/lib/scan-stats"
 
 /**
@@ -48,29 +48,13 @@ const TIMEOUT_MS = 5_000
 /** Rows pulled for one distribution query. Aggregation happens in JS. */
 export const DISTRIBUTION_ROW_LIMIT = 20_000
 
-async function withTimeout<T>(fn: (signal: AbortSignal) => Promise<T>): Promise<T> {
-  const controller = new AbortController()
-  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS)
-  try {
-    return await fn(controller.signal)
-  } finally {
-    clearTimeout(timer)
-  }
-}
 
-function headers(cfg: SupabaseConfig): Record<string, string> {
-  return {
-    apikey: cfg.serviceKey,
-    Authorization: `Bearer ${cfg.serviceKey}`,
-    "content-type": "application/json",
-  }
-}
 
 export async function dbRecordScanStat(cfg: SupabaseConfig, row: ScanStat): Promise<void> {
-  const res = await withTimeout((signal) =>
+  const res = await withTimeout(TIMEOUT_MS, (signal) =>
     fetch(`${cfg.url}/rest/v1/${TABLE}`, {
       method: "POST",
-      headers: { ...headers(cfg), Prefer: "return=minimal" },
+      headers: { ...restHeaders(cfg), Prefer: "return=minimal" },
       body: JSON.stringify(row),
       signal,
     }),
@@ -103,8 +87,8 @@ export async function dbScores(
   if (filter.language) params.set("language", `eq.${filter.language}`)
   if (filter.size) params.set("size", `eq.${filter.size}`)
 
-  const res = await withTimeout((signal) =>
-    fetch(`${cfg.url}/rest/v1/${TABLE}?${params}`, { headers: headers(cfg), signal }),
+  const res = await withTimeout(TIMEOUT_MS, (signal) =>
+    fetch(`${cfg.url}/rest/v1/${TABLE}?${params}`, { headers: restHeaders(cfg), signal }),
   )
   if (!res.ok) {
     throw new Error(`Scan-stat read failed (${res.status}): ${(await res.text()).slice(0, 200)}`)

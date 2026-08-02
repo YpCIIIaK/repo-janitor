@@ -101,12 +101,35 @@ export function isCheckable(raw: string): boolean {
   return true
 }
 
-/** Pull http(s) URLs out of a file's text, cleaned of trailing punctuation. */
+/**
+ * Pull http(s) URLs out of a file's text, cleaned of trailing punctuation.
+ *
+ * A match that stops dead at `<` was cut short by an angle-bracket placeholder,
+ * and what survives is not a URL anyone wrote. `PLACEHOLDER_RE` cannot save this
+ * one: `URL_RE` excludes `<`, so by the time the check runs the placeholder has
+ * already been amputated. This repository's own README supplied the proof —
+ * `https://…/api/card/<owner>/<name>?token=<token>` was extracted as
+ * `https://…/api/card/`, requested, and reported as a 404. Four of them, in the
+ * section that tells people how to install the badge.
+ */
 export function extractUrls(text: string): string[] {
-  const out: string[] = []
+  return extractUrlsWithLines(text).map((u) => u.url)
+}
+
+/**
+ * The same extraction, carrying line numbers for the markdown path.
+ *
+ * One function rather than two: the markdown reader used to inline its own
+ * `matchAll(URL_RE)`, which is why the placeholder bug above existed there and
+ * nowhere else. A rule that lives in two places is a rule that holds in one.
+ */
+export function extractUrlsWithLines(text: string): { url: string; line: number }[] {
+  const out: { url: string; line: number }[] = []
   for (const m of text.matchAll(URL_RE)) {
+    const at = m.index ?? 0
+    if (text[at + m[0].length] === "<") continue
     const cleaned = stripTrailingPunctuation(m[0])
-    if (cleaned) out.push(cleaned)
+    if (cleaned) out.push({ url: cleaned, line: lineAt(text, at) })
   }
   return out
 }
@@ -237,10 +260,7 @@ export const deadLinksScanner: Scanner = {
 
       // Markdown is prose end to end; source files contribute comments only.
       const found: { url: string; line: number }[] = isMd
-        ? [...text.matchAll(URL_RE)].map((m) => ({
-            url: stripTrailingPunctuation(m[0]),
-            line: lineAt(text, m.index ?? 0),
-          }))
+        ? extractUrlsWithLines(text)
         : commentUrls(text)
 
       for (const { url, line } of found) {

@@ -50,7 +50,17 @@ export function supabaseConfig(): SupabaseConfig | null {
   return { url, serviceKey }
 }
 
-function headers(cfg: SupabaseConfig): Record<string, string> {
+/**
+ * PostgREST auth headers for the service role.
+ *
+ * Lives here, with `supabaseConfig`, because every other `*-db.ts` module
+ * already imports from this one. It was copied into all five of them until this
+ * project's own duplicate-code scanner reported the twelve repeated lines —
+ * byte-identical, differing only in the timeout constant each one closed over.
+ * That is the exact drift the finding warns about: five places to forget when
+ * an auth header changes.
+ */
+export function restHeaders(cfg: SupabaseConfig): Record<string, string> {
   return {
     apikey: cfg.serviceKey,
     Authorization: `Bearer ${cfg.serviceKey}`,
@@ -58,10 +68,19 @@ function headers(cfg: SupabaseConfig): Record<string, string> {
   }
 }
 
-/** Abort rather than hang: a slow database must not hold a request open forever. */
-async function withTimeout<T>(fn: (signal: AbortSignal) => Promise<T>): Promise<T> {
+/**
+ * Run a fetch under an abort deadline.
+ *
+ * The timeout is a parameter rather than a constant because the callers do not
+ * agree on it: the read paths use 5s and the write paths 8s. Collapsing them to
+ * one number would have been a behaviour change smuggled in as a refactor.
+ */
+export async function withTimeout<T>(
+  ms: number,
+  fn: (signal: AbortSignal) => Promise<T>,
+): Promise<T> {
   const controller = new AbortController()
-  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS)
+  const timer = setTimeout(() => controller.abort(), ms)
   try {
     return await fn(controller.signal)
   } finally {
@@ -146,10 +165,10 @@ export async function dbPutShare(
     report: SharedReport
   },
 ): Promise<void> {
-  const res = await withTimeout((signal) =>
+  const res = await withTimeout(TIMEOUT_MS, (signal) =>
     fetch(`${cfg.url}/rest/v1/${TABLE}`, {
       method: "POST",
-      headers: { ...headers(cfg), Prefer: "return=minimal" },
+      headers: { ...restHeaders(cfg), Prefer: "return=minimal" },
       body: JSON.stringify({ token: share.token, report: packDbReport(share) }),
       signal,
     }),
@@ -170,10 +189,10 @@ export async function dbUpdateShare(
   },
 ): Promise<void> {
   const params = new URLSearchParams({ token: `eq.${share.token}` })
-  const res = await withTimeout((signal) =>
+  const res = await withTimeout(TIMEOUT_MS, (signal) =>
     fetch(`${cfg.url}/rest/v1/${TABLE}?${params}`, {
       method: "PATCH",
-      headers: { ...headers(cfg), Prefer: "return=minimal" },
+      headers: { ...restHeaders(cfg), Prefer: "return=minimal" },
       body: JSON.stringify({ report: packDbReport(share) }),
       signal,
     }),
@@ -185,10 +204,10 @@ export async function dbUpdateShare(
 
 export async function dbDeleteShare(cfg: SupabaseConfig, token: string): Promise<void> {
   const params = new URLSearchParams({ token: `eq.${token}` })
-  const res = await withTimeout((signal) =>
+  const res = await withTimeout(TIMEOUT_MS, (signal) =>
     fetch(`${cfg.url}/rest/v1/${TABLE}?${params}`, {
       method: "DELETE",
-      headers: { ...headers(cfg), Prefer: "return=minimal" },
+      headers: { ...restHeaders(cfg), Prefer: "return=minimal" },
       signal,
     }),
   )
@@ -207,8 +226,8 @@ export async function dbGetShare(
     limit: "1",
   })
 
-  const res = await withTimeout((signal) =>
-    fetch(`${cfg.url}/rest/v1/${TABLE}?${params}`, { headers: headers(cfg), signal }),
+  const res = await withTimeout(TIMEOUT_MS, (signal) =>
+    fetch(`${cfg.url}/rest/v1/${TABLE}?${params}`, { headers: restHeaders(cfg), signal }),
   )
   if (!res.ok) return null
 
@@ -235,8 +254,8 @@ export async function dbGetShareByRepoKey(
     limit: "1",
   })
 
-  const res = await withTimeout((signal) =>
-    fetch(`${cfg.url}/rest/v1/${TABLE}?${params}`, { headers: headers(cfg), signal }),
+  const res = await withTimeout(TIMEOUT_MS, (signal) =>
+    fetch(`${cfg.url}/rest/v1/${TABLE}?${params}`, { headers: restHeaders(cfg), signal }),
   )
   if (!res.ok) return null
 

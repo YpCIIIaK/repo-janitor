@@ -1,5 +1,5 @@
 import "server-only"
-import type { SupabaseConfig } from "@/lib/share-db"
+import { restHeaders, withTimeout, type SupabaseConfig } from "@/lib/share-db"
 import type { StoredRepo } from "@/lib/server-store"
 
 /**
@@ -44,23 +44,7 @@ const TIMEOUT_MS = 8_000
 /** Bound on rows read at once. A dashboard that needs more than this needs paging, not a bigger number. */
 export const REPO_ROW_LIMIT = 500
 
-async function withTimeout<T>(fn: (signal: AbortSignal) => Promise<T>): Promise<T> {
-  const controller = new AbortController()
-  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS)
-  try {
-    return await fn(controller.signal)
-  } finally {
-    clearTimeout(timer)
-  }
-}
 
-function headers(cfg: SupabaseConfig): Record<string, string> {
-  return {
-    apikey: cfg.serviceKey,
-    Authorization: `Bearer ${cfg.serviceKey}`,
-    "content-type": "application/json",
-  }
-}
 
 /** Every stored repository, newest first. */
 export async function dbReadRepos(cfg: SupabaseConfig): Promise<StoredRepo[]> {
@@ -70,8 +54,8 @@ export async function dbReadRepos(cfg: SupabaseConfig): Promise<StoredRepo[]> {
     limit: String(REPO_ROW_LIMIT),
   })
 
-  const res = await withTimeout((signal) =>
-    fetch(`${cfg.url}/rest/v1/${TABLE}?${params}`, { headers: headers(cfg), signal }),
+  const res = await withTimeout(TIMEOUT_MS, (signal) =>
+    fetch(`${cfg.url}/rest/v1/${TABLE}?${params}`, { headers: restHeaders(cfg), signal }),
   )
   if (!res.ok) {
     throw new Error(`Report read failed (${res.status}): ${(await res.text()).slice(0, 200)}`)
@@ -87,8 +71,8 @@ export async function dbReadRepos(cfg: SupabaseConfig): Promise<StoredRepo[]> {
 export async function dbReadRepo(cfg: SupabaseConfig, id: string): Promise<StoredRepo | null> {
   const params = new URLSearchParams({ select: "repo", id: `eq.${id}`, limit: "1" })
 
-  const res = await withTimeout((signal) =>
-    fetch(`${cfg.url}/rest/v1/${TABLE}?${params}`, { headers: headers(cfg), signal }),
+  const res = await withTimeout(TIMEOUT_MS, (signal) =>
+    fetch(`${cfg.url}/rest/v1/${TABLE}?${params}`, { headers: restHeaders(cfg), signal }),
   )
   if (!res.ok) {
     throw new Error(`Report read failed (${res.status}): ${(await res.text()).slice(0, 200)}`)
@@ -107,11 +91,11 @@ export async function dbReadRepo(cfg: SupabaseConfig, id: string): Promise<Store
  * the sequence around it races.
  */
 export async function dbWriteRepo(cfg: SupabaseConfig, repo: StoredRepo): Promise<void> {
-  const res = await withTimeout((signal) =>
+  const res = await withTimeout(TIMEOUT_MS, (signal) =>
     fetch(`${cfg.url}/rest/v1/${TABLE}`, {
       method: "POST",
       headers: {
-        ...headers(cfg),
+        ...restHeaders(cfg),
         Prefer: "resolution=merge-duplicates,return=minimal",
       },
       body: JSON.stringify({ id: repo.id, updated_at: new Date().toISOString(), repo }),

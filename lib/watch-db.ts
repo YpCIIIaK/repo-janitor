@@ -1,5 +1,5 @@
 import "server-only"
-import type { SupabaseConfig } from "@/lib/share-db"
+import { restHeaders, withTimeout, type SupabaseConfig } from "@/lib/share-db"
 import type { Grade } from "@/lib/mock-data"
 
 /**
@@ -68,23 +68,7 @@ type DbRow = {
   manage_token: string
 }
 
-async function withTimeout<T>(fn: (signal: AbortSignal) => Promise<T>): Promise<T> {
-  const controller = new AbortController()
-  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS)
-  try {
-    return await fn(controller.signal)
-  } finally {
-    clearTimeout(timer)
-  }
-}
 
-function headers(cfg: SupabaseConfig): Record<string, string> {
-  return {
-    apikey: cfg.serviceKey,
-    Authorization: `Bearer ${cfg.serviceKey}`,
-    "content-type": "application/json",
-  }
-}
 
 function fromRow(row: DbRow): WatchSubscription | null {
   const g = row.last_grade
@@ -128,11 +112,11 @@ export async function dbUpsertWatch(
   cfg: SupabaseConfig,
   sub: WatchSubscription,
 ): Promise<void> {
-  const res = await withTimeout((signal) =>
+  const res = await withTimeout(TIMEOUT_MS, (signal) =>
     fetch(`${cfg.url}/rest/v1/${TABLE}`, {
       method: "POST",
       headers: {
-        ...headers(cfg),
+        ...restHeaders(cfg),
         Prefer: "resolution=merge-duplicates,return=minimal",
       },
       body: JSON.stringify(toRow(sub)),
@@ -157,8 +141,8 @@ export async function dbGetWatchByEmailRepo(
     select: "*",
     limit: "1",
   })
-  const res = await withTimeout((signal) =>
-    fetch(`${cfg.url}/rest/v1/${TABLE}?${params}`, { headers: headers(cfg), signal }),
+  const res = await withTimeout(TIMEOUT_MS, (signal) =>
+    fetch(`${cfg.url}/rest/v1/${TABLE}?${params}`, { headers: restHeaders(cfg), signal }),
   )
   if (!res.ok) return null
   const rows = (await res.json()) as DbRow[]
@@ -175,8 +159,8 @@ export async function dbGetWatchByUnsub(
     select: "*",
     limit: "1",
   })
-  const res = await withTimeout((signal) =>
-    fetch(`${cfg.url}/rest/v1/${TABLE}?${params}`, { headers: headers(cfg), signal }),
+  const res = await withTimeout(TIMEOUT_MS, (signal) =>
+    fetch(`${cfg.url}/rest/v1/${TABLE}?${params}`, { headers: restHeaders(cfg), signal }),
   )
   if (!res.ok) return null
   const rows = (await res.json()) as DbRow[]
@@ -193,8 +177,8 @@ export async function dbListByManageToken(
     select: "*",
     order: "created_at.desc",
   })
-  const res = await withTimeout((signal) =>
-    fetch(`${cfg.url}/rest/v1/${TABLE}?${params}`, { headers: headers(cfg), signal }),
+  const res = await withTimeout(TIMEOUT_MS, (signal) =>
+    fetch(`${cfg.url}/rest/v1/${TABLE}?${params}`, { headers: restHeaders(cfg), signal }),
   )
   if (!res.ok) return []
   const rows = (await res.json()) as DbRow[]
@@ -211,8 +195,8 @@ export async function dbFindManageTokenForEmail(
     select: "manage_token",
     limit: "1",
   })
-  const res = await withTimeout((signal) =>
-    fetch(`${cfg.url}/rest/v1/${TABLE}?${params}`, { headers: headers(cfg), signal }),
+  const res = await withTimeout(TIMEOUT_MS, (signal) =>
+    fetch(`${cfg.url}/rest/v1/${TABLE}?${params}`, { headers: restHeaders(cfg), signal }),
   )
   if (!res.ok) return null
   const rows = (await res.json()) as { manage_token?: string }[]
@@ -222,10 +206,10 @@ export async function dbFindManageTokenForEmail(
 
 export async function dbDeleteWatch(cfg: SupabaseConfig, id: string): Promise<void> {
   const params = new URLSearchParams({ id: `eq.${id}` })
-  const res = await withTimeout((signal) =>
+  const res = await withTimeout(TIMEOUT_MS, (signal) =>
     fetch(`${cfg.url}/rest/v1/${TABLE}?${params}`, {
       method: "DELETE",
-      headers: { ...headers(cfg), Prefer: "return=minimal" },
+      headers: { ...restHeaders(cfg), Prefer: "return=minimal" },
       signal,
     }),
   )
@@ -255,10 +239,10 @@ export async function dbUpdateWatchCheckpoint(
     body.last_notified_at = patch.lastNotifiedAt
   }
   const params = new URLSearchParams({ id: `eq.${id}` })
-  const res = await withTimeout((signal) =>
+  const res = await withTimeout(TIMEOUT_MS, (signal) =>
     fetch(`${cfg.url}/rest/v1/${TABLE}?${params}`, {
       method: "PATCH",
-      headers: { ...headers(cfg), Prefer: "return=minimal" },
+      headers: { ...restHeaders(cfg), Prefer: "return=minimal" },
       body: JSON.stringify(body),
       signal,
     }),
@@ -281,8 +265,8 @@ export async function dbListDueWatches(
     order: "last_checked_at.asc.nullsfirst",
     limit: String(limit),
   })
-  const res = await withTimeout((signal) =>
-    fetch(`${cfg.url}/rest/v1/${TABLE}?${params}`, { headers: headers(cfg), signal }),
+  const res = await withTimeout(TIMEOUT_MS, (signal) =>
+    fetch(`${cfg.url}/rest/v1/${TABLE}?${params}`, { headers: restHeaders(cfg), signal }),
   )
   if (!res.ok) return []
   const rows = (await res.json()) as DbRow[]
