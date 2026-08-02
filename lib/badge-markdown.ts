@@ -155,7 +155,7 @@ export function embedSnippet(
   const target = parseSharePath(shareUrl)
   if (!target) return null
   const src = embedUrl(origin, target, opts)
-  const { width, height } = embedDimensions(opts.size)
+  const { width, height } = embedDimensions()
   const title = escAttr(`Repo Anti-Rot — ${target.owner}/${target.name}`)
   return `<iframe src="${escAttr(src)}" title="${title}" width="${width}" height="${height}" style="border:0;border-radius:12px;overflow:hidden;background:transparent" loading="lazy"></iframe>`
 }

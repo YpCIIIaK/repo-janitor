@@ -11,8 +11,8 @@ import {
 } from "@/lib/badge-decor"
 
 import {
+  DEFAULT_CARD_HEIGHT,
   DEFAULT_WIDGET_OPTIONS,
-  cardHeightFor,
   type WidgetOptions,
   type WidgetTheme,
 } from "@/lib/widget-options"
@@ -24,8 +24,8 @@ import {
  * channel as the small badge, enough room for grade, score, severity and a
  * one-line verdict. Pure so the layout can be unit-tested without a server.
  *
- * Appearance is driven by {@link WidgetOptions} query params (`theme`, `hide=…`)
- * so a pasted README snippet keeps the publisher’s layout choices.
+ * The only appearance option is `?theme=light`; everything else about the layout
+ * is fixed, because a card with one good layout does not need a control for it.
  */
 
 export const CARD_WIDTH = 480
@@ -211,7 +211,7 @@ export function cardHeadline(data: Pick<HealthCardData, "counts" | "totalIssues"
   return `${data.totalIssues} findings`
 }
 
-type CardOpts = Pick<WidgetOptions, "theme" | "chips" | "meta" | "headline">
+type CardOpts = Pick<WidgetOptions, "theme">
 
 /**
  * Build the SVG for a known report, or a neutral unknown card when `data` is null.
@@ -225,15 +225,10 @@ export function renderHealthCardSvg(
   data: HealthCardData | null,
   options: Partial<CardOpts> & { motion?: boolean } = {},
 ): string {
-  const opts: CardOpts = {
-    theme: options.theme ?? DEFAULT_WIDGET_OPTIONS.theme,
-    chips: options.chips ?? DEFAULT_WIDGET_OPTIONS.chips,
-    meta: options.meta ?? DEFAULT_WIDGET_OPTIONS.meta,
-    headline: options.headline ?? DEFAULT_WIDGET_OPTIONS.headline,
-  }
+  const opts: CardOpts = { theme: options.theme ?? DEFAULT_WIDGET_OPTIONS.theme }
   const pal = PALETTE[opts.theme]
   const w = CARD_WIDTH
-  const h = cardHeightFor(opts)
+  const h = DEFAULT_CARD_HEIGHT
 
   // Same texture as the badge, at card scale. Seeded from owner/name so a
   // project's card and its badge are stable and a little bit its own; clipped
@@ -305,22 +300,16 @@ export function renderHealthCardSvg(
   }
 
   // Layout bands (top → bottom): brand, title, score/headline, chips, footer.
-  const footBand = opts.meta ? FOOTER_BAND : 12
-  const chipBand = opts.chips ? 26 + 10 : 0
+  const footBand = FOOTER_BAND
+  const chipBand = 26 + 10
   const chipY = h - footBand - chipBand
   const footY = h - 18
   const headlineY = 126
-  const scoreY = opts.headline ? 102 : 118
+  const scoreY = 102
 
-  const headlineSvg = opts.headline
-    ? `<text x="${PAD_X}" y="${headlineY}" fill="${boast ? color : pal.soft}" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="13" font-weight="600">${esc(headline)}</text>`
-    : ""
-  const chipsSvg = opts.chips
-    ? `<g transform="translate(${PAD_X},${chipY})">${chips.join("")}</g>`
-    : ""
-  const metaSvg = opts.meta
-    ? `<text x="${PAD_X}" y="${footY}" fill="${pal.dim}" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="11">${esc(foot)}</text>`
-    : ""
+  const headlineSvg = `<text x="${PAD_X}" y="${headlineY}" fill="${boast ? color : pal.soft}" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="13" font-weight="600">${esc(headline)}</text>`
+  const chipsSvg = `<g transform="translate(${PAD_X},${chipY})">${chips.join("")}</g>`
+  const metaSvg = `<text x="${PAD_X}" y="${footY}" fill="${pal.dim}" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="11">${esc(foot)}</text>`
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(aria)}">

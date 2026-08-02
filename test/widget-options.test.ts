@@ -1,8 +1,8 @@
 import { describe, it, expect } from "vitest"
 import {
+  DEFAULT_CARD_HEIGHT,
   DEFAULT_WIDGET_OPTIONS,
   appendWidgetOptions,
-  cardHeightFor,
   embedDimensions,
   formatBadgeMessage,
   parseWidgetOptions,
@@ -10,6 +10,16 @@ import {
 } from "@/lib/widget-options"
 import { badgeMarkdown, cardMarkdown, embedSnippet } from "@/lib/badge-markdown"
 import { CARD_HEIGHT, renderHealthCardSvg, type HealthCardData } from "@/lib/health-card"
+
+/**
+ * There is one option left: `?theme=light`.
+ *
+ * The others — hide, message, style, label, size — are gone along with the panel
+ * that drove them. What is tested here is that the one that remains still works
+ * end to end, and that dropping the rest did not quietly change the default
+ * rendering: a README that pasted a plain URL must get exactly what it got
+ * before.
+ */
 
 const ORIGIN = "https://anti-rot.example.com"
 const SHARE = `${ORIGIN}/r/acme/widget/tok123`
@@ -30,63 +40,40 @@ describe("parseWidgetOptions", () => {
     expect(parseWidgetOptions("")).toEqual(DEFAULT_WIDGET_OPTIONS)
   })
 
-  it("reads theme, style, message, size, label and hide bands", () => {
-    const opts = parseWidgetOptions(
-      "theme=light&style=flat-square&message=grade&size=roomy&label=health&hide=chips,meta",
-    )
-    expect(opts).toMatchObject({
-      theme: "light",
-      style: "flat-square",
-      message: "grade",
-      size: "roomy",
-      label: "health",
-      chips: false,
-      meta: false,
-      headline: true,
-    })
+  it("reads the theme", () => {
+    expect(parseWidgetOptions("theme=light").theme).toBe("light")
+    expect(parseWidgetOptions("theme=dark").theme).toBe("dark")
+    expect(parseWidgetOptions("theme=neon").theme).toBe("dark")
   })
 
-  it("omits defaults from the serialized query", () => {
+  it("ignores the retired options instead of failing on them", () => {
+    // Someone's README may still carry them. Silently rendering the default is
+    // the right answer; a broken image because of a stale query is not.
+    expect(
+      parseWidgetOptions("style=flat-square&message=grade&size=roomy&label=x&hide=chips,meta"),
+    ).toEqual(DEFAULT_WIDGET_OPTIONS)
+  })
+
+  it("omits the default from the serialized query", () => {
     expect(widgetOptionsQuery(DEFAULT_WIDGET_OPTIONS).toString()).toBe("")
-  })
-
-  it("serializes only non-defaults", () => {
-    const q = widgetOptionsQuery({
-      ...DEFAULT_WIDGET_OPTIONS,
-      theme: "light",
-      chips: false,
-      message: "score",
-    })
-    expect(q.get("theme")).toBe("light")
-    expect(q.get("message")).toBe("score")
-    expect(q.get("hide")).toBe("chips")
-    expect(q.get("style")).toBeNull()
+    expect(widgetOptionsQuery({ theme: "light" }).get("theme")).toBe("light")
   })
 })
 
 describe("formatBadgeMessage", () => {
-  it("formats grade, score or both", () => {
-    expect(formatBadgeMessage("A", 94, "grade-score")).toBe("A 94")
-    expect(formatBadgeMessage("A", 94, "grade")).toBe("A")
-    expect(formatBadgeMessage("A", 94, "score")).toBe("94")
+  it("always shows grade and score", () => {
+    expect(formatBadgeMessage("A", 94)).toBe("A 94")
   })
 })
 
 describe("dimensions", () => {
-  it("grows the embed for roomy size", () => {
-    expect(embedDimensions("compact").height).toBe(228)
-    expect(embedDimensions("roomy").height).toBeGreaterThan(228)
-  })
-
-  it("shrinks the card when bands are hidden", () => {
-    expect(cardHeightFor(DEFAULT_WIDGET_OPTIONS)).toBe(CARD_HEIGHT)
-    expect(
-      cardHeightFor({ chips: false, meta: false, headline: false }),
-    ).toBeLessThan(CARD_HEIGHT)
+  it("has one embed size and one card height", () => {
+    expect(embedDimensions()).toEqual({ width: 420, height: 228 })
+    expect(DEFAULT_CARD_HEIGHT).toBe(CARD_HEIGHT)
   })
 })
 
-describe("URL helpers with options", () => {
+describe("URL helpers", () => {
   it("keeps default markdown URLs short", () => {
     expect(badgeMarkdown(ORIGIN, SHARE)).toBe(
       `[![Repo Anti-Rot](${ORIGIN}/api/badge/acme/widget?token=tok123)](${ORIGIN}/r/acme/widget/tok123)`,
@@ -95,15 +82,13 @@ describe("URL helpers with options", () => {
     expect(cardMarkdown(ORIGIN, SHARE)).not.toContain("theme=")
   })
 
-  it("appends widget options to badge, card and embed", () => {
-    const opts = { ...DEFAULT_WIDGET_OPTIONS, theme: "light" as const, message: "grade" as const }
+  it("appends the theme to badge, card and embed", () => {
+    const opts = { theme: "light" as const }
     expect(badgeMarkdown(ORIGIN, SHARE, opts)).toContain("theme=light")
-    expect(badgeMarkdown(ORIGIN, SHARE, opts)).toContain("message=grade")
     expect(cardMarkdown(ORIGIN, SHARE, opts)).toContain("theme=light")
-    const html = embedSnippet(ORIGIN, SHARE, { ...opts, size: "roomy" })
+    const html = embedSnippet(ORIGIN, SHARE, opts)
     expect(html).toContain("theme=light")
-    expect(html).toContain("size=roomy")
-    expect(html).toContain('height="268"')
+    expect(html).toContain('height="228"')
   })
 
   it("appendWidgetOptions is a no-op for defaults", () => {
@@ -113,18 +98,18 @@ describe("URL helpers with options", () => {
   })
 })
 
-describe("renderHealthCardSvg options", () => {
-  it("honours hide=chips,meta,headline and light theme", () => {
-    const svg = renderHealthCardSvg("acme", "widget", sample, {
-      theme: "light",
-      chips: false,
-      meta: false,
-      headline: false,
-    })
-    expect(svg).toContain("#ffffff")
-    expect(svg).not.toContain("0 critical")
-    expect(svg).not.toContain("findings")
-    expect(svg).not.toContain("Scanned")
-    expect(svg).toContain(`height="${cardHeightFor({ chips: false, meta: false, headline: false })}"`)
+describe("renderHealthCardSvg", () => {
+  it("renders every band, at the one card height", () => {
+    const svg = renderHealthCardSvg("acme", "widget", sample)
+    expect(svg).toContain("0 critical")
+    expect(svg).toContain("Scanned")
+    expect(svg).toContain(`height="${CARD_HEIGHT}"`)
+  })
+
+  it("honours the light theme", () => {
+    const svg = renderHealthCardSvg("acme", "widget", sample, { theme: "light" })
+    // The background is seeded per repository, so the assertion is on a palette
+    // colour that only the light theme uses, not on the gradient stops.
+    expect(svg).toContain("#1f2328")
   })
 })

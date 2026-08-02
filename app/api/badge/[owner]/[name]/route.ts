@@ -2,7 +2,7 @@ import { readServerRepos } from "@/lib/server-store"
 import { getShare } from "@/lib/share-store"
 import { UNKNOWN_GRADE_HEX, gradeHex } from "@/lib/grade-style"
 import type { Grade } from "@/lib/mock-data"
-import { formatBadgeMessage, parseWidgetOptions } from "@/lib/widget-options"
+import { formatBadgeMessage } from "@/lib/widget-options"
 import { decorLayer, driftShapes, hashSeed, shade } from "@/lib/badge-decor"
 
 /**
@@ -10,8 +10,7 @@ import { decorLayer, driftShapes, hashSeed, shade } from "@/lib/badge-decor"
  *   ![rot](https://your-deploy/api/badge/acme/web-dashboard)
  *
  * Renders `repo anti-rot | <grade> <score>` colored by grade. Unknown repos get
- * a neutral "unknown" badge so the image never 404s in a README. The right-hand
- * label can be overridden with ?label=, and ?style=flat-square squares corners.
+ * a neutral "unknown" badge so the image never 404s in a README.
  *
  * ## Two sources, because there were two kinds of user and only one was served
  *
@@ -37,6 +36,9 @@ export const dynamic = "force-dynamic"
 
 const UNKNOWN_COLOR = UNKNOWN_GRADE_HEX
 
+/** The shields left-hand text. Fixed: it names the tool, and it is not a setting. */
+const BADGE_LABEL = "repo anti-rot"
+
 // Approximate Verdana width per char at 11px — good enough for badge spacing.
 function textWidth(s: string): number {
   let w = 0
@@ -52,7 +54,6 @@ function badgeSvg(
   label: string,
   message: string,
   color: string,
-  square: boolean,
   seed: number,
   animate: boolean,
 ): string {
@@ -61,7 +62,7 @@ function badgeSvg(
   const mw = textWidth(message) + pad * 2
   const total = lw + mw
   const h = 20
-  const r = square ? 0 : 3
+  const r = 3
   const lx = (lw / 2) * 10
   const mx = (lw + mw / 2) * 10
   const lLen = (lw - pad) * 10
@@ -102,8 +103,6 @@ export async function GET(
 ) {
   const { owner, name } = await params
   const { searchParams } = new URL(request.url)
-  const opts = parseWidgetOptions(searchParams)
-  const square = opts.style === "flat-square"
 
   const wantOwner = decodeURIComponent(owner)
   const wantName = decodeURIComponent(name)
@@ -131,16 +130,14 @@ export async function GET(
     if (repo) found = { grade: repo.latest.grade, score: repo.latest.score }
   }
 
-  const message = found
-    ? formatBadgeMessage(found.grade, found.score, opts.message)
-    : "unknown"
+  const message = found ? formatBadgeMessage(found.grade, found.score) : "unknown"
   const color = found ? gradeHex(found.grade) : UNKNOWN_COLOR
 
   // The OS reduced-motion preference does not reach an SVG inside an <img>, so
   // the badge takes an explicit opt-out that a README author can paste.
   const animate = searchParams.get("motion") !== "off"
 
-  const svg = badgeSvg(opts.label, message, color, square, hashSeed(id.toLowerCase()), animate)
+  const svg = badgeSvg(BADGE_LABEL, message, color, hashSeed(id.toLowerCase()), animate)
   return new Response(svg, {
     headers: {
       "Content-Type": "image/svg+xml; charset=utf-8",

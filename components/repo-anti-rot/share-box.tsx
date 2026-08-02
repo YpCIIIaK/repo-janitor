@@ -1,16 +1,10 @@
 "use client"
 
 import { useCallback, useEffect, useRef, useState } from "react"
-import { Check, ChevronDown, Copy, Link2, RefreshCw, RotateCcw, Trash2 } from "lucide-react"
+import { Check, Copy, Link2, RefreshCw, RotateCcw, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible"
 import { useLocale } from "@/components/i18n/locale-provider"
-import { WidgetCustomize } from "@/components/repo-anti-rot/widget-customize"
 import { usageHeaders } from "@/lib/visitor"
 import {
   clearShareHandle,
@@ -29,11 +23,9 @@ import {
   parseSharePath,
 } from "@/lib/badge-markdown"
 import {
-  cardHeightFor,
+  DEFAULT_CARD_HEIGHT,
+  DEFAULT_WIDGET_OPTIONS,
   embedDimensions,
-  loadWidgetOptions,
-  saveWidgetOptions,
-  type WidgetOptions,
 } from "@/lib/widget-options"
 import { cn } from "@/lib/utils"
 
@@ -60,9 +52,7 @@ export function ShareBox({ report, repoUrl }: { report: unknown; repoUrl?: strin
   const [failed, setFailed] = useState<string | null>(null)
   const [copied, setCopied] = useState<CopyTarget | null>(null)
   const [status, setStatus] = useState<"idle" | "updated" | "rotated" | "revoked">("idle")
-  const [widgetOpts, setWidgetOpts] = useState<WidgetOptions>(() => loadWidgetOptions())
   const [tab, setTab] = useState<WidgetTab>("badge")
-  const [customizeOpen, setCustomizeOpen] = useState(false)
   const autoKey = useRef<string | null>(null)
 
   // Reload the localStorage handle when the scanned repo changes (render-time
@@ -71,11 +61,6 @@ export function ShareBox({ report, repoUrl }: { report: unknown; repoUrl?: strin
     setHandleRepoKey(repoKey)
     setHandle(repo ? loadShareHandle(repo.owner, repo.name) : null)
   }
-
-  const onWidgetChange = useCallback((next: WidgetOptions) => {
-    setWidgetOpts(next)
-    saveWidgetOptions(next)
-  }, [])
 
   const persist = useCallback(
     (data: {
@@ -219,15 +204,15 @@ export function ShareBox({ report, repoUrl }: { report: unknown; repoUrl?: strin
     const origin = typeof window !== "undefined" ? window.location.origin : ""
     const url = handle.path
     const cacheKey = handle.updatedAt
-    const cardMd = cardMarkdown(origin, url, widgetOpts, cacheKey)
-    const embedHtml = embedSnippet(origin, url, widgetOpts)
-    const badgeMd = badgeMarkdown(origin, url, widgetOpts, cacheKey)
+    const cardMd = cardMarkdown(origin, url, DEFAULT_WIDGET_OPTIONS, cacheKey)
+    const embedHtml = embedSnippet(origin, url, DEFAULT_WIDGET_OPTIONS)
+    const badgeMd = badgeMarkdown(origin, url, DEFAULT_WIDGET_OPTIONS, cacheKey)
     const target = parseSharePath(url)
-    const cardSrc = target ? cardUrl(origin, target, widgetOpts, cacheKey) : ""
-    const badgeSrc = target ? badgeUrl(origin, target, widgetOpts, cacheKey) : ""
-    const embedSrc = target ? embedUrl(origin, target, widgetOpts) : ""
-    const { height: embedH } = embedDimensions(widgetOpts.size)
-    const cardH = cardHeightFor(widgetOpts)
+    const cardSrc = target ? cardUrl(origin, target, DEFAULT_WIDGET_OPTIONS, cacheKey) : ""
+    const badgeSrc = target ? badgeUrl(origin, target, DEFAULT_WIDGET_OPTIONS, cacheKey) : ""
+    const embedSrc = target ? embedUrl(origin, target, DEFAULT_WIDGET_OPTIONS) : ""
+    const { height: embedH } = embedDimensions()
+    const cardH = DEFAULT_CARD_HEIGHT
 
     const tabs: { id: WidgetTab; label: string }[] = [
       { id: "badge", label: t("share.tabBadge") },
@@ -313,25 +298,6 @@ export function ShareBox({ report, repoUrl }: { report: unknown; repoUrl?: strin
           ))}
         </div>
 
-        <Collapsible open={customizeOpen} onOpenChange={setCustomizeOpen}>
-          <CollapsibleTrigger asChild>
-            <button
-              type="button"
-              className="flex w-full items-center justify-between rounded-md px-1 py-1 text-xs text-muted-foreground transition-colors hover:text-foreground"
-            >
-              <span>{t("share.widgetTitle")}</span>
-              <ChevronDown
-                className={cn(
-                  "size-3.5 transition-transform",
-                  customizeOpen && "rotate-180",
-                )}
-              />
-            </button>
-          </CollapsibleTrigger>
-          <CollapsibleContent className="pt-2">
-            <WidgetCustomize value={widgetOpts} onChange={onWidgetChange} />
-          </CollapsibleContent>
-        </Collapsible>
 
         {tab === "badge" && badgeMd && target && (
           <div className="space-y-2 border-t border-border pt-3">
