@@ -1,0 +1,41 @@
+name: Watch cron
+
+# Daily ping of /api/cron/watch so subscribed public repos get rescanned and
+# drop emails fire. Requires repository secrets:
+#   WATCH_CRON_URL  — full URL, e.g. https://host/api/cron/watch
+#   CRON_SECRET     — same value as the deploy's CRON_SECRET
+#
+# With either unset the job exits quietly (forks / local clones unaffected).
+
+on:
+  schedule:
+    - cron: "0 7 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: watch-cron
+  cancel-in-progress: true
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Trigger watch cron
+        env:
+          URL: ${{ secrets.WATCH_CRON_URL }}
+          SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          if [ -z "$URL" ] || [ -z "$SECRET" ]; then
+            echo "WATCH_CRON_URL or CRON_SECRET unset — skipping."
+            exit 0
+          fi
+          curl -fsS -X POST \
+            -H "Authorization: Bearer ${SECRET}" \
+            -H "Accept: application/json" \
+            --retry 3 --retry-delay 20 \
+            --max-time 280 \
+            "$URL"

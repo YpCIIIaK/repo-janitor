@@ -3,6 +3,9 @@
 [![CI](https://github.com/YpCIIIaK/repo-janitor/actions/workflows/ci.yml/badge.svg)](https://github.com/YpCIIIaK/repo-janitor/actions/workflows/ci.yml)
 [![Repo Anti-Rot](https://repo-anti-rot.onrender.com/api/badge/YpCIIIaK/repo-janitor?token=xfiXJJAdYsBL-rLw)](https://repo-anti-rot.onrender.com/r/YpCIIIaK/repo-janitor/xfiXJJAdYsBL-rLw)
 
+<!-- Dogfood: live health card for this repository (stable share token). -->
+[![Repo Anti-Rot card](https://repo-anti-rot.onrender.com/api/card/YpCIIIaK/repo-janitor?token=xfiXJJAdYsBL-rLw)](https://repo-anti-rot.onrender.com/r/YpCIIIaK/repo-janitor/xfiXJJAdYsBL-rLw)
+
 A repository **health & decay monitor**. It scans a codebase for the kinds of rot
 that accumulate silently — undocumented env vars, abandoned & vulnerable
 dependencies, stale branches, aging TODOs, committed secrets, dead & commented-out
@@ -18,7 +21,47 @@ npx repo-anti-rot scan .
 
 No clone, no install, no signup — a grade and a ranked list of findings for the
 repo you're standing in. `--format json|md|sarif` and `--output <file>` if you
-want it in a file or in CI.
+want it in a file or in CI. Add `--fix` to print the top quick-wins first.
+
+### Put a card on *your* README
+
+1. Open [repo-anti-rot.onrender.com](https://repo-anti-rot.onrender.com), scan the
+   public repo, create a **share link** (consent → Create link).
+2. Copy the markdown from the Share dialog — or paste these templates and replace
+   the placeholders:
+
+**Large card** (github-readme-stats size):
+
+```md
+[![Repo Anti-Rot](https://repo-anti-rot.onrender.com/api/card/<owner>/<name>?token=<token>)](https://repo-anti-rot.onrender.com/r/<owner>/<name>/<token>)
+```
+
+**Small badge** (title-line strip):
+
+```md
+[![Repo Anti-Rot](https://repo-anti-rot.onrender.com/api/badge/<owner>/<name>?token=<token>)](https://repo-anti-rot.onrender.com/r/<owner>/<name>/<token>)
+```
+
+Optional query params (kept in the URL so the README remembers your layout):
+`theme=light`, `hide=chips,meta,headline`, `message=grade|score|grade-score`,
+`style=flat-square`, `label=health`, `size=roomy` (embed only).
+
+**Website embed** (not GitHub — READMEs strip iframes):
+
+```html
+<iframe
+  src="https://repo-anti-rot.onrender.com/embed/<owner>/<name>/<token>"
+  title="Repo Anti-Rot"
+  width="420"
+  height="228"
+  style="border:0;border-radius:12px;overflow:hidden;background:transparent"
+  loading="lazy"
+></iframe>
+```
+
+Create the snippets on the **deployed** site (not localhost) and keep Supabase
+configured so the share token survives redeploys. Re-scanning from the same
+browser refreshes the snapshot — the README URL stays put.
 
 Everything below is for working on Repo Anti-Rot itself.
 
@@ -296,30 +339,25 @@ The per-finding enrichment is tuned to stay cheap on small/free models:
 
 ## Health badge & README card
 
-Two sizes, same sources.
+Share-link templates (card, badge, embed, query params) live under
+[Put a card on *your* README](#put-a-card-on-your-readme) at the top — copy those
+first. The Share dialog after a scan also offers one-click markdown / HTML.
 
-**Large card** (README plaque — grade, score, severity counts, verdict):
+GitHub READMEs cannot host iframes; use the SVG card or badge there. Self-hosted
+deploys: swap `repo-anti-rot.onrender.com` for your origin.
 
-```
-[![Repo Anti-Rot](https://your-deploy.example.com/api/card/<owner>/<name>?token=<token>)](https://your-deploy.example.com/r/<owner>/<name>/<token>)
-```
+## Watch for score drops (email)
 
-**Small badge** (shields strip for the title line):
+After a scan (or on a shared report), leave an email on **Watch for drops**. No
+account: we store a baseline grade/score for that public repo and email you only
+when it falls meaningfully. Manage / unsubscribe are capability links
+(`/watch/<token>`, one-click unsub). Recover the manage page anytime at `/watch`
+(magic link to the same address).
 
-```
-[![Repo Anti-Rot](https://your-deploy.example.com/api/badge/<owner>/<name>?token=<token>)](https://your-deploy.example.com/r/<owner>/<name>/<token>)
-```
-
-GitHub READMEs cannot host iframes, so the card and badge are SVG images. Click
-through to the shared report.
-
-**Website embed** (docs / status page — not GitHub README):
-
-```
-<iframe src="https://your-deploy.example.com/embed/<owner>/<name>/<token>" title="Repo Anti-Rot" width="420" height="200" style="border:0;border-radius:12px;overflow:hidden" loading="lazy"></iframe>
-```
-
-Offered as “Copy HTML” in the Share dialog after you create a link.
+Needs Supabase for the `watch_subscriptions` table (SQL in `.env.example`), plus
+`RESEND_API_KEY` to actually send mail (without it, mail is logged server-side).
+Point a daily cron at `POST /api/cron/watch` with `Authorization: Bearer $CRON_SECRET`
+(see `.github/workflows/watch-cron.yml`).
 
 **From a scan you shared.** Scan a repository, tick the consent box, create a
 share link — card and badge markdown are offered right there, ready to paste. No

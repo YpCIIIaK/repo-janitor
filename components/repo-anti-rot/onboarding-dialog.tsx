@@ -12,21 +12,31 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 
-const workflow = `# .github/workflows/hygiene.yml
+/** Must match packages/action/action.yml + README example inputs. */
+const workflow = `# .github/workflows/repo-anti-rot.yml
 name: Repo Anti-Rot
 on:
-  schedule: [{ cron: "0 9 * * 1" }]
+  schedule:
+    - cron: "0 6 * * 1" # weekly, Monday 06:00 UTC
   pull_request:
+
+permissions:
+  contents: read
+  pull-requests: write # sticky PR comment
+
 jobs:
-  scan:
+  health:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
-      - uses: repo-anti-rot/action@v1
         with:
-          dashboard-url: \${{ secrets.REPO_ANTI_ROT_URL }}
-          dashboard-token: \${{ secrets.REPO_ANTI_ROT_TOKEN }}`
+          fetch-depth: 0 # full history → real blame ages
+      - uses: YpCIIIaK/repo-janitor/packages/action@v1
+        with:
+          dashboard-url: https://repo-anti-rot.onrender.com
+          token: \${{ secrets.REPO_ANTI_ROT_INGEST_TOKEN }}
+          github-token: \${{ github.token }}
+          fail-on: D`
 
 /** `trigger` lets the sidebar rail supply a rail-shaped button. See SettingsDialog. */
 export function OnboardingDialog({ trigger }: { trigger?: React.ReactNode } = {}) {

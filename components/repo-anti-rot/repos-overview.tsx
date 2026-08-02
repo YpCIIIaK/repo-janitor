@@ -8,6 +8,7 @@ import {
   timeAgo,
   type StoredRepo,
 } from "@/lib/reports-store"
+import { estimateDebtHours, formatDebtHours } from "@/lib/debt-hours"
 import { GRADE_BADGE_CLASS } from "@/lib/grade-style"
 import { Card } from "@/components/ui/card"
 import { PortfolioTrend } from "@/components/repo-anti-rot/portfolio-trend"
@@ -39,16 +40,22 @@ export function ReposOverview({
     0,
   )
   const totalIssues = repos.reduce((sum, r) => sum + r.latest.issues.length, 0)
+  const debtHours = repos.reduce((sum, r) => sum + estimateDebtHours(r.latest.issues), 0)
   const trend = portfolioTrend(repos)
 
   const summary = [
     { label: "Repositories", value: String(total) },
     { label: "Avg score", value: String(avgScore) },
-    { label: "Open issues", value: String(totalIssues) },
     {
       label: "Critical",
       value: String(totalCritical),
       tone: totalCritical > 0 ? "text-destructive" : undefined,
+    },
+    {
+      label: "Est. debt",
+      value: formatDebtHours(debtHours),
+      tone: debtHours >= 8 ? "text-destructive" : undefined,
+      hint: totalIssues > 0 ? `${totalIssues} open` : undefined,
     },
   ]
 
@@ -68,6 +75,9 @@ export function ReposOverview({
             <span className={cn("font-mono text-2xl font-semibold tabular-nums", s.tone)}>
               {s.value}
             </span>
+            {"hint" in s && s.hint ? (
+              <span className="text-[11px] text-muted-foreground">{s.hint}</span>
+            ) : null}
           </Card>
         ))}
       </div>
@@ -137,6 +147,12 @@ export function ReposOverview({
                         {density.perKloc.toFixed(1)}/kLOC
                       </span>
                     )}
+                    <span
+                      className="font-mono text-xs tabular-nums text-muted-foreground"
+                      title="Rough fix time"
+                    >
+                      ≈{formatDebtHours(estimateDebtHours(repo.latest.issues))}
+                    </span>
                     <span className="font-mono text-sm font-semibold tabular-nums">
                       {repo.latest.score}
                     </span>

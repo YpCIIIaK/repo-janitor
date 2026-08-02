@@ -5,6 +5,7 @@ import { Check, Copy, Link2, RefreshCw, RotateCcw, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useLocale } from "@/components/i18n/locale-provider"
+import { WidgetCustomize } from "@/components/repo-anti-rot/widget-customize"
 import { usageHeaders } from "@/lib/visitor"
 import {
   clearShareHandle,
@@ -22,6 +23,14 @@ import {
   embedUrl,
   parseSharePath,
 } from "@/lib/badge-markdown"
+import {
+  DEFAULT_WIDGET_OPTIONS,
+  cardHeightFor,
+  embedDimensions,
+  loadWidgetOptions,
+  saveWidgetOptions,
+  type WidgetOptions,
+} from "@/lib/widget-options"
 
 type CopyTarget = "link" | "card" | "embed" | "badge"
 
@@ -41,12 +50,22 @@ export function ShareBox({ report, repoUrl }: { report: unknown; repoUrl?: strin
   const [failed, setFailed] = useState<string | null>(null)
   const [copied, setCopied] = useState<CopyTarget | null>(null)
   const [status, setStatus] = useState<"idle" | "updated" | "revoked">("idle")
+  const [widgetOpts, setWidgetOpts] = useState<WidgetOptions>(DEFAULT_WIDGET_OPTIONS)
   const autoKey = useRef<string | null>(null)
 
   useEffect(() => {
     if (!repo) return
     setHandle(loadShareHandle(repo.owner, repo.name))
   }, [repo?.owner, repo?.name])
+
+  useEffect(() => {
+    setWidgetOpts(loadWidgetOptions())
+  }, [])
+
+  const onWidgetChange = useCallback((next: WidgetOptions) => {
+    setWidgetOpts(next)
+    saveWidgetOptions(next)
+  }, [])
 
   const persist = useCallback(
     (data: {
@@ -184,10 +203,16 @@ export function ShareBox({ report, repoUrl }: { report: unknown; repoUrl?: strin
   if (handle) {
     const origin = typeof window !== "undefined" ? window.location.origin : ""
     const url = handle.path
-    const cardMd = cardMarkdown(origin, url)
-    const embedHtml = embedSnippet(origin, url)
-    const badgeMd = badgeMarkdown(origin, url)
+    const cardMd = cardMarkdown(origin, url, widgetOpts)
+    const embedHtml = embedSnippet(origin, url, widgetOpts)
+    const badgeMd = badgeMarkdown(origin, url, widgetOpts)
     const target = parseSharePath(url)
+    const bust = handle.updatedAt ? `&t=${encodeURIComponent(handle.updatedAt)}` : ""
+    const cardSrc = target ? `${cardUrl(origin, target, widgetOpts)}${bust}` : ""
+    const badgeSrc = target ? `${badgeUrl(origin, target, widgetOpts)}${bust}` : ""
+    const embedSrc = target ? embedUrl(origin, target, widgetOpts) : ""
+    const { height: embedH } = embedDimensions(widgetOpts.size)
+    const cardH = cardHeightFor(widgetOpts)
 
     return (
       <div className="space-y-3 rounded-lg border border-border bg-card/40 p-3">
@@ -240,6 +265,8 @@ export function ShareBox({ report, repoUrl }: { report: unknown; repoUrl?: strin
         <p className="text-[11px] leading-relaxed text-muted-foreground/80">{t("share.rotateHint")}</p>
         {failed && <p className="text-xs text-destructive">{failed}</p>}
 
+        <WidgetCustomize value={widgetOpts} onChange={onWidgetChange} />
+
         {cardMd && target && (
           <div className="border-t border-border pt-3">
             <p className="text-sm font-medium">{t("share.cardTitle")}</p>
@@ -248,11 +275,12 @@ export function ShareBox({ report, repoUrl }: { report: unknown; repoUrl?: strin
             </p>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={`${cardUrl(origin, target)}${handle.updatedAt ? `&t=${encodeURIComponent(handle.updatedAt)}` : ""}`}
+              key={cardSrc}
+              src={cardSrc}
               alt=""
               className="mt-2 w-full max-w-[480px] rounded-md border border-border"
               width={480}
-              height={220}
+              height={cardH}
             />
             <div className="mt-2 flex items-center gap-2">
               <code className="min-w-0 flex-1 truncate rounded bg-muted px-2 py-1 font-mono text-[11px] text-muted-foreground">
@@ -273,10 +301,11 @@ export function ShareBox({ report, repoUrl }: { report: unknown; repoUrl?: strin
               {t("share.embedLead")}
             </p>
             <iframe
-              src={embedUrl(origin, target)}
+              key={embedSrc}
+              src={embedSrc}
               title="Repo Anti-Rot embed preview"
-              className="mt-2 w-full rounded-xl border border-border bg-transparent"
-              style={{ height: 228 }}
+              className="mt-2 w-full max-w-[420px] rounded-xl border border-border bg-transparent"
+              style={{ height: embedH }}
               loading="lazy"
             />
             <div className="mt-2 flex items-center gap-2">
@@ -299,10 +328,10 @@ export function ShareBox({ report, repoUrl }: { report: unknown; repoUrl?: strin
             </p>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={`${badgeUrl(origin, target)}${handle.updatedAt ? `&t=${encodeURIComponent(handle.updatedAt)}` : ""}`}
+              key={badgeSrc}
+              src={badgeSrc}
               alt=""
               className="mt-2 h-5"
-              width={120}
               height={20}
             />
             <div className="mt-2 flex items-center gap-2">

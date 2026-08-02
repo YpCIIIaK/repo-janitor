@@ -2,7 +2,7 @@
 
 import { Command } from "commander";
 import { promises as fs } from "fs";
-import { renderReport } from "@repo-anti-rot/core";
+import { formatQuickWinsTerminal, quickWins, renderReport } from "@repo-anti-rot/core";
 import type { ScanReport } from "@repo-anti-rot/core";
 import { join } from "path";
 import { scanRepo } from "./context";
@@ -50,6 +50,8 @@ function registerScan(program: Command) {
     .option("-f, --format <format>", "Output format (json, terminal, md, sarif)", "terminal")
     .option("-o, --output <file>", "Output file path")
     .option("--progress", "Emit machine-readable progress events to stderr")
+    .option("--fix", "After the scan, print the top quick-wins to fix first")
+    .option("--fix-limit <n>", "How many quick-wins to list with --fix", (v) => parseInt(v, 10), 8)
     .action(async (pathArg: string, options) => {
       try {
         // `--path` wins when given explicitly, so existing scripts keep working.
@@ -71,6 +73,12 @@ function registerScan(program: Command) {
           console.log(`Results written to: ${options.output}`);
         } else {
           console.log(output);
+        }
+
+        if (options.fix) {
+          const limit = Number.isFinite(options.fixLimit) && options.fixLimit > 0 ? options.fixLimit : 8;
+          const wins = quickWins(report.issues, limit);
+          console.log("\n" + formatQuickWinsTerminal(wins));
         }
       } catch (err) {
         console.error("Error during scan:", err);

@@ -8,6 +8,13 @@
  * broken in a way that has nothing to do with the project.
  */
 
+import {
+  DEFAULT_WIDGET_OPTIONS,
+  appendWidgetOptions,
+  embedDimensions,
+  type WidgetOptions,
+} from "@/lib/widget-options"
+
 /** `/r/<owner>/<name>/<token>` — the share path the API hands back. */
 const SHARE_PATH_RE = /^\/r\/([^/]+)\/([^/]+)\/([A-Za-z0-9_-]+)\/?$/
 
@@ -47,15 +54,25 @@ function shareHref(origin: string, t: ShareTarget): string {
 }
 
 /** Absolute badge image URL for a share target (shields strip). */
-export function badgeUrl(origin: string, t: ShareTarget): string {
+export function badgeUrl(
+  origin: string,
+  t: ShareTarget,
+  opts: WidgetOptions = DEFAULT_WIDGET_OPTIONS,
+): string {
   const path = `/api/badge/${encodeURIComponent(t.owner)}/${encodeURIComponent(t.name)}`
-  return `${origin.replace(/\/$/, "")}${path}?token=${encodeURIComponent(t.token)}`
+  const base = `${origin.replace(/\/$/, "")}${path}?token=${encodeURIComponent(t.token)}`
+  return appendWidgetOptions(base, opts)
 }
 
 /** Absolute large-card image URL for a share target (README plaque). */
-export function cardUrl(origin: string, t: ShareTarget): string {
+export function cardUrl(
+  origin: string,
+  t: ShareTarget,
+  opts: WidgetOptions = DEFAULT_WIDGET_OPTIONS,
+): string {
   const path = `/api/card/${encodeURIComponent(t.owner)}/${encodeURIComponent(t.name)}`
-  return `${origin.replace(/\/$/, "")}${path}?token=${encodeURIComponent(t.token)}`
+  const base = `${origin.replace(/\/$/, "")}${path}?token=${encodeURIComponent(t.token)}`
+  return appendWidgetOptions(base, opts)
 }
 
 /**
@@ -64,20 +81,28 @@ export function cardUrl(origin: string, t: ShareTarget): string {
  * Clickable on purpose. A bare grade invites "says who?", and the answer should
  * be one click away rather than something the reader has to take on trust.
  */
-export function badgeMarkdown(origin: string, shareUrl: string): string | null {
+export function badgeMarkdown(
+  origin: string,
+  shareUrl: string,
+  opts: WidgetOptions = DEFAULT_WIDGET_OPTIONS,
+): string | null {
   const target = parseSharePath(shareUrl)
   if (!target) return null
-  const img = badgeUrl(origin, target)
+  const img = badgeUrl(origin, target, opts)
   return `[![Repo Anti-Rot](${img})](${shareHref(origin, target)})`
 }
 
 /**
  * Markdown for the large health card — same link target as the strip badge.
  */
-export function cardMarkdown(origin: string, shareUrl: string): string | null {
+export function cardMarkdown(
+  origin: string,
+  shareUrl: string,
+  opts: WidgetOptions = DEFAULT_WIDGET_OPTIONS,
+): string | null {
   const target = parseSharePath(shareUrl)
   if (!target) return null
-  const img = cardUrl(origin, target)
+  const img = cardUrl(origin, target, opts)
   return `[![Repo Anti-Rot](${img})](${shareHref(origin, target)})`
 }
 
@@ -87,9 +112,14 @@ export const EMBED_WIDTH = 420
 export const EMBED_HEIGHT = 228
 
 /** Absolute embed page URL for a share target. */
-export function embedUrl(origin: string, t: ShareTarget): string {
+export function embedUrl(
+  origin: string,
+  t: ShareTarget,
+  opts: WidgetOptions = DEFAULT_WIDGET_OPTIONS,
+): string {
   const base = origin.replace(/\/$/, "")
-  return `${base}/embed/${encodeURIComponent(t.owner)}/${encodeURIComponent(t.name)}/${t.token}`
+  const url = `${base}/embed/${encodeURIComponent(t.owner)}/${encodeURIComponent(t.name)}/${t.token}`
+  return appendWidgetOptions(url, opts)
 }
 
 /**
@@ -101,10 +131,15 @@ function escAttr(s: string): string {
   return s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;")
 }
 
-export function embedSnippet(origin: string, shareUrl: string): string | null {
+export function embedSnippet(
+  origin: string,
+  shareUrl: string,
+  opts: WidgetOptions = DEFAULT_WIDGET_OPTIONS,
+): string | null {
   const target = parseSharePath(shareUrl)
   if (!target) return null
-  const src = embedUrl(origin, target)
+  const src = embedUrl(origin, target, opts)
+  const { width, height } = embedDimensions(opts.size)
   const title = escAttr(`Repo Anti-Rot — ${target.owner}/${target.name}`)
-  return `<iframe src="${escAttr(src)}" title="${title}" width="${EMBED_WIDTH}" height="${EMBED_HEIGHT}" style="border:0;border-radius:12px;overflow:hidden;background:transparent" loading="lazy"></iframe>`
+  return `<iframe src="${escAttr(src)}" title="${title}" width="${width}" height="${height}" style="border:0;border-radius:12px;overflow:hidden;background:transparent" loading="lazy"></iframe>`
 }
