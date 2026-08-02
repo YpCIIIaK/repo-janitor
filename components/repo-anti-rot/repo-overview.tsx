@@ -1,6 +1,7 @@
 "use client"
 
-import { Boxes, FileCode2, Github, Layers, PackageOpen, ScrollText } from "lucide-react"
+import { Boxes, FileCode2, Layers, PackageOpen, ScrollText } from "lucide-react"
+import { Github } from "@/components/icons/github"
 import type { Grade } from "@/lib/mock-data"
 import { languageShares, type RepoProfile } from "@/lib/repo-profile"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
