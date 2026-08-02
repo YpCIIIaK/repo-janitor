@@ -3,7 +3,7 @@
 [![CI](https://github.com/YpCIIIaK/repo-janitor/actions/workflows/ci.yml/badge.svg)](https://github.com/YpCIIIaK/repo-janitor/actions/workflows/ci.yml)
 [![Repo Anti-Rot](https://repo-anti-rot.onrender.com/api/badge/YpCIIIaK/repo-janitor?token=6vrFaCeAInuIPVm1)](https://repo-anti-rot.onrender.com/r/YpCIIIaK/repo-janitor/6vrFaCeAInuIPVm1)
 
-[![Repo Anti-Rot card](https://repo-anti-rot.onrender.com/api/card/YpCIIIaK/repo-janitor?token=xfiXJJAdYsBL-rLw)]
+[![Repo Anti-Rot card](https://repo-anti-rot.onrender.com/api/card/YpCIIIaK/repo-janitor?token=xfiXJJAdYsBL-rLw)
 
 A repository **health & decay monitor**. It scans a codebase for the kinds of rot
 that accumulate silently — undocumented env vars, abandoned & vulnerable
