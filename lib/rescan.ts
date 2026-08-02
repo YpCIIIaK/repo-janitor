@@ -51,8 +51,34 @@ export async function rescanRepo(repo: StoredRepo, hooks: RescanHooks = {}): Pro
     })
   }
 
+  const previous = {
+    grade: repo.latest.grade,
+    score: repo.latest.score,
+    critical: repo.latest.issues.filter((i) => i.severity === "critical").length,
+  }
+
   saveReport(report, url)
   // Keep a previously published README badge / share URL on this browser in sync.
   await refreshPublishedShare(report, url).catch(() => "failed")
+
+  // Same webhook as CI ingest — browser rescans used to be silent.
+  if (report.score < previous.score) {
+    const critical = report.issues.filter((i) => i.severity === "critical").length
+    void fetch("/api/notify-drop", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        owner: report.repo.owner,
+        name: report.repo.name,
+        previous,
+        current: {
+          grade: report.grade,
+          score: report.score,
+          critical,
+        },
+      }),
+    }).catch(() => {})
+  }
+
   return report
 }

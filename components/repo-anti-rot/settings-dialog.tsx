@@ -267,7 +267,8 @@ export function SettingsDialog({ trigger }: { trigger?: React.ReactNode } = {}) 
                   Scheduled scans
                 </Label>
                 <p className="text-xs text-muted-foreground">
-                  Auto-rescan tracked repos on a schedule while this tab is open.
+                  Runs only while this browser tab stays open — closing it stops the schedule.
+                  For unattended monitoring use the GitHub Action or Watch email alerts.
                 </p>
               </div>
               <Switch
@@ -331,8 +332,9 @@ export function SettingsDialog({ trigger }: { trigger?: React.ReactNode } = {}) 
                 )}
 
                 <p className="text-xs text-muted-foreground">
-                  {describeSchedule(sched)} · runs only while a tab is open. For unattended scans use
-                  the GitHub Action&apos;s <code>schedule:</code> trigger.
+                  {describeSchedule(sched)} · this tab must stay open. Unattended: Action{" "}
+                  <code>schedule:</code> (Settings → Connect a repository) or leave an email on{" "}
+                  <strong>Watch for drops</strong> after a scan.
                 </p>
               </div>
             )}

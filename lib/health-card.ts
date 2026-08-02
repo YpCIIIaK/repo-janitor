@@ -1,6 +1,12 @@
 import type { Grade } from "@/lib/mock-data"
 import { UNKNOWN_GRADE_HEX, gradeHex } from "@/lib/grade-style"
 import { isBoastworthy, verdictOf, type VerdictCounts } from "@/lib/verdict"
+import {
+  DEFAULT_WIDGET_OPTIONS,
+  cardHeightFor,
+  type WidgetOptions,
+  type WidgetTheme,
+} from "@/lib/widget-options"
 
 /**
  * Large README health card — the “star counter” size, not the shields strip.
@@ -8,6 +14,9 @@ import { isBoastworthy, verdictOf, type VerdictCounts } from "@/lib/verdict"
  * GitHub READMEs cannot host iframes, so this is an SVG image: same distribution
  * channel as the small badge, enough room for grade, score, severity and a
  * one-line verdict. Pure so the layout can be unit-tested without a server.
+ *
+ * Appearance is driven by {@link WidgetOptions} query params (`theme`, `hide=…`)
+ * so a pasted README snippet keeps the publisher’s layout choices.
  */
 
 export const CARD_WIDTH = 480
@@ -32,6 +41,46 @@ export type HealthCardData = {
   generatedAt?: string
   /** "1,240 files · 182,431 lines" — only when the scan recorded a profile. */
   scope?: string | null
+}
+
+type CardPalette = {
+  bg0: string
+  bg1: string
+  stroke: string
+  muted: string
+  text: string
+  soft: string
+  dim: string
+  plaque: string
+  chipOff: string
+  chipOffFg: string
+}
+
+const PALETTE: Record<WidgetTheme, CardPalette> = {
+  dark: {
+    bg0: "#161b22",
+    bg1: "#0d1117",
+    stroke: "#30363d",
+    muted: "#8b949e",
+    text: "#e6edf3",
+    soft: "#c9d1d9",
+    dim: "#6e7681",
+    plaque: "#0d1117",
+    chipOff: "#21262d",
+    chipOffFg: "#6e7681",
+  },
+  light: {
+    bg0: "#ffffff",
+    bg1: "#f6f8fa",
+    stroke: "#d0d7de",
+    muted: "#656d76",
+    text: "#1f2328",
+    soft: "#424a53",
+    dim: "#656d76",
+    plaque: "#ffffff",
+    chipOff: "#eaeef2",
+    chipOffFg: "#656d76",
+  },
 }
 
 function esc(s: string): string {
@@ -105,6 +154,8 @@ export function cardHeadline(data: Pick<HealthCardData, "counts" | "totalIssues"
   return `${data.totalIssues} findings`
 }
 
+type CardOpts = Pick<WidgetOptions, "theme" | "chips" | "meta" | "headline">
+
 /**
  * Build the SVG for a known report, or a neutral unknown card when `data` is null.
  *
@@ -115,9 +166,17 @@ export function renderHealthCardSvg(
   pathOwner: string,
   pathName: string,
   data: HealthCardData | null,
+  options: Partial<CardOpts> = {},
 ): string {
+  const opts: CardOpts = {
+    theme: options.theme ?? DEFAULT_WIDGET_OPTIONS.theme,
+    chips: options.chips ?? DEFAULT_WIDGET_OPTIONS.chips,
+    meta: options.meta ?? DEFAULT_WIDGET_OPTIONS.meta,
+    headline: options.headline ?? DEFAULT_WIDGET_OPTIONS.headline,
+  }
+  const pal = PALETTE[opts.theme]
   const w = CARD_WIDTH
-  const h = CARD_HEIGHT
+  const h = cardHeightFor(opts)
   const title = truncateLabel(`${pathOwner}/${pathName}`)
   const aria = data
     ? `Repo Anti-Rot: ${pathOwner}/${pathName} grade ${data.grade}, ${data.score} of 100`
@@ -129,15 +188,15 @@ export function renderHealthCardSvg(
   <title>${esc(aria)}</title>
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#161b22"/>
-      <stop offset="100%" stop-color="#0d1117"/>
+      <stop offset="0%" stop-color="${pal.bg0}"/>
+      <stop offset="100%" stop-color="${pal.bg1}"/>
     </linearGradient>
   </defs>
-  <rect width="${w}" height="${h}" rx="12" fill="url(#bg)" stroke="#30363d" stroke-width="1"/>
-  <text x="${PAD_X}" y="40" fill="#8b949e" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="13" font-weight="600">Repo Anti-Rot</text>
-  <text x="${PAD_X}" y="78" fill="#e6edf3" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="22" font-weight="700">${esc(title)}</text>
+  <rect width="${w}" height="${h}" rx="12" fill="url(#bg)" stroke="${pal.stroke}" stroke-width="1"/>
+  <text x="${PAD_X}" y="40" fill="${pal.muted}" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="13" font-weight="600">Repo Anti-Rot</text>
+  <text x="${PAD_X}" y="78" fill="${pal.text}" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="22" font-weight="700">${esc(title)}</text>
   <text x="${PAD_X}" y="120" fill="${UNKNOWN_COLOR}" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="28" font-weight="700">unknown</text>
-  <text x="${PAD_X}" y="${h - 22}" fill="#6e7681" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="12">No published scan for this repository</text>
+  <text x="${PAD_X}" y="${h - 22}" fill="${pal.dim}" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="12">No published scan for this repository</text>
 </svg>`
   }
 
@@ -147,11 +206,10 @@ export function renderHealthCardSvg(
   const { critical, warning, info } = data.counts
   const foot = formatCardFoot(data.scope, data.generatedAt, 52)
 
-  // Severity chips — muted when zero so a clean result does not look alarmed.
   const chip = (label: string, n: number, fill: string, x: number) => {
     const active = n > 0
-    const bg = active ? fill : "#21262d"
-    const fg = active ? "#0d1117" : "#6e7681"
+    const bg = active ? fill : pal.chipOff
+    const fg = active ? (opts.theme === "light" ? "#ffffff" : "#0d1117") : pal.chipOffFg
     const text = `${n} ${label}`
     const cw = Math.max(64, 18 + text.length * 6.4)
     return `
@@ -175,39 +233,52 @@ export function renderHealthCardSvg(
   }
 
   // Layout bands (top → bottom): brand, title, score/headline, chips, footer.
-  // Chips sit above a dedicated footer band so the meta line cannot cover them.
-  const chipY = h - FOOTER_BAND - 26 - 10
+  const footBand = opts.meta ? FOOTER_BAND : 12
+  const chipBand = opts.chips ? 26 + 10 : 0
+  const chipY = h - footBand - chipBand
   const footY = h - 18
+  const headlineY = 126
+  const scoreY = opts.headline ? 102 : 118
+
+  const headlineSvg = opts.headline
+    ? `<text x="${PAD_X}" y="${headlineY}" fill="${boast ? color : pal.soft}" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="13" font-weight="600">${esc(headline)}</text>`
+    : ""
+  const chipsSvg = opts.chips
+    ? `<g transform="translate(${PAD_X},${chipY})">${chips.join("")}</g>`
+    : ""
+  const metaSvg = opts.meta
+    ? `<text x="${PAD_X}" y="${footY}" fill="${pal.dim}" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="11">${esc(foot)}</text>`
+    : ""
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(aria)}">
   <title>${esc(aria)}</title>
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#161b22"/>
-      <stop offset="100%" stop-color="#0d1117"/>
+      <stop offset="0%" stop-color="${pal.bg0}"/>
+      <stop offset="100%" stop-color="${pal.bg1}"/>
     </linearGradient>
     <linearGradient id="glow" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%" stop-color="${color}" stop-opacity="0.22"/>
       <stop offset="100%" stop-color="${color}" stop-opacity="0"/>
     </linearGradient>
   </defs>
-  <rect width="${w}" height="${h}" rx="12" fill="url(#bg)" stroke="#30363d" stroke-width="1"/>
+  <rect width="${w}" height="${h}" rx="12" fill="url(#bg)" stroke="${pal.stroke}" stroke-width="1"/>
   <rect x="0" y="0" width="6" height="${h}" rx="3" fill="${color}"/>
   <rect x="6" y="0" width="160" height="${h}" fill="url(#glow)"/>
 
-  <text x="${PAD_X}" y="34" fill="#8b949e" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="12" font-weight="600" letter-spacing="0.04em">REPO ANTI-ROT</text>
-  <text x="${PAD_X}" y="62" fill="#e6edf3" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="20" font-weight="700">${esc(title)}</text>
+  <text x="${PAD_X}" y="34" fill="${pal.muted}" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="12" font-weight="600" letter-spacing="0.04em">REPO ANTI-ROT</text>
+  <text x="${PAD_X}" y="62" fill="${pal.text}" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="20" font-weight="700">${esc(title)}</text>
 
   <!-- Grade plaque — stops above the chip row -->
-  <rect x="${w - 124}" y="24" width="92" height="92" rx="16" fill="#0d1117" stroke="${color}" stroke-width="3"/>
+  <rect x="${w - 124}" y="24" width="92" height="92" rx="16" fill="${pal.plaque}" stroke="${color}" stroke-width="3"/>
   <text x="${w - 78}" y="88" text-anchor="middle" fill="${color}" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="52" font-weight="800">${esc(data.grade)}</text>
 
-  <text x="${PAD_X}" y="102" fill="#e6edf3" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="28" font-weight="700">${data.score}<tspan fill="#8b949e" font-size="16" font-weight="600">/100</tspan></text>
-  <text x="${PAD_X}" y="126" fill="${boast ? color : "#c9d1d9"}" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="13" font-weight="600">${esc(headline)}</text>
+  <text x="${PAD_X}" y="${scoreY}" fill="${pal.text}" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="28" font-weight="700">${data.score}<tspan fill="${pal.muted}" font-size="16" font-weight="600">/100</tspan></text>
+  ${headlineSvg}
 
-  <g transform="translate(${PAD_X},${chipY})">${chips.join("")}</g>
+  ${chipsSvg}
 
-  <text x="${PAD_X}" y="${footY}" fill="#6e7681" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="11">${esc(foot)}</text>
+  ${metaSvg}
 </svg>`
 }

@@ -3,6 +3,7 @@ import { getShare } from "@/lib/share-store"
 import { scopeLine } from "@/lib/verdict"
 import { renderHealthCardSvg, type HealthCardData } from "@/lib/health-card"
 import type { Grade } from "@/lib/mock-data"
+import { parseWidgetOptions } from "@/lib/widget-options"
 
 /**
  * Large SVG health card for READMEs — github-readme-stats size, not a shields strip.
@@ -24,6 +25,7 @@ export async function GET(
 ) {
   const { owner, name } = await params
   const { searchParams } = new URL(request.url)
+  const opts = parseWidgetOptions(searchParams)
 
   const wantOwner = decodeURIComponent(owner)
   const wantName = decodeURIComponent(name)
@@ -69,7 +71,7 @@ export async function GET(
     }
   }
 
-  const svg = renderHealthCardSvg(wantOwner, wantName, data)
+  const svg = renderHealthCardSvg(wantOwner, wantName, data, opts)
   return new Response(svg, {
     headers: {
       "Content-Type": "image/svg+xml; charset=utf-8",

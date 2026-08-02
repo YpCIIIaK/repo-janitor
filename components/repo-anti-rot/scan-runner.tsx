@@ -30,8 +30,11 @@ import { refreshPublishedShare } from "@/lib/share-refresh"
 import { GRADE_CSS_VAR } from "@/lib/grade-style"
 import { Progress } from "@/components/ui/progress"
 import { ShareBox } from "./share-box"
+import { WatchBox } from "./watch-box"
+import { FamousRepos } from "./famous-repos"
 import { PercentileLine } from "./percentile-line"
 import { useLocale } from "@/components/i18n/locale-provider"
+import { formatDebtHours, HOURS_PER_SEVERITY } from "@/lib/debt-hours"
 
 type Grade = "A" | "B" | "C" | "D" | "F"
 type Severity = "critical" | "warning" | "info"
@@ -55,6 +58,8 @@ interface ScanReport {
   score: number
   grade: Grade
   issues: Issue[]
+  /** HEAD SHA when the scanner recorded it — used as the watch baseline. */
+  commit?: string
   /**
    * Language and tooling breakdown. Optional because reports stored by older
    * versions predate it, and the only thing that reads it here — the percentile
@@ -147,10 +152,13 @@ function reportToMarkdown(report: ScanReport): string {
   return lines.join("\n")
 }
 
+const SEV_RANK: Record<Severity, number> = { critical: 3, warning: 2, info: 1 }
+
 function ResultCard({ result, onOpen }: { result: ScanResult; onOpen?: (repoId: string) => void }) {
   const { t } = useLocale()
   const [expanded, setExpanded] = useState<string | null>(null)
   const [copied, setCopied] = useState(false)
+  const [showAllFindings, setShowAllFindings] = useState(false)
 
   if (!result.ok || !result.report) {
     return (
@@ -174,6 +182,13 @@ function ResultCard({ result, onOpen }: { result: ScanResult; onOpen?: (repoId: 
     warning: issues.filter((i) => i.severity === "warning").length,
     info: issues.filter((i) => i.severity === "info").length,
   }
+  const ranked = [...issues].sort((a, b) => {
+    const sev = SEV_RANK[b.severity] - SEV_RANK[a.severity]
+    if (sev !== 0) return sev
+    return b.ageDays - a.ageDays
+  })
+  const PREVIEW = 3
+  const visible = showAllFindings ? ranked : ranked.slice(0, PREVIEW)
 
   async function copyJson() {
     try {
@@ -224,8 +239,23 @@ function ResultCard({ result, onOpen }: { result: ScanResult; onOpen?: (repoId: 
             reader's eye. */}
         <PercentileLine score={score} languages={report.profile?.languages} />
 
+        {/* Peak-motivation CTAs first — watch + share before a wall of findings. */}
+        <div className="space-y-2 rounded-lg border border-primary/25 bg-primary/5 p-3">
+          <p className="text-xs font-medium text-foreground">{t("scan.firstLookTitle")}</p>
+          <p className="text-[11px] leading-relaxed text-muted-foreground">{t("scan.firstLookLead")}</p>
+          <WatchBox
+            owner={repo.owner}
+            name={repo.name}
+            repoUrl={result.url}
+            grade={grade}
+            score={score}
+            sha={typeof report.commit === "string" ? report.commit : null}
+          />
+          <ShareBox report={report} repoUrl={result.url} />
+        </div>
+
         {/* Severity counts */}
-        <div className="flex gap-2 text-xs">
+        <div className="flex flex-wrap items-center gap-2 text-xs">
           <span className={cn("rounded-full border px-2 py-0.5", severityStyle.critical)}>
             {counts.critical} {t("issues.critical")}
           </span>
@@ -235,62 +265,89 @@ function ResultCard({ result, onOpen }: { result: ScanResult; onOpen?: (repoId: 
           <span className={cn("rounded-full border px-2 py-0.5", severityStyle.info)}>
             {counts.info} {t("issues.info")}
           </span>
+          {ranked.length > 0 && (
+            <span className="text-muted-foreground">
+              {t("scan.debtHint", {
+                debt: formatDebtHours(
+                  ranked.reduce((s, i) => s + (HOURS_PER_SEVERITY[i.severity] ?? 0), 0),
+                ),
+              })}
+            </span>
+          )}
         </div>
 
-        {/* Issues — expandable rows with full detail */}
-        {issues.length > 0 ? (
-          <div className="divide-y divide-border rounded-md border border-border">
-            {issues.map((issue) => {
-              const open = expanded === issue.id
-              return (
-                <div key={issue.id}>
-                  <button
-                    onClick={() => setExpanded(open ? null : issue.id)}
-                    className="flex w-full items-center gap-3 px-3 py-2 text-left transition-colors hover:bg-accent/50"
-                  >
-                    {open ? (
-                      <ChevronDown className="size-4 shrink-0 text-muted-foreground" />
-                    ) : (
-                      <ChevronRight className="size-4 shrink-0 text-muted-foreground" />
-                    )}
-                    <span
-                      className={cn(
-                        "hidden w-16 shrink-0 rounded-full border px-2 py-0.5 text-center text-[10px] font-medium uppercase sm:inline-block",
-                        severityStyle[issue.severity],
-                      )}
+        {/* Quick wins first; full list behind one click so the first session stays light. */}
+        {ranked.length > 0 ? (
+          <div className="space-y-2">
+            <p className="text-xs font-medium text-muted-foreground">{t("scan.quickWinsTitle")}</p>
+            <div className="divide-y divide-border rounded-md border border-border">
+              {visible.map((issue) => {
+                const open = expanded === issue.id
+                return (
+                  <div key={issue.id}>
+                    <button
+                      onClick={() => setExpanded(open ? null : issue.id)}
+                      className="flex w-full items-center gap-3 px-3 py-2 text-left transition-colors hover:bg-accent/50"
                     >
-                      {issue.severity}
-                    </span>
-                    <span className="min-w-0 flex-1">
-                      <span className="block truncate text-sm">{issue.title}</span>
-                      <span className="block truncate font-mono text-xs text-muted-foreground">{issue.location}</span>
-                    </span>
-                    <span className="hidden shrink-0 text-xs text-muted-foreground md:block">
-                      {categoryLabels[issue.category]}
-                    </span>
-                    <span className="w-12 shrink-0 text-right font-mono text-xs tabular-nums text-muted-foreground">
-                      {formatAge(issue.ageDays)}
-                    </span>
-                  </button>
-                  {open && (
-                    <div className="space-y-2 bg-secondary/40 px-4 pb-4 pl-11 pt-1 text-sm text-muted-foreground">
-                      <p>{issue.detail}</p>
-                      {issue.aiNote && (
-                        <div className="rounded-md border border-primary/30 bg-primary/5 px-3 py-2">
-                          <div className="mb-1 text-xs font-medium text-primary">AI analysis</div>
-                          <p className="text-foreground/90">{issue.aiNote}</p>
-                        </div>
+                      {open ? (
+                        <ChevronDown className="size-4 shrink-0 text-muted-foreground" />
+                      ) : (
+                        <ChevronRight className="size-4 shrink-0 text-muted-foreground" />
                       )}
-                      <div className="flex flex-wrap gap-x-4 gap-y-1 font-mono text-xs">
-                        <span>category: {categoryLabels[issue.category]}</span>
-                        <span>location: {issue.location}</span>
-                        <span>age: {formatAge(issue.ageDays)}</span>
+                      <span
+                        className={cn(
+                          "hidden w-16 shrink-0 rounded-full border px-2 py-0.5 text-center text-[10px] font-medium uppercase sm:inline-block",
+                          severityStyle[issue.severity],
+                        )}
+                      >
+                        {issue.severity}
+                      </span>
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate text-sm">{issue.title}</span>
+                        <span className="block truncate font-mono text-xs text-muted-foreground">
+                          {issue.location}
+                        </span>
+                      </span>
+                      <span className="hidden shrink-0 text-xs text-muted-foreground md:block">
+                        {categoryLabels[issue.category]}
+                      </span>
+                      <span className="w-12 shrink-0 text-right font-mono text-xs tabular-nums text-muted-foreground">
+                        {formatAge(issue.ageDays)}
+                      </span>
+                    </button>
+                    {open && (
+                      <div className="space-y-2 bg-secondary/40 px-4 pb-4 pl-11 pt-1 text-sm text-muted-foreground">
+                        <p>{issue.detail}</p>
+                        {issue.aiNote && (
+                          <div className="rounded-md border border-primary/30 bg-primary/5 px-3 py-2">
+                            <div className="mb-1 text-xs font-medium text-primary">AI analysis</div>
+                            <p className="text-foreground/90">{issue.aiNote}</p>
+                          </div>
+                        )}
+                        <div className="flex flex-wrap gap-x-4 gap-y-1 font-mono text-xs">
+                          <span>category: {categoryLabels[issue.category]}</span>
+                          <span>location: {issue.location}</span>
+                          <span>age: {formatAge(issue.ageDays)}</span>
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </div>
-              )
-            })}
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+            {ranked.length > PREVIEW && (
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="h-7 text-xs"
+                onClick={() => setShowAllFindings((v) => !v)}
+              >
+                {showAllFindings
+                  ? t("scan.showFewer")
+                  : t("scan.showAllFindings", { count: ranked.length })}
+              </Button>
+            )}
           </div>
         ) : (
           <p className="rounded-md border border-border py-6 text-center text-sm text-muted-foreground">
@@ -298,8 +355,8 @@ function ResultCard({ result, onOpen }: { result: ScanResult; onOpen?: (repoId: 
           </p>
         )}
 
-        {/* Export actions */}
-        <div className="flex flex-wrap gap-2 pt-1">
+        {/* Secondary: dashboard + export — after the retention CTAs. */}
+        <div className="flex flex-wrap gap-2 border-t border-border pt-3">
           {onOpen && (
             <Button size="sm" onClick={() => onOpen(`${repo.owner}/${repo.name}`)}>
               <Maximize2 className="size-4" />
@@ -327,10 +384,6 @@ function ResultCard({ result, onOpen }: { result: ScanResult; onOpen?: (repoId: 
             {copied ? t("scan.copied") : t("scan.copyJson")}
           </Button>
         </div>
-
-        {/* Opt-in publishing. Deliberately below the results: the user decides
-            after seeing what they would be sharing, not before. */}
-        <ShareBox report={report} repoUrl={result.url} />
       </CardContent>
     </Card>
   )
@@ -427,6 +480,8 @@ export function ScanRunner({ onOpen }: { onOpen?: (repoId: string) => void }) {
           <p className="text-sm text-muted-foreground">{t("scan.formLead")}</p>
 
           <RepoPicker selected={selected} onChange={setSelected} disabled={loading} />
+
+          <FamousRepos selected={selected} onChange={setSelected} disabled={loading} />
 
           <div className="flex items-center justify-between gap-3 border-t border-border pt-3">
             <span className="text-xs text-muted-foreground">

@@ -35,6 +35,10 @@ repo-anti-rot scan --path . --format json --output report.json
 # write a SARIF 2.1.0 file for GitHub code scanning
 repo-anti-rot scan --path . --format sarif --output repo-anti-rot.sarif
 
+# Top findings to fix first (~an hour of focused work for the first few)
+repo-anti-rot scan --path . --fix
+repo-anti-rot scan --path . --fix --fix-limit 5
+
 # scan many cloned repos under a directory
 repo-anti-rot batch ./repos --out-dir ./reports
 ```

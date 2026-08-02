@@ -2,6 +2,7 @@ import { readServerRepos } from "@/lib/server-store"
 import { getShare } from "@/lib/share-store"
 import { UNKNOWN_GRADE_HEX, gradeHex } from "@/lib/grade-style"
 import type { Grade } from "@/lib/mock-data"
+import { formatBadgeMessage, parseWidgetOptions } from "@/lib/widget-options"
 
 /**
  * Shields-style SVG health badge for a repo, e.g.
@@ -82,8 +83,8 @@ export async function GET(
 ) {
   const { owner, name } = await params
   const { searchParams } = new URL(request.url)
-  const label = searchParams.get("label") || "repo anti-rot"
-  const square = searchParams.get("style") === "flat-square"
+  const opts = parseWidgetOptions(searchParams)
+  const square = opts.style === "flat-square"
 
   const wantOwner = decodeURIComponent(owner)
   const wantName = decodeURIComponent(name)
@@ -104,10 +105,12 @@ export async function GET(
     if (repo) found = { grade: repo.latest.grade, score: repo.latest.score }
   }
 
-  const message = found ? `${found.grade} ${found.score}` : "unknown"
+  const message = found
+    ? formatBadgeMessage(found.grade, found.score, opts.message)
+    : "unknown"
   const color = found ? gradeHex(found.grade) : UNKNOWN_COLOR
 
-  const svg = badgeSvg(label, message, color, square)
+  const svg = badgeSvg(opts.label, message, color, square)
   return new Response(svg, {
     headers: {
       "Content-Type": "image/svg+xml; charset=utf-8",

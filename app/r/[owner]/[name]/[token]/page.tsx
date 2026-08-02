@@ -6,6 +6,7 @@ import { getShare } from "@/lib/share-store"
 import { LOCALE_COOKIE, resolveLocale, t } from "@/lib/i18n"
 import type { SharedReport } from "@/lib/share-report"
 import { FreshScanCta } from "@/components/repo-anti-rot/fresh-scan-cta"
+import { WatchBox } from "@/components/repo-anti-rot/watch-box"
 import { ShareChrome } from "@/components/repo-anti-rot/share-chrome"
 import { ViewBeacon } from "@/components/repo-anti-rot/view-beacon"
 import { verdictOf, isBoastworthy, scopeLine } from "@/lib/verdict"
@@ -151,29 +152,30 @@ export default async function SharedReportPage({ params }: { params: Promise<Par
           >
             {report.grade}
           </div>
-          <div>
+          <div className="min-w-0">
             <p className="text-3xl font-semibold tabular-nums">
               {tr("grade.score", { score: report.score })}
             </p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {report.totalIssues === 1 && locale === "en"
-                ? tr("issues.countOne")
-                : tr("issues.count", { count: report.totalIssues })}
-            </p>
-            {/* The comparison sits with the score, not in a box of its own: it is
-                a reading of that number, and away from it it becomes trivia. */}
+            {/* Percentile is the first reading of the score — before counts or
+                findings — so a cold shared link answers "compared to what?"
+                immediately. Hidden entirely when the sample is too small. */}
             {pct && (
-              <p className="mt-2 text-sm">
+              <p className="mt-2 text-base font-medium leading-snug">
                 <span
                   className={pct.direction === "worse" ? "text-warning" : "text-success"}
                 >
                   {tr(pct.key, { percent: pct.percent, language: primaryLanguage ?? "" })}
-                </span>{" "}
-                <span className="text-xs text-muted-foreground">
+                </span>
+                <span className="mt-0.5 block text-xs font-normal text-muted-foreground">
                   {tr("pct.sample", { count: percentile?.sample ?? 0 })}
                 </span>
               </p>
             )}
+            <p className="mt-2 text-sm text-muted-foreground">
+              {report.totalIssues === 1 && locale === "en"
+                ? tr("issues.countOne")
+                : tr("issues.count", { count: report.totalIssues })}
+            </p>
             <p className="mt-2 flex flex-wrap gap-3 text-xs">
               {(["critical", "warning", "info"] as const).map((sev) => (
                 // A zero is good news and must not be painted like bad news. Red
@@ -261,7 +263,17 @@ export default async function SharedReportPage({ params }: { params: Promise<Par
         )}
 
         {report.repoUrl && (
-          <FreshScanCta repoUrl={report.repoUrl} repoLabel={`${owner}/${name}`} />
+          <div className="mt-8 space-y-3">
+            <WatchBox
+              compact
+              owner={report.repo.owner}
+              name={report.repo.name}
+              repoUrl={report.repoUrl}
+              grade={report.grade}
+              score={report.score}
+            />
+            <FreshScanCta repoUrl={report.repoUrl} repoLabel={`${owner}/${name}`} />
+          </div>
         )}
 
         <div className="mt-12 border-t border-border pt-6">

@@ -2,6 +2,7 @@
 
 import { useSyncExternalStore } from "react"
 import type { Grade, Issue, Severity, StatCard } from "@/lib/mock-data"
+import { estimateDebtHours, formatDebtHours } from "@/lib/debt-hours"
 
 /**
  * Client-side persistence for real scan reports.
@@ -296,11 +297,11 @@ export function repoStats(
   const last = h[h.length - 1]
   const prev = h.length > 1 ? h[h.length - 2] : undefined
   const critical = countSeverity(issues, "critical")
-  const branches = issues.filter((i) => i.category === "branch").length
   const open = issues.length
   const scoreDelta = prev ? last.score - prev.score : 0
   const critDelta = prev ? last.critical - prev.critical : 0
   const openDelta = prev ? last.critical + last.warning + last.info - (prev.critical + prev.warning + prev.info) : 0
+  const debtH = estimateDebtHours(issues)
 
   return [
     {
@@ -325,11 +326,11 @@ export function repoStats(
       tone: open === 0 ? "good" : "neutral",
     },
     {
-      label: "Stale Branches",
-      value: String(branches),
+      label: "Est. debt",
+      value: formatDebtHours(debtH),
       delta: 0,
-      deltaLabel: branches === 0 ? "all clean" : "needs pruning",
-      tone: branches > 0 ? "neutral" : "good",
+      deltaLabel: debtH === 0 ? "nothing to fix" : "rough fix time",
+      tone: debtH === 0 ? "good" : debtH >= 8 ? "bad" : "neutral",
     },
   ]
 }
