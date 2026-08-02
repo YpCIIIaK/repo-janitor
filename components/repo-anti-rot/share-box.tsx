@@ -24,7 +24,6 @@ import {
   parseSharePath,
 } from "@/lib/badge-markdown"
 import {
-  DEFAULT_WIDGET_OPTIONS,
   cardHeightFor,
   embedDimensions,
   loadWidgetOptions,
@@ -44,23 +43,25 @@ type CopyTarget = "link" | "card" | "embed" | "badge"
 export function ShareBox({ report, repoUrl }: { report: unknown; repoUrl?: string }) {
   const { t } = useLocale()
   const repo = repoFromReport(report)
+  const repoKey = repo ? `${repo.owner}/${repo.name}` : ""
   const [consented, setConsented] = useState(false)
   const [busy, setBusy] = useState(false)
-  const [handle, setHandle] = useState<ShareHandle | null>(null)
+  const [handle, setHandle] = useState<ShareHandle | null>(() =>
+    repo ? loadShareHandle(repo.owner, repo.name) : null,
+  )
+  const [handleRepoKey, setHandleRepoKey] = useState(repoKey)
   const [failed, setFailed] = useState<string | null>(null)
   const [copied, setCopied] = useState<CopyTarget | null>(null)
   const [status, setStatus] = useState<"idle" | "updated" | "revoked">("idle")
-  const [widgetOpts, setWidgetOpts] = useState<WidgetOptions>(DEFAULT_WIDGET_OPTIONS)
+  const [widgetOpts, setWidgetOpts] = useState<WidgetOptions>(() => loadWidgetOptions())
   const autoKey = useRef<string | null>(null)
 
-  useEffect(() => {
-    if (!repo) return
-    setHandle(loadShareHandle(repo.owner, repo.name))
-  }, [repo?.owner, repo?.name])
-
-  useEffect(() => {
-    setWidgetOpts(loadWidgetOptions())
-  }, [])
+  // Reload the localStorage handle when the scanned repo changes (render-time
+  // adjust — avoids a cascading setState-in-effect lint).
+  if (repoKey !== handleRepoKey) {
+    setHandleRepoKey(repoKey)
+    setHandle(repo ? loadShareHandle(repo.owner, repo.name) : null)
+  }
 
   const onWidgetChange = useCallback((next: WidgetOptions) => {
     setWidgetOpts(next)
@@ -156,7 +157,11 @@ export function ShareBox({ report, repoUrl }: { report: unknown; repoUrl?: strin
     if (autoKey.current === key) return
     autoKey.current = key
     if (handle.updatedAt && generatedAt && handle.updatedAt >= generatedAt) return
-    void publish({ manageKey: handle.manageKey })
+    const manageKey = handle.manageKey
+    // Defer so publish's setState is not synchronous inside the effect body.
+    queueMicrotask(() => {
+      void publish({ manageKey })
+    })
   }, [handle, publish, report, repo])
 
   async function revoke() {

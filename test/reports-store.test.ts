@@ -93,19 +93,24 @@ describe("newIssueIds", () => {
 describe("repoStats", () => {
   it("derives the four stat cards from the live issues", () => {
     const repo = storedRepo({
-      latest: report([issue({ severity: "critical" }), issue({ category: "branch" })], { score: 70 }),
+      latest: report(
+        [issue({ severity: "critical" }), issue({ severity: "warning", category: "branch" })],
+        { score: 70 },
+      ),
     })
     const cards = repoStats(repo)
     expect(cards.map((c) => c.label)).toEqual([
       "Health Score",
       "Critical Issues",
       "Open Issues",
-      "Stale Branches",
+      "Est. debt",
     ])
     expect(cards[0].value).toBe("70")
     expect(cards[1].value).toBe("1") // one critical
     expect(cards[2].value).toBe("2") // two open
-    expect(cards[3].value).toBe("1") // one branch finding
+    // Rough hours: 1 critical (4h) + 1 warning (1.5h) → "5.5h"
+    expect(cards[3].value).toBe("5.5h")
+    expect(cards[3].deltaLabel).toBe("rough fix time")
   })
 
   it("computes score delta from history", () => {
