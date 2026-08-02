@@ -1,7 +1,15 @@
 import type { Grade } from "@/lib/mock-data"
 import { UNKNOWN_GRADE_HEX, gradeHex } from "@/lib/grade-style"
 import { isBoastworthy, verdictOf, type VerdictCounts } from "@/lib/verdict"
-import { CARD_DRIFT, decorLayer, driftShapes, hashSeed } from "@/lib/badge-decor"
+import {
+  CARD_DRIFT,
+  decorLayer,
+  driftShapes,
+  hashSeed,
+  hslToHex,
+  hueFromSeed,
+} from "@/lib/badge-decor"
+
 import {
   DEFAULT_WIDGET_OPTIONS,
   cardHeightFor,
@@ -25,6 +33,50 @@ export const CARD_WIDTH = 480
 export const CARD_HEIGHT = 220
 
 const UNKNOWN_COLOR = UNKNOWN_GRADE_HEX
+
+/**
+ * How much colour a grade is allowed to put into the background.
+ *
+ * The hue says which repository this is; the saturation says how healthy it is.
+ * A pristine repo's card is quietly tinted, an F is drained to near-grey — the
+ * colour literally leaves as the project rots, which is the one thing this card
+ * exists to say. It is a second encoding of the grade, never the only one: the
+ * letter, the accent bar and the chips carry it too, so nothing is lost to a
+ * reader who cannot separate the shades.
+ */
+const GRADE_VIVIDNESS: Record<Grade, number> = {
+  A: 1,
+  B: 0.8,
+  C: 0.58,
+  D: 0.36,
+  F: 0.18,
+}
+
+/**
+ * Background gradient stops for a repository's card.
+ *
+ * Spans the whole card. It used to be a 160px band of grade colour over a flat
+ * background, which left a visible vertical seam a third of the way across —
+ * the kind of edge you cannot stop seeing once you have seen it.
+ */
+export function cardSurface(
+  seed: number,
+  grade: Grade | null,
+  theme: WidgetTheme,
+): { bg0: string; bg1: string } {
+  const hue = hueFromSeed(seed)
+  const vivid = grade ? GRADE_VIVIDNESS[grade] : 0.12
+
+  return theme === "light"
+    ? {
+        bg0: hslToHex(hue, 0.5 * vivid, 0.985),
+        bg1: hslToHex(hue, 0.42 * vivid, 0.945),
+      }
+    : {
+        bg0: hslToHex(hue, 0.34 * vivid, 0.125),
+        bg1: hslToHex(hue, 0.4 * vivid, 0.05),
+      }
+}
 
 /** Left padding / content start. */
 const PAD_X = 28
@@ -186,8 +238,10 @@ export function renderHealthCardSvg(
   // Same texture as the badge, at card scale. Seeded from owner/name so a
   // project's card and its badge are stable and a little bit its own; clipped
   // to the rounded rect so nothing escapes the corners.
+  const seed = hashSeed(`${pathOwner}/${pathName}`.toLowerCase())
+  const surface = cardSurface(seed, data ? data.grade : null, opts.theme)
   const decor = decorLayer(
-    driftShapes(hashSeed(`${pathOwner}/${pathName}`.toLowerCase()), w, h, CARD_DRIFT),
+    driftShapes(seed, w, h, CARD_DRIFT),
     pal.decor,
     options.motion !== false,
   )
@@ -204,8 +258,8 @@ export function renderHealthCardSvg(
   <title>${esc(aria)}</title>
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="${pal.bg0}"/>
-      <stop offset="100%" stop-color="${pal.bg1}"/>
+      <stop offset="0%" stop-color="${surface.bg0}"/>
+      <stop offset="100%" stop-color="${surface.bg1}"/>
     </linearGradient>
     ${decorClip}
   </defs>
@@ -273,19 +327,14 @@ export function renderHealthCardSvg(
   <title>${esc(aria)}</title>
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="${pal.bg0}"/>
-      <stop offset="100%" stop-color="${pal.bg1}"/>
-    </linearGradient>
-    <linearGradient id="glow" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="${color}" stop-opacity="0.22"/>
-      <stop offset="100%" stop-color="${color}" stop-opacity="0"/>
+      <stop offset="0%" stop-color="${surface.bg0}"/>
+      <stop offset="100%" stop-color="${surface.bg1}"/>
     </linearGradient>
     ${decorClip}
   </defs>
   <rect width="${w}" height="${h}" rx="12" fill="url(#bg)" stroke="${pal.stroke}" stroke-width="1"/>
   ${decorLayerSvg}
   <rect x="0" y="0" width="6" height="${h}" rx="3" fill="${color}"/>
-  <rect x="6" y="0" width="160" height="${h}" fill="url(#glow)"/>
 
   <text x="${PAD_X}" y="34" fill="${pal.muted}" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="12" font-weight="600" letter-spacing="0.04em">REPO ANTI-ROT</text>
   <text x="${PAD_X}" y="62" fill="${pal.text}" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="20" font-weight="700">${esc(title)}</text>

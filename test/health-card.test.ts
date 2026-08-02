@@ -3,6 +3,7 @@ import {
   CARD_HEIGHT,
   CARD_WIDTH,
   cardHeadline,
+  cardSurface,
   compactCount,
   compactScope,
   formatCardFoot,
@@ -11,6 +12,7 @@ import {
   type HealthCardData,
 } from "@/lib/health-card"
 import { cardMarkdown, cardUrl } from "@/lib/badge-markdown"
+import { hashSeed, hslToHex, parseHex } from "@/lib/badge-decor"
 
 const sample: HealthCardData = {
   owner: "acme",
@@ -120,5 +122,78 @@ describe("card markdown helpers", () => {
     expect(cardMarkdown(ORIGIN, `${ORIGIN}/r/acme/widget/tok123`)).toBe(
       `[![Repo Anti-Rot](${ORIGIN}/api/card/acme/widget?token=tok123)](${ORIGIN}/r/acme/widget/tok123)`,
     )
+  })
+})
+
+describe("cardSurface", () => {
+  /**
+   * Hue identifies the repository, saturation reports its health. The card used
+   * to be a flat background under a 160px band of grade colour, which left a
+   * seam a third of the way across and gave every project the same surface.
+   */
+
+  it("gives different repositories different hues", () => {
+    const a = cardSurface(hashSeed("alpha/nebula"), "A", "dark")
+    const b = cardSurface(hashSeed("beta/harbor"), "A", "dark")
+    expect(a.bg0).not.toBe(b.bg0)
+  })
+
+  it("gives one repository the same surface every time", () => {
+    const seed = hashSeed("alpha/nebula")
+    expect(cardSurface(seed, "B", "dark")).toEqual(cardSurface(seed, "B", "dark"))
+  })
+
+  it("drains the colour as the grade falls", () => {
+    // Saturation carries the grade, so it must decrease monotonically. This is a
+    // second encoding, never the only one — the letter, the accent bar and the
+    // chips all still state the grade outright.
+    const seed = hashSeed("alpha/nebula")
+    const sat = (hex: string) => {
+      const c = parseHex(hex)!
+      const max = Math.max(c.r, c.g, c.b)
+      const min = Math.min(c.r, c.g, c.b)
+      return max === 0 ? 0 : (max - min) / max
+    }
+    const grades = ["A", "B", "C", "D", "F"] as const
+    const sats = grades.map((g) => sat(cardSurface(seed, g, "dark").bg0))
+    for (let i = 1; i < sats.length; i++) {
+      expect(sats[i]).toBeLessThan(sats[i - 1])
+    }
+  })
+
+  it("keeps a dark card dark and a light card light", () => {
+    // Whatever hue comes out of the seed, the surface has to stay a background:
+    // a mid-tone would take the text down with it.
+    const lum = (hex: string) => {
+      const c = parseHex(hex)!
+      return (c.r + c.g + c.b) / 3 / 255
+    }
+    for (const id of ["alpha/nebula", "gamma/drift", "omega/relic", "a/b"]) {
+      for (const g of ["A", "F"] as const) {
+        expect(lum(cardSurface(hashSeed(id), g, "dark").bg0)).toBeLessThan(0.2)
+        expect(lum(cardSurface(hashSeed(id), g, "light").bg0)).toBeGreaterThan(0.9)
+      }
+    }
+  })
+
+  it("uses a near-neutral surface when there is no grade to report", () => {
+    const s = cardSurface(hashSeed("nobody/nothing"), null, "dark")
+    const c = parseHex(s.bg0)!
+    expect(Math.max(c.r, c.g, c.b) - Math.min(c.r, c.g, c.b)).toBeLessThan(12)
+  })
+})
+
+describe("hslToHex", () => {
+  it("matches known conversions", () => {
+    expect(hslToHex(0, 1, 0.5)).toBe("#ff0000")
+    expect(hslToHex(120, 1, 0.5)).toBe("#00ff00")
+    expect(hslToHex(240, 1, 0.5)).toBe("#0000ff")
+    expect(hslToHex(0, 0, 0.5)).toBe("#808080")
+  })
+
+  it("wraps hue and clamps out-of-range input", () => {
+    expect(hslToHex(360, 1, 0.5)).toBe(hslToHex(0, 1, 0.5))
+    expect(hslToHex(-120, 1, 0.5)).toBe(hslToHex(240, 1, 0.5))
+    expect(hslToHex(0, 5, 2)).toBe("#ffffff")
   })
 })
