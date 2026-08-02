@@ -2,15 +2,28 @@ import "server-only"
 import { promises as fs } from "fs"
 import { join } from "path"
 import type { Grade, Issue, Severity } from "@/lib/mock-data"
+import { supabaseConfig } from "@/lib/share-db"
+import { dbReadRepo, dbReadRepos, dbWriteRepo } from "@/lib/server-store-db"
 
 /**
- * Server-side report store (filesystem).
+ * Server-side report store.
  *
  * `/api/ingest` writes here so reports POSTed from CI survive across browsers and
- * devices; `/api/reports` reads it back for the dashboard to merge into its store.
- * Shape mirrors the client's `StoredRepo` (lib/reports-store) so the UI consumes it
- * unchanged. Single JSON file under `.repo-anti-rot/` — simple and inspectable; swap for
- * SQLite/Postgres when history/query volume actually grows.
+ * devices; `/api/reports` reads it back for the dashboard to merge into its store,
+ * and `/api/badge` reads it to answer without a share token. Shape mirrors the
+ * client's `StoredRepo` (lib/reports-store) so the UI consumes it unchanged.
+ *
+ * Two backends, chosen by configuration — the same rule as `lib/share-store.ts`:
+ *
+ *  - **Supabase** when `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are set.
+ *  - **Filesystem** otherwise: one JSON file under `.repo-anti-rot/`. Local
+ *    development and self-hosting need no account, and the tests need no network.
+ *
+ * The filesystem path is only viable where the disk survives, and on a container
+ * host it does not: it is wiped on every deploy and restart. The symptom was
+ * specific and public — the README's health badge reads the latest ingested
+ * report, so it showed a grade after each push to main and reverted to "unknown"
+ * at the next redeploy. That is the reason the database backend exists.
  */
 
 export interface ScanReport {
@@ -49,6 +62,21 @@ function countSeverity(issues: Issue[], sev: Severity): number {
 }
 
 export async function readServerRepos(): Promise<StoredRepo[]> {
+  const cfg = supabaseConfig()
+  if (cfg) {
+    try {
+      return await dbReadRepos(cfg)
+    } catch {
+      // A database that is down must not take the dashboard with it. Empty is
+      // the same answer this returned for an unreadable file, and callers
+      // already treat it as "nothing ingested yet".
+      return []
+    }
+  }
+  return readFsRepos()
+}
+
+async function readFsRepos(): Promise<StoredRepo[]> {
   try {
     const raw = await fs.readFile(FILE, "utf-8")
     const parsed = JSON.parse(raw)
@@ -72,9 +100,50 @@ export interface UpsertResult {
   previous: ScanReport | null
 }
 
+/**
+ * Merge a new report into a repository's stored document.
+ *
+ * Pure, so the merge rule — refresh the latest, replace any trend point with the
+ * same timestamp, keep the last `MAX_HISTORY` — is testable without a backend
+ * and identical across both of them.
+ */
+export function mergeReport(
+  existing: StoredRepo | null,
+  report: ScanReport,
+  point: TrendPoint,
+): UpsertResult {
+  const { owner, name, defaultBranch } = report.repo
+  const id = `${owner}/${name}`
+
+  if (existing) {
+    const previous = existing.latest // capture before overwrite
+    const repo: StoredRepo = {
+      ...existing,
+      defaultBranch,
+      latest: report,
+      scannedAt: point.at,
+      history: [...existing.history.filter((p) => p.at !== point.at), point].slice(-MAX_HISTORY),
+    }
+    return { repo, previous }
+  }
+
+  return {
+    repo: {
+      id,
+      owner,
+      name,
+      defaultBranch,
+      latest: report,
+      history: [point],
+      scannedAt: point.at,
+    },
+    previous: null,
+  }
+}
+
 /** Upsert a report: refresh the repo's latest and append a trend point. */
 export async function upsertServerReport(report: ScanReport): Promise<UpsertResult> {
-  const { owner, name, defaultBranch } = report.repo
+  const { owner, name } = report.repo
   const id = `${owner}/${name}`
   const at = report.generatedAt || new Date().toISOString()
   const point: TrendPoint = {
@@ -85,28 +154,23 @@ export async function upsertServerReport(report: ScanReport): Promise<UpsertResu
     info: countSeverity(report.issues, "info"),
   }
 
-  const list = await readServerRepos()
-  const existing = list.find((r) => r.id === id)
-  if (existing) {
-    const previous = existing.latest // capture before overwrite
-    existing.latest = report
-    existing.defaultBranch = defaultBranch
-    existing.scannedAt = at
-    existing.history = [...existing.history.filter((p) => p.at !== at), point].slice(-MAX_HISTORY)
-    await writeServerRepos(list)
-    return { repo: existing, previous }
+  const cfg = supabaseConfig()
+  if (cfg) {
+    // One row read, one row written — not the whole table. A write failure is
+    // deliberately allowed to throw: `/api/ingest` turns it into a 500, and CI
+    // reporting a successful upload that never landed is exactly the kind of
+    // quiet lie this project exists to find.
+    const existing = await dbReadRepo(cfg, id)
+    const result = mergeReport(existing, report, point)
+    await dbWriteRepo(cfg, result.repo)
+    return result
   }
 
-  const created: StoredRepo = {
-    id,
-    owner,
-    name,
-    defaultBranch,
-    latest: report,
-    history: [point],
-    scannedAt: at,
-  }
-  list.unshift(created)
+  const list = await readFsRepos()
+  const index = list.findIndex((r) => r.id === id)
+  const result = mergeReport(index === -1 ? null : list[index], report, point)
+  if (index === -1) list.unshift(result.repo)
+  else list[index] = result.repo
   await writeServerRepos(list)
-  return { repo: created, previous: null }
+  return result
 }
