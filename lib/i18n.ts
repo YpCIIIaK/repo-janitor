@@ -76,6 +76,16 @@ const en = {
   "scan.showAllFindings": "Show all {count} findings",
   "scan.showFewer": "Show fewer",
   "scan.debtHint": "≈{debt} to clear",
+  "scan.resultLead":
+    "Findings, watch, share, and history live in the dashboard — this card is just the grade.",
+  "scan.checksTitle": "Checks",
+  "scan.checksAll": "all {total}",
+  "scan.checksPartial": "{count} of {total}",
+  "scan.checksLead":
+    "Pick which scanners to run. Full scans are more complete; a subset is faster.",
+  "scan.presetAll": "All checks",
+  "scan.presetSecurity": "Security only",
+  "scan.presetFast": "Fast pack",
 
   // The multi-repository summary, shown above the individual reports.
   "batch.title": "{count} repositories, together",
@@ -213,20 +223,26 @@ const en = {
   "share.revoked": "Share link revoked. You can create a new one below.",
   "share.rotate": "New URL",
   "share.rotateHint":
-    "“New URL” invalidates the old link (and any README badge pointing at it). Prefer Update when you only need a fresher snapshot.",
+    "“New URL” invalidates the old link (and any README badge/card pointing at it). Prefer Update when you only need a fresher snapshot.",
+  "share.rotated":
+    "New public URL minted. Re-copy the badge/card markdown into your README — the old token now shows “unknown”.",
+  "share.widgetsLabel": "README widgets",
+  "share.tabBadge": "Badge",
+  "share.tabCard": "Card",
+  "share.tabEmbed": "Embed",
   "share.cardTitle": "Card for your README",
   "share.cardLead":
-    "A larger plaque — grade, score and severity counts. Same stable URL: it refreshes when this browser updates the share.",
+    "Larger plaque — grade, score, severity. Paste this markdown (not the small badge URL). After Update snapshot, re-copy if GitHub still shows old numbers.",
   "share.cardCopy": "Copy markdown",
   "share.embedTitle": "Embed on a website",
   "share.embedLead":
-    "Mini dashboard iframe for docs or a status page. GitHub READMEs strip iframes — use the card above there.",
+    "Mini dashboard iframe for docs or a status page. GitHub READMEs strip iframes — use the Card tab there.",
   "share.embedCopy": "Copy HTML",
   "share.badgeTitle": "Small badge",
   "share.badgeLead":
-    "Shields-style strip for the title line. Paste once — it tracks the live share for this repo.",
+    "Shields-style strip for the title line. Same share token as the card — one live link per repo. If it says “unknown”, the token was rotated or doesn’t match owner/name.",
   "share.badgeCopy": "Copy markdown",
-  "share.widgetTitle": "Customize widgets",
+  "share.widgetTitle": "Customize appearance",
   "share.widgetLead":
     "Theme, bands and badge text land in the URL — paste once and the README keeps your layout.",
   "share.widgetTheme": "Theme",
@@ -353,6 +369,16 @@ const ru: Messages = {
   "scan.showAllFindings": "Показать все {count}",
   "scan.showFewer": "Свернуть",
   "scan.debtHint": "≈{debt} на закрытие",
+  "scan.resultLead":
+    "Находки, watch, share и история — в дашборде. Здесь только оценка.",
+  "scan.checksTitle": "Проверки",
+  "scan.checksAll": "все {total}",
+  "scan.checksPartial": "{count} из {total}",
+  "scan.checksLead":
+    "Выберите, какие сканеры запускать. Полный скан полнее; подмножество — быстрее.",
+  "scan.presetAll": "Все проверки",
+  "scan.presetSecurity": "Только security",
+  "scan.presetFast": "Быстрый набор",
 
   "batch.title": "Репозиториев вместе: {count}",
   "batch.findings": "находок всего",
@@ -476,20 +502,26 @@ const ru: Messages = {
   "share.revoked": "Ссылка отозвана. Ниже можно создать новую.",
   "share.rotate": "Новый URL",
   "share.rotateHint":
-    "«Новый URL» инвалидирует старую ссылку (и бейдж в README на неё). Если нужен только свежий снимок — жмите «Обновить».",
+    "«Новый URL» инвалидирует старую ссылку (и бейдж/карточку в README). Если нужен только свежий снимок — жмите «Обновить».",
+  "share.rotated":
+    "Выпущен новый публичный URL. Заново вставьте markdown бейджа/карточки в README — старый токен теперь показывает «unknown».",
+  "share.widgetsLabel": "Виджеты для README",
+  "share.tabBadge": "Бейдж",
+  "share.tabCard": "Карточка",
+  "share.tabEmbed": "Embed",
   "share.cardTitle": "Карточка для README",
   "share.cardLead":
-    "Крупная плашка — оценка, балл и счётчики severity. Тот же стабильный URL: обновляется, когда этот браузер обновляет share.",
+    "Крупная плашка — оценка, балл, severity. Вставляйте этот markdown (не URL маленького бейджа). После «Обновить снимок» перекопируйте, если GitHub ещё показывает старые цифры.",
   "share.cardCopy": "Скопировать markdown",
   "share.embedTitle": "Встроить на сайт",
   "share.embedLead":
-    "Мини-дашборд в iframe для документации или status page. В README GitHub iframe вырезает — там используйте карточку выше.",
+    "Мини-дашборд в iframe для документации или status page. В README GitHub iframe вырезает — там вкладка «Карточка».",
   "share.embedCopy": "Скопировать HTML",
   "share.badgeTitle": "Маленький бейдж",
   "share.badgeLead":
-    "Узкая полоска в стиле shields для строки заголовка. Вставьте один раз — она следит за живым share этого репо.",
+    "Узкая полоска shields для строки заголовка. Тот же токен, что у карточки — одна живая ссылка на репо. Если «unknown» — токен сменили или не совпал owner/name.",
   "share.badgeCopy": "Скопировать markdown",
-  "share.widgetTitle": "Настройка виджетов",
+  "share.widgetTitle": "Внешний вид",
   "share.widgetLead":
     "Тема, блоки и текст бейджа попадают в URL — вставили в README, и раскладка сохранится.",
   "share.widgetTheme": "Тема",

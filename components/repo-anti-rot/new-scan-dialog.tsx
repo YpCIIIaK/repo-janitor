@@ -20,24 +20,26 @@ export function NewScanDialog({
 }) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[85vh] overflow-auto sm:max-w-2xl">
+      <DialogContent className="flex max-h-[85vh] flex-col overflow-hidden sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle>New scan</DialogTitle>
           <DialogDescription>
-            Paste one or more public repository URLs. Results are saved automatically and appear in
-            the sidebar — or open one straight in the dashboard.
+            Paste public repository URLs, optionally pick which checks to run, then open the
+            dashboard for the full report.
           </DialogDescription>
         </DialogHeader>
-        <ScanRunner
-          onOpen={
-            onOpenRepo
-              ? (repoId) => {
-                  onOpenRepo(repoId)
-                  onOpenChange(false)
-                }
-              : undefined
-          }
-        />
+        <div className="min-h-0 flex-1 overflow-y-auto thin-scrollbar pr-1">
+          <ScanRunner
+            onOpen={
+              onOpenRepo
+                ? (repoId) => {
+                    onOpenRepo(repoId)
+                    onOpenChange(false)
+                  }
+                : undefined
+            }
+          />
+        </div>
       </DialogContent>
     </Dialog>
   )

@@ -36,7 +36,11 @@ export async function GET(
   const token = searchParams.get("token")
   if (token) {
     const share = await getShare(token)
-    if (share && share.report.repo.owner === wantOwner && share.report.repo.name === wantName) {
+    if (
+      share &&
+      share.report.repo.owner.toLowerCase() === wantOwner.toLowerCase() &&
+      share.report.repo.name.toLowerCase() === wantName.toLowerCase()
+    ) {
       const r = share.report
       data = {
         owner: wantOwner,
@@ -50,7 +54,9 @@ export async function GET(
       }
     }
   } else {
-    const repo = (await readServerRepos()).find((r) => r.id === id)
+    const repo = (await readServerRepos()).find(
+      (r) => r.id.toLowerCase() === id.toLowerCase(),
+    )
     if (repo) {
       const latest = repo.latest as typeof repo.latest & {
         profile?: { totalFiles?: number; languages?: { language: string; loc: number }[] }
@@ -75,7 +81,7 @@ export async function GET(
   return new Response(svg, {
     headers: {
       "Content-Type": "image/svg+xml; charset=utf-8",
-      "Cache-Control": "public, max-age=120, s-maxage=120, stale-while-revalidate=600",
+      "Cache-Control": "public, max-age=60, s-maxage=60, must-revalidate",
     },
   })
 }

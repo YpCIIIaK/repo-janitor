@@ -25,6 +25,7 @@ import {
 import { recordRepoUsage, visitorFrom } from "@/lib/usage"
 import { recordScanStat } from "@/lib/percentile"
 import { isOwner } from "@/lib/owner"
+import { ALL_SCAN_IDS, onlyForRequest, sanitizeScannerIds } from "@/lib/scan-selection"
 
 // Cloning + scanning is real work — run on the Node runtime, allow time for it.
 export const runtime = "nodejs"
@@ -38,7 +39,11 @@ type ScanEvent =
   | { type: "repo-done"; url: string; ok: true; report: unknown }
   | { type: "repo-done"; url: string; ok: false; error: string }
 
-async function cloneAndScan(url: string, emit: (ev: ScanEvent) => void): Promise<void> {
+async function cloneAndScan(
+  url: string,
+  emit: (ev: ScanEvent) => void,
+  only: string[] | null,
+): Promise<void> {
   const dir = await mkdtemp(join(tmpdir(), "repo-anti-rot-"))
   try {
     emit({ type: "phase", url, phase: "clone" })
@@ -78,23 +83,27 @@ async function cloneAndScan(url: string, emit: (ev: ScanEvent) => void): Promise
 
     emit({ type: "phase", url, phase: "scan" })
     const reportPath = join(dir, "repo-anti-rot-report.json")
+    const cliArgs = [
+      // Cap the child's heap so a huge repository kills the scanner and not
+      // the whole service. Without this the container hits its limit and the
+      // platform restarts everything, taking every other request with it.
+      `--max-old-space-size=${SCAN_HEAP_MB}`,
+      CLI_DIST,
+      "scan",
+      "--path",
+      dir,
+      "--format",
+      "json",
+      "--output",
+      reportPath,
+      "--progress",
+    ]
+    if (only && only.length > 0) {
+      cliArgs.push("--only", only.join(","))
+    }
     const scan = await run(
       "node",
-      [
-        // Cap the child's heap so a huge repository kills the scanner and not
-        // the whole service. Without this the container hits its limit and the
-        // platform restarts everything, taking every other request with it.
-        `--max-old-space-size=${SCAN_HEAP_MB}`,
-        CLI_DIST,
-        "scan",
-        "--path",
-        dir,
-        "--format",
-        "json",
-        "--output",
-        reportPath,
-        "--progress",
-      ],
+      cliArgs,
       {
         timeoutMs: 120_000,
         onStderrLine: (line) => {
@@ -153,7 +162,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 })
   }
 
-  const rawUrls = (body as { urls?: unknown })?.urls
+  const rawUrls = (body as { urls?: unknown; only?: unknown })?.urls
   const urls = Array.isArray(rawUrls)
     ? rawUrls.map((u) => String(u).trim()).filter(Boolean)
     : typeof rawUrls === "string"
@@ -162,6 +171,25 @@ export async function POST(request: Request) {
 
   if (urls.length === 0) {
     return NextResponse.json({ error: "Provide one or more repository URLs in `urls`." }, { status: 400 })
+  }
+
+  const rawOnly = (body as { only?: unknown })?.only
+  let only: string[] | null = null
+  if (rawOnly !== undefined && rawOnly !== null) {
+    if (!Array.isArray(rawOnly)) {
+      return NextResponse.json(
+        { error: "`only` must be an array of scanner ids." },
+        { status: 400 },
+      )
+    }
+    const unknown = rawOnly.map(String).filter((id) => !ALL_SCAN_IDS.includes(id))
+    if (unknown.length > 0) {
+      return NextResponse.json(
+        { error: `Unknown scanner id(s): ${unknown.join(", ")}` },
+        { status: 400 },
+      )
+    }
+    only = onlyForRequest(sanitizeScannerIds(rawOnly))
   }
   if (!owner && urls.length > limits.maxUrlsPerRequest) {
     return NextResponse.json(
@@ -216,7 +244,7 @@ export async function POST(request: Request) {
         // per-repo outcome, not a dead stream: the client still gets a reason.
         try {
           if (queueDepth() > 0) send({ type: "queued", url, position: queueDepth() })
-          await withScanSlot(limits, () => cloneAndScan(url, send), request.signal)
+          await withScanSlot(limits, () => cloneAndScan(url, send, only), request.signal)
         } catch (err) {
           const error =
             err instanceof QueueFullError

@@ -1,6 +1,7 @@
 export * from "./schema"
 export * from "./scanner"
 export * from "./engine"
+export * from "./select-scanners"
 export * from "./config"
 export * from "./ast"
 export * from "./manifests"

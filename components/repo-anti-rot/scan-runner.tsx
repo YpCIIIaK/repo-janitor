@@ -6,14 +6,9 @@ import {
   Play,
   AlertTriangle,
   GitBranch,
-  ChevronDown,
-  ChevronRight,
   Download,
   FileJson,
-  FileText,
   Clock,
-  Check,
-  Copy,
   Maximize2,
 } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -29,12 +24,15 @@ import { runScanStream } from "@/lib/scan-client"
 import { refreshPublishedShare } from "@/lib/share-refresh"
 import { GRADE_CSS_VAR } from "@/lib/grade-style"
 import { Progress } from "@/components/ui/progress"
-import { ShareBox } from "./share-box"
-import { WatchBox } from "./watch-box"
 import { FamousRepos } from "./famous-repos"
-import { PercentileLine } from "./percentile-line"
+import { ScannerPicker } from "./scanner-picker"
 import { useLocale } from "@/components/i18n/locale-provider"
 import { formatDebtHours, HOURS_PER_SEVERITY } from "@/lib/debt-hours"
+import {
+  loadScannerSelection,
+  onlyForRequest,
+  saveScannerSelection,
+} from "@/lib/scan-selection"
 
 type Grade = "A" | "B" | "C" | "D" | "F"
 type Severity = "critical" | "warning" | "info"
@@ -60,12 +58,6 @@ interface ScanReport {
   issues: Issue[]
   /** HEAD SHA when the scanner recorded it — used as the watch baseline. */
   commit?: string
-  /**
-   * Language and tooling breakdown. Optional because reports stored by older
-   * versions predate it, and the only thing that reads it here — the percentile
-   * line — treats its absence as "compare against everything" rather than as an
-   * error.
-   */
   profile?: { languages?: { language?: string; loc?: number }[] }
 }
 
@@ -80,22 +72,6 @@ const severityStyle: Record<Severity, string> = {
   critical: "bg-destructive/15 text-destructive border-destructive/30",
   warning: "bg-chart-2/15 text-chart-2 border-chart-2/30",
   info: "bg-muted text-muted-foreground border-border",
-}
-
-const categoryLabels: Record<IssueCategory, string> = {
-  env: "Env Lifecycle",
-  dependency: "Dependency Funeral",
-  branch: "Stale Branch",
-  todo: "TODO Debt",
-  security: "Security",
-  "dead-code": "Dead Code",
-  hygiene: "Hygiene",
-}
-
-function formatAge(days: number) {
-  if (days >= 365) return `${Math.floor(days / 365)}y`
-  if (days >= 30) return `${Math.floor(days / 30)}mo`
-  return `${days}d`
 }
 
 function formatTimestamp(iso: string) {
@@ -116,49 +92,13 @@ function downloadFile(filename: string, content: string, type: string) {
   URL.revokeObjectURL(url)
 }
 
-function reportToMarkdown(report: ScanReport): string {
-  const { repo, grade, score, generatedAt, issues } = report
-  const counts = {
-    critical: issues.filter((i) => i.severity === "critical").length,
-    warning: issues.filter((i) => i.severity === "warning").length,
-    info: issues.filter((i) => i.severity === "info").length,
-  }
-  const lines: string[] = [
-    `# Repo Anti-Rot report — ${repo.owner}/${repo.name}`,
-    "",
-    `- **Grade:** ${grade} (${score}/100)`,
-    `- **Default branch:** ${repo.defaultBranch}`,
-    `- **Scanned:** ${formatTimestamp(generatedAt)}`,
-    `- **Issues:** ${counts.critical} critical · ${counts.warning} warning · ${counts.info} info`,
-    "",
-  ]
-  if (issues.length === 0) {
-    lines.push("No issues detected — clean scan. ✅", "")
-  } else {
-    lines.push("## Issues", "")
-    for (const i of issues) {
-      lines.push(
-        `### [${i.severity.toUpperCase()}] ${i.title}`,
-        "",
-        `- **Category:** ${categoryLabels[i.category] ?? i.category}`,
-        `- **Location:** \`${i.location}\``,
-        `- **Age:** ${formatAge(i.ageDays)}`,
-        "",
-        i.detail,
-        "",
-      )
-    }
-  }
-  return lines.join("\n")
-}
-
-const SEV_RANK: Record<Severity, number> = { critical: 3, warning: 2, info: 1 }
-
+/**
+ * Compact post-scan card — grade + severity + one CTA into the dashboard.
+ * Detail (findings, watch, share, percentile) stays in the full app so this
+ * dialog fits one viewport and people open the dashboard on purpose.
+ */
 function ResultCard({ result, onOpen }: { result: ScanResult; onOpen?: (repoId: string) => void }) {
   const { t } = useLocale()
-  const [expanded, setExpanded] = useState<string | null>(null)
-  const [copied, setCopied] = useState(false)
-  const [showAllFindings, setShowAllFindings] = useState(false)
 
   if (!result.ok || !result.report) {
     return (
@@ -182,28 +122,12 @@ function ResultCard({ result, onOpen }: { result: ScanResult; onOpen?: (repoId: 
     warning: issues.filter((i) => i.severity === "warning").length,
     info: issues.filter((i) => i.severity === "info").length,
   }
-  const ranked = [...issues].sort((a, b) => {
-    const sev = SEV_RANK[b.severity] - SEV_RANK[a.severity]
-    if (sev !== 0) return sev
-    return b.ageDays - a.ageDays
-  })
-  const PREVIEW = 3
-  const visible = showAllFindings ? ranked : ranked.slice(0, PREVIEW)
-
-  async function copyJson() {
-    try {
-      await navigator.clipboard.writeText(JSON.stringify(report, null, 2))
-      setCopied(true)
-      setTimeout(() => setCopied(false), 1500)
-    } catch {
-      // clipboard may be unavailable (insecure context) — fall back to download
-      downloadFile(`${slug}.repo-anti-rot.json`, JSON.stringify(report, null, 2), "application/json")
-    }
-  }
+  const debtHours = issues.reduce((s, i) => s + (HOURS_PER_SEVERITY[i.severity] ?? 0), 0)
+  const repoId = `${repo.owner}/${repo.name}`
 
   return (
     <Card>
-      <CardHeader className="flex-row items-center justify-between gap-3">
+      <CardHeader className="flex-row items-center justify-between gap-3 pb-2">
         <CardTitle className="flex min-w-0 items-center gap-2 text-base">
           <GitBranch className="size-4 shrink-0 text-muted-foreground" />
           <span className="truncate">
@@ -214,14 +138,16 @@ function ResultCard({ result, onOpen }: { result: ScanResult; onOpen?: (repoId: 
           <span className="font-mono text-xs tabular-nums text-muted-foreground">{score}/100</span>
           <span
             className="flex size-8 items-center justify-center rounded-md font-mono text-sm font-bold"
-            style={{ color: GRADE_CSS_VAR[grade], backgroundColor: `color-mix(in oklab, ${GRADE_CSS_VAR[grade]} 15%, transparent)` }}
+            style={{
+              color: GRADE_CSS_VAR[grade],
+              backgroundColor: `color-mix(in oklab, ${GRADE_CSS_VAR[grade]} 15%, transparent)`,
+            }}
           >
             {grade}
           </span>
         </div>
       </CardHeader>
       <CardContent className="space-y-3">
-        {/* Metadata */}
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
           <span className="flex items-center gap-1">
             <GitBranch className="size-3" />
@@ -233,28 +159,6 @@ function ResultCard({ result, onOpen }: { result: ScanResult; onOpen?: (repoId: 
           </span>
         </div>
 
-        {/* Where this score stands. Under the metadata rather than beside the
-            grade: it arrives after the card has already rendered, and a line
-            that appears next to the number would shift the layout under the
-            reader's eye. */}
-        <PercentileLine score={score} languages={report.profile?.languages} />
-
-        {/* Peak-motivation CTAs first — watch + share before a wall of findings. */}
-        <div className="space-y-2 rounded-lg border border-primary/25 bg-primary/5 p-3">
-          <p className="text-xs font-medium text-foreground">{t("scan.firstLookTitle")}</p>
-          <p className="text-[11px] leading-relaxed text-muted-foreground">{t("scan.firstLookLead")}</p>
-          <WatchBox
-            owner={repo.owner}
-            name={repo.name}
-            repoUrl={result.url}
-            grade={grade}
-            score={score}
-            sha={typeof report.commit === "string" ? report.commit : null}
-          />
-          <ShareBox report={report} repoUrl={result.url} />
-        </div>
-
-        {/* Severity counts */}
         <div className="flex flex-wrap items-center gap-2 text-xs">
           <span className={cn("rounded-full border px-2 py-0.5", severityStyle.critical)}>
             {counts.critical} {t("issues.critical")}
@@ -265,123 +169,39 @@ function ResultCard({ result, onOpen }: { result: ScanResult; onOpen?: (repoId: 
           <span className={cn("rounded-full border px-2 py-0.5", severityStyle.info)}>
             {counts.info} {t("issues.info")}
           </span>
-          {ranked.length > 0 && (
+          {issues.length > 0 && (
             <span className="text-muted-foreground">
-              {t("scan.debtHint", {
-                debt: formatDebtHours(
-                  ranked.reduce((s, i) => s + (HOURS_PER_SEVERITY[i.severity] ?? 0), 0),
-                ),
-              })}
+              {t("scan.debtHint", { debt: formatDebtHours(debtHours) })}
             </span>
           )}
         </div>
 
-        {/* Quick wins first; full list behind one click so the first session stays light. */}
-        {ranked.length > 0 ? (
-          <div className="space-y-2">
-            <p className="text-xs font-medium text-muted-foreground">{t("scan.quickWinsTitle")}</p>
-            <div className="divide-y divide-border rounded-md border border-border">
-              {visible.map((issue) => {
-                const open = expanded === issue.id
-                return (
-                  <div key={issue.id}>
-                    <button
-                      onClick={() => setExpanded(open ? null : issue.id)}
-                      className="flex w-full items-center gap-3 px-3 py-2 text-left transition-colors hover:bg-accent/50"
-                    >
-                      {open ? (
-                        <ChevronDown className="size-4 shrink-0 text-muted-foreground" />
-                      ) : (
-                        <ChevronRight className="size-4 shrink-0 text-muted-foreground" />
-                      )}
-                      <span
-                        className={cn(
-                          "hidden w-16 shrink-0 rounded-full border px-2 py-0.5 text-center text-[10px] font-medium uppercase sm:inline-block",
-                          severityStyle[issue.severity],
-                        )}
-                      >
-                        {issue.severity}
-                      </span>
-                      <span className="min-w-0 flex-1">
-                        <span className="block truncate text-sm">{issue.title}</span>
-                        <span className="block truncate font-mono text-xs text-muted-foreground">
-                          {issue.location}
-                        </span>
-                      </span>
-                      <span className="hidden shrink-0 text-xs text-muted-foreground md:block">
-                        {categoryLabels[issue.category]}
-                      </span>
-                      <span className="w-12 shrink-0 text-right font-mono text-xs tabular-nums text-muted-foreground">
-                        {formatAge(issue.ageDays)}
-                      </span>
-                    </button>
-                    {open && (
-                      <div className="space-y-2 bg-secondary/40 px-4 pb-4 pl-11 pt-1 text-sm text-muted-foreground">
-                        <p>{issue.detail}</p>
-                        {issue.aiNote && (
-                          <div className="rounded-md border border-primary/30 bg-primary/5 px-3 py-2">
-                            <div className="mb-1 text-xs font-medium text-primary">AI analysis</div>
-                            <p className="text-foreground/90">{issue.aiNote}</p>
-                          </div>
-                        )}
-                        <div className="flex flex-wrap gap-x-4 gap-y-1 font-mono text-xs">
-                          <span>category: {categoryLabels[issue.category]}</span>
-                          <span>location: {issue.location}</span>
-                          <span>age: {formatAge(issue.ageDays)}</span>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )
-              })}
-            </div>
-            {ranked.length > PREVIEW && (
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                className="h-7 text-xs"
-                onClick={() => setShowAllFindings((v) => !v)}
-              >
-                {showAllFindings
-                  ? t("scan.showFewer")
-                  : t("scan.showAllFindings", { count: ranked.length })}
-              </Button>
-            )}
-          </div>
-        ) : (
-          <p className="rounded-md border border-border py-6 text-center text-sm text-muted-foreground">
-            {t("scan.clean")}
-          </p>
+        {issues.length === 0 && (
+          <p className="text-sm text-muted-foreground">{t("scan.clean")}</p>
         )}
 
-        {/* Secondary: dashboard + export — after the retention CTAs. */}
-        <div className="flex flex-wrap gap-2 border-t border-border pt-3">
+        <p className="text-[11px] leading-relaxed text-muted-foreground">{t("scan.resultLead")}</p>
+
+        <div className="flex flex-wrap items-center gap-2">
           {onOpen && (
-            <Button size="sm" onClick={() => onOpen(`${repo.owner}/${repo.name}`)}>
+            <Button size="sm" onClick={() => onOpen(repoId)}>
               <Maximize2 className="size-4" />
               {t("scan.openDashboard")}
             </Button>
           )}
           <Button
-            variant="outline"
+            variant="ghost"
             size="sm"
-            onClick={() => downloadFile(`${slug}.repo-anti-rot.json`, JSON.stringify(report, null, 2), "application/json")}
+            onClick={() =>
+              downloadFile(
+                `${slug}.repo-anti-rot.json`,
+                JSON.stringify(report, null, 2),
+                "application/json",
+              )
+            }
           >
             <FileJson className="size-4" />
             {t("scan.downloadJson")}
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => downloadFile(`${slug}.repo-anti-rot.md`, reportToMarkdown(report), "text/markdown")}
-          >
-            <FileText className="size-4" />
-            {t("scan.downloadMarkdown")}
-          </Button>
-          <Button variant="ghost" size="sm" onClick={copyJson}>
-            {copied ? <Check className="size-4" /> : <Copy className="size-4" />}
-            {copied ? t("scan.copied") : t("scan.copyJson")}
           </Button>
         </div>
       </CardContent>
@@ -392,6 +212,7 @@ function ResultCard({ result, onOpen }: { result: ScanResult; onOpen?: (repoId: 
 export function ScanRunner({ onOpen }: { onOpen?: (repoId: string) => void }) {
   const { t } = useLocale()
   const [selected, setSelected] = useState<SelectedRepo[]>([])
+  const [scannerIds, setScannerIds] = useState<string[]>(() => loadScannerSelection())
   const [loading, setLoading] = useState(false)
   const [progress, setProgress] = useState(0) // 0..1 overall
   const [progressLabel, setProgressLabel] = useState("")
@@ -405,6 +226,11 @@ export function ScanRunner({ onOpen }: { onOpen?: (repoId: string) => void }) {
   const urls = selected.map((s) => s.url)
 
   const okResults = results?.filter((r) => r.ok && r.report) ?? []
+
+  function onScannersChange(ids: string[]) {
+    setScannerIds(ids)
+    saveScannerSelection(ids)
+  }
 
   function downloadAll() {
     const reports = okResults.map((r) => r.report)
@@ -421,9 +247,11 @@ export function ScanRunner({ onOpen }: { onOpen?: (repoId: string) => void }) {
     // Reserve the last 20% of the bar for the AI pass when it's enabled.
     const aiOn = isAiEnabled(readAiSettings())
     const scanSpan = aiOn ? 0.8 : 1
+    const only = onlyForRequest(scannerIds)
 
     try {
       const scanResults = (await runScanStream(urls, {
+        only,
         onProgress: (s) => {
           setProgress(s.fraction * scanSpan)
           setProgressLabel(s.label)
@@ -431,16 +259,16 @@ export function ScanRunner({ onOpen }: { onOpen?: (repoId: string) => void }) {
       })) as unknown as ScanResult[]
       setResults(scanResults)
 
-      const okResults = scanResults.filter((r) => r.ok && r.report)
+      const succeeded = scanResults.filter((r) => r.ok && r.report)
 
       if (aiOn) {
         // Enrich each report, mapping completion onto the final 80%→100% slice.
-        const totals = okResults.map((r) => aiTargetCount(r.report as StoredScanReport))
+        const totals = succeeded.map((r) => aiTargetCount(r.report as StoredScanReport))
         const grand = totals.reduce((a, b) => a + b, 0)
         let doneGlobal = 0
         setProgressLabel("AI analysis…")
-        for (let i = 0; i < okResults.length; i++) {
-          const r = okResults[i]
+        for (let i = 0; i < succeeded.length; i++) {
+          const r = succeeded[i]
           const report = (await enrichReport(r.report as StoredScanReport, {
             onProgress: (done) => {
               const frac = grand > 0 ? (doneGlobal + done) / grand : 1
@@ -448,12 +276,12 @@ export function ScanRunner({ onOpen }: { onOpen?: (repoId: string) => void }) {
             },
           })) as unknown as ScanReport
           doneGlobal += totals[i]
-          r.report = report // reflect notes in the on-screen result cards too
+          r.report = report
           saveReport(report as StoredScanReport, r.url)
           await refreshPublishedShare(report, r.url).catch(() => "failed")
         }
       } else {
-        for (const r of okResults) {
+        for (const r of succeeded) {
           saveReport(r.report as StoredScanReport, r.url)
           await refreshPublishedShare(r.report, r.url).catch(() => "failed")
         }
@@ -469,11 +297,9 @@ export function ScanRunner({ onOpen }: { onOpen?: (repoId: string) => void }) {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Elevated: on the landing page this card is the one thing to do, and it
-          has to read as the focus rather than as the first of several panels. */}
+    <div className="space-y-4">
       <Card className="border-border/80 shadow-lg shadow-primary/5 ring-1 ring-primary/5">
-        <CardHeader>
+        <CardHeader className="pb-2">
           <CardTitle className="text-base">{t("scan.formTitle")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
@@ -482,6 +308,12 @@ export function ScanRunner({ onOpen }: { onOpen?: (repoId: string) => void }) {
           <RepoPicker selected={selected} onChange={setSelected} disabled={loading} />
 
           <FamousRepos selected={selected} onChange={setSelected} disabled={loading} />
+
+          <ScannerPicker
+            selected={scannerIds}
+            onChange={onScannersChange}
+            disabled={loading}
+          />
 
           <div className="flex items-center justify-between gap-3 border-t border-border pt-3">
             <span className="text-xs text-muted-foreground">
@@ -520,12 +352,9 @@ export function ScanRunner({ onOpen }: { onOpen?: (repoId: string) => void }) {
       )}
 
       {results && (
-        <div className="space-y-4">
+        <div className="space-y-3">
           {results.length > 1 && (
             <>
-              {/* The batch as one thing, above the individual reports. Reading
-                  five cards in a row does not answer "which is worst" or "what
-                  is wrong with all of them". */}
               <BatchSummaryCard
                 summary={summariseBatch(
                   results as unknown as Parameters<typeof summariseBatch>[0],
@@ -545,8 +374,6 @@ export function ScanRunner({ onOpen }: { onOpen?: (repoId: string) => void }) {
           {results.map((r) => (
             <div
               key={r.url}
-              // Scroll target for the summary table, so a row leads to the full
-              // report rather than to a second copy of the same numbers.
               id={r.report ? repoAnchor(`${r.report.repo.owner}/${r.report.repo.name}`) : undefined}
               className="scroll-mt-4"
             >

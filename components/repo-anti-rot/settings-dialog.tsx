@@ -104,7 +104,7 @@ export function SettingsDialog({ trigger }: { trigger?: React.ReactNode } = {}) 
           </DialogDescription>
         </DialogHeader>
 
-        <div className="-mx-1 flex-1 space-y-5 overflow-y-auto px-1 py-2">
+        <div className="-mx-1 min-h-0 flex-1 space-y-5 overflow-y-auto thin-scrollbar px-1 py-2">
           {/* Appearance — applies immediately, no Save */}
           <div className="space-y-2">
             <div className="space-y-0.5">

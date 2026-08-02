@@ -96,12 +96,19 @@ export async function GET(
   if (token) {
     const share = await getShare(token)
     // The token proves the right to read that report; it does not make the
-    // report be about whatever repository the URL claims.
-    if (share && share.report.repo.owner === wantOwner && share.report.repo.name === wantName) {
+    // report be about whatever repository the URL claims. Owner/name compare
+    // case-insensitively — GitHub paths and paste casing often disagree.
+    if (
+      share &&
+      share.report.repo.owner.toLowerCase() === wantOwner.toLowerCase() &&
+      share.report.repo.name.toLowerCase() === wantName.toLowerCase()
+    ) {
       found = { grade: share.report.grade, score: share.report.score }
     }
   } else {
-    const repo = (await readServerRepos()).find((r) => r.id === id)
+    const repo = (await readServerRepos()).find(
+      (r) => r.id.toLowerCase() === id.toLowerCase(),
+    )
     if (repo) found = { grade: repo.latest.grade, score: repo.latest.score }
   }
 
@@ -114,8 +121,9 @@ export async function GET(
   return new Response(svg, {
     headers: {
       "Content-Type": "image/svg+xml; charset=utf-8",
-      // Let CDNs cache briefly but always allow a quick refresh after a new scan.
-      "Cache-Control": "public, max-age=120, s-maxage=120, stale-while-revalidate=600",
+      // GitHub Camo caches aggressively; keep origin TTL short. Copied markdown
+      // also carries a `v=` bust when the share snapshot updates.
+      "Cache-Control": "public, max-age=60, s-maxage=60, must-revalidate",
     },
   })
 }

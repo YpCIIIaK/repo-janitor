@@ -53,15 +53,25 @@ function shareHref(origin: string, t: ShareTarget): string {
   return `${base}/r/${encodeURIComponent(t.owner)}/${encodeURIComponent(t.name)}/${t.token}`
 }
 
+/** Optional bust so GitHub Camo / CDNs refetch after a snapshot update. */
+function withCacheBust(url: string, cacheKey?: string): string {
+  if (!cacheKey) return url
+  // Compact ISO → digits only keeps the markdown shorter.
+  const v = cacheKey.replace(/\D/g, "").slice(0, 14) || cacheKey.slice(0, 16)
+  const join = url.includes("?") ? "&" : "?"
+  return `${url}${join}v=${encodeURIComponent(v)}`
+}
+
 /** Absolute badge image URL for a share target (shields strip). */
 export function badgeUrl(
   origin: string,
   t: ShareTarget,
   opts: WidgetOptions = DEFAULT_WIDGET_OPTIONS,
+  cacheKey?: string,
 ): string {
   const path = `/api/badge/${encodeURIComponent(t.owner)}/${encodeURIComponent(t.name)}`
   const base = `${origin.replace(/\/$/, "")}${path}?token=${encodeURIComponent(t.token)}`
-  return appendWidgetOptions(base, opts)
+  return withCacheBust(appendWidgetOptions(base, opts), cacheKey)
 }
 
 /** Absolute large-card image URL for a share target (README plaque). */
@@ -69,10 +79,11 @@ export function cardUrl(
   origin: string,
   t: ShareTarget,
   opts: WidgetOptions = DEFAULT_WIDGET_OPTIONS,
+  cacheKey?: string,
 ): string {
   const path = `/api/card/${encodeURIComponent(t.owner)}/${encodeURIComponent(t.name)}`
   const base = `${origin.replace(/\/$/, "")}${path}?token=${encodeURIComponent(t.token)}`
-  return appendWidgetOptions(base, opts)
+  return withCacheBust(appendWidgetOptions(base, opts), cacheKey)
 }
 
 /**
@@ -80,15 +91,19 @@ export function cardUrl(
  *
  * Clickable on purpose. A bare grade invites "says who?", and the answer should
  * be one click away rather than something the reader has to take on trust.
+ *
+ * `cacheKey` (usually share `updatedAt`) is appended as `v=` so a refreshed
+ * snapshot is not stuck behind GitHub's image cache.
  */
 export function badgeMarkdown(
   origin: string,
   shareUrl: string,
   opts: WidgetOptions = DEFAULT_WIDGET_OPTIONS,
+  cacheKey?: string,
 ): string | null {
   const target = parseSharePath(shareUrl)
   if (!target) return null
-  const img = badgeUrl(origin, target, opts)
+  const img = badgeUrl(origin, target, opts, cacheKey)
   return `[![Repo Anti-Rot](${img})](${shareHref(origin, target)})`
 }
 
@@ -99,10 +114,11 @@ export function cardMarkdown(
   origin: string,
   shareUrl: string,
   opts: WidgetOptions = DEFAULT_WIDGET_OPTIONS,
+  cacheKey?: string,
 ): string | null {
   const target = parseSharePath(shareUrl)
   if (!target) return null
-  const img = cardUrl(origin, target, opts)
+  const img = cardUrl(origin, target, opts, cacheKey)
   return `[![Repo Anti-Rot](${img})](${shareHref(origin, target)})`
 }
 
