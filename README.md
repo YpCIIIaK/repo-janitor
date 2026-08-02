@@ -3,12 +3,10 @@
 [![CI](https://github.com/YpCIIIaK/repo-janitor/actions/workflows/ci.yml/badge.svg)](https://github.com/YpCIIIaK/repo-janitor/actions/workflows/ci.yml)
 <!-- Tokenless on purpose: this form reads the latest report ingested from CI, so it
      tracks main. A `?token=…` badge pins one share forever — every share mints a new
-     token, so a pasted one is a snapshot that silently ages into a lie.
-     The link goes to the dashboard rather than to /r/<owner>/<name>, which does not
-     exist yet; a badge pointing at a 404 is worse than one pointing at nothing. -->
-[![Repo Anti-Rot](https://repo-anti-rot.onrender.com/api/badge/YpCIIIaK/repo-janitor)](https://repo-anti-rot.onrender.com/)
+     token, so a pasted one is a snapshot that silently ages into a lie. -->
+[![Repo Anti-Rot](https://repo-anti-rot.onrender.com/api/badge/YpCIIIaK/repo-janitor)](https://repo-anti-rot.onrender.com/r/YpCIIIaK/repo-janitor)
 
-[![Repo Anti-Rot card](https://repo-anti-rot.onrender.com/api/card/YpCIIIaK/repo-janitor)](https://repo-anti-rot.onrender.com/)
+[![Repo Anti-Rot card](https://repo-anti-rot.onrender.com/api/card/YpCIIIaK/repo-janitor)](https://repo-anti-rot.onrender.com/r/YpCIIIaK/repo-janitor)
 
 A repository **health & decay monitor**. It scans a codebase for the kinds of rot
 that accumulate silently — undocumented env vars, abandoned & vulnerable
@@ -409,10 +407,11 @@ Two things to get right before pasting one anywhere public:
 ![rot](https://your-deploy.example.com/api/badge/<owner>/<name>)
 ```
 
-Or make it clickable, linking back to the dashboard:
+Or make it clickable, linking to the repository's report page — same tokenless
+form, always the newest CI upload:
 
 ```
-[![rot](https://your-deploy.example.com/api/badge/<owner>/<name>)](https://your-deploy.example.com)
+[![rot](https://your-deploy.example.com/api/badge/<owner>/<name>)](https://your-deploy.example.com/r/<owner>/<name>)
 ```
 
 It renders `repo anti-rot | <grade> <score>`, colored by grade (green → amber →
