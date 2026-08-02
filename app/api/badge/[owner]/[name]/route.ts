@@ -3,6 +3,7 @@ import { getShare } from "@/lib/share-store"
 import { UNKNOWN_GRADE_HEX, gradeHex } from "@/lib/grade-style"
 import type { Grade } from "@/lib/mock-data"
 import { formatBadgeMessage, parseWidgetOptions } from "@/lib/widget-options"
+import { decorLayer, driftShapes, hashSeed, shade } from "@/lib/badge-decor"
 
 /**
  * Shields-style SVG health badge for a repo, e.g.
@@ -47,7 +48,14 @@ function esc(s: string): string {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
 }
 
-function badgeSvg(label: string, message: string, color: string, square: boolean): string {
+function badgeSvg(
+  label: string,
+  message: string,
+  color: string,
+  square: boolean,
+  seed: number,
+  animate: boolean,
+): string {
   const pad = 6
   const lw = textWidth(label) + pad * 2
   const mw = textWidth(message) + pad * 2
@@ -59,13 +67,24 @@ function badgeSvg(label: string, message: string, color: string, square: boolean
   const lLen = (lw - pad) * 10
   const mLen = (mw - pad) * 10
 
+  // Diagonal gradients rather than flat fills: light to dark across each half.
+  // The right-hand side is derived from the grade colour, so A stays green and
+  // F stays red — the gradient is decoration, never the thing being read.
+  const mLight = shade(color, 0.18)
+  const mDark = shade(color, -0.16)
+
+  const decor = decorLayer(driftShapes(seed, total, h), "#dfe6ee", animate)
+
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${total}" height="${h}" role="img" aria-label="${esc(label)}: ${esc(message)}">
   <title>${esc(label)}: ${esc(message)}</title>
   <linearGradient id="s" x2="0" y2="100%"><stop offset="0" stop-color="#bbb" stop-opacity=".1"/><stop offset="1" stop-opacity=".1"/></linearGradient>
+  <linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5c636b"/><stop offset="1" stop-color="#41474e"/></linearGradient>
+  <linearGradient id="mg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${mLight}"/><stop offset="1" stop-color="${mDark}"/></linearGradient>
   <clipPath id="r"><rect width="${total}" height="${h}" rx="${r}" fill="#fff"/></clipPath>
   <g clip-path="url(#r)">
-    <rect width="${lw}" height="${h}" fill="#555"/>
-    <rect x="${lw}" width="${mw}" height="${h}" fill="${color}"/>
+    <rect width="${lw}" height="${h}" fill="url(#lg)"/>
+    <rect x="${lw}" width="${mw}" height="${h}" fill="url(#mg)"/>
+    ${decor}
     <rect width="${total}" height="${h}" fill="url(#s)"/>
   </g>
   <g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="110" text-rendering="geometricPrecision">
@@ -117,7 +136,11 @@ export async function GET(
     : "unknown"
   const color = found ? gradeHex(found.grade) : UNKNOWN_COLOR
 
-  const svg = badgeSvg(opts.label, message, color, square)
+  // The OS reduced-motion preference does not reach an SVG inside an <img>, so
+  // the badge takes an explicit opt-out that a README author can paste.
+  const animate = searchParams.get("motion") !== "off"
+
+  const svg = badgeSvg(opts.label, message, color, square, hashSeed(id.toLowerCase()), animate)
   return new Response(svg, {
     headers: {
       "Content-Type": "image/svg+xml; charset=utf-8",
