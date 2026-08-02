@@ -40,6 +40,8 @@ export interface ScanProgressState {
 export interface RunScanHandlers {
   onProgress?: (state: ScanProgressState) => void
   signal?: AbortSignal
+  /** Subset of scanner ids; omit / null for the full registry. */
+  only?: string[] | null
 }
 
 const PHASE_LABEL = { clone: "Cloning", scan: "Scanning" } as const
@@ -49,10 +51,13 @@ export async function runScanStream(
   urls: string[],
   handlers: RunScanHandlers = {},
 ): Promise<ScanResult[]> {
+  const body: { urls: string[]; only?: string[] } = { urls }
+  if (handlers.only && handlers.only.length > 0) body.only = handlers.only
+
   const res = await fetch("/api/scan", {
     method: "POST",
     headers: { "Content-Type": "application/json", ...usageHeaders() },
-    body: JSON.stringify({ urls }),
+    body: JSON.stringify(body),
     signal: handlers.signal,
   })
 

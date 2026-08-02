@@ -178,15 +178,16 @@ export function RepoSidebar({
           />
         )}
         {onNewScan && <RailButton icon={<ScanLine />} label="New scan" onClick={onNewScan} />}
-        {/* Reopening lives in the rail because the rail is the only thing still
-            on screen when the panel is shut. It used to be an absolutely
-            positioned button next to the rail, which rendered and reported
-            itself visible but sat underneath the sticky page header — so the
-            sidebar could be collapsed and never reopened. */}
-        {collapsed && (
-          <RailButton icon={<PanelLeftOpen />} label="Expand sidebar" onClick={toggleCollapsed} />
-        )}
-        <div className="mt-auto flex flex-col items-center gap-1">{railExtras}</div>
+        {/* Collapse/expand stays at the bottom of the rail in both states so it
+            never jumps between the header and the top of the icon stack. */}
+        <div className="mt-auto flex flex-col items-center gap-1">
+          {railExtras}
+          <RailButton
+            icon={collapsed ? <PanelLeftOpen /> : <PanelLeftClose />}
+            label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            onClick={toggleCollapsed}
+          />
+        </div>
       </div>
 
       {/* Contextual panel. */}
@@ -218,15 +219,6 @@ export function RepoSidebar({
           ) : (
             <span className="text-sm font-semibold">Repositories</span>
           )}
-          <button
-            onClick={toggleCollapsed}
-            aria-expanded
-            aria-label="Collapse sidebar"
-            title="Collapse sidebar"
-            className="shrink-0 rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-accent/60 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          >
-            <PanelLeftClose className="size-4" />
-          </button>
         </div>
 
         <nav className="flex-1 space-y-0.5 overflow-y-auto px-2 pb-2">

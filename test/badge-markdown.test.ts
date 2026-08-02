@@ -78,6 +78,16 @@ describe("badgeMarkdown", () => {
   it("returns null rather than half a badge for an unusable link", () => {
     expect(badgeMarkdown(ORIGIN, "/app")).toBeNull()
   })
+
+  it("appends a compact v= bust when a cache key is given", () => {
+    const md = badgeMarkdown(
+      ORIGIN,
+      `${ORIGIN}/r/acme/widget/tok123`,
+      undefined,
+      "2026-07-31T12:34:56.000Z",
+    )
+    expect(md).toContain("token=tok123&v=20260731123456")
+  })
 })
 
 describe("embedSnippet", () => {

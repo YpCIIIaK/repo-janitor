@@ -2,7 +2,14 @@
 
 import { Command } from "commander";
 import { promises as fs } from "fs";
-import { formatQuickWinsTerminal, quickWins, renderReport } from "@repo-anti-rot/core";
+import {
+  ALL_SCANNER_IDS,
+  formatQuickWinsTerminal,
+  parseOnlyOption,
+  quickWins,
+  renderReport,
+  selectScanners,
+} from "@repo-anti-rot/core";
 import type { ScanReport } from "@repo-anti-rot/core";
 import { join } from "path";
 import { scanRepo } from "./context";
@@ -50,6 +57,10 @@ function registerScan(program: Command) {
     .option("-f, --format <format>", "Output format (json, terminal, md, sarif)", "terminal")
     .option("-o, --output <file>", "Output file path")
     .option("--progress", "Emit machine-readable progress events to stderr")
+    .option(
+      "--only <ids>",
+      "Run only these scanners (comma-separated ids, e.g. secrets,ci-health)",
+    )
     .option("--fix", "After the scan, print the top quick-wins to fix first")
     .option("--fix-limit <n>", "How many quick-wins to list with --fix", (v) => parseInt(v, 10), 8)
     .action(async (pathArg: string, options) => {
@@ -58,6 +69,22 @@ function registerScan(program: Command) {
         const root = await fs.realpath(options.path ?? pathArg);
         console.log(`Scanning repository at: ${root}`);
 
+        const only = parseOnlyOption(options.only)
+        const { scanners, unknown } = selectScanners(only)
+        if (unknown.length > 0) {
+          console.error(
+            `Unknown scanner id(s): ${unknown.join(", ")}. Known: ${ALL_SCANNER_IDS.join(", ")}`,
+          )
+          process.exit(1)
+        }
+        if (scanners.length === 0) {
+          console.error("No scanners selected. Pass valid ids to --only, or omit --only for all.")
+          process.exit(1)
+        }
+        if (only) {
+          console.log(`Running ${scanners.length} scanner(s): ${scanners.map((s) => s.id).join(", ")}`)
+        }
+
         // With --progress, stream one NDJSON line per scanner to stderr so a parent
         // process (the dashboard's /api/scan) can render real progress.
         const onProgress = options.progress
@@ -65,7 +92,7 @@ function registerScan(program: Command) {
               process.stderr.write(`@@PROGRESS@@${JSON.stringify(p)}\n`)
           : undefined;
 
-        const report = await scanRepo(root, onProgress);
+        const report = await scanRepo(root, onProgress, only ? scanners : undefined);
         const output = serializeReport(report, options.format);
 
         if (options.output) {

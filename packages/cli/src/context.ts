@@ -2,7 +2,13 @@ import { promises as fs } from "fs";
 import fg from "fast-glob";
 import simpleGit, { SimpleGit } from "simple-git";
 import { runScan, loadConfig } from "@repo-anti-rot/core";
-import type { ScanContext, ScanReport, ScanProgress, HistoryAddition } from "@repo-anti-rot/core";
+import type {
+  ScanContext,
+  ScanReport,
+  ScanProgress,
+  HistoryAddition,
+  Scanner,
+} from "@repo-anti-rot/core";
 import { basename, join } from "path";
 
 /**
@@ -358,7 +364,8 @@ export async function buildScanContext(root: string): Promise<ScanContext> {
 export async function scanRepo(
   root: string,
   onProgress?: (p: ScanProgress) => void,
+  scanners?: Scanner[],
 ): Promise<ScanReport> {
   const ctx = await buildScanContext(root);
-  return runScan(ctx, undefined, onProgress);
+  return runScan(ctx, scanners, onProgress);
 }
