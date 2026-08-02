@@ -49,14 +49,15 @@ want it in a file or in CI. Add `--fix` to print the top quick-wins first.
 Optional query params (kept in the URL so the README remembers your layout):
 `theme=light`, `hide=chips,meta,headline`, `message=grade|score|grade-score`,
 `style=flat-square`, `label=health`, `size=roomy` (embed only),
-`motion=off` (badge only — keeps the texture, stops the drift).
+`motion=off` (keeps the texture, stops the drift).
 
-The badge draws a few faint grey shapes that drift behind the text. Their
-arrangement is seeded from `owner/name`, so every project's badge looks a little
-different and any one project's badge always looks the same. `prefers-reduced-motion`
-is honoured when the SVG is opened on its own, but browsers do not pass that
-preference into an image embedded in a page — which is how a README shows it —
-so `?motion=off` is the reliable way to turn the movement off.
+The badge and the card both draw faint grey shapes that drift behind the text —
+small and sparse on the badge, larger and slower on the card. The arrangement is
+seeded from `owner/name`, so every project looks a little different and any one
+project always looks the same. `prefers-reduced-motion` is honoured when the SVG
+is opened on its own, but browsers do not pass that preference into an image
+embedded in a page — which is how a README shows it — so `?motion=off` is the
+reliable way to turn the movement off.
 
 **Website embed** (not GitHub — READMEs strip iframes):
 
@@ -415,7 +416,7 @@ It renders `repo anti-rot | <grade> <score>`, colored by grade (green → amber 
 red), and falls back to a neutral `unknown` badge for repos with no report (so a
 README image never 404s). Optional query params: `?label=health` (left text),
 `?style=flat-square` (square corners) and `?motion=off` (stops the drifting
-background shapes; see the badge section above).
+background shapes — also accepted by `/api/card`; see the badge section above).
 
 ## GitHub code scanning (SARIF)
 

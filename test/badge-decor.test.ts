@@ -1,5 +1,7 @@
 import { describe, it, expect } from "vitest"
 import {
+  BADGE_DRIFT,
+  CARD_DRIFT,
   decorLayer,
   driftShapes,
   hashSeed,
@@ -9,14 +11,14 @@ import {
 } from "@/lib/badge-decor"
 
 /**
- * The badge decoration.
+ * The drifting texture shared by the badge and the health card.
  *
  * The look is a matter of taste and was settled by looking at it. What is
- * tested here is everything that is not taste: that a repository's badge is the
- * same image every time, that the shapes stay inside the twenty-pixel strip,
- * and that `motion=off` really removes the movement rather than merely hiding
- * it — the badge sits in other people's READMEs, so "no animation" has to mean
- * no animation.
+ * tested here is everything that is not taste: that a repository renders the
+ * same image every time, that shapes stay clear of the edges on both surfaces
+ * despite very different drift distances, and that `motion=off` really removes
+ * the movement rather than merely hiding it — these sit in other people's
+ * READMEs, so "no animation" has to mean no animation.
  */
 
 describe("seeded layout", () => {
@@ -34,6 +36,24 @@ describe("seeded layout", () => {
     expect(a).not.toEqual(b)
   })
 
+  it("keeps card shapes clear of the edges too, with their much larger bob", () => {
+    // The card's vertical travel is nine pixels against the badge's one, so the
+    // margin has to follow the options rather than being a constant. Getting
+    // this wrong is invisible in a still and obvious in motion: shapes clip
+    // through the top and bottom edges.
+    const w = 480
+    const h = 220
+    for (const id of ["acme/widget", "facebook/react", "YpCIIIaK/repo-janitor"]) {
+      const shapes = driftShapes(hashSeed(id), w, h, CARD_DRIFT)
+      expect(shapes.length).toBeGreaterThan(BADGE_DRIFT.maxCount)
+      for (const s of shapes) {
+        expect(Math.abs(s.bob)).toBeLessThanOrEqual(CARD_DRIFT.bob)
+        expect(s.y - Math.abs(s.bob)).toBeGreaterThan(0)
+        expect(s.y + Math.abs(s.bob)).toBeLessThan(h)
+      }
+    }
+  })
+
   it("keeps every shape's centre in the strip across its whole drift", () => {
     // Centres, not extents: a shape wider than its margin bleeds past the edge
     // and the rounded-corner clipPath cuts it, which is intentional — partial
@@ -42,7 +62,7 @@ describe("seeded layout", () => {
     // disappears entirely for part of its cycle and the badge looks like it is
     // flickering.
     const h = 20
-    const bob = 1.2 // the vertical component of the drift keyframes
+    const bob = BADGE_DRIFT.bob
     for (const id of ["a/b", "acme/widget", "facebook/react", "YpCIIIaK/repo-janitor"]) {
       for (const s of driftShapes(hashSeed(id), 140, h)) {
         expect(s.y - bob).toBeGreaterThan(0)
@@ -53,7 +73,7 @@ describe("seeded layout", () => {
 
   it("scales the count with width and never crowds a long badge", () => {
     expect(driftShapes(1, 60, 20).length).toBeLessThan(driftShapes(1, 300, 20).length)
-    expect(driftShapes(1, 3000, 20).length).toBeLessThanOrEqual(7)
+    expect(driftShapes(1, 3000, 20).length).toBeLessThanOrEqual(BADGE_DRIFT.maxCount)
     expect(driftShapes(1, 10, 20).length).toBeGreaterThanOrEqual(3)
   })
 

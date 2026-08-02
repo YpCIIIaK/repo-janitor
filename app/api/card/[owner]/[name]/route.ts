@@ -77,7 +77,11 @@ export async function GET(
     }
   }
 
-  const svg = renderHealthCardSvg(wantOwner, wantName, data, opts)
+  // Same opt-out as the badge: the OS reduced-motion preference does not reach
+  // an SVG inside an <img>, so the URL has to carry it.
+  const motion = searchParams.get("motion") !== "off"
+
+  const svg = renderHealthCardSvg(wantOwner, wantName, data, { ...opts, motion })
   return new Response(svg, {
     headers: {
       "Content-Type": "image/svg+xml; charset=utf-8",

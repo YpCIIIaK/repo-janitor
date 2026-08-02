@@ -1,5 +1,5 @@
 /**
- * Decoration for the README badge: a smooth gradient and a few grey shapes
+ * Decoration shared by the README badge and the large health card: grey shapes
  * drifting behind the text.
  *
  * ## Three constraints shape every decision here
@@ -23,10 +23,12 @@
  *    arrangements — which is the point — while a single repository's badge stays
  *    the same image every time, instead of flickering between cached variants.
  *
- * 3. **The badge is twenty pixels tall.** Anything with real presence in that
- *    strip competes with the grade, which is the only thing the badge is for.
- *    The shapes are deliberately at the edge of visible: low opacity, no shape
- *    wider than a few pixels, and all of them behind the text.
+ * 3. **Scale decides the numbers, so both surfaces get their own.** The badge is
+ *    twenty pixels tall: anything with real presence there competes with the
+ *    grade, which is the only thing a badge is for, so its shapes sit at the
+ *    edge of visible. The card is twenty times the area, and those same values
+ *    on it read as dust rather than texture — bigger, fainter, slower, and more
+ *    of them. See BADGE_DRIFT and CARD_DRIFT.
  */
 
 /** FNV-1a. Small, stable across platforms, and good enough to seed a PRNG. */
@@ -64,6 +66,8 @@ export interface DecorShape {
   delay: number
   /** horizontal travel in px, signed */
   travel: number
+  /** vertical travel in px, signed */
+  bob: number
 }
 
 const KINDS: DecorKind[] = ["circle", "square", "slash"]
@@ -72,16 +76,71 @@ const KINDS: DecorKind[] = ["circle", "square", "slash"]
 const r2 = (n: number) => Math.round(n * 100) / 100
 
 /**
+ * How dense and how large the texture is.
+ *
+ * The defaults are the badge's, tuned by looking at it at 1×. The card is
+ * twenty times the area and needs its own numbers: the same values there
+ * produce a handful of specks in a lot of empty space, which reads as dust
+ * rather than as texture.
+ */
+export interface DriftOptions {
+  /** px of width per shape, before the cap */
+  density?: number
+  maxCount?: number
+  minSize?: number
+  sizeRange?: number
+  minOpacity?: number
+  opacityRange?: number
+  /** max horizontal travel in px */
+  travel?: number
+  /** max vertical travel in px, applied in the keyframes */
+  bob?: number
+}
+
+export const BADGE_DRIFT: Required<DriftOptions> = {
+  density: 22,
+  maxCount: 7,
+  minSize: 1.8,
+  sizeRange: 2.6,
+  minOpacity: 0.14,
+  opacityRange: 0.14,
+  travel: 11,
+  bob: 1.2,
+}
+
+export const CARD_DRIFT: Required<DriftOptions> = {
+  density: 34,
+  maxCount: 16,
+  minSize: 3,
+  sizeRange: 9,
+  minOpacity: 0.05,
+  opacityRange: 0.07,
+  travel: 26,
+  bob: 9,
+}
+
+/**
  * Lay out the drifting shapes.
  *
  * Count scales with width so a short badge does not get as crowded as a long
- * one, and is capped: past a handful these stop reading as texture and start
+ * one, and is capped: past a point these stop reading as texture and start
  * reading as dirt on the screen.
  */
-export function driftShapes(seed: number, width: number, height: number): DecorShape[] {
+export function driftShapes(
+  seed: number,
+  width: number,
+  height: number,
+  options: DriftOptions = {},
+): DecorShape[] {
+  const o = { ...BADGE_DRIFT, ...options }
   const rand = makeRandom(seed)
-  const count = Math.max(3, Math.min(7, Math.round(width / 22)))
+  const count = Math.max(3, Math.min(o.maxCount, Math.round(width / o.density)))
   const out: DecorShape[] = []
+
+  // Shapes must stay clear of the top and bottom edges by their bob, or they
+  // vanish for part of each cycle and the surface looks like it is flickering.
+  const margin = o.bob + 1
+  const span = Math.max(0, height - margin * 2)
 
   for (let i = 0; i < count; i++) {
     const duration = r2(7 + rand() * 11)
@@ -89,15 +148,13 @@ export function driftShapes(seed: number, width: number, height: number): DecorS
       kind: KINDS[Math.floor(rand() * KINDS.length)],
       // Spread across the width in bands, jittered, so they never clump.
       x: r2(((i + rand()) / count) * width),
-      y: r2(2 + rand() * (height - 4)),
-      // Tuned by looking at the badge at 1× rather than zoomed: the first pass
-      // used half these values and was invisible at the size anyone actually
-      // sees, which defeats the point of having texture at all.
-      size: r2(1.8 + rand() * 2.6),
-      opacity: r2(0.14 + rand() * 0.14),
+      y: r2(margin + rand() * span),
+      size: r2(o.minSize + rand() * o.sizeRange),
+      opacity: r2(o.minOpacity + rand() * o.opacityRange),
       duration,
       delay: r2(-rand() * duration),
-      travel: r2((rand() < 0.5 ? -1 : 1) * (4 + rand() * 7)),
+      travel: r2((rand() < 0.5 ? -1 : 1) * (o.travel * 0.35 + rand() * o.travel * 0.65)),
+      bob: r2((i % 2 ? 1 : -1) * (o.bob * 0.4 + rand() * o.bob * 0.6)),
     })
   }
   return out
@@ -144,7 +201,7 @@ export function decorLayer(shapes: DecorShape[], fill: string, animate = true): 
   const keyframes = shapes
     .map(
       (s, i) =>
-        `@keyframes d${i}{0%{transform:translate(${s.x}px,${s.y}px)}50%{transform:translate(${r2(s.x + s.travel)}px,${r2(s.y + (i % 2 ? 1.2 : -1.2))}px)}100%{transform:translate(${s.x}px,${s.y}px)}}`,
+        `@keyframes d${i}{0%{transform:translate(${s.x}px,${s.y}px)}50%{transform:translate(${r2(s.x + s.travel)}px,${r2(s.y + s.bob)}px)}100%{transform:translate(${s.x}px,${s.y}px)}}`,
     )
     .join("")
 

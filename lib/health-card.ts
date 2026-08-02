@@ -1,6 +1,7 @@
 import type { Grade } from "@/lib/mock-data"
 import { UNKNOWN_GRADE_HEX, gradeHex } from "@/lib/grade-style"
 import { isBoastworthy, verdictOf, type VerdictCounts } from "@/lib/verdict"
+import { CARD_DRIFT, decorLayer, driftShapes, hashSeed } from "@/lib/badge-decor"
 import {
   DEFAULT_WIDGET_OPTIONS,
   cardHeightFor,
@@ -54,6 +55,8 @@ type CardPalette = {
   plaque: string
   chipOff: string
   chipOffFg: string
+  /** fill for the drifting background shapes — light on dark, dark on light */
+  decor: string
 }
 
 const PALETTE: Record<WidgetTheme, CardPalette> = {
@@ -68,6 +71,7 @@ const PALETTE: Record<WidgetTheme, CardPalette> = {
     plaque: "#0d1117",
     chipOff: "#21262d",
     chipOffFg: "#6e7681",
+    decor: "#dfe6ee",
   },
   light: {
     bg0: "#ffffff",
@@ -80,6 +84,7 @@ const PALETTE: Record<WidgetTheme, CardPalette> = {
     plaque: "#ffffff",
     chipOff: "#eaeef2",
     chipOffFg: "#656d76",
+    decor: "#24292f",
   },
 }
 
@@ -166,7 +171,7 @@ export function renderHealthCardSvg(
   pathOwner: string,
   pathName: string,
   data: HealthCardData | null,
-  options: Partial<CardOpts> = {},
+  options: Partial<CardOpts> & { motion?: boolean } = {},
 ): string {
   const opts: CardOpts = {
     theme: options.theme ?? DEFAULT_WIDGET_OPTIONS.theme,
@@ -177,6 +182,17 @@ export function renderHealthCardSvg(
   const pal = PALETTE[opts.theme]
   const w = CARD_WIDTH
   const h = cardHeightFor(opts)
+
+  // Same texture as the badge, at card scale. Seeded from owner/name so a
+  // project's card and its badge are stable and a little bit its own; clipped
+  // to the rounded rect so nothing escapes the corners.
+  const decor = decorLayer(
+    driftShapes(hashSeed(`${pathOwner}/${pathName}`.toLowerCase()), w, h, CARD_DRIFT),
+    pal.decor,
+    options.motion !== false,
+  )
+  const decorClip = `<clipPath id="cc"><rect width="${w}" height="${h}" rx="12"/></clipPath>`
+  const decorLayerSvg = decor ? `<g clip-path="url(#cc)">${decor}</g>` : ""
   const title = truncateLabel(`${pathOwner}/${pathName}`)
   const aria = data
     ? `Repo Anti-Rot: ${pathOwner}/${pathName} grade ${data.grade}, ${data.score} of 100`
@@ -191,8 +207,10 @@ export function renderHealthCardSvg(
       <stop offset="0%" stop-color="${pal.bg0}"/>
       <stop offset="100%" stop-color="${pal.bg1}"/>
     </linearGradient>
+    ${decorClip}
   </defs>
   <rect width="${w}" height="${h}" rx="12" fill="url(#bg)" stroke="${pal.stroke}" stroke-width="1"/>
+  ${decorLayerSvg}
   <text x="${PAD_X}" y="40" fill="${pal.muted}" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="13" font-weight="600">Repo Anti-Rot</text>
   <text x="${PAD_X}" y="78" fill="${pal.text}" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="22" font-weight="700">${esc(title)}</text>
   <text x="${PAD_X}" y="120" fill="${UNKNOWN_COLOR}" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="28" font-weight="700">unknown</text>
@@ -262,8 +280,10 @@ export function renderHealthCardSvg(
       <stop offset="0%" stop-color="${color}" stop-opacity="0.22"/>
       <stop offset="100%" stop-color="${color}" stop-opacity="0"/>
     </linearGradient>
+    ${decorClip}
   </defs>
   <rect width="${w}" height="${h}" rx="12" fill="url(#bg)" stroke="${pal.stroke}" stroke-width="1"/>
+  ${decorLayerSvg}
   <rect x="0" y="0" width="6" height="${h}" rx="3" fill="${color}"/>
   <rect x="6" y="0" width="160" height="${h}" fill="url(#glow)"/>
 
