@@ -1,10 +1,14 @@
 # Repo Anti-Rot
 
 [![CI](https://github.com/YpCIIIaK/repo-janitor/actions/workflows/ci.yml/badge.svg)](https://github.com/YpCIIIaK/repo-janitor/actions/workflows/ci.yml)
-<!-- One live share token only — a second/rotated token makes the badge show "unknown". -->
-[![Repo Anti-Rot](https://repo-anti-rot.onrender.com/api/badge/YpCIIIaK/repo-janitor?token=xfiXJJAdYsBL-rLw)](https://repo-anti-rot.onrender.com/r/YpCIIIaK/repo-janitor/xfiXJJAdYsBL-rLw)
+<!-- Tokenless on purpose: this form reads the latest report ingested from CI, so it
+     tracks main. A `?token=…` badge pins one share forever — every share mints a new
+     token, so a pasted one is a snapshot that silently ages into a lie.
+     The link goes to the dashboard rather than to /r/<owner>/<name>, which does not
+     exist yet; a badge pointing at a 404 is worse than one pointing at nothing. -->
+[![Repo Anti-Rot](https://repo-anti-rot.onrender.com/api/badge/YpCIIIaK/repo-janitor)](https://repo-anti-rot.onrender.com/)
 
-[![Repo Anti-Rot](https://repo-anti-rot.onrender.com/api/card/YpCIIIaK/repo-janitor?token=xfiXJJAdYsBL-rLw)](https://repo-anti-rot.onrender.com/r/YpCIIIaK/repo-janitor/xfiXJJAdYsBL-rLw)
+[![Repo Anti-Rot card](https://repo-anti-rot.onrender.com/api/card/YpCIIIaK/repo-janitor)](https://repo-anti-rot.onrender.com/)
 
 A repository **health & decay monitor**. It scans a codebase for the kinds of rot
 that accumulate silently — undocumented env vars, abandoned & vulnerable
