@@ -26,31 +26,39 @@ describe("computeScore (client mirror of the engine)", () => {
   })
 
   it("clamps at 0", () => {
-    const many = Array.from({ length: 20 }, () => issue({ severity: "critical" }))
+    // Criticals taper last and least, so it takes a genuinely broken repository
+    // to reach the floor — but the floor is still a floor.
+    const many = Array.from({ length: 200 }, () => issue({ severity: "critical" }))
     expect(computeScore(many)).toBe(0)
   })
 
-  it("caps the penalty a pile of info can inflict", () => {
-    // 200 info would be 50 points linearly (→ score 50); the cap holds it to 8.
+  it("tapers a pile of info instead of charging for all of it", () => {
+    // 200 info would be 50 points linearly (→ score 50). The taper holds it to 7.
     const many = Array.from({ length: 200 }, () => issue({ severity: "info" }))
-    expect(computeScore(many)).toBe(92)
+    expect(computeScore(many)).toBe(93)
   })
 
-  it("caps warnings but lets criticals still tank the score", () => {
+  it("tapers warnings but lets criticals still tank the score", () => {
     const warnings = Array.from({ length: 100 }, () => issue({ severity: "warning" }))
-    expect(computeScore(warnings)).toBe(60) // capped at 40, not 100
+    expect(computeScore(warnings)).toBe(47) // 53 points, not the linear 300
     const criticals = Array.from({ length: 50 }, () => issue({ severity: "critical" }))
-    expect(computeScore(criticals)).toBe(0) // uncapped
+    expect(scoreToGrade(computeScore(criticals))).toBe("F")
   })
 
   /**
    * The point of the info tier is "worth knowing", not "counts against you".
-   * The narrowest grade band is 10 points wide, so as long as the info cap stays
-   * under that, no quantity of info findings can drop a repo a grade on its own.
-   * This asserts the property rather than the constant, so it keeps holding if
-   * someone retunes the weight.
+   * The narrowest grade band is 10 points wide, and info alone stays under that
+   * for any repository anyone will actually scan.
+   *
+   * Stated as a bound rather than as an absolute, because the absolute is not
+   * available any more and pretending otherwise would be the test lying. A hard
+   * cap could promise "no quantity, ever"; a taper cannot, because the two
+   * properties are opposed — a bounded total forces the marginal cost to zero,
+   * which is precisely the behaviour this replaced. A thousand info notes cost
+   * nine points. Ten thousand would cost more than ten, and a repository with
+   * ten thousand info findings has earned a lower grade.
    */
-  it("never lets info findings alone cost a grade band", () => {
+  it("never lets info findings alone cost a grade band, at any realistic count", () => {
     for (const count of [1, 10, 100, 1000]) {
       const many = Array.from({ length: count }, () => issue({ severity: "info" }))
       expect(scoreToGrade(computeScore(many))).toBe("A")
@@ -71,18 +79,34 @@ describe("penaltyBreakdown", () => {
       issue({ severity: "info" }),
     ])
     expect(result).toEqual([
-      { severity: "critical", count: 1, penalty: 10, capped: false },
-      { severity: "warning", count: 2, penalty: 6, capped: false },
-      { severity: "info", count: 1, penalty: 0.25, capped: false },
+      { severity: "critical", count: 1, penalty: 10, discounted: false },
+      { severity: "warning", count: 2, penalty: 6, discounted: false },
+      { severity: "info", count: 1, penalty: 0.25, discounted: false },
     ])
   })
 
-  it("flags a tier whose cap has bitten — further findings there are free", () => {
-    const many = Array.from({ length: 100 }, () => issue({ severity: "info" }))
-    const info = penaltyBreakdown(many).find((p) => p.severity === "info")!
-    expect(info.penalty).toBe(8)
-    expect(info.capped).toBe(true)
-    expect(info.count).toBe(100) // the count is honest even though the charge stopped
+  it("keeps charging past the discount threshold, less each time", () => {
+    // The rule this replaced stopped charging entirely: the hundredth info note
+    // cost exactly nothing, so the tool listed a finding and privately valued it
+    // at zero. Now the charge only tapers.
+    const at = (n: number) =>
+      penaltyBreakdown(Array.from({ length: n }, () => issue({ severity: "info" }))).find(
+        (p) => p.severity === "info",
+      )!
+
+    const twenty = at(20)
+    expect(twenty.discounted).toBe(false)
+    expect(twenty.penalty).toBeCloseTo(5, 5) // still linear: 20 × 0.25
+
+    const hundred = at(100)
+    expect(hundred.discounted).toBe(true)
+    expect(hundred.count).toBe(100)
+    expect(hundred.penalty).toBeGreaterThan(twenty.penalty)
+    // Each additional one costs strictly more than nothing and less than the last.
+    const step = (n: number) => at(n).penalty - at(n - 1).penalty
+    expect(step(100)).toBeGreaterThan(0)
+    expect(step(100)).toBeLessThan(step(30))
+    expect(step(30)).toBeLessThan(0.25)
   })
 
   /**
@@ -107,7 +131,7 @@ describe("penaltyBreakdown", () => {
 })
 
 describe("issueCosts", () => {
-  it("charges each finding its tier weight below the cap", () => {
+  it("charges each finding its full tier weight before the taper", () => {
     const costs = issueCosts([
       issue({ id: "a", severity: "critical" }),
       issue({ id: "b", severity: "warning" }),
@@ -118,12 +142,19 @@ describe("issueCosts", () => {
     expect(costs.get("c")).toBe(0.25)
   })
 
-  it("shares a capped tier's total between its findings", () => {
-    // 100 info would be 25 points linearly; the cap holds the tier to 8, so each
-    // finding is responsible for 0.08 — not the 0.25 the weight suggests.
+  it("shares a tapered tier's total between its findings", () => {
+    // 100 info would be 25 points linearly; the taper holds the tier to about
+    // 6.4, so each finding is responsible for a fraction of the 0.25 its weight
+    // suggests — but a fraction, never zero, which is what the cap used to make it.
     const many = Array.from({ length: 100 }, (_, i) => issue({ id: `i${i}`, severity: "info" }))
     const costs = issueCosts(many)
-    expect(costs.get("i0")).toBeCloseTo(0.08, 10)
+    const each = costs.get("i0")!
+    expect(each).toBeGreaterThan(0)
+    expect(each).toBeLessThan(0.25)
+    expect(each * 100).toBeCloseTo(
+      penaltyBreakdown(many).find((p) => p.severity === "info")!.penalty,
+      10,
+    )
   })
 
   /**

@@ -177,7 +177,7 @@ const en = {
 
   "landing.grade.title": "How the grade is worked out",
   "landing.grade.lead":
-    "A score out of 100, starting at 100 and losing points per finding: {critical} for a critical, {warning} for a warning, {info} for an info note. Info is capped so that a pile of small notes can never cost a whole grade band.",
+    "A score out of 100, starting at 100 and losing points per finding: {critical} for a critical, {warning} for a warning, {info} for an info note. Past the first few of a kind, each additional finding costs less than the last — so a pile of small notes can never cost a whole grade band, and none of them is ever free.",
 
   "landing.privacy.title": "What happens to your code",
   "landing.privacy.clone":
@@ -442,7 +442,7 @@ const ru: Messages = {
 
   "landing.grade.title": "Как считается оценка",
   "landing.grade.lead":
-    "Сто баллов, из которых вычитается за каждую находку: {critical} за критичную, {warning} за предупреждение, {info} за заметку. У заметок есть потолок — россыпь мелочи не может стоить целой ступени грейда.",
+    "Сто баллов, из которых вычитается за каждую находку: {critical} за критичную, {warning} за предупреждение, {info} за заметку. После первых нескольких находок одного вида каждая следующая стоит меньше предыдущей — поэтому россыпь мелочи не может стоить целой ступени грейда, но и бесплатной не становится ни одна.",
 
   "landing.privacy.title": "Что происходит с вашим кодом",
   "landing.privacy.clone":
