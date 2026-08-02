@@ -810,11 +810,19 @@ Starts at 100 and subtracts weighted penalties: **critical −10**, **warning �
 **C** ≥ 60, **D** ≥ 40, else **F**. Penalties are configurable per-repo via the
 `weights` field in `.repo-anti-rot.json` (see above).
 
-Each severity tier's total penalty is **capped** (warning ≤ 40, info ≤ 8;
-critical is uncapped) so a swarm of low-signal notes can't sink a repo harder
-than a genuine critical. The info cap is below the narrowest grade band (10
-points), so info findings alone can never move you down a grade. Below the cap the penalty is exactly linear, so typical
-repos score the same — the cap only bites on pile-ups.
+Within a severity tier the charge **tapers**: the first few findings cost their
+full weight (2 criticals, 8 warnings, 20 info notes), and after that each
+additional one costs less than the one before it — but never nothing. So a swarm
+of low-signal notes can't sink a repo harder than a genuine critical, while a
+repo with a hundred warnings still scores below one with fifty.
+
+This replaced a hard per-tier cap, for two reasons. The cap made findings free:
+past warning number fourteen the tool listed a finding and privately valued it at
+zero, which is the tool disagreeing with itself in front of you. And it stopped
+the scale from discriminating at the bottom — `psf/requests` and `clap-rs/clap`
+both scored exactly 0/100, which is a scale that has stopped measuring. Under the
+taper they score 11 and 2. Typical repositories are unaffected: the thresholds sit
+where the old linear stretch ended, so ordinary scores move by at most a point.
 
 Alongside the score the dashboard shows **issue density** — findings per 1000
 lines of code — so repos of very different sizes can be compared fairly (raw

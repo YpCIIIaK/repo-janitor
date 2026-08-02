@@ -90,19 +90,20 @@ export function GradeCard({
                 <span className="text-muted-foreground">{severityNoun[p.severity]}</span>
                 <span className="ml-auto font-mono tabular-nums text-muted-foreground">
                   −{Number(p.penalty.toFixed(2))}
-                  {/* A capped tier has stopped charging: more findings of this
-                      kind cost nothing, which changes what you should do next. */}
-                  {p.capped && <span className="ml-1 text-muted-foreground/60">(max)</span>}
+                  {/* Past its threshold a tier charges less for each additional
+                      finding — still something, which is what separates this from
+                      the cap it replaced. */}
+                  {p.discounted && <span className="ml-1 text-muted-foreground/60">(tapered)</span>}
                 </span>
               </div>
             ))}
             {/* Without this, the per-finding numbers elsewhere look wrong: inside
-                a capped tier they are a share of a fixed total, so fixing one
-                finding hands its points to the others rather than to you. */}
-            {breakdown.some((p) => p.capped) && (
+                a tapered tier they are a share of a total that grows more slowly
+                than the count, so fixing one hands part of its points to the rest. */}
+            {breakdown.some((p) => p.discounted) && (
               <p className="pt-1 text-[11px] leading-snug text-muted-foreground/70">
-                A tier at its maximum has stopped charging — clearing one finding
-                there raises the score only once the whole tier drops below the cap.
+                Past a few findings, each additional one in a tier costs less than
+                the last — never nothing, so clearing any of them still helps.
               </p>
             )}
           </div>

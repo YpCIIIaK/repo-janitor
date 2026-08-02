@@ -44,7 +44,7 @@ describe("computeScore", () => {
   })
 
   it("clamps at 0 and never goes negative", () => {
-    const many = Array.from({ length: 20 }, () => issue({ severity: "critical" }))
+    const many = Array.from({ length: 200 }, () => issue({ severity: "critical" }))
     expect(computeScore(many)).toBe(0)
   })
 
@@ -53,23 +53,28 @@ describe("computeScore", () => {
     expect(computeScore(issues, { critical: 10, warning: 3, info: 10 })).toBe(90)
   })
 
-  it("caps low-severity pile-ups so they can't outweigh a real critical", () => {
-    // Linearly 200 info = 50 points (score 50); capped at 8 → score 92, which is
-    // still an A: info alone must never cost a grade band.
+  it("tapers low-severity pile-ups so they can't outweigh a real critical", () => {
+    // Linearly 200 info = 50 points (score 50); the taper holds it to 7, still an
+    // A — info alone must not cost a grade band at any realistic count.
     const info = Array.from({ length: 200 }, () => issue({ severity: "info" }))
-    expect(computeScore(info)).toBe(92)
-    // Warnings cap at 40; criticals stay uncapped.
+    expect(computeScore(info)).toBe(93)
+    expect(scoreToGrade(computeScore(info))).toBe("A")
+    // A hundred warnings cost 53, not the linear 300 — and not a fixed 40 either:
+    // the hundredth still charges something, unlike under the cap this replaced.
     const warnings = Array.from({ length: 100 }, () => issue({ severity: "warning" }))
-    expect(computeScore(warnings)).toBe(60)
+    expect(computeScore(warnings)).toBe(47)
   })
 
-  it("lets an explicit weight override outrank a lower default cap", () => {
-    // The info cap is 8. A repo that deliberately sets `info: 10` must still get
-    // 10 for one finding, or the cap would silently veto its config.
-    expect(computeScore([issue({ severity: "info" })], { critical: 10, warning: 3, info: 10 })).toBe(90)
-    // Two of them are still capped — the cap governs pile-ups, not the first hit.
+  it("honours an explicit weight override in full, not up to a ceiling", () => {
+    // A repo that deliberately sets `info: 10` gets 10 a finding. Under the cap
+    // this replaced, two such findings still cost 10 in total — the default
+    // ceiling silently vetoed the repo's own configuration. The taper has no
+    // ceiling to veto with: it only ever discounts a tail, and 2 is well inside
+    // the full-price stretch.
+    const w = { critical: 10, warning: 3, info: 10 }
+    expect(computeScore([issue({ severity: "info" })], w)).toBe(90)
     const two = [issue({ severity: "info" }), issue({ severity: "info" })]
-    expect(computeScore(two, { critical: 10, warning: 3, info: 10 })).toBe(90)
+    expect(computeScore(two, w)).toBe(80)
   })
 
   it("matches DEFAULT_WEIGHTS shape", () => {

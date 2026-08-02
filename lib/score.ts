@@ -13,18 +13,36 @@ export type SeverityWeights = Record<Severity, number>
 export const DEFAULT_WEIGHTS: SeverityWeights = { critical: 10, warning: 3, info: 0.25 }
 
 /**
- * Per-tier penalty caps — must mirror the engine (packages/core/src/engine.ts).
- * Below the cap the penalty is exactly linear, so the cap only affects pile-ups.
+ * Per-tier discount curve — must mirror the engine (packages/core/src/engine.ts).
+ * The first `full` findings cost full weight; after that each costs less than the
+ * one before, and never nothing. `test/score-parity.test.ts` holds the two copies
+ * to the same numbers.
  */
-export const SEVERITY_PENALTY_CAP: SeverityWeights = { critical: Infinity, warning: 40, info: 8 }
+export interface PenaltyCurve {
+  full: number
+  alpha: number
+}
+
+export const SEVERITY_CURVE: Record<Severity, PenaltyCurve> = {
+  critical: { full: 2, alpha: 0.7 },
+  warning: { full: 8, alpha: 0.5 },
+  info: { full: 20, alpha: 0.4 },
+}
+
+/** Points one severity tier subtracts for `count` findings. */
+export function tierPenalty(count: number, weight: number, curve: PenaltyCurve): number {
+  if (count <= 0) return 0
+  if (count <= curve.full) return count * weight
+  return weight * (curve.full + Math.pow(count - curve.full, curve.alpha))
+}
 
 export interface SeverityPenalty {
   severity: Severity
   count: number
-  /** Points this tier actually subtracted, after its cap. */
+  /** Points this tier actually subtracted, after its discount. */
   penalty: number
-  /** True when the cap bit — i.e. more findings would cost nothing further. */
-  capped: boolean
+  /** True once the discount has begun — further findings cost less, never nothing. */
+  discounted: boolean
 }
 
 /**
@@ -43,19 +61,18 @@ export function penaltyBreakdown(
 
   return (["critical", "warning", "info"] as const).map((severity) => {
     // Mirrors the engine: a cap never clips a single finding below its own weight.
-    const cap = Math.max(SEVERITY_PENALTY_CAP[severity], weights[severity])
-    const raw = counts[severity] * weights[severity]
+    const curve = SEVERITY_CURVE[severity]
     return {
       severity,
       count: counts[severity],
-      penalty: Math.min(raw, cap),
-      capped: raw > cap,
+      penalty: tierPenalty(counts[severity], weights[severity], curve),
+      discounted: counts[severity] > curve.full,
     }
   })
 }
 
-/** 0–100: start at 100, subtract each severity tier's penalty (count * weight,
- * capped per tier), round, clamp to 0. */
+/** 0–100: start at 100, subtract each severity tier's discounted penalty, round,
+ * clamp to 0. */
 export function computeScore(issues: Issue[], weights: SeverityWeights = DEFAULT_WEIGHTS): number {
   const penalty = penaltyBreakdown(issues, weights).reduce((sum, p) => sum + p.penalty, 0)
   return Math.max(0, Math.round(100 - penalty))
@@ -64,16 +81,16 @@ export function computeScore(issues: Issue[], weights: SeverityWeights = DEFAULT
 /**
  * What each individual finding costs the score, keyed by issue id.
  *
- * Below a tier's cap this is simply its weight. Above the cap the tier's total
- * is fixed, so the findings in it *share* that total — twenty info notes past
- * an 8-point cap cost 0.4 each, not 0.25. Any other split would be a number
- * that does not add up: the per-finding costs have to sum to the tier penalty,
- * because that is the only reading of "this is what it costs you" that survives
- * someone checking the arithmetic.
+ * Below a tier's discount threshold this is simply its weight. Past it the tier's
+ * findings *share* the tier total, which grows more slowly than their count. Any
+ * other split would be a number that does not add up: the per-finding costs have
+ * to sum to the tier penalty, because that is the only reading of "this is what
+ * it costs you" that survives someone checking the arithmetic.
  *
- * A consequence worth knowing rather than hiding: inside a capped tier, fixing
- * one finding does not raise the score by its listed cost — the remaining ones
- * absorb it. The UI says so where it shows these numbers.
+ * A consequence worth knowing rather than hiding: inside a discounted tier,
+ * fixing one finding raises the score by less than its listed cost — the
+ * remaining ones absorb part of it. The UI says so where it shows these numbers.
+ * What no longer happens is a finding worth exactly nothing.
  */
 export function issueCosts(
   issues: Issue[],
