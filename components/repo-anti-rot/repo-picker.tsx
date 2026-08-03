@@ -142,6 +142,11 @@ export function RepoPicker({
 
   const { maxSelected, maxCloneMb } = useServerLimits()
   const full = selected.length >= maxSelected
+  // "the limit of 1 repositories per run" — the plural read as a bug in the
+  // product before anyone read it as a typo. One helper, so the two places that
+  // say this cannot start disagreeing.
+  const limitNotice = () =>
+    maxSelected === 1 ? t("scan.limitOne") : t("scan.limit", { max: maxSelected })
   const chosen = new Set(selected.map((s) => s.url))
 
   /**
@@ -199,7 +204,7 @@ export function RepoPicker({
         continue
       }
       if (selected.length + fresh.length >= maxSelected) {
-        setNotice(t("scan.limit", { max: maxSelected }))
+        setNotice(limitNotice())
         break
       }
       seen.add(url)
@@ -249,7 +254,7 @@ export function RepoPicker({
       </div>
 
       {notice && <p className="text-xs text-chart-3">{notice}</p>}
-      {full && <p className="text-xs text-muted-foreground">{t("scan.limit", { max: maxSelected })}</p>}
+      {full && <p className="text-xs text-muted-foreground">{limitNotice()}</p>}
 
       {/* Search results and previews. Clicking one adds it rather than filling
           the box, so there is one action, not two — and the results stay on

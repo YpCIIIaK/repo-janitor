@@ -23,6 +23,7 @@ import { readAiSettings, isAiEnabled } from "@/lib/ai-settings"
 import { runScanStream } from "@/lib/scan-client"
 import { refreshPublishedShare } from "@/lib/share-refresh"
 import { GRADE_CSS_VAR } from "@/lib/grade-style"
+import { PercentileLine } from "@/components/repo-anti-rot/percentile-line"
 import { Progress } from "@/components/ui/progress"
 import { FamousRepos } from "./famous-repos"
 import { ScannerPicker } from "./scanner-picker"
@@ -148,6 +149,12 @@ function ResultCard({ result, onOpen }: { result: ScanResult; onOpen?: (repoId: 
         </div>
       </CardHeader>
       <CardContent className="space-y-3">
+        {/* The first thing a first-time visitor needs, and the place it was
+            missing longest: "84/100" means nothing to someone who has never seen
+            another repository's score. Renders nothing when the sample is too
+            small to say anything honest. */}
+        <PercentileLine score={score} languages={report.profile?.languages} />
+
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
           <span className="flex items-center gap-1">
             <GitBranch className="size-3" />
