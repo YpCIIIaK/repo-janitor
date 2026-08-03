@@ -67,6 +67,17 @@ describe("compact meta line", () => {
     expect(foot).toContain("Scanned")
     expect(foot.length).toBeLessThanOrEqual(52)
   })
+
+  it("prefers a rot hint over the scanned date", () => {
+    const foot = formatCardFoot(
+      "385 files · 43,591 lines",
+      "2026-08-01T12:00:00.000Z",
+      52,
+      "Last improved 47d ago",
+    )
+    expect(foot).toContain("Last improved 47d ago")
+    expect(foot).not.toContain("Scanned")
+  })
 })
 
 describe("renderHealthCardSvg", () => {
@@ -93,6 +104,14 @@ describe("renderHealthCardSvg", () => {
     const svg = renderHealthCardSvg("other", "repo", { ...sample, owner: "acme", name: "widget" })
     expect(svg).toContain("other/repo")
     expect(svg).not.toContain("acme/widget")
+  })
+
+  it("shows the rot hint in the footer when provided", () => {
+    const svg = renderHealthCardSvg("acme", "widget", {
+      ...sample,
+      rotHint: "Rotting 12d",
+    })
+    expect(svg).toContain("Rotting 12d")
   })
 
   it("renders a neutral unknown card", () => {

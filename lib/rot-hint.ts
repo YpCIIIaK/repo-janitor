@@ -36,21 +36,33 @@ export function rotHint(history: ScorePoint[], nowMs: number = Date.now()): stri
 
   const sorted = [...history].sort((a, b) => a.at.localeCompare(b.at))
   let lastImprovedAt: string | null = null
-  let lastDeclinedAt: string | null = null
 
   for (let i = 1; i < sorted.length; i++) {
-    const prev = sorted[i - 1].score
-    const cur = sorted[i].score
-    if (cur > prev) lastImprovedAt = sorted[i].at
-    else if (cur < prev) lastDeclinedAt = sorted[i].at
+    if (sorted[i].score > sorted[i - 1].score) lastImprovedAt = sorted[i].at
   }
 
-  // A decline after the last improvement (or with no improvement) is rotting.
-  if (
-    lastDeclinedAt &&
-    (!lastImprovedAt || lastDeclinedAt.localeCompare(lastImprovedAt) > 0)
-  ) {
-    return daysPhrase(daysBetween(lastDeclinedAt, nowMs), "rotting")
+  /**
+   * Where the *current* decline started, not where it last continued.
+   *
+   * "Rotting 12d" reads as a duration, so it has to be one. Measuring from the
+   * most recent drop said "Rotting since yesterday" about a repository that had
+   * been sliding for a fortnight — the number that makes the point, understated
+   * into a shrug, and it would keep resetting every time the score fell again.
+   *
+   * Walk back from the newest point through the run of drops and flat stretches;
+   * an improvement ends the run. Each drop met on the way is older than the last,
+   * so the final one recorded is where the slide began.
+   */
+  let declineStartedAt: string | null = null
+  for (let i = sorted.length - 1; i > 0; i--) {
+    const prev = sorted[i - 1].score
+    const cur = sorted[i].score
+    if (cur > prev) break
+    if (cur < prev) declineStartedAt = sorted[i].at
+  }
+
+  if (declineStartedAt) {
+    return daysPhrase(daysBetween(declineStartedAt, nowMs), "rotting")
   }
 
   if (lastImprovedAt) {

@@ -191,18 +191,23 @@ export function formatScannedAt(iso: string | undefined): string | null {
 
 /**
  * One-line meta for card/embed footers. Keeps chips readable by staying short.
+ *
+ * When `hint` is set (trend copy from score history), it replaces the scanned
+ * date — the emotional fact is the point of the line; "Scanned Aug 1" is backup.
  */
 export function formatCardFoot(
   scope: string | null | undefined,
   generatedAt: string | undefined,
   maxLen = 48,
+  hint?: string | null,
 ): string {
   const parts = [
     compactScope(scope),
-    (() => {
-      const d = formatScannedAt(generatedAt)
-      return d ? `Scanned ${d}` : null
-    })(),
+    hint?.trim() ||
+      (() => {
+        const d = formatScannedAt(generatedAt)
+        return d ? `Scanned ${d}` : null
+      })(),
   ].filter(Boolean) as string[]
   if (parts.length === 0) return "Snapshot of a published scan"
   return truncateLabel(parts.join(" · "), maxLen)
@@ -276,7 +281,7 @@ export function renderHealthCardSvg(
   const headline = cardHeadline(data)
   const boast = isBoastworthy(verdictOf(data.counts, data.totalIssues, data.score))
   const { critical, warning, info } = data.counts
-  const foot = formatCardFoot(data.scope, data.generatedAt, 52)
+  const foot = formatCardFoot(data.scope, data.generatedAt, 52, data.rotHint)
 
   const chip = (label: string, n: number, fill: string, x: number) => {
     const active = n > 0
