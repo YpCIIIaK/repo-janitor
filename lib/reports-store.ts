@@ -500,18 +500,31 @@ export function portfolioTrend(repos: StoredRepo[]): PortfolioPoint[] {
 }
 
 /** Relative time like "3 hours ago" from an ISO timestamp. */
-export function timeAgo(iso: string): string {
+/**
+ * "3 hours ago", in the reader's language.
+ *
+ * Built on `Intl.RelativeTimeFormat` rather than string concatenation, because
+ * the concatenated version was English-only and leaked into a localized UI: the
+ * grade card said "Скан 1 month ago" — the label translated, the value not,
+ * which is worse than leaving the whole thing in English.
+ *
+ * Locale defaults to English so the many call sites that have no locale to hand
+ * keep behaving exactly as before.
+ */
+export function timeAgo(iso: string, locale: string = "en"): string {
   const then = new Date(iso).getTime()
   if (Number.isNaN(then)) return iso
   const secs = Math.max(0, Math.floor((Date.now() - then) / 1000))
-  if (secs < 60) return "just now"
+
+  const rtf = new Intl.RelativeTimeFormat(locale, { numeric: "auto" })
+  if (secs < 60) return rtf.format(0, "second")
   const mins = Math.floor(secs / 60)
-  if (mins < 60) return `${mins} min${mins === 1 ? "" : "s"} ago`
+  if (mins < 60) return rtf.format(-mins, "minute")
   const hrs = Math.floor(mins / 60)
-  if (hrs < 24) return `${hrs} hour${hrs === 1 ? "" : "s"} ago`
+  if (hrs < 24) return rtf.format(-hrs, "hour")
   const days = Math.floor(hrs / 24)
-  if (days < 30) return `${days} day${days === 1 ? "" : "s"} ago`
+  if (days < 30) return rtf.format(-days, "day")
   const months = Math.floor(days / 30)
-  if (months < 12) return `${months} month${months === 1 ? "" : "s"} ago`
-  return `${Math.floor(months / 12)}y ago`
+  if (months < 12) return rtf.format(-months, "month")
+  return rtf.format(-Math.floor(months / 12), "year")
 }
