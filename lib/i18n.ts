@@ -293,6 +293,17 @@ const en = {
     "This is a shared summary: code evidence and secret values are not included.",
 
   "grade.score": "{score}/100",
+  "gradeCard.scanned": "Scanned {when}",
+  "gradeCard.notes": "notes",
+  "gradeCard.points": "−{points}",
+  "gradeCard.taperNote": "Each additional finding of a kind costs less than the last — never nothing, so clearing any of them still helps.",
+  "gradeCard.clean": "No secrets, known vulnerabilities, end-of-life runtimes or workflow security issues found.",
+  "gradeCard.cleanScoped": "No secrets, known vulnerabilities, end-of-life runtimes or workflow security issues found across {scope}.",
+  "gradeLabel.A": "Pristine",
+  "gradeLabel.B": "Healthy",
+  "gradeLabel.C": "Aging",
+  "gradeLabel.D": "Rotting",
+  "gradeLabel.F": "Critical decay",
   "issues.count": "{count} findings",
   // English needs the singular spelled out. Russian sidesteps it with the
   // "находок: N" shape, which is why there is no matching key there.
@@ -551,6 +562,17 @@ const ru: Messages = {
     "Это краткая сводка: фрагменты кода и значения секретов в неё не входят.",
 
   "grade.score": "{score}/100",
+  "gradeCard.scanned": "Скан {when}",
+  "gradeCard.notes": "заметок",
+  "gradeCard.points": "−{points}",
+  "gradeCard.taperNote": "Каждая следующая находка того же вида стоит дешевле предыдущей — но не бесплатна, поэтому убрать любую из них всё равно полезно.",
+  "gradeCard.clean": "Ни секретов, ни известных уязвимостей, ни устаревших рантаймов, ни проблем с безопасностью workflow.",
+  "gradeCard.cleanScoped": "Ни секретов, ни известных уязвимостей, ни устаревших рантаймов, ни проблем с безопасностью workflow — на объёме {scope}.",
+  "gradeLabel.A": "Безупречно",
+  "gradeLabel.B": "Здоров",
+  "gradeLabel.C": "Стареет",
+  "gradeLabel.D": "Гниёт",
+  "gradeLabel.F": "Распад",
   "issues.count": "находок: {count}",
   // Unused at runtime — the "находок: N" shape above already reads correctly at
   // one. It exists so the dictionary stays complete, which is what the type

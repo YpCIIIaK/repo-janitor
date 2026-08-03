@@ -384,10 +384,11 @@ export default function DashboardPage() {
                 <GradeCard
                   grade={repo.grade}
                   score={repo.score}
-                  lastScan={repo.lastScan}
+                  scannedAt={current.scannedAt}
                   issues={issues}
                   weights={weights}
                   scope={scanScope}
+                  languages={current.latest.profile?.languages}
                 />
                 <IssueBreakdown issues={issues} />
               </div>
@@ -484,10 +485,11 @@ export default function DashboardPage() {
                 <GradeCard
                   grade={repo.grade}
                   score={repo.score}
-                  lastScan={repo.lastScan}
+                  scannedAt={current.scannedAt}
                   issues={issues}
                   weights={weights}
                   scope={scanScope}
+                  languages={current.latest.profile?.languages}
                 />
                 <IssueBreakdown issues={issues} />
               </div>
