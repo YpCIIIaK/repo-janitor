@@ -38,6 +38,7 @@ const LABEL_OVERRIDES: Record<string, string> = {
   "config-conflict": "Config Conflict",
   "ci-health": "CI Health",
   "duplicate-code": "Duplicate Code",
+  "supply-chain": "Supply Chain",
 }
 
 /**

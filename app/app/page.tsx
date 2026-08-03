@@ -39,18 +39,33 @@ import { useSnoozed, partitionSnoozed, clearSnoozedForRepo } from "@/lib/snooze-
 import { computeScore, scoreToGrade } from "@/lib/score"
 import { scopeLine } from "@/lib/verdict"
 import { cn } from "@/lib/utils"
+import { useLocale } from "@/components/i18n/locale-provider"
+import { tp } from "@/lib/i18n"
 
 // React Flow is client-only and heavy — load the tree lazily so it stays out of
+/**
+ * Placeholder for the lazily-loaded tree views.
+ *
+ * A component rather than inline JSX because `dynamic()`'s `loading` is called
+ * outside any component, where `useLocale` cannot be used — and a loading
+ * message is exactly the kind of string that stays English for years because
+ * nobody looks at it for long enough to notice.
+ */
+function LoadingBox({ messageKey, height }: { messageKey: "app.loadingMap" | "app.loadingHistory"; height: string }) {
+  const { t } = useLocale()
+  return (
+    <div className={`flex ${height} items-center justify-center rounded-lg border border-border text-sm text-muted-foreground`}>
+      {t(messageKey)}
+    </div>
+  )
+}
+
 // the initial bundle and only ships when the user opens the Tree tab.
 const RepoTree = dynamic(
   () => import("@/components/repo-anti-rot/repo-tree").then((m) => m.RepoTree),
   {
     ssr: false,
-    loading: () => (
-      <div className="flex h-[600px] items-center justify-center rounded-lg border border-border text-sm text-muted-foreground">
-        Loading map…
-      </div>
-    ),
+    loading: () => <LoadingBox messageKey="app.loadingMap" height="h-[600px]" />,
   },
 )
 
@@ -59,11 +74,7 @@ const CommitTree = dynamic(
   () => import("@/components/repo-anti-rot/commit-tree").then((m) => m.CommitTree),
   {
     ssr: false,
-    loading: () => (
-      <div className="flex h-[640px] items-center justify-center rounded-lg border border-border text-sm text-muted-foreground">
-        Loading history…
-      </div>
-    ),
+    loading: () => <LoadingBox messageKey="app.loadingHistory" height="h-[640px]" />,
   },
 )
 
@@ -86,6 +97,7 @@ const OVERVIEW = "__overview__"
  * same situation and cannot misfire.
  */
 export default function DashboardPage() {
+  const { t, locale } = useLocale()
   const router = useRouter()
   const repos = useRepos()
   const snoozed = useSnoozed()
@@ -131,14 +143,14 @@ export default function DashboardPage() {
         <main className="mx-auto w-full max-w-lg px-4 py-24">
           <EmptyState
             icon={<ScanLine />}
-            title="Nothing scanned yet"
-            description="Reports are kept in this browser. Scan a repository and it will show up here."
+            title={t("app.nothingScanned")}
+            description={t("app.emptyDesc")}
             action={
               <Link
                 href="/"
                 className="inline-flex h-9 items-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
               >
-                Scan a repository
+                {t("app.scanRepo")}
               </Link>
             }
           />
@@ -254,7 +266,7 @@ export default function DashboardPage() {
             <SettingsDialog
               trigger={
                 <button
-                  title="Settings"
+                  title={t("app.settings")}
                   aria-label="Settings"
                   className="flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent/50 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 >
@@ -265,8 +277,8 @@ export default function DashboardPage() {
             <OnboardingDialog
               trigger={
                 <button
-                  title="Connect a repository"
-                  aria-label="Connect a repository"
+                  title={t("app.connectRepo")}
+                  aria-label={t("app.connectRepo")}
                   className="flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent/50 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 >
                   <HelpCircle className="size-4" />
@@ -304,16 +316,17 @@ export default function DashboardPage() {
                     nothing came back — so say the amount. */}
                 {issues.length === 0
                   ? scanScope
-                    ? `Clean scan across ${scanScope}`
-                    : "Clean scan — nothing found"
-                  : `${issues.length} open issue${issues.length === 1 ? "" : "s"}`}
+                    ? t("app.cleanAcross", { scope: scanScope })
+                    : t("app.cleanNothing")
+                  : tp(locale, "issues.open", issues.length)}
                 {issues.length > 0 && density && (
-                  <span title={`${density.loc.toLocaleString()} lines of code`}>
+                  <span title={t("app.linesOfCode", { count: density.loc.toLocaleString() })}>
                     {" · "}
                     {density.perKloc.toFixed(1)}/kLOC
                   </span>
                 )}
-                {issues.length > 0 && ` · scanned ${repo.lastScan}`}
+                {issues.length > 0 &&
+                  ` · ${t("app.scannedAt", { when: timeAgo(current.scannedAt, locale) })}`}
               </p>
               {diff.hasPrev && (diff.added > 0 || diff.fixed > 0) && (
                 <div className="mt-1.5 flex flex-wrap items-center gap-1.5 text-xs">
@@ -327,7 +340,7 @@ export default function DashboardPage() {
                       −{diff.fixed} fixed
                     </span>
                   )}
-                  <span className="text-muted-foreground">since last scan</span>
+                  <span className="text-muted-foreground">{t("app.sinceLastScan")}</span>
                 </div>
               )}
             </div>
@@ -350,7 +363,7 @@ export default function DashboardPage() {
                 size="sm"
                 variant="outline"
                 onClick={() => setPaletteOpen(true)}
-                title="Command palette (⌘K / Ctrl+K)"
+                title={t("app.commandPalette")}
               >
                 <CommandIcon className="size-4" />
                 <kbd className="ml-1 hidden rounded bg-muted px-1 text-[10px] font-medium text-muted-foreground sm:inline">

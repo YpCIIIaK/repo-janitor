@@ -24,6 +24,7 @@ import { Sparkline } from "@/components/charts/sparkline"
 import { EmptyState } from "@/components/ui/empty-state"
 import { NavItem, NavSectionLabel } from "./sidebar-nav"
 import { cn } from "@/lib/utils"
+import { useLocale } from "@/components/i18n/locale-provider"
 
 /** Persisted so the choice survives a reload — a layout preference you have to
  * re-make every visit is not a preference. */
@@ -128,6 +129,7 @@ export function RepoSidebar({
   /** Rendered at the foot of the rail — settings, help, and the like. */
   railExtras?: ReactNode
 }) {
+  const { t } = useLocale()
   const overviewActive = activeId === "__overview__"
   const [collapsed, setCollapsed] = useState(false)
 
@@ -163,8 +165,8 @@ export function RepoSidebar({
       <div className="flex w-14 shrink-0 flex-col items-center gap-1 border-r border-border py-3">
         <button
           onClick={onHome}
-          title="Repo Anti-Rot — back to the start"
-          aria-label="Back to the start"
+          title={t("nav.brandHome")}
+          aria-label={t("nav.backHome")}
           className="mb-2 flex size-9 items-center justify-center rounded-lg bg-primary/15 text-primary transition-colors hover:bg-primary/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           <Activity className="size-4" />
@@ -172,12 +174,12 @@ export function RepoSidebar({
         {onShowOverview && (
           <RailButton
             icon={<LayoutGrid />}
-            label="All repositories"
+            label={t("nav.allRepos")}
             active={overviewActive}
             onClick={onShowOverview}
           />
         )}
-        {onNewScan && <RailButton icon={<ScanLine />} label="New scan" onClick={onNewScan} />}
+        {onNewScan && <RailButton icon={<ScanLine />} label={t("nav.newScan")} onClick={onNewScan} />}
         {/* Collapse/expand stays at the bottom of the rail in both states so it
             never jumps between the header and the top of the icon stack. */}
         <div className="mt-auto flex flex-col items-center gap-1">
@@ -217,7 +219,7 @@ export function RepoSidebar({
               </span>
             </>
           ) : (
-            <span className="text-sm font-semibold">Repositories</span>
+            <span className="text-sm font-semibold">{t("nav.repositories")}</span>
           )}
         </div>
 
@@ -231,52 +233,52 @@ export function RepoSidebar({
                   the same findings. */}
               <NavItem
                 icon={<LayoutDashboard />}
-                label="Overview"
+                label={t("nav.overview")}
                 active={section === "overview"}
                 onClick={go("overview")}
               />
               <NavItem
                 icon={<ListTree />}
-                label="Issues"
+                label={t("nav.issues")}
                 count={counts?.issues}
                 active={section === "issues"}
                 onClick={go("issues")}
               />
               <NavItem
                 icon={<ShieldCheck />}
-                label="Security"
+                label={t("nav.security")}
                 count={counts?.security}
                 active={section === "security"}
                 onClick={go("security")}
               />
               <NavItem
                 icon={<LinkIcon />}
-                label="Links"
+                label={t("nav.links")}
                 count={counts?.links}
                 active={section === "links"}
                 onClick={go("links")}
               />
               <NavItem
                 icon={<Workflow />}
-                label="Tree"
+                label={t("nav.tree")}
                 active={section === "tree"}
                 onClick={go("tree")}
               />
               <NavItem
                 icon={<GitGraph />}
-                label="History"
+                label={t("nav.history")}
                 active={section === "history"}
                 onClick={go("history")}
               />
               <NavItem
                 icon={<Info />}
-                label="About"
+                label={t("nav.about")}
                 active={section === "about"}
                 onClick={go("about")}
               />
               <NavItem
                 icon={<Boxes />}
-                label="Breakdown"
+                label={t("nav.breakdown")}
                 active={section === "breakdown"}
                 onClick={go("breakdown")}
               />
@@ -284,7 +286,7 @@ export function RepoSidebar({
           )}
 
           <NavSectionLabel>
-            Repositories
+            {t("nav.repositories")}
             {repositories.length > 0 && (
               <span className="ml-1.5 font-mono normal-case text-muted-foreground/70">
                 {repositories.length}
@@ -294,7 +296,7 @@ export function RepoSidebar({
 
           {repositories.length === 0 && (
             <EmptyState
-              title="No repositories yet"
+              title={t("nav.noRepos")}
               description="Run a scan and it will show up here."
               className="mx-1 gap-2 rounded-lg border-dashed px-3 py-6"
             />
@@ -348,7 +350,7 @@ export function RepoSidebar({
                   <button
                     onClick={() => onRemove(repo.id)}
                     aria-label={`Remove ${repo.name}`}
-                    title="Remove from list"
+                    title={t("nav.removeRepo")}
                     className="shrink-0 rounded p-1.5 text-muted-foreground opacity-0 transition-opacity hover:text-destructive group-hover:opacity-100"
                   >
                     <Trash2 className="size-3.5" />

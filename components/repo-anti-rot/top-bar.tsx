@@ -12,6 +12,7 @@ import {
 import type { ReactNode } from "react"
 import type { Repository } from "@/lib/mock-data"
 import { cn } from "@/lib/utils"
+import { useLocale } from "@/components/i18n/locale-provider"
 
 export type TopBarRepoOption = {
   id: string
@@ -42,6 +43,7 @@ export function TopBar({
   /** Rendered at the right end. Used on the landing page, which has no rail. */
   extras?: ReactNode
 }) {
+  const { t } = useLocale()
   // The logo is the conventional way home, so it becomes a button wherever
   // there is somewhere to go — and stays plain text where there is not, rather
   // than looking clickable and doing nothing.
@@ -63,8 +65,8 @@ export function TopBar({
         {onHome ? (
           <button
             onClick={onHome}
-            title="Back to the start — scan another repository"
-            aria-label="Back to the start"
+            title={t("nav.backHomeLong")}
+            aria-label={t("nav.backHome")}
             className="-mx-2 flex items-center gap-2 rounded-md px-2 py-1 transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             {brand}
@@ -83,7 +85,7 @@ export function TopBar({
                 <DropdownMenuTrigger asChild>
                   <button
                     className="flex items-center gap-1.5 rounded-md px-2 py-1 text-sm font-medium transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    aria-label="Switch repository"
+                    aria-label={t("nav.switchRepo")}
                   >
                     {repo.name}
                     <ChevronsUpDown className="size-3.5 text-muted-foreground" />
@@ -117,7 +119,7 @@ export function TopBar({
           {onBackToDashboard && (
             <Button variant="ghost" size="sm" onClick={onBackToDashboard}>
               <LayoutDashboard className="size-4" />
-              <span className="hidden sm:inline">Dashboard</span>
+              <span className="hidden sm:inline">{t("nav.dashboard")}</span>
             </Button>
           )}
           {/* Only where there are findings to search. The landing page passes no
@@ -130,7 +132,7 @@ export function TopBar({
               <Input
                 value={search}
                 onChange={(e) => onSearch(e.target.value)}
-                placeholder="Search issues..."
+                placeholder={t("nav.searchIssues")}
                 className="h-8 w-56 bg-secondary pl-8 text-sm"
               />
             </div>

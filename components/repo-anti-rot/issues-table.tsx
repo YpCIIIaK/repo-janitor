@@ -57,6 +57,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { cn } from "@/lib/utils"
+import { useLocale } from "@/components/i18n/locale-provider"
 
 /** Repo context needed to build GitHub links and key snooze state. */
 export interface TableRepo {
@@ -92,6 +93,7 @@ function IssueRow({
   /** Points this finding takes off the score; omitted when unknown. */
   cost?: number
 }) {
+  const { t } = useLocale()
   const scannerId = resolveScanner(issue)
   const kindLabel = scannerId ? scannerLabel(scannerId) : categoryLabels[issue.category]
   const kindTitle = scannerId
@@ -121,12 +123,12 @@ function IssueRow({
           <span className="truncate text-sm">{issue.title}</span>
           {isNew && (
             <span className="shrink-0 rounded-full border border-primary/40 bg-primary/10 px-1.5 py-0.5 text-[10px] font-medium text-primary">
-              New
+              {t("table.new")}
             </span>
           )}
           {snoozed && (
             <span className="shrink-0 rounded-full border border-border bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
-              Snoozed
+              {t("table.snoozed")}
             </span>
           )}
         </span>
@@ -147,7 +149,7 @@ function IssueRow({
           "hidden w-12 shrink-0 text-right font-mono text-xs tabular-nums sm:block",
           snoozed ? "text-muted-foreground/40" : "text-destructive/70",
         )}
-        title={snoozed ? "Snoozed — not counted against the score" : "Points off the score"}
+        title={snoozed ? t("table.snoozedCost") : t("table.cost")}
       >
         {snoozed ? "—" : cost === undefined ? "" : `−${formatCost(cost)}`}
       </span>
@@ -177,6 +179,7 @@ export function IssuesTable({
   /** Effective scan weights, so per-finding costs match the score exactly. */
   weights?: SeverityWeights
 }) {
+  const { t } = useLocale()
   const [severity, setSeverity] = useState<SeverityFilter>("all")
   const [category, setCategory] = useState<CategoryFilter>("all")
   const [scanner, setScanner] = useState<string>("all")
@@ -328,7 +331,7 @@ export function IssuesTable({
     <Card>
       <CardHeader className="flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between">
         <CardTitle className="text-base">
-          Detected issues
+          {t("table.title")}
           <span className="ml-2 font-mono text-sm font-normal text-muted-foreground">
             {filtered.length}
           </span>
@@ -340,7 +343,7 @@ export function IssuesTable({
               variant={changesOnly ? "secondary" : "ghost"}
               className="h-8 gap-1.5 px-2 text-xs"
               onClick={() => setChangesOnly((c) => !c)}
-              title={changesOnly ? "Show all findings" : "Show only findings new since the last scan"}
+              title={changesOnly ? t("table.showAll") : t("table.showNewOnly")}
             >
               <GitCompare className="size-4" />
               {changesOnly ? "All" : `Changes (${newIds?.size ?? 0})`}
@@ -355,7 +358,7 @@ export function IssuesTable({
                 size="sm"
                 variant="ghost"
                 className="h-8 px-2 text-muted-foreground hover:text-foreground"
-                aria-label="More list options"
+                aria-label={t("table.moreListOptions")}
                 title="More options"
               >
                 <MoreHorizontal className="size-4" />
@@ -406,7 +409,7 @@ export function IssuesTable({
               Scanner stay Selects — too many options to lay out flat, and Scanner
               is what splits Hygiene into ci-health / docs-drift / …. */}
           <Segmented
-            aria-label="Filter by severity"
+            aria-label={t("table.filterSeverity")}
             size="sm"
             value={severity}
             onChange={(v) => setSeverity(v as SeverityFilter)}
@@ -420,11 +423,11 @@ export function IssuesTable({
             ]}
           />
           <Select value={category} onValueChange={onCategoryChange}>
-            <SelectTrigger className="h-8 w-[150px] bg-secondary text-sm" aria-label="Filter by category">
+            <SelectTrigger className="h-8 w-[150px] bg-secondary text-sm" aria-label={t("table.filterCategory")}>
               <SelectValue placeholder="Category" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All categories</SelectItem>
+              <SelectItem value="all">{t("table.allCategories")}</SelectItem>
               {(Object.keys(categoryLabels) as IssueCategory[]).map((c) => (
                 <SelectItem key={c} value={c}>
                   {categoryLabels[c]}
@@ -437,11 +440,11 @@ export function IssuesTable({
             onValueChange={setScanner}
             disabled={scannerOptions.length === 0}
           >
-            <SelectTrigger className="h-8 w-[170px] bg-secondary text-sm" aria-label="Filter by scanner">
+            <SelectTrigger className="h-8 w-[170px] bg-secondary text-sm" aria-label={t("table.filterScanner")}>
               <SelectValue placeholder="Scanner" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All scanners</SelectItem>
+              <SelectItem value="all">{t("table.allScanners")}</SelectItem>
               {scannerOptions.map((s) => (
                 <SelectItem key={s.id} value={s.id}>
                   {s.label}
@@ -457,7 +460,7 @@ export function IssuesTable({
           <div className="border-t border-border p-4">
             <EmptyState
               icon={<SearchX />}
-              title="No matching findings"
+              title={t("table.noMatches")}
               description={
                 base.length === 0
                   ? "This scan found nothing at all — which is the good outcome."
@@ -520,7 +523,7 @@ export function IssuesTable({
           // Notes exist but nothing actionable does — say so, rather than showing
           // an empty list above a collapsed box.
           <p className="border-t border-border px-4 py-10 text-center text-sm text-muted-foreground">
-            Nothing actionable — only low-signal notes below.
+            {t("table.nothingActionable")}
           </p>
         ) : (
           <div className="divide-y divide-border border-t border-border">
@@ -540,10 +543,10 @@ export function IssuesTable({
                 <ChevronRight className="size-4 shrink-0 text-muted-foreground" />
               )}
               <Info className="size-4 shrink-0 text-muted-foreground" />
-              <span className="text-sm font-medium">Notes</span>
+              <span className="text-sm font-medium">{t("table.notes")}</span>
               <span className="font-mono text-xs text-muted-foreground">{notes.length}</span>
               <span className="ml-auto text-xs text-muted-foreground">
-                low signal · barely affects the score
+                {t("table.notesHint")}
               </span>
             </button>
             {showNotes && <div className="divide-y divide-border">{notes.map(renderRow)}</div>}
@@ -562,7 +565,7 @@ export function IssuesTable({
                 <ChevronRight className="size-4 shrink-0 text-muted-foreground" />
               )}
               <Check className="size-4 shrink-0 text-emerald-500" />
-              <span className="text-sm font-medium">Fixed since last scan</span>
+              <span className="text-sm font-medium">{t("table.fixedSince")}</span>
               <span className="font-mono text-xs text-muted-foreground">{fixed.length}</span>
             </button>
             {showFixed && (

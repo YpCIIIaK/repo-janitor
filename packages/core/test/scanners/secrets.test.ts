@@ -181,4 +181,35 @@ describe("secretsScanner", () => {
     const ctx = makeContext({ files: {} })
     expect(await secretsScanner.run(ctx)).toHaveLength(0)
   })
+
+  it("flags OpenAI, npm, and Slack webhook credentials", async () => {
+    const openai = `sk-proj-${"a".repeat(20)}`
+    const npm = `npm_${"b".repeat(36)}`
+    const webhook = "https://hooks.slack.com/services/T00/B00/XXXXXXXXXXXXXXXXXXXXXXXX"
+    const ctx = makeContext({
+      files: {
+        "a.ts": `const k = "${openai}"\n`,
+        "b.ts": `const t = "${npm}"\n`,
+        "c.ts": `const u = "${webhook}"\n`,
+      },
+    })
+    const issues = await secretsScanner.run(ctx)
+    const ids = issues.map((i) => i.id).join(" ")
+    expect(ids).toContain("openai-key")
+    expect(ids).toContain("npm-token")
+    expect(ids).toContain("slack-webhook")
+    for (const issue of issues) {
+      expect(issue.evidence).not.toContain(openai)
+      expect(issue.evidence).not.toContain(npm)
+    }
+  })
+
+  it("does not treat Stripe sk_live_ as an OpenAI key", async () => {
+    const ctx = makeContext({
+      files: { "a.ts": `const s = "sk_live_${"a".repeat(30)}"\n` },
+    })
+    const issues = await secretsScanner.run(ctx)
+    expect(issues.some((i) => i.id.includes("openai-key"))).toBe(false)
+    expect(issues.some((i) => i.id.includes("stripe-secret"))).toBe(true)
+  })
 })

@@ -21226,7 +21226,7 @@ var require_lib2 = __commonJS({
 // src/index.ts
 var import_fs2 = require("fs");
 
-// ../cli/dist/chunk-22V6WKIR.js
+// ../cli/dist/chunk-S4QHBY6N.js
 var import_fs = require("fs");
 var import_fast_glob = __toESM(require_out4(), 1);
 
@@ -40705,7 +40705,7 @@ function date4(params) {
 // ../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/external.js
 config(en_default());
 
-// ../cli/dist/chunk-22V6WKIR.js
+// ../cli/dist/chunk-S4QHBY6N.js
 var import_path = require("path");
 var __create2 = Object.create;
 var __defProp3 = Object.defineProperty;
@@ -56055,7 +56055,20 @@ var DETECTORS = [
   { id: "github-pat", label: "GitHub personal access token", re: /\bgh[opsur]_[0-9A-Za-z]{36}\b/ },
   { id: "github-fine-pat", label: "GitHub fine-grained token", re: /\bgithub_pat_[0-9A-Za-z_]{82}\b/ },
   { id: "slack-token", label: "Slack token", re: /\bxox[baprs]-[0-9A-Za-z-]{10,}\b/ },
+  {
+    id: "slack-webhook",
+    label: "Slack incoming webhook",
+    re: /https:\/\/hooks\.slack\.com\/services\/[A-Za-z0-9]+\/[A-Za-z0-9]+\/[A-Za-z0-9]+/
+  },
   { id: "google-api-key", label: "Google API key", re: /\bAIza[0-9A-Za-z\-_]{35}\b/ },
+  // OpenAI user keys (`sk-…`) and project keys (`sk-proj-…`). Avoid matching
+  // Stripe's `sk_live_…` by requiring a hyphen after `sk`, not an underscore.
+  {
+    id: "openai-key",
+    label: "OpenAI API key",
+    re: /\bsk-(?:proj-)?[A-Za-z0-9]{20,}\b/
+  },
+  { id: "npm-token", label: "npm access token", re: /\bnpm_[A-Za-z0-9]{36}\b/ },
   { id: "private-key", label: "Private key", re: /-----BEGIN (?:RSA |EC |OPENSSH |DSA |PGP )?PRIVATE KEY-----/ }
 ];
 var ASSIGN_RE = /(password|passwd|pwd|secret|token|api[_-]?key|access[_-]?key|client[_-]?secret|auth[_-]?token)["']?\s*[:=]\s*["`']([^"`'\s]{20,})["`']/i;
@@ -58655,6 +58668,32 @@ var RULES = [
     title: "Security value generated with Math.random()",
     detail: "`Math.random` is a predictable pseudo-random generator, not a cryptographic one \u2014 its output can be reconstructed from earlier values. Use `crypto.randomBytes` / `crypto.getRandomValues` for anything anyone is not supposed to guess."
   },
+  {
+    id: "jwt-verify-false",
+    lang: "js",
+    // jsonwebtoken / jose-style options that skip signature checks.
+    re: /\bverify\s*:\s*false\b/g,
+    severity: "critical",
+    title: "JWT verification disabled (verify: false)",
+    detail: "With verification off, anyone can forge a token and the application will accept it. Remove `verify: false` and always validate the signature with the expected algorithm and key."
+  },
+  {
+    id: "localstorage-secret",
+    lang: "js",
+    // setItem key (first arg) or value expression mentions a credential-ish name.
+    re: /localStorage\.setItem\s*\(\s*(?:['"`][^'"`]*(?:token|password|passwd|secret|api[_-]?key)[^'"`]*['"`]|[^)]*(?:token|password|passwd|secret|apiKey|api_key))/gi,
+    severity: "warning",
+    title: "Credential stored in localStorage",
+    detail: "`localStorage` is readable by any script on the origin, so XSS becomes credential theft. Prefer an httpOnly cookie set by the server, or keep short-lived tokens in memory only."
+  },
+  {
+    id: "document-write-dynamic",
+    lang: "js",
+    re: /document\.write\s*\(\s*(?:`[^`]*\$\{|[^)'"`\n]*\+)/g,
+    severity: "warning",
+    title: "document.write() with a value built at runtime",
+    detail: "`document.write` injects markup into the page. If any part of the argument can carry user input this is cross-site scripting. Prefer DOM APIs (`textContent`, `createElement`) or a sanitiser when HTML is required."
+  },
   // ---- Python -------------------------------------------------------------
   {
     id: "py-shell-true",
@@ -60562,6 +60601,118 @@ var duplicateCodeScanner = {
     });
   }
 };
+var PACKAGE_JSON_RE = /(^|\/)package\.json$/i;
+var LIFECYCLE2 = /* @__PURE__ */ new Set([
+  "preinstall",
+  "install",
+  "postinstall",
+  "prepare",
+  "prepublish",
+  "prepublishOnly"
+]);
+var REMOTE_SHELL_RE = /\b(?:curl|wget)\b[\s\S]{0,200}\|\s*(?:ba)?sh\b|\b(?:curl|wget)\s[^|&;\n]*\|\s*(?:ba)?sh\b/i;
+var NODE_EVAL_RE = /\bnode\s+(?:-e|--eval)\b/i;
+var HTTP_GIT_RE = /^(?:git\+)?http:\/\//i;
+var MAX_ISSUES9 = 20;
+function parsePkg(raw) {
+  try {
+    const v = JSON.parse(raw);
+    if (!v || typeof v !== "object" || Array.isArray(v)) return null;
+    return v;
+  } catch (e) {
+    return null;
+  }
+}
+function pushIssue(out, opts) {
+  if (out.length >= MAX_ISSUES9) return;
+  out.push({
+    id: opts.id,
+    category: "security",
+    severity: opts.severity,
+    title: opts.title,
+    location: opts.location,
+    ageDays: 0,
+    detail: opts.detail,
+    evidence: opts.evidence
+  });
+}
+function scanScripts(out, file2, scripts) {
+  for (const [name, body] of Object.entries(scripts)) {
+    if (typeof body !== "string" || !body.trim()) continue;
+    const location = `${file2}#scripts.${name}`;
+    const isLifecycle = LIFECYCLE2.has(name);
+    if (REMOTE_SHELL_RE.test(body)) {
+      if (isLifecycle) {
+        pushIssue(out, {
+          id: `supply-lifecycle-remote-shell-${file2}-${name}`,
+          severity: "critical",
+          title: `Lifecycle script "${name}" pipes curl/wget into a shell`,
+          detail: "This runs on every install with the privileges of whoever installs the package. Replace the remote pipe with a pinned, reviewed script in the repository, or drop the hook. Supply-chain malware almost always arrives this way.",
+          location,
+          evidence: body.slice(0, 160)
+        });
+      } else {
+        pushIssue(out, {
+          id: `supply-scripts-curl-pipe-${file2}-${name}`,
+          severity: "warning",
+          title: `Script "${name}" pipes curl/wget into a shell`,
+          detail: "Piping a downloaded script into a shell skips integrity checks. Prefer a committed script, or at least `curl -fsSL \u2026 -o file && sh file` after a checksum.",
+          location,
+          evidence: body.slice(0, 160)
+        });
+      }
+      continue;
+    }
+    if (isLifecycle && NODE_EVAL_RE.test(body)) {
+      pushIssue(out, {
+        id: `supply-lifecycle-node-eval-${file2}-${name}`,
+        severity: "warning",
+        title: `Lifecycle script "${name}" runs node -e`,
+        detail: "Inline `node -e` in an install hook is hard to review and a common place to hide network callbacks. Move the logic into a committed `.js` file and call that instead.",
+        location,
+        evidence: body.slice(0, 160)
+      });
+    }
+  }
+}
+function scanDeps(out, file2, field, deps) {
+  if (!deps) return;
+  for (const [name, version2] of Object.entries(deps)) {
+    if (typeof version2 !== "string") continue;
+    if (!HTTP_GIT_RE.test(version2)) continue;
+    pushIssue(out, {
+      id: `supply-dep-git-http-${file2}-${field}-${name}`,
+      severity: "warning",
+      title: `Dependency "${name}" installed over cleartext HTTP`,
+      detail: "An HTTP git/tarball URL can be swapped on the wire. Use `https://`, a registry version, or `git+ssh://` with a known host key.",
+      location: `${file2}#${field}.${name}`,
+      evidence: version2.slice(0, 160)
+    });
+  }
+}
+var supplyChainScanner = {
+  id: "supply-chain",
+  category: "security",
+  run(ctx) {
+    return __async(this, null, function* () {
+      const issues = [];
+      const files = ctx.files.map((f) => f.replace(/\\/g, "/")).filter((f) => PACKAGE_JSON_RE.test(f) && !isFixturePath(f));
+      for (const file2 of files) {
+        if (issues.length >= MAX_ISSUES9) break;
+        const raw = yield ctx.readFile(file2);
+        if (!raw) continue;
+        const pkg = parsePkg(raw);
+        if (!pkg) continue;
+        if (pkg.scripts) scanScripts(issues, file2, pkg.scripts);
+        scanDeps(issues, file2, "dependencies", pkg.dependencies);
+        scanDeps(issues, file2, "devDependencies", pkg.devDependencies);
+        scanDeps(issues, file2, "optionalDependencies", pkg.optionalDependencies);
+        scanDeps(issues, file2, "peerDependencies", pkg.peerDependencies);
+      }
+      return issues;
+    });
+  }
+};
 var defaultScanners = [
   envLifecycleScanner,
   staleBranchScanner,
@@ -60588,7 +60739,8 @@ var defaultScanners = [
   configConflictScanner,
   licenseRiskScanner,
   ciHealthScanner,
-  duplicateCodeScanner
+  duplicateCodeScanner,
+  supplyChainScanner
 ];
 var SEVERITY_CURVE = {
   critical: { full: 2, alpha: 0.7 },
@@ -61588,7 +61740,20 @@ var DETECTORS2 = [
   { id: "github-pat", label: "GitHub personal access token", re: /\bgh[opsur]_[0-9A-Za-z]{36}\b/ },
   { id: "github-fine-pat", label: "GitHub fine-grained token", re: /\bgithub_pat_[0-9A-Za-z_]{82}\b/ },
   { id: "slack-token", label: "Slack token", re: /\bxox[baprs]-[0-9A-Za-z-]{10,}\b/ },
+  {
+    id: "slack-webhook",
+    label: "Slack incoming webhook",
+    re: /https:\/\/hooks\.slack\.com\/services\/[A-Za-z0-9]+\/[A-Za-z0-9]+\/[A-Za-z0-9]+/
+  },
   { id: "google-api-key", label: "Google API key", re: /\bAIza[0-9A-Za-z\-_]{35}\b/ },
+  // OpenAI user keys (`sk-…`) and project keys (`sk-proj-…`). Avoid matching
+  // Stripe's `sk_live_…` by requiring a hyphen after `sk`, not an underscore.
+  {
+    id: "openai-key",
+    label: "OpenAI API key",
+    re: /\bsk-(?:proj-)?[A-Za-z0-9]{20,}\b/
+  },
+  { id: "npm-token", label: "npm access token", re: /\bnpm_[A-Za-z0-9]{36}\b/ },
   { id: "private-key", label: "Private key", re: /-----BEGIN (?:RSA |EC |OPENSSH |DSA |PGP )?PRIVATE KEY-----/ }
 ];
 var ASSIGN_RE2 = /(password|passwd|pwd|secret|token|api[_-]?key|access[_-]?key|client[_-]?secret|auth[_-]?token)["']?\s*[:=]\s*["`']([^"`'\s]{20,})["`']/i;
@@ -64104,6 +64269,32 @@ var RULES3 = [
     title: "Security value generated with Math.random()",
     detail: "`Math.random` is a predictable pseudo-random generator, not a cryptographic one \u2014 its output can be reconstructed from earlier values. Use `crypto.randomBytes` / `crypto.getRandomValues` for anything anyone is not supposed to guess."
   },
+  {
+    id: "jwt-verify-false",
+    lang: "js",
+    // jsonwebtoken / jose-style options that skip signature checks.
+    re: /\bverify\s*:\s*false\b/g,
+    severity: "critical",
+    title: "JWT verification disabled (verify: false)",
+    detail: "With verification off, anyone can forge a token and the application will accept it. Remove `verify: false` and always validate the signature with the expected algorithm and key."
+  },
+  {
+    id: "localstorage-secret",
+    lang: "js",
+    // setItem key (first arg) or value expression mentions a credential-ish name.
+    re: /localStorage\.setItem\s*\(\s*(?:['"`][^'"`]*(?:token|password|passwd|secret|api[_-]?key)[^'"`]*['"`]|[^)]*(?:token|password|passwd|secret|apiKey|api_key))/gi,
+    severity: "warning",
+    title: "Credential stored in localStorage",
+    detail: "`localStorage` is readable by any script on the origin, so XSS becomes credential theft. Prefer an httpOnly cookie set by the server, or keep short-lived tokens in memory only."
+  },
+  {
+    id: "document-write-dynamic",
+    lang: "js",
+    re: /document\.write\s*\(\s*(?:`[^`]*\$\{|[^)'"`\n]*\+)/g,
+    severity: "warning",
+    title: "document.write() with a value built at runtime",
+    detail: "`document.write` injects markup into the page. If any part of the argument can carry user input this is cross-site scripting. Prefer DOM APIs (`textContent`, `createElement`) or a sanitiser when HTML is required."
+  },
   // ---- Python -------------------------------------------------------------
   {
     id: "py-shell-true",
@@ -64295,7 +64486,7 @@ var CODE_RE2 = /\.(ts|tsx|js|jsx|mjs|mts|cts|py|go|rs|rb|php|java|kt|swift|cs)$/
 var SKIP_PATH_RE2 = /(^|\/)(?:node_modules|vendor|third_party|dist|build|out|\.next)\//i;
 var TEST_RE8 = /(^|\/)(?:__tests__|tests?|specs?|fixtures?)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test_[^/]+\.py$|_test\.(?:py|go|rb)$/i;
 var MAX_REQUESTS2 = 60;
-var MAX_ISSUES9 = 40;
+var MAX_ISSUES10 = 40;
 var CONCURRENCY4 = 4;
 var URL_RE2 = /https?:\/\/[^\s<>"'`)\]}\\]+/g;
 var SKIP_HOST_RE2 = /^(?:localhost|127\.|0\.0\.0\.0|\[?::1\]?|10\.|192\.168\.|172\.(?:1[6-9]|2\d|3[01])\.|169\.254\.|[^.]*\.local$|[^.]*\.internal$|[^.]*\.test$|[^.]*\.invalid$|[^.]*\.example$|example\.(?:com|org|net)$|.*\.example\.(?:com|org|net)$)/i;
@@ -64425,7 +64616,7 @@ var deadLinksScanner2 = {
     });
     const issues = [];
     for (const { url: url2, where, res } of checked) {
-      if (issues.length >= MAX_ISSUES9) break;
+      if (issues.length >= MAX_ISSUES10) break;
       if (res === null) {
         issues.push({
           id: `deadlink-unreachable-${url2}`,
@@ -64458,7 +64649,7 @@ var deadLinksScanner2 = {
 
 // ../core/src/scanners/workflow-security.ts
 var WORKFLOW_RE3 = /^\.github\/workflows\/[^/]+\.ya?ml$/i;
-var MAX_ISSUES10 = 40;
+var MAX_ISSUES11 = 40;
 var FIRST_PARTY2 = /^(?:actions|github|docker)\//i;
 var SHA_RE2 = /^[0-9a-f]{40}$/i;
 var INJECTABLE2 = [
@@ -64594,11 +64785,11 @@ var workflowSecurityScanner2 = {
     if (workflows.length === 0) return [];
     const issues = [];
     for (const file2 of workflows) {
-      if (issues.length >= MAX_ISSUES10) break;
+      if (issues.length >= MAX_ISSUES11) break;
       const content = await ctx.readFile(file2);
       if (!content) continue;
       for (const finding of scanWorkflow2(content)) {
-        if (issues.length >= MAX_ISSUES10) break;
+        if (issues.length >= MAX_ISSUES11) break;
         const rule = RULES4[finding.rule];
         if (!rule) continue;
         let ageDays = 0;
@@ -64623,7 +64814,7 @@ var workflowSecurityScanner2 = {
 };
 
 // ../core/src/scanners/eol-runtime.ts
-var MAX_ISSUES11 = 30;
+var MAX_ISSUES12 = 30;
 var APPROACHING_DAYS2 = 90;
 var TABLE_AS_OF2 = "2026-07-30";
 var NODE_EOL2 = {
@@ -64840,11 +65031,11 @@ var eolRuntimeScanner2 = {
     const now = Date.now();
     const issues = [];
     for (const file2 of candidates) {
-      if (issues.length >= MAX_ISSUES11) break;
+      if (issues.length >= MAX_ISSUES12) break;
       const content = await ctx.readFile(file2);
       if (!content) continue;
       for (const finding of scanFileForEol2(file2, content)) {
-        if (issues.length >= MAX_ISSUES11) break;
+        if (issues.length >= MAX_ISSUES12) break;
         const days = daysUntil2(finding.eol, now);
         if (days > APPROACHING_DAYS2) continue;
         const { severity, title, detail } = describe4(finding, days);
@@ -64870,7 +65061,7 @@ var eolRuntimeScanner2 = {
 };
 
 // ../core/src/scanners/docs-drift.ts
-var MAX_ISSUES12 = 25;
+var MAX_ISSUES13 = 25;
 var DOC_RE2 = /^(readme|contributing|docs\/.*|\.github\/(readme|contributing))\.mdx?$/i;
 var PM_SUBCOMMANDS2 = /* @__PURE__ */ new Set([
   "install",
@@ -64918,7 +65109,7 @@ var PM_SUBCOMMANDS2 = /* @__PURE__ */ new Set([
   "fund",
   "docs"
 ]);
-var LIFECYCLE2 = /* @__PURE__ */ new Set(["test", "start", "stop", "restart"]);
+var LIFECYCLE3 = /* @__PURE__ */ new Set(["test", "start", "stop", "restart"]);
 function isPlaceholder2(name) {
   return /[<>[\]{}$*|]/.test(name) || /^(your|my|some|the)[-_]/i.test(name);
 }
@@ -64974,7 +65165,7 @@ function findCommandRefs2(content) {
     if (!word) continue;
     if (isPlaceholder2(word) || !NAME3.test(word)) continue;
     const isSubcommand = !explicitRun && PM_SUBCOMMANDS2.has(word);
-    if (!explicitRun && !isSubcommand && !LIFECYCLE2.has(word)) continue;
+    if (!explicitRun && !isSubcommand && !LIFECYCLE3.has(word)) continue;
     out.push({
       manager,
       script: word,
@@ -65055,7 +65246,7 @@ var docsDriftScanner2 = {
     const manager = soleManager2(ctx.files);
     const issues = [];
     for (const file2 of docs) {
-      if (issues.length >= MAX_ISSUES12) break;
+      if (issues.length >= MAX_ISSUES13) break;
       const content = await ctx.readFile(file2);
       if (!content) continue;
       const f = norm(file2);
@@ -65068,7 +65259,7 @@ var docsDriftScanner2 = {
       };
       if (sawManifest) {
         for (const ref of findCommandRefs2(content)) {
-          if (issues.length >= MAX_ISSUES12) break;
+          if (issues.length >= MAX_ISSUES13) break;
           if (ref.isSubcommand) continue;
           if (scripts.has(ref.script)) continue;
           issues.push({
@@ -65084,7 +65275,7 @@ var docsDriftScanner2 = {
         }
       }
       for (const badge of findWorkflowBadges2(content)) {
-        if (issues.length >= MAX_ISSUES12) break;
+        if (issues.length >= MAX_ISSUES13) break;
         if (workflowKeys.has(badge.workflow)) continue;
         issues.push({
           id: `docs-drift-badge-${f}-${badge.line}`,
@@ -65099,7 +65290,7 @@ var docsDriftScanner2 = {
       }
       if (manager) {
         for (const ref of findCommandRefs2(content)) {
-          if (issues.length >= MAX_ISSUES12) break;
+          if (issues.length >= MAX_ISSUES13) break;
           if (ref.manager === manager) continue;
           if (!ref.isSubcommand || !/^(install|i|ci)$/.test(ref.script)) continue;
           if (ref.hasArgs) continue;
@@ -65121,7 +65312,7 @@ var docsDriftScanner2 = {
 };
 
 // ../core/src/scanners/config-conflict.ts
-var MAX_ISSUES13 = 25;
+var MAX_ISSUES14 = 25;
 var NOT_THE_PROJECT2 = /* @__PURE__ */ new Set([
   "__fixtures__",
   "fixtures",
@@ -65328,7 +65519,7 @@ var configConflictScanner2 = {
     const files = ctx.files.map((f) => f.replace(/\\/g, "/"));
     const conflicts2 = findFilenameConflicts2(files);
     for (const file2 of files.filter(isReadable2)) {
-      if (conflicts2.length >= MAX_ISSUES13) break;
+      if (conflicts2.length >= MAX_ISSUES14) break;
       const content = await ctx.readFile(file2);
       if (!content) continue;
       if (baseOf2(file2) === "package.json") {
@@ -65345,7 +65536,7 @@ var configConflictScanner2 = {
       }
     }
     const issues = [];
-    for (const c3 of conflicts2.slice(0, MAX_ISSUES13)) {
+    for (const c3 of conflicts2.slice(0, MAX_ISSUES14)) {
       const { severity, title, detail } = describe5(c3);
       const location = c3.files[0];
       let ageDays = 0;
@@ -65372,7 +65563,7 @@ var configConflictScanner2 = {
 
 // ../core/src/scanners/license-risk.ts
 var MAX_LOOKUPS2 = 60;
-var MAX_ISSUES14 = 25;
+var MAX_ISSUES15 = 25;
 var RANK2 = {
   permissive: 0,
   unknown: 1,
@@ -65568,7 +65759,7 @@ var licenseRiskScanner2 = {
     const issues = [];
     let lookups = 0;
     for (const name of names.slice(0, 300)) {
-      if (issues.length >= MAX_ISSUES14) break;
+      if (issues.length >= MAX_ISSUES15) break;
       let license = null;
       let source = "";
       const installed = await ctx.readFile(`node_modules/${name}/package.json`);
@@ -65616,7 +65807,7 @@ var licenseRiskScanner2 = {
 // ../core/src/scanners/ci-health.ts
 var WORKFLOW_RE4 = /^\.github\/workflows\/[^/]+\.ya?ml$/i;
 var ACTION_RE2 = /(^|\/)action\.ya?ml$/i;
-var MAX_ISSUES15 = 20;
+var MAX_ISSUES16 = 20;
 var OTHER_CI_CONFIG2 = [
   ".circleci/config.yml",
   ".circleci/config.yaml",
@@ -65743,7 +65934,7 @@ var ciHealthScanner2 = {
       if (!content) continue;
       contents.set(file2, content);
       for (const f of scanCiFile2(file2, content)) {
-        if (issues.length >= MAX_ISSUES15) break;
+        if (issues.length >= MAX_ISSUES16) break;
         const { title, detail } = RULE_TEXT2[f.rule];
         let ageDays = 0;
         try {
@@ -65765,7 +65956,7 @@ var ciHealthScanner2 = {
     const workflowText = workflows.map((f) => contents.get(f) ?? "").concat(files.filter((f) => ACTION_RE2.test(f)).map((f) => contents.get(f) ?? "")).join("\n");
     const hasTestFiles = files.some((f) => TEST_FILE_RE2.test(f));
     const elsewhere = OTHER_CI_CONFIG2.some((c3) => files.includes(c3));
-    if (hasTestFiles && !elsewhere && issues.length < MAX_ISSUES15) {
+    if (hasTestFiles && !elsewhere && issues.length < MAX_ISSUES16) {
       const runsTests = TEST_INVOCATION2.test(workflowText) || TEST_ACTION2.test(workflowText);
       if (!runsTests) {
         issues.push({
@@ -65780,7 +65971,7 @@ var ciHealthScanner2 = {
         });
       }
     }
-    if (issues.length < MAX_ISSUES15) {
+    if (issues.length < MAX_ISSUES16) {
       const triggers = /* @__PURE__ */ new Set();
       for (const f of workflows) {
         for (const t2 of triggersOf2(contents.get(f) ?? "")) triggers.add(t2);
@@ -65806,7 +65997,7 @@ var ciHealthScanner2 = {
 // ../core/src/scanners/duplicate-code.ts
 var WINDOW2 = 8;
 var MIN_CHARS2 = 240;
-var MAX_ISSUES16 = 15;
+var MAX_ISSUES17 = 15;
 var MAX_FILES2 = 4e3;
 var MANY_COPIES2 = 4;
 var LARGE_BLOCK2 = 30;
@@ -65958,7 +66149,7 @@ var duplicateCodeScanner2 = {
       const lines = significantLines2(content);
       if (lines.length >= WINDOW2) normalized.set(file2.replace(/\\/g, "/"), lines);
     }
-    const blocks = findDuplicates2(normalized).slice(0, MAX_ISSUES16);
+    const blocks = findDuplicates2(normalized).slice(0, MAX_ISSUES17);
     const issues = [];
     for (const b2 of blocks) {
       const [first2, ...rest] = b2.places;
@@ -65981,6 +66172,118 @@ var duplicateCodeScanner2 = {
         detail: `The same ${b2.length} significant lines appear at ${where}${more}. Matching is verbatim after whitespace and comments are dropped, so these really are the same text rather than merely similar code. Copies drift: a fix lands in one of them, a validation rule is tightened in another, and from then on there is no single answer to what this code does. Test files, generated output and vendored directories are excluded from this check.`,
         evidence: b2.sample
       });
+    }
+    return issues;
+  }
+};
+
+// ../core/src/scanners/supply-chain.ts
+var PACKAGE_JSON_RE2 = /(^|\/)package\.json$/i;
+var LIFECYCLE4 = /* @__PURE__ */ new Set([
+  "preinstall",
+  "install",
+  "postinstall",
+  "prepare",
+  "prepublish",
+  "prepublishOnly"
+]);
+var REMOTE_SHELL_RE2 = /\b(?:curl|wget)\b[\s\S]{0,200}\|\s*(?:ba)?sh\b|\b(?:curl|wget)\s[^|&;\n]*\|\s*(?:ba)?sh\b/i;
+var NODE_EVAL_RE2 = /\bnode\s+(?:-e|--eval)\b/i;
+var HTTP_GIT_RE2 = /^(?:git\+)?http:\/\//i;
+var MAX_ISSUES18 = 20;
+function parsePkg2(raw) {
+  try {
+    const v = JSON.parse(raw);
+    if (!v || typeof v !== "object" || Array.isArray(v)) return null;
+    return v;
+  } catch {
+    return null;
+  }
+}
+function pushIssue2(out, opts) {
+  if (out.length >= MAX_ISSUES18) return;
+  out.push({
+    id: opts.id,
+    category: "security",
+    severity: opts.severity,
+    title: opts.title,
+    location: opts.location,
+    ageDays: 0,
+    detail: opts.detail,
+    evidence: opts.evidence
+  });
+}
+function scanScripts2(out, file2, scripts) {
+  for (const [name, body] of Object.entries(scripts)) {
+    if (typeof body !== "string" || !body.trim()) continue;
+    const location = `${file2}#scripts.${name}`;
+    const isLifecycle = LIFECYCLE4.has(name);
+    if (REMOTE_SHELL_RE2.test(body)) {
+      if (isLifecycle) {
+        pushIssue2(out, {
+          id: `supply-lifecycle-remote-shell-${file2}-${name}`,
+          severity: "critical",
+          title: `Lifecycle script "${name}" pipes curl/wget into a shell`,
+          detail: "This runs on every install with the privileges of whoever installs the package. Replace the remote pipe with a pinned, reviewed script in the repository, or drop the hook. Supply-chain malware almost always arrives this way.",
+          location,
+          evidence: body.slice(0, 160)
+        });
+      } else {
+        pushIssue2(out, {
+          id: `supply-scripts-curl-pipe-${file2}-${name}`,
+          severity: "warning",
+          title: `Script "${name}" pipes curl/wget into a shell`,
+          detail: "Piping a downloaded script into a shell skips integrity checks. Prefer a committed script, or at least `curl -fsSL \u2026 -o file && sh file` after a checksum.",
+          location,
+          evidence: body.slice(0, 160)
+        });
+      }
+      continue;
+    }
+    if (isLifecycle && NODE_EVAL_RE2.test(body)) {
+      pushIssue2(out, {
+        id: `supply-lifecycle-node-eval-${file2}-${name}`,
+        severity: "warning",
+        title: `Lifecycle script "${name}" runs node -e`,
+        detail: "Inline `node -e` in an install hook is hard to review and a common place to hide network callbacks. Move the logic into a committed `.js` file and call that instead.",
+        location,
+        evidence: body.slice(0, 160)
+      });
+    }
+  }
+}
+function scanDeps2(out, file2, field, deps) {
+  if (!deps) return;
+  for (const [name, version2] of Object.entries(deps)) {
+    if (typeof version2 !== "string") continue;
+    if (!HTTP_GIT_RE2.test(version2)) continue;
+    pushIssue2(out, {
+      id: `supply-dep-git-http-${file2}-${field}-${name}`,
+      severity: "warning",
+      title: `Dependency "${name}" installed over cleartext HTTP`,
+      detail: "An HTTP git/tarball URL can be swapped on the wire. Use `https://`, a registry version, or `git+ssh://` with a known host key.",
+      location: `${file2}#${field}.${name}`,
+      evidence: version2.slice(0, 160)
+    });
+  }
+}
+var supplyChainScanner2 = {
+  id: "supply-chain",
+  category: "security",
+  async run(ctx) {
+    const issues = [];
+    const files = ctx.files.map((f) => f.replace(/\\/g, "/")).filter((f) => PACKAGE_JSON_RE2.test(f) && !isFixturePath2(f));
+    for (const file2 of files) {
+      if (issues.length >= MAX_ISSUES18) break;
+      const raw = await ctx.readFile(file2);
+      if (!raw) continue;
+      const pkg = parsePkg2(raw);
+      if (!pkg) continue;
+      if (pkg.scripts) scanScripts2(issues, file2, pkg.scripts);
+      scanDeps2(issues, file2, "dependencies", pkg.dependencies);
+      scanDeps2(issues, file2, "devDependencies", pkg.devDependencies);
+      scanDeps2(issues, file2, "optionalDependencies", pkg.optionalDependencies);
+      scanDeps2(issues, file2, "peerDependencies", pkg.peerDependencies);
     }
     return issues;
   }
@@ -66013,7 +66316,8 @@ var defaultScanners2 = [
   configConflictScanner2,
   licenseRiskScanner2,
   ciHealthScanner2,
-  duplicateCodeScanner2
+  duplicateCodeScanner2,
+  supplyChainScanner2
 ];
 
 // ../core/src/select-scanners.ts

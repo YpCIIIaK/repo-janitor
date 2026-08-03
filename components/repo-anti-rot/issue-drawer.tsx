@@ -1,5 +1,6 @@
 "use client"
 
+import { useLocale } from "@/components/i18n/locale-provider"
 import { useEffect, useState } from "react"
 import { AlertTriangle, Bell, BellOff, Bug, Check, Clipboard, Link2, Loader2, Sparkles } from "lucide-react"
 import { Github } from "@/components/icons/github"
@@ -53,6 +54,7 @@ function CopyButton({ value, label }: { value: string; label: string }) {
  * on-demand AI verdict, and quick actions (GitHub permalink, copy, snooze).
  */
 export function IssueDrawer({ issue, open, onOpenChange, githubUrl, newIssueUrl, snoozed, onToggleSnooze }: Props) {
+  const { t } = useLocale()
   const settings = useAiSettings()
   const hasKey = !!settings.apiKey.trim()
   // Cache namespace folds in the web-search toggle (see aiCacheModel).
@@ -114,20 +116,20 @@ export function IssueDrawer({ issue, open, onOpenChange, githubUrl, newIssueUrl,
 
             <div className="space-y-4 p-4">
               <dl className="grid grid-cols-[max-content_1fr] gap-x-4 gap-y-1.5 text-xs">
-                <dt className="text-muted-foreground">Category</dt>
+                <dt className="text-muted-foreground">{t("table.category")}</dt>
                 <dd className="text-foreground">{categoryLabels[issue.category]}</dd>
                 {scannerId && (
                   <>
-                    <dt className="text-muted-foreground">Scanner</dt>
+                    <dt className="text-muted-foreground">{t("table.scanner")}</dt>
                     <dd className="text-foreground">
                       <span>{scannerLabel(scannerId)}</span>
                       <span className="ml-1.5 font-mono text-muted-foreground">{scannerId}</span>
                     </dd>
                   </>
                 )}
-                <dt className="text-muted-foreground">Location</dt>
+                <dt className="text-muted-foreground">{t("drawer.location")}</dt>
                 <dd className="break-all font-mono text-foreground">{issue.location}</dd>
-                <dt className="text-muted-foreground">Age</dt>
+                <dt className="text-muted-foreground">{t("drawer.age")}</dt>
                 <dd className="text-foreground">{fullAge(issue.ageDays)}</dd>
               </dl>
 
@@ -144,7 +146,7 @@ export function IssueDrawer({ issue, open, onOpenChange, githubUrl, newIssueUrl,
                 <div className="mb-2 flex items-center justify-between gap-2">
                   <div className="flex items-center gap-1.5 text-xs font-medium text-primary">
                     <Sparkles className="size-3.5" />
-                    AI analysis
+                    {t("drawer.ai")}
                   </div>
                   {hasKey && (
                     <Button
@@ -161,7 +163,7 @@ export function IssueDrawer({ issue, open, onOpenChange, githubUrl, newIssueUrl,
                 </div>
                 {!hasKey ? (
                   <p className="text-xs text-muted-foreground">
-                    Add an OpenRouter key in Settings to get a verdict for this finding.
+                    {t("drawer.aiNeedsKey")}
                   </p>
                 ) : error ? (
                   <p className="flex items-start gap-1.5 text-xs text-destructive">
@@ -173,11 +175,11 @@ export function IssueDrawer({ issue, open, onOpenChange, githubUrl, newIssueUrl,
                 ) : loading ? (
                   <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
                     <Loader2 className="size-3.5 animate-spin" />
-                    Analyzing…
+                    {t("drawer.analyzing")}
                   </p>
                 ) : (
                   <p className="text-xs text-muted-foreground">
-                    Click Generate for a decisive verdict on this finding.
+                    {t("drawer.aiHint")}
                   </p>
                 )}
               </div>
@@ -193,26 +195,26 @@ export function IssueDrawer({ issue, open, onOpenChange, githubUrl, newIssueUrl,
                   >
                     <a href={githubUrl} target="_blank" rel="noopener noreferrer">
                       <Github className="size-3.5" />
-                      Open on GitHub
+                      {t("drawer.openGithub")}
                     </a>
                   </Button>
                 )}
-                {githubUrl && <CopyButton value={githubUrl} label="Copy link" />}
+                {githubUrl && <CopyButton value={githubUrl} label={t("drawer.copyLink")} />}
                 {newIssueUrl && (
                   <Button
                     asChild
                     size="sm"
                     variant="ghost"
                     className="h-8 gap-1.5 px-2 text-xs text-muted-foreground hover:text-foreground"
-                    title="Open GitHub's new-issue form, prefilled — you review and submit it there"
+                    title={t("drawer.createIssueHint")}
                   >
                     <a href={newIssueUrl} target="_blank" rel="noopener noreferrer">
                       <Bug className="size-3.5" />
-                      Create issue
+                      {t("drawer.createIssue")}
                     </a>
                   </Button>
                 )}
-                <CopyButton value={issueAsMarkdown({ ...issue, aiNote: note ?? issue.aiNote })} label="Copy Markdown" />
+                <CopyButton value={issueAsMarkdown({ ...issue, aiNote: note ?? issue.aiNote })} label={t("drawer.copyMarkdown")} />
                 <Button
                   size="sm"
                   variant="ghost"
@@ -226,7 +228,7 @@ export function IssueDrawer({ issue, open, onOpenChange, githubUrl, newIssueUrl,
               {githubUrl === null && (
                 <p className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
                   <Link2 className="size-3" />
-                  No GitHub permalink for this location.
+                  {t("drawer.noPermalink")}
                 </p>
               )}
             </div>
