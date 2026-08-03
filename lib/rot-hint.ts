@@ -12,6 +12,23 @@ export interface ScorePoint {
   score: number
 }
 
+/**
+ * What the score history says, before anybody puts it into words.
+ *
+ * Separated from the phrasing because the two readers disagree about language:
+ * the README card is an SVG that is English everywhere, while the report page is
+ * translated. Returning a finished English string would have put "Rotting 12d"
+ * under a Russian heading — the same half-translated result as "Скан 1 month
+ * ago", arrived at the same way.
+ */
+export type TrendKind = "improved" | "rotting" | "unchanged"
+
+export interface Trend {
+  kind: TrendKind
+  /** Whole days since the thing described started. */
+  days: number
+}
+
 function daysBetween(iso: string, nowMs: number): number {
   const t = new Date(iso).getTime()
   if (!Number.isFinite(t)) return 0
@@ -30,10 +47,10 @@ function daysPhrase(days: number, kind: "improved" | "rotting"): string {
 }
 
 /**
- * Derive a short footer hint from ascending-or-unsorted score points.
+ * Derive the trend from ascending-or-unsorted score points.
  * `null` when there is nothing useful to say (first scan, or flat & recent).
  */
-export function rotHint(history: ScorePoint[], nowMs: number = Date.now()): string | null {
+export function rotTrend(history: ScorePoint[], nowMs: number = Date.now()): Trend | null {
   if (history.length < 2) return null
 
   const sorted = [...history].sort((a, b) => a.at.localeCompare(b.at))
@@ -82,15 +99,29 @@ export function rotHint(history: ScorePoint[], nowMs: number = Date.now()): stri
      */
     const current = sorted[sorted.length - 1].score
     if (scoreToGrade(current) === "A") return null
-    return daysPhrase(daysBetween(declineStartedAt, nowMs), "rotting")
+    return { kind: "rotting", days: daysBetween(declineStartedAt, nowMs) }
   }
 
   if (lastImprovedAt) {
-    return daysPhrase(daysBetween(lastImprovedAt, nowMs), "improved")
+    return { kind: "improved", days: daysBetween(lastImprovedAt, nowMs) }
   }
 
   // Scores never moved — only nag if that has gone on a while.
   const span = daysBetween(sorted[0].at, nowMs)
-  if (span >= 7) return `Unchanged ${span}d`
+  if (span >= 7) return { kind: "unchanged", days: span }
   return null
+}
+
+/**
+ * The English wording, for the SVG card.
+ *
+ * The card carries no locale — it is an image in someone's README, read by
+ * whoever passes — so it stays English, and this is the one place that decides
+ * how the trend sounds there.
+ */
+export function rotHint(history: ScorePoint[], nowMs: number = Date.now()): string | null {
+  const trend = rotTrend(history, nowMs)
+  if (!trend) return null
+  if (trend.kind === "unchanged") return `Unchanged ${trend.days}d`
+  return daysPhrase(trend.days, trend.kind)
 }

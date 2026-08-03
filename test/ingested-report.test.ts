@@ -66,7 +66,7 @@ describe("ingestedSharedReport", () => {
 
   it("never returns a path, a snippet or a detail string", async () => {
     readServerRepos.mockResolvedValue([repo()])
-    const shared = await ingestedSharedReport("acme", "widget")
+    const shared = (await ingestedSharedReport("acme", "widget"))?.report
     const json = JSON.stringify(shared)
 
     for (const field of FORBIDDEN_SHARED_FIELDS) {
@@ -80,14 +80,55 @@ describe("ingestedSharedReport", () => {
 
   it("carries a repo URL so the page can offer watch and rescan", async () => {
     readServerRepos.mockResolvedValue([repo()])
-    const shared = await ingestedSharedReport("acme", "widget")
+    const shared = (await ingestedSharedReport("acme", "widget"))?.report
     expect(shared?.repoUrl).toBe("https://github.com/acme/widget")
   })
 
   it("survives a report with no issues array", async () => {
     readServerRepos.mockResolvedValue([repo({ issues: undefined })])
-    const shared = await ingestedSharedReport("acme", "widget")
+    const shared = (await ingestedSharedReport("acme", "widget"))?.report
     expect(shared?.totalIssues).toBe(0)
     expect(shared?.topIssues).toEqual([])
+  })
+})
+
+describe("the trend that comes with it", () => {
+  /**
+   * The grade cannot say which way a repository is going: 62 falling and 62
+   * climbing are the same letter and not the same project. This is the only
+   * route that can tell them apart — a share token carries a projection with no
+   * score history in it, by design.
+   */
+  const withHistory = (history: { at: string; score: number }[]) => ({
+    ...repo(),
+    history,
+  })
+  const ago = (days: number) =>
+    new Date(Date.now() - days * 86_400_000).toISOString()
+
+  it("reports a slide, counted from where it began", async () => {
+    readServerRepos.mockResolvedValue([
+      withHistory([
+        { at: ago(40), score: 80 },
+        { at: ago(12), score: 71 },
+        { at: ago(1), score: 68 },
+      ]),
+    ])
+    expect((await ingestedSharedReport("acme", "widget"))?.trend).toEqual({
+      kind: "rotting",
+      days: 12,
+    })
+  })
+
+  it("is null for a repository with a single scan", async () => {
+    readServerRepos.mockResolvedValue([withHistory([{ at: ago(2), score: 75 }])])
+    expect((await ingestedSharedReport("acme", "widget"))?.trend).toBeNull()
+  })
+
+  it("is null when history is missing entirely", async () => {
+    // Reports ingested before trends existed have no history array at all.
+    const { history: _dropped, ...noHistory } = withHistory([])
+    readServerRepos.mockResolvedValue([noHistory])
+    expect((await ingestedSharedReport("acme", "widget"))?.trend).toBeNull()
   })
 })
