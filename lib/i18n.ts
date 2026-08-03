@@ -201,6 +201,49 @@ const en = {
   "landing.ci.badge":
     "Scans from CI also keep a health badge current — the one at the top of this project's own README.",
   "landing.ci.repo": "Setup is in the README",
+  // The redesigned landing page: hero, numbered section labels, and the copy
+  // that only exists in that layout. Everything factual still comes from
+  // lib/landing-facts.ts — these are labels, not claims.
+  "hero.eyebrow": "code health & decay monitor",
+  "hero.titleTop": "Your repo is rotting.",
+  "hero.titleBottom": "Nobody committed it.",
+  "hero.checks": "checks",
+  "hero.families": "families",
+  "hero.mock": "mock data",
+  "hero.note": "No account, no install. The repository is cloned to a temporary directory, read, and deleted when the scan finishes.",
+
+  "landing.label.checks": "the checks",
+  "landing.label.grade": "the maths",
+  "landing.label.corpus": "the corpus",
+  "landing.label.privacy": "the fine print",
+  "landing.label.ci": "automation",
+
+  "landing.checks.aside": "false positives are bugs",
+  "landing.checks.calibration": "calibration",
+  "landing.checks.calibrationBody": "A check that fires on a healthy repository is a bug, not a finding. Every rule runs against the corpus before it ships.",
+  "landing.checks.calibrationLink": "Report a false positive",
+
+  "landing.grade.ruler": "score",
+  "landing.grade.ledger": "worked example",
+  "landing.grade.start": "starting score",
+  "landing.grade.final": "final",
+
+  "landing.privacy.cloneTitle": "Cloned to a temp dir",
+  "landing.privacy.reportTitle": "The report stays in your browser",
+  "landing.privacy.usageTitle": "Two rows that cannot be joined",
+  "landing.privacy.never": "never recorded",
+  "landing.privacy.neverPaths": "file paths",
+  "landing.privacy.neverCode": "source code",
+  "landing.privacy.neverIp": "ip addresses",
+  "landing.privacy.neverAgents": "user agents",
+  "landing.privacy.neverPair": "repo name + score",
+  "landing.privacy.neverAccounts": "accounts",
+
+  "landing.ci.perkGate": "Fails the build below a grade you choose",
+  "landing.ci.perkSarif": "Uploads SARIF, so findings land in the Security tab",
+  "landing.ci.perkComment": "Comments the breakdown on the pull request",
+  "landing.ci.perkBadge": "Keeps the health badge in your README current",
+  "landing.ci.badgeNote": "the badge stays current on every push",
 
   // Consent. The wording has to match what the code actually stores — see
   // `lib/share-report.ts`. Promising more privacy than we deliver would be the
@@ -572,6 +615,46 @@ const ru: Messages = {
   "landing.ci.badge":
     "Сканы из CI держат бейдж здоровья актуальным — тот самый, что стоит в README этого проекта.",
   "landing.ci.repo": "Настройка описана в README",
+  "hero.eyebrow": "монитор здоровья и распада кода",
+  "hero.titleTop": "Ваш репозиторий гниёт.",
+  "hero.titleBottom": "Этого никто не коммитил.",
+  "hero.checks": "проверок",
+  "hero.families": "семейств",
+  "hero.mock": "выдуманных данных",
+  "hero.note": "Без аккаунта и без установки. Репозиторий клонируется во временную папку, читается и удаляется по окончании скана.",
+
+  "landing.label.checks": "проверки",
+  "landing.label.grade": "арифметика",
+  "landing.label.corpus": "выборка",
+  "landing.label.privacy": "мелкий шрифт",
+  "landing.label.ci": "автоматизация",
+
+  "landing.checks.aside": "ложное срабатывание — это баг",
+  "landing.checks.calibration": "калибровка",
+  "landing.checks.calibrationBody": "Проверка, срабатывающая на здоровом репозитории, — это баг, а не находка. Каждое правило прогоняется по выборке до релиза.",
+  "landing.checks.calibrationLink": "Сообщить о ложном срабатывании",
+
+  "landing.grade.ruler": "оценка",
+  "landing.grade.ledger": "разбор примера",
+  "landing.grade.start": "начальная оценка",
+  "landing.grade.final": "итог",
+
+  "landing.privacy.cloneTitle": "Клон во временной папке",
+  "landing.privacy.reportTitle": "Отчёт остаётся в браузере",
+  "landing.privacy.usageTitle": "Две строки, которые не соединить",
+  "landing.privacy.never": "никогда не записывается",
+  "landing.privacy.neverPaths": "пути к файлам",
+  "landing.privacy.neverCode": "исходный код",
+  "landing.privacy.neverIp": "ip-адреса",
+  "landing.privacy.neverAgents": "user-agent",
+  "landing.privacy.neverPair": "имя репозитория + оценка",
+  "landing.privacy.neverAccounts": "аккаунты",
+
+  "landing.ci.perkGate": "Роняет сборку ниже выбранной вами оценки",
+  "landing.ci.perkSarif": "Загружает SARIF — находки попадают во вкладку Security",
+  "landing.ci.perkComment": "Пишет разбор комментарием к пул-реквесту",
+  "landing.ci.perkBadge": "Держит бейдж здоровья в README актуальным",
+  "landing.ci.badgeNote": "бейдж обновляется на каждом пуше",
 
   "consent.label": "Сохранить результат, чтобы им можно было поделиться по ссылке",
   "consent.body":
