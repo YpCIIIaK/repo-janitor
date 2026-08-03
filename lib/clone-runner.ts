@@ -24,15 +24,31 @@ export const SIZE_POLL_MS = 2_000
  * Without one, a large repository grows the child until the CONTAINER runs out
  * of memory, and the platform kills the whole service — every other request in
  * flight dies with it and the instance restarts. With one, the child hits its
- * own limit first and dies alone, leaving the server up and the caller with an
- * explanation.
+ * own limit first and dies alone, leaving the server up and the caller with the
+ * explanation `describeFailure` produces.
  *
- * The default assumes the smallest instance worth deploying on (512 MB) and
- * leaves room for the Next.js server itself. Raise it on a bigger box.
+ * ## Why the default is 192 and not 320
+ *
+ * `--max-old-space-size` bounds V8's old space, not the process. Measured on a
+ * real scan, resident memory runs about a quarter above the ceiling: 96 → 136 MB,
+ * 160 → 209 MB, 320 → 405 MB. The old default of 320 therefore let the child
+ * reach ~405 MB, and alongside the Next.js server that is more than a 512 MB
+ * instance has. Render killed the container — the exact failure this constant
+ * exists to prevent, caused by the constant being set as though it bounded the
+ * process.
+ *
+ * 192 puts the child's peak near 240 MB and leaves the server the rest. It costs
+ * nothing on ordinary repositories: psf/requests peaks at 93 MB and clap-rs/clap
+ * at 143 MB. What it does change is that a repository genuinely needing more —
+ * moment/moment wants the full 405 MB, three times its neighbours — is now
+ * refused with a message instead of taking the service down with it.
+ *
+ * Raise it on a bigger box, and raise it in one place: the value is read from
+ * the environment so the instance size and this number can be changed together.
  */
 export const SCAN_HEAP_MB = Math.max(
   128,
-  Number.parseInt(process.env.REPO_ANTI_ROT_SCAN_HEAP_MB ?? "", 10) || 320,
+  Number.parseInt(process.env.REPO_ANTI_ROT_SCAN_HEAP_MB ?? "", 10) || 192,
 )
 
 /** Progress lines the CLI writes to stderr; never part of an error message. */

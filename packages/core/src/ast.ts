@@ -41,7 +41,39 @@ export function pluginsFor(file: string): ("typescript" | "jsx")[] {
  * Pass `attachComment: true` when you need comment nodes (e.g. todo-debt);
  * env/import scanners leave it off so comments are stripped.
  */
+/**
+ * Generated JavaScript that must never reach the parser.
+ *
+ * Two costs, and the second is the one that bit. Findings about a bundle are
+ * findings about the build, not the code, so they are noise. And a bundle is
+ * enormous in exactly the way an AST is expensive: moment/moment commits a
+ * `min/` directory whose `tests.js` alone is 5.3 MB. Parsing it took the
+ * scanner's peak memory to 405 MB — three times what an ordinary repository
+ * needs — which on a 512 MB instance killed the container along with every
+ * other request in flight.
+ *
+ * The size and line-length tests are shape tests rather than name tests, because generated
+ * files are not reliably named: a bundle has very few newlines for its size, so
+ * average line length gives it away whatever it is called.
+ */
+const GENERATED_NAME = /(?:^|\/)(?:min|dist|bundles?)\/|\.(?:min|bundle|packed)\.(?:js|mjs|cjs|ts)$|\.js\.map$/i
+
+/** Bytes above which a source file is assumed to be generated, whatever its name. */
+const HUGE_SOURCE_BYTES = 512 * 1024
+
+/** Average line length that no hand-written source sustains across a whole file. */
+const MINIFIED_AVG_LINE = 200
+
+export function looksGenerated(content: string, file: string): boolean {
+  if (GENERATED_NAME.test(file)) return true
+  if (content.length > HUGE_SOURCE_BYTES) return true
+  let newlines = 0
+  for (let i = 0; i < content.length; i++) if (content.charCodeAt(i) === 10) newlines++
+  return content.length / (newlines + 1) > MINIFIED_AVG_LINE
+}
+
 export function parseFile(content: string, file: string, opts: { comments?: boolean } = {}): Node | null {
+  if (looksGenerated(content, file)) return null
   try {
     return parse(content, {
       sourceType: "unambiguous",
