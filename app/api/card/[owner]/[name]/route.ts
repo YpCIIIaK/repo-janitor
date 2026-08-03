@@ -2,6 +2,7 @@ import { readServerRepos } from "@/lib/server-store"
 import { getShare } from "@/lib/share-store"
 import { scopeLine } from "@/lib/verdict"
 import { renderHealthCardSvg, type HealthCardData } from "@/lib/health-card"
+import { rotHint } from "@/lib/rot-hint"
 import type { Grade } from "@/lib/mock-data"
 import { parseWidgetOptions } from "@/lib/widget-options"
 
@@ -73,6 +74,7 @@ export async function GET(
         totalIssues: issues.length,
         generatedAt: latest.generatedAt,
         scope: scopeLine(latest.profile),
+        rotHint: rotHint(repo.history ?? []),
       }
     }
   }

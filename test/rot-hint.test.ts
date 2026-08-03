@@ -96,3 +96,50 @@ describe("rotHint", () => {
     ).toBe("Unchanged 14d")
   })
 })
+
+describe("rotHint measures the decline, not the last drop", () => {
+  /**
+   * "Rotting 12d" reads as a duration, so it has to be one. Measuring from the
+   * most recent drop made a repository that had been sliding for a fortnight
+   * say "Rotting since yesterday" — the number that makes the point, understated
+   * into a shrug, and resetting every time the score fell again.
+   */
+  it("counts from where the slide began, not where it last continued", () => {
+    const history = [
+      { at: day(40), score: 80 },
+      { at: day(12), score: 71 }, // the slide starts here
+      { at: day(1), score: 68 }, // and continues
+    ]
+    expect(rotHint(history, NOW)).toBe("Rotting 12d")
+  })
+
+  it("keeps counting through a flat stretch that follows a fall", () => {
+    // A score that dropped and then stopped moving has not recovered; the rot
+    // is thirty days old, not "unchanged".
+    const history = [
+      { at: day(60), score: 90 },
+      { at: day(30), score: 70 },
+      { at: day(10), score: 70 },
+    ]
+    expect(rotHint(history, NOW)).toBe("Rotting 30d")
+  })
+
+  it("stops counting once the score recovers", () => {
+    // An improvement ends the run — a repo that dipped and climbed back is not
+    // rotting, and saying so would be the card crying wolf.
+    const history = [
+      { at: day(30), score: 90 },
+      { at: day(10), score: 80 },
+      { at: day(2), score: 85 },
+    ]
+    expect(rotHint(history, NOW)).toBe("Last improved 2d ago")
+  })
+
+  it("still says yesterday for a slide that is genuinely one day old", () => {
+    const history = [
+      { at: day(30), score: 80 },
+      { at: day(1), score: 74 },
+    ]
+    expect(rotHint(history, NOW)).toBe("Rotting since yesterday")
+  })
+})
