@@ -377,6 +377,83 @@
   }
 }
 
+/*
+ * Landing-page texture and motion.
+ *
+ * Every colour here is mixed from `--foreground`, never hard-coded, because the
+ * landing page renders under all eight themes including the two light ones — a
+ * fixed white hairline is invisible on Paper and a fixed dark one is invisible
+ * on Moss. `color-mix` against the theme's own foreground keeps the grid at the
+ * same apparent weight either way.
+ */
+.bg-grid {
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in oklab, var(--foreground) 7%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--foreground) 7%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 64px 64px;
+}
+
+.bg-scanlines {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    color-mix(in oklab, var(--foreground) 5%, transparent) 0px,
+    color-mix(in oklab, var(--foreground) 5%, transparent) 1px,
+    transparent 1px,
+    transparent 4px
+  );
+}
+
+.tabnum {
+  font-variant-numeric: tabular-nums;
+}
+
+.marquee-track {
+  animation: rar-marquee 42s linear infinite;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+.blink-dot {
+  animation: rar-blink 2s ease-in-out infinite;
+}
+
+@keyframes rar-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    /* The track holds the list twice; -50% lands exactly on the seam. */
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes rar-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+/* Motion here is decoration and nothing depends on it, so it simply stops. */
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track,
+  .blink-dot {
+    animation: none;
+  }
+}
+
 /* Thin overlay scrollbar — keeps layout width stable in dialogs. */
 .thin-scrollbar {
   scrollbar-width: thin;

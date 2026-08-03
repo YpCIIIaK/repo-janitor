@@ -3,7 +3,9 @@
 import { useEffect, useState } from "react"
 import { useLocale } from "@/components/i18n/locale-provider"
 import type { ScanSummary } from "@/lib/scan-summary"
+import { GRADE_CSS_VAR } from "@/lib/grade-style"
 import type { Grade } from "@/lib/mock-data"
+import { SectionLabel } from "./section-label"
 
 /**
  * What everything scanned so far looks like, on the landing page.
@@ -26,19 +28,14 @@ import type { Grade } from "@/lib/mock-data"
  * disprove it in ten seconds from a public API.
  */
 
-/** Colour per band, matching the grade section directly above it. */
-const BAND_TONE: Record<Grade, string> = {
-  A: "bg-emerald-500",
-  B: "bg-lime-500",
-  C: "bg-amber-500",
-  D: "bg-orange-500",
-  F: "bg-red-500",
-}
-
 const ORDER: Grade[] = ["A", "B", "C", "D", "F"]
 
-export function ScanSummarySection() {
-  const { t } = useLocale()
+/**
+ * Exposed as a hook because the landing page numbers its sections and this one
+ * is allowed to disappear. The parent has to know whether it rendered, or the
+ * eyebrows would count 01, 02, 04.
+ */
+export function useScanSummary(): ScanSummary | null {
   const [summary, setSummary] = useState<ScanSummary | null>(null)
 
   useEffect(() => {
@@ -57,49 +54,95 @@ export function ScanSummarySection() {
     }
   }, [])
 
-  if (!summary) return null
+  return summary
+}
 
+export function ScanSummarySection({ summary, index }: { summary: ScanSummary; index: string }) {
+  const { t } = useLocale()
+  const total = ORDER.reduce((n, g) => n + (summary.grades[g] ?? 0), 0)
   const max = Math.max(...ORDER.map((g) => summary.grades[g] ?? 0), 1)
 
   return (
-    <section className="mt-20">
-      <h2 className="text-balance text-2xl font-semibold tracking-tight">{t("summary.title")}</h2>
-      <p className="mt-2 max-w-2xl text-pretty text-sm leading-relaxed text-muted-foreground">
-        {t("summary.lead")}
-      </p>
-
-      <div className="mt-6 grid gap-4 sm:grid-cols-2">
-        <div className="rounded-lg border border-border bg-card/40 px-4 py-3">
-          <p className="text-3xl font-semibold tabular-nums">{summary.median}</p>
-          <p className="mt-0.5 text-sm text-muted-foreground">{t("summary.median")}</p>
-          <p className="mt-1 text-xs text-muted-foreground/70">{t("summary.medianHint")}</p>
+    <section className="border-b border-border">
+      <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:py-24">
+        <div className="max-w-2xl">
+          <SectionLabel index={index}>{t("landing.label.corpus")}</SectionLabel>
+          <h2 className="mt-4 text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
+            {t("summary.title")}
+          </h2>
+          <p className="mt-3 text-pretty leading-relaxed text-muted-foreground">
+            {t("summary.lead")}
+          </p>
         </div>
-        <div className="rounded-lg border border-border bg-card/40 px-4 py-3">
-          <p className="text-3xl font-semibold tabular-nums">{summary.count}</p>
-          <p className="mt-0.5 text-sm text-muted-foreground">{t("summary.scans")}</p>
-          <p className="mt-1 text-xs text-muted-foreground/70">{t("summary.scansHint")}</p>
-        </div>
-      </div>
 
-      {/* Bars rather than a pie: the interesting thing is that F is not rare,
-          and a row of lengths says that at a glance. */}
-      <p className="mt-6 text-sm font-medium">{t("summary.spread")}</p>
-      <div className="mt-3 space-y-1.5">
-        {ORDER.map((grade) => {
-          const n = summary.grades[grade] ?? 0
-          return (
-            <div key={grade} className="flex items-center gap-3 text-xs">
-              <span className="w-4 font-mono font-semibold">{grade}</span>
-              <span className="h-2 flex-1 overflow-hidden rounded-full bg-muted">
-                <span
-                  className={`block h-full rounded-full ${BAND_TONE[grade]}`}
-                  style={{ width: `${Math.round((n / max) * 100)}%` }}
-                />
-              </span>
-              <span className="w-8 text-right tabular-nums text-muted-foreground">{n}</span>
+        <div className="mt-10 grid gap-4 lg:grid-cols-[0.8fr_1.2fr]">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+            <div className="rounded-xl border border-border bg-card/60 p-5">
+              <p className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
+                {t("summary.median")}
+              </p>
+              <p className="tabnum mt-2 font-mono text-5xl font-semibold leading-none text-primary">
+                {summary.median}
+              </p>
+              <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                {t("summary.medianHint")}
+              </p>
             </div>
-          )
-        })}
+            <div className="rounded-xl border border-border bg-card/60 p-5">
+              <p className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
+                {t("summary.scans")}
+              </p>
+              <p className="tabnum mt-2 font-mono text-5xl font-semibold leading-none">
+                {summary.count}
+              </p>
+              <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                {t("summary.scansHint")}
+              </p>
+            </div>
+          </div>
+
+          {/* Bars rather than a pie: the interesting thing is that F is not rare,
+              and a row of lengths says that at a glance. */}
+          <figure className="rounded-xl border border-border bg-card/60 p-5">
+            <figcaption className="flex items-center justify-between font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
+              {t("summary.spread")}
+              <span className="tabnum">n = {total}</span>
+            </figcaption>
+            <ul className="mt-5 flex flex-col gap-3">
+              {ORDER.map((grade) => {
+                const n = summary.grades[grade] ?? 0
+                return (
+                  <li key={grade} className="flex items-center gap-3">
+                    <span
+                      className="flex size-6 shrink-0 items-center justify-center rounded font-mono text-xs font-bold"
+                      style={{
+                        color: GRADE_CSS_VAR[grade],
+                        backgroundColor: `color-mix(in oklab, ${GRADE_CSS_VAR[grade]} 15%, transparent)`,
+                      }}
+                    >
+                      {grade}
+                    </span>
+                    <span className="h-2.5 flex-1 overflow-hidden rounded-full bg-muted">
+                      <span
+                        className="block h-full rounded-full"
+                        style={{
+                          width: `${Math.round((n / max) * 100)}%`,
+                          backgroundColor: GRADE_CSS_VAR[grade],
+                        }}
+                      />
+                    </span>
+                    <span className="tabnum w-8 shrink-0 text-right font-mono text-xs text-muted-foreground">
+                      {n}
+                    </span>
+                    <span className="tabnum w-10 shrink-0 text-right font-mono text-xs text-muted-foreground/70">
+                      {total > 0 ? Math.round((n / total) * 100) : 0}%
+                    </span>
+                  </li>
+                )
+              })}
+            </ul>
+          </figure>
+        </div>
       </div>
     </section>
   )

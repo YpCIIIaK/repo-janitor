@@ -1,8 +1,8 @@
 "use client"
 
-import { Activity } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useLocale } from "@/components/i18n/locale-provider"
+import { CHECK_FAMILIES, TOTAL_CHECKS } from "@/lib/landing-facts"
 import { ScanRunner } from "./scan-runner"
 import { ProofRepos } from "./proof-repos"
 import { LandingSections } from "./landing-sections"
@@ -15,58 +15,96 @@ import { LandingSections } from "./landing-sections"
  * were committing to; a landing page whose entire purpose is "paste a repo URL"
  * should show the box you paste into.
  *
- * The decoration is CSS only — a radial wash behind the hero and a hairline grid.
- * No images, no animation library. This page is the first impression of a tool
- * that reports on dependency bloat, so it does not get to ship a carousel.
+ * The headline names the problem rather than the product. "Welcome to Repo
+ * Anti-Rot" told a stranger nothing they did not already know from the tab
+ * title; "your repo is rotting, nobody committed it" is the one sentence that
+ * explains why a tool like this exists at all.
+ *
+ * The three figures beside it are read from `lib/landing-facts.ts`, which
+ * `test/landing-facts.test.ts` checks against the engine's own scanner registry.
+ * A hero that quietly claims twenty-seven checks after someone deleted one is
+ * exactly the decay this project reports on, and it would be embarrassing here.
+ * The third figure is zero, and it is the honest one: nothing on this page is a
+ * mock-up of a scan that never ran.
+ *
+ * Decoration is CSS only — a hairline grid and a blurred wash, both mixed from
+ * the theme's own colours so the page survives all eight themes including the
+ * light ones. No images, no animation library. This is the first impression of a
+ * tool that reports on bloat, so it does not get to ship a carousel.
  */
 export function WelcomeScreen() {
   const { t } = useLocale()
   const router = useRouter()
 
-  return (
-    <div className="relative isolate min-h-screen overflow-hidden">
-      {/* Soft primary wash behind the hero, fading out before the fold. */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 -top-40 -z-10 h-[36rem] bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,color-mix(in_oklab,var(--color-primary)_16%,transparent),transparent_70%)]"
-      />
-      {/* Hairline grid, masked so it dissolves rather than ending in a hard edge. */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[32rem] opacity-[0.18] [mask-image:radial-gradient(ellipse_70%_60%_at_50%_0%,black,transparent)] [background-image:linear-gradient(to_right,var(--color-border)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-border)_1px,transparent_1px)] [background-size:56px_56px]"
-      />
+  const figures = [
+    { label: t("hero.checks"), value: String(TOTAL_CHECKS), accent: false },
+    { label: t("hero.families"), value: String(CHECK_FAMILIES.length), accent: false },
+    { label: t("hero.mock"), value: "0", accent: true },
+  ]
 
-      {/* Two widths on purpose: the hero and the scan form stay in a narrow
-          column, because a centred headline and a single input read badly when
-          stretched, while the sections below carry six dense cards and want the
-          room. */}
-      <main className="mx-auto w-full max-w-5xl px-4 py-16 md:py-24">
-        <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
-          <div className="flex size-16 items-center justify-center rounded-2xl border border-primary/20 bg-primary/15 text-primary shadow-sm">
-            <Activity className="size-8" />
+  return (
+    <div className="min-h-screen">
+      <section className="relative overflow-hidden border-b border-border">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-grid [mask-image:radial-gradient(100%_70%_at_50%_0%,black,transparent)]"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -top-40 left-1/2 size-[36rem] -translate-x-1/2 rounded-full bg-primary/12 blur-[120px]"
+        />
+
+        <div className="relative mx-auto grid max-w-6xl items-start gap-12 px-4 py-16 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14 lg:py-24">
+          <div className="flex flex-col items-start lg:sticky lg:top-24">
+            <span className="flex items-center gap-2 rounded-full border border-border bg-card/60 px-3 py-1 font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
+              <span aria-hidden className="blink-dot size-1.5 rounded-full bg-primary" />
+              {t("hero.eyebrow")}
+            </span>
+
+            <h1 className="mt-6 text-pretty text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl">
+              {t("hero.titleTop")}
+              <br />
+              <span className="text-muted-foreground">{t("hero.titleBottom")}</span>
+            </h1>
+
+            <p className="mt-5 max-w-lg text-pretty leading-relaxed text-muted-foreground">
+              {t("welcome.lead")}
+            </p>
+
+            <dl className="mt-8 grid w-full max-w-lg grid-cols-3 divide-x divide-border border-y border-border">
+              {figures.map((f, i) => (
+                <div key={f.label} className={i === 0 ? "py-4 pr-4" : "px-4 py-4 last:pr-0"}>
+                  <dt className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
+                    {f.label}
+                  </dt>
+                  <dd
+                    className={`tabnum mt-1 font-mono text-2xl font-semibold ${
+                      f.accent ? "text-primary" : ""
+                    }`}
+                  >
+                    {f.value}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+
+            <p className="mt-6 max-w-lg font-mono text-xs leading-relaxed text-muted-foreground">
+              {t("hero.note")}
+            </p>
           </div>
 
-          <h1 className="mt-6 text-balance bg-gradient-to-b from-foreground to-foreground/70 bg-clip-text text-4xl font-semibold tracking-tight text-transparent md:text-5xl">
-            {t("welcome.title")}
-          </h1>
-          <p className="mt-4 max-w-xl text-pretty leading-relaxed text-muted-foreground">
-            {t("welcome.lead")}
-          </p>
+          {/* The real scan form, in the slot a marketing page would fill with a
+              screenshot of one. */}
+          <div className="w-full min-w-0">
+            <ScanRunner
+              onOpen={(repoId) => router.push(`/app?repo=${encodeURIComponent(repoId)}`)}
+            />
+          </div>
         </div>
+      </section>
 
-        <div className="mx-auto mt-10 max-w-3xl">
-          {/* The result cards offer "Open" only when there is somewhere to open
-              into. There is now: the dashboard is its own route, so the report
-              can be handed over by id instead of hoping it sorts to the top. */}
-          <ScanRunner
-            onOpen={(repoId) => router.push(`/app?repo=${encodeURIComponent(repoId)}`)}
-          />
-        </div>
-
-        <ProofRepos />
-
-        <LandingSections />
-      </main>
+      <ProofRepos />
+      <LandingSections />
     </div>
   )
 }
