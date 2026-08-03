@@ -18,12 +18,16 @@ import type { Grade } from "@/lib/mock-data"
  *     last_grade      text not null,
  *     last_score      smallint not null,
  *     last_sha        text,
+ *     last_issue_ids  jsonb not null default '[]'::jsonb,
  *     last_checked_at timestamptz,
  *     last_notified_at timestamptz,
  *     created_at      timestamptz not null default now(),
  *     unsub_token     text not null unique,
  *     manage_token    text not null
  *   );
+ *   -- Existing deploys:
+ *   alter table public.watch_subscriptions
+ *     add column if not exists last_issue_ids jsonb not null default '[]'::jsonb;
  *   create unique index watch_subscriptions_email_repo
  *     on public.watch_subscriptions (email, owner, name);
  *   create index watch_subscriptions_manage on public.watch_subscriptions (manage_token);
@@ -45,6 +49,8 @@ export type WatchSubscription = {
   lastGrade: Grade
   lastScore: number
   lastSha: string | null
+  /** Issue ids from the last successful scan — baseline for regression story. */
+  lastIssueIds: string[]
   lastCheckedAt: string | null
   lastNotifiedAt: string | null
   createdAt: string
@@ -61,11 +67,17 @@ type DbRow = {
   last_grade: string
   last_score: number
   last_sha: string | null
+  last_issue_ids?: unknown
   last_checked_at: string | null
   last_notified_at: string | null
   created_at: string
   unsub_token: string
   manage_token: string
+}
+
+function parseIssueIds(raw: unknown): string[] {
+  if (!Array.isArray(raw)) return []
+  return raw.filter((x): x is string => typeof x === "string" && x.length > 0)
 }
 
 
@@ -78,6 +90,7 @@ function fromRow(row: DbRow): WatchSubscription | null {
     email: row.email,
     owner: row.owner,
     name: row.name,
+    lastIssueIds: parseIssueIds(row.last_issue_ids),
     repoUrl: row.repo_url,
     lastGrade: g,
     lastScore: row.last_score,
@@ -90,8 +103,8 @@ function fromRow(row: DbRow): WatchSubscription | null {
   }
 }
 
-function toRow(sub: WatchSubscription): DbRow {
-  return {
+function toRow(sub: WatchSubscription, withIssueIds: boolean): Record<string, unknown> {
+  const row: Record<string, unknown> = {
     id: sub.id,
     email: sub.email,
     owner: sub.owner,
@@ -106,25 +119,48 @@ function toRow(sub: WatchSubscription): DbRow {
     unsub_token: sub.unsubToken,
     manage_token: sub.manageToken,
   }
+  if (withIssueIds) row.last_issue_ids = sub.lastIssueIds ?? []
+  return row
+}
+
+/** True when PostgREST rejects an unknown `last_issue_ids` column (migration not applied). */
+function missingIssueIdsColumn(status: number, body: string): boolean {
+  return (
+    status === 400 &&
+    /last_issue_ids/i.test(body) &&
+    (/Could not find|schema cache|PGRST204/i.test(body) || /column/i.test(body))
+  )
 }
 
 export async function dbUpsertWatch(
   cfg: SupabaseConfig,
   sub: WatchSubscription,
 ): Promise<void> {
-  const res = await withTimeout(TIMEOUT_MS, (signal) =>
-    fetch(`${cfg.url}/rest/v1/${TABLE}`, {
-      method: "POST",
-      headers: {
-        ...restHeaders(cfg),
-        Prefer: "resolution=merge-duplicates,return=minimal",
-      },
-      body: JSON.stringify(toRow(sub)),
-      signal,
-    }),
-  )
+  async function post(withIssueIds: boolean): Promise<Response> {
+    return withTimeout(TIMEOUT_MS, (signal) =>
+      fetch(`${cfg.url}/rest/v1/${TABLE}`, {
+        method: "POST",
+        headers: {
+          ...restHeaders(cfg),
+          Prefer: "resolution=merge-duplicates,return=minimal",
+        },
+        body: JSON.stringify(toRow(sub, withIssueIds)),
+        signal,
+      }),
+    )
+  }
+
+  let res = await post(true)
   if (!res.ok) {
-    throw new Error(`Watch upsert failed (${res.status}): ${(await res.text()).slice(0, 300)}`)
+    const body = await res.text()
+    if (missingIssueIdsColumn(res.status, body)) {
+      res = await post(false)
+      if (!res.ok) {
+        throw new Error(`Watch upsert failed (${res.status}): ${(await res.text()).slice(0, 300)}`)
+      }
+      return
+    }
+    throw new Error(`Watch upsert failed (${res.status}): ${body.slice(0, 300)}`)
   }
 }
 
@@ -227,6 +263,7 @@ export async function dbUpdateWatchCheckpoint(
     lastSha: string | null
     lastCheckedAt: string
     lastNotifiedAt?: string | null
+    lastIssueIds?: string[]
   },
 ): Promise<void> {
   const body: Record<string, unknown> = {
@@ -238,17 +275,34 @@ export async function dbUpdateWatchCheckpoint(
   if (patch.lastNotifiedAt !== undefined) {
     body.last_notified_at = patch.lastNotifiedAt
   }
+  if (patch.lastIssueIds !== undefined) {
+    body.last_issue_ids = patch.lastIssueIds
+  }
   const params = new URLSearchParams({ id: `eq.${id}` })
-  const res = await withTimeout(TIMEOUT_MS, (signal) =>
-    fetch(`${cfg.url}/rest/v1/${TABLE}?${params}`, {
-      method: "PATCH",
-      headers: { ...restHeaders(cfg), Prefer: "return=minimal" },
-      body: JSON.stringify(body),
-      signal,
-    }),
-  )
+  async function patchOnce(payload: Record<string, unknown>): Promise<Response> {
+    return withTimeout(TIMEOUT_MS, (signal) =>
+      fetch(`${cfg.url}/rest/v1/${TABLE}?${params}`, {
+        method: "PATCH",
+        headers: { ...restHeaders(cfg), Prefer: "return=minimal" },
+        body: JSON.stringify(payload),
+        signal,
+      }),
+    )
+  }
+  let res = await patchOnce(body)
   if (!res.ok) {
-    throw new Error(`Watch patch failed (${res.status}): ${(await res.text()).slice(0, 300)}`)
+    const errBody = await res.text()
+    if (patch.lastIssueIds !== undefined && missingIssueIdsColumn(res.status, errBody)) {
+      const { last_issue_ids: _drop, ...without } = body
+      res = await patchOnce(without)
+      if (!res.ok) {
+        throw new Error(
+          `Watch checkpoint failed (${res.status}): ${(await res.text()).slice(0, 300)}`,
+        )
+      }
+      return
+    }
+    throw new Error(`Watch checkpoint failed (${res.status}): ${errBody.slice(0, 300)}`)
   }
 }
 

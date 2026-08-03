@@ -60,6 +60,8 @@ export type SubscribeInput = {
   grade: Grade
   score: number
   sha?: string | null
+  /** Optional baseline issue ids from the scan that created the watch. */
+  issueIds?: string[]
 }
 
 export type SubscribeResult = {
@@ -97,6 +99,7 @@ export async function subscribeWatch(input: SubscribeInput): Promise<SubscribeRe
         lastGrade: input.grade,
         lastScore: input.score,
         lastSha: input.sha ?? existing.lastSha,
+        lastIssueIds: input.issueIds ?? existing.lastIssueIds ?? [],
         // Keep lastCheckedAt — cron owns the check clock; subscribe resets baseline only.
       }
       await dbUpsertWatch(cfg, next)
@@ -112,6 +115,7 @@ export async function subscribeWatch(input: SubscribeInput): Promise<SubscribeRe
       lastGrade: input.grade,
       lastScore: input.score,
       lastSha: input.sha ?? null,
+      lastIssueIds: input.issueIds ?? [],
       lastCheckedAt: now,
       lastNotifiedAt: null,
       createdAt: now,
@@ -137,6 +141,8 @@ export async function subscribeWatch(input: SubscribeInput): Promise<SubscribeRe
     existing.lastGrade = input.grade
     existing.lastScore = input.score
     if (input.sha) existing.lastSha = input.sha
+    if (input.issueIds) existing.lastIssueIds = input.issueIds
+    else if (!existing.lastIssueIds) existing.lastIssueIds = []
     await writeFileStore(store)
     return { subscription: existing, created: false, managePath: managePathOf(manageToken) }
   }
@@ -150,6 +156,7 @@ export async function subscribeWatch(input: SubscribeInput): Promise<SubscribeRe
     lastGrade: input.grade,
     lastScore: input.score,
     lastSha: input.sha ?? null,
+    lastIssueIds: input.issueIds ?? [],
     lastCheckedAt: now,
     lastNotifiedAt: null,
     createdAt: now,
@@ -203,6 +210,7 @@ export async function updateWatchCheckpoint(
     lastSha: string | null
     lastCheckedAt: string
     lastNotifiedAt?: string | null
+    lastIssueIds?: string[]
   },
 ): Promise<void> {
   const cfg = supabaseConfig()
@@ -218,6 +226,7 @@ export async function updateWatchCheckpoint(
   sub.lastSha = patch.lastSha
   sub.lastCheckedAt = patch.lastCheckedAt
   if (patch.lastNotifiedAt !== undefined) sub.lastNotifiedAt = patch.lastNotifiedAt
+  if (patch.lastIssueIds !== undefined) sub.lastIssueIds = patch.lastIssueIds
   await writeFileStore(store)
 }
 

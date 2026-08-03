@@ -5,12 +5,11 @@ import { Card, CardContent } from "@/components/ui/card"
 import type { Grade, Issue } from "@/lib/mock-data"
 import { GRADE_CSS_VAR } from "@/lib/grade-style"
 import { penaltyBreakdown, type SeverityWeights } from "@/lib/score"
-import { severityStyle } from "@/lib/issue-format"
-import { cn } from "@/lib/utils"
 import { Gauge } from "@/components/charts/gauge"
 import { timeAgo } from "@/lib/reports-store"
 import { useLocale } from "@/components/i18n/locale-provider"
 import { PercentileLine } from "@/components/repo-anti-rot/percentile-line"
+import { PenaltyBreakdownList } from "@/components/repo-anti-rot/penalty-breakdown"
 import type { MessageKey } from "@/lib/i18n"
 
 /**
@@ -21,12 +20,6 @@ import type { MessageKey } from "@/lib/i18n"
  * Russian reader got "Pristine / notes / Scanned 2 hours ago" in the most
  * prominent panel on the page.
  */
-
-const severityKey: Record<string, MessageKey> = {
-  critical: "issues.critical",
-  warning: "issues.warning",
-  info: "gradeCard.notes",
-}
 
 const gradeLabelKey: Record<Grade, MessageKey> = {
   A: "gradeLabel.A",
@@ -107,36 +100,11 @@ export function GradeCard({
             problem; this says which pile of findings is the problem, which is
             the only version you can act on. */}
         {breakdown.length > 0 && (
-          <div className="w-full space-y-1.5 border-t border-border pt-4">
-            {breakdown.map((p) => (
-              <div key={p.severity} className="flex items-center gap-2 text-xs">
-                <span
-                  className={cn(
-                    "rounded-full border px-1.5 py-0.5 font-medium tabular-nums",
-                    severityStyle[p.severity],
-                  )}
-                >
-                  {p.count}
-                </span>
-                <span className="text-muted-foreground">{t(severityKey[p.severity])}</span>
-                {/* One decimal. The score is shown as a whole number, so
-                    hundredths here are precision the reader cannot use and
-                    cannot check — "−5.57" invites arithmetic that will not come
-                    out, because the tier total is itself rounded into the score. */}
-                <span className="ml-auto font-mono tabular-nums text-muted-foreground">
-                  {t("gradeCard.points", { points: p.penalty.toFixed(1) })}
-                </span>
-              </div>
-            ))}
-            {/* Said in plain words rather than with a label. This used to print
-                "(tapered)" beside the number — a term invented in the scoring
-                code, which tells a reader nothing about what it means for them. */}
-            {breakdown.some((p) => p.discounted) && (
-              <p className="pt-1 text-[11px] leading-snug text-muted-foreground/70">
-                {t("gradeCard.taperNote")}
-              </p>
-            )}
-          </div>
+          <PenaltyBreakdownList
+            issues={issues ?? []}
+            weights={weights}
+            className="border-t border-border pt-4"
+          />
         )}
       </CardContent>
     </Card>

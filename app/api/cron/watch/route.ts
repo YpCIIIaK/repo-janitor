@@ -7,6 +7,7 @@ import { isSignificantDrop } from "@/lib/watch-drop"
 import { scanWatchedRepo } from "@/lib/watch-scan"
 import { listDueWatches, updateWatchCheckpoint } from "@/lib/watch-store"
 import { isPublicGitUrl } from "@/lib/url-guard"
+import { buildRegressionStory, toStoryIssues } from "@repo-anti-rot/core"
 
 /**
  * Server cron: rescan due watches, email on significant drop.
@@ -100,6 +101,15 @@ async function runCron(request: Request) {
         { grade: scan.grade, score: scan.score },
       )
 
+      const storyIssues = toStoryIssues(scan.issues)
+      const prevIds = sub.lastIssueIds ?? []
+      const story = buildRegressionStory(
+        { score: sub.lastScore, grade: sub.lastGrade, issueIds: prevIds },
+        { score: scan.score, grade: scan.grade, issues: storyIssues },
+      )
+      // Without a stored baseline, "new" is everything — prefer top findings instead.
+      const hasBaseline = prevIds.length > 0
+
       let mailed = false
       if (verdict.dropped) {
         const mail = buildDropDigest({
@@ -118,6 +128,13 @@ async function runCron(request: Request) {
             origin,
             `/api/watch?token=${encodeURIComponent(sub.unsubToken)}`,
           ),
+          storyHeadline: story.headline,
+          newFindings: hasBaseline ? story.newFindings : undefined,
+          topFindings: hasBaseline
+            ? undefined
+            : storyIssues
+                .filter((i) => i.severity === "critical" || i.severity === "warning")
+                .slice(0, 5),
         })
         const sent = await sendMail({ to: sub.email, ...mail })
         mailed = sent.ok
@@ -129,6 +146,7 @@ async function runCron(request: Request) {
         lastSha: scan.sha,
         lastCheckedAt: checkedAt,
         lastNotifiedAt: mailed ? checkedAt : undefined,
+        lastIssueIds: storyIssues.map((i) => i.id),
       })
 
       results.push({

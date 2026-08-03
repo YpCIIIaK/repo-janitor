@@ -29,6 +29,13 @@ export type WatchScanResult =
       critical: number
       warning: number
       commits: DigestCommit[]
+      /** Slim findings for regression story (id + title + severity + location). */
+      issues: {
+        id: string
+        title: string
+        severity: string
+        location: string
+      }[]
     }
   | { ok: false; error: string }
 
@@ -142,13 +149,31 @@ export async function scanWatchedRepo(
     const report = JSON.parse(await readFile(reportPath, "utf-8")) as {
       grade?: string
       score?: number
-      issues?: { severity?: string }[]
+      issues?: {
+        id?: string
+        title?: string
+        severity?: string
+        location?: string
+      }[]
       commit?: string
     }
     if (!report.grade || !isGrade(report.grade) || typeof report.score !== "number") {
       return { ok: false, error: "scan produced an unusable report" }
     }
     const { critical, warning } = countsFromReport(report)
+    const issues = (report.issues ?? [])
+      .filter(
+        (i): i is { id: string; title: string; severity: string; location: string } =>
+          typeof i?.id === "string" &&
+          typeof i?.title === "string" &&
+          typeof i?.severity === "string",
+      )
+      .map((i) => ({
+        id: i.id,
+        title: i.title,
+        severity: i.severity,
+        location: typeof i.location === "string" ? i.location : "",
+      }))
     return {
       ok: true,
       grade: report.grade,
@@ -157,6 +182,7 @@ export async function scanWatchedRepo(
       critical,
       warning,
       commits,
+      issues,
     }
   } catch (err) {
     return { ok: false, error: err instanceof Error ? err.message : String(err) }

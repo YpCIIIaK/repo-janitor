@@ -4,6 +4,7 @@ import { Activity } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useLocale } from "@/components/i18n/locale-provider"
 import { ScanRunner } from "./scan-runner"
+import { ProofRepos } from "./proof-repos"
 import { LandingSections } from "./landing-sections"
 
 /**
@@ -61,6 +62,8 @@ export function WelcomeScreen() {
             onOpen={(repoId) => router.push(`/app?repo=${encodeURIComponent(repoId)}`)}
           />
         </div>
+
+        <ProofRepos />
 
         <LandingSections />
       </main>

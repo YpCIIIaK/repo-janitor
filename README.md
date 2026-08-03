@@ -164,6 +164,13 @@ pnpm --filter repo-anti-rot test    # CLI helpers
 pnpm --filter @repo-anti-rot/action test # Action helpers
 ```
 
+Landing proof grades come from `lib/proof-snapshot.json` (or a live CI ingest when
+present). Refresh the snapshot after scanner/score changes:
+
+```bash
+pnpm exec node scripts/refresh-proof-snapshot.mjs
+```
+
 Coverage highlights (850+ tests):
 
 - **engine** — scoring, grade thresholds, per-scanner isolation on throw, inline

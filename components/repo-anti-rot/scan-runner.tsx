@@ -24,6 +24,7 @@ import { runScanStream } from "@/lib/scan-client"
 import { refreshPublishedShare } from "@/lib/share-refresh"
 import { GRADE_CSS_VAR } from "@/lib/grade-style"
 import { PercentileLine } from "@/components/repo-anti-rot/percentile-line"
+import { PenaltyBreakdownList } from "@/components/repo-anti-rot/penalty-breakdown"
 import { Progress } from "@/components/ui/progress"
 import { FamousRepos } from "./famous-repos"
 import { ScannerPicker } from "./scanner-picker"
@@ -182,6 +183,10 @@ function ResultCard({ result, onOpen }: { result: ScanResult; onOpen?: (repoId: 
             </span>
           )}
         </div>
+
+        {issues.length > 0 && (
+          <PenaltyBreakdownList issues={issues} className="border-t border-border/60 pt-2" />
+        )}
 
         {issues.length === 0 && (
           <p className="text-sm text-muted-foreground">{t("scan.clean")}</p>
