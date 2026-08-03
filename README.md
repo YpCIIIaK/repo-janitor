@@ -821,6 +821,54 @@ const noisy = computeThing()
 Only findings that resolve to a `file:line` location can be inline-ignored;
 file-level findings (e.g. `package.json`, branches) use `ignore` or Snooze.
 
+## False positives
+
+A check that fires on a healthy repository is a **bug**, not a finding. Reporting
+one is the most useful thing anyone outside this repository can do, so the path
+is deliberately short.
+
+**From the app.** Open the finding and click **Report false positive**. It opens
+[the issue form](https://github.com/YpCIIIaK/repo-janitor/issues/new?template=false-positive.yml)
+with the scanner id, the finding text, the location and the repository URL
+already filled in, leaving you the one field nobody else can answer: why the
+code is fine. Nothing is submitted on your behalf — you review and press the
+button on GitHub.
+
+**By hand.** Same form, filled in yourself. The two things worth getting right
+are the **scanner id** (`duplicate-code`, not "Code weight") and a **public
+repository the rule can be re-run against**. If the code is private, please
+reduce it to a small public repository that reproduces the finding rather than
+pasting the original.
+
+### What happens next
+
+| Label | Meaning |
+| --- | --- |
+| `false-positive` | Applied automatically by the form. The report is open. |
+| `false-positive: confirmed` | The rule was wrong and has been fixed. |
+
+Only the second one counts. **Filing a report is free and unscored** — a count of
+reports would reward volume over being right, which is how this kind of
+arrangement usually goes bad: it becomes worth filing a genuine finding as a
+false positive, because the number goes up either way.
+
+### Credit
+
+Once a report of yours is confirmed, you can put the count in your own README:
+
+```markdown
+[![false positives found](https://<your-deploy>/api/badge/hunter/<your-login>)](https://github.com/search?q=repo%3AYpCIIIaK%2Frepo-janitor+is%3Aissue+label%3A%22false-positive%3A+confirmed%22+author%3A%3Cyour-login%3E&type=issues)
+```
+
+Publish it **linked to that search**, which is the form `lib/hunter.ts` generates.
+The badge is served to anyone who asks for any login, so the number is only worth
+anything because a reader can run the same public search and get the same answer.
+A credential nobody can check is a credential worth faking.
+
+There is no account and no table behind this. Identity is GitHub's, the count is
+a public search, and nothing about it touches what the scanner stores or what the
+consent text promises.
+
 ## Scoring
 
 Starts at 100 and subtracts weighted penalties: **critical −10**, **warning −3**,
