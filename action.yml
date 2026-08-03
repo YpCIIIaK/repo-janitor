@@ -44,6 +44,13 @@ outputs:
     description: "Letter grade A-F"
   issues:
     description: "Total number of issues found"
+# The manifest lives at the repository root because that is the only place
+# GitHub looks for `uses: YpCIIIaK/repo-janitor@v1`. It used to sit in
+# packages/action/, so the workflow printed in our own README resolved to
+# nothing — the advertised way to use this Action could never have worked.
+#
+# One manifest, not two: a copy here and a copy in the package would drift, and
+# the copy nobody edits is the one GitHub reads.
 runs:
   using: "node20"
-  main: "dist/index.cjs"
+  main: "packages/action/dist/index.cjs"
