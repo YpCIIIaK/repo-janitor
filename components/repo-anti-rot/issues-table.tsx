@@ -597,6 +597,7 @@ export function IssuesTable({
         onOpenChange={setDrawerOpen}
         githubUrl={selectedIssue ? linkFor(selectedIssue) : null}
         newIssueUrl={selectedIssue ? newIssueFor(selectedIssue) : null}
+        scannedRepoUrl={repo?.url}
         snoozed={selectedIssue ? isSnoozed(selectedIssue.id) : false}
         onToggleSnooze={() => selectedIssue && toggleSnooze(selectedIssue.id)}
       />

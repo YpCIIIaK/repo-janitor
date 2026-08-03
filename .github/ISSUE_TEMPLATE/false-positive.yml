@@ -1,0 +1,83 @@
+name: False positive
+description: A check fired on code that is actually fine.
+title: "[false positive] "
+labels: ["false-positive"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A check that fires on a healthy repository is a bug, not a finding — so
+        this is the most useful report you can file here.
+
+        The dashboard and the CLI can fill most of this in for you: open the
+        finding and use **Report false positive**, which arrives with the scanner
+        id, the location and the finding text already set.
+
+        Once a report is confirmed and the rule is fixed, the issue is labelled
+        `false-positive: confirmed`. That label is what counts — reporting alone
+        is not scored, because a count of reports would reward volume over being
+        right.
+
+  - type: input
+    id: scanner
+    attributes:
+      label: Scanner id
+      description: The id printed next to the finding, e.g. `duplicate-code`. Not the family name.
+      placeholder: duplicate-code
+    validations:
+      required: true
+
+  - type: input
+    id: repo
+    attributes:
+      label: Public repository it fired on
+      description: >-
+        A URL anyone can clone, so the rule can be re-run against it. If the code
+        is private, please reduce it to a small public repository that reproduces
+        the finding rather than pasting the original.
+      placeholder: https://github.com/owner/name
+    validations:
+      required: true
+
+  - type: input
+    id: finding
+    attributes:
+      label: The finding, as it was shown
+      placeholder: 11 lines duplicated between two files
+
+  - type: input
+    id: location
+    attributes:
+      label: Location
+      description: Path and line, as the report gave it.
+      placeholder: src/index.ts:42
+
+  - type: textarea
+    id: why
+    attributes:
+      label: Why the code is fine
+      description: >-
+        The part only you can supply. What is the check missing — generated code,
+        a deliberate duplication, a vendored file, a pattern that is safe in this
+        context?
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: >-
+        `npx repo-anti-rot --version`, or the date if you used the hosted
+        dashboard. A rule may already have been fixed since your scan.
+      placeholder: 1.0.0
+
+  - type: checkboxes
+    id: confirms
+    attributes:
+      label: Before submitting
+      options:
+        - label: >-
+            The repository link is public, and I have not pasted secrets, tokens
+            or private source into this issue.
+          required: true

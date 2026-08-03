@@ -2,11 +2,12 @@
 
 import { useLocale } from "@/components/i18n/locale-provider"
 import { useEffect, useState } from "react"
-import { AlertTriangle, Bell, BellOff, Bug, Check, Clipboard, Link2, Loader2, Sparkles } from "lucide-react"
+import { AlertTriangle, Bell, BellOff, Bug, Check, Clipboard, Link2, Loader2, ShieldQuestion, Sparkles } from "lucide-react"
 import { Github } from "@/components/icons/github"
 import { categoryLabels, severityLabels, type Issue } from "@/lib/mock-data"
 import { resolveScanner, scannerLabel } from "@/lib/scanners"
 import { fullAge, issueAsMarkdown, severityStyle } from "@/lib/issue-format"
+import { falsePositiveUrl } from "@/lib/false-positive"
 import { useAiSettings, aiCacheModel } from "@/lib/ai-settings"
 import { analyzeOneIssue } from "@/lib/ai-enrich"
 import { getCachedNotes, putCachedNotes } from "@/lib/ai-cache"
@@ -21,6 +22,11 @@ interface Props {
   githubUrl: string | null
   /** Prefilled GitHub "new issue" URL for this finding, or null when unavailable. */
   newIssueUrl: string | null
+  /**
+   * URL of the scanned repository, used to prefill a false-positive report so it
+   * arrives with something the rule can be re-run against.
+   */
+  scannedRepoUrl?: string | null
   snoozed: boolean
   onToggleSnooze: () => void
 }
@@ -53,7 +59,16 @@ function CopyButton({ value, label }: { value: string; label: string }) {
  * Sliding detail panel for a single finding: full metadata, evidence, an
  * on-demand AI verdict, and quick actions (GitHub permalink, copy, snooze).
  */
-export function IssueDrawer({ issue, open, onOpenChange, githubUrl, newIssueUrl, snoozed, onToggleSnooze }: Props) {
+export function IssueDrawer({
+  issue,
+  open,
+  onOpenChange,
+  githubUrl,
+  newIssueUrl,
+  scannedRepoUrl,
+  snoozed,
+  onToggleSnooze,
+}: Props) {
   const { t } = useLocale()
   const settings = useAiSettings()
   const hasKey = !!settings.apiKey.trim()
@@ -214,6 +229,31 @@ export function IssueDrawer({ issue, open, onOpenChange, githubUrl, newIssueUrl,
                     </a>
                   </Button>
                 )}
+                {/* Points at THIS project, not the scanned repo: the bug being
+                    reported is ours. It arrives with the scanner id and a
+                    clonable URL already set, which is the difference between a
+                    report that can be acted on and one that cannot. */}
+                <Button
+                  asChild
+                  size="sm"
+                  variant="ghost"
+                  className="h-8 gap-1.5 px-2 text-xs text-muted-foreground hover:text-foreground"
+                  title={t("drawer.falsePositiveHint")}
+                >
+                  <a
+                    href={falsePositiveUrl({
+                      scanner: scannerId,
+                      repo: scannedRepoUrl,
+                      finding: issue.title,
+                      location: issue.location,
+                    })}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <ShieldQuestion className="size-3.5" />
+                    {t("drawer.falsePositive")}
+                  </a>
+                </Button>
                 <CopyButton value={issueAsMarkdown({ ...issue, aiNote: note ?? issue.aiNote })} label={t("drawer.copyMarkdown")} />
                 <Button
                   size="sm"
