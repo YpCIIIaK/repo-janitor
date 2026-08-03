@@ -4,6 +4,8 @@
  * Pure so digests can be unit-tested without a network. Delivery is {@link sendMail}.
  */
 
+import type { StoryIssue } from "@repo-anti-rot/core"
+
 export type DigestCommit = {
   shortSha: string
   subject: string
@@ -22,10 +24,39 @@ export type DropDigestInput = {
   scanUrl: string
   manageUrl: string
   unsubUrl: string
+  /** One-line regression headline from {@link buildRegressionStory}. */
+  storyHeadline?: string
+  /** New findings since the last watch baseline. */
+  newFindings?: StoryIssue[]
+  /** Fallback when we have no baseline ids — current top findings. */
+  topFindings?: StoryIssue[]
 }
 
 function esc(s: string): string {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+}
+
+function findingsBlock(
+  title: string,
+  findings: StoryIssue[] | undefined,
+): { text: string[]; html: string } {
+  if (!findings || findings.length === 0) return { text: [], html: "" }
+  const text = [
+    title + ":",
+    ...findings.map(
+      (f) => `  [${f.severity}] ${f.title}${f.location ? ` — ${f.location}` : ""}`,
+    ),
+    "",
+  ]
+  const html = `<p><strong>${esc(title)}</strong></p><ul>${findings
+    .map(
+      (f) =>
+        `<li><strong>${esc(f.severity)}</strong> ${esc(f.title)}` +
+        (f.location ? ` <code>${esc(f.location)}</code>` : "") +
+        `</li>`,
+    )
+    .join("")}</ul>`
+  return { text, html }
 }
 
 export function buildDropDigest(input: DropDigestInput): { subject: string; text: string; html: string } {
@@ -37,20 +68,31 @@ export function buildDropDigest(input: DropDigestInput): { subject: string; text
       ? input.commits.map((c) => `  ${c.shortSha}  ${c.subject}`).join("\n")
       : "  (no commit list available)"
 
-  const text = [
+  const changed =
+    input.newFindings && input.newFindings.length > 0
+      ? findingsBlock("What changed (new findings)", input.newFindings)
+      : findingsBlock("Top findings now", input.topFindings)
+
+  const textParts: string[] = [
     `Repo Anti-Rot — score drop for ${repo}`,
     "",
     `Was:  ${input.prevGrade} ${input.prevScore}/100`,
     `Now:  ${input.nextGrade} ${input.nextScore}/100`,
     `Findings: ${input.critical} critical · ${input.warning} warning`,
     "",
+  ]
+  if (input.storyHeadline) {
+    textParts.push(`What changed: ${input.storyHeadline}`, "")
+  }
+  textParts.push(...changed.text)
+  textParts.push(
     "Recent commits:",
     commitLines,
     "",
     `Rescan: ${input.scanUrl}`,
     `Manage watches: ${input.manageUrl}`,
     `Unsubscribe: ${input.unsubUrl}`,
-  ].join("\n")
+  )
 
   const commitHtml =
     input.commits.length > 0
@@ -62,11 +104,17 @@ export function buildDropDigest(input: DropDigestInput): { subject: string; text
           .join("")}</ul>`
       : "<p><em>No commit list available</em></p>"
 
+  const headlineHtml = input.storyHeadline
+    ? `<p><strong>What changed:</strong> ${esc(input.storyHeadline)}</p>`
+    : ""
+
   const html = `<!doctype html><html><body style="font-family:system-ui,sans-serif;line-height:1.45;color:#1f2328">
 <p><strong>Repo Anti-Rot</strong> — score drop for <code>${esc(repo)}</code></p>
 <p>Was: <strong>${esc(input.prevGrade)} ${input.prevScore}</strong>/100<br/>
 Now: <strong>${esc(input.nextGrade)} ${input.nextScore}</strong>/100<br/>
 Findings: ${input.critical} critical · ${input.warning} warning</p>
+${headlineHtml}
+${changed.html}
 <p>Recent commits:</p>
 ${commitHtml}
 <p><a href="${esc(input.scanUrl)}">Rescan now</a> ·
@@ -74,7 +122,7 @@ ${commitHtml}
 <a href="${esc(input.unsubUrl)}">Unsubscribe</a></p>
 </body></html>`
 
-  return { subject, text, html }
+  return { subject, text: textParts.join("\n"), html }
 }
 
 export function buildWelcomeWatch(input: {

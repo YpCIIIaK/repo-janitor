@@ -81,6 +81,35 @@ describe("watch-email", () => {
     expect(mail.html).toContain("Unsubscribe")
   })
 
+  it("includes regression story findings when provided", () => {
+    const mail = buildDropDigest({
+      owner: "acme",
+      name: "widget",
+      prevGrade: "A",
+      prevScore: 94,
+      nextGrade: "C",
+      nextScore: 70,
+      critical: 2,
+      warning: 1,
+      commits: [],
+      scanUrl: "https://x/",
+      manageUrl: "https://x/w",
+      unsubUrl: "https://x/u",
+      storyHeadline: "A 94 → C 70 (-24) · 2 new",
+      newFindings: [
+        {
+          id: "a",
+          title: "Secret in config",
+          severity: "critical",
+          location: "config.ts",
+        },
+      ],
+    })
+    expect(mail.text).toContain("What changed: A 94 → C 70 (-24) · 2 new")
+    expect(mail.text).toContain("Secret in config")
+    expect(mail.html).toContain("Secret in config")
+  })
+
   it("builds welcome and magic templates", () => {
     expect(buildWelcomeWatch({
       owner: "a",
@@ -128,9 +157,11 @@ describe("watch-store filesystem", () => {
       repoUrl: "https://github.com/acme/widget",
       grade: "B",
       score: 77,
+      issueIds: ["issue-a", "issue-b"],
     })
     expect(first.created).toBe(true)
     expect(first.managePath).toMatch(/^\/watch\//)
+    expect(first.subscription.lastIssueIds).toEqual(["issue-a", "issue-b"])
 
     const second = await subscribeWatch({
       email,

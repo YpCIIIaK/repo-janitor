@@ -14,6 +14,8 @@ type Props = {
   grade: Grade
   score: number
   sha?: string | null
+  /** Issue ids from the current scan — baseline for the next drop email. */
+  issueIds?: string[]
   /** Compact single-line variant for share page / share box. */
   compact?: boolean
 }
@@ -29,6 +31,7 @@ export function WatchBox({
   grade,
   score,
   sha,
+  issueIds,
   compact = false,
 }: Props) {
   const { t } = useLocale()
@@ -45,7 +48,16 @@ export function WatchBox({
       const res = await fetch("/api/watch", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ email, owner, name, repoUrl, grade, score, sha: sha ?? undefined }),
+        body: JSON.stringify({
+          email,
+          owner,
+          name,
+          repoUrl,
+          grade,
+          score,
+          sha: sha ?? undefined,
+          issueIds: issueIds?.length ? issueIds : undefined,
+        }),
       })
       const data = (await res.json().catch(() => ({}))) as {
         error?: string

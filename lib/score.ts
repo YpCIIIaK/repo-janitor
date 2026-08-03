@@ -136,6 +136,28 @@ export function scoreToGrade(score: number): Grade {
   return "F"
 }
 
+/**
+ * Synthetic findings for landing / docs examples — only severity is meaningful.
+ */
+export function issuesFromCounts(counts: Partial<Record<Severity, number>>): Issue[] {
+  const out: Issue[] = []
+  for (const severity of ["critical", "warning", "info"] as const) {
+    const n = counts[severity] ?? 0
+    for (let i = 0; i < n; i++) {
+      out.push({
+        id: `${severity}-${i}`,
+        category: "hygiene",
+        severity,
+        title: severity,
+        location: "",
+        ageDays: 0,
+        detail: "",
+      })
+    }
+  }
+  return out
+}
+
 export interface CategoryScore {
   category: IssueCategory
   label: string

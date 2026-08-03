@@ -14,6 +14,7 @@ import { IssuesTable } from "@/components/repo-anti-rot/issues-table"
 import { CategoryScores } from "@/components/repo-anti-rot/category-scores"
 import { HotspotFiles } from "@/components/repo-anti-rot/hotspot-files"
 import { AiSummaryCard } from "@/components/repo-anti-rot/ai-summary-card"
+import { RegressionBanner } from "@/components/repo-anti-rot/regression-banner"
 import { AgeHistogram } from "@/components/repo-anti-rot/age-histogram"
 import { TrendChart } from "@/components/repo-anti-rot/trend-chart"
 import { ReposOverview } from "@/components/repo-anti-rot/repos-overview"
@@ -385,6 +386,12 @@ export default function DashboardPage() {
                 list lives on Issues — keeping both places was two scrolls of
                 the same table with different surrounding chrome. */}
             <TabsContent value="overview" className="mt-6 space-y-6">
+              <RegressionBanner
+                repo={current}
+                liveScore={liveScore}
+                liveGrade={liveGrade}
+                onViewIssues={() => setTab("issues")}
+              />
               <AiSummaryCard
                 repoId={current.id}
                 owner={current.owner}

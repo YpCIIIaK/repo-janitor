@@ -66536,6 +66536,69 @@ function renderSarif(report) {
   return JSON.stringify(sarif, null, 2);
 }
 
+// ../core/src/regression-story.ts
+var SEV_RANK = {
+  critical: 0,
+  warning: 1,
+  info: 2
+};
+var DEFAULT_NEW_CAP = 5;
+function isSeverity(s) {
+  return s === "critical" || s === "warning" || s === "info";
+}
+function toStoryIssues(issues) {
+  const out = [];
+  for (const i2 of issues) {
+    if (!i2 || typeof i2.id !== "string" || !i2.id) continue;
+    if (typeof i2.title !== "string" || !i2.title) continue;
+    if (typeof i2.severity !== "string" || !isSeverity(i2.severity)) continue;
+    out.push({
+      id: i2.id,
+      title: i2.title,
+      severity: i2.severity,
+      location: typeof i2.location === "string" ? i2.location : ""
+    });
+  }
+  return out;
+}
+function buildRegressionStory(baseline, next, opts) {
+  const newCap = opts?.newCap ?? DEFAULT_NEW_CAP;
+  const prev = new Set(baseline.issueIds);
+  const curIds = new Set(next.issues.map((i2) => i2.id));
+  let added = 0;
+  for (const id of curIds) if (!prev.has(id)) added++;
+  let fixed = 0;
+  for (const id of prev) if (!curIds.has(id)) fixed++;
+  const scoreDelta = next.score - baseline.score;
+  const newFindings = next.issues.filter((i2) => !prev.has(i2.id)).sort((a, b2) => {
+    const sev = SEV_RANK[a.severity] - SEV_RANK[b2.severity];
+    if (sev !== 0) return sev;
+    return a.title.localeCompare(b2.title);
+  }).slice(0, newCap);
+  const headline = formatStoryHeadline({
+    prevGrade: baseline.grade,
+    prevScore: baseline.score,
+    nextGrade: next.grade,
+    nextScore: next.score,
+    scoreDelta,
+    added,
+    fixed
+  });
+  return { scoreDelta, added, fixed, newFindings, headline };
+}
+function formatStoryHeadline(input) {
+  const left = input.prevGrade ? `${input.prevGrade} ${input.prevScore}` : String(input.prevScore);
+  const right = `${input.nextGrade} ${input.nextScore}`;
+  const delta = input.scoreDelta > 0 ? `+${input.scoreDelta}` : input.scoreDelta < 0 ? String(input.scoreDelta) : "0";
+  const parts = [`${left} \u2192 ${right} (${delta})`];
+  if (input.added > 0) parts.push(`${input.added} new`);
+  if (input.fixed > 0) parts.push(`${input.fixed} fixed`);
+  if (input.added === 0 && input.fixed === 0 && input.scoreDelta === 0) {
+    return `${left} \u2192 ${right} \xB7 no change`;
+  }
+  return parts.join(" \xB7 ");
+}
+
 // src/lib.ts
 function getInput(name, fallback = "") {
   const key = `INPUT_${name.toUpperCase().replace(/-/g, "_")}`;
@@ -66593,7 +66656,19 @@ function renderPrComment(report, dashboardUrl, baseline) {
     ""
   ];
   if (baseline) {
+    const story = buildRegressionStory(
+      { score: baseline.score, issueIds: baseline.issueIds },
+      { score, grade, issues: toStoryIssues(issues) }
+    );
     lines.push(renderDeltaLine(scanDelta(report, baseline)), "");
+    if (story.newFindings.length > 0) {
+      lines.push("**New this scan**", "");
+      for (const f of story.newFindings) {
+        const loc = f.location ? ` (\`${f.location.replace(/\|/g, "\\|")}\`)` : "";
+        lines.push(`- **${f.severity}** ${f.title.replace(/\|/g, "\\|")}${loc}`);
+      }
+      lines.push("");
+    }
   }
   lines.push(
     `**${issues.length}** open finding${issues.length === 1 ? "" : "s"}: ${sev("critical")} critical \xB7 ${sev("warning")} warning \xB7 ${sev("info")} info`,
@@ -66602,7 +66677,7 @@ function renderPrComment(report, dashboardUrl, baseline) {
   if (issues.length === 0) {
     lines.push("No rot detected \u2014 clean scan. \u2705");
   } else {
-    lines.push("| Severity | Finding | Location |", "| --- | --- | --- |");
+    lines.push("**Open findings**", "", "| Severity | Finding | Location |", "| --- | --- | --- |");
     for (const i2 of top) {
       const loc = i2.location.replace(/\|/g, "\\|");
       const title = i2.title.replace(/\|/g, "\\|");

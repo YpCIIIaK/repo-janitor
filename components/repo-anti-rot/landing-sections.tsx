@@ -19,6 +19,9 @@ import {
   TOTAL_CHECKS,
   type CheckFamily,
 } from "@/lib/landing-facts"
+import { computeScore, issuesFromCounts, scoreToGrade } from "@/lib/score"
+import { ScanSummarySection } from "./scan-summary-section"
+import { PenaltyBreakdownList } from "@/components/repo-anti-rot/penalty-breakdown"
 
 /**
  * Everything on the landing page below the scan form.
@@ -55,8 +58,15 @@ const BAND_TONE: Record<string, string> = {
 
 const REPO_URL = "https://github.com/YpCIIIaK/repo-janitor#github-action"
 
+/** Concrete example used in the grade section — kept here so the numbers in
+ *  copy and in PenaltyBreakdownList cannot drift apart. */
+const GRADE_EXAMPLE = { critical: 3, warning: 5 } as const
+
 export function LandingSections() {
   const { t } = useLocale()
+  const exampleIssues = issuesFromCounts(GRADE_EXAMPLE)
+  const exampleScore = computeScore(exampleIssues)
+  const exampleGrade = scoreToGrade(exampleScore)
 
   return (
     <>
@@ -132,7 +142,32 @@ export function LandingSections() {
             </span>
           </div>
         </div>
+
+        <div className="mt-8 max-w-md rounded-xl border border-border bg-card/50 p-5">
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            {t("landing.grade.exampleLead", {
+              critical: String(GRADE_EXAMPLE.critical),
+              warning: String(GRADE_EXAMPLE.warning),
+              score: String(exampleScore),
+              grade: exampleGrade,
+            })}
+          </p>
+          <PenaltyBreakdownList issues={exampleIssues} className="mt-4 border-t border-border pt-3" />
+          <p className="mt-4 text-xs leading-relaxed text-muted-foreground">
+            {t("landing.grade.meaningA")}
+          </p>
+          <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+            {t("landing.grade.meaningF")}
+          </p>
+        </div>
       </section>
+
+      {/* ---- what everything scanned looks like ----------------------------
+          Straight after the grade explanation: the reader has just learned what
+          the letters mean, and this is where they find out what an ordinary
+          repository actually gets. Renders nothing until the sample is big
+          enough to be worth saying. */}
+      <ScanSummarySection />
 
       {/* ---- what happens to your code -------------------------------------
           Placed before the CI section on purpose: this is the question a

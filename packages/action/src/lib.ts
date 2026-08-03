@@ -1,4 +1,4 @@
-import { renderMarkdown } from "@repo-anti-rot/core"
+import { buildRegressionStory, renderMarkdown, toStoryIssues } from "@repo-anti-rot/core"
 import type { Grade, ScanReport } from "@repo-anti-rot/core"
 
 /**
@@ -87,7 +87,7 @@ export function renderDeltaLine(delta: ScanDelta): string {
 
 /** Markdown body of the PR comment (carries a hidden marker so we can upsert it).
  * When a `baseline` (the dashboard's last stored scan) is given, a delta line shows
- * how this PR moves the score and finding count. */
+ * how this PR moves the score and finding count, plus a short list of new findings. */
 export function renderPrComment(report: ScanReport, dashboardUrl: string, baseline?: Baseline | null): string {
   const { repo, grade, score, issues } = report
   const sev = (s: string) => issues.filter((i) => i.severity === s).length
@@ -101,7 +101,19 @@ export function renderPrComment(report: ScanReport, dashboardUrl: string, baseli
   ]
 
   if (baseline) {
+    const story = buildRegressionStory(
+      { score: baseline.score, issueIds: baseline.issueIds },
+      { score, grade, issues: toStoryIssues(issues) },
+    )
     lines.push(renderDeltaLine(scanDelta(report, baseline)), "")
+    if (story.newFindings.length > 0) {
+      lines.push("**New this scan**", "")
+      for (const f of story.newFindings) {
+        const loc = f.location ? ` (\`${f.location.replace(/\|/g, "\\|")}\`)` : ""
+        lines.push(`- **${f.severity}** ${f.title.replace(/\|/g, "\\|")}${loc}`)
+      }
+      lines.push("")
+    }
   }
 
   lines.push(
@@ -113,7 +125,7 @@ export function renderPrComment(report: ScanReport, dashboardUrl: string, baseli
   if (issues.length === 0) {
     lines.push("No rot detected — clean scan. ✅")
   } else {
-    lines.push("| Severity | Finding | Location |", "| --- | --- | --- |")
+    lines.push("**Open findings**", "", "| Severity | Finding | Location |", "| --- | --- | --- |")
     for (const i of top) {
       const loc = i.location.replace(/\|/g, "\\|")
       const title = i.title.replace(/\|/g, "\\|")

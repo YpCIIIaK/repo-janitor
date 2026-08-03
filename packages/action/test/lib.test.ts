@@ -109,6 +109,25 @@ describe("renderPrComment", () => {
     )
     expect(md).toContain("1 critical · 1 warning · 1 info")
     expect(md).toContain("| Severity | Finding | Location |")
+    expect(md).toContain("**Open findings**")
+  })
+
+  it("lists new findings vs a baseline", () => {
+    const md = renderPrComment(
+      report({
+        score: 70,
+        grade: "C",
+        issues: [
+          issue({ id: "kept", title: "Old finding", severity: "info" }),
+          issue({ id: "new-1", title: "Brand new secret", severity: "critical", location: "a.ts" }),
+        ],
+      }),
+      "",
+      { score: 90, issueIds: ["kept"] },
+    )
+    expect(md).toContain("**New this scan**")
+    expect(md).toContain("Brand new secret")
+    expect(md).toContain("📉 score **-20**")
   })
 
   it("caps the table at 10 rows and notes the remainder", () => {

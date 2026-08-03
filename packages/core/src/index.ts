@@ -29,3 +29,4 @@ export { deadLinksScanner, isCheckable, extractUrls, commentUrls } from "./scann
 export { supplyChainScanner } from "./scanners/supply-chain"
 export * from "./reporters"
 export { quickWins, formatQuickWinsTerminal, type QuickWin } from "./quick-wins"
+export * from "./regression-story"

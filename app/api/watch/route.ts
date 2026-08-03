@@ -65,6 +65,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "score must be 0–100" }, { status: 400 })
   }
   const sha = typeof body.sha === "string" && /^[0-9a-f]{7,40}$/i.test(body.sha) ? body.sha : null
+  const issueIds = Array.isArray(body.issueIds)
+    ? body.issueIds.filter((x): x is string => typeof x === "string" && x.length > 0).slice(0, 500)
+    : undefined
 
   try {
     const result = await subscribeWatch({
@@ -75,6 +78,7 @@ export async function POST(request: Request) {
       grade: gradeRaw,
       score: Math.round(score),
       sha,
+      issueIds,
     })
 
     const manageUrl = absoluteUrl(request, result.managePath)

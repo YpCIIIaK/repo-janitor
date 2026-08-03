@@ -1,0 +1,53 @@
+{
+  "updatedAt": "2026-08-03T11:33:09.312Z",
+  "repos": [
+    {
+      "owner": "expressjs",
+      "name": "express",
+      "grade": "B",
+      "score": 86
+    },
+    {
+      "owner": "colinhacks",
+      "name": "zod",
+      "grade": "F",
+      "score": 37
+    },
+    {
+      "owner": "tj",
+      "name": "commander.js",
+      "grade": "A",
+      "score": 92
+    },
+    {
+      "owner": "sindresorhus",
+      "name": "ky",
+      "grade": "B",
+      "score": 89
+    },
+    {
+      "owner": "vercel",
+      "name": "ms",
+      "grade": "C",
+      "score": 63
+    },
+    {
+      "owner": "debug-js",
+      "name": "debug",
+      "grade": "C",
+      "score": 66
+    },
+    {
+      "owner": "chalk",
+      "name": "chalk",
+      "grade": "A",
+      "score": 91
+    },
+    {
+      "owner": "lukeed",
+      "name": "clsx",
+      "grade": "B",
+      "score": 84
+    }
+  ]
+}

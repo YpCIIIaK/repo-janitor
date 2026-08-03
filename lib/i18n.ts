@@ -155,6 +155,13 @@ const en = {
   "pct.sample": "out of {count} scans",
 
   "landing.checks.title": "{count} checks, in six families",
+  "summary.title": "What the average repository looks like",
+  "summary.lead": "Every public scan run here, added up. Nobody's name is in it — the table this comes from has no column for one.",
+  "summary.median": "median score",
+  "summary.medianHint": "half of everything scanned sits below this",
+  "summary.scans": "scans",
+  "summary.scansHint": "the sample these numbers are drawn from",
+  "summary.spread": "How the grades fall",
   "landing.checks.lead":
     "Every one is calibrated against real repositories before it ships — the rule only stays if it stays quiet on projects that are doing it right.",
   "landing.cat.security.title": "Security",
@@ -364,6 +371,20 @@ const en = {
   "app.cleanAcross": "Clean scan across {scope}",
   "app.cleanNothing": "Clean scan — nothing found",
   "app.linesOfCode": "{count} lines of code",
+  "app.regressionViewIssues": "View new issues",
+
+  "proof.title": "Grades on public repos",
+  "proof.lead": "Real scores from the same engine. Click one to scan it yourself.",
+  "proof.live": "Live",
+  "proof.snapshot": "Cached",
+  "proof.updated": "Snapshot {when}",
+
+  "landing.grade.exampleLead":
+    "Example: {critical} critical and {warning} warning findings → score {score}, grade {grade}.",
+  "landing.grade.meaningA":
+    "A means the scan found little that costs points — not that the repo is perfect.",
+  "landing.grade.meaningF":
+    "F means enough weight of findings that the score fell below the last band.",
 
   "table.new": "New",
   "table.snoozed": "Snoozed",
@@ -505,6 +526,13 @@ const ru: Messages = {
   "pct.sample": "из {count} сканов",
 
   "landing.checks.title": "{count} проверок, шесть семейств",
+  "summary.title": "Как выглядит средний репозиторий",
+  "summary.lead": "Все публичные сканы, сложенные вместе. Ничьих имён здесь нет — в таблице, откуда это берётся, нет такого столбца.",
+  "summary.median": "медианная оценка",
+  "summary.medianHint": "половина просканированного — ниже",
+  "summary.scans": "сканов",
+  "summary.scansHint": "выборка, из которой посчитано",
+  "summary.spread": "Как распределяются грейды",
   "landing.checks.lead":
     "Каждая откалибрована на живых репозиториях до выхода: правило остаётся, только если молчит на проектах, где всё сделано правильно.",
   "landing.cat.security.title": "Безопасность",
@@ -709,6 +737,20 @@ const ru: Messages = {
   "app.cleanAcross": "Чисто — просканировано {scope}",
   "app.cleanNothing": "Чисто — ничего не найдено",
   "app.linesOfCode": "{count} строк кода",
+  "app.regressionViewIssues": "К новым находкам",
+
+  "proof.title": "Оценки публичных репозиториев",
+  "proof.lead": "Те же оценки, тем же движком. Нажмите — и просканируйте сами.",
+  "proof.live": "Live",
+  "proof.snapshot": "Снимок",
+  "proof.updated": "Снимок {when}",
+
+  "landing.grade.exampleLead":
+    "Пример: {critical} critical и {warning} warning → оценка {score}, грейд {grade}.",
+  "landing.grade.meaningA":
+    "A значит, что скан почти ничего не вычел — не то, что репозиторий идеален.",
+  "landing.grade.meaningF":
+    "F значит, что вес находок опустил оценку ниже последней ступени.",
 
   "table.new": "Новые",
   "table.snoozed": "Отложенные",

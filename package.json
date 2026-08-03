@@ -19,7 +19,8 @@
     "build:packages": "pnpm --filter @repo-anti-rot/core build && pnpm --filter repo-anti-rot build && pnpm --filter @repo-anti-rot/action build",
     "test": "vitest run && pnpm -r --if-present test",
     "test:dashboard": "vitest run",
-    "setup": "pnpm install && pnpm run build:cli"
+    "setup": "pnpm install && pnpm run build:cli",
+    "proof:refresh": "node scripts/refresh-proof-snapshot.mjs"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "1.2.12",
@@ -49,6 +50,7 @@
     "@radix-ui/react-toggle": "1.1.10",
     "@radix-ui/react-toggle-group": "1.1.11",
     "@radix-ui/react-tooltip": "1.2.8",
+    "@repo-anti-rot/core": "workspace:*",
     "@xyflow/react": "^12.11.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
