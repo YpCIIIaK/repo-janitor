@@ -40,7 +40,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0 # full history → real blame ages + branch staleness
-      - uses: your-org/repo-anti-rot/packages/action@v1
+      - uses: YpCIIIaK/repo-janitor@v1
         with:
           dashboard-url: https://repo-anti-rot.example.com
           token: ${{ secrets.REPO_ANTI_ROT_INGEST_TOKEN }}

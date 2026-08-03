@@ -48,6 +48,22 @@ jobs:
       - name: Build packages (engine, CLI, Action)
         run: pnpm run build:packages
 
+      # A GitHub Action runs straight from the tagged ref with no install step,
+      # so packages/action/dist/index.cjs is committed. Committed build output is
+      # build output that goes stale: someone edits packages/action/src, the
+      # bundle is not rebuilt, and every consumer keeps running last month's code
+      # while the source says otherwise. The build above has just regenerated it —
+      # if that produced a different file, the commit is inconsistent with itself.
+      - name: Action bundle is up to date with its source
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          if ! git diff --quiet -- packages/action/dist/index.cjs; then
+            echo "::error::packages/action/dist/index.cjs is stale. Run 'pnpm run build:packages' and commit the result."
+            git diff --stat -- packages/action/dist/index.cjs
+            exit 1
+          fi
+          echo "Action bundle matches its source."
+
       - name: Typecheck dashboard
         run: pnpm exec tsc --noEmit
 

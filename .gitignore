@@ -5,6 +5,12 @@ node_modules/
 .next/
 out/
 dist/
+# ...except the Action's bundle. A GitHub Action runs straight from the
+# repository at the tagged ref, with no install step and no node_modules, so
+# `packages/action/dist/index.cjs` has to be committed or `uses:` resolves to a
+# file that is not there. CI rebuilds it and fails if it differs from source.
+!packages/action/dist/
+!packages/action/dist/index.cjs
 build/
 *.tsbuildinfo
 next-env.d.ts

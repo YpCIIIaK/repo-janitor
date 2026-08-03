@@ -112,6 +112,11 @@ Node's `path`/`os.tmpdir()` so separators and temp dirs are handled per-OS.
 > in the repo. After cloning you must build it once — otherwise the dashboard's
 > "New scan" / "Rescan" buttons will fail with "scan failed" because
 > `packages/cli/dist/index.js` doesn't exist yet.
+>
+> The one exception is `packages/action/dist/index.cjs`, which **is** committed:
+> a GitHub Action runs straight from the tagged ref with no install step, so the
+> bundle has to be in the repository or `uses:` resolves to a missing file. CI
+> rebuilds it and fails if the committed copy has drifted from the source.
 
 ```bash
 git clone https://github.com/YpCIIIaK/repo-janitor.git
@@ -441,13 +446,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with: { fetch-depth: 0 } # full history for git-blame ages
-      - uses: YpCIIIaK/repo-janitor@main
+      - uses: YpCIIIaK/repo-janitor@v1 # or a full SHA — see the note below
         with:
           sarif-file: repo-anti-rot.sarif
       - uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: repo-anti-rot.sarif
 ```
+
+`@v1` is a moving tag: it follows the latest v1 release, so bug fixes arrive
+without you editing anything. That convenience is also a supply-chain risk, and
+this repository's own `workflow-security` scanner will say so about any action
+pinned to a tag — including this one. Pin the full commit SHA if you would rather
+audit upgrades yourself.
 
 Mapping: each finding becomes a SARIF result with `level` derived from severity
 (critical → `error`, warning → `warning`, info → `note`), grouped into one rule
