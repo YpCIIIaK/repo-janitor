@@ -143,3 +143,40 @@ describe("rotHint measures the decline, not the last drop", () => {
     expect(rotHint(history, NOW)).toBe("Rotting since yesterday")
   })
 })
+
+describe("an A is not rotting", () => {
+  /**
+   * The slide is real — 96 to 92 is a slide — but "Rotting 6d" printed under a
+   * green A is the card contradicting itself, on a public README, about a
+   * repository in better shape than almost anything it will be seen beside.
+   */
+  it("says nothing about a repository that slipped but stayed in the top band", () => {
+    expect(
+      rotHint([{ at: day(20), score: 96 }, { at: day(6), score: 92 }], NOW),
+    ).toBeNull()
+    expect(
+      rotHint([{ at: day(30), score: 99 }, { at: day(3), score: 98 }], NOW),
+    ).toBeNull()
+  })
+
+  it("speaks up the moment the score leaves the band", () => {
+    // This is the case worth a word: not "it dipped", but "it is no longer an A".
+    expect(
+      rotHint([{ at: day(20), score: 94 }, { at: day(9), score: 88 }], NOW),
+    ).toBe("Rotting 9d")
+  })
+
+  it("takes the boundary from the grade bands, not from a literal", () => {
+    // 90 is an A and 89 is not, so the line falls between them. If the bands
+    // move, this moves with them.
+    expect(rotHint([{ at: day(20), score: 97 }, { at: day(5), score: 90 }], NOW)).toBeNull()
+    expect(rotHint([{ at: day(20), score: 97 }, { at: day(5), score: 89 }], NOW)).toBe("Rotting 5d")
+  })
+
+  it("still congratulates an A that improved", () => {
+    // Suppressing the accusation must not suppress the praise.
+    expect(
+      rotHint([{ at: day(20), score: 91 }, { at: day(2), score: 95 }], NOW),
+    ).toBe("Last improved 2d ago")
+  })
+})

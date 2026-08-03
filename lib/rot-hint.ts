@@ -1,3 +1,5 @@
+import { scoreToGrade } from "@/lib/score"
+
 /**
  * One-line “gentle shame” copy from score history — for the README card footer.
  *
@@ -62,6 +64,24 @@ export function rotHint(history: ScorePoint[], nowMs: number = Date.now()): stri
   }
 
   if (declineStartedAt) {
+    /**
+     * An A is not rotting.
+     *
+     * The slide is real — 96 to 92 is a slide — but "Rotting 6d" printed under a
+     * green A is the card contradicting itself, on a public README, about a
+     * repository in better shape than almost anything it will be seen next to.
+     * A word that strong has to be earned, and staying inside the top band is
+     * the opposite of earning it.
+     *
+     * Nothing is substituted: with the accusation withdrawn there is no second
+     * fact worth the line, and the footer falls back to the scan date. "Last
+     * improved 200d ago" would be the same nag in a quieter voice.
+     *
+     * The threshold comes from `scoreToGrade` rather than a literal 90, so
+     * moving the grade bands moves this with them.
+     */
+    const current = sorted[sorted.length - 1].score
+    if (scoreToGrade(current) === "A") return null
     return daysPhrase(daysBetween(declineStartedAt, nowMs), "rotting")
   }
 
