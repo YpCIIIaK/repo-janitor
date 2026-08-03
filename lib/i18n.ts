@@ -326,6 +326,75 @@ const en = {
   "theme.rose": "Rose",
   "theme.paper": "Paper",
   "theme.chalk": "Chalk",
+  // --- dashboard chrome -----------------------------------------------------
+  "nav.dashboard": "Dashboard",
+  "nav.brandHome": "Repo Anti-Rot — back to the start",
+  "nav.backHome": "Back to the start",
+  "nav.backHomeLong": "Back to the start — scan another repository",
+  "nav.switchRepo": "Switch repository",
+  "nav.searchIssues": "Search issues...",
+  "nav.repositories": "Repositories",
+  "nav.allRepos": "All repositories",
+  "nav.newScan": "New scan",
+  "nav.overview": "Overview",
+  "nav.issues": "Issues",
+  "nav.security": "Security",
+  "nav.links": "Links",
+  "nav.tree": "Tree",
+  "nav.history": "History",
+  "nav.about": "About",
+  "nav.breakdown": "Breakdown",
+  "nav.noRepos": "No repositories yet",
+  "nav.removeRepo": "Remove from list",
+
+  "app.loadingMap": "Loading map…",
+  "app.loadingHistory": "Loading history…",
+  "app.scanRepo": "Scan a repository",
+  "app.sinceLastScan": "since last scan",
+  "app.scannedAt": "scanned {when}",
+  "app.nothingScanned": "Nothing scanned yet",
+  "app.settings": "Settings",
+  "app.connectRepo": "Connect a repository",
+  "app.commandPalette": "Command palette (⌘K / Ctrl+K)",
+  "app.emptyDesc": "Reports are kept in this browser. Scan a repository and it will show up here.",
+  "app.cleanAcross": "Clean scan across {scope}",
+  "app.cleanNothing": "Clean scan — nothing found",
+  "app.linesOfCode": "{count} lines of code",
+
+  "table.new": "New",
+  "table.snoozed": "Snoozed",
+  "table.title": "Detected issues",
+  "table.allCategories": "All categories",
+  "table.allScanners": "All scanners",
+  "table.nothingActionable": "Nothing actionable — only low-signal notes below.",
+  "table.notes": "Notes",
+  "table.notesHint": "low signal · barely affects the score",
+  "table.fixedSince": "Fixed since last scan",
+  "table.moreListOptions": "More list options",
+  "table.moreOptions": "More options",
+  "table.filterSeverity": "Filter by severity",
+  "table.filterCategory": "Filter by category",
+  "table.category": "Category",
+  "table.filterScanner": "Filter by scanner",
+  "table.scanner": "Scanner",
+  "table.noMatches": "No matching findings",
+  "table.showAll": "Show all findings",
+  "table.showNewOnly": "Show only findings new since the last scan",
+  "table.snoozedCost": "Snoozed — not counted against the score",
+  "table.cost": "Points off the score",
+
+  "drawer.location": "Location",
+  "drawer.age": "Age",
+  "drawer.ai": "AI analysis",
+  "drawer.aiNeedsKey": "Add an OpenRouter key in Settings to get a verdict for this finding.",
+  "drawer.analyzing": "Analyzing…",
+  "drawer.aiHint": "Click Generate for a decisive verdict on this finding.",
+  "drawer.openGithub": "Open on GitHub",
+  "drawer.createIssue": "Create issue",
+  "drawer.createIssueHint": "Open GitHub's new-issue form, prefilled — you review and submit it there",
+  "drawer.noPermalink": "No GitHub permalink for this location.",
+  "drawer.copyLink": "Copy link",
+  "drawer.copyMarkdown": "Copy Markdown",
 } as const
 
 /** Every locale must provide exactly the English key set. */
@@ -597,6 +666,76 @@ const ru: Messages = {
   "theme.rose": "Роза",
   "theme.paper": "Бумага",
   "theme.chalk": "Мел",
+
+  // --- dashboard chrome -----------------------------------------------------
+  "nav.dashboard": "Дашборд",
+  "nav.brandHome": "Repo Anti-Rot — в начало",
+  "nav.backHome": "В начало",
+  "nav.backHomeLong": "В начало — просканировать другой репозиторий",
+  "nav.switchRepo": "Сменить репозиторий",
+  "nav.searchIssues": "Поиск по находкам…",
+  "nav.repositories": "Репозитории",
+  "nav.allRepos": "Все репозитории",
+  "nav.newScan": "Новый скан",
+  "nav.overview": "Обзор",
+  "nav.issues": "Находки",
+  "nav.security": "Безопасность",
+  "nav.links": "Ссылки",
+  "nav.tree": "Дерево",
+  "nav.history": "История",
+  "nav.about": "О репозитории",
+  "nav.breakdown": "Разбор",
+  "nav.noRepos": "Пока нет репозиториев",
+  "nav.removeRepo": "Убрать из списка",
+
+  "app.loadingMap": "Загрузка карты…",
+  "app.loadingHistory": "Загрузка истории…",
+  "app.scanRepo": "Просканировать репозиторий",
+  "app.sinceLastScan": "с прошлого скана",
+  "app.scannedAt": "скан {when}",
+  "app.nothingScanned": "Пока ничего не просканировано",
+  "app.settings": "Настройки",
+  "app.connectRepo": "Подключить репозиторий",
+  "app.commandPalette": "Палитра команд (⌘K / Ctrl+K)",
+  "app.emptyDesc": "Отчёты хранятся в этом браузере. Просканируйте репозиторий — он появится здесь.",
+  "app.cleanAcross": "Чисто — просканировано {scope}",
+  "app.cleanNothing": "Чисто — ничего не найдено",
+  "app.linesOfCode": "{count} строк кода",
+
+  "table.new": "Новые",
+  "table.snoozed": "Отложенные",
+  "table.title": "Найденные проблемы",
+  "table.allCategories": "Все категории",
+  "table.allScanners": "Все сканеры",
+  "table.nothingActionable": "Действовать не над чем — ниже только малозначимые заметки.",
+  "table.notes": "Заметки",
+  "table.notesHint": "малый сигнал · почти не влияет на оценку",
+  "table.fixedSince": "Исправлено с прошлого скана",
+  "table.moreListOptions": "Ещё настройки списка",
+  "table.moreOptions": "Ещё действия",
+  "table.filterSeverity": "Фильтр по важности",
+  "table.filterCategory": "Фильтр по категории",
+  "table.category": "Категория",
+  "table.filterScanner": "Фильтр по сканеру",
+  "table.scanner": "Сканер",
+  "table.noMatches": "Ничего не найдено",
+  "table.showAll": "Показать все находки",
+  "table.showNewOnly": "Показать только новые с прошлого скана",
+  "table.snoozedCost": "Отложено — не влияет на оценку",
+  "table.cost": "Сколько снимает с оценки",
+
+  "drawer.location": "Расположение",
+  "drawer.age": "Возраст",
+  "drawer.ai": "AI-разбор",
+  "drawer.aiNeedsKey": "Добавьте ключ OpenRouter в настройках, чтобы получить вердикт по этой находке.",
+  "drawer.analyzing": "Анализ…",
+  "drawer.aiHint": "Нажмите «Сгенерировать», чтобы получить вердикт по находке.",
+  "drawer.openGithub": "Открыть на GitHub",
+  "drawer.createIssue": "Создать issue",
+  "drawer.createIssueHint": "Откроется форма создания issue на GitHub с заполненными полями — отправите её сами",
+  "drawer.noPermalink": "Для этого места нет постоянной ссылки на GitHub.",
+  "drawer.copyLink": "Скопировать ссылку",
+  "drawer.copyMarkdown": "Скопировать Markdown",
 }
 
 export const messages: Record<Locale, Messages> = { en, ru }
@@ -611,17 +750,72 @@ export function isLocale(value: unknown): value is Locale {
  * An unknown locale falls back to English rather than throwing: a wrong cookie
  * value should degrade the page, not break it.
  */
+
+/**
+ * Plural forms, kept in their own table rather than in `messages`.
+ *
+ * Languages do not agree on how many forms they have: English needs two, Russian
+ * four. Modelling them as ordinary keys would force English to declare `few` and
+ * `many` — a statement about English that is not true — and would make the
+ * dictionary claim a symmetry the grammar does not have.
+ *
+ * `Intl.PluralRules` picks the category, so the rule for a language is the
+ * platform's, not ours. Russian's is genuinely non-obvious: 21 takes the same
+ * form as 1, and 111 takes the same form as 5.
+ */
+type PluralForms = Partial<Record<Intl.LDMLPluralRule, string>>
+
+const plurals = {
+  en: {
+    "issues.open": { one: "{count} open issue", other: "{count} open issues" },
+  },
+  ru: {
+    "issues.open": {
+      one: "{count} открытая находка",
+      few: "{count} открытые находки",
+      many: "{count} открытых находок",
+    },
+  },
+} satisfies Record<Locale, Record<string, PluralForms>>
+
+export type PluralKey = keyof (typeof plurals)["en"]
+
+function fill(raw: string, vars?: Record<string, string | number>): string {
+  if (!vars) return raw
+  return raw.replace(/\{(\w+)\}/g, (match, name: string) =>
+    name in vars ? String(vars[name]) : match,
+  )
+}
+
+/**
+ * A counted message in the right grammatical form.
+ *
+ * Falls back along `category -> other -> English` so a missing form degrades to
+ * a slightly wrong sentence rather than to an empty one.
+ */
+export function tp(
+  locale: Locale,
+  key: PluralKey,
+  count: number,
+  vars?: Record<string, string | number>,
+): string {
+  const table = plurals[locale] ?? plurals[DEFAULT_LOCALE]
+  const forms: PluralForms = table[key] ?? plurals[DEFAULT_LOCALE][key]
+  // Read through the widened type: Russian genuinely has no `other` form, so
+  // the literal types differ per locale and only this view is common to both.
+  const english: PluralForms = plurals[DEFAULT_LOCALE][key]
+  const category = new Intl.PluralRules(locale).select(count)
+  const raw = forms[category] ?? forms.other ?? english.other ?? String(count)
+  return fill(raw, { count, ...vars })
+}
+
 export function t(
   locale: Locale,
   key: MessageKey,
   vars?: Record<string, string | number>,
 ): string {
   const table = messages[locale] ?? messages[DEFAULT_LOCALE]
-  const raw = table[key] ?? messages[DEFAULT_LOCALE][key]
-  if (!vars) return raw
-  return raw.replace(/\{(\w+)\}/g, (match, name: string) =>
-    name in vars ? String(vars[name]) : match,
-  )
+  return fill(table[key] ?? messages[DEFAULT_LOCALE][key], vars)
 }
 
 /**

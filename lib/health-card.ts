@@ -94,6 +94,11 @@ export type HealthCardData = {
   generatedAt?: string
   /** "1,240 files · 182,431 lines" — only when the scan recorded a profile. */
   scope?: string | null
+  /**
+   * Gentle shame / pride line from score history, e.g. "Last improved 47d ago"
+   * or "Rotting 12d". Prefer this over the scanned date in the footer when set.
+   */
+  rotHint?: string | null
 }
 
 type CardPalette = {

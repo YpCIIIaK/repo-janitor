@@ -28,6 +28,7 @@ import { configConflictScanner } from "./scanners/config-conflict"
 import { licenseRiskScanner } from "./scanners/license-risk"
 import { ciHealthScanner } from "./scanners/ci-health"
 import { duplicateCodeScanner } from "./scanners/duplicate-code"
+import { supplyChainScanner } from "./scanners/supply-chain"
 
 /** Default scanner registry. Add new scanners here as they are implemented. */
 export const defaultScanners: Scanner[] = [
@@ -57,6 +58,7 @@ export const defaultScanners: Scanner[] = [
   licenseRiskScanner,
   ciHealthScanner,
   duplicateCodeScanner,
+  supplyChainScanner,
 ]
 
 /** Severity penalties per finding, before the per-tier discount in

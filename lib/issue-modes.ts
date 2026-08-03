@@ -31,8 +31,8 @@ const MODES: Record<IssueMode, ModeSpec> = {
     // The workflow scanner belongs here rather than in a CI section of its own:
     // a stranger reading your secrets out of a pull request is the same question
     // as a hard-coded key, however different the file it lives in.
-    scanners: ["insecure-code", "secrets", "vulnerable-deps", "workflow-security"],
-    legacyPrefixes: ["insecure-", "secret-", "vuln-"],
+    scanners: ["insecure-code", "secrets", "vulnerable-deps", "workflow-security", "supply-chain"],
+    legacyPrefixes: ["insecure-", "secret-", "vuln-", "supply-"],
   },
   links: {
     // Internal and external link rot are the same chore, split across two

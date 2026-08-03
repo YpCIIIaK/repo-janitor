@@ -150,6 +150,39 @@ const RULES: VulnRule[] = [
       "can be reconstructed from earlier values. Use `crypto.randomBytes` / `crypto.getRandomValues` " +
       "for anything anyone is not supposed to guess.",
   },
+  {
+    id: "jwt-verify-false",
+    lang: "js",
+    // jsonwebtoken / jose-style options that skip signature checks.
+    re: /\bverify\s*:\s*false\b/g,
+    severity: "critical",
+    title: "JWT verification disabled (verify: false)",
+    detail:
+      "With verification off, anyone can forge a token and the application will accept it. " +
+      "Remove `verify: false` and always validate the signature with the expected algorithm and key.",
+  },
+  {
+    id: "localstorage-secret",
+    lang: "js",
+    // setItem key (first arg) or value expression mentions a credential-ish name.
+    re: /localStorage\.setItem\s*\(\s*(?:['"`][^'"`]*(?:token|password|passwd|secret|api[_-]?key)[^'"`]*['"`]|[^)]*(?:token|password|passwd|secret|apiKey|api_key))/gi,
+    severity: "warning",
+    title: "Credential stored in localStorage",
+    detail:
+      "`localStorage` is readable by any script on the origin, so XSS becomes credential theft. " +
+      "Prefer an httpOnly cookie set by the server, or keep short-lived tokens in memory only.",
+  },
+  {
+    id: "document-write-dynamic",
+    lang: "js",
+    re: /document\.write\s*\(\s*(?:`[^`]*\$\{|[^)'"`\n]*\+)/g,
+    severity: "warning",
+    title: "document.write() with a value built at runtime",
+    detail:
+      "`document.write` injects markup into the page. If any part of the argument can carry user " +
+      "input this is cross-site scripting. Prefer DOM APIs (`textContent`, `createElement`) or a " +
+      "sanitiser when HTML is required.",
+  },
 
   // ---- Python -------------------------------------------------------------
   {

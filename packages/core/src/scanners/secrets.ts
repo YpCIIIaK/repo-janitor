@@ -33,7 +33,20 @@ const DETECTORS: Detector[] = [
   { id: "github-pat", label: "GitHub personal access token", re: /\bgh[opsur]_[0-9A-Za-z]{36}\b/ },
   { id: "github-fine-pat", label: "GitHub fine-grained token", re: /\bgithub_pat_[0-9A-Za-z_]{82}\b/ },
   { id: "slack-token", label: "Slack token", re: /\bxox[baprs]-[0-9A-Za-z-]{10,}\b/ },
+  {
+    id: "slack-webhook",
+    label: "Slack incoming webhook",
+    re: /https:\/\/hooks\.slack\.com\/services\/[A-Za-z0-9]+\/[A-Za-z0-9]+\/[A-Za-z0-9]+/,
+  },
   { id: "google-api-key", label: "Google API key", re: /\bAIza[0-9A-Za-z\-_]{35}\b/ },
+  // OpenAI user keys (`sk-…`) and project keys (`sk-proj-…`). Avoid matching
+  // Stripe's `sk_live_…` by requiring a hyphen after `sk`, not an underscore.
+  {
+    id: "openai-key",
+    label: "OpenAI API key",
+    re: /\bsk-(?:proj-)?[A-Za-z0-9]{20,}\b/,
+  },
+  { id: "npm-token", label: "npm access token", re: /\bnpm_[A-Za-z0-9]{36}\b/ },
   { id: "private-key", label: "Private key", re: /-----BEGIN (?:RSA |EC |OPENSSH |DSA |PGP )?PRIVATE KEY-----/ },
 ]
 

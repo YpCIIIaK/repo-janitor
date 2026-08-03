@@ -164,4 +164,25 @@ describe("insecureCodeScanner", () => {
     expect(first[0].id).toBe(second[0].id)
     expect(first[0].id).toContain("eval-dynamic")
   })
+
+  it("flags JWT verify: false", async () => {
+    const bad = await run({ "src/auth.ts": "jwt.decode(token, { verify: false })\n" })
+    expect(bad).toHaveLength(1)
+    expect(bad[0].severity).toBe("critical")
+    expect(bad[0].id).toContain("jwt-verify-false")
+  })
+
+  it("flags credentials written to localStorage", async () => {
+    const bad = await run({ "src/a.ts": 'localStorage.setItem("authToken", value)\n' })
+    expect(bad).toHaveLength(1)
+    expect(bad[0].severity).toBe("warning")
+    expect(await run({ "src/b.ts": 'localStorage.setItem("theme", "dark")\n' })).toHaveLength(0)
+  })
+
+  it("flags dynamic document.write but not a literal", async () => {
+    const bad = await run({ "src/a.ts": "document.write(`<p>${name}</p>`)\n" })
+    expect(bad).toHaveLength(1)
+    expect(bad[0].id).toContain("document-write-dynamic")
+    expect(await run({ "src/b.ts": 'document.write("<p>ok</p>")\n' })).toHaveLength(0)
+  })
 })
