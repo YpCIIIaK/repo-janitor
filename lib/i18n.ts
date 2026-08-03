@@ -112,6 +112,7 @@ const en = {
   "scan.selectedEmpty": "Nothing selected yet. Search above, or paste a repository URL.",
   "scan.duplicate": "Already in the list.",
   "scan.limit": "That is the limit of {max} repositories per run.",
+  "scan.limitOne": "One repository per run is the limit here.",
   "scan.willScan": "{count} will be cloned and scanned",
   "scan.runCount": "Scan {count}",
 
@@ -396,6 +397,7 @@ const ru: Messages = {
   "scan.selectedEmpty": "Пока ничего не выбрано. Найдите выше или вставьте ссылку.",
   "scan.duplicate": "Уже в списке.",
   "scan.limit": "Это предел — {max} репозиториев за раз.",
+  "scan.limitOne": "Здесь можно сканировать по одному репозиторию за раз.",
   "scan.willScan": "будет склонировано и просканировано: {count}",
   "scan.runCount": "Сканировать: {count}",
 
