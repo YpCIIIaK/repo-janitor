@@ -23,6 +23,7 @@ import {
   type CheckFamily,
 } from "@/lib/landing-facts"
 import { GRADE_CSS_VAR } from "@/lib/grade-style"
+import { falsePositiveUrl } from "@/lib/false-positive"
 import type { Grade } from "@/lib/mock-data"
 import { computeScore, issuesFromCounts, penaltyBreakdown, scoreToGrade } from "@/lib/score"
 import { ScanSummarySection, useScanSummary } from "./scan-summary-section"
@@ -61,7 +62,6 @@ const ICONS: Record<CheckFamily["id"], typeof ShieldAlert> = {
 const SPANS = ["lg:col-span-2", "", "", "", "", "lg:col-span-2"]
 
 const REPO_URL = "https://github.com/YpCIIIaK/repo-janitor#readme"
-const ISSUES_URL = "https://github.com/YpCIIIaK/repo-janitor/issues/new"
 
 /** Concrete example used in the grade section — kept here so the numbers in
  *  copy and in the ledger cannot drift apart. */
@@ -218,7 +218,7 @@ export function LandingSections() {
                 </p>
               </div>
               <a
-                href={ISSUES_URL}
+                href={falsePositiveUrl()}
                 target="_blank"
                 rel="noreferrer noopener"
                 className="flex items-center gap-2 font-mono text-xs text-foreground transition-colors hover:text-primary"
