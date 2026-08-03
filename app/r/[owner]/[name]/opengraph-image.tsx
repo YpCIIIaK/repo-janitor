@@ -13,5 +13,6 @@ export default async function Image({
   params: Promise<{ owner: string; name: string }>
 }) {
   const { owner, name } = await params
-  return renderReportOgImage(owner, name, await ingestedSharedReport(owner, name))
+  const found = await ingestedSharedReport(owner, name)
+  return renderReportOgImage(owner, name, found?.report ?? null)
 }

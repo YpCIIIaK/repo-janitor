@@ -264,6 +264,10 @@ const en = {
   "watch.magicSubmit": "Send link",
   "watch.magicSent": "If that address has watches, the link is on its way.",
   "share.heading": "Repository health",
+  "trend.improvedToday": "Improved today",
+  "trend.improvedYesterday": "Last improved yesterday",
+  "trend.droppedToday": "Score dropped today",
+  "trend.rottingYesterday": "Rotting since yesterday",
   // The good-news wording. Every one of these states something the scan
   // actually established — what was read, and what was not found in it. None
   // claims the code is good, which is not something this tool measures.
@@ -606,6 +610,10 @@ const ru: Messages = {
   "watch.magicSubmit": "Отправить",
   "watch.magicSent": "Если на этом адресе есть подписки — ссылка уже в пути.",
   "share.heading": "Здоровье репозитория",
+  "trend.improvedToday": "Улучшение сегодня",
+  "trend.improvedYesterday": "Последнее улучшение вчера",
+  "trend.droppedToday": "Оценка упала сегодня",
+  "trend.rottingYesterday": "Гниёт со вчерашнего дня",
   "verdict.clean.title": "Скан чист",
   "verdict.clean.body":
     "Ничего не найдено на объёме {scope}. Проверялись секреты, известные уязвимости, протухшие рантаймы, безопасность CI-воркфлоу, мёртвый код и гниль зависимостей.",
@@ -768,12 +776,30 @@ type PluralForms = Partial<Record<Intl.LDMLPluralRule, string>>
 const plurals = {
   en: {
     "issues.open": { one: "{count} open issue", other: "{count} open issues" },
+    "trend.improvedDays": { one: "Last improved {count} day ago", other: "Last improved {count} days ago" },
+    "trend.rottingDays": { one: "Rotting for {count} day", other: "Rotting for {count} days" },
+    "trend.unchangedDays": { one: "Unchanged for {count} day", other: "Unchanged for {count} days" },
   },
   ru: {
     "issues.open": {
       one: "{count} открытая находка",
       few: "{count} открытые находки",
       many: "{count} открытых находок",
+    },
+    "trend.improvedDays": {
+      one: "Последнее улучшение {count} день назад",
+      few: "Последнее улучшение {count} дня назад",
+      many: "Последнее улучшение {count} дней назад",
+    },
+    "trend.rottingDays": {
+      one: "Гниёт {count} день",
+      few: "Гниёт {count} дня",
+      many: "Гниёт {count} дней",
+    },
+    "trend.unchangedDays": {
+      one: "Без изменений {count} день",
+      few: "Без изменений {count} дня",
+      many: "Без изменений {count} дней",
     },
   },
 } satisfies Record<Locale, Record<string, PluralForms>>

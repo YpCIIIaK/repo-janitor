@@ -11,6 +11,9 @@ import { percentileFor } from "@/lib/percentile"
 import { percentileCopy } from "@/lib/percentile-copy"
 import { sizeBucket } from "@/lib/scan-stats"
 import { gradeBadgeClass } from "@/lib/grade-style"
+import { trendCopy, isDecline } from "@/lib/rot-hint-copy"
+import type { Trend } from "@/lib/rot-hint"
+import { tp } from "@/lib/i18n"
 
 /**
  * The rendered body of a scan report.
@@ -58,10 +61,17 @@ export async function ReportView({
   owner,
   name,
   report,
+  trend,
 }: {
   owner: string
   name: string
   report: SharedReport
+  /**
+   * Direction of travel. Only the tokenless route has it — a share token
+   * carries a projection with no score history in it — so the shared page shows
+   * the date alone rather than an emptier version of this.
+   */
+  trend?: Trend | null
 }) {
   const [cookieStore, headerList] = await Promise.all([cookies(), headers()])
   const locale = resolveLocale(
@@ -143,6 +153,22 @@ export async function ReportView({
                 <span className="mt-0.5 block text-xs font-normal text-muted-foreground">
                   {tr("pct.sample", { count: percentile?.sample ?? 0 })}
                 </span>
+              </p>
+            )}
+            {/* The grade cannot say this. A repository at 62 on the way down
+                and one at 62 on the way up are the same letter and not the same
+                project, and a reader arriving from someone else's README has no
+                other way to tell them apart. */}
+            {trend && (
+              <p
+                className={`mt-2 text-sm font-medium ${
+                  isDecline(trend) ? "text-warning" : "text-muted-foreground"
+                }`}
+              >
+                {(() => {
+                  const copy = trendCopy(trend)
+                  return copy.plural ? tp(locale, copy.key, copy.count) : tr(copy.key)
+                })()}
               </p>
             )}
             <p className="mt-2 text-sm text-muted-foreground">

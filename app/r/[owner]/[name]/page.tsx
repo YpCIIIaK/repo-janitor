@@ -32,8 +32,9 @@ export async function generateMetadata({
   params: Promise<Params>
 }): Promise<Metadata> {
   const { owner, name } = await params
-  const report = await ingestedSharedReport(owner, name)
-  if (!report) return { title: "Repo Anti-Rot" }
+  const found = await ingestedSharedReport(owner, name)
+  if (!found) return { title: "Repo Anti-Rot" }
+  const report = found.report
 
   const title = `${owner}/${name} — grade ${report.grade} (${report.score}/100)`
   const description = `Repository health scan: ${report.totalIssues} findings across security, dependencies and code decay.`
@@ -52,10 +53,10 @@ export async function generateMetadata({
 
 export default async function IngestedReportPage({ params }: { params: Promise<Params> }) {
   const { owner, name } = await params
-  const report = await ingestedSharedReport(owner, name)
+  const found = await ingestedSharedReport(owner, name)
   // 404 rather than an "unknown" page: a URL anyone can guess must not imply
   // that a repository was scanned and found wanting when it was never scanned.
-  if (!report) notFound()
+  if (!found) notFound()
 
-  return <ReportView owner={owner} name={name} report={report} />
+  return <ReportView owner={owner} name={name} report={found.report} trend={found.trend} />
 }
