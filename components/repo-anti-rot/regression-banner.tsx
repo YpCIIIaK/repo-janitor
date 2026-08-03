@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowRight, TrendingDown } from "lucide-react"
+import { ArrowLeftRight, ArrowRight, TrendingDown } from "lucide-react"
 import { buildRegressionStory, toStoryIssues } from "@repo-anti-rot/core"
 import type { StoredRepo } from "@/lib/reports-store"
 import { scoreToGrade } from "@/lib/score"
@@ -48,12 +48,34 @@ export function RegressionBanner({
   // improvements without new issues stay in the header chips only.
   if (story.added === 0 && story.scoreDelta >= 0) return null
 
+  /**
+   * The alarm is for the score falling, not for the banner existing.
+   *
+   * Four findings appearing while four others are fixed leaves the score where
+   * it was, and dressing that in a red border and a falling arrow tells a reader
+   * their project got worse when it did not — the exact misreading this tool is
+   * supposed to catch elsewhere. The findings still get listed either way, since
+   * new issues are news whatever the arithmetic did; only the chrome changes.
+   */
+  const dropped = story.scoreDelta < 0
+  const Icon = dropped ? TrendingDown : ArrowLeftRight
+
   return (
-    <div className="rounded-xl border border-destructive/25 bg-destructive/5 px-4 py-3">
+    <div
+      className={cn(
+        "rounded-xl border px-4 py-3",
+        dropped ? "border-destructive/25 bg-destructive/5" : "border-border bg-muted/30",
+      )}
+    >
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0 space-y-2">
           <p className="flex items-center gap-1.5 text-sm font-medium">
-            <TrendingDown className="size-4 shrink-0 text-destructive" />
+            <Icon
+              className={cn(
+                "size-4 shrink-0",
+                dropped ? "text-destructive" : "text-muted-foreground",
+              )}
+            />
             <span className="font-mono text-[13px] tabular-nums">{story.headline}</span>
           </p>
           {story.newFindings.length > 0 && (
