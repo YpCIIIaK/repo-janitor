@@ -131,6 +131,18 @@ export default async function ProfilePage({
         <figcaption className="text-muted-foreground text-xs">Wide, for a README</figcaption>
       </figure>
 
+      <h2 className="mt-12 text-lg font-semibold">Resume card</h2>
+      <p className="text-muted-foreground mt-1 text-sm">
+        The big one — stack, focus areas, projects, contacts. Editable, with a
+        live preview, and downloadable as an SVG.
+      </p>
+      <a
+        href="/profile/resume"
+        className="bg-foreground text-background mt-4 inline-flex items-center rounded-lg px-5 py-2.5 text-sm font-semibold"
+      >
+        Open the builder
+      </a>
+
       <h2 className="mt-12 text-lg font-semibold">Paste it somewhere</h2>
       <pre className="bg-muted mt-3 overflow-x-auto rounded-lg p-4 text-xs">
         <code>{personCardMarkdown(login, "")}</code>
