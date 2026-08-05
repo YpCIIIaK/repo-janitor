@@ -6,6 +6,7 @@ import {
   renderContributorCardSvg,
   type ContributorSignals,
 } from "@/lib/contributor-card"
+import { renderPersonCardSvg, type PersonFacts } from "@/lib/person-card"
 
 /**
  * Preview surface for the experimental contributor card.
@@ -40,6 +41,46 @@ const LADDER: ContributorSignals[] = [
 /** Same signals, different logins — the check that the seed still does its job. */
 const SEEDS = ["octocat", "YpCIIIaK", "torvalds", "gaearon", "sindresorhus"]
 
+/**
+ * The person card, which needs no contribution history at all.
+ *
+ * Ordered from a bare handle to a filled-in profile, because the thing worth
+ * checking is that the sparse one still looks deliberate rather than broken.
+ */
+const PEOPLE: PersonFacts[] = [
+  { login: "octocat" },
+  { login: "YpCIIIaK", name: "Vova", location: "Cyprus" },
+  {
+    login: "torvalds",
+    name: "Linus Torvalds",
+    bio: "Just a guy who writes kernels and reads mail.",
+    location: "Portland, OR",
+    joinedYear: 2011,
+    publicRepos: 7,
+    followers: 231000,
+  },
+  {
+    login: "gaearon",
+    name: "dan",
+    bio: "wrote some code, made some tools, mostly just replying to issues",
+    company: "@bsky",
+    location: "London, UK",
+    joinedYear: 2011,
+    publicRepos: 260,
+    followers: 82400,
+  },
+  {
+    login: "sindresorhus",
+    name: "Sindre Sorhus",
+    bio: "Full-time open sourcerer. Maker of things.",
+    company: "Open source",
+    location: "Norway",
+    joinedYear: 2009,
+    publicRepos: 1100,
+    followers: 62000,
+  },
+]
+
 function Card({ svg }: { svg: string }) {
   return (
     <div
@@ -60,7 +101,35 @@ export default function CardLabPage() {
         structure is drawn on top. Nothing here is wired to real data.
       </p>
 
-      <h2 className="mt-10 text-lg font-semibold">The ladder</h2>
+      <h2 className="mt-10 text-lg font-semibold">The person card</h2>
+      <p className="text-muted-foreground mt-1 text-sm">
+        No tiers and no contribution history — just who somebody is. The handle
+        seeds the look; the facts fill it in. A bare handle should still look
+        deliberate.
+      </p>
+      <div className="mt-5 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-5">
+        {PEOPLE.map((person) => (
+          <figure key={person.login} className="space-y-2">
+            <Card svg={renderPersonCardSvg(person)} />
+            <figcaption className="text-muted-foreground text-xs">
+              {Object.keys(person).length - 1} facts known
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+
+      <h2 className="mt-12 text-lg font-semibold">Same person, both cards</h2>
+      <p className="text-muted-foreground mt-1 text-sm">
+        They should read as one identity seen twice, not as two products.
+      </p>
+      <div className="mt-5 grid grid-cols-2 gap-5 sm:grid-cols-4">
+        <Card svg={renderPersonCardSvg(PEOPLE[3])} />
+        <Card svg={renderContributorCardSvg("gaearon", LADDER[3])} />
+        <Card svg={renderPersonCardSvg(PEOPLE[4])} />
+        <Card svg={renderContributorCardSvg("sindresorhus", LADDER[3])} />
+      </div>
+
+      <h2 className="mt-12 text-lg font-semibold">The ladder</h2>
       <p className="text-muted-foreground mt-1 text-sm">
         One person, six tiers. It should read as the same card getting denser.
       </p>
