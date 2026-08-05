@@ -7,7 +7,13 @@ import {
   statesMatch,
   verifyState,
 } from "@/lib/github-oauth"
-import { SESSION_COOKIE, SESSION_TTL_SECONDS, createSession, isSecureRequest } from "@/lib/session"
+import {
+  SESSION_COOKIE,
+  SESSION_TTL_SECONDS,
+  createSession,
+  isSecureRequest,
+  publicOrigin,
+} from "@/lib/session"
 import { isGithubLogin } from "@/lib/hunter"
 
 /**
@@ -39,10 +45,8 @@ function clearFlowCookies(headers: Headers, secure: string) {
 }
 
 function fail(request: Request, reason: string) {
-  const url = new URL(request.url)
   const headers = new Headers({ Location: `/profile?error=${encodeURIComponent(reason)}` })
   clearFlowCookies(headers, isSecureRequest(request) ? "; Secure" : "")
-  void url
   return new Response(null, { status: 302, headers })
 }
 
@@ -115,7 +119,8 @@ export async function GET(request: Request) {
 
   const token = await exchangeCode(
     code,
-    `${url.origin}/api/auth/github/callback`,
+    // Must be byte-identical to the one sent when the flow started.
+    `${publicOrigin(request)}/api/auth/github/callback`,
     config.clientId,
     config.clientSecret,
   )

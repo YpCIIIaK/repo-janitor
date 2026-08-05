@@ -158,6 +158,44 @@ export function isSecureRequest(request: Request): boolean {
 }
 
 /**
+ * The origin a browser actually typed, not the one the server sees.
+ *
+ * Behind a TLS-terminating proxy — which is every PaaS, this deploy included —
+ * `request.url` reports the internal hop: `http://…`, sometimes an internal
+ * hostname. Building an OAuth `redirect_uri` from it sends GitHub a URL that
+ * does not match the one registered on the app, and GitHub refuses the whole
+ * sign-in with "the redirect_uri is not associated with this application".
+ *
+ * `PUBLIC_ORIGIN` wins when set, because a header is a guess and configuration
+ * is not. Otherwise the forwarded pair is used, then the plain `host` header,
+ * then whatever the request claimed.
+ *
+ * ## Why trusting these headers is safe *here* and not everywhere
+ *
+ * `x-forwarded-host` is client-controlled unless a proxy overwrites it, so
+ * trusting it can become host-header injection — a poisoned password-reset link,
+ * say. It cannot do that in this file: the value only ever becomes a
+ * `redirect_uri`, and GitHub rejects any redirect_uri that is not registered on
+ * the app. A forged host produces a failed sign-in, not a redirect anywhere
+ * useful to the forger. Set `PUBLIC_ORIGIN` on the deploy and even that stops
+ * being reachable.
+ */
+export function publicOrigin(request: Request): string {
+  const configured = process.env.PUBLIC_ORIGIN?.trim().replace(/\/+$/, "")
+  if (configured) return configured
+
+  const url = new URL(request.url)
+  // A proxy chain reports the client hop first.
+  const proto = request.headers.get("x-forwarded-proto")?.split(",")[0].trim()
+  const host =
+    request.headers.get("x-forwarded-host")?.split(",")[0].trim() ||
+    request.headers.get("host")?.trim()
+
+  if (!host) return url.origin
+  return `${proto || url.protocol.replace(":", "")}://${host}`
+}
+
+/**
  * Read the session out of a request's cookies.
  *
  * `now` is passed through rather than left to `readSession`'s default so a test

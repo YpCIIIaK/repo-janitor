@@ -8,6 +8,7 @@ import {
   createSession,
   isSecureRequest,
   readSession,
+  publicOrigin,
   sessionFromRequest,
 } from "@/lib/session"
 
@@ -107,6 +108,41 @@ describe("isSecureRequest", () => {
     expect(isSecureRequest(withProto("http"))).toBe(false)
     expect(isSecureRequest(new Request("https://x.test/"))).toBe(true)
     expect(isSecureRequest(new Request("http://x.test/"))).toBe(false)
+  })
+})
+
+describe("publicOrigin", () => {
+  const req = (headers: Record<string, string>) =>
+    new Request("http://10.0.0.7:3000/api/auth/github", { headers })
+
+  it("reconstructs the browser's origin from the proxy headers", () => {
+    // The bug this exists for: Render terminates TLS, so request.url is the
+    // internal http hop. A redirect_uri built from it does not match the one
+    // registered on the OAuth app and GitHub refuses the whole sign-in.
+    expect(
+      publicOrigin(req({ "x-forwarded-proto": "https", "x-forwarded-host": "repo-anti-rot.onrender.com" })),
+    ).toBe("https://repo-anti-rot.onrender.com")
+  })
+
+  it("takes the client hop from a proxy chain", () => {
+    expect(
+      publicOrigin(req({ "x-forwarded-proto": "https,http", "x-forwarded-host": "a.test,b.test" })),
+    ).toBe("https://a.test")
+  })
+
+  it("falls back to the host header, then to the request", () => {
+    expect(publicOrigin(req({ host: "localhost:3000" }))).toBe("http://localhost:3000")
+    expect(publicOrigin(req({}))).toBe("http://10.0.0.7:3000")
+  })
+
+  it("lets configuration win over any header", () => {
+    // A header is a guess; configuration is not.
+    process.env.PUBLIC_ORIGIN = "https://configured.test/"
+    try {
+      expect(publicOrigin(req({ "x-forwarded-host": "spoofed.test" }))).toBe("https://configured.test")
+    } finally {
+      delete process.env.PUBLIC_ORIGIN
+    }
   })
 })
 

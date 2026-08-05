@@ -6,7 +6,7 @@ import {
   oauthConfig,
   safeReturnPath,
 } from "@/lib/github-oauth"
-import { isSecureRequest } from "@/lib/session"
+import { isSecureRequest, publicOrigin } from "@/lib/session"
 
 /**
  * Starts the GitHub sign-in flow: mint a state, set it as a cookie, redirect.
@@ -30,7 +30,9 @@ export async function GET(request: Request) {
   const url = new URL(request.url)
   const next = safeReturnPath(url.searchParams.get("next"))
   const state = createState(secret)
-  const redirectUri = `${url.origin}/api/auth/github/callback`
+  // Not url.origin: behind a TLS-terminating proxy that is the internal hop,
+  // and GitHub refuses a redirect_uri that is not the registered one.
+  const redirectUri = `${publicOrigin(request)}/api/auth/github/callback`
 
   const headers = new Headers({ Location: authorizeUrl(config.clientId, redirectUri, state) })
   const secure = isSecureRequest(request) ? "; Secure" : ""
