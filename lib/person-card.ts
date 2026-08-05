@@ -41,9 +41,27 @@ import {
   MAX_TIER,
   cardMarks,
   cardPalette,
+  type MarkField,
 } from "@/lib/contributor-card"
 
 export { CARD_HEIGHT, CARD_WIDTH }
+
+/**
+ * The wide layout, for somewhere a portrait card does not belong.
+ *
+ * A README is a wide column of text, and a 300×420 card dropped into one reads
+ * as an interruption. These proportions match the health card, so a repository
+ * badge and a person card can sit in the same document without either looking
+ * like it wandered in from another project.
+ *
+ * It is a different shape, not a different card: same seed, same texture, same
+ * facts. Anything that appears only in one layout would make the two disagree
+ * about who somebody is.
+ */
+export const WIDE_WIDTH = 480
+export const WIDE_HEIGHT = 300
+
+export type PersonCardLayout = "portrait" | "wide"
 
 const PAD = 22
 
@@ -192,6 +210,76 @@ const MONO = "ui-monospace,SFMono-Regular,Menlo,Consolas,monospace"
 
 export interface PersonCardOptions {
   theme?: Theme
+  /** `"wide"` for the README-shaped card. Defaults to the portrait one. */
+  layout?: PersonCardLayout
+}
+
+/**
+ * Everything the two layouts disagree about, in one place.
+ *
+ * Gathered rather than branched through the renderer because the failure mode
+ * of a second layout is the two drifting apart one `if` at a time until a fix
+ * lands in one and not the other.
+ */
+interface Geometry {
+  w: number
+  h: number
+  /** Baseline of the display name. */
+  nameY: number
+  nameSize: number
+  /** Handle sits under the name on portrait, beside it on wide. */
+  handleY: number
+  handleAnchored: boolean
+  dividerY: number
+  bioY: number
+  bioPerLine: number
+  bioLines: number
+  field: MarkField
+  /** Facts run in one column on portrait, two on wide. */
+  columns: number
+}
+
+/**
+ * `hasBio` moves the lattice, and that is the whole reason it is a parameter.
+ *
+ * With the field pinned below where two bio lines would go, a person who never
+ * wrote one gets a band of empty card between the rule and the texture. It
+ * reads as a card that failed to load rather than as a card about somebody
+ * quiet, and the wide layout — half the height, same gap — shows it worst.
+ */
+function geometryOf(layout: PersonCardLayout, hasBio: boolean): Geometry {
+  if (layout === "wide") {
+    const fieldY = hasBio ? 132 : 96
+    return {
+      w: WIDE_WIDTH,
+      h: WIDE_HEIGHT,
+      nameY: 48,
+      nameSize: 22,
+      handleY: 48,
+      handleAnchored: true,
+      dividerY: 68,
+      bioY: 92,
+      bioPerLine: 56,
+      bioLines: 2,
+      field: { x: PAD, y: fieldY, w: WIDE_WIDTH - PAD * 2, h: 212 - fieldY },
+      columns: 2,
+    }
+  }
+  const fieldY = hasBio ? 150 : 116
+  return {
+    w: CARD_WIDTH,
+    h: CARD_HEIGHT,
+    nameY: 52,
+    nameSize: 24,
+    handleY: 76,
+    handleAnchored: false,
+    dividerY: 100,
+    bioY: 128,
+    bioPerLine: 34,
+    bioLines: 2,
+    field: { x: PAD, y: fieldY, w: CARD_WIDTH - PAD * 2, h: 288 - fieldY },
+    columns: 1,
+  }
 }
 
 /**
@@ -205,10 +293,11 @@ export function renderPersonCardSvg(
   options: PersonCardOptions = {},
 ): string {
   const theme: Theme = options.theme ?? "dark"
+  const layout: PersonCardLayout = options.layout === "wide" ? "wide" : "portrait"
   const pal = SURFACE[theme]
   const dark = theme === "dark"
-  const w = CARD_WIDTH
-  const h = CARD_HEIGHT
+  const geo = geometryOf(layout, Boolean(facts.bio?.trim()))
+  const { w, h } = geo
 
   const login = facts.login
   const seed = hashSeed(login.toLowerCase())
@@ -219,9 +308,9 @@ export function renderPersonCardSvg(
   // Same id-collision guard as the contributor card: these are meant to be shown
   // in rows, and shared ids make every card after the first adopt the first
   // one's gradient.
-  const uid = `p${(seed >>> 0).toString(36)}${level}${theme[0]}`
+  const uid = `p${(seed >>> 0).toString(36)}${level}${theme[0]}${layout[0]}`
 
-  const marks = cardMarks(seed, level)
+  const marks = cardMarks(seed, level, geo.field)
     .map(
       (m) =>
         `<g transform="translate(${m.x} ${m.y}) rotate(${m.rotate})">${
@@ -234,27 +323,49 @@ export function renderPersonCardSvg(
     )
     .join("")
 
-  const display = truncate(facts.name?.trim() || login, 18)
   const handle = truncate(`@${login}`, 22)
-  const bioLines = facts.bio ? wrapBio(facts.bio) : []
+  // On the wide card the handle sits on the same line, so the name's budget is
+  // whatever the handle leaves. A fixed budget let a long name and a long handle
+  // meet in the middle.
+  const nameBudget = layout === "wide" ? Math.max(10, 40 - handle.length) : 18
+  const display = truncate(facts.name?.trim() || login, nameBudget)
+  const bioLines = facts.bio ? wrapBio(facts.bio, geo.bioPerLine, geo.bioLines) : []
   const rows = factRows(facts)
   const aria = `Card for ${facts.name?.trim() || login} (@${login})`
 
   const bioSvg = bioLines
     .map(
       (line, i) =>
-        `<text x="${PAD}" y="${128 + i * 17}" fill="${pal.muted}" font-family="${FONT}" font-size="12">${esc(line)}</text>`,
+        `<text x="${PAD}" y="${geo.bioY + i * 17}" fill="${pal.muted}" font-family="${FONT}" font-size="12">${esc(line)}</text>`,
     )
     .join("")
 
-  // Rows sit against the bottom so a card with one fact and a card with four
+  const headerSvg = geo.handleAnchored
+    ? `<text x="${PAD}" y="${geo.nameY}" fill="${pal.text}" font-family="${FONT}" font-size="${geo.nameSize}" font-weight="700">${esc(display)}</text>
+  <text x="${w - PAD}" y="${geo.handleY}" text-anchor="end" fill="${accent}" font-family="${MONO}" font-size="13" font-weight="600">${esc(handle)}</text>`
+    : `<text x="${PAD}" y="${geo.nameY}" fill="${pal.text}" font-family="${FONT}" font-size="${geo.nameSize}" font-weight="700">${esc(display)}</text>
+  <text x="${PAD}" y="${geo.handleY}" fill="${accent}" font-family="${MONO}" font-size="13" font-weight="600">${esc(handle)}</text>`
+
+  // Rows sit against the bottom so a card with one fact and a card with five
   // share a baseline. A block that floats up as facts go missing makes a wall of
   // cards look broken.
-  const rowsTop = h - 34 - (rows.length - 1) * 20
+  //
+  // On the wide card they run down the left column and then the right, rather
+  // than alternating across. Reading order beats visual balance here: the facts
+  // are already in a fixed order, and zig-zagging through it would throw that
+  // away for a slightly tidier last row.
+  const perColumn = Math.ceil(rows.length / geo.columns)
+  const rowsTop = h - 34 - (perColumn - 1) * 20
+  const colWidth = (w - PAD * 2) / geo.columns
   const rowsSvg = rows
     .map(([label, value], i) => {
-      const y = rowsTop + i * 20
-      return `<text x="${PAD}" y="${y}" fill="${pal.dim}" font-family="${FONT}" font-size="11">${esc(label)}</text><text x="${w - PAD}" y="${y}" text-anchor="end" fill="${pal.text}" font-family="${MONO}" font-size="12" font-weight="700">${esc(value)}</text>`
+      const col = Math.floor(i / perColumn)
+      const y = rowsTop + (i % perColumn) * 20
+      const left = PAD + col * colWidth
+      // Columns are gapped so the left column's value cannot touch the right
+      // column's label at the widest plausible pair.
+      const right = left + colWidth - (geo.columns > 1 && col === 0 ? 16 : 0)
+      return `<text x="${left}" y="${y}" fill="${pal.dim}" font-family="${FONT}" font-size="11">${esc(label)}</text><text x="${right}" y="${y}" text-anchor="end" fill="${pal.text}" font-family="${MONO}" font-size="12" font-weight="700">${esc(value)}</text>`
     })
     .join("")
 
@@ -273,9 +384,8 @@ export function renderPersonCardSvg(
   <rect width="${w}" height="${h}" rx="16" fill="url(#pbg-${uid})" stroke="${pal.stroke}" stroke-width="1"/>
   <g clip-path="url(#pclip-${uid})">${marks}</g>
 
-  <text x="${PAD}" y="52" fill="${pal.text}" font-family="${FONT}" font-size="24" font-weight="700">${esc(display)}</text>
-  <text x="${PAD}" y="76" fill="${accent}" font-family="${MONO}" font-size="13" font-weight="600">${esc(handle)}</text>
-  <line x1="${PAD}" y1="100" x2="${w - PAD}" y2="100" stroke="${pal.stroke}" stroke-width="1"/>
+  ${headerSvg}
+  <line x1="${PAD}" y1="${geo.dividerY}" x2="${w - PAD}" y2="${geo.dividerY}" stroke="${pal.stroke}" stroke-width="1"/>
   ${bioSvg}
   ${rowsSvg}
 </svg>`

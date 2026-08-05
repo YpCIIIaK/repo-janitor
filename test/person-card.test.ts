@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest"
 
 import {
+  WIDE_HEIGHT,
+  WIDE_WIDTH,
   compact,
   detailLevel,
   factRows,
@@ -9,7 +11,8 @@ import {
   type PersonFacts,
 } from "@/lib/person-card"
 
-import { MAX_TIER } from "@/lib/contributor-card"
+import { MAX_TIER, cardMarks } from "@/lib/contributor-card"
+import { hashSeed } from "@/lib/badge-decor"
 
 const FULL: PersonFacts = {
   login: "gaearon",
@@ -142,6 +145,78 @@ describe("compact", () => {
   it("refuses to render nonsense", () => {
     expect(compact(Number.NaN)).toBe("0")
     expect(compact(-5)).toBe("0")
+  })
+})
+
+describe("the wide layout", () => {
+  const wide = (facts: PersonFacts) => renderPersonCardSvg(facts, { layout: "wide" })
+
+  it("is a different shape, not a different card", () => {
+    const svg = wide(FULL)
+    expect(svg).toContain(`width="${WIDE_WIDTH}"`)
+    expect(svg).toContain(`height="${WIDE_HEIGHT}"`)
+    expect(svg).toContain(`viewBox="0 0 ${WIDE_WIDTH} ${WIDE_HEIGHT}"`)
+  })
+
+  it("shows exactly the same facts as the portrait card", () => {
+    // Anything appearing in only one layout would make the two disagree about
+    // who somebody is.
+    const portrait = renderPersonCardSvg(FULL)
+    for (const [label, value] of factRows(FULL)) {
+      expect(portrait).toContain(`>${label}<`)
+      expect(wide(FULL)).toContain(`>${label}<`)
+      expect(wide(FULL)).toContain(`>${value}<`)
+    }
+  })
+
+  it("keeps the person's colour across layouts", () => {
+    const accent = (svg: string) => /fill="(#[0-9a-f]{6})" font-family="ui-monospace/.exec(svg)?.[1]
+    expect(accent(wide(FULL))).toBe(accent(renderPersonCardSvg(FULL)))
+    expect(accent(wide(FULL))).toBeTruthy()
+  })
+
+  it("does not share defs ids with the portrait card", () => {
+    // The lab shows both layouts on one page; shared ids would make the second
+    // adopt the first one's gradient.
+    const id = (svg: string) => /id="pbg-([^"]+)"/.exec(svg)?.[1]
+    expect(id(wide(FULL))).not.toBe(id(renderPersonCardSvg(FULL)))
+  })
+
+  it("keeps every fact inside the card", () => {
+    const ys = [...wide(FULL).matchAll(/<text x="[\d.]+" y="([\d.]+)"/g)].map((m) => Number(m[1]))
+    expect(ys.length).toBeGreaterThan(0)
+    for (const y of ys) expect(y).toBeLessThan(WIDE_HEIGHT)
+  })
+
+  it("keeps the lattice inside the card", () => {
+    const marks = cardMarks(hashSeed("gaearon"), MAX_TIER, {
+      x: 22,
+      y: 132,
+      w: WIDE_WIDTH - 44,
+      h: 80,
+    })
+    for (const m of marks) {
+      expect(m.x).toBeGreaterThan(0)
+      expect(m.x).toBeLessThan(WIDE_WIDTH)
+      expect(m.y).toBeGreaterThan(0)
+      expect(m.y).toBeLessThan(WIDE_HEIGHT)
+    }
+  })
+
+  it("gets more marks than the portrait card, not bigger ones", () => {
+    // A wide field must not scale the marks up, or the two layouts stop looking
+    // like the same texture.
+    const seed = hashSeed("gaearon")
+    const narrow = cardMarks(seed, 3)
+    const broad = cardMarks(seed, 3, { x: 22, y: 132, w: WIDE_WIDTH - 44, h: 80 })
+    const largest = (ms: typeof narrow) => Math.max(...ms.map((m) => m.size))
+    expect(largest(broad)).toBeCloseTo(largest(narrow), 0)
+  })
+
+  it("falls back to portrait for an unknown layout", () => {
+    // The route passes this through from a query string.
+    const odd = renderPersonCardSvg(FULL, { layout: "banner" as never })
+    expect(odd).toBe(renderPersonCardSvg(FULL))
   })
 })
 

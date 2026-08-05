@@ -298,13 +298,36 @@ export function cardPalette(seed: number, tier: number, dark: boolean): string[]
  * second, smaller mark inside a share of the cells — the "second layer" that
  * makes a Warden's card denser without making it larger.
  */
-export function cardMarks(seed: number, tier: number): CardMark[] {
+export interface MarkField {
+  x: number
+  y: number
+  w: number
+  h: number
+}
+
+/** Where the lattice goes on the portrait card, and the default for both. */
+export const DEFAULT_MARK_FIELD: MarkField = {
+  x: PAD,
+  y: 150,
+  w: CARD_WIDTH - PAD * 2,
+  h: 138,
+}
+
+export function cardMarks(
+  seed: number,
+  tier: number,
+  field: MarkField = DEFAULT_MARK_FIELD,
+): CardMark[] {
   const t = Math.max(0, Math.min(MAX_TIER, tier))
-  const cols = TIER_COLUMNS[t]
   const rand = makeRandom(seed ^ 0x5bf03635)
   const tones = TIER_TONES[t]
 
-  const field = { x: PAD, y: 150, w: CARD_WIDTH - PAD * 2, h: 138 }
+  // Columns scale with the field so a wide card is not the same handful of
+  // marks stretched apart; density per unit of area is what the tier means.
+  const cols = Math.max(
+    2,
+    Math.round(TIER_COLUMNS[t] * (field.w / DEFAULT_MARK_FIELD.w)),
+  )
   const cellW = field.w / cols
   const rows = Math.max(2, Math.round(field.h / cellW))
   const cellH = field.h / rows
@@ -314,7 +337,11 @@ export function cardMarks(seed: number, tier: number): CardMark[] {
   // twice as wide at tier 0 as at tier 5, so cell-relative sizing made the
   // emptiest card the one with the biggest blobs on it — the ladder appeared to
   // run backwards. Constant size, varying count: growth reads as accumulation.
-  const unit = field.w / TIER_COLUMNS[MAX_TIER]
+  //
+  // Off the default field rather than the given one, for the same reason one
+  // step out: a wide card must not get proportionally bigger marks, or the two
+  // layouts stop looking like the same texture.
+  const unit = DEFAULT_MARK_FIELD.w / TIER_COLUMNS[MAX_TIER]
 
   // Cells this tier fills a second time. Zero for the first half of the ladder:
   // the early card should look sparse and calm, or later growth reads as noise
