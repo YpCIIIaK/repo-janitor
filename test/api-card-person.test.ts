@@ -143,6 +143,12 @@ describe("GET /api/card/person/[login]", () => {
     expect(bad).toContain("max-age=120")
   })
 
+  it("takes the wide layout and ignores anything else", async () => {
+    expect(await (await call("octocat", "size=wide")).text()).toContain('width="480"')
+    expect(await (await call("octocat", "size=huge")).text()).toContain('width="300"')
+    expect(await (await call("octocat")).text()).toContain('width="300"')
+  })
+
   it("takes the light theme and ignores anything else", async () => {
     expect(await (await call("octocat", "theme=light")).text()).toContain("#f6f8fa")
     expect(await (await call("octocat", "theme=neon")).text()).not.toContain("#f6f8fa")

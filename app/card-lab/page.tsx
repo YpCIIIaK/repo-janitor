@@ -118,6 +118,18 @@ export default function CardLabPage() {
         ))}
       </div>
 
+      <h2 className="mt-12 text-lg font-semibold">The wide layout</h2>
+      <p className="text-muted-foreground mt-1 text-sm">
+        Same card, README proportions — <code>?size=wide</code>. The lattice
+        moves up when somebody has no bio, so a quiet profile does not render as
+        a band of empty card.
+      </p>
+      <div className="mt-5 grid gap-5 sm:grid-cols-2">
+        {PEOPLE.slice(1).map((person) => (
+          <Card key={person.login} svg={renderPersonCardSvg(person, { layout: "wide" })} />
+        ))}
+      </div>
+
       <h2 className="mt-12 text-lg font-semibold">Same person, both cards</h2>
       <p className="text-muted-foreground mt-1 text-sm">
         They should read as one identity seen twice, not as two products.

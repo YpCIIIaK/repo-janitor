@@ -68,10 +68,12 @@ export async function GET(
 
   const facts = await fetchPerson(login)
   const theme = searchParams.get("theme") === "light" ? "light" : "dark"
+  // `size=wide` gives the README-shaped card. Same data, different shape.
+  const layout = searchParams.get("size") === "wide" ? "wide" : "portrait"
 
   // A failed lookup still renders: the handle is enough, and the sparse card is
   // the honest picture of knowing only that much.
-  const svg = renderPersonCardSvg(facts ?? { login }, { theme })
+  const svg = renderPersonCardSvg(facts ?? { login }, { theme, layout })
   const ttl = facts ? TTL_SECONDS : FAILURE_TTL_SECONDS
 
   return new Response(svg, {
