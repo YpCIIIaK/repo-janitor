@@ -92,16 +92,66 @@ export function ResumeEditor({ initial }: { initial: ResumeCardData }) {
 
   const patch = (part: Partial<ResumeCardData>) => setData((d) => ({ ...d, ...part }))
 
-  const download = () => {
-    const blob = new Blob([svg], { type: "image/svg+xml;charset=utf-8" })
+  const [busy, setBusy] = useState(false)
+
+  const save = (blob: Blob, extension: string) => {
     const url = URL.createObjectURL(blob)
     const a = document.createElement("a")
     a.href = url
-    a.download = `${data.handle || "resume"}-card.svg`
+    a.download = `${data.handle || "resume"}-card.${extension}`
     a.click()
     // Revoking immediately can cancel the download in some browsers; a tick is
     // enough and the object is small.
     setTimeout(() => URL.revokeObjectURL(url), 1000)
+  }
+
+  const downloadSvg = () => save(new Blob([svg], { type: "image/svg+xml;charset=utf-8" }), "svg")
+
+  /**
+   * PNG export, and the reason it is the default button rather than a nicety.
+   *
+   * SVG is the better file and it is refused nearly everywhere a resume
+   * actually goes — job boards, LinkedIn, Word, Google Docs, most ATS. Several
+   * of them do not reject it either; they parse it as HTML, which flattens the
+   * whole card into a run of text and looks like the file is broken.
+   *
+   * Drawn through an Image and a canvas, so there is no dependency and no
+   * server. The canvas is never tainted because the card embeds no external
+   * resource — that is the same self-containment the generator keeps for its
+   * own reasons.
+   */
+  const downloadPng = async (scale = 2) => {
+    setBusy(true)
+    const url = URL.createObjectURL(new Blob([svg], { type: "image/svg+xml;charset=utf-8" }))
+    try {
+      const height = Number(/<svg[^>]*height="(\d+)"/.exec(svg)?.[1] ?? 0)
+      if (!height) throw new Error("no height")
+
+      const image = new Image()
+      await new Promise<void>((resolve, reject) => {
+        image.onload = () => resolve()
+        image.onerror = () => reject(new Error("decode failed"))
+        image.src = url
+      })
+
+      const canvas = document.createElement("canvas")
+      canvas.width = RESUME_WIDTH * scale
+      canvas.height = height * scale
+      const context = canvas.getContext("2d")
+      if (!context) throw new Error("no 2d context")
+      context.drawImage(image, 0, 0, canvas.width, canvas.height)
+
+      const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/png"))
+      if (blob) save(blob, "png")
+    } catch {
+      // Rasterising can fail on a browser that will not decode an SVG into an
+      // image. The SVG itself is still correct, so offer that rather than
+      // leaving the button silently dead.
+      downloadSvg()
+    } finally {
+      URL.revokeObjectURL(url)
+      setBusy(false)
+    }
   }
 
   return (
@@ -110,8 +160,16 @@ export function ResumeEditor({ initial }: { initial: ResumeCardData }) {
         <div className="flex flex-wrap gap-2">
           <button
             type="button"
-            onClick={download}
-            className="bg-foreground text-background rounded-lg px-4 py-2 text-sm font-semibold"
+            disabled={busy}
+            onClick={() => downloadPng(2)}
+            className="bg-foreground text-background rounded-lg px-4 py-2 text-sm font-semibold disabled:opacity-60"
+          >
+            {busy ? "Rendering…" : "Download PNG (2×)"}
+          </button>
+          <button
+            type="button"
+            onClick={downloadSvg}
+            className="rounded-lg border px-4 py-2 text-sm font-medium"
           >
             Download SVG
           </button>
@@ -131,8 +189,13 @@ export function ResumeEditor({ initial }: { initial: ResumeCardData }) {
           </button>
         </div>
         <p className="text-muted-foreground text-xs">
-          Nothing is saved — this page keeps no copy of your edits. Download the
-          SVG before you leave.
+          Nothing is saved — this page keeps no copy of your edits. Download
+          before you leave.
+        </p>
+        <p className="text-muted-foreground text-xs">
+          <strong>PNG for a resume.</strong> Job boards, LinkedIn, Word and most
+          ATS either refuse SVG or parse it as HTML, which flattens the card
+          into a run of text. SVG is for a README or a site you control.
         </p>
 
         <Section title="Header">
