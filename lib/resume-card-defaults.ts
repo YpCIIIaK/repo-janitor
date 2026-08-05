@@ -8,144 +8,194 @@ import type { ResumeCardData } from "@/lib/resume-card"
  * touching JSX. Nothing here is stored anywhere — the editor loads this, you
  * change it in the browser, and you download the result. See `lib/session.ts`
  * for why the project keeps no per-person storage.
+ *
+ * ## This is a selection, not a dump
+ *
+ * The CV behind it runs to several pages. A card that tried to hold all of it
+ * would be a wall nobody reads, so each section keeps what is specific and
+ * drops what every CV claims: concrete versions over "modern stack", the one
+ * measurable outcome over the list of responsibilities. Anything cut is still
+ * in the CV, which is the document that has room for it.
  */
 export const DEFAULT_RESUME: ResumeCardData = {
   handle: "YpCIIIaK",
-  headline: "Frontend Developer",
-  subtitle: "·  Bots  ·  Automation  ·  Scripts  ·  AI",
+  headline: "Frontend / Fullstack",
+  subtitle: "·  Realtime  ·  Trading  ·  Bots  ·  AI",
   summary:
-    "2+ years building web apps, trading tools, chatbots and browser extensions. " +
-    "Looking for a Frontend / Fullstack role with a focus on AI & automation, in a small product team.",
+    "2+ years across two startups, an HR-tech internship and privacy-first pet projects: " +
+    "web apps, trading tools, local Go agents, chatbots and browser extensions. " +
+    "React, Angular, Next.js, Vue on the front; Go, Node and Symfony behind them.",
   availability: "Open to work",
   stats: [
     { value: "2+", label: "years", note: "shipping production code" },
-    { value: "6", label: "domains", note: "web · trading · bots · AI" },
-    { value: "St.2", label: "Google Accelerator", note: "server resources for a year" },
-    { value: "15+", label: "technologies", note: "across the stack" },
+    { value: "2", label: "startups", note: "core team · Vortan, AI arena" },
+    { value: "St.2", label: "Google Accelerator", note: "a year of server resources" },
+    { value: "227k", label: "docs reindexed", note: "a filter nobody could use" },
   ],
   stack: [
     {
       group: "Languages",
       items: [
-        { name: "JavaScript", color: "#f7df1e" },
-        { name: "TypeScript", color: "#3178c6" },
-        { name: "PHP", color: "#777bb4" },
+        { name: "TypeScript 5", color: "#3178c6" },
+        { name: "JavaScript ES6+", color: "#f7df1e" },
+        { name: "Go 1.22", color: "#00add8" },
+        { name: "PHP 8.4", color: "#777bb4" },
         { name: "Python", color: "#3776ab" },
-        { name: "HTML5", color: "#e34f26" },
-        { name: "CSS3", color: "#1572b6" },
         { name: "SQL", color: "#4479a1" },
       ],
     },
     {
       group: "Frontend",
       items: [
-        { name: "React", color: "#61dafb" },
-        { name: "Next.js", color: "#dddddd" },
-        { name: "Vue.js", color: "#4fc08d" },
-        { name: "Tailwind CSS", color: "#06b6d4" },
+        { name: "React 18/19", color: "#61dafb" },
+        { name: "Angular 19", color: "#dd0031" },
+        { name: "Next.js App Router", color: "#dddddd" },
+        { name: "Vue 3", color: "#4fc08d" },
+        { name: "Vite", color: "#a78bfa" },
+        { name: "Tailwind", color: "#06b6d4" },
+        { name: "SCSS", color: "#cf649a" },
+      ],
+    },
+    {
+      group: "State",
+      items: [
+        { name: "Redux Toolkit", color: "#764abc" },
+        { name: "Angular Signals", color: "#dd0031" },
+        { name: "RxJS 7", color: "#e0234e" },
+        { name: "useSyncExternalStore", color: "#61dafb" },
       ],
     },
     {
       group: "Backend",
       items: [
-        { name: "Node.js", color: "#339933" },
-        { name: "Symfony", color: "#dddddd" },
-        { name: "Doctrine", color: "#fc6a31" },
-        { name: "MySQL", color: "#4479a1" },
+        { name: "Node.js 22", color: "#339933" },
+        { name: "NestJS", color: "#e0234e" },
+        { name: "Symfony 8", color: "#dddddd" },
+        { name: "Doctrine ORM", color: "#fc6a31" },
+        { name: "PostgreSQL", color: "#4169e1" },
+        { name: "OpenSearch", color: "#ffa41c" },
       ],
     },
     {
-      group: "Tools",
+      group: "Realtime",
       items: [
-        { name: "Git", color: "#f05032" },
-        { name: "Docker", color: "#2496ed" },
-        { name: "VS Code", color: "#007acc" },
+        { name: "WebSocket", color: "#7bd88f" },
+        { name: "gorilla/websocket", color: "#00add8" },
+        { name: "Binance WS/REST", color: "#f0b90b" },
+        { name: "gopsutil", color: "#00add8" },
+        { name: "NDJSON streaming", color: "#8b95a3" },
       ],
     },
     {
       group: "Dataviz",
       items: [
-        { name: "Chart.js", color: "#ff6384" },
-        { name: "D3.js", color: "#f9a03c" },
+        { name: "d3-geo + topojson", color: "#f9a03c" },
+        { name: "Lightweight Charts", color: "#26a5e4" },
+        { name: "Recharts", color: "#ff6384" },
+        { name: "custom SVG charts", color: "#a78bfa" },
       ],
     },
     {
-      group: "APIs",
+      group: "Infra",
       items: [
-        { name: "Telegram Bot API", color: "#26a5e4" },
-        { name: "Chrome Extensions", color: "#4285f4" },
-        { name: "OpenRouter API", color: "#a78bfa" },
-        { name: "VK API", color: "#0077ff" },
+        { name: "GitHub Actions", color: "#dddddd" },
+        { name: "Docker", color: "#2496ed" },
+        { name: "pnpm workspaces", color: "#f9ad00" },
+        { name: "ArgoCD", color: "#ef7b4d" },
+        { name: "SARIF 2.1", color: "#8b95a3" },
+        { name: "Vitest", color: "#7bd88f" },
       ],
     },
   ],
   focus: [
-    { title: "Frontend & UI/UX", note: "complex SPAs, responsive layouts, animations", color: "#5aa9ff" },
-    { title: "Trading tools", note: "crypto analytics, backtesting, trading bots", color: "#7bd88f" },
-    { title: "Chrome extensions", note: "automation, parsers, platform UI enhancements", color: "#ff9f45" },
-    { title: "Bots & integrations", note: "Telegram/VK bots, payments, AI assistants", color: "#ff6b6b" },
-    { title: "AI products", note: "multi-agent systems, RAG, usage analytics", color: "#a78bfa" },
+    { title: "Frontend & UI/UX", note: "complex SPAs, Cmd-K palette, virtual scroll", color: "#5aa9ff" },
+    { title: "Realtime data", note: "WS with backoff, multiplexed typed streams", color: "#7bd88f" },
+    { title: "Trading tools", note: "strategy builders, backtesting, live charts", color: "#f0b90b" },
+    { title: "Local-first agents", note: "Go + gopsutil, nothing leaves the machine", color: "#00add8" },
+    { title: "Bots & integrations", note: "Telegram/VK, payments, AI assistants", color: "#ff6b6b" },
+    { title: "AI products", note: "multi-agent chains, RAG, usage analytics", color: "#a78bfa" },
   ],
   projects: [
     {
-      title: "AI Multi-Agent Platform",
-      meta: "in development",
-      body: "Visual chain builder, RAG, usage analytics and interaction modes — debates, collaboration. Built on OpenRouter.",
-      tags: ["React", "OpenRouter", "RAG"],
-      color: "#ff9f45",
-    },
-    {
-      title: "Vortan — Crypto Tools",
-      meta: "4+ months · core team",
-      body: "Frontend/fullstack for crypto analytics and trading-bot tooling. Advanced to Google Accelerator Stage 2 — a year of server resources.",
-      tags: ["Frontend", "Fullstack", "Trading"],
-      color: "#7bd88f",
-    },
-    {
-      title: "Chrome Extensions for Trading",
-      meta: "2+ months",
-      body: "TraderNet and Binance: richer UI, extra metrics, automation, API integration. Plus a data parser, CSS detector and UI block copier.",
-      tags: ["Chrome API", "Automation"],
+      title: "HR-tech candidate search",
+      meta: "internship · React + NestJS",
+      body: "Search UI and filters over OpenSearch. Wrote the experience calculator that merges overlapping employment ranges, then backfilled 227k documents whose totalExperience was zero — the range filter had never worked.",
+      tags: ["React 18", "NestJS", "OpenSearch", "Redux"],
       color: "#5aa9ff",
     },
     {
-      title: "Telegram Bots — YourTar",
-      meta: "~6 months",
-      body: "Bots for a retail store, an online psychology school and a gym: reporting, notifications, admin panels, AI-automated reports.",
-      tags: ["Telegram", "PHP", "AI"],
-      color: "#ff6b6b",
+      title: "Vortan — crypto tools",
+      meta: "startup · 4+ months · core",
+      body: "Led frontend and part of the backend for strategy builders, backtesting and trading-bot control. Team reached Google Accelerator Stage 2 — a year of server resources.",
+      tags: ["Frontend lead", "Backtesting", "Charts"],
+      color: "#f0b90b",
     },
     {
-      title: "Portfolio & Mini-Apps",
-      meta: "7+ months",
-      body: "Canvas sandbox, music visualizer, Notion clone and a browser effects library.",
-      tags: ["React", "Tailwind"],
+      title: "AI multi-agent platform",
+      meta: "current main project",
+      body: "An arena for AI agents: visual chain builder combining models and scripts without code, RAG and thinking modes, debate and collaboration formats, plus cost and error analytics.",
+      tags: ["Next.js", "OpenRouter", "RAG"],
       color: "#a78bfa",
     },
     {
-      title: "Internship — Paraweb",
-      meta: "1 month",
-      body: "Production work: layouts, components, bug fixes. Git-flow and code review.",
-      tags: ["Git-flow", "Code review"],
-      color: "#8b95a3",
+      title: "WiFi Analyzer",
+      meta: "own product · Go + React",
+      body: "Privacy-first local analyser: one poll loop fans snapshots to every client, so N connections is not N syscalls. Offline geo-IP, d3-geo world map, evil-twin detection. Origin locked to localhost so no site can read your process list.",
+      tags: ["Go", "WebSocket", "d3-geo"],
+      color: "#00add8",
+    },
+    {
+      title: "PC Health Monitor",
+      meta: "own product · in progress",
+      body: "Catches unnatural load — hidden miners, thermal throttling, disk decay. Per-process CPU% as a delta between polls rather than the lifetime average the library hands you. 24h ring buffer plus rotated JSONL.",
+      tags: ["Go", "gopsutil", "React"],
+      color: "#7bd88f",
+    },
+    {
+      title: "Repo Anti-Rot",
+      meta: "own product · 17 scanners",
+      body: "Scores a repository 0–100 and tracks its decay. One engine in three wrappers: CLI, GitHub Action with SARIF and PR comments, and a Next.js dashboard. ~237 Vitest tests against deterministic stubs.",
+      tags: ["Next.js", "GitHub Action", "OSV"],
+      color: "#ff9f45",
+    },
+    {
+      title: "Trading Chrome extensions",
+      meta: "2+ months · MV3",
+      body: "TraderNet and Binance: extra panels and metrics, automation, market monitoring and API integration. Plus a data parser, CSS detector and UI block copier.",
+      tags: ["Manifest V3", "Service Workers"],
+      color: "#4285f4",
+    },
+    {
+      title: "Telegram bots — YourTar",
+      meta: "~6 months · PHP/Python",
+      body: "Reporting for a retail store, an online psychology school and a gym: user flows, admin panels, notifications, and AI-automated reports that cut the manual work.",
+      tags: ["Telegram", "PHP", "AI"],
+      color: "#26a5e4",
     },
   ],
   education: {
-    degree: "Bachelor's in Software Engineering",
-    place: "TUSUR, Russia · 2028",
-    notes: ["Also studied in IT programs at TSU (Russia)", "and AITU (Kazakhstan)."],
-    certificates: ["Udemy — Complete JavaScript + React Course", "Google Accelerator — Stage 2 (AI project)"],
+    degree: "BSc Software Engineering",
+    place: "TUSUR, Russia · expected 2028",
+    notes: [
+      "Scholarship IT programmes at TSU (Russia)",
+      "and AITU (Kazakhstan). Entered three",
+      "state-funded programmes across fields.",
+    ],
+    certificates: [
+      "Udemy — Complete JavaScript + React",
+      "Google Accelerator — Stage 2 (AI project)",
+    ],
   },
   about:
-    "Passionate about modern frontend, UI/UX and practical AI & automation. " +
-    "Ship fast, iterate on feedback. Happiest on projects where people interact with data and AI live.",
-  hobbies: ["basketball", "skiing", "swimming", "fitness"],
+    "Comfortable on both sides: components, states and layout, and the logic behind them — APIs, bots, agents, AI. " +
+    "Ship fast, then improve on feedback. Happiest where a web interface meets live data.",
+  hobbies: ["basketball", "water polo", "skiing", "fitness"],
   contact: {
     title: "Let's talk",
-    note: "Open to Frontend / Fullstack roles with AI & automation",
+    note: "Open to Frontend / Fullstack — realtime, trading, AI, automation",
   },
   links: [
-    { label: "Telegram", value: "@bigboyvova", color: "#5aa9ff" },
+    { label: "Telegram", value: "@bigboyvova", color: "#26a5e4" },
     { label: "Portfolio", value: "portfolioypshak.vercel.app", color: "#ff9f45" },
   ],
 }
