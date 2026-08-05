@@ -6,7 +6,7 @@ import {
   renderContributorCardSvg,
   type ContributorSignals,
 } from "@/lib/contributor-card"
-import { renderPersonCardSvg, type PersonFacts } from "@/lib/person-card"
+import { factRows, renderPersonCardSvg, type PersonFacts } from "@/lib/person-card"
 
 /**
  * Preview surface for the experimental contributor card.
@@ -40,6 +40,60 @@ const LADDER: ContributorSignals[] = [
 
 /** Same signals, different logins — the check that the seed still does its job. */
 const SEEDS = ["octocat", "YpCIIIaK", "torvalds", "gaearon", "sindresorhus"]
+
+/**
+ * The same people with the detailed half filled in, as `?detail=full` returns
+ * it. Eight rows is the worst case the layout has to survive.
+ */
+const DETAILED: PersonFacts[] = [
+  {
+    login: "torvalds",
+    name: "Linus Torvalds",
+    location: "Portland, OR",
+    company: "Linux Foundation",
+    joinedYear: 2011,
+    publicRepos: 12,
+    followers: 315000,
+    topLanguage: "C",
+    starsReceived: 253000,
+    starsApproximate: false,
+    bestKnown: "linux",
+  },
+  {
+    login: "sindresorhus",
+    name: "Sindre Sorhus",
+    bio: "Full-Time Open-Sourcerer. Focused on Swift & JavaScript.",
+    joinedYear: 2009,
+    publicRepos: 1100,
+    followers: 81000,
+    topLanguage: "JavaScript",
+    starsReceived: 936000,
+    starsApproximate: true,
+    bestKnown: "awesome",
+  },
+  {
+    login: "gaearon",
+    name: "dan",
+    joinedYear: 2011,
+    publicRepos: 299,
+    followers: 91000,
+    topLanguage: "JavaScript",
+    starsReceived: 46000,
+    starsApproximate: true,
+    bestKnown: "react-hot-loader",
+  },
+  {
+    login: "YpCIIIaK",
+    name: "Vova",
+    joinedYear: 2022,
+    publicRepos: 63,
+    followers: 1,
+    topLanguage: "TypeScript",
+    starsReceived: 7,
+    starsApproximate: false,
+    bestKnown: "app-adv",
+  },
+]
 
 /**
  * The person card, which needs no contribution history at all.
@@ -115,6 +169,32 @@ export default function CardLabPage() {
               {Object.keys(person).length - 1} facts known
             </figcaption>
           </figure>
+        ))}
+      </div>
+
+      <h2 className="mt-12 text-lg font-semibold">The detailed card</h2>
+      <p className="text-muted-foreground mt-1 text-sm">
+        <code>?detail=full</code> — three more rows, from a second lookup. The
+        lattice gives up the height rather than being drawn through. A tilde
+        means the star total is summed over the most-starred hundred and is a
+        floor, not a total.
+      </p>
+      <div className="mt-5 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
+        {DETAILED.map((person) => (
+          <figure key={person.login} className="space-y-2">
+            <Card svg={renderPersonCardSvg(person)} />
+            <figcaption className="text-muted-foreground text-xs">
+              {factRows(person).length} rows
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+      <div className="mt-5 grid gap-5 sm:grid-cols-2">
+        {DETAILED.slice(0, 2).map((person) => (
+          <Card
+            key={person.login}
+            svg={renderPersonCardSvg(person, { layout: "wide" })}
+          />
         ))}
       </div>
 

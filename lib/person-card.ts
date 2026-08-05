@@ -85,6 +85,16 @@ export interface PersonFacts {
   joinedYear?: number | null
   publicRepos?: number | null
   followers?: number | null
+
+  /**
+   * The detailed half, from `?detail=full`. Absent by default, because filling
+   * it costs a second API call against a tighter rate limit.
+   */
+  topLanguage?: string | null
+  starsReceived?: number | null
+  /** True when the star total is summed over a sample rather than everything. */
+  starsApproximate?: boolean
+  bestKnown?: string | null
 }
 
 /**
@@ -183,6 +193,18 @@ export function factRows(facts: PersonFacts): [string, string][] {
   if (facts.joinedYear) rows.push(["joined", String(facts.joinedYear)])
   if (typeof facts.publicRepos === "number") rows.push(["public repos", compact(facts.publicRepos)])
   if (typeof facts.followers === "number") rows.push(["followers", compact(facts.followers)])
+
+  // The detailed rows come last: what somebody is known for is more interesting
+  // than where they live, but the profile rows are the ones every card has, and
+  // a stable position beats an interesting one when two cards are compared.
+  if (facts.topLanguage) rows.push(["top language", truncate(facts.topLanguage, 16)])
+  if (typeof facts.starsReceived === "number") {
+    // The tilde is not decoration. The total is summed over the most-starred
+    // hundred, so for somebody with more than that it is a floor, and saying so
+    // costs one character.
+    rows.push(["stars", `${facts.starsApproximate ? "~" : ""}${compact(facts.starsReceived)}`])
+  }
+  if (facts.bestKnown) rows.push(["best known", truncate(facts.bestKnown, 16)])
   return rows
 }
 
@@ -237,7 +259,15 @@ interface Geometry {
   field: MarkField
   /** Facts run in one column on portrait, two on wide. */
   columns: number
+  /** Baseline of the first fact row. */
+  rowsTop: number
 }
+
+/** Row pitch and the gap the lattice keeps above the first row. */
+const ROW_STEP = 20
+const ROW_CLEARANCE = 16
+/** Below this the lattice stops being texture and starts being a smudge. */
+const MIN_FIELD_HEIGHT = 34
 
 /**
  * `hasBio` moves the lattice, and that is the whole reason it is a parameter.
@@ -247,9 +277,21 @@ interface Geometry {
  * reads as a card that failed to load rather than as a card about somebody
  * quiet, and the wide layout — half the height, same gap — shows it worst.
  */
-function geometryOf(layout: PersonCardLayout, hasBio: boolean): Geometry {
+function geometryOf(layout: PersonCardLayout, hasBio: boolean, rowCount: number): Geometry {
+  // The lattice ends where the facts begin. `?detail=full` adds three rows, and
+  // with a fixed bottom those rows would be drawn straight through the texture.
+  const fieldHeight = (h: number, fieldY: number, columns: number) => {
+    const perColumn = Math.max(1, Math.ceil(rowCount / columns))
+    const rowsTop = h - 34 - (perColumn - 1) * ROW_STEP
+    return {
+      rowsTop,
+      height: Math.max(MIN_FIELD_HEIGHT, rowsTop - ROW_CLEARANCE - fieldY),
+    }
+  }
+
   if (layout === "wide") {
     const fieldY = hasBio ? 132 : 96
+    const { rowsTop, height } = fieldHeight(WIDE_HEIGHT, fieldY, 2)
     return {
       w: WIDE_WIDTH,
       h: WIDE_HEIGHT,
@@ -261,11 +303,13 @@ function geometryOf(layout: PersonCardLayout, hasBio: boolean): Geometry {
       bioY: 92,
       bioPerLine: 56,
       bioLines: 2,
-      field: { x: PAD, y: fieldY, w: WIDE_WIDTH - PAD * 2, h: 212 - fieldY },
+      field: { x: PAD, y: fieldY, w: WIDE_WIDTH - PAD * 2, h: height },
       columns: 2,
+      rowsTop,
     }
   }
   const fieldY = hasBio ? 150 : 116
+  const { rowsTop, height } = fieldHeight(CARD_HEIGHT, fieldY, 1)
   return {
     w: CARD_WIDTH,
     h: CARD_HEIGHT,
@@ -277,8 +321,9 @@ function geometryOf(layout: PersonCardLayout, hasBio: boolean): Geometry {
     bioY: 128,
     bioPerLine: 34,
     bioLines: 2,
-    field: { x: PAD, y: fieldY, w: CARD_WIDTH - PAD * 2, h: 288 - fieldY },
+    field: { x: PAD, y: fieldY, w: CARD_WIDTH - PAD * 2, h: height },
     columns: 1,
+    rowsTop,
   }
 }
 
@@ -296,7 +341,7 @@ export function renderPersonCardSvg(
   const layout: PersonCardLayout = options.layout === "wide" ? "wide" : "portrait"
   const pal = SURFACE[theme]
   const dark = theme === "dark"
-  const geo = geometryOf(layout, Boolean(facts.bio?.trim()))
+  const geo = geometryOf(layout, Boolean(facts.bio?.trim()), factRows(facts).length)
   const { w, h } = geo
 
   const login = facts.login
@@ -354,13 +399,13 @@ export function renderPersonCardSvg(
   // than alternating across. Reading order beats visual balance here: the facts
   // are already in a fixed order, and zig-zagging through it would throw that
   // away for a slightly tidier last row.
-  const perColumn = Math.ceil(rows.length / geo.columns)
-  const rowsTop = h - 34 - (perColumn - 1) * 20
+  const perColumn = Math.max(1, Math.ceil(rows.length / geo.columns))
+  const rowsTop = geo.rowsTop
   const colWidth = (w - PAD * 2) / geo.columns
   const rowsSvg = rows
     .map(([label, value], i) => {
       const col = Math.floor(i / perColumn)
-      const y = rowsTop + (i % perColumn) * 20
+      const y = rowsTop + (i % perColumn) * ROW_STEP
       const left = PAD + col * colWidth
       // Columns are gapped so the left column's value cannot touch the right
       // column's label at the widest plausible pair.

@@ -1,5 +1,5 @@
 import { isGithubLogin } from "@/lib/hunter"
-import { projectPerson, userApiUrl } from "@/lib/github-user"
+import { projectPerson, projectRepoStats, repoSearchUrl, userApiUrl } from "@/lib/github-user"
 import { renderPersonCardSvg } from "@/lib/person-card"
 
 /**
@@ -32,26 +32,48 @@ const FAILURE_TTL_SECONDS = 120
 /** GitHub is slow often enough to need a bound; the card degrades instead. */
 const TIMEOUT_MS = 4000
 
-async function fetchPerson(login: string) {
+function githubHeaders(): Record<string, string> {
   const headers: Record<string, string> = {
     Accept: "application/vnd.github+json",
     "User-Agent": "repo-anti-rot-card",
   }
   // Unauthenticated reads allow sixty an hour per IP, which one popular README
-  // exhausts. The token needs no scopes — this is public data.
+  // exhausts. Search is tighter still — ten a minute — which is most of the
+  // reason `detail=full` is opt-in. The token needs no scopes; this is public
+  // data either way.
   const token = process.env.GITHUB_TOKEN
   if (token) headers.Authorization = `Bearer ${token}`
+  return headers
+}
 
+async function getJson(url: string): Promise<unknown | null> {
   try {
-    const res = await fetch(userApiUrl(login), {
-      headers,
+    const res = await fetch(url, {
+      headers: githubHeaders(),
       signal: AbortSignal.timeout(TIMEOUT_MS),
     })
     if (!res.ok) return null
-    return projectPerson(await res.json())
+    return await res.json()
   } catch {
     return null
   }
+}
+
+async function fetchPerson(login: string) {
+  return projectPerson(await getJson(userApiUrl(login)))
+}
+
+/**
+ * The extra lookup behind `detail=full`.
+ *
+ * Separate from the profile call so a search that is rate-limited or slow costs
+ * the detailed rows and nothing else — the card still renders with everything
+ * the profile gave it, rather than degrading to a bare handle because the
+ * optional half failed.
+ */
+async function fetchStats(login: string) {
+  const body = await getJson(repoSearchUrl(login))
+  return body ? projectRepoStats(body) : null
 }
 
 export async function GET(
@@ -66,14 +88,25 @@ export async function GET(
     return new Response("not a GitHub login", { status: 400 })
   }
 
-  const facts = await fetchPerson(login)
   const theme = searchParams.get("theme") === "light" ? "light" : "dark"
   // `size=wide` gives the README-shaped card. Same data, different shape.
   const layout = searchParams.get("size") === "wide" ? "wide" : "portrait"
+  const detailed = searchParams.get("detail") === "full"
+
+  // Both at once when they are both wanted: the search does not depend on the
+  // profile, and running them in series would double the card's latency for
+  // nothing.
+  const [facts, stats] = await Promise.all([
+    fetchPerson(login),
+    detailed ? fetchStats(login) : Promise.resolve(null),
+  ])
 
   // A failed lookup still renders: the handle is enough, and the sparse card is
   // the honest picture of knowing only that much.
-  const svg = renderPersonCardSvg(facts ?? { login }, { theme, layout })
+  const svg = renderPersonCardSvg(
+    { ...(facts ?? { login }), ...(stats ?? {}) },
+    { theme, layout },
+  )
   const ttl = facts ? TTL_SECONDS : FAILURE_TTL_SECONDS
 
   return new Response(svg, {

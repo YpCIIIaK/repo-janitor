@@ -1,7 +1,15 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
 
 import { GET } from "@/app/api/card/person/[login]/route"
-import { joinedYearOf, personCardMarkdown, projectPerson, userApiUrl } from "@/lib/github-user"
+import {
+  STATS_SAMPLE,
+  joinedYearOf,
+  personCardMarkdown,
+  projectPerson,
+  projectRepoStats,
+  repoSearchUrl,
+  userApiUrl,
+} from "@/lib/github-user"
 
 /**
  * The person-card endpoint is public and its only parameter is a path segment,
@@ -169,6 +177,131 @@ describe("GET /api/card/person/[login]", () => {
       if (previous === undefined) delete process.env.GITHUB_TOKEN
       else process.env.GITHUB_TOKEN = previous
     }
+  })
+})
+
+const SEARCH = {
+  total_count: 3,
+  items: [
+    { name: "react", language: "JavaScript", stargazers_count: 200_000 },
+    { name: "redux", language: "TypeScript", stargazers_count: 60_000 },
+    { name: "notes", language: "JavaScript", stargazers_count: 40 },
+  ],
+}
+
+describe("projectRepoStats", () => {
+  it("names the most-starred repository and sums the sample", () => {
+    expect(projectRepoStats(SEARCH)).toEqual({
+      topLanguage: "JavaScript",
+      starsReceived: 260_040,
+      starsApproximate: false,
+      bestKnown: "react",
+    })
+  })
+
+  it("flags the total as approximate once the sample is capped", () => {
+    // Beyond a page the sum is a floor, not a total, and the card says so.
+    const capped = { total_count: 400, items: SEARCH.items }
+    expect(projectRepoStats(capped).starsApproximate).toBe(true)
+    expect(projectRepoStats(SEARCH).starsApproximate).toBe(false)
+  })
+
+  it("breaks a language tie toward the better-known work", () => {
+    // Items arrive most-starred first, so the earlier entry wins a tie.
+    const tied = {
+      total_count: 2,
+      items: [
+        { name: "a", language: "Rust", stargazers_count: 900 },
+        { name: "b", language: "Go", stargazers_count: 10 },
+      ],
+    }
+    expect(projectRepoStats(tied).topLanguage).toBe("Rust")
+  })
+
+  it("returns nothing at all for somebody with no public repositories", () => {
+    // "0 stars" is a claim; an absent row is the truth.
+    expect(projectRepoStats({ total_count: 0, items: [] })).toEqual({
+      topLanguage: null,
+      starsReceived: null,
+      starsApproximate: false,
+      bestKnown: null,
+    })
+  })
+
+  it("survives a payload that is not a search result", () => {
+    expect(projectRepoStats(null).bestKnown).toBeNull()
+    expect(projectRepoStats({ items: "nope" }).bestKnown).toBeNull()
+    expect(projectRepoStats({ items: [{}] }).starsReceived).toBe(0)
+  })
+
+  it("keeps a real zero when repositories exist but nobody starred them", () => {
+    const quiet = { total_count: 1, items: [{ name: "scratch", stargazers_count: 0 }] }
+    expect(projectRepoStats(quiet).starsReceived).toBe(0)
+    expect(projectRepoStats(quiet).bestKnown).toBe("scratch")
+  })
+})
+
+describe("repoSearchUrl", () => {
+  it("sorts by stars and excludes forks", () => {
+    const url = repoSearchUrl("octocat")
+    // Sorting by stars is what makes the sample cap honest, and excluding forks
+    // stops anybody manufacturing a total by forking popular projects.
+    expect(url).toContain("sort=stars")
+    expect(url).toContain(`per_page=${STATS_SAMPLE}`)
+    expect(decodeURIComponent(url)).toContain("user:octocat fork:false")
+  })
+})
+
+describe("GET /api/card/person/[login]?detail=full", () => {
+  const detailCall = async (qs: string) => {
+    fetchMock.mockImplementation(async (url: string) =>
+      url.includes("/search/")
+        ? { ok: true, json: async () => SEARCH }
+        : { ok: true, json: async () => PAYLOAD },
+    )
+    return (await call("octocat", qs)).text()
+  }
+
+  it("adds the detailed rows", async () => {
+    const body = await detailCall("detail=full")
+    expect(body).toContain("top language")
+    expect(body).toContain("JavaScript")
+    expect(body).toContain("best known")
+    expect(body).toContain("react")
+  })
+
+  it("costs nothing extra by default", async () => {
+    // The search endpoint allows ten calls a minute, which is most of the reason
+    // this is opt-in rather than always on.
+    await call("octocat")
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+    expect(fetchMock.mock.calls[0][0]).not.toContain("/search/")
+  })
+
+  it("does not show the detailed rows without the flag", async () => {
+    expect(await (await call("octocat")).text()).not.toContain("top language")
+  })
+
+  it("keeps the profile rows when only the search fails", async () => {
+    // A rate-limited search must cost the detailed rows and nothing else.
+    fetchMock.mockImplementation(async (url: string) =>
+      url.includes("/search/")
+        ? { ok: false, json: async () => ({}) }
+        : { ok: true, json: async () => PAYLOAD },
+    )
+    const body = await (await call("octocat", "detail=full")).text()
+    expect(body).toContain("The Octocat")
+    expect(body).toContain("followers")
+    expect(body).not.toContain("top language")
+  })
+
+  it("marks a capped total with a tilde", async () => {
+    fetchMock.mockImplementation(async (url: string) =>
+      url.includes("/search/")
+        ? { ok: true, json: async () => ({ total_count: 400, items: SEARCH.items }) }
+        : { ok: true, json: async () => PAYLOAD },
+    )
+    expect(await (await call("octocat", "detail=full")).text()).toContain("~260k")
   })
 })
 
