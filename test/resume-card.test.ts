@@ -54,9 +54,13 @@ describe("renderResumeCardSvg", () => {
 
   it("hides the availability pill when it is blank", () => {
     // Asserted on the pill's own text: the green also appears in the background
-    // texture palette, so searching for the colour proves nothing.
-    expect(renderResumeCardSvg({ ...DEFAULT_RESUME, availability: "" })).not.toContain("OPEN TO WORK")
-    expect(renderResumeCardSvg(DEFAULT_RESUME)).toContain("OPEN TO WORK")
+    // texture palette, so searching for the colour proves nothing. Taken from
+    // the data rather than written out, so editing the copy is not a test
+    // failure — the behaviour under test is the hiding, not the wording.
+    const pill = DEFAULT_RESUME.availability.toUpperCase()
+    expect(pill).not.toBe("")
+    expect(renderResumeCardSvg({ ...DEFAULT_RESUME, availability: "" })).not.toContain(pill)
+    expect(renderResumeCardSvg(DEFAULT_RESUME)).toContain(pill)
   })
 
   it("is deterministic for the same input", () => {

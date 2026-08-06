@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="2069" viewBox="0 0 1000 2069" role="img" aria-label="@YpCIIIaK — Frontend / Fullstack">
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="2500" viewBox="0 0 1000 2500" role="img" aria-label="@YpCIIIaK — Frontend / Fullstack">
 <title>@YpCIIIaK — Frontend / Fullstack</title>
 <defs>
   <linearGradient id="rc-bg" x1="0" y1="0" x2="0.4" y2="1">
@@ -12,20 +12,20 @@
   <linearGradient id="rc-accent" x1="0" y1="0" x2="0" y2="1">
     <stop offset="0%" stop-color="#ff9f45"/><stop offset="100%" stop-color="#ff6b6b"/>
   </linearGradient>
-  <clipPath id="rc-clip"><rect width="1000" height="2069" rx="20"/></clipPath>
+  <clipPath id="rc-clip"><rect width="1000" height="2500" rx="20"/></clipPath>
 </defs>
-<rect width="1000" height="2069" fill="url(#rc-bg)"/>
-<g clip-path="url(#rc-clip)"><circle cx="650.04" cy="1711.26" r="4.35" fill="#5aa9ff" opacity="0.1"/><circle cx="749.4" cy="1381" r="4.28" fill="none" stroke="#7bd88f" stroke-width="1" opacity="0.05"/><circle cx="843.19" cy="723.35" r="3.11" fill="none" stroke="#5aa9ff" stroke-width="1" opacity="0.15"/><circle cx="777.79" cy="935.87" r="5.22" fill="#ff6b6b" opacity="0.08"/><circle cx="141.75" cy="254.48" r="1.88" fill="#ff6b6b" opacity="0.05"/><circle cx="251.76" cy="297.01" r="6.35" fill="none" stroke="#7bd88f" stroke-width="1" opacity="0.13"/><circle cx="640.12" cy="1151.44" r="4.08" fill="#ff9f45" opacity="0.13"/><circle cx="793.63" cy="283.92" r="3.12" fill="none" stroke="#ff9f45" stroke-width="1" opacity="0.12"/><circle cx="115.89" cy="1495.65" r="3.64" fill="#ff9f45" opacity="0.14"/><circle cx="447.28" cy="1624.55" r="1.98" fill="#ff9f45" opacity="0.08"/><circle cx="655.7" cy="1870.57" r="3.38" fill="#7bd88f" opacity="0.12"/><circle cx="970.25" cy="1003.73" r="2.67" fill="none" stroke="#7bd88f" stroke-width="1" opacity="0.05"/><circle cx="810.11" cy="464.9" r="4.7" fill="#7bd88f" opacity="0.15"/><circle cx="693.83" cy="144.63" r="2.46" fill="none" stroke="#7bd88f" stroke-width="1" opacity="0.11"/><circle cx="646.89" cy="216.94" r="1.55" fill="#ff9f45" opacity="0.14"/><circle cx="223.71" cy="446.37" r="5.25" fill="#5aa9ff" opacity="0.09"/><circle cx="295.69" cy="1321.32" r="3.15" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.06"/><circle cx="809.27" cy="1010.78" r="5.11" fill="#7bd88f" opacity="0.06"/><circle cx="719.31" cy="91.49" r="4.15" fill="#5aa9ff" opacity="0.1"/><circle cx="87.09" cy="1297.09" r="6.21" fill="#5aa9ff" opacity="0.05"/><circle cx="673.47" cy="1048.79" r="4.08" fill="#5aa9ff" opacity="0.09"/><circle cx="847.37" cy="60.7" r="5.5" fill="#ff6b6b" opacity="0.09"/><circle cx="775.71" cy="1251.3" r="5.31" fill="#ff9f45" opacity="0.07"/><circle cx="122.63" cy="1818.82" r="3.67" fill="none" stroke="#ff9f45" stroke-width="1" opacity="0.07"/><circle cx="662.95" cy="2034.83" r="3" fill="#ff6b6b" opacity="0.08"/><circle cx="868.95" cy="955.81" r="4.47" fill="#ff9f45" opacity="0.11"/><circle cx="998.35" cy="900.05" r="2.47" fill="none" stroke="#7bd88f" stroke-width="1" opacity="0.15"/><circle cx="816.67" cy="1695.72" r="1.92" fill="#ff6b6b" opacity="0.12"/><circle cx="146.71" cy="427.84" r="3.35" fill="none" stroke="#5aa9ff" stroke-width="1" opacity="0.14"/><circle cx="83.94" cy="1381.22" r="2.32" fill="#ff6b6b" opacity="0.12"/><circle cx="536.16" cy="395.58" r="5.83" fill="#ff6b6b" opacity="0.09"/><circle cx="102.33" cy="866.63" r="6.36" fill="#5aa9ff" opacity="0.15"/><circle cx="302.93" cy="1621.13" r="4.44" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.09"/><circle cx="856.95" cy="1697.13" r="5.71" fill="#7bd88f" opacity="0.06"/><circle cx="361.3" cy="736.42" r="3.73" fill="#ff9f45" opacity="0.11"/><circle cx="99.98" cy="1718.84" r="3.02" fill="#5aa9ff" opacity="0.09"/><circle cx="131.03" cy="2059.08" r="3.89" fill="none" stroke="#ff9f45" stroke-width="1" opacity="0.12"/><circle cx="279.27" cy="1731.25" r="2.69" fill="none" stroke="#ff9f45" stroke-width="1" opacity="0.12"/><circle cx="640.96" cy="1502.02" r="6.15" fill="#5aa9ff" opacity="0.09"/><circle cx="461.84" cy="950.73" r="2.7" fill="#7bd88f" opacity="0.13"/><circle cx="598.31" cy="686.99" r="3.08" fill="#7bd88f" opacity="0.14"/><circle cx="682.62" cy="386.77" r="3.24" fill="none" stroke="#5aa9ff" stroke-width="1" opacity="0.11"/><circle cx="562.1" cy="1633.06" r="1.68" fill="#ff6b6b" opacity="0.07"/><circle cx="304.82" cy="128.08" r="3.73" fill="#ff6b6b" opacity="0.09"/><circle cx="860.48" cy="2008.17" r="1.6" fill="#7bd88f" opacity="0.05"/><circle cx="189.56" cy="1080.13" r="2.88" fill="#ff9f45" opacity="0.09"/><circle cx="147.76" cy="309.71" r="3.82" fill="none" stroke="#5aa9ff" stroke-width="1" opacity="0.11"/><circle cx="973.77" cy="446.66" r="4.63" fill="#5aa9ff" opacity="0.1"/><circle cx="571.12" cy="83.88" r="5.51" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.08"/><circle cx="744.57" cy="1599.82" r="3.58" fill="none" stroke="#5aa9ff" stroke-width="1" opacity="0.14"/><circle cx="262.54" cy="1539.15" r="5.38" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.05"/><circle cx="622.53" cy="466.66" r="3.31" fill="#ff9f45" opacity="0.11"/><circle cx="84.94" cy="1493.62" r="5.69" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.07"/><circle cx="235.19" cy="763.49" r="6.2" fill="#ff9f45" opacity="0.11"/><circle cx="330.73" cy="1852.69" r="4.82" fill="#7bd88f" opacity="0.09"/><circle cx="861.61" cy="2020" r="5.86" fill="#7bd88f" opacity="0.1"/><circle cx="689.26" cy="1639.61" r="4.43" fill="none" stroke="#5aa9ff" stroke-width="1" opacity="0.12"/><circle cx="906.96" cy="957.7" r="5.59" fill="#5aa9ff" opacity="0.12"/><circle cx="367.49" cy="1946.76" r="4.5" fill="#7bd88f" opacity="0.06"/><circle cx="457.88" cy="282.39" r="3.98" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.07"/><circle cx="343.32" cy="514.03" r="5.85" fill="#ff6b6b" opacity="0.07"/><circle cx="65.65" cy="162.52" r="1.65" fill="#5aa9ff" opacity="0.07"/><circle cx="942.01" cy="520.99" r="5.27" fill="#7bd88f" opacity="0.07"/><circle cx="946.86" cy="1947.34" r="2.22" fill="none" stroke="#ff9f45" stroke-width="1" opacity="0.07"/><circle cx="25.1" cy="1511.53" r="2.39" fill="#7bd88f" opacity="0.15"/><circle cx="93.65" cy="1117.37" r="1.61" fill="#7bd88f" opacity="0.1"/><circle cx="596.09" cy="817.1" r="5.28" fill="none" stroke="#7bd88f" stroke-width="1" opacity="0.13"/><circle cx="81.04" cy="331.76" r="4.44" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.13"/><circle cx="60.87" cy="1328.1" r="4.63" fill="#7bd88f" opacity="0.09"/><circle cx="813.59" cy="1009.31" r="5.7" fill="none" stroke="#7bd88f" stroke-width="1" opacity="0.05"/><circle cx="751.74" cy="1017.23" r="5.95" fill="none" stroke="#7bd88f" stroke-width="1" opacity="0.08"/><circle cx="905.5" cy="1700.41" r="2.2" fill="#ff9f45" opacity="0.15"/><circle cx="349.08" cy="434.88" r="6.01" fill="#7bd88f" opacity="0.1"/><circle cx="878.55" cy="528.08" r="5.43" fill="none" stroke="#7bd88f" stroke-width="1" opacity="0.1"/><circle cx="720.22" cy="1263.55" r="3.69" fill="#ff9f45" opacity="0.12"/><circle cx="147.34" cy="652.11" r="3.5" fill="#ff6b6b" opacity="0.15"/><circle cx="194.08" cy="1860.77" r="3.12" fill="none" stroke="#5aa9ff" stroke-width="1" opacity="0.09"/><circle cx="235.63" cy="1236.26" r="2.77" fill="#7bd88f" opacity="0.13"/><circle cx="117.6" cy="673.1" r="4.83" fill="#5aa9ff" opacity="0.13"/><circle cx="536.32" cy="1242.8" r="3.76" fill="#ff9f45" opacity="0.08"/><circle cx="608.18" cy="851.42" r="5.95" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.05"/><circle cx="56.09" cy="1609.8" r="5.96" fill="none" stroke="#ff9f45" stroke-width="1" opacity="0.07"/><circle cx="803.94" cy="1821.12" r="5.19" fill="none" stroke="#7bd88f" stroke-width="1" opacity="0.14"/><circle cx="179.09" cy="1875.64" r="4.17" fill="#ff9f45" opacity="0.06"/><circle cx="475.89" cy="1991.03" r="6.37" fill="#5aa9ff" opacity="0.09"/><circle cx="97.9" cy="86.38" r="5.62" fill="#5aa9ff" opacity="0.12"/><circle cx="817.8" cy="1137.91" r="1.62" fill="#ff6b6b" opacity="0.06"/><circle cx="741.85" cy="781.8" r="6.28" fill="#ff6b6b" opacity="0.12"/><circle cx="898.53" cy="1755.91" r="3.77" fill="none" stroke="#7bd88f" stroke-width="1" opacity="0.11"/><circle cx="98.38" cy="1436.49" r="2.68" fill="none" stroke="#ff9f45" stroke-width="1" opacity="0.07"/><circle cx="779.91" cy="905.13" r="5.95" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.08"/><circle cx="149.54" cy="1259.15" r="5.84" fill="none" stroke="#ff9f45" stroke-width="1" opacity="0.14"/><circle cx="701.14" cy="1498.98" r="5.37" fill="none" stroke="#7bd88f" stroke-width="1" opacity="0.12"/><circle cx="278.4" cy="1191.63" r="4.53" fill="#7bd88f" opacity="0.05"/><circle cx="160.15" cy="1922.61" r="5.45" fill="none" stroke="#5aa9ff" stroke-width="1" opacity="0.12"/><circle cx="392.26" cy="1871.62" r="5.06" fill="#5aa9ff" opacity="0.11"/><circle cx="521.61" cy="361.37" r="3.89" fill="#ff9f45" opacity="0.09"/><circle cx="687.21" cy="194.06" r="4.72" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.12"/><circle cx="598.16" cy="1682.89" r="4.79" fill="#7bd88f" opacity="0.11"/><circle cx="631.23" cy="2004.92" r="2.7" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.06"/><circle cx="919.27" cy="1512.32" r="4.12" fill="#ff6b6b" opacity="0.07"/><circle cx="703.44" cy="60.46" r="6.09" fill="none" stroke="#7bd88f" stroke-width="1" opacity="0.09"/><circle cx="253.02" cy="1003.79" r="1.73" fill="#ff6b6b" opacity="0.1"/><circle cx="809.51" cy="635.01" r="4.83" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.1"/><circle cx="447.31" cy="255.25" r="6.36" fill="none" stroke="#7bd88f" stroke-width="1" opacity="0.09"/><circle cx="537.06" cy="1330.34" r="1.82" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.07"/><circle cx="676.81" cy="1287.37" r="3" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.1"/><circle cx="557.3" cy="69.53" r="1.66" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.06"/><circle cx="300.79" cy="1188.23" r="4.6" fill="#ff6b6b" opacity="0.11"/><circle cx="92.07" cy="984.39" r="2.14" fill="none" stroke="#7bd88f" stroke-width="1" opacity="0.11"/><circle cx="283.1" cy="2016.97" r="4.88" fill="#7bd88f" opacity="0.14"/><circle cx="510.39" cy="1498.54" r="2.14" fill="none" stroke="#5aa9ff" stroke-width="1" opacity="0.14"/><circle cx="531.51" cy="1943.5" r="2.93" fill="none" stroke="#ff9f45" stroke-width="1" opacity="0.12"/><circle cx="705.16" cy="963.48" r="4.19" fill="#5aa9ff" opacity="0.13"/><circle cx="884.95" cy="643.87" r="2.07" fill="none" stroke="#5aa9ff" stroke-width="1" opacity="0.09"/><circle cx="772.77" cy="1006.84" r="5.48" fill="none" stroke="#7bd88f" stroke-width="1" opacity="0.1"/><circle cx="767.92" cy="735.25" r="6.26" fill="#7bd88f" opacity="0.08"/><circle cx="259.83" cy="186.6" r="2.49" fill="#5aa9ff" opacity="0.13"/><circle cx="573.39" cy="221.72" r="5.7" fill="#5aa9ff" opacity="0.15"/><circle cx="415.27" cy="1488.81" r="4.46" fill="none" stroke="#5aa9ff" stroke-width="1" opacity="0.1"/><circle cx="465.24" cy="192.53" r="4.49" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.15"/><circle cx="148.86" cy="1804.84" r="4.84" fill="none" stroke="#5aa9ff" stroke-width="1" opacity="0.11"/><circle cx="298.98" cy="574.14" r="3.18" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.15"/><circle cx="451.53" cy="1691.12" r="5.07" fill="#7bd88f" opacity="0.05"/><circle cx="750.87" cy="1081.93" r="5.14" fill="#ff6b6b" opacity="0.11"/><circle cx="421.87" cy="918.78" r="2.98" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.07"/><circle cx="225.99" cy="226.73" r="2.83" fill="none" stroke="#7bd88f" stroke-width="1" opacity="0.13"/><circle cx="2.65" cy="2060.89" r="4.96" fill="none" stroke="#7bd88f" stroke-width="1" opacity="0.14"/><circle cx="302.41" cy="875.3" r="2.12" fill="#7bd88f" opacity="0.12"/><circle cx="407.13" cy="1304.53" r="5.25" fill="#7bd88f" opacity="0.09"/><circle cx="308.22" cy="954.27" r="5.03" fill="none" stroke="#5aa9ff" stroke-width="1" opacity="0.11"/><circle cx="877.08" cy="698.55" r="6.2" fill="#ff9f45" opacity="0.13"/><circle cx="446.2" cy="415.72" r="5.19" fill="#ff6b6b" opacity="0.06"/><circle cx="909.69" cy="1685.06" r="4.21" fill="none" stroke="#7bd88f" stroke-width="1" opacity="0.11"/><circle cx="535.47" cy="922.62" r="3.35" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.07"/><circle cx="56.27" cy="1454.27" r="3.58" fill="#7bd88f" opacity="0.1"/><circle cx="302.82" cy="1154.34" r="6.43" fill="none" stroke="#7bd88f" stroke-width="1" opacity="0.14"/><circle cx="213.06" cy="4.51" r="4.51" fill="#7bd88f" opacity="0.08"/><circle cx="479.02" cy="366.37" r="5.07" fill="#7bd88f" opacity="0.09"/><circle cx="109.63" cy="1163.93" r="4.28" fill="none" stroke="#5aa9ff" stroke-width="1" opacity="0.13"/><circle cx="447.12" cy="1688.38" r="4.35" fill="#ff6b6b" opacity="0.1"/><circle cx="960.88" cy="1720.61" r="4.3" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.12"/><circle cx="543.94" cy="1501.21" r="5.86" fill="none" stroke="#5aa9ff" stroke-width="1" opacity="0.07"/><circle cx="298.72" cy="789.24" r="5.91" fill="#ff9f45" opacity="0.12"/><circle cx="70.24" cy="1113.3" r="3.56" fill="#7bd88f" opacity="0.14"/><circle cx="142.25" cy="129.04" r="5.47" fill="#ff6b6b" opacity="0.09"/><circle cx="433.66" cy="1277.36" r="4.13" fill="#7bd88f" opacity="0.1"/><circle cx="592.26" cy="670.17" r="2.68" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.12"/><circle cx="964.04" cy="7.48" r="6.07" fill="#5aa9ff" opacity="0.12"/><circle cx="42.12" cy="322.06" r="6.22" fill="#ff6b6b" opacity="0.13"/></g>
+<rect width="1000" height="2500" fill="url(#rc-bg)"/>
+<g clip-path="url(#rc-clip)"><circle cx="650.04" cy="2067.74" r="4.35" fill="#5aa9ff" opacity="0.1"/><circle cx="749.4" cy="1668.68" r="4.28" fill="none" stroke="#7bd88f" stroke-width="1" opacity="0.05"/><circle cx="843.19" cy="874.04" r="3.11" fill="none" stroke="#5aa9ff" stroke-width="1" opacity="0.15"/><circle cx="777.79" cy="1130.83" r="5.22" fill="#ff6b6b" opacity="0.08"/><circle cx="141.75" cy="307.5" r="1.88" fill="#ff6b6b" opacity="0.05"/><circle cx="251.76" cy="358.88" r="6.35" fill="none" stroke="#7bd88f" stroke-width="1" opacity="0.13"/><circle cx="640.12" cy="1391.3" r="4.08" fill="#ff9f45" opacity="0.13"/><circle cx="793.63" cy="343.07" r="3.12" fill="none" stroke="#ff9f45" stroke-width="1" opacity="0.12"/><circle cx="115.89" cy="1807.21" r="3.64" fill="#ff9f45" opacity="0.14"/><circle cx="447.28" cy="1962.97" r="1.98" fill="#ff9f45" opacity="0.08"/><circle cx="655.7" cy="2260.24" r="3.38" fill="#7bd88f" opacity="0.12"/><circle cx="970.25" cy="1212.82" r="2.67" fill="none" stroke="#7bd88f" stroke-width="1" opacity="0.05"/><circle cx="810.11" cy="561.75" r="4.7" fill="#7bd88f" opacity="0.15"/><circle cx="693.83" cy="174.76" r="2.46" fill="none" stroke="#7bd88f" stroke-width="1" opacity="0.11"/><circle cx="646.89" cy="262.13" r="1.55" fill="#ff9f45" opacity="0.14"/><circle cx="223.71" cy="539.35" r="5.25" fill="#5aa9ff" opacity="0.09"/><circle cx="295.69" cy="1596.56" r="3.15" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.06"/><circle cx="809.27" cy="1221.34" r="5.11" fill="#7bd88f" opacity="0.06"/><circle cx="719.31" cy="110.55" r="4.15" fill="#5aa9ff" opacity="0.1"/><circle cx="87.09" cy="1567.29" r="6.21" fill="#5aa9ff" opacity="0.05"/><circle cx="673.47" cy="1267.27" r="4.08" fill="#5aa9ff" opacity="0.09"/><circle cx="847.37" cy="73.35" r="5.5" fill="#ff6b6b" opacity="0.09"/><circle cx="775.71" cy="1511.96" r="5.31" fill="#ff9f45" opacity="0.07"/><circle cx="122.63" cy="2197.71" r="3.67" fill="none" stroke="#ff9f45" stroke-width="1" opacity="0.07"/><circle cx="662.95" cy="2458.71" r="3" fill="#ff6b6b" opacity="0.08"/><circle cx="868.95" cy="1154.92" r="4.47" fill="#ff9f45" opacity="0.11"/><circle cx="998.35" cy="1087.54" r="2.47" fill="none" stroke="#7bd88f" stroke-width="1" opacity="0.15"/><circle cx="816.67" cy="2048.96" r="1.92" fill="#ff6b6b" opacity="0.12"/><circle cx="146.71" cy="516.96" r="3.35" fill="none" stroke="#5aa9ff" stroke-width="1" opacity="0.14"/><circle cx="83.94" cy="1668.95" r="2.32" fill="#ff6b6b" opacity="0.12"/><circle cx="536.16" cy="477.99" r="5.83" fill="#ff6b6b" opacity="0.09"/><circle cx="102.33" cy="1047.16" r="6.36" fill="#5aa9ff" opacity="0.15"/><circle cx="302.93" cy="1958.83" r="4.44" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.09"/><circle cx="856.95" cy="2050.66" r="5.71" fill="#7bd88f" opacity="0.06"/><circle cx="361.3" cy="889.83" r="3.73" fill="#ff9f45" opacity="0.11"/><circle cx="99.98" cy="2076.9" r="3.02" fill="#5aa9ff" opacity="0.09"/><circle cx="131.03" cy="2488.01" r="3.89" fill="none" stroke="#ff9f45" stroke-width="1" opacity="0.12"/><circle cx="279.27" cy="2091.89" r="2.69" fill="none" stroke="#ff9f45" stroke-width="1" opacity="0.12"/><circle cx="640.96" cy="1814.91" r="6.15" fill="#5aa9ff" opacity="0.09"/><circle cx="461.84" cy="1148.79" r="2.7" fill="#7bd88f" opacity="0.13"/><circle cx="598.31" cy="830.1" r="3.08" fill="#7bd88f" opacity="0.14"/><circle cx="682.62" cy="467.34" r="3.24" fill="none" stroke="#5aa9ff" stroke-width="1" opacity="0.11"/><circle cx="562.1" cy="1973.24" r="1.68" fill="#ff6b6b" opacity="0.07"/><circle cx="304.82" cy="154.76" r="3.73" fill="#ff6b6b" opacity="0.09"/><circle cx="860.48" cy="2426.5" r="1.6" fill="#7bd88f" opacity="0.05"/><circle cx="189.56" cy="1305.13" r="2.88" fill="#ff9f45" opacity="0.09"/><circle cx="147.76" cy="374.23" r="3.82" fill="none" stroke="#5aa9ff" stroke-width="1" opacity="0.11"/><circle cx="973.77" cy="539.71" r="4.63" fill="#5aa9ff" opacity="0.1"/><circle cx="571.12" cy="101.36" r="5.51" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.08"/><circle cx="744.57" cy="1933.08" r="3.58" fill="none" stroke="#5aa9ff" stroke-width="1" opacity="0.14"/><circle cx="262.54" cy="1859.77" r="5.38" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.05"/><circle cx="622.53" cy="563.88" r="3.31" fill="#ff9f45" opacity="0.11"/><circle cx="84.94" cy="1804.75" r="5.69" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.07"/><circle cx="235.19" cy="922.53" r="6.2" fill="#ff9f45" opacity="0.11"/><circle cx="330.73" cy="2238.63" r="4.82" fill="#7bd88f" opacity="0.09"/><circle cx="861.61" cy="2440.8" r="5.86" fill="#7bd88f" opacity="0.1"/><circle cx="689.26" cy="1981.17" r="4.43" fill="none" stroke="#5aa9ff" stroke-width="1" opacity="0.12"/><circle cx="906.96" cy="1157.2" r="5.59" fill="#5aa9ff" opacity="0.12"/><circle cx="367.49" cy="2352.29" r="4.5" fill="#7bd88f" opacity="0.06"/><circle cx="457.88" cy="341.22" r="3.98" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.07"/><circle cx="343.32" cy="621.11" r="5.85" fill="#ff6b6b" opacity="0.07"/><circle cx="65.65" cy="196.38" r="1.65" fill="#5aa9ff" opacity="0.07"/><circle cx="942.01" cy="629.52" r="5.27" fill="#7bd88f" opacity="0.07"/><circle cx="946.86" cy="2353" r="2.22" fill="none" stroke="#ff9f45" stroke-width="1" opacity="0.07"/><circle cx="25.1" cy="1826.4" r="2.39" fill="#7bd88f" opacity="0.15"/><circle cx="93.65" cy="1350.14" r="1.61" fill="#7bd88f" opacity="0.1"/><circle cx="596.09" cy="987.31" r="5.28" fill="none" stroke="#7bd88f" stroke-width="1" opacity="0.13"/><circle cx="81.04" cy="400.86" r="4.44" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.13"/><circle cx="60.87" cy="1604.76" r="4.63" fill="#7bd88f" opacity="0.09"/><circle cx="813.59" cy="1219.56" r="5.7" fill="none" stroke="#7bd88f" stroke-width="1" opacity="0.05"/><circle cx="751.74" cy="1229.13" r="5.95" fill="none" stroke="#7bd88f" stroke-width="1" opacity="0.08"/><circle cx="905.5" cy="2054.62" r="2.2" fill="#ff9f45" opacity="0.15"/><circle cx="349.08" cy="525.47" r="6.01" fill="#7bd88f" opacity="0.1"/><circle cx="878.55" cy="638.09" r="5.43" fill="none" stroke="#7bd88f" stroke-width="1" opacity="0.1"/><circle cx="720.22" cy="1526.76" r="3.69" fill="#ff9f45" opacity="0.12"/><circle cx="147.34" cy="787.95" r="3.5" fill="#ff6b6b" opacity="0.15"/><circle cx="194.08" cy="2248.39" r="3.12" fill="none" stroke="#5aa9ff" stroke-width="1" opacity="0.09"/><circle cx="235.63" cy="1493.79" r="2.77" fill="#7bd88f" opacity="0.13"/><circle cx="117.6" cy="813.31" r="4.83" fill="#5aa9ff" opacity="0.13"/><circle cx="536.32" cy="1501.69" r="3.76" fill="#ff9f45" opacity="0.08"/><circle cx="608.18" cy="1028.79" r="5.95" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.05"/><circle cx="56.09" cy="1945.15" r="5.96" fill="none" stroke="#ff9f45" stroke-width="1" opacity="0.07"/><circle cx="803.94" cy="2200.48" r="5.19" fill="none" stroke="#7bd88f" stroke-width="1" opacity="0.14"/><circle cx="179.09" cy="2266.35" r="4.17" fill="#ff9f45" opacity="0.06"/><circle cx="475.89" cy="2405.79" r="6.37" fill="#5aa9ff" opacity="0.09"/><circle cx="97.9" cy="104.37" r="5.62" fill="#5aa9ff" opacity="0.12"/><circle cx="817.8" cy="1374.96" r="1.62" fill="#ff6b6b" opacity="0.06"/><circle cx="741.85" cy="944.66" r="6.28" fill="#ff6b6b" opacity="0.12"/><circle cx="898.53" cy="2121.69" r="3.77" fill="none" stroke="#7bd88f" stroke-width="1" opacity="0.11"/><circle cx="98.38" cy="1735.73" r="2.68" fill="none" stroke="#ff9f45" stroke-width="1" opacity="0.07"/><circle cx="779.91" cy="1093.68" r="5.95" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.08"/><circle cx="149.54" cy="1521.45" r="5.84" fill="none" stroke="#ff9f45" stroke-width="1" opacity="0.14"/><circle cx="701.14" cy="1811.24" r="5.37" fill="none" stroke="#7bd88f" stroke-width="1" opacity="0.12"/><circle cx="278.4" cy="1439.86" r="4.53" fill="#7bd88f" opacity="0.05"/><circle cx="160.15" cy="2323.11" r="5.45" fill="none" stroke="#5aa9ff" stroke-width="1" opacity="0.12"/><circle cx="392.26" cy="2261.5" r="5.06" fill="#5aa9ff" opacity="0.11"/><circle cx="521.61" cy="436.65" r="3.89" fill="#ff9f45" opacity="0.09"/><circle cx="687.21" cy="234.49" r="4.72" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.12"/><circle cx="598.16" cy="2033.46" r="4.79" fill="#7bd88f" opacity="0.11"/><circle cx="631.23" cy="2422.57" r="2.7" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.06"/><circle cx="919.27" cy="1827.36" r="4.12" fill="#ff6b6b" opacity="0.07"/><circle cx="703.44" cy="73.06" r="6.09" fill="none" stroke="#7bd88f" stroke-width="1" opacity="0.09"/><circle cx="253.02" cy="1212.9" r="1.73" fill="#ff6b6b" opacity="0.1"/><circle cx="809.51" cy="767.3" r="4.83" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.1"/><circle cx="447.31" cy="308.43" r="6.36" fill="none" stroke="#7bd88f" stroke-width="1" opacity="0.09"/><circle cx="537.06" cy="1607.46" r="1.82" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.07"/><circle cx="676.81" cy="1555.55" r="3" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.1"/><circle cx="557.3" cy="84.01" r="1.66" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.06"/><circle cx="300.79" cy="1435.76" r="4.6" fill="#ff6b6b" opacity="0.11"/><circle cx="92.07" cy="1189.45" r="2.14" fill="none" stroke="#7bd88f" stroke-width="1" opacity="0.11"/><circle cx="283.1" cy="2437.14" r="4.88" fill="#7bd88f" opacity="0.14"/><circle cx="510.39" cy="1810.71" r="2.14" fill="none" stroke="#5aa9ff" stroke-width="1" opacity="0.14"/><circle cx="531.51" cy="2348.35" r="2.93" fill="none" stroke="#ff9f45" stroke-width="1" opacity="0.12"/><circle cx="705.16" cy="1164.18" r="4.19" fill="#5aa9ff" opacity="0.13"/><circle cx="884.95" cy="778" r="2.07" fill="none" stroke="#5aa9ff" stroke-width="1" opacity="0.09"/><circle cx="772.77" cy="1216.57" r="5.48" fill="none" stroke="#7bd88f" stroke-width="1" opacity="0.1"/><circle cx="767.92" cy="888.42" r="6.26" fill="#7bd88f" opacity="0.08"/><circle cx="259.83" cy="225.48" r="2.49" fill="#5aa9ff" opacity="0.13"/><circle cx="573.39" cy="267.91" r="5.7" fill="#5aa9ff" opacity="0.15"/><circle cx="415.27" cy="1798.94" r="4.46" fill="none" stroke="#5aa9ff" stroke-width="1" opacity="0.1"/><circle cx="465.24" cy="232.64" r="4.49" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.15"/><circle cx="148.86" cy="2180.81" r="4.84" fill="none" stroke="#5aa9ff" stroke-width="1" opacity="0.11"/><circle cx="298.98" cy="693.74" r="3.18" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.15"/><circle cx="451.53" cy="2043.4" r="5.07" fill="#7bd88f" opacity="0.05"/><circle cx="750.87" cy="1307.31" r="5.14" fill="#ff6b6b" opacity="0.11"/><circle cx="421.87" cy="1110.17" r="2.98" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.07"/><circle cx="225.99" cy="273.96" r="2.83" fill="none" stroke="#7bd88f" stroke-width="1" opacity="0.13"/><circle cx="2.65" cy="2490.2" r="4.96" fill="none" stroke="#7bd88f" stroke-width="1" opacity="0.14"/><circle cx="302.41" cy="1057.64" r="2.12" fill="#7bd88f" opacity="0.12"/><circle cx="407.13" cy="1576.28" r="5.25" fill="#7bd88f" opacity="0.09"/><circle cx="308.22" cy="1153.06" r="5.03" fill="none" stroke="#5aa9ff" stroke-width="1" opacity="0.11"/><circle cx="877.08" cy="844.07" r="6.2" fill="#ff9f45" opacity="0.13"/><circle cx="446.2" cy="502.32" r="5.19" fill="#ff6b6b" opacity="0.06"/><circle cx="909.69" cy="2036.08" r="4.21" fill="none" stroke="#7bd88f" stroke-width="1" opacity="0.11"/><circle cx="535.47" cy="1114.82" r="3.35" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.07"/><circle cx="56.27" cy="1757.21" r="3.58" fill="#7bd88f" opacity="0.1"/><circle cx="302.82" cy="1394.8" r="6.43" fill="none" stroke="#7bd88f" stroke-width="1" opacity="0.14"/><circle cx="213.06" cy="5.46" r="4.51" fill="#7bd88f" opacity="0.08"/><circle cx="479.02" cy="442.69" r="5.07" fill="#7bd88f" opacity="0.09"/><circle cx="109.63" cy="1406.4" r="4.28" fill="none" stroke="#5aa9ff" stroke-width="1" opacity="0.13"/><circle cx="447.12" cy="2040.09" r="4.35" fill="#ff6b6b" opacity="0.1"/><circle cx="960.88" cy="2079.03" r="4.3" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.12"/><circle cx="543.94" cy="1813.93" r="5.86" fill="none" stroke="#5aa9ff" stroke-width="1" opacity="0.07"/><circle cx="298.72" cy="953.65" r="5.91" fill="#ff9f45" opacity="0.12"/><circle cx="70.24" cy="1345.22" r="3.56" fill="#7bd88f" opacity="0.14"/><circle cx="142.25" cy="155.91" r="5.47" fill="#ff6b6b" opacity="0.09"/><circle cx="433.66" cy="1543.46" r="4.13" fill="#7bd88f" opacity="0.1"/><circle cx="592.26" cy="809.77" r="2.68" fill="none" stroke="#ff6b6b" stroke-width="1" opacity="0.12"/><circle cx="964.04" cy="9.03" r="6.07" fill="#5aa9ff" opacity="0.12"/><circle cx="42.12" cy="389.14" r="6.22" fill="#ff6b6b" opacity="0.13"/></g>
 <ellipse cx="240" cy="-40" rx="460" ry="230" fill="url(#rc-glow)"/>
 <text x="46" y="92" fill="#e9eef5" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="50" font-weight="800">@YpCIIIaK</text>
-<rect x="844.1" y="62" width="109.9" height="28" rx="14" fill="#7bd88f" opacity="0.12" stroke="#7bd88f" stroke-width="1" stroke-opacity="0.5"/>
-<circle cx="860.1" cy="76" r="4" fill="#7bd88f"/>
-<text x="872.1" y="80" fill="#7bd88f" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="11" font-weight="700" letter-spacing="0.1em">OPEN TO WORK</text>
+<rect x="820.19" y="62" width="133.81" height="28" rx="14" fill="#7bd88f" opacity="0.12" stroke="#7bd88f" stroke-width="1" stroke-opacity="0.5"/>
+<circle cx="836.19" cy="76" r="4" fill="#7bd88f"/>
+<text x="848.19" y="80" fill="#7bd88f" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="11" font-weight="700" letter-spacing="0.1em">OPEN TO OFFERS</text>
 <text x="46" y="126" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="22" font-weight="600">Frontend / Fullstack</text>
-<text x="313" y="126" fill="#69727f" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="16" font-weight="500">·  Realtime  ·  Trading  ·  Bots  ·  AI</text>
-<text x="46" y="160" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="15" font-weight="400">2+ years across two startups, an HR-tech internship and privacy-first pet</text>
-<text x="46" y="182" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="15" font-weight="400">projects: web apps, trading tools, local Go agents, chatbots and browser</text>
-<text x="46" y="204" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="15" font-weight="400">extensions. React, Angular, Next.js, Vue on the front; Go, Node and Symfony</text>
+<text x="279.67" y="126" fill="#69727f" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="16" font-weight="500">·  Realtime  ·  Trading  ·  Bots  ·  AI</text>
+<text x="46" y="160" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="15" font-weight="400">Currently at a web agency shipping client sites on WordPress and Bitrix. Before that: two</text>
+<text x="46" y="182" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="15" font-weight="400">startups, an HR-tech internship and privacy-first pet projects — trading tools, local Go agents,</text>
+<text x="46" y="204" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="15" font-weight="400">chatbots and browser extensions. React, Angular, Next.js and Vue on the front; Go, Node, PHP</text>
 <text x="46" y="226" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="15" font-weight="400">behind them.</text>
 <rect x="46" y="270" width="216.5" height="92" rx="12" fill="#141a23" stroke="#252c37" stroke-width="1"/>
 <rect x="46" y="270" width="3" height="92" rx="1.5" fill="#ff9f45"/>
@@ -34,9 +34,9 @@
 <text x="66" y="349" fill="#69727f" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="11" font-weight="400">shipping production code</text>
 <rect x="276.5" y="270" width="216.5" height="92" rx="12" fill="#141a23" stroke="#252c37" stroke-width="1"/>
 <rect x="276.5" y="270" width="3" height="92" rx="1.5" fill="#5aa9ff"/>
-<text x="296.5" y="312" fill="#5aa9ff" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="30" font-weight="800">2</text>
-<text x="296.5" y="332" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="600">startups</text>
-<text x="296.5" y="349" fill="#69727f" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="11" font-weight="400">core team · Vortan, AI arena</text>
+<text x="296.5" y="312" fill="#5aa9ff" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="30" font-weight="800">4</text>
+<text x="296.5" y="332" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="600">client sites</text>
+<text x="296.5" y="349" fill="#69727f" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="11" font-weight="400">agency · live production</text>
 <rect x="507" y="270" width="216.5" height="92" rx="12" fill="#141a23" stroke="#252c37" stroke-width="1"/>
 <rect x="507" y="270" width="3" height="92" rx="1.5" fill="#7bd88f"/>
 <text x="527" y="312" fill="#7bd88f" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="30" font-weight="800">St.2</text>
@@ -47,336 +47,429 @@
 <text x="757.5" y="312" fill="#ff6b6b" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="30" font-weight="800">227k</text>
 <text x="757.5" y="332" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="600">docs reindexed</text>
 <text x="757.5" y="349" fill="#69727f" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="11" font-weight="400">a filter nobody could use</text>
-<text x="46" y="402" fill="#ff9f45" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="12" font-weight="700">01</text><text x="76" y="402" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="700" letter-spacing="0.16em">TECH STACK</text><line x1="159" y1="398" x2="954" y2="398" stroke="#252c37" stroke-width="1"/>
+<text x="46" y="402" fill="#ff9f45" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="12" font-weight="700">01</text><text x="76" y="402" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="700" letter-spacing="0.16em">TECH STACK</text><line x1="170.01" y1="398" x2="954" y2="398" stroke="#252c37" stroke-width="1"/>
 <text x="46" y="445" fill="#69727f" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="600">Languages</text>
-<rect x="152" y="428" width="112.25" height="26" rx="13" fill="#3178c6" opacity="0.10"/>
-<rect x="152" y="428" width="112.25" height="26" rx="13" fill="none" stroke="#3178c6" stroke-opacity="0.34" stroke-width="1"/>
+<rect x="152" y="428" width="104.71" height="26" rx="13" fill="#3178c6" opacity="0.10"/>
+<rect x="152" y="428" width="104.71" height="26" rx="13" fill="none" stroke="#3178c6" stroke-opacity="0.34" stroke-width="1"/>
 <circle cx="165" cy="441" r="3.5" fill="#3178c6"/>
 <text x="175" y="445.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">TypeScript 5</text>
-<rect x="272.25" y="428" width="133.81" height="26" rx="13" fill="#f7df1e" opacity="0.10"/>
-<rect x="272.25" y="428" width="133.81" height="26" rx="13" fill="none" stroke="#f7df1e" stroke-opacity="0.34" stroke-width="1"/>
-<circle cx="285.25" cy="441" r="3.5" fill="#f7df1e"/>
-<text x="295.25" y="445.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">JavaScript ES6+</text>
-<rect x="414.06" y="428" width="76.31" height="26" rx="13" fill="#00add8" opacity="0.10"/>
-<rect x="414.06" y="428" width="76.31" height="26" rx="13" fill="none" stroke="#00add8" stroke-opacity="0.34" stroke-width="1"/>
-<circle cx="427.06" cy="441" r="3.5" fill="#00add8"/>
-<text x="437.06" y="445.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">Go 1.22</text>
-<rect x="498.38" y="428" width="76.31" height="26" rx="13" fill="#777bb4" opacity="0.10"/>
-<rect x="498.38" y="428" width="76.31" height="26" rx="13" fill="none" stroke="#777bb4" stroke-opacity="0.34" stroke-width="1"/>
-<circle cx="511.38" cy="441" r="3.5" fill="#777bb4"/>
-<text x="521.38" y="445.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">PHP 8.4</text>
-<rect x="582.69" y="428" width="69.13" height="26" rx="13" fill="#3776ab" opacity="0.10"/>
-<rect x="582.69" y="428" width="69.13" height="26" rx="13" fill="none" stroke="#3776ab" stroke-opacity="0.34" stroke-width="1"/>
-<circle cx="595.69" cy="441" r="3.5" fill="#3776ab"/>
-<text x="605.69" y="445.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">Python</text>
-<rect x="659.81" y="428" width="47.56" height="26" rx="13" fill="#4479a1" opacity="0.10"/>
-<rect x="659.81" y="428" width="47.56" height="26" rx="13" fill="none" stroke="#4479a1" stroke-opacity="0.34" stroke-width="1"/>
-<circle cx="672.81" cy="441" r="3.5" fill="#4479a1"/>
-<text x="682.81" y="445.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">SQL</text>
+<rect x="264.71" y="428" width="129.48" height="26" rx="13" fill="#f7df1e" opacity="0.10"/>
+<rect x="264.71" y="428" width="129.48" height="26" rx="13" fill="none" stroke="#f7df1e" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="277.71" cy="441" r="3.5" fill="#f7df1e"/>
+<text x="287.71" y="445.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">JavaScript ES6+</text>
+<rect x="402.19" y="428" width="71.58" height="26" rx="13" fill="#00add8" opacity="0.10"/>
+<rect x="402.19" y="428" width="71.58" height="26" rx="13" fill="none" stroke="#00add8" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="415.19" cy="441" r="3.5" fill="#00add8"/>
+<text x="425.19" y="445.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">Go 1.22</text>
+<rect x="481.77" y="428" width="74.89" height="26" rx="13" fill="#777bb4" opacity="0.10"/>
+<rect x="481.77" y="428" width="74.89" height="26" rx="13" fill="none" stroke="#777bb4" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="494.77" cy="441" r="3.5" fill="#777bb4"/>
+<text x="504.77" y="445.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">PHP 8.4</text>
+<rect x="564.66" y="428" width="66.94" height="26" rx="13" fill="#3776ab" opacity="0.10"/>
+<rect x="564.66" y="428" width="66.94" height="26" rx="13" fill="none" stroke="#3776ab" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="577.66" cy="441" r="3.5" fill="#3776ab"/>
+<text x="587.66" y="445.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">Python</text>
+<rect x="639.6" y="428" width="52.63" height="26" rx="13" fill="#4479a1" opacity="0.10"/>
+<rect x="639.6" y="428" width="52.63" height="26" rx="13" fill="none" stroke="#4479a1" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="652.6" cy="441" r="3.5" fill="#4479a1"/>
+<text x="662.6" y="445.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">SQL</text>
 <text x="46" y="483" fill="#69727f" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="600">Frontend</text>
-<rect x="152" y="466" width="105.06" height="26" rx="13" fill="#61dafb" opacity="0.10"/>
-<rect x="152" y="466" width="105.06" height="26" rx="13" fill="none" stroke="#61dafb" stroke-opacity="0.34" stroke-width="1"/>
+<rect x="152" y="466" width="100.07" height="26" rx="13" fill="#61dafb" opacity="0.10"/>
+<rect x="152" y="466" width="100.07" height="26" rx="13" fill="none" stroke="#61dafb" stroke-opacity="0.34" stroke-width="1"/>
 <circle cx="165" cy="479" r="3.5" fill="#61dafb"/>
 <text x="175" y="483.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">React 18/19</text>
-<rect x="265.06" y="466" width="97.88" height="26" rx="13" fill="#dd0031" opacity="0.10"/>
-<rect x="265.06" y="466" width="97.88" height="26" rx="13" fill="none" stroke="#dd0031" stroke-opacity="0.34" stroke-width="1"/>
-<circle cx="278.06" cy="479" r="3.5" fill="#dd0031"/>
-<text x="288.06" y="483.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">Angular 19</text>
-<rect x="370.94" y="466" width="155.38" height="26" rx="13" fill="#dddddd" opacity="0.10"/>
-<rect x="370.94" y="466" width="155.38" height="26" rx="13" fill="none" stroke="#dddddd" stroke-opacity="0.34" stroke-width="1"/>
-<circle cx="383.94" cy="479" r="3.5" fill="#dddddd"/>
-<text x="393.94" y="483.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">Next.js App Router</text>
-<rect x="534.31" y="466" width="61.94" height="26" rx="13" fill="#4fc08d" opacity="0.10"/>
-<rect x="534.31" y="466" width="61.94" height="26" rx="13" fill="none" stroke="#4fc08d" stroke-opacity="0.34" stroke-width="1"/>
-<circle cx="547.31" cy="479" r="3.5" fill="#4fc08d"/>
-<text x="557.31" y="483.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">Vue 3</text>
-<rect x="604.25" y="466" width="54.75" height="26" rx="13" fill="#a78bfa" opacity="0.10"/>
-<rect x="604.25" y="466" width="54.75" height="26" rx="13" fill="none" stroke="#a78bfa" stroke-opacity="0.34" stroke-width="1"/>
-<circle cx="617.25" cy="479" r="3.5" fill="#a78bfa"/>
-<text x="627.25" y="483.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">Vite</text>
-<rect x="667" y="466" width="83.5" height="26" rx="13" fill="#06b6d4" opacity="0.10"/>
-<rect x="667" y="466" width="83.5" height="26" rx="13" fill="none" stroke="#06b6d4" stroke-opacity="0.34" stroke-width="1"/>
-<circle cx="680" cy="479" r="3.5" fill="#06b6d4"/>
-<text x="690" y="483.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">Tailwind</text>
-<rect x="758.5" y="466" width="54.75" height="26" rx="13" fill="#cf649a" opacity="0.10"/>
-<rect x="758.5" y="466" width="54.75" height="26" rx="13" fill="none" stroke="#cf649a" stroke-opacity="0.34" stroke-width="1"/>
-<circle cx="771.5" cy="479" r="3.5" fill="#cf649a"/>
-<text x="781.5" y="483.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">SCSS</text>
-<text x="46" y="521" fill="#69727f" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="600">State</text>
-<rect x="152" y="504" width="119.44" height="26" rx="13" fill="#764abc" opacity="0.10"/>
-<rect x="152" y="504" width="119.44" height="26" rx="13" fill="none" stroke="#764abc" stroke-opacity="0.34" stroke-width="1"/>
-<circle cx="165" cy="517" r="3.5" fill="#764abc"/>
-<text x="175" y="521.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">Redux Toolkit</text>
-<rect x="279.44" y="504" width="133.81" height="26" rx="13" fill="#dd0031" opacity="0.10"/>
-<rect x="279.44" y="504" width="133.81" height="26" rx="13" fill="none" stroke="#dd0031" stroke-opacity="0.34" stroke-width="1"/>
-<circle cx="292.44" cy="517" r="3.5" fill="#dd0031"/>
-<text x="302.44" y="521.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">Angular Signals</text>
-<rect x="421.25" y="504" width="69.13" height="26" rx="13" fill="#e0234e" opacity="0.10"/>
-<rect x="421.25" y="504" width="69.13" height="26" rx="13" fill="none" stroke="#e0234e" stroke-opacity="0.34" stroke-width="1"/>
-<circle cx="434.25" cy="517" r="3.5" fill="#e0234e"/>
-<text x="444.25" y="521.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">RxJS 7</text>
-<rect x="498.38" y="504" width="169.75" height="26" rx="13" fill="#61dafb" opacity="0.10"/>
-<rect x="498.38" y="504" width="169.75" height="26" rx="13" fill="none" stroke="#61dafb" stroke-opacity="0.34" stroke-width="1"/>
-<circle cx="511.38" cy="517" r="3.5" fill="#61dafb"/>
-<text x="521.38" y="521.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">useSyncExternalStore</text>
-<text x="46" y="559" fill="#69727f" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="600">Backend</text>
-<rect x="152" y="542" width="97.88" height="26" rx="13" fill="#339933" opacity="0.10"/>
-<rect x="152" y="542" width="97.88" height="26" rx="13" fill="none" stroke="#339933" stroke-opacity="0.34" stroke-width="1"/>
-<circle cx="165" cy="555" r="3.5" fill="#339933"/>
-<text x="175" y="559.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">Node.js 22</text>
-<rect x="257.88" y="542" width="69.13" height="26" rx="13" fill="#e0234e" opacity="0.10"/>
-<rect x="257.88" y="542" width="69.13" height="26" rx="13" fill="none" stroke="#e0234e" stroke-opacity="0.34" stroke-width="1"/>
-<circle cx="270.88" cy="555" r="3.5" fill="#e0234e"/>
-<text x="280.88" y="559.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">NestJS</text>
-<rect x="335" y="542" width="90.69" height="26" rx="13" fill="#dddddd" opacity="0.10"/>
-<rect x="335" y="542" width="90.69" height="26" rx="13" fill="none" stroke="#dddddd" stroke-opacity="0.34" stroke-width="1"/>
-<circle cx="348" cy="555" r="3.5" fill="#dddddd"/>
-<text x="358" y="559.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">Symfony 8</text>
-<rect x="433.69" y="542" width="112.25" height="26" rx="13" fill="#fc6a31" opacity="0.10"/>
-<rect x="433.69" y="542" width="112.25" height="26" rx="13" fill="none" stroke="#fc6a31" stroke-opacity="0.34" stroke-width="1"/>
-<circle cx="446.69" cy="555" r="3.5" fill="#fc6a31"/>
-<text x="456.69" y="559.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">Doctrine ORM</text>
-<rect x="553.94" y="542" width="97.88" height="26" rx="13" fill="#4169e1" opacity="0.10"/>
-<rect x="553.94" y="542" width="97.88" height="26" rx="13" fill="none" stroke="#4169e1" stroke-opacity="0.34" stroke-width="1"/>
-<circle cx="566.94" cy="555" r="3.5" fill="#4169e1"/>
-<text x="576.94" y="559.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">PostgreSQL</text>
-<rect x="659.81" y="542" width="97.88" height="26" rx="13" fill="#ffa41c" opacity="0.10"/>
-<rect x="659.81" y="542" width="97.88" height="26" rx="13" fill="none" stroke="#ffa41c" stroke-opacity="0.34" stroke-width="1"/>
-<circle cx="672.81" cy="555" r="3.5" fill="#ffa41c"/>
-<text x="682.81" y="559.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">OpenSearch</text>
-<text x="46" y="597" fill="#69727f" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="600">Realtime</text>
-<rect x="152" y="580" width="90.69" height="26" rx="13" fill="#7bd88f" opacity="0.10"/>
-<rect x="152" y="580" width="90.69" height="26" rx="13" fill="none" stroke="#7bd88f" stroke-opacity="0.34" stroke-width="1"/>
-<circle cx="165" cy="593" r="3.5" fill="#7bd88f"/>
-<text x="175" y="597.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">WebSocket</text>
-<rect x="250.69" y="580" width="148.19" height="26" rx="13" fill="#00add8" opacity="0.10"/>
-<rect x="250.69" y="580" width="148.19" height="26" rx="13" fill="none" stroke="#00add8" stroke-opacity="0.34" stroke-width="1"/>
-<circle cx="263.69" cy="593" r="3.5" fill="#00add8"/>
-<text x="273.69" y="597.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">gorilla/websocket</text>
-<rect x="406.88" y="580" width="133.81" height="26" rx="13" fill="#f0b90b" opacity="0.10"/>
-<rect x="406.88" y="580" width="133.81" height="26" rx="13" fill="none" stroke="#f0b90b" stroke-opacity="0.34" stroke-width="1"/>
-<circle cx="419.88" cy="593" r="3.5" fill="#f0b90b"/>
-<text x="429.88" y="597.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">Binance WS/REST</text>
-<rect x="548.69" y="580" width="83.5" height="26" rx="13" fill="#00add8" opacity="0.10"/>
-<rect x="548.69" y="580" width="83.5" height="26" rx="13" fill="none" stroke="#00add8" stroke-opacity="0.34" stroke-width="1"/>
-<circle cx="561.69" cy="593" r="3.5" fill="#00add8"/>
-<text x="571.69" y="597.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">gopsutil</text>
-<rect x="640.19" y="580" width="141" height="26" rx="13" fill="#8b95a3" opacity="0.10"/>
-<rect x="640.19" y="580" width="141" height="26" rx="13" fill="none" stroke="#8b95a3" stroke-opacity="0.34" stroke-width="1"/>
-<circle cx="653.19" cy="593" r="3.5" fill="#8b95a3"/>
-<text x="663.19" y="597.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">NDJSON streaming</text>
-<text x="46" y="635" fill="#69727f" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="600">Dataviz</text>
-<rect x="152" y="618" width="148.19" height="26" rx="13" fill="#f9a03c" opacity="0.10"/>
-<rect x="152" y="618" width="148.19" height="26" rx="13" fill="none" stroke="#f9a03c" stroke-opacity="0.34" stroke-width="1"/>
-<circle cx="165" cy="631" r="3.5" fill="#f9a03c"/>
-<text x="175" y="635.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">d3-geo + topojson</text>
-<rect x="308.19" y="618" width="155.38" height="26" rx="13" fill="#26a5e4" opacity="0.10"/>
-<rect x="308.19" y="618" width="155.38" height="26" rx="13" fill="none" stroke="#26a5e4" stroke-opacity="0.34" stroke-width="1"/>
-<circle cx="321.19" cy="631" r="3.5" fill="#26a5e4"/>
-<text x="331.19" y="635.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">Lightweight Charts</text>
-<rect x="471.56" y="618" width="83.5" height="26" rx="13" fill="#ff6384" opacity="0.10"/>
-<rect x="471.56" y="618" width="83.5" height="26" rx="13" fill="none" stroke="#ff6384" stroke-opacity="0.34" stroke-width="1"/>
-<circle cx="484.56" cy="631" r="3.5" fill="#ff6384"/>
-<text x="494.56" y="635.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">Recharts</text>
-<rect x="563.06" y="618" width="148.19" height="26" rx="13" fill="#a78bfa" opacity="0.10"/>
-<rect x="563.06" y="618" width="148.19" height="26" rx="13" fill="none" stroke="#a78bfa" stroke-opacity="0.34" stroke-width="1"/>
-<circle cx="576.06" cy="631" r="3.5" fill="#a78bfa"/>
-<text x="586.06" y="635.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">custom SVG charts</text>
-<text x="46" y="673" fill="#69727f" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="600">Infra</text>
-<rect x="152" y="656" width="126.62" height="26" rx="13" fill="#dddddd" opacity="0.10"/>
-<rect x="152" y="656" width="126.62" height="26" rx="13" fill="none" stroke="#dddddd" stroke-opacity="0.34" stroke-width="1"/>
-<circle cx="165" cy="669" r="3.5" fill="#dddddd"/>
-<text x="175" y="673.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">GitHub Actions</text>
-<rect x="286.63" y="656" width="69.13" height="26" rx="13" fill="#2496ed" opacity="0.10"/>
-<rect x="286.63" y="656" width="69.13" height="26" rx="13" fill="none" stroke="#2496ed" stroke-opacity="0.34" stroke-width="1"/>
-<circle cx="299.63" cy="669" r="3.5" fill="#2496ed"/>
-<text x="309.63" y="673.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">Docker</text>
-<rect x="363.75" y="656" width="133.81" height="26" rx="13" fill="#f9ad00" opacity="0.10"/>
-<rect x="363.75" y="656" width="133.81" height="26" rx="13" fill="none" stroke="#f9ad00" stroke-opacity="0.34" stroke-width="1"/>
-<circle cx="376.75" cy="669" r="3.5" fill="#f9ad00"/>
-<text x="386.75" y="673.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">pnpm workspaces</text>
-<rect x="505.56" y="656" width="69.13" height="26" rx="13" fill="#ef7b4d" opacity="0.10"/>
-<rect x="505.56" y="656" width="69.13" height="26" rx="13" fill="none" stroke="#ef7b4d" stroke-opacity="0.34" stroke-width="1"/>
-<circle cx="518.56" cy="669" r="3.5" fill="#ef7b4d"/>
-<text x="528.56" y="673.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">ArgoCD</text>
-<rect x="582.69" y="656" width="90.69" height="26" rx="13" fill="#8b95a3" opacity="0.10"/>
-<rect x="582.69" y="656" width="90.69" height="26" rx="13" fill="none" stroke="#8b95a3" stroke-opacity="0.34" stroke-width="1"/>
-<circle cx="595.69" cy="669" r="3.5" fill="#8b95a3"/>
-<text x="605.69" y="673.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">SARIF 2.1</text>
-<rect x="681.38" y="656" width="69.13" height="26" rx="13" fill="#7bd88f" opacity="0.10"/>
-<rect x="681.38" y="656" width="69.13" height="26" rx="13" fill="none" stroke="#7bd88f" stroke-opacity="0.34" stroke-width="1"/>
-<circle cx="694.38" cy="669" r="3.5" fill="#7bd88f"/>
-<text x="704.38" y="673.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">Vitest</text>
-<text x="46" y="724" fill="#ff9f45" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="12" font-weight="700">02</text><text x="76" y="724" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="700" letter-spacing="0.16em">KEY FOCUS AREAS</text><line x1="193.5" y1="720" x2="954" y2="720" stroke="#252c37" stroke-width="1"/>
-<circle cx="53" cy="765" r="4" fill="#5aa9ff"/>
-<circle cx="53" cy="765" r="8" fill="none" stroke="#5aa9ff" stroke-opacity="0.3" stroke-width="1"/>
-<text x="72" y="763" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="14" font-weight="700">Frontend &amp; UI/UX</text>
-<text x="72" y="781" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="400">complex SPAs, Cmd-K palette, virtual scroll</text>
-<circle cx="515" cy="765" r="4" fill="#7bd88f"/>
-<circle cx="515" cy="765" r="8" fill="none" stroke="#7bd88f" stroke-opacity="0.3" stroke-width="1"/>
-<text x="534" y="763" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="14" font-weight="700">Realtime data</text>
-<text x="534" y="781" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="400">WS with backoff, multiplexed typed streams</text>
-<circle cx="53" cy="811" r="4" fill="#f0b90b"/>
-<circle cx="53" cy="811" r="8" fill="none" stroke="#f0b90b" stroke-opacity="0.3" stroke-width="1"/>
-<text x="72" y="809" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="14" font-weight="700">Trading tools</text>
-<text x="72" y="827" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="400">strategy builders, backtesting, live charts</text>
-<circle cx="515" cy="811" r="4" fill="#00add8"/>
-<circle cx="515" cy="811" r="8" fill="none" stroke="#00add8" stroke-opacity="0.3" stroke-width="1"/>
-<text x="534" y="809" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="14" font-weight="700">Local-first agents</text>
-<text x="534" y="827" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="400">Go + gopsutil, nothing leaves the machine</text>
-<circle cx="53" cy="857" r="4" fill="#ff6b6b"/>
-<circle cx="53" cy="857" r="8" fill="none" stroke="#ff6b6b" stroke-opacity="0.3" stroke-width="1"/>
-<text x="72" y="855" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="14" font-weight="700">Bots &amp; integrations</text>
-<text x="72" y="873" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="400">Telegram/VK, payments, AI assistants</text>
-<circle cx="515" cy="857" r="4" fill="#a78bfa"/>
-<circle cx="515" cy="857" r="8" fill="none" stroke="#a78bfa" stroke-opacity="0.3" stroke-width="1"/>
-<text x="534" y="855" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="14" font-weight="700">AI products</text>
-<text x="534" y="873" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="400">multi-agent chains, RAG, usage analytics</text>
-<text x="46" y="922" fill="#ff9f45" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="12" font-weight="700">03</text><text x="76" y="922" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="700" letter-spacing="0.16em">SELECTED PROJECTS</text><line x1="207.3" y1="918" x2="954" y2="918" stroke="#252c37" stroke-width="1"/>
-<rect x="46" y="948" width="446" height="168" rx="12" fill="#141a23" stroke="#252c37" stroke-width="1"/>
-<rect x="46" y="948" width="446" height="3" rx="1.5" fill="#5aa9ff" opacity="0.85"/>
-<text x="66" y="982" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="15" font-weight="700">HR-tech candidate search</text>
-<text x="66" y="1001" fill="#5aa9ff" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="11.5" font-weight="600">internship · React + NestJS</text>
-<text x="66" y="1024" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">Search UI and filters over OpenSearch. Wrote the experience</text>
-<text x="66" y="1041" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">calculator that merges overlapping employment ranges, then</text>
-<text x="66" y="1058" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">backfilled 227k documents whose totalExperience was zero —</text>
-<text x="66" y="1075" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">the range filter had never worked.</text>
-<rect x="66" y="1094" width="64.3" height="20" rx="10" fill="#5aa9ff" opacity="0.10"/>
-<text x="98.15" y="1108" fill="#5aa9ff" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">React 18</text>
-<rect x="136.3" y="1094" width="52.22" height="20" rx="10" fill="#5aa9ff" opacity="0.10"/>
-<text x="162.41" y="1108" fill="#5aa9ff" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">NestJS</text>
-<rect x="194.53" y="1094" width="76.38" height="20" rx="10" fill="#5aa9ff" opacity="0.10"/>
-<text x="232.71" y="1108" fill="#5aa9ff" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">OpenSearch</text>
-<rect x="276.9" y="1094" width="46.19" height="20" rx="10" fill="#5aa9ff" opacity="0.10"/>
-<text x="299.99" y="1108" fill="#5aa9ff" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">Redux</text>
-<rect x="508" y="948" width="446" height="168" rx="12" fill="#141a23" stroke="#252c37" stroke-width="1"/>
-<rect x="508" y="948" width="446" height="3" rx="1.5" fill="#f0b90b" opacity="0.85"/>
-<text x="528" y="982" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="15" font-weight="700">Vortan — crypto tools</text>
-<text x="528" y="1001" fill="#f0b90b" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="11.5" font-weight="600">startup · 4+ months · core</text>
-<text x="528" y="1024" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">Led frontend and part of the backend for strategy builders,</text>
-<text x="528" y="1041" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">backtesting and trading-bot control. Team reached Google</text>
-<text x="528" y="1058" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">Accelerator Stage 2 — a year of server resources.</text>
-<rect x="528" y="1077" width="94.49" height="20" rx="10" fill="#f0b90b" opacity="0.10"/>
-<text x="575.24" y="1091" fill="#f0b90b" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">Frontend lead</text>
-<rect x="628.49" y="1077" width="82.41" height="20" rx="10" fill="#f0b90b" opacity="0.10"/>
-<text x="669.69" y="1091" fill="#f0b90b" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">Backtesting</text>
-<rect x="716.9" y="1077" width="52.22" height="20" rx="10" fill="#f0b90b" opacity="0.10"/>
-<text x="743.01" y="1091" fill="#f0b90b" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">Charts</text>
-<rect x="46" y="1130" width="446" height="185" rx="12" fill="#141a23" stroke="#252c37" stroke-width="1"/>
-<rect x="46" y="1130" width="446" height="3" rx="1.5" fill="#a78bfa" opacity="0.85"/>
-<text x="66" y="1164" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="15" font-weight="700">AI multi-agent platform</text>
-<text x="66" y="1183" fill="#a78bfa" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="11.5" font-weight="600">current main project</text>
-<text x="66" y="1206" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">An arena for AI agents: visual chain builder combining</text>
-<text x="66" y="1223" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">models and scripts without code, RAG and thinking modes,</text>
-<text x="66" y="1240" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">debate and collaboration formats, plus cost and error</text>
-<text x="66" y="1257" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">analytics.</text>
-<rect x="66" y="1276" width="58.26" height="20" rx="10" fill="#a78bfa" opacity="0.10"/>
-<text x="95.13" y="1290" fill="#a78bfa" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">Next.js</text>
-<rect x="130.26" y="1276" width="76.38" height="20" rx="10" fill="#a78bfa" opacity="0.10"/>
-<text x="168.45" y="1290" fill="#a78bfa" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">OpenRouter</text>
-<rect x="212.64" y="1276" width="34.11" height="20" rx="10" fill="#a78bfa" opacity="0.10"/>
-<text x="229.69" y="1290" fill="#a78bfa" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">RAG</text>
-<rect x="508" y="1130" width="446" height="185" rx="12" fill="#141a23" stroke="#252c37" stroke-width="1"/>
-<rect x="508" y="1130" width="446" height="3" rx="1.5" fill="#00add8" opacity="0.85"/>
-<text x="528" y="1164" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="15" font-weight="700">WiFi Analyzer</text>
-<text x="528" y="1183" fill="#00add8" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="11.5" font-weight="600">own product · Go + React</text>
-<text x="528" y="1206" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">Privacy-first local analyser: one poll loop fans snapshots</text>
-<text x="528" y="1223" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">to every client, so N connections is not N syscalls.</text>
-<text x="528" y="1240" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">Offline geo-IP, d3-geo world map, evil-twin detection.</text>
-<text x="528" y="1257" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">Origin locked to localhost so no site can read your process</text>
-<text x="528" y="1274" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">list.</text>
-<rect x="528" y="1293" width="28.08" height="20" rx="10" fill="#00add8" opacity="0.10"/>
-<text x="542.04" y="1307" fill="#00add8" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">Go</text>
-<rect x="562.08" y="1293" width="70.34" height="20" rx="10" fill="#00add8" opacity="0.10"/>
-<text x="597.24" y="1307" fill="#00add8" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">WebSocket</text>
-<rect x="638.41" y="1293" width="52.22" height="20" rx="10" fill="#00add8" opacity="0.10"/>
-<text x="664.53" y="1307" fill="#00add8" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">d3-geo</text>
-<rect x="46" y="1329" width="446" height="168" rx="12" fill="#141a23" stroke="#252c37" stroke-width="1"/>
-<rect x="46" y="1329" width="446" height="3" rx="1.5" fill="#7bd88f" opacity="0.85"/>
-<text x="66" y="1363" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="15" font-weight="700">PC Health Monitor</text>
-<text x="66" y="1382" fill="#7bd88f" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="11.5" font-weight="600">own product · in progress</text>
-<text x="66" y="1405" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">Catches unnatural load — hidden miners, thermal throttling,</text>
-<text x="66" y="1422" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">disk decay. Per-process CPU% as a delta between polls</text>
-<text x="66" y="1439" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">rather than the lifetime average the library hands you. 24h</text>
-<text x="66" y="1456" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">ring buffer plus rotated JSONL.</text>
-<rect x="66" y="1475" width="28.08" height="20" rx="10" fill="#7bd88f" opacity="0.10"/>
-<text x="80.04" y="1489" fill="#7bd88f" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">Go</text>
-<rect x="100.08" y="1475" width="64.3" height="20" rx="10" fill="#7bd88f" opacity="0.10"/>
-<text x="132.23" y="1489" fill="#7bd88f" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">gopsutil</text>
-<rect x="170.38" y="1475" width="46.19" height="20" rx="10" fill="#7bd88f" opacity="0.10"/>
-<text x="193.47" y="1489" fill="#7bd88f" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">React</text>
-<rect x="508" y="1329" width="446" height="168" rx="12" fill="#141a23" stroke="#252c37" stroke-width="1"/>
-<rect x="508" y="1329" width="446" height="3" rx="1.5" fill="#ff9f45" opacity="0.85"/>
-<text x="528" y="1363" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="15" font-weight="700">Repo Anti-Rot</text>
-<text x="528" y="1382" fill="#ff9f45" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="11.5" font-weight="600">own product · 17 scanners</text>
-<text x="528" y="1405" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">Scores a repository 0–100 and tracks its decay. One engine</text>
-<text x="528" y="1422" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">in three wrappers: CLI, GitHub Action with SARIF and PR</text>
-<text x="528" y="1439" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">comments, and a Next.js dashboard. ~237 Vitest tests</text>
-<text x="528" y="1456" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">against deterministic stubs.</text>
-<rect x="528" y="1475" width="58.26" height="20" rx="10" fill="#ff9f45" opacity="0.10"/>
-<text x="557.13" y="1489" fill="#ff9f45" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">Next.js</text>
-<rect x="592.26" y="1475" width="94.49" height="20" rx="10" fill="#ff9f45" opacity="0.10"/>
-<text x="639.51" y="1489" fill="#ff9f45" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">GitHub Action</text>
-<rect x="692.75" y="1475" width="34.11" height="20" rx="10" fill="#ff9f45" opacity="0.10"/>
-<text x="709.81" y="1489" fill="#ff9f45" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">OSV</text>
-<rect x="46" y="1511" width="446" height="151" rx="12" fill="#141a23" stroke="#252c37" stroke-width="1"/>
-<rect x="46" y="1511" width="446" height="3" rx="1.5" fill="#4285f4" opacity="0.85"/>
-<text x="66" y="1545" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="15" font-weight="700">Trading Chrome extensions</text>
-<text x="66" y="1564" fill="#4285f4" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="11.5" font-weight="600">2+ months · MV3</text>
-<text x="66" y="1587" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">TraderNet and Binance: extra panels and metrics,</text>
-<text x="66" y="1604" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">automation, market monitoring and API integration. Plus a</text>
-<text x="66" y="1621" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">data parser, CSS detector and UI block copier.</text>
-<rect x="66" y="1640" width="82.41" height="20" rx="10" fill="#4285f4" opacity="0.10"/>
-<text x="107.21" y="1654" fill="#4285f4" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">Manifest V3</text>
-<rect x="154.41" y="1640" width="106.56" height="20" rx="10" fill="#4285f4" opacity="0.10"/>
-<text x="207.69" y="1654" fill="#4285f4" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">Service Workers</text>
-<rect x="508" y="1511" width="446" height="151" rx="12" fill="#141a23" stroke="#252c37" stroke-width="1"/>
-<rect x="508" y="1511" width="446" height="3" rx="1.5" fill="#26a5e4" opacity="0.85"/>
-<text x="528" y="1545" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="15" font-weight="700">Telegram bots — YourTar</text>
-<text x="528" y="1564" fill="#26a5e4" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="11.5" font-weight="600">~6 months · PHP/Python</text>
-<text x="528" y="1587" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">Reporting for a retail store, an online psychology school</text>
-<text x="528" y="1604" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">and a gym: user flows, admin panels, notifications, and</text>
-<text x="528" y="1621" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">AI-automated reports that cut the manual work.</text>
-<rect x="528" y="1640" width="64.3" height="20" rx="10" fill="#26a5e4" opacity="0.10"/>
-<text x="560.15" y="1654" fill="#26a5e4" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">Telegram</text>
-<rect x="598.3" y="1640" width="34.11" height="20" rx="10" fill="#26a5e4" opacity="0.10"/>
-<text x="615.36" y="1654" fill="#26a5e4" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">PHP</text>
-<rect x="638.41" y="1640" width="28.08" height="20" rx="10" fill="#26a5e4" opacity="0.10"/>
-<text x="652.45" y="1654" fill="#26a5e4" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">AI</text>
-<text x="46" y="1708" fill="#ff9f45" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="12" font-weight="700">04</text><text x="76" y="1708" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="700" letter-spacing="0.16em">EDUCATION &amp; ABOUT</text><line x1="207.3" y1="1704" x2="954" y2="1704" stroke="#252c37" stroke-width="1"/>
-<rect x="46" y="1734" width="490.32" height="177" rx="12" fill="#141a23" stroke="#252c37" stroke-width="1"/>
-<text x="66" y="1766" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="14" font-weight="700">BSc Software Engineering</text>
-<text x="66" y="1786" fill="#ff9f45" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="12" font-weight="600">TUSUR, Russia · expected 2028</text>
-<text x="66" y="1810" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="400">Scholarship IT programmes at TSU (Russia)</text>
-<text x="66" y="1827" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="400">and AITU (Kazakhstan). Entered three</text>
-<text x="66" y="1844" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="400">state-funded programmes across fields.</text>
-<line x1="66" y1="1857" x2="516.32" y2="1857" stroke="#252c37"/>
-<text x="66" y="1873" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="500">Udemy — Complete JavaScript + React</text>
-<text x="66" y="1890" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="500">Google Accelerator — Stage 2 (AI project)</text>
-<rect x="552.32" y="1734" width="401.68" height="177" rx="12" fill="#141a23" stroke="#252c37" stroke-width="1"/>
-<text x="572.32" y="1766" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="14" font-weight="700">About</text>
-<text x="572.32" y="1788" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="400">Comfortable on both sides: components, states and</text>
-<text x="572.32" y="1805" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="400">layout, and the logic behind them — APIs, bots, agents,</text>
-<text x="572.32" y="1822" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="400">AI. Ship fast, then improve on feedback. Happiest where</text>
-<text x="572.32" y="1839" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="400">a web interface meets live data.</text>
-<line x1="572.32" y1="1863" x2="934" y2="1863" stroke="#252c37"/>
-<rect x="572.32" y="1872" width="77.95" height="19" rx="9.5" fill="#252c37" opacity="0.7"/>
-<text x="611.3" y="1885" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="11" font-weight="500" text-anchor="middle">basketball</text>
-<rect x="656.27" y="1872" width="77.95" height="19" rx="9.5" fill="#252c37" opacity="0.7"/>
-<text x="695.25" y="1885" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="11" font-weight="500" text-anchor="middle">water polo</text>
-<rect x="740.22" y="1872" width="53.97" height="19" rx="9.5" fill="#252c37" opacity="0.7"/>
-<text x="767.21" y="1885" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="11" font-weight="500" text-anchor="middle">skiing</text>
-<rect x="800.19" y="1872" width="59.97" height="19" rx="9.5" fill="#252c37" opacity="0.7"/>
-<text x="830.17" y="1885" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="11" font-weight="500" text-anchor="middle">fitness</text>
-<rect x="46" y="1947" width="908" height="76" rx="14" fill="#121821" stroke="#252c37" stroke-width="1"/>
-<rect x="46" y="1947" width="4" height="76" rx="2" fill="url(#rc-accent)"/>
-<text x="72" y="1979" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="16" font-weight="700">Let's talk</text>
-<text x="72" y="2001" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="400">Open to Frontend / Fullstack — realtime, trading, AI, automation</text>
-<rect x="722.6" y="1963" width="211.4" height="44" rx="10" fill="#ff9f45" opacity="0.10" stroke="#ff9f45" stroke-opacity="0.35"/>
-<text x="828.3" y="1980" fill="#ff9f45" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="9.5" font-weight="700" text-anchor="middle" letter-spacing="0.1em">PORTFOLIO</text>
-<text x="828.3" y="1997" fill="#c2cbd6" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="12" font-weight="600" text-anchor="middle">portfolioypshak.vercel.app</text>
-<rect x="602.7" y="1963" width="107.9" height="44" rx="10" fill="#26a5e4" opacity="0.10" stroke="#26a5e4" stroke-opacity="0.35"/>
-<text x="656.65" y="1980" fill="#26a5e4" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="9.5" font-weight="700" text-anchor="middle" letter-spacing="0.1em">TELEGRAM</text>
-<text x="656.65" y="1997" fill="#c2cbd6" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="12" font-weight="600" text-anchor="middle">@bigboyvova</text>
-<rect x="0.5" y="0.5" width="999" height="2068" rx="20" fill="none" stroke="#252c37" stroke-width="1"/>
+<rect x="260.07" y="466" width="92.25" height="26" rx="13" fill="#dd0031" opacity="0.10"/>
+<rect x="260.07" y="466" width="92.25" height="26" rx="13" fill="none" stroke="#dd0031" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="273.07" cy="479" r="3.5" fill="#dd0031"/>
+<text x="283.07" y="483.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">Angular 19</text>
+<rect x="360.32" y="466" width="138.63" height="26" rx="13" fill="#dddddd" opacity="0.10"/>
+<rect x="360.32" y="466" width="138.63" height="26" rx="13" fill="none" stroke="#dddddd" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="373.32" cy="479" r="3.5" fill="#dddddd"/>
+<text x="383.32" y="483.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">Next.js App Router</text>
+<rect x="506.94" y="466" width="59.79" height="26" rx="13" fill="#4fc08d" opacity="0.10"/>
+<rect x="506.94" y="466" width="59.79" height="26" rx="13" fill="none" stroke="#4fc08d" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="519.94" cy="479" r="3.5" fill="#4fc08d"/>
+<text x="529.94" y="483.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">Vue 3</text>
+<rect x="574.73" y="466" width="49.85" height="26" rx="13" fill="#a78bfa" opacity="0.10"/>
+<rect x="574.73" y="466" width="49.85" height="26" rx="13" fill="none" stroke="#a78bfa" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="587.73" cy="479" r="3.5" fill="#a78bfa"/>
+<text x="597.73" y="483.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">Vite</text>
+<rect x="632.58" y="466" width="79.27" height="26" rx="13" fill="#06b6d4" opacity="0.10"/>
+<rect x="632.58" y="466" width="79.27" height="26" rx="13" fill="none" stroke="#06b6d4" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="645.58" cy="479" r="3.5" fill="#06b6d4"/>
+<text x="655.58" y="483.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">Tailwind</text>
+<rect x="719.85" y="466" width="61.51" height="26" rx="13" fill="#cf649a" opacity="0.10"/>
+<rect x="719.85" y="466" width="61.51" height="26" rx="13" fill="none" stroke="#cf649a" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="732.85" cy="479" r="3.5" fill="#cf649a"/>
+<text x="742.85" y="483.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">SCSS</text>
+<text x="46" y="521" fill="#69727f" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="600">CMS</text>
+<rect x="152" y="504" width="95.43" height="26" rx="13" fill="#21759b" opacity="0.10"/>
+<rect x="152" y="504" width="95.43" height="26" rx="13" fill="none" stroke="#21759b" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="165" cy="517" r="3.5" fill="#21759b"/>
+<text x="175" y="521.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">WordPress</text>
+<rect x="255.43" y="504" width="116.37" height="26" rx="13" fill="#21759b" opacity="0.10"/>
+<rect x="255.43" y="504" width="116.37" height="26" rx="13" fill="none" stroke="#21759b" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="268.43" cy="517" r="3.5" fill="#21759b"/>
+<text x="278.43" y="521.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">custom themes</text>
+<rect x="379.8" y="504" width="82.71" height="26" rx="13" fill="#00d3ae" opacity="0.10"/>
+<rect x="379.8" y="504" width="82.71" height="26" rx="13" fill="none" stroke="#00d3ae" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="392.8" cy="517" r="3.5" fill="#00d3ae"/>
+<text x="402.8" y="521.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">ACF PRO</text>
+<rect x="470.51" y="504" width="119.55" height="26" rx="13" fill="#61b8d4" opacity="0.10"/>
+<rect x="470.51" y="504" width="119.55" height="26" rx="13" fill="none" stroke="#61b8d4" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="483.51" cy="517" r="3.5" fill="#61b8d4"/>
+<text x="493.51" y="521.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">Contact Form 7</text>
+<rect x="598.05" y="504" width="60.85" height="26" rx="13" fill="#1c9ed9" opacity="0.10"/>
+<rect x="598.05" y="504" width="60.85" height="26" rx="13" fill="none" stroke="#1c9ed9" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="611.05" cy="517" r="3.5" fill="#1c9ed9"/>
+<text x="621.05" y="521.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">Bitrix</text>
+<rect x="666.9" y="504" width="125.77" height="26" rx="13" fill="#a4286a" opacity="0.10"/>
+<rect x="666.9" y="504" width="125.77" height="26" rx="13" fill="none" stroke="#a4286a" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="679.9" cy="517" r="3.5" fill="#a4286a"/>
+<text x="689.9" y="521.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">Yoast + Polylang</text>
+<text x="46" y="559" fill="#69727f" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="600">State</text>
+<rect x="152" y="542" width="108.28" height="26" rx="13" fill="#764abc" opacity="0.10"/>
+<rect x="152" y="542" width="108.28" height="26" rx="13" fill="none" stroke="#764abc" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="165" cy="555" r="3.5" fill="#764abc"/>
+<text x="175" y="559.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">Redux Toolkit</text>
+<rect x="268.28" y="542" width="122.33" height="26" rx="13" fill="#dd0031" opacity="0.10"/>
+<rect x="268.28" y="542" width="122.33" height="26" rx="13" fill="none" stroke="#dd0031" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="281.28" cy="555" r="3.5" fill="#dd0031"/>
+<text x="291.28" y="559.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">Angular Signals</text>
+<rect x="398.61" y="542" width="70.52" height="26" rx="13" fill="#e0234e" opacity="0.10"/>
+<rect x="398.61" y="542" width="70.52" height="26" rx="13" fill="none" stroke="#e0234e" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="411.61" cy="555" r="3.5" fill="#e0234e"/>
+<text x="421.61" y="559.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">RxJS 7</text>
+<rect x="477.13" y="542" width="162.87" height="26" rx="13" fill="#61dafb" opacity="0.10"/>
+<rect x="477.13" y="542" width="162.87" height="26" rx="13" fill="none" stroke="#61dafb" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="490.13" cy="555" r="3.5" fill="#61dafb"/>
+<text x="500.13" y="559.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">useSyncExternalStore</text>
+<text x="46" y="597" fill="#69727f" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="600">Backend</text>
+<rect x="152" y="580" width="89.2" height="26" rx="13" fill="#339933" opacity="0.10"/>
+<rect x="152" y="580" width="89.2" height="26" rx="13" fill="none" stroke="#339933" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="165" cy="593" r="3.5" fill="#339933"/>
+<text x="175" y="597.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">Node.js 22</text>
+<rect x="249.2" y="580" width="70.65" height="26" rx="13" fill="#e0234e" opacity="0.10"/>
+<rect x="249.2" y="580" width="70.65" height="26" rx="13" fill="none" stroke="#e0234e" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="262.2" cy="593" r="3.5" fill="#e0234e"/>
+<text x="272.2" y="597.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">NestJS</text>
+<rect x="327.86" y="580" width="89.2" height="26" rx="13" fill="#dddddd" opacity="0.10"/>
+<rect x="327.86" y="580" width="89.2" height="26" rx="13" fill="none" stroke="#dddddd" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="340.86" cy="593" r="3.5" fill="#dddddd"/>
+<text x="350.86" y="597.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">Symfony 8</text>
+<rect x="425.06" y="580" width="110.54" height="26" rx="13" fill="#fc6a31" opacity="0.10"/>
+<rect x="425.06" y="580" width="110.54" height="26" rx="13" fill="none" stroke="#fc6a31" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="438.06" cy="593" r="3.5" fill="#fc6a31"/>
+<text x="448.06" y="597.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">Doctrine ORM</text>
+<rect x="543.59" y="580" width="100.6" height="26" rx="13" fill="#4169e1" opacity="0.10"/>
+<rect x="543.59" y="580" width="100.6" height="26" rx="13" fill="none" stroke="#4169e1" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="556.59" cy="593" r="3.5" fill="#4169e1"/>
+<text x="566.59" y="597.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">PostgreSQL</text>
+<rect x="652.19" y="580" width="99.94" height="26" rx="13" fill="#ffa41c" opacity="0.10"/>
+<rect x="652.19" y="580" width="99.94" height="26" rx="13" fill="none" stroke="#ffa41c" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="665.19" cy="593" r="3.5" fill="#ffa41c"/>
+<text x="675.19" y="597.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">OpenSearch</text>
+<text x="46" y="635" fill="#69727f" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="600">Realtime</text>
+<rect x="152" y="618" width="92.38" height="26" rx="13" fill="#7bd88f" opacity="0.10"/>
+<rect x="152" y="618" width="92.38" height="26" rx="13" fill="none" stroke="#7bd88f" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="165" cy="631" r="3.5" fill="#7bd88f"/>
+<text x="175" y="635.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">WebSocket</text>
+<rect x="252.38" y="618" width="137.57" height="26" rx="13" fill="#00add8" opacity="0.10"/>
+<rect x="252.38" y="618" width="137.57" height="26" rx="13" fill="none" stroke="#00add8" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="265.38" cy="631" r="3.5" fill="#00add8"/>
+<text x="275.38" y="635.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">gorilla/websocket</text>
+<rect x="397.95" y="618" width="140.22" height="26" rx="13" fill="#f0b90b" opacity="0.10"/>
+<rect x="397.95" y="618" width="140.22" height="26" rx="13" fill="none" stroke="#f0b90b" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="410.95" cy="631" r="3.5" fill="#f0b90b"/>
+<text x="420.95" y="635.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">Binance WS/REST</text>
+<rect x="546.16" y="618" width="73.04" height="26" rx="13" fill="#00add8" opacity="0.10"/>
+<rect x="546.16" y="618" width="73.04" height="26" rx="13" fill="none" stroke="#00add8" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="559.16" cy="631" r="3.5" fill="#00add8"/>
+<text x="569.16" y="635.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">gopsutil</text>
+<rect x="627.2" y="618" width="144.19" height="26" rx="13" fill="#8b95a3" opacity="0.10"/>
+<rect x="627.2" y="618" width="144.19" height="26" rx="13" fill="none" stroke="#8b95a3" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="640.2" cy="631" r="3.5" fill="#8b95a3"/>
+<text x="650.2" y="635.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">NDJSON streaming</text>
+<text x="46" y="673" fill="#69727f" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="600">Dataviz</text>
+<rect x="152" y="656" width="132.53" height="26" rx="13" fill="#f9a03c" opacity="0.10"/>
+<rect x="152" y="656" width="132.53" height="26" rx="13" fill="none" stroke="#f9a03c" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="165" cy="669" r="3.5" fill="#f9a03c"/>
+<text x="175" y="673.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">d3-geo + topojson</text>
+<rect x="292.53" y="656" width="141.67" height="26" rx="13" fill="#26a5e4" opacity="0.10"/>
+<rect x="292.53" y="656" width="141.67" height="26" rx="13" fill="none" stroke="#26a5e4" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="305.53" cy="669" r="3.5" fill="#26a5e4"/>
+<text x="315.53" y="673.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">Lightweight Charts</text>
+<rect x="442.2" y="656" width="80.99" height="26" rx="13" fill="#ff6384" opacity="0.10"/>
+<rect x="442.2" y="656" width="80.99" height="26" rx="13" fill="none" stroke="#ff6384" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="455.2" cy="669" r="3.5" fill="#ff6384"/>
+<text x="465.2" y="673.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">Recharts</text>
+<rect x="531.19" y="656" width="142.07" height="26" rx="13" fill="#a78bfa" opacity="0.10"/>
+<rect x="531.19" y="656" width="142.07" height="26" rx="13" fill="none" stroke="#a78bfa" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="544.19" cy="669" r="3.5" fill="#a78bfa"/>
+<text x="554.19" y="673.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">custom SVG charts</text>
+<rect x="681.26" y="656" width="161.28" height="26" rx="13" fill="#88ce02" opacity="0.10"/>
+<rect x="681.26" y="656" width="161.28" height="26" rx="13" fill="none" stroke="#88ce02" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="694.26" cy="669" r="3.5" fill="#88ce02"/>
+<text x="704.26" y="673.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">GSAP + ScrollTrigger</text>
+<rect x="850.54" y="656" width="71.32" height="26" rx="13" fill="#0080ff" opacity="0.10"/>
+<rect x="850.54" y="656" width="71.32" height="26" rx="13" fill="none" stroke="#0080ff" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="863.54" cy="669" r="3.5" fill="#0080ff"/>
+<text x="873.54" y="673.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">Swiper</text>
+<text x="46" y="711" fill="#69727f" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="600">Infra</text>
+<rect x="152" y="694" width="114.11" height="26" rx="13" fill="#dddddd" opacity="0.10"/>
+<rect x="152" y="694" width="114.11" height="26" rx="13" fill="none" stroke="#dddddd" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="165" cy="707" r="3.5" fill="#dddddd"/>
+<text x="175" y="711.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">GitHub Actions</text>
+<rect x="274.11" y="694" width="69.99" height="26" rx="13" fill="#2496ed" opacity="0.10"/>
+<rect x="274.11" y="694" width="69.99" height="26" rx="13" fill="none" stroke="#2496ed" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="287.11" cy="707" r="3.5" fill="#2496ed"/>
+<text x="297.11" y="711.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">Docker</text>
+<rect x="352.1" y="694" width="136.51" height="26" rx="13" fill="#f9ad00" opacity="0.10"/>
+<rect x="352.1" y="694" width="136.51" height="26" rx="13" fill="none" stroke="#f9ad00" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="365.1" cy="707" r="3.5" fill="#f9ad00"/>
+<text x="375.1" y="711.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">pnpm workspaces</text>
+<rect x="496.61" y="694" width="73.7" height="26" rx="13" fill="#ef7b4d" opacity="0.10"/>
+<rect x="496.61" y="694" width="73.7" height="26" rx="13" fill="none" stroke="#ef7b4d" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="509.61" cy="707" r="3.5" fill="#ef7b4d"/>
+<text x="519.61" y="711.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">ArgoCD</text>
+<rect x="578.31" y="694" width="87.75" height="26" rx="13" fill="#8b95a3" opacity="0.10"/>
+<rect x="578.31" y="694" width="87.75" height="26" rx="13" fill="none" stroke="#8b95a3" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="591.31" cy="707" r="3.5" fill="#8b95a3"/>
+<text x="601.31" y="711.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">SARIF 2.1</text>
+<rect x="674.05" y="694" width="60.85" height="26" rx="13" fill="#7bd88f" opacity="0.10"/>
+<rect x="674.05" y="694" width="60.85" height="26" rx="13" fill="none" stroke="#7bd88f" stroke-opacity="0.34" stroke-width="1"/>
+<circle cx="687.05" cy="707" r="3.5" fill="#7bd88f"/>
+<text x="697.05" y="711.5" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="600">Vitest</text>
+<text x="46" y="762" fill="#ff9f45" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="12" font-weight="700">02</text><text x="76" y="762" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="700" letter-spacing="0.16em">KEY FOCUS AREAS</text><line x1="207.41" y1="758" x2="954" y2="758" stroke="#252c37" stroke-width="1"/>
+<circle cx="53" cy="803" r="4" fill="#5aa9ff"/>
+<circle cx="53" cy="803" r="8" fill="none" stroke="#5aa9ff" stroke-opacity="0.3" stroke-width="1"/>
+<text x="72" y="801" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="14" font-weight="700">Frontend &amp; UI/UX</text>
+<text x="72" y="819" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="400">complex SPAs, Cmd-K palette, virtual scroll</text>
+<circle cx="515" cy="803" r="4" fill="#7bd88f"/>
+<circle cx="515" cy="803" r="8" fill="none" stroke="#7bd88f" stroke-opacity="0.3" stroke-width="1"/>
+<text x="534" y="801" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="14" font-weight="700">Realtime data</text>
+<text x="534" y="819" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="400">WS with backoff, multiplexed typed streams</text>
+<circle cx="53" cy="849" r="4" fill="#f0b90b"/>
+<circle cx="53" cy="849" r="8" fill="none" stroke="#f0b90b" stroke-opacity="0.3" stroke-width="1"/>
+<text x="72" y="847" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="14" font-weight="700">Trading tools</text>
+<text x="72" y="865" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="400">strategy builders, backtesting, live charts</text>
+<circle cx="515" cy="849" r="4" fill="#00add8"/>
+<circle cx="515" cy="849" r="8" fill="none" stroke="#00add8" stroke-opacity="0.3" stroke-width="1"/>
+<text x="534" y="847" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="14" font-weight="700">Local-first agents</text>
+<text x="534" y="865" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="400">Go + gopsutil, nothing leaves the machine</text>
+<circle cx="53" cy="895" r="4" fill="#ff6b6b"/>
+<circle cx="53" cy="895" r="8" fill="none" stroke="#ff6b6b" stroke-opacity="0.3" stroke-width="1"/>
+<text x="72" y="893" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="14" font-weight="700">Bots &amp; integrations</text>
+<text x="72" y="911" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="400">Telegram/VK, payments, AI assistants</text>
+<circle cx="515" cy="895" r="4" fill="#a78bfa"/>
+<circle cx="515" cy="895" r="8" fill="none" stroke="#a78bfa" stroke-opacity="0.3" stroke-width="1"/>
+<text x="534" y="893" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="14" font-weight="700">AI products</text>
+<text x="534" y="911" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="400">multi-agent chains, RAG, usage analytics</text>
+<circle cx="53" cy="941" r="4" fill="#21759b"/>
+<circle cx="53" cy="941" r="8" fill="none" stroke="#21759b" stroke-opacity="0.3" stroke-width="1"/>
+<text x="72" y="939" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="14" font-weight="700">CMS delivery</text>
+<text x="72" y="957" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="400">custom themes, content models, safe deploys</text>
+<text x="46" y="1006" fill="#ff9f45" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="12" font-weight="700">03</text><text x="76" y="1006" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="700" letter-spacing="0.16em">SELECTED PROJECTS</text><line x1="229.67" y1="1002" x2="954" y2="1002" stroke="#252c37" stroke-width="1"/>
+<rect x="46" y="1032" width="446" height="185" rx="12" fill="#141a23" stroke="#252c37" stroke-width="1"/>
+<rect x="46" y="1032" width="446" height="3" rx="1.5" fill="#1c9ed9" opacity="0.85"/>
+<text x="66" y="1066" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="15" font-weight="700">Corporate homepage build</text>
+<text x="66" y="1085" fill="#1c9ed9" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="11.5" font-weight="600">agency · Bitrix + vanilla JS</text>
+<text x="66" y="1108" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">11 new sections into a live site's existing style system, reusing its</text>
+<text x="66" y="1125" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">modals, carousels and grid rather than adding a parallel one. Fluid</text>
+<text x="66" y="1142" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">typography off a single CSS multiplier, cut-corner shapes in clip-path</text>
+<text x="66" y="1159" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">instead of images. Handed over documented and split into existing vs</text>
+<text x="66" y="1176" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">new.</text>
+<rect x="66" y="1195" width="45.27" height="20" rx="10" fill="#1c9ed9" opacity="0.10"/>
+<text x="88.64" y="1209" fill="#1c9ed9" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">Bitrix</text>
+<rect x="117.27" y="1195" width="54.06" height="20" rx="10" fill="#1c9ed9" opacity="0.10"/>
+<text x="144.3" y="1209" fill="#1c9ed9" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">Swiper</text>
+<rect x="177.34" y="1195" width="61.41" height="20" rx="10" fill="#1c9ed9" opacity="0.10"/>
+<text x="208.04" y="1209" fill="#1c9ed9" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">clip-path</text>
+<rect x="508" y="1032" width="446" height="185" rx="12" fill="#141a23" stroke="#252c37" stroke-width="1"/>
+<rect x="508" y="1032" width="446" height="3" rx="1.5" fill="#21759b" opacity="0.85"/>
+<text x="528" y="1066" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="15" font-weight="700">WordPress theme from scratch</text>
+<text x="528" y="1085" fill="#21759b" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="11.5" font-weight="600">agency · PHP + ACF PRO</text>
+<text x="528" y="1108" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">Static markup into a custom theme: CPTs, ACF content model, options</text>
+<text x="528" y="1125" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">pages, forms. Migrated ACF groups from code into the database</text>
+<text x="528" y="1142" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">without losing data, then moved the whole site to production — files, DB</text>
+<text x="528" y="1159" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">and media — with serialize-safe URL replacement.</text>
+<rect x="528" y="1178" width="74.32" height="20" rx="10" fill="#21759b" opacity="0.10"/>
+<text x="565.16" y="1192" fill="#21759b" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">WordPress</text>
+<rect x="608.32" y="1178" width="63.64" height="20" rx="10" fill="#21759b" opacity="0.10"/>
+<text x="640.14" y="1192" fill="#21759b" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">ACF PRO</text>
+<rect x="677.96" y="1178" width="57.18" height="20" rx="10" fill="#21759b" opacity="0.10"/>
+<text x="706.55" y="1192" fill="#21759b" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">WP-CLI</text>
+<rect x="741.14" y="1178" width="52.95" height="20" rx="10" fill="#21759b" opacity="0.10"/>
+<text x="767.61" y="1192" fill="#21759b" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">Docker</text>
+<rect x="46" y="1231" width="446" height="168" rx="12" fill="#141a23" stroke="#252c37" stroke-width="1"/>
+<rect x="46" y="1231" width="446" height="3" rx="1.5" fill="#a4286a" opacity="0.85"/>
+<text x="66" y="1265" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="15" font-weight="700">SEO audit &amp; lead capture</text>
+<text x="66" y="1284" fill="#a4286a" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="11.5" font-weight="600">agency · 4 languages</text>
+<text x="66" y="1307" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">Technical audit of a multilingual site: killed duplicate H1s across</text>
+<text x="66" y="1324" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">dozens of pages, built regional landing pages with correct canonical</text>
+<text x="66" y="1341" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">and noindex. Floating contact widget with three forms, GA4 events on</text>
+<text x="66" y="1358" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">every path to a conversation.</text>
+<rect x="66" y="1377" width="44.49" height="20" rx="10" fill="#a4286a" opacity="0.10"/>
+<text x="88.25" y="1391" fill="#a4286a" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">Yoast</text>
+<rect x="116.49" y="1377" width="59.63" height="20" rx="10" fill="#a4286a" opacity="0.10"/>
+<text x="146.31" y="1391" fill="#a4286a" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">Polylang</text>
+<rect x="182.12" y="1377" width="37.15" height="20" rx="10" fill="#a4286a" opacity="0.10"/>
+<text x="200.7" y="1391" fill="#a4286a" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">CF7</text>
+<rect x="225.27" y="1377" width="37.15" height="20" rx="10" fill="#a4286a" opacity="0.10"/>
+<text x="243.84" y="1391" fill="#a4286a" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">GA4</text>
+<rect x="508" y="1231" width="446" height="168" rx="12" fill="#141a23" stroke="#252c37" stroke-width="1"/>
+<rect x="508" y="1231" width="446" height="3" rx="1.5" fill="#00d3ae" opacity="0.85"/>
+<text x="528" y="1265" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="15" font-weight="700">Client sites — support</text>
+<text x="528" y="1284" fill="#00d3ae" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="11.5" font-weight="600">agency · production, no SSH</text>
+<text x="528" y="1307" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">Feature work on live medical and landing-page sites: CPT ordering</text>
+<text x="528" y="1324" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">rules, editor-facing repeaters, Bitrix24 CRM lead delivery. Every</text>
+<text x="528" y="1341" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">change diffed against the server copy first and written to be additive —</text>
+<text x="528" y="1358" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">an empty field keeps the old behaviour.</text>
+<rect x="528" y="1377" width="69.98" height="20" rx="10" fill="#00d3ae" opacity="0.10"/>
+<text x="562.99" y="1391" fill="#00d3ae" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">WP_Query</text>
+<rect x="603.98" y="1377" width="90.46" height="20" rx="10" fill="#00d3ae" opacity="0.10"/>
+<text x="649.21" y="1391" fill="#00d3ae" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">Bitrix24 REST</text>
+<rect x="700.44" y="1377" width="45.83" height="20" rx="10" fill="#00d3ae" opacity="0.10"/>
+<text x="723.35" y="1391" fill="#00d3ae" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">GSAP</text>
+<rect x="46" y="1413" width="446" height="168" rx="12" fill="#141a23" stroke="#252c37" stroke-width="1"/>
+<rect x="46" y="1413" width="446" height="3" rx="1.5" fill="#5aa9ff" opacity="0.85"/>
+<text x="66" y="1447" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="15" font-weight="700">HR-tech candidate search</text>
+<text x="66" y="1466" fill="#5aa9ff" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="11.5" font-weight="600">internship · React + NestJS</text>
+<text x="66" y="1489" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">Search UI and filters over OpenSearch. Wrote the experience</text>
+<text x="66" y="1506" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">calculator that merges overlapping employment ranges, then backfilled</text>
+<text x="66" y="1523" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">227k documents whose totalExperience was zero — the range filter had</text>
+<text x="66" y="1540" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">never worked.</text>
+<rect x="66" y="1559" width="59.85" height="20" rx="10" fill="#5aa9ff" opacity="0.10"/>
+<text x="95.93" y="1573" fill="#5aa9ff" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">React 18</text>
+<rect x="131.85" y="1559" width="53.51" height="20" rx="10" fill="#5aa9ff" opacity="0.10"/>
+<text x="158.61" y="1573" fill="#5aa9ff" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">NestJS</text>
+<rect x="191.36" y="1559" width="78.11" height="20" rx="10" fill="#5aa9ff" opacity="0.10"/>
+<text x="230.41" y="1573" fill="#5aa9ff" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">OpenSearch</text>
+<rect x="275.47" y="1559" width="47.05" height="20" rx="10" fill="#5aa9ff" opacity="0.10"/>
+<text x="298.99" y="1573" fill="#5aa9ff" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">Redux</text>
+<rect x="508" y="1413" width="446" height="168" rx="12" fill="#141a23" stroke="#252c37" stroke-width="1"/>
+<rect x="508" y="1413" width="446" height="3" rx="1.5" fill="#f0b90b" opacity="0.85"/>
+<text x="528" y="1447" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="15" font-weight="700">Vortan — crypto tools</text>
+<text x="528" y="1466" fill="#f0b90b" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="11.5" font-weight="600">startup · 4+ months · core</text>
+<text x="528" y="1489" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">Led frontend and part of the backend for strategy builders, backtesting</text>
+<text x="528" y="1506" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">and trading-bot control. Team reached Google Accelerator Stage 2 — a</text>
+<text x="528" y="1523" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">year of server resources.</text>
+<rect x="528" y="1542" width="86.12" height="20" rx="10" fill="#f0b90b" opacity="0.10"/>
+<text x="571.06" y="1556" fill="#f0b90b" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">Frontend lead</text>
+<rect x="620.12" y="1542" width="74.77" height="20" rx="10" fill="#f0b90b" opacity="0.10"/>
+<text x="657.5" y="1556" fill="#f0b90b" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">Backtesting</text>
+<rect x="700.89" y="1542" width="50.39" height="20" rx="10" fill="#f0b90b" opacity="0.10"/>
+<text x="726.08" y="1556" fill="#f0b90b" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">Charts</text>
+<rect x="46" y="1595" width="446" height="168" rx="12" fill="#141a23" stroke="#252c37" stroke-width="1"/>
+<rect x="46" y="1595" width="446" height="3" rx="1.5" fill="#a78bfa" opacity="0.85"/>
+<text x="66" y="1629" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="15" font-weight="700">AI multi-agent platform</text>
+<text x="66" y="1648" fill="#a78bfa" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="11.5" font-weight="600">current main project</text>
+<text x="66" y="1671" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">An arena for AI agents: visual chain builder combining models and</text>
+<text x="66" y="1688" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">scripts without code, RAG and thinking modes, debate and collaboration</text>
+<text x="66" y="1705" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">formats, plus cost and error analytics.</text>
+<rect x="66" y="1724" width="51.17" height="20" rx="10" fill="#a78bfa" opacity="0.10"/>
+<text x="91.59" y="1738" fill="#a78bfa" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">Next.js</text>
+<rect x="123.17" y="1724" width="75.55" height="20" rx="10" fill="#a78bfa" opacity="0.10"/>
+<text x="160.94" y="1738" fill="#a78bfa" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">OpenRouter</text>
+<rect x="204.72" y="1724" width="38.37" height="20" rx="10" fill="#a78bfa" opacity="0.10"/>
+<text x="223.9" y="1738" fill="#a78bfa" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">RAG</text>
+<rect x="508" y="1595" width="446" height="168" rx="12" fill="#141a23" stroke="#252c37" stroke-width="1"/>
+<rect x="508" y="1595" width="446" height="3" rx="1.5" fill="#00add8" opacity="0.85"/>
+<text x="528" y="1629" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="15" font-weight="700">WiFi Analyzer</text>
+<text x="528" y="1648" fill="#00add8" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="11.5" font-weight="600">own product · Go + React</text>
+<text x="528" y="1671" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">Privacy-first local analyser: one poll loop fans snapshots to every</text>
+<text x="528" y="1688" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">client, so N connections is not N syscalls. Offline geo-IP, d3-geo world</text>
+<text x="528" y="1705" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">map, evil-twin detection. Origin locked to localhost so no site can read</text>
+<text x="528" y="1722" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">your process list.</text>
+<rect x="528" y="1741" width="29.36" height="20" rx="10" fill="#00add8" opacity="0.10"/>
+<text x="542.68" y="1755" fill="#00add8" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">Go</text>
+<rect x="563.36" y="1741" width="71.76" height="20" rx="10" fill="#00add8" opacity="0.10"/>
+<text x="599.24" y="1755" fill="#00add8" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">WebSocket</text>
+<rect x="641.12" y="1741" width="51.73" height="20" rx="10" fill="#00add8" opacity="0.10"/>
+<text x="666.98" y="1755" fill="#00add8" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">d3-geo</text>
+<rect x="46" y="1777" width="446" height="151" rx="12" fill="#141a23" stroke="#252c37" stroke-width="1"/>
+<rect x="46" y="1777" width="446" height="3" rx="1.5" fill="#7bd88f" opacity="0.85"/>
+<text x="66" y="1811" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="15" font-weight="700">PC Health Monitor</text>
+<text x="66" y="1830" fill="#7bd88f" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="11.5" font-weight="600">own product · in progress</text>
+<text x="66" y="1853" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">Catches unnatural load — hidden miners, thermal throttling, disk decay.</text>
+<text x="66" y="1870" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">Per-process CPU% as a delta between polls rather than the lifetime</text>
+<text x="66" y="1887" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">average the library hands you. 24h ring buffer plus rotated JSONL.</text>
+<rect x="66" y="1906" width="29.36" height="20" rx="10" fill="#7bd88f" opacity="0.10"/>
+<text x="80.68" y="1920" fill="#7bd88f" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">Go</text>
+<rect x="101.36" y="1906" width="55.51" height="20" rx="10" fill="#7bd88f" opacity="0.10"/>
+<text x="129.11" y="1920" fill="#7bd88f" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">gopsutil</text>
+<rect x="162.87" y="1906" width="44.49" height="20" rx="10" fill="#7bd88f" opacity="0.10"/>
+<text x="185.11" y="1920" fill="#7bd88f" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">React</text>
+<rect x="508" y="1777" width="446" height="151" rx="12" fill="#141a23" stroke="#252c37" stroke-width="1"/>
+<rect x="508" y="1777" width="446" height="3" rx="1.5" fill="#ff9f45" opacity="0.85"/>
+<text x="528" y="1811" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="15" font-weight="700">Repo Anti-Rot</text>
+<text x="528" y="1830" fill="#ff9f45" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="11.5" font-weight="600">own product · 17 scanners</text>
+<text x="528" y="1853" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">Scores a repository 0–100 and tracks its decay. One engine in three</text>
+<text x="528" y="1870" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">wrappers: CLI, GitHub Action with SARIF and PR comments, and a</text>
+<text x="528" y="1887" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">Next.js dashboard. ~237 Vitest tests against deterministic stubs.</text>
+<rect x="528" y="1906" width="51.17" height="20" rx="10" fill="#ff9f45" opacity="0.10"/>
+<text x="553.59" y="1920" fill="#ff9f45" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">Next.js</text>
+<rect x="585.17" y="1906" width="84.12" height="20" rx="10" fill="#ff9f45" opacity="0.10"/>
+<text x="627.23" y="1920" fill="#ff9f45" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">GitHub Action</text>
+<rect x="675.29" y="1906" width="38.37" height="20" rx="10" fill="#ff9f45" opacity="0.10"/>
+<text x="694.47" y="1920" fill="#ff9f45" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">OSV</text>
+<rect x="46" y="1942" width="446" height="151" rx="12" fill="#141a23" stroke="#252c37" stroke-width="1"/>
+<rect x="46" y="1942" width="446" height="3" rx="1.5" fill="#4285f4" opacity="0.85"/>
+<text x="66" y="1976" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="15" font-weight="700">Trading Chrome extensions</text>
+<text x="66" y="1995" fill="#4285f4" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="11.5" font-weight="600">2+ months · MV3</text>
+<text x="66" y="2018" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">TraderNet and Binance: extra panels and metrics, automation, market</text>
+<text x="66" y="2035" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">monitoring and API integration. Plus a data parser, CSS detector and</text>
+<text x="66" y="2052" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">UI block copier.</text>
+<rect x="66" y="2071" width="75.77" height="20" rx="10" fill="#4285f4" opacity="0.10"/>
+<text x="103.88" y="2085" fill="#4285f4" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">Manifest V3</text>
+<rect x="147.77" y="2071" width="104.15" height="20" rx="10" fill="#4285f4" opacity="0.10"/>
+<text x="199.84" y="2085" fill="#4285f4" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">Service Workers</text>
+<rect x="508" y="1942" width="446" height="151" rx="12" fill="#141a23" stroke="#252c37" stroke-width="1"/>
+<rect x="508" y="1942" width="446" height="3" rx="1.5" fill="#26a5e4" opacity="0.85"/>
+<text x="528" y="1976" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="15" font-weight="700">Telegram bots — YourTar</text>
+<text x="528" y="1995" fill="#26a5e4" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="11.5" font-weight="600">~6 months · PHP/Python</text>
+<text x="528" y="2018" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">Reporting for a retail store, an online psychology school and a gym:</text>
+<text x="528" y="2035" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">user flows, admin panels, notifications, and AI-automated reports that</text>
+<text x="528" y="2052" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12.5" font-weight="400">cut the manual work.</text>
+<rect x="528" y="2071" width="65.86" height="20" rx="10" fill="#26a5e4" opacity="0.10"/>
+<text x="560.93" y="2085" fill="#26a5e4" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">Telegram</text>
+<rect x="599.86" y="2071" width="38.37" height="20" rx="10" fill="#26a5e4" opacity="0.10"/>
+<text x="619.05" y="2085" fill="#26a5e4" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">PHP</text>
+<rect x="644.23" y="2071" width="26.8" height="20" rx="10" fill="#26a5e4" opacity="0.10"/>
+<text x="657.63" y="2085" fill="#26a5e4" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">AI</text>
+<text x="46" y="2139" fill="#ff9f45" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="12" font-weight="700">04</text><text x="76" y="2139" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="700" letter-spacing="0.16em">EDUCATION &amp; ABOUT</text><line x1="217.96" y1="2135" x2="954" y2="2135" stroke="#252c37" stroke-width="1"/>
+<rect x="46" y="2165" width="490.32" height="177" rx="12" fill="#141a23" stroke="#252c37" stroke-width="1"/>
+<text x="66" y="2197" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="14" font-weight="700">BSc Software Engineering</text>
+<text x="66" y="2217" fill="#ff9f45" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="12" font-weight="600">TUSUR, Russia · expected 2028</text>
+<text x="66" y="2241" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="400">Scholarship IT programmes at TSU (Russia)</text>
+<text x="66" y="2258" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="400">and AITU (Kazakhstan). Entered three</text>
+<text x="66" y="2275" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="400">state-funded programmes across fields.</text>
+<line x1="66" y1="2288" x2="516.32" y2="2288" stroke="#252c37"/>
+<text x="66" y="2304" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="500">Udemy — Complete JavaScript + React</text>
+<text x="66" y="2321" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="500">Google Accelerator — Stage 2 (AI project)</text>
+<rect x="552.32" y="2165" width="401.68" height="177" rx="12" fill="#141a23" stroke="#252c37" stroke-width="1"/>
+<text x="572.32" y="2197" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="14" font-weight="700">About</text>
+<text x="572.32" y="2219" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="400">Comfortable on both sides: components, states and layout, and the</text>
+<text x="572.32" y="2236" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="400">logic behind them — APIs, bots, agents, AI. Ship fast, then improve</text>
+<text x="572.32" y="2253" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="400">on feedback. Happiest where a web interface meets live data.</text>
+<line x1="572.32" y1="2294" x2="934" y2="2294" stroke="#252c37"/>
+<rect x="572.32" y="2303" width="68.71" height="19" rx="9.5" fill="#252c37" opacity="0.7"/>
+<text x="606.68" y="2316" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="11" font-weight="500" text-anchor="middle">basketball</text>
+<rect x="647.03" y="2303" width="71.9" height="19" rx="9.5" fill="#252c37" opacity="0.7"/>
+<text x="682.98" y="2316" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="11" font-weight="500" text-anchor="middle">water polo</text>
+<rect x="724.93" y="2303" width="47.92" height="19" rx="9.5" fill="#252c37" opacity="0.7"/>
+<text x="748.89" y="2316" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="11" font-weight="500" text-anchor="middle">skiing</text>
+<rect x="778.85" y="2303" width="51.22" height="19" rx="9.5" fill="#252c37" opacity="0.7"/>
+<text x="804.46" y="2316" fill="#c2cbd6" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="11" font-weight="500" text-anchor="middle">fitness</text>
+<rect x="46" y="2378" width="908" height="76" rx="14" fill="#121821" stroke="#252c37" stroke-width="1"/>
+<rect x="46" y="2378" width="4" height="76" rx="2" fill="url(#rc-accent)"/>
+<text x="72" y="2410" fill="#e9eef5" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="16" font-weight="700">Let's talk</text>
+<text x="72" y="2432" fill="#8b95a3" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="12" font-weight="400">Open to Frontend / Fullstack — realtime, trading, AI, automation</text>
+<rect x="714.8" y="2394" width="219.2" height="44" rx="10" fill="#ff9f45" opacity="0.10" stroke="#ff9f45" stroke-opacity="0.35"/>
+<text x="824.4" y="2411" fill="#ff9f45" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="9.5" font-weight="700" text-anchor="middle" letter-spacing="0.1em">PORTFOLIO</text>
+<text x="824.4" y="2428" fill="#c2cbd6" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="12" font-weight="600" text-anchor="middle">portfolioypshak.vercel.app</text>
+<rect x="591.6" y="2394" width="111.2" height="44" rx="10" fill="#26a5e4" opacity="0.10" stroke="#26a5e4" stroke-opacity="0.35"/>
+<text x="647.2" y="2411" fill="#26a5e4" font-family="Segoe UI,Inter,Helvetica,Arial,sans-serif" font-size="9.5" font-weight="700" text-anchor="middle" letter-spacing="0.1em">TELEGRAM</text>
+<text x="647.2" y="2428" fill="#c2cbd6" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="12" font-weight="600" text-anchor="middle">@bigboyvova</text>
+<rect x="0.5" y="0.5" width="999" height="2499" rx="20" fill="none" stroke="#252c37" stroke-width="1"/>
 </svg>

@@ -112,14 +112,41 @@ function esc(s: string): string {
 }
 
 /**
- * Estimated advance width.
+ * Estimated advance width, per character rather than per string.
  *
- * Bold text is wider per character, so weight matters more than it looks. These
- * two constants were fitted by rendering and comparing, not guessed, but they
- * remain an approximation — see the header note.
+ * A flat average per character is wrong in the one place it matters most: chip
+ * widths. A chip is sized to its own label, so the error does not average out
+ * across a paragraph the way it does in prose — a label made of wide letters
+ * ("useSyncExternalStore", "pnpm workspaces") measured under, and the text
+ * spilled past the pill drawn around it.
+ *
+ * These ratios are relative to the font size, eyeballed against the Segoe UI /
+ * Inter stack. Still an estimate — SVG offers no way to measure a glyph here —
+ * but wrong by a few percent on a word instead of by a third.
  */
+const NARROW = new Set("iljItf!.,:;'|[]()".split(""))
+const WIDE = new Set("mwMW@%".split(""))
+const CAPS = /[A-Z]/
+
+function charWidth(c: string): number {
+  if (c === " ") return 0.26
+  if (NARROW.has(c)) return 0.3
+  if (WIDE.has(c)) return 0.86
+  if (c >= "0" && c <= "9") return 0.56
+  if (CAPS.test(c)) return 0.67
+  return 0.53
+}
+
 function tw(s: string, size: number, weight = 400): number {
-  return s.length * size * (weight < 600 ? 0.545 : 0.575)
+  let units = 0
+  for (const c of s) units += charWidth(c)
+  // Semibold and bold set wider than regular at the same size.
+  return units * size * (weight < 600 ? 1 : 1.06)
+}
+
+/** Monospace advances uniformly; the proportional table would misjudge it. */
+function twMono(s: string, size: number): number {
+  return s.length * size * 0.6
 }
 
 function truncate(s: string, max: number): string {
@@ -454,7 +481,8 @@ export function renderResumeCardSvg(data: ResumeCardData): string {
   for (const link of [...data.links].reverse()) {
     const value = truncate(link.value, 34)
     const label = link.label.toUpperCase()
-    const bw = Math.max(tw(value, 12, 600), tw(label, 10, 700)) + 32
+    // The value is set in monospace, the label is not.
+    const bw = Math.max(twMono(value, 12), tw(label, 10, 700)) + 32
     lx -= bw
     out.push(
       `<rect x="${r(lx)}" y="${r(y + 16)}" width="${r(bw)}" height="44" rx="10" fill="${link.color}" opacity="0.10" stroke="${link.color}" stroke-opacity="0.35"/>`,

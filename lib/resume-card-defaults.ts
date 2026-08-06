@@ -22,13 +22,14 @@ export const DEFAULT_RESUME: ResumeCardData = {
   headline: "Frontend / Fullstack",
   subtitle: "·  Realtime  ·  Trading  ·  Bots  ·  AI",
   summary:
-    "2+ years across two startups, an HR-tech internship and privacy-first pet projects: " +
-    "web apps, trading tools, local Go agents, chatbots and browser extensions. " +
-    "React, Angular, Next.js, Vue on the front; Go, Node and Symfony behind them.",
-  availability: "Open to work",
+    "Currently at a web agency shipping client sites on WordPress and Bitrix. " +
+    "Before that: two startups, an HR-tech internship and privacy-first pet projects — " +
+    "trading tools, local Go agents, chatbots and browser extensions. " +
+    "React, Angular, Next.js and Vue on the front; Go, Node, PHP behind them.",
+  availability: "Open to offers",
   stats: [
     { value: "2+", label: "years", note: "shipping production code" },
-    { value: "2", label: "startups", note: "core team · Vortan, AI arena" },
+    { value: "4", label: "client sites", note: "agency · live production" },
     { value: "St.2", label: "Google Accelerator", note: "a year of server resources" },
     { value: "227k", label: "docs reindexed", note: "a filter nobody could use" },
   ],
@@ -54,6 +55,17 @@ export const DEFAULT_RESUME: ResumeCardData = {
         { name: "Vite", color: "#a78bfa" },
         { name: "Tailwind", color: "#06b6d4" },
         { name: "SCSS", color: "#cf649a" },
+      ],
+    },
+    {
+      group: "CMS",
+      items: [
+        { name: "WordPress", color: "#21759b" },
+        { name: "custom themes", color: "#21759b" },
+        { name: "ACF PRO", color: "#00d3ae" },
+        { name: "Contact Form 7", color: "#61b8d4" },
+        { name: "Bitrix", color: "#1c9ed9" },
+        { name: "Yoast + Polylang", color: "#a4286a" },
       ],
     },
     {
@@ -93,6 +105,8 @@ export const DEFAULT_RESUME: ResumeCardData = {
         { name: "Lightweight Charts", color: "#26a5e4" },
         { name: "Recharts", color: "#ff6384" },
         { name: "custom SVG charts", color: "#a78bfa" },
+        { name: "GSAP + ScrollTrigger", color: "#88ce02" },
+        { name: "Swiper", color: "#0080ff" },
       ],
     },
     {
@@ -114,8 +128,37 @@ export const DEFAULT_RESUME: ResumeCardData = {
     { title: "Local-first agents", note: "Go + gopsutil, nothing leaves the machine", color: "#00add8" },
     { title: "Bots & integrations", note: "Telegram/VK, payments, AI assistants", color: "#ff6b6b" },
     { title: "AI products", note: "multi-agent chains, RAG, usage analytics", color: "#a78bfa" },
+    { title: "CMS delivery", note: "custom themes, content models, safe deploys", color: "#21759b" },
   ],
   projects: [
+    {
+      title: "Corporate homepage build",
+      meta: "agency · Bitrix + vanilla JS",
+      body: "11 new sections into a live site's existing style system, reusing its modals, carousels and grid rather than adding a parallel one. Fluid typography off a single CSS multiplier, cut-corner shapes in clip-path instead of images. Handed over documented and split into existing vs new.",
+      tags: ["Bitrix", "Swiper", "clip-path"],
+      color: "#1c9ed9",
+    },
+    {
+      title: "WordPress theme from scratch",
+      meta: "agency · PHP + ACF PRO",
+      body: "Static markup into a custom theme: CPTs, ACF content model, options pages, forms. Migrated ACF groups from code into the database without losing data, then moved the whole site to production — files, DB and media — with serialize-safe URL replacement.",
+      tags: ["WordPress", "ACF PRO", "WP-CLI", "Docker"],
+      color: "#21759b",
+    },
+    {
+      title: "SEO audit & lead capture",
+      meta: "agency · 4 languages",
+      body: "Technical audit of a multilingual site: killed duplicate H1s across dozens of pages, built regional landing pages with correct canonical and noindex. Floating contact widget with three forms, GA4 events on every path to a conversation.",
+      tags: ["Yoast", "Polylang", "CF7", "GA4"],
+      color: "#a4286a",
+    },
+    {
+      title: "Client sites — support",
+      meta: "agency · production, no SSH",
+      body: "Feature work on live medical and landing-page sites: CPT ordering rules, editor-facing repeaters, Bitrix24 CRM lead delivery. Every change diffed against the server copy first and written to be additive — an empty field keeps the old behaviour.",
+      tags: ["WP_Query", "Bitrix24 REST", "GSAP"],
+      color: "#00d3ae",
+    },
     {
       title: "HR-tech candidate search",
       meta: "internship · React + NestJS",
