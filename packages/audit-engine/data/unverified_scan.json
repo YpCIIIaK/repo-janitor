@@ -1,0 +1,102 @@
+[
+{
+"chain": 1,
+"addr": "0x055E84e7FE8955E2781010B866f10Ef6E1E77e59",
+"size": 11076,
+"impl": null,
+"self_verified": "sourcify",
+"hit": false,
+"pending": false,
+"prog": "Lombard Finance"
+},
+{
+"chain": 1,
+"addr": "0x1De9fcfeDF3E51266c188ee422fbA1c7860DA0eF",
+"size": 1159,
+"impl": "0x4757a83ed9fac47669627c54289b271d7475e852",
+"impl_verified": "sourcify",
+"hit": false,
+"pending": false,
+"prog": "Lombard Finance"
+},
+{
+"chain": 1,
+"addr": "0x451c54981C7DA5d95901b770C540547cF5FE0A2D",
+"size": 1159,
+"impl": "0xc785247dc5a51223aeae23668c24a1a79841a235",
+"impl_verified": "sourcify",
+"hit": false,
+"pending": false,
+"prog": "Lombard Finance"
+},
+{
+"chain": 1,
+"addr": "0x8236a87084f8b84306f72007f36f2618a5634494",
+"size": 1159,
+"impl": "0x072072317469ebb6c340a47e41561c9c3b782bd9",
+"impl_verified": "sourcify",
+"hit": false,
+"pending": false,
+"prog": "Lombard Finance"
+},
+{
+"chain": 1,
+"addr": "0x964677F337d6528d659b1892D0045B8B27183fc0",
+"size": 1159,
+"impl": "0x052359563d104867a42c48cb7e688b1af22f0080",
+"impl_verified": "blockscout",
+"hit": false,
+"pending": false,
+"prog": "Lombard Finance"
+},
+{
+"chain": 1,
+"addr": "0x9eCe5fB1aB62d9075c4ec814b321e24D8EA021ac",
+"size": 1159,
+"impl": "0xb823359367978a28eae71e90f79d95b62348bd80",
+"impl_verified": "sourcify",
+"hit": false,
+"pending": false,
+"prog": "Lombard Finance"
+},
+{
+"chain": 1,
+"addr": "0xB0F70C0bD6FD87dbEb7C10dC692a2a6106817072",
+"size": 1159,
+"impl": "0x6b89d757668a830f17d693a88d46073501df635d",
+"impl_verified": "sourcify",
+"hit": false,
+"pending": false,
+"prog": "Lombard Finance"
+},
+{
+"chain": 1,
+"addr": "0xC3ecFE771564e3f28CFB7a9b203F4d10279338eD",
+"size": 7014,
+"impl": null,
+"self_verified": "blockscout",
+"hit": false,
+"pending": false,
+"prog": "Lombard Finance"
+},
+{
+"chain": 1,
+"addr": "0xc750eCAC7250E0D18ecE2C7a5F130E3A765dc260",
+"size": 5410,
+"impl": null,
+"self_verified": "sourcify",
+"hit": false,
+"pending": false,
+"prog": "Lombard Finance"
+},
+{
+"chain": 1,
+"addr": "0xdad58dfa5c1a7a34419afdbe1f0d610efeea95e4",
+"size": 1159,
+"impl": "0x9f8048c81d00da5e757e20ad5fc89f8a32c5478e",
+"impl_verified": "sourcify",
+"hit": false,
+"pending": false,
+"prog": "Lombard Finance"
+}
+]

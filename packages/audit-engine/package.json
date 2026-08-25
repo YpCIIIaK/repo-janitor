@@ -1,0 +1,12 @@
+{
+  "name": "@repo-anti-rot/audit-engine",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Python audit-market & vulnerability scanning engine (ported from auditscout). Emits JSON snapshots consumed by the dashboard.",
+  "license": "MIT",
+  "scripts": {
+    "market:refresh": "python market.py --refresh",
+    "market": "python market.py",
+    "contests": "python contests.py"
+  }
+}

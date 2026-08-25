@@ -1,0 +1,16 @@
+{
+  "at": "2026-08-15T17:09:00.839Z",
+  "model": "nvidia/nemotron-3.5-lightning:free",
+  "maxRep": 80,
+  "jobs": {
+    "done": 25,
+    "error": 3,
+    "queued": 57
+  },
+  "reports": 25,
+  "phase": "error",
+  "last": "flow-wallet",
+  "done": 24,
+  "errors": 3,
+  "error": "TimeoutError: The operation was aborted due to timeout"
+}

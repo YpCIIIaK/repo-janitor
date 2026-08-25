@@ -1,0 +1,11 @@
+morpho-org/bundler3
+morpho-org/bundles
+morpho-org/metamorpho
+morpho-org/metamorpho-v1.1
+morpho-org/midnight
+morpho-org/morpho-blue
+morpho-org/morpho-blue-irm
+morpho-org/morpho-blue-oracles
+morpho-org/morpho-token
+morpho-org/vault-v2
+morpho-org/vault-v2-adapter-registries

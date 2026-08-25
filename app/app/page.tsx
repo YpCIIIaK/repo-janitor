@@ -298,6 +298,14 @@ export default function DashboardPage() {
           search={search}
           onSearch={setSearch}
           onHome={goHome}
+          extras={
+            <Link
+              href="/app/audit"
+              className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+            >
+              Audit market
+            </Link>
+          }
         />
 
         {showOverview ? (

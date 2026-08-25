@@ -1,0 +1,216 @@
+{
+ "confirmed_real": [
+  {
+   "chain": 1,
+   "addr": "0x19382707d5a47E74f60053b652Ab34b6e30Febad",
+   "size": 7062,
+   "impl": null,
+   "self_verified": null,
+   "hit": true,
+   "prog": "Vesper",
+   "etherscan": "нет"
+  },
+  {
+   "chain": 1,
+   "addr": "0x3bF6Ac986C7Af9A9Ac356C0e99C0041EFd8D96e7",
+   "size": 7005,
+   "impl": null,
+   "self_verified": null,
+   "hit": true,
+   "prog": "Hyperlane",
+   "etherscan": "нет"
+  },
+  {
+   "chain": 1,
+   "addr": "0x47e8aF9e30C32Ab91060ED587894288786761B45",
+   "size": 1426,
+   "impl": null,
+   "self_verified": null,
+   "hit": true,
+   "prog": "Hyperlane",
+   "etherscan": "нет"
+  },
+  {
+   "chain": 1,
+   "addr": "0x8c1001eBee6F25b31863A55EadfF149aF88B356F",
+   "size": 7005,
+   "impl": null,
+   "self_verified": null,
+   "hit": true,
+   "prog": "Hyperlane",
+   "etherscan": "нет"
+  },
+  {
+   "chain": 1,
+   "addr": "0xCe74905e51497b4adD3639366708b821dcBcff96",
+   "size": 6136,
+   "impl": null,
+   "self_verified": null,
+   "hit": true,
+   "prog": "Hyperlane",
+   "etherscan": "нет"
+  },
+  {
+   "chain": 1,
+   "addr": "0xfA21D9628ADce86531854C2B7ef00F07394B0B69",
+   "size": 1426,
+   "impl": null,
+   "self_verified": null,
+   "hit": true,
+   "prog": "Hyperlane",
+   "etherscan": "нет"
+  },
+  {
+   "chain": 8453,
+   "addr": "0x182E8d7c5F1B06201b102123FC7dF0EaeB445a7B",
+   "size": 6136,
+   "impl": null,
+   "self_verified": null,
+   "hit": true,
+   "prog": "Hyperlane",
+   "etherscan": "нет"
+  },
+  {
+   "chain": 8453,
+   "addr": "0x8F7454AC98228f3504Bb91eA3D8Adafe6406110A",
+   "size": 1426,
+   "impl": null,
+   "self_verified": null,
+   "hit": true,
+   "prog": "Hyperlane",
+   "etherscan": "нет"
+  },
+  {
+   "chain": 8453,
+   "addr": "0x8b83fefd896fAa52057798f6426E9f0B080FCCcE",
+   "size": 1426,
+   "impl": null,
+   "self_verified": null,
+   "hit": true,
+   "prog": "Hyperlane",
+   "etherscan": "нет"
+  },
+  {
+   "chain": 42161,
+   "addr": "0x12Df53079d399a47e9E730df095b712B0FDFA791",
+   "size": 1426,
+   "impl": null,
+   "self_verified": null,
+   "hit": true,
+   "prog": "Hyperlane",
+   "etherscan": "нет"
+  },
+  {
+   "chain": 42161,
+   "addr": "0x1df063280C4166AF9a725e3828b4dAC6c7113B08",
+   "size": 6136,
+   "impl": null,
+   "self_verified": null,
+   "hit": true,
+   "prog": "Hyperlane",
+   "etherscan": "нет"
+  },
+  {
+   "chain": 42161,
+   "addr": "0x9e8fFb1c26099e75Dd5D794030e2E9AA51471c25",
+   "size": 3711,
+   "impl": null,
+   "self_verified": null,
+   "hit": true,
+   "prog": "Hyperlane",
+   "etherscan": "нет"
+  },
+  {
+   "chain": 1,
+   "addr": "0xbC9eE0D911739cBc72cd094ADA26F56E0C49EeAE",
+   "size": 2946,
+   "impl": null,
+   "self_verified": null,
+   "hit": true,
+   "prog": "Olympus",
+   "etherscan": "нет"
+  },
+  {
+   "chain": 1,
+   "addr": "0x5C1E3D653fcbC54Ae25c2AD9d59548D2082C687B",
+   "size": 135,
+   "impl": "0xbe6e26e881f73d2b1c4973c097cbcb0d96394601",
+   "impl_verified": null,
+   "hit": true,
+   "prog": "Ether.fi",
+   "etherscan": "нет"
+  },
+  {
+   "chain": 1,
+   "addr": "0x908C4D94D34924765f1eDc22A1DD098397c59dD4",
+   "size": 4009,
+   "impl": null,
+   "self_verified": null,
+   "hit": true,
+   "prog": "GMX",
+   "etherscan": "нет"
+  },
+  {
+   "chain": 1,
+   "addr": "0x55C93b20Dd2F790AC429D6341a022A781791654A",
+   "size": 5776,
+   "impl": null,
+   "self_verified": null,
+   "hit": true,
+   "prog": "deBridge",
+   "etherscan": "нет"
+  }
+ ],
+ "substantial_singletons": [
+  {
+   "chain": 1,
+   "addr": "0x19382707d5a47E74f60053b652Ab34b6e30Febad",
+   "size": 7062,
+   "impl": null,
+   "self_verified": null,
+   "hit": true,
+   "prog": "Vesper",
+   "etherscan": "нет"
+  },
+  {
+   "chain": 42161,
+   "addr": "0x9e8fFb1c26099e75Dd5D794030e2E9AA51471c25",
+   "size": 3711,
+   "impl": null,
+   "self_verified": null,
+   "hit": true,
+   "prog": "Hyperlane",
+   "etherscan": "нет"
+  },
+  {
+   "chain": 1,
+   "addr": "0xbC9eE0D911739cBc72cd094ADA26F56E0C49EeAE",
+   "size": 2946,
+   "impl": null,
+   "self_verified": null,
+   "hit": true,
+   "prog": "Olympus",
+   "etherscan": "нет"
+  },
+  {
+   "chain": 1,
+   "addr": "0x908C4D94D34924765f1eDc22A1DD098397c59dD4",
+   "size": 4009,
+   "impl": null,
+   "self_verified": null,
+   "hit": true,
+   "prog": "GMX",
+   "etherscan": "нет"
+  },
+  {
+   "chain": 1,
+   "addr": "0x55C93b20Dd2F790AC429D6341a022A781791654A",
+   "size": 5776,
+   "impl": null,
+   "self_verified": null,
+   "hit": true,
+   "prog": "deBridge",
+   "etherscan": "нет"
+  }
+ ]
+}

@@ -33,6 +33,7 @@ export default tseslint.config(
       "**/node_modules/**",
       "**/dist/**",
       ".next/**",
+      "packages/audit-engine/**",
       "packages/*/dist/**",
       "datamine/**",
       "sample-repo/**",
