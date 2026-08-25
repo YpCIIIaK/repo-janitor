@@ -1,0 +1,580 @@
+{
+  "n": 25,
+  "open": 17,
+  "closed": 8,
+  "hunt": [
+    {
+      "id": 3,
+      "slug": "bitdelta",
+      "title": "BitDelta",
+      "max": 1000000,
+      "paid": 1107,
+      "subs": 163,
+      "fee": 0,
+      "rep": 0,
+      "langs": [],
+      "leads": 2,
+      "notes": "KYC required (kyc:1); program active, not private/paused; mixed Web/apps scope; max bounty $1M; 163 submissions",
+      "lead_titles": [
+        "High low KYC Document Validation Bypass",
+        "Medium low Overly Permissive CORS Policy"
+      ],
+      "hotspot_titles": [
+        "H1 High IDOR on User Asset Endpoints",
+        "H2 High Race Condition in Transaction Replay Handling",
+        "H3 Medium Insufficient Rate Limiting on API Authentication"
+      ],
+      "summary": "BitDelta is an active HackenProof program with Web and apps scope, KYC mandatory, and a $1M maximum bounty across 163 submissions. Gates are clear: not private, not paused, fee zero, and no reputation barrier. Hotspots highlight IDOR, race conditions, and API rate-limiting as hig"
+    },
+    {
+      "id": 5,
+      "slug": "sui-protocol",
+      "title": "Sui Protocol",
+      "max": 1000000,
+      "paid": 2468750,
+      "subs": 960,
+      "fee": 20,
+      "rep": 0,
+      "langs": [
+        "Move",
+        "Rust"
+      ],
+      "leads": 4,
+      "notes": "KYC required, POC required, $20 antispam fee required; program Active, not private",
+      "lead_titles": [
+        "High medium Staking Reward Calculation Incentive Misalignment",
+        "High low Authority Set Reconfiguration Front-Running",
+        "High medium Move Package Upgradeability Logic Flaw",
+        "Medium low Gas Griefing via Excessive Parallel Contract Calls"
+      ],
+      "hotspot_titles": [
+        "H1 Critical Bridge Native Message Forgery Enabling >$3M Asset Theft",
+        "H2 Critical Consensus BFT Assumption Violation via Epoch Stake Manipulation",
+        "H3 Critical zkLogin Circuit Construction Flaw Allowing Key Derivation Without Valid Identity",
+        "H4 High Move Contract Storage Rebate Exploitation After Epoch Change",
+        "H5 High DeepBook v3 CLOB Logic Flaw Causing Permanent Fund Freeze"
+      ],
+      "summary": "Sui Protocol is an active, KYC/PoC-required bug bounty program on HackenProof with a $20 submission fee and million-dollar payout ceiling. The in-scope attack surface centers on Move/Rust smart contracts, bridge protocol, staking economics, consensus, and zkLogin, with Critical s"
+    },
+    {
+      "id": 1,
+      "slug": "near-intents-bridges",
+      "title": "NEAR Intents: Bridges",
+      "max": 300000,
+      "paid": 45200,
+      "subs": 544,
+      "fee": 5,
+      "rep": 0,
+      "langs": [
+        "Rust",
+        "Solidity",
+        "Wasm"
+      ],
+      "leads": 5,
+      "notes": "KYC required, $5 POC submission fee, live program active",
+      "lead_titles": [
+        "High low MPC Threshold Signature Bypass via DKG Manipulation",
+        "High med Bridge Relayer Signature Validation Gap",
+        "High med Cross-Chain Intent Replay Across Domains",
+        "High low Bitcoin Light-Client Merkle Proof Edge Cases",
+        "High med TEE Attestation Weakness in MPC Node Deployment"
+      ],
+      "hotspot_titles": [
+        "H1 High MPC Threshold Signature Bypass",
+        "H2 High Omni Bridge Relayer Authorization Bypass",
+        "H3 High Cross-Chain Intent Replay Attack",
+        "H4 High Bitcoin Light-Client Proof Validation Flaw",
+        "H5 High MPC Key Share Information Disclosure"
+      ],
+      "summary": "The NEAR Intents: Bridges program covers critical MPC and bridge infrastructure with Critical severity targets across smart contracts and network layers. KYC and a $5 POC fee are required to participate. Hotspots focus on threshold signature bypass, bridge relayer authorization, "
+    },
+    {
+      "id": 6,
+      "slug": "near-smart-contracts-1",
+      "title": "NEAR Smart Contracts",
+      "max": 300000,
+      "paid": 100200,
+      "subs": 271,
+      "fee": 5,
+      "rep": 0,
+      "langs": [
+        "Rust"
+      ],
+      "leads": 5,
+      "notes": "KYC and POC required; $5 submission fee; program active",
+      "lead_titles": [
+        "Critical high Lockup Owner Transfer Bypass",
+        "High med Staking Reward Rate Discrepancy",
+        "High low Multisig Threshold Arithmetic Flaw",
+        "Medium med DAO Proposal Bond Refund Loophole",
+        "High high Cross-Contract Call Gas Forward Missing"
+      ],
+      "hotspot_titles": [
+        "H1 Critical Lockup Vesting Schedule Manipulation",
+        "H2 Critical Staking Pool Delegation Reward Theft",
+        "H3 High Multisig Proposal Front-Running & Quorum Bypass",
+        "H4 High Sputnik DAO Governance Bond Forgiveness Edge Case",
+        "H5 High Staking Pool Factory Parameter Validation Gap",
+        "H6 High Unchecked Recursive Contract Calls in Staking Pool Execution"
+      ],
+      "summary": "The NEAR Smart Contracts program on HackenProof scopes into critical core contracts (lockup, staking-pool, multisig, whitelist, staking-pool-factory, sputnik-dao) written in Rust/WASM. In-scope vulnerabilities center on fund theft, transaction manipulation, economic exploits, and"
+    },
+    {
+      "id": 7,
+      "slug": "near-intents-smart-contracts",
+      "title": "NEAR Intents: Smart Contracts",
+      "max": 300000,
+      "paid": 500000,
+      "subs": 301,
+      "fee": 5,
+      "rep": 0,
+      "langs": [
+        "Rust",
+        "Wasm"
+      ],
+      "leads": 4,
+      "notes": "KYC required; $5 submission fee; payment in NEAR vested over 1 year; test on private testnet encouraged",
+      "lead_titles": [
+        "High high Intent Replay Vulnerability",
+        "High med Controller Privilege Escalation",
+        "Medium low PoA Bridge Token Representation Mismatch",
+        "Medium med Parameter Manipulation in Intent Creation"
+      ],
+      "hotspot_titles": [
+        "H1 Critical Inadequate Intent Signature Verification",
+        "H2 High Front-Running in Intent Execution Order",
+        "H3 Critical Integer Overflow/Underflow in Balance Reconciliation",
+        "H4 Critical Missing Access Control on Fund Withdrawal",
+        "H5 High Cryptographic Hash Collapse in Payload Processing",
+        "H6 High Replay Attack Across Intent Executions"
+      ],
+      "summary": "NEAR Intents is an active HackenProof bug bounty program targeting the Verifier smart contract and associated atomic swap infrastructure on NEAR. Scope centers on fund security, transaction integrity, and cryptographic correctness in Rust/Wasm contracts, with Critical/High severi"
+    },
+    {
+      "id": 8,
+      "slug": "cetus-smart-contracts",
+      "title": "Cetus Smart Contracts",
+      "max": 300000,
+      "paid": 310,
+      "subs": 352,
+      "fee": 0,
+      "rep": 0,
+      "langs": [
+        "Move"
+      ],
+      "leads": 5,
+      "notes": "KYC required; POC required; Move-on-Sui program; not private; active bounty range $10-$300k",
+      "lead_titles": [
+        "High medium Unvalidated governance parameter in swap fee calculation",
+        "Medium low Token metadata mismatch between Move module and external wallet",
+        "High medium Front-runable intent settlement due to predictable nonce generation",
+        "Medium medium Unbounded iteration in reward distribution loop",
+        "High low Missing pause mechanism on critical withdrawal functions"
+      ],
+      "hotspot_titles": [
+        "H1 Critical Unchecked Move transfer in swap routing",
+        "H2 High Admin key compromise on CLMM parameter updates",
+        "H3 High Integer underflow in reward point calculation",
+        "H4 High Reentrancy on external token call in staking withdrawal",
+        "H5 High Intent signature replay without nonce binding",
+        "H6 Critical Proxy upgradeability without governance guardrails"
+      ],
+      "summary": "Cetus Smart Contracts on Sui uses Move for its CLMM, staking, and DEX infrastructure with a $10-$300k bounty range and KYC/POC requirements. The program targets critical logic flaws, fund manipulation, and access control issues in-scope contracts, while out-of-scope excludes theo"
+    },
+    {
+      "id": 9,
+      "slug": "cronos-smart-contracts",
+      "title": "Cronos Smart Contracts",
+      "max": 250000,
+      "paid": 0,
+      "subs": 156,
+      "fee": 0,
+      "rep": 50,
+      "langs": [
+        "Solidity"
+      ],
+      "leads": 4,
+      "notes": "KYC and POC mandatory; program active on Cronos EVM; Critical severity focus on fund drainage",
+      "lead_titles": [
+        "High low Predictable nonce derivation in intent settlement allowing front-run",
+        "High med Unbounded loop in reward distribution without gas cap causing transaction revert",
+        "High low Admin fee percentage miscalculation on fee-on-transfer tokens",
+        "High med Missing role checks on proxy admin functions enabling privilege escalation"
+      ],
+      "hotspot_titles": [
+        "H1 High Absence of replay protection on intent settlement nonces",
+        "H2 High Lack of admin pause function on cross-protocol withdrawal entrypoints",
+        "H3 High Unchecked low-level call on token transfer bypassing balance checks",
+        "H4 High Unvalidated admin-updatable fee percentages in token transfer logic",
+        "H5 High Weak role enforcement on proxy admin migration functions"
+      ],
+      "summary": "The Cronos Smart Contracts program targets EVM DeFi protocols across the Cronos ecosystem, focusing on vulnerabilities that cause unintentional fund withdrawal or user balance loss. Scope is limited to Solidity-based smart contracts, with submissions requiring KYC and POC. Critic"
+    },
+    {
+      "id": 10,
+      "slug": "account-abstraction-bugs",
+      "title": "Account Abstraction Bugs",
+      "max": 250000,
+      "paid": 73000,
+      "subs": 294,
+      "fee": 7,
+      "rep": 0,
+      "langs": [
+        "Solidity"
+      ],
+      "leads": 5,
+      "notes": "KYC required, POC required, $7 submission fee, program active, private: false",
+      "lead_titles": [
+        "High high Absence of emergency pause on EntryPoint/UserOperation critical paths",
+        "High med Stake management loops without gas cap causing transaction revert",
+        "High low On-chain fee parameter manipulation via unvalidated governance inputs",
+        "High med State consistency gap between EntryPoint execution and account logic",
+        "High high Insufficient entropy in UserOperation nonce generation enabling ordering prediction"
+      ],
+      "hotspot_titles": [
+        "H1 High EntryPoint calldata validation gap allowing unintended call execution",
+        "H2 High BaseAccount signature replay without strict nonce binding",
+        "H3 High Paymaster gas payment logic edge cases with token transfer semantics",
+        "H4 High StakeManager parameter tweak enabling O(1) censorship of staked entities",
+        "H5 High Nonce derivation with insufficient entropy in UserOperation settlement"
+      ],
+      "summary": "The Account Abstraction Bugs program on HackenProof targets ERC-4337 core smart contract logic in Solidity, with scope limited to core/utils folders and committed tags v0.6.0–v0.8.0. Critical severity bugs in EntryPoint validation, nonce management, and paymaster fee handling off"
+    },
+    {
+      "id": 11,
+      "slug": "aptos-network",
+      "title": "Aptos Network",
+      "max": 250000,
+      "paid": 1939000,
+      "subs": 457,
+      "fee": 100,
+      "rep": 0,
+      "langs": [
+        "Move",
+        "Rust"
+      ],
+      "leads": 5,
+      "notes": "KYC required; POC required; $100 submission fee; program active and not private",
+      "lead_titles": [
+        "Critical medium Insufficient validation of governance-upgraded Move parameters",
+        "Critical low Absence of pause on critical withdrawal paths in Move modules",
+        "High medium Predictable sequence numbers in Aptos transaction pool enabling front-run",
+        "Medium medium Unbounded iteration in Move reward/fee distribution loops",
+        "Critical low State consistency gap between Move modules and Account Abstraction accounts"
+      ],
+      "hotspot_titles": [
+        "H1 Critical Unvalidated governance parameter in Move fee calculation enabling fund diversion",
+        "H2 Critical Missing emergency pause on critical Move module transfers",
+        "H3 High Predictable nonce derivation in AIP-104 Account Abstraction enabling front-run",
+        "H4 Medium Unbounded loop in Move reward distribution without gas cap",
+        "H5 Critical Privilege escalation via misconfigured Permissioned Signer (AIP-103)"
+      ],
+      "summary": "Aptos Network is an active Layer 1 bug bounty program on HackenProof, accepting Move and Rust smart contract audits with KYC, POC, and a $100 submission fee. Bounties range from $0 to $250,000 based on severity, with Critical rewards for fund-loss or consensus vulnerabilities. Ho"
+    },
+    {
+      "id": 12,
+      "slug": "deltaprime-smart-contracts",
+      "title": "DeltaPrime Smart Contracts",
+      "max": 250000,
+      "paid": 99700,
+      "subs": 510,
+      "fee": 5,
+      "rep": 0,
+      "langs": [
+        "Solidity"
+      ],
+      "leads": 4,
+      "notes": "Submission fee 5 USD; min_reputation 0; program active; Solidity-only EVM contracts; critical severity target in v1.1.0",
+      "lead_titles": [
+        "High medium Fee-on-transfer token miscalculation in pool share updates",
+        "Medium low Predictable Prime Account creation enabling front-run capture",
+        "High medium Insufficient validation of admin-set fee percentages on fee-on-transfer tokens",
+        "High high State consistency gap between Pool snapshot and Prime Account solvency"
+      ],
+      "hotspot_titles": [
+        "H1 High Oracle-mediated LTV circumvention",
+        "H2 High Reentrancy in Prime Account token transfers",
+        "H3 High Missing emergency pause on withdrawal/liquidation paths",
+        "H4 High Governance-upgraded parameter injection into LTV/fees",
+        "H5 Medium Gas-exhaustive interest accrual loop without cap"
+      ],
+      "summary": "DeltaPrime is an active Solidity-based lending bug bounty program on HackenProof, focusing on undercollateralized loan protocols via Prime Accounts and Pool contracts. The in-scope target is v1.1.0 contracts with Critical severity priority, while v2 auxiliary contracts are out of"
+    },
+    {
+      "id": 13,
+      "slug": "citrea-protocol-and-smart-contracts",
+      "title": "Citrea Protocol & Smart Contracts",
+      "max": 250000,
+      "paid": 2100,
+      "subs": 543,
+      "fee": 5,
+      "rep": 50,
+      "langs": [
+        "Rust",
+        "Solidity"
+      ],
+      "leads": 5,
+      "notes": "KYC+POC required, $5 submission fee, active program, EVM/Rust mixed",
+      "lead_titles": [
+        "High low Bridge Message Replay Vulnerability",
+        "High med Proxy Admin Upgrade Without Safety Validation",
+        "High med Governance-Adjusted Fee Parameters Without Solvency Enforcement",
+        "High low Bitcoin Light Client Finality Assumption Gap",
+        "High med OFT Token Transfer Semantic Assumptions"
+      ],
+      "hotspot_titles": [
+        "H1 High Unvalidated Proxy Admin Upgrade Path",
+        "H2 High Fee-on-Transfer Token Balance Tracking Flaw",
+        "H3 High Missing Emergency Pause on Cross-Chain Withdrawal Routes",
+        "H4 High System Contract Initialization Vector",
+        "H5 High Predictable Nonce/Sequence in OFT Bridge Messaging"
+      ],
+      "summary": "Citrea Protocol operates as the first Bitcoin-secured rollup combining zero-knowledge proofs with BitVM two-way peg technology. The program scope encompasses critical EVM smart contracts, system contracts, bridge implementations, and BitVM circuit components, all marked Critical "
+    },
+    {
+      "id": 14,
+      "slug": "cronos-zkevm-smart-contracts",
+      "title": "Cronos zkEVM Smart Contracts",
+      "max": 200000,
+      "paid": 500,
+      "subs": 192,
+      "fee": 0,
+      "rep": 0,
+      "langs": [
+        "Solidity"
+      ],
+      "leads": 3,
+      "notes": "KYC required; EVM/Solidity focus; Active program",
+      "lead_titles": [
+        "High low Oracle Price Manipulation Leading to Liquidation Threshold Abuse",
+        "Critical medium Lack of Timelock on Admin-Upgraded Critical Withdrawal Logic",
+        "High medium Insufficient Input Validation on Cross-Contract Transfers"
+      ],
+      "hotspot_titles": [
+        "H1 Critical Withdrawal Paths Without Emergency Pause Circuit Breaker",
+        "H2 Critical Proxy Admin Upgrade on Fund-Controlling Contracts Without Timelock",
+        "H3 High Fee-on-Transfer Token Reward Distribution Errors",
+        "H4 High Pool Snapshot-Lag Leading to Under-collateralization",
+        "H5 High Predictable Nonce in Custom Token Authorization Schemes"
+      ],
+      "summary": "Cronos zkEVM Smart Contracts is an active EVM/Solidity-focused bug bounty covering Amply Finance, H2 Finance, and Fulcrom DeFi protocols, with an emphasis on vulnerabilities causing unintentional fund withdrawal or user asset loss. The program is live, requires KYC, and offers bo"
+    },
+    {
+      "id": 16,
+      "slug": "risc-zero-blockchain-verifiers",
+      "title": "RISC Zero Blockchain Verifiers",
+      "max": 150000,
+      "paid": 1000,
+      "subs": 140,
+      "fee": 5,
+      "rep": 50,
+      "langs": [
+        "Solidity"
+      ],
+      "leads": 5,
+      "notes": "Active program, 50 reputation minimum, $5 submission fee, no KYC required",
+      "lead_titles": [
+        "High low Absence of Timelock on Verifier Upgrade Parameters",
+        "High med Groth16 Receipt Replay Without Freshness Guarantees",
+        "High low Upstream Contract State Validation Gap in Router Integration",
+        "High med Fee-on-Transfer Token Logic Gap in Verification Payments",
+        "High low Proxy Admin Key Leakage Redirecting Verification Flows"
+      ],
+      "hotspot_titles": [
+        "H1 High Groth16 Receipt Claim Verification Bypass",
+        "H2 High Admin Upgrade Proxy Without Safety Validation",
+        "H3 High Insufficient Input Validation on Cross-Contract Transfers in Router",
+        "H4 High Reentrancy Pattern in Proof Verification Flow",
+        "H5 High Fee Percentage Manipulation on Fee-on-Transfer Tokens",
+        "H6 High Upstream Dependency Exploit via Router Contract"
+      ],
+      "summary": "The RISC Zero Blockchain Verifiers program targets critical vulnerabilities in Groth16 receipt claim verification on Ethereum mainnet, with bounties up to $150k for invalid claims that successfully verify. Scope is limited to active deployed contracts and their router dependencie"
+    },
+    {
+      "id": 17,
+      "slug": "polkadot-bridge",
+      "title": "Polkadot Bridge",
+      "max": 100000,
+      "paid": 0,
+      "subs": 190,
+      "fee": 0,
+      "rep": 80,
+      "langs": [
+        "Rust"
+      ],
+      "leads": 4,
+      "notes": "KYC required (kyc:1) for payout eligibility, min_reputation 80 to participate, no submission fee",
+      "lead_titles": [
+        "High high Potential replay attack vector via missing proof freshness",
+        "High med Proxy admin key leakage redirecting verification flows",
+        "Medium low Fee-on-transfer token balance mismatch during bridge operations",
+        "Medium med Absence of timelock on verifier upgrade parameters"
+      ],
+      "hotspot_titles": [
+        "H1 High Replay vulnerability in cross-chain message relay",
+        "H2 High Insufficient access control on upgradeable proxy admin",
+        "H3 Medium-High Fee-on-transfer token edge case in withdrawal logic",
+        "H4 Medium Missing timelock on critical parameter or upgrade changes",
+        "H5 Medium Rust integer overflow/underflow in balance computations"
+      ],
+      "summary": "The Polkadot Bridge program on HackenProof is an active Rust-based bridge with 190 submissions and a bounty range spanning from minimal to substantial, requiring KYC and min_reputation 80 for participation. Primary risk surfaces involve replay-prone cross-chain messages, upgradea"
+    },
+    {
+      "id": 22,
+      "slug": "cronos-blockchain-protocols",
+      "title": "Cronos Blockchain Protocols",
+      "max": 100000,
+      "paid": 118830,
+      "subs": 321,
+      "fee": 0,
+      "rep": 50,
+      "langs": [
+        "Go"
+      ],
+      "leads": 4,
+      "notes": "KYC and POC required for participation; program active on Cronos EVM/Ethermint/POS",
+      "lead_titles": [
+        "High medium Absence of timelock on verifier upgrade parameters",
+        "High low Fee-on-transfer token logic gap in reward distribution",
+        "High medium Proxy admin key exposure in verification contracts",
+        "High low Missing proof freshness enabling replay attacks"
+      ],
+      "hotspot_titles": [
+        "H1 High Proxy upgrade without timelock or authorization",
+        "H2 High Fee-on-transfer token balance accounting gap",
+        "H3 High Proof freshness gap enabling replay attacks",
+        "H4 High Proxy admin key leakage redirecting verification flows",
+        "H5 High Groth16 receipt validation gap accepting invalid proofs"
+      ],
+      "summary": "Cronos Blockchain Protocols is an active EVM-focused bug bounty program requiring KYC and PoC, with Critical severity on fund-draining vulnerabilities. Scope centers on Cronos EVM, Ethermint, and Cronos POS chain smart contracts. Hotspots target upgradeable contract timelocks, fe"
+    },
+    {
+      "id": 24,
+      "slug": "internet-computer-protocol-icp",
+      "title": "Internet Computer Protocol (ICP)",
+      "max": 50000,
+      "paid": 62200,
+      "subs": 419,
+      "fee": 10,
+      "rep": 0,
+      "langs": [
+        "Rust"
+      ],
+      "leads": 3,
+      "notes": "KYC required; POC required; $10 submission fee; program active",
+      "lead_titles": [
+        "High med Inadequate role-based access control on NNS proposal execution",
+        "High low Missing replay nonce in SNS token swap operations",
+        "Medium low Fee-on-transfer token balance snapshotting flaw in reward distribution"
+      ],
+      "hotspot_titles": [
+        "H1 Critical Missing timelock on NNS governance parameter changes",
+        "H2 Critical Proxy admin key exposure in SNS canister upgrade flow",
+        "H3 High Stale proof acceptance in chain fusion receipt validation",
+        "H4 High Authentication proof replay gap in Internet Identity",
+        "H5 High Unvalidated threshold signature derivation in Chain Fusion Signer"
+      ],
+      "summary": "The ICP bug bounty program encompasses core protocol infrastructure, governance systems, and developer tooling, requiring a $10 submission fee with KYC and POC verification. Critical hotspots center on missing timelocks in NNS governance and proxy admin key exposure in SNS upgrad"
+    },
+    {
+      "id": 25,
+      "slug": "hyperbridge-protocol",
+      "title": "Hyperbridge Protocol",
+      "max": 50000,
+      "paid": 152500,
+      "subs": 2202,
+      "fee": 5,
+      "rep": 0,
+      "langs": [
+        "Rust",
+        "Solidity"
+      ],
+      "leads": 4,
+      "notes": "Active program, mixed Rust/Solidity, $5 submission fee, no KYC, min_rep 0, Critical severity bounties $30k-$50k",
+      "lead_titles": [
+        "Medium medium Fee-on-Transfer Token Balance Tracking Gap",
+        "Medium low Cross-Chain Proof Freshness Absence",
+        "High high Proxy Admin Key Exposure in Verification Contracts",
+        "Low low Missing Sequence Number in Inter-Chain Transactions"
+      ],
+      "hotspot_titles": [
+        "H1 Critical Merkle Proof Validation Gap",
+        "H2 Critical Missing Timelock on Bridge Admin Upgrades",
+        "H3 High Cross-Chain Message Replay Vulnerability",
+        "H4 High Role-Based Access Control Gap on Bridge Critical Functions",
+        "H5 Medium Numeric Overflow Underflow in Cross-Chain Asset Amounts"
+      ],
+      "summary": "Hyperbridge Protocol is an active cross-chain interoperability program targeting bridge and smart contract vulnerabilities in Rust and Solidity. Gates are open (ok=true, no KYC, $5 fee, min_rep 0), with Critical severity bounties up to $50k. Hotspots focus on merkle proof validat"
+    }
+  ],
+  "skip": [
+    {
+      "id": 2,
+      "slug": "bitmart-post-incident-forensics-bounty-hunt",
+      "title": "Bitmart Post-Incident Forensics Bounty Hunt",
+      "max": 58000000,
+      "why": "Program currently paused; active contest not running. Submissions accepted per guidelines but no active triage.",
+      "kill": []
+    },
+    {
+      "id": 4,
+      "slug": "near-protocol",
+      "title": "NEAR Protocol",
+      "max": 1000000,
+      "why": "Program paused; KYC required; $5 POC fee required",
+      "kill": []
+    },
+    {
+      "id": 15,
+      "slug": "risc-zero-zkvm",
+      "title": "RISC Zero zkVM ",
+      "max": 150000,
+      "why": "Program paused; contest not active. Submissions not accepted.",
+      "kill": [
+        "Receipt integrity bypass enabling proof forgery",
+        "Guest VM escape via host library sandbox breach",
+        "Verifier privilege escalation from crafted receipt"
+      ]
+    },
+    {
+      "id": 18,
+      "slug": "zetachain-smart-contracts",
+      "title": "ZetaChain Smart Contracts",
+      "max": 100000,
+      "why": "Program is paused; submission fee $5 required but no reports accepted",
+      "kill": []
+    },
+    {
+      "id": 19,
+      "slug": "walrus-protocol",
+      "title": "Walrus Protocol",
+      "max": 100000,
+      "why": "Program paused; KYC required; $5 submission fee; gates red per program status",
+      "kill": []
+    },
+    {
+      "id": 20,
+      "slug": "zetachain-blockchain-software",
+      "title": "ZetaChain Blockchain Software",
+      "max": 100000,
+      "why": "Program is paused. No active hunting scope.",
+      "kill": []
+    },
+    {
+      "id": 21,
+      "slug": "calyx-smart-contract",
+      "title": "Calyx Smart Contract",
+      "max": 100000,
+      "why": "Program paused; KYC required; $5 submission fee",
+      "kill": []
+    },
+    {
+      "id": 23,
+      "slug": "kai-finance-yield-protocol",
+      "title": "Kai Finance Yield Protocol",
+      "max": 100000,
+      "why": "Program currently paused; no active bounty hunting",
+      "kill": []
+    }
+  ]
+}
