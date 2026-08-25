@@ -1,0 +1,13 @@
+[
+  {
+    "name": "Threshold L2BTCRedeemer (base<->arbitrum)",
+    "a": {"rpc": "https://base-rpc.publicnode.com", "addr": "0xe931f1ac6b00400e1dad153e184afee164d2d88b", "chain": 8453, "eid": 30184},
+    "b": {"rpc": "https://arbitrum-one-rpc.publicnode.com", "addr": "0xd7cd996a47b3293d4fec2dbcf49692370334d9b7", "chain": 42161, "eid": 30110},
+    "shared": ["l1BtcRedeemerWormholeAddress():bytes32", "minimumRedemptionAmount():uint256"]
+  },
+  {
+    "name": "Lombard LBTC OFT (ethereum<->base)",
+    "a": {"rpc": "https://eth.drpc.org", "addr": "0x8236a87084f8b84306f72007f36f2618a5634494", "chain": 1, "eid": 30101},
+    "b": {"rpc": "https://base-rpc.publicnode.com", "addr": "0x1290a6b480f7ef14925229fdb66f5680ad8f44ad", "chain": 8453, "eid": 30184}
+  }
+]

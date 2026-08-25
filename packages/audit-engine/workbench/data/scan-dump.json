@@ -1,0 +1,2299 @@
+{
+  "jobs": [
+    {
+      "status": "done",
+      "n": 25
+    },
+    {
+      "status": "error",
+      "n": 3
+    },
+    {
+      "status": "queued",
+      "n": 56
+    },
+    {
+      "status": "running",
+      "n": 1
+    }
+  ],
+  "n": 25,
+  "rows": [
+    {
+      "id": 1,
+      "slug": "near-intents-bridges",
+      "title": "NEAR Intents: Bridges",
+      "summary": "The NEAR Intents: Bridges program covers critical MPC and bridge infrastructure with Critical severity targets across smart contracts and network layers. KYC and a $5 POC fee are required to participate. Hotspots focus on threshold signature bypass, bridge relayer authorization, cross-chain replay, light-client proof validation, and MPC key disclosure—all directly tied to fund integrity and explicitly in-scope. Leads highlight duplicate-risk vectors in DKG manipulation, relayer validation, replay protection, proof verification, and TEE attestation, with high severity but low-to-medium duplicate probability.",
+      "gates": {
+        "ok": true,
+        "rep": 0,
+        "fee": 0,
+        "notes": "KYC required, $5 POC submission fee, live program active"
+      },
+      "payouts": "",
+      "scope": [
+        "MPC Network threshold signature generation",
+        "Omni Bridge multi-chain asset bridge",
+        "NEAR Intents SDKs and relayers",
+        "Smart contracts: omni-bridge, btc-bridge, btc-light-client-contract",
+        "Treasury addresses (reference docs)"
+      ],
+      "oos": [
+        "Unbounded gas/storage consumption",
+        "Griefing without profit motive",
+        "Network-level DoS",
+        "Wormhole guardian network",
+        "Social engineering and physical TEE attacks",
+        "Test-only code paths (#[cfg(test)])",
+        "Non-default feature gates (dev-utils, benchmark)",
+        "Deployment/operational misconfigurations",
+        "Chain reorgs/validator collusion",
+        "RNG quality issues without cross-asset impact"
+      ],
+      "kill": [],
+      "hotspots": [
+        {
+          "code": "H1",
+          "title": "MPC Threshold Signature Bypass",
+          "severity": "High",
+          "why": "Potential manipulation of DKG output or presignature validation could allow forging signatures below the required threshold, enabling unauthorized chain abstraction signatures."
+        },
+        {
+          "code": "H2",
+          "title": "Omni Bridge Relayer Authorization Bypass",
+          "severity": "High",
+          "why": "Inadequate validation of relayer signatures against intent hashes may permit unauthorized asset withdrawal or double-spending across chains."
+        },
+        {
+          "code": "H3",
+          "title": "Cross-Chain Intent Replay Attack",
+          "severity": "High",
+          "why": "Missing or weak replay nonces across intent domains could enable the same intent to be executed on multiple networks, resulting in double-spending."
+        },
+        {
+          "code": "H4",
+          "title": "Bitcoin Light-Client Proof Validation Flaw",
+          "severity": "High",
+          "why": "Edge cases in Merkle proof verification for btc-light-client-contract may accept invalid Bitcoin block headers, leading to fund misdirection."
+        },
+        {
+          "code": "H5",
+          "title": "MPC Key Share Information Disclosure",
+          "severity": "High",
+          "why": "Side-channel or network leakage of threshold key shares during DKG or signing phases could enable partial key reconstruction."
+        }
+      ],
+      "leads": [
+        {
+          "title": "MPC Threshold Signature Bypass via DKG Manipulation",
+          "severity": "High",
+          "p_dupe": "low",
+          "hypothesis": "If DKG resharing parameters can be influenced by a subset of nodes, the effective threshold may be reduced, allowing signature forgery without full node compromise.",
+          "why_not_oos": "Directly impacts MPC network integrity and cross-chain signature validity; explicitly in-scope under cryptographic flaws and unauthorized access to MPC key shares."
+        },
+        {
+          "title": "Bridge Relayer Signature Validation Gap",
+          "severity": "High",
+          "p_dupe": "med",
+          "hypothesis": "Relayer signatures may not be fully verified against intent content hash, creating a window for malicious relayers to redirect cross-chain asset transfers.",
+          "why_not_oos": "Omni Bridge relayer logic is a core in-scope target for asset transfer security; findings fall under unauthorized transaction and bridge protocol execution flows."
+        },
+        {
+          "title": "Cross-Chain Intent Replay Across Domains",
+          "severity": "High",
+          "p_dupe": "med",
+          "hypothesis": "Intent identifiers may lack chain-binding or unique nonce mechanisms, allowing a valid intent submitted on one chain to be replayed and executed on another.",
+          "why_not_oos": "Replay attacks directly enable double-spending of funds across chains, covered under 'Cross-chain replay attacks enabling double-spending' in-scope category."
+        },
+        {
+          "title": "Bitcoin Light-Client Merkle Proof Edge Cases",
+          "severity": "High",
+          "p_dupe": "low",
+          "hypothesis": "Inconsistent validation logic for Bitcoin block Merkle proofs could accept fraudulent headers, causing the bridge to act on invalid Bitcoin state.",
+          "why_not_oos": "btc-light-client-contract is in-scope; proof validation flaws directly affect cross-chain asset backing and are explicitly listed as verification bypass targets."
+        },
+        {
+          "title": "TEE Attestation Weakness in MPC Node Deployment",
+          "severity": "High",
+          "p_dupe": "med",
+          "hypothesis": "If TEE attestation configuration is weakened or bypassed, MPC signing keys may be extracted or accepted outside the trusted execution environment, compromising the entire signing capability.",
+          "why_not_oos": "TEE integration is documented for MPC nodes; findings on attestation misconfiguration affect the 'Unauthorized access to MPC key shares or signing capability' in-scope category, even if TEE is in grace period."
+        }
+      ],
+      "parse_error": false,
+      "min_rep": 0,
+      "max_bounty": 300000,
+      "paid": 45200,
+      "submissions": 544,
+      "fee": 5,
+      "kyc": 1,
+      "languages": "[\"Rust\",\"Solidity\",\"Wasm\"]",
+      "types": "[\"blockchain\",\"smart contract\"]",
+      "item_counts": {
+        "lead": 5,
+        "hotspot": 5,
+        "kill": 0
+      }
+    },
+    {
+      "id": 2,
+      "slug": "bitmart-post-incident-forensics-bounty-hunt",
+      "title": "Bitmart Post-Incident Forensics Bounty Hunt",
+      "summary": "Bitmart Post-Incident Forensics Bounty Hunt is a paused forensic intelligence program seeking verified data on the December 2021 $196M hack involving stolen private keys across ETH, BSC, TRON, and VeChain. Attackers funneled funds through mixers like Tornado Cash, ChangeNOW, SimpleSwap, and Wasabi CoinJoin. The program offers bounties for attacker identification, fund flow tracing, and successful recovery, with additional percentages on recovered assets. Currently, the active contest is paused, and no triage or payouts are processing.",
+      "gates": {
+        "ok": false,
+        "rep": 0,
+        "fee": 0,
+        "notes": "Program currently paused; active contest not running. Submissions accepted per guidelines but no active triage."
+      },
+      "payouts": "$50-$58,000,000 bounty range per market price at incident date, plus 10%-30% of recovered funds as additional reward based on contribution significance. High-impact intelligence $1k-$5k, medium $500-$2k, low $50-$500.",
+      "scope": [
+        "Attacker identification (on-chain & off-chain ties, social links, CEX account traces)",
+        "Transaction & fund flow analysis (on-chain tracing, mixing activity, laundering methods)",
+        "Infrastructure details (IP addresses, domains, hosting services used)",
+        "Other forensic evidence contributing to identifying the hacker(s)"
+      ],
+      "oos": [
+        "Submissions lacking forensic value",
+        "Repeating known data without new context",
+        "Unverifiable claims",
+        "Activity violating laws or ethical standards"
+      ],
+      "kill": [],
+      "hotspots": [],
+      "leads": [],
+      "parse_error": false,
+      "min_rep": 0,
+      "max_bounty": 58000000,
+      "paid": 0,
+      "submissions": 126,
+      "fee": 0,
+      "kyc": 0,
+      "languages": "[]",
+      "types": "[]",
+      "item_counts": {
+        "lead": 0,
+        "hotspot": 0,
+        "kill": 0
+      }
+    },
+    {
+      "id": 3,
+      "slug": "bitdelta",
+      "title": "BitDelta",
+      "summary": "BitDelta is an active HackenProof program with Web and apps scope, KYC mandatory, and a $1M maximum bounty across 163 submissions. Gates are clear: not private, not paused, fee zero, and no reputation barrier. Hotspots highlight IDOR, race conditions, and API rate-limiting as high-impact areas, while leads point to KYC bypass and CORS misconfiguration as out-of-scope-compliant investigation points.",
+      "gates": {
+        "ok": true,
+        "rep": 0,
+        "fee": 0,
+        "notes": "KYC required (kyc:1); program active, not private/paused; mixed Web/apps scope; max bounty $1M; 163 submissions"
+      },
+      "payouts": "",
+      "scope": [
+        "Web",
+        "apps"
+      ],
+      "oos": [],
+      "kill": [
+        "authorization_boundaries",
+        "input_sanitization",
+        "rate_limiting"
+      ],
+      "hotspots": [
+        {
+          "code": "H1",
+          "title": "IDOR on User Asset Endpoints",
+          "severity": "High",
+          "why": "Missing access control checks allow unauthorized reading or modification of user balances and transaction history."
+        },
+        {
+          "code": "H2",
+          "title": "Race Condition in Transaction Replay Handling",
+          "severity": "High",
+          "why": "Concurrent requests without proper nonce or locking mechanisms can enable double-spend or state inconsistency."
+        },
+        {
+          "code": "H3",
+          "title": "Insufficient Rate Limiting on API Authentication",
+          "severity": "Medium",
+          "why": "Absence of progressive delays or account lockout facilitates automated brute-force or credential stuffing attacks."
+        }
+      ],
+      "leads": [
+        {
+          "title": "KYC Document Validation Bypass",
+          "severity": "High",
+          "p_dupe": "low",
+          "hypothesis": "Weak MIME type or content validation on uploaded identity documents could allow forged submissions, enabling accounts without proper compliance checks.",
+          "why_not_oos": "KYC requirements are program-mandated (kyc:1); flaws directly subvert compliance and user trust."
+        },
+        {
+          "title": "Overly Permissive CORS Policy",
+          "severity": "Medium",
+          "p_dupe": "low",
+          "hypothesis": "Relaxed CORS headers across multiple origins may allow cross-domain data reading or request forgery in user browsers.",
+          "why_not_oos": "CORS configuration is part of the Web frontend scope and impacts data confidentiality."
+        }
+      ],
+      "parse_error": false,
+      "min_rep": 0,
+      "max_bounty": 1000000,
+      "paid": 1107,
+      "submissions": 163,
+      "fee": 0,
+      "kyc": 1,
+      "languages": "[]",
+      "types": "[\"Web\",\"apps\"]",
+      "item_counts": {
+        "lead": 2,
+        "hotspot": 3,
+        "kill": 3
+      }
+    },
+    {
+      "id": 4,
+      "slug": "near-protocol",
+      "title": "NEAR Protocol",
+      "summary": "The NEAR Protocol bug bounty program is currently paused, with KYC and a $5 POC fee acting as mandatory gates. In-scope targets are confined to the nearcore codebase and focus on critical blockchain issues such as fund theft, transaction manipulation, consensus and cryptographic flaws, with fixed $10k payouts for DoS fixes without hardfork. Out-of-scope includes network-level DoS, DoS/DDoS exploits, social engineering, spam, and any code outside nearcore. Due to the paused status, no active hunting or payouts are available at this time.",
+      "gates": {
+        "ok": false,
+        "rep": 0,
+        "fee": 5,
+        "notes": "Program paused; KYC required; $5 POC fee required"
+      },
+      "payouts": "",
+      "scope": [
+        "Stealing or loss of funds",
+        "Unauthorized transaction",
+        "Transaction manipulation",
+        "Price manipulation",
+        "Fee payment bypass",
+        "Balance manipulation",
+        "Contract execution flows",
+        "Consensus flaws",
+        "P2P network flaws",
+        "Cryptographic flaws",
+        "DoS issues fixed without hardfork (High severity, $10k fixed payout)"
+      ],
+      "oos": [
+        "Network-level DoS",
+        "DoS/DDoS exploits",
+        "Social engineering attacks",
+        "Spam",
+        "Vulnerabilities outside nearcore codebase"
+      ],
+      "kill": [],
+      "hotspots": [],
+      "leads": [],
+      "parse_error": false,
+      "min_rep": 0,
+      "max_bounty": 1000000,
+      "paid": 3325000,
+      "submissions": 754,
+      "fee": 5,
+      "kyc": 1,
+      "languages": "[\"Rust\"]",
+      "types": "[\"blockchain\"]",
+      "item_counts": {
+        "lead": 0,
+        "hotspot": 0,
+        "kill": 0
+      }
+    },
+    {
+      "id": 5,
+      "slug": "sui-protocol",
+      "title": "Sui Protocol",
+      "summary": "Sui Protocol is an active, KYC/PoC-required bug bounty program on HackenProof with a $20 submission fee and million-dollar payout ceiling. The in-scope attack surface centers on Move/Rust smart contracts, bridge protocol, staking economics, consensus, and zkLogin, with Critical severity reserved for fund theft, BFT violations, and bridge message forgery. Hotspots identified focus on bridge forgery, consensus manipulation, zkLogin circuit integrity, storage rebate exploitation, and CLOB logic flaws, while leads explore staking incentive misalignment, authority reconfiguration front-running, package upgradeability, and gas griefing. No critical gates are red; all submissions must include working PoC and pass KYC.",
+      "gates": {
+        "ok": true,
+        "rep": 0,
+        "fee": 20,
+        "notes": "KYC required, POC required, $20 antispam fee required; program Active, not private"
+      },
+      "payouts": "Payouts in USD or SUI token; Critical up to $1,000,000, High $500–$20,000, Medium $1,000–$5,000, Low $200–$1,000 per impact matrix",
+      "scope": [
+        "smart contract (Move/Rust)",
+        "blockchain protocol (Sui Network)",
+        "bridge",
+        "staking and epoch management",
+        "zkLogin circuits",
+        "DeepBook v3 CLOB",
+        "Seal decentralized secrets management"
+      ],
+      "oos": [
+        "json-rpc and json-rpc-types",
+        "web application XSS without fund impact",
+        "off-chain infrastructure outside Sui protocol"
+      ],
+      "kill": [],
+      "hotspots": [
+        {
+          "code": "H1",
+          "title": "Bridge Native Message Forgery Enabling >$3M Asset Theft",
+          "severity": "Critical",
+          "why": "Bridge contract message validation gaps could allow crafting malicious native bridge messages, enabling illegitimate minting or transfer of assets exceeding the $3M threshold with fully working PoC."
+        },
+        {
+          "code": "H2",
+          "title": "Consensus BFT Assumption Violation via Epoch Stake Manipulation",
+          "severity": "Critical",
+          "why": "Manipulating delegated stake during epoch reconfiguration could grant authorities voting power vastly disproportionate (20x) to stake, compromising proof-of-stake governance integrity as per Critical impact criteria."
+        },
+        {
+          "code": "H3",
+          "title": "zkLogin Circuit Construction Flaw Allowing Key Derivation Without Valid Identity",
+          "severity": "Critical",
+          "why": "Vulnerabilities in zkLogin circuit construction could permit deriving valid keys without satisfying on-chain identity policies, leading to unauthorized fund access or transaction signing."
+        },
+        {
+          "code": "H4",
+          "title": "Move Contract Storage Rebate Exploitation After Epoch Change",
+          "severity": "High",
+          "why": "Edge cases in epoch-change transactions where excessive storage rebates on 0x5 object are not evenly distributed, allowing the first actor to touch the object to obtain rebates, causing proportional fund depreciation for other users."
+        },
+        {
+          "code": "H5",
+          "title": "DeepBook v3 CLOB Logic Flaw Causing Permanent Fund Freeze",
+          "severity": "High",
+          "why": "Logic flaws in the CLOB order book could trigger invariant violations or unintended permanent freezing of funds, exceeding the known order-limit exclusion and causing significant loss or network disruption."
+        }
+      ],
+      "leads": [
+        {
+          "title": "Staking Reward Calculation Incentive Misalignment",
+          "severity": "High",
+          "p_dupe": "medium",
+          "hypothesis": "Edge cases in epoch reward distribution could allow attackers to claim disproportionate rewards by manipulating stake durations or epoch boundaries, beyond the minimum stake mitigation.",
+          "why_not_oos": "Directly affects SUI token holders and staking participants; impact falls within fund-related Critical/High categories."
+        },
+        {
+          "title": "Authority Set Reconfiguration Front-Running",
+          "severity": "High",
+          "p_dupe": "low",
+          "hypothesis": "Manipulating the stake delegation queue during epoch transitions could allow front-running of authority set changes, disproportionately benefiting specific authorities or attackers.",
+          "why_not_oos": "Impacts consensus governance and stake distribution, aligning with Critical impact category for BFT violation."
+        },
+        {
+          "title": "Move Package Upgradeability Logic Flaw",
+          "severity": "High",
+          "p_dupe": "medium",
+          "hypothesis": "If Sui packages contain upgradeable logic without proper guards, attackers could upgrade contracts to extract funds, halt operations, or redirect state.",
+          "why_not_oos": "Affects smart contract logic and fund safety; in scope per smart_contract category and fund theft impacts."
+        },
+        {
+          "title": "Gas Griefing via Excessive Parallel Contract Calls",
+          "severity": "Medium",
+          "p_dupe": "low",
+          "hypothesis": "Crafting transaction bundles that maximize parallel gas usage could starve network resources or cause DoS for other users, though not direct fund theft.",
+          "why_not_oos": "Impacts network availability and user experience; medium severity but high EV if widespread across users."
+        }
+      ],
+      "parse_error": false,
+      "min_rep": 0,
+      "max_bounty": 1000000,
+      "paid": 2468750,
+      "submissions": 960,
+      "fee": 20,
+      "kyc": 1,
+      "languages": "[\"Move\",\"Rust\"]",
+      "types": "[\"smart contract\",\"blockchain\"]",
+      "item_counts": {
+        "lead": 4,
+        "hotspot": 5,
+        "kill": 0
+      }
+    },
+    {
+      "id": 6,
+      "slug": "near-smart-contracts-1",
+      "title": "NEAR Smart Contracts",
+      "summary": "The NEAR Smart Contracts program on HackenProof scopes into critical core contracts (lockup, staking-pool, multisig, whitelist, staking-pool-factory, sputnik-dao) written in Rust/WASM. In-scope vulnerabilities center on fund theft, transaction manipulation, economic exploits, and governance flaws, with bounties up to $300k for Critical severity. Out-of-scope includes network-level DoS, social engineering, and spam, per program rules. Researchers must navigate KYC, POC requirements, and a $5 submission fee, with SLA triage within 5 business days.",
+      "gates": {
+        "ok": true,
+        "rep": 0,
+        "fee": 5,
+        "notes": "KYC and POC required; $5 submission fee; program active"
+      },
+      "payouts": "$100 - $300,000",
+      "scope": [
+        "lockup contract",
+        "staking-pool",
+        "staking-pool-factory",
+        "multisig",
+        "whitelist",
+        "sputnik-dao-contract",
+        "fund theft",
+        "transaction manipulation",
+        "price manipulation",
+        "fee payment bypass",
+        "balance manipulation",
+        "contract execution flows",
+        "cryptographic flaws"
+      ],
+      "oos": [
+        "network-level DoS unrelated to smart contract execution",
+        "DoS/DDoS vulnerabilities",
+        "social engineering attacks",
+        "spam"
+      ],
+      "kill": [],
+      "hotspots": [
+        {
+          "code": "H1",
+          "title": "Lockup Vesting Schedule Manipulation",
+          "severity": "Critical",
+          "why": "Improper validation of start/end timestamps or owner transfer could allow premature fund release or schedule override, directly impacting fund integrity."
+        },
+        {
+          "code": "H2",
+          "title": "Staking Pool Delegation Reward Theft",
+          "severity": "Critical",
+          "why": "Missing or insufficient checks on delegation messages could allow attackers to divert staking rewards by crafting malicious delegator calls, exploiting the pool's payout flow."
+        },
+        {
+          "code": "H3",
+          "title": "Multisig Proposal Front-Running & Quorum Bypass",
+          "severity": "High",
+          "why": "Inadequate ordering or threshold validation in multisig could enable front-running of proposals or quorum manipulation, allowing unauthorized contract changes."
+        },
+        {
+          "code": "H4",
+          "title": "Sputnik DAO Governance Bond Forgiveness Edge Case",
+          "severity": "High",
+          "why": "Flawed bonding or forgiveness period logic in DAO proposals could allow bond recovery without valid proposal execution, impacting DAO treasury integrity."
+        },
+        {
+          "code": "H5",
+          "title": "Staking Pool Factory Parameter Validation Gap",
+          "severity": "High",
+          "why": "Insufficient input validation in factory deployment parameters could allow creation of malicious staking pools with exploitable withdrawal or reward logic."
+        },
+        {
+          "code": "H6",
+          "title": "Unchecked Recursive Contract Calls in Staking Pool Execution",
+          "severity": "High",
+          "why": "Absence of call depth limits or gas metering in nested contract calls could enable griefing or state corruption during execution flows."
+        }
+      ],
+      "leads": [
+        {
+          "title": "Lockup Owner Transfer Bypass",
+          "severity": "Critical",
+          "p_dupe": "high",
+          "hypothesis": "If lockup contract lacks proper owner change validation, attacker could transfer ownership and alter vesting terms exclusively through on-chain governance calls.",
+          "why_not_oos": "Entirely on-chain smart contract logic; no network-level DoS or external dependency."
+        },
+        {
+          "title": "Staking Reward Rate Discrepancy",
+          "severity": "High",
+          "p_dupe": "med",
+          "hypothesis": "Discrepancy between reward-per-share calculation and actual staked amount could allow inflated reward claims via crafted delegation messages.",
+          "why_not_oos": "Pure contract state manipulation; excluded from OOS scope."
+        },
+        {
+          "title": "Multisig Threshold Arithmetic Flaw",
+          "severity": "High",
+          "p_dupe": "low",
+          "hypothesis": "Incorrect threshold arithmetic could allow proposal approval with fewer signatures than required by the multisig configuration.",
+          "why_not_oos": "On-chain governance logic; does not involve network-level DoS or external attack surfaces."
+        },
+        {
+          "title": "DAO Proposal Bond Refund Loophole",
+          "severity": "Medium",
+          "p_dupe": "med",
+          "hypothesis": "Flawed bond refund logic could allow bond retrieval without valid proposal finalization, impacting DAO treasury economics.",
+          "why_not_oos": "Pure contract economic logic; no network-level DoS or social engineering involved."
+        },
+        {
+          "title": "Cross-Contract Call Gas Forward Missing",
+          "severity": "High",
+          "p_dupe": "high",
+          "hypothesis": "Missing gas forward in internal calls could cause callee failure and block legitimate execution flow, exploitable via repeated malicious call patterns.",
+          "why_not_oos": "Contract-internal gas metering; does not constitute network-level DoS or spam."
+        }
+      ],
+      "parse_error": false,
+      "min_rep": 0,
+      "max_bounty": 300000,
+      "paid": 100200,
+      "submissions": 271,
+      "fee": 5,
+      "kyc": 1,
+      "languages": "[\"Rust\"]",
+      "types": "[\"smart contract\"]",
+      "item_counts": {
+        "lead": 5,
+        "hotspot": 6,
+        "kill": 0
+      }
+    },
+    {
+      "id": 7,
+      "slug": "near-intents-smart-contracts",
+      "title": "NEAR Intents: Smart Contracts",
+      "summary": "NEAR Intents is an active HackenProof bug bounty program targeting the Verifier smart contract and associated atomic swap infrastructure on NEAR. Scope centers on fund security, transaction integrity, and cryptographic correctness in Rust/Wasm contracts, with Critical/High severity bugs rewarded up to $300,000. Key hotspot areas include intent signature validation, atomic execution ordering, and access control on fund withdrawals. Program requires KYC, a $5 submission fee, and payments in vested NEAR over 1 year; analysis gates are currently open (ok=true) with no critical showstoppers blocking participation.",
+      "gates": {
+        "ok": true,
+        "rep": 0,
+        "fee": 0,
+        "notes": "KYC required; $5 submission fee; payment in NEAR vested over 1 year; test on private testnet encouraged"
+      },
+      "payouts": "Critical: up to $300,000; High: up to $100,000; Medium: up to $20,000; Low: up to $1,000; total High+Critical capped at 10% TVL or max severity budget",
+      "scope": [
+        "smart contract",
+        "blockchain",
+        "atomic swap intent execution"
+      ],
+      "oos": [
+        "unbounded gas consumption",
+        "griefing without profit motive",
+        "network-level DoS unrelated to contract execution",
+        "impact on assets outside NEAR Intents ecosystem"
+      ],
+      "kill": [
+        "unbounded gas consumption",
+        "griefing without profit motive",
+        "network-level DoS unrelated to contract execution"
+      ],
+      "hotspots": [
+        {
+          "code": "H1",
+          "title": "Inadequate Intent Signature Verification",
+          "severity": "Critical",
+          "why": "The execute_intents function may fail to properly validate BIP-322/TIP-191/ERC-191 signed payloads, allowing crafted intents to trigger unauthorized token transfers."
+        },
+        {
+          "code": "H2",
+          "title": "Front-Running in Intent Execution Order",
+          "severity": "High",
+          "why": "Absence of commit-reveal or strict ordering mechanisms in execute_intents enables attackers to reorder intents via gas bidding, manipulating swap outcomes."
+        },
+        {
+          "code": "H3",
+          "title": "Integer Overflow/Underflow in Balance Reconciliation",
+          "severity": "Critical",
+          "why": "Unsafe arithmetic or wrapping operations in balance calculations could allow amount manipulation beyond intended limits, leading to fund loss."
+        },
+        {
+          "code": "H4",
+          "title": "Missing Access Control on Fund Withdrawal",
+          "severity": "Critical",
+          "why": "After atomic swap execution, anyone may be able to withdraw swapped funds without proof of correct intent fulfillment, leading to theft."
+        },
+        {
+          "code": "H5",
+          "title": "Cryptographic Hash Collapse in Payload Processing",
+          "severity": "High",
+          "why": "Flawed hashing or signature recovery for external signing standards (BIP-322 etc.) could enable intent forgery and unauthorized transaction execution."
+        },
+        {
+          "code": "H6",
+          "title": "Replay Attack Across Intent Executions",
+          "severity": "High",
+          "why": "Lack of nonce or session binding allows previously valid intents to be re-submitted and executed, potentially double-spending or altering allocations."
+        }
+      ],
+      "leads": [
+        {
+          "title": "Intent Replay Vulnerability",
+          "severity": "High",
+          "p_dupe": "high",
+          "hypothesis": "Valid intents lacking replay protection can be resubmitted, enabling double-spending or allocation manipulation across multiple execution cycles.",
+          "why_not_oos": "Directly impacts transaction integrity and fund safety; falls within in-scope transaction manipulation criteria."
+        },
+        {
+          "title": "Controller Privilege Escalation",
+          "severity": "High",
+          "p_dupe": "med",
+          "hypothesis": "The contract upgrade/state migration interface (Controller) may lack robust admin checks, allowing unauthorized parameter changes or state overrides.",
+          "why_not_oos": "Affects long-term contract integrity and fund security; in-scope for protocol manipulation."
+        },
+        {
+          "title": "PoA Bridge Token Representation Mismatch",
+          "severity": "Medium",
+          "p_dupe": "low",
+          "hypothesis": "Discrepancies between PoA factory token contracts and Intents Verifier expectations could cause token misrouting or loss during cross-asset transfers.",
+          "why_not_oos": "Involves fund movement across assets; program explicitly covers price manipulation and fee payment bypass."
+        },
+        {
+          "title": "Parameter Manipulation in Intent Creation",
+          "severity": "Medium",
+          "p_dupe": "med",
+          "hypothesis": "Insufficient validation of intent parameters (amounts, asset types) during creation could allow out-of-range or malicious values to be processed later.",
+          "why_not_oos": "Leads to transaction manipulation and fee bypass; in-scope per program rules."
+        }
+      ],
+      "parse_error": false,
+      "min_rep": 0,
+      "max_bounty": 300000,
+      "paid": 500000,
+      "submissions": 301,
+      "fee": 5,
+      "kyc": 1,
+      "languages": "[\"Rust\",\"Wasm\"]",
+      "types": "[\"smart contract\",\"blockchain\",\"other\"]",
+      "item_counts": {
+        "lead": 4,
+        "hotspot": 6,
+        "kill": 3
+      }
+    },
+    {
+      "id": 8,
+      "slug": "cetus-smart-contracts",
+      "title": "Cetus Smart Contracts",
+      "summary": "Cetus Smart Contracts on Sui uses Move for its CLMM, staking, and DEX infrastructure with a $10-$300k bounty range and KYC/POC requirements. The program targets critical logic flaws, fund manipulation, and access control issues in-scope contracts, while out-of-scope excludes theoretical issues, compiler version gaps, and front-run-only vectors. Hotspots focus on unchecked transfers, admin privilege, arithmetic edge cases, reentrancy, intent replay, and upgradeability risks, with severity aligned to potential fund loss and recoverability.",
+      "gates": {
+        "ok": true,
+        "rep": 0,
+        "fee": 0,
+        "notes": "KYC required; POC required; Move-on-Sui program; not private; active bounty range $10-$300k"
+      },
+      "payouts": "",
+      "scope": [
+        "smart contracts in sources folder and dependencies",
+        "Move bytecode for CLMM, staking, and DEX infrastructure",
+        "Intent creation and routing mechanisms",
+        "Governance-updated parameters and access controls"
+      ],
+      "oos": [
+        "theoretical vulnerabilities without demonstration",
+        "old or unpatched compiler versions",
+        "imported contracts outside the sources folder",
+        "code style, gas optimization, and best practice issues",
+        "vulnerabilities exploitable only via front-running (unless highest severity)",
+        "redundant or dead code"
+      ],
+      "kill": [],
+      "hotspots": [
+        {
+          "code": "H1",
+          "title": "Unchecked Move transfer in swap routing",
+          "severity": "Critical",
+          "why": "Funds sent to invalid addresses without revert, enabling silent asset loss"
+        },
+        {
+          "code": "H2",
+          "title": "Admin key compromise on CLMM parameter updates",
+          "severity": "High",
+          "why": "Unauthorized changes to fee tiers or liquidation thresholds can divert or lock funds"
+        },
+        {
+          "code": "H3",
+          "title": "Integer underflow in reward point calculation",
+          "severity": "High",
+          "why": "Malicious input can underflow point totals, distorting reward distribution and user payouts"
+        },
+        {
+          "code": "H4",
+          "title": "Reentrancy on external token call in staking withdrawal",
+          "severity": "High",
+          "why": "Attacker re-enters before state update, potentially draining staked assets"
+        },
+        {
+          "code": "H5",
+          "title": "Intent signature replay without nonce binding",
+          "severity": "High",
+          "why": "Repeated intent execution enables transaction manipulation and sandwich opportunities"
+        },
+        {
+          "code": "H6",
+          "title": "Proxy upgradeability without governance guardrails",
+          "severity": "Critical",
+          "why": "Malicious upgrade can replace logic to siphon funds or halt operations"
+        }
+      ],
+      "leads": [
+        {
+          "title": "Unvalidated governance parameter in swap fee calculation",
+          "severity": "High",
+          "p_dupe": "medium",
+          "hypothesis": "On-chain governance updates to swap fees are applied without re-validation against current pool state, potentially allowing fee drift",
+          "why_not_oos": "Direct impact on user swap costs and expected returns"
+        },
+        {
+          "title": "Token metadata mismatch between Move module and external wallet",
+          "severity": "Medium",
+          "p_dupe": "low",
+          "hypothesis": "Decimals or symbol fields differ between contract and wallet interface, leading to miscalculated amounts during approval or swap",
+          "why_not_oos": "Affects user balance accuracy and transaction feasibility"
+        },
+        {
+          "title": "Front-runable intent settlement due to predictable nonce generation",
+          "severity": "High",
+          "p_dupe": "medium",
+          "hypothesis": "Intent creation uses predictable nonce patterns, enabling attackers to front-run and redirect orders",
+          "why_not_oos": "Profitable manipulation within scope, not purely theoretical"
+        },
+        {
+          "title": "Unbounded iteration in reward distribution loop",
+          "severity": "Medium",
+          "p_dupe": "medium",
+          "hypothesis": "Reward calculation iterates over all registered users without gas limit checks, causing transaction failure for legitimate participants",
+          "why_not_oos": "Direct gas exhaustion and user impact, not theoretical"
+        },
+        {
+          "title": "Missing pause mechanism on critical withdrawal functions",
+          "severity": "High",
+          "p_dupe": "low",
+          "hypothesis": "No emergency pause on asset-moving functions, allowing exploits to escalate without mitigation",
+          "why_not_oos": "Affects recoverability and severity escalation"
+        }
+      ],
+      "parse_error": false,
+      "min_rep": 0,
+      "max_bounty": 300000,
+      "paid": 310,
+      "submissions": 352,
+      "fee": 0,
+      "kyc": 1,
+      "languages": "[\"Move\"]",
+      "types": "[\"smart contract\"]",
+      "item_counts": {
+        "lead": 5,
+        "hotspot": 6,
+        "kill": 0
+      }
+    },
+    {
+      "id": 9,
+      "slug": "cronos-smart-contracts",
+      "title": "Cronos Smart Contracts",
+      "summary": "The Cronos Smart Contracts program targets EVM DeFi protocols across the Cronos ecosystem, focusing on vulnerabilities that cause unintentional fund withdrawal or user balance loss. Scope is limited to Solidity-based smart contracts, with submissions requiring KYC and POC. Critical severity issues center on access control gaps, predictable nonce schemes, unbounded loops, fee manipulation, and missing circuit-breakers, all presenting direct risk to deposited assets.",
+      "gates": {
+        "ok": true,
+        "rep": 50,
+        "fee": 0,
+        "notes": "KYC and POC mandatory; program active on Cronos EVM; Critical severity focus on fund drainage"
+      },
+      "payouts": "",
+      "scope": [
+        "VVS Finance",
+        "Tectonic",
+        "Ferro",
+        "Fulcrom",
+        "Veno",
+        "Other Cronos Ecosystem DeFi"
+      ],
+      "oos": [
+        "off-chain services",
+        "web2 frontends",
+        "mobile applications",
+        "IPFS storage"
+      ],
+      "kill": [
+        "Cross-chain message replay attack on bridged Cronos assets",
+        "Unchecked constructor parameters corrupting contract state"
+      ],
+      "hotspots": [
+        {
+          "code": "H1",
+          "title": "Absence of replay protection on intent settlement nonces",
+          "severity": "High",
+          "why": "Nonces lacking cryptographic randomness or block-height binding enable attackers to resubmit and fill claims multiple times"
+        },
+        {
+          "code": "H2",
+          "title": "Lack of admin pause function on cross-protocol withdrawal entrypoints",
+          "severity": "High",
+          "why": "Without a circuit-breaker, exploit cascades across VVS/Tectonic contracts cannot be halted, leading to full fund drain"
+        },
+        {
+          "code": "H3",
+          "title": "Unchecked low-level call on token transfer bypassing balance checks",
+          "severity": "High",
+          "why": "Using callvalue/transfer without checks-effects-interactions may result in silent fund lock or state inconsistency"
+        },
+        {
+          "code": "H4",
+          "title": "Unvalidated admin-updatable fee percentages in token transfer logic",
+          "severity": "High",
+          "why": "Fee rates changeable by governance without balance validation can be set to exorbitant values, siphoning user tokens"
+        },
+        {
+          "code": "H5",
+          "title": "Weak role enforcement on proxy admin migration functions",
+          "severity": "High",
+          "why": "Missing or default role checks on upgradeable proxy paths allow unauthorized contract logic changes"
+        }
+      ],
+      "leads": [
+        {
+          "title": "Predictable nonce derivation in intent settlement allowing front-run",
+          "severity": "High",
+          "p_dupe": "low",
+          "hypothesis": "Nonces generated from block.timestamp permit attackers to front-run and capture intended rewards",
+          "why_not_oos": "On-chain intent logic is in-scope; direct fund impact"
+        },
+        {
+          "title": "Unbounded loop in reward distribution without gas cap causing transaction revert",
+          "severity": "High",
+          "p_dupe": "med",
+          "hypothesis": "Large user iteration without gas limit or early-exit triggers out-of-gas revert, locking pending rewards",
+          "why_not_oos": "Directly affects reward availability and contract usability"
+        },
+        {
+          "title": "Admin fee percentage miscalculation on fee-on-transfer tokens",
+          "severity": "High",
+          "p_dupe": "low",
+          "hypothesis": "Updatable fee rates not validated against user balance changes enable arbitrary balance drainage",
+          "why_not_oos": "Fee manipulation directly impacts user balances in-scope DeFi"
+        },
+        {
+          "title": "Missing role checks on proxy admin functions enabling privilege escalation",
+          "severity": "High",
+          "p_dupe": "med",
+          "hypothesis": "Admin functions on upgradeable proxies lack onlyRole modifiers, allowing unauthorized parameter changes",
+          "why_not_oos": "Contract upgrades are core to DeFi scope and fund integrity"
+        }
+      ],
+      "parse_error": false,
+      "min_rep": 50,
+      "max_bounty": 250000,
+      "paid": 0,
+      "submissions": 156,
+      "fee": 0,
+      "kyc": 1,
+      "languages": "[\"Solidity\"]",
+      "types": "[\"smart contract\"]",
+      "item_counts": {
+        "lead": 4,
+        "hotspot": 5,
+        "kill": 2
+      }
+    },
+    {
+      "id": 10,
+      "slug": "account-abstraction-bugs",
+      "title": "Account Abstraction Bugs",
+      "summary": "The Account Abstraction Bugs program on HackenProof targets ERC-4337 core smart contract logic in Solidity, with scope limited to core/utils folders and committed tags v0.6.0–v0.8.0. Critical severity bugs in EntryPoint validation, nonce management, and paymaster fee handling offer the highest bounties ($100k–$250k), while medium issues involve assumption inconsistencies and bounded-loop DOS. Gates require KYC, POC submission, and a $7 fee; the program is active and private=false. Hotspots and leads focus on validation bypass, stake censorship at O(1) cost, and nonce predictability, with duplicate reports likely high for nonce-related vectors.",
+      "gates": {
+        "ok": true,
+        "rep": 0,
+        "fee": 7,
+        "notes": "KYC required, POC required, $7 submission fee, program active, private: false"
+      },
+      "payouts": "$1,000 - $250,000 (Critical: $100k–$250k, High: $25k–$50k, Medium: $5k–$10k, Low: $1k–$2k)",
+      "scope": [
+        "ERC-4337 EntryPoint contract validation and execution logic",
+        "UserOperation processing and calldata handling",
+        "Smart contract account (BaseAccount/SimpleAccount) authentication and signature verification",
+        "Paymaster operations including fee handling and gas payment logic",
+        "StakeManager deposit/stake management and reputation rules",
+        "NonceManager nonce generation, replay prevention, and settlement logic",
+        "Core and utils folders only, Solidity implementation bugs"
+      ],
+      "oos": [
+        "Network-level DoS attacks targeting specific bundlers, accounts, or paymasters",
+        "General libp2p or P2P layer attacks",
+        "Social engineering, phishing, or spam outside smart contract scope",
+        "Vulnerabilities in off-chain services, bundlers, or user interfaces not covered by contract code",
+        "Documentation or specification gaps without implementation impact",
+        "Code outside committed tags v0.6.0–v0.8.0",
+        "Personal data compromise or service interruption outside contract execution"
+      ],
+      "kill": [],
+      "hotspots": [
+        {
+          "code": "H1",
+          "title": "EntryPoint calldata validation gap allowing unintended call execution",
+          "severity": "High",
+          "why": "Insufficient checks on UserOperation calldata structure can permit execution of calls outside intended validation, potentially enabling fund theft or censorship."
+        },
+        {
+          "code": "H2",
+          "title": "BaseAccount signature replay without strict nonce binding",
+          "severity": "High",
+          "why": "Absence of replay-proof mechanisms in _validateSignature permits resubmission of captured UserOps, disrupting account state or enabling double-spend conditions."
+        },
+        {
+          "code": "H3",
+          "title": "Paymaster gas payment logic edge cases with token transfer semantics",
+          "severity": "High",
+          "why": "Improper handling of token transfer semantics (e.g., fee-on-transfer, rebasing tokens) in paymaster validation can cause undercharging, unexpected transfers, or transaction revert, affecting protocol economics."
+        },
+        {
+          "code": "H4",
+          "title": "StakeManager parameter tweak enabling O(1) censorship of staked entities",
+          "severity": "High",
+          "why": "If reputation or stake adjustment parameters require minimal gas, an attacker can censor specific accounts at O(1) cost, violating protocol liveness and staked entity guarantees."
+        },
+        {
+          "code": "H5",
+          "title": "Nonce derivation with insufficient entropy in UserOperation settlement",
+          "severity": "High",
+          "why": "Deterministic nonce generation without adequate randomness allows prediction of UserOp ordering, facilitating front-running or replay before bundler inclusion."
+        }
+      ],
+      "leads": [
+        {
+          "title": "Absence of emergency pause on EntryPoint/UserOperation critical paths",
+          "severity": "High",
+          "p_dupe": "high",
+          "hypothesis": "Without a pause function, exploited vulnerabilities in UserOperation processing can persist, enabling ongoing fund disruption or mempool poisoning.",
+          "why_not_oos": "Pause mechanisms on core contract functions affecting liveness are in-scope for AA severity High, distinct from off-chain service outages."
+        },
+        {
+          "title": "Stake management loops without gas cap causing transaction revert",
+          "severity": "High",
+          "p_dupe": "med",
+          "hypothesis": "Loops over stake participant arrays can be forced to consume excessive gas, blocking legitimate stake operations and causing effective DOS of stake management.",
+          "why_not_oos": "Gas-griefing loops in core protocol logic are explicitly listed as in-scope DOS vectors against the AA protocol, not general bundler attacks."
+        },
+        {
+          "title": "On-chain fee parameter manipulation via unvalidated governance inputs",
+          "severity": "High",
+          "p_dupe": "low",
+          "hypothesis": "If fee adjustment parameters derived from governance are not validated on-chain, attackers can tilt economic incentives or extract excess fees from the protocol.",
+          "why_not_oos": "On-chain fee manipulation affecting protocol economics falls under AA in-scope bugs, distinct from off-chain governance attacks or specification gaps."
+        },
+        {
+          "title": "State consistency gap between EntryPoint execution and account logic",
+          "severity": "High",
+          "p_dupe": "med",
+          "hypothesis": "Discrepancies between assumed and actual states (e.g., balance vs. staked amount) during UserOp execution can enable unexpected token movements or replay.",
+          "why_not_oos": "Assumption inconsistencies within the AA core are explicitly recognized as in-scope severity Medium-High, separate from external contract bugs."
+        },
+        {
+          "title": "Insufficient entropy in UserOperation nonce generation enabling ordering prediction",
+          "severity": "High",
+          "p_dupe": "high",
+          "hypothesis": "Deterministic nonce generation without adequate randomness allows attackers to predict and manipulate UserOp ordering prior to bundler inclusion, compromising transaction fairness and mempool integrity.",
+          "why_not_oos": "Nonce predictability affecting AA mempool ordering is an in-scope vector; distinct from general external mempool front-running or unrelated attack vectors."
+        }
+      ],
+      "parse_error": false,
+      "min_rep": 0,
+      "max_bounty": 250000,
+      "paid": 73000,
+      "submissions": 294,
+      "fee": 7,
+      "kyc": 1,
+      "languages": "[\"Solidity\"]",
+      "types": "[\"smart contract\"]",
+      "item_counts": {
+        "lead": 5,
+        "hotspot": 5,
+        "kill": 0
+      }
+    },
+    {
+      "id": 11,
+      "slug": "aptos-network",
+      "title": "Aptos Network",
+      "summary": "Aptos Network is an active Layer 1 bug bounty program on HackenProof, accepting Move and Rust smart contract audits with KYC, POC, and a $100 submission fee. Bounties range from $0 to $250,000 based on severity, with Critical rewards for fund-loss or consensus vulnerabilities. Hotspots identified focus on governance parameter validation, pause mechanism gaps, nonce predictability in Account Abstraction, unbounded loops, and Permissioned Signer privilege escalation, all within in-scope targets and not flagged as out-of-scope or known issues.",
+      "gates": {
+        "ok": true,
+        "rep": 0,
+        "fee": 100,
+        "notes": "KYC required; POC required; $100 submission fee; program active and not private"
+      },
+      "payouts": "Critical: up to $250,000; High: up to $50,000; Medium: up to $10,000; Low: $0 per program severity mapping.",
+      "scope": [
+        "Move-based smart contracts",
+        "Aptos L1 core protocol",
+        "AIP-103 Permissioned Signer",
+        "AIP-104 Account Abstraction"
+      ],
+      "oos": [
+        "social engineering",
+        "network DoS (validator-dependent)",
+        "RCE on validator nodes",
+        "API crashes"
+      ],
+      "kill": [],
+      "hotspots": [
+        {
+          "code": "H1",
+          "title": "Unvalidated governance parameter in Move fee calculation enabling fund diversion",
+          "severity": "Critical",
+          "why": "Governance-updated Move module parameters lack input bounds checks; attacker could manipulate fees or enable unauthorized minting, directly impacting user funds without requiring a hardfork."
+        },
+        {
+          "code": "H2",
+          "title": "Missing emergency pause on critical Move module transfers",
+          "severity": "Critical",
+          "why": "Critical transfer and withdrawal functions lack an emergency pause mechanism; the gap is a patchable configuration (not hardfork-required), and exploitation could enable fund diversion matching program Critical severity for loss-of-funds vectors."
+        },
+        {
+          "code": "H3",
+          "title": "Predictable nonce derivation in AIP-104 Account Abstraction enabling front-run",
+          "severity": "High",
+          "why": "If nonce generation in AIP-104 lacks sufficient entropy, attackers predict transaction ordering, front-run intents, and extract value from user accounts."
+        },
+        {
+          "code": "H4",
+          "title": "Unbounded loop in Move reward distribution without gas cap",
+          "severity": "Medium",
+          "why": "Reward/distribution loops iterate over user sets without gas limits; per program rules, DoS fixable without hardfork falls into Medium severity, but impact on user funds elevates concern beyond trivial."
+        },
+        {
+          "code": "H5",
+          "title": "Privilege escalation via misconfigured Permissioned Signer (AIP-103)",
+          "severity": "Critical",
+          "why": "AIP-103 Permissioned Signer access controls are weak; attacker gains unauthorized module upgrade rights, enabling minting or state corruption with Critical impact, patchable via signer reconfiguration."
+        }
+      ],
+      "leads": [
+        {
+          "title": "Insufficient validation of governance-upgraded Move parameters",
+          "severity": "Critical",
+          "p_dupe": "medium",
+          "hypothesis": "Governance proposals that update fee or transfer module parameters lack input bounds checking, allowing parameter drift that diverts funds or enables minting.",
+          "why_not_oos": "Governance-upgraded parameters directly affect network operations and user funds; program explicitly includes loss-of-funds vulnerabilities in scope and rewards them based on severity classification."
+        },
+        {
+          "title": "Absence of pause on critical withdrawal paths in Move modules",
+          "severity": "Critical",
+          "p_dupe": "low",
+          "hypothesis": "Critical transfer/withdrawal functions lack an emergency pause flag, preventing recovery during active exploits and matching the program's Critical severity for permanent freezing of funds (where fix is patchable without hardfork).",
+          "why_not_oos": "Program rules accept Medium DoS without hardfork, but absence of pause on fund-moving functions is distinct and in scope for Critical rewards when patchable."
+        },
+        {
+          "title": "Predictable sequence numbers in Aptos transaction pool enabling front-run",
+          "severity": "High",
+          "p_dupe": "medium",
+          "hypothesis": "Transaction sequence derivation in the Move transaction pool lacks cryptographic randomness, allowing attackers to front-run high-value transfers or governance calls.",
+          "why_not_oos": "Front-running of user transactions impacts fund integrity and is not a pure network DoS; program includes loss-of-funds vectors in scope."
+        },
+        {
+          "title": "Unbounded iteration in Move reward/fee distribution loops",
+          "severity": "Medium",
+          "p_dupe": "medium",
+          "hypothesis": "Reward distribution loops in Move modules iterate over user sets without gas limits or termination checks, enabling gas griefing or state corruption that locks funds.",
+          "why_not_oos": "Causes transaction revert and potential fund lock, but is recoverable via patch without hardfork; program accepts Medium DoS but this crosses into Medium due to fund impact."
+        },
+        {
+          "title": "State consistency gap between Move modules and Account Abstraction accounts",
+          "severity": "Critical",
+          "p_dupe": "low",
+          "hypothesis": "Synchronization bugs between base-layer Move modules and AIP-104 account logic allow double-spend or mint conditions across module boundaries.",
+          "why_not_oos": "Directly impacts fund safety and consensus; program includes Consensus/Safety Violations and Loss of Funds as in-scope Critical categories."
+        }
+      ],
+      "parse_error": false,
+      "min_rep": 0,
+      "max_bounty": 250000,
+      "paid": 1939000,
+      "submissions": 457,
+      "fee": 100,
+      "kyc": 1,
+      "languages": "[\"Move\",\"Rust\"]",
+      "types": "[\"blockchain\",\"smart contract\"]",
+      "item_counts": {
+        "lead": 5,
+        "hotspot": 5,
+        "kill": 0
+      }
+    },
+    {
+      "id": 12,
+      "slug": "deltaprime-smart-contracts",
+      "title": "DeltaPrime Smart Contracts",
+      "summary": "DeltaPrime is an active Solidity-based lending bug bounty program on HackenProof, focusing on undercollateralized loan protocols via Prime Accounts and Pool contracts. The in-scope target is v1.1.0 contracts with Critical severity priority, while v2 auxiliary contracts are out of scope. Hotspots center on oracle-mediated solvency manipulation, reentrancy in withdrawal paths, missing pause mechanisms, governance parameter injection, and gas-exhaustive loops. Leads extend these into fee-on-transfer token handling, predictable account creation, admin fee validation, and cross-component state consistency gaps, with duplicate probability adjusted against the program's 510 prior submissions.",
+      "gates": {
+        "ok": true,
+        "rep": 0,
+        "fee": 5,
+        "notes": "Submission fee 5 USD; min_reputation 0; program active; Solidity-only EVM contracts; critical severity target in v1.1.0"
+      },
+      "payouts": "",
+      "scope": [
+        "Solidity smart contracts v1.1.0 (DeltaPrime lending protocol, Prime Accounts, Pool, liquidation mechanism, RedStone oracle integration)"
+      ],
+      "oos": [
+        "v2 contracts (RecoveryManager, VestingDistributor, token*, UniswapV3Facet) marked None severity",
+        "theoretical vulnerabilities without proof or demonstration",
+        "compiler version not locked or best-practice issues",
+        "imported contracts, code style, gas optimizations",
+        "temporary fund freezes, DoS/spam, off-chain/web application issues"
+      ],
+      "kill": [],
+      "hotspots": [
+        {
+          "code": "H1",
+          "title": "Oracle-mediated LTV circumvention",
+          "severity": "High",
+          "why": "RedStone price feeds used in solvency checks could be manipulated via timestamp or flash-loan-biased pricing, allowing under-collateralized positions to pass liquidation thresholds"
+        },
+        {
+          "code": "H2",
+          "title": "Reentrancy in Prime Account token transfers",
+          "severity": "High",
+          "why": "Outbound token transfers in Prime Account logic may not follow Checks-Effects-Interactions pattern, enabling reentrant calls that drain collateral before state updates"
+        },
+        {
+          "code": "H3",
+          "title": "Missing emergency pause on withdrawal/liquidation paths",
+          "severity": "High",
+          "why": "Without a global pause mechanism, malicious state or exploit spread cannot be contained, affecting all active Prime Accounts and pooled funds"
+        },
+        {
+          "code": "H4",
+          "title": "Governance-upgraded parameter injection into LTV/fees",
+          "severity": "High",
+          "why": "If upgrade functions lack strict validation, malicious proposals could set LTV to extreme values or zero fees, directly corrupting contract state and user funds"
+        },
+        {
+          "code": "H5",
+          "title": "Gas-exhaustive interest accrual loop without cap",
+          "severity": "Medium",
+          "why": "Loop-based interest updates without gas limit can cause transaction revert, enabling DoS on user deposits, withdrawals, or borrows"
+        }
+      ],
+      "leads": [
+        {
+          "title": "Fee-on-transfer token miscalculation in pool share updates",
+          "severity": "High",
+          "p_dupe": "medium",
+          "hypothesis": "Pool balance updates using virtual indices may not correctly handle on-transfer fees, leading to share inflation or hidden user fund loss",
+          "why_not_oos": "Direct impact on user fund balances within the lending scope, not theoretical"
+        },
+        {
+          "title": "Predictable Prime Account creation enabling front-run capture",
+          "severity": "Medium",
+          "p_dupe": "low",
+          "hypothesis": "Deterministic initialization parameters or deployment order could allow front-running of Prime Account creation to capture intended under-collateralized loans",
+          "why_not_oos": "Affects loan origination flow and user fund allocation, within scope"
+        },
+        {
+          "title": "Insufficient validation of admin-set fee percentages on fee-on-transfer tokens",
+          "severity": "High",
+          "p_dupe": "medium",
+          "hypothesis": "Governance-set fees not validated against token mechanics, causing incorrect fee accrual, extraction, or share imbalance",
+          "why_not_oos": "Direct financial impact, in scope as parameter manipulation"
+        },
+        {
+          "title": "State consistency gap between Pool snapshot and Prime Account solvency",
+          "severity": "High",
+          "p_dupe": "high",
+          "hypothesis": "Pool-level solvency snapshot may lag behind real-time Prime Account state, allowing transient arbitrage or transient under-collateral positions to bypass checks",
+          "why_not_oos": "Real fund movement risk, not a theoretical compiler issue; directly impacts loan safety"
+        }
+      ],
+      "parse_error": false,
+      "min_rep": 0,
+      "max_bounty": 250000,
+      "paid": 99700,
+      "submissions": 510,
+      "fee": 5,
+      "kyc": 0,
+      "languages": "[\"Solidity\"]",
+      "types": "[\"smart contract\"]",
+      "item_counts": {
+        "lead": 4,
+        "hotspot": 5,
+        "kill": 0
+      }
+    },
+    {
+      "id": 13,
+      "slug": "citrea-protocol-and-smart-contracts",
+      "title": "Citrea Protocol & Smart Contracts",
+      "summary": "Citrea Protocol operates as the first Bitcoin-secured rollup combining zero-knowledge proofs with BitVM two-way peg technology. The program scope encompasses critical EVM smart contracts, system contracts, bridge implementations, and BitVM circuit components, all marked Critical severity. Identified hotspots and leads focus on proxy admin upgradeability, bridge message integrity, fee parameter governance, constructor validation, and token transfer semantics, with payouts in USDC on Ethereum ranging from $100 to $250k.",
+      "gates": {
+        "ok": true,
+        "rep": 50,
+        "fee": 5,
+        "notes": "KYC+POC required, $5 submission fee, active program, EVM/Rust mixed"
+      },
+      "payouts": "USDC on Ethereum, $100-$250k range, total paid $2100",
+      "scope": [
+        "smart contract",
+        "blockchain",
+        "protocol",
+        "bridge",
+        "token",
+        "proxy",
+        "system contract"
+      ],
+      "oos": [
+        "Past audit reports - Sigma Prime, Cantina",
+        "Off-chain social engineering",
+        "Web application XSS outside scope"
+      ],
+      "kill": [],
+      "hotspots": [
+        {
+          "code": "H1",
+          "title": "Unvalidated Proxy Admin Upgrade Path",
+          "severity": "High",
+          "why": "Proxy Admin can change implementation addresses without verifying new code invariants, risking state corruption in critical system contracts"
+        },
+        {
+          "code": "H2",
+          "title": "Fee-on-Transfer Token Balance Tracking Flaw",
+          "severity": "High",
+          "why": "Bridge contracts interacting with USDC/USDT/WBTC may miscalculate shares/fees due to fee-on-transfer semantics, causing solvency gaps"
+        },
+        {
+          "code": "H3",
+          "title": "Missing Emergency Pause on Cross-Chain Withdrawal Routes",
+          "severity": "High",
+          "why": "Critical bridge withdrawal paths lack an emergency stop mechanism, enabling rapid asset drain during exploit scenarios"
+        },
+        {
+          "code": "H4",
+          "title": "System Contract Initialization Vector",
+          "severity": "High",
+          "why": "System contracts (Bitcoin Light Client, Fee Vaults) use constructor parameters for critical configuration without comprehensive on-chain validation, risking misaligned consensus or fee logic"
+        },
+        {
+          "code": "H5",
+          "title": "Predictable Nonce/Sequence in OFT Bridge Messaging",
+          "severity": "High",
+          "why": "Cross-chain message nonces/sequences may be predictable, allowing front-run or replay of bridged asset transfers"
+        }
+      ],
+      "leads": [
+        {
+          "title": "Bridge Message Replay Vulnerability",
+          "severity": "High",
+          "p_dupe": "low",
+          "hypothesis": "Cross-chain OFT messages lack domain-separated nonce replay protection, enabling re-submission and double-spend of bridged assets",
+          "why_not_oos": "Not documented as mitigated; design-level gap in message routing"
+        },
+        {
+          "title": "Proxy Admin Upgrade Without Safety Validation",
+          "severity": "High",
+          "p_dupe": "med",
+          "hypothesis": "Proxy Admin can upgrade to new implementation addresses that violate critical invariants, causing silent state corruption",
+          "why_not_oos": "Upgrade mechanism active but lacks pre-upgrade invariant checks"
+        },
+        {
+          "title": "Governance-Adjusted Fee Parameters Without Solvency Enforcement",
+          "severity": "High",
+          "p_dupe": "med",
+          "hypothesis": "Governance can modify fee percentages on bridge contracts without real-time solvency checks, enabling hidden asset misappropriation",
+          "why_not_oos": "Fees are on-chain but solvency not enforced by design"
+        },
+        {
+          "title": "Bitcoin Light Client Finality Assumption Gap",
+          "severity": "High",
+          "p_dupe": "low",
+          "hypothesis": "Light client finality assumptions may not account for Bitcoin re-orgs, risking double-spend on bridged BTC assets",
+          "why_not_oos": "Critical consensus component; finality logic not publicly verified against re-org scenarios"
+        },
+        {
+          "title": "OFT Token Transfer Semantic Assumptions",
+          "severity": "High",
+          "p_dupe": "med",
+          "hypothesis": "Bridge implementations assume standard ERC20 transfer semantics without checking return values, risking lost or misrouted assets with non-standard tokens",
+          "why_not_oos": "Common pattern but not validated for Citrea's diverse token list"
+        }
+      ],
+      "parse_error": false,
+      "min_rep": 50,
+      "max_bounty": 250000,
+      "paid": 2100,
+      "submissions": 543,
+      "fee": 5,
+      "kyc": 1,
+      "languages": "[\"Rust\",\"Solidity\"]",
+      "types": "[\"smart contract\",\"blockchain\"]",
+      "item_counts": {
+        "lead": 5,
+        "hotspot": 5,
+        "kill": 0
+      }
+    },
+    {
+      "id": 14,
+      "slug": "cronos-zkevm-smart-contracts",
+      "title": "Cronos zkEVM Smart Contracts",
+      "summary": "Cronos zkEVM Smart Contracts is an active EVM/Solidity-focused bug bounty covering Amply Finance, H2 Finance, and Fulcrom DeFi protocols, with an emphasis on vulnerabilities causing unintentional fund withdrawal or user asset loss. The program is live, requires KYC, and offers bounties from $500 up to $200,000 based on severity. Key hotspots include missing pause mechanisms on withdrawals, proxy admin upgrades without timelocks, fee-on-transfer token math errors, pool snapshot lag enabling under-collateralization, and predictable nonces in authorization schemes. Leads highlight oracle manipulation risks, timelock gaps on admin upgrades, and cross-contract transfer validation flaws, all within scope and not previously cleaned.",
+      "gates": {
+        "ok": true,
+        "rep": 0,
+        "fee": 0,
+        "notes": "KYC required; EVM/Solidity focus; Active program"
+      },
+      "payouts": "Bounties range from $500 to $200,000 USD based on severity; Critical findings for fund drainage paid at highest tiers; program uses HackenProof payout system.",
+      "scope": [
+        "Smart contracts on Cronos zkEVM",
+        "DeFi protocols: Amply Finance, H2 Finance, Fulcrom",
+        "Vulnerabilities causing unintentional fund withdrawal or user asset loss"
+      ],
+      "oos": [
+        "Web frontend/UI bugs",
+        "Off-chain server vulnerabilities",
+        "Social engineering, phishing, KYC bypass",
+        "XSS/CSRF without fund impact",
+        "Non-smart-contract code",
+        "Known CVEs without new exploit chain",
+        "IPFS/URL metadata issues"
+      ],
+      "kill": [
+        "Emergency pause deployment on critical withdrawal routes",
+        "Reentrancy guard enforcement across pool contracts",
+        "Oracle price feed diversification and fallback mechanisms"
+      ],
+      "hotspots": [
+        {
+          "code": "H1",
+          "title": "Withdrawal Paths Without Emergency Pause Circuit Breaker",
+          "severity": "Critical",
+          "why": "Several critical withdrawal and drain functions across the listed Cronos zkEVM contracts lack a pause mechanism; an exploit or admin error can result in irreversible fund extraction without any recovery path."
+        },
+        {
+          "code": "H2",
+          "title": "Proxy Admin Upgrade on Fund-Controlling Contracts Without Timelock",
+          "severity": "Critical",
+          "why": "Admin can upgrade logic on contracts managing user assets without a timelock or governance vote, allowing immediate logic changes that can reroute, freeze, or drain funds without user recourse."
+        },
+        {
+          "code": "H3",
+          "title": "Fee-on-Transfer Token Reward Distribution Errors",
+          "severity": "High",
+          "why": "Integrated fee-on-transfer tokens are not properly handled in reward/escrow calculations; users receive net amounts less than accrued rewards, causing silent fund erosion and incorrect token balances."
+        },
+        {
+          "code": "H4",
+          "title": "Pool Snapshot-Lag Leading to Under-collateralization",
+          "severity": "High",
+          "why": "Pool state snapshots do not update synchronously with per-user balance changes; this gap can be exploited to report inflated solvency, allowing users to withdraw more than their actual share."
+        },
+        {
+          "code": "H5",
+          "title": "Predictable Nonce in Custom Token Authorization Schemes",
+          "severity": "High",
+          "why": "Custom permit or approval mechanisms use sequential or predictable nonces; attackers can pre-compute valid signatures to authorize unauthorized token transfers or drain liquidity."
+        }
+      ],
+      "leads": [
+        {
+          "title": "Oracle Price Manipulation Leading to Liquidation Threshold Abuse",
+          "severity": "High",
+          "p_dupe": "low",
+          "hypothesis": "Price oracles used in H2 and Fulcrom lending markets can be manipulated to trigger or suppress liquidations, allowing attackers to capture collateral or avoid repayment at favorable rates.",
+          "why_not_oos": "Oracle logic is on-chain within scope; program targets fund-loss vulnerabilities directly."
+        },
+        {
+          "title": "Lack of Timelock on Admin-Upgraded Critical Withdrawal Logic",
+          "severity": "Critical",
+          "p_dupe": "medium",
+          "hypothesis": "Several contracts upgrade withdrawal-critical functions via proxy admin without a timelock, enabling attackers or malicious admins to reroute funds instantly before users or governance can react.",
+          "why_not_oos": "On-chain access control and upgradeability are in scope; not a web2 or off-chain issue."
+        },
+        {
+          "title": "Insufficient Input Validation on Cross-Contract Transfers",
+          "severity": "High",
+          "p_dupe": "medium",
+          "hypothesis": "Interconnected pool contracts perform token transfers without adequate recipient or amount validation, allowing recursive or flash-loan-based attacks to drain balances across the ecosystem.",
+          "why_not_oos": "Solidity reentrancy and transfer logic vulnerabilities; directly impact user funds on Cronos zkEVM."
+        }
+      ],
+      "parse_error": false,
+      "min_rep": 0,
+      "max_bounty": 200000,
+      "paid": 500,
+      "submissions": 192,
+      "fee": 0,
+      "kyc": 1,
+      "languages": "[\"Solidity\"]",
+      "types": "[\"smart contract\"]",
+      "item_counts": {
+        "lead": 3,
+        "hotspot": 5,
+        "kill": 3
+      }
+    },
+    {
+      "id": 15,
+      "slug": "risc-zero-zkvm",
+      "title": "RISC Zero zkVM ",
+      "summary": "RISC Zero zkVM is a verifiable computing platform using zk-STARKs and RISC-V emulation, currently paused on HackenProof with 50 reputation points required and a $250–$150,000 bounty range. The in-scope focus covers receipt integrity, guest-host isolation, and core zkVM security, while out-of-scope excludes demo applications, third-party guests, and privileged mode issues. Six hotspot categories identified: receipt tampering, private input leakage, execution metadata leakage, verifier arbitrary code execution, guest VM escape, and host I/O bypass, all rated Critical or High severity.",
+      "gates": {
+        "ok": false,
+        "rep": 50,
+        "fee": 0,
+        "notes": "Program paused; contest not active. Submissions not accepted."
+      },
+      "payouts": "",
+      "scope": [
+        "zkvm-core",
+        "receipt-integrity",
+        "guest-host-comm",
+        "host-storage-isolation"
+      ],
+      "oos": [
+        "demo-applications",
+        "documentation",
+        "third-party-guest-programs",
+        "verifier-modification",
+        "host-software-modification",
+        "soundness-attacks-crafted-guests",
+        "privileged-risc0-circuits-jan2026"
+      ],
+      "kill": [
+        "Receipt integrity bypass enabling proof forgery",
+        "Guest VM escape via host library sandbox breach",
+        "Verifier privilege escalation from crafted receipt"
+      ],
+      "hotspots": [
+        {
+          "code": "H1",
+          "title": "Receipt journal tampering / seal forgery",
+          "severity": "Critical",
+          "why": "Receipt integrity is foundational; tampering breaks verifiability and enables proof invalidation."
+        },
+        {
+          "code": "H2",
+          "title": "Private input extraction from zkVM receipt",
+          "severity": "High",
+          "why": "Receipts may inadvertently expose guest memory access patterns or cycle counts, compromising input privacy."
+        },
+        {
+          "code": "H3",
+          "title": "Information leakage in receipts (cycle counts, memory patterns)",
+          "severity": "High",
+          "why": "Side-channel metadata can aid reverse engineering or targeted attacks on guest programs."
+        },
+        {
+          "code": "H4",
+          "title": "Arbitrary code execution in zkVM verifier via malicious receipt",
+          "severity": "Critical",
+          "why": "Verifier compromise bypasses entire proof trust model; critical for ZK system security."
+        },
+        {
+          "code": "H5",
+          "title": "Guest program VM escape via host library interaction",
+          "severity": "Critical",
+          "why": "Malicious guest execution outside defined I/O interface can read/write host memory, breaking isolation."
+        },
+        {
+          "code": "H6",
+          "title": "Reading/writing host memory/storage outside defined I/O interface",
+          "severity": "High",
+          "why": "Out-of-bounds access in host guest communication breaks sandboxing and enables exploitation."
+        }
+      ],
+      "leads": [],
+      "parse_error": false,
+      "min_rep": 50,
+      "max_bounty": 150000,
+      "paid": 68250,
+      "submissions": 123,
+      "fee": 0,
+      "kyc": 0,
+      "languages": "[\"Rust\"]",
+      "types": "[\"blockchain\",\"apps\"]",
+      "item_counts": {
+        "lead": 0,
+        "hotspot": 6,
+        "kill": 3
+      }
+    },
+    {
+      "id": 16,
+      "slug": "risc-zero-blockchain-verifiers",
+      "title": "RISC Zero Blockchain Verifiers",
+      "summary": "The RISC Zero Blockchain Verifiers program targets critical vulnerabilities in Groth16 receipt claim verification on Ethereum mainnet, with bounties up to $150k for invalid claims that successfully verify. Scope is limited to active deployed contracts and their router dependencies, excluding zkVM core and SaaS surfaces. Hotspots focus on verification bypass, upgrade safety, cross-contract validation, reentrancy, fee manipulation, and dependency exploits. Leads highlight governance gaps, replay risks, token handling flaws, and proxy key compromise as high-impact but lower-duplication potential vectors.",
+      "gates": {
+        "ok": true,
+        "rep": 0,
+        "fee": 5,
+        "notes": "Active program, 50 reputation minimum, $5 submission fee, no KYC required"
+      },
+      "payouts": "$250 - $150,000 range: Critical $10,000 - $150,000, High $5,000 - $10,000, Medium $1,000 - $5,000, Low $250 - $1,000",
+      "scope": [
+        "Solidity smart contract verification",
+        "Groth16 receipt claims on Ethereum mainnet",
+        "RISC Zero managed contracts deployed to mainnet",
+        "Router contract upstream dependencies exploitable on mainnet"
+      ],
+      "oos": [
+        "RISC Zero web pages, demo applications, SaaS services",
+        "Core zkVM vulnerabilities (submit to corresponding program)",
+        "Personal data compromise or service degradation",
+        "Automated scanner spam or account creation flows",
+        "Vulnerabilities outside Ethereum mainnet deployment scope"
+      ],
+      "kill": [
+        "Invalid Groth16 receipt accepted by verifier due to validation gap",
+        "Proxy admin upgrade bypass enabling malicious verifier logic takeover",
+        "Receipt signature validation gap enabling proof forgery"
+      ],
+      "hotspots": [
+        {
+          "code": "H1",
+          "title": "Groth16 Receipt Claim Verification Bypass",
+          "severity": "High",
+          "why": "Insufficient validation of proof fields allowing invalid claims to successfully verify"
+        },
+        {
+          "code": "H2",
+          "title": "Admin Upgrade Proxy Without Safety Validation",
+          "severity": "High",
+          "why": "Proxy admin upgrade could redirect verifier logic to malicious implementation without guards"
+        },
+        {
+          "code": "H3",
+          "title": "Insufficient Input Validation on Cross-Contract Transfers in Router",
+          "severity": "High",
+          "why": "Missing checks on external calls during receipt processing could enable state corruption"
+        },
+        {
+          "code": "H4",
+          "title": "Reentrancy Pattern in Proof Verification Flow",
+          "severity": "High",
+          "why": "Unprotected external calls during receipt handling may allow state re-entry attacks"
+        },
+        {
+          "code": "H5",
+          "title": "Fee Percentage Manipulation on Fee-on-Transfer Tokens",
+          "severity": "High",
+          "why": "Admin-set fees not validated, enabling dusting or denial of verification services"
+        },
+        {
+          "code": "H6",
+          "title": "Upstream Dependency Exploit via Router Contract",
+          "severity": "High",
+          "why": "Dependencies not fully validated before integration, exploitable chain into verifier"
+        }
+      ],
+      "leads": [
+        {
+          "title": "Absence of Timelock on Verifier Upgrade Parameters",
+          "severity": "High",
+          "p_dupe": "low",
+          "hypothesis": "Admin can change verification logic without timelock, enabling immediate malicious modifications",
+          "why_not_oos": "Upgrade functionality is within scope; timelock omission affects bounty-eligible outcomes"
+        },
+        {
+          "title": "Groth16 Receipt Replay Without Freshness Guarantees",
+          "severity": "High",
+          "p_dupe": "med",
+          "hypothesis": "Valid receipts replayed across blocks without context checks could bypass verification state requirements",
+          "why_not_oos": "Receipt handling is in scope; replay risk impacts verification integrity on mainnet"
+        },
+        {
+          "title": "Upstream Contract State Validation Gap in Router Integration",
+          "severity": "High",
+          "p_dupe": "low",
+          "hypothesis": "Dependencies called by router not fully validated before state merge into verifier, enabling trust erosion",
+          "why_not_oos": "In-scope if exploitable on Ethereum mainnet; within program boundaries"
+        },
+        {
+          "title": "Fee-on-Transfer Token Logic Gap in Verification Payments",
+          "severity": "High",
+          "p_dupe": "med",
+          "hypothesis": "Admin-set fees on transfer tokens not checked, causing verification failures or dusting attacks",
+          "why_not_oos": "Token logic is in scope; fee manipulation affects verification eligibility for bounties"
+        },
+        {
+          "title": "Proxy Admin Key Leakage Redirecting Verification Flows",
+          "severity": "High",
+          "p_dupe": "low",
+          "hypothesis": "Compromised proxy admin key could divert all receipt verification to a malicious contract implementation",
+          "why_not_oos": "Proxy pattern is used; key compromise via external vectors remains within contract scope"
+        }
+      ],
+      "parse_error": false,
+      "min_rep": 50,
+      "max_bounty": 150000,
+      "paid": 1000,
+      "submissions": 140,
+      "fee": 5,
+      "kyc": 0,
+      "languages": "[\"Solidity\"]",
+      "types": "[\"blockchain\",\"smart contract\"]",
+      "item_counts": {
+        "lead": 5,
+        "hotspot": 6,
+        "kill": 3
+      }
+    },
+    {
+      "id": 17,
+      "slug": "polkadot-bridge",
+      "title": "Polkadot Bridge",
+      "summary": "The Polkadot Bridge program on HackenProof is an active Rust-based bridge with 190 submissions and a bounty range spanning from minimal to substantial, requiring KYC and min_reputation 80 for participation. Primary risk surfaces involve replay-prone cross-chain messages, upgradeable proxy admin access, and token fee edge cases. Gate requirements and code complexity moderate immediate high-impact discovery without deeper protocol-level audit.",
+      "gates": {
+        "ok": true,
+        "rep": 80,
+        "fee": 0,
+        "notes": "KYC required (kyc:1) for payout eligibility, min_reputation 80 to participate, no submission fee"
+      },
+      "payouts": "",
+      "scope": [
+        "Polkadot bridge core message passing logic",
+        "Verifier and relayer contract interactions",
+        "Rust implementation of asset lock/mint flows",
+        "Cross-chain consensus finality gadgets",
+        "Upgradeable proxy administration"
+      ],
+      "oos": [
+        "Social engineering and phishing attempts",
+        "UI/UX bugs outside core protocol logic",
+        "Documentation or website errors",
+        "Off-chain service downtime unrelated to bridge logic",
+        "General network connectivity issues"
+      ],
+      "kill": [
+        "Upgradeable contract path without proper authorization and timelock checks"
+      ],
+      "hotspots": [
+        {
+          "code": "H1",
+          "title": "Replay vulnerability in cross-chain message relay",
+          "severity": "High",
+          "why": "Messages or proofs lacking nonce or freshness guarantees can be replayed, enabling double-spoofing or state corruption across chains"
+        },
+        {
+          "code": "H2",
+          "title": "Insufficient access control on upgradeable proxy admin",
+          "severity": "High",
+          "why": "If admin privileges on bridge contracts are not strictly restricted, unauthorized logic changes could redirect verification flows or asset handling"
+        },
+        {
+          "code": "H3",
+          "title": "Fee-on-transfer token edge case in withdrawal logic",
+          "severity": "Medium-High",
+          "why": "Tokens that deduct fees on transfer can cause balance mismatches or locked funds when bridge contracts execute transfers without accounting for fee amounts"
+        },
+        {
+          "code": "H4",
+          "title": "Missing timelock on critical parameter or upgrade changes",
+          "severity": "Medium",
+          "why": "Without a delay between proposal and execution, admin changes to verification or withdrawal logic can take effect instantly, increasing risk of malicious upgrades"
+        },
+        {
+          "code": "H5",
+          "title": "Rust integer overflow/underflow in balance computations",
+          "severity": "Medium",
+          "why": "Edge cases with large integer values in balance tracking could lead to unexpected underflows or overflows, especially in cross-chain asset amount calculations"
+        }
+      ],
+      "leads": [
+        {
+          "title": "Potential replay attack vector via missing proof freshness",
+          "severity": "High",
+          "p_dupe": "high",
+          "hypothesis": "Cross-chain proofs without per-message nonces or timestamps can be reused, allowing an attacker to replay old proofs on new state roots",
+          "why_not_oos": "Core protocol verification logic, essential for bridge security assessment"
+        },
+        {
+          "title": "Proxy admin key leakage redirecting verification flows",
+          "severity": "High",
+          "p_dupe": "med",
+          "hypothesis": "Compromise of admin private keys for upgradeable bridge contracts could allow attacker to inject malicious verifier logic or pause/redirect flows",
+          "why_not_oos": "Access control and key management issue within program scope"
+        },
+        {
+          "title": "Fee-on-transfer token balance mismatch during bridge operations",
+          "severity": "Medium",
+          "p_dupe": "low",
+          "hypothesis": "Tokens imposing transfer fees may result in recipient receiving less than expected, causing fund loss or incorrect accounting in bridge withdrawal paths",
+          "why_not_oos": "Token interaction logic, within scope of cross-chain asset handling"
+        },
+        {
+          "title": "Absence of timelock on verifier upgrade parameters",
+          "severity": "Medium",
+          "p_dupe": "med",
+          "hypothesis": "Upgradable verifier components lacking timelock enable rapid replacement with malicious versions upon admin key compromise",
+          "why_not_oos": "Governance and upgrade pattern review, not out of scope"
+        }
+      ],
+      "parse_error": false,
+      "min_rep": 80,
+      "max_bounty": 100000,
+      "paid": 0,
+      "submissions": 190,
+      "fee": 0,
+      "kyc": 1,
+      "languages": "[\"Rust\"]",
+      "types": "[\"other\"]",
+      "item_counts": {
+        "lead": 4,
+        "hotspot": 5,
+        "kill": 1
+      }
+    },
+    {
+      "id": 18,
+      "slug": "zetachain-smart-contracts",
+      "title": "ZetaChain Smart Contracts",
+      "summary": "ZetaChain Smart Contracts bug bounty program on HackenProof is currently paused, accepting no new reports. The program targets EVM, Solana, Sui, and TON smart contracts written in Solidity, with critical severity bounties ranging from $15,000 to $100,000 and medium payouts from $500 to $2,500. Out-of-scope items include legacy contracts, testing scripts, web tools, and theoretical vulnerabilities without exploitability. Participation historically required a $5 POC submission fee and strict adherence to disclosure guidelines, but all activity is suspended due to the pause status.",
+      "gates": {
+        "ok": false,
+        "rep": 0,
+        "fee": 5,
+        "notes": "Program is paused; submission fee $5 required but no reports accepted"
+      },
+      "payouts": "",
+      "scope": [
+        "EVM smart contracts (protocol-contracts-evm)",
+        "Solana interface contracts (protocol-contracts-solana)",
+        "Sui interface contracts (protocol-contracts-sui)",
+        "TON interface contracts (protocol-contracts-ton)",
+        "ZetaChain toolkit (dev use only, low severity)"
+      ],
+      "oos": [
+        "Legacy contracts under /*/legacy/*",
+        "Testing and development scripts",
+        "Web applications and TypeScript tools",
+        "Old compiler versions",
+        "Imported contracts outside scope",
+        "Code style and gas optimization issues",
+        "Redundant code",
+        "Moderate information disclosure"
+      ],
+      "kill": [],
+      "hotspots": [],
+      "leads": [],
+      "parse_error": false,
+      "min_rep": 0,
+      "max_bounty": 100000,
+      "paid": 6100,
+      "submissions": 217,
+      "fee": 5,
+      "kyc": 0,
+      "languages": "[\"Solidity\"]",
+      "types": "[\"blockchain\",\"smart contract\"]",
+      "item_counts": {
+        "lead": 0,
+        "hotspot": 0,
+        "kill": 0
+      }
+    },
+    {
+      "id": 19,
+      "slug": "walrus-protocol",
+      "title": "Walrus Protocol",
+      "summary": "Walrus Protocol program covers smart contracts, storage nodes, aggregators, and core Rust/Move libraries on Sui. The program requires KYC, a $5 submission fee, and valid PoCs for medium+ severity issues. Scope includes erasure coding, availability certificate verification, and economic model logic, with critical/high bounties for integrity and fee bypass flaws. Currently the program is paused, limiting active research but highlighting persistent upgradeability and verification attack surfaces.",
+      "gates": {
+        "ok": false,
+        "rep": 0,
+        "fee": 5,
+        "notes": "Program paused; KYC required; $5 submission fee; gates red per program status"
+      },
+      "payouts": "Critical: $20,000-$100,000; High: $5,000-$20,000; Medium: $2,000-$5,000; Low: $500-$2,000. Paid in USD or WAL tokens. Program currently paused.",
+      "scope": [
+        "smart_contracts",
+        "storage_nodes",
+        "aggregators",
+        "core_protocol_components",
+        "sdk_integrations"
+      ],
+      "oos": [
+        "wal_exchange_testnet",
+        "deprecated_subsidies_contract",
+        "network_layer_dos_brute_force",
+        "third_party_unmodified_libraries",
+        "social_engineering",
+        "ui_ux_issues",
+        "missing_http_security_headers",
+        "csrf_without_state_modifying_impact"
+      ],
+      "kill": [],
+      "hotspots": [
+        {
+          "code": "H1",
+          "title": "Move contract upgradeability without timelock on critical parameters",
+          "severity": "High",
+          "why": "Sui Move contracts governing staking and governance lack mandatory timelocks on admin parameter changes, enabling abrupt policy shifts affecting rewards and fees"
+        },
+        {
+          "code": "H2",
+          "title": "Erasure coding 'Red Stuff' data commitment bypass",
+          "severity": "Critical",
+          "why": "Gaps in the two-dimensional erasure coding commitment mechanism could allow undetected data corruption or substitution, impacting blob integrity"
+        },
+        {
+          "code": "H3",
+          "title": "Availability certificate replay/forgery via missing proof freshness",
+          "severity": "High",
+          "why": "Absence of nonce or timestamp binding in certificate verification could enable replay attacks to forge availability proofs"
+        },
+        {
+          "code": "H4",
+          "title": "Storage node aggregator API crafted request state inconsistency",
+          "severity": "High",
+          "why": "Unvalidated inputs to REST APIs for sliver storage and epoch transitions may cause state desynchronization between nodes and on-chain records"
+        },
+        {
+          "code": "H5",
+          "title": "Economic model fee/staking requirement bypass",
+          "severity": "High",
+          "why": "Vulnerabilities allowing storage at near-zero cost or circumvention of staking requirements directly impact economic integrity, classified as High per severity guidelines"
+        }
+      ],
+      "leads": [],
+      "parse_error": false,
+      "min_rep": 0,
+      "max_bounty": 100000,
+      "paid": 23000,
+      "submissions": 273,
+      "fee": 5,
+      "kyc": 1,
+      "languages": "[\"Move\",\"Rust\"]",
+      "types": "[\"smart contract\",\"blockchain\"]",
+      "item_counts": {
+        "lead": 0,
+        "hotspot": 5,
+        "kill": 0
+      }
+    },
+    {
+      "id": 20,
+      "slug": "zetachain-blockchain-software",
+      "title": "ZetaChain Blockchain Software",
+      "summary": "ZetaChain Blockchain Software is a paused bug bounty program on HackenProof targeting ZetaChain's L1 node software (zetacored) and cross-chain validator client (zetaclientd), written in Go. The program offers bounties from $1,000 to $100,000 for critical vulnerabilities in protocol consensus, cross-chain transactions, staking, and TSS security. A $5 POC submission fee applies, and the program is currently inactive/paused, meaning no active hunting or rewards are available at this time.",
+      "gates": {
+        "ok": false,
+        "rep": 0,
+        "fee": 5,
+        "notes": "Program is paused. No active hunting scope."
+      },
+      "payouts": "",
+      "scope": [
+        "L1 blockchain node (zetacored)",
+        "cross-chain validator client (zetaclientd)",
+        "TSS orchestration library (go-tss)"
+      ],
+      "oos": [
+        "Exploits requiring malicious observer/signer",
+        "DoS/DDoS attacks",
+        "Pre-release/experimental code (toolkit)",
+        "Social engineering",
+        "Spam"
+      ],
+      "kill": [],
+      "hotspots": [],
+      "leads": [],
+      "parse_error": false,
+      "min_rep": 0,
+      "max_bounty": 100000,
+      "paid": 37500,
+      "submissions": 287,
+      "fee": 5,
+      "kyc": 0,
+      "languages": "[\"Go\"]",
+      "types": "[\"blockchain\"]",
+      "item_counts": {
+        "lead": 0,
+        "hotspot": 0,
+        "kill": 0
+      }
+    },
+    {
+      "id": 21,
+      "slug": "calyx-smart-contract",
+      "title": "Calyx Smart Contract",
+      "summary": "Calyx Smart Contract is a paused bug bounty program on HackenProof requiring KYC and a $5 POC submission fee. The program targets Aurora launchpad smart contracts, combining Rust/NEAR and EVM components. Because the program is currently paused, no new reports are being accepted, resulting in empty leads and hotspots. In-scope findings focus on fund theft, freezing, and contract logic flaws as defined by the program's detailed scope.",
+      "gates": {
+        "ok": false,
+        "rep": 0,
+        "fee": 5,
+        "notes": "Program paused; KYC required; $5 submission fee"
+      },
+      "payouts": "$100 - $100,000",
+      "scope": [
+        "smart_contract"
+      ],
+      "oos": [
+        "oracle_manipulation",
+        "flash_loan_attacks",
+        "51_percent_attacks",
+        "sybil_attacks",
+        "centralization_risks"
+      ],
+      "kill": [],
+      "hotspots": [],
+      "leads": [],
+      "parse_error": false,
+      "min_rep": 0,
+      "max_bounty": 100000,
+      "paid": 9500,
+      "submissions": 307,
+      "fee": 5,
+      "kyc": 1,
+      "languages": "[\"Rust\"]",
+      "types": "[\"smart contract\"]",
+      "item_counts": {
+        "lead": 0,
+        "hotspot": 0,
+        "kill": 0
+      }
+    },
+    {
+      "id": 22,
+      "slug": "cronos-blockchain-protocols",
+      "title": "Cronos Blockchain Protocols",
+      "summary": "Cronos Blockchain Protocols is an active EVM-focused bug bounty program requiring KYC and PoC, with Critical severity on fund-draining vulnerabilities. Scope centers on Cronos EVM, Ethermint, and Cronos POS chain smart contracts. Hotspots target upgradeable contract timelocks, fee-on-token logic, proof freshness, and admin key security. Leads hypothesize similar high-impact vectors without repeating known findings, all aligned with in-scope fund-loss impacts.",
+      "gates": {
+        "ok": true,
+        "rep": 50,
+        "fee": 0,
+        "notes": "KYC and POC required for participation; program active on Cronos EVM/Ethermint/POS"
+      },
+      "payouts": "",
+      "scope": [
+        "Cronos EVM smart contracts",
+        "Ethermint integration",
+        "Cronos POS chain fund flows",
+        "critical crypto flaw exploitation",
+        "cross-chain bridge logic"
+      ],
+      "oos": [
+        "DoS/DDoS attacks",
+        "social engineering",
+        "51% attacks",
+        "lack of liquidity",
+        "gas draining",
+        "previously known vulnerabilities",
+        "initialization difficulties via redeployment",
+        "third-party pool intervention",
+        "best practice critiques",
+        "Sybil attacks",
+        "design issues without user fund loss",
+        "assets not declared",
+        "feature requests"
+      ],
+      "kill": [
+        "upgradeable contract unauthorized upgrade",
+        "proof validation gap enabling forgery",
+        "admin key compromise redirecting funds"
+      ],
+      "hotspots": [
+        {
+          "code": "H1",
+          "title": "Proxy upgrade without timelock or authorization",
+          "severity": "High",
+          "why": "Missing timelock on upgradeable contracts allows malicious logic replacement leading to fund drainage"
+        },
+        {
+          "code": "H2",
+          "title": "Fee-on-transfer token balance accounting gap",
+          "severity": "High",
+          "why": "Reward/settlement contracts not accounting for on-fee tokens cause unexpected balance reductions and fund loss"
+        },
+        {
+          "code": "H3",
+          "title": "Proof freshness gap enabling replay attacks",
+          "severity": "High",
+          "why": "Absence of nonce or timestamp binding in verification allows replay of valid proofs for unauthorized withdrawals"
+        },
+        {
+          "code": "H4",
+          "title": "Proxy admin key leakage redirecting verification flows",
+          "severity": "High",
+          "why": "Leaked admin key permits arbitrary contract upgrades redirecting user funds to attacker-controlled addresses"
+        },
+        {
+          "code": "H5",
+          "title": "Groth16 receipt validation gap accepting invalid proofs",
+          "severity": "High",
+          "why": "Insufficient receipt verification allows forged proofs to trigger fund withdrawals"
+        }
+      ],
+      "leads": [
+        {
+          "title": "Absence of timelock on verifier upgrade parameters",
+          "severity": "High",
+          "p_dupe": "medium",
+          "hypothesis": "Without timelock, any upgrade can instantly change contract logic and redirect all future transactions",
+          "why_not_oos": "Directly impacts fund safety and is in-scope for fund draining vulnerabilities"
+        },
+        {
+          "title": "Fee-on-transfer token logic gap in reward distribution",
+          "severity": "High",
+          "p_dupe": "low",
+          "hypothesis": "Reward contracts miscalculate balances for fee-on-transfer tokens, causing systematic fund loss during distributions",
+          "why_not_oos": "Fund withdrawal/draining impact, directly in-scope"
+        },
+        {
+          "title": "Proxy admin key exposure in verification contracts",
+          "severity": "High",
+          "p_dupe": "medium",
+          "hypothesis": "Leaked admin private key allows attacker to upgrade verification logic and accept malicious proofs for fund theft",
+          "why_not_oos": "Critical fund impact, program scope includes verification logic security"
+        },
+        {
+          "title": "Missing proof freshness enabling replay attacks",
+          "severity": "High",
+          "p_dupe": "low",
+          "hypothesis": "Valid proofs can be replayed without freshness guarantees (nonce/timestamp), enabling repeated unauthorized withdrawals",
+          "why_not_oos": "Directly causes unintentional fund draining, in-scope"
+        }
+      ],
+      "parse_error": false,
+      "min_rep": 50,
+      "max_bounty": 100000,
+      "paid": 118830,
+      "submissions": 321,
+      "fee": 0,
+      "kyc": 1,
+      "languages": "[\"Go\"]",
+      "types": "[\"blockchain\"]",
+      "item_counts": {
+        "lead": 4,
+        "hotspot": 5,
+        "kill": 3
+      }
+    },
+    {
+      "id": 23,
+      "slug": "kai-finance-yield-protocol",
+      "title": "Kai Finance Yield Protocol",
+      "summary": "Kai Finance Yield Protocol is a Move-based DeFi yield farming protocol on Sui, currently paused. In-scope smart contracts cover Leverage Core and Access Management packages, with bounties ranging $5k-$100k for critical findings such as fund loss, unauthorized transactions, and logic attacks. No active submissions have been paid to date. Program requires 50 reputation, POC submission, and exclusive reporting via hackenproof.com.",
+      "gates": {
+        "ok": false,
+        "rep": 0,
+        "fee": 0,
+        "notes": "Program currently paused; no active bounty hunting"
+      },
+      "payouts": "$5,000 - $100,000; $0 paid to date",
+      "scope": [
+        "Move smart contracts",
+        "Sui DeFi yield farming",
+        "Leverage Core",
+        "Access Management"
+      ],
+      "oos": [
+        "theoretical vulnerabilities without proof",
+        "old compiler version",
+        "imported contracts",
+        "code style violations",
+        "gas optimizations",
+        "redundant code",
+        "best practice issues",
+        "front-run only attacks",
+        "test code bugs",
+        "modules not deployed or used"
+      ],
+      "kill": [],
+      "hotspots": [],
+      "leads": [],
+      "parse_error": false,
+      "min_rep": 50,
+      "max_bounty": 100000,
+      "paid": 0,
+      "submissions": 462,
+      "fee": 0,
+      "kyc": 0,
+      "languages": "[\"Move\"]",
+      "types": "[\"smart contract\"]",
+      "item_counts": {
+        "lead": 0,
+        "hotspot": 0,
+        "kill": 0
+      }
+    },
+    {
+      "id": 24,
+      "slug": "internet-computer-protocol-icp",
+      "title": "Internet Computer Protocol (ICP)",
+      "summary": "The ICP bug bounty program encompasses core protocol infrastructure, governance systems, and developer tooling, requiring a $10 submission fee with KYC and POC verification. Critical hotspots center on missing timelocks in NNS governance and proxy admin key exposure in SNS upgrades, which could enable fund redirection or unauthorized canister logic changes. High-severity leads highlight replay vulnerabilities in chain fusion proofs, authentication flow gaps, and token balance logic errors in reward distribution. Overall, the Rust-based, multi-layer attack surface provides substantial EV for scoped governance and cross-chain validation bugs.",
+      "gates": {
+        "ok": true,
+        "rep": 0,
+        "fee": 10,
+        "notes": "KYC required; POC required; $10 submission fee; program active"
+      },
+      "payouts": "",
+      "scope": [
+        "Core Internet Computer Protocol Stack",
+        "Network Nervous System (NNS) canisters",
+        "Rosetta API and price/oracle integrations",
+        "Service Nervous System (SNS) and DAO frameworks",
+        "Internet Identity authentication",
+        "Motoko/Rust/Candid SDK and tooling",
+        "Boundary nodes and chain fusion infrastructure",
+        "Dashboard and web front-ends",
+        "ICRC and ckToken ledgers",
+        "Cross-chain bridge and signer contracts"
+      ],
+      "oos": [
+        "Off-chain XSS on non-critical domains",
+        "General web UI flaws without blockchain impact",
+        "Social engineering, phishing, and account takeover outside crypto scope",
+        "DoS/DDoS attacks on production infrastructure",
+        "Off-the-shelf DAST/scanner usage on production",
+        "Compromising personal data or off-chain systems not in scope",
+        "Unauthorized code execution on user devices"
+      ],
+      "kill": [
+        "Governance takeover via missing timelock on NNS parameters",
+        "Proxy admin key leakage enabling unauthorized canister upgrades"
+      ],
+      "hotspots": [
+        {
+          "code": "H1",
+          "title": "Missing timelock on NNS governance parameter changes",
+          "severity": "Critical",
+          "why": "Adversary can submit and activate critical governance upgrades without delay, enabling rapid state manipulation or fund redirection"
+        },
+        {
+          "code": "H2",
+          "title": "Proxy admin key exposure in SNS canister upgrade flow",
+          "severity": "Critical",
+          "why": "Compromised admin key permits unauthorized canister logic replacement, potentially diverting DAO funds or breaking invariants"
+        },
+        {
+          "code": "H3",
+          "title": "Stale proof acceptance in chain fusion receipt validation",
+          "severity": "High",
+          "why": "Lack of freshness or nonce checks allows replay of cross-chain proofs, enabling double-spend or forged bridge transactions"
+        },
+        {
+          "code": "H4",
+          "title": "Authentication proof replay gap in Internet Identity",
+          "severity": "High",
+          "why": "Reused authentication proofs without fresh challenge allow impersonation of users across sessions"
+        },
+        {
+          "code": "H5",
+          "title": "Unvalidated threshold signature derivation in Chain Fusion Signer",
+          "severity": "High",
+          "why": "Missing validation of key authorization allows fabrication of Bitcoin/Ethereum signatures via the bridge"
+        }
+      ],
+      "leads": [
+        {
+          "title": "Inadequate role-based access control on NNS proposal execution",
+          "severity": "High",
+          "p_dupe": "med",
+          "hypothesis": "Non-NNS actors may execute proposals due to missing role checks or privilege escalation",
+          "why_not_oos": "NNS proposal execution is a core governance surface and explicitly in-scope for the program"
+        },
+        {
+          "title": "Missing replay nonce in SNS token swap operations",
+          "severity": "High",
+          "p_dupe": "low",
+          "hypothesis": "Absence of per-session nonce enables replay of swap requests, potentially leading to double-spend or transaction manipulation",
+          "why_not_oos": "SNS token swaps involve value transfer and are within the program's financial integration scope"
+        },
+        {
+          "title": "Fee-on-transfer token balance snapshotting flaw in reward distribution",
+          "severity": "Medium",
+          "p_dupe": "low",
+          "hypothesis": "Contract incorrectly calculates user rewards by ignoring transfer fees, leading to under-payment or token locking",
+          "why_not_oos": "Reward distribution with tokens is within the program's scope of financial integrations"
+        }
+      ],
+      "parse_error": false,
+      "min_rep": 0,
+      "max_bounty": 50000,
+      "paid": 62200,
+      "submissions": 419,
+      "fee": 10,
+      "kyc": 1,
+      "languages": "[\"Rust\"]",
+      "types": "[\"blockchain\"]",
+      "item_counts": {
+        "lead": 3,
+        "hotspot": 5,
+        "kill": 2
+      }
+    },
+    {
+      "id": 25,
+      "slug": "hyperbridge-protocol",
+      "title": "Hyperbridge Protocol",
+      "summary": "Hyperbridge Protocol is an active cross-chain interoperability program targeting bridge and smart contract vulnerabilities in Rust and Solidity. Gates are open (ok=true, no KYC, $5 fee, min_rep 0), with Critical severity bounties up to $50k. Hotspots focus on merkle proof validation, upgrade timelocks, replay resilience, and access control gaps that could enable fund theft or unauthorized transactions. Leads explore token balance edge cases, proof freshness, admin key exposure, and message sequencing issues, all within in-scope scope and excluding theoretical/compiler/style categories.",
+      "gates": {
+        "ok": true,
+        "rep": 0,
+        "fee": 5,
+        "notes": "Active program, mixed Rust/Solidity, $5 submission fee, no KYC, min_rep 0, Critical severity bounties $30k-$50k"
+      },
+      "payouts": "",
+      "scope": [
+        "smart contract runtime vulnerabilities",
+        "cross-chain bridge logic",
+        "merkle proof verification",
+        "pallet runtime correctness",
+        "overflow underflow and reentrancy in bridge operations"
+      ],
+      "oos": [
+        "theoretical vulnerabilities without demonstration",
+        "old compiler version",
+        "imported contract vulnerabilities",
+        "code style violations",
+        "gas optimizations",
+        "best practice issues",
+        "front-run only exploits"
+      ],
+      "kill": [],
+      "hotspots": [
+        {
+          "code": "H1",
+          "title": "Merkle Proof Validation Gap",
+          "severity": "Critical",
+          "why": "Invalid proof acceptance could allow malicious cross-chain messages, leading to fund theft or state corruption"
+        },
+        {
+          "code": "H2",
+          "title": "Missing Timelock on Bridge Admin Upgrades",
+          "severity": "Critical",
+          "why": "Absence of timelock on upgrade parameters enables unauthorized contract modifications and fund redirection"
+        },
+        {
+          "code": "H3",
+          "title": "Cross-Chain Message Replay Vulnerability",
+          "severity": "High",
+          "why": "Lack of nonce or sequence tracking allows duplicate message replay, risking double-spend or state inconsistency"
+        },
+        {
+          "code": "H4",
+          "title": "Role-Based Access Control Gap on Bridge Critical Functions",
+          "severity": "High",
+          "why": "Insufficient permissions on message validation or fund release functions could allow unauthorized operations"
+        },
+        {
+          "code": "H5",
+          "title": "Numeric Overflow Underflow in Cross-Chain Asset Amounts",
+          "severity": "Medium",
+          "why": "Custom numeric logic in pallets or edge cases in Solidity may allow amount manipulation despite ^0.8.20 defaults"
+        }
+      ],
+      "leads": [
+        {
+          "title": "Fee-on-Transfer Token Balance Tracking Gap",
+          "severity": "Medium",
+          "p_dupe": "medium",
+          "hypothesis": "Bridge reward distribution may miscalculate balances when interacting with ERC20 tokens featuring transfer fees, causing accounting errors",
+          "why_not_oos": "Relates to smart contract token interaction logic within cross-chain transfer correctness"
+        },
+        {
+          "title": "Cross-Chain Proof Freshness Absence",
+          "severity": "Medium",
+          "p_dupe": "low",
+          "hypothesis": "Without proof freshness checks, stale proofs could be reused across finality windows, enabling state manipulation",
+          "why_not_oos": "Message integrity and finality-aware validation is in scope for correctness bugs"
+        },
+        {
+          "title": "Proxy Admin Key Exposure in Verification Contracts",
+          "severity": "High",
+          "p_dupe": "high",
+          "hypothesis": "Admin key leakage in verification contracts could allow unauthorized upgrade paths, redirecting cross-chain message flows",
+          "why_not_oos": "Upgrade mechanism of bridge contracts is in scope and classified as Critical severity"
+        },
+        {
+          "title": "Missing Sequence Number in Inter-Chain Transactions",
+          "severity": "Low",
+          "p_dupe": "low",
+          "hypothesis": "Absence of sequence numbers may allow ordering manipulation of cross-chain messages, affecting deterministic state transitions",
+          "why_not_oos": "Message ordering logic is within scope for correctness bugs, not theoretical"
+        }
+      ],
+      "parse_error": false,
+      "min_rep": 0,
+      "max_bounty": 50000,
+      "paid": 152500,
+      "submissions": 2202,
+      "fee": 5,
+      "kyc": 0,
+      "languages": "[\"Rust\",\"Solidity\"]",
+      "types": "[\"smart contract\"]",
+      "item_counts": {
+        "lead": 4,
+        "hotspot": 5,
+        "kill": 0
+      }
+    }
+  ]
+}
