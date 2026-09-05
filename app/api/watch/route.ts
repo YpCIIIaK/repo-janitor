@@ -7,6 +7,8 @@ import { buildWelcomeWatch } from "@/lib/watch-email"
 import { allowRate } from "@/lib/watch-rate"
 import { subscribeWatch, unsubscribeByToken } from "@/lib/watch-store"
 import { isValidWatchToken, normalizeWatchEmail } from "@/lib/watch-tokens"
+import { sessionFromRequest } from "@/lib/session"
+import { readJson } from "@/lib/request-json"
 
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
@@ -23,6 +25,9 @@ function absoluteUrl(request: Request, path: string): string {
  * DELETE — unsubscribe via unsub token (body or ?token=).
  */
 export async function POST(request: Request) {
+  const session = sessionFromRequest(request, process.env.REPO_ANTI_ROT_SESSION_SECRET)
+  const verifiedEmail = normalizeWatchEmail(session?.verifiedEmail)
+  if (!verifiedEmail) return NextResponse.json({ error: "Sign in with GitHub and a verified primary email to create watches." }, { status: 401 })
   const limits = limitsFromEnv()
   const ip = clientIp(request, limits.trustedProxyHops)
   if (!allowRate(`watch:sub:${ip}`, 20, 60 * 60 * 1000)) {
@@ -31,7 +36,8 @@ export async function POST(request: Request) {
 
   let body: Record<string, unknown>
   try {
-    body = (await request.json()) as Record<string, unknown>
+    body = (await readJson(request, 32 * 1024)) as Record<string, unknown>
+    if (!body || typeof body !== "object" || Array.isArray(body)) throw new Error("Invalid object")
   } catch {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 })
   }
@@ -40,6 +46,7 @@ export async function POST(request: Request) {
   if (!email) {
     return NextResponse.json({ error: "Valid email required" }, { status: 400 })
   }
+  if (email !== verifiedEmail) return NextResponse.json({ error: "Use the verified email of your signed-in GitHub account." }, { status: 403 })
 
   const owner = typeof body.owner === "string" ? body.owner.trim() : ""
   const name = typeof body.name === "string" ? body.name.trim() : ""

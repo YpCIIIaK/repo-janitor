@@ -19,6 +19,7 @@ export interface ScanReport {
   score: number
   grade: Grade
   issues: Issue[]
+  diagnostics?: { completedScanners: string[]; failedScanners: string[]; history: "shallow" | "available" | "unavailable" }
   /** Effective weights the scan used; lets the client recompute the score identically. */
   config?: { weights: { critical: number; warning: number; info: number } }
   /** Repo size metrics for normalized comparison (issues per 1000 lines). */

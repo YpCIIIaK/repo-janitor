@@ -6,6 +6,15 @@ const nextConfig = {
   async headers() {
     return [
       {
+        source: "/:path*",
+        headers: [
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "Referrer-Policy", value: "no-referrer" },
+          { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
+          { key: "Content-Security-Policy", value: "frame-ancestors 'self'; object-src 'none'; base-uri 'self'" },
+        ],
+      },
+      {
         // Embed widgets are meant to be framed on other sites (docs, status
         // pages). Default browser / host CSP often blocks that; open framing
         // only for /embed/*, nowhere else.

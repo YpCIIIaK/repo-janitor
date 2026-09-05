@@ -85,7 +85,13 @@ export function clientIp(request: Request, hops = 1): string {
 /** Cap the tracked-client table so a spray of forged addresses cannot grow it without bound. */
 const MAX_TRACKED_CLIENTS = 10_000
 
-const hits = new Map<string, number[]>()
+// Next may bundle this module separately for each route. Keep one limiter in
+// the Node process so those bundles cannot each admit their own full workload.
+const processState = globalThis as typeof globalThis & {
+  rarScanLimits?: { hits: Map<string, number[]>; active: number; waiting: (() => void)[] }
+}
+const state: NonNullable<typeof processState.rarScanLimits> = processState.rarScanLimits ??= { hits: new Map<string, number[]>(), active: 0, waiting: [] }
+const { hits, waiting } = state
 
 export interface RateDecision {
   ok: boolean
@@ -142,16 +148,13 @@ export class QueueTimeoutError extends Error {
   }
 }
 
-let active = 0
-const waiting: (() => void)[] = []
-
 /** Number of callers currently waiting for a slot — surfaced to clients as queue position. */
 export function queueDepth(): number {
   return waiting.length
 }
 
 export function activeScans(): number {
-  return active
+  return state.active
 }
 
 /**
@@ -167,16 +170,20 @@ export async function withScanSlot<T>(
   fn: () => Promise<T>,
   signal?: AbortSignal,
 ): Promise<T> {
-  if (active >= limits.maxConcurrent) {
+  if (signal?.aborted) throw new Error("client disconnected")
+  if (state.active >= limits.maxConcurrent) {
     if (waiting.length >= limits.maxQueue) throw new QueueFullError(waiting.length)
     await waitForSlot(limits, signal)
+  } else {
+    state.active++
   }
-
-  active++
   try {
+    // A waiter can disconnect after its slot is reserved but before this
+    // continuation runs. Release that reservation without starting the work.
+    if (signal?.aborted) throw new Error("client disconnected")
     return await fn()
   } finally {
-    active--
+    state.active--
     const next = waiting.shift()
     if (next) next()
   }
@@ -197,7 +204,12 @@ function waitForSlot(limits: ScanLimits, signal?: AbortSignal): Promise<void> {
       fn()
     }
 
-    const wake = () => done(resolve)
+    const wake = () => done(() => {
+      // Reserve synchronously, before resolving: a new arrival can run before
+      // the resumed waiter's microtask and must not steal this slot.
+      state.active++
+      resolve()
+    })
     const onAbort = () => done(() => reject(new Error("client disconnected")))
     const timer = setTimeout(
       () => done(() => reject(new QueueTimeoutError(Date.now() - startedAt))),
@@ -214,5 +226,5 @@ function waitForSlot(limits: ScanLimits, signal?: AbortSignal): Promise<void> {
 export function __resetScanLimits(): void {
   hits.clear()
   waiting.length = 0
-  active = 0
+  state.active = 0
 }

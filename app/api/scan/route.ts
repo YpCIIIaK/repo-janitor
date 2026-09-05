@@ -26,6 +26,7 @@ import { recordRepoUsage, visitorFrom } from "@/lib/usage"
 import { recordScanStat } from "@/lib/percentile"
 import { isOwner } from "@/lib/owner"
 import { ALL_SCAN_IDS, onlyForRequest, sanitizeScannerIds } from "@/lib/scan-selection"
+import { readJson } from "@/lib/request-json"
 
 // Cloning + scanning is real work — run on the Node runtime, allow time for it.
 export const runtime = "nodejs"
@@ -43,8 +44,10 @@ async function cloneAndScan(
   url: string,
   emit: (ev: ScanEvent) => void,
   only: string[] | null,
+  signal: AbortSignal,
 ): Promise<void> {
-  const dir = await mkdtemp(join(tmpdir(), "repo-anti-rot-"))
+  const workspace = await mkdtemp(join(tmpdir(), "repo-anti-rot-"))
+  const dir = join(workspace, "checkout")
   try {
     emit({ type: "phase", url, phase: "clone" })
     // Watchdog: poll the tree size during the clone and abort if it blows past the
@@ -62,7 +65,7 @@ async function cloneAndScan(
       clone = await run(
         "git",
         ["clone", "--depth", "1", "--single-branch", url, dir],
-        { timeoutMs: 120_000, signal: sizeGuard.signal },
+        { timeoutMs: 120_000, signal: AbortSignal.any([sizeGuard.signal, signal]) },
       )
     } finally {
       clearInterval(watchdog)
@@ -82,7 +85,7 @@ async function cloneAndScan(
     }
 
     emit({ type: "phase", url, phase: "scan" })
-    const reportPath = join(dir, "repo-anti-rot-report.json")
+    const reportPath = join(workspace, "report.json")
     const cliArgs = [
       // Cap the child's heap so a huge repository kills the scanner and not
       // the whole service. Without this the container hits its limit and the
@@ -106,6 +109,7 @@ async function cloneAndScan(
       cliArgs,
       {
         timeoutMs: 120_000,
+        signal,
         onStderrLine: (line) => {
           if (!line.startsWith("@@PROGRESS@@")) return
           try {
@@ -131,7 +135,7 @@ async function cloneAndScan(
   } catch (err) {
     emit({ type: "repo-done", url, ok: false, error: String(err) })
   } finally {
-    await rm(dir, { recursive: true, force: true }).catch(() => {})
+    await rm(workspace, { recursive: true, force: true }).catch(() => {})
   }
 }
 
@@ -157,7 +161,7 @@ export async function POST(request: Request) {
 
   let body: unknown
   try {
-    body = await request.json()
+    body = await readJson(request, 32 * 1024)
   } catch {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 })
   }
@@ -217,9 +221,13 @@ export async function POST(request: Request) {
   // repo-done payloads as the final results. Scans run sequentially (clone is
   // IO/network heavy) which keeps memory + disk flat and progress readable.
   const encoder = new TextEncoder()
+  const cancelled = new AbortController()
+  const signal = AbortSignal.any([request.signal, cancelled.signal])
   const stream = new ReadableStream<Uint8Array>({
+    cancel() { cancelled.abort() },
     async start(controller) {
       const send = (obj: unknown) => {
+        if (signal.aborted) return
         // Usage is recorded from the outcome the server actually produced, not
         // from anything the client says happened. `recordRepoUsage` stores the
         // host and owner/name only — never this URL as given, which can carry
@@ -234,17 +242,18 @@ export async function POST(request: Request) {
             recordScanStat(ev.report, visitorFrom(request) === null)
           }
         }
-        controller.enqueue(encoder.encode(JSON.stringify(obj) + "\n"))
+        try { controller.enqueue(encoder.encode(JSON.stringify(obj) + "\n")) } catch { cancelled.abort() }
       }
       send({ type: "start", total: urls.length })
       for (let i = 0; i < urls.length; i++) {
+        if (signal.aborted) break
         const url = urls[i]
         send({ type: "repo-start", url, index: i, total: urls.length })
         // Hold a slot only around the actual work. Failing to get one is a
         // per-repo outcome, not a dead stream: the client still gets a reason.
         try {
           if (queueDepth() > 0) send({ type: "queued", url, position: queueDepth() })
-          await withScanSlot(limits, () => cloneAndScan(url, send, only), request.signal)
+          await withScanSlot(limits, () => cloneAndScan(url, send, only, signal), signal)
         } catch (err) {
           const error =
             err instanceof QueueFullError
@@ -256,7 +265,7 @@ export async function POST(request: Request) {
         }
       }
       send({ type: "done" })
-      controller.close()
+      if (!signal.aborted) controller.close()
     },
   })
 

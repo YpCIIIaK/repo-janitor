@@ -92,6 +92,59 @@ describe("withScanSlot", () => {
     return { promise, release }
   }
 
+  it("does not start an already disconnected request even with a free slot", async () => {
+    const controller = new AbortController()
+    controller.abort()
+    const work = vi.fn(async () => "unexpected")
+    await expect(withScanSlot(base, work, controller.signal)).rejects.toThrow(/disconnected/)
+    expect(work).not.toHaveBeenCalled()
+    expect(activeScans()).toBe(0)
+    expect(queueDepth()).toBe(0)
+  })
+
+  it("reserves a released slot for its waiter before a new arrival can run", async () => {
+    const limits = { ...base, maxConcurrent: 1, maxQueue: 3 }
+    const first = deferred()
+    const waiter = deferred()
+    const order: string[] = []
+    let peak = 0
+    const record = (name: string) => { order.push(name); peak = Math.max(peak, activeScans()) }
+    const running = withScanSlot(limits, () => first.promise)
+    const queued = withScanSlot(limits, () => { record("waiter"); return waiter.promise })
+    let arrival!: Promise<void>
+    first.release()
+    // Runs after the releasing job's finally but before the waiter's resumed
+    // continuation. This is the interval in which an unreserved slot is stolen.
+    queueMicrotask(() => {
+      arrival = withScanSlot(limits, async () => { record("arrival") })
+    })
+    await running
+    await Promise.resolve()
+    expect(order).toEqual(["waiter"])
+    expect(queueDepth()).toBe(1)
+    expect(activeScans()).toBe(1)
+    waiter.release()
+    await Promise.all([queued, arrival])
+    expect(order).toEqual(["waiter", "arrival"])
+    expect(peak).toBe(1)
+    expect(activeScans()).toBe(0)
+  })
+
+  it("shares concurrency and rate state between separately loaded module copies", async () => {
+    vi.resetModules()
+    const anotherRoute = await import("@/lib/scan-limits")
+    const held = deferred()
+    const running = withScanSlot({ ...base, maxConcurrent: 1 }, () => held.promise)
+    expect(anotherRoute.activeScans()).toBe(1)
+    const queued = anotherRoute.withScanSlot({ ...base, maxConcurrent: 1 }, async () => "done")
+    expect(queueDepth()).toBe(1)
+    checkRateLimit("shared", base, 1_000_000)
+    expect(anotherRoute.checkRateLimit("shared", base, 1_000_000).remaining).toBe(1)
+    held.release()
+    await Promise.all([running, queued])
+    expect(anotherRoute.activeScans()).toBe(0)
+  })
+
   it("runs up to maxConcurrent at once and queues the rest", async () => {
     const a = deferred()
     const b = deferred()

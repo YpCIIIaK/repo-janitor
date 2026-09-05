@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server"
 import { isPublicGitUrl } from "@/lib/url-guard"
 import { run } from "@/lib/clone-runner"
+import { allowRate } from "@/lib/watch-rate"
+import { clientIp, limitsFromEnv, withScanSlot } from "@/lib/scan-limits"
+import { readJson } from "@/lib/request-json"
 
 /**
  * Is this repository still there and still public?
@@ -22,9 +25,13 @@ export const runtime = "nodejs"
 export const maxDuration = 30
 
 export async function POST(request: Request) {
+  const limits = limitsFromEnv()
+  if (!allowRate(`repo-live:${clientIp(request, limits.trustedProxyHops)}`, 30, 60_000)) {
+    return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 })
+  }
   let body: unknown
   try {
-    body = await request.json()
+    body = await readJson(request, 8192)
   } catch {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 })
   }
@@ -39,12 +46,16 @@ export async function POST(request: Request) {
     return NextResponse.json({ live: false, reason: safe.reason }, { status: 200 })
   }
 
-  const res = await run("git", ["ls-remote", "--exit-code", url, "HEAD"], {
+  let res
+  try { res = await withScanSlot(limits, () => run("git", ["ls-remote", "--exit-code", url, "HEAD"], {
     timeoutMs: 10_000,
     // Refuse interactive credential prompts: a private repo must fail fast, not
     // block the process waiting for a username nobody will type.
     env: { GIT_TERMINAL_PROMPT: "0", GIT_ASKPASS: "echo" },
-  })
+    signal: request.signal,
+  }), request.signal) } catch {
+    return NextResponse.json({ error: "Server is busy" }, { status: 503 })
+  }
 
   return NextResponse.json(
     { live: res.code === 0 },

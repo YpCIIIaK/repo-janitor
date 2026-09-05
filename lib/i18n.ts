@@ -189,9 +189,9 @@ const en = {
 
   "landing.privacy.title": "What happens to your code",
   "landing.privacy.clone":
-    "The repository is cloned into a temporary directory on the server, read, and deleted when the scan finishes. Nothing is kept.",
+    "The repository is cloned into a temporary directory on the server, read, and deleted when the scan finishes. History reports are reused from cache for 24 hours; expired entries are removed on later cache writes.",
   "landing.privacy.report":
-    "The report stays in this browser. It is stored on the server only if you tick the share box, and then only as a summary — no file paths, no snippets.",
+    "The current scan report stays in this browser. Sharing stores a summary without file paths or snippets. Optional hosted AI sends finding titles and categories to OpenRouter with your opt-in. Recommendations are reused for 24 hours; expired cache entries and backups have separate retention.",
   "landing.privacy.usage":
     "Two rows per scan, in two tables that cannot be joined. One counts usage: a random browser id, the event, and the repository name — no score. The other records the result's shape — score, grade, main language, size band, findings per severity — with no name, no address and no browser id, so a score is never attached to a project. Never file paths, code, IP addresses or user agents.",
 
@@ -231,7 +231,7 @@ const en = {
   "landing.privacy.cloneTitle": "Cloned to a temp dir",
   "landing.privacy.reportTitle": "The report stays in your browser",
   "landing.privacy.usageTitle": "Two rows that cannot be joined",
-  "landing.privacy.never": "never recorded",
+  "landing.privacy.never": "not collected in anonymous usage analytics",
   "landing.privacy.neverPaths": "file paths",
   "landing.privacy.neverCode": "source code",
   "landing.privacy.neverIp": "ip addresses",
@@ -295,7 +295,7 @@ const en = {
   "share.badgeCopy": "Copy markdown",
   "watch.title": "Watch for drops",
   "watch.lead":
-    "Grade slipped? We’ll email you. No account — just this address and an unsubscribe link.",
+    "Daily checks and drop alerts sent to your verified GitHub email. Sign in to subscribe; unsubscribe any time.",
   "watch.emailPlaceholder": "you@example.com",
   "watch.submit": "Watch",
   "watch.submitting": "Saving…",
@@ -354,7 +354,7 @@ const en = {
   "gradeCard.taperNote": "Each additional finding of a kind costs less than the last — never nothing, so clearing any of them still helps.",
   "gradeCard.clean": "No secrets, known vulnerabilities, end-of-life runtimes or workflow security issues found.",
   "gradeCard.cleanScoped": "No secrets, known vulnerabilities, end-of-life runtimes or workflow security issues found across {scope}.",
-  "gradeLabel.A": "Pristine",
+  "gradeLabel.A": "Healthy",
   "gradeLabel.B": "Healthy",
   "gradeLabel.C": "Aging",
   "gradeLabel.D": "Rotting",
@@ -405,6 +405,9 @@ const en = {
   "app.loadingHistory": "Loading history…",
   "app.scanRepo": "Scan a repository",
   "app.sinceLastScan": "since last scan",
+  "app.scanCoverage": "scanners completed.",
+  "app.shallowHistory": "Shallow clone: branch, authorship and age checks see only the downloaded history. Use the CLI on a full clone for complete history checks.",
+  "app.failedScanners": "Failed scanners",
   "app.scannedAt": "scanned {when}",
   "app.nothingScanned": "Nothing scanned yet",
   "app.settings": "Settings",
@@ -605,9 +608,9 @@ const ru: Messages = {
 
   "landing.privacy.title": "Что происходит с вашим кодом",
   "landing.privacy.clone":
-    "Репозиторий клонируется во временную папку на сервере, читается и удаляется по завершении скана. Ничего не остаётся.",
+    "Репозиторий клонируется во временную папку на сервере, читается и удаляется по завершении скана. Отчёты истории повторно используются из кэша 24 часа; просроченные записи удаляются при следующих записях в кэш.",
   "landing.privacy.report":
-    "Отчёт остаётся в этом браузере. На сервер он попадает, только если вы отметите галочку «поделиться», и только выжимкой — без путей к файлам и фрагментов кода.",
+    "Отчёт текущего скана остаётся в этом браузере. Публикация сохраняет выжимку без путей и фрагментов кода. Серверный ИИ с вашего согласия отправляет названия и категории находок в OpenRouter. Рекомендации повторно используются 24 часа; просроченный кэш и резервные копии хранятся по отдельным правилам.",
   "landing.privacy.usage":
     "На скан пишутся две строки, в две таблицы, которые нельзя связать. Первая считает использование: случайный идентификатор браузера, событие и имя репозитория — без оценки. Вторая — форму результата: оценку, грейд, основной язык, класс размера, количество находок по severity — без имени, адреса и идентификатора браузера, так что оценка ни к какому проекту не привязывается. Никогда — пути к файлам, код, IP-адреса и user-agent.",
 
@@ -644,7 +647,7 @@ const ru: Messages = {
   "landing.privacy.cloneTitle": "Клон во временной папке",
   "landing.privacy.reportTitle": "Отчёт остаётся в браузере",
   "landing.privacy.usageTitle": "Две строки, которые не соединить",
-  "landing.privacy.never": "никогда не записывается",
+  "landing.privacy.never": "не собирается в анонимной статистике использования",
   "landing.privacy.neverPaths": "пути к файлам",
   "landing.privacy.neverCode": "исходный код",
   "landing.privacy.neverIp": "ip-адреса",
@@ -704,7 +707,7 @@ const ru: Messages = {
   "share.badgeCopy": "Скопировать markdown",
   "watch.title": "Следить за падениями",
   "watch.lead":
-    "Оценка упала — пришлём письмо. Без аккаунта: только адрес и ссылка отписки.",
+    "Ежедневная проверка и письмо при ухудшении — на подтверждённый адрес GitHub. Для подписки войдите; отписаться можно в любой момент.",
   "watch.emailPlaceholder": "you@example.com",
   "watch.submit": "Следить",
   "watch.submitting": "Сохраняем…",
@@ -760,7 +763,7 @@ const ru: Messages = {
   "gradeCard.taperNote": "Каждая следующая находка того же вида стоит дешевле предыдущей — но не бесплатна, поэтому убрать любую из них всё равно полезно.",
   "gradeCard.clean": "Ни секретов, ни известных уязвимостей, ни устаревших рантаймов, ни проблем с безопасностью workflow.",
   "gradeCard.cleanScoped": "Ни секретов, ни известных уязвимостей, ни устаревших рантаймов, ни проблем с безопасностью workflow — на объёме {scope}.",
-  "gradeLabel.A": "Безупречно",
+  "gradeLabel.A": "Хорошее состояние",
   "gradeLabel.B": "Здоров",
   "gradeLabel.C": "Стареет",
   "gradeLabel.D": "Гниёт",
@@ -813,6 +816,9 @@ const ru: Messages = {
   "app.loadingHistory": "Загрузка истории…",
   "app.scanRepo": "Просканировать репозиторий",
   "app.sinceLastScan": "с прошлого скана",
+  "app.scanCoverage": "сканеров завершено.",
+  "app.shallowHistory": "Неглубокий клон: проверки веток, авторства и возраста видят только загруженную историю. Для полной проверки истории запустите CLI на полном клоне.",
+  "app.failedScanners": "Сканеры с ошибкой",
   "app.scannedAt": "скан {when}",
   "app.nothingScanned": "Пока ничего не просканировано",
   "app.settings": "Настройки",

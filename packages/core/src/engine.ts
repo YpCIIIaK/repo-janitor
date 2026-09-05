@@ -234,6 +234,8 @@ export async function runScan(
   onProgress?: (p: ScanProgress) => void,
 ): Promise<ScanReport> {
   const issues: Issue[] = []
+  const completedScanners: string[] = []
+  const failedScanners: string[] = []
   const total = scanners.length
   onProgress?.({ completed: 0, total })
   let completed = 0
@@ -245,7 +247,9 @@ export async function runScan(
       for (const issue of await scanner.run(ctx)) {
         issues.push({ ...issue, scanner: scanner.id })
       }
+      completedScanners.push(scanner.id)
     } catch (err) {
+      failedScanners.push(scanner.id)
       ctx.log(`[repo-anti-rot] scanner "${scanner.id}" failed: ${String(err)}`)
     }
     completed++
@@ -267,6 +271,7 @@ export async function runScan(
     score,
     grade: scoreToGrade(score),
     issues: visible,
+    diagnostics: { completedScanners, failedScanners, history: ctx.history ?? "unavailable" },
     // Echo effective weights so the dashboard recomputes the score identically.
     config: { weights },
     metrics: { linesOfCode },

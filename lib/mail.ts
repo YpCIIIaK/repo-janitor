@@ -32,6 +32,7 @@ function resendFrom(): string {
 export async function sendMail(msg: MailMessage): Promise<SendMailResult> {
   const key = resendKey()
   if (!key) {
+    if (process.env.REPO_ANTI_ROT_PUBLIC === "true") return { ok: false, error: "Email delivery is not configured" }
     console.info(
       `[mail:console] to=${msg.to} subject=${JSON.stringify(msg.subject)}\n${msg.text}`,
     )
@@ -41,6 +42,7 @@ export async function sendMail(msg: MailMessage): Promise<SendMailResult> {
   try {
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
+      signal: AbortSignal.timeout(15_000),
       headers: {
         Authorization: `Bearer ${key}`,
         "content-type": "application/json",

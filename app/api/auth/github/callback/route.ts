@@ -15,6 +15,7 @@ import {
   publicOrigin,
 } from "@/lib/session"
 import { isGithubLogin } from "@/lib/hunter"
+import { normalizeWatchEmail } from "@/lib/watch-tokens"
 
 /**
  * Where GitHub sends the browser back.
@@ -92,6 +93,19 @@ async function loginFor(token: string): Promise<string | null> {
   }
 }
 
+async function verifiedEmailFor(token: string): Promise<string | undefined> {
+  try {
+    const response = await fetch("https://api.github.com/user/emails", {
+      headers: { Accept: "application/vnd.github+json", "User-Agent": "repo-anti-rot-auth", Authorization: `Bearer ${token}` },
+      signal: AbortSignal.timeout(TIMEOUT_MS),
+    })
+    if (!response.ok) return undefined
+    const emails = await response.json() as { email?: unknown; primary?: boolean; verified?: boolean }[]
+    if (!Array.isArray(emails)) return undefined
+    return normalizeWatchEmail(emails.find((email) => email.primary === true && email.verified === true)?.email) ?? undefined
+  } catch { return undefined }
+}
+
 export async function GET(request: Request) {
   const config = oauthConfig()
   const secret = process.env.REPO_ANTI_ROT_SESSION_SECRET
@@ -128,6 +142,7 @@ export async function GET(request: Request) {
 
   const login = await loginFor(token)
   if (!login) return fail(request, "who_failed")
+  const verifiedEmail = await verifiedEmailFor(token)
 
   const next = safeReturnPath(cookie(request, "rar_oauth_next"))
   const secure = isSecureRequest(request) ? "; Secure" : ""
@@ -135,7 +150,7 @@ export async function GET(request: Request) {
   clearFlowCookies(headers, secure)
   headers.append(
     "Set-Cookie",
-    `${SESSION_COOKIE}=${createSession(login, secret)}; HttpOnly; SameSite=Lax; Path=/; Max-Age=${SESSION_TTL_SECONDS}${secure}`,
+    `${SESSION_COOKIE}=${createSession(login, secret, Date.now(), verifiedEmail)}; HttpOnly; SameSite=Lax; Path=/; Max-Age=${SESSION_TTL_SECONDS}${secure}`,
   )
 
   return new Response(null, { status: 302, headers })

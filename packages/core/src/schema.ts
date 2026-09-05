@@ -108,6 +108,11 @@ export const scanReportSchema = z.object({
   score: z.number().int().min(0).max(100),
   grade: gradeSchema,
   issues: z.array(issueSchema),
+  diagnostics: z.object({
+    completedScanners: z.array(z.string()),
+    failedScanners: z.array(z.string()),
+    history: z.enum(["shallow", "available", "unavailable"]),
+  }).optional(),
   /**
    * Effective scan configuration echoed into the report. Lets the dashboard
    * recompute the score client-side (for Snooze) with the SAME weights the scan

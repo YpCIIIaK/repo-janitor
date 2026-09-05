@@ -12,7 +12,7 @@ A repository **health & decay monitor**. It scans a codebase for the kinds of ro
 that accumulate silently — undocumented env vars, abandoned & vulnerable
 dependencies, stale branches, aging TODOs, committed secrets, dead & commented-out
 code, disabled tests, and binary bloat — scores it A–F, and shows everything in a
-dashboard. An optional AI pass adds a short, decisive verdict to each finding via
+dashboard. An optional AI pass adds recommendations and verification steps via
 OpenRouter.
 
 ## Try it
@@ -95,7 +95,7 @@ The dashboard's `/api/scan` route shells out to the **built** CLI
 
 ## Prerequisites
 
-- Node.js 20+ (uses the built-in global `fetch`)
+- Node.js 22+ (uses the built-in global `fetch`)
 - [pnpm](https://pnpm.io) (the repo is a pnpm workspace) — or just run
   `corepack enable` and the pinned version (`packageManager` in `package.json`)
   is provisioned automatically
@@ -107,6 +107,15 @@ out to `git`/`node` directly (no `.cmd`/`.sh` wrappers), and all paths go throug
 Node's `path`/`os.tmpdir()` so separators and temp dirs are handled per-OS.
 
 ## Setup
+
+For a Windows mini-server with Docker, a domain, persistent storage and automatic
+maintenance, see [Self-hosting](docs/SELF-HOSTING.md). Run `pnpm setup:server`
+to create a private `.env.local` without overwriting existing settings.
+Для переноса на Windows-сервер с доменом repo-janitor.app: [инструкция на русском](docs/SERVER-HANDOFF.md).
+
+The [product review](docs/COMPETITIVE-REVIEW.md) records positioning, implemented
+improvements and remaining work. The standalone auditscout tools are not part of
+the dashboard or its Docker image.
 
 > **Important:** `packages/*/dist` is git-ignored, so the compiled CLI is **not**
 > in the repo. After cloning you must build it once — otherwise the dashboard's

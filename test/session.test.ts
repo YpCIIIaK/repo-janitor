@@ -205,11 +205,11 @@ describe("safeReturnPath", () => {
 })
 
 describe("authorizeUrl", () => {
-  it("asks for no scopes", () => {
+  it("asks only for email verification scope", () => {
     // An empty scope still reads public profile data, and a leaked token then
     // grants nothing that was not already public.
     const url = new URL(authorizeUrl("cid", "https://x.test/cb", "st"))
-    expect(url.searchParams.get("scope")).toBe("")
+    expect(url.searchParams.get("scope")).toBe("user:email")
     expect(url.searchParams.get("client_id")).toBe("cid")
     expect(url.searchParams.get("redirect_uri")).toBe("https://x.test/cb")
     expect(url.searchParams.get("state")).toBe("st")

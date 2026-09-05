@@ -80,6 +80,9 @@ async function checkTmp(): Promise<Check> {
  * to be discovered. Names the backend only; the URL and key stay server-side.
  */
 function checkShareStore(): Check {
+  if (!supabaseConfig() && process.env.REPO_ANTI_ROT_STORAGE_DURABLE === "true" && process.env.REPO_ANTI_ROT_DATA_DIR?.trim()) {
+    return { ok: true, detail: "filesystem (operator-configured persistent volume)" }
+  }
   return supabaseConfig()
     ? { ok: true, detail: "supabase (durable)" }
     : {

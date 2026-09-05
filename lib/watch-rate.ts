@@ -15,6 +15,10 @@ export function allowRate(
 ): boolean {
   const b = buckets.get(key)
   if (!b || now >= b.resetAt) {
+    if (buckets.size >= 10_000) {
+      for (const [id, entry] of buckets) if (entry.resetAt <= now) buckets.delete(id)
+      if (buckets.size >= 10_000 && !buckets.has(key)) return false
+    }
     buckets.set(key, { resetAt: now + windowMs, count: 1 })
     return true
   }

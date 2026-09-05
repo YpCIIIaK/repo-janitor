@@ -1,6 +1,8 @@
 import "server-only"
 import { promises as fs } from "fs"
 import { join } from "path"
+import { dataDir } from "@/lib/data-dir"
+import { withStorageLock, writeJsonAtomic } from "@/lib/storage-io"
 import type { Grade, Issue, Severity } from "@/lib/mock-data"
 import { supabaseConfig } from "@/lib/share-db"
 import { dbReadRepo, dbReadRepos, dbWriteRepo } from "@/lib/server-store-db"
@@ -53,7 +55,7 @@ export interface StoredRepo {
   scannedAt: string
 }
 
-const DIR = join(process.cwd(), ".repo-anti-rot")
+const DIR = dataDir()
 const FILE = join(DIR, "reports.json")
 const MAX_HISTORY = 50
 
@@ -89,7 +91,7 @@ async function readFsRepos(): Promise<StoredRepo[]> {
 
 async function writeServerRepos(list: StoredRepo[]): Promise<void> {
   await fs.mkdir(DIR, { recursive: true })
-  await fs.writeFile(FILE, JSON.stringify(list, null, 2), "utf-8")
+  await writeJsonAtomic(FILE, list)
 }
 
 /** Outcome of an upsert: the stored repo plus the report it replaced (if any),
@@ -143,6 +145,10 @@ export function mergeReport(
 
 /** Upsert a report: refresh the repo's latest and append a trend point. */
 export async function upsertServerReport(report: ScanReport): Promise<UpsertResult> {
+  return withStorageLock(() => upsertReport(report))
+}
+
+async function upsertReport(report: ScanReport): Promise<UpsertResult> {
   const { owner, name } = report.repo
   const id = `${owner}/${name}`
   const at = report.generatedAt || new Date().toISOString()

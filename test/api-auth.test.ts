@@ -24,7 +24,7 @@ describe("bearerToken", () => {
 
   it("returns empty string when no/!bearer header", () => {
     expect(bearerToken(req())).toBe("")
-    expect(bearerToken(req("Basic Zm9v"))).toBe("Basic Zm9v") // not a bearer → returned as-is, won't match a token
+    expect(bearerToken(req("Basic Zm9v"))).toBe("")
   })
 })
 

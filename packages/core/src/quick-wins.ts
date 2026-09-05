@@ -24,7 +24,7 @@ export function quickWins(issues: Issue[], limit = 8): QuickWin[] {
 export function formatQuickWinsTerminal(wins: QuickWin[]): string {
   if (wins.length === 0) return "No findings — nothing to fix."
   const lines = [
-    "Quick wins (fix these first — roughly an hour of focused work for the top few):",
+    "Quick wins (prioritized findings; effort estimates are heuristic):",
     "",
   ]
   for (let n = 0; n < wins.length; n++) {

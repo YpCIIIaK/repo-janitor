@@ -20,7 +20,7 @@ export function safeEqual(a: string, b: string): boolean {
 /** Extract the `Authorization: Bearer <token>` value, or "" when absent. */
 export function bearerToken(request: Request): string {
   const header = request.headers.get("authorization") ?? ""
-  return header.replace(/^Bearer\s+/i, "").trim()
+  return /^Bearer\s+/i.test(header) ? header.replace(/^Bearer\s+/i, "").trim() : ""
 }
 
 /**
@@ -31,6 +31,6 @@ export function bearerToken(request: Request): string {
  * When enabled, the comparison is constant-time.
  */
 export function checkBearer(request: Request, expected: string | undefined): boolean {
-  if (!expected) return true
+  if (!expected?.trim()) return process.env.REPO_ANTI_ROT_PUBLIC !== "true"
   return safeEqual(bearerToken(request), expected)
 }

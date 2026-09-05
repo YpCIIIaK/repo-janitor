@@ -5,6 +5,9 @@ import { join } from "path"
 import { isPublicGitUrl } from "@/lib/url-guard"
 import { MAX_CLONE_BYTES, SIZE_POLL_MS, run, dirSizeExceeds } from "@/lib/clone-runner"
 import { parseLogWithStats, COMMIT_RS } from "@/lib/commit-sampling"
+import { clientIp, limitsFromEnv, withScanSlot } from "@/lib/scan-limits"
+import { allowRate } from "@/lib/watch-rate"
+import { readJson } from "@/lib/request-json"
 
 /**
  * List a repository's commits and what each one changed — without scanning any
@@ -33,9 +36,16 @@ const MAX_COMMITS = 250
 const LOG_FORMAT = `${COMMIT_RS}%H%x1f%ct%x1f%P%x1f%D%x1f%s`
 
 export async function POST(request: Request) {
+  const limits = limitsFromEnv()
+  if (!allowRate(`commits:${clientIp(request, limits.trustedProxyHops)}`, 20, 60 * 60_000)) return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 })
+  try { return await withScanSlot(limits, () => listCommits(request), request.signal) }
+  catch { return NextResponse.json({ error: "Server busy or request cancelled" }, { status: 503 }) }
+}
+
+async function listCommits(request: Request) {
   let body: unknown
   try {
-    body = await request.json()
+    body = await readJson(request, 32 * 1024)
   } catch {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 })
   }
@@ -70,7 +80,7 @@ export async function POST(request: Request) {
     try {
       clone = await run("git", ["clone", "--filter=blob:none", "--no-checkout", url, dir], {
         timeoutMs: 120_000,
-        signal: sizeGuard.signal,
+        signal: AbortSignal.any([sizeGuard.signal, request.signal]),
       })
     } finally {
       clearInterval(watchdog)
@@ -100,7 +110,7 @@ export async function POST(request: Request) {
         `--max-count=${MAX_COMMITS}`,
         `--format=${LOG_FORMAT}`,
       ],
-      { timeoutMs: 60_000 },
+      { timeoutMs: 60_000, signal: request.signal },
     )
     if (log.code !== 0) {
       return NextResponse.json(
