@@ -14,6 +14,7 @@ import { IssuesTable } from "@/components/repo-anti-rot/issues-table"
 import { CategoryScores } from "@/components/repo-anti-rot/category-scores"
 import { HotspotFiles } from "@/components/repo-anti-rot/hotspot-files"
 import { AiSummaryCard } from "@/components/repo-anti-rot/ai-summary-card"
+import { RemediationPlan } from "@/components/repo-anti-rot/remediation-plan"
 import { RegressionBanner } from "@/components/repo-anti-rot/regression-banner"
 import { AgeHistogram } from "@/components/repo-anti-rot/age-histogram"
 import { TrendChart } from "@/components/repo-anti-rot/trend-chart"
@@ -298,14 +299,6 @@ export default function DashboardPage() {
           search={search}
           onSearch={setSearch}
           onHome={goHome}
-          extras={
-            <Link
-              href="/app/audit"
-              className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
-            >
-              Audit market
-            </Link>
-          }
         />
 
         {showOverview ? (
@@ -394,6 +387,11 @@ export default function DashboardPage() {
                 list lives on Issues — keeping both places was two scrolls of
                 the same table with different surrounding chrome. */}
             <TabsContent value="overview" className="mt-6 space-y-6">
+              {current.latest.diagnostics && <p className="rounded-lg border px-4 py-3 text-sm text-muted-foreground">
+                {current.latest.diagnostics.completedScanners.length} {t("app.scanCoverage")}
+                {current.latest.diagnostics.history === "shallow" && ` ${t("app.shallowHistory")}`}
+                {current.latest.diagnostics.failedScanners.length > 0 && ` ${t("app.failedScanners")}: ${current.latest.diagnostics.failedScanners.join(", ")}`}
+              </p>}
               <RegressionBanner
                 repo={current}
                 liveScore={liveScore}
@@ -422,6 +420,7 @@ export default function DashboardPage() {
               </div>
 
               <HealthOverview stats={stats} />
+              <RemediationPlan issues={issues} weights={weights} />
 
               <div className="grid gap-6 lg:grid-cols-2">
                 <CategoryScores issues={issues} weights={weights} />

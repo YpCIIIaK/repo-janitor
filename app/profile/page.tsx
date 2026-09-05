@@ -46,8 +46,9 @@ export default async function ProfilePage({
       <main className="mx-auto max-w-2xl px-6 py-20">
         <h1 className="text-2xl font-bold">Your profile</h1>
         <p className="text-muted-foreground mt-3 text-sm">
-          Sign in with GitHub to see your cards. Nothing is stored: the sign-in
-          only proves the handle is yours, and the session lives in a cookie.
+          Sign in with GitHub to see your cards and subscribe to repository alerts.
+          Your login and verified primary email are kept in a signed session cookie
+          for eight days. Subscribing also stores your email with the watch.
         </p>
 
         {error ? (

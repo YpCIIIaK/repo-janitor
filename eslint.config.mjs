@@ -45,6 +45,12 @@ export default tseslint.config(
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,
+  {
+    files: ["scripts/**/*.mjs"],
+    languageOptions: {
+      globals: { process: "readonly", console: "readonly", fetch: "readonly", AbortSignal: "readonly", setTimeout: "readonly", Buffer: "readonly", URL: "readonly" },
+    },
+  },
   // Next.js preset only for the dashboard sources.
   ...next.map((cfg) => ({
     ...cfg,

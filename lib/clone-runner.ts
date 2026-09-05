@@ -1,6 +1,7 @@
 import { spawn } from "child_process"
 import { readdir, stat } from "fs/promises"
 import { join } from "path"
+import { scanEnvironment } from "@/lib/scan-environment"
 
 /**
  * Shared primitives for the clone+scan API routes (`/api/scan` and
@@ -102,26 +103,38 @@ export function run(
     timeoutMs?: number
     onStderrLine?: (line: string) => void
     signal?: AbortSignal
-    /** Extra environment for the child, merged over the parent's. */
+    /** Extra non-secret environment for the child. */
     env?: Record<string, string>
   } = {},
 ): Promise<RunResult> {
   return new Promise((resolve) => {
+    if (opts.signal?.aborted) { resolve({ code: -1, stdout: "", stderr: "Scan cancelled" }); return }
     const child = spawn(cmd, args, {
       windowsHide: true,
-      signal: opts.signal,
-      ...(opts.env ? { env: { ...process.env, ...opts.env } } : {}),
+      detached: process.platform !== "win32",
+      env: { ...scanEnvironment(), ...opts.env },
     })
     let stdout = ""
     let stderr = ""
     let buf = "" // partial-line buffer for stderr
+    const stop = () => {
+      if (!child.pid) return
+      if (process.platform === "win32") {
+        const killer = spawn("taskkill", ["/pid", String(child.pid), "/T", "/F"], { windowsHide: true, stdio: "ignore", env: scanEnvironment() })
+        killer.on("error", () => child.kill("SIGKILL"))
+      } else {
+        try { process.kill(-child.pid, "SIGKILL") } catch { child.kill("SIGKILL") }
+      }
+    }
+    opts.signal?.addEventListener("abort", stop, { once: true })
     const timeout = opts.timeoutMs
-      ? setTimeout(() => child.kill("SIGKILL"), opts.timeoutMs)
+      ? setTimeout(stop, opts.timeoutMs)
       : null
-    child.stdout.on("data", (d) => (stdout += d.toString()))
+    const maxOutput = 2 * 1024 * 1024
+    child.stdout.on("data", (d) => (stdout = (stdout + d.toString()).slice(-maxOutput)))
     child.stderr.on("data", (d) => {
       const text = d.toString()
-      stderr += text
+      stderr = (stderr + text).slice(-maxOutput)
       if (!opts.onStderrLine) return
       buf += text
       let nl: number
@@ -130,13 +143,14 @@ export function run(
         buf = buf.slice(nl + 1)
         opts.onStderrLine(line)
       }
+      if (buf.length > maxOutput) buf = buf.slice(-maxOutput)
     })
     child.on("error", (err) => {
-      if (timeout) clearTimeout(timeout)
-      resolve({ code: -1, stdout, stderr: stderr + String(err) })
+      stderr += String(err)
     })
     child.on("close", (code) => {
       if (timeout) clearTimeout(timeout)
+      opts.signal?.removeEventListener("abort", stop)
       if (buf && opts.onStderrLine) opts.onStderrLine(buf)
       resolve({ code, stdout, stderr })
     })

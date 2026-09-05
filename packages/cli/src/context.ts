@@ -9,7 +9,8 @@ import type {
   HistoryAddition,
   Scanner,
 } from "@repo-anti-rot/core";
-import { basename, join } from "path";
+import { basename, join, relative, isAbsolute, resolve } from "path";
+import { safeRequest } from "./safe-network";
 
 /**
  * Node implementation of the engine's `ScanContext` (fast-glob + simple-git +
@@ -79,11 +80,19 @@ export async function buildScanContext(root: string): Promise<ScanContext> {
 
   // Get repository metadata
   const repo = await getRepoMetadata(git, root);
+  let history: "shallow" | "available" | "unavailable" = "unavailable";
+  try { history = (await git.revparse(["--is-shallow-repository"])).trim() === "true" ? "shallow" : "available"; } catch { /* not a git repository */ }
 
   // Per-project config (.repo-anti-rot.json) — defaults when absent/invalid.
   const readRel = async (relPath: string): Promise<string | null> => {
     try {
-      return await fs.readFile(join(root, relPath), "utf-8");
+      const base = await fs.realpath(root);
+      const file = await fs.realpath(resolve(root, relPath));
+      const rel = relative(base, file);
+      if (!rel || rel === ".." || rel.startsWith(`..${process.platform === "win32" ? "\\" : "/"}`) || isAbsolute(rel)) return null;
+      const info = await fs.stat(file);
+      if (!info.isFile() || info.size > 2 * 1024 * 1024) return null;
+      return await fs.readFile(file, "utf-8");
     } catch {
       return null;
     }
@@ -111,11 +120,13 @@ export async function buildScanContext(root: string): Promise<ScanContext> {
     cwd: root,
     dot: true,
     onlyFiles: true,
+    followSymbolicLinks: false,
     ignore: config.ignore,
   });
 
   return {
     root,
+    history,
     repo,
     config,
     files,
@@ -300,11 +311,9 @@ export async function buildScanContext(root: string): Promise<ScanContext> {
     },
     fetchJson: async (url: string): Promise<unknown | null> => {
       try {
-        const res = await fetch(url, {
-          headers: { accept: "application/json", "user-agent": "repo-anti-rot (https://github.com/YpCIIIaK/repo-janitor)" },
-        });
-        if (!res.ok) return null;
-        return await res.json();
+        const res = await safeRequest(url);
+        if (res.status < 200 || res.status >= 300) return null;
+        return JSON.parse(res.text);
       } catch {
         // offline / network error → caller degrades to offline mode
         return null;
@@ -312,17 +321,9 @@ export async function buildScanContext(root: string): Promise<ScanContext> {
     },
     postJson: async (url: string, body: unknown): Promise<unknown | null> => {
       try {
-        const res = await fetch(url, {
-          method: "POST",
-          headers: {
-            accept: "application/json",
-            "content-type": "application/json",
-            "user-agent": "repo-anti-rot (https://github.com/YpCIIIaK/repo-janitor)",
-          },
-          body: JSON.stringify(body),
-        });
-        if (!res.ok) return null;
-        return await res.json();
+        const res = await safeRequest(url, { method: "POST", body: JSON.stringify(body) });
+        if (res.status < 200 || res.status >= 300) return null;
+        return JSON.parse(res.text);
       } catch {
         // offline / network error → caller degrades to offline mode
         return null;
@@ -331,32 +332,18 @@ export async function buildScanContext(root: string): Promise<ScanContext> {
     headUrl: async (url: string): Promise<{ status: number; url?: string } | null> => {
       // A per-request timeout matters more here than anywhere else: a link
       // scanner without one hangs the whole scan on the first unresponsive host.
-      const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), 8000);
       try {
         // Some servers reject HEAD outright (405) while serving GET fine, so a
         // rejected HEAD is retried as a GET before believing it.
-        let res = await fetch(url, {
-          method: "HEAD",
-          redirect: "follow",
-          headers: { "user-agent": "repo-anti-rot (https://github.com/YpCIIIaK/repo-janitor)" },
-          signal: controller.signal,
-        });
+        let res = await safeRequest(url, { method: "HEAD" });
         if (res.status === 405 || res.status === 501) {
-          res = await fetch(url, {
-            method: "GET",
-            redirect: "follow",
-            headers: { "user-agent": "repo-anti-rot (https://github.com/YpCIIIaK/repo-janitor)" },
-            signal: controller.signal,
-          });
+          res = await safeRequest(url);
         }
         return { status: res.status, url: res.url };
       } catch {
         // DNS failure, refused connection, or the timeout above. Reported as
         // "unreachable", which the scanner treats differently from a 404.
         return null;
-      } finally {
-        clearTimeout(timer);
       }
     },
     log: (msg: string) => {

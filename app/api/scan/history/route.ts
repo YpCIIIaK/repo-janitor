@@ -15,6 +15,9 @@ import {
 import { parseLog, selectCommits, type Commit } from "@/lib/commit-sampling"
 import { getCachedScan, putCachedScan } from "@/lib/scan-cache"
 import { recordRepoUsage } from "@/lib/usage"
+import { clientIp, limitsFromEnv, withScanSlot } from "@/lib/scan-limits"
+import { allowRate } from "@/lib/watch-rate"
+import { readJson } from "@/lib/request-json"
 
 // Cloning + scanning many commits is heavy — Node runtime, generous budget.
 export const runtime = "nodejs"
@@ -85,18 +88,20 @@ function issueIds(report: unknown): string[] {
 }
 
 /** Scan a single checked-out commit, using the disk cache when possible. */
-async function scanCommit(url: string, dir: string, sha: string): Promise<unknown> {
+async function scanCommit(url: string, dir: string, sha: string, signal: AbortSignal): Promise<unknown> {
   const cached = await getCachedScan(url, sha)
   if (cached) return cached
 
   const checkout = await run("git", ["-C", dir, "checkout", "-q", "--detach", sha], {
     timeoutMs: 60_000,
+    signal,
   })
   if (checkout.code !== 0) {
     throw new Error(`checkout failed: ${checkout.stderr.trim() || `exit ${checkout.code}`}`)
   }
 
-  const reportPath = join(dir, "repo-anti-rot-report.json")
+  // Output belongs to the server's workspace, never to the untrusted checkout.
+  const reportPath = join(dir, "..", "report.json")
   const scan = await run(
     "node",
     [
@@ -112,7 +117,7 @@ async function scanCommit(url: string, dir: string, sha: string): Promise<unknow
       "--output",
       reportPath,
     ],
-    { timeoutMs: 120_000 },
+    { timeoutMs: 120_000, signal },
   )
   if (scan.code !== 0) {
     throw new Error(describeFailure(scan))
@@ -137,32 +142,32 @@ async function buildHistory(
   all: boolean,
   emit: (ev: HistoryEvent) => void,
   cancelled: () => boolean,
+  signal: AbortSignal,
   /** Explicit selection from the commit picker; overrides sampling entirely. */
   shas?: string[],
 ): Promise<void> {
-  const dir = await mkdtemp(join(tmpdir(), "repo-anti-rot-hist-"))
+  const workspace = await mkdtemp(join(tmpdir(), "repo-anti-rot-hist-"))
+  const dir = join(workspace, "checkout")
+  let watchdog: ReturnType<typeof setInterval> | undefined
   try {
-    // Partial clone: full commit graph, blobs fetched lazily on checkout. Keep the
-    // size watchdog — even a blobless clone of a hostile repo could balloon on first
-    // checkout, but the per-commit work below is what actually pulls blobs.
+    // History scanners inspect patches and blame, not just checked-out files.
+    // A blobless clone makes git log -p fetch historical blobs individually,
+    // turning a small repository into hundreds of network round trips. Fetch
+    // the objects together once; the watchdog still bounds the full clone.
     const sizeGuard = new AbortController()
     let abortedForSize = false
-    const watchdog = setInterval(async () => {
+    watchdog = setInterval(async () => {
       if (await dirSizeExceeds(dir, MAX_CLONE_BYTES)) {
         abortedForSize = true
         sizeGuard.abort()
       }
     }, SIZE_POLL_MS)
-    let clone
-    try {
-      clone = await run(
+    const scanSignal = AbortSignal.any([sizeGuard.signal, signal])
+    const clone = await run(
         "git",
-        ["clone", "--filter=blob:none", "--no-single-branch", url, dir],
-        { timeoutMs: 180_000, signal: sizeGuard.signal },
+        ["clone", "--no-single-branch", url, dir],
+        { timeoutMs: 180_000, signal: scanSignal },
       )
-    } finally {
-      clearInterval(watchdog)
-    }
     if (abortedForSize) {
       emit({ type: "error", error: `repository exceeds the ${Math.round(MAX_CLONE_BYTES / (1024 * 1024))} MB clone limit` })
       return
@@ -175,6 +180,7 @@ async function buildHistory(
     // First-parent history of the default branch (HEAD after clone).
     const log = await run("git", ["-C", dir, "log", "--first-parent", `--format=${LOG_FORMAT}`], {
       timeoutMs: 60_000,
+      signal: scanSignal,
     })
     if (log.code !== 0) {
       emit({ type: "error", error: `git log failed: ${log.stderr.trim() || `exit ${log.code}`}` })
@@ -189,9 +195,10 @@ async function buildHistory(
     // A hand-picked set is honoured as given — filtered against the real log so
     // a stale or forged sha cannot send us checking out something arbitrary,
     // and ordered by the log rather than by the request.
+    const cap = process.env.REPO_ANTI_ROT_PUBLIC === "true" ? 20 : ALL_CAP
     const selected = shas?.length
-      ? commits.filter((c) => shas.includes(c.sha)).slice(0, ALL_CAP)
-      : selectCommits(commits, all ? Math.min(commits.length, ALL_CAP) : sample)
+      ? commits.filter((c) => shas.includes(c.sha)).slice(0, cap)
+      : selectCommits(commits, all ? Math.min(commits.length, cap) : Math.min(sample, cap))
 
     if (selected.length === 0) {
       emit({ type: "error", error: "none of the selected commits exist in this history" })
@@ -204,12 +211,10 @@ async function buildHistory(
     const chronological = [...selected].reverse()
     let prevIds: string[] | null = null
     for (const c of chronological) {
-      // Between commits, not inside one: a checkout or scan already running is
-      // left to finish rather than killed halfway, which would leave the temp
-      // clone in a state the cleanup below has to guess at.
-      if (cancelled()) return
+      // Stop between commits as well as aborting active child processes.
+      if (cancelled() || scanSignal.aborted) return
       try {
-        const report = await scanCommit(url, dir, c.sha)
+        const report = await scanCommit(url, dir, c.sha, scanSignal)
         const ids = issueIds(report)
         const prev = prevIds
         const added = prev ? ids.filter((id) => !prev.includes(id)).length : 0
@@ -228,14 +233,17 @@ async function buildHistory(
   } catch (err) {
     emit({ type: "error", error: String(err) })
   } finally {
-    await rm(dir, { recursive: true, force: true }).catch(() => {})
+    if (watchdog) clearInterval(watchdog)
+    await rm(workspace, { recursive: true, force: true }).catch(() => {})
   }
 }
 
 export async function POST(request: Request) {
+  const limits = limitsFromEnv()
+  if (!allowRate(`history:${clientIp(request, limits.trustedProxyHops)}`, 5, 60 * 60_000)) return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 })
   let body: unknown
   try {
-    body = await request.json()
+    body = await readJson(request, 32 * 1024)
   } catch {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 })
   }
@@ -263,6 +271,8 @@ export async function POST(request: Request) {
 
   const encoder = new TextEncoder()
   let cancelled = false
+  const abort = new AbortController()
+  const signal = AbortSignal.any([request.signal, abort.signal])
 
   const stream = new ReadableStream<Uint8Array>({
     async start(controller) {
@@ -270,7 +280,7 @@ export async function POST(request: Request) {
         // Once the client is gone the controller is closed; enqueueing on it
         // throws, and that error would surface as a scan failure rather than
         // the deliberate stop it actually is.
-        if (cancelled) return
+        if (cancelled || signal.aborted) return
         try {
           controller.enqueue(encoder.encode(JSON.stringify(ev) + "\n"))
         } catch {
@@ -281,7 +291,7 @@ export async function POST(request: Request) {
       // Counted from the nodes actually produced, so a scan the user stopped
       // halfway is recorded as the work it really did.
       let scanned = 0
-      await buildHistory(
+      try { await withScanSlot(limits, () => buildHistory(
         url,
         sample,
         all,
@@ -289,9 +299,10 @@ export async function POST(request: Request) {
           if (ev.type === "node") scanned++
           emit(ev)
         },
-        () => cancelled,
+        () => cancelled || signal.aborted,
+        signal,
         shas,
-      )
+      ), signal) } catch { emit({ type: "error", error: "Server busy or request cancelled" }) }
       recordRepoUsage(request, "commit-scan", url, { amount: scanned, ok: scanned > 0 })
       if (!cancelled) controller.close()
     },
@@ -299,6 +310,7 @@ export async function POST(request: Request) {
     // the signal that lets the per-commit loop above stop early.
     cancel() {
       cancelled = true
+      abort.abort()
     },
   })
 

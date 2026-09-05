@@ -3,6 +3,7 @@ import { scanReportSchema } from "@/packages/core/src/schema"
 import { upsertServerReport, type ScanReport } from "@/lib/server-store"
 import { notifyScoreDrop } from "@/lib/webhook"
 import { checkBearer } from "@/lib/api-auth"
+import { readJson } from "@/lib/request-json"
 
 /**
  * Report ingestion endpoint.
@@ -24,7 +25,7 @@ export async function POST(request: Request) {
 
   let body: unknown
   try {
-    body = await request.json()
+    body = await readJson(request, 2 * 1024 * 1024)
   } catch {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 })
   }

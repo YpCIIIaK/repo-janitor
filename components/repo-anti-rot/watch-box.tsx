@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Bell, Check, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -22,7 +22,7 @@ type Props = {
 
 /**
  * Peak-motivation CTA: email me if this grade drops.
- * No account — just a subscription on the repo.
+ * GitHub verifies the notification address before a subscription is created.
  */
 export function WatchBox({
   owner,
@@ -34,11 +34,22 @@ export function WatchBox({
   issueIds,
   compact = false,
 }: Props) {
-  const { t } = useLocale()
+  const { t, locale } = useLocale()
+  const [identity, setIdentity] = useState<{ configured: boolean; verifiedEmail: string | null } | null>(null)
   const [email, setEmail] = useState("")
   const [busy, setBusy] = useState(false)
   const [done, setDone] = useState<{ managePath: string } | null>(null)
   const [error, setError] = useState<string | null>(null)
+  useEffect(() => {
+    const abort = new AbortController()
+    void fetch("/api/auth/me", { signal: abort.signal, cache: "no-store" })
+      .then((res) => res.json())
+      .then((data) => {
+        setIdentity({ configured: data.configured === true, verifiedEmail: typeof data.verifiedEmail === "string" ? data.verifiedEmail : null })
+        setEmail(typeof data.verifiedEmail === "string" ? data.verifiedEmail : "")
+      }).catch(() => { if (!abort.signal.aborted) setIdentity({ configured: false, verifiedEmail: null }) })
+    return () => abort.abort()
+  }, [])
 
   async function submit(e: React.FormEvent) {
     e.preventDefault()
@@ -111,6 +122,15 @@ export function WatchBox({
           <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{t("watch.lead")}</p>
         )}
       </div>
+      {!identity?.verifiedEmail ? (
+        <p className="text-xs text-muted-foreground">
+          {!identity ? (locale === "ru" ? "Проверяем вход…" : "Checking sign-in…") : identity.configured ? (
+            <a className="text-primary underline" href={`/api/auth/github?next=${encodeURIComponent(typeof window === "undefined" ? "/app" : window.location.pathname + window.location.search)}`}>
+              {locale === "ru" ? "Войти через GitHub с подтверждённым основным email (или войти заново)" : "Sign in with GitHub and a verified primary email (or sign in again)"}
+            </a>
+          ) : (locale === "ru" ? "Уведомления пока недоступны: владелец сервера должен настроить вход через GitHub." : "Alerts are unavailable until the server owner configures GitHub sign-in.")}
+        </p>
+      ) : (
       <div className={compact ? "flex flex-wrap items-center gap-2" : "flex flex-col gap-2 sm:flex-row"}>
         <Input
           type="email"
@@ -118,7 +138,7 @@ export function WatchBox({
           autoComplete="email"
           placeholder={t("watch.emailPlaceholder")}
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          readOnly
           className="h-8 min-w-0 flex-1 text-sm"
           disabled={busy}
         />
@@ -127,6 +147,7 @@ export function WatchBox({
           {t(busy ? "watch.submitting" : "watch.submit")}
         </Button>
       </div>
+      )}
       {error && <p className="text-xs text-destructive">{error}</p>}
     </form>
   )

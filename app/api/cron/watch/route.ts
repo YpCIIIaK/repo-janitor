@@ -38,6 +38,7 @@ function absolute(origin: string, path: string): string {
   return `${origin.replace(/\/$/, "")}${path.startsWith("/") ? path : `/${path}`}`
 }
 
+const processState = globalThis as typeof globalThis & { rarWatchCronRunning?: boolean }
 async function runCron(request: Request) {
   if (!authorized(request)) {
     const configured = Boolean(process.env.CRON_SECRET?.trim())
@@ -48,6 +49,13 @@ async function runCron(request: Request) {
       { status: configured ? 401 : 503 },
     )
   }
+
+  if (processState.rarWatchCronRunning) return NextResponse.json({ ok: true, skipped: "already running" }, { status: 202 })
+  processState.rarWatchCronRunning = true
+  try { return await runBatch(request) } finally { processState.rarWatchCronRunning = false }
+}
+
+async function runBatch(request: Request) {
 
   const origin =
     process.env.REPO_ANTI_ROT_DASHBOARD_URL?.trim().replace(/\/$/, "") ||
@@ -141,12 +149,14 @@ async function runCron(request: Request) {
       }
 
       await updateWatchCheckpoint(sub.id, {
-        lastGrade: scan.grade,
-        lastScore: scan.score,
-        lastSha: scan.sha,
+        // Failed delivery keeps the old baseline so the drop is retried on the
+        // next daily check. Advancing it would silently lose the notification.
+        lastGrade: verdict.dropped && !mailed ? sub.lastGrade : scan.grade,
+        lastScore: verdict.dropped && !mailed ? sub.lastScore : scan.score,
+        lastSha: verdict.dropped && !mailed ? sub.lastSha : scan.sha,
         lastCheckedAt: checkedAt,
         lastNotifiedAt: mailed ? checkedAt : undefined,
-        lastIssueIds: storyIssues.map((i) => i.id),
+        lastIssueIds: verdict.dropped && !mailed ? sub.lastIssueIds : storyIssues.map((i) => i.id),
       })
 
       results.push({

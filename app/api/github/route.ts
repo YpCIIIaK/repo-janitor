@@ -4,7 +4,8 @@ import {
   projectRepo,
   type GithubRepo,
 } from "@/lib/github-repo"
-import { checkRateLimit, clientIp, limitsFromEnv } from "@/lib/scan-limits"
+import { clientIp, limitsFromEnv } from "@/lib/scan-limits"
+import { allowRate } from "@/lib/watch-rate"
 
 /**
  * Repository lookup and search, proxied to GitHub.
@@ -85,12 +86,12 @@ function projectSearch(body: unknown): GithubRepo[] {
   return items
     .slice(0, SEARCH_LIMIT)
     .map(projectRepo)
-    .filter((r): r is GithubRepo => r !== null)
+    .filter((r): r is GithubRepo => r !== null && !r.private)
 }
 
 export async function GET(request: Request) {
   const limits = limitsFromEnv()
-  if (!checkRateLimit(clientIp(request, limits.trustedProxyHops), limits).ok) {
+  if (!allowRate(`github:${clientIp(request, limits.trustedProxyHops)}`, 60, 60_000)) {
     return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 })
   }
 
@@ -154,6 +155,9 @@ export async function GET(request: Request) {
   }
   if (res.status !== 200) {
     return NextResponse.json({ error: `GitHub returned ${res.status}` }, { status: 502 })
+  }
+  if (mode === "repo" && (res.body as { private?: boolean })?.private === true) {
+    return NextResponse.json({ error: "not-found" }, { status: 404 })
   }
 
   const body =

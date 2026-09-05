@@ -68,7 +68,8 @@ export async function scanWatchedRepo(
   url: string,
   sinceSha?: string | null,
 ): Promise<WatchScanResult> {
-  const dir = await mkdtemp(join(tmpdir(), "rar-watch-"))
+  const workspace = await mkdtemp(join(tmpdir(), "rar-watch-"))
+  const dir = join(workspace, "checkout")
   try {
     const sizeGuard = new AbortController()
     let abortedForSize = false
@@ -126,7 +127,7 @@ export async function scanWatchedRepo(
       if (recent.code === 0) commits = toDigestCommits(parseLog(recent.stdout))
     }
 
-    const reportPath = join(dir, "repo-anti-rot-report.json")
+    const reportPath = join(workspace, "report.json")
     const scan = await run(
       "node",
       [
@@ -187,6 +188,6 @@ export async function scanWatchedRepo(
   } catch (err) {
     return { ok: false, error: err instanceof Error ? err.message : String(err) }
   } finally {
-    await rm(dir, { recursive: true, force: true }).catch(() => {})
+    await rm(workspace, { recursive: true, force: true }).catch(() => {})
   }
 }

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { checkBearer } from "@/lib/api-auth"
 import { readEnv } from "@/lib/env"
+import { readJson } from "@/lib/request-json"
 
 /**
  * AI completion proxy (OpenRouter).
@@ -39,7 +40,13 @@ const WEB_MAX_RESULTS = 3
 export async function POST(request: Request) {
   let body: Body
   try {
-    body = (await request.json()) as Body
+    body = (await readJson(request)) as Body
+    if (!body || typeof body !== "object" || Array.isArray(body)) throw new Error("Invalid object")
+    for (const key of ["apiKey", "model", "system", "prompt"] as const) {
+      if (body[key] !== undefined && typeof body[key] !== "string") throw new Error("Invalid string")
+    }
+    if (body.maxTokens !== undefined && (typeof body.maxTokens !== "number" || !Number.isFinite(body.maxTokens))) throw new Error("Invalid maxTokens")
+    if (body.web !== undefined && typeof body.web !== "boolean") throw new Error("Invalid web flag")
   } catch {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 })
   }
@@ -101,6 +108,7 @@ export async function POST(request: Request) {
   try {
     res = await fetch(ENDPOINT, {
       method: "POST",
+      signal: AbortSignal.timeout(45_000),
       headers: {
         Authorization: `Bearer ${apiKey}`,
         "Content-Type": "application/json",

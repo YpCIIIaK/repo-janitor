@@ -3463,21 +3463,21 @@ var require_pattern = __commonJS({
     exports2.removeDuplicateSlashes = removeDuplicateSlashes;
     function partitionAbsoluteAndRelative(patterns) {
       const absolute = [];
-      const relative = [];
+      const relative2 = [];
       for (const pattern of patterns) {
-        if (isAbsolute(pattern)) {
+        if (isAbsolute2(pattern)) {
           absolute.push(pattern);
         } else {
-          relative.push(pattern);
+          relative2.push(pattern);
         }
       }
-      return [absolute, relative];
+      return [absolute, relative2];
     }
     exports2.partitionAbsoluteAndRelative = partitionAbsoluteAndRelative;
-    function isAbsolute(pattern) {
+    function isAbsolute2(pattern) {
       return path.isAbsolute(pattern);
     }
-    exports2.isAbsolute = isAbsolute;
+    exports2.isAbsolute = isAbsolute2;
   }
 });
 
@@ -4563,41 +4563,41 @@ var require_queue = __commonJS({
       queue.drained = drained;
       return queue;
       function push(value) {
-        var p2 = new Promise(function(resolve, reject) {
+        var p2 = new Promise(function(resolve2, reject) {
           pushCb(value, function(err, result) {
             if (err) {
               reject(err);
               return;
             }
-            resolve(result);
+            resolve2(result);
           });
         });
         p2.catch(noop);
         return p2;
       }
       function unshift(value) {
-        var p2 = new Promise(function(resolve, reject) {
+        var p2 = new Promise(function(resolve2, reject) {
           unshiftCb(value, function(err, result) {
             if (err) {
               reject(err);
               return;
             }
-            resolve(result);
+            resolve2(result);
           });
         });
         p2.catch(noop);
         return p2;
       }
       function drained() {
-        var p2 = new Promise(function(resolve) {
+        var p2 = new Promise(function(resolve2) {
           process.nextTick(function() {
             if (queue.idle()) {
-              resolve();
+              resolve2();
             } else {
               var previousDrain = queue.drain;
               queue.drain = function() {
                 if (typeof previousDrain === "function") previousDrain();
-                resolve();
+                resolve2();
                 queue.drain = previousDrain;
               };
             }
@@ -5083,9 +5083,9 @@ var require_stream3 = __commonJS({
         });
       }
       _getStat(filepath) {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve2, reject) => {
           this._stat(filepath, this._fsStatSettings, (error51, stats) => {
-            return error51 === null ? resolve(stats) : reject(error51);
+            return error51 === null ? resolve2(stats) : reject(error51);
           });
         });
       }
@@ -5109,10 +5109,10 @@ var require_async5 = __commonJS({
         this._readerStream = new stream_1.default(this._settings);
       }
       dynamic(root, options) {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve2, reject) => {
           this._walkAsync(root, options, (error51, entries) => {
             if (error51 === null) {
-              resolve(entries);
+              resolve2(entries);
             } else {
               reject(error51);
             }
@@ -5122,10 +5122,10 @@ var require_async5 = __commonJS({
       async static(patterns, options) {
         const entries = [];
         const stream = this._readerStream.static(patterns, options);
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve2, reject) => {
           stream.once("error", reject);
           stream.on("data", (entry) => entries.push(entry));
-          stream.once("end", () => resolve(entries));
+          stream.once("end", () => resolve2(entries));
         });
       }
     };
@@ -21226,7 +21226,7 @@ var require_lib2 = __commonJS({
 // src/index.ts
 var import_fs2 = require("fs");
 
-// ../cli/dist/chunk-S4QHBY6N.js
+// ../cli/dist/chunk-M3RY3JLD.js
 var import_fs = require("fs");
 var import_fast_glob = __toESM(require_out4(), 1);
 
@@ -40705,8 +40705,12 @@ function date4(params) {
 // ../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/external.js
 config(en_default());
 
-// ../cli/dist/chunk-S4QHBY6N.js
+// ../cli/dist/chunk-M3RY3JLD.js
 var import_path = require("path");
+var import_promises = require("dns/promises");
+var import_net = require("net");
+var import_http = require("http");
+var import_https = require("https");
 var __create2 = Object.create;
 var __defProp3 = Object.defineProperty;
 var __defProps = Object.defineProperties;
@@ -40754,7 +40758,7 @@ var __toESM2 = (mod, isNodeMode, target) => (target = mod != null ? __create2(__
   mod
 ));
 var __async = (__this, __arguments, generator) => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve2, reject) => {
     var fulfilled = (value) => {
       try {
         step(generator.next(value));
@@ -40769,7 +40773,7 @@ var __async = (__this, __arguments, generator) => {
         reject(e);
       }
     };
-    var step = (x2) => x2.done ? resolve(x2.value) : Promise.resolve(x2.value).then(fulfilled, rejected);
+    var step = (x2) => x2.done ? resolve2(x2.value) : Promise.resolve(x2.value).then(fulfilled, rejected);
     step((generator = generator.apply(__this, __arguments)).next());
   });
 };
@@ -55425,6 +55429,11 @@ var scanReportSchema = external_exports.object({
   score: external_exports.number().int().min(0).max(100),
   grade: gradeSchema,
   issues: external_exports.array(issueSchema),
+  diagnostics: external_exports.object({
+    completedScanners: external_exports.array(external_exports.string()),
+    failedScanners: external_exports.array(external_exports.string()),
+    history: external_exports.enum(["shallow", "available", "unavailable"])
+  }).optional(),
   /**
    * Effective scan configuration echoed into the report. Lets the dashboard
    * recompute the score client-side (for Snooze) with the SAME weights the scan
@@ -57264,8 +57273,8 @@ var outdatedDepsScanner = {
       const deps = (yield collectDirectDeps(ctx)).filter((d) => LOOKUPS[d.ecosystem]).slice(0, MAX_DEPS);
       if (deps.length === 0) return [];
       const results = yield mapLimit(deps, CONCURRENCY, (dep) => __async(null, null, function* () {
-        const lookup22 = LOOKUPS[dep.ecosystem];
-        const info = lookup22 ? yield lookup22(ctx, dep.name) : null;
+        const lookup32 = LOOKUPS[dep.ecosystem];
+        const info = lookup32 ? yield lookup32(ctx, dep.name) : null;
         return info ? issuesFor(dep, info) : [];
       }));
       return results.flat();
@@ -60822,8 +60831,10 @@ function applyInlineIgnores(issues, ctx) {
 }
 function runScan(_0) {
   return __async(this, arguments, function* (ctx, scanners = defaultScanners, onProgress) {
-    var _a22, _b, _c, _d;
+    var _a22, _b, _c, _d, _e;
     const issues = [];
+    const completedScanners = [];
+    const failedScanners = [];
     const total = scanners.length;
     onProgress == null ? void 0 : onProgress({ completed: 0, total });
     let completed = 0;
@@ -60832,7 +60843,9 @@ function runScan(_0) {
         for (const issue2 of yield scanner.run(ctx)) {
           issues.push(__spreadProps(__spreadValues({}, issue2), { scanner: scanner.id }));
         }
+        completedScanners.push(scanner.id);
       } catch (err) {
+        failedScanners.push(scanner.id);
         ctx.log(`[repo-anti-rot] scanner "${scanner.id}" failed: ${String(err)}`);
       }
       completed++;
@@ -60851,6 +60864,7 @@ function runScan(_0) {
       score,
       grade: scoreToGrade(score),
       issues: visible,
+      diagnostics: { completedScanners, failedScanners, history: (_e = ctx.history) != null ? _e : "unavailable" },
       // Echo effective weights so the dashboard recomputes the score identically.
       config: { weights },
       metrics: { linesOfCode },
@@ -60862,6 +60876,94 @@ function runScan(_0) {
 var ALL_SCANNER_IDS = defaultScanners.map((s) => s.id);
 var _a4;
 var useColor = ((_a4 = process.stdout) == null ? void 0 : _a4.isTTY) === true && !process.env.NO_COLOR;
+var blocked = new import_net.BlockList();
+for (const [address, prefix] of [
+  ["0.0.0.0", 8],
+  ["10.0.0.0", 8],
+  ["100.64.0.0", 10],
+  ["127.0.0.0", 8],
+  ["169.254.0.0", 16],
+  ["172.16.0.0", 12],
+  ["192.0.0.0", 24],
+  ["192.0.2.0", 24],
+  ["192.168.0.0", 16],
+  ["198.18.0.0", 15],
+  ["198.51.100.0", 24],
+  ["203.0.113.0", 24],
+  ["224.0.0.0", 4],
+  ["240.0.0.0", 4]
+]) blocked.addSubnet(address, prefix, "ipv4");
+function isPublicAddress(address) {
+  const family = (0, import_net.isIP)(address);
+  if (family === 4) return !blocked.check(address, "ipv4");
+  if (family !== 6) return false;
+  const global2 = new import_net.BlockList();
+  global2.addSubnet("2000::", 3, "ipv6");
+  const excluded = new import_net.BlockList();
+  excluded.addSubnet("2001::", 23, "ipv6");
+  excluded.addSubnet("2001:db8::", 32, "ipv6");
+  excluded.addSubnet("2002::", 16, "ipv6");
+  return global2.check(address, "ipv6") && !excluded.check(address, "ipv6");
+}
+function safeRequest(_0) {
+  return __async(this, arguments, function* (input, options = {}) {
+    const signal = AbortSignal.timeout(8e3);
+    let url2 = new URL(input);
+    for (let hop = 0; hop < 5; hop++) {
+      if (!/^https?:$/.test(url2.protocol) || url2.username || url2.password || url2.port && url2.port !== "80" && url2.port !== "443") throw new Error("Unsafe URL");
+      const host = url2.hostname.replace(/^\[|\]$/g, "");
+      const addresses = yield new Promise((resolve2, reject) => {
+        const abort = () => reject(new Error("DNS timeout"));
+        signal.addEventListener("abort", abort, { once: true });
+        (0, import_promises.lookup)(host, { all: true }).then(resolve2, reject).finally(() => signal.removeEventListener("abort", abort));
+        if (signal.aborted) abort();
+      });
+      if (!addresses.length || addresses.some((a) => !isPublicAddress(a.address))) throw new Error("Non-public destination");
+      const address = addresses[0];
+      const result = yield new Promise((resolve2, reject) => {
+        const send = url2.protocol === "https:" ? import_https.request : import_http.request;
+        const req = send(url2, {
+          method: options.method || "GET",
+          signal,
+          lookup: (_hostname, opts, callback) => {
+            if (opts.all) callback(null, [address]);
+            else callback(null, address.address, address.family);
+          },
+          headers: __spreadValues({
+            "user-agent": "repo-anti-rot",
+            accept: "application/json"
+          }, options.body ? { "content-type": "application/json" } : {})
+        }, (res) => {
+          const status = res.statusCode || 0;
+          const location = res.headers.location;
+          if (options.method === "HEAD" || location && status >= 300 && status < 400) {
+            res.destroy();
+            resolve2({ status, url: url2.href, text: "", location });
+            return;
+          }
+          const chunks = [];
+          let size = 0;
+          res.on("data", (chunk) => {
+            size += chunk.length;
+            if (size > 4 * 1024 * 1024) res.destroy(new Error("Response too large"));
+            else chunks.push(chunk);
+          });
+          res.on("error", reject);
+          res.on("end", () => resolve2({ status, url: url2.href, text: Buffer.concat(chunks).toString("utf8") }));
+        });
+        req.on("error", reject);
+        req.end(options.body);
+      });
+      if (result.location && result.status >= 300 && result.status < 400) {
+        if (options.method === "POST") throw new Error("POST redirects are not allowed");
+        url2 = new URL(result.location, url2);
+        continue;
+      }
+      return result;
+    }
+    throw new Error("Too many redirects");
+  });
+}
 function getRepoMetadata(git, root) {
   return __async(this, null, function* () {
     var _a22, _b;
@@ -60903,9 +61005,20 @@ function buildScanContext(root) {
   return __async(this, null, function* () {
     const git = esm_default(root);
     const repo = yield getRepoMetadata(git, root);
+    let history = "unavailable";
+    try {
+      history = (yield git.revparse(["--is-shallow-repository"])).trim() === "true" ? "shallow" : "available";
+    } catch (e) {
+    }
     const readRel = (relPath) => __async(null, null, function* () {
       try {
-        return yield import_fs.promises.readFile((0, import_path.join)(root, relPath), "utf-8");
+        const base = yield import_fs.promises.realpath(root);
+        const file2 = yield import_fs.promises.realpath((0, import_path.resolve)(root, relPath));
+        const rel = (0, import_path.relative)(base, file2);
+        if (!rel || rel === ".." || rel.startsWith(`..${process.platform === "win32" ? "\\" : "/"}`) || (0, import_path.isAbsolute)(rel)) return null;
+        const info = yield import_fs.promises.stat(file2);
+        if (!info.isFile() || info.size > 2 * 1024 * 1024) return null;
+        return yield import_fs.promises.readFile(file2, "utf-8");
       } catch (e) {
         return null;
       }
@@ -60931,10 +61044,12 @@ function buildScanContext(root) {
       cwd: root,
       dot: true,
       onlyFiles: true,
+      followSymbolicLinks: false,
       ignore: config2.ignore
     });
     return {
       root,
+      history,
       repo,
       config: config2,
       files,
@@ -61100,55 +61215,31 @@ function buildScanContext(root) {
       },
       fetchJson: (url2) => __async(null, null, function* () {
         try {
-          const res = yield fetch(url2, {
-            headers: { accept: "application/json", "user-agent": "repo-anti-rot (https://github.com/YpCIIIaK/repo-janitor)" }
-          });
-          if (!res.ok) return null;
-          return yield res.json();
+          const res = yield safeRequest(url2);
+          if (res.status < 200 || res.status >= 300) return null;
+          return JSON.parse(res.text);
         } catch (e) {
           return null;
         }
       }),
       postJson: (url2, body) => __async(null, null, function* () {
         try {
-          const res = yield fetch(url2, {
-            method: "POST",
-            headers: {
-              accept: "application/json",
-              "content-type": "application/json",
-              "user-agent": "repo-anti-rot (https://github.com/YpCIIIaK/repo-janitor)"
-            },
-            body: JSON.stringify(body)
-          });
-          if (!res.ok) return null;
-          return yield res.json();
+          const res = yield safeRequest(url2, { method: "POST", body: JSON.stringify(body) });
+          if (res.status < 200 || res.status >= 300) return null;
+          return JSON.parse(res.text);
         } catch (e) {
           return null;
         }
       }),
       headUrl: (url2) => __async(null, null, function* () {
-        const controller = new AbortController();
-        const timer = setTimeout(() => controller.abort(), 8e3);
         try {
-          let res = yield fetch(url2, {
-            method: "HEAD",
-            redirect: "follow",
-            headers: { "user-agent": "repo-anti-rot (https://github.com/YpCIIIaK/repo-janitor)" },
-            signal: controller.signal
-          });
+          let res = yield safeRequest(url2, { method: "HEAD" });
           if (res.status === 405 || res.status === 501) {
-            res = yield fetch(url2, {
-              method: "GET",
-              redirect: "follow",
-              headers: { "user-agent": "repo-anti-rot (https://github.com/YpCIIIaK/repo-janitor)" },
-              signal: controller.signal
-            });
+            res = yield safeRequest(url2);
           }
           return { status: res.status, url: res.url };
         } catch (e) {
           return null;
-        } finally {
-          clearTimeout(timer);
         }
       }),
       log: (msg) => {
@@ -61244,6 +61335,11 @@ var scanReportSchema2 = external_exports.object({
   score: external_exports.number().int().min(0).max(100),
   grade: gradeSchema2,
   issues: external_exports.array(issueSchema2),
+  diagnostics: external_exports.object({
+    completedScanners: external_exports.array(external_exports.string()),
+    failedScanners: external_exports.array(external_exports.string()),
+    history: external_exports.enum(["shallow", "available", "unavailable"])
+  }).optional(),
   /**
    * Effective scan configuration echoed into the report. Lets the dashboard
    * recompute the score client-side (for Snooze) with the SAME weights the scan
@@ -61964,7 +62060,7 @@ async function monthlyDownloads2(ctx, pkg) {
   );
   return typeof data?.downloads === "number" ? data.downloads : null;
 }
-async function lookup2(ctx, pkg) {
+async function lookup3(ctx, pkg) {
   if (!ctx.fetchJson) return null;
   const data = await ctx.fetchJson(`https://registry.npmjs.org/${pkg}`);
   if (!data) return null;
@@ -62006,7 +62102,7 @@ var dependencyFuneralScanner2 = {
           detail: `${name} is declared in dependencies but no import/require references it. Consider removing it.`
         });
       }
-      const info = await lookup2(ctx, name);
+      const info = await lookup3(ctx, name);
       if (!info) continue;
       if (info.deprecated) {
         issues.push({
@@ -62892,8 +62988,8 @@ var outdatedDepsScanner2 = {
     const deps = (await collectDirectDeps2(ctx)).filter((d) => LOOKUPS2[d.ecosystem]).slice(0, MAX_DEPS2);
     if (deps.length === 0) return [];
     const results = await mapLimit2(deps, CONCURRENCY3, async (dep) => {
-      const lookup3 = LOOKUPS2[dep.ecosystem];
-      const info = lookup3 ? await lookup3(ctx, dep.name) : null;
+      const lookup4 = LOOKUPS2[dep.ecosystem];
+      const info = lookup4 ? await lookup4(ctx, dep.name) : null;
       return info ? issuesFor2(dep, info) : [];
     });
     return results.flat();

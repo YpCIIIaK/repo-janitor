@@ -9,8 +9,10 @@ import {
   quickWins,
   renderReport,
   selectScanners,
+  evaluateQualityGate,
+  scanReportSchema,
 } from "@repo-anti-rot/core";
-import type { ScanReport } from "@repo-anti-rot/core";
+import type { ScanReport, NewFindingThreshold } from "@repo-anti-rot/core";
 import { join } from "path";
 import { scanRepo } from "./context";
 import { reportFileName } from "./naming";
@@ -62,12 +64,19 @@ function registerScan(program: Command) {
       "Run only these scanners (comma-separated ids, e.g. secrets,ci-health)",
     )
     .option("--fix", "After the scan, print the top quick-wins to fix first")
+    .option("--baseline <file>", "Previous JSON report; gate only findings absent from this baseline")
+    .option("--fail-on-new <severity>", "Exit 2 on new findings at this severity or higher (critical, warning, info, never)", "never")
+    .option("--min-score <score>", "Exit 2 when the overall score is below this minimum (0–100)")
     .option("--fix-limit <n>", "How many quick-wins to list with --fix", (v) => parseInt(v, 10), 8)
     .action(async (pathArg: string, options) => {
       try {
         // `--path` wins when given explicitly, so existing scripts keep working.
         const root = await fs.realpath(options.path ?? pathArg);
-        console.log(`Scanning repository at: ${root}`);
+        console.error(`Scanning repository at: ${root}`);
+        if (!["critical", "warning", "info", "never"].includes(options.failOnNew)) throw new Error("Invalid --fail-on-new threshold");
+        const minScore = options.minScore === undefined ? undefined : Number(options.minScore);
+        if (minScore !== undefined && (!Number.isFinite(minScore) || minScore < 0 || minScore > 100)) throw new Error("--min-score must be between 0 and 100");
+        const baseline = options.baseline ? scanReportSchema.parse(JSON.parse(await fs.readFile(options.baseline, "utf8"))) : undefined;
 
         const only = parseOnlyOption(options.only)
         const { scanners, unknown } = selectScanners(only)
@@ -82,7 +91,7 @@ function registerScan(program: Command) {
           process.exit(1)
         }
         if (only) {
-          console.log(`Running ${scanners.length} scanner(s): ${scanners.map((s) => s.id).join(", ")}`)
+          console.error(`Running ${scanners.length} scanner(s): ${scanners.map((s) => s.id).join(", ")}`)
         }
 
         // With --progress, stream one NDJSON line per scanner to stderr so a parent
@@ -97,7 +106,7 @@ function registerScan(program: Command) {
 
         if (options.output) {
           await fs.writeFile(options.output, output, "utf-8");
-          console.log(`Results written to: ${options.output}`);
+          console.error(`Results written to: ${options.output}`);
         } else {
           console.log(output);
         }
@@ -105,7 +114,12 @@ function registerScan(program: Command) {
         if (options.fix) {
           const limit = Number.isFinite(options.fixLimit) && options.fixLimit > 0 ? options.fixLimit : 8;
           const wins = quickWins(report.issues, limit);
-          console.log("\n" + formatQuickWinsTerminal(wins));
+          console.error("\n" + formatQuickWinsTerminal(wins));
+        }
+        const gate = evaluateQualityGate(report, { baseline, failOnNew: options.failOnNew as NewFindingThreshold, minScore });
+        if (!gate.passed) {
+          console.error(`Quality gate failed: ${gate.blocking.length} new blocking finding(s)${gate.belowMinimum ? `; score ${report.score} below ${minScore}` : ""}${gate.incomplete ? "; one or more scanners failed" : ""}.`);
+          process.exitCode = 2;
         }
       } catch (err) {
         console.error("Error during scan:", err);

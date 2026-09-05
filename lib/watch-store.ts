@@ -1,6 +1,8 @@
 import "server-only"
 import { promises as fs } from "fs"
 import { join } from "path"
+import { dataDir } from "@/lib/data-dir"
+import { withStorageLock, writeJsonAtomic } from "@/lib/storage-io"
 import { supabaseConfig } from "@/lib/share-db"
 import { repoKeyOf } from "@/lib/share-keys"
 import type { Grade } from "@/lib/mock-data"
@@ -26,7 +28,7 @@ import { isValidWatchToken, newWatchId, newWatchToken } from "@/lib/watch-tokens
 
 export type { WatchSubscription }
 
-const FILE = join(process.cwd(), ".repo-anti-rot", "watch-subscriptions.json")
+const FILE = join(dataDir(), "watch-subscriptions.json")
 const MAX_WATCHES = 10_000
 
 type FileStore = { watches: WatchSubscription[] }
@@ -43,13 +45,13 @@ async function readFileStore(): Promise<FileStore> {
 }
 
 async function writeFileStore(store: FileStore): Promise<void> {
-  await fs.mkdir(join(process.cwd(), ".repo-anti-rot"), { recursive: true })
+  await fs.mkdir(dataDir(), { recursive: true })
   // Evict oldest when over cap.
   if (store.watches.length > MAX_WATCHES) {
     store.watches.sort((a, b) => a.createdAt.localeCompare(b.createdAt))
     store.watches = store.watches.slice(-MAX_WATCHES)
   }
-  await fs.writeFile(FILE, JSON.stringify(store), "utf-8")
+  await writeJsonAtomic(FILE, store)
 }
 
 export type SubscribeInput = {
@@ -75,10 +77,15 @@ function managePathOf(manageToken: string): string {
 }
 
 /**
+ * Trusted server operation: the API must first establish ownership of input.email.
  * Create or refresh a watch for (email, owner, name).
  * Reuses an existing manage_token for this email when one exists.
  */
 export async function subscribeWatch(input: SubscribeInput): Promise<SubscribeResult> {
+  return withStorageLock(() => subscribe(input))
+}
+
+async function subscribe(input: SubscribeInput): Promise<SubscribeResult> {
   const owner = input.owner.trim()
   const name = input.name.trim()
   const email = input.email
@@ -169,6 +176,10 @@ export async function subscribeWatch(input: SubscribeInput): Promise<SubscribeRe
 }
 
 export async function unsubscribeByToken(unsubToken: string): Promise<boolean> {
+  return withStorageLock(() => unsubscribe(unsubToken))
+}
+
+async function unsubscribe(unsubToken: string): Promise<boolean> {
   if (!isValidWatchToken(unsubToken)) return false
   const cfg = supabaseConfig()
   if (cfg) {
@@ -213,6 +224,10 @@ export async function updateWatchCheckpoint(
     lastIssueIds?: string[]
   },
 ): Promise<void> {
+  return withStorageLock(() => updateCheckpoint(id, patch))
+}
+
+async function updateCheckpoint(id: string, patch: Parameters<typeof updateWatchCheckpoint>[1]): Promise<void> {
   const cfg = supabaseConfig()
   if (cfg) {
     await dbUpdateWatchCheckpoint(cfg, id, patch)

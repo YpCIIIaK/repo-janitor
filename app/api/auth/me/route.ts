@@ -21,6 +21,7 @@ export async function GET(request: Request) {
   return Response.json(
     {
       login: session?.login ?? null,
+      verifiedEmail: session?.verifiedEmail ?? null,
       expiresAt: session ? new Date(session.exp * 1000).toISOString() : null,
       configured: Boolean(oauthConfig() && process.env.REPO_ANTI_ROT_SESSION_SECRET),
     },

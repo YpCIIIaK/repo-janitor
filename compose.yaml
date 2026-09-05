@@ -1,0 +1,71 @@
+name: repo-anti-rot
+services:
+  app:
+    build: .
+    image: repo-anti-rot:local
+    restart: unless-stopped
+    env_file: .env.local
+    environment:
+      NODE_ENV: production
+      REPO_ANTI_ROT_PUBLIC: "true"
+      REPO_ANTI_ROT_DATA_DIR: /data
+      REPO_ANTI_ROT_STORAGE_DURABLE: "true"
+      REPO_ANTI_ROT_BACKUP_DIR: /backups
+    ports:
+      - "127.0.0.1:3000:3000"
+    volumes:
+      - app-data:/data
+      - backups:/backups
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ALL]
+    pids_limit: 256
+    mem_limit: 8g
+    cpus: 4
+    healthcheck:
+      test: ["CMD", "node", "scripts/healthcheck.mjs"]
+      interval: 60s
+      timeout: 15s
+      start_period: 90s
+      retries: 3
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+
+  maintenance:
+    image: repo-anti-rot:local
+    restart: unless-stopped
+    environment:
+      INTERNAL_ORIGIN: http://app:3000
+      CRON_SECRET: ${CRON_SECRET:?Use --env-file .env.local with a configured CRON_SECRET}
+    command: ["node", "scripts/maintenance.mjs"]
+    depends_on:
+      app: { condition: service_healthy }
+    security_opt: ["no-new-privileges:true"]
+    cap_drop: [ALL]
+    mem_limit: 256m
+    logging:
+      driver: json-file
+      options: { max-size: "5m", max-file: "3" }
+
+  caddy:
+    image: caddy:2-alpine
+    profiles: [public]
+    restart: unless-stopped
+    environment:
+      DOMAIN: ${DOMAIN:-localhost}
+    ports: ["80:80", "443:443", "443:443/udp"]
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on: [app]
+    logging:
+      driver: json-file
+      options: { max-size: "5m", max-file: "3" }
+
+volumes:
+  app-data:
+  backups:
+  caddy-data:
+  caddy-config:

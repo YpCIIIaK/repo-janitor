@@ -10,17 +10,14 @@ import { createHmac, timingSafeEqual } from "node:crypto"
  * text describes exactly what is stored. A users table would invalidate all
  * three at once, and it would do it for a feature that does not need one.
  *
- * What signing in actually has to establish is one fact: the person holding this
- * browser is @login. GitHub asserts that during the OAuth exchange, and a signed
- * cookie carries the assertion afterwards. The server stores nothing, so there
- * is no new personal data, nothing to leak, and nothing the consent text needs
- * to start mentioning.
+ * GitHub asserts the login and, when available, a verified primary email during
+ * OAuth. A signed cookie carries these claims. The email authorizes notification
+ * subscriptions; it is persisted in the watch store only when subscribing.
  *
  * The cost is the honest one: a session cannot be revoked server-side before it
  * expires, because there is no record of it to revoke. That is why the lifetime
- * is days rather than months, and why nothing here is a capability — the cookie
- * says who you are, never what you may do. Anything destructive must re-check
- * against GitHub rather than trusting this.
+ * is days rather than months. The verified email authorizes creating watches for
+ * that address. Repository write permissions are never inferred from this cookie.
  *
  * ## Why not JWT
  *
@@ -41,7 +38,9 @@ export const SESSION_TTL_SECONDS = 8 * 24 * 60 * 60
 export const SESSION_COOKIE = "rar_session"
 
 export interface Session {
-  /** GitHub login. The only identity claim in here. */
+  /** Primary email asserted verified by GitHub during OAuth. */
+  verifiedEmail?: string
+  /** GitHub login asserted during OAuth. */
   login: string
   /** Issued at, epoch seconds. */
   iat: number
@@ -76,11 +75,11 @@ function safeEqual(a: string, b: string): boolean {
  *
  * `now` is injectable so expiry is testable without waiting eight days.
  */
-export function createSession(login: string, secret: string, now = Date.now()): string {
+export function createSession(login: string, secret: string, now = Date.now(), verifiedEmail?: string): string {
   if (!secret) throw new Error("session secret is not configured")
 
   const iat = Math.floor(now / 1000)
-  const session: Session = { login, iat, exp: iat + SESSION_TTL_SECONDS }
+  const session: Session = { login, iat, exp: iat + SESSION_TTL_SECONDS, ...(verifiedEmail ? { verifiedEmail } : {}) }
   const payload = b64url(JSON.stringify(session))
   return `${payload}${SEPARATOR}${sign(payload, secret)}`
 }
@@ -122,14 +121,14 @@ export function readSession(
   }
 
   if (!session || typeof session !== "object") return null
-  const { login, iat, exp } = session as Record<string, unknown>
+  const { login, iat, exp, verifiedEmail } = session as Record<string, unknown>
 
   if (typeof login !== "string" || !login) return null
   if (typeof iat !== "number" || typeof exp !== "number") return null
   if (!Number.isFinite(iat) || !Number.isFinite(exp)) return null
   if (exp <= Math.floor(now / 1000)) return null
 
-  return { login, iat, exp }
+  return { login, iat, exp, ...(typeof verifiedEmail === "string" ? { verifiedEmail } : {}) }
 }
 
 /**
@@ -212,7 +211,7 @@ export function sessionFromRequest(
   for (const part of header.split(";")) {
     const [name, ...rest] = part.trim().split("=")
     if (name === SESSION_COOKIE) {
-      return readSession(decodeURIComponent(rest.join("=")), secret, now)
+      try { return readSession(decodeURIComponent(rest.join("=")), secret, now) } catch { return null }
     }
   }
   return null

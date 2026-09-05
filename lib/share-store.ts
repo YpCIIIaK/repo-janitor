@@ -2,6 +2,8 @@ import "server-only"
 import { randomBytes } from "crypto"
 import { promises as fs } from "fs"
 import { join } from "path"
+import { dataDir } from "@/lib/data-dir"
+import { withStorageLock, writeJsonAtomic } from "@/lib/storage-io"
 import { assertShareable, type SharedReport } from "@/lib/share-report"
 import {
   dbDeleteShare,
@@ -41,7 +43,7 @@ import {
  * manage key) when the old URL must be invalidated.
  */
 
-const DIR = join(process.cwd(), ".repo-anti-rot", "shared")
+const DIR = join(dataDir(), "shared")
 const BY_REPO_DIR = join(DIR, "by-repo")
 
 /** 96 bits of randomness: not enumerable, still short enough to paste in chat. */
@@ -92,7 +94,7 @@ function repoIndexFile(repoKey: string): string {
 
 async function writeRepoIndex(repoKey: string, token: string): Promise<void> {
   await fs.mkdir(BY_REPO_DIR, { recursive: true })
-  await fs.writeFile(repoIndexFile(repoKey), JSON.stringify({ token }), "utf-8")
+  await writeJsonAtomic(repoIndexFile(repoKey), { token })
 }
 
 async function readRepoIndex(repoKey: string): Promise<string | null> {
@@ -146,6 +148,10 @@ export async function publishShare(
   report: SharedReport,
   opts: { manageKey?: string; rotate?: boolean } = {},
 ): Promise<PublishShareResult> {
+  return withStorageLock(() => publish(report, opts))
+}
+
+async function publish(report: SharedReport, opts: { manageKey?: string; rotate?: boolean }): Promise<PublishShareResult> {
   assertShareable(report)
   const repoKey = repoKeyOf(report.repo)
   const existing = await getShareByRepoKey(repoKey)
@@ -213,6 +219,10 @@ export async function revokeShare(opts: {
   owner?: string
   name?: string
 }): Promise<{ ok: true } | { ok: false; code: "not_found" | "forbidden"; message: string }> {
+  return withStorageLock(() => revoke(opts))
+}
+
+async function revoke(opts: Parameters<typeof revokeShare>[0]): ReturnType<typeof revokeShare> {
   const manageKey = opts.manageKey.trim()
   if (!isValidShareKey(manageKey)) {
     return { ok: false, code: "forbidden", message: "Invalid manage key." }
@@ -252,7 +262,7 @@ async function writeShare(share: StoredShare, opts: { update?: boolean } = {}): 
   }
 
   await fs.mkdir(DIR, { recursive: true })
-  await fs.writeFile(fileFor(share.token), JSON.stringify(share), "utf-8")
+  await writeJsonAtomic(fileFor(share.token), share)
   await writeRepoIndex(share.repoKey, share.token)
   await evictOldest().catch(() => {})
 }

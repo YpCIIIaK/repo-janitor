@@ -16,11 +16,8 @@ import { createHmac, randomBytes, timingSafeEqual } from "node:crypto"
  *
  * ## Scopes
  *
- * None. An empty scope still yields a token that can read public profile data,
- * which is all the profile page shows, and it means a leaked token grants
- * nothing that was not already public. Ask for `read:user` only when something
- * actually needs a private field, and expect to explain why on the consent
- * screen — GitHub shows the user exactly what was requested.
+ * `user:email` establishes ownership of the primary verified notification
+ * address for watches. No repository or write permissions are requested.
  */
 
 export const AUTHORIZE_URL = "https://github.com/login/oauth/authorize"
@@ -107,8 +104,8 @@ export function authorizeUrl(clientId: string, redirectUri: string, state: strin
     client_id: clientId,
     redirect_uri: redirectUri,
     state,
-    // Empty on purpose — see the scope note at the top of this file.
-    scope: "",
+    // Needed to verify the watch notification address; no repository access.
+    scope: "user:email",
     allow_signup: "true",
   })
   return `${AUTHORIZE_URL}?${params.toString()}`

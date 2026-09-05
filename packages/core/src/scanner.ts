@@ -22,6 +22,8 @@ export interface HistoryAddition {
  * object so scanners stay pure and easy to test / swap implementations.
  */
 export interface ScanContext {
+  /** Whether history-based rules have a complete local history to inspect. */
+  history?: "shallow" | "available" | "unavailable"
   /** absolute path to the repository root */
   root: string
   /** repo metadata, usually derived from git remote */

@@ -1,0 +1,12 @@
+{$DOMAIN:localhost} {
+    request_body {
+        max_size 2MB
+    }
+    header {
+        Strict-Transport-Security "max-age=31536000"
+        -Server
+    }
+    reverse_proxy app:3000 {
+        flush_interval -1
+    }
+}

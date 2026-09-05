@@ -119,7 +119,19 @@ export async function isPublicGitUrl(url: string, resolve: HostResolver = defaul
   if (u.protocol !== "http:" && u.protocol !== "https:") {
     return { ok: false, reason: "only http(s) URLs are allowed" }
   }
+  if (u.username || u.password || (u.port && u.port !== "443" && u.port !== "80")) {
+    return { ok: false, reason: "credentials and non-standard ports are not allowed" }
+  }
   const host = normalizeHost(u.hostname)
+  // A public service only clones from administrator-selected forges. Together
+  // with disabled git redirects this prevents user-controlled DNS rebinding.
+  if (process.env.REPO_ANTI_ROT_PUBLIC === "true") {
+    const hosts = (process.env.REPO_ANTI_ROT_GIT_HOSTS || "github.com,gitlab.com,bitbucket.org")
+      .split(",").map((h) => h.trim().toLowerCase()).filter(Boolean)
+    if (u.protocol !== "https:" || !hosts.includes(host)) {
+      return { ok: false, reason: "this instance accepts HTTPS repositories from its configured Git hosts only" }
+    }
+  }
   if (isBlockedHost(host)) {
     return { ok: false, reason: "host is loopback/private/internal" }
   }
