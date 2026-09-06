@@ -4,6 +4,8 @@ import { tmpdir } from "os"
 import { join } from "path"
 import { CLI_DIST, run } from "@/lib/clone-runner"
 import { supabaseConfig } from "@/lib/share-db"
+import { checkBearer } from "@/lib/api-auth"
+import { isOwner } from "@/lib/owner"
 
 /**
  * Deployment health check.
@@ -21,6 +23,16 @@ import { supabaseConfig } from "@/lib/share-db"
  * Doubles as the endpoint a keep-alive pinger hits (see
  * .github/workflows/keepalive.yml): it is cheap, has no side effects that
  * outlive the request, and touching it keeps a free-tier instance awake.
+ *
+ * ## Two levels of detail
+ *
+ * The full report names the CLI path, the temp directory, the git and Node
+ * versions and the process uptime. On a self-hosted box that is a map of the
+ * machine — the OS, the user account, where the code lives — handed to anyone
+ * who asks. So an anonymous caller gets only the verdicts (`ok`, `canScan`,
+ * `durableShares`), which is all a pinger or a load balancer needs. The
+ * operator (owner cookie, or `Authorization: Bearer <REPO_ANTI_ROT_READ_TOKEN>`)
+ * gets the per-check detail that makes a failing deploy debuggable.
  */
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
@@ -93,16 +105,41 @@ function checkShareStore(): Check {
       }
 }
 
-export async function GET() {
+/** May this caller see paths, versions and per-check detail? */
+function isOperator(request: Request): boolean {
+  if (isOwner(request)) return true
+  const readToken = process.env.REPO_ANTI_ROT_READ_TOKEN?.trim()
+  // `checkBearer` treats an unset token as "auth disabled" for local dev; here
+  // that must not turn into "everyone is the operator", so require it to be set.
+  return Boolean(readToken) && checkBearer(request, readToken)
+}
+
+const NO_STORE = { headers: { "Cache-Control": "no-store" } }
+
+export async function GET(request: Request) {
   const [git, cli, tmp] = await Promise.all([checkGit(), checkCli(), checkTmp()])
   const shareStore = checkShareStore()
   // Scanning does not depend on the share backend — a host can be perfectly good
   // at scanning while storing links somewhere that forgets them.
   const canScan = git.ok && cli.ok && tmp.ok
 
+  // Never cached: a cached health check is worse than none, and the keep-alive
+  // pinger must actually reach the instance to keep it awake.
+  if (!isOperator(request)) {
+    return NextResponse.json(
+      {
+        ok: true, // the app itself is up; `canScan` is the interesting part
+        canScan,
+        durableShares: shareStore.ok,
+        hint: canScan ? undefined : "This host cannot run repository scans.",
+      },
+      NO_STORE,
+    )
+  }
+
   return NextResponse.json(
     {
-      ok: true, // the app itself is up; `canScan` is the interesting part
+      ok: true,
       canScan,
       durableShares: shareStore.ok,
       checks: { git, cli, tmp, shareStore },
@@ -114,8 +151,6 @@ export async function GET() {
           + "the built CLI on disk and a writable temp dir — i.e. a long-lived container, "
           + "not a serverless function.",
     },
-    // Never cached: a cached health check is worse than none, and the keep-alive
-    // pinger must actually reach the instance to keep it awake.
-    { headers: { "Cache-Control": "no-store" } },
+    NO_STORE,
   )
 }
