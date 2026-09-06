@@ -12,8 +12,11 @@ import { buildRegressionStory, toStoryIssues } from "@repo-anti-rot/core"
 /**
  * Server cron: rescan due watches, email on significant drop.
  *
- * Auth: `Authorization: Bearer $CRON_SECRET` or `?secret=` (cron-job.org).
- * Unset CRON_SECRET → 503 (fail closed; this endpoint spends real CPU).
+ * Auth: `Authorization: Bearer $CRON_SECRET` only. A query `?secret=` used
+ * to be accepted for cron hosts that cannot set headers; that puts the secret
+ * in access logs, Referer, browser history and any reverse-proxy dump. Those
+ * hosts can send a header. Unset CRON_SECRET → 503 (fail closed; this
+ * endpoint spends real CPU).
  */
 
 export const runtime = "nodejs"
@@ -29,9 +32,7 @@ function authorized(request: Request): boolean {
   const expected = process.env.CRON_SECRET?.trim()
   if (!expected) return false
   const bearer = bearerToken(request)
-  if (bearer && safeEqual(bearer, expected)) return true
-  const q = new URL(request.url).searchParams.get("secret") ?? ""
-  return q.length > 0 && safeEqual(q, expected)
+  return Boolean(bearer) && safeEqual(bearer, expected)
 }
 
 function absolute(origin: string, path: string): string {

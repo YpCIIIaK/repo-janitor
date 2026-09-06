@@ -4,7 +4,7 @@ vi.mock("@/lib/mail", () => ({ sendMail: vi.fn() }))
 vi.mock("@/lib/watch-scan", () => ({ scanWatchedRepo: vi.fn() }))
 vi.mock("@/lib/watch-store", () => ({ listDueWatches: vi.fn(), updateWatchCheckpoint: vi.fn() }))
 vi.mock("@/lib/url-guard", () => ({ isPublicGitUrl: vi.fn().mockResolvedValue({ ok: true }) }))
-import { POST } from "@/app/api/cron/watch/route"
+import { GET, POST } from "@/app/api/cron/watch/route"
 import { sendMail } from "@/lib/mail"
 import { scanWatchedRepo } from "@/lib/watch-scan"
 import { listDueWatches, updateWatchCheckpoint, type WatchSubscription } from "@/lib/watch-store"
@@ -26,6 +26,23 @@ describe("cron mail reliability", () => {
     expect(sendMail).toHaveBeenCalledTimes(2)
     expect(updateWatchCheckpoint).toHaveBeenLastCalledWith("watch", expect.objectContaining({ lastGrade: "C", lastScore: 60, lastSha: "new" }))
   })
+  it("rejects a secret in the query string — that belongs in a header, not in logs", async () => {
+    vi.mocked(listDueWatches).mockResolvedValue([])
+    const leaked = new Request("http://localhost/api/cron/watch?secret=cron-test", { method: "GET" })
+    const res = await GET(leaked)
+    expect(res.status).toBe(401)
+    expect(listDueWatches).not.toHaveBeenCalled()
+  })
+
+  it("still accepts GET with a bearer token, for hosts that only GET", async () => {
+    vi.mocked(listDueWatches).mockResolvedValue([])
+    const res = await GET(new Request("http://localhost/api/cron/watch", {
+      method: "GET",
+      headers: { authorization: "Bearer cron-test" },
+    }))
+    expect(res.status).toBe(200)
+  })
+
   it("skips overlapping batches and releases the guard afterwards", async () => {
     let release!: (value: WatchSubscription[]) => void
     vi.mocked(listDueWatches).mockReturnValueOnce(new Promise((resolve) => { release = resolve }))
