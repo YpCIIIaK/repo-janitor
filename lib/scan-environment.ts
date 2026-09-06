@@ -11,11 +11,12 @@ export function scanEnvironment(source: Record<string, string | undefined> = pro
     GIT_TERMINAL_PROMPT: "0",
     GIT_CONFIG_NOSYSTEM: "1",
     GIT_CONFIG_GLOBAL: process.platform === "win32" ? "NUL" : "/dev/null",
-    GIT_CONFIG_COUNT: "4",
+    GIT_CONFIG_COUNT: "5",
     GIT_CONFIG_KEY_0: "http.followRedirects", GIT_CONFIG_VALUE_0: "false",
     GIT_CONFIG_KEY_1: "protocol.file.allow", GIT_CONFIG_VALUE_1: "never",
     GIT_CONFIG_KEY_2: "protocol.ext.allow", GIT_CONFIG_VALUE_2: "never",
     GIT_CONFIG_KEY_3: "core.hooksPath", GIT_CONFIG_VALUE_3: process.platform === "win32" ? "NUL" : "/dev/null",
+    GIT_CONFIG_KEY_4: "core.symlinks", GIT_CONFIG_VALUE_4: "false",
     GIT_LFS_SKIP_SMUDGE: "1",
   }
 }

@@ -8,6 +8,7 @@ import {
   MAX_CLONE_BYTES,
   SCAN_HEAP_MB,
   SIZE_POLL_MS,
+  describeCloneFailure,
   describeFailure,
   run,
   dirSizeExceeds,
@@ -80,7 +81,7 @@ async function cloneAndScan(
       return
     }
     if (clone.code !== 0) {
-      emit({ type: "repo-done", url, ok: false, error: `git clone failed: ${clone.stderr.trim() || `exit ${clone.code}`}` })
+      emit({ type: "repo-done", url, ok: false, error: describeCloneFailure(clone) })
       return
     }
 

@@ -8,6 +8,7 @@ import {
   MAX_CLONE_BYTES,
   SCAN_HEAP_MB,
   SIZE_POLL_MS,
+  describeCloneFailure,
   describeFailure,
   run,
   dirSizeExceeds,
@@ -97,7 +98,7 @@ async function scanCommit(url: string, dir: string, sha: string, signal: AbortSi
     signal,
   })
   if (checkout.code !== 0) {
-    throw new Error(`checkout failed: ${checkout.stderr.trim() || `exit ${checkout.code}`}`)
+    throw new Error("checkout failed")
   }
 
   // Output belongs to the server's workspace, never to the untrusted checkout.
@@ -173,7 +174,7 @@ async function buildHistory(
       return
     }
     if (clone.code !== 0) {
-      emit({ type: "error", error: `git clone failed: ${clone.stderr.trim() || `exit ${clone.code}`}` })
+      emit({ type: "error", error: describeCloneFailure(clone) })
       return
     }
 
@@ -183,7 +184,7 @@ async function buildHistory(
       signal: scanSignal,
     })
     if (log.code !== 0) {
-      emit({ type: "error", error: `git log failed: ${log.stderr.trim() || `exit ${log.code}`}` })
+      emit({ type: "error", error: "git log failed" })
       return
     }
 
