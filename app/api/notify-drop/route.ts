@@ -3,6 +3,9 @@ import { notifyScoreDropFromSummary } from "@/lib/webhook"
 import { clientIp, limitsFromEnv } from "@/lib/scan-limits"
 import { allowRate } from "@/lib/watch-rate"
 import { isGrade } from "@/lib/watch-drop"
+import { isOwner } from "@/lib/owner"
+import { readEnv } from "@/lib/env"
+import { readJson } from "@/lib/request-json"
 
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
@@ -13,6 +16,16 @@ export const dynamic = "force-dynamic"
  * Ingest already fires {@link notifyScoreDrop} from CI. Client rescans never hit
  * ingest, so the dashboard POSTs a tiny summary here after a local rescan when
  * the score fell. Same env as ingest (`REPO_ANTI_ROT_WEBHOOK_URL`). Rate-limited.
+ *
+ * ## Who may ring the bell
+ *
+ * The body is whatever the browser says happened — there is no report behind
+ * it to check. On a private dashboard that is fine: the only browser is the
+ * operator's. On a public instance it is an open door to the operator's Slack:
+ * anyone can POST "acme/widget dropped A → F" thirty times an hour, forever.
+ * So in public mode the request must carry the owner cookie; everyone else gets
+ * a 204 and nothing is sent. The response never distinguishes "not configured"
+ * from "not you" — neither is the caller's business.
  */
 export async function POST(request: Request) {
   const limits = limitsFromEnv()
@@ -21,9 +34,18 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Too many requests" }, { status: 429 })
   }
 
+  // Nothing to deliver to, or not the operator on a public box: accept quietly.
+  // The browser fires this in the background and ignores the answer anyway.
+  const configured = Boolean(readEnv("REPO_ANTI_ROT_WEBHOOK_URL")?.trim())
+  const allowed = process.env.REPO_ANTI_ROT_PUBLIC !== "true" || isOwner(request)
+  if (!configured || !allowed) {
+    return new Response(null, { status: 204 })
+  }
+
   let body: Record<string, unknown>
   try {
-    body = (await request.json()) as Record<string, unknown>
+    body = (await readJson(request, 8 * 1024)) as Record<string, unknown>
+    if (!body || typeof body !== "object" || Array.isArray(body)) throw new Error("Invalid object")
   } catch {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 })
   }
