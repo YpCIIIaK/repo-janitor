@@ -7,6 +7,7 @@ import {
   MAX_CLONE_BYTES,
   SCAN_HEAP_MB,
   SIZE_POLL_MS,
+  describeCloneFailure,
   describeFailure,
   run,
   dirSizeExceeds,
@@ -100,7 +101,7 @@ export async function scanWatchedRepo(
       }
     }
     if (clone.code !== 0) {
-      return { ok: false, error: `git clone failed: ${clone.stderr.trim() || `exit ${clone.code}`}` }
+      return { ok: false, error: describeCloneFailure(clone) }
     }
 
     const head = await run("git", ["-C", dir, "rev-parse", "HEAD"], { timeoutMs: 15_000 })

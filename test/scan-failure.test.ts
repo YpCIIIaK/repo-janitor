@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { describeFailure, SCAN_HEAP_MB } from "@/lib/clone-runner"
+import { describeCloneFailure, describeFailure, SCAN_HEAP_MB } from "@/lib/clone-runner"
 
 const result = (over: Partial<{ code: number | null; stderr: string }> = {}) => ({
   code: 1,
@@ -59,5 +59,23 @@ describe("describeFailure", () => {
 
   it("falls back to the exit code when there is nothing to quote", () => {
     expect(describeFailure(result({ code: 2, stderr: "" }))).toBe("scan failed (exit 2)")
+  })
+})
+
+describe("describeCloneFailure", () => {
+  it("never quotes git's stderr — that stream names paths on this host", () => {
+    const message = describeCloneFailure(
+      result({
+        code: 128,
+        stderr: "fatal: could not create work tree dir 'C:\\Users\\somebody\\AppData\\Local\\Temp\\repo': Permission denied",
+      }),
+    )
+    expect(message).toBe("git clone failed")
+    expect(message).not.toContain("Users")
+    expect(message).not.toContain("Temp")
+  })
+
+  it("names a cancelled clone without dumping the reason stream", () => {
+    expect(describeCloneFailure(result({ code: -1, stderr: "Scan cancelled" }))).toBe("clone was cancelled")
   })
 })

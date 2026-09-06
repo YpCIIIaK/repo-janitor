@@ -85,6 +85,17 @@ export function describeFailure(result: RunResult): string {
   return detail ? `scan failed: ${detail}` : `scan failed (exit ${result.code})`
 }
 
+/**
+ * Clone failures used to quote git's stderr. That stream names the URL as
+ * git saw it, local paths, and sometimes the host's git version — none of
+ * which the caller needs, and all of which describe the box. The exit is
+ * enough: the repository could not be cloned.
+ */
+export function describeCloneFailure(result: RunResult): string {
+  if (result.stderr === "Scan cancelled" || result.code === -1) return "clone was cancelled"
+  return "git clone failed"
+}
+
 export interface RunResult {
   code: number | null
   stdout: string

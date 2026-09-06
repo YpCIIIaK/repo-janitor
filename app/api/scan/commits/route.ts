@@ -3,7 +3,7 @@ import { mkdtemp, rm } from "fs/promises"
 import { tmpdir } from "os"
 import { join } from "path"
 import { isPublicGitUrl } from "@/lib/url-guard"
-import { MAX_CLONE_BYTES, SIZE_POLL_MS, run, dirSizeExceeds } from "@/lib/clone-runner"
+import { MAX_CLONE_BYTES, SIZE_POLL_MS, describeCloneFailure, run, dirSizeExceeds } from "@/lib/clone-runner"
 import { parseLogWithStats, COMMIT_RS } from "@/lib/commit-sampling"
 import { clientIp, limitsFromEnv, withScanSlot } from "@/lib/scan-limits"
 import { allowRate } from "@/lib/watch-rate"
@@ -94,7 +94,7 @@ async function listCommits(request: Request) {
     }
     if (clone.code !== 0) {
       return NextResponse.json(
-        { error: `git clone failed: ${clone.stderr.trim() || `exit ${clone.code}`}` },
+        { error: describeCloneFailure(clone) },
         { status: 400 },
       )
     }
