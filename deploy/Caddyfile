@@ -3,8 +3,9 @@
         max_size 2MB
     }
     header {
-        Strict-Transport-Security "max-age=31536000"
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
         -Server
+        -X-Powered-By
     }
     reverse_proxy app:3000 {
         flush_interval -1
