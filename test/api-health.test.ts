@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
-import { GET } from "@/app/api/health/route"
+import { GET as GETRoute } from "@/app/api/health/route"
 
 /**
  * Health-endpoint tests.
@@ -29,13 +29,27 @@ type Body = {
 }
 
 const savedEnv = { ...process.env }
+const READ_TOKEN = "read-token-for-tests-0123456789abcdef"
+
+/** Anonymous caller: sees verdicts only. */
+const anon = () => new Request("https://example.test/api/health")
+/** Operator: sees paths, versions and per-check detail. */
+const operator = () =>
+  new Request("https://example.test/api/health", {
+    headers: { authorization: `Bearer ${READ_TOKEN}` },
+  })
 
 beforeEach(() => {
   run.mockReset()
   process.env = { ...savedEnv }
   delete process.env.SUPABASE_URL
   delete process.env.SUPABASE_SERVICE_ROLE_KEY
+  delete process.env.REPO_ANTI_ROT_OWNER_TOKEN
+  process.env.REPO_ANTI_ROT_READ_TOKEN = READ_TOKEN
 })
+
+// Detail tests below use `GET(operator())`; the anonymous shape is asserted separately.
+const GET = (request: Request = operator()) => GETRoute(request)
 
 describe("GET /api/health", () => {
   it("reports canScan:false with a usable hint when git is missing", async () => {
@@ -114,5 +128,68 @@ describe("GET /api/health", () => {
     run.mockResolvedValue({ code: 0, stdout: "git version 2.43.0", stderr: "" })
     const res = await GET()
     expect(res.headers.get("Cache-Control")).toBe("no-store")
+    expect((await GET(anon())).headers.get("Cache-Control")).toBe("no-store")
+  })
+
+  /**
+   * The full report is a map of the host: the CLI path names the OS, the user
+   * account and the checkout directory; the temp dir and versions say what is
+   * installed. None of that belongs in an anonymous response.
+   */
+  describe("anonymous caller", () => {
+    it("gets the verdicts but no paths, versions or per-check detail", async () => {
+      run.mockResolvedValue({ code: 0, stdout: "git version 2.43.0", stderr: "" })
+      const res = await GET(anon())
+      const body = (await res.json()) as Body & { node?: string; uptimeSec?: number }
+
+      expect(res.status).toBe(200)
+      expect(body.ok).toBe(true)
+      expect(typeof body.canScan).toBe("boolean")
+      expect(typeof body.durableShares).toBe("boolean")
+      expect(body.checks).toBeUndefined()
+      expect(body.node).toBeUndefined()
+      expect(body.uptimeSec).toBeUndefined()
+      const text = JSON.stringify(body)
+      expect(text).not.toContain("git version")
+      expect(text).not.toContain("/nonexistent")
+      expect(text).not.toContain("SUPABASE_URL")
+    })
+
+    it("still learns that the host cannot scan, without the internals", async () => {
+      run.mockRejectedValue(new Error("spawn git ENOENT"))
+      const body = (await (await GET(anon())).json()) as Body
+      expect(body.canScan).toBe(false)
+      expect(body.hint).toBeTruthy()
+      expect(JSON.stringify(body)).not.toContain("ENOENT")
+    })
+
+    it("is not promoted to operator by a wrong bearer token", async () => {
+      run.mockResolvedValue({ code: 0, stdout: "git version 2.43.0", stderr: "" })
+      const req = new Request("https://example.test/api/health", {
+        headers: { authorization: "Bearer not-the-token" },
+      })
+      const body = (await (await GET(req)).json()) as Body
+      expect(body.checks).toBeUndefined()
+    })
+
+    it("is not promoted to operator when no read token is configured at all", async () => {
+      // `checkBearer` disables auth for an unset token in local dev; health must
+      // not inherit that and hand the full report to everyone.
+      delete process.env.REPO_ANTI_ROT_READ_TOKEN
+      run.mockResolvedValue({ code: 0, stdout: "git version 2.43.0", stderr: "" })
+      const body = (await (await GET(anon())).json()) as Body
+      expect(body.checks).toBeUndefined()
+    })
+  })
+
+  it("shows the full report to the owner cookie as well", async () => {
+    const KEY = "owner-key-0123456789abcdef0123456789abcdef"
+    process.env.REPO_ANTI_ROT_OWNER_TOKEN = KEY
+    run.mockResolvedValue({ code: 0, stdout: "git version 2.43.0", stderr: "" })
+    const req = new Request("https://example.test/api/health", {
+      headers: { cookie: `rar_owner=${KEY}` },
+    })
+    const body = (await (await GET(req)).json()) as Body
+    expect(body.checks.git.detail).toBe("git version 2.43.0")
   })
 })
