@@ -17,16 +17,16 @@ import { Label } from "@/components/ui/label"
  * component can answer from what it stored.
  */
 export function OwnerKey() {
-  const [state, setState] = useState<{ owner: boolean; configured: boolean } | null>(null)
+  const [state, setState] = useState<{ owner: boolean } | null>(null)
   const [key, setKey] = useState("")
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     void fetch("/api/unlock")
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => setState(data))
-      .catch(() => {})
+      .then((res) => (res.ok ? res.json() : { owner: false }))
+      .then((data) => setState({ owner: Boolean(data?.owner) }))
+      .catch(() => setState({ owner: false }))
   }, [])
 
   async function submit(method: "POST" | "DELETE") {
@@ -47,7 +47,7 @@ export function OwnerKey() {
       // Dropped immediately: the value is in the cookie now, and keeping a copy
       // in a React tree is exactly what httpOnly was chosen to avoid.
       setKey("")
-      setState((prev) => ({ configured: prev?.configured ?? true, owner: Boolean(data?.owner) }))
+      setState({ owner: Boolean(data?.owner) })
       // Anything showing a limit has to ask again: unlocking changes the answer,
       // and a form still holding the public cap will refuse work the server
       // would now accept.
@@ -59,9 +59,12 @@ export function OwnerKey() {
     }
   }
 
-  // Nothing to offer on a deployment with no key configured. Showing an empty
-  // field would advertise a door that does not exist.
-  if (!state?.configured && !state?.owner) return null
+  // Wait for the server before painting: a flash of the form on an already
+  // unlocked browser is worse than a blank. The form itself is shown even
+  // when no key is configured — GET no longer reports that, because the
+  // answer is useful to a guesser and the POST already refuses both cases
+  // with the same sentence.
+  if (state === null) return null
 
   return (
     <div className="space-y-2 border-t border-border pt-5">
