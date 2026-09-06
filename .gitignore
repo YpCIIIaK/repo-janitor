@@ -22,6 +22,9 @@ pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# --- local archives ---
+*.zip
+
 # --- scan artifacts (generated locally by the dashboard / CLI) ---
 .repo-anti-rot/
 .reporot/

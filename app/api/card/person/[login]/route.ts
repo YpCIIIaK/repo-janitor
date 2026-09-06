@@ -4,7 +4,7 @@ import { renderPersonCardSvg } from "@/lib/person-card"
 
 /**
  * A card for a person, from their public GitHub profile, e.g.
- *   [![octocat](https://your-deploy/api/card/person/octocat)](https://github.com/octocat)
+ *   [![octocat](https://your-deploy/api/card/person/octocat)](https://github.com/YOUR_LOGIN)
  *
  * No account, no tier, no history with this project required. See
  * `lib/person-card.ts` for why the handle is the only thing that seeds the look,

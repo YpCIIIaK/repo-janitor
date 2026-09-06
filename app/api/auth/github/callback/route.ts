@@ -8,11 +8,10 @@ import {
   verifyState,
 } from "@/lib/github-oauth"
 import {
-  SESSION_COOKIE,
-  SESSION_TTL_SECONDS,
   createSession,
   isSecureRequest,
   publicOrigin,
+  sessionCookieHeader,
 } from "@/lib/session"
 import { isGithubLogin } from "@/lib/hunter"
 import { normalizeWatchEmail } from "@/lib/watch-tokens"
@@ -145,12 +144,12 @@ export async function GET(request: Request) {
   const verifiedEmail = await verifiedEmailFor(token)
 
   const next = safeReturnPath(cookie(request, "rar_oauth_next"))
-  const secure = isSecureRequest(request) ? "; Secure" : ""
+  const secure = isSecureRequest(request)
   const headers = new Headers({ Location: next })
-  clearFlowCookies(headers, secure)
+  clearFlowCookies(headers, secure ? "; Secure" : "")
   headers.append(
     "Set-Cookie",
-    `${SESSION_COOKIE}=${createSession(login, secret, Date.now(), verifiedEmail)}; HttpOnly; SameSite=Lax; Path=/; Max-Age=${SESSION_TTL_SECONDS}${secure}`,
+    sessionCookieHeader(createSession(login, secret, Date.now(), verifiedEmail), secure),
   )
 
   return new Response(null, { status: 302, headers })

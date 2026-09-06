@@ -10,6 +10,8 @@ import {
   readSession,
   publicOrigin,
   sessionFromRequest,
+  sessionCookieHeader,
+  sessionCookieOptions,
 } from "@/lib/session"
 
 import {
@@ -95,6 +97,20 @@ describe("sessionFromRequest", () => {
     const cookie = createSession("octocat", SECRET, NOW)
     expect(sessionFromRequest(withCookie(`not_${SESSION_COOKIE}=${cookie}`), SECRET, NOW)).toBeNull()
     expect(sessionFromRequest(withCookie(`${SESSION_COOKIE}=${cookie}`), SECRET, NOW)).not.toBeNull()
+  })
+})
+
+describe("sessionCookieHeader", () => {
+  it("uses the shared options so login and logout stay in lock-step", () => {
+    const opts = sessionCookieOptions(true)
+    expect(opts.httpOnly).toBe(true)
+    expect(opts.sameSite).toBe("lax")
+    const set = sessionCookieHeader("tok", true)
+    expect(set).toContain("HttpOnly")
+    expect(set).toContain("SameSite=lax")
+    expect(set).toContain("Secure")
+    expect(sessionCookieHeader("", false, 0)).toContain("Max-Age=0")
+    expect(sessionCookieHeader("", false, 0)).not.toContain("Secure")
   })
 })
 
