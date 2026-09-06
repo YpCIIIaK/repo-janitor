@@ -530,6 +530,7 @@ export function ResumeEditor({ initial }: { initial: ResumeCardData }) {
           className="overflow-hidden rounded-xl border [&>svg]:h-auto [&>svg]:w-full"
           // Built here by our own pure function; every field it renders goes
           // through its escaper.
+          // repo-anti-rot-ignore-next-line
           dangerouslySetInnerHTML={{ __html: svg }}
         />
       </div>

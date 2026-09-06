@@ -149,6 +149,12 @@ export function sessionCookieOptions(secure: boolean) {
   }
 }
 
+/** `Set-Cookie` value for the session, using {@link sessionCookieOptions}. */
+export function sessionCookieHeader(value: string, secure: boolean, maxAge = SESSION_TTL_SECONDS): string {
+  const opts = sessionCookieOptions(secure)
+  return `${SESSION_COOKIE}=${value}; HttpOnly; SameSite=${opts.sameSite}; Path=${opts.path}; Max-Age=${maxAge}${opts.secure ? "; Secure" : ""}`
+}
+
 /** True when the request arrived over https, directly or through a proxy. */
 export function isSecureRequest(request: Request): boolean {
   const proto = request.headers.get("x-forwarded-proto")

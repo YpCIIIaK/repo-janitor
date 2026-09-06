@@ -15,7 +15,7 @@ secure. A grade summarizes findings from the selected checks and available data.
 
 | Product | Relevant capability | Implication for Repo Anti-Rot |
 | --- | --- | --- |
-| [SonarQube](https://docs.sonarsource.com/sonarqube/latest/analysis/pull-request) | Pull-request analysis focuses on introduced issues | Gate new debt separately from the old backlog; make incomplete analysis visible |
+| [SonarQube](https://docs.sonarsource.com/sonarqube-server/analyzing-source-code/pull-request-analysis) | Pull-request analysis focuses on introduced issues | Gate new debt separately from the old backlog; make incomplete analysis visible |
 | [Qodana](https://www.jetbrains.com/help/qodana/about-qodana.html) | Baselines, quality gates and quick fixes | Reports need an actionable remediation path, not just a score |
 | [Renovate](https://docs.renovatebot.com/) | Updates dependencies and lockfiles through pull requests | Integrate with an updater rather than inventing an unsafe generic version bump |
 | [GitHub Autofix](https://docs.github.com/en/code-security/concepts/code-scanning/autofix-for-code-scanning) | Generates candidate fixes; agentic mode can validate and open a PR | AI advice must be distinguished from verified fixes; evidence and validation matter |

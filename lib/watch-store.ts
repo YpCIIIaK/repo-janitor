@@ -4,7 +4,6 @@ import { join } from "path"
 import { dataDir } from "@/lib/data-dir"
 import { withStorageLock, writeJsonAtomic } from "@/lib/storage-io"
 import { supabaseConfig } from "@/lib/share-db"
-import { repoKeyOf } from "@/lib/share-keys"
 import type { Grade } from "@/lib/mock-data"
 import {
   dbDeleteWatch,
@@ -261,7 +260,3 @@ export async function listDueWatches(
     .slice(0, limit)
 }
 
-/** Repo key helper re-export for callers that already hold owner/name. */
-export function watchRepoKey(owner: string, name: string): string {
-  return repoKeyOf({ owner, name })
-}

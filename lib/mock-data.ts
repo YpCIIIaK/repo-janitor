@@ -111,7 +111,7 @@ const demoRepositories: Repository[] = [
 // Single source of truth for the dashboard's repo list.
 // Empty by default → the app shows the welcome screen until a real scan is run.
 // Swap to `demoRepositories` to preview the populated dashboard with sample data.
-export const repositories: Repository[] = []
+const repositories: Repository[] = []
 
 const issuesByRepo: Record<string, Issue[]> = {
   "repo-1": [
@@ -342,11 +342,11 @@ function countBySeverity(list: Issue[], sev: Severity) {
   return list.filter((i) => i.severity === sev).length
 }
 
-export function getIssues(repoId: string): Issue[] {
+function getIssues(repoId: string): Issue[] {
   return issuesByRepo[repoId] ?? []
 }
 
-export function getTrend(repoId: string): TrendPoint[] {
+function getTrend(repoId: string): TrendPoint[] {
   return trendByRepo[repoId] ?? []
 }
 
