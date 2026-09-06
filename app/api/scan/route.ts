@@ -7,6 +7,7 @@ import {
   CLI_DIST,
   MAX_CLONE_BYTES,
   SCAN_HEAP_MB,
+  SCAN_TIMEOUT_MS,
   SIZE_POLL_MS,
   describeCloneFailure,
   describeFailure,
@@ -31,7 +32,7 @@ import { readJson } from "@/lib/request-json"
 
 // Cloning + scanning is real work — run on the Node runtime, allow time for it.
 export const runtime = "nodejs"
-export const maxDuration = 300
+export const maxDuration = 720
 
 /** A progress/result event forwarded to the client over the NDJSON stream. */
 type ScanEvent =
@@ -109,7 +110,7 @@ async function cloneAndScan(
       "node",
       cliArgs,
       {
-        timeoutMs: 240_000,
+        timeoutMs: SCAN_TIMEOUT_MS,
         signal,
         onStderrLine: (line) => {
           if (!line.startsWith("@@PROGRESS@@")) return

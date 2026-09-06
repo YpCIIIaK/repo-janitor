@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { describeCloneFailure, describeFailure, SCAN_HEAP_MB } from "@/lib/clone-runner"
+import { describeCloneFailure, describeFailure, SCAN_HEAP_MB, SCAN_TIMEOUT_MS } from "@/lib/clone-runner"
 
 const result = (over: Partial<{ code: number | null; stderr: string; timedOut: boolean }> = {}) => ({
   code: 1,
@@ -15,6 +15,12 @@ const PROGRESS = [
   '@@PROGRESS@@{"scanner":"stale-branch","completed":2,"total":19}',
   '@@PROGRESS@@{"scanner":"todo-debt","completed":3,"total":19}',
 ].join("\n")
+
+describe("scan budget", () => {
+  it("gives a weak host ten minutes for one scan", () => {
+    expect(SCAN_TIMEOUT_MS).toBe(10 * 60 * 1000)
+  })
+})
 
 describe("describeFailure", () => {
   it("never shows progress lines as an error", () => {
