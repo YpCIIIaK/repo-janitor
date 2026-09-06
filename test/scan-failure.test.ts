@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest"
 import { describeCloneFailure, describeFailure, SCAN_HEAP_MB } from "@/lib/clone-runner"
 
-const result = (over: Partial<{ code: number | null; stderr: string }> = {}) => ({
+const result = (over: Partial<{ code: number | null; stderr: string; timedOut: boolean }> = {}) => ({
   code: 1,
   stdout: "",
   stderr: "",
@@ -59,6 +59,30 @@ describe("describeFailure", () => {
 
   it("falls back to the exit code when there is nothing to quote", () => {
     expect(describeFailure(result({ code: 2, stderr: "" }))).toBe("scan failed (exit 2)")
+  })
+
+  it("does not treat the CLI banner as the failure — that line is just a host path", () => {
+    const message = describeFailure(
+      result({
+        code: 1,
+        stderr: "Scanning repository at: C:\\Users\\somebody\\AppData\\Local\\Temp\\repo-anti-rot-abc\\checkout\n",
+      }),
+    )
+    expect(message).toBe("scan failed (exit 1)")
+    expect(message).not.toContain("Users")
+    expect(message).not.toContain("Temp")
+  })
+
+  it("names a timeout instead of quoting whatever was on stderr", () => {
+    expect(
+      describeFailure(
+        result({
+          code: 1,
+          timedOut: true,
+          stderr: "Scanning repository at: C:\\Users\\somebody\\Temp\\checkout",
+        }),
+      ),
+    ).toMatch(/timed out/)
   })
 })
 

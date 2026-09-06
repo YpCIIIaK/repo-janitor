@@ -109,7 +109,7 @@ async function cloneAndScan(
       "node",
       cliArgs,
       {
-        timeoutMs: 120_000,
+        timeoutMs: 240_000,
         signal,
         onStderrLine: (line) => {
           if (!line.startsWith("@@PROGRESS@@")) return
