@@ -18,6 +18,8 @@ export const CLI_DIST = join(process.cwd(), "packages", "cli", "dist", "index.js
 // aborts the clone once the tree crosses this line.
 export const MAX_CLONE_BYTES = 500 * 1024 * 1024 // 500 MB
 export const SIZE_POLL_MS = 2_000
+/** Ceiling for one `repo-anti-rot scan` child. A weak host still finishes a large tree. */
+export const SCAN_TIMEOUT_MS = 10 * 60 * 1000
 
 /**
  * Heap ceiling for the scanner child process, in MB.
