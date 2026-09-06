@@ -64,11 +64,24 @@ const PROGRESS_PREFIX = "@@PROGRESS@@"
  * hint of what went wrong. Progress is dropped, the tail is kept (the failure is
  * at the end, not the start), and the whole thing is bounded.
  */
+/** Status lines the CLI always writes; they are not the failure. */
+const CHATTER = /^(Scanning repository at:|Results written to:|Running \d+ scanner)/i
+
+function stripHostPaths(text: string): string {
+  return text
+    .replace(/[A-Za-z]:\\[^\s]+/g, "<path>")
+    .replace(/\/(?:Users|home|tmp|var|opt)[^\s]*/g, "<path>")
+}
+
 export function describeFailure(result: RunResult): string {
+  if (result.timedOut) {
+    return "scan timed out — this repository took too long on this instance"
+  }
+
   const lines = result.stderr
     .split(/\r?\n/)
     .map((l) => l.trim())
-    .filter((l) => l && !l.startsWith(PROGRESS_PREFIX))
+    .filter((l) => l && !l.startsWith(PROGRESS_PREFIX) && !CHATTER.test(l))
 
   const text = lines.join(" ").toLowerCase()
 
@@ -81,8 +94,12 @@ export function describeFailure(result: RunResult): string {
     return "scan was stopped — it ran out of memory or time. This usually means the repository is very large."
   }
 
-  const detail = lines.slice(-4).join(" ").slice(0, 400)
-  return detail ? `scan failed: ${detail}` : `scan failed (exit ${result.code})`
+  const detail = stripHostPaths(lines.slice(-4).join(" ").slice(0, 400)).trim()
+  // Chatter and host paths are not a reason. Fall back to the exit code.
+  if (!detail || detail === "<path>") {
+    return `scan failed (exit ${result.code})`
+  }
+  return `scan failed: ${detail}`
 }
 
 /**
@@ -100,6 +117,8 @@ export interface RunResult {
   code: number | null
   stdout: string
   stderr: string
+  /** True when we killed the child because `timeoutMs` elapsed. */
+  timedOut?: boolean
 }
 
 /**
@@ -128,6 +147,7 @@ export function run(
     let stdout = ""
     let stderr = ""
     let buf = "" // partial-line buffer for stderr
+    let timedOut = false
     const stop = () => {
       if (!child.pid) return
       if (process.platform === "win32") {
@@ -139,7 +159,10 @@ export function run(
     }
     opts.signal?.addEventListener("abort", stop, { once: true })
     const timeout = opts.timeoutMs
-      ? setTimeout(stop, opts.timeoutMs)
+      ? setTimeout(() => {
+          timedOut = true
+          stop()
+        }, opts.timeoutMs)
       : null
     const maxOutput = 2 * 1024 * 1024
     child.stdout.on("data", (d) => (stdout = (stdout + d.toString()).slice(-maxOutput)))
@@ -163,7 +186,7 @@ export function run(
       if (timeout) clearTimeout(timeout)
       opts.signal?.removeEventListener("abort", stop)
       if (buf && opts.onStderrLine) opts.onStderrLine(buf)
-      resolve({ code, stdout, stderr })
+      resolve({ code, stdout, stderr, timedOut })
     })
   })
 }

@@ -1,5 +1,10 @@
 {
-  "ignore": ["sample-repo/**", "datamine/**"],
+  "ignore": [
+    "sample-repo/**",
+    "datamine/**",
+    "packages/audit-engine/**",
+    "reports/**"
+  ],
   "mute": [
     {
       "category": "security",
