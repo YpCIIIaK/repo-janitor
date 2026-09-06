@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { OWNER_COOKIE, isOwner, isOwnerToken, ownerKeyConfigured } from "@/lib/owner"
+import { OWNER_COOKIE, isOwner, isOwnerToken } from "@/lib/owner"
 import { checkRateLimit, clientIp, limitsFromEnv } from "@/lib/scan-limits"
 
 /**
@@ -7,7 +7,7 @@ import { checkRateLimit, clientIp, limitsFromEnv } from "@/lib/scan-limits"
  *
  *   POST   { "token": "…" }   →  sets the owner cookie
  *   DELETE                    →  clears it
- *   GET                       →  am I the owner, and is a key even configured
+ *   GET                       →  am I the owner (not whether a key is configured)
  *
  * The cookie is `httpOnly`, so the key it carries is never readable from page
  * scripts. `sameSite: lax` keeps it off cross-site requests, which matters here:
@@ -22,7 +22,10 @@ export const runtime = "nodejs"
 const MAX_AGE = 90 * 24 * 60 * 60
 
 export async function GET(request: Request) {
-  return NextResponse.json({ owner: isOwner(request), configured: ownerKeyConfigured() })
+  // `configured` used to travel with this answer. Telling a stranger that a
+  // key exists is the first half of guessing it, and the Settings form does
+  // not need to know: POST already uses one message for "wrong" and "unset".
+  return NextResponse.json({ owner: isOwner(request) })
 }
 
 export async function POST(request: Request) {
