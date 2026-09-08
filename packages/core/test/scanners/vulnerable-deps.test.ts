@@ -6,6 +6,25 @@ const BATCH_URL = "https://api.osv.dev/v1/querybatch"
 const VULN_URL = "https://api.osv.dev/v1/vulns/"
 
 describe("vulnerableDepsScanner", () => {
+  it("lowers transitive tooling advisories in a dev-only pnpm project", async () => {
+    const ctx = makeContext({
+      files: {
+        "package.json": JSON.stringify({ devDependencies: { tooling: "1.0.0" } }),
+        "pnpm-lock.yaml": [
+          "importers:", "  .:", "    devDependencies:",
+          "      tooling:", "        version: 1.0.0",
+          "snapshots:", "  tooling@1.0.0:", "    dependencies:",
+          "      badlib: 1.0.0", "  badlib@1.0.0: {}",
+        ].join("\n"),
+      },
+      postJson: { [BATCH_URL]: { results: [{ vulns: [] }, { vulns: [{ id: "V" }] }] } },
+      fetchJson: { [`${VULN_URL}V`]: { id: "V", database_specific: { severity: "CRITICAL" } } },
+    })
+    const issues = await vulnerableDepsScanner.run(ctx)
+    expect(issues).toHaveLength(1)
+    expect(issues[0].severity).toBe("warning")
+    expect(issues[0].detail).toContain("Build/test-only path")
+  })
   it("is a no-op when there is no network adapter (offline)", async () => {
     const ctx = makeContext({
       files: { "package.json": JSON.stringify({ dependencies: { lodash: "4.17.20" } }) },
@@ -348,5 +367,165 @@ describe("vulnerableDepsScanner — severity calibration", () => {
       }),
     )
     expect(issues[0].severity).toBe("critical")
+  })
+})
+
+describe("vulnerableDepsScanner — multiple installed versions", () => {
+  it("queries a nested vulnerable dev version without borrowing direct production status", async () => {
+    const ctx = makeContext({
+      files: {
+        "package.json": JSON.stringify({ dependencies: { shared: "2.0.0" }, devDependencies: { tool: "1.0.0" } }),
+        "package-lock.json": JSON.stringify({
+          packages: {
+            "": { name: "root" },
+            "node_modules/shared": { version: "2.0.0" },
+            "node_modules/tool": { version: "1.0.0", dev: true },
+            "node_modules/tool/node_modules/shared": { version: "1.0.0", dev: true },
+          },
+        }),
+      },
+      postJson: { [BATCH_URL]: { results: [{ vulns: [] }, { vulns: [] }, { vulns: [{ id: "V-OLD" }] }] } },
+      fetchJson: {
+        [`${VULN_URL}V-OLD`]: {
+          id: "V-OLD",
+          database_specific: { severity: "HIGH" },
+          affected: [{ package: { ecosystem: "npm", name: "shared" } }],
+        },
+      },
+    })
+    const issues = await vulnerableDepsScanner.run(ctx)
+    expect(issues).toHaveLength(1)
+    expect(issues[0].title).toContain("shared@1.0.0")
+    expect(issues[0].severity).toBe("info")
+    expect(issues[0].detail).toContain("transitive dependency")
+    expect(issues[0].detail).toContain("Build/test-only path")
+  })
+
+  it("keeps two vulnerable versions in OSV alignment and chooses the worse runtime context", async () => {
+    const ctx = makeContext({
+      files: {
+        "package.json": JSON.stringify({ dependencies: { shared: "2.0.0" }, devDependencies: { tool: "1.0.0" } }),
+        "package-lock.json": JSON.stringify({
+          packages: {
+            "": {},
+            "node_modules/tool/node_modules/shared": { version: "1.0.0", dev: true },
+            "node_modules/shared": { version: "2.0.0" },
+          },
+        }),
+      },
+      postJson: { [BATCH_URL]: { results: [{ vulns: [{ id: "V" }] }, { vulns: [{ id: "V" }] }] } },
+      fetchJson: { [`${VULN_URL}V`]: { id: "V", database_specific: { severity: "CRITICAL" } } },
+    })
+    const issues = await vulnerableDepsScanner.run(ctx)
+    expect(issues).toHaveLength(1)
+    expect(issues[0].severity).toBe("critical")
+    expect(issues[0].title).toContain("shared@2.0.0")
+  })
+})
+
+describe("vulnerableDepsScanner — aliases and workspaces", () => {
+  it("queries an npm alias by its real package name", async () => {
+    const issues = await vulnerableDepsScanner.run(makeContext({
+      files: {
+        "package.json": JSON.stringify({ dependencies: { "safe-lodash": "npm:lodash@4.17.20" } }),
+        "package-lock.json": JSON.stringify({ packages: {
+          "": { dependencies: { "safe-lodash": "npm:lodash@4.17.20" } },
+          "node_modules/safe-lodash": { name: "lodash", version: "4.17.20" },
+        } }),
+      },
+      postJson: { [BATCH_URL]: { results: [{ vulns: [{ id: "V" }] }] } },
+      fetchJson: { [`${VULN_URL}V`]: { id: "V", database_specific: { severity: "HIGH" } } },
+    }))
+    expect(issues).toHaveLength(1)
+    expect(issues[0].title).toContain("lodash@4.17.20")
+    expect(issues[0].severity).toBe("critical")
+    expect(issues[0].evidence).toContain("node_modules/safe-lodash")
+  })
+
+  it("attributes a pnpm workspace alias to the declaring importer", async () => {
+    const issues = await vulnerableDepsScanner.run(makeContext({
+      files: {
+        "package.json": "{}",
+        "packages/web/package.json": JSON.stringify({ dependencies: { compat: "npm:lodash@4.17.20" } }),
+        "pnpm-lock.yaml": [
+          "importers:", "  .: {}", "  packages/web:", "    dependencies:", "      compat:",
+          "        specifier: npm:lodash@4.17.20", "        version: lodash@4.17.20",
+          "snapshots:", "  lodash@4.17.20: {}",
+        ].join("\n"),
+      },
+      postJson: { [BATCH_URL]: { results: [{ vulns: [{ id: "V" }] }] } },
+      fetchJson: { [`${VULN_URL}V`]: { id: "V", database_specific: { severity: "HIGH" } } },
+    }))
+    expect(issues).toHaveLength(1)
+    expect(issues[0].title).toContain("lodash@4.17.20")
+    expect(issues[0].location).toBe("packages/web/package.json")
+    expect(issues[0].severity).toBe("critical")
+    expect(issues[0].evidence).toContain("packages/web")
+  })
+
+  it("normalizes an npm alias even without a lockfile", async () => {
+    const issues = await vulnerableDepsScanner.run(makeContext({
+      files: { "package.json": JSON.stringify({ dependencies: { compat: "npm:lodash@4.17.20" } }) },
+      postJson: { [BATCH_URL]: { results: [{ vulns: [{ id: "V" }] }] } },
+      fetchJson: { [`${VULN_URL}V`]: { id: "V", database_specific: { severity: "HIGH" } } },
+    }))
+    expect(issues[0].title).toContain("lodash@4.17.20")
+    expect(issues[0].severity).toBe("critical")
+  })
+
+  it("still scans an npm lockfile when the root manifest is absent", async () => {
+    const issues = await vulnerableDepsScanner.run(makeContext({
+      files: { "package-lock.json": JSON.stringify({ packages: { "node_modules/deep": { version: "1.0.0" } } }) },
+      postJson: { [BATCH_URL]: { results: [{ vulns: [{ id: "V" }] }] } },
+      fetchJson: { [`${VULN_URL}V`]: { id: "V", database_specific: { severity: "HIGH" } } },
+    }))
+    expect(issues).toHaveLength(1)
+    expect(issues[0].title).toContain("deep@1.0.0")
+    expect(issues[0].severity).toBe("warning")
+  })
+})
+
+describe("vulnerableDepsScanner — advisory metadata selection", () => {
+  it("uses severity from the matching affected package", async () => {
+    const issues = await vulnerableDepsScanner.run(makeContext({
+      files: { "package.json": JSON.stringify({ dependencies: { target: "1.0.0" } }) },
+      postJson: { [BATCH_URL]: { results: [{ vulns: [{ id: "V" }] }] } },
+      fetchJson: { [`${VULN_URL}V`]: {
+        id: "V",
+        affected: [
+          { package: { ecosystem: "npm", name: "other" }, database_specific: { severity: "CRITICAL" } },
+          { package: { ecosystem: "npm", name: "target" }, database_specific: { severity: "LOW" } },
+        ],
+      } },
+    }))
+    expect(issues[0].severity).toBe("info")
+  })
+
+  it("recommends the fix from the vulnerable branch containing the installed version", async () => {
+    const issues = await vulnerableDepsScanner.run(makeContext({
+      files: { "package.json": JSON.stringify({ dependencies: { target: "2.1.0" } }) },
+      postJson: { [BATCH_URL]: { results: [{ vulns: [{ id: "V" }] }] } },
+      fetchJson: { [`${VULN_URL}V`]: {
+        id: "V",
+        affected: [{ package: { ecosystem: "npm", name: "target" }, ranges: [
+          { type: "ECOSYSTEM", events: [{ introduced: "1.0.0" }, { fixed: "1.5.0" }] },
+          { type: "ECOSYSTEM", events: [{ introduced: "2.0.0" }, { fixed: "2.5.0" }] },
+        ] }],
+      } },
+    }))
+    expect(issues[0].detail).toContain("Fixed in 2.5.0")
+    expect(issues[0].detail).not.toContain("Fixed in 1.5.0")
+  })
+})
+
+describe("vulnerableDepsScanner — polyglot lockfiles", () => {
+  it("does not classify every Cargo.lock row as a direct critical dependency", async () => {
+    const issues = await vulnerableDepsScanner.run(makeContext({
+      files: { "Cargo.lock": '[[package]]\nname = "deep"\nversion = "1.2.3"\n' },
+      postJson: { [BATCH_URL]: { results: [{ vulns: [{ id: "V" }] }] } },
+      fetchJson: { [`${VULN_URL}V`]: { id: "V", database_specific: { severity: "HIGH" } } },
+    }))
+    expect(issues[0].severity).toBe("warning")
+    expect(issues[0].detail).toContain("transitive dependency")
   })
 })

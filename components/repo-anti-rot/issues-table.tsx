@@ -598,6 +598,7 @@ export function IssuesTable({
         githubUrl={selectedIssue ? linkFor(selectedIssue) : null}
         newIssueUrl={selectedIssue ? newIssueFor(selectedIssue) : null}
         scannedRepoUrl={repo?.url}
+        scannedCommit={repo?.commit}
         snoozed={selectedIssue ? isSnoozed(selectedIssue.id) : false}
         onToggleSnooze={() => selectedIssue && toggleSnooze(selectedIssue.id)}
       />

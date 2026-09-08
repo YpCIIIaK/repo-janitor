@@ -52,7 +52,7 @@ export function TopBar({
       <div className="flex size-7 items-center justify-center rounded-md bg-primary/15 text-primary">
         <Activity className="size-4" />
       </div>
-      <span className="font-mono text-sm font-semibold tracking-tight">Repo Anti-Rot</span>
+      <span className="font-mono text-sm font-semibold tracking-tight">Repo Janitor</span>
     </>
   )
 

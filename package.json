@@ -21,6 +21,7 @@
     "test:dashboard": "vitest run",
     "setup": "pnpm install && pnpm run build:cli",
     "proof:refresh": "node scripts/refresh-proof-snapshot.mjs",
+    "demo:refresh": "pnpm run build:cli && node scripts/refresh-demo.mjs",
     "setup:server": "node scripts/setup-local.mjs"
   },
   "dependencies": {

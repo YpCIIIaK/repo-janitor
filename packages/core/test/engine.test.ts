@@ -65,16 +65,22 @@ describe("computeScore", () => {
     expect(computeScore(warnings)).toBe(47)
   })
 
-  it("honours an explicit weight override in full, not up to a ceiling", () => {
-    // A repo that deliberately sets `info: 10` gets 10 a finding. Under the cap
-    // this replaced, two such findings still cost 10 in total — the default
-    // ceiling silently vetoed the repo's own configuration. The taper has no
-    // ceiling to veto with: it only ever discounts a tail, and 2 is well inside
-    // the full-price stretch.
-    const w = { critical: 10, warning: 3, info: 10 }
-    expect(computeScore([issue({ severity: "info" })], w)).toBe(90)
-    const two = [issue({ severity: "info" }), issue({ severity: "info" })]
-    expect(computeScore(two, w)).toBe(80)
+  it("bounds custom info weights without weakening warning or critical overrides", () => {
+    const w = { critical: 25, warning: 12, info: 10, infoCap: 10 }
+    const notes = Array.from({ length: 20 }, () => issue({ severity: "info" }))
+    expect(computeScore(notes, w)).toBe(90)
+    expect(computeScore([...notes, issue({ severity: "warning" }), issue({ severity: "critical" })], w)).toBe(53)
+  })
+
+  it.each([1, 20, 1000, 100_000])("keeps %i informational findings within ten points", (count) => {
+    const notes = Array.from({ length: count }, () => issue({ severity: "info" }))
+    expect(computeScore(notes)).toBeGreaterThanOrEqual(90)
+    expect(computeScore([...notes, issue({ severity: "critical" }), issue({ severity: "warning" })])).toBe(computeScore(notes) - 13)
+  })
+
+  it("persists the informational budget so historical consumers can reproduce the score", async () => {
+    const report = await runScan(makeContext({}), [])
+    expect(report.config?.weights.infoCap).toBe(10)
   })
 
   it("matches DEFAULT_WEIGHTS shape", () => {

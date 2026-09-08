@@ -2,7 +2,7 @@
 
 import { useLocale } from "@/components/i18n/locale-provider"
 import { useEffect, useState } from "react"
-import { AlertTriangle, Bell, BellOff, Bug, Check, Clipboard, Link2, Loader2, ShieldQuestion, Sparkles } from "lucide-react"
+import { AlertTriangle, Bell, BellOff, Bug, Check, Clipboard, Download, Link2, Loader2, Network, ShieldQuestion, Sparkles } from "lucide-react"
 import { Github } from "@/components/icons/github"
 import { categoryLabels, severityLabels, type Issue } from "@/lib/mock-data"
 import { resolveScanner, scannerLabel } from "@/lib/scanners"
@@ -14,6 +14,7 @@ import { getCachedNotes, putCachedNotes } from "@/lib/ai-cache"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { cn } from "@/lib/utils"
+import { DependencyResearchGraph, type DependencyResearchGraphProps } from "@/components/repo-anti-rot/dependency-research-graph"
 
 interface Props {
   issue: Issue | null
@@ -27,6 +28,7 @@ interface Props {
    * arrives with something the rule can be re-run against.
    */
   scannedRepoUrl?: string | null
+  scannedCommit?: string | null
   snoozed: boolean
   onToggleSnooze: () => void
 }
@@ -66,10 +68,11 @@ export function IssueDrawer({
   githubUrl,
   newIssueUrl,
   scannedRepoUrl,
+  scannedCommit,
   snoozed,
   onToggleSnooze,
 }: Props) {
-  const { t } = useLocale()
+  const { t, locale } = useLocale()
   const settings = useAiSettings()
   const hasKey = !!settings.apiKey.trim()
   // Cache namespace folds in the web-search toggle (see aiCacheModel).
@@ -78,6 +81,9 @@ export function IssueDrawer({
   const [note, setNote] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [research, setResearch] = useState<(DependencyResearchGraphProps & { raw: unknown }) | null>(null)
+  const [researchLoading, setResearchLoading] = useState(false)
+  const [researchError, setResearchError] = useState<string | null>(null)
 
   // When the selected finding changes, reset to its known/cached verdict.
   useEffect(() => {
@@ -85,6 +91,9 @@ export function IssueDrawer({
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setError(null)
     setLoading(false)
+    setResearch(null)
+    setResearchError(null)
+    setResearchLoading(false)
     if (!issue) {
       setNote(null)
       return
@@ -110,11 +119,117 @@ export function IssueDrawer({
     }
   }
 
+  async function investigateDependency() {
+    if (!issue?.analysisRef || !scannedRepoUrl) return
+    setResearchLoading(true)
+    setResearchError(null)
+    try {
+      const response = await fetch("/api/dependency-research", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          repoUrl: scannedRepoUrl,
+          commit: scannedCommit,
+          target: `${issue.analysisRef.package}@${issue.analysisRef.version}`,
+        }),
+      })
+      const data = await response.json() as {
+        error?: string
+        manager?: string
+        nodes?: { id: string; kind: "project" | "package"; name: string; version: string | null; runtime: "production" | "development" | "both" | "unknown"; location: string }[]
+        edges?: { from: string; to: string; kind: string; requested: string }[]
+        paths?: { runtime: "production" | "development"; nodeIds: string[] }[]
+        matches?: string[]
+        warnings?: string[]
+      }
+      if (!response.ok || !data.nodes || !data.edges || !data.paths) throw new Error(data.error || "Deep analysis failed")
+      const allNodeById = new Map(data.nodes.map((node) => [node.id, node]))
+      const projectIds = new Set(data.nodes.filter((node) => node.kind === "project").map((node) => node.id))
+      const directIds = new Set(data.edges.filter((edge) => projectIds.has(edge.from)).map((edge) => edge.to))
+      const matchIds = new Set(data.matches ?? [])
+      const visibleIds = new Set(data.nodes.length <= 300
+        ? data.nodes.map((node) => node.id)
+        : [...data.paths.flatMap((path) => path.nodeIds), ...(data.matches ?? [])])
+      if (data.nodes.length > 300) {
+        for (const edge of data.edges) {
+          if (visibleIds.size >= 300) break
+          if (visibleIds.has(edge.from) || visibleIds.has(edge.to)) {
+            visibleIds.add(edge.from)
+            if (visibleIds.size < 300) visibleIds.add(edge.to)
+          }
+        }
+      }
+      const visibleNodes = [...visibleIds].map((id) => allNodeById.get(id)).filter((node): node is NonNullable<typeof node> => !!node)
+      setResearch({
+        raw: data,
+        nodes: visibleNodes.map((node) => ({
+          id: node.id,
+          name: node.name,
+          version: node.version,
+          runtime: node.runtime,
+          kind: node.kind === "project" ? (node.location === "." ? "root" : "workspace") : directIds.has(node.id) ? "direct" : "transitive",
+          severity: matchIds.has(node.id) ? issue.severity : "none",
+          installPath: node.location,
+          packageManager: data.manager,
+        })),
+        edges: data.edges.filter((edge) => visibleIds.has(edge.from) && visibleIds.has(edge.to)).map((edge) => ({ source: edge.from, target: edge.to, label: `${edge.kind} · ${edge.requested}`, optional: edge.kind === "optional" })),
+        paths: data.paths.map((path, index) => ({ id: `path-${index}`, nodeIds: path.nodeIds, runtime: path.runtime })),
+        summary: {
+          title: locale === "ru" ? `Пути к ${issue.analysisRef.package}` : `Paths to ${issue.analysisRef.package}`,
+          description: (data.warnings ?? []).length
+            ? (locale === "ru" ? `Граф построен с ${data.warnings!.length} предупреждениями о неоднозначных связях.` : `Graph built with ${data.warnings!.length} unresolved-link warnings.`)
+            : (locale === "ru" ? "Связи восстановлены из lock-файла; код проекта не запускался." : "Links reconstructed from the lockfile; repository code was not executed."),
+          totalNodes: data.nodes.length,
+          productionNodes: data.nodes.filter((node) => node.runtime === "production" || node.runtime === "both").length,
+          developmentNodes: data.nodes.filter((node) => node.runtime === "development" || node.runtime === "both").length,
+          unknownNodes: data.nodes.filter((node) => node.runtime === "unknown").length,
+          vulnerableNodes: matchIds.size,
+        },
+      })
+    } catch (err) {
+      setResearchError(err instanceof Error ? err.message : "Deep analysis failed")
+    } finally {
+      setResearchLoading(false)
+    }
+  }
+
+  function downloadResearch(format: "json" | "md") {
+    if (!research) return
+    const md = (value: string) => value.replace(/[\\`*_[\]{}()#+.!<>|-]/g, "\\$&")
+    const nodeById = new Map(research.nodes.map((node) => [node.id, node]))
+    const markdown = [
+      `# Dependency research: ${md(issue?.analysisRef?.package ?? "package")}`,
+      "",
+      research.summary.description ?? "",
+      "",
+      `- Nodes: ${research.summary.totalNodes}`,
+      `- Production: ${research.summary.productionNodes}`,
+      `- Development: ${research.summary.developmentNodes}`,
+      `- Unknown: ${research.summary.unknownNodes ?? 0}`,
+      "",
+      "## Paths",
+      "",
+      ...research.paths.map((path) => `- **${path.runtime}**: ${path.nodeIds.map((id) => {
+        const node = nodeById.get(id)
+        return md(node ? `${node.name}${node.version ? `@${node.version}` : ""}` : id)
+      }).join(" → ")}`),
+      "",
+    ].join("\n")
+    const content = format === "json" ? JSON.stringify(research.raw, null, 2) : markdown
+    const blob = new Blob([content], { type: format === "json" ? "application/json" : "text/markdown" })
+    const url = URL.createObjectURL(blob)
+    const anchor = document.createElement("a")
+    anchor.href = url
+    anchor.download = `dependency-research-${issue?.analysisRef?.package.replace(/[^a-z0-9._-]/gi, "-") ?? "report"}.${format}`
+    anchor.click()
+    URL.revokeObjectURL(url)
+  }
+
   const scannerId = issue ? resolveScanner(issue) : null
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="right" className="w-full gap-0 overflow-y-auto sm:max-w-md">
+      <SheetContent side="right" className={cn("w-full gap-0 overflow-y-auto", research ? "sm:max-w-5xl" : "sm:max-w-md")}>
         {issue && (
           <>
             <SheetHeader className="space-y-2 border-b border-border">
@@ -198,6 +313,31 @@ export function IssueDrawer({
                   </p>
                 )}
               </div>
+
+              {issue.analysisRef && scannedRepoUrl && (
+                <div className="space-y-3 rounded-md border border-border bg-muted/20 p-3">
+                  <div className="flex flex-wrap items-start justify-between gap-2">
+                    <div>
+                      <p className="flex items-center gap-1.5 text-xs font-medium"><Network className="size-3.5 text-primary" />{locale === "ru" ? "Глубокое исследование зависимости" : "Deep dependency research"}</p>
+                      <p className="mt-1 text-xs text-muted-foreground">{locale === "ru" ? "Повторно клонирует выбранный commit и восстанавливает полные production/dev пути. Ничего из репозитория не запускается." : "Re-clones the selected commit and reconstructs complete production/dev paths. Repository code is never executed."}</p>
+                    </div>
+                    <Button size="sm" variant="outline" onClick={investigateDependency} disabled={researchLoading}>
+                      {researchLoading ? <Loader2 className="size-3.5 animate-spin" /> : <Network className="size-3.5" />}
+                      {researchLoading ? (locale === "ru" ? "Исследуем…" : "Researching…") : (locale === "ru" ? "Исследовать пути" : "Research paths")}
+                    </Button>
+                  </div>
+                  {researchError && <p className="text-xs text-destructive">{researchError}</p>}
+                  {research && (
+                    <>
+                      <DependencyResearchGraph {...research} />
+                      <div className="flex flex-wrap gap-1">
+                        <Button size="sm" variant="ghost" onClick={() => downloadResearch("json")}><Download className="size-3.5" />JSON</Button>
+                        <Button size="sm" variant="ghost" onClick={() => downloadResearch("md")}><Download className="size-3.5" />Markdown</Button>
+                      </div>
+                    </>
+                  )}
+                </div>
+              )}
 
               {/* Actions */}
               <div className="flex flex-wrap gap-1 border-t border-border pt-3">

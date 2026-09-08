@@ -14,9 +14,8 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'Repo Anti-Rot — Code Health & Decay Monitor',
-  description: 'Track repository rot over time: dead env vars, unused dependencies, stale branches, TODO debt and secrets in history.',
-  generator: 'v0.app',
+  title: 'Repo Janitor — Repository Maintenance, Prioritized',
+  description: 'Scan a public repository for maintenance issues and get a prioritized action plan. Explore findings, check the evidence, and track improvements.',
   icons: {
     icon: [
       {
