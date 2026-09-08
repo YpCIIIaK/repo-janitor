@@ -7,15 +7,21 @@ import { categoryLabels, type Grade, type Issue, type IssueCategory, type Severi
  * recomputed in the browser, so we need the exact same weights/rounding the
  * scanner used. If the engine weights change, change them here too.
  */
-export type SeverityWeights = Record<Severity, number>
+export type SeverityWeights = Record<Severity, number> & { infoCap?: number }
 
 /** Built-in defaults — must mirror the engine (packages/core/src/config.ts). */
-export const DEFAULT_WEIGHTS: SeverityWeights = { critical: 10, warning: 3, info: 0.25 }
+export const DEFAULT_WEIGHTS: SeverityWeights = { critical: 10, warning: 3, info: 0.25, infoCap: 10 }
+
+/** Reports created before weights were persisted used the uncapped formula. */
+export function reportWeights(report: { config?: { weights: SeverityWeights } }): SeverityWeights {
+  return report.config?.weights ?? { critical: 10, warning: 3, info: 0.25 }
+}
 
 /**
  * Per-tier discount curve — must mirror the engine (packages/core/src/engine.ts).
  * The first `full` findings cost full weight; after that each costs less than the
- * one before, and never nothing. `test/score-parity.test.ts` holds the two copies
+ * one before. Current weights cap info at 10 points; legacy weights omit the cap.
+ * `test/score-parity.test.ts` holds the two copies
  * to the same numbers.
  */
 export interface PenaltyCurve {
@@ -32,8 +38,10 @@ export const SEVERITY_CURVE: Record<Severity, PenaltyCurve> = {
 /** Points one severity tier subtracts for `count` findings. */
 export function tierPenalty(count: number, weight: number, curve: PenaltyCurve): number {
   if (count <= 0) return 0
-  if (count <= curve.full) return count * weight
-  return weight * (curve.full + Math.pow(count - curve.full, curve.alpha))
+  const raw = count <= curve.full
+    ? count * weight
+    : weight * (curve.full + Math.pow(count - curve.full, curve.alpha))
+  return raw
 }
 
 export interface SeverityPenalty {
@@ -41,7 +49,7 @@ export interface SeverityPenalty {
   count: number
   /** Points this tier actually subtracted, after its discount. */
   penalty: number
-  /** True once the discount has begun — further findings cost less, never nothing. */
+  /** True when tapering or the informational budget reduces the linear penalty. */
   discounted: boolean
 }
 
@@ -60,13 +68,14 @@ export function penaltyBreakdown(
   for (const i of issues) counts[i.severity]++
 
   return (["critical", "warning", "info"] as const).map((severity) => {
-    // Mirrors the engine: a cap never clips a single finding below its own weight.
     const curve = SEVERITY_CURVE[severity]
+    const raw = tierPenalty(counts[severity], weights[severity], curve)
+    const penalty = severity === "info" ? Math.min(raw, weights.infoCap ?? Infinity) : raw
     return {
       severity,
       count: counts[severity],
-      penalty: tierPenalty(counts[severity], weights[severity], curve),
-      discounted: counts[severity] > curve.full,
+      penalty,
+      discounted: counts[severity] > curve.full || penalty < raw,
     }
   })
 }
@@ -90,7 +99,8 @@ export function computeScore(issues: Issue[], weights: SeverityWeights = DEFAULT
  * A consequence worth knowing rather than hiding: inside a discounted tier,
  * fixing one finding raises the score by less than its listed cost — the
  * remaining ones absorb part of it. The UI says so where it shows these numbers.
- * What no longer happens is a finding worth exactly nothing.
+ * At the informational ceiling, fixing a single note may not change the score.
+ * The notes remain listed; this attribution is not a promised improvement.
  */
 export function issueCosts(
   issues: Issue[],

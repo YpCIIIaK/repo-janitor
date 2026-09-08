@@ -57,6 +57,14 @@ export const issueSchema = z.object({
    * REDACTED (the credential is masked) so the report never leaks the value.
    */
   evidence: z.string().optional(),
+  /** Stable input for an optional, separately requested deep analysis. */
+  analysisRef: z.object({
+    kind: z.literal("dependency"),
+    ecosystem: z.string(),
+    package: z.string(),
+    version: z.string(),
+    advisoryId: z.string(),
+  }).optional(),
   /**
    * Optional AI-generated assessment. Attached client-side by the dashboard when
    * AI analysis is enabled; the core scanners never populate it.
@@ -124,6 +132,8 @@ export const scanReportSchema = z.object({
         critical: z.number().nonnegative(),
         warning: z.number().nonnegative(),
         info: z.number().nonnegative(),
+        // Absent in legacy reports: preserve their uncapped informational curve.
+        infoCap: z.number().nonnegative().optional(),
       }),
     })
     .optional(),

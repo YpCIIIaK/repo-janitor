@@ -1,0 +1,134 @@
+{
+  "generatedAt": "2026-09-07T00:00:00.000Z",
+  "scanners": [
+    "project-hygiene",
+    "skipped-tests",
+    "leftover-debug"
+  ],
+  "before": {
+    "schemaVersion": 1,
+    "repo": {
+      "owner": "demo",
+      "name": "cart-example",
+      "defaultBranch": "main"
+    },
+    "generatedAt": "2026-09-07T00:00:00.000Z",
+    "score": 97,
+    "grade": "A",
+    "issues": [
+      {
+        "id": "debug-src/cart.ts:2",
+        "category": "hygiene",
+        "severity": "info",
+        "title": "Leftover console.log in source",
+        "location": "src/cart.ts:2",
+        "ageDays": 0,
+        "detail": "A `console.log` call is committed in source. If it was for debugging, remove it; for real logging prefer a logger or console.error/warn.",
+        "evidence": "console.log(…)",
+        "scanner": "leftover-debug"
+      },
+      {
+        "id": "debug-src/cart.ts:3",
+        "category": "hygiene",
+        "severity": "info",
+        "title": "Leftover debugger in source",
+        "location": "src/cart.ts:3",
+        "ageDays": 0,
+        "detail": "A `debugger` statement is committed in source — remove it before shipping.",
+        "evidence": "debugger",
+        "scanner": "leftover-debug"
+      },
+      {
+        "id": "skiptest-tests/cart.test.ts:3",
+        "category": "hygiene",
+        "severity": "warning",
+        "title": "Disabled coverage: focused test (.only)",
+        "location": "tests/cart.test.ts:3",
+        "ageDays": 0,
+        "detail": "A focused test (.only) is committed — focusing disables every other test in this file, so the suite can pass while almost nothing runs. Remove the focus before merging.",
+        "evidence": "it.only('adds prices', () => {",
+        "scanner": "skipped-tests"
+      }
+    ],
+    "diagnostics": {
+      "completedScanners": [
+        "project-hygiene",
+        "leftover-debug",
+        "skipped-tests"
+      ],
+      "failedScanners": [],
+      "history": "unavailable"
+    },
+    "config": {
+      "weights": {
+        "critical": 10,
+        "warning": 3,
+        "info": 0.25,
+        "infoCap": 10
+      }
+    },
+    "metrics": {
+      "linesOfCode": 13
+    },
+    "profile": {
+      "totalFiles": 6,
+      "languages": [
+        {
+          "language": "TypeScript",
+          "files": 2,
+          "loc": 13
+        }
+      ],
+      "tools": [
+        "Node.js",
+        "GitHub Actions"
+      ]
+    }
+  },
+  "after": {
+    "schemaVersion": 1,
+    "repo": {
+      "owner": "demo",
+      "name": "cart-example",
+      "defaultBranch": "main"
+    },
+    "generatedAt": "2026-09-07T00:00:00.000Z",
+    "score": 100,
+    "grade": "A",
+    "issues": [],
+    "diagnostics": {
+      "completedScanners": [
+        "project-hygiene",
+        "leftover-debug",
+        "skipped-tests"
+      ],
+      "failedScanners": [],
+      "history": "unavailable"
+    },
+    "config": {
+      "weights": {
+        "critical": 10,
+        "warning": 3,
+        "info": 0.25,
+        "infoCap": 10
+      }
+    },
+    "metrics": {
+      "linesOfCode": 11
+    },
+    "profile": {
+      "totalFiles": 6,
+      "languages": [
+        {
+          "language": "TypeScript",
+          "files": 2,
+          "loc": 11
+        }
+      ],
+      "tools": [
+        "Node.js",
+        "GitHub Actions"
+      ]
+    }
+  }
+}

@@ -12,7 +12,7 @@ import { categorySchema, type Issue } from "./schema"
 export const CONFIG_FILENAME = ".repo-anti-rot.json"
 
 /** Default severity penalties — must mirror the client (lib/score.ts). */
-export const DEFAULT_WEIGHTS = { critical: 10, warning: 3, info: 0.25 } as const
+export const DEFAULT_WEIGHTS = { critical: 10, warning: 3, info: 0.25, infoCap: 10 } as const
 
 /**
  * Inline ignore markers (eslint-style, no overlap):
@@ -69,7 +69,7 @@ export interface ResolvedConfig {
   /** rules that suppress individual findings post-scan (reviewed/accepted) */
   mute: MuteRule[]
   /** effective severity weights (defaults merged with any overrides) */
-  weights: { critical: number; warning: number; info: number }
+  weights: { critical: number; warning: number; info: number; infoCap?: number }
 }
 
 export function defaultConfig(): ResolvedConfig {

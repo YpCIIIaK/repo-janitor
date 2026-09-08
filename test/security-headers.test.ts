@@ -27,6 +27,7 @@ describe("next.config headers", () => {
   })
 
   it("applies the full policy site-wide and a framing exception under /embed", async () => {
+    if (!nextConfig.headers) throw new Error("Security headers must be configured")
     const rows = await nextConfig.headers()
     const site = rows.find((r) => r.source === "/:path*")
     const embed = rows.find((r) => r.source === "/embed/:path*")

@@ -38,7 +38,7 @@ import { ModePanel } from "@/components/repo-anti-rot/mode-panel"
 import { ScanHistory } from "@/components/repo-anti-rot/scan-history"
 import { filterMode } from "@/lib/issue-modes"
 import { useSnoozed, partitionSnoozed, clearSnoozedForRepo } from "@/lib/snooze-store"
-import { computeScore, scoreToGrade } from "@/lib/score"
+import { computeScore, scoreToGrade, reportWeights } from "@/lib/score"
 import { scopeLine } from "@/lib/verdict"
 import { cn } from "@/lib/utils"
 import { useLocale } from "@/components/i18n/locale-provider"
@@ -165,7 +165,7 @@ export default function DashboardPage() {
   // which we recompute in the browser using the same weights as the engine.
   const sidebarRepos: SidebarRepo[] = repos.map((r) => {
     const { live } = partitionSnoozed(r.id, r.latest.issues, snoozed)
-    const score = computeScore(live, r.latest.config?.weights)
+    const score = computeScore(live, reportWeights(r.latest))
     return {
       id: r.id,
       name: r.name,
@@ -185,7 +185,7 @@ export default function DashboardPage() {
   const scanScope = scopeLine(current.latest.profile)
 
   const allIssues = current.latest.issues
-  const weights = current.latest.config?.weights
+  const weights = reportWeights(current.latest)
   const { live: issues } = partitionSnoozed(current.id, allIssues, snoozed)
   const liveScore = computeScore(issues, weights)
   const liveGrade = scoreToGrade(liveScore)

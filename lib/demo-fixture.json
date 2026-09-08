@@ -1,0 +1,18 @@
+{
+  "description": "Educational fixture owned by Repo Janitor; no third-party repository or security claim.",
+  "scanners": ["project-hygiene", "skipped-tests", "leftover-debug"],
+  "common": {
+    "README.md": "# Cart example\nEducational fixture for the Repo Janitor demo.\n",
+    "LICENSE": "MIT License\nCopyright (c) Repo Janitor contributors\n",
+    "package.json": "{\"name\":\"repo-janitor-demo\",\"private\":true,\"type\":\"module\"}\n",
+    ".github/workflows/test.yml": "name: Tests\non: [push]\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - run: echo 'Educational fixture only'\n"
+  },
+  "before": {
+    "src/cart.ts": "export function subtotal(prices: number[]) {\n  console.log('calculating subtotal', prices);\n  debugger;\n  return prices.reduce((sum, price) => sum + price, 0);\n}\n",
+    "tests/cart.test.ts": "import { it, expect } from 'vitest';\nimport { subtotal } from '../src/cart';\nit.only('adds prices', () => {\n  expect(subtotal([2, 3])).toBe(5);\n});\nit('handles an empty cart', () => {\n  expect(subtotal([])).toBe(0);\n});\n"
+  },
+  "after": {
+    "src/cart.ts": "export function subtotal(prices: number[]) {\n  return prices.reduce((sum, price) => sum + price, 0);\n}\n",
+    "tests/cart.test.ts": "import { it, expect } from 'vitest';\nimport { subtotal } from '../src/cart';\nit('adds prices', () => {\n  expect(subtotal([2, 3])).toBe(5);\n});\nit('handles an empty cart', () => {\n  expect(subtotal([])).toBe(0);\n});\n"
+  }
+}

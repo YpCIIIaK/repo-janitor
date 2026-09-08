@@ -45,14 +45,14 @@ export const LOCALE_LABELS: Record<Locale, string> = {
 }
 
 const en = {
-  "welcome.title": "Welcome to Repo Anti-Rot",
+  "welcome.title": "Welcome to Repo Janitor",
   "welcome.lead":
-    "Point Repo Anti-Rot at any public git repo and it will measure the decay — secrets, stale branches, dead code and dependency rot — then hand you a health grade.",
+    "Check a public repository for maintenance issues, inspect the evidence, and get a prioritized plan of what to improve first.",
 
   // The scan form. It sits on the landing page, so it is rule 1, not rule 3.
   "scan.formTitle": "Run a real scan",
   "scan.formLead":
-    "Search GitHub or paste a repository URL, then add it to the list. Everything in the list is cloned and scanned by the Repo Anti-Rot engine — no mock data.",
+    "Search GitHub or paste a repository URL, then add it to the list. Everything in the list is cloned and scanned by the Repo Janitor engine — no mock data.",
   "scan.run": "Run scan",
   "scan.running": "Scanning…",
   "scan.urls": "{count} URL · max {max} per run",
@@ -163,7 +163,7 @@ const en = {
   "summary.scansHint": "the sample these numbers are drawn from",
   "summary.spread": "How the grades fall",
   "landing.checks.lead":
-    "Every one is calibrated against real repositories before it ships — the rule only stays if it stays quiet on projects that are doing it right.",
+    "Explore checks for security, dependencies, configuration and maintenance. Each finding includes an explanation so you can assess it in your project's context.",
   "landing.cat.security.title": "Security",
   "landing.cat.security.body":
     "Credentials committed to the working tree or buried in history, dependencies with published advisories, dangerous constructs in your own code, and workflows that hand a stranger your token.",
@@ -185,7 +185,7 @@ const en = {
 
   "landing.grade.title": "How the grade is worked out",
   "landing.grade.lead":
-    "A score out of 100, starting at 100 and losing points per finding: {critical} for a critical, {warning} for a warning, {info} for an info note. Past the first few of a kind, each additional finding costs less than the last — so a pile of small notes can never cost a whole grade band, and none of them is ever free.",
+    "A score out of 100: base penalties are {critical} for a critical finding, {warning} for a warning and {info} for an informational note. Repeated findings taper. In new scans, informational notes together subtract at most 10 points; warnings and critical findings remain uncapped.",
 
   "landing.privacy.title": "What happens to your code",
   "landing.privacy.clone":
@@ -204,11 +204,22 @@ const en = {
   // The redesigned landing page: hero, numbered section labels, and the copy
   // that only exists in that layout. Everything factual still comes from
   // lib/landing-facts.ts — these are labels, not claims.
-  "hero.eyebrow": "code health & decay monitor",
-  "hero.titleTop": "Your repo is rotting.",
-  "hero.titleBottom": "Nobody committed it.",
+  "hero.account": "accounts needed",
+  "hero.scan": "Check your repository",
+  "hero.demo": "Explore a demo report",
+  "hero.resultLabel": "From a finding to an improvement",
+  "hero.resultFind": "Inspect the findings",
+  "hero.resultFindBody": "See affected files, severity, and the reason behind each finding. Verify the context before making changes.",
+  "hero.resultPlan": "Choose what to fix first",
+  "hero.resultPlanBody": "Open the prioritized action plan with suggested steps and ways to verify a fix.",
+  "hero.resultRepeat": "Check your progress",
+  "hero.resultRepeatBody": "Scan again after a change. Add the CLI or GitHub Action when you want checks in your workflow.",
+  "hero.limits": "The score describes repository maintenance signals, not proven security. Findings can need project-specific context; inspect the evidence and report false positives.",
+  "hero.eyebrow": "Repo Janitor · repository maintenance",
+  "hero.titleTop": "Know what needs attention.",
+  "hero.titleBottom": "See where to start.",
   "hero.checks": "checks",
-  "hero.families": "families",
+  "hero.families": "areas",
   "hero.mock": "mock data",
   "hero.note": "No account, no install. The repository is cloned to a temporary directory, read, and deleted when the scan finishes.",
 
@@ -220,7 +231,7 @@ const en = {
 
   "landing.checks.aside": "false positives are bugs",
   "landing.checks.calibration": "calibration",
-  "landing.checks.calibrationBody": "A check that fires on a healthy repository is a bug, not a finding. Every rule runs against the corpus before it ships.",
+  "landing.checks.calibrationBody": "Rules can misinterpret project context. Report incorrect findings so we can reproduce them and add regression tests.",
   "landing.checks.calibrationLink": "Report a false positive",
 
   "landing.grade.ruler": "score",
@@ -351,7 +362,7 @@ const en = {
   "gradeCard.scanned": "Scanned {when}",
   "gradeCard.notes": "notes",
   "gradeCard.points": "−{points}",
-  "gradeCard.taperNote": "Each additional finding of a kind costs less than the last — never nothing, so clearing any of them still helps.",
+  "gradeCard.taperNote": "Repeated findings have a reduced impact. All findings remain visible, even when resolving one does not change the rounded score.",
   "gradeCard.clean": "No secrets, known vulnerabilities, end-of-life runtimes or workflow security issues found.",
   "gradeCard.cleanScoped": "No secrets, known vulnerabilities, end-of-life runtimes or workflow security issues found across {scope}.",
   "gradeLabel.A": "Healthy",
@@ -382,7 +393,7 @@ const en = {
   "theme.chalk": "Chalk",
   // --- dashboard chrome -----------------------------------------------------
   "nav.dashboard": "Dashboard",
-  "nav.brandHome": "Repo Anti-Rot — back to the start",
+  "nav.brandHome": "Repo Janitor — back to the start",
   "nav.backHome": "Back to the start",
   "nav.backHomeLong": "Back to the start — scan another repository",
   "nav.switchRepo": "Switch repository",
@@ -475,13 +486,13 @@ export type MessageKey = keyof typeof en
 export type Messages = Record<MessageKey, string>
 
 const ru: Messages = {
-  "welcome.title": "Repo Anti-Rot",
+  "welcome.title": "Repo Janitor",
   "welcome.lead":
-    "Укажите любой публичный git-репозиторий, и Repo Anti-Rot измерит его распад — секреты, заброшенные ветки, мёртвый код и гниль зависимостей — и выставит оценку здоровья.",
+    "Проверьте публичный репозиторий: получите находки с пояснениями и план обслуживания, чтобы понять, что стоит исправить в первую очередь.",
 
   "scan.formTitle": "Запустить настоящий скан",
   "scan.formLead":
-    "Найдите репозиторий на GitHub или вставьте ссылку и добавьте в список. Всё, что в списке, будет склонировано и просканировано движком Repo Anti-Rot — без выдуманных данных.",
+    "Найдите репозиторий на GitHub или вставьте ссылку и добавьте в список. Всё, что в списке, будет склонировано и просканировано движком Repo Janitor — без выдуманных данных.",
   "scan.run": "Запустить скан",
   "scan.running": "Сканируем…",
   "scan.urls": "ссылок: {count} · не больше {max} за раз",
@@ -582,7 +593,7 @@ const ru: Messages = {
   "summary.scansHint": "выборка, из которой посчитано",
   "summary.spread": "Как распределяются грейды",
   "landing.checks.lead":
-    "Каждая откалибрована на живых репозиториях до выхода: правило остаётся, только если молчит на проектах, где всё сделано правильно.",
+    "Проверки безопасности, зависимостей, конфигурации и обслуживания. У каждой находки есть объяснение, чтобы вы могли оценить её в контексте своего проекта.",
   "landing.cat.security.title": "Безопасность",
   "landing.cat.security.body":
     "Ключи в рабочем дереве и в истории коммитов, зависимости с опубликованными адвизори, опасные конструкции в вашем коде и воркфлоу, отдающие токен постороннему.",
@@ -604,7 +615,7 @@ const ru: Messages = {
 
   "landing.grade.title": "Как считается оценка",
   "landing.grade.lead":
-    "Сто баллов, из которых вычитается за каждую находку: {critical} за критичную, {warning} за предупреждение, {info} за заметку. После первых нескольких находок одного вида каждая следующая стоит меньше предыдущей — поэтому россыпь мелочи не может стоить целой ступени грейда, но и бесплатной не становится ни одна.",
+    "Оценка из 100 баллов: базовый штраф — {critical} за критичную находку, {warning} за предупреждение и {info} за информационную заметку. Повторные находки влияют меньше. В новых проверках все заметки вместе снимают максимум 10 баллов; для предупреждений и критичных находок такого ограничения нет.",
 
   "landing.privacy.title": "Что происходит с вашим кодом",
   "landing.privacy.clone":
@@ -620,11 +631,22 @@ const ru: Messages = {
   "landing.ci.badge":
     "Сканы из CI держат бейдж здоровья актуальным — тот самый, что стоит в README этого проекта.",
   "landing.ci.repo": "Настройка описана в README",
-  "hero.eyebrow": "монитор здоровья и распада кода",
-  "hero.titleTop": "Ваш репозиторий гниёт.",
-  "hero.titleBottom": "Этого никто не коммитил.",
+  "hero.account": "нужных аккаунтов",
+  "hero.scan": "Проверить репозиторий",
+  "hero.demo": "Посмотреть демоотчёт",
+  "hero.resultLabel": "От находки к исправлению",
+  "hero.resultFind": "Разберитесь в находках",
+  "hero.resultFindBody": "Посмотрите файлы, серьёзность и причины находок. Проверьте контекст, прежде чем менять код.",
+  "hero.resultPlan": "Выберите, что исправить первым",
+  "hero.resultPlanBody": "Откройте приоритетный план с предложениями по исправлению и проверке результата.",
+  "hero.resultRepeat": "Проверьте результат",
+  "hero.resultRepeatBody": "Повторите скан после изменений. Подключите CLI или GitHub Action для проверок в рабочем процессе.",
+  "hero.limits": "Оценка отражает сигналы о состоянии репозитория, а не доказанную безопасность. Находки требуют учёта контекста проекта: проверяйте пояснения и сообщайте о ложных срабатываниях.",
+  "hero.eyebrow": "Repo Janitor · обслуживание репозиториев",
+  "hero.titleTop": "Что требует внимания?",
+  "hero.titleBottom": "Узнайте, с чего начать.",
   "hero.checks": "проверок",
-  "hero.families": "семейств",
+  "hero.families": "направлений",
   "hero.mock": "выдуманных данных",
   "hero.note": "Без аккаунта и без установки. Репозиторий клонируется во временную папку, читается и удаляется по окончании скана.",
 
@@ -636,7 +658,7 @@ const ru: Messages = {
 
   "landing.checks.aside": "ложное срабатывание — это баг",
   "landing.checks.calibration": "калибровка",
-  "landing.checks.calibrationBody": "Проверка, срабатывающая на здоровом репозитории, — это баг, а не находка. Каждое правило прогоняется по выборке до релиза.",
+  "landing.checks.calibrationBody": "Правила могут неверно понимать контекст проекта. Сообщайте об ошибочных находках: это помогает воспроизвести проблему и добавить регрессионные тесты.",
   "landing.checks.calibrationLink": "Сообщить о ложном срабатывании",
 
   "landing.grade.ruler": "оценка",
@@ -760,7 +782,7 @@ const ru: Messages = {
   "gradeCard.scanned": "Скан {when}",
   "gradeCard.notes": "заметок",
   "gradeCard.points": "−{points}",
-  "gradeCard.taperNote": "Каждая следующая находка того же вида стоит дешевле предыдущей — но не бесплатна, поэтому убрать любую из них всё равно полезно.",
+  "gradeCard.taperNote": "Повторные находки влияют на оценку меньше. Все находки остаются видны, даже если исправление одной из них не меняет округлённый балл.",
   "gradeCard.clean": "Ни секретов, ни известных уязвимостей, ни устаревших рантаймов, ни проблем с безопасностью workflow.",
   "gradeCard.cleanScoped": "Ни секретов, ни известных уязвимостей, ни устаревших рантаймов, ни проблем с безопасностью workflow — на объёме {scope}.",
   "gradeLabel.A": "Хорошее состояние",
@@ -793,7 +815,7 @@ const ru: Messages = {
 
   // --- dashboard chrome -----------------------------------------------------
   "nav.dashboard": "Дашборд",
-  "nav.brandHome": "Repo Anti-Rot — в начало",
+  "nav.brandHome": "Repo Janitor — в начало",
   "nav.backHome": "В начало",
   "nav.backHomeLong": "В начало — просканировать другой репозиторий",
   "nav.switchRepo": "Сменить репозиторий",

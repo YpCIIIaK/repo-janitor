@@ -51,6 +51,8 @@ describe("client mirror agrees with the engine", () => {
     const shapes = [
       {},
       { info: 3 },
+      { info: 100_000 },
+      { critical: 1, warning: 1, info: 100_000 },
       { warning: 2, info: 12 },
       { critical: 1, warning: 4, info: 20 },
       { critical: 7, warning: 17, info: 25 }, // psf/requests
@@ -65,11 +67,9 @@ describe("client mirror agrees with the engine", () => {
 })
 
 describe("the curve behaves as claimed", () => {
-  it("charges every finding something, however many there are", () => {
-    // The property the taper exists for: no finding is ever free. Under the cap
-    // it replaced, the fourteenth warning cost exactly nothing — the tool listed
-    // a finding and privately valued it at zero.
-    for (const sev of ["critical", "warning", "info"] as const) {
+  it("keeps uncapped warning and critical penalties increasing", () => {
+    // Significant findings continue to increase their tier penalty.
+    for (const sev of ["critical", "warning"] as const) {
       const w = ENGINE_WEIGHTS[sev]
       const curve = SEVERITY_CURVE[sev]
       for (const k of [50, 200, 1000, 10_000]) {
@@ -100,9 +100,39 @@ describe("the curve behaves as claimed", () => {
     }
   })
 
-  it("still lets security findings tank a score", () => {
-    // The reason criticals taper last and least. A repository with a dozen live
-    // CVEs must not be able to sit in a passing band.
+  it("still lets critical findings lower a score substantially", () => {
+    // Severity is scanner evidence, not proof of an exploitable vulnerability.
     expect(engineScore(make({ critical: 12 }))).toBeLessThan(40)
   })
+})
+
+
+describe("informational budget", () => {
+  it("is monotone and bounded at 10 regardless of volume", () => {
+    let previous = 0
+    for (const count of [0, 1, 20, 1000, 2000, 10_000, 100_000]) {
+      const penalty = 100 - engineScore(make({ info: count }))
+      expect(penalty).toBeGreaterThanOrEqual(previous)
+      expect(penalty).toBeLessThanOrEqual(10)
+      previous = penalty
+    }
+    expect(previous).toBe(10)
+  })
+
+  it("keeps browser and core aligned for custom weights at the ceiling", () => {
+    const findings = make({ critical: 1, warning: 2, info: 20 })
+    const weights = { critical: 12, warning: 5, info: 30, infoCap: 10 }
+    expect(clientScore(findings, weights)).toBe(68)
+    expect(clientScore(findings, weights)).toBe(engineScore(findings, weights))
+  })
+})
+
+
+it("preserves uncapped historical scores when the persisted infoCap is absent", () => {
+  const findings = make({ info: 100_000 })
+  const legacy = { critical: 10, warning: 3, info: 0.25 }
+  expect(clientScore(findings, legacy)).toBe(70)
+  expect(engineScore(findings, legacy)).toBe(70)
+  expect(clientScore(findings)).toBe(90)
+  expect(engineScore(findings)).toBe(90)
 })

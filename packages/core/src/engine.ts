@@ -65,33 +65,11 @@ export const defaultScanners: Scanner[] = [
  * {@link SEVERITY_CURVE}. info is deliberately near-cosmetic — a quarter of a
  * point — so a pile of low-signal notes cannot meaningfully move the grade; a
  * repo can override these via .repo-anti-rot.json. */
-export type SeverityWeights = { critical: number; warning: number; info: number }
+export type SeverityWeights = { critical: number; warning: number; info: number; infoCap?: number }
 
-/**
- * How a tier's penalty grows with the number of findings in it.
- *
- * The first `full` findings cost their weight outright. After that each one
- * still costs something, but less than the one before it — the tail is
- * `weight * (n - full) ** alpha`, whose slope falls away without ever reaching
- * zero.
- *
- * This replaced a hard per-tier cap, and the reason is worth stating. Under a
- * cap the fourteenth warning cost exactly nothing: the tool listed a finding and
- * privately valued it at zero, which is the tool disagreeing with itself in
- * front of the user. Worse, the score stopped distinguishing between repos once
- * they were past the cap — psf/requests and clap-rs/clap both scored 0 out of
- * 100, and a scale that returns the same number for meaningfully different
- * repositories has stopped measuring.
- *
- * The parameters are calibrated, not chosen: on real reports the score of a
- * typical repository moves by at most a point, while pile-ups spread out instead
- * of piling on the floor. `full` for info is 20 and for warnings 8 because that
- * is where the old linear stretch ended in practice, so the common case is
- * unchanged.
- *
- * Criticals discount last and least — two at full price before the curve starts.
- * Security findings still have to be able to tank a score, which was the point
- * of leaving them uncapped before.
+/** Severity tiers taper after their full-weight stretch. Informational findings
+ * additionally have a 10-point budget: their volume measures maintenance work,
+ * not evidence of serious defects. Warning and critical tiers remain uncapped.
  */
 export interface PenaltyCurve {
   /** How many findings are charged at full weight before the discount begins. */
@@ -100,7 +78,7 @@ export interface PenaltyCurve {
   alpha: number
 }
 
-export const SEVERITY_CURVE: Record<keyof SeverityWeights, PenaltyCurve> = {
+export const SEVERITY_CURVE: Record<"critical" | "warning" | "info", PenaltyCurve> = {
   critical: { full: 2, alpha: 0.7 },
   warning: { full: 8, alpha: 0.5 },
   info: { full: 20, alpha: 0.4 },
@@ -115,8 +93,10 @@ export const SEVERITY_CURVE: Record<keyof SeverityWeights, PenaltyCurve> = {
  */
 export function tierPenalty(count: number, weight: number, curve: PenaltyCurve): number {
   if (count <= 0) return 0
-  if (count <= curve.full) return count * weight
-  return weight * (curve.full + Math.pow(count - curve.full, curve.alpha))
+  const raw = count <= curve.full
+    ? count * weight
+    : weight * (curve.full + Math.pow(count - curve.full, curve.alpha))
+  return raw
 }
 
 /**
@@ -124,11 +104,12 @@ export function tierPenalty(count: number, weight: number, curve: PenaltyCurve):
  * clamps to 0.
  */
 export function computeScore(issues: Issue[], weights: SeverityWeights = DEFAULT_WEIGHTS): number {
-  const counts: Record<keyof SeverityWeights, number> = { critical: 0, warning: 0, info: 0 }
+  const counts: Record<"critical" | "warning" | "info", number> = { critical: 0, warning: 0, info: 0 }
   for (const i of issues) counts[i.severity]++
   let penalty = 0
   for (const sev of ["critical", "warning", "info"] as const) {
-    penalty += tierPenalty(counts[sev], weights[sev], SEVERITY_CURVE[sev])
+    const raw = tierPenalty(counts[sev], weights[sev], SEVERITY_CURVE[sev])
+    penalty += sev === "info" ? Math.min(raw, weights.infoCap ?? Infinity) : raw
   }
   return Math.max(0, Math.round(100 - penalty))
 }

@@ -1,5 +1,6 @@
 import type { Scanner, ScanContext } from "../scanner"
 import type { Issue, Severity } from "../schema"
+import { parseFile, walk, type Node } from "../ast"
 
 /**
  * Insecure Code scanner ⭐.
@@ -75,7 +76,7 @@ const RULES: VulnRule[] = [
     id: "exec-interpolated",
     lang: "js",
     // A shell command assembled from a template literal or string concatenation.
-    re: /\bexec(?:Sync|File)?\s*\(\s*(?:`[^`]*\$\{|['"][^'"]*['"]\s*\+)/g,
+    re: /\bexec(?:Sync)?\s*\(\s*(?:`[^`]*\$\{|['"][^'"]*['"]\s*\+)/g,
     severity: "critical",
     title: "Shell command built by string interpolation",
     detail:
@@ -150,17 +151,9 @@ const RULES: VulnRule[] = [
       "can be reconstructed from earlier values. Use `crypto.randomBytes` / `crypto.getRandomValues` " +
       "for anything anyone is not supposed to guess.",
   },
-  {
-    id: "jwt-verify-false",
-    lang: "js",
-    // jsonwebtoken / jose-style options that skip signature checks.
-    re: /\bverify\s*:\s*false\b/g,
-    severity: "critical",
-    title: "JWT verification disabled (verify: false)",
-    detail:
-      "With verification off, anyone can forge a token and the application will accept it. " +
-      "Remove `verify: false` and always validate the signature with the expected algorithm and key.",
-  },
+  // `verify: false` is not a jsonwebtoken signature-bypass option. Decoding a
+  // token can also be legitimate; detecting authentication based on decoded
+  // claims requires data-flow context, not a generic object-property match.
   {
     id: "localstorage-secret",
     lang: "js",
@@ -367,6 +360,32 @@ export interface CodeHit {
  */
 export function scanSource(content: string, lang: Lang): CodeHit[] {
   const markers = COMMENT_MARKERS[lang]
+  // Parse whole-file text boundaries: line-local quoting cannot distinguish a
+  // multiline documentation string or block comment from executable code.
+  const textRanges: [number, number][] = []
+  const staticFunctionCalls = new Set<number>()
+  if (lang === "js") {
+    const tree = parseFile(content, "source.tsx", { comments: true })
+    const record = (node: Node) => {
+      if (typeof node.start === "number" && typeof node.end === "number") {
+        textRanges.push([node.start, node.end])
+      }
+    }
+    if (tree) {
+      walk(tree, (node) => {
+        if (["StringLiteral", "RegExpLiteral", "TemplateElement"].includes(node.type ?? "")) record(node)
+        // Feature probes and literal functions do not execute external input.
+        // Keep dynamic code generation visible; this is not taint analysis.
+        const callee = node.callee as Node | undefined
+        if (node.type === "NewExpression" && callee?.type === "Identifier" && callee.name === "Function" &&
+          typeof node.start === "number" && Array.isArray(node.arguments) && node.arguments.every((arg: Node) =>
+            arg.type === "StringLiteral" || arg.type === "TemplateLiteral" && Array.isArray(arg.expressions) && arg.expressions.length === 0)) {
+          staticFunctionCalls.add(node.start)
+        }
+      })
+      if (Array.isArray(tree.comments)) for (const comment of tree.comments) record(comment as Node)
+    }
+  }
   // One finding per line: overlapping rules on the same line describe one defect.
   const byLine = new Map<number, CodeHit>()
 
@@ -375,6 +394,8 @@ export function scanSource(content: string, lang: Lang): CodeHit[] {
     rule.re.lastIndex = 0
     for (const m of content.matchAll(rule.re)) {
       const idx = m.index ?? 0
+      if (textRanges.some(([start, end]) => idx >= start && idx < end)) continue
+      if (rule.id === "new-function" && staticFunctionCalls.has(idx)) continue
       const lineStart = content.lastIndexOf("\n", idx - 1) + 1
       const prefix = content.slice(lineStart, idx)
       if (markers.some((mk) => prefix.includes(mk))) continue

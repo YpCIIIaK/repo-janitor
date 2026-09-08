@@ -1,7 +1,7 @@
 import type { Scanner, ScanContext } from "../scanner"
 import type { Issue, Severity } from "../schema"
 import { collectManifestDeps, type OsvEcosystem } from "../manifests"
-import { computeNpmProdSet } from "../lockgraph"
+import { computeNpmPackageInstances, computeNpmProdSet } from "../lockgraph"
 
 /**
  * Vulnerable Dependencies scanner ⭐.
@@ -190,18 +190,40 @@ function mapSeverity(
   return opts.runtime === false ? downgrade(sev) : sev
 }
 
-/** Pick the human severity label OSV exposes (top-level first, then per-affected). */
-function severityLabel(vuln: OsvVuln): string | undefined {
-  return vuln.database_specific?.severity ?? vuln.affected?.[0]?.database_specific?.severity
+/** Pick severity for the package being queried, never from another affected row. */
+function severityLabel(vuln: OsvVuln, ecosystem: OsvEcosystem, name: string): string | undefined {
+  return vuln.database_specific?.severity ?? vuln.affected?.find(
+    (aff) => aff.package?.ecosystem === ecosystem && aff.package?.name === name,
+  )?.database_specific?.severity
 }
 
-/** First published fixed version for the given package, if any. */
-function fixedVersion(vuln: OsvVuln, ecosystem: OsvEcosystem, name: string): string | null {
+function compareVersions(a: string, b: string): number | null {
+  const parse = (value: string) => value.match(/^v?(\d+)\.(\d+)\.(\d+)(?:[-+].*)?$/)?.slice(1).map(Number)
+  const av = parse(a)
+  const bv = parse(b)
+  if (!av || !bv) return null
+  for (let i = 0; i < 3; i++) if (av[i] !== bv[i]) return av[i] - bv[i]
+  return 0
+}
+
+/** Fixed version for the affected interval containing the queried version. */
+function fixedVersion(vuln: OsvVuln, ecosystem: OsvEcosystem, name: string, version: string): string | null {
   for (const aff of vuln.affected ?? []) {
     if (aff.package?.ecosystem !== ecosystem || aff.package?.name !== name) continue
     for (const range of aff.ranges ?? []) {
+      let active = false
       for (const ev of range.events ?? []) {
-        if (ev.fixed) return ev.fixed
+        if (ev.introduced) {
+          const cmp = ev.introduced === "0" ? 1 : compareVersions(version, ev.introduced)
+          if (cmp === null) return null
+          if (cmp >= 0) active = true
+        }
+        if (ev.fixed) {
+          const cmp = compareVersions(version, ev.fixed)
+          if (cmp === null) return null
+          if (active && cmp < 0) return ev.fixed
+          if (cmp >= 0) active = false
+        }
       }
     }
   }
@@ -227,6 +249,15 @@ interface QueryItem {
   runtime: boolean | null
   /** declared directly in the manifest (false = pulled in transitively) */
   direct: boolean
+  /** lockfile install path or pnpm importer/snapshot chain */
+  dependencyPath?: string[]
+}
+
+function normalizeNpmDeclaration(name: string, range: string): { name: string; range: string } {
+  if (!range.startsWith("npm:")) return { name, range }
+  const target = range.slice(4)
+  const at = target.lastIndexOf("@")
+  return at > 0 ? { name: target.slice(0, at), range: target.slice(at + 1) } : { name, range }
 }
 
 /**
@@ -239,16 +270,16 @@ interface QueryItem {
 async function enumerateNpmInstalled(
   ctx: ScanContext,
   fileSet: Set<string>,
-): Promise<Map<string, { version: string; dev: boolean }> | null> {
-  const installed = new Map<string, { version: string; dev: boolean }>()
+): Promise<{ name: string; version: string; dev: boolean }[] | null> {
+  const installed = new Map<string, { name: string; version: string; dev: boolean }>()
   let sawLockfile = false
 
   const add = (name: string, version: string, dev: boolean) => {
     if (!name || !version) return
-    const existing = installed.get(name)
-    // Prefer a non-dev record if we see the same package both ways.
-    if (!existing) installed.set(name, { version, dev })
-    else if (existing.dev && !dev) installed.set(name, { version: existing.version, dev: false })
+    const key = `${name}\0${version}`
+    const existing = installed.get(key)
+    if (!existing) installed.set(key, { name, version, dev })
+    else if (existing.dev && !dev) installed.set(key, { name, version, dev: false })
   }
 
   // package-lock.json / npm-shrinkwrap.json — structured JSON, most reliable.
@@ -304,7 +335,7 @@ async function enumerateNpmInstalled(
     }
   }
 
-  return sawLockfile ? installed : null
+  return sawLockfile ? [...installed.values()] : null
 }
 
 export const vulnerableDepsScanner: Scanner = {
@@ -318,25 +349,42 @@ export const vulnerableDepsScanner: Scanner = {
     // 1) npm — resolve exact versions from package.json + JS lockfiles.
     const fileSet = new Set(ctx.files)
     const raw = await ctx.readFile("package.json")
+    let pkgJson: {
+      dependencies?: Record<string, string>
+      devDependencies?: Record<string, string>
+      optionalDependencies?: Record<string, string>
+    } = {}
     if (raw) {
-      try {
-        const pkgJson = JSON.parse(raw) as {
-          dependencies?: Record<string, string>
-          devDependencies?: Record<string, string>
-          optionalDependencies?: Record<string, string>
+      try { pkgJson = JSON.parse(raw) as typeof pkgJson } catch { /* lockfile analysis still works */ }
+    }
+        const declared: Record<string, string> = {}
+        const devNames = new Set<string>()
+        const prodNames = new Set<string>()
+        for (const [name, range] of Object.entries(pkgJson.devDependencies ?? {})) {
+          const normalized = normalizeNpmDeclaration(name, range)
+          declared[normalized.name] = normalized.range
+          devNames.add(normalized.name)
         }
-        const declared: Record<string, string> = {
-          ...(pkgJson.dependencies ?? {}),
-          ...(pkgJson.devDependencies ?? {}),
-          ...(pkgJson.optionalDependencies ?? {}),
+        for (const group of [pkgJson.dependencies ?? {}, pkgJson.optionalDependencies ?? {}]) {
+          for (const [name, range] of Object.entries(group)) {
+            const normalized = normalizeNpmDeclaration(name, range)
+            declared[normalized.name] = normalized.range
+            prodNames.add(normalized.name)
+          }
         }
-        const devNames = new Set(Object.keys(pkgJson.devDependencies ?? {}))
-        const prodNames = new Set(Object.keys(pkgJson.dependencies ?? {}))
         const declaredNames = new Set(Object.keys(declared))
         // Production reachability from the lockfile graph; null when unreadable.
         const prodSet = await computeNpmProdSet(ctx, fileSet)
-        const isRuntime = (name: string): boolean | null => {
-          // A package declared in this manifest's `dependencies` ships, full stop.
+        const exactInstances = await computeNpmPackageInstances(ctx, fileSet)
+        const exactRuntime = exactInstances ? new Map<string, boolean>() : null
+        for (const item of exactInstances ?? []) {
+          const key = `${item.name}\0${item.version}`
+          exactRuntime!.set(key, (exactRuntime!.get(key) ?? false) || item.runtime)
+        }
+        const isRuntime = (name: string, version?: string): boolean | null => {
+          if (version && exactRuntime?.has(`${name}\0${version}`)) return exactRuntime.get(`${name}\0${version}`)!
+          // A package declared in this manifest's production groups ships when
+          // no exact lockfile instance classification is available.
           if (prodNames.has(name)) return true
           if (prodSet) return prodSet.has(name)
           // No graph: the manifest still tells us about its own direct deps.
@@ -345,16 +393,19 @@ export const vulnerableDepsScanner: Scanner = {
         }
         // Prefer the FULL installed tree from a lockfile (transitive included,
         // like `npm audit`); fall back to declared-only floors with no lockfile.
-        const installed = await enumerateNpmInstalled(ctx, fileSet)
+        const installed = exactInstances ?? await enumerateNpmInstalled(ctx, fileSet)
         if (installed) {
-          for (const [name, { version }] of installed) {
+          for (const item of installed) {
+            const { name, version } = item
+            const exact = "runtime" in item
             queryList.push({
               ecosystem: "npm",
               name,
               version,
-              manifest: "package.json",
-              runtime: isRuntime(name),
-              direct: declaredNames.has(name),
+              manifest: exact ? item.manifest : "package.json",
+              runtime: isRuntime(name, version),
+              direct: exact ? item.direct && (item.manifest !== "package.json" || declaredNames.has(name)) : declaredNames.has(name),
+              dependencyPath: exact ? item.paths : undefined,
             })
           }
         } else if (Object.keys(declared).length > 0) {
@@ -363,15 +414,22 @@ export const vulnerableDepsScanner: Scanner = {
             queryList.push({ ecosystem: "npm", name, version, manifest: "package.json", runtime: isRuntime(name), direct: true })
           }
         }
-      } catch {
-        /* malformed package.json — skip the npm part, still check other manifests */
-      }
-    }
 
     // 2) Polyglot — Python / Go / Rust / Ruby manifests & lockfiles.
     for (const d of await collectManifestDeps(ctx)) {
-      // Non-npm manifests carry no dev/prod split we can trust → unknown.
-      queryList.push({ ecosystem: d.ecosystem, name: d.name, version: d.version, manifest: d.manifest, runtime: null, direct: true })
+      const fromLockfile = /(?:\.lock|lock$)/i.test(d.manifest)
+      const devOnly = /(?:^|[-/])dev(?:\.|[-/])/i.test(d.manifest)
+      // A lockfile enumerates transitive packages too. Calling every row direct
+      // turns ordinary HIGH advisories into false criticals. Without a graph we
+      // keep runtime unknown, but directness must stay conservative.
+      queryList.push({
+        ecosystem: d.ecosystem,
+        name: d.name,
+        version: d.version,
+        manifest: d.manifest,
+        runtime: devOnly ? false : null,
+        direct: !fromLockfile,
+      })
     }
 
     if (queryList.length === 0) return []
@@ -420,15 +478,15 @@ export const vulnerableDepsScanner: Scanner = {
     const byDisplayId = new Map<string, Issue>()
     const seen = new Set<string>()
     for (const hit of hits) {
-      const key = `${hit.name}::${hit.vulnId}`
+      const key = `${hit.name}::${hit.version}::${hit.vulnId}`
       if (seen.has(key)) continue // one finding per package+advisory
       seen.add(key)
 
       const vuln = details.get(hit.vulnId)
-      const label = vuln ? severityLabel(vuln) : undefined
+      const label = vuln ? severityLabel(vuln, hit.ecosystem, hit.name) : undefined
       const id = vuln ? displayId(vuln) : hit.vulnId
       const summary = vuln?.summary?.trim()
-      const fixed = vuln ? fixedVersion(vuln, hit.ecosystem, hit.name) : null
+      const fixed = vuln ? fixedVersion(vuln, hit.ecosystem, hit.name, hit.version) : null
 
       const fixHint = fixed
         ? `Fixed in ${fixed} — upgrade to ${fixed} or later.`
@@ -439,6 +497,9 @@ export const vulnerableDepsScanner: Scanner = {
         hit.runtime === false
           ? " Build/test-only path — not reachable from the production install, so severity is lowered."
           : ""
+      const evidence = hit.dependencyPath?.length
+        ? `Dependency path: ${hit.dependencyPath.join(" → ")}`
+        : undefined
       const detail =
         `${summary ? `${summary} ` : ""}${hit.name}@${hit.version} (${hit.ecosystem}) is affected by ${id}` +
         `${label ? ` (${label.toLowerCase()} severity)` : ""}. ${fixHint}` +
@@ -454,6 +515,14 @@ export const vulnerableDepsScanner: Scanner = {
         location: hit.manifest,
         ageDays: 0,
         detail,
+        ...(evidence ? { evidence } : {}),
+        analysisRef: {
+          kind: "dependency",
+          ecosystem: hit.ecosystem,
+          package: hit.name,
+          version: hit.version,
+          advisoryId: hit.vulnId,
+        },
       }
 
       const dupeKey = `${hit.name}::${id}`

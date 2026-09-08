@@ -1,37 +1,14 @@
 "use client"
 
 import { useRouter } from "next/navigation"
+import Link from "next/link"
+import { ArrowRight, ListChecks, Search, TrendingUp } from "lucide-react"
 import { useLocale } from "@/components/i18n/locale-provider"
 import { CHECK_FAMILIES, TOTAL_CHECKS } from "@/lib/landing-facts"
 import { ScanRunner } from "./scan-runner"
-import { ProofRepos } from "./proof-repos"
 import { LandingSections } from "./landing-sections"
 
-/**
- * The first thing a visitor sees.
- *
- * The scan form is on the page, not behind a "Run your first scan" button. The
- * button was a step that asked people to commit before showing them what they
- * were committing to; a landing page whose entire purpose is "paste a repo URL"
- * should show the box you paste into.
- *
- * The headline names the problem rather than the product. "Welcome to Repo
- * Anti-Rot" told a stranger nothing they did not already know from the tab
- * title; "your repo is rotting, nobody committed it" is the one sentence that
- * explains why a tool like this exists at all.
- *
- * The three figures beside it are read from `lib/landing-facts.ts`, which
- * `test/landing-facts.test.ts` checks against the engine's own scanner registry.
- * A hero that quietly claims twenty-seven checks after someone deleted one is
- * exactly the decay this project reports on, and it would be embarrassing here.
- * The third figure is zero, and it is the honest one: nothing on this page is a
- * mock-up of a scan that never ran.
- *
- * Decoration is CSS only — a hairline grid and a blurred wash, both mixed from
- * the theme's own colours so the page survives all eight themes including the
- * light ones. No images, no animation library. This is the first impression of a
- * tool that reports on bloat, so it does not get to ship a carousel.
- */
+/** Keep the real form beside the promise and offer a report before asking for a scan. */
 export function WelcomeScreen() {
   const { t } = useLocale()
   const router = useRouter()
@@ -39,7 +16,7 @@ export function WelcomeScreen() {
   const figures = [
     { label: t("hero.checks"), value: String(TOTAL_CHECKS), accent: false },
     { label: t("hero.families"), value: String(CHECK_FAMILIES.length), accent: false },
-    { label: t("hero.mock"), value: "0", accent: true },
+    { label: t("hero.account"), value: "0", accent: true },
   ]
 
   return (
@@ -71,6 +48,15 @@ export function WelcomeScreen() {
               {t("welcome.lead")}
             </p>
 
+            <div className="mt-6 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+              <a href="#scan" className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring hover:opacity-90">
+                {t("hero.scan")}<ArrowRight className="size-4" />
+              </a>
+              <Link href="/demo" className="inline-flex items-center justify-center rounded-lg border border-border bg-card/60 px-4 py-3 text-sm font-medium hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                {t("hero.demo")}
+              </Link>
+            </div>
+
             <dl className="mt-8 grid w-full max-w-lg grid-cols-3 divide-x divide-border border-y border-border">
               {figures.map((f, i) => (
                 <div key={f.label} className={i === 0 ? "py-4 pr-4" : "px-4 py-4 last:pr-0"}>
@@ -95,7 +81,7 @@ export function WelcomeScreen() {
 
           {/* The real scan form, in the slot a marketing page would fill with a
               screenshot of one. */}
-          <div className="w-full min-w-0">
+          <div id="scan" className="w-full min-w-0 scroll-mt-20">
             <ScanRunner
               onOpen={(repoId) => router.push(`/app?repo=${encodeURIComponent(repoId)}`)}
             />
@@ -103,7 +89,24 @@ export function WelcomeScreen() {
         </div>
       </section>
 
-      <ProofRepos />
+      <section aria-label={t("hero.resultLabel")} className="border-b border-border bg-card/20">
+        <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+          <ol className="grid gap-6 md:grid-cols-3">
+            {[
+              { icon: Search, title: t("hero.resultFind"), body: t("hero.resultFindBody") },
+              { icon: ListChecks, title: t("hero.resultPlan"), body: t("hero.resultPlanBody") },
+              { icon: TrendingUp, title: t("hero.resultRepeat"), body: t("hero.resultRepeatBody") },
+            ].map(({ icon: Icon, title, body }, i) => (
+              <li key={title} className="min-w-0">
+                <div className="flex items-center gap-2 text-primary"><Icon className="size-4" /><span className="font-mono text-xs">0{i + 1}</span></div>
+                <h2 className="mt-3 text-lg font-semibold">{title}</h2>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{body}</p>
+              </li>
+            ))}
+          </ol>
+          <p className="mt-8 border-t border-border pt-5 text-sm leading-relaxed text-muted-foreground">{t("hero.limits")}</p>
+        </div>
+      </section>
       <LandingSections />
     </div>
   )

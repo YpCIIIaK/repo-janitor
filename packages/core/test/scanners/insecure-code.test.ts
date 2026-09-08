@@ -9,6 +9,46 @@ import { makeContext } from "../helpers"
  * tell a description of code from code flags every one of them.
  */
 describe("literal handling", () => {
+  it("ignores literal Function feature probes but preserves dynamic bodies", async () => {
+    const issues = await insecureCodeScanner.run(makeContext({ files: {
+      "src/probe.ts": 'new Function("return true");\nnew Function("value", body);',
+    } }))
+    expect(issues).toHaveLength(1)
+    expect(issues[0].location).toBe("src/probe.ts:2")
+    expect(issues[0].severity).toBe("critical")
+  })
+
+  it("ignores block comments and multiline documentation while retaining executable calls", async () => {
+    const issues = await insecureCodeScanner.run(makeContext({ files: {
+      "src/help.ts": [
+        "/* Example of unsafe code:",
+        "eval(payload)",
+        "*/",
+        "const help = `Example:",
+        "new Function(payload)",
+        "`;",
+        "eval(payload)",
+      ].join("\n"),
+    } }))
+    expect(issues).toHaveLength(1)
+    expect(issues[0].location).toBe("src/help.ts:7")
+  })
+
+  it("does not call an interpolated executable path shell interpolation", async () => {
+    const issues = await insecureCodeScanner.run(makeContext({ files: {
+      "src/run.ts": "execFile(`${bin}/git`, ['status']);\nexec(`git ${argument}`);",
+    } }))
+    expect(issues).toHaveLength(1)
+    expect(issues[0].location).toBe("src/run.ts:2")
+  })
+
+  it("does not interpret arbitrary verify options as JWT settings", async () => {
+    const issues = await insecureCodeScanner.run(makeContext({ files: {
+      "src/config.ts": "const build = { verify: false };\njwt.decode(token, { verify: false });\njwt.verify(token, key, { verify: false });",
+    } }))
+    expect(issues).toHaveLength(0)
+  })
+
   it("does not flag dangerous text inside a regex literal", async () => {
     const issues = await insecureCodeScanner.run(
       makeContext({
@@ -165,11 +205,8 @@ describe("insecureCodeScanner", () => {
     expect(first[0].id).toContain("eval-dynamic")
   })
 
-  it("flags JWT verify: false", async () => {
-    const bad = await run({ "src/auth.ts": "jwt.decode(token, { verify: false })\n" })
-    expect(bad).toHaveLength(1)
-    expect(bad[0].severity).toBe("critical")
-    expect(bad[0].id).toContain("jwt-verify-false")
+  it("does not claim token decoding alone proves an authentication bypass", async () => {
+    expect(await run({ "src/auth.ts": "jwt.decode(token, { verify: false })\n" })).toHaveLength(0)
   })
 
   it("flags credentials written to localStorage", async () => {

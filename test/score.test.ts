@@ -7,10 +7,16 @@ import {
   issueCosts,
   penaltyBreakdown,
   DEFAULT_WEIGHTS,
+  reportWeights,
 } from "@/lib/score"
 import { issue } from "./helpers"
 
 describe("computeScore (client mirror of the engine)", () => {
+  it("preserves legacy report scoring while new reports retain their info budget", () => {
+    const notes = Array.from({ length: 100000 }, () => issue({ severity: "info" }))
+    expect(computeScore(notes, reportWeights({}))).toBe(70)
+    expect(computeScore(notes, reportWeights({ config: { weights: DEFAULT_WEIGHTS } }))).toBe(90)
+  })
   it("starts at 100 with no issues", () => {
     expect(computeScore([])).toBe(100)
   })
@@ -45,28 +51,16 @@ describe("computeScore (client mirror of the engine)", () => {
     expect(scoreToGrade(computeScore(criticals))).toBe("F")
   })
 
-  /**
-   * The point of the info tier is "worth knowing", not "counts against you".
-   * The narrowest grade band is 10 points wide, and info alone stays under that
-   * for any repository anyone will actually scan.
-   *
-   * Stated as a bound rather than as an absolute, because the absolute is not
-   * available any more and pretending otherwise would be the test lying. A hard
-   * cap could promise "no quantity, ever"; a taper cannot, because the two
-   * properties are opposed — a bounded total forces the marginal cost to zero,
-   * which is precisely the behaviour this replaced. A thousand info notes cost
-   * nine points. Ten thousand would cost more than ten, and a repository with
-   * ten thousand info findings has earned a lower grade.
-   */
-  it("never lets info findings alone cost a grade band, at any realistic count", () => {
-    for (const count of [1, 10, 100, 1000]) {
-      const many = Array.from({ length: count }, () => issue({ severity: "info" }))
-      expect(scoreToGrade(computeScore(many))).toBe("A")
+  it("keeps information-only reports in A even at very large counts", () => {
+    for (const count of [1, 20, 1000, 100_000]) {
+      const notes = Array.from({ length: count }, () => issue({ severity: "info" }))
+      expect(scoreToGrade(computeScore(notes))).toBe("A")
+      expect(penaltyBreakdown(notes).find((p) => p.severity === "info")!.penalty).toBeLessThanOrEqual(10)
     }
   })
 
   it("mirrors the engine's default weights exactly", () => {
-    expect(DEFAULT_WEIGHTS).toEqual({ critical: 10, warning: 3, info: 0.25 })
+    expect(DEFAULT_WEIGHTS).toEqual({ critical: 10, warning: 3, info: 0.25, infoCap: 10 })
   })
 })
 

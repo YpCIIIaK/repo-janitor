@@ -31,6 +31,13 @@ export interface Issue {
   detail: string
   /** Optional one-line snippet of the offending code (redacted for secrets). */
   evidence?: string
+  analysisRef?: {
+    kind: "dependency"
+    ecosystem: string
+    package: string
+    version: string
+    advisoryId: string
+  }
   /** Optional AI assessment, attached client-side when AI analysis is enabled. */
   aiNote?: string
   /** Id of the scanner that produced this finding; absent in pre-v1.1 reports. */
@@ -349,4 +356,3 @@ function getIssues(repoId: string): Issue[] {
 function getTrend(repoId: string): TrendPoint[] {
   return trendByRepo[repoId] ?? []
 }
-

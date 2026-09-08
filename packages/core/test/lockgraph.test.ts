@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { computeNpmProdSet } from "../src/lockgraph"
+import { computeNpmPackageInstances, computeNpmProdSet } from "../src/lockgraph"
 import { makeContext } from "./helpers"
 
 /**
@@ -120,5 +120,64 @@ describe("computeNpmProdSet", () => {
     expect(
       await run({ "pnpm-lock.yaml": "packages:\n  /app@1.0.0:\n    resolution: {integrity: aaa}\n" }),
     ).toBeNull()
+  })
+
+  it("distinguishes a dev-only importer from an unknown graph", async () => {
+    expect(await run({ "pnpm-lock.yaml": [
+      "importers:", "  .:", "    devDependencies:",
+      "      tooling:", "        version: 1.0.0",
+      "snapshots:", "  tooling@1.0.0:", "    dependencies:",
+      "      badlib: 1.0.0", "  badlib@1.0.0: {}",
+    ].join("\n") })).toEqual(new Set())
+    expect(await run({ "pnpm-lock.yaml": "importers:\nsnapshots:\n" })).toBeNull()
+  })
+})
+
+describe("computeNpmPackageInstances", () => {
+  it("keeps production and dev versions of one package separate", async () => {
+    const files = {
+      "package-lock.json": JSON.stringify({
+        packages: {
+          "": { name: "root" },
+          "node_modules/shared": { version: "2.0.0" },
+          "node_modules/tool/node_modules/shared": { version: "1.0.0", dev: true },
+        },
+      }),
+    }
+    const ctx = makeContext({ files })
+    expect(await computeNpmPackageInstances(ctx, new Set(Object.keys(files)))).toEqual([
+      { name: "shared", version: "2.0.0", runtime: true, direct: true, manifest: "package.json", paths: ["node_modules/shared"] },
+      { name: "shared", version: "1.0.0", runtime: false, direct: false, manifest: "package.json", paths: ["node_modules/tool/node_modules/shared"] },
+    ])
+  })
+
+  it("keeps pnpm versions separate while walking only production snapshots", async () => {
+    const files = { "pnpm-lock.yaml": [
+      "importers:", "  .:", "    dependencies:", "      app:", "        version: 1.0.0",
+      "    devDependencies:", "      tool:", "        version: 1.0.0",
+      "snapshots:", "  app@1.0.0:", "    dependencies:", "      shared: 2.0.0",
+      "  tool@1.0.0:", "    dependencies:", "      shared: 1.0.0",
+      "  shared@2.0.0: {}", "  shared@1.0.0: {}",
+    ].join("\n") }
+    const ctx = makeContext({ files })
+    expect(await computeNpmPackageInstances(ctx, new Set(Object.keys(files)))).toEqual([
+      { name: "app", version: "1.0.0", runtime: true, direct: true, manifest: "package.json", paths: [".", "app@1.0.0"] },
+      { name: "tool", version: "1.0.0", runtime: false, direct: true, manifest: "package.json", paths: [".", "tool@1.0.0"] },
+      { name: "shared", version: "2.0.0", runtime: true, direct: false, manifest: "package.json", paths: [".", "app@1.0.0", "shared@2.0.0"] },
+      { name: "shared", version: "1.0.0", runtime: false, direct: false, manifest: "package.json", paths: ["shared@1.0.0"] },
+    ])
+  })
+
+  it("does not lend runtime reachability to another pnpm peer variant", async () => {
+    const files = { "pnpm-lock.yaml": [
+      "importers:", "  .:", "    dependencies:", "      widget:", "        version: 1.0.0(peer@1.0.0)",
+      "snapshots:", "  widget@1.0.0(peer@1.0.0): {}", "  widget@1.0.0(peer@2.0.0): {}",
+    ].join("\n") }
+    const ctx = makeContext({ files })
+    const instances = await computeNpmPackageInstances(ctx, new Set(Object.keys(files)))
+    expect(instances?.map((item) => ({ runtime: item.runtime, path: item.paths.at(-1) }))).toEqual([
+      { runtime: true, path: "widget@1.0.0(peer@1.0.0)" },
+      { runtime: false, path: "widget@1.0.0(peer@2.0.0)" },
+    ])
   })
 })
