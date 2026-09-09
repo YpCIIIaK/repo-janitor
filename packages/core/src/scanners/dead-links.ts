@@ -286,15 +286,17 @@ export const deadLinksScanner: Scanner = {
         issues.push({
           id: `deadlink-unreachable-${url}`,
           category: "hygiene",
-          severity: "warning",
+          // A transport failure is not proof that the repository's link is
+          // broken: DNS, the scanner's network, or the remote service may be
+          // temporarily unavailable. Keep confirmed 404/410 responses warning.
+          severity: "info",
           title: `Unreachable link → ${url}`,
           location: `${where.file}:${where.line}`,
           ageDays: 0,
           detail:
             `${where.file} links to ${url}, which could not be reached at all — the domain does not ` +
-            "resolve, refused the connection, or timed out. That usually means the site is gone " +
-            "rather than moved, so the link needs replacing rather than updating. Worth " +
-            "double-checking by hand: a single failed request is not proof of a permanent outage.",
+            "resolve, refused the connection, or timed out. Check it again from another network " +
+            "before changing the link; a single transport failure is not proof of a permanent outage.",
           evidence: url,
         })
         continue
