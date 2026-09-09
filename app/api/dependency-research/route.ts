@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 import { mkdtemp, readdir, readFile, rm, stat } from "node:fs/promises"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
-import { researchDependencyGraph, type ScanContext } from "@repo-anti-rot/core"
+import { DependencyResearchLimitError, researchDependencyGraph, type ScanContext } from "@repo-anti-rot/core"
 import { isPublicGitUrl } from "@/lib/url-guard"
 import { MAX_CLONE_BYTES, dirSizeExceeds, run, SIZE_POLL_MS } from "@/lib/clone-runner"
 import { clientIp, limitsFromEnv, withScanSlot } from "@/lib/scan-limits"
@@ -15,7 +15,7 @@ export const maxDuration = 360
 
 const TARGET_RE = /^(?:@[a-z0-9._-]+\/)?[a-z0-9._-]+(?:@\d+\.\d+\.\d+(?:-[0-9a-z.-]+)?(?:\+[0-9a-z.-]+)?)?$/i
 const SKIP_DIRS = new Set([".git", "node_modules", ".next", "dist", "build", "coverage"])
-const DEP_FILE_RE = /(?:^|\/)(?:package\.json|package-lock\.json|npm-shrinkwrap\.json|pnpm-lock\.yaml)$/
+const DEP_FILE_RE = /(?:^|\/)(?:package\.json|package-lock\.json|npm-shrinkwrap\.json|pnpm-lock\.yaml|yarn\.lock)$/
 const MAX_WALK_ENTRIES = 50_000
 const MAX_DEP_FILE_BYTES = 12 * 1024 * 1024
 const SAFE_GIT_ENV = {
@@ -61,12 +61,6 @@ async function researchContext(root: string): Promise<ScanContext> {
 }
 
 export async function POST(request: Request) {
-  const limits = limitsFromEnv()
-  const ip = clientIp(request, limits.trustedProxyHops)
-  if (!isOwner(request) && !allowRate(`dependency-research:${ip}`, 4, 60 * 60_000)) {
-    return NextResponse.json({ error: "Deep-analysis limit exceeded. Try again later." }, { status: 429 })
-  }
-
   let body: unknown
   try { body = await readJson(request, 8 * 1024) } catch {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 })
@@ -82,6 +76,13 @@ export async function POST(request: Request) {
   }
   const safe = await isPublicGitUrl(repoUrl)
   if (!safe.ok) return NextResponse.json({ error: `Unsafe repository URL: ${safe.reason}` }, { status: 400 })
+
+  const limits = limitsFromEnv()
+  const ip = clientIp(request, limits.trustedProxyHops)
+  if (!isOwner(request) && !allowRate(`dependency-research:${ip}`, 4, 60 * 60_000)) {
+    return NextResponse.json({ error: "Deep-analysis limit exceeded. Try again later." },
+      { status: 429, headers: { "retry-after": "3600" } })
+  }
 
   const workspace = await mkdtemp(join(tmpdir(), "repo-janitor-research-"))
   const checkout = join(workspace, "checkout")
@@ -113,9 +114,17 @@ export async function POST(request: Request) {
       }
 
       const ctx = await researchContext(checkout)
-      const result = await researchDependencyGraph(ctx, new Set(ctx.files), { target, maxPaths: 100 })
+      let result
+      try {
+        result = await researchDependencyGraph(ctx, new Set(ctx.files), { target, maxPaths: 100, maxNodes: 5_000, maxEdges: 15_000 })
+      } catch (error) {
+        if (error instanceof DependencyResearchLimitError) {
+          return NextResponse.json({ error: "Dependency graph exceeds the deep-analysis safety limit." }, { status: 413 })
+        }
+        throw error
+      }
       if (!result) {
-        return NextResponse.json({ error: "Deep analysis currently supports package-lock v2/v3 and pnpm-lock v9." }, { status: 422 })
+        return NextResponse.json({ error: "Deep analysis currently supports package-lock v2/v3, pnpm-lock v9, and Yarn Classic/Berry." }, { status: 422 })
       }
       if (result.nodes.length > 5_000 || result.edges.length > 15_000) {
         return NextResponse.json({ error: "Dependency graph exceeds the deep-analysis display limit." }, { status: 422 })

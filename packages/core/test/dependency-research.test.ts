@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { researchDependencyGraph } from "../src/dependency-research"
+import { DependencyResearchLimitError, researchDependencyGraph } from "../src/dependency-research"
 import { makeContext } from "./helpers"
 
 const run = (files: Record<string, string>, target?: string) =>
@@ -57,8 +57,29 @@ describe("researchDependencyGraph", () => {
   })
 
   it("returns null for unsupported or incomplete lockfiles", async () => {
-    expect(await run({ "yarn.lock": "x@1:\n  version 1.0.0" })).toBeNull()
+    expect(await run({ "yarn.lock": "not a lockfile" })).toBeNull()
     expect(await run({ "package-lock.json": JSON.stringify({ lockfileVersion: 1 }) })).toBeNull()
+    expect(await run({ "pnpm-lock.yaml": "lockfileVersion: '8.0'\nimporters:\n  .: {}\nsnapshots:\n  x@1.0.0: {}" })).toBeNull()
+  })
+
+  it("selects Yarn Classic through the shared research entry point", async () => {
+    const result = await run({
+      "package.json": JSON.stringify({ dependencies: { x: "^1.0.0" } }),
+      "yarn.lock": "# yarn lockfile v1\n\nx@^1.0.0:\n  version \"1.2.0\"\n",
+    }, "x")
+    expect(result?.manager).toBe("yarn")
+    expect(result?.nodes.find((node) => node.name === "x")?.runtime).toBe("production")
+    expect(result?.paths).toHaveLength(1)
+  })
+
+  it("stops while parsing when graph budgets are exceeded", async () => {
+    const ctx = makeContext({ files: { "package-lock.json": JSON.stringify({ lockfileVersion: 3, packages: {
+      "": { dependencies: { a: "1.0.0", b: "1.0.0" } },
+      "node_modules/a": { version: "1.0.0" },
+      "node_modules/b": { version: "1.0.0" },
+    } }) } })
+    await expect(researchDependencyGraph(ctx, new Set(ctx.files), { maxNodes: 2 })).rejects.toBeInstanceOf(DependencyResearchLimitError)
+    await expect(researchDependencyGraph(ctx, new Set(ctx.files), { maxEdges: 1 })).rejects.toBeInstanceOf(DependencyResearchLimitError)
   })
 
   it("resolves relative links between pnpm workspace importers", async () => {
@@ -67,7 +88,7 @@ describe("researchDependencyGraph", () => {
       "packages/api/package.json": JSON.stringify({ name: "api" }),
       "packages/shared/package.json": JSON.stringify({ name: "shared" }),
       "pnpm-lock.yaml": [
-        "importers:", "  .:", "    dependencies:", "      api:", "        version: link:packages/api",
+        "lockfileVersion: '9.0'", "importers:", "  .:", "    dependencies:", "      api:", "        version: link:packages/api",
         "  packages/api:", "    dependencies:", "      shared:", "        version: link:../shared",
         "  packages/shared:", "    dependencies:", "      leaf:", "        version: 1.0.0",
         "snapshots:", "  leaf@1.0.0: {}",
@@ -83,7 +104,7 @@ describe("researchDependencyGraph", () => {
     const result = await run({
       "package.json": "{}",
       "pnpm-lock.yaml": [
-        "importers:", "  .:", "    dependencies:", "      widget:", "        version: 1.0.0",
+        "lockfileVersion: '9.0'", "importers:", "  .:", "    dependencies:", "      widget:", "        version: 1.0.0",
         "snapshots:", "  widget@1.0.0(peer@1.0.0): {}", "  widget@1.0.0(peer@2.0.0): {}",
       ].join("\n"),
     }, "widget")
@@ -107,8 +128,22 @@ describe("researchDependencyGraph", () => {
       if (i < 179) snapshots.push("    dependencies:", `      p${i + 1}: 1.0.0`)
     }
     const result = await run({ "package.json": "{}", "pnpm-lock.yaml": [
-      "importers:", "  .:", "    dependencies:", "      p0: 1.0.0", "snapshots:", ...snapshots,
+      "lockfileVersion: '9.0'", "importers:", "  .:", "    dependencies:", "      p0: 1.0.0", "snapshots:", ...snapshots,
     ].join("\n") }, "p179")
     expect(result?.warnings.some((warning) => warning.includes("safety limit"))).toBe(true)
+  })
+
+  it("does not report path truncation for large branches unrelated to the target", async () => {
+    const packages: Record<string, Record<string, unknown>> = {
+      "": { dependencies: { target: "1.0.0", branch0: "1.0.0" } },
+      "node_modules/target": { version: "1.0.0" },
+    }
+    for (let index = 0; index < 300; index++) packages[`node_modules/branch${index}`] = {
+      version: "1.0.0",
+      ...(index < 299 ? { dependencies: { [`branch${index + 1}`]: "1.0.0" } } : {}),
+    }
+    const result = await run({ "package-lock.json": JSON.stringify({ lockfileVersion: 3, packages }) }, "target")
+    expect(result?.paths).toHaveLength(1)
+    expect(result?.warnings.some((warning) => warning.includes("path search"))).toBe(false)
   })
 })

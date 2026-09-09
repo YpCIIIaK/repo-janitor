@@ -2,6 +2,7 @@ import type { Scanner, ScanContext } from "../scanner"
 import type { Issue, Severity } from "../schema"
 import { collectManifestDeps, type OsvEcosystem } from "../manifests"
 import { computeNpmPackageInstances, computeNpmProdSet } from "../lockgraph"
+import { parseYarnDependencyResearch } from "../yarn-dependency-research"
 
 /**
  * Vulnerable Dependencies scanner ⭐.
@@ -338,6 +339,36 @@ async function enumerateNpmInstalled(
   return sawLockfile ? [...installed.values()] : null
 }
 
+async function enumerateYarnInstalled(ctx: ScanContext, fileSet: Set<string>) {
+  if (!fileSet.has("yarn.lock")) return null
+  const text = await ctx.readFile("yarn.lock")
+  if (!text) return null
+  const manifests = new Map<string, string>()
+  for (const file of fileSet) if (file === "package.json" || file.endsWith("/package.json")) {
+    const body = await ctx.readFile(file)
+    if (body) manifests.set(file === "package.json" ? "." : file.slice(0, -13), body)
+  }
+  let graph: ReturnType<typeof parseYarnDependencyResearch>
+  try { graph = parseYarnDependencyResearch(text, manifests, { maxNodes: MAX_QUERIES, maxEdges: MAX_QUERIES * 3 }) }
+  catch { return null }
+  if (!graph) return null
+  const nodes = new Map(graph.nodes.map((node) => [node.id, node]))
+  const incoming = new Map<string, typeof graph.edges>()
+  for (const edge of graph.edges) incoming.set(edge.to, [...(incoming.get(edge.to) ?? []), edge])
+  return graph.nodes.filter((node) => node.kind === "package" && node.version).map((node) => {
+    const projectEdges = (incoming.get(node.id) ?? []).filter((edge) => nodes.get(edge.from)?.kind === "project")
+    const importer = projectEdges.map((edge) => nodes.get(edge.from)?.importer).find((value): value is string => Boolean(value)) ?? "."
+    return {
+      name: node.name,
+      version: node.version!,
+      runtime: node.runtime === "production" || node.runtime === "both",
+      direct: projectEdges.length > 0,
+      manifest: importer === "." ? "package.json" : `${importer}/package.json`,
+      paths: undefined as string[] | undefined,
+    }
+  })
+}
+
 export const vulnerableDepsScanner: Scanner = {
   id: "vulnerable-deps",
   category: "security",
@@ -376,8 +407,10 @@ export const vulnerableDepsScanner: Scanner = {
         // Production reachability from the lockfile graph; null when unreadable.
         const prodSet = await computeNpmProdSet(ctx, fileSet)
         const exactInstances = await computeNpmPackageInstances(ctx, fileSet)
-        const exactRuntime = exactInstances ? new Map<string, boolean>() : null
-        for (const item of exactInstances ?? []) {
+        const yarnInstances = exactInstances ? null : await enumerateYarnInstalled(ctx, fileSet)
+        const graphInstances = exactInstances ?? yarnInstances
+        const exactRuntime = graphInstances ? new Map<string, boolean>() : null
+        for (const item of graphInstances ?? []) {
           const key = `${item.name}\0${item.version}`
           exactRuntime!.set(key, (exactRuntime!.get(key) ?? false) || item.runtime)
         }
@@ -393,7 +426,7 @@ export const vulnerableDepsScanner: Scanner = {
         }
         // Prefer the FULL installed tree from a lockfile (transitive included,
         // like `npm audit`); fall back to declared-only floors with no lockfile.
-        const installed = exactInstances ?? await enumerateNpmInstalled(ctx, fileSet)
+        const installed = graphInstances ?? await enumerateNpmInstalled(ctx, fileSet)
         if (installed) {
           for (const item of installed) {
             const { name, version } = item

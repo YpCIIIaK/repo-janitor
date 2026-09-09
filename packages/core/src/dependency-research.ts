@@ -1,4 +1,5 @@
 import type { ScanContext } from "./scanner"
+import { parseYarnDependencyResearch } from "./yarn-dependency-research"
 
 export type DependencyRuntime = "production" | "development" | "both" | "unknown"
 export type DependencyNodeKind = "project" | "package"
@@ -33,10 +34,13 @@ export interface DependencyResearchOptions {
   target?: string
   /** Protect reports from pathological graphs. Defaults to 100 paths per target. */
   maxPaths?: number
+  /** Hard parser budgets. Defaults match the public deep-analysis endpoint. */
+  maxNodes?: number
+  maxEdges?: number
 }
 
 export interface DependencyResearchResult {
-  manager: "npm" | "pnpm"
+  manager: "npm" | "pnpm" | "yarn"
   lockfile: string
   nodes: DependencyResearchNode[]
   edges: DependencyResearchEdge[]
@@ -45,9 +49,23 @@ export interface DependencyResearchResult {
   warnings: string[]
 }
 
-interface MutableNode extends DependencyResearchNode {
+export interface DependencyResearchMutableNode extends DependencyResearchNode {
   prod: boolean
   dev: boolean
+}
+
+export class DependencyResearchLimitError extends Error {
+  constructor(public readonly kind: "nodes" | "edges") {
+    super(`Dependency graph exceeds the ${kind} limit.`)
+    this.name = "DependencyResearchLimitError"
+  }
+}
+
+export function assertDependencyResearchBudget(
+  options: DependencyResearchOptions, kind: "nodes" | "edges", count: number,
+): void {
+  const limit = kind === "nodes" ? options.maxNodes ?? 5_000 : options.maxEdges ?? 15_000
+  if (count > limit) throw new DependencyResearchLimitError(kind)
 }
 
 const clean = (value: string) => value.trim().replace(/^['"]|['"]$/g, "").replace(/,$/, "")
@@ -60,9 +78,9 @@ function targetMatches(node: DependencyResearchNode, target?: string): boolean {
   return node.version !== null && target === `${node.name}@${node.version}`
 }
 
-function finish(
+export function finalizeDependencyResearch(
   manager: DependencyResearchResult["manager"], lockfile: string,
-  nodeMap: Map<string, MutableNode>, edges: DependencyResearchEdge[], options: DependencyResearchOptions,
+  nodeMap: Map<string, DependencyResearchMutableNode>, edges: DependencyResearchEdge[], options: DependencyResearchOptions,
   warnings: string[] = [],
 ): DependencyResearchResult {
   const outgoing = new Map<string, DependencyResearchEdge[]>()
@@ -98,12 +116,22 @@ function finish(
 
   const matches = [...nodeMap.values()].filter((node) => targetMatches(node, options.target)).map((node) => node.id)
   const wanted = new Set(matches)
+  const incoming = new Map<string, string[]>()
+  for (const edge of edges) incoming.set(edge.to, [...(incoming.get(edge.to) ?? []), edge.from])
+  const relevant = new Set(matches)
+  const reverseQueue = [...matches]
+  for (let cursor = 0; cursor < reverseQueue.length; cursor++) {
+    for (const parent of incoming.get(reverseQueue[cursor]) ?? []) if (!relevant.has(parent)) {
+      relevant.add(parent)
+      reverseQueue.push(parent)
+    }
+  }
   const paths: DependencyResearchPath[] = []
   const maxPaths = Math.max(1, options.maxPaths ?? 100)
-  let walkSteps = 0
   let truncated = false
   const walk = (start: string, mode: "production" | "development") => {
     const stack = [{ id: start, path: [] as string[], devStarted: false }]
+    let walkSteps = 0
     while (stack.length && paths.length < maxPaths && walkSteps < 20_000) {
       const state = stack.pop()!
       walkSteps++
@@ -111,13 +139,14 @@ function finish(
       const next = [...state.path, state.id]
       if (wanted.has(state.id)) { paths.push({ runtime: mode, nodeIds: next }); continue }
       for (const edge of outgoing.get(state.id) ?? []) {
+        if (!relevant.has(edge.to)) continue
         if (mode === "production" && edge.scope === "development") continue
         if (mode === "development" && !state.devStarted && edge.scope !== "development") continue
         if (mode === "development" && state.devStarted && edge.scope === "development") continue
         stack.push({ id: edge.to, path: next, devStarted: state.devStarted || edge.scope === "development" })
       }
     }
-    if (stack.length || walkSteps >= 20_000 || paths.length >= maxPaths) truncated = true
+    if (stack.length && (walkSteps >= 20_000 || paths.length >= maxPaths)) truncated = true
   }
   if (options.target) for (const root of roots) {
     walk(root.id, "production")
@@ -138,7 +167,7 @@ function packageNameFromPath(path: string, fallback?: string): string | null {
 function parseNpm(text: string, lockfile: string, options: DependencyResearchOptions): DependencyResearchResult | null {
   const json = JSON.parse(text) as { lockfileVersion?: number; packages?: Record<string, Record<string, unknown>> }
   if (!json.packages || (json.lockfileVersion !== 2 && json.lockfileVersion !== 3)) return null
-  const nodes = new Map<string, MutableNode>()
+  const nodes = new Map<string, DependencyResearchMutableNode>()
   const pathToId = new Map<string, string>()
   for (const [location, raw] of Object.entries(json.packages)) {
     const name = packageNameFromPath(location, typeof raw.name === "string" ? raw.name : undefined)
@@ -148,6 +177,7 @@ function parseNpm(text: string, lockfile: string, options: DependencyResearchOpt
     const version = typeof raw.version === "string" ? raw.version : null
     nodes.set(id, { id, kind: isProject ? "project" : "package", name: name ?? "root", version,
       runtime: "unknown", location: location || ".", importer: isProject ? location || "." : undefined, prod: false, dev: false })
+    assertDependencyResearchBudget(options, "nodes", nodes.size)
     pathToId.set(location, id)
   }
   // npm represents workspace links as node_modules entries pointing at another
@@ -184,9 +214,10 @@ function parseNpm(text: string, lockfile: string, options: DependencyResearchOpt
           scope: group === "devDependencies" ? "development" : "production" })
         else warnings.push(`Could not resolve ${name} from ${location || "."}`)
       }
+      assertDependencyResearchBudget(options, "edges", edges.length)
     }
   }
-  return finish("npm", lockfile, nodes, edges, options, warnings)
+  return finalizeDependencyResearch("npm", lockfile, nodes, edges, options, warnings)
 }
 
 interface PnpmRef { name: string; requested: string; group: string }
@@ -201,6 +232,7 @@ function pnpmIdentity(value: string): { id: string; name: string; version: strin
 }
 
 function parsePnpm(text: string, lockfile: string, options: DependencyResearchOptions, manifests: Map<string, string>): DependencyResearchResult | null {
+  if (!/^lockfileVersion:\s*['"]?9(?:\.0)?['"]?\s*$/m.test(text)) return null
   let section: "importers" | "snapshots" | null = null
   let importer = "."
   let snapshot: PnpmEntry | null = null
@@ -240,15 +272,19 @@ function parsePnpm(text: string, lockfile: string, options: DependencyResearchOp
   }
   if (!importers.size || !snapshots.size) return null
 
-  const nodes = new Map<string, MutableNode>()
+  const nodes = new Map<string, DependencyResearchMutableNode>()
   for (const path of importers.keys()) {
     let name = path === "." ? "root" : path
     try { name = JSON.parse(manifests.get(path) ?? "{}").name ?? name } catch { /* retain path */ }
     nodes.set(`pnpm:importer:${path}`, { id: `pnpm:importer:${path}`, kind: "project", name, version: null,
       runtime: "unknown", location: path, importer: path, prod: false, dev: false })
+    assertDependencyResearchBudget(options, "nodes", nodes.size)
   }
-  for (const entry of snapshots.values()) nodes.set(`pnpm:${entry.id}`, { id: `pnpm:${entry.id}`, kind: "package", name: entry.name,
-    version: entry.version, runtime: "unknown", location: entry.id, prod: false, dev: false })
+  for (const entry of snapshots.values()) {
+    nodes.set(`pnpm:${entry.id}`, { id: `pnpm:${entry.id}`, kind: "package", name: entry.name,
+      version: entry.version, runtime: "unknown", location: entry.id, prod: false, dev: false })
+    assertDependencyResearchBudget(options, "nodes", nodes.size)
+  }
 
   const normalizeLink = (base: string, relative: string): string => {
     const parts = `${base === "." ? "" : base}/${relative}`.split("/")
@@ -290,17 +326,19 @@ function parsePnpm(text: string, lockfile: string, options: DependencyResearchOp
       kind: to.startsWith("pnpm:importer:") ? "workspace" : depKind(ref.group),
       scope: ref.group === "devDependencies" ? "development" : "production" })
     else warnings.push(`Could not resolve ${ref.name} from importer ${path}`)
+    assertDependencyResearchBudget(options, "edges", edges.length)
   }
   for (const entry of snapshots.values()) for (const ref of entry.refs) {
     const to = resolve(ref.name, ref.requested)
     if (to) edges.push({ from: `pnpm:${entry.id}`, to, name: ref.name, requested: ref.requested, kind: depKind(ref.group),
       scope: ref.group === "devDependencies" ? "development" : "production" })
     else warnings.push(`Could not resolve ${ref.name} from ${entry.id}`)
+    assertDependencyResearchBudget(options, "edges", edges.length)
   }
-  return finish("pnpm", lockfile, nodes, edges, options, warnings)
+  return finalizeDependencyResearch("pnpm", lockfile, nodes, edges, options, warnings)
 }
 
-/** Build an explainable dependency graph from a committed npm or pnpm lockfile. */
+/** Build an explainable dependency graph from a committed npm, pnpm or Yarn lockfile. */
 export async function researchDependencyGraph(
   ctx: ScanContext,
   fileSet: Set<string> = new Set(ctx.files),
@@ -310,7 +348,10 @@ export async function researchDependencyGraph(
     if (!fileSet.has(lockfile)) continue
     const text = await ctx.readFile(lockfile)
     if (!text) continue
-    try { const result = parseNpm(text, lockfile, options); if (result) return result } catch { /* try pnpm */ }
+    try { const result = parseNpm(text, lockfile, options); if (result) return result } catch (error) {
+      if (error instanceof DependencyResearchLimitError) throw error
+      /* malformed npm lockfile — try another supported manager */
+    }
   }
   if (fileSet.has("pnpm-lock.yaml")) {
     const text = await ctx.readFile("pnpm-lock.yaml")
@@ -321,6 +362,17 @@ export async function researchDependencyGraph(
         if (body) manifests.set(file === "package.json" ? "." : file.slice(0, -13), body)
       }
       return parsePnpm(text, "pnpm-lock.yaml", options, manifests)
+    }
+  }
+  if (fileSet.has("yarn.lock")) {
+    const text = await ctx.readFile("yarn.lock")
+    if (text) {
+      const manifests = new Map<string, string>()
+      for (const file of fileSet) if (file === "package.json" || file.endsWith("/package.json")) {
+        const body = await ctx.readFile(file)
+        if (body) manifests.set(file === "package.json" ? "." : file.slice(0, -13), body)
+      }
+      return parseYarnDependencyResearch(text, manifests, options)
     }
   }
   return null
