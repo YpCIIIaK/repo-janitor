@@ -371,6 +371,31 @@ describe("vulnerableDepsScanner — severity calibration", () => {
 })
 
 describe("vulnerableDepsScanner — multiple installed versions", () => {
+  it("uses Yarn paths to keep production and development versions separate", async () => {
+    const ctx = makeContext({
+      files: {
+        "package.json": JSON.stringify({ dependencies: { app: "^1.0.0" }, devDependencies: { tool: "^1.0.0" } }),
+        "yarn.lock": [
+          "# yarn lockfile v1", "",
+          "shared@^2.0.0:", "  version \"2.1.0\"", "",
+          "shared@^1.0.0:", "  version \"1.2.0\"", "",
+          "app@^1.0.0:", "  version \"1.0.0\"", "  dependencies:", "    shared \"^2.0.0\"", "",
+          "tool@^1.0.0:", "  version \"1.0.0\"", "  dependencies:", "    shared \"^1.0.0\"",
+        ].join("\n"),
+      },
+      postJson: { [BATCH_URL]: { results: [{ vulns: [] }, { vulns: [{ id: "V-OLD" }] }, { vulns: [] }, { vulns: [] }] } },
+      fetchJson: { [`${VULN_URL}V-OLD`]: {
+        id: "V-OLD", database_specific: { severity: "HIGH" },
+        affected: [{ package: { ecosystem: "npm", name: "shared" } }],
+      } },
+    })
+    const issues = await vulnerableDepsScanner.run(ctx)
+    expect(issues).toHaveLength(1)
+    expect(issues[0].title).toContain("shared@1.2.0")
+    expect(issues[0].severity).toBe("info")
+    expect(issues[0].detail).toContain("Build/test-only path")
+  })
+
   it("queries a nested vulnerable dev version without borrowing direct production status", async () => {
     const ctx = makeContext({
       files: {
