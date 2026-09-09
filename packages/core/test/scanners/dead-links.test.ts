@@ -135,7 +135,8 @@ describe("deadLinksScanner", () => {
     })
     const issues = await deadLinksScanner.run(ctx)
     expect(issues[0].title).toContain("Unreachable")
-    expect(issues[0].detail).toContain("gone rather than moved")
+    expect(issues[0].severity).toBe("info")
+    expect(issues[0].detail).toContain("not proof of a permanent outage")
   })
 
   /**

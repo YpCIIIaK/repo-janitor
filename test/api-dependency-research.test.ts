@@ -115,7 +115,7 @@ describe("POST /api/dependency-research", () => {
   })
 
   it("maps an internal graph budget error to 413 and cleans the checkout", async () => {
-    mocks.researchDependencyGraph.mockRejectedValue(new DependencyResearchLimitError("node"))
+    mocks.researchDependencyGraph.mockRejectedValue(new DependencyResearchLimitError("nodes"))
 
     const response = await POST(request())
 
