@@ -11,7 +11,9 @@ function comparableOrigin(value: string): string {
 export function proxy(request: NextRequest) {
   if (!["GET", "HEAD", "OPTIONS"].includes(request.method)) {
     const origin = request.headers.get("origin")
-    const expected = process.env.PUBLIC_ORIGIN || request.nextUrl.origin
+    // Render terminates TLS before Next.js, so nextUrl may describe the internal
+    // HTTP hop. Use deployment configuration, never client-forwarded headers.
+    const expected = process.env.PUBLIC_ORIGIN || process.env.RENDER_EXTERNAL_URL || request.nextUrl.origin
     if (origin && comparableOrigin(origin) !== comparableOrigin(expected)) {
       return NextResponse.json({ error: "Cross-origin mutation refused" }, { status: 403 })
     }
