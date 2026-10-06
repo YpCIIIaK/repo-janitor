@@ -26863,7 +26863,7 @@ var require_lib4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-NFD7VEB3.js
+// ../cli/dist/chunk-3AHGYEAX.js
 var import_fs2 = require("fs");
 
 // ../../node_modules/.pnpm/tinyglobby@0.2.17/node_modules/tinyglobby/dist/index.mjs
@@ -45593,7 +45593,7 @@ function date4(params) {
 // ../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/external.js
 config(en_default());
 
-// ../cli/dist/chunk-NFD7VEB3.js
+// ../cli/dist/chunk-3AHGYEAX.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -73997,11 +73997,19 @@ var TEST_RE4 = /(^|\/)(?:__tests__|tests?|specs?|fixtures?)\/|\.(?:test|spec)\.[
 var MAX_REQUESTS = 60;
 var MAX_ISSUES = 40;
 var CONCURRENCY2 = 4;
-var URL_RE = /https?:\/\/[^\s<>"'`)\]}\\]+/g;
+var URL_RE = /https?:\/\/[^\s<>"'`\]}\\]+/g;
 var SKIP_HOST_RE = /^(?:localhost|127\.|0\.0\.0\.0|\[?::1\]?|10\.|192\.168\.|172\.(?:1[6-9]|2\d|3[01])\.|169\.254\.|[^.]*\.local$|[^.]*\.internal$|[^.]*\.test$|[^.]*\.invalid$|[^.]*\.example$|example\.(?:com|org|net)$|.*\.example\.(?:com|org|net)$)/i;
 var PLACEHOLDER_RE2 = /\{\{|\}\}|\$\{|%[sdv]\b|<[a-z-]+>|\bYOUR[_-]|\bowner\/repo\b|\byour-/i;
 function stripTrailingPunctuation(url2) {
-  return url2.replace(/[.,;:!?'"*_)]+$/, "");
+  let depth = 0;
+  for (let i = 0; i < url2.length; i++) {
+    if (url2[i] === "(") depth++;
+    if (url2[i] === ")") {
+      if (depth === 0) return url2.slice(0, i).replace(/[.,;:!?'"*_]+$/, "");
+      depth--;
+    }
+  }
+  return url2.replace(/[.,;:!?'"*_]+$/, "");
 }
 function isCheckable(raw) {
   let u2;
@@ -74118,18 +74126,15 @@ var deadLinksScanner = {
         for (const { url: url2, line } of found) {
           if (!isCheckable(url2) || seen.has(url2)) continue;
           seen.set(url2, { file: norm, line });
-          if (seen.size >= MAX_REQUESTS) break;
         }
-        if (seen.size >= MAX_REQUESTS) break;
       }
       const targets = [...seen.entries()].slice(0, MAX_REQUESTS);
       const checked = yield mapPool(targets, CONCURRENCY2, (_0) => __async(null, [_0], function* ([url2, where]) {
-        const res = yield headUrl(url2);
+        const res = yield headUrl(url2).catch(() => null);
         return { url: url2, where, res };
       }));
       const issues = [];
       for (const { url: url2, where, res } of checked) {
-        if (issues.length >= MAX_ISSUES) break;
         if (res === null) {
           issues.push({
             id: `deadlink-unreachable-${url2}`,
@@ -74154,12 +74159,37 @@ var deadLinksScanner = {
             title: `Dead link (${res.status}) \u2192 ${url2}`,
             location: `${where.file}:${where.line}`,
             ageDays: 0,
-            detail: `${where.file} links to ${url2}, which returns HTTP ${res.status}. The page is gone; update the link to its new home or remove it.`,
+            detail: `${where.file} links to ${url2}, which returns HTTP ${res.status} to the scanner. Check whether it requires authentication before updating or removing the link.`,
+            evidence: url2
+          });
+        } else if (res.status < 200 || res.status >= 300) {
+          issues.push({
+            id: `deadlink-unverified-${url2}`,
+            category: "hygiene",
+            severity: "info",
+            title: `Link not verified (HTTP ${res.status}) \u2192 ${url2}`,
+            location: `${where.file}:${where.line}`,
+            ageDays: 0,
+            detail: `The server returned HTTP ${res.status}. Access restrictions, rate limits or server errors can prevent verification. This is not evidence that the link is dead; retry later or check it in your browser.`,
             evidence: url2
           });
         }
       }
-      return issues;
+      issues.sort((a, b3) => Number(b3.severity === "warning") - Number(a.severity === "warning"));
+      const omitted = Math.max(0, issues.length - MAX_ISSUES);
+      const result = issues.slice(0, MAX_ISSUES);
+      if (seen.size > targets.length || omitted > 0) {
+        result.push({
+          id: "deadlink-coverage",
+          category: "hygiene",
+          severity: "info",
+          title: "Link verification coverage is limited",
+          location: "repository",
+          ageDays: 0,
+          detail: `Checked ${targets.length} of ${seen.size} unique eligible URLs; ${seen.size - targets.length} were not checked because of the ${MAX_REQUESTS}-URL limit. ${omitted} additional findings were omitted from the detail list. Unchecked links must not be treated as working.`
+        });
+      }
+      return result;
     });
   }
 };
@@ -80262,11 +80292,19 @@ var TEST_RE8 = /(^|\/)(?:__tests__|tests?|specs?|fixtures?)\/|\.(?:test|spec)\.[
 var MAX_REQUESTS2 = 60;
 var MAX_ISSUES10 = 40;
 var CONCURRENCY4 = 4;
-var URL_RE2 = /https?:\/\/[^\s<>"'`)\]}\\]+/g;
+var URL_RE2 = /https?:\/\/[^\s<>"'`\]}\\]+/g;
 var SKIP_HOST_RE2 = /^(?:localhost|127\.|0\.0\.0\.0|\[?::1\]?|10\.|192\.168\.|172\.(?:1[6-9]|2\d|3[01])\.|169\.254\.|[^.]*\.local$|[^.]*\.internal$|[^.]*\.test$|[^.]*\.invalid$|[^.]*\.example$|example\.(?:com|org|net)$|.*\.example\.(?:com|org|net)$)/i;
 var PLACEHOLDER_RE4 = /\{\{|\}\}|\$\{|%[sdv]\b|<[a-z-]+>|\bYOUR[_-]|\bowner\/repo\b|\byour-/i;
 function stripTrailingPunctuation2(url2) {
-  return url2.replace(/[.,;:!?'"*_)]+$/, "");
+  let depth = 0;
+  for (let i = 0; i < url2.length; i++) {
+    if (url2[i] === "(") depth++;
+    if (url2[i] === ")") {
+      if (depth === 0) return url2.slice(0, i).replace(/[.,;:!?'"*_]+$/, "");
+      depth--;
+    }
+  }
+  return url2.replace(/[.,;:!?'"*_]+$/, "");
 }
 function isCheckable2(raw) {
   let u2;
@@ -80379,18 +80417,15 @@ var deadLinksScanner2 = {
       for (const { url: url2, line } of found) {
         if (!isCheckable2(url2) || seen.has(url2)) continue;
         seen.set(url2, { file: norm, line });
-        if (seen.size >= MAX_REQUESTS2) break;
       }
-      if (seen.size >= MAX_REQUESTS2) break;
     }
     const targets = [...seen.entries()].slice(0, MAX_REQUESTS2);
     const checked = await mapPool2(targets, CONCURRENCY4, async ([url2, where]) => {
-      const res = await headUrl(url2);
+      const res = await headUrl(url2).catch(() => null);
       return { url: url2, where, res };
     });
     const issues = [];
     for (const { url: url2, where, res } of checked) {
-      if (issues.length >= MAX_ISSUES10) break;
       if (res === null) {
         issues.push({
           id: `deadlink-unreachable-${url2}`,
@@ -80415,12 +80450,37 @@ var deadLinksScanner2 = {
           title: `Dead link (${res.status}) \u2192 ${url2}`,
           location: `${where.file}:${where.line}`,
           ageDays: 0,
-          detail: `${where.file} links to ${url2}, which returns HTTP ${res.status}. The page is gone; update the link to its new home or remove it.`,
+          detail: `${where.file} links to ${url2}, which returns HTTP ${res.status} to the scanner. Check whether it requires authentication before updating or removing the link.`,
+          evidence: url2
+        });
+      } else if (res.status < 200 || res.status >= 300) {
+        issues.push({
+          id: `deadlink-unverified-${url2}`,
+          category: "hygiene",
+          severity: "info",
+          title: `Link not verified (HTTP ${res.status}) \u2192 ${url2}`,
+          location: `${where.file}:${where.line}`,
+          ageDays: 0,
+          detail: `The server returned HTTP ${res.status}. Access restrictions, rate limits or server errors can prevent verification. This is not evidence that the link is dead; retry later or check it in your browser.`,
           evidence: url2
         });
       }
     }
-    return issues;
+    issues.sort((a, b3) => Number(b3.severity === "warning") - Number(a.severity === "warning"));
+    const omitted = Math.max(0, issues.length - MAX_ISSUES10);
+    const result = issues.slice(0, MAX_ISSUES10);
+    if (seen.size > targets.length || omitted > 0) {
+      result.push({
+        id: "deadlink-coverage",
+        category: "hygiene",
+        severity: "info",
+        title: "Link verification coverage is limited",
+        location: "repository",
+        ageDays: 0,
+        detail: `Checked ${targets.length} of ${seen.size} unique eligible URLs; ${seen.size - targets.length} were not checked because of the ${MAX_REQUESTS2}-URL limit. ${omitted} additional findings were omitted from the detail list. Unchecked links must not be treated as working.`
+      });
+    }
+    return result;
   }
 };
 
