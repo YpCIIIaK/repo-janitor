@@ -1,6 +1,6 @@
 import { promises as fs } from "fs";
-import fg from "fast-glob";
-import simpleGit, { SimpleGit } from "simple-git";
+import { glob } from "tinyglobby";
+import { simpleGit, type SimpleGit } from "simple-git";
 import { runScan, loadConfig } from "@repo-anti-rot/core";
 import type {
   ScanContext,
@@ -13,7 +13,7 @@ import { basename, join, relative, isAbsolute, resolve } from "path";
 import { safeRequest } from "./safe-network";
 
 /**
- * Node implementation of the engine's `ScanContext` (fast-glob + simple-git +
+ * Node implementation of the engine's `ScanContext` (tinyglobby + simple-git +
  * fetch). Lives here, not in the bin, so both the CLI and the GitHub Action build
  * the exact same context. Keep all IO in this file.
  */
@@ -122,7 +122,7 @@ export async function buildScanContext(root: string): Promise<ScanContext> {
   const config = await loadConfig(readRel, (msg) => console.warn(`[repo-anti-rot] ${msg}`));
 
   // Get list of files (excluding node_modules, .git, etc. plus user ignore globs)
-  const files = await fg([
+  const files = await glob([
     "**/*",
     "!**/node_modules/**",
     "!**/.git/**",
