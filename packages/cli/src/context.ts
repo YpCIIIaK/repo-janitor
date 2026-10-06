@@ -26,6 +26,28 @@ export interface RepoMetadata {
   commit?: string;
 }
 
+type UrlRequest = typeof safeRequest;
+
+/**
+ * Check a human-facing URL without trusting a HEAD-only 404/410.
+ *
+ * GitHub and a number of CDN/WAF frontends do not always route HEAD exactly as
+ * they route the GET a browser performs.  Treating that HEAD response as proof
+ * made working repository, issue and documentation links appear dead.  A GET is
+ * therefore the confirmation request for both unsupported HEAD responses and
+ * the two statuses the scanner can report as a dead link.
+ */
+export async function probePublishedUrl(
+  url: string,
+  request: UrlRequest = safeRequest,
+): Promise<{ status: number; url?: string }> {
+  let res = await request(url, { method: "HEAD" });
+  if ([404, 405, 410, 501].includes(res.status)) {
+    res = await request(url);
+  }
+  return { status: res.status, url: res.url };
+}
+
 export async function getRepoMetadata(git: SimpleGit, root: string): Promise<RepoMetadata> {
   // Local-repo fallback: derive a readable name from the folder rather than
   // "unknown-repo", so scanning a repo without a GitHub remote still reads well.
@@ -333,13 +355,7 @@ export async function buildScanContext(root: string): Promise<ScanContext> {
       // A per-request timeout matters more here than anywhere else: a link
       // scanner without one hangs the whole scan on the first unresponsive host.
       try {
-        // Some servers reject HEAD outright (405) while serving GET fine, so a
-        // rejected HEAD is retried as a GET before believing it.
-        let res = await safeRequest(url, { method: "HEAD" });
-        if (res.status === 405 || res.status === 501) {
-          res = await safeRequest(url);
-        }
-        return { status: res.status, url: res.url };
+        return await probePublishedUrl(url);
       } catch {
         // DNS failure, refused connection, or the timeout above. Reported as
         // "unreachable", which the scanner treats differently from a 404.
