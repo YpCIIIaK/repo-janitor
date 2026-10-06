@@ -4,7 +4,45 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync, unlinkSync } from "node:
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 import type { SimpleGit } from "simple-git"
-import { buildScanContext, getRepoMetadata } from "../src/context"
+import { buildScanContext, getRepoMetadata, probePublishedUrl } from "../src/context"
+import type { SafeResponse } from "../src/safe-network"
+
+describe("probePublishedUrl", () => {
+  function requester(statuses: number[]) {
+    const calls: Array<"GET" | "HEAD" | "POST"> = []
+    const request = async (url: string, options: { method?: "GET" | "HEAD" | "POST" } = {}) => {
+      calls.push(options.method ?? "GET")
+      const status = statuses.shift()
+      if (status === undefined) throw new Error("unexpected request")
+      return { status, url, text: "" } satisfies SafeResponse
+    }
+    return { calls, request }
+  }
+
+  it.each([404, 410])("confirms a HEAD %i with the GET a browser uses", async (headStatus) => {
+    const fake = requester([headStatus, 200])
+    const result = await probePublishedUrl("https://github.com/acme/widget", fake.request)
+
+    expect(fake.calls).toEqual(["HEAD", "GET"])
+    expect(result.status).toBe(200)
+  })
+
+  it("keeps a genuinely missing link dead when GET confirms the 404", async () => {
+    const fake = requester([404, 404])
+    const result = await probePublishedUrl("https://github.com/acme/missing", fake.request)
+
+    expect(fake.calls).toEqual(["HEAD", "GET"])
+    expect(result.status).toBe(404)
+  })
+
+  it("does not spend a GET on a successful HEAD", async () => {
+    const fake = requester([200])
+    const result = await probePublishedUrl("https://github.com/acme/widget", fake.request)
+
+    expect(fake.calls).toEqual(["HEAD"])
+    expect(result.status).toBe(200)
+  })
+})
 
 /**
  * Build a fake SimpleGit exposing only the methods getRepoMetadata calls.
