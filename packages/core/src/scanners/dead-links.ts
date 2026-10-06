@@ -43,7 +43,7 @@ const MAX_ISSUES = 40
 /** Requests in flight. Deliberately low: politeness to the hosts, not throughput. */
 const CONCURRENCY = 4
 
-const URL_RE = /https?:\/\/[^\s<>"'`)\]}\\]+/g
+const URL_RE = /https?:\/\/[^\s<>"'`\]}\\]+/g
 
 /**
  * Hosts and shapes that must never be requested.
@@ -75,7 +75,15 @@ const PLACEHOLDER_RE =
 function stripTrailingPunctuation(url: string): string {
   // Markdown and prose leave punctuation glued to the end: "see https://example.com."
   // Emphasis markers count: `[text](https://example.com)**` is a real shape.
-  return url.replace(/[.,;:!?'"*_)]+$/, "")
+  let depth = 0
+  for (let i = 0; i < url.length; i++) {
+    if (url[i] === "(") depth++
+    if (url[i] === ")") {
+      if (depth === 0) return url.slice(0, i).replace(/[.,;:!?'"*_]+$/, "")
+      depth--
+    }
+  }
+  return url.replace(/[.,;:!?'"*_]+$/, "")
 }
 
 /**
@@ -266,20 +274,17 @@ export const deadLinksScanner: Scanner = {
       for (const { url, line } of found) {
         if (!isCheckable(url) || seen.has(url)) continue
         seen.set(url, { file: norm, line })
-        if (seen.size >= MAX_REQUESTS) break
       }
-      if (seen.size >= MAX_REQUESTS) break
     }
 
     const targets = [...seen.entries()].slice(0, MAX_REQUESTS)
     const checked = await mapPool(targets, CONCURRENCY, async ([url, where]) => {
-      const res = await headUrl(url)
+      const res = await headUrl(url).catch(() => null)
       return { url, where, res }
     })
 
     const issues: Issue[] = []
     for (const { url, where, res } of checked) {
-      if (issues.length >= MAX_ISSUES) break
 
       // Unreachable: DNS failed, connection refused, or it timed out.
       if (res === null) {
@@ -302,9 +307,8 @@ export const deadLinksScanner: Scanner = {
         continue
       }
 
-      // 404/410 are the unambiguous ones. A 401/403 means the page exists but
-      // wants credentials, and 5xx is the server having a bad day — neither is
-      // the repository's bug, so neither is reported.
+      // The network adapter confirms HEAD 404/410 with GET. Other non-success
+      // statuses are inconclusive and must remain visible without a dead verdict.
       if (res.status === 404 || res.status === 410) {
         issues.push({
           id: `deadlink-${res.status}-${url}`,
@@ -314,13 +318,39 @@ export const deadLinksScanner: Scanner = {
           location: `${where.file}:${where.line}`,
           ageDays: 0,
           detail:
-            `${where.file} links to ${url}, which returns HTTP ${res.status}. The page is gone; ` +
-            "update the link to its new home or remove it.",
+            `${where.file} links to ${url}, which returns HTTP ${res.status} to the scanner. ` +
+            "Check whether it requires authentication before updating or removing the link.",
+          evidence: url,
+        })
+      } else if (res.status < 200 || res.status >= 300) {
+        issues.push({
+          id: `deadlink-unverified-${url}`,
+          category: "hygiene",
+          severity: "info",
+          title: `Link not verified (HTTP ${res.status}) → ${url}`,
+          location: `${where.file}:${where.line}`,
+          ageDays: 0,
+          detail: `The server returned HTTP ${res.status}. Access restrictions, rate limits or server errors can prevent verification. This is not evidence that the link is dead; retry later or check it in your browser.`,
           evidence: url,
         })
       }
     }
 
-    return issues
+    // Keep confirmed failures ahead of inconclusive checks when output is capped.
+    issues.sort((a, b) => Number(b.severity === "warning") - Number(a.severity === "warning"))
+    const omitted = Math.max(0, issues.length - MAX_ISSUES)
+    const result = issues.slice(0, MAX_ISSUES)
+    if (seen.size > targets.length || omitted > 0) {
+      result.push({
+        id: "deadlink-coverage",
+        category: "hygiene",
+        severity: "info",
+        title: "Link verification coverage is limited",
+        location: "repository",
+        ageDays: 0,
+        detail: `Checked ${targets.length} of ${seen.size} unique eligible URLs; ${seen.size - targets.length} were not checked because of the ${MAX_REQUESTS}-URL limit. ${omitted} additional findings were omitted from the detail list. Unchecked links must not be treated as working.`,
+      })
+    }
+    return result
   },
 }

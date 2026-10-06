@@ -103,6 +103,10 @@ describe("isCheckable", () => {
 })
 
 describe("extractUrls", () => {
+  it("preserves nested parentheses but excludes the markdown delimiter", () => {
+    expect(extractUrls("[x](https://github.com/acme/widget/wiki/A_(B_(C)))")).toEqual(["https://github.com/acme/widget/wiki/A_(B_(C))"])
+    expect(extractUrls("(https://a.dev/A_(B)).")).toEqual(["https://a.dev/A_(B)"])
+  })
   it("strips punctuation that prose glues to the end", () => {
     expect(extractUrls("See https://nodejs.org/api.html.")).toEqual(["https://nodejs.org/api.html"])
     expect(extractUrls("(https://a.dev/x), next")).toEqual(["https://a.dev/x"])
@@ -144,12 +148,31 @@ describe("deadLinksScanner", () => {
    * having a bad day. Neither is the repository's bug, and reporting them would
    * make the category untrustworthy.
    */
-  it.each([401, 403, 429, 500, 503])("does not report HTTP %i", async (status) => {
+  it.each([401, 403, 429, 500, 503])("reports HTTP %i as unverified rather than dead", async (status) => {
     const ctx = makeContext({
       files: { "README.md": "[x](https://acme.dev/a)\n" },
       headUrl: { "https://acme.dev/a": { status } },
     })
-    expect(await deadLinksScanner.run(ctx)).toHaveLength(0)
+    const issues = await deadLinksScanner.run(ctx)
+    expect(issues).toHaveLength(1)
+    expect(issues[0].severity).toBe("info")
+    expect(issues[0].title).toContain("not verified")
+  })
+
+  it("discloses unchecked links beyond the request budget", async () => {
+    let requests = 0
+    const ctx = makeContext({ files: { "README.md": Array.from({ length: 65 }, (_, i) => `https://acme.dev/${i}`).join("\n") } })
+    const issues = await deadLinksScanner.run({ ...ctx, headUrl: async () => { requests++; return { status: 200 } } })
+    expect(requests).toBe(60)
+    expect(issues).toHaveLength(1)
+    expect(issues[0].detail).toContain("Checked 60 of 65")
+  })
+
+  it("does not let inconclusive checks hide confirmed dead links", async () => {
+    const ctx = makeContext({ files: { "README.md": Array.from({ length: 60 }, (_, i) => `https://acme.dev/${i}`).join("\n") } })
+    const issues = await deadLinksScanner.run({ ...ctx, headUrl: async (url) => ({ status: url.endsWith("/59") ? 404 : 429 }) })
+    expect(issues[0].severity).toBe("warning")
+    expect(issues.at(-1)?.detail).toContain("20 additional findings")
   })
 
   it("finds links in code comments and package.json, not just markdown", async () => {
