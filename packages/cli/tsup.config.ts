@@ -11,7 +11,7 @@ export default defineConfig({
   dts: true,
   // Bundle the workspace core in: it ships raw .ts (main → src/index.ts),
   // so leaving it external makes Node fail with ERR_UNKNOWN_FILE_EXTENSION.
-  // Everything else (commander/fast-glob/simple-git/zod) stays a real dep.
+  // Everything else (commander/tinyglobby/simple-git/zod) stays a real dep.
   noExternal: ["@repo-anti-rot/core"],
   // Stamp the CLI's --version from package.json at build time.
   define: { __CLI_VERSION__: JSON.stringify(version) },
