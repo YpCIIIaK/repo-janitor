@@ -78,7 +78,7 @@ export interface StoredShare {
 }
 
 export type PublishShareResult =
-  | { ok: true; share: StoredShare; manageKey: string; created: boolean }
+  | { ok: true; share: StoredShare; manageKey: string; created: boolean; reclaimed?: boolean }
   | { ok: false; code: "missing_key" | "forbidden"; message: string }
 
 function fileFor(token: string): string {
@@ -146,12 +146,15 @@ export async function putShare(report: SharedReport): Promise<StoredShare & { ma
  */
 export async function publishShare(
   report: SharedReport,
-  opts: { manageKey?: string; rotate?: boolean } = {},
+  opts: { manageKey?: string; rotate?: boolean; ownerLogin?: string } = {},
 ): Promise<PublishShareResult> {
   return withStorageLock(() => publish(report, opts))
 }
 
-async function publish(report: SharedReport, opts: { manageKey?: string; rotate?: boolean }): Promise<PublishShareResult> {
+async function publish(
+  report: SharedReport,
+  opts: { manageKey?: string; rotate?: boolean; ownerLogin?: string },
+): Promise<PublishShareResult> {
   assertShareable(report)
   const repoKey = repoKeyOf(report.repo)
   const existing = await getShareByRepoKey(repoKey)
@@ -172,6 +175,31 @@ async function publish(report: SharedReport, opts: { manageKey?: string; rotate?
   }
 
   const manageKey = opts.manageKey?.trim() ?? ""
+  const keyMatches =
+    !!manageKey && !!existing.manageKeyHash && verifyManageKey(manageKey, existing.manageKeyHash)
+
+  // Lost manage key (other browser, cleared storage, legacy row): the repo
+  // owner, signed in with GitHub, reclaims the link. Same public token, so
+  // README badges keep working; a fresh manage key replaces the old one.
+  const login = opts.ownerLogin?.trim().toLowerCase()
+  if (!keyMatches && login && login === report.repo.owner.trim().toLowerCase()) {
+    const newKey = newManageKey()
+    const share: StoredShare = {
+      ...existing,
+      token: opts.rotate ? newShareToken() : existing.token,
+      updatedAt: new Date().toISOString(),
+      manageKeyHash: hashManageKey(newKey),
+      report,
+    }
+    if (opts.rotate) {
+      await removeShareRecord(existing)
+      await writeShare(share)
+    } else {
+      await writeShare(share, { update: true })
+    }
+    return { ok: true, share, manageKey: newKey, created: false, reclaimed: true }
+  }
+
   if (!manageKey) {
     return {
       ok: false,
@@ -180,7 +208,7 @@ async function publish(report: SharedReport, opts: { manageKey?: string; rotate?
         "A share link already exists for this repository. Pass the manage key from the browser that created it to update the snapshot.",
     }
   }
-  if (!existing.manageKeyHash || !verifyManageKey(manageKey, existing.manageKeyHash)) {
+  if (!keyMatches) {
     return {
       ok: false,
       code: "forbidden",
