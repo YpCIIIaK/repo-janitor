@@ -1,8 +1,8 @@
 "use client"
 
+import { Logo } from "@/components/icons/logo"
 import { useEffect, useState, type ReactNode } from "react"
 import {
-  Activity,
   Boxes,
   GitBranch,
   GitGraph,
@@ -167,9 +167,9 @@ export function RepoSidebar({
           onClick={onHome}
           title={t("nav.brandHome")}
           aria-label={t("nav.backHome")}
-          className="mb-2 flex size-9 items-center justify-center rounded-lg bg-primary/15 text-primary transition-colors hover:bg-primary/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="mb-2 flex size-9 items-center justify-center rounded-lg text-foreground transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
-          <Activity className="size-4" />
+          <Logo className="size-9" />
         </button>
         {onShowOverview && (
           <RailButton
