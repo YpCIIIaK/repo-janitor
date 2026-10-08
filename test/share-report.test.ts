@@ -165,3 +165,32 @@ describe("assertShareable", () => {
     expect(() => assertShareable({ score: 72, topIssues: [{ title: "ok" }] })).not.toThrow()
   })
 })
+
+describe("toSharedReport — essentials and activity", () => {
+  it("copies only known checklist keys and activity counts", () => {
+    const base = report([issue()])
+    const shared = toSharedReport({
+      ...base,
+      profile: {
+        totalFiles: 3,
+        languages: [],
+        tools: [],
+        checklist: { readme: true, license: false, injected: "x" },
+        activity: {
+          commitsLastYear: 5,
+          authors: 2,
+          coreAuthors: 1,
+          months: [{ month: "2026-07", commits: 5 }],
+          names: ["alice@example.com"],
+        },
+      },
+    } as unknown as ScanReport)
+    expect(shared.profile?.checklist?.readme).toBe(true)
+    expect(shared.profile?.checklist?.license).toBe(false)
+    expect(shared.profile?.checklist).not.toHaveProperty("injected")
+    expect(Object.keys(shared.profile?.checklist ?? {})).toHaveLength(9)
+    expect(shared.profile?.activity?.commitsLastYear).toBe(5)
+    expect(JSON.stringify(shared)).not.toContain("alice")
+    expect(() => assertShareable(shared)).not.toThrow()
+  })
+})

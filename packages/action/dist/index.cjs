@@ -26863,7 +26863,7 @@ var require_lib4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-AISCPNZK.js
+// ../cli/dist/chunk-QJHHQ5EA.js
 var import_fs2 = require("fs");
 
 // ../../node_modules/.pnpm/tinyglobby@0.2.17/node_modules/tinyglobby/dist/index.mjs
@@ -45593,7 +45593,7 @@ function date4(params) {
 // ../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/external.js
 config(en_default());
 
-// ../cli/dist/chunk-AISCPNZK.js
+// ../cli/dist/chunk-QJHHQ5EA.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -69903,7 +69903,9 @@ var issueSchema = external_exports.object({
    * `id`, which silently breaks the day an id format changes. Optional because
    * reports written before this field existed are still valid.
    */
-  scanner: external_exports.string().optional()
+  scanner: external_exports.string().optional(),
+  /** Specific check within the scanner (see rules.ts); stamped by the engine. */
+  rule: external_exports.string().optional()
 });
 var repoProfileSchema = external_exports.object({
   /** Total files the scan walked (after ignore globs). */
@@ -70107,6 +70109,98 @@ function summarizeActivity(commits, lastCommitAt, now = Date.now()) {
     authors: perAuthor.size,
     coreAuthors: core
   };
+}
+var INSECURE = {
+  "eval-dynamic": "eval() on a dynamic value",
+  "new-function": "new Function() on a dynamic value",
+  "exec-interpolated": "Shell command built from variables",
+  "sql-interpolated": "SQL built by string interpolation",
+  "innerhtml-dynamic": "innerHTML set from a variable",
+  "react-dangerous-html": "dangerouslySetInnerHTML",
+  "tls-verification-off": "TLS verification disabled",
+  "weak-hash": "Weak hash (MD5/SHA-1)",
+  "random-for-secret": "Math.random() for a secret",
+  "localstorage-secret": "Secret in localStorage",
+  "document-write-dynamic": "document.write() of a variable",
+  "py-shell-true": "subprocess with shell=True",
+  "py-os-system": "os.system() call",
+  "py-yaml-load": "Unsafe yaml.load()",
+  "py-pickle-load": "pickle.load() of untrusted data",
+  "py-eval-exec": "Python eval()/exec()",
+  "py-verify-false": "requests with verify=False"
+};
+var WORKFLOW = {
+  "action-unpinned": "Action not pinned to a commit",
+  "self-hosted-runner": "Self-hosted runner on public triggers",
+  "script-injection": "Script injection in a workflow",
+  "pr-target-checkout": "pull_request_target checks out PR code",
+  "no-permissions": "Workflow token permissions not restricted"
+};
+var DEFS = [
+  { rule: "secret-history", label: "Secret still in git history", test: /^secret-history-/ },
+  { rule: "secret-generic", label: "High-entropy secret assignment", test: /^secret-entropy-/ },
+  { rule: "secret-provider", label: "Provider credential (AWS, Stripe, GitHub\u2026)", test: /^secret-/ },
+  ...Object.entries(INSECURE).map(([id, label]) => ({
+    rule: `insecure-${id}`,
+    label,
+    test: new RegExp(`^insecure-${id}-`)
+  })),
+  ...Object.entries(WORKFLOW).map(([id, label]) => ({ rule: `workflow-${id}`, label, test: new RegExp(`^${id}-`) })),
+  { rule: "ci-tests-not-run", label: "CI never runs the tests", test: /^ci-tests-not-run/ },
+  { rule: "ci-no-pr-trigger", label: "CI does not run on pull requests", test: /^ci-no-pr-trigger/ },
+  { rule: "ci-silenced-failure", label: "CI step failures silenced", test: /^ci-silenced-failure-/ },
+  { rule: "ci-disabled", label: "CI job disabled", test: /^ci-disabled-/ },
+  { rule: "ci-swallowed", label: "CI errors swallowed", test: /^ci-swallowed-/ },
+  { rule: "vuln", label: "Dependency with a known vulnerability", test: /^vuln-/ },
+  { rule: "dep-unused", label: "Unused dependency", test: /^dep-unused-/ },
+  { rule: "dep-deprecated", label: "Deprecated dependency", test: /^dep-deprecated-/ },
+  { rule: "dep-abandoned", label: "Abandoned dependency", test: /^dep-abandoned-/ },
+  { rule: "dep-outdated", label: "Outdated dependency", test: /^dep-outdated-/ },
+  { rule: "eol-runner", label: "End-of-life CI runner image", test: /^eol-runner-/ },
+  { rule: "eol-runtime", label: "End-of-life runtime version", test: /^eol-/ },
+  { rule: "license-network", label: "Network copyleft license (AGPL\u2026)", test: /^license-network-/ },
+  { rule: "license-strong", label: "Strong copyleft license (GPL\u2026)", test: /^license-strong-/ },
+  { rule: "license-weak", label: "Weak copyleft license (LGPL, MPL\u2026)", test: /^license-weak-/ },
+  { rule: "license-proprietary", label: "Proprietary or unknown license", test: /^license-proprietary-/ },
+  { rule: "lockfile-missing", label: "No lockfile committed", test: /^lockfile-missing/ },
+  { rule: "lockfile-drift", label: "Lockfile out of sync with manifest", test: /^lockfile-drift-/ },
+  { rule: "supply-remote-shell", label: "Install script pipes a download to a shell", test: /^supply-(lifecycle-remote-shell|scripts-curl-pipe)-/ },
+  { rule: "supply-node-eval", label: "Install script evaluates code", test: /^supply-lifecycle-node-eval-/ },
+  { rule: "supply-git-http", label: "Dependency fetched over plain HTTP", test: /^supply-dep-git-http-/ },
+  { rule: "env-missing", label: "Env var used but not in .env.example", test: /^env-missing-/ },
+  { rule: "env-dead", label: "Env var documented but never used", test: /^env-dead-/ },
+  { rule: "env-no-example", label: "No .env.example", test: /^env-no-example/ },
+  { rule: "branch-stale", label: "Stale branch", test: /^branch-stale-/ },
+  { rule: "todo", label: "Old TODO / FIXME", test: /^todo-/ },
+  { rule: "dead-export", label: "Export nothing imports", test: /^dead-(export|symbol)-/ },
+  { rule: "dead-uikit", label: "Unused UI kit", test: /^dead-code-uikit-/ },
+  { rule: "duplicate", label: "Duplicated block", test: /^duplicate-/ },
+  { rule: "commented-code", label: "Commented-out code", test: /^commented-/ },
+  { rule: "debug-leftover", label: "Leftover debug statement", test: /^debug-/ },
+  { rule: "skipped-test", label: "Skipped or focused test", test: /^skiptest-/ },
+  { rule: "bus-factor", label: "Old single-author file", test: /^busfactor-/ },
+  { rule: "hygiene-no-readme", label: "No README", test: /^hygiene-no-readme/ },
+  { rule: "hygiene-no-license", label: "No LICENSE", test: /^hygiene-no-license/ },
+  { rule: "hygiene-no-tests", label: "No tests", test: /^hygiene-no-tests/ },
+  { rule: "hygiene-no-ci", label: "No CI", test: /^hygiene-no-ci/ },
+  { rule: "bloat", label: "Large or binary file in git", test: /^bloat-/ },
+  { rule: "docker-latest", label: "Base image uses :latest", test: /^docker-latest-/ },
+  { rule: "docker-untagged", label: "Base image has no tag", test: /^docker-untagged-/ },
+  { rule: "docker-root", label: "Container runs as root", test: /^docker-root-/ },
+  { rule: "docker-add-url", label: "ADD downloads a remote URL", test: /^docker-add-url-/ },
+  { rule: "config-conflict", label: "Two configs, one ignored", test: /^config-conflict-/ },
+  { rule: "docs-script", label: "Docs mention a missing script", test: /^docs-drift-script-/ },
+  { rule: "docs-manager", label: "Docs use the wrong package manager", test: /^docs-drift-manager-/ },
+  { rule: "docs-badge", label: "Badge points at something gone", test: /^docs-drift-badge-/ },
+  { rule: "doc-link", label: "Broken relative link in docs", test: /^doclink-/ },
+  { rule: "dead-link", label: "External link no longer resolves", test: /^deadlink-(\d|unreachable)/ },
+  { rule: "dead-link-unverified", label: "External link could not be checked", test: /^deadlink-/ }
+];
+var LABELS = new Map(DEFS.map((d2) => [d2.rule, d2.label]));
+function ruleOf(issue2) {
+  var _a22;
+  for (const d2 of DEFS) if (d2.test.test(issue2.id)) return d2.rule;
+  return (_a22 = issue2.scanner) != null ? _a22 : "other";
 }
 var CONFIG_FILENAME = ".repo-anti-rot.json";
 var DEFAULT_WEIGHTS = { critical: 10, warning: 3, info: 0.25, infoCap: 10 };
@@ -76058,7 +76152,7 @@ function applyInlineIgnores(issues, ctx) {
 }
 function runScan(_0) {
   return __async(this, arguments, function* (ctx, scanners = defaultScanners, onProgress) {
-    var _a22, _b, _c, _d, _e2;
+    var _a22, _b, _c, _d, _e2, _f;
     const issues = [];
     const completedScanners = [];
     const failedScanners = [];
@@ -76068,7 +76162,8 @@ function runScan(_0) {
     for (const scanner of scanners) {
       try {
         for (const issue2 of yield scanner.run(ctx)) {
-          issues.push(__spreadProps(__spreadValues({}, issue2), { scanner: scanner.id }));
+          const stamped = __spreadProps(__spreadValues({}, issue2), { scanner: scanner.id });
+          issues.push(__spreadProps(__spreadValues({}, stamped), { rule: (_a22 = stamped.rule) != null ? _a22 : ruleOf(stamped) }));
         }
         completedScanners.push(scanner.id);
       } catch (err) {
@@ -76078,8 +76173,8 @@ function runScan(_0) {
       completed++;
       onProgress == null ? void 0 : onProgress({ scanner: scanner.id, completed, total });
     }
-    const weights = (_b = (_a22 = ctx.config) == null ? void 0 : _a22.weights) != null ? _b : DEFAULT_WEIGHTS;
-    const mute = (_d = (_c = ctx.config) == null ? void 0 : _c.mute) != null ? _d : [];
+    const weights = (_c = (_b = ctx.config) == null ? void 0 : _b.weights) != null ? _c : DEFAULT_WEIGHTS;
+    const mute = (_e2 = (_d = ctx.config) == null ? void 0 : _d.mute) != null ? _e2 : [];
     const inlineVisible = yield applyInlineIgnores(issues, ctx);
     const visible = mute.length ? inlineVisible.filter((i) => !isMuted(i, mute)) : inlineVisible;
     const score = computeScore(visible, weights);
@@ -76091,7 +76186,7 @@ function runScan(_0) {
       score,
       grade: scoreToGrade(score),
       issues: visible,
-      diagnostics: { completedScanners, failedScanners, history: (_e2 = ctx.history) != null ? _e2 : "unavailable" },
+      diagnostics: { completedScanners, failedScanners, history: (_f = ctx.history) != null ? _f : "unavailable" },
       // Echo effective weights so the dashboard recomputes the score identically.
       config: { weights },
       metrics: { linesOfCode },
@@ -76558,7 +76653,9 @@ var issueSchema2 = external_exports.object({
    * `id`, which silently breaks the day an id format changes. Optional because
    * reports written before this field existed are still valid.
    */
-  scanner: external_exports.string().optional()
+  scanner: external_exports.string().optional(),
+  /** Specific check within the scanner (see rules.ts); stamped by the engine. */
+  rule: external_exports.string().optional()
 });
 var repoProfileSchema2 = external_exports.object({
   /** Total files the scan walked (after ignore globs). */
@@ -76631,6 +76728,95 @@ var scanReportSchema2 = external_exports.object({
   /** What the codebase is made of — languages and detected tooling. */
   profile: repoProfileSchema2.optional()
 });
+
+// ../core/src/rules.ts
+var INSECURE2 = {
+  "eval-dynamic": "eval() on a dynamic value",
+  "new-function": "new Function() on a dynamic value",
+  "exec-interpolated": "Shell command built from variables",
+  "sql-interpolated": "SQL built by string interpolation",
+  "innerhtml-dynamic": "innerHTML set from a variable",
+  "react-dangerous-html": "dangerouslySetInnerHTML",
+  "tls-verification-off": "TLS verification disabled",
+  "weak-hash": "Weak hash (MD5/SHA-1)",
+  "random-for-secret": "Math.random() for a secret",
+  "localstorage-secret": "Secret in localStorage",
+  "document-write-dynamic": "document.write() of a variable",
+  "py-shell-true": "subprocess with shell=True",
+  "py-os-system": "os.system() call",
+  "py-yaml-load": "Unsafe yaml.load()",
+  "py-pickle-load": "pickle.load() of untrusted data",
+  "py-eval-exec": "Python eval()/exec()",
+  "py-verify-false": "requests with verify=False"
+};
+var WORKFLOW2 = {
+  "action-unpinned": "Action not pinned to a commit",
+  "self-hosted-runner": "Self-hosted runner on public triggers",
+  "script-injection": "Script injection in a workflow",
+  "pr-target-checkout": "pull_request_target checks out PR code",
+  "no-permissions": "Workflow token permissions not restricted"
+};
+var DEFS2 = [
+  { rule: "secret-history", label: "Secret still in git history", test: /^secret-history-/ },
+  { rule: "secret-generic", label: "High-entropy secret assignment", test: /^secret-entropy-/ },
+  { rule: "secret-provider", label: "Provider credential (AWS, Stripe, GitHub\u2026)", test: /^secret-/ },
+  ...Object.entries(INSECURE2).map(([id, label]) => ({
+    rule: `insecure-${id}`,
+    label,
+    test: new RegExp(`^insecure-${id}-`)
+  })),
+  ...Object.entries(WORKFLOW2).map(([id, label]) => ({ rule: `workflow-${id}`, label, test: new RegExp(`^${id}-`) })),
+  { rule: "ci-tests-not-run", label: "CI never runs the tests", test: /^ci-tests-not-run/ },
+  { rule: "ci-no-pr-trigger", label: "CI does not run on pull requests", test: /^ci-no-pr-trigger/ },
+  { rule: "ci-silenced-failure", label: "CI step failures silenced", test: /^ci-silenced-failure-/ },
+  { rule: "ci-disabled", label: "CI job disabled", test: /^ci-disabled-/ },
+  { rule: "ci-swallowed", label: "CI errors swallowed", test: /^ci-swallowed-/ },
+  { rule: "vuln", label: "Dependency with a known vulnerability", test: /^vuln-/ },
+  { rule: "dep-unused", label: "Unused dependency", test: /^dep-unused-/ },
+  { rule: "dep-deprecated", label: "Deprecated dependency", test: /^dep-deprecated-/ },
+  { rule: "dep-abandoned", label: "Abandoned dependency", test: /^dep-abandoned-/ },
+  { rule: "dep-outdated", label: "Outdated dependency", test: /^dep-outdated-/ },
+  { rule: "eol-runner", label: "End-of-life CI runner image", test: /^eol-runner-/ },
+  { rule: "eol-runtime", label: "End-of-life runtime version", test: /^eol-/ },
+  { rule: "license-network", label: "Network copyleft license (AGPL\u2026)", test: /^license-network-/ },
+  { rule: "license-strong", label: "Strong copyleft license (GPL\u2026)", test: /^license-strong-/ },
+  { rule: "license-weak", label: "Weak copyleft license (LGPL, MPL\u2026)", test: /^license-weak-/ },
+  { rule: "license-proprietary", label: "Proprietary or unknown license", test: /^license-proprietary-/ },
+  { rule: "lockfile-missing", label: "No lockfile committed", test: /^lockfile-missing/ },
+  { rule: "lockfile-drift", label: "Lockfile out of sync with manifest", test: /^lockfile-drift-/ },
+  { rule: "supply-remote-shell", label: "Install script pipes a download to a shell", test: /^supply-(lifecycle-remote-shell|scripts-curl-pipe)-/ },
+  { rule: "supply-node-eval", label: "Install script evaluates code", test: /^supply-lifecycle-node-eval-/ },
+  { rule: "supply-git-http", label: "Dependency fetched over plain HTTP", test: /^supply-dep-git-http-/ },
+  { rule: "env-missing", label: "Env var used but not in .env.example", test: /^env-missing-/ },
+  { rule: "env-dead", label: "Env var documented but never used", test: /^env-dead-/ },
+  { rule: "env-no-example", label: "No .env.example", test: /^env-no-example/ },
+  { rule: "branch-stale", label: "Stale branch", test: /^branch-stale-/ },
+  { rule: "todo", label: "Old TODO / FIXME", test: /^todo-/ },
+  { rule: "dead-export", label: "Export nothing imports", test: /^dead-(export|symbol)-/ },
+  { rule: "dead-uikit", label: "Unused UI kit", test: /^dead-code-uikit-/ },
+  { rule: "duplicate", label: "Duplicated block", test: /^duplicate-/ },
+  { rule: "commented-code", label: "Commented-out code", test: /^commented-/ },
+  { rule: "debug-leftover", label: "Leftover debug statement", test: /^debug-/ },
+  { rule: "skipped-test", label: "Skipped or focused test", test: /^skiptest-/ },
+  { rule: "bus-factor", label: "Old single-author file", test: /^busfactor-/ },
+  { rule: "hygiene-no-readme", label: "No README", test: /^hygiene-no-readme/ },
+  { rule: "hygiene-no-license", label: "No LICENSE", test: /^hygiene-no-license/ },
+  { rule: "hygiene-no-tests", label: "No tests", test: /^hygiene-no-tests/ },
+  { rule: "hygiene-no-ci", label: "No CI", test: /^hygiene-no-ci/ },
+  { rule: "bloat", label: "Large or binary file in git", test: /^bloat-/ },
+  { rule: "docker-latest", label: "Base image uses :latest", test: /^docker-latest-/ },
+  { rule: "docker-untagged", label: "Base image has no tag", test: /^docker-untagged-/ },
+  { rule: "docker-root", label: "Container runs as root", test: /^docker-root-/ },
+  { rule: "docker-add-url", label: "ADD downloads a remote URL", test: /^docker-add-url-/ },
+  { rule: "config-conflict", label: "Two configs, one ignored", test: /^config-conflict-/ },
+  { rule: "docs-script", label: "Docs mention a missing script", test: /^docs-drift-script-/ },
+  { rule: "docs-manager", label: "Docs use the wrong package manager", test: /^docs-drift-manager-/ },
+  { rule: "docs-badge", label: "Badge points at something gone", test: /^docs-drift-badge-/ },
+  { rule: "doc-link", label: "Broken relative link in docs", test: /^doclink-/ },
+  { rule: "dead-link", label: "External link no longer resolves", test: /^deadlink-(\d|unreachable)/ },
+  { rule: "dead-link-unverified", label: "External link could not be checked", test: /^deadlink-/ }
+];
+var LABELS2 = new Map(DEFS2.map((d2) => [d2.rule, d2.label]));
 
 // ../core/src/config.ts
 var weightsSchema2 = external_exports.object({

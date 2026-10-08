@@ -1,6 +1,8 @@
 "use client"
 
-import { AlertTriangle, CheckCircle2, Cpu, Gauge, Ruler, XCircle } from "lucide-react"
+import { useState } from "react"
+import { AlertTriangle, CheckCircle2, ChevronRight, Cpu, Gauge, Ruler, XCircle } from "lucide-react"
+import { ruleLabel, ruleOf } from "@/packages/core/src/rules"
 import { categoryLabels, type Grade, type Issue, type IssueCategory, type Severity } from "@/lib/mock-data"
 import {
   DEFAULT_WEIGHTS,
@@ -74,11 +76,11 @@ function ScannerTable({
   diagnostics?: Diagnostics
 }) {
   const costs = issueCosts(issues, weights)
-  const rows = new Map<string, { counts: Record<Severity, number>; cost: number; total: number }>()
+  const rows = new Map<string, ScannerRow>()
   const ensure = (id: string) => {
     let r = rows.get(id)
     if (!r) {
-      r = { counts: { critical: 0, warning: 0, info: 0 }, cost: 0, total: 0 }
+      r = { counts: { critical: 0, warning: 0, info: 0 }, cost: 0, total: 0, rules: new Map() }
       rows.set(id, r)
     }
     return r
@@ -87,8 +89,15 @@ function ScannerTable({
   for (const issue of issues) {
     const r = ensure(issue.scanner ?? "unknown")
     r.counts[issue.severity]++
-    r.cost += costs.get(issue.id) ?? 0
+    const cost = costs.get(issue.id) ?? 0
+    r.cost += cost
     r.total++
+    const key = issue.rule ?? ruleOf(issue)
+    const rule = r.rules.get(key) ?? { count: 0, cost: 0, worst: issue.severity }
+    rule.count++
+    rule.cost += cost
+    if (SEVERITIES.indexOf(issue.severity) < SEVERITIES.indexOf(rule.worst)) rule.worst = issue.severity
+    r.rules.set(key, rule)
   }
   const failed = diagnostics?.failedScanners ?? []
   for (const id of failed) rows.delete(id)
@@ -115,28 +124,7 @@ function ScannerTable({
         {withFindings.length > 0 && (
           <ul className="divide-y divide-border">
             {withFindings.map(([id, r]) => (
-              <li key={id} className="grid grid-cols-[1fr_auto] gap-x-4 gap-y-1 py-2.5 sm:grid-cols-[minmax(0,1fr)_140px_64px]">
-                <div className="min-w-0">
-                  <p className="truncate text-sm font-medium">{scannerName(id)}</p>
-                  {SCANNER_INFO[id] && (
-                    <p className="truncate text-xs text-muted-foreground">{SCANNER_INFO[id].what}</p>
-                  )}
-                </div>
-                <div className="col-start-1 flex items-center gap-2.5 text-xs tabular-nums text-muted-foreground sm:col-start-auto">
-                  {SEVERITIES.filter((s) => r.counts[s] > 0).map((s) => (
-                    <span key={s} className="flex items-center gap-1" title={s}>
-                      <span className={cn("size-2 rounded-full", SEV_DOT[s])} />
-                      {r.counts[s]}
-                    </span>
-                  ))}
-                </div>
-                <div className="row-span-2 row-start-1 flex flex-col items-end justify-center gap-1 sm:row-span-1 sm:row-start-auto">
-                  <span className="text-sm font-semibold tabular-nums">−{fmt(r.cost)}</span>
-                  <span className="h-1 w-12 overflow-hidden rounded-full bg-secondary">
-                    <span className="block h-full bg-primary" style={{ width: `${(r.cost / maxCost) * 100}%` }} />
-                  </span>
-                </div>
-              </li>
+              <ScannerRowItem key={id} id={id} row={r} maxCost={maxCost} />
             ))}
           </ul>
         )}
@@ -178,6 +166,61 @@ function ScannerTable({
         )}
       </CardContent>
     </Card>
+  )
+}
+
+interface ScannerRow {
+  counts: Record<Severity, number>
+  cost: number
+  total: number
+  rules: Map<string, { count: number; cost: number; worst: Severity }>
+}
+
+/** One scanner; expands into the specific rules that fired and what each cost. */
+function ScannerRowItem({ id, row: r, maxCost }: { id: string; row: ScannerRow; maxCost: number }) {
+  const [open, setOpen] = useState(false)
+  const rules = [...r.rules.entries()].sort((a, b) => b[1].cost - a[1].cost || b[1].count - a[1].count)
+  return (
+    <li>
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        className="grid w-full grid-cols-[16px_1fr_auto] items-center gap-x-3 gap-y-1 py-2.5 text-left sm:grid-cols-[16px_minmax(0,1fr)_140px_64px]"
+      >
+        <ChevronRight className={cn("size-4 text-muted-foreground transition-transform", open && "rotate-90")} />
+        <div className="min-w-0">
+          <p className="truncate text-sm font-medium">{scannerName(id)}</p>
+          {SCANNER_INFO[id] && <p className="truncate text-xs text-muted-foreground">{SCANNER_INFO[id].what}</p>}
+        </div>
+        <div className="col-start-2 flex items-center gap-2.5 text-xs tabular-nums text-muted-foreground sm:col-start-auto">
+          {SEVERITIES.filter((s) => r.counts[s] > 0).map((s) => (
+            <span key={s} className="flex items-center gap-1" title={s}>
+              <span className={cn("size-2 rounded-full", SEV_DOT[s])} />
+              {r.counts[s]}
+            </span>
+          ))}
+        </div>
+        <div className="col-start-3 row-span-2 row-start-1 flex flex-col items-end justify-center gap-1 sm:col-start-auto sm:row-span-1 sm:row-start-auto">
+          <span className="text-sm font-semibold tabular-nums">−{fmt(r.cost)}</span>
+          <span className="h-1 w-12 overflow-hidden rounded-full bg-secondary">
+            <span className="block h-full bg-primary" style={{ width: `${(r.cost / maxCost) * 100}%` }} />
+          </span>
+        </div>
+      </button>
+      {open && (
+        <ul className="mb-3 ml-7 space-y-1.5 rounded-md bg-secondary/40 p-2.5">
+          {rules.map(([rule, v]) => (
+            <li key={rule} className="flex items-center gap-2 text-xs">
+              <span className={cn("size-2 shrink-0 rounded-full", SEV_DOT[v.worst])} />
+              <span className="min-w-0 flex-1 truncate">{ruleLabel(rule) ?? scannerName(rule)}</span>
+              <span className="tabular-nums text-muted-foreground">×{v.count}</span>
+              <span className="w-12 text-right tabular-nums">−{fmt(v.cost)}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </li>
   )
 }
 
