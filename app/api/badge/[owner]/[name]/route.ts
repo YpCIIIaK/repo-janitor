@@ -51,7 +51,9 @@ export async function GET(
   const wantName = decodeURIComponent(name)
   const id = `${wantOwner}/${wantName}`
 
+  const essentials = searchParams.get("kind") === "essentials"
   let found: { grade: Grade; score: number } | null = null
+  let checklist: Record<string, boolean> | undefined
 
   const token = searchParams.get("token")
   if (token) {
@@ -65,6 +67,7 @@ export async function GET(
       share.report.repo.name.toLowerCase() === wantName.toLowerCase()
     ) {
       found = { grade: share.report.grade, score: share.report.score }
+      checklist = share.report.profile?.checklist
     }
   } else {
     const repo = (await readServerRepos()).find(
@@ -73,14 +76,29 @@ export async function GET(
     if (repo) found = { grade: repo.latest.grade, score: repo.latest.score }
   }
 
-  const message = found ? formatBadgeMessage(found.grade, found.score) : "unknown"
-  const color = found ? gradeHex(found.grade) : UNKNOWN_COLOR
+  let label = BADGE_LABEL
+  let message = found ? formatBadgeMessage(found.grade, found.score) : "unknown"
+  let color = found ? gradeHex(found.grade) : UNKNOWN_COLOR
+  if (essentials) {
+    // Essentials badge: only from a shared report, which is where the checklist lives.
+    label = "essentials"
+    const values = checklist ? Object.values(checklist) : []
+    if (values.length === 0) {
+      message = "unknown"
+      color = UNKNOWN_COLOR
+    } else {
+      const have = values.filter(Boolean).length
+      const ratio = have / values.length
+      message = `${have}/${values.length}`
+      color = gradeHex(ratio >= 0.85 ? "A" : ratio >= 0.65 ? "B" : ratio >= 0.45 ? "C" : ratio >= 0.25 ? "D" : "F")
+    }
+  }
 
   // The OS reduced-motion preference does not reach an SVG inside an <img>, so
   // the badge takes an explicit opt-out that a README author can paste.
   const animate = searchParams.get("motion") !== "off"
 
-  const svg = badgeSvg(BADGE_LABEL, message, color, hashSeed(id.toLowerCase()), animate)
+  const svg = badgeSvg(label, message, color, hashSeed(id.toLowerCase()), animate)
   return new Response(svg, {
     headers: {
       "Content-Type": "image/svg+xml; charset=utf-8",

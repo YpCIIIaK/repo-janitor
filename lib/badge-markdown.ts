@@ -107,6 +107,14 @@ export function badgeMarkdown(
   return `[![Repo Anti-Rot](${img})](${shareHref(origin, target)})`
 }
 
+/** Markdown for the "essentials N/9" badge — same share link, `kind=essentials`. */
+export function essentialsBadgeMarkdown(origin: string, shareUrl: string, cacheKey?: string): string | null {
+  const target = parseSharePath(shareUrl)
+  if (!target) return null
+  const img = badgeUrl(origin, target, DEFAULT_WIDGET_OPTIONS, cacheKey).replace("?token=", "?kind=essentials&token=")
+  return `[![Project essentials](${img})](${shareHref(origin, target)})`
+}
+
 /**
  * Markdown for the large health card — same link target as the strip badge.
  */

@@ -19,6 +19,7 @@ import {
   cardMarkdown,
   cardUrl,
   embedSnippet,
+  essentialsBadgeMarkdown,
   embedUrl,
   parseSharePath,
 } from "@/lib/badge-markdown"
@@ -29,7 +30,7 @@ import {
 } from "@/lib/widget-options"
 import { cn } from "@/lib/utils"
 
-type CopyTarget = "link" | "card" | "embed" | "badge"
+type CopyTarget = "link" | "card" | "embed" | "badge" | "essentials"
 type WidgetTab = "badge" | "card" | "embed"
 
 /**
@@ -220,6 +221,9 @@ export function ShareBox({ report, repoUrl }: { report: unknown; repoUrl?: strin
     const target = parseSharePath(url)
     const cardSrc = target ? cardUrl(origin, target, DEFAULT_WIDGET_OPTIONS, cacheKey) : ""
     const badgeSrc = target ? badgeUrl(origin, target, DEFAULT_WIDGET_OPTIONS, cacheKey) : ""
+    const hasChecklist = Boolean((report as { profile?: { checklist?: unknown } })?.profile?.checklist)
+    const essentialsMd = hasChecklist ? essentialsBadgeMarkdown(origin, url, cacheKey) : null
+    const essentialsSrc = badgeSrc.replace("?token=", "?kind=essentials&token=")
     const embedSrc = target ? embedUrl(origin, target, DEFAULT_WIDGET_OPTIONS) : ""
     const { height: embedH } = embedDimensions()
     const cardH = DEFAULT_CARD_HEIGHT
@@ -326,6 +330,28 @@ export function ShareBox({ report, repoUrl }: { report: unknown; repoUrl?: strin
                 {t(copied === "badge" ? "share.copied" : "share.badgeCopy")}
               </Button>
             </div>
+            {essentialsMd && (
+              <details className="group pt-1">
+                <summary className="cursor-pointer list-none text-xs text-muted-foreground hover:text-foreground">
+                  <span className="mr-1 inline-block transition-transform group-open:rotate-90">›</span>
+                  {t("share.essentialsBadge")}
+                </summary>
+                <div className="mt-2 space-y-2">
+                  <p className="text-xs text-muted-foreground">{t("share.essentialsBadgeLead")}</p>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img key={essentialsSrc} src={essentialsSrc} alt="" className="h-5" height={20} />
+                  <div className="flex items-center gap-2">
+                    <code className="min-w-0 flex-1 truncate rounded bg-muted px-2 py-1 font-mono text-[11px] text-muted-foreground">
+                      {essentialsMd}
+                    </code>
+                    <Button size="sm" variant="ghost" onClick={() => copyText(essentialsMd, "essentials")}>
+                      {copied === "essentials" ? <Check className="size-4" /> : <Copy className="size-4" />}
+                      {t(copied === "essentials" ? "share.copied" : "share.badgeCopy")}
+                    </Button>
+                  </div>
+                </div>
+              </details>
+            )}
           </div>
         )}
 
