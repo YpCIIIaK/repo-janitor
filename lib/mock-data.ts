@@ -40,6 +40,8 @@ export interface Issue {
   }
   /** Optional AI assessment, attached client-side when AI analysis is enabled. */
   aiNote?: string
+  /** Failed automatic analysis; retry is available in the finding drawer. */
+  aiError?: string
   /** Id of the scanner that produced this finding; absent in pre-v1.1 reports. */
   scanner?: string
 }

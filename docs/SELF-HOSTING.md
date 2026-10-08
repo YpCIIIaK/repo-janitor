@@ -71,6 +71,13 @@ PUBLIC_ORIGIN=https://repo-janitor.app
 REPO_ANTI_ROT_DASHBOARD_URL=https://repo-janitor.app
 ```
 
+On Render, set `PUBLIC_ORIGIN=https://repo-janitor.app` in the service's
+**Environment** settings and restart/redeploy after attaching this custom domain.
+DNS verification and a valid certificate do not update this application setting.
+If POST requests return `Cross-origin mutation refused`, check `PUBLIC_ORIGIN`:
+without it, the application falls back to Render's `onrender.com` URL. Keep this
+explicit origin check; do not trust arbitrary forwarded-host headers or disable it.
+
 Point DNS at the server's public address; forward TCP 80/443 to the Windows host
 and allow those ports in Windows Firewall. Caddy obtains/renews certificates when
 the domain is reachable. If the ISP uses CGNAT, inbound forwarding will require a

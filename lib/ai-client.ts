@@ -1,5 +1,7 @@
 "use client"
 
+import { isUsableAiText } from "@/lib/ai-output"
+
 /**
  * Shared transport for AI completions.
  *
@@ -20,7 +22,7 @@ export interface CompletionBody {
   system: string
   prompt: string
   maxTokens: number
-  /** Enable OpenRouter's web-search plugin for this completion (opt-in, costs extra). */
+  /** Fetch public source metadata directly; no OpenRouter search plugin. */
   web?: boolean
 }
 
@@ -43,8 +45,15 @@ export async function fetchCompletion(
     }
 
     if (res.ok) {
-      const data = (await res.json().catch(() => null)) as { text?: string } | null
-      return data?.text ?? null
+      const data = (await res.json().catch(() => null)) as { text?: string; sources?: { label: string; url: string; status: string }[] } | null
+      if (!isUsableAiText(data?.text)) return null
+      if (!Array.isArray(data.sources)) return data.text
+      const checks = data.sources.length ? data.sources.map((s) => `${s.label}: ${s.status === "fetched" ? "fetched" : "not verified"} (${s.url})`).join("; ") : "No supported source identifiers found; not verified."
+      const suffix = `Source checks for this request: ${checks}`
+      // Preserve the numbered batch protocol while retaining deterministic source provenance.
+      return /^\s*\[?\d+\]?\s*[:.)-]/m.test(data.text)
+        ? data.text.split("\n").map((line) => /^\s*\[?\d+\]?\s*[:.)-]/.test(line) ? `${line} ${suffix}` : line).join("\n")
+        : `${data.text}\n\n${suffix}`
     }
 
     // Rate-limited or transient server error → back off and retry.

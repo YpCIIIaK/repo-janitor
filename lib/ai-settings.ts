@@ -18,10 +18,8 @@ export interface AiSettings {
   /** OpenRouter model id, e.g. "google/gemini-2.0-flash-exp:free". */
   model: string
   /**
-   * Let the model search the web (OpenRouter web plugin) when triaging findings
-   * that reference external advisories — security CVEs and dependency status. Lets
-   * it read the ACTUAL advisory, including ones published after its training cutoff.
-   * Costs extra per OpenRouter's web pricing, so it's opt-in and off by default.
+   * Fetch public OSV/npm/GitHub facts for advisory and dependency findings.
+   * No paid search plugin. Kept under the existing key for saved-settings compatibility.
    */
   webSearch: boolean
   /** Which scanner categories get an AI assessment after a scan. */

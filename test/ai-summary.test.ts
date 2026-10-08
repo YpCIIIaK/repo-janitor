@@ -22,6 +22,21 @@ const input = (over: Partial<SummaryInput> = {}): SummaryInput => ({
 })
 
 describe("generateSummary", () => {
+  it("rejects reasoning text and does not cache it", async () => {
+    saveAiSettings({ ...DEFAULT_SETTINGS, apiKey: "sk-test", model: "m" })
+    fetchCompletion.mockResolvedValue("Here's a thinking process: 1. **Analyze User Request:**")
+    expect(await generateSummary(input())).toBeNull()
+    expect(getCachedSummary("m", "acme/widget", ["a", "b"])).toBeNull()
+  })
+
+  it("does not send info finding details or search the web for them", async () => {
+    saveAiSettings({ ...DEFAULT_SETTINGS, apiKey: "sk-test", webSearch: true })
+    fetchCompletion.mockResolvedValue("Healthy repository.")
+    await generateSummary(input({ issues: [issue({ severity: "info", category: "security", title: "PRIVATE_INFO_TITLE" })] }))
+    expect(fetchCompletion.mock.calls[0][0].prompt).not.toContain("PRIVATE_INFO_TITLE")
+    expect(fetchCompletion.mock.calls[0][0].web).toBe(false)
+  })
+
   it("returns null when no API key is configured", async () => {
     expect(await generateSummary(input())).toBeNull()
     expect(fetchCompletion).not.toHaveBeenCalled()

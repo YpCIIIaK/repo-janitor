@@ -1,5 +1,5 @@
 /** Bound streamed bodies too: Content-Length can be absent or dishonest. */
-export async function readJson(request: Request, maxBytes = 256 * 1024): Promise<unknown> {
+export async function readJson(request: Request | Response, maxBytes = 256 * 1024): Promise<unknown> {
   if (Number(request.headers.get("content-length")) > maxBytes) throw new Error("Request too large")
   if (!request.body) throw new Error("Empty body")
   const reader = request.body.getReader()

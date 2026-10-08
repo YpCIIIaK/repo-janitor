@@ -19,6 +19,21 @@ function res(opts: { ok?: boolean; status?: number; text?: string; retryAfter?: 
 }
 
 describe("fetchCompletion", () => {
+  it("retains fetched and unavailable source links in numbered answers", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(Response.json({ text: "1: Upgrade now\n2: Keep it", sources: [
+      { label: "OSV", url: "https://api.osv.dev/v1/vulns/test", status: "fetched" },
+      { label: "npm", url: "https://registry.npmjs.org/test/latest", status: "unavailable" },
+    ] })))
+    const answer = await fetchCompletion(body)
+    expect(answer?.split("\n")).toHaveLength(2)
+    expect(answer).toContain("npm: not verified")
+    expect(answer).toContain("OSV: fetched")
+  })
+
+  it("does not claim verification when no supported identifier was found", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(Response.json({ text: "Summary.", sources: [] })))
+    expect(await fetchCompletion(body)).toContain("No supported source identifiers found; not verified.")
+  })
   it("returns the text on a 200", async () => {
     const fetchMock = vi.fn().mockResolvedValue(res({ ok: true, status: 200, text: "hello" }))
     vi.stubGlobal("fetch", fetchMock)

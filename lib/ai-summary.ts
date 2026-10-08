@@ -6,6 +6,7 @@ import { categoryScores, scoreToGrade, computeScore, type SeverityWeights } from
 import { hotspotFiles } from "@/lib/hotspots"
 import { readAiSettings, aiCacheModel, aiBudget } from "@/lib/ai-settings"
 import { fetchCompletion } from "@/lib/ai-client"
+import { isUsableAiText } from "@/lib/ai-output"
 
 /**
  * AI "executive summary" — one short, decisive paragraph about a repo's overall
@@ -18,7 +19,7 @@ import { fetchCompletion } from "@/lib/ai-client"
  */
 
 const KEY = "repo-anti-rot:ai-summary:v1"
-const CACHE_VERSION = "2"
+const CACHE_VERSION = "4"
 
 const SYSTEM =
   "You are a staff engineer giving a repository's maintainer a brutally honest, " +
@@ -125,7 +126,7 @@ function buildDigest(input: SummaryInput, topFindings: number): string {
   // Most severe findings first; cap to the model's budget (a large-context model
   // sees far more of the report, so it can ground the summary in more specifics).
   const order: Record<Severity, number> = { critical: 0, warning: 1, info: 2 }
-  const top = [...issues].sort((a, b) => order[a.severity] - order[b.severity]).slice(0, topFindings)
+  const top = issues.filter((i) => i.severity !== "info").sort((a, b) => order[a.severity] - order[b.severity]).slice(0, topFindings)
   if (top.length > 0) {
     lines.push("Top findings:")
     for (const i of top) {
@@ -169,7 +170,7 @@ export async function generateSummary(
   // Web search only pays off when there's an advisory-bearing finding to look up.
   const wantWeb =
     settings.webSearch &&
-    input.issues.some((i) => i.category === "security" || i.category === "dependency")
+    input.issues.some((i) => i.severity !== "info" && (i.category === "security" || i.category === "dependency"))
 
   const text = await fetchCompletion(
     {
@@ -177,12 +178,12 @@ export async function generateSummary(
       model: settings.model,
       system: SYSTEM,
       prompt,
-      maxTokens: budget.summaryMaxTokens,
+      maxTokens: Math.max(1500, budget.summaryMaxTokens),
       web: wantWeb,
     },
     opts.signal,
   )
-  if (!text) return null
+  if (!isUsableAiText(text)) return null
 
   const summary = text.trim()
   putCachedSummary(cacheModel, input.repoId, ids, summary)

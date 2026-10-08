@@ -213,12 +213,12 @@ export function SettingsDialog({ trigger }: { trigger?: React.ReactNode } = {}) 
             <div className="min-w-0 space-y-0.5">
               <Label htmlFor="ai-web" className="flex items-center gap-1.5">
                 <Globe className="size-4 text-primary" />
-                Web search for advisories
+                Check current sources
               </Label>
               <p className="text-xs text-muted-foreground">
-                Let the model read live CVE/GHSA advisories and package status for security &
-                dependency findings — including ones newer than its training data. Uses OpenRouter&apos;s
-                web plugin (billed per use), so it&apos;s off by default.
+                Fetch advisories from OSV, npm package metadata and linked GitHub repository status.
+                No paid search plugin. Results are cached; unavailable sources are marked unverified.
+                Model token charges and public API limits still apply.
               </p>
             </div>
             <Switch
@@ -233,7 +233,7 @@ export function SettingsDialog({ trigger }: { trigger?: React.ReactNode } = {}) 
             <div className="space-y-0.5">
               <Label>Analyze these categories on scan</Label>
               <p className="text-xs text-muted-foreground">
-                After each scan, findings in the enabled categories get an AI verdict. Only the
+                After each scan, warning and critical findings in the enabled categories get an AI verdict. Info notes are excluded. Only the
                 finding's title, location and (redacted) snippet are sent.
               </p>
             </div>
