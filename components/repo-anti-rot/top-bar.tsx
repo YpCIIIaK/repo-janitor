@@ -1,6 +1,7 @@
 "use client"
 
-import { Activity, Check, ChevronsUpDown, LayoutDashboard, Search } from "lucide-react"
+import { Logo } from "@/components/icons/logo"
+import { Check, ChevronsUpDown, LayoutDashboard, Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import {
@@ -49,9 +50,7 @@ export function TopBar({
   // than looking clickable and doing nothing.
   const brand = (
     <>
-      <div className="flex size-7 items-center justify-center rounded-md bg-primary/15 text-primary">
-        <Activity className="size-4" />
-      </div>
+      <Logo className="size-7 text-foreground" />
       <span className="font-mono text-sm font-semibold tracking-tight">Repo Janitor</span>
     </>
   )
