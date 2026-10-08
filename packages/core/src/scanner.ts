@@ -64,6 +64,11 @@ export interface ScanContext {
      * recoverable from history. Omitted when git is unavailable, in which case the
      * secrets scanner degrades to a working-tree-only scan.
      */
+    /**
+     * Optional: non-merge commits of the last year (opaque author key + epoch ms)
+     * and the newest commit's time, for the profile's activity summary.
+     */
+    activity?: () => Promise<{ commits: { author: string; at: number }[]; lastCommitAt: number | null }>
     historyAdditions?: (opts?: { maxCommits?: number }) => Promise<HistoryAddition[]>
   }
   /**

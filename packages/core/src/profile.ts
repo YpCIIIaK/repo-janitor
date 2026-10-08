@@ -91,3 +91,97 @@ export function detectTools(files: string[]): string[] {
   }
   return out
 }
+
+/** Community-standard files a maintained project usually carries. */
+export const CHECKLIST_ITEMS = [
+  "readme",
+  "license",
+  "contributing",
+  "security",
+  "codeOfConduct",
+  "changelog",
+  "ci",
+  "tests",
+  "gitignore",
+] as const
+export type ChecklistItem = (typeof CHECKLIST_ITEMS)[number]
+
+const CHECKLIST_RULES: Record<ChecklistItem, RegExp> = {
+  readme: /^(\.github\/|docs\/)?readme(\.[a-z]+)?$/,
+  license: /^(licen[cs]e|copying)(\.[a-z]+)?$/,
+  contributing: /^(\.github\/|docs\/)?contributing(\.[a-z]+)?$/,
+  security: /^(\.github\/|docs\/)?security(\.[a-z]+)?$/,
+  codeOfConduct: /^(\.github\/|docs\/)?code_of_conduct(\.[a-z]+)?$/,
+  changelog: /^(changelog|changes|history)(\.[a-z]+)?$/,
+  ci: /^(\.github\/workflows\/[^/]+\.ya?ml|\.gitlab-ci\.ya?ml|\.circleci\/config\.ya?ml|azure-pipelines\.ya?ml|jenkinsfile|\.travis\.ya?ml)$/,
+  tests: /(^|\/)(tests?|__tests__|spec)\/|\.(test|spec)\.[a-z]+$|(^|\/)test_[^/]+\.py$|_test\.go$/,
+  gitignore: /^\.gitignore$/,
+}
+
+/** Which community-standard files are present, from the file list alone. */
+export function detectChecklist(files: string[]): Record<ChecklistItem, boolean> {
+  const norm = files.map((f) => f.replace(/\\/g, "/").toLowerCase())
+  const out = {} as Record<ChecklistItem, boolean>
+  for (const item of CHECKLIST_ITEMS) out[item] = norm.some((f) => CHECKLIST_RULES[item].test(f))
+  return out
+}
+
+/** One commit as the activity summary needs it: an opaque author key and a time. */
+export interface ActivityCommit {
+  author: string
+  at: number
+}
+
+/**
+ * Commit activity over the last 12 months. Author identities never leave this
+ * function: the report carries counts only.
+ */
+export function summarizeActivity(
+  commits: ActivityCommit[],
+  lastCommitAt: number | null,
+  now = Date.now(),
+): {
+  lastCommitAt?: string
+  commitsLastYear: number
+  months: { month: string; commits: number }[]
+  authors: number
+  coreAuthors: number
+} {
+  const start = new Date(now)
+  start.setUTCDate(1)
+  start.setUTCHours(0, 0, 0, 0)
+  start.setUTCMonth(start.getUTCMonth() - 11)
+  const months: { month: string; commits: number }[] = []
+  for (let i = 0; i < 12; i++) {
+    const d = new Date(start)
+    d.setUTCMonth(start.getUTCMonth() + i)
+    months.push({ month: d.toISOString().slice(0, 7), commits: 0 })
+  }
+  const index = new Map(months.map((m, i) => [m.month, i]))
+  const perAuthor = new Map<string, number>()
+  let total = 0
+  for (const c of commits) {
+    if (c.at < start.getTime() || c.at > now) continue
+    const i = index.get(new Date(c.at).toISOString().slice(0, 7))
+    if (i === undefined) continue
+    months[i].commits++
+    total++
+    perAuthor.set(c.author, (perAuthor.get(c.author) ?? 0) + 1)
+  }
+  // Fewest authors that together made 80% of the year's commits.
+  const counts = [...perAuthor.values()].sort((a, b) => b - a)
+  let core = 0
+  let acc = 0
+  for (const n of counts) {
+    if (acc >= total * 0.8) break
+    acc += n
+    core++
+  }
+  return {
+    lastCommitAt: lastCommitAt ? new Date(lastCommitAt).toISOString() : undefined,
+    commitsLastYear: total,
+    months,
+    authors: perAuthor.size,
+    coreAuthors: core,
+  }
+}
