@@ -79,6 +79,8 @@ export const issueSchema = z.object({
    * reports written before this field existed are still valid.
    */
   scanner: z.string().optional(),
+  /** Specific check within the scanner (see rules.ts); stamped by the engine. */
+  rule: z.string().optional(),
 })
 export type Issue = z.infer<typeof issueSchema>
 

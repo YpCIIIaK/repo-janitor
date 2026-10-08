@@ -1,4 +1,5 @@
 import type { ScanReport } from "@/lib/server-store"
+import { CHECKLIST_ITEMS } from "@/packages/core/src/profile"
 import type { Grade, Issue, IssueCategory, Severity } from "@/lib/mock-data"
 
 /**
@@ -59,6 +60,16 @@ export interface SharedReport {
     totalFiles: number
     languages: { language: string; loc: number }[]
     tools: string[]
+    /** Which community files exist — booleans for a fixed key list, nothing else. */
+    checklist?: Record<string, boolean>
+    /** Commit counts only; no author identities. */
+    activity?: {
+      lastCommitAt?: string
+      commitsLastYear: number
+      months: { month: string; commits: number }[]
+      authors: number
+      coreAuthors: number
+    }
   }
 }
 
@@ -102,7 +113,19 @@ export function toSharedReport(report: ScanReport, repoUrl?: string): SharedRepo
     }))
 
   const profile = (report as ScanReport & { profile?: unknown }).profile as
-    | { totalFiles?: number; languages?: { language: string; loc: number }[]; tools?: string[] }
+    | {
+        totalFiles?: number
+        languages?: { language: string; loc: number }[]
+        tools?: string[]
+        checklist?: Record<string, unknown>
+        activity?: {
+          lastCommitAt?: string
+          commitsLastYear?: number
+          months?: { month: string; commits: number }[]
+          authors?: number
+          coreAuthors?: number
+        }
+      }
     | undefined
 
   return {
@@ -124,6 +147,27 @@ export function toSharedReport(report: ScanReport, repoUrl?: string): SharedRepo
               loc: l.loc,
             })),
             tools: profile.tools ?? [],
+            ...(profile.checklist
+              ? {
+                  checklist: Object.fromEntries(
+                    CHECKLIST_ITEMS.map((k) => [k, profile.checklist?.[k] === true]),
+                  ),
+                }
+              : {}),
+            ...(profile.activity
+              ? {
+                  activity: {
+                    ...(profile.activity.lastCommitAt ? { lastCommitAt: profile.activity.lastCommitAt } : {}),
+                    commitsLastYear: Number(profile.activity.commitsLastYear) || 0,
+                    months: (profile.activity.months ?? []).slice(0, 12).map((m) => ({
+                      month: String(m.month).slice(0, 7),
+                      commits: Number(m.commits) || 0,
+                    })),
+                    authors: Number(profile.activity.authors) || 0,
+                    coreAuthors: Number(profile.activity.coreAuthors) || 0,
+                  },
+                }
+              : {}),
           },
         }
       : {}),

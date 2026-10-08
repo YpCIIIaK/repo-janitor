@@ -263,7 +263,7 @@ const en = {
   // change the other in the same commit.
   "consent.label": "Save this result so it can be shared by link",
   "consent.body":
-    "Stores the grade, score, counts per category, the titles of the top 10 findings, and the repository's public address. File paths, line numbers, code snippets and matched secret values are never written — they stay in this browser.",
+    "Stores the grade, score, counts per category, the titles of the top 10 findings, which project essentials (README, LICENSE…) exist, monthly commit counts, and the repository's public address. File paths, line numbers, code snippets and matched secret values are never written — they stay in this browser.",
   "consent.optional": "Optional. Leave it off and the report stays in this browser only.",
 
   "share.action": "Share",
@@ -275,6 +275,20 @@ const en = {
   "share.reclaimHint":
     "If you own this repository, sign in with GitHub and press the button again — the link (and README badges) will be reclaimed here.",
   "share.reclaimSignIn": "Sign in with GitHub",
+  "share.essentials": "Project essentials",
+  "share.activity": "Activity, last 12 months",
+  "share.activityLine": "{commits} commits · {authors} authors · {core} make 80% of commits",
+  "share.essentialsBadge": "Essentials badge",
+  "share.essentialsBadgeLead": "Shows how many of 9 project essentials the repository has.",
+  "check.readme": "README",
+  "check.license": "License",
+  "check.contributing": "Contributing guide",
+  "check.security": "Security policy",
+  "check.codeOfConduct": "Code of conduct",
+  "check.changelog": "Changelog",
+  "check.ci": "CI pipeline",
+  "check.tests": "Tests",
+  "check.gitignore": ".gitignore",
   "share.copy": "Copy link",
   "share.copied": "Copied",
   "share.liveTitle": "Live share link",
@@ -688,7 +702,7 @@ const ru: Messages = {
 
   "consent.label": "Сохранить результат, чтобы им можно было поделиться по ссылке",
   "consent.body":
-    "Сохраняются оценка, грейд, количество находок по категориям, заголовки 10 главных и публичный адрес репозитория. Пути к файлам, номера строк, фрагменты кода и найденные значения секретов не записываются — они остаются в этом браузере.",
+    "Сохраняются оценка, грейд, количество находок по категориям, заголовки 10 главных, какие базовые файлы есть в проекте (README, LICENSE…), число коммитов по месяцам и публичный адрес репозитория. Пути к файлам, номера строк, фрагменты кода и найденные значения секретов не записываются — они остаются в этом браузере.",
   "consent.optional":
     "По желанию. Если не отмечать, отчёт останется только в этом браузере.",
 
@@ -701,6 +715,20 @@ const ru: Messages = {
   "share.reclaimHint":
     "Если репозиторий ваш — войдите через GitHub и нажмите кнопку ещё раз: ссылка (и бейджи в README) перейдут в этот браузер.",
   "share.reclaimSignIn": "Войти через GitHub",
+  "share.essentials": "Базовые файлы проекта",
+  "share.activity": "Активность за 12 месяцев",
+  "share.activityLine": "коммитов: {commits} · авторов: {authors} · 80% коммитов делают: {core}",
+  "share.essentialsBadge": "Бейдж базовых файлов",
+  "share.essentialsBadgeLead": "Показывает, сколько из 9 базовых файлов есть в репозитории.",
+  "check.readme": "README",
+  "check.license": "Лицензия",
+  "check.contributing": "Гайд для контрибьюторов",
+  "check.security": "Политика безопасности",
+  "check.codeOfConduct": "Кодекс поведения",
+  "check.changelog": "Changelog",
+  "check.ci": "CI",
+  "check.tests": "Тесты",
+  "check.gitignore": ".gitignore",
   "share.copy": "Скопировать ссылку",
   "share.copied": "Скопировано",
   "share.liveTitle": "Живая ссылка",

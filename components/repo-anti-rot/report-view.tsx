@@ -262,6 +262,72 @@ export async function ReportView({
           </section>
         )}
 
+        {(report.profile?.checklist || report.profile?.activity) && (
+          <section className="mt-8 space-y-2">
+            {report.profile?.checklist && (() => {
+              const entries = Object.entries(report.profile.checklist)
+              const have = entries.filter(([, v]) => v).length
+              return (
+                <details className="group rounded-lg border border-border">
+                  <summary className="flex cursor-pointer list-none items-center justify-between px-3 py-2.5 text-sm">
+                    <span>{tr("share.essentials")}</span>
+                    <span className="tabular-nums text-muted-foreground">
+                      {have}/{entries.length}
+                      <span className="ml-2 inline-block transition-transform group-open:rotate-90">›</span>
+                    </span>
+                  </summary>
+                  <ul className="grid grid-cols-1 gap-1.5 border-t border-border px-3 py-2.5 text-xs sm:grid-cols-2">
+                    {entries.map(([k, v]) => (
+                      <li key={k} className={v ? "" : "text-muted-foreground"}>
+                        <span className={v ? "text-success" : ""}>{v ? "✓" : "○"}</span>{" "}
+                        {tr(`check.${k}` as Parameters<typeof t>[1])}
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              )
+            })()}
+            {report.profile?.activity && (() => {
+              const a = report.profile.activity
+              const max = Math.max(1, ...a.months.map((m) => m.commits))
+              return (
+                <details className="group rounded-lg border border-border">
+                  <summary className="flex cursor-pointer list-none items-center justify-between px-3 py-2.5 text-sm">
+                    <span>{tr("share.activity")}</span>
+                    <span className="flex items-center gap-2 text-muted-foreground">
+                      <span className="flex h-4 items-end gap-px" aria-hidden>
+                        {a.months.map((m) => (
+                          <span
+                            key={m.month}
+                            className="w-1 rounded-[1px] bg-primary/70"
+                            style={{ height: `${Math.max(12, (m.commits / max) * 100)}%` }}
+                          />
+                        ))}
+                      </span>
+                      <span className="inline-block transition-transform group-open:rotate-90">›</span>
+                    </span>
+                  </summary>
+                  <div className="border-t border-border px-3 py-2.5">
+                    <div className="flex h-14 items-end gap-1">
+                      {a.months.map((m) => (
+                        <div
+                          key={m.month}
+                          title={`${m.month}: ${m.commits}`}
+                          className={m.commits ? "flex-1 rounded-sm bg-primary/70" : "flex-1 rounded-sm bg-secondary"}
+                          style={{ height: `${Math.max(6, (m.commits / max) * 100)}%` }}
+                        />
+                      ))}
+                    </div>
+                    <p className="mt-2 text-xs text-muted-foreground">
+                      {tr("share.activityLine", { commits: a.commitsLastYear, authors: a.authors, core: a.coreAuthors })}
+                    </p>
+                  </div>
+                </details>
+              )
+            })()}
+          </section>
+        )}
+
         {report.repoUrl && (
           <div className="mt-8 space-y-3">
             <WatchBox
