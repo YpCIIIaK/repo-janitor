@@ -330,19 +330,29 @@ and (optionally) an `OPENROUTER_ALLOWED_MODELS` whitelist; requests that carry
 the user's own key are unaffected. Output size is always clamped. See
 [Security & hardening](#security--hardening).
 
-### Web search for advisories (optional)
+### Current source checks (optional)
 
 Findings in the **security** and **dependency** categories point at external
 advisories (CVE/GHSA pages, package registries) that may be newer than the model's
 training data — so the model can end up just paraphrasing the finding text. Toggle
-**Web search for advisories** in Settings to let it consult the live advisory via
-OpenRouter's web plugin: it then describes what the vulnerability *actually* allows
-and which versions are affected, instead of echoing the finding.
+**Check current sources** in Settings to fetch exact CVE/GHSA records from OSV,
+npm latest-version metadata, and the linked GitHub repository's archive/activity status.
+The server supplies these facts to the model and displays source URLs with the answer.
+This is bounded source retrieval, not general web search: at most four advisories,
+two npm packages, and their GitHub repositories per request. Non-npm package
+metadata and identifiers outside this budget are not looked up.
 
-It's **off by default** (the web plugin is billed per use) and only ever fires for
+It's **off by default**, uses no paid OpenRouter search plugin, and only fires for
 those two advisory-bearing categories — repo-internal findings (dead code, TODOs,
 hygiene) never trigger a web call. Web-informed verdicts are cached in a separate
 namespace, so toggling the option re-asks rather than serving a stale answer.
+
+Successful source responses are cached in memory for one hour; failures for one minute.
+The cache is process-local and resets on restart. Timeouts, rate limits, missing IDs,
+and invalid responses are marked unverified, never interpreted as safety. Published
+advisories do not prove exploitability in the scanned repository. Public API limits,
+server costs, and model token charges still apply. `:online` model IDs are rejected
+to prevent accidentally enabling paid search.
 
 ### Executive summary
 
@@ -352,7 +362,7 @@ the single highest-leverage next action). It costs exactly one model call and is
 cached by model + the exact set of findings, so reopening the repo or rescanning
 with no changes never re-asks. Only finding metadata (title, location, category,
 severity) is sent — never the `evidence` snippet — so a redacted secret's masked
-value still never leaves the machine. When **web search** is on and the repo has a
+value still never leaves the machine. When **Check current sources** is on and the repo has a
 security or dependency finding, the summary call also consults live advisories to
 weight CVE severity accurately.
 

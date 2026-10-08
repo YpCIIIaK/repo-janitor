@@ -6,6 +6,7 @@ import type { Issue } from "@/lib/mock-data"
 import type { SeverityWeights } from "@/lib/score"
 import { useAiSettings, aiCacheModel } from "@/lib/ai-settings"
 import { generateSummary, getCachedSummary, type SummaryInput } from "@/lib/ai-summary"
+import { AiAnswer } from "@/components/repo-anti-rot/ai-answer"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 
@@ -95,7 +96,7 @@ export function AiSummaryCard({ repoId, owner, name, issues, weights }: Props) {
         setSummary(res.summary)
         setCached(res.cached)
       } else {
-        setError("Could not generate a summary (model unavailable or rate-limited). Try again.")
+        setError("Could not generate a complete summary. The model may be unavailable, rate-limited, or returned an invalid answer. Retry or choose another model in Settings.")
       }
     } finally {
       setLoading(false)
@@ -151,7 +152,7 @@ export function AiSummaryCard({ repoId, owner, name, issues, weights }: Props) {
           </p>
         ) : summary ? (
           <div className="space-y-2">
-            <p className="leading-relaxed text-foreground/90">{summary}</p>
+            <p className="whitespace-pre-line leading-relaxed text-foreground/90"><AiAnswer text={summary} /></p>
             <p className="text-[11px] text-muted-foreground">
               {cached ? "Cached · " : "Fresh · "}
               {model}

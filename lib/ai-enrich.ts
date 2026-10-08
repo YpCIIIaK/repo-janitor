@@ -5,11 +5,12 @@ import type { ScanReport } from "@/lib/reports-store"
 import { readAiSettings, enabledCategories, aiCacheModel, aiBudget, type AiSettings } from "@/lib/ai-settings"
 import { getCachedNotes, putCachedNotes } from "@/lib/ai-cache"
 import { fetchCompletion } from "@/lib/ai-client"
+import { isUsableAiText, AI_FAILURE_MESSAGE } from "@/lib/ai-output"
 
 /**
  * Client-side AI enrichment for scan findings.
  *
- * After a scan, each finding whose category the user enabled gets a short,
+ * After a scan, each warning/critical finding whose category the user enabled gets a short,
  * decisive `aiNote` from the model via our `/api/ai/complete` proxy. Deterministic
  * scan results are never altered — we only ADD context, so a failed/disabled AI
  * call degrades gracefully. For secrets the snippet is already REDACTED by the
@@ -21,8 +22,7 @@ import { fetchCompletion } from "@/lib/ai-client"
  *  - **Batch** — findings of one category go out in a single request (one verdict
  *    per finding) instead of one request each — far fewer round-trips.
  *  - **Retry** — 429/5xx responses back off and retry (free tiers rate-limit hard).
- *  - **Always answer** — the prompt forbids hedging/refusals so even a small model
- *    commits to a verdict.
+ *  - **Validate** — malformed and incomplete answers stay retryable, never cached.
  */
 
 // Bound cost/time: how many parallel requests we allow. The per-pass issue cap and
@@ -31,8 +31,7 @@ import { fetchCompletion } from "@/lib/ai-client"
 const CONCURRENCY = 3
 
 // Categories whose findings reference EXTERNAL advisories (CVE/GHSA pages, package
-// registries). Only these benefit from web search, so the (paid) web plugin is
-// requested for them alone — repo-internal categories never trigger a web call.
+// registries). Only these request direct source checks; internal categories do not.
 const WEB_SEARCH_CATEGORIES = new Set<IssueCategory>(["security", "dependency"])
 
 /** Shared tail appended to every category prompt: be decisive, no fluff, always answer. */
@@ -137,15 +136,20 @@ function findingBlock(issue: Issue): string {
 /** Parse "1: verdict" / "2) verdict" lines into an n-length array of verdicts. */
 function parseBatch(text: string, n: number): string[] {
   const out = new Array<string>(n).fill("")
+  if (!isUsableAiText(text)) return out
   for (const line of text.split("\n")) {
     const m = line.match(/^\s*\[?(\d+)\]?\s*[:.)-]\s*(.+)$/)
     if (!m) continue
     const idx = Number(m[1]) - 1
-    if (idx >= 0 && idx < n && !out[idx]) out[idx] = m[2].trim()
+    if (idx >= 0 && idx < n && !out[idx] && isVerdict(m[2].trim())) out[idx] = m[2].trim()
   }
   // Single-finding fallback: a small model may skip numbering for one item.
-  if (n === 1 && !out[0]) out[0] = text.trim()
+  if (n === 1 && !out[0] && isVerdict(text.trim())) out[0] = text.trim()
   return out
+}
+
+function isVerdict(text: string): boolean {
+  return isUsableAiText(text) && /^(Safe to remove|Keep|Verify\b|Document it|Remove it|Optional|Replace with\b|Delete|Merge first|Act now|Backlog|Stale|Rotate now|Likely a placeholder|Upgrade now|Low risk here|Fix it|Add it|Safe to ignore)(?:\b|$)/.test(text)
 }
 
 /** Analyze one same-category batch; returns id → verdict for the ones we got. */
@@ -166,9 +170,9 @@ async function analyzeBatch(
       apiKey: settings.apiKey,
       model: settings.model,
       system: CATEGORY_PROMPTS[category],
-      // Generous headroom: free models are verbose and may add a reasoning preamble.
+      // Headroom for providers that share reasoning and answer token budgets.
       // The ceiling scales with the model's context budget (bigger batches need more).
-      maxTokens: Math.min(aiBudget(settings).enrichTokenCap, Math.max(400, 240 * issues.length)),
+      maxTokens: Math.min(aiBudget(settings).enrichTokenCap, Math.max(1500, 400 * issues.length)),
       prompt,
       // Web search only for advisory-bearing categories, and only when enabled.
       web: settings.webSearch && WEB_SEARCH_CATEGORIES.has(category),
@@ -211,7 +215,7 @@ export async function analyzeOneIssue(
   settings: AiSettings,
   signal?: AbortSignal,
 ): Promise<string | null> {
-  if (!settings.apiKey.trim()) return null
+  if (!settings.apiKey.trim() || issue.severity === "info") return null
   const verdicts = await analyzeBatch(issue.category, [issue], settings, signal)
   return verdicts.get(issue.id) ?? null
 }
@@ -222,7 +226,7 @@ export function aiTargetCount(report: ScanReport): number {
   if (!settings.apiKey.trim()) return 0
   const enabled = new Set(enabledCategories(settings))
   if (enabled.size === 0) return 0
-  const targets = report.issues.filter((i) => enabled.has(i.category))
+  const targets = report.issues.filter((i) => i.severity !== "info" && enabled.has(i.category))
   const cached = getCachedNotes(aiCacheModel(settings), targets.map((i) => i.id))
   const misses = targets.filter((i) => !cached.has(i.id)).length
   return Math.min(misses, aiBudget(settings).maxIssues)
@@ -245,7 +249,7 @@ export async function enrichReport(report: ScanReport, opts: EnrichOptions = {})
   const enabled = new Set(enabledCategories(settings))
   if (enabled.size === 0) return report
 
-  const targets = report.issues.filter((i) => enabled.has(i.category))
+  const targets = report.issues.filter((i) => i.severity !== "info" && enabled.has(i.category))
   if (targets.length === 0) return report
 
   // 1) Re-use cached verdicts; only fetch the misses (capped to the model's budget).
@@ -286,11 +290,12 @@ export async function enrichReport(report: ScanReport, opts: EnrichOptions = {})
   })
   putCachedNotes(cacheModel, fresh)
 
-  if (noteById.size === 0) return report
+  const attempted = new Set(misses.map((i) => i.id))
   return {
     ...report,
     issues: report.issues.map((i) =>
-      noteById.has(i.id) ? { ...i, aiNote: noteById.get(i.id) } : i,
+      noteById.has(i.id) ? { ...i, aiNote: noteById.get(i.id), aiError: undefined }
+        : attempted.has(i.id) ? { ...i, aiNote: undefined, aiError: AI_FAILURE_MESSAGE } : i,
     ),
   }
 }

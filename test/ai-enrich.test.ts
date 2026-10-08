@@ -27,6 +27,37 @@ function enableAi(categories: string[]) {
 }
 
 describe("enrichReport", () => {
+  it("skips info notes even when their category is enabled", async () => {
+    enableAi(["security"])
+    const r = report([issue({ id: "note", category: "security", severity: "info" })])
+    expect(aiTargetCount(r)).toBe(0)
+    expect(await enrichReport(r)).toBe(r)
+    expect(await analyzeOneIssue(r.issues[0], { ...DEFAULT_SETTINGS, apiKey: "test" })).toBeNull()
+    expect(fetchCompletion).not.toHaveBeenCalled()
+  })
+
+  it("marks malformed warning answers as failed without caching them", async () => {
+    enableAi(["security"])
+    fetchCompletion.mockResolvedValue("1. **Analyze the User's Request:**")
+    const r = report([issue({ category: "security" })])
+    const out = await enrichReport(r)
+    expect(out.issues[0].aiNote).toBeUndefined()
+    expect(out.issues[0].aiError).toContain("failed")
+    expect(aiTargetCount(r)).toBe(1)
+    fetchCompletion.mockResolvedValue("1: Upgrade now — verify the affected dependency path.")
+    const retry = await enrichReport(out)
+    expect(retry.issues[0].aiNote).toContain("Upgrade now")
+    expect(retry.issues[0].aiError).toBeUndefined()
+  })
+
+  it("preserves successful answers and marks missing batch answers as failed", async () => {
+    enableAi(["hygiene"])
+    fetchCompletion.mockResolvedValue("1: Add it")
+    const out = await enrichReport(report([issue({ id: "a" }), issue({ id: "b", severity: "critical" })]))
+    expect(out.issues[0].aiNote).toBe("Add it")
+    expect(out.issues[1].aiError).toContain("failed")
+  })
+
   it("is a no-op without an API key", async () => {
     const r = report([issue({ category: "hygiene" })])
     expect(await enrichReport(r)).toBe(r)

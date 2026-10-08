@@ -49,6 +49,7 @@ interface Issue {
   ageDays: number
   detail: string
   aiNote?: string
+  aiError?: string
 }
 
 interface ScanReport {
@@ -183,6 +184,13 @@ function ResultCard({ result, onOpen }: { result: ScanResult; onOpen?: (repoId: 
             </span>
           )}
         </div>
+
+        {issues.some((i) => i.aiError) && (
+          <p role="status" className="text-xs text-amber-500">
+            AI analysis failed for {issues.filter((i) => i.aiError).length} finding(s).
+            Scan results are intact. Open the finding and select Generate to retry.
+          </p>
+        )}
 
         {issues.length > 0 && (
           <PenaltyBreakdownList issues={issues} className="border-t border-border/60 pt-2" />

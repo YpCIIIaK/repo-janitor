@@ -11,6 +11,8 @@ import { falsePositiveUrl } from "@/lib/false-positive"
 import { useAiSettings, aiCacheModel } from "@/lib/ai-settings"
 import { analyzeOneIssue } from "@/lib/ai-enrich"
 import { getCachedNotes, putCachedNotes } from "@/lib/ai-cache"
+import { isUsableAiText, AI_FAILURE_MESSAGE } from "@/lib/ai-output"
+import { AiAnswer } from "@/components/repo-anti-rot/ai-answer"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { cn } from "@/lib/utils"
@@ -99,7 +101,9 @@ export function IssueDrawer({
       return
     }
     const cached = hasKey ? getCachedNotes(model, [issue.id]).get(issue.id) : undefined
-    setNote(issue.aiNote ?? cached ?? null)
+    const saved = isUsableAiText(issue.aiNote) ? issue.aiNote : null
+    setNote(cached ?? saved)
+    setError(cached ? null : issue.aiError ?? (issue.aiNote && !saved ? AI_FAILURE_MESSAGE : null))
   }, [issue, model, hasKey])
 
   async function generate() {
@@ -112,7 +116,7 @@ export function IssueDrawer({
         setNote(verdict)
         putCachedNotes(model, [[issue.id, verdict]])
       } else {
-        setError("Could not generate a verdict (model unavailable or rate-limited). Try again.")
+        setError(AI_FAILURE_MESSAGE)
       }
     } finally {
       setLoading(false)
@@ -272,7 +276,7 @@ export function IssueDrawer({
               <p className="text-sm leading-relaxed text-foreground/90">{issue.detail}</p>
 
               {/* AI verdict */}
-              <div className="rounded-md border border-primary/30 bg-primary/5 p-3">
+              {issue.severity !== "info" && <div className="rounded-md border border-primary/30 bg-primary/5 p-3">
                 <div className="mb-2 flex items-center justify-between gap-2">
                   <div className="flex items-center gap-1.5 text-xs font-medium text-primary">
                     <Sparkles className="size-3.5" />
@@ -301,7 +305,7 @@ export function IssueDrawer({
                     {error}
                   </p>
                 ) : note ? (
-                  <p className="text-sm leading-relaxed text-foreground/90">{note}</p>
+                  <p className="whitespace-pre-line text-sm leading-relaxed text-foreground/90"><AiAnswer text={note} /></p>
                 ) : loading ? (
                   <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
                     <Loader2 className="size-3.5 animate-spin" />
@@ -312,7 +316,7 @@ export function IssueDrawer({
                     {t("drawer.aiHint")}
                   </p>
                 )}
-              </div>
+              </div>}
 
               {issue.analysisRef && scannedRepoUrl && (
                 <div className="space-y-3 rounded-md border border-border bg-muted/20 p-3">
