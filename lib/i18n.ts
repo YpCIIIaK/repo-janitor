@@ -271,7 +271,10 @@ const en = {
   "share.creating": "Creating…",
   "share.failed": "Could not create the link. Try again.",
   "share.existsOtherDevice":
-    "A share link already exists for this repository. Open it from the browser that created it to update or revoke.",
+    "A share link already exists for this repository, but this browser doesn't hold its manage key.",
+  "share.reclaimHint":
+    "If you own this repository, sign in with GitHub and press the button again — the link (and README badges) will be reclaimed here.",
+  "share.reclaimSignIn": "Sign in with GitHub",
   "share.copy": "Copy link",
   "share.copied": "Copied",
   "share.liveTitle": "Live share link",
@@ -694,7 +697,10 @@ const ru: Messages = {
   "share.creating": "Создаём…",
   "share.failed": "Не удалось создать ссылку. Попробуйте ещё раз.",
   "share.existsOtherDevice":
-    "Ссылка для этого репозитория уже есть. Откройте её в браузере, где создавали, чтобы обновить или отозвать.",
+    "Ссылка для этого репозитория уже есть, но в этом браузере нет ключа управления.",
+  "share.reclaimHint":
+    "Если репозиторий ваш — войдите через GitHub и нажмите кнопку ещё раз: ссылка (и бейджи в README) перейдут в этот браузер.",
+  "share.reclaimSignIn": "Войти через GitHub",
   "share.copy": "Скопировать ссылку",
   "share.copied": "Скопировано",
   "share.liveTitle": "Живая ссылка",

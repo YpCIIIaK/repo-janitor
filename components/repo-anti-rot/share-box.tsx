@@ -50,6 +50,7 @@ export function ShareBox({ report, repoUrl }: { report: unknown; repoUrl?: strin
   )
   const [handleRepoKey, setHandleRepoKey] = useState(repoKey)
   const [failed, setFailed] = useState<string | null>(null)
+  const [needsSignIn, setNeedsSignIn] = useState(false)
   const [copied, setCopied] = useState<CopyTarget | null>(null)
   const [status, setStatus] = useState<"idle" | "updated" | "rotated" | "revoked">("idle")
   const [tab, setTab] = useState<WidgetTab>("badge")
@@ -91,6 +92,7 @@ export function ShareBox({ report, repoUrl }: { report: unknown; repoUrl?: strin
       if (!repo) return
       setBusy(true)
       setFailed(null)
+      setNeedsSignIn(false)
       setStatus("idle")
       try {
         const res = await fetch("/api/share", {
@@ -114,6 +116,14 @@ export function ShareBox({ report, repoUrl }: { report: unknown; repoUrl?: strin
         if (!res.ok) {
           if (data.code === "missing_key") {
             setFailed(t("share.existsOtherDevice"))
+            setNeedsSignIn(true)
+          } else if (data.code === "forbidden" && opts.manageKey) {
+            // Stale key in this browser (link reclaimed elsewhere): drop it so
+            // the create / reclaim path is reachable again.
+            clearShareHandle(repo.owner, repo.name)
+            setHandle(null)
+            setFailed(t("share.existsOtherDevice"))
+            setNeedsSignIn(true)
           } else {
             setFailed(data.error || t("share.failed"))
           }
@@ -408,6 +418,17 @@ export function ShareBox({ report, repoUrl }: { report: unknown; repoUrl?: strin
         </Button>
         {failed && <span className="text-xs text-destructive">{failed}</span>}
       </div>
+      {needsSignIn && (
+        <p className="mt-2 text-xs text-muted-foreground">
+          {t("share.reclaimHint")}{" "}
+          <a
+            className="text-primary underline"
+            href={`/api/auth/github?next=${encodeURIComponent(typeof window === "undefined" ? "/app" : window.location.pathname + window.location.search)}`}
+          >
+            {t("share.reclaimSignIn")}
+          </a>
+        </p>
+      )}
     </div>
   )
 }

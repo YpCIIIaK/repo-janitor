@@ -6,6 +6,7 @@ import type { ScanReport } from "@/lib/server-store"
 import { checkRateLimit, clientIp, limitsFromEnv } from "@/lib/scan-limits"
 import { isPublicGitUrl } from "@/lib/url-guard"
 import { recordUsage, visitorFrom } from "@/lib/usage"
+import { sessionFromRequest } from "@/lib/session"
 
 /**
  * Publish, refresh, rotate or revoke a share link.
@@ -68,7 +69,8 @@ export async function POST(request: Request) {
   const rotate = (body as { rotate?: unknown })?.rotate === true
 
   const shared = toSharedReport(parsed.data as ScanReport, repoUrl)
-  const result = await publishShare(shared, { manageKey, rotate })
+  const ownerLogin = sessionFromRequest(request, process.env.REPO_ANTI_ROT_SESSION_SECRET)?.login
+  const result = await publishShare(shared, { manageKey, rotate, ownerLogin })
 
   if (!result.ok) {
     const status = result.code === "missing_key" ? 409 : 403

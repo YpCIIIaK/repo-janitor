@@ -76,6 +76,27 @@ describe("publishShare / revokeShare (filesystem)", () => {
     expect(again.code).toBe("missing_key")
   })
 
+  it("lets the signed-in repo owner reclaim a link without the manage key", async () => {
+    const { publishShare } = await import("@/lib/share-store")
+    const created = await publishShare(report("Acme", "Reclaim"))
+    if (!created.ok) throw new Error("create failed")
+
+    const stranger = await publishShare(report("Acme", "Reclaim", 10), { ownerLogin: "someone" })
+    expect(stranger.ok).toBe(false)
+
+    const owner = await publishShare(report("Acme", "Reclaim", 12), { ownerLogin: "acme" })
+    expect(owner.ok).toBe(true)
+    if (!owner.ok) return
+    expect(owner.reclaimed).toBe(true)
+    expect(owner.share.token).toBe(created.share.token)
+    expect(owner.manageKey).not.toBe(created.manageKey)
+
+    const oldKey = await publishShare(report("Acme", "Reclaim"), { manageKey: created.manageKey })
+    expect(oldKey.ok).toBe(false)
+    const newKey = await publishShare(report("Acme", "Reclaim"), { manageKey: owner.manageKey })
+    expect(newKey.ok).toBe(true)
+  })
+
   it("refuses a wrong manage key", async () => {
     const { publishShare, newShareToken } = await import("@/lib/share-store")
     const created = await publishShare(report("Acme", "WrongKey"))
