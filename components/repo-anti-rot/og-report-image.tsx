@@ -22,6 +22,24 @@ const TONE: Record<string, string> = {
   F: "#f87171",
 }
 
+/** The brand mark for dark preview cards (Satori renders inline SVG). */
+export function OgMark({ size }: { size: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 120 120">
+      <rect x="2" y="2" width="116" height="116" rx="26" fill="#18181b" stroke="#3f3f46" strokeWidth="4" />
+      <path
+        d="M42 30H32v60h10M78 30h10v60H78"
+        fill="none"
+        stroke="#fafafa"
+        strokeWidth="8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path d="M50 74l20-28" fill="none" stroke="#f97316" strokeWidth="8" strokeLinecap="round" />
+    </svg>
+  )
+}
+
 export interface OgReport {
   grade: string
   score: number
@@ -68,7 +86,10 @@ export function renderReportOgImage(
         }}
       >
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ fontSize: 28, color: "#94a3b8" }}>Repo Anti-Rot</div>
+          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+            <OgMark size={44} />
+            <div style={{ fontSize: 28, color: "#94a3b8" }}>Repo Janitor</div>
+          </div>
           {/* Satori requires an explicit `display` on any element with more than
               one child, so interpolations are joined into a single text node
               rather than sitting side by side. */}
