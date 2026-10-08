@@ -4,9 +4,6 @@
 <!-- Tokenless on purpose: this form reads the latest report ingested from CI, so it
      tracks main. A `?token=…` badge pins one share forever — every share mints a new
      token, so a pasted one is a snapshot that silently ages into a lie. -->
-[![Repo Anti-Rot](https://repo-janitor.app/api/badge/YpCIIIaK/repo-janitor?token=MFCvesIlqgkqBC39&v=20260907064943)](https://repo-janitor.app/r/YpCIIIaK/repo-janitor/MFCvesIlqgkqBC39)
-
-[![Repo Anti-Rot](https://repo-janitor.app/api/card/YpCIIIaK/repo-janitor?token=MFCvesIlqgkqBC39&v=20260907064943)](https://repo-janitor.app/r/YpCIIIaK/repo-janitor/MFCvesIlqgkqBC39)
 
 A repository **health & decay monitor**. It scans a codebase for the kinds of rot
 that accumulate silently — undocumented env vars, abandoned & vulnerable
