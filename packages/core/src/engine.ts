@@ -1,6 +1,6 @@
 import type { Scanner, ScanContext } from "./scanner"
 import { scanReportSchema, SCHEMA_VERSION, type Grade, type Issue, type RepoProfile, type ScanReport } from "./schema"
-import { extToLanguage, detectTools } from "./profile"
+import { extToLanguage, detectTools, detectChecklist, summarizeActivity } from "./profile"
 import { DEFAULT_WEIGHTS, INLINE_IGNORE_MARKER, INLINE_IGNORE_NEXT_LINE_MARKER, isMuted } from "./config"
 import { envLifecycleScanner } from "./scanners/env-lifecycle"
 import { staleBranchScanner } from "./scanners/stale-branch"
@@ -160,9 +160,25 @@ async function buildMetricsAndProfile(
     .map(([language, v]) => ({ language, files: v.files, loc: v.loc }))
     .sort((a, b) => b.loc - a.loc || b.files - a.files || a.language.localeCompare(b.language))
 
+  let activity: RepoProfile["activity"]
+  if (ctx.history === "available" && ctx.git.activity) {
+    try {
+      const raw = await ctx.git.activity()
+      activity = summarizeActivity(raw.commits, raw.lastCommitAt)
+    } catch {
+      activity = undefined
+    }
+  }
+
   return {
     linesOfCode: languages.reduce((sum, l) => sum + l.loc, 0),
-    profile: { totalFiles: ctx.files.length, languages, tools: detectTools(ctx.files) },
+    profile: {
+      totalFiles: ctx.files.length,
+      languages,
+      tools: detectTools(ctx.files),
+      checklist: detectChecklist(ctx.files),
+      ...(activity ? { activity } : {}),
+    },
   }
 }
 
