@@ -1,6 +1,7 @@
 import type { Scanner, ScanContext } from "./scanner"
 import { scanReportSchema, SCHEMA_VERSION, type Grade, type Issue, type RepoProfile, type ScanReport } from "./schema"
 import { extToLanguage, detectTools, detectChecklist, summarizeActivity } from "./profile"
+import { ruleOf } from "./rules"
 import { DEFAULT_WEIGHTS, INLINE_IGNORE_MARKER, INLINE_IGNORE_NEXT_LINE_MARKER, isMuted } from "./config"
 import { envLifecycleScanner } from "./scanners/env-lifecycle"
 import { staleBranchScanner } from "./scanners/stale-branch"
@@ -242,7 +243,8 @@ export async function runScan(
       // it: one place, impossible to forget, and a scanner cannot claim to be
       // another one.
       for (const issue of await scanner.run(ctx)) {
-        issues.push({ ...issue, scanner: scanner.id })
+        const stamped = { ...issue, scanner: scanner.id }
+        issues.push({ ...stamped, rule: stamped.rule ?? ruleOf(stamped) })
       }
       completedScanners.push(scanner.id)
     } catch (err) {

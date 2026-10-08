@@ -44,6 +44,8 @@ export interface Issue {
   aiError?: string
   /** Id of the scanner that produced this finding; absent in pre-v1.1 reports. */
   scanner?: string
+  /** Specific check within the scanner; derived from `id` for older reports. */
+  rule?: string
 }
 
 export interface TrendPoint {
