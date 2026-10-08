@@ -1,9 +1,10 @@
 # Repo Anti-Rot
 
 [![CI](https://github.com/YpCIIIaK/repo-janitor/actions/workflows/ci.yml/badge.svg)](https://github.com/YpCIIIaK/repo-janitor/actions/workflows/ci.yml)
-<!-- Tokenless on purpose: this form reads the latest report ingested from CI, so it
-     tracks main. A `?token=…` badge pins one share forever — every share mints a new
-     token, so a pasted one is a snapshot that silently ages into a lie. -->
+
+[![Repo Anti-Rot](https://repo-janitor.app/api/badge/YpCIIIaK/repo-janitor?token=fBnmjwtdsbRNq0Sm&v=20261008130616)](https://repo-janitor.app/r/YpCIIIaK/repo-janitor/fBnmjwtdsbRNq0Sm)
+
+[![Repo Anti-Rot](https://repo-janitor.app/api/card/YpCIIIaK/repo-janitor?token=fBnmjwtdsbRNq0Sm&v=20261008130616)](https://repo-janitor.app/r/YpCIIIaK/repo-janitor/fBnmjwtdsbRNq0Sm)
 
 A repository **health & decay monitor**. It scans a codebase for the kinds of rot
 that accumulate silently — undocumented env vars, abandoned & vulnerable
