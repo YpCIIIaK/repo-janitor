@@ -286,6 +286,24 @@ export async function buildScanContext(root: string): Promise<ScanContext> {
           return [];
         }
       },
+      activity: async () => {
+        try {
+          // %ae is only a grouping key; it is reduced to counts by the summary and
+          // never reaches the report.
+          const out = await git.raw(['log', '--no-merges', '--since=1.year', '--format=%ae%x02%ct']);
+          const commits = out
+            .split('\n')
+            .filter(Boolean)
+            .map((line) => {
+              const [author, ct] = line.split('\x02');
+              return { author: (author ?? '').toLowerCase(), at: (parseInt(ct ?? '0', 10) || 0) * 1000 };
+            });
+          const last = (await git.raw(['log', '-1', '--format=%ct'])).trim();
+          return { commits, lastCommitAt: last ? parseInt(last, 10) * 1000 : null };
+        } catch {
+          return { commits: [], lastCommitAt: null };
+        }
+      },
       fileOwnership: async (): Promise<Record<string, { authors: number; ageDays: number }>> => {
         try {
           // One pass over history. \x01 marks a commit header, \x02 splits

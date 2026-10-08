@@ -3,6 +3,7 @@ import { mkdtemp, rm, readFile } from "fs/promises"
 import { tmpdir } from "os"
 import { join } from "path"
 import { isPublicGitUrl } from "@/lib/url-guard"
+import { summarizeActivity } from "@/packages/core/src/profile"
 import {
   CLI_DIST,
   MAX_CLONE_BYTES,
@@ -41,6 +42,43 @@ type ScanEvent =
   | { type: "scanner"; url: string; scanner?: string; completed: number; total: number }
   | { type: "repo-done"; url: string; ok: true; report: unknown }
   | { type: "repo-done"; url: string; ok: false; error: string }
+
+/**
+ * Commit activity for the About tab. The scan clones `--depth 1`, so after the
+ * scan we deepen the same checkout by one year of commit objects only
+ * (`--filter=tree:0`: no trees, no blobs — a few KB per hundred commits).
+ * Best-effort: any failure just leaves the report without activity.
+ */
+async function yearActivity(dir: string, signal: AbortSignal) {
+  const since = new Date(Date.now() - 366 * 86_400_000).toISOString().slice(0, 10)
+  const head = await run("git", ["-C", dir, "log", "-1", "--format=%ct"], { timeoutMs: 10_000, signal })
+  const lastCommitAt = (parseInt(head.stdout.trim(), 10) || 0) * 1000
+  if (head.code !== 0 || !lastCommitAt) return null
+
+  const deepen = await run(
+    "git",
+    ["-C", dir, "fetch", "--quiet", "--filter=tree:0", `--shallow-since=${since}`, "origin"],
+    { timeoutMs: 30_000, signal },
+  )
+  // A failed deepen is only trustworthy when HEAD itself is older than the
+  // window: then "no commits this year" is the truth, not an artifact.
+  if (deepen.code !== 0 && lastCommitAt >= Date.parse(since)) return null
+
+  const log = await run(
+    "git",
+    ["-C", dir, "log", "--no-merges", `--since=${since}`, "--format=%ae%x02%ct"],
+    { timeoutMs: 15_000, signal },
+  )
+  if (log.code !== 0) return null
+  const commits = log.stdout
+    .split("\n")
+    .filter(Boolean)
+    .map((line) => {
+      const [author, ct] = line.split("\x02")
+      return { author: (author ?? "").toLowerCase(), at: (parseInt(ct ?? "0", 10) || 0) * 1000 }
+    })
+  return summarizeActivity(commits, lastCommitAt)
+}
 
 async function cloneAndScan(
   url: string,
@@ -133,6 +171,10 @@ async function cloneAndScan(
     }
 
     const report = JSON.parse(await readFile(reportPath, "utf-8"))
+    if (report?.profile && !report.profile.activity) {
+      const activity = await yearActivity(dir, signal)
+      if (activity) report.profile.activity = activity
+    }
     emit({ type: "repo-done", url, ok: true, report })
   } catch (err) {
     emit({ type: "repo-done", url, ok: false, error: String(err) })

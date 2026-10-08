@@ -1,6 +1,7 @@
 "use client"
 
 import { useSyncExternalStore } from "react"
+import type { RepoProfile } from "@/lib/repo-profile"
 import type { Grade, Issue, Severity, StatCard } from "@/lib/mock-data"
 import { estimateDebtHours, formatDebtHours } from "@/lib/debt-hours"
 
@@ -29,11 +30,7 @@ export interface ScanReport {
    * Optional: reports produced before profiling shipped won't carry it (the
    * About tab prompts for a rescan in that case).
    */
-  profile?: {
-    totalFiles: number
-    languages: { language: string; files: number; loc: number }[]
-    tools: string[]
-  }
+  profile?: RepoProfile
 }
 
 export interface TrendPoint {

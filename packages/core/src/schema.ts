@@ -100,6 +100,21 @@ export const repoProfileSchema = z.object({
   ),
   /** Detected ecosystems/tooling (e.g. "Node.js", "Docker", "GitHub Actions"). */
   tools: z.array(z.string()),
+  /** Community-standard files present (README, LICENSE, CI, tests…). */
+  checklist: z.record(z.string(), z.boolean()).optional(),
+  /**
+   * Commit activity over the last year. Counts only — no author identities.
+   * Present only when the scan had the full history.
+   */
+  activity: z
+    .object({
+      lastCommitAt: z.string().optional(),
+      commitsLastYear: z.number().int().nonnegative(),
+      months: z.array(z.object({ month: z.string(), commits: z.number().int().nonnegative() })),
+      authors: z.number().int().nonnegative(),
+      coreAuthors: z.number().int().nonnegative(),
+    })
+    .optional(),
 })
 export type RepoProfile = z.infer<typeof repoProfileSchema>
 

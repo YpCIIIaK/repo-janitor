@@ -26863,7 +26863,7 @@ var require_lib4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-3AHGYEAX.js
+// ../cli/dist/chunk-AISCPNZK.js
 var import_fs2 = require("fs");
 
 // ../../node_modules/.pnpm/tinyglobby@0.2.17/node_modules/tinyglobby/dist/index.mjs
@@ -45593,7 +45593,7 @@ function date4(params) {
 // ../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/external.js
 config(en_default());
 
-// ../cli/dist/chunk-3AHGYEAX.js
+// ../cli/dist/chunk-AISCPNZK.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -69917,7 +69917,20 @@ var repoProfileSchema = external_exports.object({
     })
   ),
   /** Detected ecosystems/tooling (e.g. "Node.js", "Docker", "GitHub Actions"). */
-  tools: external_exports.array(external_exports.string())
+  tools: external_exports.array(external_exports.string()),
+  /** Community-standard files present (README, LICENSE, CI, tests…). */
+  checklist: external_exports.record(external_exports.string(), external_exports.boolean()).optional(),
+  /**
+   * Commit activity over the last year. Counts only — no author identities.
+   * Present only when the scan had the full history.
+   */
+  activity: external_exports.object({
+    lastCommitAt: external_exports.string().optional(),
+    commitsLastYear: external_exports.number().int().nonnegative(),
+    months: external_exports.array(external_exports.object({ month: external_exports.string(), commits: external_exports.number().int().nonnegative() })),
+    authors: external_exports.number().int().nonnegative(),
+    coreAuthors: external_exports.number().int().nonnegative()
+  }).optional()
 });
 var scanReportSchema = external_exports.object({
   schemaVersion: external_exports.literal(SCHEMA_VERSION),
@@ -70027,6 +70040,73 @@ function detectTools(files) {
     if (norm.some((f3) => rule.test.test(f3))) out.push(rule.tool);
   }
   return out;
+}
+var CHECKLIST_ITEMS = [
+  "readme",
+  "license",
+  "contributing",
+  "security",
+  "codeOfConduct",
+  "changelog",
+  "ci",
+  "tests",
+  "gitignore"
+];
+var CHECKLIST_RULES = {
+  readme: /^(\.github\/|docs\/)?readme(\.[a-z]+)?$/,
+  license: /^(licen[cs]e|copying)(\.[a-z]+)?$/,
+  contributing: /^(\.github\/|docs\/)?contributing(\.[a-z]+)?$/,
+  security: /^(\.github\/|docs\/)?security(\.[a-z]+)?$/,
+  codeOfConduct: /^(\.github\/|docs\/)?code_of_conduct(\.[a-z]+)?$/,
+  changelog: /^(changelog|changes|history)(\.[a-z]+)?$/,
+  ci: /^(\.github\/workflows\/[^/]+\.ya?ml|\.gitlab-ci\.ya?ml|\.circleci\/config\.ya?ml|azure-pipelines\.ya?ml|jenkinsfile|\.travis\.ya?ml)$/,
+  tests: /(^|\/)(tests?|__tests__|spec)\/|\.(test|spec)\.[a-z]+$|(^|\/)test_[^/]+\.py$|_test\.go$/,
+  gitignore: /^\.gitignore$/
+};
+function detectChecklist(files) {
+  const norm = files.map((f3) => f3.replace(/\\/g, "/").toLowerCase());
+  const out = {};
+  for (const item of CHECKLIST_ITEMS) out[item] = norm.some((f3) => CHECKLIST_RULES[item].test(f3));
+  return out;
+}
+function summarizeActivity(commits, lastCommitAt, now = Date.now()) {
+  var _a22;
+  const start = new Date(now);
+  start.setUTCDate(1);
+  start.setUTCHours(0, 0, 0, 0);
+  start.setUTCMonth(start.getUTCMonth() - 11);
+  const months = [];
+  for (let i = 0; i < 12; i++) {
+    const d2 = new Date(start);
+    d2.setUTCMonth(start.getUTCMonth() + i);
+    months.push({ month: d2.toISOString().slice(0, 7), commits: 0 });
+  }
+  const index = new Map(months.map((m2, i) => [m2.month, i]));
+  const perAuthor = /* @__PURE__ */ new Map();
+  let total = 0;
+  for (const c3 of commits) {
+    if (c3.at < start.getTime() || c3.at > now) continue;
+    const i = index.get(new Date(c3.at).toISOString().slice(0, 7));
+    if (i === void 0) continue;
+    months[i].commits++;
+    total++;
+    perAuthor.set(c3.author, ((_a22 = perAuthor.get(c3.author)) != null ? _a22 : 0) + 1);
+  }
+  const counts = [...perAuthor.values()].sort((a, b3) => b3 - a);
+  let core = 0;
+  let acc = 0;
+  for (const n of counts) {
+    if (acc >= total * 0.8) break;
+    acc += n;
+    core++;
+  }
+  return {
+    lastCommitAt: lastCommitAt ? new Date(lastCommitAt).toISOString() : void 0,
+    commitsLastYear: total,
+    months,
+    authors: perAuthor.size,
+    coreAuthors: core
+  };
 }
 var CONFIG_FILENAME = ".repo-anti-rot.json";
 var DEFAULT_WEIGHTS = { critical: 10, warning: 3, info: 0.25, infoCap: 10 };
@@ -75926,9 +76006,23 @@ function buildMetricsAndProfile(ctx) {
       langs.set(language, entry);
     }
     const languages = [...langs.entries()].map(([language, v2]) => ({ language, files: v2.files, loc: v2.loc })).sort((a, b3) => b3.loc - a.loc || b3.files - a.files || a.language.localeCompare(b3.language));
+    let activity;
+    if (ctx.history === "available" && ctx.git.activity) {
+      try {
+        const raw = yield ctx.git.activity();
+        activity = summarizeActivity(raw.commits, raw.lastCommitAt);
+      } catch (e) {
+        activity = void 0;
+      }
+    }
     return {
       linesOfCode: languages.reduce((sum, l3) => sum + l3.loc, 0),
-      profile: { totalFiles: ctx.files.length, languages, tools: detectTools(ctx.files) }
+      profile: __spreadValues({
+        totalFiles: ctx.files.length,
+        languages,
+        tools: detectTools(ctx.files),
+        checklist: detectChecklist(ctx.files)
+      }, activity ? { activity } : {})
     };
   });
 }
@@ -76311,6 +76405,19 @@ function buildScanContext(root) {
             return [];
           }
         }),
+        activity: () => __async(null, null, function* () {
+          try {
+            const out = yield git.raw(["log", "--no-merges", "--since=1.year", "--format=%ae%x02%ct"]);
+            const commits = out.split("\n").filter(Boolean).map((line) => {
+              const [author, ct2] = line.split("");
+              return { author: (author != null ? author : "").toLowerCase(), at: (parseInt(ct2 != null ? ct2 : "0", 10) || 0) * 1e3 };
+            });
+            const last = (yield git.raw(["log", "-1", "--format=%ct"])).trim();
+            return { commits, lastCommitAt: last ? parseInt(last, 10) * 1e3 : null };
+          } catch (e) {
+            return { commits: [], lastCommitAt: null };
+          }
+        }),
         fileOwnership: () => __async(null, null, function* () {
           try {
             const out = yield git.raw([
@@ -76465,7 +76572,20 @@ var repoProfileSchema2 = external_exports.object({
     })
   ),
   /** Detected ecosystems/tooling (e.g. "Node.js", "Docker", "GitHub Actions"). */
-  tools: external_exports.array(external_exports.string())
+  tools: external_exports.array(external_exports.string()),
+  /** Community-standard files present (README, LICENSE, CI, tests…). */
+  checklist: external_exports.record(external_exports.string(), external_exports.boolean()).optional(),
+  /**
+   * Commit activity over the last year. Counts only — no author identities.
+   * Present only when the scan had the full history.
+   */
+  activity: external_exports.object({
+    lastCommitAt: external_exports.string().optional(),
+    commitsLastYear: external_exports.number().int().nonnegative(),
+    months: external_exports.array(external_exports.object({ month: external_exports.string(), commits: external_exports.number().int().nonnegative() })),
+    authors: external_exports.number().int().nonnegative(),
+    coreAuthors: external_exports.number().int().nonnegative()
+  }).optional()
 });
 var scanReportSchema2 = external_exports.object({
   schemaVersion: external_exports.literal(SCHEMA_VERSION2),

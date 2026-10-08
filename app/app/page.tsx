@@ -28,6 +28,7 @@ import { Button } from "@/components/ui/button"
 import { EmptyState } from "@/components/ui/empty-state"
 import { ArrowRight, Command as CommandIcon, ScanLine } from "lucide-react"
 import { NewScanDialog } from "@/components/repo-anti-rot/new-scan-dialog"
+import { BreakdownPanel } from "@/components/repo-anti-rot/breakdown-panel"
 import { RepoOverview } from "@/components/repo-anti-rot/repo-overview"
 import { useRepos, removeRepo, repoStats, repoTrend, countSeverity, timeAgo, repoDiff, repoDiffDetail, newIssueIds, issueDensity } from "@/lib/reports-store"
 import { Settings as SettingsIcon, HelpCircle } from "lucide-react"
@@ -507,20 +508,14 @@ export default function DashboardPage() {
               />
             </TabsContent>
 
-            <TabsContent value="breakdown" className="mt-6 space-y-6">
-              <div className="grid gap-6 lg:grid-cols-[260px_1fr]">
-                <GradeCard
-                  grade={repo.grade}
-                  score={repo.score}
-                  scannedAt={current.scannedAt}
-                  issues={issues}
-                  weights={weights}
-                  scope={scanScope}
-                  languages={current.latest.profile?.languages}
-                />
-                <IssueBreakdown issues={issues} />
-              </div>
-              <TrendChart data={trend} />
+            <TabsContent value="breakdown" className="mt-6">
+              <BreakdownPanel
+                issues={issues}
+                weights={weights}
+                diagnostics={current.latest.diagnostics}
+                linesOfCode={current.latest.metrics?.linesOfCode}
+                score={repo.score}
+              />
             </TabsContent>
           </Tabs>
         </main>
