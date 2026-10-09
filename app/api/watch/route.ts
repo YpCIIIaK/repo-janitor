@@ -123,7 +123,7 @@ export async function DELETE(request: Request) {
   let token = searchParams.get("token") ?? ""
   if (!token) {
     try {
-      const body = (await request.json()) as { unsubToken?: string; token?: string }
+      const body = (await readJson(request, 8 * 1024)) as { unsubToken?: string; token?: string }
       token = body.unsubToken ?? body.token ?? ""
     } catch {
       /* query-only */
