@@ -395,5 +395,12 @@ export async function scanRepo(
   scanners?: Scanner[],
 ): Promise<ScanReport> {
   const ctx = await buildScanContext(root);
+  // Reproducible runs (the scanner benchmark): no registry, OSV or link checks,
+  // so results depend only on the checked-out tree.
+  if (process.env.REPO_ANTI_ROT_OFFLINE === "1") {
+    delete ctx.fetchJson;
+    delete ctx.postJson;
+    delete ctx.headUrl;
+  }
   return runScan(ctx, scanners, onProgress);
 }
