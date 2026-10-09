@@ -213,3 +213,14 @@ describe("secretsScanner", () => {
     expect(issues.some((i) => i.id.includes("stripe-secret"))).toBe(true)
   })
 })
+
+describe("secrets — built values are not secrets", () => {
+  it.each([
+    "response.json({token: `invalid-${refreshCount}-abcdefghijk`})",
+    "headers: { 'Lock-Token': 'urn:uuid:a515cfa4-5da4-22e1-f5b5-00a0451e6bf7' }",
+    'new_secret = "#{secret}abcdefghijklmnopqrstuvwx"',
+  ])("ignores %s", async (line) => {
+    const issues = await secretsScanner.run(makeContext({ files: { "src/a.ts": line + "\n" } }))
+    expect(issues).toEqual([])
+  })
+})

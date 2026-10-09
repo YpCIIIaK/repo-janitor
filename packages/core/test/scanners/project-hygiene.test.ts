@@ -47,3 +47,25 @@ describe("projectHygieneScanner", () => {
     expect(ids).not.toContain("hygiene-no-tests")
   })
 })
+
+describe("project hygiene — benchmark false positives", () => {
+  const ids = async (opts: Parameters<typeof makeContext>[0]) =>
+    (await projectHygieneScanner.run(makeContext(opts))).map((i) => i.id)
+
+  it("accepts a README the file walk skipped (symlink) when it resolves", async () => {
+    const out = await ids({ files: { "src/a.ts": "x" }, sizes: { "README.md": 10 } })
+    expect(out).not.toContain("hygiene-no-readme")
+  })
+
+  it("accepts dual LICENSE-MIT / LICENSE-APACHE and COPYING", async () => {
+    expect(await ids({ files: { "LICENSE-MIT": "", "LICENSE-APACHE": "" } })).not.toContain("hygiene-no-license")
+    expect(await ids({ files: { COPYING: "" } })).not.toContain("hygiene-no-license")
+  })
+
+  it.each(["context_test.go", "test.js", "test.node.js", "pkg/test_api.py", "lib/foo_spec.rb", "src/FooTest.java"])(
+    "recognises %s as a test",
+    async (file) => {
+      expect(await ids({ files: { [file]: "" } })).not.toContain("hygiene-no-tests")
+    },
+  )
+})

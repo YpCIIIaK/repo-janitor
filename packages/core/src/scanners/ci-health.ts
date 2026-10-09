@@ -288,6 +288,44 @@ const RULE_TEXT: Record<
   },
 }
 
+/** `rake` with no task runs the default task, which in Ruby projects is the suite. */
+const BARE_RAKE = /\brake\s*(?:["']?\s*)?$/m
+
+/**
+ * Text CI reaches one step away from the workflow: the Makefile behind `make ci`,
+ * the script behind `run: scripts/test`, the package.json scripts behind
+ * `pnpm run ${{ matrix.task }}`. Requests, httpx and ms all run their tests this
+ * way and were reported as never running them. Only ever widens what counts as
+ * "runs tests", so following too much costs a missed finding, never a false one.
+ */
+async function indirectRunText(ctx: ScanContext, files: string[], workflowText: string): Promise<string> {
+  const parts: string[] = []
+  const add = async (path: string) => {
+    const c = await ctx.readFile(path)
+    if (c) parts.push(c.slice(0, 200_000))
+  }
+  if (/\bmake\b/.test(workflowText)) {
+    for (const f of files) if (/(^|\/)(GNU)?makefile$/i.test(f)) await add(f)
+  }
+  if (/\b(?:npm|pnpm|yarn|bun)\b/.test(workflowText)) {
+    for (const f of files) {
+      if (!/(^|\/)package\.json$/.test(f) || f.split("/").length > 3) continue
+      const raw = await ctx.readFile(f)
+      try {
+        const scripts = (JSON.parse(raw ?? "{}") as { scripts?: Record<string, string> }).scripts ?? {}
+        parts.push(Object.values(scripts).join("\n"))
+      } catch {
+        /* not JSON we can read */
+      }
+    }
+  }
+  const fileSet = new Set(files)
+  for (const m of workflowText.matchAll(/(?:^|[\s"'])\.?\/?((?:scripts?|bin|tools|ci)\/[\w./-]+)/g)) {
+    if (fileSet.has(m[1])) await add(m[1])
+  }
+  return parts.join("\n")
+}
+
 export const ciHealthScanner: Scanner = {
   id: "ci-health",
   category: "hygiene",
@@ -343,7 +381,9 @@ export const ciHealthScanner: Scanner = {
     const hasTestFiles = files.some((f) => TEST_FILE_RE.test(f))
     const elsewhere = OTHER_CI_CONFIG.some((c) => files.includes(c))
     if (hasTestFiles && !elsewhere && issues.length < MAX_ISSUES) {
-      const runsTests = TEST_INVOCATION.test(workflowText) || TEST_ACTION.test(workflowText)
+      const reachable = workflowText + "\n" + (await indirectRunText(ctx, files, workflowText))
+      const runsTests =
+        TEST_INVOCATION.test(reachable) || TEST_ACTION.test(workflowText) || BARE_RAKE.test(workflowText)
       if (!runsTests) {
         issues.push({
           id: "ci-tests-not-run",

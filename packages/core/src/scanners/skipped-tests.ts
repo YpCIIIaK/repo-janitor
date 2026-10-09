@@ -44,7 +44,15 @@ function jsHit(node: Node): Hit | null {
     const host = obj.name ?? ""
     const mod = prop.name
     if (mod === "only" && HOSTS.has(host)) return { severity: "warning", label: "focused test (.only)" }
-    if (mod === "skip" && HOSTS.has(host)) return { severity: "info", label: "skipped test (.skip)" }
+    if (mod === "skip" && HOSTS.has(host)) {
+      // Playwright's `test.skip(condition)` skips the rest of the block on one
+      // configuration only (dev vs build, one browser). A skipped TEST names it:
+      // its first argument is the title string.
+      const first = (node.arguments as Node[] | undefined)?.[0]
+      const titled = first && (first.type === "StringLiteral" || first.type === "TemplateLiteral")
+      if (!titled) return null
+      return { severity: "info", label: "skipped test (.skip)" }
+    }
     if (mod === "todo" && (host === "it" || host === "test"))
       return { severity: "info", label: "unimplemented test (.todo)" }
     return null

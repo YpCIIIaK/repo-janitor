@@ -57,3 +57,19 @@ describe("commentedCodeScanner", () => {
     expect(await commentedCodeScanner.run(ctx)).toHaveLength(0)
   })
 })
+
+describe("commented-code — documentation examples", () => {
+  const count = async (content: string) =>
+    (await commentedCodeScanner.run(makeContext({ files: { "src/a.go": content } }))).length
+
+  it("skips a Go doc example indented after the marker", async () => {
+    expect(await count('// GetQuery returns a value.\n//\n//\tGET /?name=Manu&lastname=\n//\t("Manu", true) == c.GetQuery("name")\n//\t("", false) == c.GetQuery("id")\nfunc x() {}\n')).toBe(0)
+  })
+  it("skips an example introduced by a colon and bullet lists", async () => {
+    expect(await count("// Testing for these options:\n// --inspect[=[host:]port]\n// --inspect-brk[=[host:]port]\n// --inspect-port=[host:]port\n")).toBe(0)
+    expect(await count("// Order:\n//   * PreRun()\n//   * Run()\n//   * PostRun()\n")).toBe(0)
+  })
+  it("still flags plain commented-out statements", async () => {
+    expect(await count("x := 1\n// a := foo();\n// b := bar(a);\n// baz(a, b);\n")).toBe(1)
+  })
+})

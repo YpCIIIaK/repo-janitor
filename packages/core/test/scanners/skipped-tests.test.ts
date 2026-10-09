@@ -79,3 +79,17 @@ describe("skippedTestsScanner", () => {
     expect(issues[0].location).toBe("a.test.ts:3")
   })
 })
+
+describe("skipped-tests — conditional skip", () => {
+  it("does not flag Playwright's test.skip(condition), only a titled skip", async () => {
+    const out = await skippedTestsScanner.run(
+      makeContext({
+        files: {
+          "e2e/a.spec.ts":
+            "test.describe(() => {\n  test.skip(mode !== 'build')\n  test('x', () => {})\n})\ntest.skip('broken', () => {})\n",
+        },
+      }),
+    )
+    expect(out.map((i) => i.location)).toEqual(["e2e/a.spec.ts:5"])
+  })
+})
