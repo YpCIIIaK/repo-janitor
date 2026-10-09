@@ -4,7 +4,7 @@ import { createRequire } from "module"
 const { version } = createRequire(import.meta.url)("./package.json") as { version: string }
 
 export default defineConfig({
-  // index → the `repo-anti-rot` bin; context → the `repo-anti-rot/context`
+  // index → the `repo-janitor` bin; context → the `repo-janitor/context`
   // subpath the GitHub Action bundles (the Node ScanContext impl).
   entry: ["src/index.ts", "src/context.ts"],
   format: ["esm", "cjs"],

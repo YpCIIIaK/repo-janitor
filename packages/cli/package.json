@@ -1,5 +1,5 @@
 {
-  "name": "repo-anti-rot",
+  "name": "repo-janitor",
   "version": "0.3.0",
   "description": "Repository health & decay monitor \u2014 scans a codebase for committed secrets, vulnerable/abandoned dependencies, dead code, stale branches, aging TODOs and more, then scores it A\u2013F. Emits terminal, JSON, Markdown or SARIF.",
   "type": "module",
@@ -16,23 +16,25 @@
   },
   "keywords": [
     "cli",
-    "repository",
-    "health",
     "code-quality",
-    "secrets",
-    "sarif",
-    "vulnerabilities",
-    "osv",
-    "dependencies",
     "dead-code",
-    "technical-debt",
+    "dependencies",
+    "health",
     "linter",
-    "static-analysis"
+    "osv",
+    "repo-janitor",
+    "repository",
+    "sarif",
+    "secrets",
+    "static-analysis",
+    "technical-debt",
+    "vulnerabilities"
   ],
   "engines": {
     "node": ">=22"
   },
   "bin": {
+    "repo-janitor": "./dist/index.js",
     "repo-anti-rot": "./dist/index.js"
   },
   "exports": {

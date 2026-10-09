@@ -68,7 +68,7 @@ body:
     attributes:
       label: Version
       description: >-
-        `npx repo-anti-rot --version`, or the date if you used the hosted
+        `npx repo-janitor --version`, or the date if you used the hosted
         dashboard. A rule may already have been fixed since your scan.
       placeholder: 1.0.0
 

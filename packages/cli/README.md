@@ -1,4 +1,4 @@
-# repo-anti-rot
+# repo-janitor
 
 A repository **health & decay monitor**, on the command line. It scans a codebase
 for the kinds of rot that accumulate silently — committed secrets (working tree
@@ -14,33 +14,33 @@ freshness) degrade to a no-op offline instead of failing the scan.
 
 ```bash
 # one-off, no install
-npx repo-anti-rot scan --path .
+npx repo-janitor scan --path .
 
 # or install globally
-npm i -g repo-anti-rot
-repo-anti-rot scan --path .
+npm i -g repo-janitor
+repo-janitor scan --path .
 ```
 
-Requires **Node.js 20+** and **git** on your `PATH`.
+Requires **Node.js 22+** and **git** on your `PATH`.
 
 ## Usage
 
 ```bash
 # scan the current checkout, human-readable output
-repo-anti-rot scan --path . --format terminal
+repo-janitor scan --path . --format terminal
 
 # write a JSON report
-repo-anti-rot scan --path . --format json --output report.json
+repo-janitor scan --path . --format json --output report.json
 
 # write a SARIF 2.1.0 file for GitHub code scanning
-repo-anti-rot scan --path . --format sarif --output repo-anti-rot.sarif
+repo-janitor scan --path . --format sarif --output repo-anti-rot.sarif
 
 # Top findings to fix first (~an hour of focused work for the first few)
-repo-anti-rot scan --path . --fix
-repo-anti-rot scan --path . --fix --fix-limit 5
+repo-janitor scan --path . --fix
+repo-janitor scan --path . --fix --fix-limit 5
 
 # scan many cloned repos under a directory
-repo-anti-rot batch ./repos --out-dir ./reports
+repo-janitor batch ./repos --out-dir ./reports
 ```
 
 **Formats:** `terminal` (default), `json`, `md`, `sarif`.
@@ -66,15 +66,15 @@ markers.
 The package is importable as well as executable — the scan API is the root export:
 
 ```js
-import { scanRepo, buildScanContext } from "repo-anti-rot"
+import { scanRepo, buildScanContext } from "repo-janitor"
 
 const report = await scanRepo("/path/to/repo")
 console.log(report.score, report.grade, report.issues.length)
 ```
 
-`repo-anti-rot/context` resolves to the same module and stays supported.
+`repo-janitor/context` resolves to the same module and stays supported.
 
-Note that the CLI entry point is reachable only through the `repo-anti-rot`
+Note that the CLI entry point is reachable only through the `repo-janitor` (or legacy `repo-anti-rot`)
 binary, never by import: it parses `argv` and exits on load, so importing it
 would run the command line rather than hand you an API.
 
