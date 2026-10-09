@@ -1,7 +1,7 @@
 {
   "name": "repo-anti-rot",
-  "version": "0.2.0",
-  "description": "Repository health & decay monitor — scans a codebase for committed secrets, vulnerable/abandoned dependencies, dead code, stale branches, aging TODOs and more, then scores it A–F. Emits terminal, JSON, Markdown or SARIF.",
+  "version": "0.3.0",
+  "description": "Repository health & decay monitor \u2014 scans a codebase for committed secrets, vulnerable/abandoned dependencies, dead code, stale branches, aging TODOs and more, then scores it A\u2013F. Emits terminal, JSON, Markdown or SARIF.",
   "type": "module",
   "license": "MIT",
   "author": "YpCIIIaK",
@@ -51,7 +51,8 @@
   "files": [
     "dist",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "CHANGELOG.md"
   ],
   "publishConfig": {
     "access": "public"
