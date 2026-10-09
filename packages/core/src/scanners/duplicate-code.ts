@@ -68,7 +68,7 @@ const CODE_EXT =
  * scaffold that had diverged would be the bug.
  */
 const SKIP_PATH =
-  /(^|\/)(?:node_modules|vendor|third_party|thirdparty|dist|build|out|target|generated|__generated__|\.next|\.nuxt|coverage|migrations|__snapshots__|__fixtures__|fixtures?|testdata|examples?|templates?(?:[-_.][\w.-]*)?|scaffolds?|starters?|playgrounds?)\//i
+  /(^|\/)(?:node_modules|vendor|third_party|thirdparty|dist|build|out|target|generated|__generated__|\.next|\.nuxt|coverage|migrations|__snapshots__|__fixtures__|fixtures?|testdata|examples?|templates?(?:[-_.][\w.-]*)?|scaffolds?|starters?|playgrounds?|bench(?:mark)?s?|locales?|i18n|translations?)\//i
 
 /** Files that are machine output even when their directory looks ordinary. */
 const GENERATED_FILE =
@@ -89,7 +89,7 @@ const TEST_FILE =
 const NOISE =
   /^(?:[{}()[\];,]+|else\s*\{?|\}?\s*else\s*(?:if.*)?\{?|return;?|break;?|continue;?|pass|end|fi|done|<\/?\w+\s*\/?>)$/
 
-const IMPORTISH = /^(?:import\b|from\s+\S+\s+import\b|#include\b|using\s+\w|require\s*\(|use\s+\w|package\b|export\s+\*|export\s+\{)/
+const IMPORTISH = /^(?:\}\s*from\s|import\b|from\s+\S+\s+import\b|#include\b|using\s+\w|require\s*\(|use\s+\w|package\b|export\s+\*|export\s+\{)/
 
 const COMMENT = /^(?:\/\/|#|\*|\/\*|--|;;)/
 
@@ -110,9 +110,21 @@ export function significantLines(content: string): NormalizedLine[] {
   const out: NormalizedLine[] = []
   const lines = content.split(/\r?\n/)
   let inBlockComment = false
+  let inDocstring: string | null = null
 
   for (let i = 0; i < lines.length; i++) {
     let text = lines[i].trim()
+    // Python docstrings are prose: two methods documented alike are not copies.
+    if (inDocstring) {
+      if (text.includes(inDocstring)) inDocstring = null
+      continue
+    }
+    const doc = text.match(/^[rRuUbB]?("""|''')/)
+    if (doc) {
+      const rest = text.slice(text.indexOf(doc[1]) + 3)
+      if (!rest.includes(doc[1])) inDocstring = doc[1]
+      continue
+    }
     if (inBlockComment) {
       if (text.includes("*/")) inBlockComment = false
       continue
@@ -147,6 +159,12 @@ const DECLARATIVE = [
   /^[A-Z]\w*(?:\s+extends\s+.+?)?(?:\s*=\s*[^=]*?)?,?$/, // generic parameter
   /^\)?\s*:\s*.+$/, // a return-type line
   /^[<>(),\s|&]*$/, // punctuation left over from a signature
+  // A name in a multi-line import / export list: `ClientTemporaryReferenceSet,`
+  /^(?:type\s+)?[\w$]+(?:\s+as\s+[\w$]+)?,?$/,
+  // A parameter with a type and a default, Python or TS: `files: FilesType = None,`
+  /^\*{0,2}[\w$]+\??\s*:\s*[^=]+=\s*[^=][^,]*,?$/,
+  // The frame of a signature: `def send(`, `self,`, `) -> Response:`, `@overload`
+  /^(?:async\s+)?def\s+\w+\($|^(?:self|cls|\*),?$|^\)\s*->.*:$|^@(?:t\.|typing\.)?overload$/,
 ]
 
 function isDeclarative(text: string): boolean {

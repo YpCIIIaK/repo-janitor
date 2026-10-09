@@ -6,6 +6,7 @@
  "dead-export-tests/setup/server.js:startTestServer": "fp",
  "dead-export-tests/setup/server.js:stopAllTrackedHTTPServers": "fp",
  "debug-docs/scripts/utils.js:4": "fp",
+ "debug-gulpfile.js:9": "tp",
  "debug-sandbox/server.js:81": "fp",
  "debug-scripts/axios-build-instance.js:17": "fp",
  "env-no-example": "fp",

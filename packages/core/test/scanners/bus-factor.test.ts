@@ -51,3 +51,13 @@ describe("busFactorScanner", () => {
     expect(await busFactorScanner.run(ctx)).toHaveLength(0)
   })
 })
+
+describe("bus-factor — low-stakes files", () => {
+  it("skips tests, fixtures, configs and benchmarks but keeps library source", async () => {
+    const files = ["tests/a.py", "jest.config.ts", "bench/b.ts", "test.node.js", "src/core.ts"]
+    const ownership = Object.fromEntries(files.map((f) => [f, { authors: 1, ageDays: 900 }]))
+    const ctx = makeContext({ files: Object.fromEntries(files.map((f) => [f, "x"])), ownership })
+    const out = (await busFactorScanner.run(ctx)).map((i) => i.location)
+    expect(out).toEqual(["src/core.ts"])
+  })
+})

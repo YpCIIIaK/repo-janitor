@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { scanWorkflow, workflowSecurityScanner } from "../../src/scanners/workflow-security"
+import { everyJobHasPermissions, scanWorkflow, workflowSecurityScanner } from "../../src/scanners/workflow-security"
 import type { ScanContext } from "../../src/scanner"
 
 const rules = (yaml: string) => scanWorkflow(yaml).map((f) => f.rule)
@@ -176,9 +176,9 @@ jobs:
       ).toContain("no-permissions")
     })
 
-    it("does not count a job-level block as the top-level one", () => {
-      // Only the top-level key changes the default for every job, and the
-      // default is what is write-all on an older repository.
+    it("accepts job-level blocks when every job has one", () => {
+      // A job's own permissions replace the default for that job's token, so
+      // covering every job is as tight as a top-level block.
       expect(
         rules(`on: [push]
 jobs:
@@ -188,6 +188,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo hi
+`),
+      ).not.toContain("no-permissions")
+    })
+
+    it("still flags a job left on the default", () => {
+      expect(
+        rules(`on: [push]
+jobs:
+  a:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+  b:
+    runs-on: ubuntu-latest
 `),
       ).toContain("no-permissions")
     })
@@ -256,5 +270,16 @@ describe("workflowSecurityScanner", () => {
         ctx({ "deploy/ci.yml": "jobs:\n  a:\n    runs-on: ubuntu-latest\n" }),
       ),
     ).toEqual([])
+  })
+})
+
+describe("everyJobHasPermissions", () => {
+  it("accepts per-job permissions on every job", () => {
+    const y = "on: push\njobs:\n  a:\n    runs-on: x\n    permissions:\n      contents: read\n  b:\n    permissions: {}\n    runs-on: x\n"
+    expect(everyJobHasPermissions(y.split("\n"))).toBe(true)
+  })
+  it("rejects when one job lacks them", () => {
+    const y = "on: push\njobs:\n  a:\n    permissions:\n      contents: read\n  b:\n    runs-on: x\n    steps:\n      - uses: x\n        with:\n          permissions: no\n"
+    expect(everyJobHasPermissions(y.split("\n"))).toBe(false)
   })
 })

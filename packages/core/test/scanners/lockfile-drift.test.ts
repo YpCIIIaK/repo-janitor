@@ -60,3 +60,24 @@ describe("lockfileDriftScanner", () => {
     expect(await lockfileDriftScanner.run(ctx)).toHaveLength(0)
   })
 })
+
+describe("lockfile-drift — deliberate omissions", () => {
+  const ids = async (files: Record<string, string>) =>
+    (await lockfileDriftScanner.run(makeContext({ files }))).map((i) => i.id)
+  const pkg = JSON.stringify({ dependencies: { a: "1" } })
+
+  it("respects package-lock=false", async () => {
+    expect(await ids({ "package.json": pkg, ".npmrc": "package-lock=false\n" })).toEqual([])
+    expect(await ids({ "package.json": pkg })).toEqual(["lockfile-missing"])
+  })
+  it("does not ask a library crate, gem or Composer library for a lockfile", async () => {
+    expect(await ids({ "Cargo.toml": '[dependencies]\nserde = "1"\n', "src/lib.rs": "" })).toEqual([])
+    expect(await ids({ Gemfile: 'gem "rack"\n', "x.gemspec": "" })).toEqual([])
+    expect(await ids({ "composer.json": JSON.stringify({ require: { "a/b": "1" } }) })).toEqual([])
+  })
+  it("still asks an application crate for Cargo.lock", async () => {
+    expect(await ids({ "Cargo.toml": '[dependencies]\nserde = "1"\n', "src/main.rs": "" })).toEqual([
+      "lockfile-missing-Cargo.lock",
+    ])
+  })
+})

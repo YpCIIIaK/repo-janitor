@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest"
 import { scanCiFile, triggersOf, ciHealthScanner } from "../../src/scanners/ci-health"
 import type { ScanContext } from "../../src/scanner"
+import { makeContext } from "../helpers"
 
 /** Every per-file rule assumes a verification workflow, so fixtures carry a trigger. */
 const ON = "on: [push, pull_request]\n"
@@ -267,5 +268,34 @@ describe("ciHealthScanner", () => {
       }),
     )
     expect(issues).toEqual([])
+  })
+})
+
+describe("ci-health — tests run through an indirection", () => {
+  const wf = (run: string) => `on: [push, pull_request]\njobs:\n  t:\n    runs-on: ubuntu-latest\n    steps:\n      - run: ${run}\n`
+  const notRun = async (files: Record<string, string>) =>
+    (await ciHealthScanner.run(makeContext({ files: { "tests/test_a.py": "", ...files } }))).some(
+      (i) => i.id === "ci-tests-not-run",
+    )
+
+  it("follows make targets into the Makefile", async () => {
+    expect(await notRun({ ".github/workflows/ci.yml": wf("make ci"), Makefile: "ci:\n\tpytest tests\n" })).toBe(false)
+  })
+  it("follows a script path", async () => {
+    expect(await notRun({ ".github/workflows/ci.yml": wf('"scripts/test"'), "scripts/test": "coverage run -m pytest\n" })).toBe(false)
+  })
+  it("follows package.json scripts behind a matrix task", async () => {
+    expect(
+      await notRun({
+        ".github/workflows/ci.yml": wf("pnpm run ${{ matrix.task }}"),
+        "package.json": JSON.stringify({ scripts: { "test:node": "jest" } }),
+      }),
+    ).toBe(false)
+  })
+  it("treats bare rake as the default (test) task", async () => {
+    expect(await notRun({ ".github/workflows/ci.yml": wf("bundle exec rake") })).toBe(false)
+  })
+  it("still reports a workflow that only lints", async () => {
+    expect(await notRun({ ".github/workflows/ci.yml": wf("make lint"), Makefile: "lint:\n\truff .\n" })).toBe(true)
   })
 })

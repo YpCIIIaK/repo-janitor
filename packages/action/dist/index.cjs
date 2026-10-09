@@ -26863,7 +26863,7 @@ var require_lib4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-QJHHQ5EA.js
+// ../cli/dist/chunk-WHPJADND.js
 var import_fs2 = require("fs");
 
 // ../../node_modules/.pnpm/tinyglobby@0.2.17/node_modules/tinyglobby/dist/index.mjs
@@ -45593,7 +45593,7 @@ function date4(params) {
 // ../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/external.js
 config(en_default());
 
-// ../cli/dist/chunk-QJHHQ5EA.js
+// ../cli/dist/chunk-WHPJADND.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -70130,6 +70130,8 @@ var INSECURE = {
   "py-verify-false": "requests with verify=False"
 };
 var WORKFLOW = {
+  "action-tag-first-party": "First-party action pinned to a mutable tag",
+  "action-tag": "Third-party action pinned to a mutable tag",
   "action-unpinned": "Action not pinned to a commit",
   "self-hosted-runner": "Self-hosted runner on public triggers",
   "script-injection": "Script injection in a workflow",
@@ -70157,6 +70159,8 @@ var DEFS = [
   { rule: "dep-abandoned", label: "Abandoned dependency", test: /^dep-abandoned-/ },
   { rule: "dep-outdated", label: "Outdated dependency", test: /^dep-outdated-/ },
   { rule: "eol-runner", label: "End-of-life CI runner image", test: /^eol-runner-/ },
+  { rule: "eol-node", label: "End-of-life Node.js version", test: /^eol-node-/ },
+  { rule: "eol-python", label: "End-of-life Python version", test: /^eol-python-/ },
   { rule: "eol-runtime", label: "End-of-life runtime version", test: /^eol-/ },
   { rule: "license-network", label: "Network copyleft license (AGPL\u2026)", test: /^license-network-/ },
   { rule: "license-strong", label: "Strong copyleft license (GPL\u2026)", test: /^license-strong-/ },
@@ -70520,6 +70524,13 @@ function analyzeWithAst(content, file2, acc) {
   });
   return true;
 }
+function looksDeployable(files) {
+  return files.some(
+    (f3) => /(^|\/)(dockerfile|docker-compose\.ya?ml|compose\.ya?ml|procfile|fly\.toml|vercel\.json|netlify\.toml|render\.ya?ml|app\.ya?ml|serverless\.ya?ml|next\.config\.[cm]?[jt]s|nuxt\.config\.[cm]?[jt]s|\.env(\.[\w-]+)?)$/i.test(
+      f3.replace(/\\/g, "/")
+    )
+  );
+}
 var envLifecycleScanner = {
   id: "env-lifecycle",
   category: "env",
@@ -70591,7 +70602,7 @@ var envLifecycleScanner = {
             detail: hasFallback ? `Code reads the ${name} env var but it is not documented in ${exampleName}. A fallback default is provided in code, so this is optional \u2014 document it for clarity or ignore.` : `Code reads the ${name} env var but it is not documented in ${exampleName}.`
           });
         }
-      } else if (undocumented.length > 0) {
+      } else if (undocumented.length > 0 && looksDeployable(ctx.files)) {
         issues.push({
           id: `env-no-example`,
           category: "env",
@@ -70716,6 +70727,7 @@ var todoDebtScanner = {
       const issues = [];
       for (const file2 of ctx.files) {
         if (!SOURCE_RE.test(file2)) continue;
+        if (/\.snap(\.[\w]+)*$|(^|\/)__snapshots__\//.test(file2.replace(/\\/g, "/"))) continue;
         const content = yield ctx.readFile(file2);
         if (!content) continue;
         const ast = parseFile(content, file2, { comments: true });
@@ -70762,6 +70774,7 @@ var DETECTORS = [
 ];
 var ASSIGN_RE = /(password|passwd|pwd|secret|token|api[_-]?key|access[_-]?key|client[_-]?secret|auth[_-]?token)["']?\s*[:=]\s*["`']([^"`'\s]{20,})["`']/i;
 var PLACEHOLDER_RE = /^(your|example|changeme|placeholder|redacted|dummy|test|sample|xxx+|<|\$\{|process\.env)/i;
+var NOT_A_SECRET_RE = /\$\{|#\{|\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b/i;
 var KNOWN_EXAMPLE_RE = /EXAMPLE/;
 var BINARY_EXT = /\.(png|jpe?g|gif|webp|ico|bmp|pdf|zip|gz|tar|woff2?|ttf|eot|mp[34]|mov|wasm)$/i;
 var SKIP_NAME = /(?:^|\/)(package-lock\.json|pnpm-lock\.yaml|yarn\.lock)$/;
@@ -70801,7 +70814,7 @@ function findSecretsInLine(line) {
   const m2 = line.match(ASSIGN_RE);
   if (m2) {
     const value = m2[2];
-    if (!PLACEHOLDER_RE.test(value) && !KNOWN_EXAMPLE_RE.test(value) && entropy(value) >= 4) {
+    if (!PLACEHOLDER_RE.test(value) && !KNOWN_EXAMPLE_RE.test(value) && !NOT_A_SECRET_RE.test(value) && entropy(value) >= 4) {
       hits.push({ id: "entropy", token: value, label: m2[1], entropyHit: true });
     }
   }
@@ -72581,12 +72594,30 @@ var LOCK_SPECS = [
     hasDeps: (c3) => /"require(?:-dev)?"\s*:/.test(c3)
   }
 ];
+function isLibraryManifest(manifest, content, files) {
+  var _a22;
+  const norm = files.map((f3) => f3.replace(/\\/g, "/"));
+  if (manifest === "Cargo.toml") {
+    const hasBin = /^\s*\[\[bin\]\]/m.test(content) || norm.some((f3) => f3 === "src/main.rs" || f3.startsWith("src/bin/"));
+    return !hasBin && !/^\s*\[workspace\]/m.test(content);
+  }
+  if (manifest === "Gemfile") return norm.some((f3) => /^[^/]+\.gemspec$/.test(f3));
+  if (manifest === "composer.json") {
+    try {
+      const type = (_a22 = JSON.parse(content).type) != null ? _a22 : "library";
+      return type === "library";
+    } catch (e) {
+      return false;
+    }
+  }
+  return false;
+}
 var lockfileDriftScanner = {
   id: "lockfile-drift",
   category: "dependency",
   run(ctx) {
     return __async(this, null, function* () {
-      var _a22, _b, _c;
+      var _a22, _b, _c, _d;
       const issues = [];
       const fileSet = new Set(ctx.files);
       const raw = yield ctx.readFile("package.json");
@@ -72604,8 +72635,10 @@ var lockfileDriftScanner = {
         ] : [];
         if (names.length > 0) {
           const present = LOCKFILES.filter((f3) => fileSet.has(f3));
+          const npmrc = fileSet.has(".npmrc") ? (_d = yield ctx.readFile(".npmrc")) != null ? _d : "" : "";
+          const optedOut = /^\s*package-lock\s*=\s*false\s*$/m.test(npmrc);
           if (present.length === 0) {
-            issues.push({
+            if (!optedOut) issues.push({
               id: "lockfile-missing",
               category: "dependency",
               severity: "warning",
@@ -72640,6 +72673,7 @@ var lockfileDriftScanner = {
         if (spec.lockfiles.some((f3) => fileSet.has(f3))) continue;
         const content = yield ctx.readFile(spec.manifest);
         if (!content || !spec.hasDeps(content)) continue;
+        if (isLibraryManifest(spec.manifest, content, ctx.files)) continue;
         issues.push({
           id: `lockfile-missing-${spec.lockName}`,
           category: "dependency",
@@ -72655,8 +72689,21 @@ var lockfileDriftScanner = {
   }
 };
 var README_RE = /^readme(\.(md|rst|txt|adoc))?$/i;
-var LICENSE_RE = /^licen[sc]e(\.(md|txt))?$/i;
-var TEST_RE = /(^|\/)(__tests__\/|test\/|tests\/|spec\/)|\.(test|spec)\.[cm]?[jt]sx?$/i;
+var LICENSE_RE = /^(licen[sc]e|copying)([-._][a-z0-9.-]+)?(\.(md|txt|rst))?$/i;
+var TEST_RE = new RegExp(
+  [
+    String.raw`(^|/)(__tests__|tests?|spec|testdata)/`,
+    String.raw`\.(test|spec)\.[cm]?[jt]sx?$`,
+    // test.js / test.node.js at any level (debug, many small npm packages)
+    String.raw`(^|/)test(\.[a-z]+)*\.[cm]?[jt]sx?$`,
+    String.raw`_test\.(go|py)$`,
+    String.raw`(^|/)test_[^/]+\.py$`,
+    String.raw`_spec\.rb$`,
+    String.raw`Test\.(java|kt|php)$`
+  ].join("|"),
+  "i"
+);
+var README_CANDIDATES = ["README.md", "README", "README.rst", "README.txt", "README.adoc", "readme.md", "Readme.md"];
 var CI_RE = /^(\.github\/workflows\/.+\.ya?ml|\.gitlab-ci\.yml|\.circleci\/config\.yml|\.travis\.yml|azure-pipelines\.yml|\.drone\.yml|Jenkinsfile|\.woodpecker\.ya?ml|bitbucket-pipelines\.yml)$/i;
 function baseName(p2) {
   const norm = p2.replace(/\\/g, "/");
@@ -72670,7 +72717,15 @@ var projectHygieneScanner = {
     return __async(this, null, function* () {
       const files = ctx.files.map((f3) => f3.replace(/\\/g, "/"));
       const rootFiles = files.filter((f3) => !f3.includes("/"));
-      const hasReadme = rootFiles.some((f3) => README_RE.test(f3));
+      let hasReadme = rootFiles.some((f3) => README_RE.test(f3));
+      if (!hasReadme && ctx.fileSize) {
+        for (const name of README_CANDIDATES) {
+          if ((yield ctx.fileSize(name)) !== null) {
+            hasReadme = true;
+            break;
+          }
+        }
+      }
       const hasLicense = rootFiles.some((f3) => LICENSE_RE.test(baseName(f3)));
       const hasTests = files.some((f3) => TEST_RE.test(f3));
       const hasCI = files.some((f3) => CI_RE.test(f3));
@@ -72705,7 +72760,7 @@ var projectHygieneScanner = {
           title: "No test files found",
           location: ".",
           ageDays: 0,
-          detail: "No test files (*.test.*, *.spec.*, or a test/ directory) were found anywhere in the repo. Untested code is risky to change \u2014 consider adding at least smoke tests."
+          detail: "No test files (*.test.*, *_test.go, test_*.py, or a test/ directory) were found anywhere in the repo. Untested code is risky to change \u2014 consider adding at least smoke tests."
         });
       }
       if (!hasCI) {
@@ -72724,8 +72779,10 @@ var projectHygieneScanner = {
   }
 };
 var SOURCE_RE3 = /\.(ts|tsx|js|jsx|mjs|mts|cts)$/;
-var TEST_RE2 = /(^|\/)(?:__tests__|tests?|specs?)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test_[^/]+\.py$|_test\.(?:py|go|rb)$|_spec\.rb$|(?:^|\/)conftest\.py$/i;
+var TEST_RE2 = /(^|\/)(?:__tests__|tests?|specs?|e2e)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test_[^/]+\.py$|_test\.(?:py|go|rb)$|_spec\.rb$|(?:^|\/)conftest\.py$/i;
 var EXAMPLE_RE = /(^|\/)examples?\/|(?:^|\/)example\.[cm]?[jt]sx?$/i;
+var TOOLING_RE = /(^|\/)(?:bench(?:mark)?s?|scripts?|bin|tools?|sandbox|playgrounds?|fixtures?|__fixtures__|docs?)\/|\.test-d\.tsx?$|\.d\.ts$|(^|\/)build\.rs$|(^|\/)play(?:ground)?\.[cm]?[jt]sx?$/i;
+var ENTRY_FILE_RE = /(^|\/)(?:__main__|_?main|cli)\.py$|(^|\/)src\/main\.rs$|(^|\/)src\/bin\//i;
 var DEBUG_METHODS = /* @__PURE__ */ new Set(["log", "debug", "trace", "dir", "table"]);
 var MAX_PER_FILE = 8;
 var MAX_TOTAL = 50;
@@ -72779,8 +72836,9 @@ var LANG_DEBUG = {
   py: [
     { re: /\bbreakpoint\s*\(/g, severity: "warning", label: "breakpoint()" },
     { re: /\bi?pdb\.set_trace\s*\(/g, severity: "warning", label: "pdb.set_trace()" },
-    { re: /\bprint\s*\(/g, severity: "info", label: "print()" },
-    { re: /\bpprint\s*\(/g, severity: "info", label: "pprint()" }
+    // Not `console.print(` (rich) or other methods named print.
+    { re: new RegExp("(?<![.\\w])print\\s*\\(", "g"), severity: "info", label: "print()" },
+    { re: new RegExp("(?<![.\\w])pprint\\s*\\(", "g"), severity: "info", label: "pprint()" }
   ],
   go: [{ re: /\bfmt\.Print(?:ln|f)?\s*\(/g, severity: "info", label: "fmt.Print" }],
   rs: [
@@ -72829,8 +72887,16 @@ function debugLabel(node) {
 function lineAt(content, index) {
   return content.slice(0, index).split("\n").length;
 }
-function scanRegexDebug(content, lang) {
+function maskPython(content) {
+  const blank = (m2) => m2.replace(/[^\n]/g, " ");
+  let out = content.replace(/("""|''')[\s\S]*?\1/g, blank);
+  const guard = out.search(/^if\s+__name__\s*==\s*["']__main__["']\s*:/m);
+  if (guard !== -1) out = out.slice(0, guard) + blank(out.slice(guard));
+  return out;
+}
+function scanRegexDebug(raw, lang) {
   var _a22, _b;
+  const content = lang === "py" ? maskPython(raw) : raw;
   const rules = LANG_DEBUG[lang];
   const markers = (_a22 = COMMENT_MARKERS[lang]) != null ? _a22 : [];
   const byLine = /* @__PURE__ */ new Map();
@@ -72844,11 +72910,28 @@ function scanRegexDebug(content, lang) {
       const existing = byLine.get(line);
       if (existing && !(rule.severity === "warning" && existing.severity !== "warning")) continue;
       const lineEnd = content.indexOf("\n", idx);
-      const lineText = content.slice(lineStart, lineEnd === -1 ? void 0 : lineEnd).trim();
+      const lineText = raw.slice(lineStart, lineEnd === -1 ? void 0 : lineEnd).trim();
       byLine.set(line, { line, label: rule.label, severity: rule.severity, evidence: lineText.slice(0, 120) });
     }
   }
   return [...byLine.values()].sort((a, b3) => a.line - b3.line);
+}
+function privateWorkspaceDirs(ctx) {
+  return __async(this, null, function* () {
+    var _a22;
+    const out = [];
+    for (const f3 of ctx.files) {
+      const norm = f3.replace(/\\/g, "/");
+      if (!/\/package\.json$/.test(norm)) continue;
+      try {
+        if (JSON.parse((_a22 = yield ctx.readFile(f3)) != null ? _a22 : "{}").private === true) {
+          out.push(norm.slice(0, -"package.json".length));
+        }
+      } catch (e) {
+      }
+    }
+    return out;
+  });
 }
 var leftoverDebugScanner = {
   id: "leftover-debug",
@@ -72857,10 +72940,12 @@ var leftoverDebugScanner = {
     return __async(this, null, function* () {
       const issues = [];
       const entrypoints = yield collectEntrypoints(ctx);
+      const internalDirs = yield privateWorkspaceDirs(ctx);
       for (const file2 of ctx.files) {
         if (issues.length >= MAX_TOTAL) break;
         const norm = file2.replace(/\\/g, "/");
-        if (TEST_RE2.test(norm) || EXAMPLE_RE.test(norm)) continue;
+        if (TEST_RE2.test(norm) || EXAMPLE_RE.test(norm) || TOOLING_RE.test(norm)) continue;
+        if (internalDirs.some((d2) => norm.startsWith(d2))) continue;
         const isJs = SOURCE_RE3.test(norm);
         const lang = isJs ? null : debugLangOf(norm);
         if (!isJs && !lang) continue;
@@ -72895,8 +72980,10 @@ var leftoverDebugScanner = {
             });
           }
         } else if (lang) {
+          const isEntry = ENTRY_FILE_RE.test(norm) || lang === "go" && /^package\s+main\b/m.test(content);
           let perFile = 0;
           for (const hit of scanRegexDebug(content, lang)) {
+            if (isEntry && hit.severity !== "warning") continue;
             if (issues.length >= MAX_TOTAL || perFile >= MAX_PER_FILE) break;
             issues.push({
               id: `debug-${norm}:${hit.line}`,
@@ -72951,6 +73038,7 @@ var brokenDocLinksScanner = {
   run(ctx) {
     return __async(this, null, function* () {
       const fileSet = new Set(ctx.files.map((f3) => f3.replace(/\\/g, "/")));
+      const usesMkdocs = fileSet.has("mkdocs.yml") || fileSet.has("mkdocs.yaml");
       const dirSet = /* @__PURE__ */ new Set();
       for (const f3 of fileSet) {
         let d2 = dirOf(f3);
@@ -72983,6 +73071,11 @@ var brokenDocLinksScanner = {
           const resolved = resolveRel(baseDir, decoded);
           if (!resolved) continue;
           if (fileSet.has(resolved) || dirSet.has(resolved)) continue;
+          if (usesMkdocs && /\.md$/i.test(file2)) {
+            const asDir = resolveRel(`${baseDir}/${file2.split("/").pop().replace(/\.md$/i, "")}`, decoded);
+            if (asDir && (fileSet.has(`${asDir}.md`) || fileSet.has(`${asDir}/index.md`) || fileSet.has(asDir))) continue;
+            if (fileSet.has(`${resolved}.md`)) continue;
+          }
           const line = lineAt2(text, m2.index);
           issues.push({
             id: `doclink-${norm}:${line}:${target}`,
@@ -73002,6 +73095,7 @@ var brokenDocLinksScanner = {
 };
 var SOURCE_RE4 = /\.(ts|tsx|js|jsx|mjs|mts|cts|py|go|rs|java|rb|php|c|cc|cpp|h|hpp|cs|kt|swift|scala)$/;
 var STALE_DAYS3 = 365;
+var LOW_STAKES_RE = /(^|\/)(?:__tests__|tests?|spec|e2e|testdata|fixtures?|__fixtures__|examples?|playgrounds?|sandbox|bench(?:mark)?s?|docs?|scripts?|bin)\/|(^|\/)[^/]*(?:\.(?:test|spec|test-d|config|conf)\.[^/]+|_test\.\w+|_spec\.rb)$|(^|\/)test[^/]*\.\w+$|(^|\/)(?:conftest|setup|noxfile|gulpfile|gruntfile|karma\.conf)\.\w+$/i;
 var MAX_TOTAL3 = 30;
 function years(days) {
   if (days >= 365) {
@@ -73021,7 +73115,7 @@ var busFactorScanner = {
       const tracked = new Set(ctx.files.map((f3) => f3.replace(/\\/g, "/")));
       const candidates = Object.entries(ownership).filter(([path, info]) => {
         const norm = path.replace(/\\/g, "/");
-        return tracked.has(norm) && SOURCE_RE4.test(norm) && info.authors === 1 && info.ageDays >= STALE_DAYS3;
+        return tracked.has(norm) && SOURCE_RE4.test(norm) && !LOW_STAKES_RE.test(norm) && info.authors === 1 && info.ageDays >= STALE_DAYS3;
       }).sort((a, b3) => b3[1].ageDays - a[1].ageDays).slice(0, MAX_TOTAL3);
       return candidates.map(([path, info]) => {
         const norm = path.replace(/\\/g, "/");
@@ -73099,6 +73193,12 @@ function resolveModule(spec, fromFile, fileSet) {
   for (const ext of EXT_CANDIDATES) {
     if (fileSet.has(base + ext)) return base + ext;
   }
+  const emitted = base.match(/^(.*)\.(m|c)?jsx?$/);
+  if (emitted) {
+    for (const ext of [".ts", ".tsx", ".mts", ".cts", ".d.ts"]) {
+      if (fileSet.has(emitted[1] + ext)) return emitted[1] + ext;
+    }
+  }
   for (const idx of INDEX_CANDIDATES) {
     if (fileSet.has(base + idx)) return base + idx;
   }
@@ -73121,10 +73221,43 @@ var deadCodeScanner = {
     });
   }
 };
+var NOT_SHIPPED_RE = /(^|\/)(?:__tests__|tests?|spec|e2e|fixtures?|__fixtures__|__snapshots__|examples?|playgrounds?|sandbox|bench(?:mark)?s?|scripts?)\/|\.(?:test|spec|test-d|snap)\.|\.snap\.[a-z.]+$/i;
+function packageEntryFiles(ctx, fileSet) {
+  return __async(this, null, function* () {
+    var _a22;
+    const out = /* @__PURE__ */ new Set();
+    const collect = (v2, acc) => {
+      if (typeof v2 === "string") acc.push(v2);
+      else if (v2 && typeof v2 === "object") for (const x3 of Object.values(v2)) collect(x3, acc);
+    };
+    for (const pkgPath of ctx.files.filter((f3) => /(^|\/)package\.json$/.test(f3) && !f3.includes("node_modules"))) {
+      let pkg;
+      try {
+        pkg = JSON.parse((_a22 = yield ctx.readFile(pkgPath)) != null ? _a22 : "{}");
+      } catch (e) {
+        continue;
+      }
+      const targets = [];
+      for (const key of ["main", "module", "types", "typings", "exports", "browser"]) collect(pkg[key], targets);
+      for (const t2 of targets) {
+        if (!t2.startsWith(".") && !/^[\w@]/.test(t2)) continue;
+        const resolved = resolveModule(t2.startsWith(".") ? t2 : `./${t2}`, pkgPath, fileSet);
+        if (resolved) out.add(resolved);
+        const src = t2.replace(/^\.?\/?(dist|lib|build|out)\//, "./src/");
+        const fromSrc = resolveModule(src, pkgPath, fileSet);
+        if (fromSrc) out.add(fromSrc);
+      }
+    }
+    return out;
+  });
+}
 function scanJsTsExports(ctx, sources) {
   return __async(this, null, function* () {
     var _a22, _b;
     const fileSet = new Set(sources);
+    const entryFiles = yield packageEntryFiles(ctx, fileSet);
+    const namespaceRanges = [];
+    const mdxText = (yield Promise.all(ctx.files.filter((f3) => /\.mdx$/i.test(f3)).slice(0, 2e3).map((f3) => ctx.readFile(f3)))).join("\n");
     const exports2 = [];
     const usedNames = /* @__PURE__ */ new Set();
     const exemptFiles = /* @__PURE__ */ new Set();
@@ -73135,7 +73268,7 @@ function scanJsTsExports(ctx, sources) {
       if (!content) continue;
       const ast = parseFile(content, file2);
       if (!ast) continue;
-      const isBarrel = /(^|\/)index\.[a-z]+$/.test(file2);
+      const isBarrel = /(^|\/)index(\.d)?\.[a-z]+$/.test(file2) || entryFiles.has(file2) || NOT_SHIPPED_RE.test(file2);
       const srcLines = content.split("\n");
       const snip = (n) => {
         var _a32, _b2, _c;
@@ -73170,26 +73303,30 @@ function scanJsTsExports(ctx, sources) {
       };
       const idCounts = /* @__PURE__ */ new Map();
       walk(ast, (node) => {
-        var _a32, _b2, _c, _d, _e2, _f, _g, _h, _i;
+        var _a32, _b2, _c, _d, _e2, _f, _g, _h, _i, _j, _k, _l;
+        if (node.type === "TSModuleDeclaration") {
+          const loc = node.loc;
+          if (((_a32 = loc == null ? void 0 : loc.start) == null ? void 0 : _a32.line) && ((_b2 = loc.end) == null ? void 0 : _b2.line)) namespaceRanges.push([file2, loc.start.line, loc.end.line]);
+        }
         if (node.type === "Identifier") {
           const name = node.name;
-          idCounts.set(name, ((_a32 = idCounts.get(name)) != null ? _a32 : 0) + 1);
+          idCounts.set(name, ((_c = idCounts.get(name)) != null ? _c : 0) + 1);
         }
         if (node.type === "ImportDeclaration") {
-          for (const spec of (_b2 = node.specifiers) != null ? _b2 : []) {
+          for (const spec of (_d = node.specifiers) != null ? _d : []) {
             if (spec.type === "ImportSpecifier") {
               const imported = spec.imported;
               const name = (imported == null ? void 0 : imported.type) === "Identifier" ? imported.name : imported == null ? void 0 : imported.value;
               if (name) usedNames.add(name);
             } else if (spec.type === "ImportNamespaceSpecifier") {
-              const target = resolveModule((_c = node.source) == null ? void 0 : _c.value, file2, fileSet);
+              const target = resolveModule((_e2 = node.source) == null ? void 0 : _e2.value, file2, fileSet);
               if (target) exemptFiles.add(target);
             }
           }
           return;
         }
         if (node.type === "ExportAllDeclaration") {
-          const target = resolveModule((_d = node.source) == null ? void 0 : _d.value, file2, fileSet);
+          const target = resolveModule((_f = node.source) == null ? void 0 : _f.value, file2, fileSet);
           if (target) exemptFiles.add(target);
           return;
         }
@@ -73198,7 +73335,7 @@ function scanJsTsExports(ctx, sources) {
           const isDynImport = (callee == null ? void 0 : callee.type) === "Import";
           const isRequire = (callee == null ? void 0 : callee.type) === "Identifier" && callee.name === "require";
           if (isDynImport || isRequire) {
-            const arg = (_e2 = node.arguments) == null ? void 0 : _e2[0];
+            const arg = (_g = node.arguments) == null ? void 0 : _g[0];
             if ((arg == null ? void 0 : arg.type) === "StringLiteral") {
               const target = resolveModule(arg.value, file2, fileSet);
               if (target) exemptFiles.add(target);
@@ -73206,8 +73343,13 @@ function scanJsTsExports(ctx, sources) {
           }
         }
         if (node.type === "ExportNamedDeclaration" && node.source) {
-          for (const spec of (_f = node.specifiers) != null ? _f : []) {
-            const local = (_g = spec.local) != null ? _g : spec.exported;
+          for (const spec of (_h = node.specifiers) != null ? _h : []) {
+            if (spec.type === "ExportNamespaceSpecifier") {
+              const target = resolveModule((_i = node.source) == null ? void 0 : _i.value, file2, fileSet);
+              if (target) exemptFiles.add(target);
+              continue;
+            }
+            const local = (_j = spec.local) != null ? _j : spec.exported;
             if ((local == null ? void 0 : local.type) === "Identifier") usedNames.add(local.name);
           }
           return;
@@ -73219,14 +73361,14 @@ function scanJsTsExports(ctx, sources) {
               const id = decl.id;
               if ((id == null ? void 0 : id.type) === "Identifier") exports2.push({ name: id.name, file: file2, line: lineOf3(node), code: snip(node) });
             } else if (decl.type === "VariableDeclaration") {
-              for (const d2 of (_h = decl.declarations) != null ? _h : []) {
+              for (const d2 of (_k = decl.declarations) != null ? _k : []) {
                 const id = d2.id;
                 if ((id == null ? void 0 : id.type) === "Identifier") exports2.push({ name: id.name, file: file2, line: lineOf3(node), code: snip(node) });
               }
             }
           }
           if (!isBarrel) {
-            for (const spec of (_i = node.specifiers) != null ? _i : []) {
+            for (const spec of (_l = node.specifiers) != null ? _l : []) {
               const exported = spec.exported;
               const name = (exported == null ? void 0 : exported.type) === "Identifier" ? exported.name : void 0;
               if (name && name !== "default") exports2.push({ name, file: file2, line: lineOf3(node), code: snip(node) });
@@ -73244,6 +73386,8 @@ function scanJsTsExports(ctx, sources) {
     const kitDead = /* @__PURE__ */ new Map();
     for (const exp of exports2) {
       if (exemptFiles.has(exp.file)) continue;
+      if (namespaceRanges.some(([f3, a, b3]) => f3 === exp.file && exp.line >= a && exp.line <= b3)) continue;
+      if (mdxText && new RegExp(`\\b${exp.name.replace(/\$/g, "\\$")}\\b`).test(mdxText)) continue;
       if (usedNames.has(exp.name)) continue;
       if (CONVENTION_EXPORTS.has(exp.name)) continue;
       const kit = uiKitRoot(exp.file);
@@ -73389,11 +73533,13 @@ function collectPythonDead(ctx, files, issues) {
       countInto(c3, freq);
       for (const n of pythonAllNames(c3)) publicNames.add(n);
     }
+    const isLibrary = ctx.files.some((f3) => /^(pyproject\.toml|setup\.py|setup\.cfg)$/.test(toPosix(f3)));
     for (const [file2, content] of contents) {
       const norm = toPosix(file2);
-      if (PY_TEST_RE.test(norm)) continue;
+      if (PY_TEST_RE.test(norm) || NOT_SHIPPED_RE.test(norm)) continue;
       if (/(^|\/)__init__\.py$/.test(norm)) continue;
       for (const def of pythonDefs(content)) {
+        if (isLibrary && !def.name.startsWith("_")) continue;
         if (publicNames.has(def.name)) continue;
         if (((_a22 = freq.get(def.name)) != null ? _a22 : 0) > 1) continue;
         issues.push(makeDeadIssue(file2, def, "python"));
@@ -73678,7 +73824,7 @@ var MAX_PER_FILE2 = 10;
 var MAX_TOTAL5 = 60;
 var HOSTS = /* @__PURE__ */ new Set(["describe", "it", "test", "context", "suite"]);
 function jsHit(node) {
-  var _a22, _b;
+  var _a22, _b, _c;
   if (node.type !== "CallExpression" && node.type !== "OptionalCallExpression") return null;
   const callee = node.callee;
   if (!callee) return null;
@@ -73689,13 +73835,18 @@ function jsHit(node) {
     const host = (_a22 = obj.name) != null ? _a22 : "";
     const mod = prop.name;
     if (mod === "only" && HOSTS.has(host)) return { severity: "warning", label: "focused test (.only)" };
-    if (mod === "skip" && HOSTS.has(host)) return { severity: "info", label: "skipped test (.skip)" };
+    if (mod === "skip" && HOSTS.has(host)) {
+      const first = (_b = node.arguments) == null ? void 0 : _b[0];
+      const titled = first && (first.type === "StringLiteral" || first.type === "TemplateLiteral");
+      if (!titled) return null;
+      return { severity: "info", label: "skipped test (.skip)" };
+    }
     if (mod === "todo" && (host === "it" || host === "test"))
       return { severity: "info", label: "unimplemented test (.todo)" };
     return null;
   }
   if (callee.type === "Identifier") {
-    const name = (_b = callee.name) != null ? _b : "";
+    const name = (_c = callee.name) != null ? _c : "";
     if (/^f(?:it|describe|test)$/.test(name)) return { severity: "warning", label: "focused test (fit/fdescribe)" };
     if (/^x(?:it|describe|test|context)$/.test(name)) return { severity: "info", label: "skipped test (xit/xdescribe)" };
   }
@@ -73786,6 +73937,10 @@ var MAX_TOTAL6 = 40;
 var SKIP_PREFIX = /^(?:!|\/|@|eslint|prettier|ts-|tslint|biome|c8|istanbul|prettier-ignore|todo\b|fixme\b|note\b|hack\b|xxx\b|https?:|www\.|copyright|spdx|licen[sc]e)/i;
 var PROSE_TAIL = /[.:?!]\s*$/;
 var CODE_SIGNAL = /[;{},)]\s*$|=>|(?:^|[^=!<>])=(?:[^=]|$)|^[)}\]]/;
+var PROSE_RUN = /\b[A-Za-z]{2,} [A-Za-z]{2,} [A-Za-z]{2,} [A-Za-z]{2,}\b/;
+function isDocIndent(line) {
+  return /^\s*\/\/(\t| {2,})/.test(line);
+}
 function commentBody(line) {
   const m2 = line.match(/^\s*\/\/(.*)$/);
   return m2 ? m2[1].trim() : null;
@@ -73795,6 +73950,7 @@ function looksLikeCode(body) {
   if (SKIP_PREFIX.test(body)) return false;
   if (PROSE_TAIL.test(body)) return false;
   if (body.includes("`")) return false;
+  if (PROSE_RUN.test(body) && !/[;={}]/.test(body)) return false;
   return CODE_SIGNAL.test(body);
 }
 var commentedCodeScanner = {
@@ -73814,7 +73970,14 @@ var commentedCodeScanner = {
         let runStart = -1;
         let runLen = 0;
         const flush = () => {
-          if (runLen >= MIN_RUN && perFile < MAX_PER_FILE3 && issues.length < MAX_TOTAL6) {
+          var _a22, _b, _c, _d, _e2, _f;
+          const run = runStart === -1 ? [] : lines.slice(runStart, runStart + runLen);
+          const docExample = (
+            // …unless the line above opens the expression the indented lines continue.
+            run.every(isDocIndent) && !/[({[,]\s*$|=>\s*$/.test((_b = commentBody((_a22 = lines[runStart - 1]) != null ? _a22 : "")) != null ? _b : "") || run.some((l3) => /^\s*\/\/\s*[*-]\s/.test(l3)) || // introduced by "For example:" / "Testing for these options:"
+            /:\s*$/.test((_d = commentBody((_c = lines[runStart - 1]) != null ? _c : "")) != null ? _d : "") || /:\s*$/.test((_f = commentBody((_e2 = lines[runStart - 2]) != null ? _e2 : "")) != null ? _f : "")
+          );
+          if (!docExample && runLen >= MIN_RUN && perFile < MAX_PER_FILE3 && issues.length < MAX_TOTAL6) {
             const lineNo = runStart + 1;
             issues.push({
               id: `commented-${norm}:${lineNo}`,
@@ -74066,7 +74229,18 @@ var LOWER = {
   warning: "info",
   info: "info"
 };
-var SKIP_IN_TEST = /* @__PURE__ */ new Set(["new-function", "eval-dynamic"]);
+var SKIP_IN_TEST = /* @__PURE__ */ new Set([
+  "new-function",
+  "eval-dynamic",
+  // A test talking to its own self-signed fixture server, computing Content-MD5,
+  // round-tripping an object through pickle, or making a throwaway token.
+  // Every one of these in the benchmark was the test working as intended.
+  "tls-verification-off",
+  "py-verify-false",
+  "weak-hash",
+  "py-pickle-load",
+  "random-for-secret"
+]);
 function scanSource(content, lang) {
   var _a22;
   const markers = COMMENT_MARKERS2[lang];
@@ -74451,10 +74625,39 @@ function scanWorkflow(content) {
       evidence: (_b = (_a22 = lines[checksOutPrHead - 1]) == null ? void 0 : _a22.trim()) != null ? _b : ""
     });
   }
-  if (sawJobs && !hasTopLevelPermissions) {
+  if (sawJobs && !hasTopLevelPermissions && !everyJobHasPermissions(lines)) {
     findings.push({ rule: "no-permissions", line: 1, evidence: "" });
   }
   return findings;
+}
+function everyJobHasPermissions(lines) {
+  const indentOf22 = (l3) => l3.length - l3.trimStart().length;
+  const start = lines.findIndex((l3) => /^jobs:\s*(#.*)?$/.test(l3));
+  if (start === -1) return false;
+  let jobIndent = -1;
+  let childIndent = -1;
+  let jobs = 0;
+  let withPerms = 0;
+  let counted = false;
+  for (let i = start + 1; i < lines.length; i++) {
+    const line = lines[i];
+    if (!line.trim() || line.trimStart().startsWith("#")) continue;
+    const ind = indentOf22(line);
+    if (ind === 0) break;
+    if (jobIndent === -1) jobIndent = ind;
+    if (ind === jobIndent) {
+      jobs++;
+      childIndent = -1;
+      counted = false;
+      continue;
+    }
+    if (childIndent === -1) childIndent = ind;
+    if (ind === childIndent && !counted && /^\s*permissions:/.test(line)) {
+      withPerms++;
+      counted = true;
+    }
+  }
+  return jobs > 0 && withPerms === jobs;
 }
 var RULES2 = {
   "pr-target-checkout": {
@@ -75645,6 +75848,36 @@ var RULE_TEXT = {
     detail: "The test command's exit code is thrown away (`|| true`, `; exit 0`, `--exit-zero`), so the suite can fail every run and CI will never notice. Usually added to unblock one urgent merge and then forgotten \u2014 from that day on the tests are documentation, not a gate."
   }
 };
+var BARE_RAKE = /\brake\s*(?:["']?\s*)?$/m;
+function indirectRunText(ctx, files, workflowText) {
+  return __async(this, null, function* () {
+    var _a22;
+    const parts = [];
+    const add = (path) => __async(null, null, function* () {
+      const c3 = yield ctx.readFile(path);
+      if (c3) parts.push(c3.slice(0, 2e5));
+    });
+    if (/\bmake\b/.test(workflowText)) {
+      for (const f3 of files) if (/(^|\/)(GNU)?makefile$/i.test(f3)) yield add(f3);
+    }
+    if (/\b(?:npm|pnpm|yarn|bun)\b/.test(workflowText)) {
+      for (const f3 of files) {
+        if (!/(^|\/)package\.json$/.test(f3) || f3.split("/").length > 3) continue;
+        const raw = yield ctx.readFile(f3);
+        try {
+          const scripts = (_a22 = JSON.parse(raw != null ? raw : "{}").scripts) != null ? _a22 : {};
+          parts.push(Object.values(scripts).join("\n"));
+        } catch (e) {
+        }
+      }
+    }
+    const fileSet = new Set(files);
+    for (const m2 of workflowText.matchAll(/(?:^|[\s"'])\.?\/?((?:scripts?|bin|tools|ci)\/[\w./-]+)/g)) {
+      if (fileSet.has(m2[1])) yield add(m2[1]);
+    }
+    return parts.join("\n");
+  });
+}
 var ciHealthScanner = {
   id: "ci-health",
   category: "hygiene",
@@ -75691,7 +75924,8 @@ var ciHealthScanner = {
       const hasTestFiles = files.some((f3) => TEST_FILE_RE.test(f3));
       const elsewhere = OTHER_CI_CONFIG.some((c3) => files.includes(c3));
       if (hasTestFiles && !elsewhere && issues.length < MAX_ISSUES7) {
-        const runsTests = TEST_INVOCATION.test(workflowText) || TEST_ACTION.test(workflowText);
+        const reachable22 = workflowText + "\n" + (yield indirectRunText(ctx, files, workflowText));
+        const runsTests = TEST_INVOCATION.test(reachable22) || TEST_ACTION.test(workflowText) || BARE_RAKE.test(workflowText);
         if (!runsTests) {
           issues.push({
             id: "ci-tests-not-run",
@@ -75735,18 +75969,29 @@ var MAX_FILES = 4e3;
 var MANY_COPIES = 4;
 var LARGE_BLOCK = 30;
 var CODE_EXT = /\.(?:[cm]?[jt]sx?|py|go|rs|rb|php|java|kt|kts|swift|scala|cs|c|cc|cpp|h|hpp|m|mm|dart|ex|exs|vue|svelte)$/i;
-var SKIP_PATH = /(^|\/)(?:node_modules|vendor|third_party|thirdparty|dist|build|out|target|generated|__generated__|\.next|\.nuxt|coverage|migrations|__snapshots__|__fixtures__|fixtures?|testdata|examples?|templates?(?:[-_.][\w.-]*)?|scaffolds?|starters?|playgrounds?)\//i;
+var SKIP_PATH = /(^|\/)(?:node_modules|vendor|third_party|thirdparty|dist|build|out|target|generated|__generated__|\.next|\.nuxt|coverage|migrations|__snapshots__|__fixtures__|fixtures?|testdata|examples?|templates?(?:[-_.][\w.-]*)?|scaffolds?|starters?|playgrounds?|bench(?:mark)?s?|locales?|i18n|translations?)\//i;
 var GENERATED_FILE = /(?:\.min\.[jt]s|\.bundle\.js|\.g\.dart|_pb2?\.py|\.pb\.go|\.generated\.[a-z]+|\.d\.ts)$/i;
 var TEST_FILE = /(^|\/)(?:tests?|spec|__tests__|e2e)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(^|\/)test_[^/]+\.py$|[^/]+_test\.(?:py|go|rb)$|[^/]+Test\.(?:java|kt|cs)$|_spec\.rb$/i;
 var NOISE = /^(?:[{}()[\];,]+|else\s*\{?|\}?\s*else\s*(?:if.*)?\{?|return;?|break;?|continue;?|pass|end|fi|done|<\/?\w+\s*\/?>)$/;
-var IMPORTISH = /^(?:import\b|from\s+\S+\s+import\b|#include\b|using\s+\w|require\s*\(|use\s+\w|package\b|export\s+\*|export\s+\{)/;
+var IMPORTISH = /^(?:\}\s*from\s|import\b|from\s+\S+\s+import\b|#include\b|using\s+\w|require\s*\(|use\s+\w|package\b|export\s+\*|export\s+\{)/;
 var COMMENT = /^(?:\/\/|#|\*|\/\*|--|;;)/;
 function significantLines(content) {
   const out = [];
   const lines = content.split(/\r?\n/);
   let inBlockComment = false;
+  let inDocstring = null;
   for (let i = 0; i < lines.length; i++) {
     let text = lines[i].trim();
+    if (inDocstring) {
+      if (text.includes(inDocstring)) inDocstring = null;
+      continue;
+    }
+    const doc = text.match(/^[rRuUbB]?("""|''')/);
+    if (doc) {
+      const rest = text.slice(text.indexOf(doc[1]) + 3);
+      if (!rest.includes(doc[1])) inDocstring = doc[1];
+      continue;
+    }
     if (inBlockComment) {
       if (text.includes("*/")) inBlockComment = false;
       continue;
@@ -75770,8 +76015,14 @@ var DECLARATIVE = [
   // generic parameter
   /^\)?\s*:\s*.+$/,
   // a return-type line
-  /^[<>(),\s|&]*$/
+  /^[<>(),\s|&]*$/,
   // punctuation left over from a signature
+  // A name in a multi-line import / export list: `ClientTemporaryReferenceSet,`
+  /^(?:type\s+)?[\w$]+(?:\s+as\s+[\w$]+)?,?$/,
+  // A parameter with a type and a default, Python or TS: `files: FilesType = None,`
+  /^\*{0,2}[\w$]+\??\s*:\s*[^=]+=\s*[^=][^,]*,?$/,
+  // The frame of a signature: `def send(`, `self,`, `) -> Response:`, `@overload`
+  /^(?:async\s+)?def\s+\w+\($|^(?:self|cls|\*),?$|^\)\s*->.*:$|^@(?:t\.|typing\.)?overload$/
 ];
 function isDeclarative(text) {
   return DECLARATIVE.some((re2) => re2.test(text));
@@ -76591,6 +76842,11 @@ function buildScanContext(root) {
 function scanRepo(root, onProgress, scanners) {
   return __async(this, null, function* () {
     const ctx = yield buildScanContext(root);
+    if (process.env.REPO_ANTI_ROT_OFFLINE === "1") {
+      delete ctx.fetchJson;
+      delete ctx.postJson;
+      delete ctx.headUrl;
+    }
     return runScan(ctx, scanners, onProgress);
   });
 }
@@ -76750,6 +77006,8 @@ var INSECURE2 = {
   "py-verify-false": "requests with verify=False"
 };
 var WORKFLOW2 = {
+  "action-tag-first-party": "First-party action pinned to a mutable tag",
+  "action-tag": "Third-party action pinned to a mutable tag",
   "action-unpinned": "Action not pinned to a commit",
   "self-hosted-runner": "Self-hosted runner on public triggers",
   "script-injection": "Script injection in a workflow",
@@ -76777,6 +77035,8 @@ var DEFS2 = [
   { rule: "dep-abandoned", label: "Abandoned dependency", test: /^dep-abandoned-/ },
   { rule: "dep-outdated", label: "Outdated dependency", test: /^dep-outdated-/ },
   { rule: "eol-runner", label: "End-of-life CI runner image", test: /^eol-runner-/ },
+  { rule: "eol-node", label: "End-of-life Node.js version", test: /^eol-node-/ },
+  { rule: "eol-python", label: "End-of-life Python version", test: /^eol-python-/ },
   { rule: "eol-runtime", label: "End-of-life runtime version", test: /^eol-/ },
   { rule: "license-network", label: "Network copyleft license (AGPL\u2026)", test: /^license-network-/ },
   { rule: "license-strong", label: "Strong copyleft license (GPL\u2026)", test: /^license-strong-/ },
@@ -77068,6 +77328,13 @@ function analyzeWithAst2(content, file2, acc) {
   });
   return true;
 }
+function looksDeployable2(files) {
+  return files.some(
+    (f3) => /(^|\/)(dockerfile|docker-compose\.ya?ml|compose\.ya?ml|procfile|fly\.toml|vercel\.json|netlify\.toml|render\.ya?ml|app\.ya?ml|serverless\.ya?ml|next\.config\.[cm]?[jt]s|nuxt\.config\.[cm]?[jt]s|\.env(\.[\w-]+)?)$/i.test(
+      f3.replace(/\\/g, "/")
+    )
+  );
+}
 var envLifecycleScanner2 = {
   id: "env-lifecycle",
   category: "env",
@@ -77137,7 +77404,7 @@ var envLifecycleScanner2 = {
           detail: hasFallback ? `Code reads the ${name} env var but it is not documented in ${exampleName}. A fallback default is provided in code, so this is optional \u2014 document it for clarity or ignore.` : `Code reads the ${name} env var but it is not documented in ${exampleName}.`
         });
       }
-    } else if (undocumented.length > 0) {
+    } else if (undocumented.length > 0 && looksDeployable2(ctx.files)) {
       issues.push({
         id: `env-no-example`,
         category: "env",
@@ -77261,6 +77528,7 @@ var todoDebtScanner2 = {
     const issues = [];
     for (const file2 of ctx.files) {
       if (!SOURCE_RE8.test(file2)) continue;
+      if (/\.snap(\.[\w]+)*$|(^|\/)__snapshots__\//.test(file2.replace(/\\/g, "/"))) continue;
       const content = await ctx.readFile(file2);
       if (!content) continue;
       const ast = parseFile2(content, file2, { comments: true });
@@ -77308,6 +77576,7 @@ var DETECTORS2 = [
 ];
 var ASSIGN_RE2 = /(password|passwd|pwd|secret|token|api[_-]?key|access[_-]?key|client[_-]?secret|auth[_-]?token)["']?\s*[:=]\s*["`']([^"`'\s]{20,})["`']/i;
 var PLACEHOLDER_RE3 = /^(your|example|changeme|placeholder|redacted|dummy|test|sample|xxx+|<|\$\{|process\.env)/i;
+var NOT_A_SECRET_RE2 = /\$\{|#\{|\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b/i;
 var KNOWN_EXAMPLE_RE2 = /EXAMPLE/;
 var BINARY_EXT2 = /\.(png|jpe?g|gif|webp|ico|bmp|pdf|zip|gz|tar|woff2?|ttf|eot|mp[34]|mov|wasm)$/i;
 var SKIP_NAME2 = /(?:^|\/)(package-lock\.json|pnpm-lock\.yaml|yarn\.lock)$/;
@@ -77346,7 +77615,7 @@ function findSecretsInLine2(line) {
   const m2 = line.match(ASSIGN_RE2);
   if (m2) {
     const value = m2[2];
-    if (!PLACEHOLDER_RE3.test(value) && !KNOWN_EXAMPLE_RE2.test(value) && entropy2(value) >= 4) {
+    if (!PLACEHOLDER_RE3.test(value) && !KNOWN_EXAMPLE_RE2.test(value) && !NOT_A_SECRET_RE2.test(value) && entropy2(value) >= 4) {
       hits.push({ id: "entropy", token: value, label: m2[1], entropyHit: true });
     }
   }
@@ -79040,6 +79309,23 @@ var LOCK_SPECS2 = [
     hasDeps: (c3) => /"require(?:-dev)?"\s*:/.test(c3)
   }
 ];
+function isLibraryManifest2(manifest, content, files) {
+  const norm = files.map((f3) => f3.replace(/\\/g, "/"));
+  if (manifest === "Cargo.toml") {
+    const hasBin = /^\s*\[\[bin\]\]/m.test(content) || norm.some((f3) => f3 === "src/main.rs" || f3.startsWith("src/bin/"));
+    return !hasBin && !/^\s*\[workspace\]/m.test(content);
+  }
+  if (manifest === "Gemfile") return norm.some((f3) => /^[^/]+\.gemspec$/.test(f3));
+  if (manifest === "composer.json") {
+    try {
+      const type = JSON.parse(content).type ?? "library";
+      return type === "library";
+    } catch {
+      return false;
+    }
+  }
+  return false;
+}
 var lockfileDriftScanner2 = {
   id: "lockfile-drift",
   category: "dependency",
@@ -79061,8 +79347,10 @@ var lockfileDriftScanner2 = {
       ] : [];
       if (names.length > 0) {
         const present = LOCKFILES4.filter((f3) => fileSet.has(f3));
+        const npmrc = fileSet.has(".npmrc") ? await ctx.readFile(".npmrc") ?? "" : "";
+        const optedOut = /^\s*package-lock\s*=\s*false\s*$/m.test(npmrc);
         if (present.length === 0) {
-          issues.push({
+          if (!optedOut) issues.push({
             id: "lockfile-missing",
             category: "dependency",
             severity: "warning",
@@ -79097,6 +79385,7 @@ var lockfileDriftScanner2 = {
       if (spec.lockfiles.some((f3) => fileSet.has(f3))) continue;
       const content = await ctx.readFile(spec.manifest);
       if (!content || !spec.hasDeps(content)) continue;
+      if (isLibraryManifest2(spec.manifest, content, ctx.files)) continue;
       issues.push({
         id: `lockfile-missing-${spec.lockName}`,
         category: "dependency",
@@ -79113,8 +79402,21 @@ var lockfileDriftScanner2 = {
 
 // ../core/src/scanners/project-hygiene.ts
 var README_RE2 = /^readme(\.(md|rst|txt|adoc))?$/i;
-var LICENSE_RE2 = /^licen[sc]e(\.(md|txt))?$/i;
-var TEST_RE5 = /(^|\/)(__tests__\/|test\/|tests\/|spec\/)|\.(test|spec)\.[cm]?[jt]sx?$/i;
+var LICENSE_RE2 = /^(licen[sc]e|copying)([-._][a-z0-9.-]+)?(\.(md|txt|rst))?$/i;
+var TEST_RE5 = new RegExp(
+  [
+    String.raw`(^|/)(__tests__|tests?|spec|testdata)/`,
+    String.raw`\.(test|spec)\.[cm]?[jt]sx?$`,
+    // test.js / test.node.js at any level (debug, many small npm packages)
+    String.raw`(^|/)test(\.[a-z]+)*\.[cm]?[jt]sx?$`,
+    String.raw`_test\.(go|py)$`,
+    String.raw`(^|/)test_[^/]+\.py$`,
+    String.raw`_spec\.rb$`,
+    String.raw`Test\.(java|kt|php)$`
+  ].join("|"),
+  "i"
+);
+var README_CANDIDATES2 = ["README.md", "README", "README.rst", "README.txt", "README.adoc", "readme.md", "Readme.md"];
 var CI_RE2 = /^(\.github\/workflows\/.+\.ya?ml|\.gitlab-ci\.yml|\.circleci\/config\.yml|\.travis\.yml|azure-pipelines\.yml|\.drone\.yml|Jenkinsfile|\.woodpecker\.ya?ml|bitbucket-pipelines\.yml)$/i;
 function baseName2(p2) {
   const norm = p2.replace(/\\/g, "/");
@@ -79127,7 +79429,15 @@ var projectHygieneScanner2 = {
   async run(ctx) {
     const files = ctx.files.map((f3) => f3.replace(/\\/g, "/"));
     const rootFiles = files.filter((f3) => !f3.includes("/"));
-    const hasReadme = rootFiles.some((f3) => README_RE2.test(f3));
+    let hasReadme = rootFiles.some((f3) => README_RE2.test(f3));
+    if (!hasReadme && ctx.fileSize) {
+      for (const name of README_CANDIDATES2) {
+        if (await ctx.fileSize(name) !== null) {
+          hasReadme = true;
+          break;
+        }
+      }
+    }
     const hasLicense = rootFiles.some((f3) => LICENSE_RE2.test(baseName2(f3)));
     const hasTests = files.some((f3) => TEST_RE5.test(f3));
     const hasCI = files.some((f3) => CI_RE2.test(f3));
@@ -79162,7 +79472,7 @@ var projectHygieneScanner2 = {
         title: "No test files found",
         location: ".",
         ageDays: 0,
-        detail: "No test files (*.test.*, *.spec.*, or a test/ directory) were found anywhere in the repo. Untested code is risky to change \u2014 consider adding at least smoke tests."
+        detail: "No test files (*.test.*, *_test.go, test_*.py, or a test/ directory) were found anywhere in the repo. Untested code is risky to change \u2014 consider adding at least smoke tests."
       });
     }
     if (!hasCI) {
@@ -79182,8 +79492,10 @@ var projectHygieneScanner2 = {
 
 // ../core/src/scanners/leftover-debug.ts
 var SOURCE_RE10 = /\.(ts|tsx|js|jsx|mjs|mts|cts)$/;
-var TEST_RE6 = /(^|\/)(?:__tests__|tests?|specs?)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test_[^/]+\.py$|_test\.(?:py|go|rb)$|_spec\.rb$|(?:^|\/)conftest\.py$/i;
+var TEST_RE6 = /(^|\/)(?:__tests__|tests?|specs?|e2e)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test_[^/]+\.py$|_test\.(?:py|go|rb)$|_spec\.rb$|(?:^|\/)conftest\.py$/i;
 var EXAMPLE_RE2 = /(^|\/)examples?\/|(?:^|\/)example\.[cm]?[jt]sx?$/i;
+var TOOLING_RE2 = /(^|\/)(?:bench(?:mark)?s?|scripts?|bin|tools?|sandbox|playgrounds?|fixtures?|__fixtures__|docs?)\/|\.test-d\.tsx?$|\.d\.ts$|(^|\/)build\.rs$|(^|\/)play(?:ground)?\.[cm]?[jt]sx?$/i;
+var ENTRY_FILE_RE2 = /(^|\/)(?:__main__|_?main|cli)\.py$|(^|\/)src\/main\.rs$|(^|\/)src\/bin\//i;
 var DEBUG_METHODS2 = /* @__PURE__ */ new Set(["log", "debug", "trace", "dir", "table"]);
 var MAX_PER_FILE5 = 8;
 var MAX_TOTAL8 = 50;
@@ -79235,8 +79547,9 @@ var LANG_DEBUG2 = {
   py: [
     { re: /\bbreakpoint\s*\(/g, severity: "warning", label: "breakpoint()" },
     { re: /\bi?pdb\.set_trace\s*\(/g, severity: "warning", label: "pdb.set_trace()" },
-    { re: /\bprint\s*\(/g, severity: "info", label: "print()" },
-    { re: /\bpprint\s*\(/g, severity: "info", label: "pprint()" }
+    // Not `console.print(` (rich) or other methods named print.
+    { re: /(?<![.\w])print\s*\(/g, severity: "info", label: "print()" },
+    { re: /(?<![.\w])pprint\s*\(/g, severity: "info", label: "pprint()" }
   ],
   go: [{ re: /\bfmt\.Print(?:ln|f)?\s*\(/g, severity: "info", label: "fmt.Print" }],
   rs: [
@@ -79283,7 +79596,15 @@ function debugLabel2(node) {
 function lineAt5(content, index) {
   return content.slice(0, index).split("\n").length;
 }
-function scanRegexDebug2(content, lang) {
+function maskPython2(content) {
+  const blank = (m2) => m2.replace(/[^\n]/g, " ");
+  let out = content.replace(/("""|''')[\s\S]*?\1/g, blank);
+  const guard = out.search(/^if\s+__name__\s*==\s*["']__main__["']\s*:/m);
+  if (guard !== -1) out = out.slice(0, guard) + blank(out.slice(guard));
+  return out;
+}
+function scanRegexDebug2(raw, lang) {
+  const content = lang === "py" ? maskPython2(raw) : raw;
   const rules = LANG_DEBUG2[lang];
   const markers = COMMENT_MARKERS3[lang] ?? [];
   const byLine = /* @__PURE__ */ new Map();
@@ -79297,11 +79618,25 @@ function scanRegexDebug2(content, lang) {
       const existing = byLine.get(line);
       if (existing && !(rule.severity === "warning" && existing.severity !== "warning")) continue;
       const lineEnd = content.indexOf("\n", idx);
-      const lineText = content.slice(lineStart, lineEnd === -1 ? void 0 : lineEnd).trim();
+      const lineText = raw.slice(lineStart, lineEnd === -1 ? void 0 : lineEnd).trim();
       byLine.set(line, { line, label: rule.label, severity: rule.severity, evidence: lineText.slice(0, 120) });
     }
   }
   return [...byLine.values()].sort((a, b3) => a.line - b3.line);
+}
+async function privateWorkspaceDirs2(ctx) {
+  const out = [];
+  for (const f3 of ctx.files) {
+    const norm = f3.replace(/\\/g, "/");
+    if (!/\/package\.json$/.test(norm)) continue;
+    try {
+      if (JSON.parse(await ctx.readFile(f3) ?? "{}").private === true) {
+        out.push(norm.slice(0, -"package.json".length));
+      }
+    } catch {
+    }
+  }
+  return out;
 }
 var leftoverDebugScanner2 = {
   id: "leftover-debug",
@@ -79309,10 +79644,12 @@ var leftoverDebugScanner2 = {
   async run(ctx) {
     const issues = [];
     const entrypoints = await collectEntrypoints2(ctx);
+    const internalDirs = await privateWorkspaceDirs2(ctx);
     for (const file2 of ctx.files) {
       if (issues.length >= MAX_TOTAL8) break;
       const norm = file2.replace(/\\/g, "/");
-      if (TEST_RE6.test(norm) || EXAMPLE_RE2.test(norm)) continue;
+      if (TEST_RE6.test(norm) || EXAMPLE_RE2.test(norm) || TOOLING_RE2.test(norm)) continue;
+      if (internalDirs.some((d2) => norm.startsWith(d2))) continue;
       const isJs = SOURCE_RE10.test(norm);
       const lang = isJs ? null : debugLangOf2(norm);
       if (!isJs && !lang) continue;
@@ -79347,8 +79684,10 @@ var leftoverDebugScanner2 = {
           });
         }
       } else if (lang) {
+        const isEntry = ENTRY_FILE_RE2.test(norm) || lang === "go" && /^package\s+main\b/m.test(content);
         let perFile = 0;
         for (const hit of scanRegexDebug2(content, lang)) {
+          if (isEntry && hit.severity !== "warning") continue;
           if (issues.length >= MAX_TOTAL8 || perFile >= MAX_PER_FILE5) break;
           issues.push({
             id: `debug-${norm}:${hit.line}`,
@@ -79403,6 +79742,7 @@ var brokenDocLinksScanner2 = {
   category: "hygiene",
   async run(ctx) {
     const fileSet = new Set(ctx.files.map((f3) => f3.replace(/\\/g, "/")));
+    const usesMkdocs = fileSet.has("mkdocs.yml") || fileSet.has("mkdocs.yaml");
     const dirSet = /* @__PURE__ */ new Set();
     for (const f3 of fileSet) {
       let d2 = dirOf3(f3);
@@ -79435,6 +79775,11 @@ var brokenDocLinksScanner2 = {
         const resolved = resolveRel2(baseDir, decoded);
         if (!resolved) continue;
         if (fileSet.has(resolved) || dirSet.has(resolved)) continue;
+        if (usesMkdocs && /\.md$/i.test(file2)) {
+          const asDir = resolveRel2(`${baseDir}/${file2.split("/").pop().replace(/\.md$/i, "")}`, decoded);
+          if (asDir && (fileSet.has(`${asDir}.md`) || fileSet.has(`${asDir}/index.md`) || fileSet.has(asDir))) continue;
+          if (fileSet.has(`${resolved}.md`)) continue;
+        }
         const line = lineAt6(text, m2.index);
         issues.push({
           id: `doclink-${norm}:${line}:${target}`,
@@ -79455,6 +79800,7 @@ var brokenDocLinksScanner2 = {
 // ../core/src/scanners/bus-factor.ts
 var SOURCE_RE11 = /\.(ts|tsx|js|jsx|mjs|mts|cts|py|go|rs|java|rb|php|c|cc|cpp|h|hpp|cs|kt|swift|scala)$/;
 var STALE_DAYS6 = 365;
+var LOW_STAKES_RE2 = /(^|\/)(?:__tests__|tests?|spec|e2e|testdata|fixtures?|__fixtures__|examples?|playgrounds?|sandbox|bench(?:mark)?s?|docs?|scripts?|bin)\/|(^|\/)[^/]*(?:\.(?:test|spec|test-d|config|conf)\.[^/]+|_test\.\w+|_spec\.rb)$|(^|\/)test[^/]*\.\w+$|(^|\/)(?:conftest|setup|noxfile|gulpfile|gruntfile|karma\.conf)\.\w+$/i;
 var MAX_TOTAL10 = 30;
 function years2(days) {
   if (days >= 365) {
@@ -79473,7 +79819,7 @@ var busFactorScanner2 = {
     const tracked = new Set(ctx.files.map((f3) => f3.replace(/\\/g, "/")));
     const candidates = Object.entries(ownership).filter(([path, info]) => {
       const norm = path.replace(/\\/g, "/");
-      return tracked.has(norm) && SOURCE_RE11.test(norm) && info.authors === 1 && info.ageDays >= STALE_DAYS6;
+      return tracked.has(norm) && SOURCE_RE11.test(norm) && !LOW_STAKES_RE2.test(norm) && info.authors === 1 && info.ageDays >= STALE_DAYS6;
     }).sort((a, b3) => b3[1].ageDays - a[1].ageDays).slice(0, MAX_TOTAL10);
     return candidates.map(([path, info]) => {
       const norm = path.replace(/\\/g, "/");
@@ -79552,6 +79898,12 @@ function resolveModule2(spec, fromFile, fileSet) {
   for (const ext of EXT_CANDIDATES2) {
     if (fileSet.has(base + ext)) return base + ext;
   }
+  const emitted = base.match(/^(.*)\.(m|c)?jsx?$/);
+  if (emitted) {
+    for (const ext of [".ts", ".tsx", ".mts", ".cts", ".d.ts"]) {
+      if (fileSet.has(emitted[1] + ext)) return emitted[1] + ext;
+    }
+  }
   for (const idx of INDEX_CANDIDATES2) {
     if (fileSet.has(base + idx)) return base + idx;
   }
@@ -79572,8 +79924,38 @@ var deadCodeScanner2 = {
     return issues;
   }
 };
+var NOT_SHIPPED_RE2 = /(^|\/)(?:__tests__|tests?|spec|e2e|fixtures?|__fixtures__|__snapshots__|examples?|playgrounds?|sandbox|bench(?:mark)?s?|scripts?)\/|\.(?:test|spec|test-d|snap)\.|\.snap\.[a-z.]+$/i;
+async function packageEntryFiles2(ctx, fileSet) {
+  const out = /* @__PURE__ */ new Set();
+  const collect = (v2, acc) => {
+    if (typeof v2 === "string") acc.push(v2);
+    else if (v2 && typeof v2 === "object") for (const x3 of Object.values(v2)) collect(x3, acc);
+  };
+  for (const pkgPath of ctx.files.filter((f3) => /(^|\/)package\.json$/.test(f3) && !f3.includes("node_modules"))) {
+    let pkg;
+    try {
+      pkg = JSON.parse(await ctx.readFile(pkgPath) ?? "{}");
+    } catch {
+      continue;
+    }
+    const targets = [];
+    for (const key of ["main", "module", "types", "typings", "exports", "browser"]) collect(pkg[key], targets);
+    for (const t2 of targets) {
+      if (!t2.startsWith(".") && !/^[\w@]/.test(t2)) continue;
+      const resolved = resolveModule2(t2.startsWith(".") ? t2 : `./${t2}`, pkgPath, fileSet);
+      if (resolved) out.add(resolved);
+      const src = t2.replace(/^\.?\/?(dist|lib|build|out)\//, "./src/");
+      const fromSrc = resolveModule2(src, pkgPath, fileSet);
+      if (fromSrc) out.add(fromSrc);
+    }
+  }
+  return out;
+}
 async function scanJsTsExports2(ctx, sources) {
   const fileSet = new Set(sources);
+  const entryFiles = await packageEntryFiles2(ctx, fileSet);
+  const namespaceRanges = [];
+  const mdxText = (await Promise.all(ctx.files.filter((f3) => /\.mdx$/i.test(f3)).slice(0, 2e3).map((f3) => ctx.readFile(f3)))).join("\n");
   const exports2 = [];
   const usedNames = /* @__PURE__ */ new Set();
   const exemptFiles = /* @__PURE__ */ new Set();
@@ -79584,7 +79966,7 @@ async function scanJsTsExports2(ctx, sources) {
     if (!content) continue;
     const ast = parseFile2(content, file2);
     if (!ast) continue;
-    const isBarrel = /(^|\/)index\.[a-z]+$/.test(file2);
+    const isBarrel = /(^|\/)index(\.d)?\.[a-z]+$/.test(file2) || entryFiles.has(file2) || NOT_SHIPPED_RE2.test(file2);
     const srcLines = content.split("\n");
     const snip = (n) => {
       const start = lineOf7(n);
@@ -79618,6 +80000,10 @@ async function scanJsTsExports2(ctx, sources) {
     };
     const idCounts = /* @__PURE__ */ new Map();
     walk2(ast, (node) => {
+      if (node.type === "TSModuleDeclaration") {
+        const loc = node.loc;
+        if (loc?.start?.line && loc.end?.line) namespaceRanges.push([file2, loc.start.line, loc.end.line]);
+      }
       if (node.type === "Identifier") {
         const name = node.name;
         idCounts.set(name, (idCounts.get(name) ?? 0) + 1);
@@ -79654,6 +80040,11 @@ async function scanJsTsExports2(ctx, sources) {
       }
       if (node.type === "ExportNamedDeclaration" && node.source) {
         for (const spec of node.specifiers ?? []) {
+          if (spec.type === "ExportNamespaceSpecifier") {
+            const target = resolveModule2(node.source?.value, file2, fileSet);
+            if (target) exemptFiles.add(target);
+            continue;
+          }
           const local = spec.local ?? spec.exported;
           if (local?.type === "Identifier") usedNames.add(local.name);
         }
@@ -79691,6 +80082,8 @@ async function scanJsTsExports2(ctx, sources) {
   const kitDead = /* @__PURE__ */ new Map();
   for (const exp of exports2) {
     if (exemptFiles.has(exp.file)) continue;
+    if (namespaceRanges.some(([f3, a, b3]) => f3 === exp.file && exp.line >= a && exp.line <= b3)) continue;
+    if (mdxText && new RegExp(`\\b${exp.name.replace(/\$/g, "\\$")}\\b`).test(mdxText)) continue;
     if (usedNames.has(exp.name)) continue;
     if (CONVENTION_EXPORTS2.has(exp.name)) continue;
     const kit = uiKitRoot2(exp.file);
@@ -79831,11 +80224,13 @@ async function collectPythonDead2(ctx, files, issues) {
     countInto2(c3, freq);
     for (const n of pythonAllNames2(c3)) publicNames.add(n);
   }
+  const isLibrary = ctx.files.some((f3) => /^(pyproject\.toml|setup\.py|setup\.cfg)$/.test(toPosix2(f3)));
   for (const [file2, content] of contents) {
     const norm = toPosix2(file2);
-    if (PY_TEST_RE2.test(norm)) continue;
+    if (PY_TEST_RE2.test(norm) || NOT_SHIPPED_RE2.test(norm)) continue;
     if (/(^|\/)__init__\.py$/.test(norm)) continue;
     for (const def of pythonDefs2(content)) {
+      if (isLibrary && !def.name.startsWith("_")) continue;
       if (publicNames.has(def.name)) continue;
       if ((freq.get(def.name) ?? 0) > 1) continue;
       issues.push(makeDeadIssue2(file2, def, "python"));
@@ -80122,7 +80517,12 @@ function jsHit2(node) {
     const host = obj.name ?? "";
     const mod = prop.name;
     if (mod === "only" && HOSTS2.has(host)) return { severity: "warning", label: "focused test (.only)" };
-    if (mod === "skip" && HOSTS2.has(host)) return { severity: "info", label: "skipped test (.skip)" };
+    if (mod === "skip" && HOSTS2.has(host)) {
+      const first = node.arguments?.[0];
+      const titled = first && (first.type === "StringLiteral" || first.type === "TemplateLiteral");
+      if (!titled) return null;
+      return { severity: "info", label: "skipped test (.skip)" };
+    }
     if (mod === "todo" && (host === "it" || host === "test"))
       return { severity: "info", label: "unimplemented test (.todo)" };
     return null;
@@ -80217,6 +80617,10 @@ var MAX_TOTAL13 = 40;
 var SKIP_PREFIX2 = /^(?:!|\/|@|eslint|prettier|ts-|tslint|biome|c8|istanbul|prettier-ignore|todo\b|fixme\b|note\b|hack\b|xxx\b|https?:|www\.|copyright|spdx|licen[sc]e)/i;
 var PROSE_TAIL2 = /[.:?!]\s*$/;
 var CODE_SIGNAL2 = /[;{},)]\s*$|=>|(?:^|[^=!<>])=(?:[^=]|$)|^[)}\]]/;
+var PROSE_RUN2 = /\b[A-Za-z]{2,} [A-Za-z]{2,} [A-Za-z]{2,} [A-Za-z]{2,}\b/;
+function isDocIndent2(line) {
+  return /^\s*\/\/(\t| {2,})/.test(line);
+}
 function commentBody2(line) {
   const m2 = line.match(/^\s*\/\/(.*)$/);
   return m2 ? m2[1].trim() : null;
@@ -80226,6 +80630,7 @@ function looksLikeCode2(body) {
   if (SKIP_PREFIX2.test(body)) return false;
   if (PROSE_TAIL2.test(body)) return false;
   if (body.includes("`")) return false;
+  if (PROSE_RUN2.test(body) && !/[;={}]/.test(body)) return false;
   return CODE_SIGNAL2.test(body);
 }
 var commentedCodeScanner2 = {
@@ -80244,7 +80649,13 @@ var commentedCodeScanner2 = {
       let runStart = -1;
       let runLen = 0;
       const flush = () => {
-        if (runLen >= MIN_RUN2 && perFile < MAX_PER_FILE7 && issues.length < MAX_TOTAL13) {
+        const run = runStart === -1 ? [] : lines.slice(runStart, runStart + runLen);
+        const docExample = (
+          // …unless the line above opens the expression the indented lines continue.
+          run.every(isDocIndent2) && !/[({[,]\s*$|=>\s*$/.test(commentBody2(lines[runStart - 1] ?? "") ?? "") || run.some((l3) => /^\s*\/\/\s*[*-]\s/.test(l3)) || // introduced by "For example:" / "Testing for these options:"
+          /:\s*$/.test(commentBody2(lines[runStart - 1] ?? "") ?? "") || /:\s*$/.test(commentBody2(lines[runStart - 2] ?? "") ?? "")
+        );
+        if (!docExample && runLen >= MIN_RUN2 && perFile < MAX_PER_FILE7 && issues.length < MAX_TOTAL13) {
           const lineNo = runStart + 1;
           issues.push({
             id: `commented-${norm}:${lineNo}`,
@@ -80496,7 +80907,18 @@ var LOWER2 = {
   warning: "info",
   info: "info"
 };
-var SKIP_IN_TEST2 = /* @__PURE__ */ new Set(["new-function", "eval-dynamic"]);
+var SKIP_IN_TEST2 = /* @__PURE__ */ new Set([
+  "new-function",
+  "eval-dynamic",
+  // A test talking to its own self-signed fixture server, computing Content-MD5,
+  // round-tripping an object through pickle, or making a throwaway token.
+  // Every one of these in the benchmark was the test working as intended.
+  "tls-verification-off",
+  "py-verify-false",
+  "weak-hash",
+  "py-pickle-load",
+  "random-for-secret"
+]);
 function scanSource2(content, lang) {
   const markers = COMMENT_MARKERS4[lang];
   const textRanges = [];
@@ -80874,10 +81296,39 @@ function scanWorkflow2(content) {
       evidence: lines[checksOutPrHead - 1]?.trim() ?? ""
     });
   }
-  if (sawJobs && !hasTopLevelPermissions) {
+  if (sawJobs && !hasTopLevelPermissions && !everyJobHasPermissions2(lines)) {
     findings.push({ rule: "no-permissions", line: 1, evidence: "" });
   }
   return findings;
+}
+function everyJobHasPermissions2(lines) {
+  const indentOf3 = (l3) => l3.length - l3.trimStart().length;
+  const start = lines.findIndex((l3) => /^jobs:\s*(#.*)?$/.test(l3));
+  if (start === -1) return false;
+  let jobIndent = -1;
+  let childIndent = -1;
+  let jobs = 0;
+  let withPerms = 0;
+  let counted = false;
+  for (let i = start + 1; i < lines.length; i++) {
+    const line = lines[i];
+    if (!line.trim() || line.trimStart().startsWith("#")) continue;
+    const ind = indentOf3(line);
+    if (ind === 0) break;
+    if (jobIndent === -1) jobIndent = ind;
+    if (ind === jobIndent) {
+      jobs++;
+      childIndent = -1;
+      counted = false;
+      continue;
+    }
+    if (childIndent === -1) childIndent = ind;
+    if (ind === childIndent && !counted && /^\s*permissions:/.test(line)) {
+      withPerms++;
+      counted = true;
+    }
+  }
+  return jobs > 0 && withPerms === jobs;
 }
 var RULES4 = {
   "pr-target-checkout": {
@@ -82062,6 +82513,33 @@ var RULE_TEXT2 = {
     detail: "The test command's exit code is thrown away (`|| true`, `; exit 0`, `--exit-zero`), so the suite can fail every run and CI will never notice. Usually added to unblock one urgent merge and then forgotten \u2014 from that day on the tests are documentation, not a gate."
   }
 };
+var BARE_RAKE2 = /\brake\s*(?:["']?\s*)?$/m;
+async function indirectRunText2(ctx, files, workflowText) {
+  const parts = [];
+  const add = async (path) => {
+    const c3 = await ctx.readFile(path);
+    if (c3) parts.push(c3.slice(0, 2e5));
+  };
+  if (/\bmake\b/.test(workflowText)) {
+    for (const f3 of files) if (/(^|\/)(GNU)?makefile$/i.test(f3)) await add(f3);
+  }
+  if (/\b(?:npm|pnpm|yarn|bun)\b/.test(workflowText)) {
+    for (const f3 of files) {
+      if (!/(^|\/)package\.json$/.test(f3) || f3.split("/").length > 3) continue;
+      const raw = await ctx.readFile(f3);
+      try {
+        const scripts = JSON.parse(raw ?? "{}").scripts ?? {};
+        parts.push(Object.values(scripts).join("\n"));
+      } catch {
+      }
+    }
+  }
+  const fileSet = new Set(files);
+  for (const m2 of workflowText.matchAll(/(?:^|[\s"'])\.?\/?((?:scripts?|bin|tools|ci)\/[\w./-]+)/g)) {
+    if (fileSet.has(m2[1])) await add(m2[1]);
+  }
+  return parts.join("\n");
+}
 var ciHealthScanner2 = {
   id: "ci-health",
   category: "hygiene",
@@ -82100,7 +82578,8 @@ var ciHealthScanner2 = {
     const hasTestFiles = files.some((f3) => TEST_FILE_RE2.test(f3));
     const elsewhere = OTHER_CI_CONFIG2.some((c3) => files.includes(c3));
     if (hasTestFiles && !elsewhere && issues.length < MAX_ISSUES16) {
-      const runsTests = TEST_INVOCATION2.test(workflowText) || TEST_ACTION2.test(workflowText);
+      const reachable3 = workflowText + "\n" + await indirectRunText2(ctx, files, workflowText);
+      const runsTests = TEST_INVOCATION2.test(reachable3) || TEST_ACTION2.test(workflowText) || BARE_RAKE2.test(workflowText);
       if (!runsTests) {
         issues.push({
           id: "ci-tests-not-run",
@@ -82145,18 +82624,29 @@ var MAX_FILES2 = 4e3;
 var MANY_COPIES2 = 4;
 var LARGE_BLOCK2 = 30;
 var CODE_EXT2 = /\.(?:[cm]?[jt]sx?|py|go|rs|rb|php|java|kt|kts|swift|scala|cs|c|cc|cpp|h|hpp|m|mm|dart|ex|exs|vue|svelte)$/i;
-var SKIP_PATH2 = /(^|\/)(?:node_modules|vendor|third_party|thirdparty|dist|build|out|target|generated|__generated__|\.next|\.nuxt|coverage|migrations|__snapshots__|__fixtures__|fixtures?|testdata|examples?|templates?(?:[-_.][\w.-]*)?|scaffolds?|starters?|playgrounds?)\//i;
+var SKIP_PATH2 = /(^|\/)(?:node_modules|vendor|third_party|thirdparty|dist|build|out|target|generated|__generated__|\.next|\.nuxt|coverage|migrations|__snapshots__|__fixtures__|fixtures?|testdata|examples?|templates?(?:[-_.][\w.-]*)?|scaffolds?|starters?|playgrounds?|bench(?:mark)?s?|locales?|i18n|translations?)\//i;
 var GENERATED_FILE2 = /(?:\.min\.[jt]s|\.bundle\.js|\.g\.dart|_pb2?\.py|\.pb\.go|\.generated\.[a-z]+|\.d\.ts)$/i;
 var TEST_FILE2 = /(^|\/)(?:tests?|spec|__tests__|e2e)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(^|\/)test_[^/]+\.py$|[^/]+_test\.(?:py|go|rb)$|[^/]+Test\.(?:java|kt|cs)$|_spec\.rb$/i;
 var NOISE2 = /^(?:[{}()[\];,]+|else\s*\{?|\}?\s*else\s*(?:if.*)?\{?|return;?|break;?|continue;?|pass|end|fi|done|<\/?\w+\s*\/?>)$/;
-var IMPORTISH2 = /^(?:import\b|from\s+\S+\s+import\b|#include\b|using\s+\w|require\s*\(|use\s+\w|package\b|export\s+\*|export\s+\{)/;
+var IMPORTISH2 = /^(?:\}\s*from\s|import\b|from\s+\S+\s+import\b|#include\b|using\s+\w|require\s*\(|use\s+\w|package\b|export\s+\*|export\s+\{)/;
 var COMMENT2 = /^(?:\/\/|#|\*|\/\*|--|;;)/;
 function significantLines2(content) {
   const out = [];
   const lines = content.split(/\r?\n/);
   let inBlockComment = false;
+  let inDocstring = null;
   for (let i = 0; i < lines.length; i++) {
     let text = lines[i].trim();
+    if (inDocstring) {
+      if (text.includes(inDocstring)) inDocstring = null;
+      continue;
+    }
+    const doc = text.match(/^[rRuUbB]?("""|''')/);
+    if (doc) {
+      const rest = text.slice(text.indexOf(doc[1]) + 3);
+      if (!rest.includes(doc[1])) inDocstring = doc[1];
+      continue;
+    }
     if (inBlockComment) {
       if (text.includes("*/")) inBlockComment = false;
       continue;
@@ -82180,8 +82670,14 @@ var DECLARATIVE2 = [
   // generic parameter
   /^\)?\s*:\s*.+$/,
   // a return-type line
-  /^[<>(),\s|&]*$/
+  /^[<>(),\s|&]*$/,
   // punctuation left over from a signature
+  // A name in a multi-line import / export list: `ClientTemporaryReferenceSet,`
+  /^(?:type\s+)?[\w$]+(?:\s+as\s+[\w$]+)?,?$/,
+  // A parameter with a type and a default, Python or TS: `files: FilesType = None,`
+  /^\*{0,2}[\w$]+\??\s*:\s*[^=]+=\s*[^=][^,]*,?$/,
+  // The frame of a signature: `def send(`, `self,`, `) -> Response:`, `@overload`
+  /^(?:async\s+)?def\s+\w+\($|^(?:self|cls|\*),?$|^\)\s*->.*:$|^@(?:t\.|typing\.)?overload$/
 ];
 function isDeclarative2(text) {
   return DECLARATIVE2.some((re2) => re2.test(text));

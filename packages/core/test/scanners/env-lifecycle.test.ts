@@ -40,6 +40,7 @@ describe("envLifecycleScanner", () => {
   it("excludes platform/CI vars from the no-example summary count", async () => {
     const ctx = makeContext({
       files: {
+        Dockerfile: "FROM node:22\n",
         "a.ts":
           "const r = process.env.GITHUB_EVENT_NAME\n" +
           "const x = process.env.NO_COLOR\n" +
@@ -113,7 +114,7 @@ describe("envLifecycleScanner", () => {
 
   it("emits a single info nudge when there is no .env.example", async () => {
     const ctx = makeContext({
-      files: { "a.ts": "const a = process.env.FOO\nconst b = process.env.BAR\n" },
+      files: { Dockerfile: "FROM node:22\n", "a.ts": "const a = process.env.FOO\nconst b = process.env.BAR\n" },
     })
     const issues = await envLifecycleScanner.run(ctx)
     expect(issues).toHaveLength(1)
@@ -144,5 +145,13 @@ describe("envLifecycleScanner", () => {
     })
     const issues = await envLifecycleScanner.run(ctx)
     expect(issues.some((i) => i.id === "env-missing-LEGACY_ONLY_IN_TEST")).toBe(false)
+  })
+})
+
+describe("env-lifecycle — libraries", () => {
+  it("does not ask a library with no deploy config for a .env.example", async () => {
+    const ctx = makeContext({ files: { "lib/proxy.js": "const p = process.env.NO_PROXY\n" } })
+    const issues = await envLifecycleScanner.run(ctx)
+    expect(issues.map((i) => i.id)).not.toContain("env-no-example")
   })
 })

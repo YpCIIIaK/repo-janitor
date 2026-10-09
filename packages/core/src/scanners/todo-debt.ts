@@ -101,6 +101,9 @@ export const todoDebtScanner: Scanner = {
 
     for (const file of ctx.files) {
       if (!SOURCE_RE.test(file)) continue
+      // Snapshot fixtures copy whatever comments their input had; the TODO
+      // belongs to the input file, which is reported on its own.
+      if (/\.snap(\.[\w]+)*$|(^|\/)__snapshots__\//.test(file.replace(/\\/g, "/"))) continue
       const content = await ctx.readFile(file)
       if (!content) continue
 
