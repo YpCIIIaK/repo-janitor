@@ -200,7 +200,7 @@ importers:
       '@repo-anti-rot/core':
         specifier: link:../core
         version: link:../core
-      repo-anti-rot:
+      repo-janitor:
         specifier: link:../cli
         version: link:../cli
     devDependencies:

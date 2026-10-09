@@ -27,7 +27,7 @@ packages/core/
   the CLI, the Action and `/api/ingest` (which validates against `scanReportSchema`).
 - **All IO lives behind `ScanContext`** (fs / git / network). Scanners stay pure → easy
   to test and to swap implementations. The real context is `packages/cli/src/context.ts`,
-  re-exported as `repo-anti-rot/context` and reused by the Action.
+  re-exported as `repo-janitor/context` and reused by the Action.
 - **Scanners are plugins** implementing `Scanner`. Register in `defaultScanners`
   (`engine.ts`). No engine edits needed.
 - **Per-scanner isolation:** a thrown scanner error is logged and skipped, never fatal.

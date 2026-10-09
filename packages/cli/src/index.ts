@@ -222,7 +222,7 @@ async function main() {
   const program = new Command();
 
   program
-    .name("repo-anti-rot")
+    .name("repo-janitor")
     .description("CLI for Repo Anti-Rot repository health scanning")
     .version(version);
 
