@@ -57,6 +57,10 @@ const ASSIGN_RE =
 // Obvious non-secrets we never want to flag via the entropy path.
 const PLACEHOLDER_RE = /^(your|example|changeme|placeholder|redacted|dummy|test|sample|xxx+|<|\$\{|process\.env)/i
 
+// Values that are built, not stored: string interpolation (`invalid-${n}`,
+// Ruby `"#{secret}x"`) and UUIDs (WebDAV lock tokens, request ids).
+const NOT_A_SECRET_RE = /\$\{|#\{|\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b/i
+
 // Canonical documentation example credentials. AWS (and the docs that copy it)
 // append the literal "EXAMPLE" to sample keys precisely so scanners skip them —
 // e.g. `AKIAIOSFODNN7EXAMPLE`, `wJalrXUtnFEMI/…/bPxRfiCYEXAMPLEKEY`. Other secret
@@ -145,7 +149,12 @@ function findSecretsInLine(line: string): LineHit[] {
   const m = line.match(ASSIGN_RE)
   if (m) {
     const value = m[2]
-    if (!PLACEHOLDER_RE.test(value) && !KNOWN_EXAMPLE_RE.test(value) && entropy(value) >= 4.0) {
+    if (
+      !PLACEHOLDER_RE.test(value) &&
+      !KNOWN_EXAMPLE_RE.test(value) &&
+      !NOT_A_SECRET_RE.test(value) &&
+      entropy(value) >= 4.0
+    ) {
       hits.push({ id: "entropy", token: value, label: m[1], entropyHit: true })
     }
   }

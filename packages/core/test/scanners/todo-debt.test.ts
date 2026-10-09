@@ -85,3 +85,12 @@ describe("todoDebtScanner", () => {
     expect(fixme?.location).toBe("a.ts:3")
   })
 })
+
+describe("todo-debt — snapshots", () => {
+  it("skips TODOs copied into snapshot fixtures", async () => {
+    const out = await todoDebtScanner.run(
+      makeContext({ files: { "src/fixtures/a.js.snap.js": "// TODO: from the input\nfunction f() {}\n" } }),
+    )
+    expect(out).toEqual([])
+  })
+})

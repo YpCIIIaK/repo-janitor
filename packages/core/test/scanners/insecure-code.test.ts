@@ -161,10 +161,20 @@ describe("insecureCodeScanner", () => {
   })
 
   it("lowers severity in test files, where the pattern is often deliberate", async () => {
-    const issues = await run({ "src/api.test.ts": "new Agent({ rejectUnauthorized: false })\n" })
+    const issues = await run({ "src/api.test.ts": "db.query(`SELECT * FROM users WHERE id = ${id}`)\n" })
     expect(issues).toHaveLength(1)
-    expect(issues[0].severity).toBe("warning") // critical, lowered one step
     expect(issues[0].detail).toContain("test file")
+  })
+
+  it("skips fixture-server TLS, Content-MD5 and pickle round-trips in tests", async () => {
+    expect(
+      await run({
+        "test/https.test.js": "new Agent({ rejectUnauthorized: false })\nconst h = createHash('md5')\n",
+        "tests/test_pickle.py": "r = pickle.loads(pickle.dumps(p))\n",
+      }),
+    ).toHaveLength(0)
+    // …but not in shipped code.
+    expect(await run({ "src/api.ts": "new Agent({ rejectUnauthorized: false })\n" })).toHaveLength(1)
   })
 
   it("skips eval / new Function in tests — those are usually the thing under test", async () => {

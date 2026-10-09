@@ -63,6 +63,7 @@ export const brokenDocLinksScanner: Scanner = {
   category: "hygiene",
   async run(ctx: ScanContext): Promise<Issue[]> {
     const fileSet = new Set(ctx.files.map((f) => f.replace(/\\/g, "/")))
+    const usesMkdocs = fileSet.has("mkdocs.yml") || fileSet.has("mkdocs.yaml")
     // Lets us treat a link to a directory (that holds files) as valid.
     const dirSet = new Set<string>()
     for (const f of fileSet) {
@@ -105,6 +106,13 @@ export const brokenDocLinksScanner: Scanner = {
         const resolved = resolveRel(baseDir, decoded)
         if (!resolved) continue // resolved to repo root
         if (fileSet.has(resolved) || dirSet.has(resolved)) continue
+        // MkDocs serves docs/async.md at /async/, so `../advanced/transports`
+        // from that page means docs/advanced/transports.md.
+        if (usesMkdocs && /\.md$/i.test(file)) {
+          const asDir = resolveRel(`${baseDir}/${file.split("/").pop()!.replace(/\.md$/i, "")}`, decoded)
+          if (asDir && (fileSet.has(`${asDir}.md`) || fileSet.has(`${asDir}/index.md`) || fileSet.has(asDir))) continue
+          if (fileSet.has(`${resolved}.md`)) continue
+        }
 
         const line = lineAt(text, m.index)
         issues.push({

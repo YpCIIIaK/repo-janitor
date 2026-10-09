@@ -20,9 +20,18 @@ import { parseFile, walk, type Node } from "../ast"
 const SOURCE_RE = /\.(ts|tsx|js|jsx|mjs|mts|cts)$/
 // Polyglot test-file detection — debug output in tests/fixtures is expected.
 const TEST_RE =
-  /(^|\/)(?:__tests__|tests?|specs?)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test_[^/]+\.py$|_test\.(?:py|go|rb)$|_spec\.rb$|(?:^|\/)conftest\.py$/i
+  /(^|\/)(?:__tests__|tests?|specs?|e2e)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test_[^/]+\.py$|_test\.(?:py|go|rb)$|_spec\.rb$|(?:^|\/)conftest\.py$/i
 /** Smoke / demo scripts whose whole point is to print a report to stdout. */
 const EXAMPLE_RE = /(^|\/)examples?\/|(?:^|\/)example\.[cm]?[jt]sx?$/i
+/**
+ * Tooling whose output IS stdout: benchmarks, build/release scripts, dev
+ * sandboxes, fixtures, docs generators, type tests and Cargo build scripts.
+ * In the benchmark every console.log/print in these was intentional.
+ */
+const TOOLING_RE =
+  /(^|\/)(?:bench(?:mark)?s?|scripts?|bin|tools?|sandbox|playgrounds?|fixtures?|__fixtures__|docs?)\/|\.test-d\.tsx?$|\.d\.ts$|(^|\/)build\.rs$|(^|\/)play(?:ground)?\.[cm]?[jt]sx?$/i
+/** Program entry points where printing is the program's job (only breakpoints count). */
+const ENTRY_FILE_RE = /(^|\/)(?:__main__|_?main|cli)\.py$|(^|\/)src\/main\.rs$|(^|\/)src\/bin\//i
 const DEBUG_METHODS = new Set(["log", "debug", "trace", "dir", "table"])
 
 const MAX_PER_FILE = 8
@@ -107,8 +116,9 @@ const LANG_DEBUG: Record<string, DebugRule[]> = {
   py: [
     { re: /\bbreakpoint\s*\(/g, severity: "warning", label: "breakpoint()" },
     { re: /\bi?pdb\.set_trace\s*\(/g, severity: "warning", label: "pdb.set_trace()" },
-    { re: /\bprint\s*\(/g, severity: "info", label: "print()" },
-    { re: /\bpprint\s*\(/g, severity: "info", label: "pprint()" },
+    // Not `console.print(` (rich) or other methods named print.
+    { re: /(?<![.\w])print\s*\(/g, severity: "info", label: "print()" },
+    { re: /(?<![.\w])pprint\s*\(/g, severity: "info", label: "pprint()" },
   ],
   go: [{ re: /\bfmt\.Print(?:ln|f)?\s*\(/g, severity: "info", label: "fmt.Print" }],
   rs: [
@@ -171,8 +181,22 @@ interface RegexHit {
   evidence: string
 }
 
+/**
+ * Blank out what is not code, keeping offsets and newlines: Python docstrings
+ * (click documented `breakpoint()` in one and got a warning for it), and
+ * everything under `if __name__ == "__main__":`, which is a script's output.
+ */
+function maskPython(content: string): string {
+  const blank = (m: string) => m.replace(/[^\n]/g, " ")
+  let out = content.replace(/("""|''')[\s\S]*?\1/g, blank)
+  const guard = out.search(/^if\s+__name__\s*==\s*["']__main__["']\s*:/m)
+  if (guard !== -1) out = out.slice(0, guard) + blank(out.slice(guard))
+  return out
+}
+
 /** Collect leftover-debug hits from a non-JS file using its language rules. */
-function scanRegexDebug(content: string, lang: keyof typeof LANG_DEBUG): RegexHit[] {
+function scanRegexDebug(raw: string, lang: keyof typeof LANG_DEBUG): RegexHit[] {
+  const content = lang === "py" ? maskPython(raw) : raw
   const rules = LANG_DEBUG[lang]
   const markers = COMMENT_MARKERS[lang] ?? []
   const byLine = new Map<number, RegexHit>()
@@ -191,12 +215,33 @@ function scanRegexDebug(content: string, lang: keyof typeof LANG_DEBUG): RegexHi
       if (existing && !(rule.severity === "warning" && existing.severity !== "warning")) continue
 
       const lineEnd = content.indexOf("\n", idx)
-      const lineText = content.slice(lineStart, lineEnd === -1 ? undefined : lineEnd).trim()
+      const lineText = raw.slice(lineStart, lineEnd === -1 ? undefined : lineEnd).trim()
       byLine.set(line, { line, label: rule.label, severity: rule.severity, evidence: lineText.slice(0, 120) })
     }
   }
 
   return [...byLine.values()].sort((a, b) => a.line - b.line)
+}
+
+/**
+ * Nested workspace packages marked `"private": true` — a monorepo's own build,
+ * bisect and size-probe tools. Their console output is what they are for. The
+ * root package is never included: a private root is an application.
+ */
+async function privateWorkspaceDirs(ctx: ScanContext): Promise<string[]> {
+  const out: string[] = []
+  for (const f of ctx.files) {
+    const norm = f.replace(/\\/g, "/")
+    if (!/\/package\.json$/.test(norm)) continue
+    try {
+      if ((JSON.parse((await ctx.readFile(f)) ?? "{}") as { private?: boolean }).private === true) {
+        out.push(norm.slice(0, -"package.json".length))
+      }
+    } catch {
+      /* unreadable manifest */
+    }
+  }
+  return out
 }
 
 export const leftoverDebugScanner: Scanner = {
@@ -205,11 +250,13 @@ export const leftoverDebugScanner: Scanner = {
   async run(ctx: ScanContext): Promise<Issue[]> {
     const issues: Issue[] = []
     const entrypoints = await collectEntrypoints(ctx)
+    const internalDirs = await privateWorkspaceDirs(ctx)
 
     for (const file of ctx.files) {
       if (issues.length >= MAX_TOTAL) break
       const norm = file.replace(/\\/g, "/")
-      if (TEST_RE.test(norm) || EXAMPLE_RE.test(norm)) continue
+      if (TEST_RE.test(norm) || EXAMPLE_RE.test(norm) || TOOLING_RE.test(norm)) continue
+      if (internalDirs.some((d) => norm.startsWith(d))) continue
 
       const isJs = SOURCE_RE.test(norm)
       const lang = isJs ? null : debugLangOf(norm)
@@ -259,8 +306,12 @@ export const leftoverDebugScanner: Scanner = {
         }
       } else if (lang) {
         // Python / Go / Rust / Ruby / PHP — regex-based.
+        // In a program entry point (Python __main__/cli, Rust main/bin, Go
+        // `package main`) printing is the output; only breakpoints are leftovers.
+        const isEntry = ENTRY_FILE_RE.test(norm) || (lang === "go" && /^package\s+main\b/m.test(content))
         let perFile = 0
         for (const hit of scanRegexDebug(content, lang)) {
+          if (isEntry && hit.severity !== "warning") continue
           if (issues.length >= MAX_TOTAL || perFile >= MAX_PER_FILE) break
           issues.push({
             id: `debug-${norm}:${hit.line}`,

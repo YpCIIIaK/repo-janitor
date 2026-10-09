@@ -35,6 +35,18 @@ const PROSE_TAIL = /[.:?!]\s*$/
 //  - starts with a closing bracket (dangling block tail)
 const CODE_SIGNAL = /[;{},)]\s*$|=>|(?:^|[^=!<>])=(?:[^=]|$)|^[)}\]]/
 
+// Four plain words in a row reads as a sentence, not a statement.
+const PROSE_RUN = /\b[A-Za-z]{2,} [A-Za-z]{2,} [A-Za-z]{2,} [A-Za-z]{2,}\b/
+
+/**
+ * Indented after the marker (`//\t…`, `//    …`): the way doc comments lay
+ * out an example — Go's doc convention, usage snippets, worked tables. Real
+ * commented-out code starts at one space and only its inner lines indent.
+ */
+function isDocIndent(line: string): boolean {
+  return /^\s*\/\/(\t| {2,})/.test(line)
+}
+
 /** Is this raw source line a single-line `//` comment? Returns its body or null. */
 function commentBody(line: string): string | null {
   const m = line.match(/^\s*\/\/(.*)$/)
@@ -49,6 +61,8 @@ function looksLikeCode(body: string): boolean {
   // Backticks almost always mean inline-code-in-prose (doc comments), not an
   // actual commented-out statement — skip to avoid flagging documentation.
   if (body.includes("`")) return false
+  // A sentence that happens to end in ")" — "added trailing CRLF to FormData (backported from 7.1.0)".
+  if (PROSE_RUN.test(body) && !/[;={}]/.test(body)) return false
   return CODE_SIGNAL.test(body)
 }
 
@@ -72,7 +86,15 @@ export const commentedCodeScanner: Scanner = {
       let runLen = 0
 
       const flush = () => {
-        if (runLen >= MIN_RUN && perFile < MAX_PER_FILE && issues.length < MAX_TOTAL) {
+        const run = runStart === -1 ? [] : lines.slice(runStart, runStart + runLen)
+        const docExample =
+          // …unless the line above opens the expression the indented lines continue.
+          (run.every(isDocIndent) && !/[({[,]\s*$|=>\s*$/.test(commentBody(lines[runStart - 1] ?? "") ?? "")) ||
+          run.some((l) => /^\s*\/\/\s*[*-]\s/.test(l)) ||
+          // introduced by "For example:" / "Testing for these options:"
+          /:\s*$/.test(commentBody(lines[runStart - 1] ?? "") ?? "") ||
+          /:\s*$/.test(commentBody(lines[runStart - 2] ?? "") ?? "")
+        if (!docExample && runLen >= MIN_RUN && perFile < MAX_PER_FILE && issues.length < MAX_TOTAL) {
           const lineNo = runStart + 1
           issues.push({
             id: `commented-${norm}:${lineNo}`,

@@ -16,6 +16,13 @@ import type { Issue } from "../schema"
 
 const SOURCE_RE = /\.(ts|tsx|js|jsx|mjs|mts|cts|py|go|rs|java|rb|php|c|cc|cpp|h|hpp|cs|kt|swift|scala)$/
 const STALE_DAYS = 365
+/**
+ * Files whose loss of context costs nothing: tests, fixtures, examples,
+ * playgrounds, benchmarks, docs tooling and tool configs. Four in five
+ * bus-factor findings in the benchmark were one of these.
+ */
+const LOW_STAKES_RE =
+  /(^|\/)(?:__tests__|tests?|spec|e2e|testdata|fixtures?|__fixtures__|examples?|playgrounds?|sandbox|bench(?:mark)?s?|docs?|scripts?|bin)\/|(^|\/)[^/]*(?:\.(?:test|spec|test-d|config|conf)\.[^/]+|_test\.\w+|_spec\.rb)$|(^|\/)test[^/]*\.\w+$|(^|\/)(?:conftest|setup|noxfile|gulpfile|gruntfile|karma\.conf)\.\w+$/i
 const MAX_TOTAL = 30
 
 function years(days: number): string {
@@ -42,6 +49,7 @@ export const busFactorScanner: Scanner = {
         return (
           tracked.has(norm) &&
           SOURCE_RE.test(norm) &&
+          !LOW_STAKES_RE.test(norm) &&
           info.authors === 1 &&
           info.ageDays >= STALE_DAYS
         )

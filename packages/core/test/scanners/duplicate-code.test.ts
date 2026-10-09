@@ -323,3 +323,20 @@ describe("duplicateCodeScanner", () => {
     expect(await duplicateCodeScanner.run(ctx({ "src/a.ts": CLONE }))).toEqual([])
   })
 })
+
+describe("duplicate-code — declarations are not copies", () => {
+  it("ignores a repeated multi-line import list and Python signature", async () => {
+    const imports = "import {\n" + Array.from({ length: 12 }, (_, i) => `  LongTypeNameNumber${i},`).join("\n") + "\n} from '../types'\n"
+    const sig =
+      "def send(\n    self,\n" +
+      Array.from({ length: 10 }, (_, i) => `    parameter_number_${i}: SomeLongTypeName | None = None,`).join("\n") +
+      "\n) -> Response:\n    pass\n"
+    const files = new Map([
+      ["a.ts", significantLines(imports)],
+      ["b.ts", significantLines(imports)],
+      ["c.py", significantLines(sig)],
+      ["d.py", significantLines(sig)],
+    ])
+    expect(findDuplicates(files)).toEqual([])
+  })
+})
