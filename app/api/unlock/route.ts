@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import { readJson } from "@/lib/request-json"
 import { OWNER_COOKIE, isOwner, isOwnerToken } from "@/lib/owner"
 import { checkRateLimit, clientIp, limitsFromEnv } from "@/lib/scan-limits"
 
@@ -36,7 +37,7 @@ export async function POST(request: Request) {
 
   let body: unknown
   try {
-    body = await request.json()
+    body = await readJson(request, 8 * 1024)
   } catch {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 })
   }

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import { readJson } from "@/lib/request-json"
 import { clientIp, limitsFromEnv } from "@/lib/scan-limits"
 import { sendMail } from "@/lib/mail"
 import { buildMagicLinkMail } from "@/lib/watch-email"
@@ -24,7 +25,7 @@ export async function POST(request: Request) {
 
   let body: Record<string, unknown>
   try {
-    body = (await request.json()) as Record<string, unknown>
+    body = (await readJson(request, 8 * 1024)) as Record<string, unknown>
   } catch {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 })
   }
