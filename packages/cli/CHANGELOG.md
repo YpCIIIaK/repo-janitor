@@ -3,8 +3,9 @@
 ## 0.3.0 — 2026-10-09
 
 **The package is now published as `repo-janitor`** (`npx repo-janitor scan .`).
-The old `repo-anti-rot` package stays at 0.2.0. Both command names are
-installed, so scripts calling `repo-anti-rot` keep working; the config file
+The old `repo-anti-rot` package has been unpublished; install `repo-janitor`
+instead. Both command names are installed, so scripts calling
+`repo-anti-rot` keep working once they switch the install; the config file
 (`.repo-anti-rot.json`), ignore markers and the SARIF tool name are unchanged,
 so existing settings and GitHub code-scanning history carry over.
 
