@@ -1,6 +1,6 @@
 # Repo Anti-Rot
 
-[![CI](https://github.com/YpCIIIaK/repo-janitor/actions/workflows/ci.yml/badge.svg)](https://github.com/YpCIIIaK/repo-janitor/actions/workflows/ci.yml)
+[![CI](https://github.com/YpCIIIaK/repo-janitor/actions/workflows/ci.yml/badge.svg)](https://github.com/YpCIIIaK/repo-janitor/actions/workflows/ci.yml) [![Socket Badge](https://badge.socket.dev/npm/package/repo-janitor/0.3.0)](https://badge.socket.dev/npm/package/repo-janitor/0.3.0)
 
 [![Repo Anti-Rot](https://repo-janitor.app/api/badge/YpCIIIaK/repo-janitor?token=fBnmjwtdsbRNq0Sm&v=20261008130616)](https://repo-janitor.app/r/YpCIIIaK/repo-janitor/fBnmjwtdsbRNq0Sm)
 
