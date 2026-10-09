@@ -2,6 +2,12 @@
 
 ## 0.3.0 — 2026-10-09
 
+**The package is now published as `repo-janitor`** (`npx repo-janitor scan .`).
+The old `repo-anti-rot` package stays at 0.2.0. Both command names are
+installed, so scripts calling `repo-anti-rot` keep working; the config file
+(`.repo-anti-rot.json`), ignore markers and the SARIF tool name are unchanged,
+so existing settings and GitHub code-scanning history carry over.
+
 Far fewer false positives. Measured on a 20-repository benchmark
 (`benchmark/` in the repo), precision went from 48% to 91% and the number of
 findings on the same code fell from 1355 to 486. Scores of healthy projects

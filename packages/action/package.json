@@ -10,8 +10,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "repo-anti-rot": "link:../cli",
-    "@repo-anti-rot/core": "link:../core"
+    "@repo-anti-rot/core": "link:../core",
+    "repo-janitor": "link:../cli"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
