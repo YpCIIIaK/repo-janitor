@@ -1,0 +1,17 @@
+{
+ "action-tag-.github/workflows/ci.yml-105": "tp",
+ "action-tag-.github/workflows/ci.yml-108": "tp",
+ "action-tag-.github/workflows/ci.yml-118": "tp",
+ "action-tag-first-party-.github/workflows/ci.yml-30": "tp",
+ "action-tag-first-party-.github/workflows/ci.yml-44": "tp",
+ "action-tag-first-party-.github/workflows/ci.yml-62": "tp",
+ "busfactor-tests/test_backtrace.rs": "fp",
+ "busfactor-tests/test_repr.rs": "fp",
+ "busfactor-tests/ui/must-use.rs": "fp",
+ "commented-src/kind.rs:43": "fp",
+ "debug-build.rs:14": "fp",
+ "debug-build.rs:53": "fp",
+ "debug-build.rs:57": "fp",
+ "hygiene-no-license": "fp",
+ "todo-src/ensure.rs:251": "tp"
+}

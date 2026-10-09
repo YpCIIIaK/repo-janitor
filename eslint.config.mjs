@@ -41,12 +41,14 @@ export default tseslint.config(
       ".repo-anti-rot/**",
       "**/*.tsbuildinfo",
       "next-env.d.ts",
+      "benchmark/.cache/**",
+      "benchmark/.results/**",
     ],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
-    files: ["scripts/**/*.mjs"],
+    files: ["scripts/**/*.mjs", "benchmark/*.mjs"],
     languageOptions: {
       globals: { process: "readonly", console: "readonly", fetch: "readonly", AbortSignal: "readonly", setTimeout: "readonly", Buffer: "readonly", URL: "readonly" },
     },

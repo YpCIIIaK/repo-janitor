@@ -1,0 +1,17 @@
+{
+ "action-tag-.github/workflows/ci.yml-21": "tp",
+ "action-tag-.github/workflows/ci.yml-60": "tp",
+ "action-tag-.github/workflows/ci.yml-99": "tp",
+ "action-tag-first-party-.github/workflows/ci.yml-29": "tp",
+ "action-tag-first-party-.github/workflows/ci.yml-37": "tp",
+ "action-tag-first-party-.github/workflows/ci.yml-68": "tp",
+ "docker-latest-Dockerfile:1": "tp",
+ "docker-root-Dockerfile": "tp",
+ "duplicate-src/Client.php-738": "tp",
+ "duplicate-src/Cookie/FileCookieJar.php-140": "tp",
+ "duplicate-src/Handler/CurlFactory.php-981": "tp",
+ "env-no-example": "fp",
+ "lockfile-missing-composer.lock": "fp",
+ "todo-src/Cookie/SetCookie.php:318": "tp",
+ "todo-src/HandlerStack.php:167": "tp"
+}

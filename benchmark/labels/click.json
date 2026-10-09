@@ -1,0 +1,17 @@
+{
+ "busfactor-tests/typing/typing_group_kw_options.py": "fp",
+ "busfactor-tests/typing/typing_help_option.py": "fp",
+ "busfactor-tests/typing/typing_progressbar.py": "fp",
+ "debug-src/click/testing.py:547": "fp",
+ "debug-src/click/utils.py:275": "fp",
+ "duplicate-src/click/shell_completion.py-432": "tp",
+ "duplicate-src/click/termui.py-154": "fp",
+ "duplicate-src/click/termui.py-423": "fp",
+ "env-no-example": "fp",
+ "eol-python-examples/aliases/pyproject.toml-5": "tp",
+ "eol-python-examples/complex/pyproject.toml-5": "tp",
+ "eol-python-examples/validation/pyproject.toml-5": "tp",
+ "insecure-py-pickle-load-tests/test_utils/test_sentinel.py:67": "fp",
+ "insecure-py-pickle-load-tests/test_utils/test_sentinel.py:86": "fp",
+ "todo-src/click/core.py:2411": "tp"
+}

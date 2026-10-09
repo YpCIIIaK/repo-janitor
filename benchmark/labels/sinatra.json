@@ -1,0 +1,19 @@
+{
+ "action-tag-.github/workflows/release.yml-17": "tp",
+ "action-tag-.github/workflows/test.yml-141": "tp",
+ "action-tag-.github/workflows/test.yml-172": "tp",
+ "action-tag-first-party-.github/workflows/release.yml-16": "tp",
+ "action-tag-first-party-.github/workflows/test.yml-139": "tp",
+ "action-tag-first-party-.github/workflows/test.yml-42": "tp",
+ "busfactor-rack-protection/lib/rack_protection.rb": "tp",
+ "busfactor-sinatra-contrib/spec/okjson.rb": "fp",
+ "busfactor-test/integration/zeitwerk_app.rb": "fp",
+ "ci-tests-not-run": "fp",
+ "duplicate-lib/sinatra/base.rb-1557": "tp",
+ "env-no-example": "fp",
+ "lockfile-missing-Gemfile.lock": "fp",
+ "no-permissions-.github/workflows/release.yml-1": "fp",
+ "secret-history-entropy-rack-protection/spec/lib/rack/protection/encryptor_spec.rb@70da2a48": "fp",
+ "todo-lib/sinatra/base.rb:1106": "tp",
+ "todo-sinatra-contrib/spec/content_for_spec.rb:93": "tp"
+}

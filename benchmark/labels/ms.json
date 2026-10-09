@@ -1,0 +1,16 @@
+{
+ "action-tag-.github/workflows/quality.yml-25": "tp",
+ "action-tag-.github/workflows/release.yml-20": "tp",
+ "action-tag-.github/workflows/test.yml-24": "tp",
+ "action-tag-first-party-.github/workflows/quality.yml-22": "tp",
+ "action-tag-first-party-.github/workflows/release.yml-17": "tp",
+ "action-tag-first-party-.github/workflows/release.yml-25": "tp",
+ "busfactor-jest.config.ts": "fp",
+ "busfactor-lint-staged.config.ts": "fp",
+ "busfactor-tsdown.config.ts": "fp",
+ "ci-tests-not-run": "fp",
+ "docs-drift-badge-README.md-6": "tp",
+ "eol-node-package.json-23": "tp",
+ "no-permissions-.github/workflows/quality.yml-1": "tp",
+ "no-permissions-.github/workflows/test.yml-1": "tp"
+}

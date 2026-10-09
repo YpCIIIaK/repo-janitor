@@ -14,6 +14,9 @@ describe("ruleOf", () => {
     ["skiptest-a.test.ts:4", "skipped-test"],
     ["deadlink-404-https://x", "dead-link"],
     ["deadlink-unverified-https://x", "dead-link-unverified"],
+    ["action-tag-first-party-.github/workflows/ci.yml-9", "workflow-action-tag-first-party"],
+    ["action-tag-.github/workflows/ci.yml-9", "workflow-action-tag"],
+    ["eol-python-.github/workflows/ci.yml-3", "eol-python"],
   ])("%s → %s", (id, rule) => {
     expect(ruleOf({ id })).toBe(rule)
     expect(ruleLabel(rule)).toBeTruthy()

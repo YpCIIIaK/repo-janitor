@@ -1,0 +1,12 @@
+{
+ "action-tag-first-party-.github/workflows/main.yml-17": "tp",
+ "action-tag-first-party-.github/workflows/main.yml-18": "tp",
+ "action-tag-first-party-.github/workflows/main.yml-28": "tp",
+ "busfactor-test/helpers/create-large-file.ts": "fp",
+ "commented-test/headers.ts:286": "fp",
+ "lockfile-missing": "fp",
+ "no-permissions-.github/workflows/main.yml-1": "tp",
+ "secret-entropy-test/hooks.ts:4674": "fp",
+ "todo-source/types/ResponsePromise.ts:23": "tp",
+ "todo-source/utils/merge.ts:339": "tp"
+}

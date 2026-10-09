@@ -34,6 +34,8 @@ const INSECURE: Record<string, string> = {
 }
 
 const WORKFLOW: Record<string, string> = {
+  "action-tag-first-party": "First-party action pinned to a mutable tag",
+  "action-tag": "Third-party action pinned to a mutable tag",
   "action-unpinned": "Action not pinned to a commit",
   "self-hosted-runner": "Self-hosted runner on public triggers",
   "script-injection": "Script injection in a workflow",
@@ -62,6 +64,8 @@ const DEFS: RuleDef[] = [
   { rule: "dep-abandoned", label: "Abandoned dependency", test: /^dep-abandoned-/ },
   { rule: "dep-outdated", label: "Outdated dependency", test: /^dep-outdated-/ },
   { rule: "eol-runner", label: "End-of-life CI runner image", test: /^eol-runner-/ },
+  { rule: "eol-node", label: "End-of-life Node.js version", test: /^eol-node-/ },
+  { rule: "eol-python", label: "End-of-life Python version", test: /^eol-python-/ },
   { rule: "eol-runtime", label: "End-of-life runtime version", test: /^eol-/ },
   { rule: "license-network", label: "Network copyleft license (AGPL…)", test: /^license-network-/ },
   { rule: "license-strong", label: "Strong copyleft license (GPL…)", test: /^license-strong-/ },

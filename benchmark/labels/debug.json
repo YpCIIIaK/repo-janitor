@@ -1,0 +1,9 @@
+{
+ "busfactor-test.node.js": "fp",
+ "env-no-example": "fp",
+ "hygiene-no-tests": "fp",
+ "lockfile-missing": "tp",
+ "todo-src/browser.js:111": "tp",
+ "todo-src/browser.js:209": "tp",
+ "todo-src/browser.js:225": "tp"
+}
