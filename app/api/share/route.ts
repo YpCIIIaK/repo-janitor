@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import { readJson } from "@/lib/request-json"
 import { scanReportSchema } from "@/packages/core/src/schema"
 import { toSharedReport } from "@/lib/share-report"
 import { publishShare, revokeShare } from "@/lib/share-store"
@@ -42,7 +43,7 @@ export async function POST(request: Request) {
 
   let body: unknown
   try {
-    body = await request.json()
+    body = await readJson(request, 4 * 1024 * 1024)
   } catch {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 })
   }
@@ -102,7 +103,7 @@ export async function DELETE(request: Request) {
 
   let body: unknown
   try {
-    body = await request.json()
+    body = await readJson(request, 8 * 1024)
   } catch {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 })
   }
