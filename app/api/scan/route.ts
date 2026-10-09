@@ -1,4 +1,5 @@
-import { NextResponse } from "next/server"
+import { after, NextResponse } from "next/server"
+import { createScanJob, executeScanJob, getScanJob, validJobId } from "@/lib/scan-jobs"
 import { mkdtemp, rm, readFile } from "fs/promises"
 import { tmpdir } from "os"
 import { join } from "path"
@@ -38,7 +39,7 @@ export const maxDuration = 720
 /** A progress/result event forwarded to the client over the NDJSON stream. */
 type ScanEvent =
   | { type: "queued"; url: string; position: number }
-  | { type: "phase"; url: string; phase: "clone" | "scan" }
+  | { type: "phase"; url: string; phase: "clone" | "scan" | "activity" }
   | { type: "scanner"; url: string; scanner?: string; completed: number; total: number }
   | { type: "repo-done"; url: string; ok: true; report: unknown }
   | { type: "repo-done"; url: string; ok: false; error: string }
@@ -172,7 +173,8 @@ async function cloneAndScan(
 
     const report = JSON.parse(await readFile(reportPath, "utf-8"))
     if (report?.profile && !report.profile.activity) {
-      const activity = await yearActivity(dir, signal)
+      emit({ type: "phase", url, phase: "activity" })
+      const activity = await yearActivity(dir, signal).catch(() => null)
       if (activity) report.profile.activity = activity
     }
     emit({ type: "repo-done", url, ok: true, report })
@@ -184,6 +186,16 @@ async function cloneAndScan(
 }
 
 export async function POST(request: Request) {
+  const jobId = request.headers.get("x-scan-job")
+  if (jobId) {
+    if (!validJobId(jobId)) return NextResponse.json({ error: "Invalid scan job ID" }, { status: 400 })
+    try {
+      const existing = await getScanJob(jobId)
+      if (existing) return NextResponse.json({ id: jobId }, { status: 202, headers: { "Cache-Control": "no-store" } })
+    } catch {
+      return NextResponse.json({ error: "Background scan storage unavailable" }, { status: 503 })
+    }
+  }
   const limits = limitsFromEnv()
 
   // Rate limit first: cheapest check, and it must run before we parse or resolve
@@ -260,6 +272,37 @@ export async function POST(request: Request) {
     )
   }
 
+  if (jobId) {
+    if (new Set(urls).size !== urls.length || urls.length > 20) {
+      return NextResponse.json({ error: "Provide at most 20 distinct repository URLs." }, { status: 400 })
+    }
+    try {
+      const { job, created } = await createScanJob(jobId, urls)
+      if (created) after(async () => {
+        await executeScanJob(job, async (emit, signal) => {
+          for (const url of urls) {
+            if (signal.aborted) break
+            try {
+              emit({ type: "queued", url, position: queueDepth() + 1 })
+              await withScanSlot(limits, () => cloneAndScan(url, (event) => {
+                emit(event)
+                if (event.type === "repo-done") {
+                  recordRepoUsage(request, "scan", url, { ok: event.ok })
+                  if (event.ok) recordScanStat(event.report, visitorFrom(request) === null)
+                }
+              }, only, signal), signal)
+            } catch (err) {
+              emit({ type: "repo-done", url, ok: false, error: err instanceof QueueFullError ? "Server is busy. Try again shortly." : "Could not finish scan. Please retry." })
+            }
+          }
+        }).catch(() => { console.error("Background scan could not persist its final status") })
+      })
+      return NextResponse.json({ id: jobId }, { status: 202, headers: { "Cache-Control": "no-store" } })
+    } catch {
+      return NextResponse.json({ error: "Background scan storage unavailable or full. Try again later." }, { status: 503 })
+    }
+  }
+
   // Stream progress as NDJSON: one JSON object per line. The client reads events
   // ({phase|scanner|repo-done}) to drive a real progress bar, then collects the
   // repo-done payloads as the final results. Scans run sequentially (clone is
@@ -288,6 +331,11 @@ export async function POST(request: Request) {
         }
         try { controller.enqueue(encoder.encode(JSON.stringify(obj) + "\n")) } catch { cancelled.abort() }
       }
+      // Keep proxies from treating a quiet clone/scanner as an idle connection.
+      const heartbeat = setInterval(() => send({ type: "heartbeat" }), 15_000)
+      const stopHeartbeat = () => clearInterval(heartbeat)
+      signal.addEventListener("abort", stopHeartbeat, { once: true })
+      try {
       send({ type: "start", total: urls.length })
       for (let i = 0; i < urls.length; i++) {
         if (signal.aborted) break
@@ -310,6 +358,10 @@ export async function POST(request: Request) {
       }
       send({ type: "done" })
       if (!signal.aborted) controller.close()
+      } finally {
+        stopHeartbeat()
+        signal.removeEventListener("abort", stopHeartbeat)
+      }
     },
   })
 
