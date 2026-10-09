@@ -17,8 +17,24 @@ import type { Issue } from "../schema"
  */
 
 const README_RE = /^readme(\.(md|rst|txt|adoc))?$/i
-const LICENSE_RE = /^licen[sc]e(\.(md|txt))?$/i
-const TEST_RE = /(^|\/)(__tests__\/|test\/|tests\/|spec\/)|\.(test|spec)\.[cm]?[jt]sx?$/i
+// LICENSE, LICENSE.md, COPYING, and the dual-licence split LICENSE-MIT /
+// LICENSE-APACHE that most Rust crates use.
+const LICENSE_RE = /^(licen[sc]e|copying)([-._][a-z0-9.-]+)?(\.(md|txt|rst))?$/i
+const TEST_RE = new RegExp(
+  [
+    String.raw`(^|/)(__tests__|tests?|spec|testdata)/`,
+    String.raw`\.(test|spec)\.[cm]?[jt]sx?$`,
+    // test.js / test.node.js at any level (debug, many small npm packages)
+    String.raw`(^|/)test(\.[a-z]+)*\.[cm]?[jt]sx?$`,
+    String.raw`_test\.(go|py)$`,
+    String.raw`(^|/)test_[^/]+\.py$`,
+    String.raw`_spec\.rb$`,
+    String.raw`Test\.(java|kt|php)$`,
+  ].join("|"),
+  "i",
+)
+/** Root READMEs that may be symlinks, which the file walk does not follow. */
+const README_CANDIDATES = ["README.md", "README", "README.rst", "README.txt", "README.adoc", "readme.md", "Readme.md"]
 
 // CI config locations across the common providers.
 const CI_RE =
@@ -39,7 +55,15 @@ export const projectHygieneScanner: Scanner = {
     // Only consider root-level README/LICENSE (a docs/ README isn't the entry point).
     const rootFiles = files.filter((f) => !f.includes("/"))
 
-    const hasReadme = rootFiles.some((f) => README_RE.test(f))
+    let hasReadme = rootFiles.some((f) => README_RE.test(f))
+    if (!hasReadme && ctx.fileSize) {
+      for (const name of README_CANDIDATES) {
+        if ((await ctx.fileSize(name)) !== null) {
+          hasReadme = true
+          break
+        }
+      }
+    }
     const hasLicense = rootFiles.some((f) => LICENSE_RE.test(baseName(f)))
     const hasTests = files.some((f) => TEST_RE.test(f))
     const hasCI = files.some((f) => CI_RE.test(f))
@@ -83,7 +107,7 @@ export const projectHygieneScanner: Scanner = {
         location: ".",
         ageDays: 0,
         detail:
-          "No test files (*.test.*, *.spec.*, or a test/ directory) were found anywhere " +
+          "No test files (*.test.*, *_test.go, test_*.py, or a test/ directory) were found anywhere " +
           "in the repo. Untested code is risky to change — consider adding at least smoke tests.",
       })
     }

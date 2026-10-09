@@ -76,6 +76,30 @@ const LOCK_SPECS: LockSpec[] = [
   },
 ]
 
+/**
+ * Libraries in ecosystems whose convention is to leave the lockfile out: the
+ * consumer's resolution is what matters. A Rust crate with no binary target,
+ * a gem (has a .gemspec), a Composer package whose type is "library".
+ */
+function isLibraryManifest(manifest: string, content: string, files: string[]): boolean {
+  const norm = files.map((f) => f.replace(/\\/g, "/"))
+  if (manifest === "Cargo.toml") {
+    const hasBin =
+      /^\s*\[\[bin\]\]/m.test(content) || norm.some((f) => f === "src/main.rs" || f.startsWith("src/bin/"))
+    return !hasBin && !/^\s*\[workspace\]/m.test(content)
+  }
+  if (manifest === "Gemfile") return norm.some((f) => /^[^/]+\.gemspec$/.test(f))
+  if (manifest === "composer.json") {
+    try {
+      const type = (JSON.parse(content) as { type?: string }).type ?? "library"
+      return type === "library"
+    } catch {
+      return false
+    }
+  }
+  return false
+}
+
 export const lockfileDriftScanner: Scanner = {
   id: "lockfile-drift",
   category: "dependency",
@@ -107,9 +131,13 @@ export const lockfileDriftScanner: Scanner = {
 
       if (names.length > 0) {
         const present = LOCKFILES.filter((f) => fileSet.has(f))
+        const npmrc = fileSet.has(".npmrc") ? ((await ctx.readFile(".npmrc")) ?? "") : ""
+        // `package-lock=false` is a decision, not an omission: express, ky, chalk and
+        // fastify all set it so contributors test against fresh resolutions.
+        const optedOut = /^\s*package-lock\s*=\s*false\s*$/m.test(npmrc)
         if (present.length === 0) {
           // 1) No lockfile at all → non-reproducible installs.
-          issues.push({
+          if (!optedOut) issues.push({
             id: "lockfile-missing",
             category: "dependency",
             severity: "warning",
@@ -154,6 +182,7 @@ export const lockfileDriftScanner: Scanner = {
       if (spec.lockfiles.some((f) => fileSet.has(f))) continue // a lockfile is present
       const content = await ctx.readFile(spec.manifest)
       if (!content || !spec.hasDeps(content)) continue // no manifest / no declared deps
+      if (isLibraryManifest(spec.manifest, content, ctx.files)) continue
 
       issues.push({
         id: `lockfile-missing-${spec.lockName}`,

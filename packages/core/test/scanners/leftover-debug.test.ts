@@ -30,7 +30,7 @@ describe("leftoverDebugScanner", () => {
 
   it("flags Python breakpoint() as warning and print() as info", async () => {
     const ctx = makeContext({
-      files: { "main.py": "def f():\n    breakpoint()\n    print('x')\n" },
+      files: { "pkg/util.py": "def f():\n    breakpoint()\n    print('x')\n" },
     })
     const issues = await leftoverDebugScanner.run(ctx)
     const bp = issues.find((i) => i.title.includes("breakpoint"))
@@ -48,7 +48,7 @@ describe("leftoverDebugScanner", () => {
 
   it("flags Go fmt.Println as info", async () => {
     const ctx = makeContext({
-      files: { "main.go": 'package main\nfunc f() {\n\tfmt.Println("x")\n}\n' },
+      files: { "util.go": 'package util\nfunc f() {\n\tfmt.Println("x")\n}\n' },
     })
     const issues = await leftoverDebugScanner.run(ctx)
     expect(issues).toHaveLength(1)
@@ -95,5 +95,52 @@ describe("leftoverDebugScanner", () => {
     const issues = await leftoverDebugScanner.run(ctx)
     expect(issues).toHaveLength(1)
     expect(issues[0].title).toContain("console.log")
+  })
+})
+
+describe("leftover-debug — benchmark false positives", () => {
+  const titles = async (files: Record<string, string>) =>
+    (await leftoverDebugScanner.run(makeContext({ files }))).map((i) => `${i.location} ${i.title}`)
+
+  it("ignores print() and breakpoint() mentioned in a docstring", async () => {
+    expect(
+      await titles({ "pkg/t.py": 'def f():\n    """Covers ``breakpoint()`` and ``print()``."""\n    return 1\n' }),
+    ).toEqual([])
+  })
+  it("ignores output under the __main__ guard and rich console.print", async () => {
+    expect(
+      await titles({ "pkg/c.py": 'def g(c):\n    c.print("x")\n\nif __name__ == "__main__":\n    print(g())\n' }),
+    ).toEqual([])
+  })
+  it("ignores Cargo build-script protocol lines and benchmark output", async () => {
+    expect(
+      await titles({
+        "build.rs": 'fn main() { println!("cargo:rerun-if-changed=build.rs"); }\n',
+        "bench/index.js": "console.log('x')\n",
+      }),
+    ).toEqual([])
+  })
+  it("treats Go package main and Python CLI modules as entry points but still flags breakpoints", async () => {
+    const out = await titles({
+      "cmd/app.go": 'package main\nfunc main() { fmt.Println("hi") }\n',
+      "pkg/cli.py": "def run():\n    print('ok')\n    breakpoint()\n",
+    })
+    expect(out).toEqual(["pkg/cli.py:3 Leftover breakpoint() in source"])
+  })
+})
+
+describe("leftover-debug — internal workspace tools", () => {
+  it("skips nested private packages but not a private root app", async () => {
+    const out = await leftoverDebugScanner.run(
+      makeContext({
+        files: {
+          "package.json": JSON.stringify({ private: true }),
+          "src/app.ts": "console.log('left')\n",
+          "packages/bisect/package.json": JSON.stringify({ private: true }),
+          "packages/bisect/run.ts": "console.log('step')\n",
+        },
+      }),
+    )
+    expect(out.map((i) => i.location)).toEqual(["src/app.ts:1"])
   })
 })

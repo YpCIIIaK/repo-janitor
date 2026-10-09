@@ -53,3 +53,14 @@ describe("brokenDocLinksScanner", () => {
     expect(await brokenDocLinksScanner.run(ctx)).toHaveLength(0)
   })
 })
+
+describe("broken-doc-links — MkDocs directory URLs", () => {
+  it("resolves ../page against the page-as-directory when mkdocs.yml exists", async () => {
+    const files = {
+      "mkdocs.yml": "site_name: x\n",
+      "docs/async.md": "See [transports](../advanced/transports#asgi).\n",
+      "docs/advanced/transports.md": "# T\n",
+    }
+    expect(await brokenDocLinksScanner.run(makeContext({ files }))).toEqual([])
+  })
+})

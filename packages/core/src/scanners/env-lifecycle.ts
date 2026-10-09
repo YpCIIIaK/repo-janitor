@@ -276,6 +276,20 @@ function analyzeWithAst(content: string, file: string, acc: EnvUsage): boolean {
   return true
 }
 
+/**
+ * Something somebody deploys and configures, as opposed to a library whose env
+ * reads are conventions its users already know (NO_PROXY, SSL_CERT_FILE, DEBUG,
+ * FORCE_COLOR). Every library in the benchmark got "add a .env.example" and
+ * none of them should.
+ */
+function looksDeployable(files: string[]): boolean {
+  return files.some((f) =>
+    /(^|\/)(dockerfile|docker-compose\.ya?ml|compose\.ya?ml|procfile|fly\.toml|vercel\.json|netlify\.toml|render\.ya?ml|app\.ya?ml|serverless\.ya?ml|next\.config\.[cm]?[jt]s|nuxt\.config\.[cm]?[jt]s|\.env(\.[\w-]+)?)$/i.test(
+      f.replace(/\\/g, "/"),
+    ),
+  )
+}
+
 export const envLifecycleScanner: Scanner = {
   id: "env-lifecycle",
   category: "env",
@@ -366,7 +380,7 @@ export const envLifecycleScanner: Scanner = {
             : `Code reads the ${name} env var but it is not documented in ${exampleName}.`,
         })
       }
-    } else if (undocumented.length > 0) {
+    } else if (undocumented.length > 0 && looksDeployable(ctx.files)) {
       // No .env.example at all → don't spam one warning per var (the repo simply
       // doesn't use the convention). Surface a single info nudge instead.
       issues.push({

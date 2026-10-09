@@ -163,3 +163,64 @@ describe("deadCodeScanner (polyglot symbols)", () => {
     expect(issues.some((i) => /alt|size|contentType/.test(i.title))).toBe(false)
   })
 })
+
+describe("dead-code — library public API (benchmark false positives)", () => {
+  const ids = async (files: Record<string, string>) =>
+    (await deadCodeScanner.run(makeContext({ files }))).map((i) => i.id)
+
+  it("resolves `./api.js` to api.ts through export *", async () => {
+    const out = await ids({
+      "src/index.ts": 'export * from "./api.js"\n',
+      "src/api.ts": "export function templateLiteral() { return 1 }\n",
+    })
+    expect(out).toEqual([])
+  })
+  it("treats package.json entry points as public API", async () => {
+    const out = await ids({
+      "package.json": JSON.stringify({ exports: { types: "./source/main.d.ts", default: "./source/main.js" } }),
+      "source/main.js": "export const colors = []\n",
+      "source/main.d.ts": "export const colors: string[]\n",
+      "source/other.ts": "export const unused = 1\n",
+    })
+    expect(out).toEqual(["dead-export-source/other.ts:unused"])
+  })
+  it("ignores test helpers, fixtures and examples", async () => {
+    const out = await ids({
+      "tests/setup/server.js": "export const startTestServer = () => 1\n",
+      "examples/client.js": "export function createClient() {}\n",
+      "src/a.ts": "export const x = 1\n",
+    })
+    expect(out).toEqual(["dead-export-src/a.ts:x"])
+  })
+  it("only flags private names in a Python package", async () => {
+    const out = await ids({
+      "pyproject.toml": "",
+      "src/pkg/utils.py": "def dict_from_cookiejar(cj):\n    return {}\n\ndef _helper():\n    return 1\n",
+    })
+    expect(out).toEqual(["dead-symbol-src/pkg/utils.py:4"])
+  })
+})
+
+describe("dead-code — namespaces and docs", () => {
+  const ids = async (files: Record<string, string>) =>
+    (await deadCodeScanner.run(makeContext({ files }))).map((i) => i.id)
+
+  it("treats `export * as ns from` targets and TS namespace members as used", async () => {
+    expect(
+      await ids({
+        "src/index.ts": 'export * as iso from "./iso.js"\n',
+        "src/iso.ts": "export function date() { return 1 }\n",
+        "src/util.ts": "export namespace errorUtil {\n  export const errToObj = (m: string) => m\n}\n",
+      }),
+    ).toEqual([])
+  })
+  it("counts a component used from an MDX page", async () => {
+    expect(
+      await ids({
+        "docs/components/platinum.tsx": "export const Platinum = () => null\n",
+        "docs/content/index.mdx": "<Platinum />\n",
+        "src/a.ts": "export const x = 1\n",
+      }),
+    ).toEqual(["dead-export-src/a.ts:x"])
+  })
+})

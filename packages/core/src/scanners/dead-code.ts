@@ -94,6 +94,14 @@ function resolveModule(spec: string, fromFile: string, fileSet: Set<string>): st
   for (const ext of EXT_CANDIDATES) {
     if (fileSet.has(base + ext)) return base + ext
   }
+  // TypeScript ESM imports name the emitted file: `./api.js` means `./api.ts`.
+  // zod's whole core is re-exported this way and read as 466 dead exports.
+  const emitted = base.match(/^(.*)\.(m|c)?jsx?$/)
+  if (emitted) {
+    for (const ext of [".ts", ".tsx", ".mts", ".cts", ".d.ts"]) {
+      if (fileSet.has(emitted[1] + ext)) return emitted[1] + ext
+    }
+  }
   for (const idx of INDEX_CANDIDATES) {
     if (fileSet.has(base + idx)) return base + idx
   }
@@ -124,8 +132,54 @@ export const deadCodeScanner: Scanner = {
 }
 
 /** JS/TS unused-export analysis via a Babel-AST cross-module reference graph. */
+/**
+ * Code nothing imports by design: tests and their helpers, fixtures and
+ * snapshots, examples, playgrounds, benchmarks, scripts. Their exports are
+ * consumed by a runner or a reader, not by an import.
+ */
+const NOT_SHIPPED_RE =
+  /(^|\/)(?:__tests__|tests?|spec|e2e|fixtures?|__fixtures__|__snapshots__|examples?|playgrounds?|sandbox|bench(?:mark)?s?|scripts?)\/|\.(?:test|spec|test-d|snap)\.|\.snap\.[a-z.]+$/i
+
+/**
+ * Files a package publishes, from each package.json's main/module/types/exports.
+ * Their exports are the library's API — "unused in this repo" is the point.
+ */
+async function packageEntryFiles(ctx: ScanContext, fileSet: Set<string>): Promise<Set<string>> {
+  const out = new Set<string>()
+  const collect = (v: unknown, acc: string[]) => {
+    if (typeof v === "string") acc.push(v)
+    else if (v && typeof v === "object") for (const x of Object.values(v)) collect(x, acc)
+  }
+  for (const pkgPath of ctx.files.filter((f) => /(^|\/)package\.json$/.test(f) && !f.includes("node_modules"))) {
+    let pkg: Record<string, unknown>
+    try {
+      pkg = JSON.parse((await ctx.readFile(pkgPath)) ?? "{}")
+    } catch {
+      continue
+    }
+    const targets: string[] = []
+    for (const key of ["main", "module", "types", "typings", "exports", "browser"]) collect(pkg[key], targets)
+    for (const t of targets) {
+      if (!t.startsWith(".") && !/^[\w@]/.test(t)) continue
+      const resolved = resolveModule(t.startsWith(".") ? t : `./${t}`, pkgPath, fileSet)
+      if (resolved) out.add(resolved)
+      // dist/index.js published from src/index.ts
+      const src = t.replace(/^\.?\/?(dist|lib|build|out)\//, "./src/")
+      const fromSrc = resolveModule(src, pkgPath, fileSet)
+      if (fromSrc) out.add(fromSrc)
+    }
+  }
+  return out
+}
+
 async function scanJsTsExports(ctx: ScanContext, sources: string[]): Promise<Issue[]> {
     const fileSet = new Set(sources)
+    const entryFiles = await packageEntryFiles(ctx, fileSet)
+    const namespaceRanges: [string, number, number][] = []
+    // Components used from MDX/Markdown pages (docs sites) have no JS import.
+    const mdxText = (
+      await Promise.all(ctx.files.filter((f) => /\.mdx$/i.test(f)).slice(0, 2000).map((f) => ctx.readFile(f)))
+    ).join("\n")
     const exports: ExportSite[] = []
     const usedNames = new Set<string>() // names imported / re-exported anywhere
     const exemptFiles = new Set<string>() // namespace-imported or star-re-exported modules
@@ -142,7 +196,7 @@ async function scanJsTsExports(ctx: ScanContext, sources: string[]): Promise<Iss
       if (!content) continue
       const ast = parseFile(content, file)
       if (!ast) continue
-      const isBarrel = /(^|\/)index\.[a-z]+$/.test(file)
+      const isBarrel = /(^|\/)index(\.d)?\.[a-z]+$/.test(file) || entryFiles.has(file) || NOT_SHIPPED_RE.test(file)
       const srcLines = content.split("\n")
       // Capture a small block of context, not just the signature line: a leading
       // comment (JSDoc strongly implies a public API) plus the declaration's first
@@ -189,6 +243,12 @@ async function scanJsTsExports(ctx: ScanContext, sources: string[]): Promise<Iss
       const idCounts = new Map<string, number>()
 
       walk(ast, (node) => {
+        // `export namespace errorUtil { export const errToObj … }` — members are
+        // reached as errorUtil.errToObj, never imported by their own name.
+        if (node.type === "TSModuleDeclaration") {
+          const loc = node.loc as { start?: { line?: number }; end?: { line?: number } } | undefined
+          if (loc?.start?.line && loc.end?.line) namespaceRanges.push([file, loc.start.line, loc.end.line])
+        }
         if (node.type === "Identifier") {
           const name = node.name as string
           idCounts.set(name, (idCounts.get(name) ?? 0) + 1)
@@ -231,6 +291,12 @@ async function scanJsTsExports(ctx: ScanContext, sources: string[]): Promise<Iss
         if (node.type === "ExportNamedDeclaration" && node.source) {
           // re-export: `export { a, b } from './m'` → those names are used
           for (const spec of (node.specifiers as Node[]) ?? []) {
+            // `export * as iso from "./iso.js"`: the whole module is public surface.
+            if (spec.type === "ExportNamespaceSpecifier") {
+              const target = resolveModule((node.source as Node)?.value as string, file, fileSet)
+              if (target) exemptFiles.add(target)
+              continue
+            }
             const local = (spec.local as Node) ?? (spec.exported as Node)
             if (local?.type === "Identifier") usedNames.add(local.name as string)
           }
@@ -277,6 +343,8 @@ async function scanJsTsExports(ctx: ScanContext, sources: string[]): Promise<Iss
 
     for (const exp of exports) {
       if (exemptFiles.has(exp.file)) continue
+      if (namespaceRanges.some(([f, a, b]) => f === exp.file && exp.line >= a && exp.line <= b)) continue
+      if (mdxText && new RegExp(`\\b${exp.name.replace(/\$/g, "\\$")}\\b`).test(mdxText)) continue
       if (usedNames.has(exp.name)) continue
       if (CONVENTION_EXPORTS.has(exp.name)) continue // framework-consumed, not dead
 
@@ -479,11 +547,16 @@ async function collectPythonDead(ctx: ScanContext, files: string[], issues: Issu
     countInto(c, freq) // count refs from ALL files (tests included → counts as use)
     for (const n of pythonAllNames(c)) publicNames.add(n)
   }
+  // In a distributable package (pyproject/setup.py) every public top-level name
+  // is importable API: requests.utils.dict_from_cookiejar is used by callers,
+  // not by requests. Only `_private` names can be dead there.
+  const isLibrary = ctx.files.some((f) => /^(pyproject\.toml|setup\.py|setup\.cfg)$/.test(toPosix(f)))
   for (const [file, content] of contents) {
     const norm = toPosix(file)
-    if (PY_TEST_RE.test(norm)) continue
+    if (PY_TEST_RE.test(norm) || NOT_SHIPPED_RE.test(norm)) continue
     if (/(^|\/)__init__\.py$/.test(norm)) continue // package barrel: public API by convention
     for (const def of pythonDefs(content)) {
+      if (isLibrary && !def.name.startsWith("_")) continue
       if (publicNames.has(def.name)) continue
       if ((freq.get(def.name) ?? 0) > 1) continue
       issues.push(makeDeadIssue(file, def, "python"))

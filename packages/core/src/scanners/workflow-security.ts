@@ -177,11 +177,47 @@ export function scanWorkflow(content: string): WorkflowFinding[] {
 
   // Only meaningful for a file that actually defines jobs. A reusable workflow
   // fragment or an issue-template yaml that happens to live here is not one.
-  if (sawJobs && !hasTopLevelPermissions) {
+  if (sawJobs && !hasTopLevelPermissions && !everyJobHasPermissions(lines)) {
     findings.push({ rule: "no-permissions", line: 1, evidence: "" })
   }
 
   return findings
+}
+
+/**
+ * True when each job under `jobs:` declares its own `permissions:` block —
+ * as restrictive as a top-level one, and what CodeQL's template and most
+ * single-job bots do. zod, commander, gin and axios were all flagged for it.
+ */
+export function everyJobHasPermissions(lines: string[]): boolean {
+  const indentOf = (l: string) => l.length - l.trimStart().length
+  const start = lines.findIndex((l) => /^jobs:\s*(#.*)?$/.test(l))
+  if (start === -1) return false
+  let jobIndent = -1
+  let childIndent = -1
+  let jobs = 0
+  let withPerms = 0
+  let counted = false
+  for (let i = start + 1; i < lines.length; i++) {
+    const line = lines[i]
+    if (!line.trim() || line.trimStart().startsWith("#")) continue
+    const ind = indentOf(line)
+    if (ind === 0) break
+    if (jobIndent === -1) jobIndent = ind
+    if (ind === jobIndent) {
+      jobs++
+      childIndent = -1
+      counted = false
+      continue
+    }
+    if (childIndent === -1) childIndent = ind
+    // Only the job's own key — a `permissions:` nested deeper (in `with:`) is not one.
+    if (ind === childIndent && !counted && /^\s*permissions:/.test(line)) {
+      withPerms++
+      counted = true
+    }
+  }
+  return jobs > 0 && withPerms === jobs
 }
 
 interface RuleSpec {

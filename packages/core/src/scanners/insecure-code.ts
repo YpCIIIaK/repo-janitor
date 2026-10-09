@@ -344,7 +344,18 @@ const LOWER: Record<Severity, Severity> = {
  * eval / Function / the scanner itself). Reporting them even at lowered severity
  * is noise — the finding is the test, not a vulnerability.
  */
-const SKIP_IN_TEST = new Set(["new-function", "eval-dynamic"])
+const SKIP_IN_TEST = new Set([
+  "new-function",
+  "eval-dynamic",
+  // A test talking to its own self-signed fixture server, computing Content-MD5,
+  // round-tripping an object through pickle, or making a throwaway token.
+  // Every one of these in the benchmark was the test working as intended.
+  "tls-verification-off",
+  "py-verify-false",
+  "weak-hash",
+  "py-pickle-load",
+  "random-for-secret",
+])
 
 export interface CodeHit {
   rule: VulnRule
