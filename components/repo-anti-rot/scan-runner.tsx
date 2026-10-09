@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import {
   Loader2,
   Play,
@@ -20,7 +20,7 @@ import { cn } from "@/lib/utils"
 import { saveReport, type ScanReport as StoredScanReport } from "@/lib/reports-store"
 import { enrichReport, aiTargetCount } from "@/lib/ai-enrich"
 import { readAiSettings, isAiEnabled } from "@/lib/ai-settings"
-import { runScanStream } from "@/lib/scan-client"
+import { runBackgroundScan, usePendingScan, forgetPendingScan, type PendingScan, type ArchiveNotice } from "@/lib/scan-job-client"
 import { refreshPublishedShare } from "@/lib/share-refresh"
 import { GRADE_CSS_VAR } from "@/lib/grade-style"
 import { PercentileLine } from "@/components/repo-anti-rot/percentile-line"
@@ -238,6 +238,10 @@ export function ScanRunner({ onOpen }: { onOpen?: (repoId: string) => void }) {
   const [progressLabel, setProgressLabel] = useState("")
   const [results, setResults] = useState<ScanResult[] | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const recoverable = usePendingScan()
+  const [archiveNotice, setArchiveNotice] = useState<ArchiveNotice | null>(null)
+  const observer = useRef<AbortController | null>(null)
+  useEffect(() => () => observer.current?.abort(), [])
 
   // A shared link lands here with ?url=…; it goes into the list like anything
   // else, so the same rule holds — what gets scanned is what is shown.
@@ -257,12 +261,16 @@ export function ScanRunner({ onOpen }: { onOpen?: (repoId: string) => void }) {
     downloadFile("repo-anti-rot-batch.json", JSON.stringify(reports, null, 2), "application/json")
   }
 
-  async function runScan() {
+  async function runScan(resume?: PendingScan) {
+    observer.current?.abort()
+    const controller = new AbortController()
+    observer.current = controller
     setLoading(true)
     setError(null)
     setResults(null)
     setProgress(0)
     setProgressLabel(t("scan.starting"))
+    setArchiveNotice(null)
 
     // Reserve the last 20% of the bar for the AI pass when it's enabled.
     const aiOn = isAiEnabled(readAiSettings())
@@ -270,13 +278,22 @@ export function ScanRunner({ onOpen }: { onOpen?: (repoId: string) => void }) {
     const only = onlyForRequest(scannerIds)
 
     try {
-      const scanResults = (await runScanStream(urls, {
+      const scanResults = (await runBackgroundScan(resume?.urls ?? urls, {
         only,
+        signal: controller.signal,
+        onArchive: setArchiveNotice,
+        onResult: (result) => {
+          if (result.ok && result.report) {
+            try { saveReport(result.report, result.url) }
+            catch { setError("Could not save the browser copy (storage may be full). Download the JSON below. The server archive remains available until its expiry.") }
+          }
+        },
         onProgress: (s) => {
           setProgress(s.fraction * scanSpan)
           setProgressLabel(s.label)
         },
-      })) as unknown as ScanResult[]
+      }, resume)) as unknown as ScanResult[]
+      controller.signal.throwIfAborted()
       setResults(scanResults)
 
       const succeeded = scanResults.filter((r) => r.ok && r.report)
@@ -290,6 +307,7 @@ export function ScanRunner({ onOpen }: { onOpen?: (repoId: string) => void }) {
         for (let i = 0; i < succeeded.length; i++) {
           const r = succeeded[i]
           const report = (await enrichReport(r.report as StoredScanReport, {
+            signal: controller.signal,
             onProgress: (done) => {
               const frac = grand > 0 ? (doneGlobal + done) / grand : 1
               setProgress(0.8 + 0.2 * frac)
@@ -297,12 +315,14 @@ export function ScanRunner({ onOpen }: { onOpen?: (repoId: string) => void }) {
           })) as unknown as ScanReport
           doneGlobal += totals[i]
           r.report = report
-          saveReport(report as StoredScanReport, r.url)
+          try { saveReport(report as StoredScanReport, r.url) }
+          catch { setError("Browser storage is full. Download the report JSON below; the server copy does not include this browser's AI enrichment.") }
           await refreshPublishedShare(report, r.url).catch(() => "failed")
         }
       } else {
         for (const r of succeeded) {
-          saveReport(r.report as StoredScanReport, r.url)
+          try { saveReport(r.report as StoredScanReport, r.url) }
+          catch { setError("Browser storage is full. Download the full JSON below before server retention expires.") }
           await refreshPublishedShare(r.report, r.url).catch(() => "failed")
         }
       }
@@ -310,7 +330,7 @@ export function ScanRunner({ onOpen }: { onOpen?: (repoId: string) => void }) {
       setProgress(1)
       setResults([...scanResults])
     } catch (err) {
-      setError(String(err))
+      if (!controller.signal.aborted) setError(String(err))
     } finally {
       setLoading(false)
     }
@@ -318,6 +338,15 @@ export function ScanRunner({ onOpen }: { onOpen?: (repoId: string) => void }) {
 
   return (
     <div className="space-y-4">
+      {recoverable && !loading && (
+        <Card><CardContent className="space-y-2 p-4">
+          <p className="text-sm">A previous scan can be recovered from this browser.</p>
+          <p className="break-all text-xs text-muted-foreground">{recoverable.urls.join(", ")}</p>
+          <Button size="sm" onClick={() => void runScan(recoverable)}>Reconnect</Button>
+          <Button size="sm" variant="ghost" onClick={forgetPendingScan}>Dismiss recovery</Button>
+          <p className="text-xs text-muted-foreground">Dismissing removes this browser's recovery link, not the server report, and does not cancel work. Reports expire 24 hours after submission. A server restart may interrupt unfinished scans.</p>
+        </CardContent></Card>
+      )}
       <Card className="border-border/80 shadow-lg shadow-primary/5 ring-1 ring-primary/5">
         <CardHeader className="pb-2">
           <CardTitle className="text-base">{t("scan.formTitle")}</CardTitle>
@@ -341,7 +370,7 @@ export function ScanRunner({ onOpen }: { onOpen?: (repoId: string) => void }) {
                 ? t("repo.searchHint")
                 : t("scan.willScan", { count: selected.length })}
             </span>
-            <Button onClick={runScan} disabled={loading || urls.length === 0}>
+            <Button onClick={() => void runScan()} disabled={loading || !!recoverable || urls.length === 0}>
               {loading ? (
                 <>
                   <Loader2 className="size-4 animate-spin" />
@@ -368,11 +397,17 @@ export function ScanRunner({ onOpen }: { onOpen?: (repoId: string) => void }) {
             <span className="tabular-nums">{Math.round(progress * 100)}%</span>
           </div>
           <Progress value={progress * 100} />
+          <p className="text-xs text-muted-foreground">The scan continues on the server if you close this tab. Reopen Run scan in this browser to reconnect. AI analysis runs only while this page is open.</p>
         </div>
       )}
 
       {results && (
         <div className="space-y-3">
+          {archiveNotice && <p role="status" className="text-sm text-muted-foreground">
+            Full report saved without truncation ({Math.max(1, Math.round(archiveNotice.compressedBytes / 1024))} KB compressed).
+            Automatically unpacked when opened. Server copy expires {formatTimestamp(new Date(archiveNotice.expiresAt).toISOString())}.
+            Keep the recovery link above or download JSON. Browser copies remain unless browser data is cleared; storage errors are shown above.
+          </p>}
           {results.length > 1 && (
             <>
               <BatchSummaryCard
