@@ -1,0 +1,15 @@
+{
+ "action-tag-first-party-.github/workflows/main.yml-16": "tp",
+ "action-tag-first-party-.github/workflows/main.yml-17": "tp",
+ "busfactor-source/vendor/supports-color/browser.d.ts": "fp",
+ "commented-test/no-color-support.js:12": "tp",
+ "commented-test/no-color-support.js:6": "tp",
+ "dead-export-source/index.d.ts:backgroundColors": "fp",
+ "dead-export-source/index.d.ts:colors": "fp",
+ "dead-export-source/index.d.ts:foregroundColors": "fp",
+ "lockfile-missing": "fp",
+ "no-permissions-.github/workflows/main.yml-1": "tp",
+ "todo-source/index.d.ts:1": "tp",
+ "todo-source/index.d.ts:374": "tp",
+ "todo-source/index.js:250": "tp"
+}

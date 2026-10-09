@@ -1,0 +1,23 @@
+{
+ "action-tag-.github/workflows/ci.yml-109": "tp",
+ "action-tag-.github/workflows/ci.yml-121": "tp",
+ "action-tag-.github/workflows/ci.yml-133": "tp",
+ "action-tag-first-party-.github/workflows/ci.yml-25": "tp",
+ "action-tag-first-party-.github/workflows/ci.yml-34": "tp",
+ "action-tag-first-party-.github/workflows/ci.yml-57": "tp",
+ "busfactor-src/lexical/rounding.rs": "tp",
+ "busfactor-tests/regression/issue953.rs": "fp",
+ "busfactor-tests/ui/parse_key.rs": "fp",
+ "commented-src/lexical/errors.rs:105": "fp",
+ "commented-src/lexical/errors.rs:111": "fp",
+ "commented-src/lexical/errors.rs:97": "fp",
+ "debug-build.rs:26": "fp",
+ "debug-build.rs:28": "fp",
+ "debug-build.rs:4": "fp",
+ "duplicate-src/de.rs-573": "tp",
+ "duplicate-src/ser.rs-1103": "tp",
+ "duplicate-src/ser.rs-1281": "tp",
+ "hygiene-no-license": "fp",
+ "lockfile-missing-Cargo.lock": "fp",
+ "todo-src/read.rs:912": "tp"
+}

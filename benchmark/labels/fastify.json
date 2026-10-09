@@ -1,0 +1,19 @@
+{
+ "busfactor-lib/noop-set.js": "tp",
+ "busfactor-test/connection-timeout.test.js": "fp",
+ "busfactor-test/internals/hook-runner.test.js": "fp",
+ "commented-test/types/hooks.tst.ts:520": "tp",
+ "docs-drift-script-docs/Guides/Getting-Started.md-600": "fp",
+ "eol-node-.github/workflows/ci.yml-133": "tp",
+ "insecure-tls-verification-off-test/http2/secure-with-fallback.test.js:105": "fp",
+ "insecure-tls-verification-off-test/https/https.test.js:108": "fp",
+ "insecure-tls-verification-off-test/https/https.test.js:127": "fp",
+ "insecure-weak-hash-test/reply-trailers.test.js:268": "fp",
+ "insecure-weak-hash-test/reply-trailers.test.js:89": "fp",
+ "insecure-weak-hash-test/reply-trailers.test.js:96": "fp",
+ "lockfile-missing": "fp",
+ "secret-entropy-test/http-methods/unlock.test.js:32": "fp",
+ "todo-test/hooks.on-ready.test.js:306": "tp",
+ "todo-test/types/hooks.tst.ts:519": "tp",
+ "todo-test/types/instance.tst.ts:329": "tp"
+}

@@ -1,0 +1,22 @@
+[
+  { "name": "express", "url": "https://github.com/expressjs/express", "sha": "9efc29e280018dafc1f0617f3a3d28f4e463b7be" },
+  { "name": "zod", "url": "https://github.com/colinhacks/zod", "sha": "0b216ef674e297ebe41d8bf902262e56f8755822" },
+  { "name": "commander", "url": "https://github.com/tj/commander.js", "sha": "ba6d13ddb4243e5913367734f8c159089ffe7834" },
+  { "name": "ky", "url": "https://github.com/sindresorhus/ky", "sha": "242c32728a4be7eacfa08bca1ae0b209444f83d1" },
+  { "name": "ms", "url": "https://github.com/vercel/ms", "sha": "4ff48cec099f0514c3e9bbca18706c9c21122bfb" },
+  { "name": "debug", "url": "https://github.com/debug-js/debug", "sha": "f405ade8a4b7a0dc353e0f7390c1be90060f3621" },
+  { "name": "chalk", "url": "https://github.com/chalk/chalk", "sha": "47fc05abd46171b235e24174cd2dba83d25bf037" },
+  { "name": "clsx", "url": "https://github.com/lukeed/clsx", "sha": "925494cf31bcd97d3337aacd34e659e80cae7fe2" },
+  { "name": "axios", "url": "https://github.com/axios/axios", "sha": "1a94bdbdf0518f3adbeada510b747aff80847ed7" },
+  { "name": "fastify", "url": "https://github.com/fastify/fastify", "sha": "5c081d4b7237f0eb2db9f1204dc6400e3aa1325e" },
+  { "name": "vite-plugin-react", "url": "https://github.com/vitejs/vite-plugin-react", "sha": "1bed9c48c6e7f8a5b1d3f6c63438a1fb6e4bd0db" },
+  { "name": "requests", "url": "https://github.com/psf/requests", "sha": "611c6162cbc4ac2020a2f91c7cfa4f3abf9bbb60" },
+  { "name": "click", "url": "https://github.com/pallets/click", "sha": "2247b35ea1c47c727d7a06e51fa280e12a863ff6" },
+  { "name": "httpx", "url": "https://github.com/encode/httpx", "sha": "b5addb64f0161ff6bfe94c124ef76f6a1fba5254" },
+  { "name": "cobra", "url": "https://github.com/spf13/cobra", "sha": "adbc8813901bba65827259daa8e22ff94ec1f30e" },
+  { "name": "gin", "url": "https://github.com/gin-gonic/gin", "sha": "43fe48e8a0f44af783116cdb010725e6bb50255f" },
+  { "name": "anyhow", "url": "https://github.com/dtolnay/anyhow", "sha": "2cbb4e1bcbf8e7015f8d8b04a291c4c0597030b4" },
+  { "name": "serde-json", "url": "https://github.com/serde-rs/json", "sha": "afdf6fc67247dd7fa4fcde1381e6ecc6bcc7a30e" },
+  { "name": "sinatra", "url": "https://github.com/sinatra/sinatra", "sha": "cb22afd7902b566b6eaba6c4ea89739494a65d12" },
+  { "name": "guzzle", "url": "https://github.com/guzzle/guzzle", "sha": "93939470950a9b11e2e84204166ef5e048c55fe4" }
+]

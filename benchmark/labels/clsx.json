@@ -1,0 +1,13 @@
+{
+ "action-tag-first-party-.github/workflows/ci.yml-13": "tp",
+ "action-tag-first-party-.github/workflows/ci.yml-14": "tp",
+ "action-tag-first-party-.github/workflows/ci.yml-19": "tp",
+ "busfactor-bin/index.js": "fp",
+ "busfactor-src/lite.js": "tp",
+ "busfactor-test/lite.js": "fp",
+ "debug-bench/index.js:16": "fp",
+ "debug-bench/index.js:9": "fp",
+ "debug-bin/index.js:21": "fp",
+ "lockfile-missing": "tp",
+ "no-permissions-.github/workflows/ci.yml-1": "tp"
+}

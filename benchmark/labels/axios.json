@@ -1,0 +1,18 @@
+{
+ "busfactor-lib/helpers/null.js": "tp",
+ "busfactor-lib/platform/browser/classes/FormData.js": "tp",
+ "busfactor-lib/platform/node/classes/URLSearchParams.js": "tp",
+ "dead-export-examples/network_enhanced.js:createEnhancedClient": "fp",
+ "dead-export-tests/setup/server.js:startTestServer": "fp",
+ "dead-export-tests/setup/server.js:stopAllTrackedHTTPServers": "fp",
+ "debug-docs/scripts/utils.js:4": "fp",
+ "debug-sandbox/server.js:81": "fp",
+ "debug-scripts/axios-build-instance.js:17": "fp",
+ "env-no-example": "fp",
+ "insecure-random-for-secret-tests/browser/transform.browser.test.js:210": "fp",
+ "insecure-tls-verification-off-tests/smoke/esm/tests/http2.smoke.test.js:11": "fp",
+ "insecure-tls-verification-off-tests/smoke/esm/tests/http2.smoke.test.js:30": "fp",
+ "insecure-tls-verification-off-tests/smoke/esm/tests/http2.smoke.test.js:39": "fp",
+ "no-permissions-.github/workflows/moderator.yml-1": "fp",
+ "secret-private-key-tests/unit/adapters/key.pem:1": "fp"
+}

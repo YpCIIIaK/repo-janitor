@@ -22,7 +22,10 @@
     "setup": "pnpm install && pnpm run build:cli",
     "proof:refresh": "node scripts/refresh-proof-snapshot.mjs",
     "demo:refresh": "pnpm run build:cli && node scripts/refresh-demo.mjs",
-    "setup:server": "node scripts/setup-local.mjs"
+    "setup:server": "node scripts/setup-local.mjs",
+    "bench:run": "node benchmark/run.mjs",
+    "bench:score": "node benchmark/score.mjs",
+    "bench:sample": "node benchmark/sample.mjs"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "1.2.12",
