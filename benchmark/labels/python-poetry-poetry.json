@@ -1,0 +1,14 @@
+{
+ "action-unpinned-.github/workflows/.tests-matrix.yaml-38": "fp",
+ "action-unpinned-.github/workflows/.tests-matrix.yaml-43": "fp",
+ "action-unpinned-.github/workflows/.tests-matrix.yaml-64": "fp",
+ "action-unpinned-.github/workflows/tests.yaml-100": "fp",
+ "action-unpinned-.github/workflows/tests.yaml-102": "fp",
+ "action-unpinned-.github/workflows/tests.yaml-112": "fp",
+ "bloat-tests/repositories/fixtures/pypi.org/stubbed/discord.py-2.0.0.tar.gz": "fp",
+ "doclink-docs/cli.md:284:{{<": "fp",
+ "doclink-docs/cli.md:740:{{<": "fp",
+ "no-permissions-.github/workflows/.tests-matrix.yaml-1": "fp",
+ "pr-target-checkout-.github/workflows/docs.yaml-40": "tp",
+ "skiptest-tests/installation/test_wheel_installer.py:266": "fp"
+}

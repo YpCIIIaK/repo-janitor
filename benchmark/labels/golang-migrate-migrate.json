@@ -1,0 +1,7 @@
+{
+ "commented-database/mysql/mysql_test.go:390": "tp",
+ "config-conflict-ci-root": "tp",
+ "docker-root-Dockerfile.github-actions": "tp",
+ "env-no-example": "fp",
+ "no-permissions-.github/workflows/ci.yaml-1": "tp"
+}

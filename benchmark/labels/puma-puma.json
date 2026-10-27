@@ -1,0 +1,8 @@
+{
+ "action-tag-.github/workflows/rack_conform.yml-54": "tp",
+ "action-tag-first-party-.github/workflows/rack_conform.yml-42": "tp",
+ "ci-silenced-failure-.github/workflows/rack_conform.yml-69": "tp",
+ "ci-tests-not-run": "fp",
+ "docker-root-tools/Dockerfile": "fp",
+ "env-no-example": "fp"
+}

@@ -1,0 +1,9 @@
+{
+ "bloat-www/static/img/you-cant/log_exp_with_cache.mp4": "tp",
+ "insecure-eval-dynamic-src/htmx.js:865": "tp",
+ "insecure-eval-dynamic-www/static/src/htmx.js:865": "fp",
+ "insecure-eval-dynamic-www/themes/htmx-theme/static/js/htmx.js:865": "fp",
+ "insecure-new-function-src/htmx.js:2958": "tp",
+ "insecure-new-function-www/static/src/htmx.js:2958": "fp",
+ "insecure-new-function-www/themes/htmx-theme/static/js/htmx.js:2958": "fp"
+}

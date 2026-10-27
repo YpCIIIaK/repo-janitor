@@ -1,0 +1,13 @@
+{
+ "action-tag-.github/workflows/test.yml-251": "tp",
+ "action-tag-first-party-.github/workflows/test.yml-116": "tp",
+ "bloat-tornado/test/static/sample.xml.gz": "fp",
+ "dead-symbol-tornado/gen.py:160": "tp",
+ "docker-root-demos/blog/Dockerfile": "fp",
+ "duplicate-demos/chat/static/chat.js-15": "fp",
+ "env-no-example": "fp",
+ "insecure-py-eval-exec-tornado/test/autoreload_test.py:119": "fp",
+ "secret-private-key-tornado/test/test.key:1": "fp",
+ "skiptest-tornado/test/simple_httpclient_test.py:437": "fp",
+ "todo-tornado/http1connection.py:248": "tp"
+}

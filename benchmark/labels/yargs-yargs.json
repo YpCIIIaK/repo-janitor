@@ -1,0 +1,6 @@
+{
+ "busfactor-browser.d.ts": "fp",
+ "debug-lib/yargs-factory.ts:1493": "fp",
+ "eol-node-package.json-101": "tp",
+ "todo-lib/platform-shims/browser.mjs:70": "tp"
+}

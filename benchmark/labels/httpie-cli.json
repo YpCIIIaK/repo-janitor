@@ -1,0 +1,6 @@
+{
+ "bloat-tests/fixtures/test.bin": "fp",
+ "docker-root-extras/packaging/linux/Dockerfile": "fp",
+ "eol-runner-.github/workflows/release-choco.yml-14": "tp",
+ "insecure-py-verify-false-httpie/internal/update_warnings.py:44": "tp"
+}

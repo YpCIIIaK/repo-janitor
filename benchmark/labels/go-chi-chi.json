@@ -1,0 +1,8 @@
+{
+ "busfactor-middleware/request_size.go": "tp",
+ "commented-tree_test.go:125": "tp",
+ "duplicate-tree.go-470": "tp",
+ "no-permissions-.github/workflows/ci.yml-1": "tp",
+ "secret-private-key-testdata/key.pem:1": "fp",
+ "todo-middleware/compress.go:109": "tp"
+}

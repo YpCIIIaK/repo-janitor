@@ -1,0 +1,10 @@
+{
+ "action-tag-.github/workflows/cifuzz.yml-15": "tp",
+ "action-tag-first-party-.github/workflows/test.yml-9": "tp",
+ "debug-internal/toml-test/runner.go:406": "fp",
+ "doclink-internal/toml-test/specs/v1.0.0.md:1:logos/toml-200.png": "tp",
+ "doclink-internal/toml-test/specs/v1.1.0.md:1:logos/toml-200.png": "tp",
+ "duplicate-internal/toml-test/runner.go-466": "tp",
+ "no-permissions-.github/workflows/test.yml-1": "tp",
+ "todo-internal/toml-test/runner.go:217": "tp"
+}

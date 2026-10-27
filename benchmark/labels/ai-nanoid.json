@@ -1,0 +1,8 @@
+{
+ "insecure-exec-interpolated-test/bin.test.js:14": "fp",
+ "insecure-exec-interpolated-test/bin.test.js:20": "fp",
+ "insecure-exec-interpolated-test/bin.test.js:26": "fp",
+ "insecure-exec-interpolated-test/bin.test.js:34": "fp",
+ "insecure-exec-interpolated-test/bin.test.js:39": "fp",
+ "insecure-innerhtml-dynamic-test/demo/index.js:96": "fp"
+}

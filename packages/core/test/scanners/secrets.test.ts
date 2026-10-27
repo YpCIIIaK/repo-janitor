@@ -224,3 +224,27 @@ describe("secrets — built values are not secrets", () => {
     expect(issues).toEqual([])
   })
 })
+
+describe("secrets — 100-repo benchmark false positives", () => {
+  const ids = async (files: Record<string, string>) =>
+    (await secretsScanner.run(makeContext({ files }))).map((i) => i.id)
+
+  it.each([
+    [".goreleaser.yml", 'password: "{{.Env.MACOS_SIGN_PASSWORD}}"'],
+    ["examples/oauth.phps", "$refreshToken = 'RANDOMCHARS-----DWxgOvPT003r-yFUV49TQYag7_Aod7y0';"],
+    ["docs/usage.md", "const cubeToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjEwMDAwMDAwMDB9.OHZOpOBVKr-sCwn8sbZ5UF';"],
+    ["tests/test_client.py", "'user-pref-token=\"Am81ywsJ69xObBnuJ2FbilVH0mg=\"; '"],
+    ["tqdm/contrib/telegram.py", "...     token='1234567890:ABCdefGhIJKlmNoPQRsTUVwxyZ',"],
+    ["src/jwt.ts", "const pem = `-----BEGIN PRIVATE KEY-----\\n${encodeBase64(exported)}\\n-----END PRIVATE KEY-----`"],
+    ["src/oauth.php", " * Note that any ClientCertificatePrivateKey should include the -----BEGIN PRIVATE KEY----- and"],
+    [".yarn/releases/yarn-4.1.0.cjs", "x={secret:\"aB3dE5fG7hJ9kL1mN3pQ5rS7tU9vW1xY\"}"],
+  ])("ignores %s", async (file, line) => {
+    expect(await ids({ [file]: line + "\n" })).toEqual([])
+  })
+
+  it("still reports a key that starts a file or an assigned string", async () => {
+    expect(await ids({ "deploy/key.pem": "-----BEGIN RSA PRIVATE KEY-----\nMIIE\n" })).toHaveLength(1)
+    expect(await ids({ "src/cfg.js": 'const k = "-----BEGIN PRIVATE KEY-----"\n' })).toHaveLength(1)
+  })
+})
+

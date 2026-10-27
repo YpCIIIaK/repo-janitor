@@ -1,0 +1,7 @@
+{
+ "ci-silenced-failure-.github/workflows/pre-commit.yml-57": "fp",
+ "docker-latest-scripts/docker/Dockerfile:1": "tp",
+ "docker-root-scripts/docker/Dockerfile": "fp",
+ "env-no-example": "fp",
+ "insecure-innerhtml-dynamic-docs/js/termynal.js:228": "fp"
+}

@@ -1,0 +1,19 @@
+{
+ "action-tag-.github/workflows/slop-detection.yml-30": "tp",
+ "action-tag-first-party-.github/workflows/stale.yml-16": "tp",
+ "commented-test/integration/fixtures/multiple-done-async.fixture.js:6": "tp",
+ "dead-export-docs/src/content.config.ts:collections": "fp",
+ "dead-export-lib/nodejs/file-unloader.js:unloadFile": "fp",
+ "dep-unused-find-up-simple": "fp",
+ "dep-unused-is-path-inside": "fp",
+ "dep-unused-is-unicode-supported": "fp",
+ "dep-unused-js-yaml": "fp",
+ "dep-unused-minimatch": "fp",
+ "dep-unused-strip-json-comments": "fp",
+ "doclink-docs/src/content/docs/blog/maintenance-reboot.mdx:58:[https://github.com/mochajs/mocha/pulls/5056": "tp",
+ "doclink-docs/src/content/docs/blog/mocha-12-stable.mdx:197:running/cli/": "fp",
+ "env-no-example": "fp",
+ "eol-node-package.json-46": "tp",
+ "no-permissions-.github/workflows/add-to-project.yml-1": "tp",
+ "skiptest-test/integration/fixtures/options/only/tdd.fixture.js:27": "fp"
+}

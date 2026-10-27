@@ -1,0 +1,6 @@
+{
+ "insecure-innerhtml-dynamic-examples/utils/testpage.js:27": "fp",
+ "insecure-weak-hash-src/md5.ts:10": "fp",
+ "insecure-weak-hash-src/sha1.ts:10": "fp",
+ "pr-target-checkout-.github/workflows/browser.yml-25": "tp"
+}

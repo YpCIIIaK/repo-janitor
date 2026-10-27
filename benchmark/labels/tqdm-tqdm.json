@@ -1,0 +1,11 @@
+{
+ "action-tag-.github/workflows/test.yml-110": "tp",
+ "action-tag-first-party-.github/workflows/comment-bot.yml-11": "tp",
+ "busfactor-tqdm/dask.py": "tp",
+ "duplicate-tqdm/contrib/discord.py-36": "tp",
+ "eol-python-pyproject.toml-22": "tp",
+ "no-permissions-.github/workflows/check.yml-1": "tp",
+ "secret-history-entropy-tqdm/contrib/discord.py@8b5b4bb": "fp",
+ "secret-history-entropy-tqdm/contrib/telegram.py@ffc6b13": "fp",
+ "todo-tests/tests_synchronisation.py:115": "tp"
+}

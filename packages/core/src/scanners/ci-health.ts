@@ -74,7 +74,7 @@ const OTHER_CI_CONFIG = [
  * tests, through a runner nobody thought to list.
  */
 const TEST_INVOCATION =
-  /\b(?:npm|pnpm|yarn|bun)\s+(?:run\s+)?test\b|\b(?:vitest|jest|mocha|ava|playwright|cypress|karma|tap\b)|\bpytest\b|\bpython\s+-m\s+(?:pytest|unittest)\b|\btox\b|\bnose2?\b|\bgo\s+test\b|\bcargo\s+test\b|\bmvn\s+(?:.*\s)?test\b|\bgradle(?:w)?\s+.*\btest\b|\bmake\s+.*test\b|\brake\s+(?:test|spec)\b|\brspec\b|\bphpunit\b|\bdotnet\s+test\b|\bbazel\s+test\b|\bnx\s+.*\btest\b|\bturbo\s+run\s+.*test\b|\bct_run\b|\bmix\s+test\b|\bswift\s+test\b/i
+  /\b(?:npm|pnpm|yarn|bun)\s+(?:run\s+)?test\b|\b(?:vitest|jest|mocha|ava|playwright|cypress|karma|tap\b)|\bpytest\b|\bpython\s+-m\s+(?:pytest|unittest)\b|\btox\b|\bnose2?\b|\bgo\s+test\b|\bcargo\s+(?:[\w-]+\s+)*test\b|\bcargo\s+nextest\b|\bmvn\s+(?:.*\s)?test\b|\bgradle(?:w)?\s+.*\btest\b|\bmake\s+.*test\b|\brake\s+(?:\S+\s+)*\S*(?:test|spec)\S*|\bbake\s+test\b|\brspec\b|\bphpunit\b|\bdotnet\s+test\b|\bbazel\s+test\b|\bnx\s+.*\btest\b|\bturbo\s+run\s+.*test\b|\bct_run\b|\bmix\s+test\b|\bswift\s+test\b/i
 
 /**
  * An action whose whole job is running tests, referenced by `uses:`.
@@ -236,7 +236,8 @@ export function triggersOf(content: string): Set<string> {
       const rest = start[1].trim()
       if (rest) {
         // `on: push` or `on: [push, pull_request]`
-        for (const w of rest.replace(/[[\]]/g, "").split(",")) {
+        // `on: ["push", "pull_request"]` — quoted entries are the same events.
+        for (const w of rest.replace(/[[\]"']/g, "").split(",")) {
           const t = w.trim()
           if (t) out.add(t)
         }
@@ -252,7 +253,7 @@ export function triggersOf(content: string): Set<string> {
       inBlock = false
       continue
     }
-    const key = trimmed.match(/^-?\s*([a-z_]+)\s*:?/)
+    const key = trimmed.match(/^-?\s*["']?([a-z_]+)["']?\s*:?/)
     if (key) out.add(key[1])
   }
 

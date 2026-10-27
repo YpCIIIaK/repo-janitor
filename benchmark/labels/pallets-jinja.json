@@ -1,0 +1,4 @@
+{
+ "insecure-py-eval-exec-src/jinja2/environment.py:1225": "fp",
+ "insecure-py-pickle-load-src/jinja2/bccache.py:71": "fp"
+}

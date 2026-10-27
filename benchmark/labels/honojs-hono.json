@@ -1,0 +1,18 @@
+{
+ "busfactor-src/router/reg-exp-router/matcher.ts": "tp",
+ "config-conflict-lockfiles-benchmarks/query-param": "tp",
+ "dead-export-src/helper/css/common.ts:IS_CSS_ESCAPED": "tp",
+ "dead-export-src/helper/ssg/middleware.ts:SSG_DISABLED_RESPONSE": "fp",
+ "debug-src/middleware/cache/index.ts:91": "fp",
+ "debug-src/middleware/language/language.ts:253": "fp",
+ "duplicate-adapters/cloudflare-workers/src/websocket.ts-5": "tp",
+ "eol-node-adapters/bun/package.json-32": "tp",
+ "eol-node-adapters/vercel/package.json-32": "tp",
+ "insecure-react-dangerous-html-benchmarks/jsx/src/page.tsx:13": "fp",
+ "insecure-react-dangerous-html-src/jsx/dom/index.test.tsx:1536": "fp",
+ "insecure-react-dangerous-html-src/jsx/index.test.tsx:301": "fp",
+ "insecure-react-dangerous-html-src/jsx/index.test.tsx:307": "fp",
+ "insecure-react-dangerous-html-src/jsx/intrinsic-elements.ts:22": "fp",
+ "secret-private-key-src/utils/jwt/jwt.test.ts:1535": "fp",
+ "skiptest-src/utils/buffer.test.ts:69": "tp"
+}

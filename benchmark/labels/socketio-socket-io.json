@@ -1,0 +1,8 @@
+{
+ "bloat-packages/socket.io/test/fixtures/big.json": "tp",
+ "commented-docs/engine.io-protocol/v3-test-suite/test-suite.js:269": "fp",
+ "docker-root-examples/cluster-traefik/server/Dockerfile": "fp",
+ "env-no-example": "fp",
+ "eol-node-examples/cluster-httpd/server/Dockerfile-1": "tp",
+ "insecure-sql-interpolated-packages/socket.io-postgres-emitter/lib/index.ts:401": "tp"
+}

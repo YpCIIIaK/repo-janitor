@@ -1,0 +1,4 @@
+{
+ "bloat-test/cgi/test.gz": "fp",
+ "hygiene-no-license": "fp"
+}

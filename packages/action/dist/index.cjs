@@ -26863,7 +26863,7 @@ var require_lib4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-WHPJADND.js
+// ../cli/dist/chunk-WQ7M6I4T.js
 var import_fs2 = require("fs");
 
 // ../../node_modules/.pnpm/tinyglobby@0.2.17/node_modules/tinyglobby/dist/index.mjs
@@ -45593,7 +45593,7 @@ function date4(params) {
 // ../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/external.js
 config(en_default());
 
-// ../cli/dist/chunk-WHPJADND.js
+// ../cli/dist/chunk-WQ7M6I4T.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -70525,8 +70525,8 @@ function analyzeWithAst(content, file2, acc) {
   return true;
 }
 function looksDeployable(files) {
-  return files.some(
-    (f3) => /(^|\/)(dockerfile|docker-compose\.ya?ml|compose\.ya?ml|procfile|fly\.toml|vercel\.json|netlify\.toml|render\.ya?ml|app\.ya?ml|serverless\.ya?ml|next\.config\.[cm]?[jt]s|nuxt\.config\.[cm]?[jt]s|\.env(\.[\w-]+)?)$/i.test(
+  return files.filter((f3) => !f3.replace(/\\/g, "/").includes("/")).some(
+    (f3) => /(^|\/)(dockerfile|docker-compose\.ya?ml|compose\.ya?ml|procfile|fly\.toml|vercel\.json|render\.ya?ml|app\.ya?ml|serverless\.ya?ml|next\.config\.[cm]?[jt]s|nuxt\.config\.[cm]?[jt]s|\.env(\.[\w-]+)?)$/i.test(
       f3.replace(/\\/g, "/")
     )
   );
@@ -70773,7 +70773,7 @@ var DETECTORS = [
   { id: "private-key", label: "Private key", re: /-----BEGIN (?:RSA |EC |OPENSSH |DSA |PGP )?PRIVATE KEY-----/ }
 ];
 var ASSIGN_RE = /(password|passwd|pwd|secret|token|api[_-]?key|access[_-]?key|client[_-]?secret|auth[_-]?token)["']?\s*[:=]\s*["`']([^"`'\s]{20,})["`']/i;
-var PLACEHOLDER_RE = /^(your|example|changeme|placeholder|redacted|dummy|test|sample|xxx+|<|\$\{|process\.env)/i;
+var PLACEHOLDER_RE = /^(your|example|changeme|placeholder|redacted|dummy|test|sample|xxx+|<|\$\{|\$\(|\{\{|\{%|%|process\.env|random|1234|this|abcd)/i;
 var NOT_A_SECRET_RE = /\$\{|#\{|\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b/i;
 var KNOWN_EXAMPLE_RE = /EXAMPLE/;
 var BINARY_EXT = /\.(png|jpe?g|gif|webp|ico|bmp|pdf|zip|gz|tar|woff2?|ttf|eot|mp[34]|mov|wasm)$/i;
@@ -70783,7 +70783,13 @@ var MAX_BYTES = 1e6;
 var LOW_CONFIDENCE_DIR = /(?:^|\/)(?:tests?|__tests__|__mocks__|spec|specs?|e2e|fixtures?|__fixtures__|testdata|mocks?|examples?|samples?|docs?)\//i;
 var LOW_CONFIDENCE_NAME = /(?:^|[/._-])(?:test|tests|spec|specs|example|examples|sample|samples|fixture|fixtures|mock|mocks|dummy|stub|demo)\.[a-z0-9]+$/i;
 function isLowConfidenceSecretFile(file2) {
-  return LOW_CONFIDENCE_DIR.test(file2) || LOW_CONFIDENCE_NAME.test(file2);
+  return LOW_CONFIDENCE_DIR.test(file2) || LOW_CONFIDENCE_NAME.test(file2) || DOC_FILE.test(file2);
+}
+var DOC_FILE = /\.(?:md|mdx|markdown|rst|adoc|txt)$/i;
+var VENDORED = /(^|\/)\.yarn\/(?:releases|plugins|sdks)\/|\.pnp\.c?js$|\.min\.[cm]?js$|(^|\/)vendor\//i;
+function isRealKeyHeader(line) {
+  if (/\$\{|\\n/.test(line)) return false;
+  return /^\s*(?:(?:export\s+)?(?:const|let|var|final|static)\s+)?(?:[\w.$[\]'"]+\s*:?=?\s*[:=]\s*)?(?:[`'"]|""")?\s*-----BEGIN/.test(line);
 }
 function redactLine(line, token) {
   const masked = token.length <= 4 ? "\u2022\u2022\u2022\u2022" : token.slice(0, 4) + "\u2022".repeat(Math.min(token.length - 4, 12));
@@ -70806,11 +70812,12 @@ function findSecretsInLine(line) {
   const hits = [];
   for (const det of DETECTORS) {
     const hit = det.re.exec(line);
-    if (hit && !KNOWN_EXAMPLE_RE.test(hit[0])) {
+    if (hit && !KNOWN_EXAMPLE_RE.test(hit[0]) && (det.id !== "private-key" || isRealKeyHeader(line))) {
       hits.push({ id: det.id, token: hit[0], label: det.label, entropyHit: false });
     }
   }
   if (hits.length > 0) return hits;
+  if (/^\s*(?:>>>|\.\.\.)\s/.test(line)) return hits;
   const m2 = line.match(ASSIGN_RE);
   if (m2) {
     const value = m2[2];
@@ -70821,7 +70828,7 @@ function findSecretsInLine(line) {
   return hits;
 }
 function isSkippedSecretFile(file2) {
-  return BINARY_EXT.test(file2) || SKIP_NAME.test(file2) || file2.endsWith(".env.example");
+  return BINARY_EXT.test(file2) || SKIP_NAME.test(file2) || file2.endsWith(".env.example") || VENDORED.test(file2);
 }
 var HISTORY_MAX_COMMITS = 1e3;
 var HISTORY_MAX_FINDINGS = 50;
@@ -70842,6 +70849,8 @@ var secretsScanner = {
           const line = lines[i];
           const lineNo = i + 1;
           for (const hit of findSecretsInLine(line)) {
+            if (hit.entropyHit && lowConf) continue;
+            if (hit.id === "private-key" && isLowConfidenceSecretFile(file2)) continue;
             flaggedTokens.add(hit.token);
             const ageDays = yield ctx.git.blameAgeDays(file2, lineNo);
             issues.push(
@@ -70883,6 +70892,8 @@ var secretsScanner = {
           if (add.text.length > MAX_BYTES || add.text.includes(NUL)) continue;
           const lowConf = isLowConfidenceSecretFile(add.file);
           for (const hit of findSecretsInLine(add.text)) {
+            if (hit.entropyHit && lowConf) continue;
+            if (hit.id === "private-key" && isLowConfidenceSecretFile(add.file)) continue;
             if (flaggedTokens.has(hit.token)) continue;
             const key = `${hit.id}:${hit.token}`;
             if (seen.has(key)) continue;
@@ -70909,7 +70920,7 @@ var secretsScanner = {
     });
   }
 };
-var SOURCE_RE2 = /\.(ts|tsx|js|jsx|mjs|mts|cts)$/;
+var SOURCE_RE2 = /\.(ts|tsx|js|jsx|mjs|mts|cts|cjs)$/;
 var YEAR_MS = 365 * 24 * 60 * 60 * 1e3;
 var ABANDONED_INFO_MS = 2 * YEAR_MS;
 var ABANDONED_WARN_MS = 3 * YEAR_MS;
@@ -71023,7 +71034,8 @@ var dependencyFuneralScanner = {
       const issues = [];
       const used = yield collectImports(ctx);
       const toolingText = yield collectToolingText(ctx, (_b = pkgJson.scripts) != null ? _b : {});
-      const isUsed = (name) => used.has(name) || FRAMEWORK_IMPLICIT.has(name) || toolingText.includes(name);
+      const monorepoRoot = pkgJson.private === true && (!!pkgJson.workspaces || ctx.files.includes("pnpm-workspace.yaml"));
+      const isUsed = (name) => monorepoRoot || used.has(name) || FRAMEWORK_IMPLICIT.has(name) || toolingText.includes(name);
       for (const name of names) {
         if (!isUsed(name) && !name.startsWith("@types/")) {
           issues.push({
@@ -72598,8 +72610,8 @@ function isLibraryManifest(manifest, content, files) {
   var _a22;
   const norm = files.map((f3) => f3.replace(/\\/g, "/"));
   if (manifest === "Cargo.toml") {
-    const hasBin = /^\s*\[\[bin\]\]/m.test(content) || norm.some((f3) => f3 === "src/main.rs" || f3.startsWith("src/bin/"));
-    return !hasBin && !/^\s*\[workspace\]/m.test(content);
+    const hasBin = /^\s*\[\[bin\]\]/m.test(content) || norm.some((f3) => /(^|\/)src\/main\.rs$|(^|\/)src\/bin\//.test(f3) && !/(^|\/)(?:tests?|examples?|benches)\//.test(f3));
+    return !hasBin;
   }
   if (manifest === "Gemfile") return norm.some((f3) => /^[^/]+\.gemspec$/.test(f3));
   if (manifest === "composer.json") {
@@ -72688,8 +72700,8 @@ var lockfileDriftScanner = {
     });
   }
 };
-var README_RE = /^readme(\.(md|rst|txt|adoc))?$/i;
-var LICENSE_RE = /^(licen[sc]e|copying)([-._][a-z0-9.-]+)?(\.(md|txt|rst))?$/i;
+var README_RE = /^readme(\.(md|markdown|mkd|mdown|rst|txt|adoc|asciidoc|rdoc|org|textile))?$/i;
+var LICENSE_RE = /^([a-z0-9.]+-)?(licen[sc]e|copying)([-._][a-z0-9.-]+)?(\.(md|txt|rst))?$/i;
 var TEST_RE = new RegExp(
   [
     String.raw`(^|/)(__tests__|tests?|spec|testdata)/`,
@@ -72703,7 +72715,16 @@ var TEST_RE = new RegExp(
   ].join("|"),
   "i"
 );
-var README_CANDIDATES = ["README.md", "README", "README.rst", "README.txt", "README.adoc", "readme.md", "Readme.md"];
+var README_CANDIDATES = [
+  "README.md",
+  "README",
+  "README.rst",
+  "README.txt",
+  "README.adoc",
+  "README.markdown",
+  "readme.md",
+  "Readme.md"
+];
 var CI_RE = /^(\.github\/workflows\/.+\.ya?ml|\.gitlab-ci\.yml|\.circleci\/config\.yml|\.travis\.yml|azure-pipelines\.yml|\.drone\.yml|Jenkinsfile|\.woodpecker\.ya?ml|bitbucket-pipelines\.yml)$/i;
 function baseName(p2) {
   const norm = p2.replace(/\\/g, "/");
@@ -72781,7 +72802,7 @@ var projectHygieneScanner = {
 var SOURCE_RE3 = /\.(ts|tsx|js|jsx|mjs|mts|cts)$/;
 var TEST_RE2 = /(^|\/)(?:__tests__|tests?|specs?|e2e)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test_[^/]+\.py$|_test\.(?:py|go|rb)$|_spec\.rb$|(?:^|\/)conftest\.py$/i;
 var EXAMPLE_RE = /(^|\/)examples?\/|(?:^|\/)example\.[cm]?[jt]sx?$/i;
-var TOOLING_RE = /(^|\/)(?:bench(?:mark)?s?|scripts?|bin|tools?|sandbox|playgrounds?|fixtures?|__fixtures__|docs?)\/|\.test-d\.tsx?$|\.d\.ts$|(^|\/)build\.rs$|(^|\/)play(?:ground)?\.[cm]?[jt]sx?$/i;
+var TOOLING_RE = /(^|\/)(?:bench(?:mark)?s?|perf(?:ormance)?|internal|scripts?|bin|tools?|[\w-]*_assets|sandbox|playgrounds?|fixtures?|__fixtures__|docs?)\/|\.test-d\.tsx?$|\.d\.ts$|(^|\/)build\.rs$|(^|\/)play(?:ground)?\.[cm]?[jt]sx?$/i;
 var ENTRY_FILE_RE = /(^|\/)(?:__main__|_?main|cli)\.py$|(^|\/)src\/main\.rs$|(^|\/)src\/bin\//i;
 var DEBUG_METHODS = /* @__PURE__ */ new Set(["log", "debug", "trace", "dir", "table"]);
 var MAX_PER_FILE = 8;
@@ -72837,7 +72858,7 @@ var LANG_DEBUG = {
     { re: /\bbreakpoint\s*\(/g, severity: "warning", label: "breakpoint()" },
     { re: /\bi?pdb\.set_trace\s*\(/g, severity: "warning", label: "pdb.set_trace()" },
     // Not `console.print(` (rich) or other methods named print.
-    { re: new RegExp("(?<![.\\w])print\\s*\\(", "g"), severity: "info", label: "print()" },
+    { re: new RegExp("(?<![.\\w])print\\s*\\((?![^\\n]*file\\s*=\\s*sys\\.std(?:err|out))", "g"), severity: "info", label: "print()" },
     { re: new RegExp("(?<![.\\w])pprint\\s*\\(", "g"), severity: "info", label: "pprint()" }
   ],
   go: [{ re: /\bfmt\.Print(?:ln|f)?\s*\(/g, severity: "info", label: "fmt.Print" }],
@@ -72848,7 +72869,7 @@ var LANG_DEBUG = {
   rb: [{ re: /\bbinding\.(?:pry|irb)\b/g, severity: "warning", label: "binding.pry" }],
   php: [
     { re: /\b(?:dd|dump)\s*\(/g, severity: "warning", label: "dd()" },
-    { re: /\b(?:var_dump|print_r|var_export)\s*\(/g, severity: "info", label: "var_dump()" }
+    { re: /\bvar_dump\s*\(|\b(?:print_r|var_export)\s*\((?![^\n]*,\s*true\s*\))/g, severity: "info", label: "var_dump()" }
   ]
 };
 var COMMENT_MARKERS = {
@@ -73030,7 +73051,23 @@ function lineAt2(text, index) {
 function isLocalRelative(target) {
   if (!target) return false;
   if (/^([a-z][a-z0-9+.-]*:|\/\/|#|\/|data:)/i.test(target)) return false;
+  if (/[{}$<>%]/.test(target)) return false;
+  if (/^[^/]+@[^/]+\.[a-z]{2,}$/i.test(target)) return false;
   return true;
+}
+function pageExists(target, resolved, files) {
+  const base = resolved.replace(/\/$/, "");
+  for (const ext of [".md", ".mdx", "/index.md", "/index.mdx", "/README.md", ".html"]) {
+    if (files.has(base + ext)) return true;
+  }
+  const tail = target.replace(/^(\.\.?\/)+/, "").replace(/\/$/, "");
+  if (!tail) return false;
+  for (const f3 of files) {
+    if (f3.endsWith(`/${tail}.md`) || f3.endsWith(`/${tail}.mdx`) || f3.endsWith(`/${tail}/index.md`) || f3.endsWith(`/${tail}/index.mdx`)) {
+      return true;
+    }
+  }
+  return false;
 }
 var brokenDocLinksScanner = {
   id: "broken-doc-links",
@@ -73071,6 +73108,7 @@ var brokenDocLinksScanner = {
           const resolved = resolveRel(baseDir, decoded);
           if (!resolved) continue;
           if (fileSet.has(resolved) || dirSet.has(resolved)) continue;
+          if (!/\.[a-z0-9]+$/i.test(decoded) && pageExists(decoded, resolved, fileSet)) continue;
           if (usesMkdocs && /\.md$/i.test(file2)) {
             const asDir = resolveRel(`${baseDir}/${file2.split("/").pop().replace(/\.md$/i, "")}`, decoded);
             if (asDir && (fileSet.has(`${asDir}.md`) || fileSet.has(`${asDir}/index.md`) || fileSet.has(asDir))) continue;
@@ -73095,7 +73133,7 @@ var brokenDocLinksScanner = {
 };
 var SOURCE_RE4 = /\.(ts|tsx|js|jsx|mjs|mts|cts|py|go|rs|java|rb|php|c|cc|cpp|h|hpp|cs|kt|swift|scala)$/;
 var STALE_DAYS3 = 365;
-var LOW_STAKES_RE = /(^|\/)(?:__tests__|tests?|spec|e2e|testdata|fixtures?|__fixtures__|examples?|playgrounds?|sandbox|bench(?:mark)?s?|docs?|scripts?|bin)\/|(^|\/)[^/]*(?:\.(?:test|spec|test-d|config|conf)\.[^/]+|_test\.\w+|_spec\.rb)$|(^|\/)test[^/]*\.\w+$|(^|\/)(?:conftest|setup|noxfile|gulpfile|gruntfile|karma\.conf)\.\w+$/i;
+var LOW_STAKES_RE = /(^|\/)(?:__tests__|tests?|spec|e2e|testdata|fixtures?|__fixtures__|examples?|playgrounds?|sandbox|bench(?:mark)?s?|docs?|scripts?|bin)\/|(^|\/)[^/]*(?:\.(?:test|spec|test-d|config|conf)\.[^/]+|_test\.\w+|_spec\.rb)$|(^|\/)test[^/]*\.\w+$|(^|\/)(?:conftest|setup|noxfile|gulpfile|gruntfile|karma\.conf)\.\w+$|(^|\/)__init__\.py$|\.d\.[cm]?ts$|(^|\/)(?:language|languages|locales?|i18n|lang|translations?)\//i;
 var MAX_TOTAL3 = 30;
 function years(days) {
   if (days >= 365) {
@@ -73584,6 +73622,8 @@ var MB = 1024 * 1024;
 var LARGE_BYTES = 5 * MB;
 var MEDIA_BYTES = 2 * MB;
 var MAX_FINDINGS = 30;
+var SMALL_ARTIFACT_BYTES = 100 * 1024;
+var FIXTURE_DIR = /(^|\/)(?:tests?|__tests__|spec|fixtures?|__fixtures__|testdata|examples?)\//i;
 var ARTIFACT_EXT = /* @__PURE__ */ new Set([
   "zip",
   "tar",
@@ -73672,7 +73712,7 @@ var repoBloatScanner = {
         const norm = file2.replace(/\\/g, "/");
         const ext = extOf(norm);
         const size = ctx.fileSize ? yield ctx.fileSize(file2) : null;
-        if (ARTIFACT_EXT.has(ext)) {
+        if (ARTIFACT_EXT.has(ext) && !(FIXTURE_DIR.test(norm) && (size == null || size < SMALL_ARTIFACT_BYTES))) {
           candidates.push({ file: norm, size, severity: "warning", kind: "artifact" });
         } else if (size != null && size >= LARGE_BYTES) {
           candidates.push({ file: norm, size, severity: "warning", kind: "large" });
@@ -73802,7 +73842,8 @@ var dockerfileScanner = {
             });
           }
         }
-        if (sawFrom && !hasNonRootUser && issues.length < MAX_TOTAL4) {
+        const notAService = /(^|\/)(?:\.devcontainer|\.github|tests?|examples?|demos?|tools?|scripts?|extras|packaging|docs?)\//i.test(norm);
+        if (sawFrom && !hasNonRootUser && !notAService && issues.length < MAX_TOTAL4) {
           issues.push({
             id: `docker-root-${norm}`,
             category: "hygiene",
@@ -73860,8 +73901,7 @@ var JS_RULES = [
   { re: /\b(?:it|test)\.todo\s*\(/, severity: "info", label: "unimplemented test (.todo)" }
 ];
 var PY_RULES = [
-  { re: /@(?:pytest\.mark\.skip|unittest\.skip)\b/, severity: "info", label: "skipped test (@skip)" },
-  { re: /\b(?:self\.skipTest|pytest\.skip)\s*\(/, severity: "info", label: "skipped test (skip call)" }
+  { re: /@(?:pytest\.mark\.skip|unittest\.skip)\b/, severity: "info", label: "skipped test (@skip)" }
 ];
 var PREFILTER = /\.(?:only|skip|todo)\s*\(|\bf(?:it|describe|test)\s*\(|\bx(?:it|describe|test|context)\s*\(|@(?:pytest\.mark\.skip|unittest\.skip)|skipTest|pytest\.skip/;
 function lineOf4(node) {
@@ -73880,6 +73920,7 @@ var skippedTestsScanner = {
         if (issues.length >= MAX_TOTAL5) break;
         const norm = file2.replace(/\\/g, "/");
         if (!SOURCE_RE6.test(norm) || norm.includes(".min.")) continue;
+        if (/(^|\/)fixtures?\//i.test(norm)) continue;
         const content = yield ctx.readFile(file2);
         if (!content) continue;
         if (!PREFILTER.test(content)) continue;
@@ -74012,6 +74053,7 @@ var commentedCodeScanner = {
 var JS_RE2 = /\.(ts|tsx|js|jsx|mjs|mts|cts)$/i;
 var PY_RE2 = /\.py$/i;
 var SKIP_RE = /(^|\/)(?:node_modules|vendor|third_party|dist|build|out|\.next)\/|\.min\.[cm]?js$/i;
+var NOT_SHIPPED_RE2 = /(^|\/)(?:examples?|demos?|benchmarks?|bench|perf(?:-testing)?|performance|docs?|documentation|www|website|site|scripts?|tools?|[\w-]*_assets|static)\/|(^|\/)jquery[-.\d]*\.js$/i;
 var TEST_RE3 = /(^|\/)(?:__tests__|tests?|specs?|fixtures?)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test_[^/]+\.py$|_test\.py$|(?:^|\/)conftest\.py$/i;
 var MAX_PER_FILE4 = 6;
 var MAX_TOTAL7 = 60;
@@ -74040,7 +74082,9 @@ var RULES = [
     id: "exec-interpolated",
     lang: "js",
     // A shell command assembled from a template literal or string concatenation.
-    re: /\bexec(?:Sync)?\s*\(\s*(?:`[^`]*\$\{|['"][^'"]*['"]\s*\+)/g,
+    // A bare `exec(` / `execSync(` (child_process import) or `cp.exec(`; not
+    // `/re/.exec(…)`, `db.exec(sql)` or `jake.exec`, which run no shell.
+    re: new RegExp(`(?:(?<![.\\w$])|\\b(?:child_process|childProcess|cp)\\.)exec(?:Sync)?\\s*\\(\\s*(?:\`[^\`]*\\$\\{|['"][^'"]*['"]\\s*\\+)`, "g"),
     severity: "critical",
     title: "Shell command built by string interpolation",
     detail: "`exec` runs its argument through a shell, so an interpolated value containing `;` or `$(...)` runs as a separate command. Use `execFile`/`spawn` with an argument array, which never involves a shell, instead of building one string."
@@ -74064,7 +74108,9 @@ var RULES = [
   {
     id: "react-dangerous-html",
     lang: "js",
-    re: /dangerouslySetInnerHTML/g,
+    // The JSX attribute, not a type declaration (`dangerouslySetInnerHTML?:`)
+    // or a renderer reading the prop.
+    re: /dangerouslySetInnerHTML\s*=\s*\{/g,
     severity: "warning",
     title: "dangerouslySetInnerHTML bypasses React's escaping",
     detail: "React escapes output by default; this prop turns that off for the subtree. Confirm the HTML is either a literal you wrote or has been through a sanitiser such as DOMPurify."
@@ -74154,7 +74200,8 @@ var RULES = [
   {
     id: "py-eval-exec",
     lang: "py",
-    re: /\b(?:eval|exec)\s*\(\s*[^)'"\s]/g,
+    // Not `def eval(self, …)`, not `obj.eval(…)`.
+    re: new RegExp(`(?<![.\\w])(?<!def\\s+)(?:eval|exec)\\s*\\(\\s*[^)'"\\s]`, "g"),
     severity: "critical",
     title: "eval()/exec() on a non-literal value",
     detail: "Both execute the string they are handed. If any part of it can come from outside the program this is remote code execution. Use `ast.literal_eval` for data, or an explicit mapping of permitted operations."
@@ -74230,6 +74277,15 @@ var LOWER = {
   info: "info"
 };
 var SKIP_IN_TEST = /* @__PURE__ */ new Set([
+  "exec-interpolated",
+  "sql-interpolated",
+  "innerhtml-dynamic",
+  "react-dangerous-html",
+  "document-write-dynamic",
+  "py-eval-exec",
+  "py-os-system",
+  "py-shell-true",
+  "py-yaml-load",
   "new-function",
   "eval-dynamic",
   // A test talking to its own self-signed fixture server, computing Content-MD5,
@@ -74284,12 +74340,39 @@ function scanSource(content, lang) {
         const col = idx - lineStart;
         if (literalRanges(rawLine).some(([a, b3]) => col > a && col < b3)) continue;
       }
+      if (lang === "py") {
+        const col = idx - lineStart;
+        if (literalRanges(rawLine).some(([a, b3]) => col > a && col < b3)) continue;
+      }
+      if (rawLine.length > 1e3) continue;
+      if (!contextAllows(rule.id, content, lineStart)) continue;
       const existing = byLine.get(line);
       if (existing && rank(existing.rule.severity) >= rank(rule.severity)) continue;
       byLine.set(line, { rule, line, evidence: text.slice(0, 160) });
     }
   }
   return [...byLine.values()].sort((a, b3) => a.line - b3.line);
+}
+function around(content, lineStart, before, after) {
+  let a = lineStart;
+  for (let k2 = 0; k2 < before && a > 0; k2++) a = content.lastIndexOf("\n", a - 2) + 1;
+  let b3 = lineStart;
+  for (let k2 = 0; k2 <= after && b3 !== -1; k2++) b3 = content.indexOf("\n", b3 + 1);
+  return content.slice(a, b3 === -1 ? void 0 : b3);
+}
+function contextAllows(ruleId, content, lineStart) {
+  if (ruleId === "weak-hash") {
+    return /password|passwd|secret|token|signature|\bsign|hmac|credential|\bauth/i.test(around(content, lineStart, 3, 3));
+  }
+  if (ruleId === "py-eval-exec") {
+    return !/\bcompile\s*\(/.test(around(content, lineStart, 3, 0));
+  }
+  if (ruleId === "react-dangerous-html") {
+    const near = around(content, lineStart, 0, 3);
+    const html = near.match(/__html\s*:\s*([`'"])/);
+    if (html && !/\$\{/.test(near)) return false;
+  }
+  return true;
 }
 function rank(s) {
   return s === "critical" ? 3 : s === "warning" ? 2 : 1;
@@ -74304,7 +74387,7 @@ var insecureCodeScanner = {
       for (const file2 of ctx.files) {
         if (issues.length >= MAX_TOTAL7) break;
         const norm = file2.replace(/\\/g, "/");
-        if (SKIP_RE.test(norm)) continue;
+        if (SKIP_RE.test(norm) || NOT_SHIPPED_RE2.test(norm)) continue;
         const lang = langOf(norm);
         if (!lang) continue;
         const size = yield (_a22 = ctx.fileSize) == null ? void 0 : _a22.call(ctx, file2);
@@ -74566,6 +74649,28 @@ function indentOf(line) {
 function withoutComment(line) {
   return line.replace(/\s+#.*$/, "");
 }
+function topLevelTriggers(lines) {
+  const out = /* @__PURE__ */ new Set();
+  const start = lines.findIndex((l3) => /^["']?on["']?\s*:/.test(l3));
+  if (start === -1) return out;
+  const inline = lines[start].replace(/^["']?on["']?\s*:/, "").replace(/#.*$/, "").trim();
+  if (inline) {
+    for (const w2 of inline.replace(/[[\]"']/g, "").split(",")) if (w2.trim()) out.add(w2.trim());
+    return out;
+  }
+  let childIndent = -1;
+  for (let i = start + 1; i < lines.length; i++) {
+    const l3 = lines[i];
+    if (!l3.trim() || l3.trim().startsWith("#")) continue;
+    const ind = l3.length - l3.trimStart().length;
+    if (ind === 0) break;
+    if (childIndent === -1) childIndent = ind;
+    if (ind !== childIndent) continue;
+    const m2 = l3.trim().match(/^-?\s*["']?([a-z_]+)["']?/);
+    if (m2) out.add(m2[1]);
+  }
+  return out;
+}
 function scanWorkflow(content) {
   var _a22, _b;
   const lines = content.split(/\r?\n/);
@@ -74591,7 +74696,7 @@ function scanWorkflow(content) {
     const uses = trimmed.match(/^-?\s*uses\s*:\s*['"]?([^'"\s]+)['"]?/);
     if (uses) {
       const ref = uses[1];
-      if (!ref.startsWith("./") && !ref.startsWith("docker://")) {
+      if (!ref.startsWith("./") && !ref.startsWith("docker://") && !ref.startsWith("*") && !ref.startsWith("$")) {
         const atIdx = ref.lastIndexOf("@");
         const version2 = atIdx === -1 ? "" : ref.slice(atIdx + 1);
         const name = atIdx === -1 ? ref : ref.slice(0, atIdx);
@@ -74625,7 +74730,11 @@ function scanWorkflow(content) {
       evidence: (_b = (_a22 = lines[checksOutPrHead - 1]) == null ? void 0 : _a22.trim()) != null ? _b : ""
     });
   }
-  if (sawJobs && !hasTopLevelPermissions && !everyJobHasPermissions(lines)) {
+  const reusableOnly = (() => {
+    const t2 = topLevelTriggers(lines);
+    return t2.size === 1 && t2.has("workflow_call");
+  })();
+  if (sawJobs && !hasTopLevelPermissions && !reusableOnly && !everyJobHasPermissions(lines)) {
     findings.push({ rule: "no-permissions", line: 1, evidence: "" });
   }
   return findings;
@@ -74987,7 +75096,7 @@ var eolRuntimeScanner = {
   }
 };
 var MAX_ISSUES4 = 25;
-var DOC_RE = /^(readme|contributing|docs\/.*|\.github\/(readme|contributing))\.mdx?$/i;
+var DOC_RE = /^(?:(?:[\w.-]+\/)*readme|contributing|\.github\/(?:readme|contributing)|docs?\/(?:[\w-]+\/)*(?:contributing|development|developing|hacking|building|setup))\.mdx?$/i;
 var PM_SUBCOMMANDS = /* @__PURE__ */ new Set([
   "install",
   "i",
@@ -75753,7 +75862,7 @@ var OTHER_CI_CONFIG = [
   "cloudbuild.yaml",
   ".woodpecker.yml"
 ];
-var TEST_INVOCATION = /\b(?:npm|pnpm|yarn|bun)\s+(?:run\s+)?test\b|\b(?:vitest|jest|mocha|ava|playwright|cypress|karma|tap\b)|\bpytest\b|\bpython\s+-m\s+(?:pytest|unittest)\b|\btox\b|\bnose2?\b|\bgo\s+test\b|\bcargo\s+test\b|\bmvn\s+(?:.*\s)?test\b|\bgradle(?:w)?\s+.*\btest\b|\bmake\s+.*test\b|\brake\s+(?:test|spec)\b|\brspec\b|\bphpunit\b|\bdotnet\s+test\b|\bbazel\s+test\b|\bnx\s+.*\btest\b|\bturbo\s+run\s+.*test\b|\bct_run\b|\bmix\s+test\b|\bswift\s+test\b/i;
+var TEST_INVOCATION = /\b(?:npm|pnpm|yarn|bun)\s+(?:run\s+)?test\b|\b(?:vitest|jest|mocha|ava|playwright|cypress|karma|tap\b)|\bpytest\b|\bpython\s+-m\s+(?:pytest|unittest)\b|\btox\b|\bnose2?\b|\bgo\s+test\b|\bcargo\s+(?:[\w-]+\s+)*test\b|\bcargo\s+nextest\b|\bmvn\s+(?:.*\s)?test\b|\bgradle(?:w)?\s+.*\btest\b|\bmake\s+.*test\b|\brake\s+(?:\S+\s+)*\S*(?:test|spec)\S*|\bbake\s+test\b|\brspec\b|\bphpunit\b|\bdotnet\s+test\b|\bbazel\s+test\b|\bnx\s+.*\btest\b|\bturbo\s+run\s+.*test\b|\bct_run\b|\bmix\s+test\b|\bswift\s+test\b/i;
 var TEST_ACTION = /uses:\s*\S*(?:test|coverage|codecov|coveralls|sonar)/i;
 var TEST_FILE_RE = /(^|\/)(?:tests?|spec|__tests__|e2e)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(^|\/)test_[^/]+\.py$|[^/]+_test\.(?:py|go|rb)$|(^|\/)[^/]+Test\.(?:java|kt|cs)$|_spec\.rb$/i;
 function withoutComment3(line) {
@@ -75815,7 +75924,7 @@ function triggersOf(content) {
     if (start && /^[^\s]/.test(line)) {
       const rest = start[1].trim();
       if (rest) {
-        for (const w2 of rest.replace(/[[\]]/g, "").split(",")) {
+        for (const w2 of rest.replace(/[[\]"']/g, "").split(",")) {
           const t2 = w2.trim();
           if (t2) out.add(t2);
         }
@@ -75829,7 +75938,7 @@ function triggersOf(content) {
       inBlock = false;
       continue;
     }
-    const key = trimmed.match(/^-?\s*([a-z_]+)\s*:?/);
+    const key = trimmed.match(/^-?\s*["']?([a-z_]+)["']?\s*:?/);
     if (key) out.add(key[1]);
   }
   return out;
@@ -77329,8 +77438,8 @@ function analyzeWithAst2(content, file2, acc) {
   return true;
 }
 function looksDeployable2(files) {
-  return files.some(
-    (f3) => /(^|\/)(dockerfile|docker-compose\.ya?ml|compose\.ya?ml|procfile|fly\.toml|vercel\.json|netlify\.toml|render\.ya?ml|app\.ya?ml|serverless\.ya?ml|next\.config\.[cm]?[jt]s|nuxt\.config\.[cm]?[jt]s|\.env(\.[\w-]+)?)$/i.test(
+  return files.filter((f3) => !f3.replace(/\\/g, "/").includes("/")).some(
+    (f3) => /(^|\/)(dockerfile|docker-compose\.ya?ml|compose\.ya?ml|procfile|fly\.toml|vercel\.json|render\.ya?ml|app\.ya?ml|serverless\.ya?ml|next\.config\.[cm]?[jt]s|nuxt\.config\.[cm]?[jt]s|\.env(\.[\w-]+)?)$/i.test(
       f3.replace(/\\/g, "/")
     )
   );
@@ -77575,7 +77684,7 @@ var DETECTORS2 = [
   { id: "private-key", label: "Private key", re: /-----BEGIN (?:RSA |EC |OPENSSH |DSA |PGP )?PRIVATE KEY-----/ }
 ];
 var ASSIGN_RE2 = /(password|passwd|pwd|secret|token|api[_-]?key|access[_-]?key|client[_-]?secret|auth[_-]?token)["']?\s*[:=]\s*["`']([^"`'\s]{20,})["`']/i;
-var PLACEHOLDER_RE3 = /^(your|example|changeme|placeholder|redacted|dummy|test|sample|xxx+|<|\$\{|process\.env)/i;
+var PLACEHOLDER_RE3 = /^(your|example|changeme|placeholder|redacted|dummy|test|sample|xxx+|<|\$\{|\$\(|\{\{|\{%|%|process\.env|random|1234|this|abcd)/i;
 var NOT_A_SECRET_RE2 = /\$\{|#\{|\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b/i;
 var KNOWN_EXAMPLE_RE2 = /EXAMPLE/;
 var BINARY_EXT2 = /\.(png|jpe?g|gif|webp|ico|bmp|pdf|zip|gz|tar|woff2?|ttf|eot|mp[34]|mov|wasm)$/i;
@@ -77585,7 +77694,13 @@ var MAX_BYTES3 = 1e6;
 var LOW_CONFIDENCE_DIR2 = /(?:^|\/)(?:tests?|__tests__|__mocks__|spec|specs?|e2e|fixtures?|__fixtures__|testdata|mocks?|examples?|samples?|docs?)\//i;
 var LOW_CONFIDENCE_NAME2 = /(?:^|[/._-])(?:test|tests|spec|specs|example|examples|sample|samples|fixture|fixtures|mock|mocks|dummy|stub|demo)\.[a-z0-9]+$/i;
 function isLowConfidenceSecretFile2(file2) {
-  return LOW_CONFIDENCE_DIR2.test(file2) || LOW_CONFIDENCE_NAME2.test(file2);
+  return LOW_CONFIDENCE_DIR2.test(file2) || LOW_CONFIDENCE_NAME2.test(file2) || DOC_FILE2.test(file2);
+}
+var DOC_FILE2 = /\.(?:md|mdx|markdown|rst|adoc|txt)$/i;
+var VENDORED2 = /(^|\/)\.yarn\/(?:releases|plugins|sdks)\/|\.pnp\.c?js$|\.min\.[cm]?js$|(^|\/)vendor\//i;
+function isRealKeyHeader2(line) {
+  if (/\$\{|\\n/.test(line)) return false;
+  return /^\s*(?:(?:export\s+)?(?:const|let|var|final|static)\s+)?(?:[\w.$[\]'"]+\s*:?=?\s*[:=]\s*)?(?:[`'"]|""")?\s*-----BEGIN/.test(line);
 }
 function redactLine2(line, token) {
   const masked = token.length <= 4 ? "\u2022\u2022\u2022\u2022" : token.slice(0, 4) + "\u2022".repeat(Math.min(token.length - 4, 12));
@@ -77607,11 +77722,12 @@ function findSecretsInLine2(line) {
   const hits = [];
   for (const det of DETECTORS2) {
     const hit = det.re.exec(line);
-    if (hit && !KNOWN_EXAMPLE_RE2.test(hit[0])) {
+    if (hit && !KNOWN_EXAMPLE_RE2.test(hit[0]) && (det.id !== "private-key" || isRealKeyHeader2(line))) {
       hits.push({ id: det.id, token: hit[0], label: det.label, entropyHit: false });
     }
   }
   if (hits.length > 0) return hits;
+  if (/^\s*(?:>>>|\.\.\.)\s/.test(line)) return hits;
   const m2 = line.match(ASSIGN_RE2);
   if (m2) {
     const value = m2[2];
@@ -77622,7 +77738,7 @@ function findSecretsInLine2(line) {
   return hits;
 }
 function isSkippedSecretFile2(file2) {
-  return BINARY_EXT2.test(file2) || SKIP_NAME2.test(file2) || file2.endsWith(".env.example");
+  return BINARY_EXT2.test(file2) || SKIP_NAME2.test(file2) || file2.endsWith(".env.example") || VENDORED2.test(file2);
 }
 var HISTORY_MAX_COMMITS2 = 1e3;
 var HISTORY_MAX_FINDINGS2 = 50;
@@ -77642,6 +77758,8 @@ var secretsScanner2 = {
         const line = lines[i];
         const lineNo = i + 1;
         for (const hit of findSecretsInLine2(line)) {
+          if (hit.entropyHit && lowConf) continue;
+          if (hit.id === "private-key" && isLowConfidenceSecretFile2(file2)) continue;
           flaggedTokens.add(hit.token);
           const ageDays = await ctx.git.blameAgeDays(file2, lineNo);
           issues.push(
@@ -77683,6 +77801,8 @@ var secretsScanner2 = {
         if (add.text.length > MAX_BYTES3 || add.text.includes(NUL2)) continue;
         const lowConf = isLowConfidenceSecretFile2(add.file);
         for (const hit of findSecretsInLine2(add.text)) {
+          if (hit.entropyHit && lowConf) continue;
+          if (hit.id === "private-key" && isLowConfidenceSecretFile2(add.file)) continue;
           if (flaggedTokens.has(hit.token)) continue;
           const key = `${hit.id}:${hit.token}`;
           if (seen.has(key)) continue;
@@ -77710,7 +77830,7 @@ var secretsScanner2 = {
 };
 
 // ../core/src/scanners/dependency-funeral.ts
-var SOURCE_RE9 = /\.(ts|tsx|js|jsx|mjs|mts|cts)$/;
+var SOURCE_RE9 = /\.(ts|tsx|js|jsx|mjs|mts|cts|cjs)$/;
 var YEAR_MS2 = 365 * 24 * 60 * 60 * 1e3;
 var ABANDONED_INFO_MS2 = 2 * YEAR_MS2;
 var ABANDONED_WARN_MS2 = 3 * YEAR_MS2;
@@ -77812,7 +77932,8 @@ var dependencyFuneralScanner2 = {
     const issues = [];
     const used = await collectImports2(ctx);
     const toolingText = await collectToolingText2(ctx, pkgJson.scripts ?? {});
-    const isUsed = (name) => used.has(name) || FRAMEWORK_IMPLICIT2.has(name) || toolingText.includes(name);
+    const monorepoRoot = pkgJson.private === true && (!!pkgJson.workspaces || ctx.files.includes("pnpm-workspace.yaml"));
+    const isUsed = (name) => monorepoRoot || used.has(name) || FRAMEWORK_IMPLICIT2.has(name) || toolingText.includes(name);
     for (const name of names) {
       if (!isUsed(name) && !name.startsWith("@types/")) {
         issues.push({
@@ -79312,8 +79433,8 @@ var LOCK_SPECS2 = [
 function isLibraryManifest2(manifest, content, files) {
   const norm = files.map((f3) => f3.replace(/\\/g, "/"));
   if (manifest === "Cargo.toml") {
-    const hasBin = /^\s*\[\[bin\]\]/m.test(content) || norm.some((f3) => f3 === "src/main.rs" || f3.startsWith("src/bin/"));
-    return !hasBin && !/^\s*\[workspace\]/m.test(content);
+    const hasBin = /^\s*\[\[bin\]\]/m.test(content) || norm.some((f3) => /(^|\/)src\/main\.rs$|(^|\/)src\/bin\//.test(f3) && !/(^|\/)(?:tests?|examples?|benches)\//.test(f3));
+    return !hasBin;
   }
   if (manifest === "Gemfile") return norm.some((f3) => /^[^/]+\.gemspec$/.test(f3));
   if (manifest === "composer.json") {
@@ -79401,8 +79522,8 @@ var lockfileDriftScanner2 = {
 };
 
 // ../core/src/scanners/project-hygiene.ts
-var README_RE2 = /^readme(\.(md|rst|txt|adoc))?$/i;
-var LICENSE_RE2 = /^(licen[sc]e|copying)([-._][a-z0-9.-]+)?(\.(md|txt|rst))?$/i;
+var README_RE2 = /^readme(\.(md|markdown|mkd|mdown|rst|txt|adoc|asciidoc|rdoc|org|textile))?$/i;
+var LICENSE_RE2 = /^([a-z0-9.]+-)?(licen[sc]e|copying)([-._][a-z0-9.-]+)?(\.(md|txt|rst))?$/i;
 var TEST_RE5 = new RegExp(
   [
     String.raw`(^|/)(__tests__|tests?|spec|testdata)/`,
@@ -79416,7 +79537,16 @@ var TEST_RE5 = new RegExp(
   ].join("|"),
   "i"
 );
-var README_CANDIDATES2 = ["README.md", "README", "README.rst", "README.txt", "README.adoc", "readme.md", "Readme.md"];
+var README_CANDIDATES2 = [
+  "README.md",
+  "README",
+  "README.rst",
+  "README.txt",
+  "README.adoc",
+  "README.markdown",
+  "readme.md",
+  "Readme.md"
+];
 var CI_RE2 = /^(\.github\/workflows\/.+\.ya?ml|\.gitlab-ci\.yml|\.circleci\/config\.yml|\.travis\.yml|azure-pipelines\.yml|\.drone\.yml|Jenkinsfile|\.woodpecker\.ya?ml|bitbucket-pipelines\.yml)$/i;
 function baseName2(p2) {
   const norm = p2.replace(/\\/g, "/");
@@ -79494,7 +79624,7 @@ var projectHygieneScanner2 = {
 var SOURCE_RE10 = /\.(ts|tsx|js|jsx|mjs|mts|cts)$/;
 var TEST_RE6 = /(^|\/)(?:__tests__|tests?|specs?|e2e)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test_[^/]+\.py$|_test\.(?:py|go|rb)$|_spec\.rb$|(?:^|\/)conftest\.py$/i;
 var EXAMPLE_RE2 = /(^|\/)examples?\/|(?:^|\/)example\.[cm]?[jt]sx?$/i;
-var TOOLING_RE2 = /(^|\/)(?:bench(?:mark)?s?|scripts?|bin|tools?|sandbox|playgrounds?|fixtures?|__fixtures__|docs?)\/|\.test-d\.tsx?$|\.d\.ts$|(^|\/)build\.rs$|(^|\/)play(?:ground)?\.[cm]?[jt]sx?$/i;
+var TOOLING_RE2 = /(^|\/)(?:bench(?:mark)?s?|perf(?:ormance)?|internal|scripts?|bin|tools?|[\w-]*_assets|sandbox|playgrounds?|fixtures?|__fixtures__|docs?)\/|\.test-d\.tsx?$|\.d\.ts$|(^|\/)build\.rs$|(^|\/)play(?:ground)?\.[cm]?[jt]sx?$/i;
 var ENTRY_FILE_RE2 = /(^|\/)(?:__main__|_?main|cli)\.py$|(^|\/)src\/main\.rs$|(^|\/)src\/bin\//i;
 var DEBUG_METHODS2 = /* @__PURE__ */ new Set(["log", "debug", "trace", "dir", "table"]);
 var MAX_PER_FILE5 = 8;
@@ -79548,7 +79678,7 @@ var LANG_DEBUG2 = {
     { re: /\bbreakpoint\s*\(/g, severity: "warning", label: "breakpoint()" },
     { re: /\bi?pdb\.set_trace\s*\(/g, severity: "warning", label: "pdb.set_trace()" },
     // Not `console.print(` (rich) or other methods named print.
-    { re: /(?<![.\w])print\s*\(/g, severity: "info", label: "print()" },
+    { re: /(?<![.\w])print\s*\((?![^\n]*file\s*=\s*sys\.std(?:err|out))/g, severity: "info", label: "print()" },
     { re: /(?<![.\w])pprint\s*\(/g, severity: "info", label: "pprint()" }
   ],
   go: [{ re: /\bfmt\.Print(?:ln|f)?\s*\(/g, severity: "info", label: "fmt.Print" }],
@@ -79559,7 +79689,7 @@ var LANG_DEBUG2 = {
   rb: [{ re: /\bbinding\.(?:pry|irb)\b/g, severity: "warning", label: "binding.pry" }],
   php: [
     { re: /\b(?:dd|dump)\s*\(/g, severity: "warning", label: "dd()" },
-    { re: /\b(?:var_dump|print_r|var_export)\s*\(/g, severity: "info", label: "var_dump()" }
+    { re: /\bvar_dump\s*\(|\b(?:print_r|var_export)\s*\((?![^\n]*,\s*true\s*\))/g, severity: "info", label: "var_dump()" }
   ]
 };
 var COMMENT_MARKERS3 = {
@@ -79735,7 +79865,23 @@ function lineAt6(text, index) {
 function isLocalRelative2(target) {
   if (!target) return false;
   if (/^([a-z][a-z0-9+.-]*:|\/\/|#|\/|data:)/i.test(target)) return false;
+  if (/[{}$<>%]/.test(target)) return false;
+  if (/^[^/]+@[^/]+\.[a-z]{2,}$/i.test(target)) return false;
   return true;
+}
+function pageExists2(target, resolved, files) {
+  const base = resolved.replace(/\/$/, "");
+  for (const ext of [".md", ".mdx", "/index.md", "/index.mdx", "/README.md", ".html"]) {
+    if (files.has(base + ext)) return true;
+  }
+  const tail = target.replace(/^(\.\.?\/)+/, "").replace(/\/$/, "");
+  if (!tail) return false;
+  for (const f3 of files) {
+    if (f3.endsWith(`/${tail}.md`) || f3.endsWith(`/${tail}.mdx`) || f3.endsWith(`/${tail}/index.md`) || f3.endsWith(`/${tail}/index.mdx`)) {
+      return true;
+    }
+  }
+  return false;
 }
 var brokenDocLinksScanner2 = {
   id: "broken-doc-links",
@@ -79775,6 +79921,7 @@ var brokenDocLinksScanner2 = {
         const resolved = resolveRel2(baseDir, decoded);
         if (!resolved) continue;
         if (fileSet.has(resolved) || dirSet.has(resolved)) continue;
+        if (!/\.[a-z0-9]+$/i.test(decoded) && pageExists2(decoded, resolved, fileSet)) continue;
         if (usesMkdocs && /\.md$/i.test(file2)) {
           const asDir = resolveRel2(`${baseDir}/${file2.split("/").pop().replace(/\.md$/i, "")}`, decoded);
           if (asDir && (fileSet.has(`${asDir}.md`) || fileSet.has(`${asDir}/index.md`) || fileSet.has(asDir))) continue;
@@ -79800,7 +79947,7 @@ var brokenDocLinksScanner2 = {
 // ../core/src/scanners/bus-factor.ts
 var SOURCE_RE11 = /\.(ts|tsx|js|jsx|mjs|mts|cts|py|go|rs|java|rb|php|c|cc|cpp|h|hpp|cs|kt|swift|scala)$/;
 var STALE_DAYS6 = 365;
-var LOW_STAKES_RE2 = /(^|\/)(?:__tests__|tests?|spec|e2e|testdata|fixtures?|__fixtures__|examples?|playgrounds?|sandbox|bench(?:mark)?s?|docs?|scripts?|bin)\/|(^|\/)[^/]*(?:\.(?:test|spec|test-d|config|conf)\.[^/]+|_test\.\w+|_spec\.rb)$|(^|\/)test[^/]*\.\w+$|(^|\/)(?:conftest|setup|noxfile|gulpfile|gruntfile|karma\.conf)\.\w+$/i;
+var LOW_STAKES_RE2 = /(^|\/)(?:__tests__|tests?|spec|e2e|testdata|fixtures?|__fixtures__|examples?|playgrounds?|sandbox|bench(?:mark)?s?|docs?|scripts?|bin)\/|(^|\/)[^/]*(?:\.(?:test|spec|test-d|config|conf)\.[^/]+|_test\.\w+|_spec\.rb)$|(^|\/)test[^/]*\.\w+$|(^|\/)(?:conftest|setup|noxfile|gulpfile|gruntfile|karma\.conf)\.\w+$|(^|\/)__init__\.py$|\.d\.[cm]?ts$|(^|\/)(?:language|languages|locales?|i18n|lang|translations?)\//i;
 var MAX_TOTAL10 = 30;
 function years2(days) {
   if (days >= 365) {
@@ -79924,7 +80071,7 @@ var deadCodeScanner2 = {
     return issues;
   }
 };
-var NOT_SHIPPED_RE2 = /(^|\/)(?:__tests__|tests?|spec|e2e|fixtures?|__fixtures__|__snapshots__|examples?|playgrounds?|sandbox|bench(?:mark)?s?|scripts?)\/|\.(?:test|spec|test-d|snap)\.|\.snap\.[a-z.]+$/i;
+var NOT_SHIPPED_RE3 = /(^|\/)(?:__tests__|tests?|spec|e2e|fixtures?|__fixtures__|__snapshots__|examples?|playgrounds?|sandbox|bench(?:mark)?s?|scripts?)\/|\.(?:test|spec|test-d|snap)\.|\.snap\.[a-z.]+$/i;
 async function packageEntryFiles2(ctx, fileSet) {
   const out = /* @__PURE__ */ new Set();
   const collect = (v2, acc) => {
@@ -79966,7 +80113,7 @@ async function scanJsTsExports2(ctx, sources) {
     if (!content) continue;
     const ast = parseFile2(content, file2);
     if (!ast) continue;
-    const isBarrel = /(^|\/)index(\.d)?\.[a-z]+$/.test(file2) || entryFiles.has(file2) || NOT_SHIPPED_RE2.test(file2);
+    const isBarrel = /(^|\/)index(\.d)?\.[a-z]+$/.test(file2) || entryFiles.has(file2) || NOT_SHIPPED_RE3.test(file2);
     const srcLines = content.split("\n");
     const snip = (n) => {
       const start = lineOf7(n);
@@ -80227,7 +80374,7 @@ async function collectPythonDead2(ctx, files, issues) {
   const isLibrary = ctx.files.some((f3) => /^(pyproject\.toml|setup\.py|setup\.cfg)$/.test(toPosix2(f3)));
   for (const [file2, content] of contents) {
     const norm = toPosix2(file2);
-    if (PY_TEST_RE2.test(norm) || NOT_SHIPPED_RE2.test(norm)) continue;
+    if (PY_TEST_RE2.test(norm) || NOT_SHIPPED_RE3.test(norm)) continue;
     if (/(^|\/)__init__\.py$/.test(norm)) continue;
     for (const def of pythonDefs2(content)) {
       if (isLibrary && !def.name.startsWith("_")) continue;
@@ -80271,6 +80418,8 @@ var MB2 = 1024 * 1024;
 var LARGE_BYTES2 = 5 * MB2;
 var MEDIA_BYTES2 = 2 * MB2;
 var MAX_FINDINGS2 = 30;
+var SMALL_ARTIFACT_BYTES2 = 100 * 1024;
+var FIXTURE_DIR2 = /(^|\/)(?:tests?|__tests__|spec|fixtures?|__fixtures__|testdata|examples?)\//i;
 var ARTIFACT_EXT2 = /* @__PURE__ */ new Set([
   "zip",
   "tar",
@@ -80358,7 +80507,7 @@ var repoBloatScanner2 = {
       const norm = file2.replace(/\\/g, "/");
       const ext = extOf2(norm);
       const size = ctx.fileSize ? await ctx.fileSize(file2) : null;
-      if (ARTIFACT_EXT2.has(ext)) {
+      if (ARTIFACT_EXT2.has(ext) && !(FIXTURE_DIR2.test(norm) && (size == null || size < SMALL_ARTIFACT_BYTES2))) {
         candidates.push({ file: norm, size, severity: "warning", kind: "artifact" });
       } else if (size != null && size >= LARGE_BYTES2) {
         candidates.push({ file: norm, size, severity: "warning", kind: "large" });
@@ -80484,7 +80633,8 @@ var dockerfileScanner2 = {
           });
         }
       }
-      if (sawFrom && !hasNonRootUser && issues.length < MAX_TOTAL11) {
+      const notAService = /(^|\/)(?:\.devcontainer|\.github|tests?|examples?|demos?|tools?|scripts?|extras|packaging|docs?)\//i.test(norm);
+      if (sawFrom && !hasNonRootUser && !notAService && issues.length < MAX_TOTAL11) {
         issues.push({
           id: `docker-root-${norm}`,
           category: "hygiene",
@@ -80542,8 +80692,7 @@ var JS_RULES2 = [
   { re: /\b(?:it|test)\.todo\s*\(/, severity: "info", label: "unimplemented test (.todo)" }
 ];
 var PY_RULES2 = [
-  { re: /@(?:pytest\.mark\.skip|unittest\.skip)\b/, severity: "info", label: "skipped test (@skip)" },
-  { re: /\b(?:self\.skipTest|pytest\.skip)\s*\(/, severity: "info", label: "skipped test (skip call)" }
+  { re: /@(?:pytest\.mark\.skip|unittest\.skip)\b/, severity: "info", label: "skipped test (@skip)" }
 ];
 var PREFILTER2 = /\.(?:only|skip|todo)\s*\(|\bf(?:it|describe|test)\s*\(|\bx(?:it|describe|test|context)\s*\(|@(?:pytest\.mark\.skip|unittest\.skip)|skipTest|pytest\.skip/;
 function lineOf8(node) {
@@ -80559,6 +80708,7 @@ var skippedTestsScanner2 = {
       if (issues.length >= MAX_TOTAL12) break;
       const norm = file2.replace(/\\/g, "/");
       if (!SOURCE_RE13.test(norm) || norm.includes(".min.")) continue;
+      if (/(^|\/)fixtures?\//i.test(norm)) continue;
       const content = await ctx.readFile(file2);
       if (!content) continue;
       if (!PREFILTER2.test(content)) continue;
@@ -80691,6 +80841,7 @@ var commentedCodeScanner2 = {
 var JS_RE4 = /\.(ts|tsx|js|jsx|mjs|mts|cts)$/i;
 var PY_RE4 = /\.py$/i;
 var SKIP_RE2 = /(^|\/)(?:node_modules|vendor|third_party|dist|build|out|\.next)\/|\.min\.[cm]?js$/i;
+var NOT_SHIPPED_RE4 = /(^|\/)(?:examples?|demos?|benchmarks?|bench|perf(?:-testing)?|performance|docs?|documentation|www|website|site|scripts?|tools?|[\w-]*_assets|static)\/|(^|\/)jquery[-.\d]*\.js$/i;
 var TEST_RE7 = /(^|\/)(?:__tests__|tests?|specs?|fixtures?)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test_[^/]+\.py$|_test\.py$|(?:^|\/)conftest\.py$/i;
 var MAX_PER_FILE8 = 6;
 var MAX_TOTAL14 = 60;
@@ -80719,7 +80870,9 @@ var RULES3 = [
     id: "exec-interpolated",
     lang: "js",
     // A shell command assembled from a template literal or string concatenation.
-    re: /\bexec(?:Sync)?\s*\(\s*(?:`[^`]*\$\{|['"][^'"]*['"]\s*\+)/g,
+    // A bare `exec(` / `execSync(` (child_process import) or `cp.exec(`; not
+    // `/re/.exec(…)`, `db.exec(sql)` or `jake.exec`, which run no shell.
+    re: /(?:(?<![.\w$])|\b(?:child_process|childProcess|cp)\.)exec(?:Sync)?\s*\(\s*(?:`[^`]*\$\{|['"][^'"]*['"]\s*\+)/g,
     severity: "critical",
     title: "Shell command built by string interpolation",
     detail: "`exec` runs its argument through a shell, so an interpolated value containing `;` or `$(...)` runs as a separate command. Use `execFile`/`spawn` with an argument array, which never involves a shell, instead of building one string."
@@ -80743,7 +80896,9 @@ var RULES3 = [
   {
     id: "react-dangerous-html",
     lang: "js",
-    re: /dangerouslySetInnerHTML/g,
+    // The JSX attribute, not a type declaration (`dangerouslySetInnerHTML?:`)
+    // or a renderer reading the prop.
+    re: /dangerouslySetInnerHTML\s*=\s*\{/g,
     severity: "warning",
     title: "dangerouslySetInnerHTML bypasses React's escaping",
     detail: "React escapes output by default; this prop turns that off for the subtree. Confirm the HTML is either a literal you wrote or has been through a sanitiser such as DOMPurify."
@@ -80833,7 +80988,8 @@ var RULES3 = [
   {
     id: "py-eval-exec",
     lang: "py",
-    re: /\b(?:eval|exec)\s*\(\s*[^)'"\s]/g,
+    // Not `def eval(self, …)`, not `obj.eval(…)`.
+    re: /(?<![.\w])(?<!def\s+)(?:eval|exec)\s*\(\s*[^)'"\s]/g,
     severity: "critical",
     title: "eval()/exec() on a non-literal value",
     detail: "Both execute the string they are handed. If any part of it can come from outside the program this is remote code execution. Use `ast.literal_eval` for data, or an explicit mapping of permitted operations."
@@ -80908,6 +81064,15 @@ var LOWER2 = {
   info: "info"
 };
 var SKIP_IN_TEST2 = /* @__PURE__ */ new Set([
+  "exec-interpolated",
+  "sql-interpolated",
+  "innerhtml-dynamic",
+  "react-dangerous-html",
+  "document-write-dynamic",
+  "py-eval-exec",
+  "py-os-system",
+  "py-shell-true",
+  "py-yaml-load",
   "new-function",
   "eval-dynamic",
   // A test talking to its own self-signed fixture server, computing Content-MD5,
@@ -80960,12 +81125,39 @@ function scanSource2(content, lang) {
         const col = idx - lineStart;
         if (literalRanges2(rawLine).some(([a, b3]) => col > a && col < b3)) continue;
       }
+      if (lang === "py") {
+        const col = idx - lineStart;
+        if (literalRanges2(rawLine).some(([a, b3]) => col > a && col < b3)) continue;
+      }
+      if (rawLine.length > 1e3) continue;
+      if (!contextAllows2(rule.id, content, lineStart)) continue;
       const existing = byLine.get(line);
       if (existing && rank2(existing.rule.severity) >= rank2(rule.severity)) continue;
       byLine.set(line, { rule, line, evidence: text.slice(0, 160) });
     }
   }
   return [...byLine.values()].sort((a, b3) => a.line - b3.line);
+}
+function around2(content, lineStart, before, after) {
+  let a = lineStart;
+  for (let k2 = 0; k2 < before && a > 0; k2++) a = content.lastIndexOf("\n", a - 2) + 1;
+  let b3 = lineStart;
+  for (let k2 = 0; k2 <= after && b3 !== -1; k2++) b3 = content.indexOf("\n", b3 + 1);
+  return content.slice(a, b3 === -1 ? void 0 : b3);
+}
+function contextAllows2(ruleId, content, lineStart) {
+  if (ruleId === "weak-hash") {
+    return /password|passwd|secret|token|signature|\bsign|hmac|credential|\bauth/i.test(around2(content, lineStart, 3, 3));
+  }
+  if (ruleId === "py-eval-exec") {
+    return !/\bcompile\s*\(/.test(around2(content, lineStart, 3, 0));
+  }
+  if (ruleId === "react-dangerous-html") {
+    const near = around2(content, lineStart, 0, 3);
+    const html = near.match(/__html\s*:\s*([`'"])/);
+    if (html && !/\$\{/.test(near)) return false;
+  }
+  return true;
 }
 function rank2(s) {
   return s === "critical" ? 3 : s === "warning" ? 2 : 1;
@@ -80978,7 +81170,7 @@ var insecureCodeScanner2 = {
     for (const file2 of ctx.files) {
       if (issues.length >= MAX_TOTAL14) break;
       const norm = file2.replace(/\\/g, "/");
-      if (SKIP_RE2.test(norm)) continue;
+      if (SKIP_RE2.test(norm) || NOT_SHIPPED_RE4.test(norm)) continue;
       const lang = langOf2(norm);
       if (!lang) continue;
       const size = await ctx.fileSize?.(file2);
@@ -81238,6 +81430,28 @@ function indentOf2(line) {
 function withoutComment4(line) {
   return line.replace(/\s+#.*$/, "");
 }
+function topLevelTriggers2(lines) {
+  const out = /* @__PURE__ */ new Set();
+  const start = lines.findIndex((l3) => /^["']?on["']?\s*:/.test(l3));
+  if (start === -1) return out;
+  const inline = lines[start].replace(/^["']?on["']?\s*:/, "").replace(/#.*$/, "").trim();
+  if (inline) {
+    for (const w2 of inline.replace(/[[\]"']/g, "").split(",")) if (w2.trim()) out.add(w2.trim());
+    return out;
+  }
+  let childIndent = -1;
+  for (let i = start + 1; i < lines.length; i++) {
+    const l3 = lines[i];
+    if (!l3.trim() || l3.trim().startsWith("#")) continue;
+    const ind = l3.length - l3.trimStart().length;
+    if (ind === 0) break;
+    if (childIndent === -1) childIndent = ind;
+    if (ind !== childIndent) continue;
+    const m2 = l3.trim().match(/^-?\s*["']?([a-z_]+)["']?/);
+    if (m2) out.add(m2[1]);
+  }
+  return out;
+}
 function scanWorkflow2(content) {
   const lines = content.split(/\r?\n/);
   const findings = [];
@@ -81262,7 +81476,7 @@ function scanWorkflow2(content) {
     const uses = trimmed.match(/^-?\s*uses\s*:\s*['"]?([^'"\s]+)['"]?/);
     if (uses) {
       const ref = uses[1];
-      if (!ref.startsWith("./") && !ref.startsWith("docker://")) {
+      if (!ref.startsWith("./") && !ref.startsWith("docker://") && !ref.startsWith("*") && !ref.startsWith("$")) {
         const atIdx = ref.lastIndexOf("@");
         const version2 = atIdx === -1 ? "" : ref.slice(atIdx + 1);
         const name = atIdx === -1 ? ref : ref.slice(0, atIdx);
@@ -81296,7 +81510,11 @@ function scanWorkflow2(content) {
       evidence: lines[checksOutPrHead - 1]?.trim() ?? ""
     });
   }
-  if (sawJobs && !hasTopLevelPermissions && !everyJobHasPermissions2(lines)) {
+  const reusableOnly = (() => {
+    const t2 = topLevelTriggers2(lines);
+    return t2.size === 1 && t2.has("workflow_call");
+  })();
+  if (sawJobs && !hasTopLevelPermissions && !reusableOnly && !everyJobHasPermissions2(lines)) {
     findings.push({ rule: "no-permissions", line: 1, evidence: "" });
   }
   return findings;
@@ -81656,7 +81874,7 @@ var eolRuntimeScanner2 = {
 
 // ../core/src/scanners/docs-drift.ts
 var MAX_ISSUES13 = 25;
-var DOC_RE2 = /^(readme|contributing|docs\/.*|\.github\/(readme|contributing))\.mdx?$/i;
+var DOC_RE2 = /^(?:(?:[\w.-]+\/)*readme|contributing|\.github\/(?:readme|contributing)|docs?\/(?:[\w-]+\/)*(?:contributing|development|developing|hacking|building|setup))\.mdx?$/i;
 var PM_SUBCOMMANDS2 = /* @__PURE__ */ new Set([
   "install",
   "i",
@@ -82418,7 +82636,7 @@ var OTHER_CI_CONFIG2 = [
   "cloudbuild.yaml",
   ".woodpecker.yml"
 ];
-var TEST_INVOCATION2 = /\b(?:npm|pnpm|yarn|bun)\s+(?:run\s+)?test\b|\b(?:vitest|jest|mocha|ava|playwright|cypress|karma|tap\b)|\bpytest\b|\bpython\s+-m\s+(?:pytest|unittest)\b|\btox\b|\bnose2?\b|\bgo\s+test\b|\bcargo\s+test\b|\bmvn\s+(?:.*\s)?test\b|\bgradle(?:w)?\s+.*\btest\b|\bmake\s+.*test\b|\brake\s+(?:test|spec)\b|\brspec\b|\bphpunit\b|\bdotnet\s+test\b|\bbazel\s+test\b|\bnx\s+.*\btest\b|\bturbo\s+run\s+.*test\b|\bct_run\b|\bmix\s+test\b|\bswift\s+test\b/i;
+var TEST_INVOCATION2 = /\b(?:npm|pnpm|yarn|bun)\s+(?:run\s+)?test\b|\b(?:vitest|jest|mocha|ava|playwright|cypress|karma|tap\b)|\bpytest\b|\bpython\s+-m\s+(?:pytest|unittest)\b|\btox\b|\bnose2?\b|\bgo\s+test\b|\bcargo\s+(?:[\w-]+\s+)*test\b|\bcargo\s+nextest\b|\bmvn\s+(?:.*\s)?test\b|\bgradle(?:w)?\s+.*\btest\b|\bmake\s+.*test\b|\brake\s+(?:\S+\s+)*\S*(?:test|spec)\S*|\bbake\s+test\b|\brspec\b|\bphpunit\b|\bdotnet\s+test\b|\bbazel\s+test\b|\bnx\s+.*\btest\b|\bturbo\s+run\s+.*test\b|\bct_run\b|\bmix\s+test\b|\bswift\s+test\b/i;
 var TEST_ACTION2 = /uses:\s*\S*(?:test|coverage|codecov|coveralls|sonar)/i;
 var TEST_FILE_RE2 = /(^|\/)(?:tests?|spec|__tests__|e2e)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(^|\/)test_[^/]+\.py$|[^/]+_test\.(?:py|go|rb)$|(^|\/)[^/]+Test\.(?:java|kt|cs)$|_spec\.rb$/i;
 function withoutComment6(line) {
@@ -82480,7 +82698,7 @@ function triggersOf2(content) {
     if (start && /^[^\s]/.test(line)) {
       const rest = start[1].trim();
       if (rest) {
-        for (const w2 of rest.replace(/[[\]]/g, "").split(",")) {
+        for (const w2 of rest.replace(/[[\]"']/g, "").split(",")) {
           const t2 = w2.trim();
           if (t2) out.add(t2);
         }
@@ -82494,7 +82712,7 @@ function triggersOf2(content) {
       inBlock = false;
       continue;
     }
-    const key = trimmed.match(/^-?\s*([a-z_]+)\s*:?/);
+    const key = trimmed.match(/^-?\s*["']?([a-z_]+)["']?\s*:?/);
     if (key) out.add(key[1]);
   }
   return out;

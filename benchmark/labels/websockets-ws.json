@@ -1,0 +1,11 @@
+{
+ "action-tag-.github/workflows/ci.yml-69": "tp",
+ "action-tag-first-party-.github/workflows/ci.yml-50": "tp",
+ "busfactor-lib/subprotocol.js": "tp",
+ "duplicate-lib/extension.js-44": "tp",
+ "eol-node-package.json-32": "tp",
+ "insecure-tls-verification-off-examples/ssl.js:33": "fp",
+ "insecure-weak-hash-lib/websocket-server.js:387": "fp",
+ "insecure-weak-hash-lib/websocket.js:975": "fp",
+ "secret-private-key-test/fixtures/key.pem:1": "fp"
+}

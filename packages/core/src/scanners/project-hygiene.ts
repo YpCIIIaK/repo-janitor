@@ -16,10 +16,11 @@ import type { Issue } from "../schema"
  * list — no file contents are read.
  */
 
-const README_RE = /^readme(\.(md|rst|txt|adoc))?$/i
+const README_RE = /^readme(\.(md|markdown|mkd|mdown|rst|txt|adoc|asciidoc|rdoc|org|textile))?$/i
 // LICENSE, LICENSE.md, COPYING, and the dual-licence split LICENSE-MIT /
 // LICENSE-APACHE that most Rust crates use.
-const LICENSE_RE = /^(licen[sc]e|copying)([-._][a-z0-9.-]+)?(\.(md|txt|rst))?$/i
+// …and the `MIT-LICENSE` / `GPL-LICENSE` naming Rails-era gems use (devise, rack).
+const LICENSE_RE = /^([a-z0-9.]+-)?(licen[sc]e|copying)([-._][a-z0-9.-]+)?(\.(md|txt|rst))?$/i
 const TEST_RE = new RegExp(
   [
     String.raw`(^|/)(__tests__|tests?|spec|testdata)/`,
@@ -34,7 +35,16 @@ const TEST_RE = new RegExp(
   "i",
 )
 /** Root READMEs that may be symlinks, which the file walk does not follow. */
-const README_CANDIDATES = ["README.md", "README", "README.rst", "README.txt", "README.adoc", "readme.md", "Readme.md"]
+const README_CANDIDATES = [
+  "README.md",
+  "README",
+  "README.rst",
+  "README.txt",
+  "README.adoc",
+  "README.markdown",
+  "readme.md",
+  "Readme.md",
+]
 
 // CI config locations across the common providers.
 const CI_RE =

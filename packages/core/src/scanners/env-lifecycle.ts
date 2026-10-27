@@ -283,8 +283,10 @@ function analyzeWithAst(content: string, file: string, acc: EnvUsage): boolean {
  * none of them should.
  */
 function looksDeployable(files: string[]): boolean {
-  return files.some((f) =>
-    /(^|\/)(dockerfile|docker-compose\.ya?ml|compose\.ya?ml|procfile|fly\.toml|vercel\.json|netlify\.toml|render\.ya?ml|app\.ya?ml|serverless\.ya?ml|next\.config\.[cm]?[jt]s|nuxt\.config\.[cm]?[jt]s|\.env(\.[\w-]+)?)$/i.test(
+  // Root level only: a Dockerfile in .devcontainer/, tests/ or examples/ says
+  // nothing about the project itself being deployed.
+  return files.filter((f) => !f.replace(/\\/g, "/").includes("/")).some((f) =>
+    /(^|\/)(dockerfile|docker-compose\.ya?ml|compose\.ya?ml|procfile|fly\.toml|vercel\.json|render\.ya?ml|app\.ya?ml|serverless\.ya?ml|next\.config\.[cm]?[jt]s|nuxt\.config\.[cm]?[jt]s|\.env(\.[\w-]+)?)$/i.test(
       f.replace(/\\/g, "/"),
     ),
   )

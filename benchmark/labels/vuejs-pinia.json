@@ -1,0 +1,16 @@
+{
+ "action-tag-.github/workflows/update-sponsors.yml-21": "tp",
+ "action-tag-first-party-.github/workflows/pkg.pr.new.yml-29": "tp",
+ "busfactor-packages/testing/src/index.ts": "tp",
+ "ci-silenced-failure-.github/workflows/release.yml-157": "fp",
+ "commented-packages/playground/src/stores/nasa.ts:10": "tp",
+ "dead-export-packages/online-playground/src/download/download.ts:downloadProject": "fp",
+ "dead-export-packages/size-check/src/pinia.js:useStore": "fp",
+ "debug-packages/pinia/src/devtools/utils.ts:22": "fp",
+ "debug-packages/pinia/src/hmr.ts:115": "fp",
+ "doclink-packages/docs/cookbook/testing.md:356:../api/@pinia/testing/interfaces/TestingOptions.html": "fp",
+ "duplicate-packages/docs/.vitepress/config/en.ts-10": "fp",
+ "env-no-example": "fp",
+ "skiptest-packages/pinia/__tests__/state.spec.ts:521": "tp",
+ "todo-packages/pinia/__tests__/subscriptions.spec.ts:374": "tp"
+}

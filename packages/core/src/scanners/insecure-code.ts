@@ -26,6 +26,14 @@ const PY_RE = /\.py$/i
 // Vendored/generated code is not ours to fix, and minified bundles produce
 // garbage line numbers.
 const SKIP_RE = /(^|\/)(?:node_modules|vendor|third_party|dist|build|out|\.next)\/|\.min\.[cm]?js$/i
+/**
+ * Code that never runs on anyone's input: examples, demos, benchmarks, docs
+ * sites and their copies of the library, build and release scripts, and
+ * vendored bundles (`jquery-3.7.1.js` under test/data, `*_assets/`). In the
+ * 100-repo benchmark every finding under these paths was a false positive.
+ */
+const NOT_SHIPPED_RE =
+  /(^|\/)(?:examples?|demos?|benchmarks?|bench|perf(?:-testing)?|performance|docs?|documentation|www|website|site|scripts?|tools?|[\w-]*_assets|static)\/|(^|\/)jquery[-.\d]*\.js$/i
 const TEST_RE =
   /(^|\/)(?:__tests__|tests?|specs?|fixtures?)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test_[^/]+\.py$|_test\.py$|(?:^|\/)conftest\.py$/i
 
@@ -76,7 +84,9 @@ const RULES: VulnRule[] = [
     id: "exec-interpolated",
     lang: "js",
     // A shell command assembled from a template literal or string concatenation.
-    re: /\bexec(?:Sync)?\s*\(\s*(?:`[^`]*\$\{|['"][^'"]*['"]\s*\+)/g,
+    // A bare `exec(` / `execSync(` (child_process import) or `cp.exec(`; not
+    // `/re/.exec(…)`, `db.exec(sql)` or `jake.exec`, which run no shell.
+    re: /(?:(?<![.\w$])|\b(?:child_process|childProcess|cp)\.)exec(?:Sync)?\s*\(\s*(?:`[^`]*\$\{|['"][^'"]*['"]\s*\+)/g,
     severity: "critical",
     title: "Shell command built by string interpolation",
     detail:
@@ -109,7 +119,9 @@ const RULES: VulnRule[] = [
   {
     id: "react-dangerous-html",
     lang: "js",
-    re: /dangerouslySetInnerHTML/g,
+    // The JSX attribute, not a type declaration (`dangerouslySetInnerHTML?:`)
+    // or a renderer reading the prop.
+    re: /dangerouslySetInnerHTML\s*=\s*\{/g,
     severity: "warning",
     title: "dangerouslySetInnerHTML bypasses React's escaping",
     detail:
@@ -225,7 +237,8 @@ const RULES: VulnRule[] = [
   {
     id: "py-eval-exec",
     lang: "py",
-    re: /\b(?:eval|exec)\s*\(\s*[^)'"\s]/g,
+    // Not `def eval(self, …)`, not `obj.eval(…)`.
+    re: /(?<![.\w])(?<!def\s+)(?:eval|exec)\s*\(\s*[^)'"\s]/g,
     severity: "critical",
     title: "eval()/exec() on a non-literal value",
     detail:
@@ -345,6 +358,15 @@ const LOWER: Record<Severity, Severity> = {
  * is noise — the finding is the test, not a vulnerability.
  */
 const SKIP_IN_TEST = new Set([
+  "exec-interpolated",
+  "sql-interpolated",
+  "innerhtml-dynamic",
+  "react-dangerous-html",
+  "document-write-dynamic",
+  "py-eval-exec",
+  "py-os-system",
+  "py-shell-true",
+  "py-yaml-load",
   "new-function",
   "eval-dynamic",
   // A test talking to its own self-signed fixture server, computing Content-MD5,
@@ -421,6 +443,13 @@ export function scanSource(content: string, lang: Lang): CodeHit[] {
         if (literalRanges(rawLine).some(([a, b]) => col > a && col < b)) continue
       }
 
+      if (lang === "py") {
+        const col = idx - lineStart
+        if (literalRanges(rawLine).some(([a, b]) => col > a && col < b)) continue
+      }
+      if (rawLine.length > 1000) continue // minified bundle
+      if (!contextAllows(rule.id, content, lineStart)) continue
+
       const existing = byLine.get(line)
       // Keep the most severe rule when several match the same line.
       if (existing && rank(existing.rule.severity) >= rank(rule.severity)) continue
@@ -429,6 +458,38 @@ export function scanSource(content: string, lang: Lang): CodeHit[] {
   }
 
   return [...byLine.values()].sort((a, b) => a.line - b.line)
+}
+
+/** Up to `n` lines either side of the match, for rules that need context. */
+function around(content: string, lineStart: number, before: number, after: number): string {
+  let a = lineStart
+  for (let k = 0; k < before && a > 0; k++) a = content.lastIndexOf("\n", a - 2) + 1
+  let b = lineStart
+  for (let k = 0; k <= after && b !== -1; k++) b = content.indexOf("\n", b + 1)
+  return content.slice(a, b === -1 ? undefined : b)
+}
+
+/**
+ * Context vetoes, each from a benchmark false positive:
+ *  - weak-hash: SHA-1/MD5 are mandated by the WebSocket handshake, UUID v3/v5
+ *    and many checksums; only a security-sounding neighbourhood makes it a finding.
+ *  - py-eval-exec: `exec(compile(src, …))` is code generation (attrs, jinja,
+ *    flask config), not evaluation of input.
+ *  - react-dangerous-html: `__html` set to a literal is markup the author wrote.
+ */
+function contextAllows(ruleId: string, content: string, lineStart: number): boolean {
+  if (ruleId === "weak-hash") {
+    return /password|passwd|secret|token|signature|\bsign|hmac|credential|\bauth/i.test(around(content, lineStart, 3, 3))
+  }
+  if (ruleId === "py-eval-exec") {
+    return !/\bcompile\s*\(/.test(around(content, lineStart, 3, 0))
+  }
+  if (ruleId === "react-dangerous-html") {
+    const near = around(content, lineStart, 0, 3)
+    const html = near.match(/__html\s*:\s*([`'"])/)
+    if (html && !/\$\{/.test(near)) return false
+  }
+  return true
 }
 
 function rank(s: Severity): number {
@@ -444,7 +505,7 @@ export const insecureCodeScanner: Scanner = {
     for (const file of ctx.files) {
       if (issues.length >= MAX_TOTAL) break
       const norm = file.replace(/\\/g, "/")
-      if (SKIP_RE.test(norm)) continue
+      if (SKIP_RE.test(norm) || NOT_SHIPPED_RE.test(norm)) continue
 
       const lang = langOf(norm)
       if (!lang) continue

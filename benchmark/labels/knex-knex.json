@@ -1,0 +1,21 @@
+{
+ "ci-swallowed-.github/workflows/coverage.yml-84": "tp",
+ "ci-swallowed-.github/workflows/integration-tests.yml-121": "tp",
+ "insecure-exec-interpolated-scripts/build.js:90": "fp",
+ "insecure-exec-interpolated-test/cli/cli-test-utils.js:80": "fp",
+ "insecure-exec-interpolated-test/jake/jakelib/migrate-test.js:39": "fp",
+ "insecure-new-function-docs/scripts/snippet-utils.mjs:53": "fp",
+ "insecure-sql-interpolated-test/integration/query/trigger-deletes.js:105": "fp",
+ "insecure-sql-interpolated-test/integration/query/trigger-updates.js:64": "fp",
+ "insecure-sql-interpolated-test/integration/query/trigger-updates.js:97": "fp",
+ "insecure-sql-interpolated-test/integration2/query/misc/additional.spec.js:1153": "fp",
+ "insecure-sql-interpolated-test/integration2/query/misc/additional.spec.js:1156": "fp",
+ "insecure-sql-interpolated-test/integration2/schema/enum-native.spec.js:32": "fp",
+ "insecure-sql-interpolated-test/integration2/schema/enum-native.spec.js:49": "fp",
+ "insecure-sql-interpolated-test/integration2/schema/enum-native.spec.js:72": "fp",
+ "insecure-sql-interpolated-test/integration2/schema/enum-native.spec.js:79": "fp",
+ "insecure-sql-interpolated-test/integration2/schema/misc.spec.js:2252": "fp",
+ "insecure-sql-interpolated-test/prep-db.js:13": "fp",
+ "insecure-weak-hash-lib/dialects/oracle/utils.js:35": "fp",
+ "lockfile-missing": "tp"
+}

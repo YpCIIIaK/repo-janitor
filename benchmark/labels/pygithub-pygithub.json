@@ -1,0 +1,16 @@
+{
+ "busfactor-github/CodeSecurityConfigRepository.py": "tp",
+ "duplicate-github/AuthenticatedUser.py-252": "tp",
+ "eol-python-pyproject.toml-27": "tp",
+ "insecure-py-eval-exec-tests/Framework.py:330": "fp",
+ "insecure-py-os-system-openapi/Cli.py:108": "fp",
+ "insecure-py-os-system-openapi/Cli.py:59": "fp",
+ "insecure-py-pickle-load-github/MainClass.py:1088": "tp",
+ "no-permissions-.github/workflows/_build-pkg.yml-1": "tp",
+ "no-permissions-.github/workflows/top-issues.yaml-1": "tp",
+ "secret-entropy-tests/ReplayData/Organization.testAttachDetachSecurityConfig.txt:21": "fp",
+ "secret-entropy-tests/ReplayData/PullRequest1684.setUp.txt:21": "fp",
+ "secret-entropy-tests/ReplayData/Requester.testLoggingRedirection.txt:21": "fp",
+ "secret-private-key-tests/GithubIntegration.py:53": "fp",
+ "todo-scripts/openapi.py:1042": "tp"
+}

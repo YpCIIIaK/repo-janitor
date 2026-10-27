@@ -55,7 +55,28 @@ function isLocalRelative(target: string): boolean {
   if (!target) return false
   // external, protocol-relative, anchors, mail/tel, data URIs, root-absolute
   if (/^([a-z][a-z0-9+.-]*:|\/\/|#|\/|data:)/i.test(target)) return false
+  // Template syntax (Hugo `{{< relref >}}`, Liquid `{{ }}`/`{% %}`, `$VAR`
+  // placeholders, `<…>`) is filled in by the site generator, not a path.
+  if (/[{}$<>%]/.test(target)) return false
+  // `[me](someone@example.com)` is an e-mail missing its `mailto:`, which a
+  // reader still recognises; it is not a file that moved.
+  if (/^[^/]+@[^/]+\.[a-z]{2,}$/i.test(target)) return false
   return true
+}
+
+function pageExists(target: string, resolved: string, files: Set<string>): boolean {
+  const base = resolved.replace(/\/$/, "")
+  for (const ext of [".md", ".mdx", "/index.md", "/index.mdx", "/README.md", ".html"]) {
+    if (files.has(base + ext)) return true
+  }
+  const tail = target.replace(/^(\.\.?\/)+/, "").replace(/\/$/, "")
+  if (!tail) return false
+  for (const f of files) {
+    if (f.endsWith(`/${tail}.md`) || f.endsWith(`/${tail}.mdx`) || f.endsWith(`/${tail}/index.md`) || f.endsWith(`/${tail}/index.mdx`)) {
+      return true
+    }
+  }
+  return false
 }
 
 export const brokenDocLinksScanner: Scanner = {
@@ -106,6 +127,10 @@ export const brokenDocLinksScanner: Scanner = {
         const resolved = resolveRel(baseDir, decoded)
         if (!resolved) continue // resolved to repo root
         if (fileSet.has(resolved) || dirSet.has(resolved)) continue
+        // Docs sites (VitePress, VuePress, Docusaurus, Starlight, Jekyll) route
+        // `./usage` to usage.md and `running/cli/` to a page somewhere under the
+        // content root. Accept an extensionless link that names an existing page.
+        if (!/\.[a-z0-9]+$/i.test(decoded) && pageExists(decoded, resolved, fileSet)) continue
         // MkDocs serves docs/async.md at /async/, so `../advanced/transports`
         // from that page means docs/advanced/transports.md.
         if (usesMkdocs && /\.md$/i.test(file)) {

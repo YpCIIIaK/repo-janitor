@@ -1,0 +1,3 @@
+{
+ "dead-export-packages/eslint-plugin-mobx/src/utils.ts:assert": "tp"
+}

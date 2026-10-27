@@ -1,0 +1,10 @@
+{
+ "dep-unused-@actions/github": "fp",
+ "dep-unused-@manypkg/cli": "fp",
+ "dep-unused-@vitest/coverage-istanbul": "fp",
+ "dep-unused-concurrently": "fp",
+ "dep-unused-fast-glob": "fp",
+ "dep-unused-npm-run-all2": "fp",
+ "insecure-react-dangerous-html-examples/.experimental/next-app-dir/src/app/server-action/page.tsx:71": "fp",
+ "insecure-react-dangerous-html-www/src/components/sponsors/SponsorBubbles.jsx:60": "fp"
+}

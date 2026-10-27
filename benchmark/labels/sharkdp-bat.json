@@ -1,0 +1,7 @@
+{
+ "bloat-assets/themes.bin": "fp",
+ "docker-root-tests/syntax-tests/source/Dockerfile/Dockerfile": "fp",
+ "insecure-innerhtml-dynamic-tests/benchmarks/highlighting-speed-src/jquery.js:1248": "fp",
+ "insecure-innerhtml-dynamic-tests/benchmarks/highlighting-speed-src/jquery.js:4773": "fp",
+ "insecure-py-eval-exec-tests/benchmarks/highlighting-speed-src/numpy_test_multiarray.py:1315": "fp"
+}

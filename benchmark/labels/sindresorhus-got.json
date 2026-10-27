@@ -1,0 +1,9 @@
+{
+ "commented-documentation/examples/advanced-creation.js:146": "fp",
+ "insecure-exec-interpolated-source/core/options.ts:3545": "fp",
+ "insecure-exec-interpolated-source/core/utils/is-unix-socket-url.ts:21": "fp",
+ "insecure-tls-verification-off-benchmark/index.ts:25": "fp",
+ "insecure-tls-verification-off-benchmark/index.ts:36": "fp",
+ "insecure-tls-verification-off-benchmark/index.ts:70": "fp",
+ "skiptest-test/zstd.ts:108": "fp"
+}

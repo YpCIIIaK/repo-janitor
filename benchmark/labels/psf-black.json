@@ -1,0 +1,16 @@
+{
+ "docker-root-Dockerfile": "tp",
+ "docs-drift-badge-README.md-6": "tp",
+ "insecure-py-eval-exec-tests/test_black.py:1011": "fp",
+ "insecure-py-os-system-tests/test_black.py:2297": "fp",
+ "insecure-py-os-system-tests/test_black.py:2304": "fp",
+ "insecure-py-pickle-load-src/black/cache.py:81": "fp",
+ "insecure-py-pickle-load-src/blib2to3/pgen2/grammar.py:124": "fp",
+ "insecure-py-pickle-load-src/blib2to3/pgen2/grammar.py:129": "fp",
+ "insecure-py-yaml-load-tests/data/cases/multiline_strings.py:304": "fp",
+ "insecure-py-yaml-load-tests/data/cases/multiline_strings.py:308": "fp",
+ "insecure-py-yaml-load-tests/data/cases/multiline_strings.py:314": "fp",
+ "insecure-py-yaml-load-tests/data/cases/multiline_strings.py:42": "fp",
+ "insecure-py-yaml-load-tests/data/cases/multiline_strings.py:46": "fp",
+ "insecure-py-yaml-load-tests/data/cases/multiline_strings.py:50": "fp"
+}

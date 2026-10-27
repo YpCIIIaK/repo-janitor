@@ -1,0 +1,13 @@
+{
+ "action-tag-.github/workflows/ci.yml-111": "tp",
+ "action-tag-first-party-.github/workflows/deploy-docs.yml-26": "tp",
+ "busfactor-src/helpers/helpers.color.ts": "tp",
+ "commented-src/core/core.registry.js:137": "fp",
+ "doclink-docs/charts/radar.md:110:../general/options": "fp",
+ "doclink-docs/getting-started/index.md:94:./usage": "fp",
+ "docs-drift-script-docs/getting-started/usage.md-499": "fp",
+ "docs-drift-script-docs/getting-started/usage.md-573": "fp",
+ "duplicate-src/helpers/helpers.canvas.ts-261": "tp",
+ "secret-entropy-docs/getting-started/usage.md:152": "fp",
+ "todo-src/core/core.datasetController.js:977": "tp"
+}

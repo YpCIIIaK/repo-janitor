@@ -90,6 +90,30 @@ function withoutComment(line: string): string {
  * Exported for tests: the rules are the whole product here, and each one earns
  * a case with a realistic workflow rather than a synthetic line.
  */
+/** Event names under the top-level `on:` key (inline, list or mapping form). */
+function topLevelTriggers(lines: string[]): Set<string> {
+  const out = new Set<string>()
+  const start = lines.findIndex((l) => /^["']?on["']?\s*:/.test(l))
+  if (start === -1) return out
+  const inline = lines[start].replace(/^["']?on["']?\s*:/, "").replace(/#.*$/, "").trim()
+  if (inline) {
+    for (const w of inline.replace(/[[\]"']/g, "").split(",")) if (w.trim()) out.add(w.trim())
+    return out
+  }
+  let childIndent = -1
+  for (let i = start + 1; i < lines.length; i++) {
+    const l = lines[i]
+    if (!l.trim() || l.trim().startsWith("#")) continue
+    const ind = l.length - l.trimStart().length
+    if (ind === 0) break
+    if (childIndent === -1) childIndent = ind
+    if (ind !== childIndent) continue
+    const m = l.trim().match(/^-?\s*["']?([a-z_]+)["']?/)
+    if (m) out.add(m[1])
+  }
+  return out
+}
+
 export function scanWorkflow(content: string): WorkflowFinding[] {
   const lines = content.split(/\r?\n/)
   const findings: WorkflowFinding[] = []
@@ -134,7 +158,9 @@ export function scanWorkflow(content: string): WorkflowFinding[] {
       const ref = uses[1]
       // Local (`./.github/actions/x`) and container (`docker://`) references are
       // not fetched from a third party, so pinning does not apply.
-      if (!ref.startsWith("./") && !ref.startsWith("docker://")) {
+      // `*anchor` is a YAML alias for an action pinned elsewhere in the file;
+      // `$/…` and `./…` are the repository's own actions.
+      if (!ref.startsWith("./") && !ref.startsWith("docker://") && !ref.startsWith("*") && !ref.startsWith("$")) {
         const atIdx = ref.lastIndexOf("@")
         const version = atIdx === -1 ? "" : ref.slice(atIdx + 1)
         const name = atIdx === -1 ? ref : ref.slice(0, atIdx)
@@ -177,7 +203,13 @@ export function scanWorkflow(content: string): WorkflowFinding[] {
 
   // Only meaningful for a file that actually defines jobs. A reusable workflow
   // fragment or an issue-template yaml that happens to live here is not one.
-  if (sawJobs && !hasTopLevelPermissions && !everyJobHasPermissions(lines)) {
+  // A reusable workflow (`on: workflow_call` only) runs with its caller's token
+  // and permissions; restricting them is the caller's job.
+  const reusableOnly = (() => {
+    const t = topLevelTriggers(lines)
+    return t.size === 1 && t.has("workflow_call")
+  })()
+  if (sawJobs && !hasTopLevelPermissions && !reusableOnly && !everyJobHasPermissions(lines)) {
     findings.push({ rule: "no-permissions", line: 1, evidence: "" })
   }
 

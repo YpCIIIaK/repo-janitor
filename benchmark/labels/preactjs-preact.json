@@ -1,0 +1,8 @@
+{
+ "dead-export-demo/people/store.ts:store": "fp",
+ "insecure-innerhtml-dynamic-test/browser/render.test.jsx:805": "fp",
+ "insecure-react-dangerous-html-demo/contenteditable.jsx:20": "fp",
+ "insecure-react-dangerous-html-test/browser/render.test.jsx:748": "fp",
+ "insecure-react-dangerous-html-test/browser/render.test.jsx:766": "fp",
+ "insecure-react-dangerous-html-test/fixtures/preact.js:228": "fp"
+}

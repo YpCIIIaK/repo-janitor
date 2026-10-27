@@ -1,0 +1,12 @@
+{
+ "busfactor-language/phpmailer.lang-sr_latn.php": "fp",
+ "commented-language/phpmailer.lang-fo.php:23": "fp",
+ "debug-src/POP3.php:440": "fp",
+ "debug-src/SMTP.php:373": "fp",
+ "docker-root-.github/actions/build-docs/Dockerfile": "fp",
+ "docker-untagged-.github/actions/build-docs/Dockerfile:1": "tp",
+ "duplicate-src/PHPMailer.php-3161": "tp",
+ "secret-entropy-examples/azure_xoauth2.phps:66": "fp",
+ "secret-entropy-examples/gmail_xoauth.phps:65": "fp",
+ "secret-private-key-examples/sendoauth2.phps:53": "fp"
+}

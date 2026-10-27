@@ -22,7 +22,7 @@ const STALE_DAYS = 365
  * bus-factor findings in the benchmark were one of these.
  */
 const LOW_STAKES_RE =
-  /(^|\/)(?:__tests__|tests?|spec|e2e|testdata|fixtures?|__fixtures__|examples?|playgrounds?|sandbox|bench(?:mark)?s?|docs?|scripts?|bin)\/|(^|\/)[^/]*(?:\.(?:test|spec|test-d|config|conf)\.[^/]+|_test\.\w+|_spec\.rb)$|(^|\/)test[^/]*\.\w+$|(^|\/)(?:conftest|setup|noxfile|gulpfile|gruntfile|karma\.conf)\.\w+$/i
+  /(^|\/)(?:__tests__|tests?|spec|e2e|testdata|fixtures?|__fixtures__|examples?|playgrounds?|sandbox|bench(?:mark)?s?|docs?|scripts?|bin)\/|(^|\/)[^/]*(?:\.(?:test|spec|test-d|config|conf)\.[^/]+|_test\.\w+|_spec\.rb)$|(^|\/)test[^/]*\.\w+$|(^|\/)(?:conftest|setup|noxfile|gulpfile|gruntfile|karma\.conf)\.\w+$|(^|\/)__init__\.py$|\.d\.[cm]?ts$|(^|\/)(?:language|languages|locales?|i18n|lang|translations?)\//i
 const MAX_TOTAL = 30
 
 function years(days: number): string {
