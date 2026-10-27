@@ -18,6 +18,8 @@ const MB = 1024 * 1024
 const LARGE_BYTES = 5 * MB // any file this big is suspicious regardless of type
 const MEDIA_BYTES = 2 * MB // media is expected to be larger; only flag the heavy ones
 const MAX_FINDINGS = 30
+const SMALL_ARTIFACT_BYTES = 100 * 1024
+const FIXTURE_DIR = /(^|\/)(?:tests?|__tests__|spec|fixtures?|__fixtures__|testdata|examples?)\//i
 
 // Archives, compiled binaries, installers, db dumps — these rarely belong in git
 // at all, so they're flagged regardless of size.
@@ -68,8 +70,9 @@ export const repoBloatScanner: Scanner = {
       const ext = extOf(norm)
       const size = ctx.fileSize ? await ctx.fileSize(file) : null
 
-      if (ARTIFACT_EXT.has(ext)) {
-        // A binary artifact in git — flag regardless of size.
+      if (ARTIFACT_EXT.has(ext) && !(FIXTURE_DIR.test(norm) && (size == null || size < SMALL_ARTIFACT_BYTES))) {
+        // A binary artifact in git, flagged at any size — except small test
+        // fixtures: a 264-byte .gz exercising a decompressor is the test.
         candidates.push({ file: norm, size, severity: "warning", kind: "artifact" })
       } else if (size != null && size >= LARGE_BYTES) {
         // Any oversized file (e.g. a giant JSON/CSV fixture) — flag by size.

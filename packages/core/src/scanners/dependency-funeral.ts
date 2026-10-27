@@ -17,7 +17,7 @@ import { parseFile, walk } from "../ast"
  * the scanner runs offline: it still reports unused deps from static analysis and
  * skips the registry-derived findings.
  */
-const SOURCE_RE = /\.(ts|tsx|js|jsx|mjs|mts|cts)$/
+const SOURCE_RE = /\.(ts|tsx|js|jsx|mjs|mts|cts|cjs)$/
 const YEAR_MS = 365 * 24 * 60 * 60 * 1000
 // A 2-year publish gap is a soft note (many micro-libs are simply feature-complete);
 // only a 3+ year gap is loud enough to call a likely-unmaintained risk.
@@ -187,7 +187,12 @@ export const dependencyFuneralScanner: Scanner = {
     const raw = await ctx.readFile("package.json")
     if (!raw) return []
 
-    let pkgJson: { dependencies?: Record<string, string>; scripts?: Record<string, string> }
+    let pkgJson: {
+      dependencies?: Record<string, string>
+      scripts?: Record<string, string>
+      private?: boolean
+      workspaces?: unknown
+    }
     try {
       pkgJson = JSON.parse(raw)
     } catch {
@@ -203,7 +208,11 @@ export const dependencyFuneralScanner: Scanner = {
 
     // A dep counts as used if imported in source, consumed by a framework runtime,
     // or referenced by a build script / config file (CLIs, plugins keyed by name).
+    // The private root of a monorepo holds tooling for its workspaces: a dep there
+    // is consumed by packages and scripts we don't attribute back to the root.
+    const monorepoRoot = pkgJson.private === true && (!!pkgJson.workspaces || ctx.files.includes("pnpm-workspace.yaml"))
     const isUsed = (name: string): boolean =>
+      monorepoRoot ||
       used.has(name) || FRAMEWORK_IMPLICIT.has(name) || toolingText.includes(name)
 
     for (const name of names) {

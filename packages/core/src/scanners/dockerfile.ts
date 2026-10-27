@@ -123,7 +123,11 @@ export const dockerfileScanner: Scanner = {
       }
 
       // Root-by-default: only meaningful if the file actually builds an image.
-      if (sawFrom && !hasNonRootUser && issues.length < MAX_TOTAL) {
+      // Dev containers, test harnesses, examples and packaging/tooling images
+      // run on a developer's machine or in CI, not as a service.
+      const notAService =
+        /(^|\/)(?:\.devcontainer|\.github|tests?|examples?|demos?|tools?|scripts?|extras|packaging|docs?)\//i.test(norm)
+      if (sawFrom && !hasNonRootUser && !notAService && issues.length < MAX_TOTAL) {
         issues.push({
           id: `docker-root-${norm}`,
           category: "hygiene",

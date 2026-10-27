@@ -55,7 +55,8 @@ const ASSIGN_RE =
   /(password|passwd|pwd|secret|token|api[_-]?key|access[_-]?key|client[_-]?secret|auth[_-]?token)["']?\s*[:=]\s*["`']([^"`'\s]{20,})["`']/i
 
 // Obvious non-secrets we never want to flag via the entropy path.
-const PLACEHOLDER_RE = /^(your|example|changeme|placeholder|redacted|dummy|test|sample|xxx+|<|\$\{|process\.env)/i
+const PLACEHOLDER_RE =
+  /^(your|example|changeme|placeholder|redacted|dummy|test|sample|xxx+|<|\$\{|\$\(|\{\{|\{%|%|process\.env|random|1234|this|abcd)/i
 
 // Values that are built, not stored: string interpolation (`invalid-${n}`,
 // Ruby `"#{secret}x"`) and UUIDs (WebDAV lock tokens, request ids).
@@ -88,7 +89,24 @@ const LOW_CONFIDENCE_NAME =
 
 /** True when a path looks like test/example/fixture/docs content. */
 function isLowConfidenceSecretFile(file: string): boolean {
-  return LOW_CONFIDENCE_DIR.test(file) || LOW_CONFIDENCE_NAME.test(file)
+  return LOW_CONFIDENCE_DIR.test(file) || LOW_CONFIDENCE_NAME.test(file) || DOC_FILE.test(file)
+}
+
+/** Prose and markup: a value there is shown to a reader, not loaded by a program. */
+const DOC_FILE = /\.(?:md|mdx|markdown|rst|adoc|txt)$/i
+
+/** Bundled third-party code: a committed Yarn release, PnP loader, minified build. */
+const VENDORED = /(^|\/)\.yarn\/(?:releases|plugins|sdks)\/|\.pnp\.c?js$|\.min\.[cm]?js$|(^|\/)vendor\//i
+
+/**
+ * A private-key header is a key only where the key starts: at the beginning of
+ * the line or as the start of an assigned string. Not when code assembles a
+ * PEM around an exported key (`\`-----BEGIN…\n${body}\``) and not when a
+ * comment tells you what a key looks like.
+ */
+function isRealKeyHeader(line: string): boolean {
+  if (/\$\{|\\n/.test(line)) return false
+  return /^\s*(?:(?:export\s+)?(?:const|let|var|final|static)\s+)?(?:[\w.$[\]'"]+\s*:?=?\s*[:=]\s*)?(?:[`'"]|""")?\s*-----BEGIN/.test(line)
 }
 
 /**
@@ -140,12 +158,14 @@ function findSecretsInLine(line: string): LineHit[] {
   for (const det of DETECTORS) {
     const hit = det.re.exec(line)
     // Skip canonical documentation example keys (AWS's "EXAMPLE" convention).
-    if (hit && !KNOWN_EXAMPLE_RE.test(hit[0])) {
+    if (hit && !KNOWN_EXAMPLE_RE.test(hit[0]) && (det.id !== "private-key" || isRealKeyHeader(line))) {
       hits.push({ id: det.id, token: hit[0], label: det.label, entropyHit: false })
     }
   }
   if (hits.length > 0) return hits // don't double-flag a named hit via entropy
 
+  // Doctest / REPL lines document usage: `>>> tqdm(token='…')`.
+  if (/^\s*(?:>>>|\.\.\.)\s/.test(line)) return hits
   const m = line.match(ASSIGN_RE)
   if (m) {
     const value = m[2]
@@ -163,7 +183,7 @@ function findSecretsInLine(line: string): LineHit[] {
 
 /** Should this path be skipped entirely (binary/lockfile/.env.example)? */
 function isSkippedSecretFile(file: string): boolean {
-  return BINARY_EXT.test(file) || SKIP_NAME.test(file) || file.endsWith(".env.example")
+  return BINARY_EXT.test(file) || SKIP_NAME.test(file) || file.endsWith(".env.example") || VENDORED.test(file)
 }
 
 const HISTORY_MAX_COMMITS = 1000
@@ -194,6 +214,10 @@ export const secretsScanner: Scanner = {
         const line = lines[i]
         const lineNo = i + 1
         for (const hit of findSecretsInLine(line)) {
+          // A bare high-entropy string in a test, example or doc is a sample.
+          // Named provider patterns still report there, as info.
+          if (hit.entropyHit && lowConf) continue
+          if (hit.id === "private-key" && isLowConfidenceSecretFile(file)) continue
           flaggedTokens.add(hit.token)
           const ageDays = await ctx.git.blameAgeDays(file, lineNo)
           issues.push(
@@ -250,6 +274,8 @@ export const secretsScanner: Scanner = {
 
         const lowConf = isLowConfidenceSecretFile(add.file)
         for (const hit of findSecretsInLine(add.text)) {
+          if (hit.entropyHit && lowConf) continue
+          if (hit.id === "private-key" && isLowConfidenceSecretFile(add.file)) continue
           if (flaggedTokens.has(hit.token)) continue // still in the tree → already flagged
           const key = `${hit.id}:${hit.token}`
           if (seen.has(key)) continue

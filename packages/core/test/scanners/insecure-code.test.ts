@@ -161,7 +161,7 @@ describe("insecureCodeScanner", () => {
   })
 
   it("lowers severity in test files, where the pattern is often deliberate", async () => {
-    const issues = await run({ "src/api.test.ts": "db.query(`SELECT * FROM users WHERE id = ${id}`)\n" })
+    const issues = await run({ "src/api.test.ts": "localStorage.setItem('token', t)\n" })
     expect(issues).toHaveLength(1)
     expect(issues[0].detail).toContain("test file")
   })
@@ -231,5 +231,32 @@ describe("insecureCodeScanner", () => {
     expect(bad).toHaveLength(1)
     expect(bad[0].id).toContain("document-write-dynamic")
     expect(await run({ "src/b.ts": 'document.write("<p>ok</p>")\n' })).toHaveLength(0)
+  })
+})
+
+describe("insecure-code — 100-repo benchmark false positives", () => {
+  const run = (files: Record<string, string>) => insecureCodeScanner.run(makeContext({ files }))
+
+  it.each([
+    ["src/url.ts", "const g = /^(?<p>[^:]+):/v.exec(`${url.pathname}${url.search}`)?.groups\n"],
+    ["src/db.ts", "db.exec(`create TABLE if not exists ${ddl};`, cb)\n"],
+    ["src/ws.js", "const digest = createHash('sha1').update(key + GUID).digest('base64')\n"],
+    ["src/md5.ts", "return createHash('md5').update(bytes).digest()\n"],
+    ["src/tbtools.py", "class C:\n    def eval(self, code: str):\n        return self.console.eval(code)\n"],
+    ["src/_make.py", "bytecode = compile(script, filename, 'exec')\neval(bytecode, globs, locs)\n"],
+    ["tests/test_black.py", "py3_only = \"exec(x, end=y)\"\n"],
+    ["src/jsx/types.ts", "interface A {\n  dangerouslySetInnerHTML?: {\n    __html: string\n  }\n}\n"],
+    ["src/Style.jsx", "<style dangerouslySetInnerHTML={{\n  __html: `.a { color: red }`\n}} />\n"],
+    ["examples/ssl.js", "new WebSocket(url, { rejectUnauthorized: false })\n"],
+    ["scripts/bump.js", "execSync(`npm version ${version}`)\n"],
+    ["test/data/jquery-3.7.1.js", "tmp.innerHTML = wrap[1] + x + wrap[2];\n"],
+  ])("ignores %s", async (file, code) => {
+    expect(await run({ [file]: code })).toEqual([])
+  })
+
+  it("still flags a real shell interpolation and a password hashed with MD5", async () => {
+    expect(await run({ "src/run.js": "exec(`git clone ${url}`)\n" })).toHaveLength(1)
+    expect(await run({ "src/auth.js": "const password = createHash('md5').update(pw).digest('hex')\n" })).toHaveLength(1)
+    expect(await run({ "src/v.py": "eval(user_input)\n" })).toHaveLength(1)
   })
 })

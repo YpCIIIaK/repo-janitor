@@ -82,7 +82,7 @@ const JS_RULES: Rule[] = [
 ]
 const PY_RULES: Rule[] = [
   { re: /@(?:pytest\.mark\.skip|unittest\.skip)\b/, severity: "info", label: "skipped test (@skip)" },
-  { re: /\b(?:self\.skipTest|pytest\.skip)\s*\(/, severity: "info", label: "skipped test (skip call)" },
+
 ]
 
 const PREFILTER =
@@ -103,6 +103,8 @@ export const skippedTestsScanner: Scanner = {
       if (issues.length >= MAX_TOTAL) break
       const norm = file.replace(/\\/g, "/")
       if (!SOURCE_RE.test(norm) || norm.includes(".min.")) continue
+      // Fixtures for a test runner's own `.only`/`.skip` handling (mocha).
+      if (/(^|\/)fixtures?\//i.test(norm)) continue
 
       const content = await ctx.readFile(file)
       if (!content) continue

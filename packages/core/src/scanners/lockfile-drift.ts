@@ -84,9 +84,12 @@ const LOCK_SPECS: LockSpec[] = [
 function isLibraryManifest(manifest: string, content: string, files: string[]): boolean {
   const norm = files.map((f) => f.replace(/\\/g, "/"))
   if (manifest === "Cargo.toml") {
+    // Any binary target in the workspace makes it an application; a workspace
+    // of library crates (rayon, thiserror's test crates) is still a library.
     const hasBin =
-      /^\s*\[\[bin\]\]/m.test(content) || norm.some((f) => f === "src/main.rs" || f.startsWith("src/bin/"))
-    return !hasBin && !/^\s*\[workspace\]/m.test(content)
+      /^\s*\[\[bin\]\]/m.test(content) ||
+      norm.some((f) => /(^|\/)src\/main\.rs$|(^|\/)src\/bin\//.test(f) && !/(^|\/)(?:tests?|examples?|benches)\//.test(f))
+    return !hasBin
   }
   if (manifest === "Gemfile") return norm.some((f) => /^[^/]+\.gemspec$/.test(f))
   if (manifest === "composer.json") {

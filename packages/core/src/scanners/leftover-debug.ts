@@ -29,7 +29,7 @@ const EXAMPLE_RE = /(^|\/)examples?\/|(?:^|\/)example\.[cm]?[jt]sx?$/i
  * In the benchmark every console.log/print in these was intentional.
  */
 const TOOLING_RE =
-  /(^|\/)(?:bench(?:mark)?s?|scripts?|bin|tools?|sandbox|playgrounds?|fixtures?|__fixtures__|docs?)\/|\.test-d\.tsx?$|\.d\.ts$|(^|\/)build\.rs$|(^|\/)play(?:ground)?\.[cm]?[jt]sx?$/i
+  /(^|\/)(?:bench(?:mark)?s?|perf(?:ormance)?|internal|scripts?|bin|tools?|[\w-]*_assets|sandbox|playgrounds?|fixtures?|__fixtures__|docs?)\/|\.test-d\.tsx?$|\.d\.ts$|(^|\/)build\.rs$|(^|\/)play(?:ground)?\.[cm]?[jt]sx?$/i
 /** Program entry points where printing is the program's job (only breakpoints count). */
 const ENTRY_FILE_RE = /(^|\/)(?:__main__|_?main|cli)\.py$|(^|\/)src\/main\.rs$|(^|\/)src\/bin\//i
 const DEBUG_METHODS = new Set(["log", "debug", "trace", "dir", "table"])
@@ -117,7 +117,7 @@ const LANG_DEBUG: Record<string, DebugRule[]> = {
     { re: /\bbreakpoint\s*\(/g, severity: "warning", label: "breakpoint()" },
     { re: /\bi?pdb\.set_trace\s*\(/g, severity: "warning", label: "pdb.set_trace()" },
     // Not `console.print(` (rich) or other methods named print.
-    { re: /(?<![.\w])print\s*\(/g, severity: "info", label: "print()" },
+    { re: /(?<![.\w])print\s*\((?![^\n]*file\s*=\s*sys\.std(?:err|out))/g, severity: "info", label: "print()" },
     { re: /(?<![.\w])pprint\s*\(/g, severity: "info", label: "pprint()" },
   ],
   go: [{ re: /\bfmt\.Print(?:ln|f)?\s*\(/g, severity: "info", label: "fmt.Print" }],
@@ -128,7 +128,7 @@ const LANG_DEBUG: Record<string, DebugRule[]> = {
   rb: [{ re: /\bbinding\.(?:pry|irb)\b/g, severity: "warning", label: "binding.pry" }],
   php: [
     { re: /\b(?:dd|dump)\s*\(/g, severity: "warning", label: "dd()" },
-    { re: /\b(?:var_dump|print_r|var_export)\s*\(/g, severity: "info", label: "var_dump()" },
+    { re: /\bvar_dump\s*\(|\b(?:print_r|var_export)\s*\((?![^\n]*,\s*true\s*\))/g, severity: "info", label: "var_dump()" },
   ],
 }
 

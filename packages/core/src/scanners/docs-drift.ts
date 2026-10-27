@@ -31,7 +31,12 @@ import type { Issue } from "../schema"
 const MAX_ISSUES = 25
 
 /** Docs worth reading. Deliberately not every markdown file in the repo. */
-const DOC_RE = /^(readme|contributing|docs\/.*|\.github\/(readme|contributing))\.mdx?$/i
+// READMEs and contributor guides: the documents that tell someone to run a
+// command in THIS repository. Not guides for the reader's own project
+// (fastify's Getting-Started `npm start`), not docs comparing tools (execa's
+// bash.md), not pasted terminal output (`yarn run v1.22.17`).
+const DOC_RE =
+  /^(?:(?:[\w.-]+\/)*readme|contributing|\.github\/(?:readme|contributing)|docs?\/(?:[\w-]+\/)*(?:contributing|development|developing|hacking|building|setup))\.mdx?$/i
 
 /**
  * Package-manager subcommands, which are never scripts.
