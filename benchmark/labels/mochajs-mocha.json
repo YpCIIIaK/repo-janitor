@@ -4,6 +4,7 @@
  "commented-test/integration/fixtures/multiple-done-async.fixture.js:6": "tp",
  "dead-export-docs/src/content.config.ts:collections": "fp",
  "dead-export-lib/nodejs/file-unloader.js:unloadFile": "fp",
+ "debug-lib/cli/cli.js:35": "fp",
  "dep-unused-find-up-simple": "fp",
  "dep-unused-is-path-inside": "fp",
  "dep-unused-is-unicode-supported": "fp",

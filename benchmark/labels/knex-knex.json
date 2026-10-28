@@ -1,6 +1,7 @@
 {
  "ci-swallowed-.github/workflows/coverage.yml-84": "tp",
  "ci-swallowed-.github/workflows/integration-tests.yml-121": "tp",
+ "debug-lib/logger.js:42": "fp",
  "insecure-exec-interpolated-scripts/build.js:90": "fp",
  "insecure-exec-interpolated-test/cli/cli-test-utils.js:80": "fp",
  "insecure-exec-interpolated-test/jake/jakelib/migrate-test.js:39": "fp",

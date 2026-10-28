@@ -1,3 +1,4 @@
 {
- "bloat-test/mime-node/fixtures/attachment.bin": "fp"
+ "bloat-test/mime-node/fixtures/attachment.bin": "fp",
+ "debug-src/shared/index.ts:1068": "fp"
 }

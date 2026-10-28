@@ -1,10 +1,10 @@
 {
-  "overall": 0.878,
+  "overall": 0.879,
   "scanners": {
     "eol-runtime": 1,
     "todo-debt": 1,
     "dead-code": 0.563,
-    "leftover-debug": 0.1,
+    "leftover-debug": 0.25,
     "broken-doc-links": 0.9,
     "bus-factor": 1,
     "commented-code": 0.792,

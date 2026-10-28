@@ -1,3 +1,4 @@
 {
+ "debug-src/core.go:328": "fp",
  "secret-entropy-.goreleaser.yml:66": "fp"
 }

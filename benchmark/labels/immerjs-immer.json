@@ -1,5 +1,6 @@
 {
  "ci-no-pr-trigger": "fp",
  "commented-perf-testing/read-cpuprofile.js:439": "tp",
+ "debug-__performance_tests__/measure.mjs:19": "fp",
  "skiptest-__tests__/regressions.js:215": "tp"
 }

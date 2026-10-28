@@ -1,0 +1,4 @@
+{
+ "debug-packages/babel-preset-solid/test.js:15": "fp",
+ "debug-packages/solid-ssr/static/index.js:18": "fp"
+}

@@ -1,5 +1,6 @@
 {
  "bloat-assets/themes.bin": "fp",
+ "debug-assets/theme_preview.rs:4": "fp",
  "docker-root-tests/syntax-tests/source/Dockerfile/Dockerfile": "fp",
  "insecure-innerhtml-dynamic-tests/benchmarks/highlighting-speed-src/jquery.js:1248": "fp",
  "insecure-innerhtml-dynamic-tests/benchmarks/highlighting-speed-src/jquery.js:4773": "fp",

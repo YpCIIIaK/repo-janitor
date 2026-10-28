@@ -1,4 +1,5 @@
 {
+ "debug-rich/__init__.py:53": "fp",
  "insecure-py-eval-exec-tests/test_traceback.py:195": "fp",
  "insecure-py-shell-true-tools/make_width_tables.py:22": "fp",
  "insecure-py-shell-true-tools/make_width_tables.py:53": "fp"

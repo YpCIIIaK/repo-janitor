@@ -3,6 +3,7 @@
  "dead-symbol-src/werkzeug/http.py:344": "tp",
  "dead-symbol-src/werkzeug/http.py:832": "tp",
  "debug-src/werkzeug/serving.py:764": "fp",
+ "debug-src/werkzeug/serving.py:767": "fp",
  "duplicate-src/werkzeug/datastructures/__init__.py-31": "tp",
  "insecure-py-eval-exec-src/werkzeug/debug/tbtools.py:388": "fp",
  "todo-src/werkzeug/datastructures/range.py:193": "tp"

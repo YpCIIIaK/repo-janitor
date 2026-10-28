@@ -1,6 +1,7 @@
 {
  "bloat-packages/socket.io/test/fixtures/big.json": "tp",
  "commented-docs/engine.io-protocol/v3-test-suite/test-suite.js:269": "fp",
+ "debug-packages/engine.io-client/support/bundle-size.js:27": "fp",
  "docker-root-examples/cluster-traefik/server/Dockerfile": "fp",
  "env-no-example": "fp",
  "eol-node-examples/cluster-httpd/server/Dockerfile-1": "tp",

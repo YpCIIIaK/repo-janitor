@@ -1,3 +1,4 @@
 {
- "bloat-examples/compression/data/products.json.gz": "fp"
+ "bloat-examples/compression/data/products.json.gz": "fp",
+ "debug-axum-extra/test_files/script.js:1": "fp"
 }

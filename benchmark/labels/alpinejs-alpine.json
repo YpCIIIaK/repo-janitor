@@ -1,5 +1,6 @@
 {
  "dead-export-packages/alpinejs/src/binds.js:addVirtualBindings": "tp",
+ "debug-packages/morph/src/old_morph.js:176": "tp",
  "insecure-innerhtml-dynamic-packages/morph/src/morph.js:564": "fp",
  "insecure-new-function-packages/alpinejs/src/evaluator.js:215": "tp"
 }

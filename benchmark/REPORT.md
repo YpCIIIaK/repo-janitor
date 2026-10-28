@@ -1,13 +1,13 @@
 # Scanner benchmark
 
-120/120 repos scanned offline at pinned commits. Overall precision **88%** (303 TP, 42 FP, 4189 unlabelled, 3 lost TP).
+120/120 repos scanned offline at pinned commits. Overall precision **88%** (305 TP, 42 FP, 3889 unlabelled, 3 lost TP).
 
 ### By scanner
 
 | | precision | TP | FP | unlabelled | lost TP |
 |---|---:|---:|---:|---:|---:|
 | env-lifecycle | 0% | 0 | 3 | 4 | 0 |
-| leftover-debug | 10% | 1 | 9 | 300 | 0 |
+| leftover-debug | 25% | 3 | 9 | 0 | 0 |
 | ci-health | 43% | 3 | 4 | 3 | 0 |
 | insecure-code | 47% | 7 | 8 | 6 | 0 |
 | dead-code | 56% | 9 | 7 | 30 | 0 |
@@ -37,9 +37,9 @@
 | insecure-innerhtml-dynamic | 0% | 0 | 1 | 0 | 0 |
 | insecure-py-eval-exec | 0% | 0 | 1 | 6 | 0 |
 | insecure-py-os-system | 0% | 0 | 2 | 0 | 0 |
-| debug-leftover | 10% | 1 | 9 | 300 | 0 |
 | insecure-py-pickle-load | 20% | 1 | 4 | 0 | 0 |
 | ci-silenced-failure | 25% | 1 | 3 | 3 | 0 |
+| debug-leftover | 25% | 3 | 9 | 0 | 0 |
 | dead-export | 56% | 9 | 7 | 30 | 0 |
 | commented-code | 79% | 19 | 5 | 181 | 0 |
 | bloat | 80% | 4 | 1 | 15 | 0 |

@@ -1,3 +1,4 @@
 {
- "bloat-tests/Composer/Test/Util/Fixtures/Zip/empty.zip": "fp"
+ "bloat-tests/Composer/Test/Util/Fixtures/Zip/empty.zip": "fp",
+ "debug-src/Composer/Installer.php:391": "fp"
 }

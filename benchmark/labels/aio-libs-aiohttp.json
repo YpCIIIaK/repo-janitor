@@ -1,5 +1,6 @@
 {
  "ci-disabled-.github/workflows/ci-cd.yml-49": "fp",
+ "debug-aiohttp/client_reqrep.py:659": "fp",
  "insecure-py-eval-exec-tools/gen.py:18": "fp",
  "secret-entropy-tests/test_client_functional.py:5871": "fp"
 }

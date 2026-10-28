@@ -1,5 +1,7 @@
 {
  "bloat-www/static/img/you-cant/log_exp_with_cache.mp4": "tp",
+ "debug-src/htmx.js:892": "fp",
+ "debug-www/static/src/htmx.js:892": "fp",
  "insecure-eval-dynamic-src/htmx.js:865": "tp",
  "insecure-eval-dynamic-www/static/src/htmx.js:865": "fp",
  "insecure-eval-dynamic-www/themes/htmx-theme/static/js/htmx.js:865": "fp",
