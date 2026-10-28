@@ -25,6 +25,11 @@ function tagOf(image: string): string | null {
   return colon >= 0 ? lastSeg.slice(colon + 1) : null
 }
 
+const THROWAWAY_IMAGE_RE =
+  /(^|\/)(?:\.devcontainer|\.clusterfuzzlite|\.oss-[\w-]+|tests?|e2e|integration|interop|fixtures?|testdata|examples?|demos?)\//i
+const NOT_A_SERVICE_RE =
+  /(^|\/)(?:\.[\w-]+|tests?|e2e|integration|interop|fixtures?|testdata|examples?|demos?|tools?|scripts?|extras|packaging|docs?)\//i
+
 export const dockerfileScanner: Scanner = {
   id: "dockerfile",
   category: "hygiene",
@@ -35,6 +40,11 @@ export const dockerfileScanner: Scanner = {
       if (issues.length >= MAX_TOTAL) break
       const norm = file.replace(/\\/g, "/")
       if (!DOCKERFILE_RE.test(norm)) continue
+      // Dev containers, test harnesses, examples and fuzzing images: every finding
+      // on them in the benchmark was noise. (Tooling images in scripts/ or
+      // .github/actions still get tag checks — an unpinned base breaks CI too.)
+      if (THROWAWAY_IMAGE_RE.test(norm)) continue
+      const notAService = NOT_A_SERVICE_RE.test(norm)
 
       const content = await ctx.readFile(file)
       if (!content) continue
@@ -125,8 +135,6 @@ export const dockerfileScanner: Scanner = {
       // Root-by-default: only meaningful if the file actually builds an image.
       // Dev containers, test harnesses, examples and packaging/tooling images
       // run on a developer's machine or in CI, not as a service.
-      const notAService =
-        /(^|\/)(?:\.devcontainer|\.github|tests?|examples?|demos?|tools?|scripts?|extras|packaging|docs?)\//i.test(norm)
       if (sawFrom && !hasNonRootUser && !notAService && issues.length < MAX_TOTAL) {
         issues.push({
           id: `docker-root-${norm}`,

@@ -61,6 +61,8 @@ function isLocalRelative(target: string): boolean {
   // `[me](someone@example.com)` is an e-mail missing its `mailto:`, which a
   // reader still recognises; it is not a file that moved.
   if (/^[^/]+@[^/]+\.[a-z]{2,}$/i.test(target)) return false
+  // `npmjs.com/package/debug`: a URL missing its scheme, not a file.
+  if (/^(?:www\.)?[\w-]+\.(?:com|org|net|io|dev|app|co|me|sh|rs|js)(?:\/|$)/i.test(target)) return false
   return true
 }
 
@@ -101,6 +103,9 @@ export const brokenDocLinksScanner: Scanner = {
       if (issues.length >= MAX_TOTAL) break
       const norm = file.replace(/\\/g, "/")
       if (!MD_RE.test(norm)) continue
+      // Parser fixtures and translated copies of the docs (docs/bn-BD/…), whose
+      // links mirror the source language and are fixed upstream, not here.
+      if (/(^|\/)(?:testdata|fixtures?|__fixtures__)\/|(^|\/)docs?\/[a-z]{2}(?:-[A-Za-z]{2,4})?\//.test(norm)) continue
 
       const raw = await ctx.readFile(file)
       if (!raw || !raw.includes("](")) continue

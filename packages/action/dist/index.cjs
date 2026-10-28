@@ -26863,7 +26863,7 @@ var require_lib4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-YJV5SM5B.js
+// ../cli/dist/chunk-V72BWVWA.js
 var import_fs2 = require("fs");
 
 // ../../node_modules/.pnpm/tinyglobby@0.2.17/node_modules/tinyglobby/dist/index.mjs
@@ -45593,7 +45593,7 @@ function date4(params) {
 // ../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/external.js
 config(en_default());
 
-// ../cli/dist/chunk-YJV5SM5B.js
+// ../cli/dist/chunk-V72BWVWA.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -69905,7 +69905,13 @@ var issueSchema = external_exports.object({
    */
   scanner: external_exports.string().optional(),
   /** Specific check within the scanner (see rules.ts); stamped by the engine. */
-  rule: external_exports.string().optional()
+  rule: external_exports.string().optional(),
+  /**
+   * How often this kind of finding is right, measured on the labelled benchmark
+   * (see confidence.ts). `low` findings are hidden by default and left out of
+   * the score. Stamped by the engine; optional for older reports.
+   */
+  confidence: external_exports.enum(["high", "medium", "low"]).optional()
 });
 var repoProfileSchema = external_exports.object({
   /** Total files the scan walked (after ignore globs). */
@@ -69948,6 +69954,12 @@ var scanReportSchema = external_exports.object({
   score: external_exports.number().int().min(0).max(100),
   grade: gradeSchema,
   issues: external_exports.array(issueSchema),
+  /**
+   * Findings from rules the benchmark shows are often wrong. Kept out of
+   * `issues` (and so out of the score, counts and gates) but shipped so a
+   * reader can still opt in to see them.
+   */
+  lowConfidence: external_exports.array(issueSchema).optional(),
   diagnostics: external_exports.object({
     completedScanners: external_exports.array(external_exports.string()),
     failedScanners: external_exports.array(external_exports.string()),
@@ -70205,6 +70217,71 @@ function ruleOf(issue2) {
   var _a22;
   for (const d2 of DEFS) if (d2.test.test(issue2.id)) return d2.rule;
   return (_a22 = issue2.scanner) != null ? _a22 : "other";
+}
+var RULE_PRECISION = {
+  "bloat": { tp: 6, fp: 2 },
+  "bus-factor": { tp: 22, fp: 0 },
+  "ci-disabled": { tp: 2, fp: 1 },
+  "ci-no-pr-trigger": { tp: 1, fp: 2 },
+  "ci-silenced-failure": { tp: 2, fp: 5 },
+  "ci-swallowed": { tp: 2, fp: 0 },
+  "ci-tests-not-run": { tp: 0, fp: 1 },
+  "commented-code": { tp: 20, fp: 7 },
+  "config-conflict": { tp: 10, fp: 0 },
+  "dead-export": { tp: 10, fp: 9 },
+  "debug-leftover": { tp: 4, fp: 11 },
+  "dep-unused": { tp: 0, fp: 3 },
+  "doc-link": { tp: 9, fp: 1 },
+  "docker-latest": { tp: 2, fp: 0 },
+  "docker-root": { tp: 3, fp: 1 },
+  "docker-untagged": { tp: 1, fp: 0 },
+  "docs-badge": { tp: 2, fp: 0 },
+  "duplicate": { tp: 29, fp: 2 },
+  "env-dead": { tp: 0, fp: 3 },
+  "env-no-example": { tp: 0, fp: 6 },
+  "eol-node": { tp: 21, fp: 0 },
+  "eol-python": { tp: 15, fp: 0 },
+  "eol-runner": { tp: 2, fp: 0 },
+  "hygiene-no-ci": { tp: 1, fp: 0 },
+  "hygiene-no-license": { tp: 2, fp: 0 },
+  "hygiene-no-readme": { tp: 1, fp: 0 },
+  "insecure-eval-dynamic": { tp: 1, fp: 1 },
+  "insecure-exec-interpolated": { tp: 1, fp: 1 },
+  "insecure-innerhtml-dynamic": { tp: 0, fp: 1 },
+  "insecure-new-function": { tp: 3, fp: 3 },
+  "insecure-py-eval-exec": { tp: 0, fp: 2 },
+  "insecure-py-os-system": { tp: 0, fp: 2 },
+  "insecure-py-pickle-load": { tp: 1, fp: 5 },
+  "insecure-py-shell-true": { tp: 1, fp: 0 },
+  "insecure-py-verify-false": { tp: 1, fp: 0 },
+  "insecure-py-yaml-load": { tp: 0, fp: 2 },
+  "insecure-react-dangerous-html": { tp: 1, fp: 2 },
+  "insecure-sql-interpolated": { tp: 1, fp: 3 },
+  "insecure-tls-verification-off": { tp: 0, fp: 1 },
+  "insecure-weak-hash": { tp: 0, fp: 1 },
+  "lockfile-missing": { tp: 9, fp: 1 },
+  "secret-generic": { tp: 0, fp: 1 },
+  "secret-history": { tp: 0, fp: 1 },
+  "skipped-test": { tp: 11, fp: 1 },
+  "todo": { tp: 45, fp: 0 },
+  "workflow-action-tag": { tp: 38, fp: 0 },
+  "workflow-action-tag-first-party": { tp: 50, fp: 0 },
+  "workflow-no-permissions": { tp: 22, fp: 0 },
+  "workflow-pr-target-checkout": { tp: 2, fp: 0 },
+  "workflow-script-injection": { tp: 0, fp: 1 }
+};
+var MIN_LABELLED = 3;
+var MIN_LABELLED_HIGH = 5;
+var HIGH = 0.8;
+var LOW = 0.5;
+function confidenceOf(rule) {
+  const p2 = RULE_PRECISION[rule];
+  const n = p2 ? p2.tp + p2.fp : 0;
+  if (!p2 || n < MIN_LABELLED) return "medium";
+  const precision = (p2.tp + 1) / (n + 2);
+  if (precision >= HIGH && n >= MIN_LABELLED_HIGH) return "high";
+  if (precision < LOW) return "low";
+  return "medium";
 }
 var CONFIG_FILENAME = ".repo-anti-rot.json";
 var DEFAULT_WEIGHTS = { critical: 10, warning: 3, info: 0.25, infoCap: 10 };
@@ -70773,14 +70850,14 @@ var DETECTORS = [
   { id: "private-key", label: "Private key", re: /-----BEGIN (?:RSA |EC |OPENSSH |DSA |PGP )?PRIVATE KEY-----/ }
 ];
 var ASSIGN_RE = /(password|passwd|pwd|secret|token|api[_-]?key|access[_-]?key|client[_-]?secret|auth[_-]?token)["']?\s*[:=]\s*["`']([^"`'\s]{20,})["`']/i;
-var PLACEHOLDER_RE = /^(your|example|changeme|placeholder|redacted|dummy|test|sample|xxx+|<|\$\{|\$\(|\{\{|\{%|%|process\.env|random|1234|this|abcd)/i;
+var PLACEHOLDER_RE = /^(your|example|changeme|placeholder|redacted|dummy|test|sample|xxx+|<|\$|\(\?|\{\{|\{%|%|process\.env|random|1234|this|abcd)/i;
 var NOT_A_SECRET_RE = /\$\{|#\{|\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b/i;
 var KNOWN_EXAMPLE_RE = /EXAMPLE/;
 var BINARY_EXT = /\.(png|jpe?g|gif|webp|ico|bmp|pdf|zip|gz|tar|woff2?|ttf|eot|mp[34]|mov|wasm)$/i;
 var SKIP_NAME = /(?:^|\/)(package-lock\.json|pnpm-lock\.yaml|yarn\.lock)$/;
 var NUL = String.fromCharCode(0);
 var MAX_BYTES = 1e6;
-var LOW_CONFIDENCE_DIR = /(?:^|\/)(?:tests?|__tests__|__mocks__|spec|specs?|e2e|fixtures?|__fixtures__|testdata|mocks?|examples?|samples?|docs?)\//i;
+var LOW_CONFIDENCE_DIR = /(?:^|\/)(?:t|tests?|__tests__|__mocks__|spec|specs?|e2e|integration|testserver|test-utils|fixtures?|__fixtures__|testdata|mocks?|examples?|samples?|docs?)\//i;
 var LOW_CONFIDENCE_NAME = /(?:^|[/._-])(?:test|tests|spec|specs|example|examples|sample|samples|fixture|fixtures|mock|mocks|dummy|stub|demo)\.[a-z0-9]+$/i;
 function isLowConfidenceSecretFile(file2) {
   return LOW_CONFIDENCE_DIR.test(file2) || LOW_CONFIDENCE_NAME.test(file2) || DOC_FILE.test(file2);
@@ -73074,6 +73151,7 @@ function isLocalRelative(target) {
   if (/^([a-z][a-z0-9+.-]*:|\/\/|#|\/|data:)/i.test(target)) return false;
   if (/[{}$<>%]/.test(target)) return false;
   if (/^[^/]+@[^/]+\.[a-z]{2,}$/i.test(target)) return false;
+  if (/^(?:www\.)?[\w-]+\.(?:com|org|net|io|dev|app|co|me|sh|rs|js)(?:\/|$)/i.test(target)) return false;
   return true;
 }
 function pageExists(target, resolved, files) {
@@ -73110,6 +73188,7 @@ var brokenDocLinksScanner = {
         if (issues.length >= MAX_TOTAL2) break;
         const norm = file2.replace(/\\/g, "/");
         if (!MD_RE.test(norm)) continue;
+        if (/(^|\/)(?:testdata|fixtures?|__fixtures__)\/|(^|\/)docs?\/[a-z]{2}(?:-[A-Za-z]{2,4})?\//.test(norm)) continue;
         const raw = yield ctx.readFile(file2);
         if (!raw || !raw.includes("](")) continue;
         const text = stripCode(raw);
@@ -73783,6 +73862,8 @@ function tagOf(image) {
   const colon = lastSeg.lastIndexOf(":");
   return colon >= 0 ? lastSeg.slice(colon + 1) : null;
 }
+var THROWAWAY_IMAGE_RE = /(^|\/)(?:\.devcontainer|\.clusterfuzzlite|\.oss-[\w-]+|tests?|e2e|integration|interop|fixtures?|testdata|examples?|demos?)\//i;
+var NOT_A_SERVICE_RE = /(^|\/)(?:\.[\w-]+|tests?|e2e|integration|interop|fixtures?|testdata|examples?|demos?|tools?|scripts?|extras|packaging|docs?)\//i;
 var dockerfileScanner = {
   id: "dockerfile",
   category: "hygiene",
@@ -73793,6 +73874,8 @@ var dockerfileScanner = {
         if (issues.length >= MAX_TOTAL4) break;
         const norm = file2.replace(/\\/g, "/");
         if (!DOCKERFILE_RE.test(norm)) continue;
+        if (THROWAWAY_IMAGE_RE.test(norm)) continue;
+        const notAService = NOT_A_SERVICE_RE.test(norm);
         const content = yield ctx.readFile(file2);
         if (!content) continue;
         const lines = content.split(/\r?\n/);
@@ -73863,7 +73946,6 @@ var dockerfileScanner = {
             });
           }
         }
-        const notAService = /(^|\/)(?:\.devcontainer|\.github|tests?|examples?|demos?|tools?|scripts?|extras|packaging|docs?)\//i.test(norm);
         if (sawFrom && !hasNonRootUser && !notAService && issues.length < MAX_TOTAL4) {
           issues.push({
             id: `docker-root-${norm}`,
@@ -74074,7 +74156,7 @@ var commentedCodeScanner = {
 var JS_RE2 = /\.(ts|tsx|js|jsx|mjs|mts|cts)$/i;
 var PY_RE2 = /\.py$/i;
 var SKIP_RE = /(^|\/)(?:node_modules|vendor|third_party|dist|build|out|\.next)\/|\.min\.[cm]?js$/i;
-var NOT_SHIPPED_RE2 = /(^|\/)(?:examples?|demos?|benchmarks?|bench|perf(?:-testing)?|performance|docs?|documentation|www|website|site|scripts?|tools?|[\w-]*_assets|static)\/|(^|\/)jquery[-.\d]*\.js$/i;
+var NOT_SHIPPED_RE2 = /(^|\/)(?:examples?|demos?|benchmarks?|bench|perf(?:-testing)?|performance|docs?|documentation|www|website|site|scripts?|tools?|[\w-]*_assets|static|_?vendor(?:ed)?|third_party|integration-?[tT]ests|test-utils)\/|(^|\/)jquery[-.\d]*\.js$/i;
 var TEST_RE3 = /(^|\/)(?:__tests__|tests?|specs?|fixtures?)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test_[^/]+\.py$|_test\.py$|(?:^|\/)conftest\.py$/i;
 var MAX_PER_FILE4 = 6;
 var MAX_TOTAL7 = 60;
@@ -74086,7 +74168,7 @@ var RULES = [
     lang: "js",
     // Only when the argument is not a plain string literal: `eval("1+1")` is
     // pointless but harmless, `eval(userInput)` is remote code execution.
-    re: /\beval\s*\(\s*[^)'"`\s]/g,
+    re: new RegExp("(?<![.$\\w])eval\\s*\\(\\s*[^)'\"`\\s]", "g"),
     severity: "critical",
     title: "eval() on a non-literal value",
     detail: "`eval` executes whatever string it is given. If any part of that string can come from a request, a file or a URL, this is remote code execution. Replace it with an explicit lookup \u2014 `JSON.parse` for data, a map of allowed operations for behaviour."
@@ -74205,7 +74287,7 @@ var RULES = [
     id: "py-yaml-load",
     lang: "py",
     // yaml.load without a Loader= argument constructs arbitrary Python objects.
-    re: /\byaml\.load\s*\((?![^)]*Loader\s*=)/g,
+    re: /\byaml\.load\s*\((?![^)]*(?:Loader\s*=|Safe\w*Loader|BaseLoader))/g,
     severity: "critical",
     title: "yaml.load() without a safe loader",
     detail: "Plain `yaml.load` can instantiate arbitrary Python objects from the document, which makes parsing an untrusted file equivalent to running it. Use `yaml.safe_load`."
@@ -74366,6 +74448,8 @@ function scanSource(content, lang) {
         if (literalRanges(rawLine).some(([a, b3]) => col > a && col < b3)) continue;
       }
       if (rawLine.length > 1e3) continue;
+      if (/#\s*(?:noqa|nosec)\b|\/\/\s*(?:nosemgrep|eslint-disable)|\bNOSONAR\b/.test(rawLine)) continue;
+      if (/^\s*\*/.test(rawLine) || /``/.test(rawLine)) continue;
       if (!contextAllows(rule.id, content, lineStart)) continue;
       const existing = byLine.get(line);
       if (existing && rank(existing.rule.severity) >= rank(rule.severity)) continue;
@@ -75118,6 +75202,7 @@ var eolRuntimeScanner = {
 };
 var MAX_ISSUES4 = 25;
 var DOC_RE = /^(?:(?:[\w.-]+\/)*readme|contributing|\.github\/(?:readme|contributing)|docs?\/(?:[\w-]+\/)*(?:contributing|development|developing|hacking|building|setup))\.mdx?$/i;
+var NOT_PROJECT_DOC_RE = /(^|\/)(?:_?vendor(?:ed)?|third[_-]party|node_modules|tests?|fixtures?|examples?|scripts?|tools?|src|lib|crates)\//i;
 var PM_SUBCOMMANDS = /* @__PURE__ */ new Set([
   "install",
   "i",
@@ -75274,7 +75359,7 @@ var docsDriftScanner = {
     return __async(this, null, function* () {
       var _a22, _b, _c;
       const norm = (f3) => f3.replace(/\\/g, "/");
-      const docs = ctx.files.filter((f3) => DOC_RE.test(norm(f3)));
+      const docs = ctx.files.filter((f3) => DOC_RE.test(norm(f3)) && !NOT_PROJECT_DOC_RE.test(norm(f3)));
       if (docs.length === 0) return [];
       const scripts = /* @__PURE__ */ new Set();
       let sawManifest = false;
@@ -76450,7 +76535,7 @@ function tierPenalty(count, weight, curve) {
 function computeScore(issues, weights = DEFAULT_WEIGHTS) {
   var _a22;
   const counts = { critical: 0, warning: 0, info: 0 };
-  for (const i of issues) counts[i.severity]++;
+  for (const i of issues) if (i.confidence !== "low") counts[i.severity]++;
   let penalty = 0;
   for (const sev of ["critical", "warning", "info"]) {
     const raw = tierPenalty(counts[sev], weights[sev], SEVERITY_CURVE[sev]);
@@ -76533,7 +76618,7 @@ function applyInlineIgnores(issues, ctx) {
 }
 function runScan(_0) {
   return __async(this, arguments, function* (ctx, scanners = defaultScanners, onProgress) {
-    var _a22, _b, _c, _d, _e2, _f;
+    var _a22, _b, _c, _d, _e2, _f, _g;
     const issues = [];
     const completedScanners = [];
     const failedScanners = [];
@@ -76544,7 +76629,8 @@ function runScan(_0) {
       try {
         for (const issue2 of yield scanner.run(ctx)) {
           const stamped = __spreadProps(__spreadValues({}, issue2), { scanner: scanner.id });
-          issues.push(__spreadProps(__spreadValues({}, stamped), { rule: (_a22 = stamped.rule) != null ? _a22 : ruleOf(stamped) }));
+          const rule = (_a22 = stamped.rule) != null ? _a22 : ruleOf(stamped);
+          issues.push(__spreadProps(__spreadValues({}, stamped), { rule, confidence: (_b = stamped.confidence) != null ? _b : confidenceOf(rule) }));
         }
         completedScanners.push(scanner.id);
       } catch (err) {
@@ -76554,25 +76640,28 @@ function runScan(_0) {
       completed++;
       onProgress == null ? void 0 : onProgress({ scanner: scanner.id, completed, total });
     }
-    const weights = (_c = (_b = ctx.config) == null ? void 0 : _b.weights) != null ? _c : DEFAULT_WEIGHTS;
-    const mute = (_e2 = (_d = ctx.config) == null ? void 0 : _d.mute) != null ? _e2 : [];
+    const weights = (_d = (_c = ctx.config) == null ? void 0 : _c.weights) != null ? _d : DEFAULT_WEIGHTS;
+    const mute = (_f = (_e2 = ctx.config) == null ? void 0 : _e2.mute) != null ? _f : [];
     const inlineVisible = yield applyInlineIgnores(issues, ctx);
     const visible = mute.length ? inlineVisible.filter((i) => !isMuted(i, mute)) : inlineVisible;
-    const score = computeScore(visible, weights);
+    const lowConfidence = visible.filter((i) => i.confidence === "low");
+    const confident = lowConfidence.length ? visible.filter((i) => i.confidence !== "low") : visible;
+    const score = computeScore(confident, weights);
     const { linesOfCode, profile } = yield buildMetricsAndProfile(ctx);
-    const report2 = {
+    const report2 = __spreadProps(__spreadValues({
       schemaVersion: SCHEMA_VERSION,
       repo: ctx.repo,
       generatedAt: (/* @__PURE__ */ new Date()).toISOString(),
       score,
       grade: scoreToGrade(score),
-      issues: visible,
-      diagnostics: { completedScanners, failedScanners, history: (_f = ctx.history) != null ? _f : "unavailable" },
+      issues: confident
+    }, lowConfidence.length ? { lowConfidence } : {}), {
+      diagnostics: { completedScanners, failedScanners, history: (_g = ctx.history) != null ? _g : "unavailable" },
       // Echo effective weights so the dashboard recomputes the score identically.
       config: { weights },
       metrics: { linesOfCode },
       profile
-    };
+    });
     return scanReportSchema.parse(report2);
   });
 }
@@ -77041,7 +77130,13 @@ var issueSchema2 = external_exports.object({
    */
   scanner: external_exports.string().optional(),
   /** Specific check within the scanner (see rules.ts); stamped by the engine. */
-  rule: external_exports.string().optional()
+  rule: external_exports.string().optional(),
+  /**
+   * How often this kind of finding is right, measured on the labelled benchmark
+   * (see confidence.ts). `low` findings are hidden by default and left out of
+   * the score. Stamped by the engine; optional for older reports.
+   */
+  confidence: external_exports.enum(["high", "medium", "low"]).optional()
 });
 var repoProfileSchema2 = external_exports.object({
   /** Total files the scan walked (after ignore globs). */
@@ -77084,6 +77179,12 @@ var scanReportSchema2 = external_exports.object({
   score: external_exports.number().int().min(0).max(100),
   grade: gradeSchema2,
   issues: external_exports.array(issueSchema2),
+  /**
+   * Findings from rules the benchmark shows are often wrong. Kept out of
+   * `issues` (and so out of the score, counts and gates) but shipped so a
+   * reader can still opt in to see them.
+   */
+  lowConfidence: external_exports.array(issueSchema2).optional(),
   diagnostics: external_exports.object({
     completedScanners: external_exports.array(external_exports.string()),
     failedScanners: external_exports.array(external_exports.string()),
@@ -77705,14 +77806,14 @@ var DETECTORS2 = [
   { id: "private-key", label: "Private key", re: /-----BEGIN (?:RSA |EC |OPENSSH |DSA |PGP )?PRIVATE KEY-----/ }
 ];
 var ASSIGN_RE2 = /(password|passwd|pwd|secret|token|api[_-]?key|access[_-]?key|client[_-]?secret|auth[_-]?token)["']?\s*[:=]\s*["`']([^"`'\s]{20,})["`']/i;
-var PLACEHOLDER_RE3 = /^(your|example|changeme|placeholder|redacted|dummy|test|sample|xxx+|<|\$\{|\$\(|\{\{|\{%|%|process\.env|random|1234|this|abcd)/i;
+var PLACEHOLDER_RE3 = /^(your|example|changeme|placeholder|redacted|dummy|test|sample|xxx+|<|\$|\(\?|\{\{|\{%|%|process\.env|random|1234|this|abcd)/i;
 var NOT_A_SECRET_RE2 = /\$\{|#\{|\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b/i;
 var KNOWN_EXAMPLE_RE2 = /EXAMPLE/;
 var BINARY_EXT2 = /\.(png|jpe?g|gif|webp|ico|bmp|pdf|zip|gz|tar|woff2?|ttf|eot|mp[34]|mov|wasm)$/i;
 var SKIP_NAME2 = /(?:^|\/)(package-lock\.json|pnpm-lock\.yaml|yarn\.lock)$/;
 var NUL2 = String.fromCharCode(0);
 var MAX_BYTES3 = 1e6;
-var LOW_CONFIDENCE_DIR2 = /(?:^|\/)(?:tests?|__tests__|__mocks__|spec|specs?|e2e|fixtures?|__fixtures__|testdata|mocks?|examples?|samples?|docs?)\//i;
+var LOW_CONFIDENCE_DIR2 = /(?:^|\/)(?:t|tests?|__tests__|__mocks__|spec|specs?|e2e|integration|testserver|test-utils|fixtures?|__fixtures__|testdata|mocks?|examples?|samples?|docs?)\//i;
 var LOW_CONFIDENCE_NAME2 = /(?:^|[/._-])(?:test|tests|spec|specs|example|examples|sample|samples|fixture|fixtures|mock|mocks|dummy|stub|demo)\.[a-z0-9]+$/i;
 function isLowConfidenceSecretFile2(file2) {
   return LOW_CONFIDENCE_DIR2.test(file2) || LOW_CONFIDENCE_NAME2.test(file2) || DOC_FILE2.test(file2);
@@ -79905,6 +80006,7 @@ function isLocalRelative2(target) {
   if (/^([a-z][a-z0-9+.-]*:|\/\/|#|\/|data:)/i.test(target)) return false;
   if (/[{}$<>%]/.test(target)) return false;
   if (/^[^/]+@[^/]+\.[a-z]{2,}$/i.test(target)) return false;
+  if (/^(?:www\.)?[\w-]+\.(?:com|org|net|io|dev|app|co|me|sh|rs|js)(?:\/|$)/i.test(target)) return false;
   return true;
 }
 function pageExists2(target, resolved, files) {
@@ -79940,6 +80042,7 @@ var brokenDocLinksScanner2 = {
       if (issues.length >= MAX_TOTAL9) break;
       const norm = file2.replace(/\\/g, "/");
       if (!MD_RE3.test(norm)) continue;
+      if (/(^|\/)(?:testdata|fixtures?|__fixtures__)\/|(^|\/)docs?\/[a-z]{2}(?:-[A-Za-z]{2,4})?\//.test(norm)) continue;
       const raw = await ctx.readFile(file2);
       if (!raw || !raw.includes("](")) continue;
       const text = stripCode2(raw);
@@ -80592,6 +80695,8 @@ function tagOf2(image) {
   const colon = lastSeg.lastIndexOf(":");
   return colon >= 0 ? lastSeg.slice(colon + 1) : null;
 }
+var THROWAWAY_IMAGE_RE2 = /(^|\/)(?:\.devcontainer|\.clusterfuzzlite|\.oss-[\w-]+|tests?|e2e|integration|interop|fixtures?|testdata|examples?|demos?)\//i;
+var NOT_A_SERVICE_RE2 = /(^|\/)(?:\.[\w-]+|tests?|e2e|integration|interop|fixtures?|testdata|examples?|demos?|tools?|scripts?|extras|packaging|docs?)\//i;
 var dockerfileScanner2 = {
   id: "dockerfile",
   category: "hygiene",
@@ -80601,6 +80706,8 @@ var dockerfileScanner2 = {
       if (issues.length >= MAX_TOTAL11) break;
       const norm = file2.replace(/\\/g, "/");
       if (!DOCKERFILE_RE2.test(norm)) continue;
+      if (THROWAWAY_IMAGE_RE2.test(norm)) continue;
+      const notAService = NOT_A_SERVICE_RE2.test(norm);
       const content = await ctx.readFile(file2);
       if (!content) continue;
       const lines = content.split(/\r?\n/);
@@ -80671,7 +80778,6 @@ var dockerfileScanner2 = {
           });
         }
       }
-      const notAService = /(^|\/)(?:\.devcontainer|\.github|tests?|examples?|demos?|tools?|scripts?|extras|packaging|docs?)\//i.test(norm);
       if (sawFrom && !hasNonRootUser && !notAService && issues.length < MAX_TOTAL11) {
         issues.push({
           id: `docker-root-${norm}`,
@@ -80879,7 +80985,7 @@ var commentedCodeScanner2 = {
 var JS_RE4 = /\.(ts|tsx|js|jsx|mjs|mts|cts)$/i;
 var PY_RE4 = /\.py$/i;
 var SKIP_RE2 = /(^|\/)(?:node_modules|vendor|third_party|dist|build|out|\.next)\/|\.min\.[cm]?js$/i;
-var NOT_SHIPPED_RE4 = /(^|\/)(?:examples?|demos?|benchmarks?|bench|perf(?:-testing)?|performance|docs?|documentation|www|website|site|scripts?|tools?|[\w-]*_assets|static)\/|(^|\/)jquery[-.\d]*\.js$/i;
+var NOT_SHIPPED_RE4 = /(^|\/)(?:examples?|demos?|benchmarks?|bench|perf(?:-testing)?|performance|docs?|documentation|www|website|site|scripts?|tools?|[\w-]*_assets|static|_?vendor(?:ed)?|third_party|integration-?[tT]ests|test-utils)\/|(^|\/)jquery[-.\d]*\.js$/i;
 var TEST_RE7 = /(^|\/)(?:__tests__|tests?|specs?|fixtures?)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test_[^/]+\.py$|_test\.py$|(?:^|\/)conftest\.py$/i;
 var MAX_PER_FILE8 = 6;
 var MAX_TOTAL14 = 60;
@@ -80891,7 +80997,7 @@ var RULES3 = [
     lang: "js",
     // Only when the argument is not a plain string literal: `eval("1+1")` is
     // pointless but harmless, `eval(userInput)` is remote code execution.
-    re: /\beval\s*\(\s*[^)'"`\s]/g,
+    re: /(?<![.$\w])eval\s*\(\s*[^)'"`\s]/g,
     severity: "critical",
     title: "eval() on a non-literal value",
     detail: "`eval` executes whatever string it is given. If any part of that string can come from a request, a file or a URL, this is remote code execution. Replace it with an explicit lookup \u2014 `JSON.parse` for data, a map of allowed operations for behaviour."
@@ -81010,7 +81116,7 @@ var RULES3 = [
     id: "py-yaml-load",
     lang: "py",
     // yaml.load without a Loader= argument constructs arbitrary Python objects.
-    re: /\byaml\.load\s*\((?![^)]*Loader\s*=)/g,
+    re: /\byaml\.load\s*\((?![^)]*(?:Loader\s*=|Safe\w*Loader|BaseLoader))/g,
     severity: "critical",
     title: "yaml.load() without a safe loader",
     detail: "Plain `yaml.load` can instantiate arbitrary Python objects from the document, which makes parsing an untrusted file equivalent to running it. Use `yaml.safe_load`."
@@ -81168,6 +81274,8 @@ function scanSource2(content, lang) {
         if (literalRanges2(rawLine).some(([a, b3]) => col > a && col < b3)) continue;
       }
       if (rawLine.length > 1e3) continue;
+      if (/#\s*(?:noqa|nosec)\b|\/\/\s*(?:nosemgrep|eslint-disable)|\bNOSONAR\b/.test(rawLine)) continue;
+      if (/^\s*\*/.test(rawLine) || /``/.test(rawLine)) continue;
       if (!contextAllows2(rule.id, content, lineStart)) continue;
       const existing = byLine.get(line);
       if (existing && rank2(existing.rule.severity) >= rank2(rule.severity)) continue;
@@ -81913,6 +82021,7 @@ var eolRuntimeScanner2 = {
 // ../core/src/scanners/docs-drift.ts
 var MAX_ISSUES13 = 25;
 var DOC_RE2 = /^(?:(?:[\w.-]+\/)*readme|contributing|\.github\/(?:readme|contributing)|docs?\/(?:[\w-]+\/)*(?:contributing|development|developing|hacking|building|setup))\.mdx?$/i;
+var NOT_PROJECT_DOC_RE2 = /(^|\/)(?:_?vendor(?:ed)?|third[_-]party|node_modules|tests?|fixtures?|examples?|scripts?|tools?|src|lib|crates)\//i;
 var PM_SUBCOMMANDS2 = /* @__PURE__ */ new Set([
   "install",
   "i",
@@ -82066,7 +82175,7 @@ var docsDriftScanner2 = {
   category: "hygiene",
   async run(ctx) {
     const norm = (f3) => f3.replace(/\\/g, "/");
-    const docs = ctx.files.filter((f3) => DOC_RE2.test(norm(f3)));
+    const docs = ctx.files.filter((f3) => DOC_RE2.test(norm(f3)) && !NOT_PROJECT_DOC_RE2.test(norm(f3)));
     if (docs.length === 0) return [];
     const scripts = /* @__PURE__ */ new Set();
     let sawManifest = false;
@@ -83260,10 +83369,14 @@ function renderTerminal(report2) {
     `Health Score: ${bold(String(report2.score))}/100  Grade: ${grade}`,
     `Issues: ${report2.issues.length}  (${red(`${counts.critical} critical`)}, ${yellow(`${counts.warning} warning`)}, ${cyan(`${counts.info} info`)})`
   ].join("\n");
+  const low = report2.lowConfidence?.length ?? 0;
+  const hidden = low ? `
+
+${dim(`${low} low-confidence finding${low === 1 ? "" : "s"} hidden (often false positives) \u2014 run with --all to show.`)}` : "";
   if (report2.issues.length === 0) {
     return `${header}
 
-${green("No issues found \u2014 clean repo.")}`;
+${green("No issues found \u2014 clean repo.")}${hidden}`;
   }
   const rows = sortIssues(report2.issues).map((i) => {
     const tag = SEVERITY_COLOR[i.severity](i.severity.toUpperCase().padEnd(8));
@@ -83273,7 +83386,7 @@ ${green("No issues found \u2014 clean repo.")}`;
   }).join("\n");
   return `${header}
 
-${rows}`;
+${rows}${hidden}`;
 }
 
 // ../core/src/reporters/markdown.ts
