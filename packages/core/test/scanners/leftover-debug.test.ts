@@ -28,7 +28,7 @@ describe("leftoverDebugScanner", () => {
     expect(await leftoverDebugScanner.run(ctx)).toHaveLength(0)
   })
 
-  it("flags Python breakpoint() as warning and print() as info", async () => {
+  it("flags Python breakpoint() as warning but not print()", async () => {
     const ctx = makeContext({
       files: { "pkg/util.py": "def f():\n    breakpoint()\n    print('x')\n" },
     })
@@ -36,7 +36,7 @@ describe("leftoverDebugScanner", () => {
     const bp = issues.find((i) => i.title.includes("breakpoint"))
     const pr = issues.find((i) => i.title.includes("print"))
     expect(bp?.severity).toBe("warning")
-    expect(pr?.severity).toBe("info")
+    expect(pr).toBeUndefined()
   })
 
   it("ignores debug calls inside line comments", async () => {
@@ -46,13 +46,12 @@ describe("leftoverDebugScanner", () => {
     expect(await leftoverDebugScanner.run(ctx)).toHaveLength(0)
   })
 
-  it("flags Go fmt.Println as info", async () => {
+  it("does not flag Go fmt.Println (intentional output)", async () => {
     const ctx = makeContext({
       files: { "util.go": 'package util\nfunc f() {\n\tfmt.Println("x")\n}\n' },
     })
     const issues = await leftoverDebugScanner.run(ctx)
-    expect(issues).toHaveLength(1)
-    expect(issues[0].severity).toBe("info")
+    expect(issues).toHaveLength(0)
   })
 
   it("does NOT flag console.log in a shebang CLI entrypoint, but still flags debugger", async () => {
@@ -88,8 +87,8 @@ describe("leftoverDebugScanner", () => {
   it("still flags console.log in a normal (non-entrypoint) source file", async () => {
     const ctx = makeContext({
       files: {
-        "packages/cli/package.json": JSON.stringify({ bin: "./dist/index.js" }),
-        "packages/cli/src/helper.ts": "console.log('debug')\n",
+        "packages/app/package.json": JSON.stringify({ bin: "./dist/index.js" }),
+        "packages/app/src/helper.ts": "console.log('debug')\n",
       },
     })
     const issues = await leftoverDebugScanner.run(ctx)
@@ -142,5 +141,19 @@ describe("leftover-debug — internal workspace tools", () => {
       }),
     )
     expect(out.map((i) => i.location)).toEqual(["src/app.ts:1"])
+  })
+
+  it("keeps descriptive or debug-guarded library logging", async () => {
+    const ctx = makeContext({
+      files: {
+        "src/lib.ts":
+          "console.log('Cache miss for key', k)\n" +
+          "console.log(`Using ${x} as default`)\n" +
+          "if (options.debug) {\n  console.log(state)\n}\n" +
+          "console.log(state)\n",
+      },
+    })
+    const out = await leftoverDebugScanner.run(ctx)
+    expect(out.map((i) => i.location)).toEqual(["src/lib.ts:6"])
   })
 })

@@ -29,9 +29,7 @@ const EXAMPLE_RE = /(^|\/)examples?\/|(?:^|\/)example\.[cm]?[jt]sx?$/i
  * In the benchmark every console.log/print in these was intentional.
  */
 const TOOLING_RE =
-  /(^|\/)(?:bench(?:mark)?s?|perf(?:ormance)?|internal|scripts?|bin|tools?|[\w-]*_assets|sandbox|playgrounds?|fixtures?|__fixtures__|docs?)\/|\.test-d\.tsx?$|\.d\.ts$|(^|\/)build\.rs$|(^|\/)play(?:ground)?\.[cm]?[jt]sx?$/i
-/** Program entry points where printing is the program's job (only breakpoints count). */
-const ENTRY_FILE_RE = /(^|\/)(?:__main__|_?main|cli)\.py$|(^|\/)src\/main\.rs$|(^|\/)src\/bin\//i
+  /(^|\/)(?:bench(?:mark)?s?|perf(?:ormance)?|__performance_tests__|www|static|demos?|cli|devtools|docs_src|extras|assets|support|test_files|\.github|internal|scripts?|bin|tools?|[\w-]*_assets|sandbox|playgrounds?|fixtures?|__fixtures__|docs?)\/|\.test-d\.tsx?$|\.d\.ts$|(^|\/)build\.rs$|[-_.]bin\.[cm]?[jt]s$|(^|\/)log(?:ger|ging)?\.[cm]?[jt]s$|(^|\/)play(?:ground)?\.[cm]?[jt]sx?$/i
 const DEBUG_METHODS = new Set(["log", "debug", "trace", "dir", "table"])
 
 const MAX_PER_FILE = 8
@@ -117,17 +115,17 @@ const LANG_DEBUG: Record<string, DebugRule[]> = {
     { re: /\bbreakpoint\s*\(/g, severity: "warning", label: "breakpoint()" },
     { re: /\bi?pdb\.set_trace\s*\(/g, severity: "warning", label: "pdb.set_trace()" },
     // Not `console.print(` (rich) or other methods named print.
-    { re: /(?<![.\w])print\s*\((?![^\n]*file\s*=\s*sys\.std(?:err|out))/g, severity: "info", label: "print()" },
+    { re: /(?<![.\w'"]|def\s)print\s*\((?![^\n]*file\s*=\s*sys\.std(?:err|out))/g, severity: "info", label: "print()" },
     { re: /(?<![.\w])pprint\s*\(/g, severity: "info", label: "pprint()" },
   ],
   go: [{ re: /\bfmt\.Print(?:ln|f)?\s*\(/g, severity: "info", label: "fmt.Print" }],
   rs: [
     { re: /\bdbg!\s*\(/g, severity: "warning", label: "dbg!()" },
-    { re: /\b(?:e?println!|print!)\s*\(/g, severity: "info", label: "println!" },
+    { re: /\b(?:println!|print!)\s*\(/g, severity: "info", label: "println!" },
   ],
   rb: [{ re: /\bbinding\.(?:pry|irb)\b/g, severity: "warning", label: "binding.pry" }],
   php: [
-    { re: /\b(?:dd|dump)\s*\(/g, severity: "warning", label: "dd()" },
+    { re: /(?<![>:$\w]|function\s)(?:dd|dump)\s*\(/g, severity: "warning", label: "dd()" },
     { re: /\bvar_dump\s*\(|\b(?:print_r|var_export)\s*\((?![^\n]*,\s*true\s*\))/g, severity: "info", label: "var_dump()" },
   ],
 }
@@ -169,6 +167,24 @@ function debugLabel(node: Node): string | null {
   return `console.${prop.name}`
 }
 
+/**
+ * Library logging that was meant to stay: a call opening with a sentence
+ * ("Cache miss for key", `Using ${x}`) or one behind a debug/dev guard. In the
+ * benchmark these were deliberate; leftovers log a bare value (`console.log(x)`).
+ */
+const DEBUG_GUARD_RE = /\bif\s*\([^)]*(?:debug|verbose|__DEV__|NODE_ENV|isDev|process\.env)/i
+function intentionalLog(node: Node, lines: string[]): boolean {
+  const first = (node.arguments as Node[] | undefined)?.[0]
+  if (first?.type === "StringLiteral" && /\w\s+\w/.test(String(first.value ?? ""))) return true
+  if (first?.type === "TemplateLiteral") {
+    const quasis = (first.quasis as { value?: { raw?: string } }[] | undefined) ?? []
+    if (/\w\s+\w/.test(quasis.map((q) => q.value?.raw ?? "").join(" "))) return true
+  }
+  const line = lineOf(node)
+  for (let i = Math.max(0, line - 3); i < line - 1; i++) if (DEBUG_GUARD_RE.test(lines[i] ?? "")) return true
+  return false
+}
+
 /** 1-based line number of a string index. */
 function lineAt(content: string, index: number): number {
   return content.slice(0, index).split("\n").length
@@ -196,7 +212,12 @@ function maskPython(content: string): string {
 
 /** Collect leftover-debug hits from a non-JS file using its language rules. */
 function scanRegexDebug(raw: string, lang: keyof typeof LANG_DEBUG): RegexHit[] {
-  const content = lang === "py" ? maskPython(raw) : raw
+  let content = lang === "py" ? maskPython(raw) : raw
+  // A Rust `#[cfg(test)]` module is test code: dbg! there is the test's own.
+  if (lang === "rs") {
+    const cut = content.search(/^\s*#\[cfg\(test\)\]/m)
+    if (cut !== -1) content = content.slice(0, cut) + content.slice(cut).replace(/[^\n]/g, " ")
+  }
   const rules = LANG_DEBUG[lang]
   const markers = COMMENT_MARKERS[lang] ?? []
   const byLine = new Map<number, RegexHit>()
@@ -208,6 +229,8 @@ function scanRegexDebug(raw: string, lang: keyof typeof LANG_DEBUG): RegexHit[] 
       const prefix = content.slice(lineStart, idx)
       // Skip matches that sit after a line-comment marker (commented-out code).
       if (markers.some((mk) => prefix.includes(mk))) continue
+      // Doc-block lines (` * Show locale on var_dump().`) and code inside a string.
+      if (/^\s*\*/.test(prefix) || (prefix.match(/["']/g)?.length ?? 0) % 2 === 1) continue
 
       const line = lineAt(content, idx)
       const existing = byLine.get(line)
@@ -276,6 +299,7 @@ export const leftoverDebugScanner: Scanner = {
         // leftover debug — only a stray `debugger` is worth flagging there.
         const isEntrypoint = content.startsWith("#!") || entrypoints.has(norm)
 
+        const srcLines = content.split("\n")
         let perFile = 0
         const found: { line: number; label: string }[] = []
         walk(ast, (n) => {
@@ -283,6 +307,7 @@ export const leftoverDebugScanner: Scanner = {
           const label = debugLabel(n)
           if (!label) return
           if (isEntrypoint && label !== "debugger") return
+          if (label !== "debugger" && intentionalLog(n, srcLines)) return
           found.push({ line: lineOf(n), label })
           perFile++
         })
@@ -306,12 +331,11 @@ export const leftoverDebugScanner: Scanner = {
         }
       } else if (lang) {
         // Python / Go / Rust / Ruby / PHP — regex-based.
-        // In a program entry point (Python __main__/cli, Rust main/bin, Go
-        // `package main`) printing is the output; only breakpoints are leftovers.
-        const isEntry = ENTRY_FILE_RE.test(norm) || (lang === "go" && /^package\s+main\b/m.test(content))
         let perFile = 0
         for (const hit of scanRegexDebug(content, lang)) {
-          if (isEntry && hit.severity !== "warning") continue
+          // print/println/fmt.Print in Python, Go, Rust and PHP sources was intentional
+          // output in every benchmark repo; only breakpoints and dd() are leftovers.
+          if (hit.severity !== "warning") continue
           if (issues.length >= MAX_TOTAL || perFile >= MAX_PER_FILE) break
           issues.push({
             id: `debug-${norm}:${hit.line}`,

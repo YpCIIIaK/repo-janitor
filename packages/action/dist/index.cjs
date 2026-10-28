@@ -26863,7 +26863,7 @@ var require_lib4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-WQ7M6I4T.js
+// ../cli/dist/chunk-YJV5SM5B.js
 var import_fs2 = require("fs");
 
 // ../../node_modules/.pnpm/tinyglobby@0.2.17/node_modules/tinyglobby/dist/index.mjs
@@ -45593,7 +45593,7 @@ function date4(params) {
 // ../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/external.js
 config(en_default());
 
-// ../cli/dist/chunk-WQ7M6I4T.js
+// ../cli/dist/chunk-YJV5SM5B.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -72802,8 +72802,7 @@ var projectHygieneScanner = {
 var SOURCE_RE3 = /\.(ts|tsx|js|jsx|mjs|mts|cts)$/;
 var TEST_RE2 = /(^|\/)(?:__tests__|tests?|specs?|e2e)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test_[^/]+\.py$|_test\.(?:py|go|rb)$|_spec\.rb$|(?:^|\/)conftest\.py$/i;
 var EXAMPLE_RE = /(^|\/)examples?\/|(?:^|\/)example\.[cm]?[jt]sx?$/i;
-var TOOLING_RE = /(^|\/)(?:bench(?:mark)?s?|perf(?:ormance)?|internal|scripts?|bin|tools?|[\w-]*_assets|sandbox|playgrounds?|fixtures?|__fixtures__|docs?)\/|\.test-d\.tsx?$|\.d\.ts$|(^|\/)build\.rs$|(^|\/)play(?:ground)?\.[cm]?[jt]sx?$/i;
-var ENTRY_FILE_RE = /(^|\/)(?:__main__|_?main|cli)\.py$|(^|\/)src\/main\.rs$|(^|\/)src\/bin\//i;
+var TOOLING_RE = /(^|\/)(?:bench(?:mark)?s?|perf(?:ormance)?|__performance_tests__|www|static|demos?|cli|devtools|docs_src|extras|assets|support|test_files|\.github|internal|scripts?|bin|tools?|[\w-]*_assets|sandbox|playgrounds?|fixtures?|__fixtures__|docs?)\/|\.test-d\.tsx?$|\.d\.ts$|(^|\/)build\.rs$|[-_.]bin\.[cm]?[jt]s$|(^|\/)log(?:ger|ging)?\.[cm]?[jt]s$|(^|\/)play(?:ground)?\.[cm]?[jt]sx?$/i;
 var DEBUG_METHODS = /* @__PURE__ */ new Set(["log", "debug", "trace", "dir", "table"]);
 var MAX_PER_FILE = 8;
 var MAX_TOTAL = 50;
@@ -72858,17 +72857,17 @@ var LANG_DEBUG = {
     { re: /\bbreakpoint\s*\(/g, severity: "warning", label: "breakpoint()" },
     { re: /\bi?pdb\.set_trace\s*\(/g, severity: "warning", label: "pdb.set_trace()" },
     // Not `console.print(` (rich) or other methods named print.
-    { re: new RegExp("(?<![.\\w])print\\s*\\((?![^\\n]*file\\s*=\\s*sys\\.std(?:err|out))", "g"), severity: "info", label: "print()" },
+    { re: new RegExp(`(?<![.\\w'"]|def\\s)print\\s*\\((?![^\\n]*file\\s*=\\s*sys\\.std(?:err|out))`, "g"), severity: "info", label: "print()" },
     { re: new RegExp("(?<![.\\w])pprint\\s*\\(", "g"), severity: "info", label: "pprint()" }
   ],
   go: [{ re: /\bfmt\.Print(?:ln|f)?\s*\(/g, severity: "info", label: "fmt.Print" }],
   rs: [
     { re: /\bdbg!\s*\(/g, severity: "warning", label: "dbg!()" },
-    { re: /\b(?:e?println!|print!)\s*\(/g, severity: "info", label: "println!" }
+    { re: /\b(?:println!|print!)\s*\(/g, severity: "info", label: "println!" }
   ],
   rb: [{ re: /\bbinding\.(?:pry|irb)\b/g, severity: "warning", label: "binding.pry" }],
   php: [
-    { re: /\b(?:dd|dump)\s*\(/g, severity: "warning", label: "dd()" },
+    { re: new RegExp("(?<![>:$\\w]|function\\s)(?:dd|dump)\\s*\\(", "g"), severity: "warning", label: "dd()" },
     { re: /\bvar_dump\s*\(|\b(?:print_r|var_export)\s*\((?![^\n]*,\s*true\s*\))/g, severity: "info", label: "var_dump()" }
   ]
 };
@@ -72905,6 +72904,22 @@ function debugLabel(node) {
   if ((prop == null ? void 0 : prop.type) !== "Identifier" || !prop.name || !DEBUG_METHODS.has(prop.name)) return null;
   return `console.${prop.name}`;
 }
+var DEBUG_GUARD_RE = /\bif\s*\([^)]*(?:debug|verbose|__DEV__|NODE_ENV|isDev|process\.env)/i;
+function intentionalLog(node, lines) {
+  var _a22, _b, _c, _d;
+  const first = (_a22 = node.arguments) == null ? void 0 : _a22[0];
+  if ((first == null ? void 0 : first.type) === "StringLiteral" && /\w\s+\w/.test(String((_b = first.value) != null ? _b : ""))) return true;
+  if ((first == null ? void 0 : first.type) === "TemplateLiteral") {
+    const quasis = (_c = first.quasis) != null ? _c : [];
+    if (/\w\s+\w/.test(quasis.map((q3) => {
+      var _a32, _b2;
+      return (_b2 = (_a32 = q3.value) == null ? void 0 : _a32.raw) != null ? _b2 : "";
+    }).join(" "))) return true;
+  }
+  const line = lineOf2(node);
+  for (let i = Math.max(0, line - 3); i < line - 1; i++) if (DEBUG_GUARD_RE.test((_d = lines[i]) != null ? _d : "")) return true;
+  return false;
+}
 function lineAt(content, index) {
   return content.slice(0, index).split("\n").length;
 }
@@ -72916,8 +72931,12 @@ function maskPython(content) {
   return out;
 }
 function scanRegexDebug(raw, lang) {
-  var _a22, _b;
-  const content = lang === "py" ? maskPython(raw) : raw;
+  var _a22, _b, _c, _d;
+  let content = lang === "py" ? maskPython(raw) : raw;
+  if (lang === "rs") {
+    const cut = content.search(/^\s*#\[cfg\(test\)\]/m);
+    if (cut !== -1) content = content.slice(0, cut) + content.slice(cut).replace(/[^\n]/g, " ");
+  }
   const rules = LANG_DEBUG[lang];
   const markers = (_a22 = COMMENT_MARKERS[lang]) != null ? _a22 : [];
   const byLine = /* @__PURE__ */ new Map();
@@ -72927,6 +72946,7 @@ function scanRegexDebug(raw, lang) {
       const lineStart = content.lastIndexOf("\n", idx - 1) + 1;
       const prefix = content.slice(lineStart, idx);
       if (markers.some((mk) => prefix.includes(mk))) continue;
+      if (/^\s*\*/.test(prefix) || ((_d = (_c = prefix.match(/["']/g)) == null ? void 0 : _c.length) != null ? _d : 0) % 2 === 1) continue;
       const line = lineAt(content, idx);
       const existing = byLine.get(line);
       if (existing && !(rule.severity === "warning" && existing.severity !== "warning")) continue;
@@ -72977,6 +72997,7 @@ var leftoverDebugScanner = {
           const ast = parseFile(content, file2);
           if (!ast) continue;
           const isEntrypoint = content.startsWith("#!") || entrypoints.has(norm);
+          const srcLines = content.split("\n");
           let perFile = 0;
           const found = [];
           walk(ast, (n) => {
@@ -72984,6 +73005,7 @@ var leftoverDebugScanner = {
             const label = debugLabel(n);
             if (!label) return;
             if (isEntrypoint && label !== "debugger") return;
+            if (label !== "debugger" && intentionalLog(n, srcLines)) return;
             found.push({ line: lineOf2(n), label });
             perFile++;
           });
@@ -73001,10 +73023,9 @@ var leftoverDebugScanner = {
             });
           }
         } else if (lang) {
-          const isEntry = ENTRY_FILE_RE.test(norm) || lang === "go" && /^package\s+main\b/m.test(content);
           let perFile = 0;
           for (const hit of scanRegexDebug(content, lang)) {
-            if (isEntry && hit.severity !== "warning") continue;
+            if (hit.severity !== "warning") continue;
             if (issues.length >= MAX_TOTAL || perFile >= MAX_PER_FILE) break;
             issues.push({
               id: `debug-${norm}:${hit.line}`,
@@ -79624,8 +79645,7 @@ var projectHygieneScanner2 = {
 var SOURCE_RE10 = /\.(ts|tsx|js|jsx|mjs|mts|cts)$/;
 var TEST_RE6 = /(^|\/)(?:__tests__|tests?|specs?|e2e)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test_[^/]+\.py$|_test\.(?:py|go|rb)$|_spec\.rb$|(?:^|\/)conftest\.py$/i;
 var EXAMPLE_RE2 = /(^|\/)examples?\/|(?:^|\/)example\.[cm]?[jt]sx?$/i;
-var TOOLING_RE2 = /(^|\/)(?:bench(?:mark)?s?|perf(?:ormance)?|internal|scripts?|bin|tools?|[\w-]*_assets|sandbox|playgrounds?|fixtures?|__fixtures__|docs?)\/|\.test-d\.tsx?$|\.d\.ts$|(^|\/)build\.rs$|(^|\/)play(?:ground)?\.[cm]?[jt]sx?$/i;
-var ENTRY_FILE_RE2 = /(^|\/)(?:__main__|_?main|cli)\.py$|(^|\/)src\/main\.rs$|(^|\/)src\/bin\//i;
+var TOOLING_RE2 = /(^|\/)(?:bench(?:mark)?s?|perf(?:ormance)?|__performance_tests__|www|static|demos?|cli|devtools|docs_src|extras|assets|support|test_files|\.github|internal|scripts?|bin|tools?|[\w-]*_assets|sandbox|playgrounds?|fixtures?|__fixtures__|docs?)\/|\.test-d\.tsx?$|\.d\.ts$|(^|\/)build\.rs$|[-_.]bin\.[cm]?[jt]s$|(^|\/)log(?:ger|ging)?\.[cm]?[jt]s$|(^|\/)play(?:ground)?\.[cm]?[jt]sx?$/i;
 var DEBUG_METHODS2 = /* @__PURE__ */ new Set(["log", "debug", "trace", "dir", "table"]);
 var MAX_PER_FILE5 = 8;
 var MAX_TOTAL8 = 50;
@@ -79678,17 +79698,17 @@ var LANG_DEBUG2 = {
     { re: /\bbreakpoint\s*\(/g, severity: "warning", label: "breakpoint()" },
     { re: /\bi?pdb\.set_trace\s*\(/g, severity: "warning", label: "pdb.set_trace()" },
     // Not `console.print(` (rich) or other methods named print.
-    { re: /(?<![.\w])print\s*\((?![^\n]*file\s*=\s*sys\.std(?:err|out))/g, severity: "info", label: "print()" },
+    { re: /(?<![.\w'"]|def\s)print\s*\((?![^\n]*file\s*=\s*sys\.std(?:err|out))/g, severity: "info", label: "print()" },
     { re: /(?<![.\w])pprint\s*\(/g, severity: "info", label: "pprint()" }
   ],
   go: [{ re: /\bfmt\.Print(?:ln|f)?\s*\(/g, severity: "info", label: "fmt.Print" }],
   rs: [
     { re: /\bdbg!\s*\(/g, severity: "warning", label: "dbg!()" },
-    { re: /\b(?:e?println!|print!)\s*\(/g, severity: "info", label: "println!" }
+    { re: /\b(?:println!|print!)\s*\(/g, severity: "info", label: "println!" }
   ],
   rb: [{ re: /\bbinding\.(?:pry|irb)\b/g, severity: "warning", label: "binding.pry" }],
   php: [
-    { re: /\b(?:dd|dump)\s*\(/g, severity: "warning", label: "dd()" },
+    { re: /(?<![>:$\w]|function\s)(?:dd|dump)\s*\(/g, severity: "warning", label: "dd()" },
     { re: /\bvar_dump\s*\(|\b(?:print_r|var_export)\s*\((?![^\n]*,\s*true\s*\))/g, severity: "info", label: "var_dump()" }
   ]
 };
@@ -79723,6 +79743,18 @@ function debugLabel2(node) {
   if (prop?.type !== "Identifier" || !prop.name || !DEBUG_METHODS2.has(prop.name)) return null;
   return `console.${prop.name}`;
 }
+var DEBUG_GUARD_RE2 = /\bif\s*\([^)]*(?:debug|verbose|__DEV__|NODE_ENV|isDev|process\.env)/i;
+function intentionalLog2(node, lines) {
+  const first = node.arguments?.[0];
+  if (first?.type === "StringLiteral" && /\w\s+\w/.test(String(first.value ?? ""))) return true;
+  if (first?.type === "TemplateLiteral") {
+    const quasis = first.quasis ?? [];
+    if (/\w\s+\w/.test(quasis.map((q3) => q3.value?.raw ?? "").join(" "))) return true;
+  }
+  const line = lineOf6(node);
+  for (let i = Math.max(0, line - 3); i < line - 1; i++) if (DEBUG_GUARD_RE2.test(lines[i] ?? "")) return true;
+  return false;
+}
 function lineAt5(content, index) {
   return content.slice(0, index).split("\n").length;
 }
@@ -79734,7 +79766,11 @@ function maskPython2(content) {
   return out;
 }
 function scanRegexDebug2(raw, lang) {
-  const content = lang === "py" ? maskPython2(raw) : raw;
+  let content = lang === "py" ? maskPython2(raw) : raw;
+  if (lang === "rs") {
+    const cut = content.search(/^\s*#\[cfg\(test\)\]/m);
+    if (cut !== -1) content = content.slice(0, cut) + content.slice(cut).replace(/[^\n]/g, " ");
+  }
   const rules = LANG_DEBUG2[lang];
   const markers = COMMENT_MARKERS3[lang] ?? [];
   const byLine = /* @__PURE__ */ new Map();
@@ -79744,6 +79780,7 @@ function scanRegexDebug2(raw, lang) {
       const lineStart = content.lastIndexOf("\n", idx - 1) + 1;
       const prefix = content.slice(lineStart, idx);
       if (markers.some((mk) => prefix.includes(mk))) continue;
+      if (/^\s*\*/.test(prefix) || (prefix.match(/["']/g)?.length ?? 0) % 2 === 1) continue;
       const line = lineAt5(content, idx);
       const existing = byLine.get(line);
       if (existing && !(rule.severity === "warning" && existing.severity !== "warning")) continue;
@@ -79790,6 +79827,7 @@ var leftoverDebugScanner2 = {
         const ast = parseFile2(content, file2);
         if (!ast) continue;
         const isEntrypoint = content.startsWith("#!") || entrypoints.has(norm);
+        const srcLines = content.split("\n");
         let perFile = 0;
         const found = [];
         walk2(ast, (n) => {
@@ -79797,6 +79835,7 @@ var leftoverDebugScanner2 = {
           const label = debugLabel2(n);
           if (!label) return;
           if (isEntrypoint && label !== "debugger") return;
+          if (label !== "debugger" && intentionalLog2(n, srcLines)) return;
           found.push({ line: lineOf6(n), label });
           perFile++;
         });
@@ -79814,10 +79853,9 @@ var leftoverDebugScanner2 = {
           });
         }
       } else if (lang) {
-        const isEntry = ENTRY_FILE_RE2.test(norm) || lang === "go" && /^package\s+main\b/m.test(content);
         let perFile = 0;
         for (const hit of scanRegexDebug2(content, lang)) {
-          if (isEntry && hit.severity !== "warning") continue;
+          if (hit.severity !== "warning") continue;
           if (issues.length >= MAX_TOTAL8 || perFile >= MAX_PER_FILE5) break;
           issues.push({
             id: `debug-${norm}:${hit.line}`,
