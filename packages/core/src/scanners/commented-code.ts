@@ -57,6 +57,8 @@ function commentBody(line: string): string | null {
 function looksLikeCode(body: string): boolean {
   if (!body || body.length < 2) return false
   if (SKIP_PREFIX.test(body)) return false
+  // `//=> value`: the result line of a documented example (type-fest, sindresorhus).
+  if (body.startsWith("=>")) return false
   if (PROSE_TAIL.test(body)) return false
   // Backticks almost always mean inline-code-in-prose (doc comments), not an
   // actual commented-out statement — skip to avoid flagging documentation.
