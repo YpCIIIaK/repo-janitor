@@ -1,0 +1,5 @@
+{
+ "insecure-py-eval-exec-src/_cffi_src/utils.py:17": "fp",
+ "secret-entropy-vectors/cryptography_vectors/fernet/invalid.json:4": "fp",
+ "secret-private-key-vectors/cryptography_vectors/asymmetric/PKCS8/unenc-rsa-pkcs8.pem:63": "fp"
+}

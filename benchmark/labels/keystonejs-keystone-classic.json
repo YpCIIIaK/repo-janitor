@@ -1,0 +1,6 @@
+{
+ "insecure-react-dangerous-html-admin/client/App/elemental/FormNote/index.js:20": "fp",
+ "insecure-react-dangerous-html-fields/types/color/ColorField.js:66": "fp",
+ "insecure-react-dangerous-html-fields/types/color/ColorField.js:71": "fp",
+ "insecure-weak-hash-lib/security/csrf.js:21": "tp"
+}

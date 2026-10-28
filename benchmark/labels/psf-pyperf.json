@@ -1,0 +1,7 @@
+{
+ "bloat-doc/py3.json.gz": "tp",
+ "busfactor-pyperf/_win_memory.py": "tp",
+ "duplicate-pyperf/_compare.py-157": "tp",
+ "eol-python-pyproject.toml-54": "tp",
+ "todo-pyperf/_utils.py:223": "tp"
+}

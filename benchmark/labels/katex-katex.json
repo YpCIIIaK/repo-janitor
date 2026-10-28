@@ -1,0 +1,8 @@
+{
+ "bloat-test/screenshotter/fonts/batang/batang.ttf": "fp",
+ "debug-dockers/texcmp/texcmp.js:102": "fp",
+ "docker-add-url-dockers/texcmp/Dockerfile:5": "tp",
+ "docker-root-dockers/fonts/Dockerfile": "fp",
+ "insecure-innerhtml-dynamic-contrib/copy-tex/katex2tex.ts:43": "fp",
+ "insecure-innerhtml-dynamic-contrib/copy-tex/katex2tex.ts:51": "fp"
+}

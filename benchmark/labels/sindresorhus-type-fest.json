@@ -1,0 +1,9 @@
+{
+ "action-tag-.github/workflows/claude.yml-32": "tp",
+ "action-tag-first-party-.github/workflows/claude.yml-27": "tp",
+ "commented-source/get.d.ts:183": "fp",
+ "duplicate-test-d/require-exactly-one.ts-49": "tp",
+ "eol-node-package.json-21": "tp",
+ "no-permissions-.github/workflows/ts-canary.yml-1": "tp",
+ "todo-source/arrayable.d.ts:30": "tp"
+}

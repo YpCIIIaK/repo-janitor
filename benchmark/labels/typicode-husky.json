@@ -1,0 +1,4 @@
+{
+ "ci-no-pr-trigger": "fp",
+ "ci-tests-not-run": "fp"
+}

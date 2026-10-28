@@ -1,0 +1,6 @@
+{
+ "config-conflict-ci-root": "tp",
+ "docker-root-Dockerfile": "fp",
+ "env-no-example": "fp",
+ "insecure-exec-interpolated-lib/monitor/run.js:346": "fp"
+}

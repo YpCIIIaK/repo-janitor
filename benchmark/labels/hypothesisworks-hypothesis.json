@@ -1,0 +1,9 @@
+{
+ "bloat-brand/sticker.png": "fp",
+ "doclink-website/content/2016-06-30-tests-as-complete-specifications.md:151:../testing-optimizers-with-hypothesis/": "fp",
+ "insecure-py-eval-exec-hypothesis/src/hypothesis/internal/lambda_sources.py:265": "fp",
+ "insecure-py-shell-true-tooling/src/hypothesistooling/installers.py:66": "fp",
+ "insecure-py-shell-true-tooling/src/hypothesistooling/installers.py:94": "fp",
+ "insecure-py-shell-true-tooling/src/hypothesistooling/installers.py:98": "fp",
+ "skiptest-hypothesis/tests/pandas/test_data_frame.py:302": "tp"
+}

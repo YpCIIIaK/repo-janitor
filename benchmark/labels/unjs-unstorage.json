@@ -1,0 +1,7 @@
+{
+ "dead-export-src/drivers/azure-storage-blob.ts:DRIVER_DEPENDENCIES": "fp",
+ "insecure-sql-interpolated-src/drivers/planetscale.ts:67": "fp",
+ "insecure-sql-interpolated-src/drivers/planetscale.ts:73": "fp",
+ "insecure-sql-interpolated-src/drivers/planetscale.ts:79": "fp",
+ "skiptest-test/drivers/azure-storage-blob.test.ts:8": "tp"
+}

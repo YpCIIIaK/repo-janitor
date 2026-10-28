@@ -1,0 +1,6 @@
+{
+ "config-conflict-ts-strict-root": "tp",
+ "docker-root-Dockerfile": "fp",
+ "docs-drift-badge-README.md-11": "tp",
+ "env-no-example": "fp"
+}

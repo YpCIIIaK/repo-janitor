@@ -33,9 +33,9 @@ const SKIP_RE = /(^|\/)(?:node_modules|vendor|third_party|dist|build|out|\.next)
  * 100-repo benchmark every finding under these paths was a false positive.
  */
 const NOT_SHIPPED_RE =
-  /(^|\/)(?:examples?|demos?|benchmarks?|bench|perf(?:-testing)?|performance|docs?|documentation|www|website|site|scripts?|tools?|[\w-]*_assets|static|_?vendor(?:ed)?|third_party|integration-?[tT]ests|test-utils)\/|(^|\/)jquery[-.\d]*\.js$/i
+  /(^|\/)(?:examples?|demos?|benchmarks?|bench|perf(?:-testing)?|performance|docs?|documentation|www|website|site|scripts?|tools?|[\w-]*_assets|static|_?vendor(?:ed)?|third_party|integration-?[tT]ests|test-utils|tooling|_tools|sphinx)\/|(^|\/)jquery[-.\d]*\.js$/i
 const TEST_RE =
-  /(^|\/)(?:__tests__|tests?|specs?|fixtures?)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test_[^/]+\.py$|_test\.py$|(?:^|\/)conftest\.py$/i
+  /(^|\/)(?:__tests__|tests?|specs?|fixtures?)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test\.[cm]?[jt]s$|(?:^|\/)test_[^/]+\.py$|_test\.py$|(?:^|\/)conftest\.py$/i
 
 const MAX_PER_FILE = 6
 const MAX_TOTAL = 60
@@ -452,6 +452,8 @@ export function scanSource(content: string, lang: Lang): CodeHit[] {
       if (/#\s*(?:noqa|nosec)\b|\/\/\s*(?:nosemgrep|eslint-disable)|\bNOSONAR\b/.test(rawLine)) continue
       // Docblock lines: ` * const v = await page.$eval(`, ``pickle.loads()``.
       if (/^\s*\*/.test(rawLine) || /``/.test(rawLine)) continue
+      // Doctest continuation lines are documentation: `...     pickle.loads(x)`.
+      if (/^\s*(?:>>>|\.\.\.)\s/.test(rawLine)) continue
       if (!contextAllows(rule.id, content, lineStart)) continue
 
       const existing = byLine.get(line)

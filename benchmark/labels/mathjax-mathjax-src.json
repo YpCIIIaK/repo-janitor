@@ -1,0 +1,6 @@
+{
+ "dep-unused-mhchemparser": "fp",
+ "docs-drift-badge-README.md-13": "tp",
+ "secret-entropy-ts/input/asciimath/legacy/jax/input/AsciiMath/jax.js:1238": "fp",
+ "secret-entropy-ts/input/asciimath/legacy/jax/input/AsciiMath/jax.js:1239": "fp"
+}

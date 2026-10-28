@@ -1,0 +1,4 @@
+{
+ "ci-no-pr-trigger": "tp",
+ "dep-unused-commander": "fp"
+}
