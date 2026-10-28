@@ -131,6 +131,14 @@ function IssueRow({
               {t("table.snoozed")}
             </span>
           )}
+          {issue.confidence === "low" && (
+            <span
+              className="shrink-0 rounded-full border border-dashed border-border px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground"
+              title={t("table.lowConfidenceHint")}
+            >
+              {t("table.lowConfidence")}
+            </span>
+          )}
         </span>
         <span className="block truncate font-mono text-xs text-muted-foreground">
           {issue.location}
@@ -167,9 +175,12 @@ export function IssuesTable({
   query = "",
   newIds,
   fixed = [],
+  lowConfidence = [],
   weights,
 }: {
   issues: Issue[]
+  /** Findings from unreliable rules: hidden unless the reader asks for them. */
+  lowConfidence?: Issue[]
   repo?: TableRepo
   query?: string
   /** Ids of findings new since the previous scan — rendered with a "New" badge. */
@@ -201,7 +212,9 @@ export function IssuesTable({
     [repoId, issues, snoozed],
   )
   // Hide snoozed findings by default; the toggle reveals them inline (greyed out).
-  const base = showSnoozed ? issues : live
+  const [showLow, setShowLow] = useState(false)
+  const shown = showSnoozed ? issues : live
+  const base = useMemo(() => (showLow ? [...shown, ...lowConfidence] : shown), [showLow, shown, lowConfidence])
 
   const isSnoozed = (id: string) => snoozed.has(snoozeKey(repoId, id))
   const toggleSnooze = (id: string) => setSnoozed(repoId, id, !isSnoozed(id))
@@ -373,6 +386,12 @@ export function IssuesTable({
                 <DropdownMenuItem onSelect={() => setShowSnoozed((s) => !s)}>
                   {showSnoozed ? <BellOff className="size-4" /> : <Bell className="size-4" />}
                   {showSnoozed ? "Hide snoozed" : `Show snoozed (${muted.length})`}
+                </DropdownMenuItem>
+              )}
+              {lowConfidence.length > 0 && (
+                <DropdownMenuItem onSelect={() => setShowLow((s) => !s)}>
+                  <Info className="size-4" />
+                  {showLow ? t("table.hideLow") : t("table.showLow", { count: lowConfidence.length })}
                 </DropdownMenuItem>
               )}
               {filtered.length > 0 && (

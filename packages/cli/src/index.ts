@@ -63,6 +63,7 @@ function registerScan(program: Command) {
       "--only <ids>",
       "Run only these scanners (comma-separated ids, e.g. secrets,ci-health)",
     )
+    .option("--all", "Also list low-confidence findings (rules that are often wrong); they never affect the score")
     .option("--fix", "After the scan, print the top quick-wins to fix first")
     .option("--baseline <file>", "Previous JSON report; gate only findings absent from this baseline")
     .option("--fail-on-new <severity>", "Exit 2 on new findings at this severity or higher (critical, warning, info, never)", "never")
@@ -101,7 +102,12 @@ function registerScan(program: Command) {
               process.stderr.write(`@@PROGRESS@@${JSON.stringify(p)}\n`)
           : undefined;
 
-        const report = await scanRepo(root, onProgress, only ? scanners : undefined);
+        const scanned = await scanRepo(root, onProgress, only ? scanners : undefined);
+        // --all folds the low-confidence findings back into the list; the score
+        // still comes from the confident ones.
+        const report = options.all && scanned.lowConfidence?.length
+          ? { ...scanned, issues: [...scanned.issues, ...scanned.lowConfidence], lowConfidence: undefined }
+          : scanned;
         const output = serializeReport(report, options.format);
 
         if (options.output) {

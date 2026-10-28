@@ -42,6 +42,8 @@ export interface Issue {
   aiNote?: string
   /** Failed automatic analysis; retry is available in the finding drawer. */
   aiError?: string
+  /** Benchmark-measured reliability of the rule; `low` ones are hidden by default. */
+  confidence?: "high" | "medium" | "low"
   /** Id of the scanner that produced this finding; absent in pre-v1.1 reports. */
   scanner?: string
   /** Specific check within the scanner; derived from `id` for older reports. */

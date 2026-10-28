@@ -446,6 +446,7 @@ export default function DashboardPage() {
             <TabsContent value="issues" className="mt-6">
               <IssuesTable
                 issues={allIssues}
+                lowConfidence={current.latest.lowConfidence}
                 repo={tableRepo}
                 query={search}
                 newIds={newIds}

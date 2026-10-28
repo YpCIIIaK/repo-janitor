@@ -60,7 +60,8 @@ async function runOne(repo) {
   })
   if (scan.status !== 0 && scan.status !== 2) return console.error(`scan failed: ${repo.name}\n${scan.stderr}`)
   const report = JSON.parse(readFileSync(reportPath, "utf8"))
-  const findings = report.issues.map((i) => ({
+  // The benchmark judges every rule, including the ones shipped as low confidence.
+  const findings = [...report.issues, ...(report.lowConfidence ?? [])].map((i) => ({
     id: i.id,
     scanner: i.scanner,
     rule: i.rule,
