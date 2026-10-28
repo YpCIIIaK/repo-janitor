@@ -81,6 +81,12 @@ export const issueSchema = z.object({
   scanner: z.string().optional(),
   /** Specific check within the scanner (see rules.ts); stamped by the engine. */
   rule: z.string().optional(),
+  /**
+   * How often this kind of finding is right, measured on the labelled benchmark
+   * (see confidence.ts). `low` findings are hidden by default and left out of
+   * the score. Stamped by the engine; optional for older reports.
+   */
+  confidence: z.enum(["high", "medium", "low"]).optional(),
 })
 export type Issue = z.infer<typeof issueSchema>
 
@@ -133,6 +139,12 @@ export const scanReportSchema = z.object({
   score: z.number().int().min(0).max(100),
   grade: gradeSchema,
   issues: z.array(issueSchema),
+  /**
+   * Findings from rules the benchmark shows are often wrong. Kept out of
+   * `issues` (and so out of the score, counts and gates) but shipped so a
+   * reader can still opt in to see them.
+   */
+  lowConfidence: z.array(issueSchema).optional(),
   diagnostics: z.object({
     completedScanners: z.array(z.string()),
     failedScanners: z.array(z.string()),

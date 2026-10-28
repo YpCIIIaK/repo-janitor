@@ -2,6 +2,7 @@ import type { Scanner, ScanContext } from "./scanner"
 import { scanReportSchema, SCHEMA_VERSION, type Grade, type Issue, type RepoProfile, type ScanReport } from "./schema"
 import { extToLanguage, detectTools, detectChecklist, summarizeActivity } from "./profile"
 import { ruleOf } from "./rules"
+import { confidenceOf } from "./confidence"
 import { DEFAULT_WEIGHTS, INLINE_IGNORE_MARKER, INLINE_IGNORE_NEXT_LINE_MARKER, isMuted } from "./config"
 import { envLifecycleScanner } from "./scanners/env-lifecycle"
 import { staleBranchScanner } from "./scanners/stale-branch"
@@ -106,7 +107,8 @@ export function tierPenalty(count: number, weight: number, curve: PenaltyCurve):
  */
 export function computeScore(issues: Issue[], weights: SeverityWeights = DEFAULT_WEIGHTS): number {
   const counts: Record<"critical" | "warning" | "info", number> = { critical: 0, warning: 0, info: 0 }
-  for (const i of issues) counts[i.severity]++
+  // Low-confidence findings are shown on request but never cost points.
+  for (const i of issues) if (i.confidence !== "low") counts[i.severity]++
   let penalty = 0
   for (const sev of ["critical", "warning", "info"] as const) {
     const raw = tierPenalty(counts[sev], weights[sev], SEVERITY_CURVE[sev])
@@ -244,7 +246,8 @@ export async function runScan(
       // another one.
       for (const issue of await scanner.run(ctx)) {
         const stamped = { ...issue, scanner: scanner.id }
-        issues.push({ ...stamped, rule: stamped.rule ?? ruleOf(stamped) })
+        const rule = stamped.rule ?? ruleOf(stamped)
+        issues.push({ ...stamped, rule, confidence: stamped.confidence ?? confidenceOf(rule) })
       }
       completedScanners.push(scanner.id)
     } catch (err) {
@@ -261,7 +264,9 @@ export async function runScan(
   // (reviewed/accepted findings). Both drop findings before they reach the score.
   const inlineVisible = await applyInlineIgnores(issues, ctx)
   const visible = mute.length ? inlineVisible.filter((i) => !isMuted(i, mute)) : inlineVisible
-  const score = computeScore(visible, weights)
+  const lowConfidence = visible.filter((i) => i.confidence === "low")
+  const confident = lowConfidence.length ? visible.filter((i) => i.confidence !== "low") : visible
+  const score = computeScore(confident, weights)
   const { linesOfCode, profile } = await buildMetricsAndProfile(ctx)
   const report: ScanReport = {
     schemaVersion: SCHEMA_VERSION,
@@ -269,7 +274,8 @@ export async function runScan(
     generatedAt: new Date().toISOString(),
     score,
     grade: scoreToGrade(score),
-    issues: visible,
+    issues: confident,
+    ...(lowConfidence.length ? { lowConfidence } : {}),
     diagnostics: { completedScanners, failedScanners, history: ctx.history ?? "unavailable" },
     // Echo effective weights so the dashboard recomputes the score identically.
     config: { weights },

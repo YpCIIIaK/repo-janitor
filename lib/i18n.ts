@@ -462,6 +462,10 @@ const en = {
 
   "table.new": "New",
   "table.snoozed": "Snoozed",
+  "table.lowConfidence": "Low confidence",
+  "table.lowConfidenceHint": "This rule is often wrong on real repos; it does not affect the score.",
+  "table.showLow": "Show low-confidence ({count})",
+  "table.hideLow": "Hide low-confidence",
   "table.title": "Detected issues",
   "table.allCategories": "All categories",
   "table.allScanners": "All scanners",
@@ -901,6 +905,10 @@ const ru: Messages = {
 
   "table.new": "Новые",
   "table.snoozed": "Отложенные",
+  "table.lowConfidence": "Низкая уверенность",
+  "table.lowConfidenceHint": "Это правило часто ошибается на реальных репозиториях и не влияет на оценку.",
+  "table.showLow": "Показать с низкой уверенностью ({count})",
+  "table.hideLow": "Скрыть с низкой уверенностью",
   "table.title": "Найденные проблемы",
   "table.allCategories": "Все категории",
   "table.allScanners": "Все сканеры",

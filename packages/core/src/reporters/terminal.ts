@@ -39,8 +39,13 @@ export function renderTerminal(report: ScanReport): string {
       `(${red(`${counts.critical} critical`)}, ${yellow(`${counts.warning} warning`)}, ${cyan(`${counts.info} info`)})`,
   ].join("\n")
 
+  const low = report.lowConfidence?.length ?? 0
+  const hidden = low
+    ? `\n\n${dim(`${low} low-confidence finding${low === 1 ? "" : "s"} hidden (often false positives) — run with --all to show.`)}`
+    : ""
+
   if (report.issues.length === 0) {
-    return `${header}\n\n${green("No issues found — clean repo.")}`
+    return `${header}\n\n${green("No issues found — clean repo.")}${hidden}`
   }
 
   const rows = sortIssues(report.issues)
@@ -51,5 +56,5 @@ export function renderTerminal(report: ScanReport): string {
     })
     .join("\n")
 
-  return `${header}\n\n${rows}`
+  return `${header}\n\n${rows}${hidden}`
 }
