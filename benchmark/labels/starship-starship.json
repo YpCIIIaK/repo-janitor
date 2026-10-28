@@ -1,0 +1,10 @@
+{
+ "bloat-media/demo.gif": "fp",
+ "busfactor-src/configs/cc.rs": "tp",
+ "ci-silenced-failure-.github/workflows/release.yml-102": "fp",
+ "commented-src/configs/os.rs:93": "tp",
+ "doclink-docs/bn-BD/config/README.md:1611:bold": "fp",
+ "duplicate-src/modules/gradle.rs-135": "tp",
+ "no-permissions-.github/workflows/crowdin-pretranslate.yml-1": "tp",
+ "todo-src/modules/git_state.rs:86": "tp"
+}

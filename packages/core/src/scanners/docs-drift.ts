@@ -39,6 +39,13 @@ const DOC_RE =
   /^(?:(?:[\w.-]+\/)*readme|contributing|\.github\/(?:readme|contributing)|docs?\/(?:[\w-]+\/)*(?:contributing|development|developing|hacking|building|setup))\.mdx?$/i
 
 /**
+ * READMEs that are not about using this repository: vendored copies (with the
+ * upstream's badges), test/example/script notes, and READMEs inside source trees.
+ */
+const NOT_PROJECT_DOC_RE =
+  /(^|\/)(?:_?vendor(?:ed)?|third[_-]party|node_modules|tests?|fixtures?|examples?|scripts?|tools?|src|lib|crates)\//i
+
+/**
  * Package-manager subcommands, which are never scripts.
  *
  * `npm test` runs the `test` script, so bare verbs generally ARE script names —
@@ -276,7 +283,7 @@ export const docsDriftScanner: Scanner = {
 
   async run(ctx: ScanContext): Promise<Issue[]> {
     const norm = (f: string) => f.replace(/\\/g, "/")
-    const docs = ctx.files.filter((f) => DOC_RE.test(norm(f)))
+    const docs = ctx.files.filter((f) => DOC_RE.test(norm(f)) && !NOT_PROJECT_DOC_RE.test(norm(f)))
     if (docs.length === 0) return []
 
     // --- what the repository actually offers --------------------------------

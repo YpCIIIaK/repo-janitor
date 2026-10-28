@@ -1,0 +1,6 @@
+{
+ "dead-symbol-internal/js_lexer/js_lexer.go:2576": "tp",
+ "doclink-CHANGELOG-2020.md:2500:npmjs.com/package/debug": "fp",
+ "eol-node-npm/esbuild-wasm/package.json-11": "tp",
+ "insecure-exec-interpolated-lib/npm/node-install.ts:124": "fp"
+}

@@ -1,0 +1,4 @@
+{
+ "docker-root-interop/observability/Dockerfile": "fp",
+ "docker-untagged-examples/features/csm_observability/server/Dockerfile:29": "fp"
+}

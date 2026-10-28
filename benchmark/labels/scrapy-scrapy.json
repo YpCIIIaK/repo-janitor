@@ -1,0 +1,4 @@
+{
+ "insecure-py-eval-exec-scrapy/extensions/remote_control.py:279": "fp",
+ "insecure-py-pickle-load-scrapy/extensions/httpcache.py:314": "fp"
+}

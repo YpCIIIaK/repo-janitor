@@ -1,0 +1,11 @@
+{
+ "action-tag-first-party-.github/workflows/rollingversions.yml-18": "tp",
+ "busfactor-.prettierrc.js": "tp",
+ "debug-packages/pug-parser/index.js:269": "tp",
+ "docs-drift-manager-packages/pug/test/README.md-8": "fp",
+ "duplicate-packages/pug-lexer/index.js-704": "tp",
+ "hygiene-no-license": "tp",
+ "insecure-new-function-packages/pug/lib/index.js:288": "fp",
+ "no-permissions-.github/workflows/test.yml-1": "tp",
+ "todo-packages/pug-filters/lib/run-filter.js:34": "tp"
+}

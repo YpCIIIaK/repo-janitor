@@ -1,0 +1,4 @@
+{
+ "docker-root-.oss-scanner/Dockerfile": "fp",
+ "skiptest-tests/unit/create/test_creator.py:946": "tp"
+}

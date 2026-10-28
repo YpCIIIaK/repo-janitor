@@ -1,0 +1,8 @@
+{
+ "action-tag-.github/workflows/spell_checking.yml-18": "tp",
+ "action-tag-first-party-.github/workflows/rubocop.yml-31": "tp",
+ "busfactor-lib/rubocop/config_obsoletion/split_cop.rb": "tp",
+ "no-permissions-.github/workflows/linting.yml-1": "tp",
+ "secret-entropy-lib/rubocop/magic_comment.rb:10": "fp",
+ "todo-spec/rubocop/cop/style/mutable_constant_spec.rb:84": "tp"
+}

@@ -1,0 +1,10 @@
+{
+ "docs-drift-badge-crates/parcel-resolver/src/json_comments_rs/README.md-3": "fp",
+ "insecure-eval-dynamic-packages/dev/query/src/cli.js:921": "fp",
+ "insecure-exec-interpolated-packages/core/utils/src/openInBrowser.js:31": "tp",
+ "insecure-react-dangerous-html-packages/dev/repl/src/components/helper.js:18": "tp",
+ "insecure-tls-verification-off-packages/core/test-utils/src/utils.js:1332": "fp",
+ "insecure-tls-verification-off-packages/core/test-utils/src/utils.js:1364": "fp",
+ "script-injection-.github/workflows/ci.yml-169": "fp",
+ "skiptest-packages/core/integration-tests/test/output-formats.js:71": "tp"
+}

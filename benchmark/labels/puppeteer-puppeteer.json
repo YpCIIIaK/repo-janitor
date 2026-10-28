@@ -1,0 +1,4 @@
+{
+ "insecure-eval-dynamic-packages/puppeteer-core/src/api/Page.ts:1493": "fp",
+ "secret-private-key-packages/testserver/key.pem:1": "fp"
+}

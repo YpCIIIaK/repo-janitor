@@ -56,7 +56,7 @@ const ASSIGN_RE =
 
 // Obvious non-secrets we never want to flag via the entropy path.
 const PLACEHOLDER_RE =
-  /^(your|example|changeme|placeholder|redacted|dummy|test|sample|xxx+|<|\$\{|\$\(|\{\{|\{%|%|process\.env|random|1234|this|abcd)/i
+  /^(your|example|changeme|placeholder|redacted|dummy|test|sample|xxx+|<|\$|\(\?|\{\{|\{%|%|process\.env|random|1234|this|abcd)/i
 
 // Values that are built, not stored: string interpolation (`invalid-${n}`,
 // Ruby `"#{secret}x"`) and UUIDs (WebDAV lock tokens, request ids).
@@ -83,7 +83,7 @@ const MAX_BYTES = 1_000_000
  * they stay visible without dominating. `.env.example` is skipped entirely above.
  */
 const LOW_CONFIDENCE_DIR =
-  /(?:^|\/)(?:tests?|__tests__|__mocks__|spec|specs?|e2e|fixtures?|__fixtures__|testdata|mocks?|examples?|samples?|docs?)\//i
+  /(?:^|\/)(?:t|tests?|__tests__|__mocks__|spec|specs?|e2e|integration|testserver|test-utils|fixtures?|__fixtures__|testdata|mocks?|examples?|samples?|docs?)\//i
 const LOW_CONFIDENCE_NAME =
   /(?:^|[/._-])(?:test|tests|spec|specs|example|examples|sample|samples|fixture|fixtures|mock|mocks|dummy|stub|demo)\.[a-z0-9]+$/i
 

@@ -1,0 +1,6 @@
+{
+ "ci-silenced-failure-.github/workflows/ci.yml-53": "tp",
+ "config-conflict-lockfiles-root": "tp",
+ "insecure-eval-dynamic-packages/less/lib/less/functions/list.js:78": "fp",
+ "insecure-new-function-packages/less/lib/less/tree/js-eval-node.js:37": "fp"
+}

@@ -33,7 +33,7 @@ const SKIP_RE = /(^|\/)(?:node_modules|vendor|third_party|dist|build|out|\.next)
  * 100-repo benchmark every finding under these paths was a false positive.
  */
 const NOT_SHIPPED_RE =
-  /(^|\/)(?:examples?|demos?|benchmarks?|bench|perf(?:-testing)?|performance|docs?|documentation|www|website|site|scripts?|tools?|[\w-]*_assets|static)\/|(^|\/)jquery[-.\d]*\.js$/i
+  /(^|\/)(?:examples?|demos?|benchmarks?|bench|perf(?:-testing)?|performance|docs?|documentation|www|website|site|scripts?|tools?|[\w-]*_assets|static|_?vendor(?:ed)?|third_party|integration-?[tT]ests|test-utils)\/|(^|\/)jquery[-.\d]*\.js$/i
 const TEST_RE =
   /(^|\/)(?:__tests__|tests?|specs?|fixtures?)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test_[^/]+\.py$|_test\.py$|(?:^|\/)conftest\.py$/i
 
@@ -62,7 +62,7 @@ const RULES: VulnRule[] = [
     lang: "js",
     // Only when the argument is not a plain string literal: `eval("1+1")` is
     // pointless but harmless, `eval(userInput)` is remote code execution.
-    re: /\beval\s*\(\s*[^)'"`\s]/g,
+    re: /(?<![.$\w])eval\s*\(\s*[^)'"`\s]/g,
     severity: "critical",
     title: "eval() on a non-literal value",
     detail:
@@ -216,7 +216,7 @@ const RULES: VulnRule[] = [
     id: "py-yaml-load",
     lang: "py",
     // yaml.load without a Loader= argument constructs arbitrary Python objects.
-    re: /\byaml\.load\s*\((?![^)]*Loader\s*=)/g,
+    re: /\byaml\.load\s*\((?![^)]*(?:Loader\s*=|Safe\w*Loader|BaseLoader))/g,
     severity: "critical",
     title: "yaml.load() without a safe loader",
     detail:
@@ -448,6 +448,10 @@ export function scanSource(content: string, lang: Lang): CodeHit[] {
         if (literalRanges(rawLine).some(([a, b]) => col > a && col < b)) continue
       }
       if (rawLine.length > 1000) continue // minified bundle
+      // The maintainers already reviewed this line for a security linter.
+      if (/#\s*(?:noqa|nosec)\b|\/\/\s*(?:nosemgrep|eslint-disable)|\bNOSONAR\b/.test(rawLine)) continue
+      // Docblock lines: ` * const v = await page.$eval(`, ``pickle.loads()``.
+      if (/^\s*\*/.test(rawLine) || /``/.test(rawLine)) continue
       if (!contextAllows(rule.id, content, lineStart)) continue
 
       const existing = byLine.get(line)

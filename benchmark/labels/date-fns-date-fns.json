@@ -1,0 +1,5 @@
+{
+ "docker-latest-.devcontainer/Dockerfile:1": "fp",
+ "docs-drift-manager-pkgs/core/examples/lodash-fp/README.md-10": "fp",
+ "hygiene-no-license": "tp"
+}

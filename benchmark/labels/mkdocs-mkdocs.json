@@ -1,0 +1,6 @@
+{
+ "action-tag-.github/workflows/autofix.yml-23": "tp",
+ "eol-python-pyproject.toml-34": "tp",
+ "insecure-py-yaml-load-mkdocs/theme.py:133": "fp",
+ "insecure-py-yaml-load-mkdocs/utils/meta.py:67": "fp"
+}

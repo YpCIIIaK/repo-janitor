@@ -1,0 +1,6 @@
+{
+ "ci-no-pr-trigger": "fp",
+ "config-conflict-ci-root": "tp",
+ "debug-jakelib/ecosystem.js:80": "fp",
+ "lockfile-missing": "tp"
+}

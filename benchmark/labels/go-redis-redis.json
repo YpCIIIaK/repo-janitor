@@ -1,0 +1,5 @@
+{
+ "ci-disabled-.github/workflows/test-redis-enterprise.yml-13": "tp",
+ "docker-latest-maintnotifications/e2e/cmd/proxy-fi-server/Dockerfile:18": "fp",
+ "env-no-example": "fp"
+}
