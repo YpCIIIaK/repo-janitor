@@ -383,6 +383,8 @@ export interface CodeHit {
   rule: VulnRule
   line: number
   evidence: string
+  /** Injection rules only: untrusted input appears near the match. */
+  tainted?: boolean
 }
 
 /**
@@ -459,11 +461,38 @@ export function scanSource(content: string, lang: Lang): CodeHit[] {
       const existing = byLine.get(line)
       // Keep the most severe rule when several match the same line.
       if (existing && rank(existing.rule.severity) >= rank(rule.severity)) continue
-      byLine.set(line, { rule, line, evidence: text.slice(0, 160) })
+      const tainted = INJECTION_RULES.has(rule.id) ? TAINT_RE[lang].test(around(content, lineStart, TAINT_WINDOW, 2)) : undefined
+      byLine.set(line, { rule, line, evidence: text.slice(0, 160), tainted })
     }
   }
 
   return [...byLine.values()].sort((a, b) => a.line - b.line)
+}
+
+/** Rules whose risk depends on where the value comes from. */
+const INJECTION_RULES = new Set([
+  "eval-dynamic",
+  "new-function",
+  "exec-interpolated",
+  "sql-interpolated",
+  "innerhtml-dynamic",
+  "react-dangerous-html",
+  "document-write-dynamic",
+  "py-eval-exec",
+  "py-os-system",
+  "py-shell-true",
+  "py-pickle-load",
+  "py-yaml-load",
+])
+/** Lines above the match searched for untrusted input — roughly one function. */
+const TAINT_WINDOW = 25
+/**
+ * Untrusted sources a reviewer would trace: HTTP request fields, CLI args,
+ * the URL, cross-window messages, uploaded files, interactive input.
+ */
+const TAINT_RE: Record<"js" | "py", RegExp> = {
+  js: /\b(?:req|request|ctx\.request|ctx)\.(?:body|query|params|headers|cookies|url|originalUrl|path)\b|\bprocess\.argv\b|\blocation\.(?:search|hash|href|pathname)\b|\bsearchParams\b|\bdocument\.(?:cookie|referrer|URL)\b|\b(?:event|e|evt|msg)\.data\b|\bwindow\.name\b|\bformData\b|\.files\b|\buserInput\b/,
+  py: /\brequest\.(?:args|form|json|data|values|files|GET|POST|body|query_params|path_params|cookies|headers|get_json)\b|\bsys\.argv\b|(?<![.\w])input\s*\(|\bself\.request\b|\bflask\.request\b|\bupload|\brecv\s*\(/,
 }
 
 /** Up to `n` lines either side of the match, for rules that need context. */
@@ -551,6 +580,10 @@ export const insecureCodeScanner: Scanner = {
               "pattern is often deliberate."
             : hit.rule.detail,
           evidence: hit.evidence,
+          // Injection rules vouch for a finding only when untrusted input is in
+          // sight: a request field, argv, user input. Without it the benchmark
+          // showed these are mostly code generation and fixed commands.
+          ...(hit.tainted === undefined ? {} : { confidence: hit.tainted ? "high" : "low" }),
         })
       }
     }

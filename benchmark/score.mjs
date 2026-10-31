@@ -19,7 +19,7 @@ const corpus = JSON.parse(readFileSync(join(here, "corpus.json"), "utf8"))
 const args = new Set(process.argv.slice(2))
 const TOLERANCE = 0.02
 
-const by = { scanner: new Map(), rule: new Map() }
+const by = { scanner: new Map(), rule: new Map(), confidence: new Map() }
 const bump = (map, key, field) => {
   const row = map.get(key) ?? { tp: 0, fp: 0, unlabelled: 0, goneTp: 0 }
   row[field]++
@@ -43,6 +43,8 @@ for (const repo of corpus) {
     const field = verdict === "tp" ? "tp" : verdict === "fp" ? "fp" : "unlabelled"
     bump(by.scanner, f.scanner, field)
     bump(by.rule, f.rule, field)
+    // Confidence a scanner stamped itself (taint-gated rules); the rest is per rule.
+    bump(by.confidence, f.confidence ?? "(per rule)", field)
   }
   for (const [id, verdict] of Object.entries(labels)) {
     if (verdict !== "tp" || seen.has(id)) continue
@@ -76,6 +78,8 @@ const report = [
   table(by.scanner, "By scanner"),
   "",
   table(by.rule, "By rule"),
+  "",
+  table(by.confidence, "By scanner-stamped confidence"),
   "",
 ].join("\n")
 writeFileSync(join(here, "REPORT.md"), report)

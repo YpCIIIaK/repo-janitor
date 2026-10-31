@@ -260,3 +260,17 @@ describe("insecure-code — 100-repo benchmark false positives", () => {
     expect(await run({ "src/v.py": "eval(user_input)\n" })).toHaveLength(1)
   })
 })
+
+describe("insecure-code — taint-gated confidence", () => {
+  const scan = async (files: Record<string, string>) =>
+    (await insecureCodeScanner.run(makeContext({ files }))).map((i) => `${i.id.split("-src")[0]} ${i.confidence}`)
+
+  it("vouches for an injection only when untrusted input is in sight", async () => {
+    expect(
+      await scan({
+        "src/a.js": "app.get('/x', (req, res) => {\n  const n = req.query.name\n  exec(`ls ${n}`)\n})\n",
+        "src/b.js": "function build(dir) {\n  exec(`ls ${dir}`)\n}\n",
+      }),
+    ).toEqual(["insecure-exec-interpolated high", "insecure-exec-interpolated low"])
+  })
+})

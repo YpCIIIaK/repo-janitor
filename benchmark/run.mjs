@@ -65,6 +65,7 @@ async function runOne(repo) {
     id: i.id,
     scanner: i.scanner,
     rule: i.rule,
+    confidence: i.confidence,
     severity: i.severity,
     title: i.title,
     location: i.location,
