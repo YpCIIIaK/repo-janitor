@@ -78,6 +78,8 @@ export const commentedCodeScanner: Scanner = {
       if (issues.length >= MAX_TOTAL) break
       const norm = file.replace(/\\/g, "/")
       if (!SOURCE_RE.test(norm) || norm.includes(".min.")) continue
+      // Vendored code is someone else's to clean up.
+      if (/(^|\/)(?:vendor|third_party|node_modules)\//.test(norm)) continue
 
       const content = await ctx.readFile(file)
       if (!content || !content.includes("//")) continue
