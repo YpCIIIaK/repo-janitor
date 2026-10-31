@@ -127,7 +127,12 @@ export const deadCodeScanner: Scanner = {
     if (sources.length >= 2) issues.push(...(await scanJsTsExports(ctx, sources)))
     // Polyglot — textual "never referenced" symbols (Python, Go).
     issues.push(...(await scanPolyglotSymbols(ctx)))
-    return issues
+    // Vendored code, generated declarations and console-script entry points are
+    // used from outside the graph we can see.
+    return issues.filter(
+      (i) =>
+        !/(^|\/)(?:vendor|third_party)\/|\.generated\.|(^|\/)__main__\.py:/.test(i.location),
+    )
   },
 }
 

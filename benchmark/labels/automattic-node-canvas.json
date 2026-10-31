@@ -1,0 +1,6 @@
+{
+ "commented-src/Image.cc:1068": "fp",
+ "hygiene-no-license": "tp",
+ "lockfile-missing": "tp",
+ "skiptest-test/wpt/generated/pixel-manipulation.js:218": "tp"
+}

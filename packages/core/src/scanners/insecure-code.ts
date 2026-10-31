@@ -33,7 +33,7 @@ const SKIP_RE = /(^|\/)(?:node_modules|vendor|third_party|dist|build|out|\.next)
  * 100-repo benchmark every finding under these paths was a false positive.
  */
 const NOT_SHIPPED_RE =
-  /(^|\/)(?:examples?|demos?|benchmarks?|bench|perf(?:-testing)?|performance|docs?|documentation|www|website|site|scripts?|tools?|[\w-]*_assets|static|_?vendor(?:ed)?|third_party|integration-?[tT]ests|test-utils|tooling|_tools|sphinx)\/|(^|\/)jquery[-.\d]*\.js$/i
+  /(^|\/)(?:_?examples?|demos?|benchmarks?|bench|perf(?:-testing)?|performance|docs?|documentation|www|website|site|scripts?|tools?|[\w-]*_assets|static|_?vendor(?:ed)?|third_party|integration-?[tT]ests|test-utils|tooling|_tools|sphinx)\/|(^|\/)jquery[-.\d]*\.js$/i
 const TEST_RE =
   /(^|\/)(?:__tests__|tests?|specs?|fixtures?)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test\.[cm]?[jt]s$|(?:^|\/)test_[^/]+\.py$|_test\.py$|(?:^|\/)conftest\.py$/i
 

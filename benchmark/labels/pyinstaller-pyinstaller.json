@@ -1,0 +1,14 @@
+{
+ "action-tag-.github/workflows/ci.yml-425": "tp",
+ "action-tag-first-party-.github/workflows/lint.yml-13": "tp",
+ "bloat-PyInstaller/bootloader/Windows-64bit-intel/runw_d.exe": "tp",
+ "busfactor-bootloader/waflib/Tools/c.py": "tp",
+ "dead-symbol-PyInstaller/__main__.py:226": "fp",
+ "docker-root-bootloader/Dockerfile.osxcross": "fp",
+ "duplicate-bootloader/zlib/crc32.h-7": "tp",
+ "eol-python-pyproject.toml-6": "tp",
+ "insecure-py-eval-exec-PyInstaller/hooks/rthooks/pyi_rth_multiprocessing.py:64": "fp",
+ "insecure-py-eval-exec-PyInstaller/loader/pyimod02_importers.py:457": "fp",
+ "no-permissions-.github/workflows/validate-new-news.yml-1": "tp",
+ "todo-PyInstaller/lib/modulegraph/modulegraph.py:1075": "tp"
+}

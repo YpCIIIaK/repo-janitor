@@ -1,0 +1,9 @@
+{
+ "bloat-_examples/file-server/send-files/files/first.zip": "fp",
+ "ci-silenced-failure-.github/workflows/ci.yml-40": "fp",
+ "debug-_examples/webassembly/client/go-wasm-runtime.js:315": "fp",
+ "docker-latest-_examples/auth/basicauth/database/Dockerfile:3": "fp",
+ "secret-entropy-_examples/auth/recaptcha/custom_form/main.go:14": "fp",
+ "secret-entropy-_examples/websocket/basic/browser/index.html:27": "fp",
+ "secret-private-key-_examples/mvc/grpc-compatible-bidirectional-stream/server.key:1": "fp"
+}

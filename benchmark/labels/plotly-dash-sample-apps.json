@@ -1,0 +1,6 @@
+{
+ "ci-no-pr-trigger": "tp",
+ "config-conflict-ci-root": "tp",
+ "insecure-py-pickle-load-apps/dash-fashion-mnist-explorer/app.py:327": "fp",
+ "secret-entropy-apps/dash-uber-rides-demo/app.py:21": "fp"
+}

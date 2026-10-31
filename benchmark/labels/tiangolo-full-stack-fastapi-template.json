@@ -1,0 +1,12 @@
+{
+ "ci-silenced-failure-.github/workflows/pre-commit.yml-63": "fp",
+ "commented-frontend/playwright.config.ts:49": "fp",
+ "dead-code-uikit-frontend/src/components/ui": "tp",
+ "docker-root-backend/Dockerfile": "tp",
+ "doclink-README.md:3:../../actions/workflows/test-docker-compose.yml/badge.svg": "fp",
+ "duplicate-frontend/src/components/Admin/DeleteUser.tsx-41": "tp",
+ "env-no-example": "tp",
+ "insecure-localstorage-secret-frontend/src/hooks/useAuth.ts:45": "tp",
+ "insecure-localstorage-secret-frontend/tests/login.spec.ts:112": "fp",
+ "self-hosted-runner-.github/workflows/deploy-docker-compose.yml-17": "tp"
+}

@@ -29,7 +29,7 @@ const EXAMPLE_RE = /(^|\/)examples?\/|(?:^|\/)example\.[cm]?[jt]sx?$/i
  * In the benchmark every console.log/print in these was intentional.
  */
 const TOOLING_RE =
-  /(^|\/)(?:bench(?:mark)?s?|perf(?:ormance)?|__performance_tests__|www|static|demos?|cli|devtools|docs_src|extras|assets|support|test_files|\.github|internal|scripts?|bin|tools?|[\w-]*_assets|sandbox|playgrounds?|fixtures?|__fixtures__|docs?)\/|\.test-d\.tsx?$|\.d\.ts$|(^|\/)build\.rs$|[-_.]bin\.[cm]?[jt]s$|(^|\/)log(?:ger|ging)?\.[cm]?[jt]s$|(^|\/)play(?:ground)?\.[cm]?[jt]sx?$/i
+  /(^|\/)(?:_examples|bench(?:mark)?s?|perf(?:ormance)?|__performance_tests__|www|static|demos?|cli|devtools|docs_src|extras|assets|support|test_files|\.github|internal|scripts?|bin|tools?|[\w-]*_assets|sandbox|playgrounds?|fixtures?|__fixtures__|docs?)\/|\.test-d\.tsx?$|\.d\.ts$|(^|\/)build\.rs$|[-_.]bin\.[cm]?[jt]s$|(^|\/)log(?:ger|ging)?\.[cm]?[jt]s$|(^|\/)play(?:ground)?\.[cm]?[jt]sx?$/i
 const DEBUG_METHODS = new Set(["log", "debug", "trace", "dir", "table"])
 
 const MAX_PER_FILE = 8

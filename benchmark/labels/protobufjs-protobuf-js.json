@@ -1,0 +1,12 @@
+{
+ "action-tag-.github/workflows/release.yaml-17": "tp",
+ "action-tag-first-party-.github/workflows/test.yml-15": "tp",
+ "bloat-tests/data/mapbox/vector_tile.bin": "fp",
+ "busfactor-cli/wrappers/closure.js": "tp",
+ "ci-silenced-failure-.github/workflows/release.yaml-65": "fp",
+ "dead-export-ext/descriptor.generated.d.ts:UninterpretedOption": "fp",
+ "duplicate-cli/lib/catharsis/lib/parser.js-1697": "tp",
+ "eol-node-package.json-10": "tp",
+ "no-permissions-.github/workflows/test.yml-1": "tp",
+ "todo-tests/api_writer-reader.js:126": "tp"
+}

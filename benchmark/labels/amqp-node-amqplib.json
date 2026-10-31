@@ -1,0 +1,4 @@
+{
+ "insecure-tls-verification-off-types/callback_api.ts:30": "fp",
+ "insecure-tls-verification-off-types/channel_api.ts:32": "fp"
+}

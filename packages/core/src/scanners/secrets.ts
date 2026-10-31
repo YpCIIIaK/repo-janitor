@@ -83,7 +83,7 @@ const MAX_BYTES = 1_000_000
  * they stay visible without dominating. `.env.example` is skipped entirely above.
  */
 const LOW_CONFIDENCE_DIR =
-  /(?:^|\/)(?:t|tests?|test_files|vectors|[\w-]*_vectors|interop|__tests__|__mocks__|spec|specs?|e2e|integration|testserver|test-utils|fixtures?|__fixtures__|testdata|mocks?|examples?|samples?|docs?)\//i
+  /(?:^|\/)(?:t|tests?|test_certs|cassettes|_examples|test_files|vectors|[\w-]*_vectors|interop|__tests__|__mocks__|spec|specs?|e2e|integration|testserver|test-utils|fixtures?|__fixtures__|testdata|mocks?|examples?|samples?|docs?)\//i
 const LOW_CONFIDENCE_NAME =
   /(?:^|[/._-])(?:test|tests|spec|specs|example|examples|sample|samples|fixture|fixtures|mock|mocks|dummy|stub|demo)\.[a-z0-9]+$/i
 

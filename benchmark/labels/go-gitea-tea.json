@@ -1,0 +1,7 @@
+{
+ "busfactor-vendor/code.gitea.io/sdk/gitea/lfs_lock.go": "tp",
+ "commented-vendor/github.com/go-gitea/yaml/parserc.go:24": "fp",
+ "dead-symbol-vendor/github.com/go-gitea/yaml/apic.go:67": "fp",
+ "doclink-CONTRIBUTING.md:189:MAINTAINERS": "tp",
+ "hygiene-no-tests": "tp"
+}

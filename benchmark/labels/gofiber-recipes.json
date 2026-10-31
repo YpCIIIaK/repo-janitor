@@ -1,0 +1,7 @@
+{
+ "docker-latest-asynq/worker/Dockerfile:6": "fp",
+ "docker-untagged-gcloud-firebase/Dockerfile:17": "fp",
+ "docker-untagged-gcloud/Dockerfile:17": "fp",
+ "docker-untagged-url-shortener-api/api/Dockerfile:14": "fp",
+ "secret-private-key-https-tls/certs/ssl.key:1": "fp"
+}

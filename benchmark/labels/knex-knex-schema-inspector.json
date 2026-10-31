@@ -1,0 +1,5 @@
+{
+ "insecure-sql-interpolated-lib/dialects/postgres.ts:120": "fp",
+ "insecure-sql-interpolated-lib/dialects/postgres.ts:90": "fp",
+ "insecure-sql-interpolated-lib/dialects/sqlite.ts:216": "fp"
+}

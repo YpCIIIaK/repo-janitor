@@ -1,0 +1,6 @@
+{
+ "insecure-py-eval-exec-gluon/contrib/dbg.py:918": "fp",
+ "insecure-py-os-system-gluon/widget.py:819": "fp",
+ "insecure-py-shell-true-extras/build_web2py/build_web2py.py:110": "fp",
+ "insecure-py-shell-true-extras/build_web2py/build_web2py.py:117": "fp"
+}

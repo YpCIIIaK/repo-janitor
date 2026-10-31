@@ -26,7 +26,7 @@ function tagOf(image: string): string | null {
 }
 
 const THROWAWAY_IMAGE_RE =
-  /(^|\/)(?:\.devcontainer|\.clusterfuzzlite|\.oss-[\w-]+|tests?|e2e|integration|interop|fixtures?|testdata|examples?|demos?)\//i
+  /(^|\/)(?:\.devcontainer|\.clusterfuzzlite|\.oss-[\w-]+|tests?|e2e|integration|interop|fixtures?|testdata|_?examples?|demos?)\//i
 const NOT_A_SERVICE_RE =
   /(^|\/)(?:\.[\w-]+|tests?|e2e|integration|interop|fixtures?|testdata|examples?|demos?|tools?|scripts?|extras|packaging|docs?)\//i
 

@@ -1,0 +1,5 @@
+{
+ "eol-python-pyproject.toml-40": "tp",
+ "insecure-py-pickle-load-cherrypy/lib/sessions.py:569": "fp",
+ "insecure-py-shell-true-cherrypy/_cpmodpy.py:305": "fp"
+}
