@@ -26863,7 +26863,7 @@ var require_lib4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-LC27BUZY.js
+// ../cli/dist/chunk-4Z3MPYHG.js
 var import_fs2 = require("fs");
 
 // ../../node_modules/.pnpm/tinyglobby@0.2.17/node_modules/tinyglobby/dist/index.mjs
@@ -45593,7 +45593,7 @@ function date4(params) {
 // ../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/external.js
 config(en_default());
 
-// ../cli/dist/chunk-LC27BUZY.js
+// ../cli/dist/chunk-4Z3MPYHG.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -70219,59 +70219,64 @@ function ruleOf(issue2) {
   return (_a22 = issue2.scanner) != null ? _a22 : "other";
 }
 var RULE_PRECISION = {
-  "bloat": { tp: 7, fp: 4 },
-  "bus-factor": { tp: 25, fp: 0 },
+  "bloat": { tp: 8, fp: 6 },
+  "bus-factor": { tp: 28, fp: 0 },
   "ci-disabled": { tp: 2, fp: 1 },
-  "ci-no-pr-trigger": { tp: 2, fp: 4 },
-  "ci-silenced-failure": { tp: 2, fp: 8 },
+  "ci-no-pr-trigger": { tp: 4, fp: 4 },
+  "ci-silenced-failure": { tp: 2, fp: 11 },
   "ci-swallowed": { tp: 2, fp: 0 },
-  "ci-tests-not-run": { tp: 0, fp: 4 },
-  "commented-code": { tp: 21, fp: 7 },
-  "config-conflict": { tp: 13, fp: 0 },
+  "ci-tests-not-run": { tp: 0, fp: 6 },
+  "commented-code": { tp: 22, fp: 9 },
+  "config-conflict": { tp: 16, fp: 0 },
   "dead-export": { tp: 11, fp: 11 },
-  "debug-leftover": { tp: 4, fp: 14 },
-  "dep-unused": { tp: 0, fp: 6 },
-  "doc-link": { tp: 10, fp: 3 },
+  "dead-uikit": { tp: 1, fp: 0 },
+  "debug-leftover": { tp: 4, fp: 16 },
+  "dep-unused": { tp: 0, fp: 9 },
+  "doc-link": { tp: 12, fp: 4 },
   "docker-add-url": { tp: 1, fp: 0 },
-  "docker-latest": { tp: 2, fp: 0 },
-  "docker-root": { tp: 3, fp: 4 },
-  "docker-untagged": { tp: 1, fp: 0 },
-  "docs-badge": { tp: 5, fp: 0 },
+  "docker-latest": { tp: 3, fp: 1 },
+  "docker-root": { tp: 4, fp: 6 },
+  "docker-untagged": { tp: 1, fp: 3 },
+  "docs-badge": { tp: 6, fp: 0 },
   "docs-script": { tp: 1, fp: 0 },
-  "duplicate": { tp: 32, fp: 2 },
+  "duplicate": { tp: 35, fp: 2 },
   "env-dead": { tp: 0, fp: 3 },
-  "env-no-example": { tp: 0, fp: 9 },
-  "eol-node": { tp: 24, fp: 0 },
-  "eol-python": { tp: 18, fp: 0 },
+  "env-no-example": { tp: 1, fp: 11 },
+  "eol-node": { tp: 27, fp: 0 },
+  "eol-python": { tp: 21, fp: 0 },
   "eol-runner": { tp: 5, fp: 0 },
-  "hygiene-no-ci": { tp: 4, fp: 0 },
-  "hygiene-no-license": { tp: 3, fp: 0 },
+  "hygiene-no-ci": { tp: 7, fp: 0 },
+  "hygiene-no-license": { tp: 6, fp: 0 },
   "hygiene-no-readme": { tp: 1, fp: 0 },
-  "hygiene-no-tests": { tp: 2, fp: 1 },
-  "insecure-eval-dynamic": { tp: 1, fp: 1 },
-  "insecure-exec-interpolated": { tp: 2, fp: 3 },
+  "hygiene-no-tests": { tp: 5, fp: 1 },
+  "insecure-eval-dynamic": { tp: 1, fp: 2 },
+  "insecure-exec-interpolated": { tp: 2, fp: 6 },
   "insecure-innerhtml-dynamic": { tp: 0, fp: 3 },
-  "insecure-new-function": { tp: 3, fp: 5 },
-  "insecure-py-eval-exec": { tp: 0, fp: 4 },
-  "insecure-py-os-system": { tp: 0, fp: 2 },
-  "insecure-py-pickle-load": { tp: 1, fp: 6 },
-  "insecure-py-shell-true": { tp: 1, fp: 0 },
+  "insecure-localstorage-secret": { tp: 1, fp: 1 },
+  "insecure-new-function": { tp: 3, fp: 8 },
+  "insecure-py-eval-exec": { tp: 0, fp: 7 },
+  "insecure-py-os-system": { tp: 0, fp: 3 },
+  "insecure-py-pickle-load": { tp: 2, fp: 8 },
+  "insecure-py-shell-true": { tp: 1, fp: 3 },
   "insecure-py-verify-false": { tp: 1, fp: 0 },
   "insecure-py-yaml-load": { tp: 0, fp: 2 },
   "insecure-react-dangerous-html": { tp: 1, fp: 5 },
-  "insecure-sql-interpolated": { tp: 1, fp: 6 },
-  "insecure-tls-verification-off": { tp: 0, fp: 1 },
-  "insecure-weak-hash": { tp: 1, fp: 2 },
-  "lockfile-missing": { tp: 12, fp: 1 },
-  "secret-generic": { tp: 0, fp: 1 },
-  "secret-history": { tp: 0, fp: 2 },
-  "skipped-test": { tp: 14, fp: 1 },
-  "todo": { tp: 48, fp: 0 },
-  "workflow-action-tag": { tp: 41, fp: 0 },
-  "workflow-action-tag-first-party": { tp: 53, fp: 0 },
-  "workflow-no-permissions": { tp: 25, fp: 0 },
+  "insecure-sql-interpolated": { tp: 1, fp: 9 },
+  "insecure-tls-verification-off": { tp: 0, fp: 4 },
+  "insecure-weak-hash": { tp: 1, fp: 3 },
+  "lockfile-missing": { tp: 15, fp: 1 },
+  "secret-generic": { tp: 0, fp: 2 },
+  "secret-history": { tp: 0, fp: 3 },
+  "secret-provider": { tp: 0, fp: 2 },
+  "skipped-test": { tp: 17, fp: 1 },
+  "supply-remote-shell": { tp: 1, fp: 0 },
+  "todo": { tp: 51, fp: 0 },
+  "workflow-action-tag": { tp: 44, fp: 0 },
+  "workflow-action-tag-first-party": { tp: 56, fp: 0 },
+  "workflow-no-permissions": { tp: 28, fp: 0 },
   "workflow-pr-target-checkout": { tp: 2, fp: 0 },
-  "workflow-script-injection": { tp: 0, fp: 1 }
+  "workflow-script-injection": { tp: 1, fp: 1 },
+  "workflow-self-hosted-runner": { tp: 1, fp: 0 }
 };
 var MIN_LABELLED = 3;
 var MIN_LABELLED_HIGH = 5;
@@ -70860,7 +70865,7 @@ var BINARY_EXT = /\.(png|jpe?g|gif|webp|ico|bmp|pdf|zip|gz|tar|woff2?|ttf|eot|mp
 var SKIP_NAME = /(?:^|\/)(package-lock\.json|pnpm-lock\.yaml|yarn\.lock)$/;
 var NUL = String.fromCharCode(0);
 var MAX_BYTES = 1e6;
-var LOW_CONFIDENCE_DIR = /(?:^|\/)(?:t|tests?|test_files|vectors|[\w-]*_vectors|interop|__tests__|__mocks__|spec|specs?|e2e|integration|testserver|test-utils|fixtures?|__fixtures__|testdata|mocks?|examples?|samples?|docs?)\//i;
+var LOW_CONFIDENCE_DIR = /(?:^|\/)(?:t|tests?|test_certs|cassettes|_examples|test_files|vectors|[\w-]*_vectors|interop|__tests__|__mocks__|spec|specs?|e2e|integration|testserver|test-utils|fixtures?|__fixtures__|testdata|mocks?|examples?|samples?|docs?)\//i;
 var LOW_CONFIDENCE_NAME = /(?:^|[/._-])(?:test|tests|spec|specs|example|examples|sample|samples|fixture|fixtures|mock|mocks|dummy|stub|demo)\.[a-z0-9]+$/i;
 function isLowConfidenceSecretFile(file2) {
   return LOW_CONFIDENCE_DIR.test(file2) || LOW_CONFIDENCE_NAME.test(file2) || DOC_FILE.test(file2);
@@ -72882,7 +72887,7 @@ var projectHygieneScanner = {
 var SOURCE_RE3 = /\.(ts|tsx|js|jsx|mjs|mts|cts)$/;
 var TEST_RE2 = /(^|\/)(?:__tests__|tests?|specs?|e2e)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test_[^/]+\.py$|_test\.(?:py|go|rb)$|_spec\.rb$|(?:^|\/)conftest\.py$/i;
 var EXAMPLE_RE = /(^|\/)examples?\/|(?:^|\/)example\.[cm]?[jt]sx?$/i;
-var TOOLING_RE = /(^|\/)(?:bench(?:mark)?s?|perf(?:ormance)?|__performance_tests__|www|static|demos?|cli|devtools|docs_src|extras|assets|support|test_files|\.github|internal|scripts?|bin|tools?|[\w-]*_assets|sandbox|playgrounds?|fixtures?|__fixtures__|docs?)\/|\.test-d\.tsx?$|\.d\.ts$|(^|\/)build\.rs$|[-_.]bin\.[cm]?[jt]s$|(^|\/)log(?:ger|ging)?\.[cm]?[jt]s$|(^|\/)play(?:ground)?\.[cm]?[jt]sx?$/i;
+var TOOLING_RE = /(^|\/)(?:_examples|bench(?:mark)?s?|perf(?:ormance)?|__performance_tests__|www|static|demos?|cli|devtools|docs_src|extras|assets|support|test_files|\.github|internal|scripts?|bin|tools?|[\w-]*_assets|sandbox|playgrounds?|fixtures?|__fixtures__|docs?)\/|\.test-d\.tsx?$|\.d\.ts$|(^|\/)build\.rs$|[-_.]bin\.[cm]?[jt]s$|(^|\/)log(?:ger|ging)?\.[cm]?[jt]s$|(^|\/)play(?:ground)?\.[cm]?[jt]sx?$/i;
 var DEBUG_METHODS = /* @__PURE__ */ new Set(["log", "debug", "trace", "dir", "table"]);
 var MAX_PER_FILE = 8;
 var MAX_TOTAL = 50;
@@ -73358,7 +73363,9 @@ var deadCodeScanner = {
       const sources = ctx.files.filter((f3) => SOURCE_RE5.test(f3));
       if (sources.length >= 2) issues.push(...yield scanJsTsExports(ctx, sources));
       issues.push(...yield scanPolyglotSymbols(ctx));
-      return issues;
+      return issues.filter(
+        (i) => !/(^|\/)(?:vendor|third_party)\/|\.generated\.|(^|\/)__main__\.py:/.test(i.location)
+      );
     });
   }
 };
@@ -73865,7 +73872,7 @@ function tagOf(image) {
   const colon = lastSeg.lastIndexOf(":");
   return colon >= 0 ? lastSeg.slice(colon + 1) : null;
 }
-var THROWAWAY_IMAGE_RE = /(^|\/)(?:\.devcontainer|\.clusterfuzzlite|\.oss-[\w-]+|tests?|e2e|integration|interop|fixtures?|testdata|examples?|demos?)\//i;
+var THROWAWAY_IMAGE_RE = /(^|\/)(?:\.devcontainer|\.clusterfuzzlite|\.oss-[\w-]+|tests?|e2e|integration|interop|fixtures?|testdata|_?examples?|demos?)\//i;
 var NOT_A_SERVICE_RE = /(^|\/)(?:\.[\w-]+|tests?|e2e|integration|interop|fixtures?|testdata|examples?|demos?|tools?|scripts?|extras|packaging|docs?)\//i;
 var dockerfileScanner = {
   id: "dockerfile",
@@ -74111,6 +74118,7 @@ var commentedCodeScanner = {
         if (issues.length >= MAX_TOTAL6) break;
         const norm = file2.replace(/\\/g, "/");
         if (!SOURCE_RE7.test(norm) || norm.includes(".min.")) continue;
+        if (/(^|\/)(?:vendor|third_party|node_modules)\//.test(norm)) continue;
         const content = yield ctx.readFile(file2);
         if (!content || !content.includes("//")) continue;
         const lines = content.split(/\r?\n/);
@@ -74160,7 +74168,7 @@ var commentedCodeScanner = {
 var JS_RE2 = /\.(ts|tsx|js|jsx|mjs|mts|cts)$/i;
 var PY_RE2 = /\.py$/i;
 var SKIP_RE = /(^|\/)(?:node_modules|vendor|third_party|dist|build|out|\.next)\/|\.min\.[cm]?js$/i;
-var NOT_SHIPPED_RE2 = /(^|\/)(?:examples?|demos?|benchmarks?|bench|perf(?:-testing)?|performance|docs?|documentation|www|website|site|scripts?|tools?|[\w-]*_assets|static|_?vendor(?:ed)?|third_party|integration-?[tT]ests|test-utils|tooling|_tools|sphinx)\/|(^|\/)jquery[-.\d]*\.js$/i;
+var NOT_SHIPPED_RE2 = /(^|\/)(?:_?examples?|demos?|benchmarks?|bench|perf(?:-testing)?|performance|docs?|documentation|www|website|site|scripts?|tools?|[\w-]*_assets|static|_?vendor(?:ed)?|third_party|integration-?[tT]ests|test-utils|tooling|_tools|sphinx)\/|(^|\/)jquery[-.\d]*\.js$/i;
 var TEST_RE3 = /(^|\/)(?:__tests__|tests?|specs?|fixtures?)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test\.[cm]?[jt]s$|(?:^|\/)test_[^/]+\.py$|_test\.py$|(?:^|\/)conftest\.py$/i;
 var MAX_PER_FILE4 = 6;
 var MAX_TOTAL7 = 60;
@@ -74458,11 +74466,31 @@ function scanSource(content, lang) {
       if (!contextAllows(rule.id, content, lineStart)) continue;
       const existing = byLine.get(line);
       if (existing && rank(existing.rule.severity) >= rank(rule.severity)) continue;
-      byLine.set(line, { rule, line, evidence: text.slice(0, 160) });
+      const tainted = INJECTION_RULES.has(rule.id) ? TAINT_RE[lang].test(around(content, lineStart, TAINT_WINDOW, 2)) : void 0;
+      byLine.set(line, { rule, line, evidence: text.slice(0, 160), tainted });
     }
   }
   return [...byLine.values()].sort((a, b3) => a.line - b3.line);
 }
+var INJECTION_RULES = /* @__PURE__ */ new Set([
+  "eval-dynamic",
+  "new-function",
+  "exec-interpolated",
+  "sql-interpolated",
+  "innerhtml-dynamic",
+  "react-dangerous-html",
+  "document-write-dynamic",
+  "py-eval-exec",
+  "py-os-system",
+  "py-shell-true",
+  "py-pickle-load",
+  "py-yaml-load"
+]);
+var TAINT_WINDOW = 25;
+var TAINT_RE = {
+  js: /\b(?:req|request|ctx\.request|ctx)\.(?:body|query|params|headers|cookies|url|originalUrl|path)\b|\bprocess\.argv\b|\blocation\.(?:search|hash|href|pathname)\b|\bsearchParams\b|\bdocument\.(?:cookie|referrer|URL)\b|\b(?:event|e|evt|msg)\.data\b|\bwindow\.name\b|\bformData\b|\.files\b|\buserInput\b/,
+  py: new RegExp("\\brequest\\.(?:args|form|json|data|values|files|GET|POST|body|query_params|path_params|cookies|headers|get_json)\\b|\\bsys\\.argv\\b|(?<![.\\w])input\\s*\\(|\\bself\\.request\\b|\\bflask\\.request\\b|\\bupload|\\brecv\\s*\\(")
+};
 function around(content, lineStart, before, after) {
   let a = lineStart;
   for (let k2 = 0; k2 < before && a > 0; k2++) a = content.lastIndexOf("\n", a - 2) + 1;
@@ -74515,7 +74543,7 @@ var insecureCodeScanner = {
             ageDays = yield ctx.git.blameAgeDays(file2, hit.line);
           } catch (e) {
           }
-          issues.push({
+          issues.push(__spreadValues({
             id: `insecure-${hit.rule.id}-${norm}:${hit.line}`,
             category: "security",
             severity: isTest ? LOWER[hit.rule.severity] : hit.rule.severity,
@@ -74524,7 +74552,7 @@ var insecureCodeScanner = {
             ageDays,
             detail: isTest ? `${hit.rule.detail} Lowered one severity step because this is a test file, where the pattern is often deliberate.` : hit.rule.detail,
             evidence: hit.evidence
-          });
+          }, hit.tainted === void 0 ? {} : { confidence: hit.tainted ? "high" : "low" }));
         }
       }
       return issues;
@@ -77818,7 +77846,7 @@ var BINARY_EXT2 = /\.(png|jpe?g|gif|webp|ico|bmp|pdf|zip|gz|tar|woff2?|ttf|eot|m
 var SKIP_NAME2 = /(?:^|\/)(package-lock\.json|pnpm-lock\.yaml|yarn\.lock)$/;
 var NUL2 = String.fromCharCode(0);
 var MAX_BYTES3 = 1e6;
-var LOW_CONFIDENCE_DIR2 = /(?:^|\/)(?:t|tests?|test_files|vectors|[\w-]*_vectors|interop|__tests__|__mocks__|spec|specs?|e2e|integration|testserver|test-utils|fixtures?|__fixtures__|testdata|mocks?|examples?|samples?|docs?)\//i;
+var LOW_CONFIDENCE_DIR2 = /(?:^|\/)(?:t|tests?|test_certs|cassettes|_examples|test_files|vectors|[\w-]*_vectors|interop|__tests__|__mocks__|spec|specs?|e2e|integration|testserver|test-utils|fixtures?|__fixtures__|testdata|mocks?|examples?|samples?|docs?)\//i;
 var LOW_CONFIDENCE_NAME2 = /(?:^|[/._-])(?:test|tests|spec|specs|example|examples|sample|samples|fixture|fixtures|mock|mocks|dummy|stub|demo)\.[a-z0-9]+$/i;
 function isLowConfidenceSecretFile2(file2) {
   return LOW_CONFIDENCE_DIR2.test(file2) || LOW_CONFIDENCE_NAME2.test(file2) || DOC_FILE2.test(file2);
@@ -79751,7 +79779,7 @@ var projectHygieneScanner2 = {
 var SOURCE_RE10 = /\.(ts|tsx|js|jsx|mjs|mts|cts)$/;
 var TEST_RE6 = /(^|\/)(?:__tests__|tests?|specs?|e2e)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test_[^/]+\.py$|_test\.(?:py|go|rb)$|_spec\.rb$|(?:^|\/)conftest\.py$/i;
 var EXAMPLE_RE2 = /(^|\/)examples?\/|(?:^|\/)example\.[cm]?[jt]sx?$/i;
-var TOOLING_RE2 = /(^|\/)(?:bench(?:mark)?s?|perf(?:ormance)?|__performance_tests__|www|static|demos?|cli|devtools|docs_src|extras|assets|support|test_files|\.github|internal|scripts?|bin|tools?|[\w-]*_assets|sandbox|playgrounds?|fixtures?|__fixtures__|docs?)\/|\.test-d\.tsx?$|\.d\.ts$|(^|\/)build\.rs$|[-_.]bin\.[cm]?[jt]s$|(^|\/)log(?:ger|ging)?\.[cm]?[jt]s$|(^|\/)play(?:ground)?\.[cm]?[jt]sx?$/i;
+var TOOLING_RE2 = /(^|\/)(?:_examples|bench(?:mark)?s?|perf(?:ormance)?|__performance_tests__|www|static|demos?|cli|devtools|docs_src|extras|assets|support|test_files|\.github|internal|scripts?|bin|tools?|[\w-]*_assets|sandbox|playgrounds?|fixtures?|__fixtures__|docs?)\/|\.test-d\.tsx?$|\.d\.ts$|(^|\/)build\.rs$|[-_.]bin\.[cm]?[jt]s$|(^|\/)log(?:ger|ging)?\.[cm]?[jt]s$|(^|\/)play(?:ground)?\.[cm]?[jt]sx?$/i;
 var DEBUG_METHODS2 = /* @__PURE__ */ new Set(["log", "debug", "trace", "dir", "table"]);
 var MAX_PER_FILE5 = 8;
 var MAX_TOTAL8 = 50;
@@ -80214,7 +80242,9 @@ var deadCodeScanner2 = {
     const sources = ctx.files.filter((f3) => SOURCE_RE12.test(f3));
     if (sources.length >= 2) issues.push(...await scanJsTsExports2(ctx, sources));
     issues.push(...await scanPolyglotSymbols2(ctx));
-    return issues;
+    return issues.filter(
+      (i) => !/(^|\/)(?:vendor|third_party)\/|\.generated\.|(^|\/)__main__\.py:/.test(i.location)
+    );
   }
 };
 var NOT_SHIPPED_RE3 = /(^|\/)(?:__tests__|tests?|spec|e2e|fixtures?|__fixtures__|__snapshots__|examples?|playgrounds?|sandbox|bench(?:mark)?s?|scripts?)\/|\.(?:test|spec|test-d|snap)\.|\.snap\.[a-z.]+$/i;
@@ -80700,7 +80730,7 @@ function tagOf2(image) {
   const colon = lastSeg.lastIndexOf(":");
   return colon >= 0 ? lastSeg.slice(colon + 1) : null;
 }
-var THROWAWAY_IMAGE_RE2 = /(^|\/)(?:\.devcontainer|\.clusterfuzzlite|\.oss-[\w-]+|tests?|e2e|integration|interop|fixtures?|testdata|examples?|demos?)\//i;
+var THROWAWAY_IMAGE_RE2 = /(^|\/)(?:\.devcontainer|\.clusterfuzzlite|\.oss-[\w-]+|tests?|e2e|integration|interop|fixtures?|testdata|_?examples?|demos?)\//i;
 var NOT_A_SERVICE_RE2 = /(^|\/)(?:\.[\w-]+|tests?|e2e|integration|interop|fixtures?|testdata|examples?|demos?|tools?|scripts?|extras|packaging|docs?)\//i;
 var dockerfileScanner2 = {
   id: "dockerfile",
@@ -80942,6 +80972,7 @@ var commentedCodeScanner2 = {
       if (issues.length >= MAX_TOTAL13) break;
       const norm = file2.replace(/\\/g, "/");
       if (!SOURCE_RE14.test(norm) || norm.includes(".min.")) continue;
+      if (/(^|\/)(?:vendor|third_party|node_modules)\//.test(norm)) continue;
       const content = await ctx.readFile(file2);
       if (!content || !content.includes("//")) continue;
       const lines = content.split(/\r?\n/);
@@ -80991,7 +81022,7 @@ var commentedCodeScanner2 = {
 var JS_RE4 = /\.(ts|tsx|js|jsx|mjs|mts|cts)$/i;
 var PY_RE4 = /\.py$/i;
 var SKIP_RE2 = /(^|\/)(?:node_modules|vendor|third_party|dist|build|out|\.next)\/|\.min\.[cm]?js$/i;
-var NOT_SHIPPED_RE4 = /(^|\/)(?:examples?|demos?|benchmarks?|bench|perf(?:-testing)?|performance|docs?|documentation|www|website|site|scripts?|tools?|[\w-]*_assets|static|_?vendor(?:ed)?|third_party|integration-?[tT]ests|test-utils|tooling|_tools|sphinx)\/|(^|\/)jquery[-.\d]*\.js$/i;
+var NOT_SHIPPED_RE4 = /(^|\/)(?:_?examples?|demos?|benchmarks?|bench|perf(?:-testing)?|performance|docs?|documentation|www|website|site|scripts?|tools?|[\w-]*_assets|static|_?vendor(?:ed)?|third_party|integration-?[tT]ests|test-utils|tooling|_tools|sphinx)\/|(^|\/)jquery[-.\d]*\.js$/i;
 var TEST_RE7 = /(^|\/)(?:__tests__|tests?|specs?|fixtures?)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test\.[cm]?[jt]s$|(?:^|\/)test_[^/]+\.py$|_test\.py$|(?:^|\/)conftest\.py$/i;
 var MAX_PER_FILE8 = 6;
 var MAX_TOTAL14 = 60;
@@ -81286,11 +81317,31 @@ function scanSource2(content, lang) {
       if (!contextAllows2(rule.id, content, lineStart)) continue;
       const existing = byLine.get(line);
       if (existing && rank2(existing.rule.severity) >= rank2(rule.severity)) continue;
-      byLine.set(line, { rule, line, evidence: text.slice(0, 160) });
+      const tainted = INJECTION_RULES2.has(rule.id) ? TAINT_RE2[lang].test(around2(content, lineStart, TAINT_WINDOW2, 2)) : void 0;
+      byLine.set(line, { rule, line, evidence: text.slice(0, 160), tainted });
     }
   }
   return [...byLine.values()].sort((a, b3) => a.line - b3.line);
 }
+var INJECTION_RULES2 = /* @__PURE__ */ new Set([
+  "eval-dynamic",
+  "new-function",
+  "exec-interpolated",
+  "sql-interpolated",
+  "innerhtml-dynamic",
+  "react-dangerous-html",
+  "document-write-dynamic",
+  "py-eval-exec",
+  "py-os-system",
+  "py-shell-true",
+  "py-pickle-load",
+  "py-yaml-load"
+]);
+var TAINT_WINDOW2 = 25;
+var TAINT_RE2 = {
+  js: /\b(?:req|request|ctx\.request|ctx)\.(?:body|query|params|headers|cookies|url|originalUrl|path)\b|\bprocess\.argv\b|\blocation\.(?:search|hash|href|pathname)\b|\bsearchParams\b|\bdocument\.(?:cookie|referrer|URL)\b|\b(?:event|e|evt|msg)\.data\b|\bwindow\.name\b|\bformData\b|\.files\b|\buserInput\b/,
+  py: /\brequest\.(?:args|form|json|data|values|files|GET|POST|body|query_params|path_params|cookies|headers|get_json)\b|\bsys\.argv\b|(?<![.\w])input\s*\(|\bself\.request\b|\bflask\.request\b|\bupload|\brecv\s*\(/
+};
 function around2(content, lineStart, before, after) {
   let a = lineStart;
   for (let k2 = 0; k2 < before && a > 0; k2++) a = content.lastIndexOf("\n", a - 2) + 1;
@@ -81349,7 +81400,11 @@ var insecureCodeScanner2 = {
           location: `${norm}:${hit.line}`,
           ageDays,
           detail: isTest ? `${hit.rule.detail} Lowered one severity step because this is a test file, where the pattern is often deliberate.` : hit.rule.detail,
-          evidence: hit.evidence
+          evidence: hit.evidence,
+          // Injection rules vouch for a finding only when untrusted input is in
+          // sight: a request field, argv, user input. Without it the benchmark
+          // showed these are mostly code generation and fixed commands.
+          ...hit.tainted === void 0 ? {} : { confidence: hit.tainted ? "high" : "low" }
         });
       }
     }
