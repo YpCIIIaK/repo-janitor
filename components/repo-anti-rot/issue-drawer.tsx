@@ -265,6 +265,14 @@ export function IssueDrawer({
                 <dd className="break-all font-mono text-foreground">{issue.location}</dd>
                 <dt className="text-muted-foreground">{t("drawer.age")}</dt>
                 <dd className="text-foreground">{fullAge(issue.ageDays)}</dd>
+                {issue.confidence && (
+                  <>
+                    <dt className="text-muted-foreground">{t("drawer.confidence")}</dt>
+                    <dd className="text-foreground" title={t(`drawer.confidence.${issue.confidence}Hint`)}>
+                      {t(`drawer.confidence.${issue.confidence}`)}
+                    </dd>
+                  </>
+                )}
               </dl>
 
               {issue.evidence && (

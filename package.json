@@ -25,7 +25,8 @@
     "setup:server": "node scripts/setup-local.mjs",
     "bench:run": "node benchmark/run.mjs",
     "bench:score": "node benchmark/score.mjs",
-    "bench:sample": "node benchmark/sample.mjs"
+    "bench:sample": "node benchmark/sample.mjs",
+    "bench:stats": "node benchmark/stats.mjs"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "1.2.12",

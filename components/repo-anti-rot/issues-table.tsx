@@ -14,6 +14,7 @@ import {
   Layers,
   MoreHorizontal,
   SearchX,
+  ShieldCheck,
 } from "lucide-react"
 import {
   categoryLabels,
@@ -129,6 +130,11 @@ function IssueRow({
           {snoozed && (
             <span className="shrink-0 rounded-full border border-border bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
               {t("table.snoozed")}
+            </span>
+          )}
+          {issue.confidence === "high" && (
+            <span className="shrink-0 text-success" title={t("table.highConfidenceHint")}>
+              <ShieldCheck className="size-3.5" aria-label={t("table.highConfidence")} />
             </span>
           )}
           {issue.confidence === "low" && (
