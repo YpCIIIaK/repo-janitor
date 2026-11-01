@@ -67,7 +67,7 @@ function isLocalRelative(target: string): boolean {
   // Commit hashes, rustdoc paths (`tower_http::timeout`), Sphinx/MkDocs refs to
   // a bare name, GitHub UI paths (`../../issues/new`), markdown debris (`[`).
   if (/^[0-9a-f]{7,40}$/i.test(target) || target.includes("::")) return false
-  if (!/[./]/.test(target)) return false
+  if (!/[./]/.test(target) && !/^[A-Z][A-Z_-]+$/.test(target)) return false
   if (/^(?:\.\.\/)+(?:issues|pulls?|actions|wiki|discussions|releases|blob|tree|compare)\b/.test(target)) return false
   if (/^[[(]/.test(target)) return false
   // `npmjs.com/package/debug`: a URL missing its scheme, not a file.
