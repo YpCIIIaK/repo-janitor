@@ -29,7 +29,7 @@ const EXAMPLE_RE = /(^|\/)examples?\/|(?:^|\/)example\.[cm]?[jt]sx?$/i
  * In the benchmark every console.log/print in these was intentional.
  */
 const TOOLING_RE =
-  /(^|\/)(?:_examples|bench(?:mark)?s?|perf(?:ormance)?|__performance_tests__|www|static|demos?|cli|devtools|docs_src|extras|assets|support|test_files|\.github|internal|scripts?|bin|tools?|[\w-]*_assets|sandbox|playgrounds?|fixtures?|__fixtures__|docs?)\/|\.test-d\.tsx?$|\.d\.ts$|(^|\/)build\.rs$|[-_.]bin\.[cm]?[jt]s$|(^|\/)log(?:ger|ging)?\.[cm]?[jt]s$|(^|\/)play(?:ground)?\.[cm]?[jt]sx?$/i
+  /(^|\/)(?:_examples|[\w-]+-tests|dockers?|jakelib|dev|bench(?:mark)?s?|perf(?:ormance)?|__performance_tests__|www|static|demos?|cli|devtools|docs_src|extras|assets|support|test_files|\.github|internal|scripts?|bin|tools?|[\w-]*_assets|sandbox|playgrounds?|fixtures?|__fixtures__|docs?)\/|\.test-d\.tsx?$|\.d\.ts$|(^|\/)build\.rs$|[-_.]bin\.[cm]?[jt]s$|(^|\/)test\.[cm]?[jt]s$|^[^/]+\.[cm]?js$|(^|\/)log(?:ger|ging)?\.[cm]?[jt]s$|(^|\/)play(?:ground)?\.[cm]?[jt]sx?$/i
 const DEBUG_METHODS = new Set(["log", "debug", "trace", "dir", "table"])
 
 const MAX_PER_FILE = 8
@@ -172,7 +172,8 @@ function debugLabel(node: Node): string | null {
  * ("Cache miss for key", `Using ${x}`) or one behind a debug/dev guard. In the
  * benchmark these were deliberate; leftovers log a bare value (`console.log(x)`).
  */
-const DEBUG_GUARD_RE = /\bif\s*\([^)]*(?:debug|verbose|__DEV__|NODE_ENV|isDev|process\.env)/i
+const DEBUG_GUARD_RE =
+  /\bif\s*\([^)]*(?:debug|verbose|__DEV__|NODE_ENV|isDev|process\.env)|\blog(?:ger|All|Debug)?\s*[=:]\s*(?:function|\()|function\s+_?log\w*\s*\(/i
 function intentionalLog(node: Node, lines: string[]): boolean {
   const first = (node.arguments as Node[] | undefined)?.[0]
   if (first?.type === "StringLiteral" && /\w\s+\w/.test(String(first.value ?? ""))) return true

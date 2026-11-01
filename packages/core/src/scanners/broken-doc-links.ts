@@ -51,6 +51,9 @@ function lineAt(text: string, index: number): number {
 }
 
 /** Should this link target be checked as a local relative path? */
+const NOT_LINKED_DOC_RE =
+  /(^|\/)(?:CHANGELOG|CHANGES|HISTORY|NEWS|RELEASES?)[^/]*\.\w+$|(^|\/)(?:test|tests|spec|specs|deps|vendor|website|docs_src|blog)\/|(^|\/)README[-.][a-z]{2}(?:[-_][A-Za-z]{2,4})?\.\w+$/i
+
 function isLocalRelative(target: string): boolean {
   if (!target) return false
   // external, protocol-relative, anchors, mail/tel, data URIs, root-absolute
@@ -61,6 +64,12 @@ function isLocalRelative(target: string): boolean {
   // `[me](someone@example.com)` is an e-mail missing its `mailto:`, which a
   // reader still recognises; it is not a file that moved.
   if (/^[^/]+@[^/]+\.[a-z]{2,}$/i.test(target)) return false
+  // Commit hashes, rustdoc paths (`tower_http::timeout`), Sphinx/MkDocs refs to
+  // a bare name, GitHub UI paths (`../../issues/new`), markdown debris (`[`).
+  if (/^[0-9a-f]{7,40}$/i.test(target) || target.includes("::")) return false
+  if (!/[./]/.test(target)) return false
+  if (/^(?:\.\.\/)+(?:issues|pulls?|actions|wiki|discussions|releases|blob|tree|compare)\b/.test(target)) return false
+  if (/^[[(]/.test(target)) return false
   // `npmjs.com/package/debug`: a URL missing its scheme, not a file.
   if (/^(?:www\.)?[\w-]+\.(?:com|org|net|io|dev|app|co|me|sh|rs|js)(?:\/|$)/i.test(target)) return false
   return true
@@ -106,6 +115,10 @@ export const brokenDocLinksScanner: Scanner = {
       // Parser fixtures and translated copies of the docs (docs/bn-BD/…), whose
       // links mirror the source language and are fixed upstream, not here.
       if (/(^|\/)(?:testdata|fixtures?|__fixtures__)\/|(^|\/)docs?\/[a-z]{2}(?:-[A-Za-z]{2,4})?\//.test(norm)) continue
+      // Changelogs are history (links to files that existed then); test specs,
+      // vendored deps, website/blog sources and doc-tool snippets are resolved
+      // by their own tooling; README-ru / README.ja-JP are translations.
+      if (NOT_LINKED_DOC_RE.test(norm)) continue
 
       const raw = await ctx.readFile(file)
       if (!raw || !raw.includes("](")) continue

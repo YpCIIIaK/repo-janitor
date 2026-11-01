@@ -136,6 +136,7 @@ export function scanCiFile(file: string, content: string): CiFinding[] {
   // judged by what the step actually does rather than on its own.
   let stepHasRun = false
   let stepRunText = ""
+  let stepName = ""
   let pending: CiFinding | null = null
 
   const flushStep = () => {
@@ -143,10 +144,14 @@ export function scanCiFile(file: string, content: string): CiFinding[] {
     // not checking it, and `continue-on-error` on it usually absorbs a boring
     // exit code like "nothing to commit".
     const verifies = stepHasRun && !REGENERATES.test(stepRunText) && !MUTATES.test(stepRunText)
-    if (pending && verifies) out.push(pending)
+    // Advisory steps are allowed to fail by design: an audit, a coverage
+    // upload, a linter, a size report, a publish of docs or a nightly build.
+    const advisory = ADVISORY.test(`${stepName}\n${stepRunText}`) || ADVISORY_FILE.test(file)
+    if (pending && verifies && !advisory) out.push(pending)
     pending = null
     stepHasRun = false
     stepRunText = ""
+    stepName = ""
   }
 
   for (let i = 0; i < lines.length; i++) {
@@ -158,6 +163,8 @@ export function scanCiFile(file: string, content: string): CiFinding[] {
 
     // A new list item under `steps:` ends the previous step.
     if (/^-\s+(?:name|uses|run|id|shell)\s*:/.test(trimmed)) flushStep()
+    const named = trimmed.match(/^(?:-\s+)?name\s*:\s*(.*)$/)
+    if (named) stepName = named[1]
     if (/(?:^|^-\s+)run\s*:/.test(trimmed)) stepHasRun = true
     // Once inside a step's `run:`, keep the text: a block scalar spans lines and
     // the `git commit` that explains the silencing is rarely the first of them.
@@ -327,6 +334,10 @@ async function indirectRunText(ctx: ScanContext, files: string[], workflowText: 
   return parts.join("\n")
 }
 
+const ADVISORY =
+  /\b(?:audit|outdated|coverage|codecov|coveralls|upload|pre-commit|size|bench\w*|deploy|publish|release|docs?|nightly|canary|experimental|report|notify|slack|comment)\b/i
+const ADVISORY_FILE = /(?:audit|pre-commit|coverage|release|deploy|publish|docs|nightly|browsers?|bench\w*)[^/]*\.ya?ml$/i
+
 export const ciHealthScanner: Scanner = {
   id: "ci-health",
   category: "hygiene",
@@ -407,12 +418,16 @@ export const ciHealthScanner: Scanner = {
     // --- nothing checked before merge ---------------------------------------
     if (issues.length < MAX_ISSUES) {
       const triggers = new Set<string>()
-      for (const f of workflows) {
+      // Release, deploy and housekeeping workflows run on push by nature; they
+      // say nothing about whether changes are checked.
+      for (const f of workflows.filter((w) => !/(?:release|deploy|publish|lock|stale|docs|pages|label)[^/]*$/i.test(w))) {
         for (const t of triggersOf(contents.get(f) ?? "")) triggers.add(t)
       }
+      // Another CI (CircleCI, Travis…) may be the one gating pull requests.
+      const otherCi = ctx.files.some((f) => OTHER_CI_CONFIG.includes(f.replace(/\\/g, "/")))
       // `merge_group` means checks run in the merge queue, which is the same
       // guarantee by a newer mechanism.
-      const gated = triggers.has("pull_request") || triggers.has("merge_group")
+      const gated = triggers.has("pull_request") || triggers.has("pull_request_target") || triggers.has("merge_group") || otherCi
       // A repo whose workflows are all releases and schedules is not missing a
       // gate, it just has nothing to gate. Requiring a push trigger keeps the
       // rule to repositories that plainly do run CI on changes.

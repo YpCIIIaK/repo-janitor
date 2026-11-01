@@ -16,10 +16,13 @@ import type { Issue, Severity } from "../schema"
 
 const MB = 1024 * 1024
 const LARGE_BYTES = 5 * MB // any file this big is suspicious regardless of type
-const MEDIA_BYTES = 2 * MB // media is expected to be larger; only flag the heavy ones
+// Docs GIFs, logos and screenshots of 2–5 MB were never worth acting on in the benchmark.
+const MEDIA_BYTES = 10 * MB // media is expected to be larger; only flag the heavy ones
+/** Test data is allowed to be big: a fixture of this size is the outlier. */
+const FIXTURE_LARGE_BYTES = 25 * MB
 const MAX_FINDINGS = 30
 const SMALL_ARTIFACT_BYTES = 100 * 1024
-const FIXTURE_DIR = /(^|\/)(?:tests?|__tests__|spec|fixtures?|__fixtures__|testdata|examples?)\//i
+const FIXTURE_DIR = /(^|\/)(?:tests?|__tests__|spec|fixtures?|__fixtures__|testdata|test_protos|examples?)\//i
 
 // Archives, compiled binaries, installers, db dumps — these rarely belong in git
 // at all, so they're flagged regardless of size.
@@ -31,6 +34,10 @@ const ARTIFACT_EXT = new Set([
   "bin", "dat", "pyc", "pyo",
   "dump", "sqlite", "sqlite3", "db", "mdb",
 ])
+
+const VENDORED_RE = /(^|\/)(?:vendor|third_party|deps|node_modules)\//i
+const SHIPPED_BINARY_RE = /(^|\/)(?:bin|bootloader|fallbacks|prebuilds?|native|binaries)\/[^/]+\.(?:exe|dll|so|dylib)$/i
+const DATA_EXT = new Set(["db", "sqlite", "sqlite3", "bin", "dat", "gz", "tar"])
 
 // Large media / design files — flagged only above MEDIA_BYTES (legit but heavy).
 const MEDIA_EXT = new Set([
@@ -69,12 +76,22 @@ export const repoBloatScanner: Scanner = {
       const norm = file.replace(/\\/g, "/")
       const ext = extOf(norm)
       const size = ctx.fileSize ? await ctx.fileSize(file) : null
+      // Vendored tools and C amalgamations are copied in on purpose.
+      if (VENDORED_RE.test(norm)) continue
+      // Binaries a package ships (bin/windows-kill.exe, a bootloader, a
+      // clipboard fallback) and small data files (.db, .bin, .gz) are content.
+      const shipped = SHIPPED_BINARY_RE.test(norm) || (DATA_EXT.has(extOf(norm)) && size != null && size < SMALL_ARTIFACT_BYTES)
+      const fixture = FIXTURE_DIR.test(norm)
 
-      if (ARTIFACT_EXT.has(ext) && !(FIXTURE_DIR.test(norm) && (size == null || size < SMALL_ARTIFACT_BYTES))) {
+      if (ARTIFACT_EXT.has(ext) && !shipped && !(fixture && (size == null || size < SMALL_ARTIFACT_BYTES))) {
         // A binary artifact in git, flagged at any size — except small test
         // fixtures: a 264-byte .gz exercising a decompressor is the test.
         candidates.push({ file: norm, size, severity: "warning", kind: "artifact" })
-      } else if (size != null && size >= LARGE_BYTES) {
+      } else if (
+        size != null &&
+        size >= (fixture ? FIXTURE_LARGE_BYTES : LARGE_BYTES) &&
+        !MEDIA_EXT.has(ext)
+      ) {
         // Any oversized file (e.g. a giant JSON/CSV fixture) — flag by size.
         candidates.push({ file: norm, size, severity: "warning", kind: "large" })
       } else if (size != null && size >= MEDIA_BYTES && MEDIA_EXT.has(ext)) {
