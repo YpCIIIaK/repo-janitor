@@ -1,6 +1,9 @@
 {
  "ci-no-pr-trigger": "tp",
+ "commented-apps/dash-3d-image-partitioning/assets/undo.js:7": "fp",
  "config-conflict-ci-root": "tp",
+ "dead-symbol-apps/dash-3d-image-partitioning/app.py:841": "fp",
+ "doclink-apps/dash-image-annotation/assets/Howto.md:11:assets/select_label.png": "tp",
  "insecure-py-pickle-load-apps/dash-fashion-mnist-explorer/app.py:327": "fp",
  "secret-entropy-apps/dash-uber-rides-demo/app.py:21": "fp"
 }

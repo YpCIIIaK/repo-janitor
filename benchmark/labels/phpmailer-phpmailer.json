@@ -1,5 +1,6 @@
 {
  "busfactor-language/phpmailer.lang-sr_latn.php": "fp",
+ "commented-language/phpmailer.lang-fi.php:23": "fp",
  "commented-language/phpmailer.lang-fo.php:23": "fp",
  "debug-src/POP3.php:440": "fp",
  "debug-src/SMTP.php:373": "fp",

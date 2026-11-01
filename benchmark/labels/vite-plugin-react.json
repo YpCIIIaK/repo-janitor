@@ -3,6 +3,7 @@
  "busfactor-playground/react/hmr/parent.jsx": "fp",
  "busfactor-playground/react/import-attributes/test.jsx": "fp",
  "commented-packages/common/refresh-runtime.js:473": "fp",
+ "commented-packages/common/refresh-runtime.js:485": "fp",
  "commented-packages/plugin-rsc/e2e/basic.test.ts:1178": "tp",
  "commented-packages/plugin-rsc/e2e/basic.test.ts:1185": "tp",
  "dead-export-packages/plugin-rsc/examples/ppr/src/framework/entry.ssr.tsx:prerenderHtml": "fp",

@@ -1,3 +1,4 @@
 {
+ "dead-export-packages/query-codemods/src/v5/keep-previous-data/__testfixtures__/named.output.tsx:Example7": "fp",
  "insecure-react-dangerous-html-packages/react-query-next-experimental/src/HydrationStreamProvider.tsx:157": "fp"
 }

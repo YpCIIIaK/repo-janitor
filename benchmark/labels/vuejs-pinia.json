@@ -4,6 +4,7 @@
  "busfactor-packages/testing/src/index.ts": "tp",
  "ci-silenced-failure-.github/workflows/release.yml-157": "fp",
  "commented-packages/playground/src/stores/nasa.ts:10": "tp",
+ "dead-export-packages/nuxt/src/runtime/composables.ts:usePinia": "fp",
  "dead-export-packages/online-playground/src/download/download.ts:downloadProject": "fp",
  "dead-export-packages/size-check/src/pinia.js:useStore": "fp",
  "debug-packages/pinia/src/devtools/utils.ts:22": "fp",

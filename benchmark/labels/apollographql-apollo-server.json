@@ -1,4 +1,5 @@
 {
  "ci-no-pr-trigger": "fp",
- "config-conflict-ci-root": "tp"
+ "config-conflict-ci-root": "tp",
+ "doclink-DEVELOPMENT.md:37:changesets": "tp"
 }

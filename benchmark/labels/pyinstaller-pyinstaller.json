@@ -1,6 +1,7 @@
 {
  "action-tag-.github/workflows/ci.yml-425": "tp",
  "action-tag-first-party-.github/workflows/lint.yml-13": "tp",
+ "bloat-PyInstaller/bootloader/Windows-64bit-intel/runw.exe": "fp",
  "bloat-PyInstaller/bootloader/Windows-64bit-intel/runw_d.exe": "tp",
  "busfactor-bootloader/waflib/Tools/c.py": "tp",
  "dead-symbol-PyInstaller/__main__.py:226": "fp",

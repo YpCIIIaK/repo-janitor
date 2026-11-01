@@ -1,3 +1,4 @@
 {
+ "bloat-test/benchmarks/driver_bench/spec/parallel/ldjson_multi/ldjson015.txt": "fp",
  "insecure-weak-hash-src/cmap/auth/scram.ts:245": "fp"
 }

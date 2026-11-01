@@ -1,4 +1,6 @@
 {
+ "commented-admin/client/App/screens/List/actions/dragdrop.js:134": "tp",
+ "dead-export-website/templates/template-doc-layout.js:pageQuery": "fp",
  "insecure-react-dangerous-html-admin/client/App/elemental/FormNote/index.js:20": "fp",
  "insecure-react-dangerous-html-fields/types/color/ColorField.js:66": "fp",
  "insecure-react-dangerous-html-fields/types/color/ColorField.js:71": "fp",

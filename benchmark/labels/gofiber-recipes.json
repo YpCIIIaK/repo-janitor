@@ -1,4 +1,5 @@
 {
+ "bloat-gorm/books.db": "fp",
  "docker-latest-asynq/worker/Dockerfile:6": "fp",
  "docker-untagged-gcloud-firebase/Dockerfile:17": "fp",
  "docker-untagged-gcloud/Dockerfile:17": "fp",

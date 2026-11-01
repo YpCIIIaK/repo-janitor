@@ -1,0 +1,4 @@
+{
+ "commented-test/function/samples/track-parameter-return-reassignments/main.js:16": "fp",
+ "dead-export-wasm/bindings_wasm_bg.wasm.d.ts:__wbindgen_export": "fp"
+}

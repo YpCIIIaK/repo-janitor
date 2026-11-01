@@ -1,4 +1,5 @@
 {
+ "bloat-bin/windows-kill.exe": "fp",
  "config-conflict-ci-root": "tp",
  "docker-root-Dockerfile": "fp",
  "env-no-example": "fp",

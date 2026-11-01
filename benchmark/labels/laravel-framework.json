@@ -1,3 +1,4 @@
 {
+ "bloat-bin/splitsh-lite": "tp",
  "env-no-example": "fp"
 }

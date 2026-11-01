@@ -1,5 +1,6 @@
 {
  "commented-git/client_test.go:1175": "fp",
  "dead-symbol-.github/codeql/queries/examples/UnsanitizedResponseToTerminalGood.go:20": "fp",
+ "dead-symbol-.github/codeql/tests/unsanitized-response-to-terminal/misses_disk_roundtrip.go:17": "fp",
  "doclink-internal/attachments/testdata/references_input.md:33:./repro.mp4": "fp"
 }

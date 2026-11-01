@@ -1,3 +1,4 @@
 {
+ "dead-symbol-src/trio/_core/_tests/tutil.py:78": "fp",
  "insecure-py-pickle-load-src/trio/_tools/mypy_annotate.py:103": "fp"
 }

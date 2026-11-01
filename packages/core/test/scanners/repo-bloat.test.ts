@@ -26,10 +26,10 @@ describe("repoBloatScanner", () => {
     expect(issues[0].title).toContain("Large file")
   })
 
-  it("flags heavy media (≥2MB) as info but not small media", async () => {
+  it("flags heavy media (≥10MB) as info but not docs-sized media", async () => {
     const ctx = makeContext({
       files: { "a/heavy.png": "x", "a/small.png": "y" },
-      sizes: { "a/heavy.png": 3 * MB, "a/small.png": 50 * 1024 },
+      sizes: { "a/heavy.png": 12 * MB, "a/small.png": 3 * MB },
     })
     const issues = await repoBloatScanner.run(ctx)
     expect(issues).toHaveLength(1)

@@ -1,7 +1,10 @@
 {
+ "bloat-assets/syntaxes.bin": "fp",
  "bloat-assets/themes.bin": "fp",
+ "commented-src/syntax_mapping/builtin.rs:23": "fp",
  "debug-assets/theme_preview.rs:4": "fp",
  "docker-root-tests/syntax-tests/source/Dockerfile/Dockerfile": "fp",
+ "doclink-doc/README-ru.md:650:LICENSE-APACHE": "fp",
  "insecure-innerhtml-dynamic-tests/benchmarks/highlighting-speed-src/jquery.js:1248": "fp",
  "insecure-innerhtml-dynamic-tests/benchmarks/highlighting-speed-src/jquery.js:4773": "fp",
  "insecure-py-eval-exec-tests/benchmarks/highlighting-speed-src/numpy_test_multiarray.py:1315": "fp"

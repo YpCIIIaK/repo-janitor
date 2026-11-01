@@ -1,4 +1,5 @@
 {
+ "doclink-docs/guides/webmcp.md:166:../api/puppeteer.elementhandle": "fp",
  "insecure-eval-dynamic-packages/puppeteer-core/src/api/Page.ts:1493": "fp",
  "secret-private-key-packages/testserver/key.pem:1": "fp"
 }

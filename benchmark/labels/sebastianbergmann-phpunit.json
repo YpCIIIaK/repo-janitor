@@ -1,3 +1,4 @@
 {
+ "bloat-tools/.phpstan/vendor/phpstan/phpstan/turbo-ext/windows-x86_64/phpstan_turbo_core.dll": "fp",
  "docs-drift-badge-tools/.php-cs-fixer/vendor/react/dns/README.md-3": "fp"
 }

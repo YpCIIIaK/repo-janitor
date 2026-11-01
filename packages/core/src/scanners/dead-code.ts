@@ -37,6 +37,12 @@ const CONVENTION_EXPORTS = new Set([
   "GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS",
   // opengraph-image / icon / apple-icon route segment exports
   "alt", "size", "contentType",
+  // Gatsby page queries, MDX provider hooks, Astro/Starlight content collections
+  "pageQuery", "query", "useMDXComponents", "collections",
+  // JSX runtime entry points, looked up by the compiler
+  "jsx", "jsxs", "jsxDEV", "Fragment",
+  // unstorage driver manifests, Remix/React Router route modules
+  "DRIVER_DEPENDENCIES", "loader", "action", "meta", "links", "headers", "handle", "ErrorBoundary", "HydrateFallback",
 ])
 
 /**
@@ -143,7 +149,7 @@ export const deadCodeScanner: Scanner = {
  * consumed by a runner or a reader, not by an import.
  */
 const NOT_SHIPPED_RE =
-  /(^|\/)(?:__tests__|tests?|spec|e2e|fixtures?|__fixtures__|__snapshots__|examples?|playgrounds?|sandbox|bench(?:mark)?s?|scripts?)\/|\.(?:test|spec|test-d|snap)\.|\.snap\.[a-z.]+$/i
+  /(^|\/)(?:__tests__|_?tests?|spec|e2e|fixtures?|__fixtures__|__testfixtures__|__snapshots__|_?examples?|playgrounds?|sandbox|bench(?:mark)?s?|scripts?|website|www|docs?|tutorials?|\.github|composables)\/|\.(?:test|spec|test-d|snap)\.|\.snap\.[a-z.]+$|\.d\.[cm]?ts$|\.gen\.[cm]?[jt]sx?$/i
 
 /**
  * Files a package publishes, from each package.json's main/module/types/exports.
@@ -446,6 +452,7 @@ const GO_TEST_RE = /_test\.go$/i
 const IDENT_RE = /[A-Za-z_][A-Za-z0-9_]*/g
 const POLY_MAX = 40
 
+
 interface PolyDef {
   name: string
   line: number
@@ -491,6 +498,15 @@ function pythonDefs(content: string): PolyDef[] {
     let j = i - 1
     while (j >= 0 && lines[j].trim() === "") j--
     if (j >= 0 && lines[j].trim().startsWith("@")) continue
+    // A multi-line decorator (`@app.callback(\n  Output(...),\n)`) ends in `)`.
+    if (j >= 0 && /^[)\]]/.test(lines[j].trim())) {
+      let k = j
+      while (k > j - 30 && k >= 0 && lines[k].trim() !== "" && !/^@/.test(lines[k])) k--
+      if (k >= 0 && /^@/.test(lines[k])) continue
+    }
+    // A subclass (`class Handler(logging.Handler)`) is usually registered by
+    // name in config or found through its base; only bare classes are judged.
+    if (m[1] === "class" && /^class\s+\w+\s*\(\s*[A-Za-z_]/.test(lines[i])) continue
     out.push({
       name,
       line: i + 1,
@@ -510,6 +526,8 @@ function goDefs(content: string): PolyDef[] {
   for (let i = 0; i < lines.length; i++) {
     const m = lines[i].match(/^func\s+(?:\([^)]*\)\s*)?([A-Za-z_]\w*)\s*[([]/)
     if (!m) continue
+    // Methods can satisfy an interface no call site names; only plain funcs are judged.
+    if (/^func\s+\(/.test(lines[i])) continue
     const name = m[1]
     if (/^[A-Z]/.test(name) || name === "main" || name === "init") continue
     out.push({ name, line: i + 1, kind: "function", evidence: lines[i].trim().slice(0, 140) })
@@ -580,7 +598,7 @@ async function collectGoDead(ctx: ScanContext, files: string[], issues: Issue[])
     countInto(c, freq)
   }
   for (const [file, content] of contents) {
-    if (GO_TEST_RE.test(toPosix(file))) continue
+    if (GO_TEST_RE.test(toPosix(file)) || NOT_SHIPPED_RE.test(toPosix(file))) continue
     if (isGeneratedGo(content)) continue
     for (const def of goDefs(content)) {
       if ((freq.get(def.name) ?? 0) > 1) continue

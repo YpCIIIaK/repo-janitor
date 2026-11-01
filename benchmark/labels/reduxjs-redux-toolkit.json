@@ -1,4 +1,5 @@
 {
+ "dead-export-docs/components/DetailedExplanation.tsx:DetailedExplanation": "fp",
  "docs-drift-manager-packages/toolkit/scripts/issue-triage/README.md-18": "fp",
  "hygiene-no-readme": "tp"
 }

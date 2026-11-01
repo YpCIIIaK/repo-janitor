@@ -1,4 +1,6 @@
 {
+ "bloat-assets/pdfs/bixby_guide.pdf": "tp",
+ "doclink-docs/CONTRIBUTING.md:129:./apps": "tp",
  "insecure-exec-interpolated-apps/node/index.ts:38": "fp",
  "insecure-exec-interpolated-apps/node/index.ts:46": "fp"
 }

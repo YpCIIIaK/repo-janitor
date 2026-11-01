@@ -3,6 +3,7 @@
  "debug-docs_src/app_dir/tutorial001_py310.py:15": "fp",
  "docker-latest-scripts/docker/Dockerfile:1": "tp",
  "docker-root-scripts/docker/Dockerfile": "fp",
+ "doclink-README.md:57:tutorial/install.md": "fp",
  "env-no-example": "fp",
  "insecure-innerhtml-dynamic-docs/js/termynal.js:228": "fp"
 }

@@ -5,6 +5,7 @@
  "commented-examples/options-env.js:32": "fp",
  "commented-examples/options-env.js:37": "fp",
  "commented-lib/command.js:2721": "fp",
+ "commented-tests/command.copySettings.test.js:50": "tp",
  "debug-typings/index.test-d.ts:552": "fp",
  "duplicate-lib/argument.js-98": "tp",
  "env-no-example": "fp",

@@ -1,3 +1,4 @@
 {
- "docker-latest-test/fixtures/docker/dante/Dockerfile:1": "fp"
+ "docker-latest-test/fixtures/docker/dante/Dockerfile:1": "fp",
+ "doclink-deps/milo/README.md:26:./docs/design.md": "fp"
 }

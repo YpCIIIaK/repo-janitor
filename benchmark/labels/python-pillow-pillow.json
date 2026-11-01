@@ -1,3 +1,4 @@
 {
+ "bloat-Tests/images/fujifilm.mpo": "fp",
  "insecure-py-os-system-src/PIL/ImageShow.py:125": "fp"
 }

@@ -1,4 +1,5 @@
 {
  "bloat-test/mime-node/fixtures/attachment.bin": "fp",
- "debug-src/shared/index.ts:1068": "fp"
+ "debug-src/shared/index.ts:1068": "fp",
+ "doclink-CHANGELOG.md:1030:FLOSS_EXCEPTIONS.md": "fp"
 }

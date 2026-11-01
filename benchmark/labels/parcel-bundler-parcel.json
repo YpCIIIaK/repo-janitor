@@ -1,4 +1,7 @@
 {
+ "commented-flow-typed/npm/mocha_v8.x.x.js:17": "fp",
+ "dead-export-packages/transformers/babel/src/constants.js:BABEL_CORE_RANGE": "fp",
+ "doclink-packages/utils/parcelforvscode/vscode-extension-TODO.md:6:./packages/utils/parcel-lsp-protocol": "tp",
  "docs-drift-badge-crates/parcel-resolver/src/json_comments_rs/README.md-3": "fp",
  "insecure-eval-dynamic-packages/dev/query/src/cli.js:921": "fp",
  "insecure-exec-interpolated-packages/core/utils/src/openInBrowser.js:31": "tp",

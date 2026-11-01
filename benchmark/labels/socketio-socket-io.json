@@ -1,4 +1,5 @@
 {
+ "bloat-packages/socket.io/test/fixtures/big.jpg": "fp",
  "bloat-packages/socket.io/test/fixtures/big.json": "tp",
  "commented-docs/engine.io-protocol/v3-test-suite/test-suite.js:269": "fp",
  "debug-packages/engine.io-client/support/bundle-size.js:27": "fp",

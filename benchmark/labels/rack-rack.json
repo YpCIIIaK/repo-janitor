@@ -1,4 +1,6 @@
 {
+ "bloat-contrib/logo-lossless.webp": "fp",
  "bloat-test/cgi/test.gz": "fp",
+ "doclink-CHANGELOG.md:860:(https://github.com/y-yagi": "fp",
  "hygiene-no-license": "fp"
 }

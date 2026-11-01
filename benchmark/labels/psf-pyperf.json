@@ -1,4 +1,5 @@
 {
+ "bloat-doc/outliers.json.gz": "fp",
  "bloat-doc/py3.json.gz": "tp",
  "busfactor-pyperf/_win_memory.py": "tp",
  "duplicate-pyperf/_compare.py-157": "tp",

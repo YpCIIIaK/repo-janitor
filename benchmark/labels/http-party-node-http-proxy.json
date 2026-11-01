@@ -1,5 +1,6 @@
 {
  "commented-test/lib-http-proxy-test.js:278": "tp",
+ "commented-test/lib-http-proxy-test.js:312": "tp",
  "eol-node-package.json-38": "tp",
  "skiptest-test/lib-http-proxy-test.js:23": "tp"
 }

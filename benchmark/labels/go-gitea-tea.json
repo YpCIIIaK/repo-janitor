@@ -3,5 +3,6 @@
  "commented-vendor/github.com/go-gitea/yaml/parserc.go:24": "fp",
  "dead-symbol-vendor/github.com/go-gitea/yaml/apic.go:67": "fp",
  "doclink-CONTRIBUTING.md:189:MAINTAINERS": "tp",
+ "doclink-CONTRIBUTING.md:29:contrib/ide/": "tp",
  "hygiene-no-tests": "tp"
 }

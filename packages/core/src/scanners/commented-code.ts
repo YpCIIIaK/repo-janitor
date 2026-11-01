@@ -68,6 +68,21 @@ function looksLikeCode(body: string): boolean {
   return CODE_SIGNAL.test(body)
 }
 
+const NOT_PRODUCT_RE =
+  /(^|\/)(?:flow-typed|_?examples?|samples?|bench(?:mark)?s?|website|www|docs?|lang(?:uage)?s?|locales?|i18n|assets|legacy)\/|\.config\.[cm]?[jt]s$|\.d\.[cm]?ts$|(^|\/)example_[^/]*_test\.go$/i
+
+/** Does the surrounding comment present the block as an example or a format? */
+function introducesExample(lines: string[], start: number, len: number): boolean {
+  const near: string[] = []
+  for (let i = start - 1; i >= Math.max(0, start - 6); i--) {
+    const b = commentBody(lines[i])
+    if (b === null) break
+    near.push(b)
+  }
+  for (let i = start; i < start + len + 2 && i < lines.length; i++) near.push(commentBody(lines[i]) ?? "")
+  return near.some((b) => /```|\ba la\b|\be\.g\.|\bexample\b|like this|looks like|\bsyntax\b|\bformat\b|should be uncommented/i.test(b))
+}
+
 export const commentedCodeScanner: Scanner = {
   id: "commented-code",
   category: "hygiene",
@@ -80,6 +95,10 @@ export const commentedCodeScanner: Scanner = {
       if (!SOURCE_RE.test(norm) || norm.includes(".min.")) continue
       // Vendored code is someone else's to clean up.
       if (/(^|\/)(?:vendor|third_party|node_modules)\//.test(norm)) continue
+      // Code shown to a reader or toggled by a user, not code someone forgot:
+      // examples, docs sites, benchmarks, typed stubs, translations, legacy
+      // copies, and tool configs (`// algolia: {…}`, playwright projects).
+      if (NOT_PRODUCT_RE.test(norm)) continue
 
       const content = await ctx.readFile(file)
       if (!content || !content.includes("//")) continue
@@ -97,7 +116,10 @@ export const commentedCodeScanner: Scanner = {
           run.some((l) => /^\s*\/\/\s*[*-]\s/.test(l)) ||
           // introduced by "For example:" / "Testing for these options:"
           /:\s*$/.test(commentBody(lines[runStart - 1] ?? "") ?? "") ||
-          /:\s*$/.test(commentBody(lines[runStart - 2] ?? "") ?? "")
+          /:\s*$/.test(commentBody(lines[runStart - 2] ?? "") ?? "") ||
+          // The prose around it presents it: "a la ```…```", "looks like", "e.g.".
+          introducesExample(lines, runStart, runLen) ||
+          run.some((l) => /::=/.test(l))
         if (!docExample && runLen >= MIN_RUN && perFile < MAX_PER_FILE && issues.length < MAX_TOTAL) {
           const lineNo = runStart + 1
           issues.push({

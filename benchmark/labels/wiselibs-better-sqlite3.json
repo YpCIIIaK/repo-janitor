@@ -1,0 +1,3 @@
+{
+ "bloat-deps/sqlite3/sqlite3.c": "fp"
+}
