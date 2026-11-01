@@ -1,28 +1,28 @@
 {
-  "overall": 0.724,
+  "overall": 0.765,
   "scanners": {
     "eol-runtime": 1,
     "todo-debt": 1,
-    "dead-code": 0.522,
-    "broken-doc-links": 0.75,
+    "broken-doc-links": 0.739,
     "bus-factor": 1,
-    "commented-code": 0.71,
+    "commented-code": 0.778,
     "workflow-security": 0.992,
     "duplicate-code": 0.946,
-    "leftover-debug": 0.2,
     "skipped-tests": 0.944,
     "docs-drift": 1,
     "lockfile-drift": 0.938,
+    "dead-code": 0.645,
     "insecure-code": 0.179,
-    "repo-bloat": 0.571,
     "dockerfile": 0.474,
-    "env-lifecycle": 0.067,
-    "ci-health": 0.313,
+    "leftover-debug": 0.429,
     "config-conflict": 1,
     "secrets": 0,
+    "env-lifecycle": 0.125,
+    "ci-health": 0.444,
+    "repo-bloat": 0.538,
     "project-hygiene": 0.95,
     "dependency-funeral": 0,
     "supply-chain": 1
   },
-  "lostTp": 3
+  "lostTp": 26
 }

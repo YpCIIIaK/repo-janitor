@@ -26863,7 +26863,7 @@ var require_lib4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-4Z3MPYHG.js
+// ../cli/dist/chunk-ELHUA2FC.js
 var import_fs2 = require("fs");
 
 // ../../node_modules/.pnpm/tinyglobby@0.2.17/node_modules/tinyglobby/dist/index.mjs
@@ -45593,7 +45593,7 @@ function date4(params) {
 // ../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/external.js
 config(en_default());
 
-// ../cli/dist/chunk-4Z3MPYHG.js
+// ../cli/dist/chunk-ELHUA2FC.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -70219,20 +70219,20 @@ function ruleOf(issue2) {
   return (_a22 = issue2.scanner) != null ? _a22 : "other";
 }
 var RULE_PRECISION = {
-  "bloat": { tp: 8, fp: 6 },
+  "bloat": { tp: 7, fp: 6 },
   "bus-factor": { tp: 28, fp: 0 },
   "ci-disabled": { tp: 2, fp: 1 },
-  "ci-no-pr-trigger": { tp: 4, fp: 4 },
-  "ci-silenced-failure": { tp: 2, fp: 11 },
+  "ci-no-pr-trigger": { tp: 2, fp: 1 },
+  "ci-silenced-failure": { tp: 2, fp: 2 },
   "ci-swallowed": { tp: 2, fp: 0 },
   "ci-tests-not-run": { tp: 0, fp: 6 },
-  "commented-code": { tp: 22, fp: 9 },
+  "commented-code": { tp: 28, fp: 8 },
   "config-conflict": { tp: 16, fp: 0 },
-  "dead-export": { tp: 11, fp: 11 },
+  "dead-export": { tp: 19, fp: 11 },
   "dead-uikit": { tp: 1, fp: 0 },
-  "debug-leftover": { tp: 4, fp: 16 },
+  "debug-leftover": { tp: 3, fp: 4 },
   "dep-unused": { tp: 0, fp: 9 },
-  "doc-link": { tp: 12, fp: 4 },
+  "doc-link": { tp: 17, fp: 6 },
   "docker-add-url": { tp: 1, fp: 0 },
   "docker-latest": { tp: 3, fp: 1 },
   "docker-root": { tp: 4, fp: 6 },
@@ -70241,7 +70241,7 @@ var RULE_PRECISION = {
   "docs-script": { tp: 1, fp: 0 },
   "duplicate": { tp: 35, fp: 2 },
   "env-dead": { tp: 0, fp: 3 },
-  "env-no-example": { tp: 1, fp: 11 },
+  "env-no-example": { tp: 1, fp: 4 },
   "eol-node": { tp: 27, fp: 0 },
   "eol-python": { tp: 21, fp: 0 },
   "eol-runner": { tp: 5, fp: 0 },
@@ -70611,7 +70611,7 @@ function analyzeWithAst(content, file2, acc) {
 }
 function looksDeployable(files) {
   return files.filter((f3) => !f3.replace(/\\/g, "/").includes("/")).some(
-    (f3) => /(^|\/)(dockerfile|docker-compose\.ya?ml|compose\.ya?ml|procfile|fly\.toml|vercel\.json|render\.ya?ml|app\.ya?ml|serverless\.ya?ml|next\.config\.[cm]?[jt]s|nuxt\.config\.[cm]?[jt]s|\.env(\.[\w-]+)?)$/i.test(
+    (f3) => /(^|\/)(docker-compose\.ya?ml|compose\.ya?ml|procfile|fly\.toml|vercel\.json|render\.ya?ml|app\.ya?ml|serverless\.ya?ml|next\.config\.[cm]?[jt]s|nuxt\.config\.[cm]?[jt]s)$/i.test(
       f3.replace(/\\/g, "/")
     )
   );
@@ -72887,7 +72887,7 @@ var projectHygieneScanner = {
 var SOURCE_RE3 = /\.(ts|tsx|js|jsx|mjs|mts|cts)$/;
 var TEST_RE2 = /(^|\/)(?:__tests__|tests?|specs?|e2e)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test_[^/]+\.py$|_test\.(?:py|go|rb)$|_spec\.rb$|(?:^|\/)conftest\.py$/i;
 var EXAMPLE_RE = /(^|\/)examples?\/|(?:^|\/)example\.[cm]?[jt]sx?$/i;
-var TOOLING_RE = /(^|\/)(?:_examples|bench(?:mark)?s?|perf(?:ormance)?|__performance_tests__|www|static|demos?|cli|devtools|docs_src|extras|assets|support|test_files|\.github|internal|scripts?|bin|tools?|[\w-]*_assets|sandbox|playgrounds?|fixtures?|__fixtures__|docs?)\/|\.test-d\.tsx?$|\.d\.ts$|(^|\/)build\.rs$|[-_.]bin\.[cm]?[jt]s$|(^|\/)log(?:ger|ging)?\.[cm]?[jt]s$|(^|\/)play(?:ground)?\.[cm]?[jt]sx?$/i;
+var TOOLING_RE = /(^|\/)(?:_examples|[\w-]+-tests|dockers?|jakelib|dev|bench(?:mark)?s?|perf(?:ormance)?|__performance_tests__|www|static|demos?|cli|devtools|docs_src|extras|assets|support|test_files|\.github|internal|scripts?|bin|tools?|[\w-]*_assets|sandbox|playgrounds?|fixtures?|__fixtures__|docs?)\/|\.test-d\.tsx?$|\.d\.ts$|(^|\/)build\.rs$|[-_.]bin\.[cm]?[jt]s$|(^|\/)test\.[cm]?[jt]s$|^[^/]+\.[cm]?js$|(^|\/)log(?:ger|ging)?\.[cm]?[jt]s$|(^|\/)play(?:ground)?\.[cm]?[jt]sx?$/i;
 var DEBUG_METHODS = /* @__PURE__ */ new Set(["log", "debug", "trace", "dir", "table"]);
 var MAX_PER_FILE = 8;
 var MAX_TOTAL = 50;
@@ -72989,7 +72989,7 @@ function debugLabel(node) {
   if ((prop == null ? void 0 : prop.type) !== "Identifier" || !prop.name || !DEBUG_METHODS.has(prop.name)) return null;
   return `console.${prop.name}`;
 }
-var DEBUG_GUARD_RE = /\bif\s*\([^)]*(?:debug|verbose|__DEV__|NODE_ENV|isDev|process\.env)/i;
+var DEBUG_GUARD_RE = /\bif\s*\([^)]*(?:debug|verbose|__DEV__|NODE_ENV|isDev|process\.env)|\blog(?:ger|All|Debug)?\s*[=:]\s*(?:function|\()|function\s+_?log\w*\s*\(/i;
 function intentionalLog(node, lines) {
   var _a22, _b, _c, _d;
   const first = (_a22 = node.arguments) == null ? void 0 : _a22[0];
@@ -73154,11 +73154,16 @@ function lineAt2(text, index) {
   for (let i = 0; i < index && i < text.length; i++) if (text[i] === "\n") line++;
   return line;
 }
+var NOT_LINKED_DOC_RE = /(^|\/)(?:CHANGELOG|CHANGES|HISTORY|NEWS|RELEASES?)[^/]*\.\w+$|(^|\/)(?:test|tests|spec|specs|deps|vendor|website|docs_src|blog)\/|(^|\/)README[-.][a-z]{2}(?:[-_][A-Za-z]{2,4})?\.\w+$/i;
 function isLocalRelative(target) {
   if (!target) return false;
   if (/^([a-z][a-z0-9+.-]*:|\/\/|#|\/|data:)/i.test(target)) return false;
   if (/[{}$<>%]/.test(target)) return false;
   if (/^[^/]+@[^/]+\.[a-z]{2,}$/i.test(target)) return false;
+  if (/^[0-9a-f]{7,40}$/i.test(target) || target.includes("::")) return false;
+  if (!/[./]/.test(target) && !/^[A-Z][A-Z_-]+$/.test(target)) return false;
+  if (/^(?:\.\.\/)+(?:issues|pulls?|actions|wiki|discussions|releases|blob|tree|compare)\b/.test(target)) return false;
+  if (/^[[(]/.test(target)) return false;
   if (/^(?:www\.)?[\w-]+\.(?:com|org|net|io|dev|app|co|me|sh|rs|js)(?:\/|$)/i.test(target)) return false;
   return true;
 }
@@ -73197,6 +73202,7 @@ var brokenDocLinksScanner = {
         const norm = file2.replace(/\\/g, "/");
         if (!MD_RE.test(norm)) continue;
         if (/(^|\/)(?:testdata|fixtures?|__fixtures__)\/|(^|\/)docs?\/[a-z]{2}(?:-[A-Za-z]{2,4})?\//.test(norm)) continue;
+        if (NOT_LINKED_DOC_RE.test(norm)) continue;
         const raw = yield ctx.readFile(file2);
         if (!raw || !raw.includes("](")) continue;
         const text = stripCode(raw);
@@ -73308,7 +73314,27 @@ var CONVENTION_EXPORTS = /* @__PURE__ */ new Set([
   // opengraph-image / icon / apple-icon route segment exports
   "alt",
   "size",
-  "contentType"
+  "contentType",
+  // Gatsby page queries, MDX provider hooks, Astro/Starlight content collections
+  "pageQuery",
+  "query",
+  "useMDXComponents",
+  "collections",
+  // JSX runtime entry points, looked up by the compiler
+  "jsx",
+  "jsxs",
+  "jsxDEV",
+  "Fragment",
+  // unstorage driver manifests, Remix/React Router route modules
+  "DRIVER_DEPENDENCIES",
+  "loader",
+  "action",
+  "meta",
+  "links",
+  "headers",
+  "handle",
+  "ErrorBoundary",
+  "HydrateFallback"
 ]);
 function uiKitRoot(file2) {
   const m2 = file2.match(/^(.*?\bcomponents\/(?:ui|magicui|aceternity))(?:\/|$)/);
@@ -73369,7 +73395,7 @@ var deadCodeScanner = {
     });
   }
 };
-var NOT_SHIPPED_RE = /(^|\/)(?:__tests__|tests?|spec|e2e|fixtures?|__fixtures__|__snapshots__|examples?|playgrounds?|sandbox|bench(?:mark)?s?|scripts?)\/|\.(?:test|spec|test-d|snap)\.|\.snap\.[a-z.]+$/i;
+var NOT_SHIPPED_RE = /(^|\/)(?:__tests__|_?tests?|spec|e2e|fixtures?|__fixtures__|__testfixtures__|__snapshots__|_?examples?|playgrounds?|sandbox|bench(?:mark)?s?|scripts?|website|www|docs?|tutorials?|\.github|composables)\/|\.(?:test|spec|test-d|snap)\.|\.snap\.[a-z.]+$|\.d\.[cm]?ts$|\.gen\.[cm]?[jt]sx?$/i;
 function packageEntryFiles(ctx, fileSet) {
   return __async(this, null, function* () {
     var _a22;
@@ -73629,6 +73655,12 @@ function pythonDefs(content) {
     let j3 = i - 1;
     while (j3 >= 0 && lines[j3].trim() === "") j3--;
     if (j3 >= 0 && lines[j3].trim().startsWith("@")) continue;
+    if (j3 >= 0 && /^[)\]]/.test(lines[j3].trim())) {
+      let k2 = j3;
+      while (k2 > j3 - 30 && k2 >= 0 && lines[k2].trim() !== "" && !/^@/.test(lines[k2])) k2--;
+      if (k2 >= 0 && /^@/.test(lines[k2])) continue;
+    }
+    if (m2[1] === "class" && /^class\s+\w+\s*\(\s*[A-Za-z_]/.test(lines[i])) continue;
     out.push({
       name,
       line: i + 1,
@@ -73644,6 +73676,7 @@ function goDefs(content) {
   for (let i = 0; i < lines.length; i++) {
     const m2 = lines[i].match(/^func\s+(?:\([^)]*\)\s*)?([A-Za-z_]\w*)\s*[([]/);
     if (!m2) continue;
+    if (/^func\s+\(/.test(lines[i])) continue;
     const name = m2[1];
     if (/^[A-Z]/.test(name) || name === "main" || name === "init") continue;
     out.push({ name, line: i + 1, kind: "function", evidence: lines[i].trim().slice(0, 140) });
@@ -73708,7 +73741,7 @@ function collectGoDead(ctx, files, issues) {
       countInto(c3, freq);
     }
     for (const [file2, content] of contents) {
-      if (GO_TEST_RE.test(toPosix(file2))) continue;
+      if (GO_TEST_RE.test(toPosix(file2)) || NOT_SHIPPED_RE.test(toPosix(file2))) continue;
       if (isGeneratedGo(content)) continue;
       for (const def of goDefs(content)) {
         if (((_a22 = freq.get(def.name)) != null ? _a22 : 0) > 1) continue;
@@ -73730,10 +73763,11 @@ function scanPolyglotSymbols(ctx) {
 }
 var MB = 1024 * 1024;
 var LARGE_BYTES = 5 * MB;
-var MEDIA_BYTES = 2 * MB;
+var MEDIA_BYTES = 10 * MB;
+var FIXTURE_LARGE_BYTES = 25 * MB;
 var MAX_FINDINGS = 30;
 var SMALL_ARTIFACT_BYTES = 100 * 1024;
-var FIXTURE_DIR = /(^|\/)(?:tests?|__tests__|spec|fixtures?|__fixtures__|testdata|examples?)\//i;
+var FIXTURE_DIR = /(^|\/)(?:tests?|__tests__|spec|fixtures?|__fixtures__|testdata|test_protos|examples?)\//i;
 var ARTIFACT_EXT = /* @__PURE__ */ new Set([
   "zip",
   "tar",
@@ -73774,6 +73808,9 @@ var ARTIFACT_EXT = /* @__PURE__ */ new Set([
   "db",
   "mdb"
 ]);
+var VENDORED_RE = /(^|\/)(?:vendor|third_party|deps|node_modules)\//i;
+var SHIPPED_BINARY_RE = /(^|\/)(?:bin|bootloader|fallbacks|prebuilds?|native|binaries)\/[^/]+\.(?:exe|dll|so|dylib)$/i;
+var DATA_EXT = /* @__PURE__ */ new Set(["db", "sqlite", "sqlite3", "bin", "dat", "gz", "tar"]);
 var MEDIA_EXT = /* @__PURE__ */ new Set([
   "png",
   "jpg",
@@ -73822,9 +73859,12 @@ var repoBloatScanner = {
         const norm = file2.replace(/\\/g, "/");
         const ext = extOf(norm);
         const size = ctx.fileSize ? yield ctx.fileSize(file2) : null;
-        if (ARTIFACT_EXT.has(ext) && !(FIXTURE_DIR.test(norm) && (size == null || size < SMALL_ARTIFACT_BYTES))) {
+        if (VENDORED_RE.test(norm)) continue;
+        const shipped = SHIPPED_BINARY_RE.test(norm) || DATA_EXT.has(extOf(norm)) && size != null && size < SMALL_ARTIFACT_BYTES;
+        const fixture = FIXTURE_DIR.test(norm);
+        if (ARTIFACT_EXT.has(ext) && !shipped && !(fixture && (size == null || size < SMALL_ARTIFACT_BYTES))) {
           candidates.push({ file: norm, size, severity: "warning", kind: "artifact" });
-        } else if (size != null && size >= LARGE_BYTES) {
+        } else if (size != null && size >= (fixture ? FIXTURE_LARGE_BYTES : LARGE_BYTES) && !MEDIA_EXT.has(ext)) {
           candidates.push({ file: norm, size, severity: "warning", kind: "large" });
         } else if (size != null && size >= MEDIA_BYTES && MEDIA_EXT.has(ext)) {
           candidates.push({ file: norm, size, severity: "info", kind: "media" });
@@ -74108,6 +74148,18 @@ function looksLikeCode(body) {
   if (PROSE_RUN.test(body) && !/[;={}]/.test(body)) return false;
   return CODE_SIGNAL.test(body);
 }
+var NOT_PRODUCT_RE = /(^|\/)(?:flow-typed|_?examples?|samples?|bench(?:mark)?s?|website|www|docs?|lang(?:uage)?s?|locales?|i18n|assets|legacy)\/|\.config\.[cm]?[jt]s$|\.d\.[cm]?ts$|(^|\/)example_[^/]*_test\.go$/i;
+function introducesExample(lines, start, len) {
+  var _a22;
+  const near = [];
+  for (let i = start - 1; i >= Math.max(0, start - 6); i--) {
+    const b3 = commentBody(lines[i]);
+    if (b3 === null) break;
+    near.push(b3);
+  }
+  for (let i = start; i < start + len + 2 && i < lines.length; i++) near.push((_a22 = commentBody(lines[i])) != null ? _a22 : "");
+  return near.some((b3) => /```|\ba la\b|\be\.g\.|\bexample\b|like this|looks like|\bsyntax\b|\bformat\b|should be uncommented/i.test(b3));
+}
 var commentedCodeScanner = {
   id: "commented-code",
   category: "hygiene",
@@ -74119,6 +74171,7 @@ var commentedCodeScanner = {
         const norm = file2.replace(/\\/g, "/");
         if (!SOURCE_RE7.test(norm) || norm.includes(".min.")) continue;
         if (/(^|\/)(?:vendor|third_party|node_modules)\//.test(norm)) continue;
+        if (NOT_PRODUCT_RE.test(norm)) continue;
         const content = yield ctx.readFile(file2);
         if (!content || !content.includes("//")) continue;
         const lines = content.split(/\r?\n/);
@@ -74131,7 +74184,8 @@ var commentedCodeScanner = {
           const docExample = (
             // …unless the line above opens the expression the indented lines continue.
             run.every(isDocIndent) && !/[({[,]\s*$|=>\s*$/.test((_b = commentBody((_a22 = lines[runStart - 1]) != null ? _a22 : "")) != null ? _b : "") || run.some((l3) => /^\s*\/\/\s*[*-]\s/.test(l3)) || // introduced by "For example:" / "Testing for these options:"
-            /:\s*$/.test((_d = commentBody((_c = lines[runStart - 1]) != null ? _c : "")) != null ? _d : "") || /:\s*$/.test((_f = commentBody((_e2 = lines[runStart - 2]) != null ? _e2 : "")) != null ? _f : "")
+            /:\s*$/.test((_d = commentBody((_c = lines[runStart - 1]) != null ? _c : "")) != null ? _d : "") || /:\s*$/.test((_f = commentBody((_e2 = lines[runStart - 2]) != null ? _e2 : "")) != null ? _f : "") || // The prose around it presents it: "a la ```…```", "looks like", "e.g.".
+            introducesExample(lines, runStart, runLen) || run.some((l3) => /::=/.test(l3))
           );
           if (!docExample && runLen >= MIN_RUN && perFile < MAX_PER_FILE3 && issues.length < MAX_TOTAL6) {
             const lineNo = runStart + 1;
@@ -76018,13 +76072,17 @@ function scanCiFile(file2, content) {
   }
   let stepHasRun = false;
   let stepRunText = "";
+  let stepName = "";
   let pending = null;
   const flushStep = () => {
     const verifies = stepHasRun && !REGENERATES.test(stepRunText) && !MUTATES.test(stepRunText);
-    if (pending && verifies) out.push(pending);
+    const advisory = ADVISORY.test(`${stepName}
+${stepRunText}`) || ADVISORY_FILE.test(file2);
+    if (pending && verifies && !advisory) out.push(pending);
     pending = null;
     stepHasRun = false;
     stepRunText = "";
+    stepName = "";
   };
   for (let i = 0; i < lines.length; i++) {
     const line = withoutComment3(lines[i]);
@@ -76033,6 +76091,8 @@ function scanCiFile(file2, content) {
     const at2 = i + 1;
     const evidence = trimmed.slice(0, 200);
     if (/^-\s+(?:name|uses|run|id|shell)\s*:/.test(trimmed)) flushStep();
+    const named = trimmed.match(/^(?:-\s+)?name\s*:\s*(.*)$/);
+    if (named) stepName = named[1];
     if (/(?:^|^-\s+)run\s*:/.test(trimmed)) stepHasRun = true;
     if (stepHasRun) stepRunText += `
 ${trimmed}`;
@@ -76126,6 +76186,8 @@ function indirectRunText(ctx, files, workflowText) {
     return parts.join("\n");
   });
 }
+var ADVISORY = /\b(?:audit|outdated|coverage|codecov|coveralls|upload|pre-commit|size|bench\w*|deploy|publish|release|docs?|nightly|canary|experimental|report|notify|slack|comment)\b/i;
+var ADVISORY_FILE = /(?:audit|pre-commit|coverage|release|deploy|publish|docs|nightly|browsers?|bench\w*)[^/]*\.ya?ml$/i;
 var ciHealthScanner = {
   id: "ci-health",
   category: "hygiene",
@@ -76189,10 +76251,11 @@ var ciHealthScanner = {
       }
       if (issues.length < MAX_ISSUES7) {
         const triggers = /* @__PURE__ */ new Set();
-        for (const f3 of workflows) {
+        for (const f3 of workflows.filter((w2) => !/(?:release|deploy|publish|lock|stale|docs|pages|label)[^/]*$/i.test(w2))) {
           for (const t2 of triggersOf((_a22 = contents.get(f3)) != null ? _a22 : "")) triggers.add(t2);
         }
-        const gated = triggers.has("pull_request") || triggers.has("merge_group");
+        const otherCi = ctx.files.some((f3) => OTHER_CI_CONFIG.includes(f3.replace(/\\/g, "/")));
+        const gated = triggers.has("pull_request") || triggers.has("pull_request_target") || triggers.has("merge_group") || otherCi;
         if (!gated && triggers.has("push")) {
           issues.push({
             id: "ci-no-pr-trigger",
@@ -77594,7 +77657,7 @@ function analyzeWithAst2(content, file2, acc) {
 }
 function looksDeployable2(files) {
   return files.filter((f3) => !f3.replace(/\\/g, "/").includes("/")).some(
-    (f3) => /(^|\/)(dockerfile|docker-compose\.ya?ml|compose\.ya?ml|procfile|fly\.toml|vercel\.json|render\.ya?ml|app\.ya?ml|serverless\.ya?ml|next\.config\.[cm]?[jt]s|nuxt\.config\.[cm]?[jt]s|\.env(\.[\w-]+)?)$/i.test(
+    (f3) => /(^|\/)(docker-compose\.ya?ml|compose\.ya?ml|procfile|fly\.toml|vercel\.json|render\.ya?ml|app\.ya?ml|serverless\.ya?ml|next\.config\.[cm]?[jt]s|nuxt\.config\.[cm]?[jt]s)$/i.test(
       f3.replace(/\\/g, "/")
     )
   );
@@ -79779,7 +79842,7 @@ var projectHygieneScanner2 = {
 var SOURCE_RE10 = /\.(ts|tsx|js|jsx|mjs|mts|cts)$/;
 var TEST_RE6 = /(^|\/)(?:__tests__|tests?|specs?|e2e)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test_[^/]+\.py$|_test\.(?:py|go|rb)$|_spec\.rb$|(?:^|\/)conftest\.py$/i;
 var EXAMPLE_RE2 = /(^|\/)examples?\/|(?:^|\/)example\.[cm]?[jt]sx?$/i;
-var TOOLING_RE2 = /(^|\/)(?:_examples|bench(?:mark)?s?|perf(?:ormance)?|__performance_tests__|www|static|demos?|cli|devtools|docs_src|extras|assets|support|test_files|\.github|internal|scripts?|bin|tools?|[\w-]*_assets|sandbox|playgrounds?|fixtures?|__fixtures__|docs?)\/|\.test-d\.tsx?$|\.d\.ts$|(^|\/)build\.rs$|[-_.]bin\.[cm]?[jt]s$|(^|\/)log(?:ger|ging)?\.[cm]?[jt]s$|(^|\/)play(?:ground)?\.[cm]?[jt]sx?$/i;
+var TOOLING_RE2 = /(^|\/)(?:_examples|[\w-]+-tests|dockers?|jakelib|dev|bench(?:mark)?s?|perf(?:ormance)?|__performance_tests__|www|static|demos?|cli|devtools|docs_src|extras|assets|support|test_files|\.github|internal|scripts?|bin|tools?|[\w-]*_assets|sandbox|playgrounds?|fixtures?|__fixtures__|docs?)\/|\.test-d\.tsx?$|\.d\.ts$|(^|\/)build\.rs$|[-_.]bin\.[cm]?[jt]s$|(^|\/)test\.[cm]?[jt]s$|^[^/]+\.[cm]?js$|(^|\/)log(?:ger|ging)?\.[cm]?[jt]s$|(^|\/)play(?:ground)?\.[cm]?[jt]sx?$/i;
 var DEBUG_METHODS2 = /* @__PURE__ */ new Set(["log", "debug", "trace", "dir", "table"]);
 var MAX_PER_FILE5 = 8;
 var MAX_TOTAL8 = 50;
@@ -79877,7 +79940,7 @@ function debugLabel2(node) {
   if (prop?.type !== "Identifier" || !prop.name || !DEBUG_METHODS2.has(prop.name)) return null;
   return `console.${prop.name}`;
 }
-var DEBUG_GUARD_RE2 = /\bif\s*\([^)]*(?:debug|verbose|__DEV__|NODE_ENV|isDev|process\.env)/i;
+var DEBUG_GUARD_RE2 = /\bif\s*\([^)]*(?:debug|verbose|__DEV__|NODE_ENV|isDev|process\.env)|\blog(?:ger|All|Debug)?\s*[=:]\s*(?:function|\()|function\s+_?log\w*\s*\(/i;
 function intentionalLog2(node, lines) {
   const first = node.arguments?.[0];
   if (first?.type === "StringLiteral" && /\w\s+\w/.test(String(first.value ?? ""))) return true;
@@ -80034,11 +80097,16 @@ function lineAt6(text, index) {
   for (let i = 0; i < index && i < text.length; i++) if (text[i] === "\n") line++;
   return line;
 }
+var NOT_LINKED_DOC_RE2 = /(^|\/)(?:CHANGELOG|CHANGES|HISTORY|NEWS|RELEASES?)[^/]*\.\w+$|(^|\/)(?:test|tests|spec|specs|deps|vendor|website|docs_src|blog)\/|(^|\/)README[-.][a-z]{2}(?:[-_][A-Za-z]{2,4})?\.\w+$/i;
 function isLocalRelative2(target) {
   if (!target) return false;
   if (/^([a-z][a-z0-9+.-]*:|\/\/|#|\/|data:)/i.test(target)) return false;
   if (/[{}$<>%]/.test(target)) return false;
   if (/^[^/]+@[^/]+\.[a-z]{2,}$/i.test(target)) return false;
+  if (/^[0-9a-f]{7,40}$/i.test(target) || target.includes("::")) return false;
+  if (!/[./]/.test(target) && !/^[A-Z][A-Z_-]+$/.test(target)) return false;
+  if (/^(?:\.\.\/)+(?:issues|pulls?|actions|wiki|discussions|releases|blob|tree|compare)\b/.test(target)) return false;
+  if (/^[[(]/.test(target)) return false;
   if (/^(?:www\.)?[\w-]+\.(?:com|org|net|io|dev|app|co|me|sh|rs|js)(?:\/|$)/i.test(target)) return false;
   return true;
 }
@@ -80076,6 +80144,7 @@ var brokenDocLinksScanner2 = {
       const norm = file2.replace(/\\/g, "/");
       if (!MD_RE3.test(norm)) continue;
       if (/(^|\/)(?:testdata|fixtures?|__fixtures__)\/|(^|\/)docs?\/[a-z]{2}(?:-[A-Za-z]{2,4})?\//.test(norm)) continue;
+      if (NOT_LINKED_DOC_RE2.test(norm)) continue;
       const raw = await ctx.readFile(file2);
       if (!raw || !raw.includes("](")) continue;
       const text = stripCode2(raw);
@@ -80188,7 +80257,27 @@ var CONVENTION_EXPORTS2 = /* @__PURE__ */ new Set([
   // opengraph-image / icon / apple-icon route segment exports
   "alt",
   "size",
-  "contentType"
+  "contentType",
+  // Gatsby page queries, MDX provider hooks, Astro/Starlight content collections
+  "pageQuery",
+  "query",
+  "useMDXComponents",
+  "collections",
+  // JSX runtime entry points, looked up by the compiler
+  "jsx",
+  "jsxs",
+  "jsxDEV",
+  "Fragment",
+  // unstorage driver manifests, Remix/React Router route modules
+  "DRIVER_DEPENDENCIES",
+  "loader",
+  "action",
+  "meta",
+  "links",
+  "headers",
+  "handle",
+  "ErrorBoundary",
+  "HydrateFallback"
 ]);
 function uiKitRoot2(file2) {
   const m2 = file2.match(/^(.*?\bcomponents\/(?:ui|magicui|aceternity))(?:\/|$)/);
@@ -80247,7 +80336,7 @@ var deadCodeScanner2 = {
     );
   }
 };
-var NOT_SHIPPED_RE3 = /(^|\/)(?:__tests__|tests?|spec|e2e|fixtures?|__fixtures__|__snapshots__|examples?|playgrounds?|sandbox|bench(?:mark)?s?|scripts?)\/|\.(?:test|spec|test-d|snap)\.|\.snap\.[a-z.]+$/i;
+var NOT_SHIPPED_RE3 = /(^|\/)(?:__tests__|_?tests?|spec|e2e|fixtures?|__fixtures__|__testfixtures__|__snapshots__|_?examples?|playgrounds?|sandbox|bench(?:mark)?s?|scripts?|website|www|docs?|tutorials?|\.github|composables)\/|\.(?:test|spec|test-d|snap)\.|\.snap\.[a-z.]+$|\.d\.[cm]?ts$|\.gen\.[cm]?[jt]sx?$/i;
 async function packageEntryFiles2(ctx, fileSet) {
   const out = /* @__PURE__ */ new Set();
   const collect = (v2, acc) => {
@@ -80497,6 +80586,12 @@ function pythonDefs2(content) {
     let j3 = i - 1;
     while (j3 >= 0 && lines[j3].trim() === "") j3--;
     if (j3 >= 0 && lines[j3].trim().startsWith("@")) continue;
+    if (j3 >= 0 && /^[)\]]/.test(lines[j3].trim())) {
+      let k2 = j3;
+      while (k2 > j3 - 30 && k2 >= 0 && lines[k2].trim() !== "" && !/^@/.test(lines[k2])) k2--;
+      if (k2 >= 0 && /^@/.test(lines[k2])) continue;
+    }
+    if (m2[1] === "class" && /^class\s+\w+\s*\(\s*[A-Za-z_]/.test(lines[i])) continue;
     out.push({
       name,
       line: i + 1,
@@ -80512,6 +80607,7 @@ function goDefs2(content) {
   for (let i = 0; i < lines.length; i++) {
     const m2 = lines[i].match(/^func\s+(?:\([^)]*\)\s*)?([A-Za-z_]\w*)\s*[([]/);
     if (!m2) continue;
+    if (/^func\s+\(/.test(lines[i])) continue;
     const name = m2[1];
     if (/^[A-Z]/.test(name) || name === "main" || name === "init") continue;
     out.push({ name, line: i + 1, kind: "function", evidence: lines[i].trim().slice(0, 140) });
@@ -80571,7 +80667,7 @@ async function collectGoDead2(ctx, files, issues) {
     countInto2(c3, freq);
   }
   for (const [file2, content] of contents) {
-    if (GO_TEST_RE2.test(toPosix2(file2))) continue;
+    if (GO_TEST_RE2.test(toPosix2(file2)) || NOT_SHIPPED_RE3.test(toPosix2(file2))) continue;
     if (isGeneratedGo2(content)) continue;
     for (const def of goDefs2(content)) {
       if ((freq.get(def.name) ?? 0) > 1) continue;
@@ -80592,10 +80688,11 @@ async function scanPolyglotSymbols2(ctx) {
 // ../core/src/scanners/repo-bloat.ts
 var MB2 = 1024 * 1024;
 var LARGE_BYTES2 = 5 * MB2;
-var MEDIA_BYTES2 = 2 * MB2;
+var MEDIA_BYTES2 = 10 * MB2;
+var FIXTURE_LARGE_BYTES2 = 25 * MB2;
 var MAX_FINDINGS2 = 30;
 var SMALL_ARTIFACT_BYTES2 = 100 * 1024;
-var FIXTURE_DIR2 = /(^|\/)(?:tests?|__tests__|spec|fixtures?|__fixtures__|testdata|examples?)\//i;
+var FIXTURE_DIR2 = /(^|\/)(?:tests?|__tests__|spec|fixtures?|__fixtures__|testdata|test_protos|examples?)\//i;
 var ARTIFACT_EXT2 = /* @__PURE__ */ new Set([
   "zip",
   "tar",
@@ -80636,6 +80733,9 @@ var ARTIFACT_EXT2 = /* @__PURE__ */ new Set([
   "db",
   "mdb"
 ]);
+var VENDORED_RE2 = /(^|\/)(?:vendor|third_party|deps|node_modules)\//i;
+var SHIPPED_BINARY_RE2 = /(^|\/)(?:bin|bootloader|fallbacks|prebuilds?|native|binaries)\/[^/]+\.(?:exe|dll|so|dylib)$/i;
+var DATA_EXT2 = /* @__PURE__ */ new Set(["db", "sqlite", "sqlite3", "bin", "dat", "gz", "tar"]);
 var MEDIA_EXT2 = /* @__PURE__ */ new Set([
   "png",
   "jpg",
@@ -80683,9 +80783,12 @@ var repoBloatScanner2 = {
       const norm = file2.replace(/\\/g, "/");
       const ext = extOf2(norm);
       const size = ctx.fileSize ? await ctx.fileSize(file2) : null;
-      if (ARTIFACT_EXT2.has(ext) && !(FIXTURE_DIR2.test(norm) && (size == null || size < SMALL_ARTIFACT_BYTES2))) {
+      if (VENDORED_RE2.test(norm)) continue;
+      const shipped = SHIPPED_BINARY_RE2.test(norm) || DATA_EXT2.has(extOf2(norm)) && size != null && size < SMALL_ARTIFACT_BYTES2;
+      const fixture = FIXTURE_DIR2.test(norm);
+      if (ARTIFACT_EXT2.has(ext) && !shipped && !(fixture && (size == null || size < SMALL_ARTIFACT_BYTES2))) {
         candidates.push({ file: norm, size, severity: "warning", kind: "artifact" });
-      } else if (size != null && size >= LARGE_BYTES2) {
+      } else if (size != null && size >= (fixture ? FIXTURE_LARGE_BYTES2 : LARGE_BYTES2) && !MEDIA_EXT2.has(ext)) {
         candidates.push({ file: norm, size, severity: "warning", kind: "large" });
       } else if (size != null && size >= MEDIA_BYTES2 && MEDIA_EXT2.has(ext)) {
         candidates.push({ file: norm, size, severity: "info", kind: "media" });
@@ -80963,6 +81066,17 @@ function looksLikeCode2(body) {
   if (PROSE_RUN2.test(body) && !/[;={}]/.test(body)) return false;
   return CODE_SIGNAL2.test(body);
 }
+var NOT_PRODUCT_RE2 = /(^|\/)(?:flow-typed|_?examples?|samples?|bench(?:mark)?s?|website|www|docs?|lang(?:uage)?s?|locales?|i18n|assets|legacy)\/|\.config\.[cm]?[jt]s$|\.d\.[cm]?ts$|(^|\/)example_[^/]*_test\.go$/i;
+function introducesExample2(lines, start, len) {
+  const near = [];
+  for (let i = start - 1; i >= Math.max(0, start - 6); i--) {
+    const b3 = commentBody2(lines[i]);
+    if (b3 === null) break;
+    near.push(b3);
+  }
+  for (let i = start; i < start + len + 2 && i < lines.length; i++) near.push(commentBody2(lines[i]) ?? "");
+  return near.some((b3) => /```|\ba la\b|\be\.g\.|\bexample\b|like this|looks like|\bsyntax\b|\bformat\b|should be uncommented/i.test(b3));
+}
 var commentedCodeScanner2 = {
   id: "commented-code",
   category: "hygiene",
@@ -80973,6 +81087,7 @@ var commentedCodeScanner2 = {
       const norm = file2.replace(/\\/g, "/");
       if (!SOURCE_RE14.test(norm) || norm.includes(".min.")) continue;
       if (/(^|\/)(?:vendor|third_party|node_modules)\//.test(norm)) continue;
+      if (NOT_PRODUCT_RE2.test(norm)) continue;
       const content = await ctx.readFile(file2);
       if (!content || !content.includes("//")) continue;
       const lines = content.split(/\r?\n/);
@@ -80984,7 +81099,8 @@ var commentedCodeScanner2 = {
         const docExample = (
           // …unless the line above opens the expression the indented lines continue.
           run.every(isDocIndent2) && !/[({[,]\s*$|=>\s*$/.test(commentBody2(lines[runStart - 1] ?? "") ?? "") || run.some((l3) => /^\s*\/\/\s*[*-]\s/.test(l3)) || // introduced by "For example:" / "Testing for these options:"
-          /:\s*$/.test(commentBody2(lines[runStart - 1] ?? "") ?? "") || /:\s*$/.test(commentBody2(lines[runStart - 2] ?? "") ?? "")
+          /:\s*$/.test(commentBody2(lines[runStart - 1] ?? "") ?? "") || /:\s*$/.test(commentBody2(lines[runStart - 2] ?? "") ?? "") || // The prose around it presents it: "a la ```…```", "looks like", "e.g.".
+          introducesExample2(lines, runStart, runLen) || run.some((l3) => /::=/.test(l3))
         );
         if (!docExample && runLen >= MIN_RUN2 && perFile < MAX_PER_FILE7 && issues.length < MAX_TOTAL13) {
           const lineNo = runStart + 1;
@@ -82862,13 +82978,17 @@ function scanCiFile2(file2, content) {
   }
   let stepHasRun = false;
   let stepRunText = "";
+  let stepName = "";
   let pending = null;
   const flushStep = () => {
     const verifies = stepHasRun && !REGENERATES2.test(stepRunText) && !MUTATES2.test(stepRunText);
-    if (pending && verifies) out.push(pending);
+    const advisory = ADVISORY2.test(`${stepName}
+${stepRunText}`) || ADVISORY_FILE2.test(file2);
+    if (pending && verifies && !advisory) out.push(pending);
     pending = null;
     stepHasRun = false;
     stepRunText = "";
+    stepName = "";
   };
   for (let i = 0; i < lines.length; i++) {
     const line = withoutComment6(lines[i]);
@@ -82877,6 +82997,8 @@ function scanCiFile2(file2, content) {
     const at2 = i + 1;
     const evidence = trimmed.slice(0, 200);
     if (/^-\s+(?:name|uses|run|id|shell)\s*:/.test(trimmed)) flushStep();
+    const named = trimmed.match(/^(?:-\s+)?name\s*:\s*(.*)$/);
+    if (named) stepName = named[1];
     if (/(?:^|^-\s+)run\s*:/.test(trimmed)) stepHasRun = true;
     if (stepHasRun) stepRunText += `
 ${trimmed}`;
@@ -82967,6 +83089,8 @@ async function indirectRunText2(ctx, files, workflowText) {
   }
   return parts.join("\n");
 }
+var ADVISORY2 = /\b(?:audit|outdated|coverage|codecov|coveralls|upload|pre-commit|size|bench\w*|deploy|publish|release|docs?|nightly|canary|experimental|report|notify|slack|comment)\b/i;
+var ADVISORY_FILE2 = /(?:audit|pre-commit|coverage|release|deploy|publish|docs|nightly|browsers?|bench\w*)[^/]*\.ya?ml$/i;
 var ciHealthScanner2 = {
   id: "ci-health",
   category: "hygiene",
@@ -83022,10 +83146,11 @@ var ciHealthScanner2 = {
     }
     if (issues.length < MAX_ISSUES16) {
       const triggers = /* @__PURE__ */ new Set();
-      for (const f3 of workflows) {
+      for (const f3 of workflows.filter((w2) => !/(?:release|deploy|publish|lock|stale|docs|pages|label)[^/]*$/i.test(w2))) {
         for (const t2 of triggersOf2(contents.get(f3) ?? "")) triggers.add(t2);
       }
-      const gated = triggers.has("pull_request") || triggers.has("merge_group");
+      const otherCi = ctx.files.some((f3) => OTHER_CI_CONFIG2.includes(f3.replace(/\\/g, "/")));
+      const gated = triggers.has("pull_request") || triggers.has("pull_request_target") || triggers.has("merge_group") || otherCi;
       if (!gated && triggers.has("push")) {
         issues.push({
           id: "ci-no-pr-trigger",
