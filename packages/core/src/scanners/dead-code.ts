@@ -149,7 +149,7 @@ export const deadCodeScanner: Scanner = {
  * consumed by a runner or a reader, not by an import.
  */
 const NOT_SHIPPED_RE =
-  /(^|\/)(?:__tests__|_?tests?|spec|e2e|fixtures?|__fixtures__|__testfixtures__|__snapshots__|_?examples?|playgrounds?|sandbox|bench(?:mark)?s?|scripts?|website|www|docs?|tutorials?|\.github|composables)\/|\.(?:test|spec|test-d|snap)\.|\.snap\.[a-z.]+$|\.d\.[cm]?ts$|\.gen\.[cm]?[jt]sx?$/i
+  /(^|\/)(?:__tests__|_?tests?|spec|e2e|fixtures?|__fixtures__|__testfixtures__|__snapshots__|_?examples?|[\w-]*playgrounds?|size-check|sandbox|bench(?:mark)?s?|scripts?|website|www|docs?|tutorials?|\.github|composables)\/|\.(?:test|spec|test-d|snap)\.|\.snap\.[a-z.]+$|\.d\.[cm]?ts$|\.gen\.[cm]?[jt]sx?$/i
 
 /**
  * Files a package publishes, from each package.json's main/module/types/exports.
@@ -201,6 +201,20 @@ async function scanJsTsExports(ctx: ScanContext, sources: string[]): Promise<Iss
     // different modules don't cross-suppress.
     const locallyUsed = new Set<string>()
     const localKey = (file: string, name: string) => `${file}\u0000${name}`
+
+    // Files each identifier appears in, as plain text. A safety net under the
+    // import graph: a name that shows up in another file is referenced somehow —
+    // generated code (`module.createRpcClient(…)` in a string), a Flow file the
+    // parser rejects, a .vue/.svelte template, a lookup by name.
+    const filesWithName = new Map<string, number>()
+    const TEXT_RE = /\.(?:[cm]?[jt]sx?|vue|svelte|astro|html)$/i
+    for (const file of ctx.files.filter((f) => TEXT_RE.test(f)).slice(0, 20000)) {
+      const content = await ctx.readFile(file)
+      if (!content) continue
+      for (const name of new Set(content.match(/[A-Za-z_$][\w$]*/g) ?? [])) {
+        filesWithName.set(name, (filesWithName.get(name) ?? 0) + 1)
+      }
+    }
 
     for (const file of sources) {
       const content = await ctx.readFile(file)
@@ -357,6 +371,7 @@ async function scanJsTsExports(ctx: ScanContext, sources: string[]): Promise<Iss
       if (namespaceRanges.some(([f, a, b]) => f === exp.file && exp.line >= a && exp.line <= b)) continue
       if (mdxText && new RegExp(`\\b${exp.name.replace(/\$/g, "\\$")}\\b`).test(mdxText)) continue
       if (usedNames.has(exp.name)) continue
+      if ((filesWithName.get(exp.name) ?? 0) > 1) continue
       if (CONVENTION_EXPORTS.has(exp.name)) continue // framework-consumed, not dead
 
       const kit = uiKitRoot(exp.file)
