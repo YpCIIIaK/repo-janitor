@@ -149,6 +149,9 @@ await Promise.all(
     while (queue.length) await one(queue.shift())
   }),
 )
+// A per-repo refresh (from run.mjs) stops here: the corpus-wide file is rebuilt
+// once, by a plain `history.mjs` run, not rewritten after every repo.
+if (only.length) process.exit(0)
 const results = corpus
   .map((r) => join(outDir, `${r.name}.json`))
   .filter((f) => existsSync(f))
