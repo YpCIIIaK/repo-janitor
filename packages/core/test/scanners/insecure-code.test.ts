@@ -313,3 +313,47 @@ describe("insecure-code — PHP and Java injections (DVWA, WebGoat)", () => {
     expect(out).toEqual([])
   })
 })
+
+describe("insecure-code — Ruby, Go and C# injections (RailsGoat, govwa, WebGoat.NET)", () => {
+  const scan = async (files: Record<string, string>) =>
+    (await insecureCodeScanner.run(makeContext({ files }))).map((i) => `${i.rule ?? i.id} ${i.confidence}`)
+
+  it("finds Rails SQL interpolation, shell and dispatch with params in sight", async () => {
+    const out = await scan({
+      "app/controllers/users_controller.rb":
+        "def show\n  @user = User.where(\"id = '#{params[:id]}'\").first\n  `ping #{params[:host]}`\n" +
+        "  klass = params[:type].constantize\nend\n",
+    })
+    expect(out.map((o) => o.split(" ")[0])).toEqual(
+      expect.arrayContaining([
+        expect.stringContaining("sql-interpolated"),
+        expect.stringContaining("exec-interpolated"),
+        expect.stringContaining("ruby-dynamic-dispatch"),
+      ]),
+    )
+    expect(out.every((o) => o.endsWith("high"))).toBe(true)
+  })
+
+  it("leaves instance_eval blocks and placeholders alone", async () => {
+    const out = await scan({
+      "lib/dsl.rb": "config.instance_eval do\n  x = 1\nend\nUser.where(\"name = ?\", name)\n",
+    })
+    expect(out).toEqual([])
+  })
+
+  it("finds Go Sprintf SQL next to r.FormValue", async () => {
+    const out = await scan({
+      "handler.go":
+        'id := r.FormValue("id")\nquery := fmt.Sprintf("SELECT * FROM users WHERE id = %s", id)\nrows, _ := db.Query(query)\n',
+    })
+    expect(out).toEqual([expect.stringMatching(/sql-interpolated.* high$/)])
+  })
+
+  it("finds C# SqlCommand concatenation next to Request.Query", async () => {
+    const out = await scan({
+      "Controllers/Users.cs":
+        'var name = Request.Query["name"];\nvar cmd = new SqlCommand("SELECT * FROM Users WHERE Name = \'" + name + "\'", conn);\n',
+    })
+    expect(out).toEqual([expect.stringMatching(/sql-interpolated.* high$/)])
+  })
+})

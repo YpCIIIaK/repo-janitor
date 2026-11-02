@@ -168,6 +168,67 @@ out.push("", "## Most to clean up", "")
 for (const r of worst) out.push(`- **${r.score}** ${r.name} (${r.issues.length} findings)`)
 out.push("")
 
+// --- practices vs health ------------------------------------------------------------------
+// Bigger repos score lower whatever they do, and bigger repos also adopt more
+// practices — so a raw comparison would credit Dependabot with the effect of
+// size. Compare inside size bands and average the gaps, weighted by band size.
+// Health is measured two ways: the score, and findings per 1k lines (density),
+// which does not punish size at all.
+const histDir = join(here, ".history")
+const BANDS = [[0, 5e3], [5e3, 5e4], [5e4, 2e5], [2e5, Infinity]]
+const PRACTICE_LABELS = {
+  dependabot: "Dependabot", renovate: "Renovate", security: "SECURITY.md", codeowners: "CODEOWNERS",
+  codeql: "CodeQL", scorecard: "OpenSSF Scorecard", preCommit: "pre-commit", issueTemplates: "Issue templates",
+  prTemplate: "PR template", contributing: "CONTRIBUTING", changeset: "Changesets", devcontainer: "Dev container",
+  editorconfig: ".editorconfig", tsconfig: "TypeScript", eslintFlat: "ESLint flat config", prettier: "Prettier",
+}
+const hist = new Map()
+for (const r of repos) {
+  const p = join(histDir, `${r.name}.json`)
+  if (existsSync(p)) hist.set(r.name, JSON.parse(readFileSync(p, "utf8")))
+}
+const density = (r) => (r.loc > 500 ? (1000 * r.issues.length) / r.loc : null)
+function controlled(metric, withP) {
+  let gap = 0
+  let weight = 0
+  for (const [a, b] of BANDS) {
+    const band = repos.filter((r) => hist.has(r.name) && r.loc >= a && r.loc < b && metric(r) !== null)
+    const yes = band.filter(withP).map(metric)
+    const no = band.filter((r) => !withP(r)).map(metric)
+    if (yes.length < 5 || no.length < 5) continue
+    const w = Math.min(yes.length, no.length)
+    gap += (median(yes) - median(no)) * w
+    weight += w
+  }
+  return weight ? gap / weight : null
+}
+const practiceRows = []
+for (const [key, label] of Object.entries(PRACTICE_LABELS)) {
+  const withP = (r) => !!hist.get(r.name)?.practices?.[key]?.present
+  const users = repos.filter((r) => hist.has(r.name) && withP(r))
+  if (users.length < 15) continue
+  const raw = median(users.map((r) => r.score)) - median(repos.filter((r) => hist.has(r.name) && !withP(r)).map((r) => r.score))
+  practiceRows.push({
+    key, label, repos: users.length,
+    rawScoreGap: raw,
+    scoreGap: controlled((r) => r.score, withP),
+    densityGap: controlled(density, withP),
+  })
+}
+practiceRows.sort((a, b) => (b.scoreGap ?? -99) - (a.scoreGap ?? -99))
+const sign = (x, d = 0) => (x === null ? "—" : `${x > 0 ? "+" : ""}${x.toFixed(d)}`)
+out.push("## Do good practices go with healthier code?", "")
+out.push(
+  "Median gap between repos with and without a practice. *Raw* compares everyone; *same size* compares " +
+    "repos of similar size and averages the gaps, which removes the effect of big projects both " +
+    "adopting more and scoring lower. Density is findings per 1k lines — lower is better.",
+  "",
+)
+out.push("| practice | repos | score gap, raw | score gap, same size | findings/1k gap, same size |", "|---|---:|---:|---:|---:|")
+for (const p of practiceRows) out.push(`| ${p.label} | ${p.repos} | ${sign(p.rawScoreGap)} | ${sign(p.scoreGap, 1)} | ${sign(p.densityGap, 2)} |`)
+out.push("", "Correlation, not causation: projects that add Dependabot are also the ones that care in other ways.", "")
+json.practices = practiceRows
+
 // --- the scanner on itself ----------------------------------------------------------------
 const hidden = repos.reduce((s, r) => s + r.hidden, 0)
 const shown = repos.reduce((s, r) => s + r.issues.length, 0)
