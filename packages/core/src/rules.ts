@@ -31,6 +31,10 @@ const INSECURE: Record<string, string> = {
   "py-pickle-load": "pickle.load() of untrusted data",
   "py-eval-exec": "Python eval()/exec()",
   "py-verify-false": "requests with verify=False",
+  "php-include-user-input": "File included from request input",
+  "php-unserialize": "PHP unserialize() of a variable",
+  "php-reflected-xss": "Request input echoed unescaped",
+  "java-deserialization": "Java native deserialisation",
 }
 
 const WORKFLOW: Record<string, string> = {
