@@ -5,3 +5,5 @@
 .archive/
 .archive-worktree/
 .chunk-*.tar.gz
+.run*.log
+.resume.log
