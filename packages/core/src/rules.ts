@@ -40,6 +40,7 @@ const INSECURE: Record<string, string> = {
   "ruby-html-safe": "Request input marked html_safe",
   "go-template-html": "Value marked as trusted HTML in a Go template",
   "dotnet-deserialization": "Unsafe .NET deserialiser",
+  ssrf: "Server fetches a URL from a variable (SSRF)",
 }
 
 const WORKFLOW: Record<string, string> = {
