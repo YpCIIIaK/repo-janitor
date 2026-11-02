@@ -2,7 +2,9 @@
 
 import { useState } from "react"
 import { AlertTriangle, CheckCircle2, ChevronRight, Cpu, Gauge, Ruler, XCircle } from "lucide-react"
-import { ruleLabel, ruleOf } from "@/packages/core/src/rules"
+import { ruleOf } from "@/packages/core/src/rules"
+import { localizedRuleLabel } from "@/lib/rule-labels"
+import { useLocale } from "@/components/i18n/locale-provider"
 import { categoryLabels, type Grade, type Issue, type IssueCategory, type Severity } from "@/lib/mock-data"
 import {
   DEFAULT_WEIGHTS,
@@ -179,6 +181,7 @@ interface ScannerRow {
 /** One scanner; expands into the specific rules that fired and what each cost. */
 function ScannerRowItem({ id, row: r, maxCost }: { id: string; row: ScannerRow; maxCost: number }) {
   const [open, setOpen] = useState(false)
+  const { locale } = useLocale()
   const rules = [...r.rules.entries()].sort((a, b) => b[1].cost - a[1].cost || b[1].count - a[1].count)
   return (
     <li>
@@ -213,7 +216,7 @@ function ScannerRowItem({ id, row: r, maxCost }: { id: string; row: ScannerRow; 
           {rules.map(([rule, v]) => (
             <li key={rule} className="flex items-center gap-2 text-xs">
               <span className={cn("size-2 shrink-0 rounded-full", SEV_DOT[v.worst])} />
-              <span className="min-w-0 flex-1 truncate">{ruleLabel(rule) ?? scannerName(rule)}</span>
+              <span className="min-w-0 flex-1 truncate">{localizedRuleLabel(rule, locale) ?? scannerName(rule)}</span>
               <span className="tabular-nums text-muted-foreground">×{v.count}</span>
               <span className="w-12 text-right tabular-nums">−{fmt(v.cost)}</span>
             </li>
