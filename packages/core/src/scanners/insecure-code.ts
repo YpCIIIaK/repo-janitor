@@ -25,6 +25,9 @@ const JS_RE = /\.(ts|tsx|js|jsx|mjs|mts|cts)$/i
 const PY_RE = /\.py$/i
 const PHP_RE = /\.(?:php|phtml|inc)$/i
 const JAVA_RE = /\.(?:java|kt)$/i
+const RB_RE = /\.(?:rb|erb|rake)$/i
+const GO_RE = /\.go$/i
+const CS_RE = /\.(?:cs|cshtml)$/i
 // Vendored/generated code is not ours to fix, and minified bundles produce
 // garbage line numbers.
 const SKIP_RE = /(^|\/)(?:node_modules|vendor|third_party|dist|build|out|\.next)\/|\.min\.[cm]?js$/i
@@ -44,7 +47,7 @@ const MAX_TOTAL = 60
 /** Skip enormous files: generated payloads dominate the report and cost time. */
 const MAX_BYTES = 400_000
 
-type Lang = "js" | "py" | "php" | "java"
+type Lang = "js" | "py" | "php" | "java" | "rb" | "go" | "cs"
 
 interface VulnRule {
   /** Stable slug — part of the issue id, so renaming one resets its snooze. */
@@ -57,8 +60,145 @@ interface VulnRule {
   detail: string
 }
 
-/** PHP and Java/Kotlin: the injection classes DVWA and WebGoat teach. */
+/** PHP, Java/Kotlin, Ruby, Go and C#: the injection classes DVWA, WebGoat, RailsGoat, govwa and WebGoat.NET teach. */
 const PHP_JAVA_RULES: VulnRule[] = [
+  // --- Ruby / Rails ---------------------------------------------------------
+  {
+    id: "sql-interpolated",
+    lang: "rb",
+    re: /\.(?:where|find_by_sql|order|group|having|select|joins|pluck|from|execute|exec_query|select_all|select_value|count_by_sql)\s*\(?\s*(?:"[^"\n]*#\{|'[^'\n]*'\s*\+|"[^"\n]*"\s*\+)/g,
+    severity: "critical",
+    title: "SQL fragment built by string interpolation",
+    detail:
+      "A value is interpolated into SQL that ActiveRecord passes through as-is, which is SQL " +
+      "injection. Use placeholders (`where(\"name = ?\", name)`) or a hash condition.",
+  },
+  {
+    id: "exec-interpolated",
+    lang: "rb",
+    re: /`[^`\n]*#\{|%x[({\[][^\n]*#\{|\b(?:system|exec|spawn|IO\.popen|Open3\.\w+)\s*\(?\s*"[^"\n]*#\{/g,
+    severity: "critical",
+    title: "Shell command built by string interpolation",
+    detail:
+      "An interpolated value reaches a shell, so `;` or `$(…)` in it runs a command of its own. " +
+      "Pass the arguments separately (`system(\"ls\", dir)`), which skips the shell.",
+  },
+  {
+    id: "eval-dynamic",
+    lang: "rb",
+    re: /\b(?:eval|instance_eval|class_eval|module_eval)\b(?!\s*(?:do\b|\{|\(\s*&|&))\s*\(?\s*[^\s"'(&:{|)]/g,
+    severity: "critical",
+    title: "eval() on a non-literal value",
+    detail: "`eval` runs whatever Ruby it is given. If any part of it comes from a request, this is remote code execution.",
+  },
+  {
+    id: "ruby-dynamic-dispatch",
+    lang: "rb",
+    re: /\.(?:send|public_send|constantize|safe_constantize)\b\s*\(?\s*params\b|\bparams\s*\[[^\]]+\]\s*\.\s*(?:constantize|safe_constantize)\b/g,
+    severity: "critical",
+    title: "Method or class chosen by request input",
+    detail:
+      "The request names the method to call or the class to load, so a caller can reach any of " +
+      "them. Map the input to an allow-list.",
+  },
+  {
+    id: "ruby-marshal-load",
+    lang: "rb",
+    re: /\bMarshal\.load\s*\(|\bYAML\.(?:load|unsafe_load)\s*\((?![^)]*permitted_classes)/g,
+    severity: "warning",
+    title: "Marshal/YAML load of a value",
+    detail:
+      "`Marshal.load` and unsafe `YAML.load` build arbitrary objects. Use JSON, or `YAML.safe_load` " +
+      "with a list of permitted classes.",
+  },
+  {
+    id: "ruby-html-safe",
+    lang: "rb",
+    re: /\bparams\b[^\n]*\.html_safe\b|\braw\s*\(?\s*params\b|<%==\s*params\b/g,
+    severity: "warning",
+    title: "Request input marked as safe HTML",
+    detail: "`html_safe`/`raw` turns off Rails escaping for a request value: reflected XSS.",
+  },
+  // --- Go -------------------------------------------------------------------
+  {
+    id: "sql-interpolated",
+    lang: "go",
+    re: /\.(?:Query|QueryRow|Exec|QueryContext|QueryRowContext|ExecContext|Raw|Select|Get)\s*\(\s*(?:ctx\s*,\s*)?(?:fmt\.Sprintf\s*\(\s*"[^"\n]*\b(?:SELECT|INSERT|UPDATE|DELETE)\b|"[^"\n]*\b(?:SELECT|INSERT|UPDATE|DELETE)\b[^"\n]*"\s*\+)/gi,
+    severity: "critical",
+    title: "SQL query assembled with Sprintf or +",
+    detail:
+      "The SQL text is formatted with a value, which is what SQL injection is. Pass the value as " +
+      "an argument (`db.Query(\"… WHERE id = $1\", id)`).",
+  },
+  {
+    id: "sql-interpolated",
+    lang: "go",
+    re: /:?=\s*fmt\.Sprintf\s*\(\s*"\s*(?:SELECT|INSERT\s+INTO|UPDATE|DELETE\s+FROM)\b[^"\n]*%[sv]/gi,
+    severity: "critical",
+    title: "SQL query assembled with Sprintf",
+    detail:
+      "The SQL text is formatted with a value, which is what SQL injection is. Pass the value as " +
+      "an argument (`db.Query(\"… WHERE id = $1\", id)`).",
+  },
+  {
+    id: "exec-interpolated",
+    lang: "go",
+    re: /\bexec\.Command(?:Context)?\s*\(\s*(?:ctx\s*,\s*)?(?:"(?:sh|bash|cmd|cmd\.exe|powershell)"\s*,\s*"(?:-c|\/c|\/C|-Command)"\s*,\s*(?!")|fmt\.Sprintf)/g,
+    severity: "critical",
+    title: "Shell command built from a value",
+    detail:
+      "A computed string is handed to a shell. Call the program directly with separate " +
+      "arguments (`exec.Command(\"ping\", \"-c\", \"1\", host)`).",
+  },
+  {
+    id: "go-template-html",
+    lang: "go",
+    re: /\btemplate\.(?:HTML|JS|URL|HTMLAttr)\s*\(\s*(?!")[^)]/g,
+    severity: "warning",
+    title: "Value marked as trusted template content",
+    detail: "`template.HTML(x)` switches off html/template escaping for `x`. If it came from a request, this is XSS.",
+  },
+  // --- C# -------------------------------------------------------------------
+  {
+    id: "sql-interpolated",
+    lang: "cs",
+    re: /\b(?:new\s+(?:Sql|Npgsql|MySql|Sqlite|OleDb|Odbc)Command|\.(?:FromSqlRaw|ExecuteSqlRaw|ExecuteSqlRawAsync|Query|Execute|QueryFirst\w*|QuerySingle\w*))\s*(?:<[^>]*>)?\s*\(\s*(?:\$"[^"\n]*\b(?:SELECT|INSERT|UPDATE|DELETE)\b[^"\n]*\{|"[^"\n]*\b(?:SELECT|INSERT|UPDATE|DELETE)\b[^"\n]*"\s*\+)/gi,
+    severity: "critical",
+    title: "SQL command assembled from variables",
+    detail:
+      "A value is pasted into the SQL text, which is what SQL injection is. Use parameters " +
+      "(`cmd.Parameters.AddWithValue`) or `FromSqlInterpolated`.",
+  },
+  {
+    id: "sql-interpolated",
+    lang: "cs",
+    re: /=\s*(?:\$"\s*(?:SELECT|INSERT\s+INTO|UPDATE|DELETE\s+FROM)\b[^"\n]*\{|"\s*(?:SELECT|INSERT\s+INTO|UPDATE|DELETE\s+FROM)\b[^"\n]*"\s*\+\s*[A-Za-z_])/gi,
+    severity: "critical",
+    title: "SQL command assembled from variables",
+    detail:
+      "A value is pasted into the SQL text, which is what SQL injection is. Use parameters " +
+      "(`cmd.Parameters.AddWithValue`) or `FromSqlInterpolated`.",
+  },
+  {
+    id: "exec-interpolated",
+    lang: "cs",
+    re: /\bProcess\.Start\s*\(\s*(?:"(?:cmd(?:\.exe)?|powershell|bash|sh)"\s*,\s*(?!")|\$")/g,
+    severity: "critical",
+    title: "Process started with a computed command line",
+    detail:
+      "A computed string reaches a shell. Start the program directly and pass validated " +
+      "arguments through `ProcessStartInfo.ArgumentList`.",
+  },
+  {
+    id: "dotnet-deserialization",
+    lang: "cs",
+    re: /\bnew\s+(?:BinaryFormatter|LosFormatter|NetDataContractSerializer|SoapFormatter|ObjectStateFormatter)\b|TypeNameHandling\s*=\s*TypeNameHandling\.(?:All|Auto|Objects|Arrays)/g,
+    severity: "warning",
+    title: "Unsafe .NET deserialiser",
+    detail:
+      "BinaryFormatter-style serialisers and Json.NET `TypeNameHandling` other than None can " +
+      "instantiate attacker-chosen types. Use System.Text.Json or `TypeNameHandling.None`.",
+  },
   {
     id: "sql-interpolated",
     lang: "php",
@@ -450,6 +590,9 @@ const COMMENT_MARKERS: Record<Lang, string[]> = {
   py: ["#"],
   php: ["//", "#"],
   java: ["//"],
+  rb: ["#"],
+  go: ["//"],
+  cs: ["//"],
 }
 
 function langOf(path: string): Lang | null {
@@ -457,6 +600,9 @@ function langOf(path: string): Lang | null {
   if (PY_RE.test(path)) return "py"
   if (PHP_RE.test(path)) return "php"
   if (JAVA_RE.test(path)) return "java"
+  if (RB_RE.test(path)) return "rb"
+  if (GO_RE.test(path)) return "go"
+  if (CS_RE.test(path)) return "cs"
   return null
 }
 
@@ -500,6 +646,11 @@ const SKIP_IN_TEST = new Set([
   "php-unserialize",
   "php-reflected-xss",
   "java-deserialization",
+  "ruby-dynamic-dispatch",
+  "ruby-marshal-load",
+  "ruby-html-safe",
+  "go-template-html",
+  "dotnet-deserialization",
 ])
 
 export interface CodeHit {
@@ -610,6 +761,11 @@ const INJECTION_RULES = new Set([
   "php-unserialize",
   "php-reflected-xss",
   "java-deserialization",
+  "ruby-dynamic-dispatch",
+  "ruby-marshal-load",
+  "ruby-html-safe",
+  "go-template-html",
+  "dotnet-deserialization",
 ])
 /** Lines above the match searched for untrusted input — roughly one function. */
 const TAINT_WINDOW = 25
@@ -618,6 +774,9 @@ const TAINT_WINDOW = 25
  * the URL, cross-window messages, uploaded files, interactive input.
  */
 const TAINT_RE: Record<Lang, RegExp> = {
+  rb: /\bparams\s*\[|\bparams\.(?:require|permit|fetch)\b|\brequest\.(?:params|body|query_string|headers|env)\b|\bcookies\s*\[/,
+  go: /\br\.(?:URL\.Query|FormValue|PostFormValue|Form|PostForm|Body|Header|URL\.Path)\b|\bc\.(?:Query|Param|PostForm|FormValue|DefaultQuery|Bind\w*|ShouldBind\w*)\s*\(|\bmux\.Vars\b|\bchi\.URLParam\b|\bos\.Args\b/,
+  cs: /\bRequest\.(?:Query|Form|QueryString|Params|Cookies|Headers|Body)\b|\[From(?:Query|Body|Form|Route|Header)\]|\bHttpContext\.Request\b/,
   php: /\$_(?:GET|POST|REQUEST|COOKIE|FILES|SERVER)\b|\$request->(?:input|get|query|post)\b|\bfile_get_contents\s*\(\s*['"]php:\/\/input/,
   java: /\brequest\.get(?:Parameter|Header|QueryString|InputStream|Reader|Cookies)\b|@(?:RequestParam|PathVariable|RequestBody|RequestHeader|CookieValue)\b|\bcall\.(?:parameters|receive)\b/,
   js: /\b(?:req|request|ctx\.request|ctx)\.(?:body|query|params|headers|cookies|url|originalUrl|path)\b|\bprocess\.argv\b|\blocation\.(?:search|hash|href|pathname)\b|\bsearchParams\b|\bdocument\.(?:cookie|referrer|URL)\b|\b(?:event|e|evt|msg)\.data\b|\bwindow\.name\b|\bformData\b|\.files\b|\buserInput\b/,

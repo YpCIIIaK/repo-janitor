@@ -9,7 +9,7 @@
  * history-based scanners run as they do in the CLI).
  */
 import { spawn } from "node:child_process"
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs"
+import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
 
@@ -73,6 +73,11 @@ async function runOne(repo) {
     evidence: i.evidence,
   }))
   writeFileSync(join(outDir, `${repo.name}.json`), JSON.stringify({ repo: repo.name, sha: repo.sha, findings }, null, 1))
+  // The checkout is only needed while scanning: the next run restores it from
+  // .git with `checkout --force`. Keeping 500 working trees fills the disk.
+  if (process.env.BENCH_KEEP_TREES !== "1") {
+    for (const entry of readdirSync(dir)) if (entry !== ".git") rmSync(join(dir, entry), { recursive: true, force: true })
+  }
   console.log(`${repo.name.padEnd(28)} ${String(findings.length).padStart(5)} findings  ${((Date.now() - started) / 1000).toFixed(0)}s`)
 }
 

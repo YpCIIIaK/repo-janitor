@@ -35,6 +35,11 @@ const INSECURE: Record<string, string> = {
   "php-unserialize": "PHP unserialize() of a variable",
   "php-reflected-xss": "Request input echoed unescaped",
   "java-deserialization": "Java native deserialisation",
+  "ruby-dynamic-dispatch": "Method or class chosen by request input",
+  "ruby-marshal-load": "Marshal / unsafe YAML load",
+  "ruby-html-safe": "Request input marked html_safe",
+  "go-template-html": "Value marked as trusted HTML in a Go template",
+  "dotnet-deserialization": "Unsafe .NET deserialiser",
 }
 
 const WORKFLOW: Record<string, string> = {
