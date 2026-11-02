@@ -139,17 +139,20 @@ async function one(repo) {
   return rec
 }
 
+// `history.mjs repo…` refreshes just those repos (run.mjs calls it before it
+// drops a clone); the corpus-wide curves are always rebuilt from every cached file.
+const only = process.argv.slice(2)
 const jobs = Number(process.env.BENCH_JOBS ?? 8)
-const queue = [...corpus]
-const results = []
+const queue = corpus.filter((r) => !only.length || only.includes(r.name))
 await Promise.all(
   Array.from({ length: jobs }, async () => {
-    while (queue.length) {
-      const r = await one(queue.shift())
-      if (r) results.push(r)
-    }
+    while (queue.length) await one(queue.shift())
   }),
 )
+const results = corpus
+  .map((r) => join(outDir, `${r.name}.json`))
+  .filter((f) => existsSync(f))
+  .map((f) => JSON.parse(readFileSync(f, "utf8")))
 
 // Corpus-wide adoption curves: share of repos (alive that year) using a practice.
 const yearsAll = []

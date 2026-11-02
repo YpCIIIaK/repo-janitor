@@ -75,7 +75,13 @@ async function runOne(repo) {
   writeFileSync(join(outDir, `${repo.name}.json`), JSON.stringify({ repo: repo.name, sha: repo.sha, findings }, null, 1))
   // The checkout is only needed while scanning: the next run restores it from
   // .git with `checkout --force`. Keeping 500 working trees fills the disk.
-  if (process.env.BENCH_KEEP_TREES !== "1") {
+  // BENCH_DROP_CLONES=1 removes the whole clone (the next run clones again by SHA),
+  // so a corpus far larger than the disk can still be scanned one repo at a time.
+  if (process.env.BENCH_DROP_CLONES === "1") {
+    await sh2("node", [join(here, "history.mjs"), repo.name])
+    rmSync(dir, { recursive: true, force: true })
+  }
+  else if (process.env.BENCH_KEEP_TREES !== "1") {
     for (const entry of readdirSync(dir)) if (entry !== ".git") rmSync(join(dir, entry), { recursive: true, force: true })
   }
   console.log(`${repo.name.padEnd(28)} ${String(findings.length).padStart(5)} findings  ${((Date.now() - started) / 1000).toFixed(0)}s`)
