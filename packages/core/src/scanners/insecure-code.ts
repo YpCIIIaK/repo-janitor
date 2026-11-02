@@ -62,6 +62,48 @@ interface VulnRule {
 
 /** PHP, Java/Kotlin, Ruby, Go and C#: the injection classes DVWA, WebGoat, RailsGoat, govwa and WebGoat.NET teach. */
 const PHP_JAVA_RULES: VulnRule[] = [
+  // --- Python SQL (VAmPI: f"SELECT … '{username}'") ---------------------------
+  {
+    id: "sql-interpolated",
+    lang: "py",
+    re: /\bf(?:"\s*(?:SELECT|INSERT\s+INTO|UPDATE|DELETE\s+FROM)\b[^"\n]*\{|'\s*(?:SELECT|INSERT\s+INTO|UPDATE|DELETE\s+FROM)\b[^'\n]*\{)|(?:"\s*(?:SELECT|INSERT\s+INTO|UPDATE|DELETE\s+FROM)\b[^"\n]*"|'\s*(?:SELECT|INSERT\s+INTO|UPDATE|DELETE\s+FROM)\b[^'\n]*')\s*(?:%\s*[(\w]|\.format\s*\(|\+\s*[A-Za-z_])/gi,
+    severity: "critical",
+    title: "SQL query assembled by string formatting",
+    detail:
+      "A value is formatted into the SQL text, which is what SQL injection is. Pass it as a bound " +
+      "parameter (`cursor.execute(\"… WHERE name = %s\", (name,))`, or `text(\"… :name\")` with params).",
+  },
+  // --- Server-side request forgery ------------------------------------------
+  {
+    id: "ssrf",
+    lang: "php",
+    re: /\b(?:file_get_contents|fopen|readfile|get_headers|curl_init|simplexml_load_file)\s*\(\s*\$|\bcurl_setopt\s*\([^,]+,\s*CURLOPT_URL\s*,\s*\$/g,
+    severity: "critical",
+    title: "Server fetches a URL from a variable",
+    detail:
+      "The server requests whatever URL the variable holds. If a request supplies it, a caller can " +
+      "reach internal services and cloud metadata (SSRF). Allow-list hosts and schemes.",
+  },
+  {
+    id: "ssrf",
+    lang: "py",
+    re: /\b(?:requests|httpx|session|client)\.(?:get|post|put|head|request)\s*\(\s*(?!["'])[A-Za-z_f]|\burllib\.request\.urlopen\s*\(\s*(?!["'])/g,
+    severity: "critical",
+    title: "Server fetches a URL from a variable",
+    detail:
+      "The server requests whatever URL the variable holds. If a request supplies it, a caller can " +
+      "reach internal services and cloud metadata (SSRF). Allow-list hosts and schemes.",
+  },
+  {
+    id: "ssrf",
+    lang: "js",
+    re: /\b(?:fetch|axios(?:\.(?:get|post|request))?|got|needle|superagent\.get|https?\.get)\s*\(\s*(?!['"`])[A-Za-z_$]/g,
+    severity: "critical",
+    title: "Server fetches a URL from a variable",
+    detail:
+      "The server requests whatever URL the variable holds. If a request supplies it, a caller can " +
+      "reach internal services and cloud metadata (SSRF). Allow-list hosts and schemes.",
+  },
   // --- Ruby / Rails ---------------------------------------------------------
   {
     id: "sql-interpolated",
@@ -133,7 +175,7 @@ const PHP_JAVA_RULES: VulnRule[] = [
   {
     id: "sql-interpolated",
     lang: "go",
-    re: /:?=\s*fmt\.Sprintf\s*\(\s*"\s*(?:SELECT|INSERT\s+INTO|UPDATE|DELETE\s+FROM)\b[^"\n]*%[sv]/gi,
+    re: /:?=\s*fmt\.Sprintf\s*\(\s*(?:"\s*(?:SELECT|INSERT\s+INTO|UPDATE|DELETE\s+FROM)\b[^"\n]*%[sv]|`\s*(?:SELECT|INSERT\s+INTO|UPDATE|DELETE\s+FROM)\b[^`]*%[sv])/gi,
     severity: "critical",
     title: "SQL query assembled with Sprintf",
     detail:
@@ -460,7 +502,7 @@ const RULES: VulnRule[] = [
   {
     id: "py-os-system",
     lang: "py",
-    re: /\bos\.system\s*\(\s*(?:f['"]|['"][^'"]*['"]\s*[+%]|[A-Za-z_])/g,
+    re: /\bos\.(?:system|popen)\s*\(\s*(?:f['"]|['"][^'"]*['"]\s*[+%]|[A-Za-z_])/g,
     severity: "critical",
     title: "os.system() with a constructed command",
     detail:
@@ -651,6 +693,7 @@ const SKIP_IN_TEST = new Set([
   "ruby-html-safe",
   "go-template-html",
   "dotnet-deserialization",
+  "ssrf",
 ])
 
 export interface CodeHit {
@@ -766,6 +809,7 @@ const INJECTION_RULES = new Set([
   "ruby-html-safe",
   "go-template-html",
   "dotnet-deserialization",
+  "ssrf",
 ])
 /** Lines above the match searched for untrusted input — roughly one function. */
 const TAINT_WINDOW = 25
@@ -776,11 +820,11 @@ const TAINT_WINDOW = 25
 const TAINT_RE: Record<Lang, RegExp> = {
   rb: /\bparams\s*\[|\bparams\.(?:require|permit|fetch)\b|\brequest\.(?:params|body|query_string|headers|env)\b|\bcookies\s*\[/,
   go: /\br\.(?:URL\.Query|FormValue|PostFormValue|Form|PostForm|Body|Header|URL\.Path)\b|\bc\.(?:Query|Param|PostForm|FormValue|DefaultQuery|Bind\w*|ShouldBind\w*)\s*\(|\bmux\.Vars\b|\bchi\.URLParam\b|\bos\.Args\b/,
-  cs: /\bRequest\.(?:Query|Form|QueryString|Params|Cookies|Headers|Body)\b|\[From(?:Query|Body|Form|Route|Header)\]|\bHttpContext\.Request\b/,
+  cs: /\bRequest\.(?:Query|Form|QueryString|Params|Cookies|Headers|Body)\b|\bRequest\s*\[|\b(?:txt|tb|text)\w*\.Text\b(?!\s*=[^=])|\[From(?:Query|Body|Form|Route|Header)\]|\bHttpContext\.Request\b/,
   php: /\$_(?:GET|POST|REQUEST|COOKIE|FILES|SERVER)\b|\$request->(?:input|get|query|post)\b|\bfile_get_contents\s*\(\s*['"]php:\/\/input/,
   java: /\brequest\.get(?:Parameter|Header|QueryString|InputStream|Reader|Cookies)\b|@(?:RequestParam|PathVariable|RequestBody|RequestHeader|CookieValue)\b|\bcall\.(?:parameters|receive)\b/,
   js: /\b(?:req|request|ctx\.request|ctx)\.(?:body|query|params|headers|cookies|url|originalUrl|path)\b|\bprocess\.argv\b|\blocation\.(?:search|hash|href|pathname)\b|\bsearchParams\b|\bdocument\.(?:cookie|referrer|URL)\b|\b(?:event|e|evt|msg)\.data\b|\bwindow\.name\b|\bformData\b|\.files\b|\buserInput\b/,
-  py: /\brequest\.(?:args|form|json|data|values|files|GET|POST|body|query_params|path_params|cookies|headers|get_json)\b|\bsys\.argv\b|(?<![.\w])input\s*\(|\bself\.request\b|\bflask\.request\b|\bupload|\brecv\s*\(/,
+  py: /\bparams\s*\[\s*["']|\bparse_qsl?\s*\(|\bQUERY_STRING\b|\bquery_string\b|\brequest\.(?:args|form|json|data|values|files|GET|POST|body|query_params|path_params|cookies|headers|get_json)\b|\bsys\.argv\b|(?<![.\w])input\s*\(|\bself\.request\b|\bflask\.request\b|\bupload|\brecv\s*\(/,
 }
 
 /** Up to `n` lines either side of the match, for rules that need context. */
@@ -828,7 +872,9 @@ export const insecureCodeScanner: Scanner = {
     for (const file of ctx.files) {
       if (issues.length >= MAX_TOTAL) break
       const norm = file.replace(/\\/g, "/")
-      if (SKIP_RE.test(norm) || NOT_SHIPPED_RE.test(norm)) continue
+      // In PHP apps `www/` (or `public/`) is the web root itself, not a docs site.
+      const webRoot = /\.php$/i.test(norm) && /(^|\/)(?:www|public|htdocs)\//.test(norm)
+      if (SKIP_RE.test(norm) || (NOT_SHIPPED_RE.test(norm) && !webRoot)) continue
 
       const lang = langOf(norm)
       if (!lang) continue

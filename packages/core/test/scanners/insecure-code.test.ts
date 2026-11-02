@@ -357,3 +357,34 @@ describe("insecure-code — Ruby, Go and C# injections (RailsGoat, govwa, WebGoa
     expect(out).toEqual([expect.stringMatching(/sql-interpolated.* high$/)])
   })
 })
+
+describe("insecure-code — Python SQL and SSRF (VAmPI, SSRF lab)", () => {
+  const scan = async (files: Record<string, string>) =>
+    (await insecureCodeScanner.run(makeContext({ files }))).map((i) => `${i.rule ?? i.id} ${i.confidence}`)
+
+  it("finds an f-string query fed by the request", async () => {
+    const out = await scan({
+      "api/users.py":
+        "username = request.args.get('name')\nuser_query = f\"SELECT * FROM users WHERE username = '{username}'\"\n" +
+        "db.session.execute(text(user_query))\n",
+    })
+    expect(out).toEqual([expect.stringMatching(/sql-interpolated.* high$/)])
+  })
+
+  it("leaves a bound-parameter query alone", async () => {
+    expect(await scan({ "api/ok.py": 'cur.execute("SELECT * FROM users WHERE name = %s", (name,))\n' })).toEqual([])
+  })
+
+  it("finds SSRF when a request URL reaches the fetch", async () => {
+    const out = await scan({
+      "app/fetch.php": "<?php\n$url = $_POST['url'];\necho file_get_contents($url);\n",
+      "src/proxy.js": "app.get('/p', async (req, res) => {\n  const r = await fetch(req.query.target)\n})\n",
+    })
+    expect(out.sort()).toEqual([expect.stringMatching(/ssrf.* high$/), expect.stringMatching(/ssrf.* high$/)])
+  })
+
+  it("keeps a library's fetch of its own variable at low confidence", async () => {
+    const out = await scan({ "src/client.js": "export function get(url) {\n  return fetch(url)\n}\n" })
+    expect(out).toEqual([expect.stringMatching(/ssrf.* low$/)])
+  })
+})
