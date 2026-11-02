@@ -274,3 +274,42 @@ describe("insecure-code — taint-gated confidence", () => {
     ).toEqual(["insecure-exec-interpolated high", "insecure-exec-interpolated low"])
   })
 })
+
+describe("insecure-code — PHP and Java injections (DVWA, WebGoat)", () => {
+  const scan = async (files: Record<string, string>) =>
+    (await insecureCodeScanner.run(makeContext({ files }))).map((i) => `${i.rule ?? i.id.split("-src")[0]} ${i.confidence}`)
+
+  it("finds the textbook PHP injections with request input in sight", async () => {
+    const out = await scan({
+      "src/low.php":
+        "<?php\n$id = $_GET['id'];\n$query = \"SELECT first_name FROM users WHERE user_id = '$id';\";\n" +
+        "$result = mysqli_query($conn, $query);\n$cmd = shell_exec('ping -c 4 ' . $_REQUEST['ip']);\n" +
+        "include($_GET['page']);\necho 'Hello ' . $_GET['name'];\n",
+    })
+    expect(out.map((o) => o.split(" ")[0]).sort()).toEqual(
+      expect.arrayContaining([
+        expect.stringContaining("sql-interpolated"),
+        expect.stringContaining("exec-interpolated"),
+        expect.stringContaining("php-include-user-input"),
+        expect.stringContaining("php-reflected-xss"),
+      ]),
+    )
+    expect(out.every((o) => o.endsWith("high"))).toBe(true)
+  })
+
+  it("finds Java SQL concatenation next to request.getParameter", async () => {
+    const out = await scan({
+      "src/Lesson.java":
+        "String name = request.getParameter(\"name\");\n" +
+        "ResultSet rs = stmt.executeQuery(\"SELECT * FROM users WHERE name = '\" + name + \"'\");\n",
+    })
+    expect(out).toEqual([expect.stringMatching(/sql-interpolated.* high$/)])
+  })
+
+  it("leaves a prepared statement alone", async () => {
+    const out = await scan({
+      "src/Ok.java": 'PreparedStatement ps = c.prepareStatement("SELECT * FROM users WHERE name = ?");\nps.setString(1, name);\n',
+    })
+    expect(out).toEqual([])
+  })
+})

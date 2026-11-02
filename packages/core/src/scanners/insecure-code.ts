@@ -23,6 +23,8 @@ import { parseFile, walk, type Node } from "../ast"
 
 const JS_RE = /\.(ts|tsx|js|jsx|mjs|mts|cts)$/i
 const PY_RE = /\.py$/i
+const PHP_RE = /\.(?:php|phtml|inc)$/i
+const JAVA_RE = /\.(?:java|kt)$/i
 // Vendored/generated code is not ours to fix, and minified bundles produce
 // garbage line numbers.
 const SKIP_RE = /(^|\/)(?:node_modules|vendor|third_party|dist|build|out|\.next)\/|\.min\.[cm]?js$/i
@@ -42,7 +44,7 @@ const MAX_TOTAL = 60
 /** Skip enormous files: generated payloads dominate the report and cost time. */
 const MAX_BYTES = 400_000
 
-type Lang = "js" | "py"
+type Lang = "js" | "py" | "php" | "java"
 
 interface VulnRule {
   /** Stable slug — part of the issue id, so renaming one resets its snooze. */
@@ -54,6 +56,106 @@ interface VulnRule {
   /** What is wrong and what to do instead. Findings without a fix are noise. */
   detail: string
 }
+
+/** PHP and Java/Kotlin: the injection classes DVWA and WebGoat teach. */
+const PHP_JAVA_RULES: VulnRule[] = [
+  {
+    id: "sql-interpolated",
+    lang: "php",
+    re: /\b(?:mysqli?_query|pg_query|sqlite_query|->query|->exec|->prepare)\s*\([^;]*?(?:\$_(?:GET|POST|REQUEST|COOKIE)|["'][^"';]*\b(?:SELECT|INSERT|UPDATE|DELETE)\b[^"';]*(?:\$\w|["']\s*\.))/gi,
+    severity: "critical",
+    title: "SQL query assembled from variables",
+    detail:
+      "A variable is pasted into the SQL text, which is what SQL injection is. Use a prepared " +
+      "statement with bound parameters (PDO or mysqli `bind_param`).",
+  },
+  {
+    id: "sql-interpolated",
+    lang: "php",
+    re: /=\s*(?:"\s*(?:SELECT|INSERT\s+INTO|UPDATE|DELETE\s+FROM)\b[^"\n]*(?:\$\w|"\s*\.\s*\$)|'\s*(?:SELECT|INSERT\s+INTO|UPDATE|DELETE\s+FROM)\b[^'\n]*'\s*\.\s*\$)/gi,
+    severity: "critical",
+    title: "SQL query assembled from variables",
+    detail:
+      "A variable is pasted into the SQL text, which is what SQL injection is. Use a prepared " +
+      "statement with bound parameters (PDO or mysqli `bind_param`).",
+  },
+  {
+    id: "exec-interpolated",
+    lang: "php",
+    re: /\b(?:shell_exec|exec|system|passthru|popen|proc_open)\s*\(\s*(?:[^)'"]*\$|["'][^"']*["']\s*\.\s*\$|"[^"]*\$)/g,
+    severity: "critical",
+    title: "Shell command built from variables",
+    detail:
+      "A variable reaches a shell command, so a value containing `;` or `&&` runs its own command. " +
+      "Pass arguments through `escapeshellarg`, or avoid the shell.",
+  },
+  {
+    id: "eval-dynamic",
+    lang: "php",
+    re: /\b(?:eval|assert|create_function)\s*\(\s*[^)'"\s]/g,
+    severity: "critical",
+    title: "eval() on a non-literal value",
+    detail: "`eval` runs whatever PHP it is given. If any part of it comes from a request, this is remote code execution.",
+  },
+  {
+    id: "php-include-user-input",
+    lang: "php",
+    re: /\b(?:include|require)(?:_once)?\s*\(?\s*[^;]*\$_(?:GET|POST|REQUEST|COOKIE)/g,
+    severity: "critical",
+    title: "File included from request input",
+    detail:
+      "The path to include comes from the request: a local or remote file inclusion. Map the input " +
+      "to a fixed allow-list of files instead.",
+  },
+  {
+    id: "php-unserialize",
+    lang: "php",
+    re: /\bunserialize\s*\(\s*[^)'"\s]/g,
+    severity: "warning",
+    title: "unserialize() on a non-literal value",
+    detail:
+      "`unserialize` can instantiate arbitrary classes and trigger their magic methods. Use " +
+      "`json_decode` for data that crosses a trust boundary.",
+  },
+  {
+    id: "php-reflected-xss",
+    lang: "php",
+    re: /\b(?:echo|print)\b[^;]*\$_(?:GET|POST|REQUEST|COOKIE)\b(?![^;]*htmlspecialchars)/g,
+    severity: "warning",
+    title: "Request input echoed into the page",
+    detail: "A request value is written to the HTML unescaped: reflected XSS. Wrap it in `htmlspecialchars`.",
+  },
+  {
+    id: "sql-interpolated",
+    lang: "java",
+    re: /"[^"\n]*\b(?:SELECT|INSERT\s+INTO|UPDATE|DELETE\s+FROM)\b[^"\n]*"\s*\+\s*[A-Za-z_]/gi,
+    severity: "critical",
+    title: "SQL query assembled by string concatenation",
+    detail:
+      "The SQL text is built by concatenating a value, which is what SQL injection is. Use a " +
+      "`PreparedStatement` with `?` placeholders, or named parameters in JPA.",
+  },
+  {
+    id: "exec-interpolated",
+    lang: "java",
+    re: /\b(?:Runtime\.getRuntime\(\)\.exec|new\s+ProcessBuilder)\s*\(\s*(?!")[^)]/g,
+    severity: "critical",
+    title: "Process started with a computed command",
+    detail:
+      "The command line is built at run time. If a request value reaches it, the caller chooses " +
+      "what runs. Pass a fixed executable and validated arguments as a list.",
+  },
+  {
+    id: "java-deserialization",
+    lang: "java",
+    re: /\bnew\s+ObjectInputStream\s*\(|\bXMLDecoder\s*\(|\.readObject\s*\(\s*\)/g,
+    severity: "warning",
+    title: "Java deserialisation of a stream",
+    detail:
+      "Native Java deserialisation of untrusted bytes is a classic remote-code-execution path " +
+      "(gadget chains). Use a data format such as JSON, or an allow-list `ObjectInputFilter`.",
+  },
+]
 
 const RULES: VulnRule[] = [
   // ---- JavaScript / TypeScript -------------------------------------------
@@ -105,6 +207,19 @@ const RULES: VulnRule[] = [
       "parameterised query — placeholders plus a values array — so the driver sends the value " +
       "separately from the statement.",
   },
+  {
+    // dvna: `var query = "SELECT … WHERE login='" + req.body.login + "'"`, run later.
+    id: "sql-interpolated",
+    lang: "js",
+    re: /['"]\s*(?:SELECT|INSERT\s+INTO|UPDATE|DELETE\s+FROM)\b[^'"\n]*['"]\s*\+\s*[A-Za-z_$]/g,
+    severity: "critical",
+    title: "SQL query assembled by string concatenation",
+    detail:
+      "The query text is built by gluing a value into SQL, which is what SQL injection is. Use a " +
+      "parameterised query — placeholders plus a values array — so the driver sends the value " +
+      "separately from the statement.",
+  },
+  ...PHP_JAVA_RULES,
   {
     id: "innerhtml-dynamic",
     lang: "js",
@@ -333,11 +448,15 @@ export function literalRanges(line: string): [number, number][] {
 const COMMENT_MARKERS: Record<Lang, string[]> = {
   js: ["//"],
   py: ["#"],
+  php: ["//", "#"],
+  java: ["//"],
 }
 
 function langOf(path: string): Lang | null {
   if (JS_RE.test(path)) return "js"
   if (PY_RE.test(path)) return "py"
+  if (PHP_RE.test(path)) return "php"
+  if (JAVA_RE.test(path)) return "java"
   return null
 }
 
@@ -377,6 +496,10 @@ const SKIP_IN_TEST = new Set([
   "weak-hash",
   "py-pickle-load",
   "random-for-secret",
+  "php-include-user-input",
+  "php-unserialize",
+  "php-reflected-xss",
+  "java-deserialization",
 ])
 
 export interface CodeHit {
@@ -483,6 +606,10 @@ const INJECTION_RULES = new Set([
   "py-shell-true",
   "py-pickle-load",
   "py-yaml-load",
+  "php-include-user-input",
+  "php-unserialize",
+  "php-reflected-xss",
+  "java-deserialization",
 ])
 /** Lines above the match searched for untrusted input — roughly one function. */
 const TAINT_WINDOW = 25
@@ -490,7 +617,9 @@ const TAINT_WINDOW = 25
  * Untrusted sources a reviewer would trace: HTTP request fields, CLI args,
  * the URL, cross-window messages, uploaded files, interactive input.
  */
-const TAINT_RE: Record<"js" | "py", RegExp> = {
+const TAINT_RE: Record<Lang, RegExp> = {
+  php: /\$_(?:GET|POST|REQUEST|COOKIE|FILES|SERVER)\b|\$request->(?:input|get|query|post)\b|\bfile_get_contents\s*\(\s*['"]php:\/\/input/,
+  java: /\brequest\.get(?:Parameter|Header|QueryString|InputStream|Reader|Cookies)\b|@(?:RequestParam|PathVariable|RequestBody|RequestHeader|CookieValue)\b|\bcall\.(?:parameters|receive)\b/,
   js: /\b(?:req|request|ctx\.request|ctx)\.(?:body|query|params|headers|cookies|url|originalUrl|path)\b|\bprocess\.argv\b|\blocation\.(?:search|hash|href|pathname)\b|\bsearchParams\b|\bdocument\.(?:cookie|referrer|URL)\b|\b(?:event|e|evt|msg)\.data\b|\bwindow\.name\b|\bformData\b|\.files\b|\buserInput\b/,
   py: /\brequest\.(?:args|form|json|data|values|files|GET|POST|body|query_params|path_params|cookies|headers|get_json)\b|\bsys\.argv\b|(?<![.\w])input\s*\(|\bself\.request\b|\bflask\.request\b|\bupload|\brecv\s*\(/,
 }

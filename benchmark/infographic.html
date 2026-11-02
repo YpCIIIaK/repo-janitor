@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>515 репозиториев изнутри</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Layout: a single reading column of numbered "findings", each a big number + one chart. */
+:root {
+  --bg: #f4f5f1;
+  --surface: #ffffff;
+  --ink: #16201c;
+  --muted: #5d6a64;
+  --line: #dde2dc;
+  --accent: #0f6b5c;
+  --accent-soft: #cfe6df;
+  --warn: #b7791f;
+  --bad: #b23a3a;
+  --good: #2f7d4f;
+  --display: "Unbounded", "Segoe UI", system-ui, sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111715; --surface: #18201d; --ink: #e6ece8; --muted: #95a39c; --line: #2a3531;
+    --accent: #5cc4ad; --accent-soft: #1d3a33; --warn: #e0a64a; --bad: #e07070; --good: #6cc48f;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111715; --surface: #18201d; --ink: #e6ece8; --muted: #95a39c; --line: #2a3531;
+  --accent: #5cc4ad; --accent-soft: #1d3a33; --warn: #e0a64a; --bad: #e07070; --good: #6cc48f;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--ink); font: 16px/1.55 var(--body); }
+main { max-width: 980px; margin: 0 auto; padding: 40px 20px 64px; display: grid; gap: 28px; }
+h1, h2 { font-family: var(--display); text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+h1 { font-size: clamp(30px, 5vw, 48px); line-height: 1.1; font-weight: 700; }
+h2 { font-size: 20px; font-weight: 500; }
+p { margin: 0; max-width: 65ch; }
+.lede { color: var(--muted); font-size: 17px; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+.tile { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; display: grid; gap: 4px; }
+.tile b { font-family: var(--display); font-size: 32px; font-weight: 500; color: var(--accent); font-variant-numeric: tabular-nums; }
+.tile span { color: var(--muted); font-size: 14px; }
+section.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 22px; display: grid; gap: 14px; }
+.num { font-family: var(--mono); font-size: 12px; color: var(--accent); letter-spacing: .06em; }
+.head { display: grid; gap: 6px; }
+.note { color: var(--muted); font-size: 14px; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+svg { display: block; width: 100%; height: auto; }
+svg text { fill: var(--ink); font-family: var(--body); font-size: 13px; }
+svg .m { fill: var(--muted); font-size: 12px; }
+svg .mono { font-family: var(--mono); }
+.rings { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+.ring { display: grid; justify-items: center; gap: 6px; text-align: center; }
+.ring p { font-size: 14px; color: var(--muted); max-width: 26ch; }
+ol.list { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+ol.list li { display: grid; grid-template-columns: 64px 1fr; gap: 10px; align-items: baseline; font-size: 14px; }
+ol.list li b { font-family: var(--mono); font-weight: 500; font-variant-numeric: tabular-nums; }
+code { font-family: var(--mono); font-size: 12.5px; color: var(--muted); word-break: break-all; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--line); }
+th { color: var(--muted); font-weight: 500; }
+td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; }
+.pill { display: inline-block; padding: 1px 8px; border-radius: 99px; font-size: 12px; font-weight: 600; }
+.pill.good { background: color-mix(in srgb, var(--good) 18%, transparent); color: var(--good); }
+.pill.warn { background: color-mix(in srgb, var(--warn) 20%, transparent); color: var(--warn); }
+.pill.bad { background: color-mix(in srgb, var(--bad) 18%, transparent); color: var(--bad); }
+.wrap { overflow-x: auto; }
+footer { color: var(--muted); font-size: 13px; }
+figure.fig { margin: 0; display: grid; gap: 6px; }
+.grid2.tr { grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); }
+@media (max-width: 420px) { .grid2.tr { grid-template-columns: 1fr; } }
+figcaption { font-size: 14px; font-weight: 600; }
+.legend { display: flex; flex-wrap: wrap; gap: 12px; font-size: 13px; color: var(--muted); }
+.legend i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 5px; }
+</style>
+</head>
+<body>
+<main>
+  <header class="head">
+    <h1>515 open-source репозиториев изнутри</h1>
+    <p class="lede">Что нашёл repo-janitor в популярных проектах на 12 языках: от JavaScript и Python до Java, C#, Swift и C++. Каждый проект просканирован на зафиксированном коммите; считаются только находки, которые пользователь видит по умолчанию (высокая и средняя уверенность).</p>
+  </header>
+
+  <div class="tiles" id="tiles"></div>
+
+  <section class="card">
+    <div class="head"><span class="num">01 · ОЦЕНКИ</span><h2>Почти половина проектов получает A или B</h2>
+    <p class="note">Медианная оценка 70 из 100. «F» у 7%: огромные монорепозитории, наборы демо-приложений и учебно-уязвимые приложения (DVWA, WebGoat, Juice Shop получили 0, как и должны).</p></div>
+    <svg id="grades" viewBox="0 0 900 90" role="img" aria-label="Распределение оценок"></svg>
+  </section>
+
+  <section class="card">
+    <div class="head"><span class="num">02 · ЯЗЫКИ</span><h2>Маленькие JavaScript-пакеты чище всех, Kotlin, Rust и Java ниже</h2>
+    <p class="note">Слева медианная оценка, справа плотность находок на тысячу строк. Низкая оценка Rust объясняется размером: крупные проекты накапливают больше находок, а оценка пока не делится на размер.</p></div>
+    <div class="grid2"><svg id="langScore" viewBox="0 0 440 260" role="img" aria-label="Медианная оценка по языкам"></svg>
+    <svg id="langDensity" viewBox="0 0 440 260" role="img" aria-label="Находок на тысячу строк по языкам"></svg></div>
+  </section>
+
+  <section class="card">
+    <div class="head"><span class="num">03 · ЧТО ВСТРЕЧАЕТСЯ ЧАЩЕ ВСЕГО</span><h2>Знания у одного человека и вечные TODO есть почти везде</h2>
+    <p class="note">Доля проектов, где правило сработало хотя бы раз.</p></div>
+    <svg id="rules" viewBox="0 0 900 470" role="img" aria-label="Самые частые проблемы"></svg>
+  </section>
+
+  <section class="card">
+    <div class="head"><span class="num">04 · ЦЕПОЧКА ПОСТАВОК CI</span><h2>Большинство GitHub Actions можно подменить</h2>
+    <p class="note">Из 472 проектов с GitHub Actions. Тег вроде <code>@v4</code> автор action может перевесить на другой код; так в 2025 году прошла атака через tj-actions/changed-files. Закреплять нужно на SHA коммита.</p></div>
+    <div class="rings" id="rings"></div>
+  </section>
+
+  <section class="card">
+    <div class="head"><span class="num">05 · УСТАРЕВШИЕ ВЕРСИИ</span><h2>Больше половины проектов держатся за снятые с поддержки версии</h2></div>
+    <div class="tiles">
+      <div class="tile"><b>54%</b><span>из 298 Node.js-проектов объявляют или тестируют end-of-life Node</span></div>
+      <div class="tile"><b>69%</b><span>из 81 Python-проекта поддерживают end-of-life Python</span></div>
+      <div class="tile"><b>9%</b><span>проектов не коммитят lock-файл</span></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="head"><span class="num">06 · ГИГИЕНА ПРОЕКТА</span><h2>README и лицензия есть почти у всех, политика безопасности — меньше чем у половины</h2></div>
+    <svg id="hygiene" viewBox="0 0 900 300" role="img" aria-label="Наличие файлов проекта"></svg>
+  </section>
+
+  <section class="card">
+    <div class="head"><span class="num">07 · ВОЗРАСТ ДОЛГА</span><h2>Средний TODO живёт 4 года</h2>
+    <p class="note">10 868 TODO/FIXME с датой из git blame. 41% старше пяти лет. Самые старые старше многих их читателей:</p></div>
+    <ol class="list" id="oldest"></ol>
+  </section>
+
+  <section class="card">
+    <div class="head"><span class="num">08 · РАЗМЕР И АКТИВНОСТЬ</span><h2>Чем больше проект, тем ниже оценка, и активность это не спасает</h2>
+    <p class="note">Активные проекты (50+ коммитов за год) получают медиану 62, тихие (меньше 10) — 84. Это не значит, что заброшенные лучше: активные в среднем крупнее и находок у них больше чем вдвое (73 против 30). Вывод для продукта: оценку стоит нормировать на размер.</p></div>
+    <div class="grid2"><svg id="size" viewBox="0 0 440 260" role="img" aria-label="Оценка по размеру проекта"></svg>
+    <svg id="activity" viewBox="0 0 440 260" role="img" aria-label="Оценка по активности"></svg></div>
+  </section>
+
+  <section class="card">
+    <div class="head"><span class="num">09 · КРАЙНИЕ СЛУЧАИ</span><h2>Самые чистые и самые запущенные</h2></div>
+    <div class="grid2">
+      <div><p class="note">Оценка 100</p><ol class="list" id="best"></ol></div>
+      <div><p class="note">Ниже всех</p><ol class="list" id="worst"></ol></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="head"><span class="num">11 · ТРАЕКТОРИИ</span><h2>Как эти же проекты менялись с 2012 года</h2>
+    <p class="note">Из истории git каждого проекта: в каком году появился (или удалён) файл, отмечающий практику. Доля считается среди проектов, которые уже существовали в тот год. Важно: корпус составлен из проектов, живых сегодня, поэтому ранние годы показывают выживших.</p></div>
+    <div class="grid2 tr">
+      <figure class="fig"><figcaption>Великая миграция CI: Travis → GitHub Actions за два года</figcaption><svg id="trCi" viewBox="0 0 440 240" role="img" aria-label="Доля проектов с Travis и GitHub Actions по годам"></svg></figure>
+      <figure class="fig"><figcaption>Безопасность догоняет: Dependabot, SECURITY.md, CodeQL</figcaption><svg id="trSec" viewBox="0 0 440 240" role="img" aria-label="Доля проектов с практиками безопасности по годам"></svg></figure>
+      <figure class="fig"><figcaption>Инструменты: TypeScript, ESLint flat config, pnpm</figcaption><svg id="trTool" viewBox="0 0 440 240" role="img" aria-label="Доля проектов с инструментами по годам"></svg></figure>
+      <figure class="fig"><figcaption>Python: setup.py уступает pyproject.toml в 2022–2023</figcaption><svg id="trPy" viewBox="0 0 440 240" role="img" aria-label="setup.py и pyproject.toml по годам"></svg></figure>
+    </div>
+    <div class="tiles">
+      <div class="tile"><b>57</b><span>медиана коммитов за 2026 год (в 2015 было 145)</span></div>
+      <div class="tile"><b>9</b><span>медиана авторов за год (пик — 21 в 2016–2017)</span></div>
+      <div class="tile"><b>14%</b><span>проектов без единого коммита в 2026 году (в 2018 — 2%)</span></div>
+    </div>
+    <figure class="fig"><figcaption>Активность: медиана коммитов и авторов в год на проект</figcaption><svg id="trAct" viewBox="0 0 900 240" role="img" aria-label="Медиана коммитов и авторов по годам"></svg></figure>
+  </section>
+
+  <section class="card">
+    <div class="head"><span class="num">12 · НАСКОЛЬКО ВЕРИТЬ ЦИФРАМ</span><h2>Точность сканера на 618 вручную размеченных находках</h2></div>
+    <div class="wrap"><table>
+      <thead><tr><th>Уверенность</th><th class="r">Верных</th><th class="r">Ложных</th><th class="r">Точность</th><th>Показывается</th></tr></thead>
+      <tbody>
+        <tr><td><span class="pill good">высокая</span></td><td class="r">364</td><td class="r">8</td><td class="r">98%</td><td>да, со значком</td></tr>
+        <tr><td><span class="pill warn">средняя</span></td><td class="r">96</td><td class="r">34</td><td class="r">74%</td><td>да</td></tr>
+        <tr><td><span class="pill bad">низкая</span></td><td class="r">19</td><td class="r">97</td><td class="r">16%</td><td>только по запросу</td></tr>
+      </tbody>
+    </table></div>
+    <p class="note">1 719 находок с низкой уверенностью (6% всего, что подняли сканеры) не вошли ни в одну цифру выше.</p>
+  </section>
+
+  <footer>repo-janitor benchmark · 515 репозиториев · история git с 2010 года · данные на 2 ноября 2026</footer>
+</main>
+
+<script>
+const D = {
+  grades: { A: 124, B: 120, C: 109, D: 127, F: 35 },
+  langs: [["JavaScript",160,82,1.76],["PHP",15,76,0.47],["Ruby",18,74,1.11],["Go",44,70,1.37],["TypeScript",113,68,1.55],["Swift",6,66,1.51],["Python",81,65,1.38],["C#",12,64,1.28],["C++",6,62,2.1],["Java",16,59,0.77],["Rust",28,58,1.51],["Kotlin",8,54,1.22]],
+  rules: [["Старые файлы одного автора",0.736],["TODO / FIXME",0.699],["Дублированный код",0.652],["Action GitHub на теге",0.606],["Workflow без ограничения прав",0.466],["Сторонний action на теге",0.435],["End-of-life Node.js",0.322],["Закомментированный код",0.317],["Пропущенные тесты",0.198],["Битые ссылки в документации",0.194],["Неиспользуемые экспорты",0.128],["End-of-life Python",0.118],["Тяжёлые файлы в git",0.107],["Нет lock-файла",0.089]],
+  hygiene: [["README",0.986],["CI",0.959],["LICENSE",0.934],["Тесты",0.918],["CONTRIBUTING",0.6],["CHANGELOG",0.511],["SECURITY.md",0.421],["Code of Conduct",0.276]],
+  oldest: [[23.1,"dateutil","src/dateutil/rrule.py:1199"],[23.0,"paramiko","paramiko/ber.py:71"],[21.8,"joda-time","src/test/java/org/joda/time/chrono/TestCopticChronology.java:405"],[21.1,"joda-time","src/test/java/org/joda/time/chrono/TestEthiopicChronology.java:405"],[19.3,"sqlalchemy","test/orm/inheritance/test_manytomany.py:123"]],
+  size: [["< 5k",127,91],["5k–50k",246,74],["50k–200k",120,51],["> 200k",22,46]],
+  activity: [["Тихие (< 10)",124,84],["Активные (≥ 50)",269,62]],
+  best: ["ai/nanoid","jshttp/cookie","jonschlinkert/is-number","fastify/fastify-cors","fastify/fastify-static","expressjs/express","rust-lang/log","pyca/bcrypt"],
+  worst: [[0,"WebGoat/WebGoat · учебно-уязвимое",140],[0,"digininja/DVWA · учебно-уязвимое",105],[0,"juice-shop/juice-shop · учебно-уязвимое",150],[0,"plotly/dash-sample-apps",153],[0,"google/dagger",704],[15,"sequelize/sequelize",440],[15,"assertj/assertj",267],[16,"web2py/web2py",295]],
+};
+const H = {
+  years: [2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025,2026],
+  githubActions:[0,0,0,0,0,0,0,15,56,79,87,89,90,91,92], travis:[48,66,77,86,89,90,88,76,41,18,12,10,7,6,5],
+  dependabot:[0,0,0,0,0,0,0,0,7,21,30,34,34,37,38], security:[0,0,0,0,1,1,1,7,9,15,23,27,31,32,37], codeql:[0,0,0,0,0,0,0,0,3,8,11,12,13,16,16],
+  tsconfig:[0,0,0,1,2,4,6,10,16,20,23,24,25,25,25], eslintFlat:[0,0,0,0,0,0,0,0,0,0,0,0,10,14,15], pnpmLock:[0,0,0,0,0,0,0,0,0,1,5,6,8,8,11],
+  pyproject:[0,0,0,0,0,1,3,5,7,8,11,13,13,14,14], setupPy:[19,17,16,15,14,15,15,14,14,14,11,8,5,4,4],
+  commits:[115,123,110,145,106,99,84,91,92,80,73,70,56,45,57], authors:[11,12,16,20,21,21,20,17,18,15,14,12,12,9,9],
+};
+const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const el = (tag, attrs, text) => { const e = document.createElementNS("http://www.w3.org/2000/svg", tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (text != null) e.textContent = text; return e; };
+const pct = (x) => Math.round(x * 100) + "%";
+
+function tiles() {
+  const t = [["515","репозиториев просканировано"],["70","медианная оценка из 100"],["10 868","TODO с датой в git"],["4 года","средний возраст TODO"]];
+  document.getElementById("tiles").innerHTML = t.map(([b, s]) => `<div class="tile"><b>${b}</b><span>${s}</span></div>`).join("");
+}
+
+function grades() {
+  const svg = document.getElementById("grades"); svg.replaceChildren();
+  const total = Object.values(D.grades).reduce((a, b) => a + b, 0);
+  const colors = { A: css("--good"), B: css("--accent"), C: css("--muted"), D: css("--warn"), F: css("--bad") };
+  let x = 0;
+  for (const [g, c] of Object.entries(D.grades)) {
+    const w = (900 * c) / total;
+    svg.append(el("rect", { x: x + 1, y: 10, width: w - 2, height: 40, rx: 4, fill: colors[g] }));
+    svg.append(el("text", { x: x + 10, y: 36, fill: "#fff", style: "fill:#fff;font-weight:600" }, g));
+    svg.append(el("text", { x: x + 2, y: 74, class: "m" }, `${c} · ${pct(c / total)}`));
+    x += w;
+  }
+}
+
+function hbars(id, rows, max, fmt, color, labelW = 260, rowH = 32) {
+  const svg = document.getElementById(id); svg.replaceChildren();
+  const W = +svg.viewBox.baseVal.width, barW = W - labelW - 60;
+  svg.setAttribute("viewBox", `0 0 ${W} ${rows.length * rowH + 10}`);
+  rows.forEach(([label, v], i) => {
+    const y = i * rowH + 6;
+    svg.append(el("text", { x: 0, y: y + 17 }, label));
+    svg.append(el("rect", { x: labelW, y: y + 4, width: barW, height: 16, rx: 3, fill: css("--accent-soft") }));
+    svg.append(el("rect", { x: labelW, y: y + 4, width: Math.max(2, (barW * v) / max), height: 16, rx: 3, fill: color }));
+    svg.append(el("text", { x: labelW + (barW * v) / max + 8, y: y + 17, class: "mono" }, fmt(v)));
+  });
+}
+
+function columns(id, rows, max, title) {
+  const svg = document.getElementById(id); svg.replaceChildren();
+  const W = 440, H = 260, top = 34, bottom = 46, chartH = H - top - bottom;
+  const colW = (W - 20) / rows.length;
+  svg.append(el("text", { x: 0, y: 16, class: "m" }, title));
+  for (const g of [0, 50, 100]) {
+    const y = top + chartH - (chartH * g) / max;
+    svg.append(el("line", { x1: 0, x2: W, y1: y, y2: y, stroke: css("--line") }));
+    svg.append(el("text", { x: W - 2, y: y - 4, class: "m", "text-anchor": "end" }, g));
+  }
+  rows.forEach(([label, n, v], i) => {
+    const h = (chartH * v) / max, x = 10 + i * colW + colW * 0.2, w = colW * 0.6, y = top + chartH - h;
+    svg.append(el("rect", { x, y, width: w, height: h, rx: 4, fill: css("--accent") }));
+    svg.append(el("text", { x: x + w / 2, y: y - 6, "text-anchor": "middle", class: "mono" }, v));
+    svg.append(el("text", { x: x + w / 2, y: H - 26, "text-anchor": "middle" }, label));
+    svg.append(el("text", { x: x + w / 2, y: H - 10, "text-anchor": "middle", class: "m" }, `${n} репо`));
+  });
+}
+
+function rings() {
+  const data = [[328/472,"закрепляют хоть один action на изменяемом теге"],[224/472,"делают это со сторонним action"],[240/472,"не ограничивают права токена в workflow"]];
+  const box = document.getElementById("rings"); box.innerHTML = "";
+  for (const [v, text] of data) {
+    const r = 46, c = 2 * Math.PI * r;
+    const color = v > 0.5 ? css("--bad") : css("--warn");
+    box.insertAdjacentHTML("beforeend", `<div class="ring"><svg viewBox="0 0 120 120" width="130" height="130" aria-hidden="true">
+      <circle cx="60" cy="60" r="${r}" fill="none" stroke="${css("--accent-soft")}" stroke-width="12"/>
+      <circle cx="60" cy="60" r="${r}" fill="none" stroke="${color}" stroke-width="12" stroke-linecap="round"
+        stroke-dasharray="${c * v} ${c}" transform="rotate(-90 60 60)"/>
+      <text x="60" y="67" text-anchor="middle" style="font-family:var(--display);font-size:22px">${pct(v)}</text></svg><p>${text}</p></div>`);
+  }
+}
+
+function lists() {
+  document.getElementById("oldest").innerHTML = D.oldest.map(([y, r, f]) => `<li><b>${y.toFixed(1).replace(".", ",")} г.</b><span>${r} <code>${f}</code></span></li>`).join("");
+  document.getElementById("best").innerHTML = D.best.map((r) => `<li><b>100</b><span>${r}</span></li>`).join("");
+  document.getElementById("worst").innerHTML = D.worst.map(([s, r, n]) => `<li><b>${s}</b><span>${r} <code>${n} находок</code></span></li>`).join("");
+}
+
+function lines(id, series, max, unit) {
+  const svg = document.getElementById(id); svg.replaceChildren();
+  const W = +svg.viewBox.baseVal.width, Hh = 240, L = 44, R = 22, T = 30, B = 26;
+  const x = (i) => L + (i * (W - L - R)) / (H.years.length - 1), y = (v) => T + (Hh - T - B) * (1 - v / max);
+  for (const g of [0, max / 2, max]) {
+    svg.append(el("line", { x1: L, x2: W - R, y1: y(g), y2: y(g), stroke: css("--line") }));
+    svg.append(el("text", { x: L - 6, y: y(g) + 4, class: "m", "text-anchor": "end" }, Math.round(g) + unit));
+  }
+  H.years.forEach((yr, i) => { if (i % 2 === 0) svg.append(el("text", { x: x(i), y: Hh - 6, class: "m", "text-anchor": "middle" }, yr)); });
+  let lx = L;
+  for (const [label, key, color] of series) {
+    const d = H[key].map((v, i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join("");
+    svg.append(el("path", { d, fill: "none", stroke: color, "stroke-width": 2.5, "stroke-linejoin": "round" }));
+    const last = H[key].length - 1;
+    svg.append(el("circle", { cx: x(last), cy: y(H[key][last]), r: 3.5, fill: color }));
+    svg.append(el("rect", { x: lx, y: 8, width: 12, height: 3, rx: 1.5, fill: color }));
+    const t = el("text", { x: lx + 16, y: 13, class: "m" }, `${label} ${H[key][last]}${unit}`);
+    svg.append(t); lx += 16 + label.length * 6.6 + 40;
+  }
+}
+
+function render() {
+  tiles(); grades(); rings(); lists();
+  hbars("langScore", D.langs.map((l) => [`${l[0]} · ${l[1]}`, l[2]]), 100, (v) => v, css("--accent"), 150, 30);
+  hbars("langDensity", D.langs.map((l) => [l[0], l[3]]), 2.2, (v) => v.toFixed(1).replace(".", ","), css("--warn"), 150, 30);
+  hbars("rules", D.rules, 1, pct, css("--accent"), 300, 32);
+  hbars("hygiene", D.hygiene, 1, pct, css("--good"), 200, 34);
+  columns("size", D.size, 100, "Медианная оценка по размеру (строк кода)");
+  columns("activity", D.activity, 100, "Медианная оценка по коммитам за год");
+  lines("trCi", [["Actions","githubActions",css("--accent")],["Travis","travis",css("--bad")]], 100, "%");
+  lines("trSec", [["Dependabot","dependabot",css("--accent")],["SECURITY","security",css("--muted")],["CodeQL","codeql",css("--warn")]], 50, "%");
+  lines("trTool", [["TS","tsconfig",css("--accent")],["flat","eslintFlat",css("--warn")],["pnpm","pnpmLock",css("--good")]], 30, "%");
+  lines("trPy", [["setup.py","setupPy",css("--bad")],["pyproject","pyproject",css("--accent")]], 20, "%");
+  lines("trAct", [["коммитов","commits",css("--accent")],["авторов","authors",css("--warn")]], 150, "");
+}
+render();
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", render);
+new MutationObserver(render).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+</script>
+</body>
+</html>

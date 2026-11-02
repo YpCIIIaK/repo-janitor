@@ -1,0 +1,126 @@
+{
+  "repos": 515,
+  "generatedAt": "2026-11-02T06:21:49.625Z",
+  "grades": {
+    "A": 124,
+    "B": 120,
+    "C": 109,
+    "D": 127,
+    "F": 35
+  },
+  "languages": {
+    "JavaScript": {
+      "repos": 160,
+      "medianScore": 82,
+      "findingsPer1k": 1.76
+    },
+    "TypeScript": {
+      "repos": 113,
+      "medianScore": 68,
+      "findingsPer1k": 1.55
+    },
+    "Python": {
+      "repos": 81,
+      "medianScore": 65,
+      "findingsPer1k": 1.38
+    },
+    "Go": {
+      "repos": 44,
+      "medianScore": 70,
+      "findingsPer1k": 1.37
+    },
+    "Rust": {
+      "repos": 28,
+      "medianScore": 58,
+      "findingsPer1k": 1.51
+    },
+    "Ruby": {
+      "repos": 18,
+      "medianScore": 74,
+      "findingsPer1k": 1.11
+    },
+    "Java": {
+      "repos": 16,
+      "medianScore": 59,
+      "findingsPer1k": 0.77
+    },
+    "PHP": {
+      "repos": 15,
+      "medianScore": 76,
+      "findingsPer1k": 0.47
+    },
+    "C#": {
+      "repos": 12,
+      "medianScore": 64,
+      "findingsPer1k": 1.28
+    },
+    "Kotlin": {
+      "repos": 8,
+      "medianScore": 54,
+      "findingsPer1k": 1.22
+    },
+    "C++": {
+      "repos": 6,
+      "medianScore": 62,
+      "findingsPer1k": 2.1
+    },
+    "Swift": {
+      "repos": 6,
+      "medianScore": 66,
+      "findingsPer1k": 1.51
+    }
+  },
+  "ruleShare": {
+    "bus-factor": 0.736,
+    "todo": 0.699,
+    "duplicate": 0.652,
+    "workflow-action-tag-first-party": 0.606,
+    "workflow-no-permissions": 0.466,
+    "workflow-action-tag": 0.435,
+    "eol-node": 0.322,
+    "commented-code": 0.317,
+    "skipped-test": 0.198,
+    "doc-link": 0.194,
+    "dead-export": 0.128,
+    "eol-python": 0.118,
+    "bloat": 0.107,
+    "lockfile-missing": 0.089,
+    "config-conflict": 0.072,
+    "hygiene-no-tests": 0.052,
+    "hygiene-no-ci": 0.039,
+    "secret-provider": 0.029,
+    "ci-silenced-failure": 0.025,
+    "docs-badge": 0.017,
+    "hygiene-no-license": 0.016,
+    "secret-generic": 0.016,
+    "docker-latest": 0.01,
+    "eol-runner": 0.01,
+    "ci-disabled": 0.01
+  },
+  "ci": {
+    "withActions": 472,
+    "unpinned": 328,
+    "thirdPartyUnpinned": 224,
+    "noPermissions": 240
+  },
+  "checklist": {
+    "readme": 0.986,
+    "license": 0.934,
+    "contributing": 0.6,
+    "security": 0.421,
+    "codeOfConduct": 0.276,
+    "changelog": 0.511,
+    "ci": 0.959,
+    "tests": 0.918
+  },
+  "todo": {
+    "dated": 10868,
+    "medianDays": 1455
+  },
+  "activity": {
+    "active": 269,
+    "activeMedian": 62,
+    "quiet": 124,
+    "quietMedian": 84
+  }
+}
