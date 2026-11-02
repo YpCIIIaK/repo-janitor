@@ -27,7 +27,8 @@
     "bench:score": "node benchmark/score.mjs",
     "bench:sample": "node benchmark/sample.mjs",
     "bench:stats": "node benchmark/stats.mjs",
-    "bench:history": "node benchmark/history.mjs"
+    "bench:history": "node benchmark/history.mjs",
+    "bench:archive": "node benchmark/archive.mjs"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "1.2.12",
