@@ -44,7 +44,15 @@ function sh2(cmd, args, opts = {}) {
 async function runOne(repo) {
   const dir = join(cacheDir, repo.name)
   if (!existsSync(dir)) {
-    const c = await sh2("git", ["clone", "--quiet", "--no-checkout", repo.url, dir])
+    // Network hiccups (a proxy restart, a dropped TLS stream) are common over a
+    // multi-hour run: retry with backoff before giving up on the repo.
+    let c
+    for (let attempt = 0; attempt < 4; attempt++) {
+      rmSync(dir, { recursive: true, force: true })
+      c = await sh2("git", ["clone", "--quiet", "--no-checkout", repo.url, dir])
+      if (c.status === 0) break
+      await new Promise((r) => setTimeout(r, 15000 * 2 ** attempt))
+    }
     if (c.status !== 0) return console.error(`clone failed: ${repo.name}\n${c.stderr}`)
   }
   let co = await sh2("git", ["-C", dir, "checkout", "--quiet", "--force", repo.sha])
