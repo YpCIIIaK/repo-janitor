@@ -38,6 +38,28 @@ for (const r of corpus) {
   })
 }
 
+const VULNERABLE_RE = /goat|dvwa|dvna|dvws|juice-shop$|juice-shop-juice-shop|vampi|dsvw|vulnerable|crapi|govwa|pygoat|vulpy|dvpwa|goof|inject-some-sql|vulnado|javavulnerablelab|dvsa/i
+const urlByName = new Map(corpus.map((r) => [r.name, r.url.replace("https://github.com/", "")]))
+const urlOf = (name) => urlByName.get(name) ?? name
+
+/** Labelled precision per confidence level, from benchmark/labels and the latest results. */
+function precisionByConfidence() {
+  const out = { high: { tp: 0, fp: 0 }, medium: { tp: 0, fp: 0 }, low: { tp: 0, fp: 0 } }
+  for (const r of corpus) {
+    const lp = join(here, "labels", `${r.name}.json`)
+    const rp = join(resultsDir, `${r.name}.json`)
+    if (!existsSync(lp) || !existsSync(rp)) continue
+    const labels = JSON.parse(readFileSync(lp, "utf8"))
+    for (const f of JSON.parse(readFileSync(rp, "utf8")).findings ?? []) {
+      const v = labels[f.id]
+      const c = out[f.confidence ?? "medium"]
+      if (!c || (v !== "tp" && v !== "fp")) continue
+      c[v]++
+    }
+  }
+  return out
+}
+
 const pct = (n, d) => (d ? `${Math.round((100 * n) / d)}%` : "—")
 const median = (xs) => {
   const s = [...xs].sort((a, b) => a - b)
@@ -110,6 +132,10 @@ out.push("## End-of-life runtimes", "")
 out.push(`- **${pct(node.filter((r) => has(r, "eol-node")).length, node.length)}** of ${node.length} Node.js projects still declare or test on an end-of-life Node version.`)
 out.push(`- **${pct(py.filter((r) => has(r, "eol-python")).length, py.length)}** of ${py.length} Python projects still support an end-of-life Python.`)
 out.push(`- **${pct(repos.filter((r) => has(r, "eol-runner")).length, n)}** of all repos run CI on a retired runner image.`, "")
+json.eol = {
+  node: { repos: node.length, eol: node.filter((r) => has(r, "eol-node")).length },
+  python: { repos: py.length, eol: py.filter((r) => has(r, "eol-python")).length },
+}
 
 // --- hygiene checklist ----------------------------------------------------------
 const items = ["readme", "license", "contributing", "security", "codeOfConduct", "changelog", "ci", "tests"]
@@ -134,7 +160,12 @@ out.push(`- ${pct(todoAges.filter((d) => d > 5 * 365).length, todoAges.length)} 
 out.push("", "Oldest TODOs in the corpus:", "")
 for (const { repo, i } of oldest) out.push(`- ${(i.ageDays / 365).toFixed(1)} y — ${repo} \`${i.location}\``)
 out.push("")
-json.todo = { dated: todoAges.length, medianDays: median(todoAges) }
+json.todo = {
+  dated: todoAges.length,
+  medianDays: median(todoAges),
+  overFiveYears: todoAges.filter((d) => d > 5 * 365).length,
+  oldest: oldest.map(({ repo, i }) => ({ repo: urlOf(repo), location: i.location, years: Number((i.ageDays / 365).toFixed(1)) })),
+}
 
 // --- activity vs health -----------------------------------------------------------------
 const active = repos.filter((r) => (r.activity.commitsLastYear ?? 0) >= 50)
@@ -153,9 +184,11 @@ const buckets = [
   ["> 200k", 2e5, Infinity],
 ]
 out.push("## Size vs score", "", "| size | repos | median score |", "|---|---:|---:|")
+json.sizeBands = []
 for (const [label, a, b] of buckets) {
   const l = repos.filter((r) => r.loc >= a && r.loc < b)
   out.push(`| ${label} | ${l.length} | ${median(l.map((r) => r.score))} |`)
+  json.sizeBands.push({ label, repos: l.length, medianScore: median(l.map((r) => r.score)) })
 }
 out.push("")
 
@@ -167,6 +200,22 @@ for (const r of best) out.push(`- **${r.score}** ${r.name} (${r.issues.length} f
 out.push("", "## Most to clean up", "")
 for (const r of worst) out.push(`- **${r.score}** ${r.name} (${r.issues.length} findings)`)
 out.push("")
+json.best = best.map((r) => ({ repo: urlOf(r.name), score: r.score, findings: r.issues.length }))
+json.worst = [...repos]
+  .filter((r) => !VULNERABLE_RE.test(r.name))
+  .sort((a, b) => a.score - b.score || b.issues.length - a.issues.length)
+  .slice(0, 8)
+  .map((r) => ({ repo: urlOf(r.name), score: r.score, findings: r.issues.length }))
+json.medianScore = median(repos.map((r) => r.score))
+
+// --- deliberately vulnerable apps: what the scanner finds where holes are known -----------
+json.vulnerableApps = repos
+  .filter((r) => VULNERABLE_RE.test(r.name))
+  .map((r) => {
+    const high = r.issues.filter((i) => /^(?:insecure|iac|secret)-/.test(i.id) && i.confidence === "high")
+    return { repo: urlOf(r.name), language: r.language, high: high.length, crossFile: high.filter((i) => /Request input reaches/.test(i.detail ?? "")).length }
+  })
+  .sort((a, b) => b.high - a.high)
 
 // --- practices vs health ------------------------------------------------------------------
 // Bigger repos score lower whatever they do, and bigger repos also adopt more
@@ -231,6 +280,9 @@ json.practices = practiceRows
 
 // --- the scanner on itself ----------------------------------------------------------------
 const hidden = repos.reduce((s, r) => s + r.hidden, 0)
+json.lowConfidenceHidden = hidden
+json.shown = repos.reduce((s, r) => s + r.issues.length, 0)
+json.precision = precisionByConfidence()
 const shown = repos.reduce((s, r) => s + r.issues.length, 0)
 out.push("## Noise the confidence scale hides", "")
 out.push(`${hidden} low-confidence findings were kept out of these numbers (${pct(hidden, hidden + shown)} of everything the scanners raised).`, "")
