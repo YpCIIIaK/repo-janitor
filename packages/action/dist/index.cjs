@@ -26863,8 +26863,9 @@ var require_lib4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-ELHUA2FC.js
+// ../cli/dist/chunk-XI2JJVTW.js
 var import_fs2 = require("fs");
+var import_child_process = require("child_process");
 
 // ../../node_modules/.pnpm/tinyglobby@0.2.17/node_modules/tinyglobby/dist/index.mjs
 var import_fs = require("fs");
@@ -45593,7 +45594,7 @@ function date4(params) {
 // ../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/external.js
 config(en_default());
 
-// ../cli/dist/chunk-ELHUA2FC.js
+// ../cli/dist/chunk-XI2JJVTW.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -70139,7 +70140,17 @@ var INSECURE = {
   "py-yaml-load": "Unsafe yaml.load()",
   "py-pickle-load": "pickle.load() of untrusted data",
   "py-eval-exec": "Python eval()/exec()",
-  "py-verify-false": "requests with verify=False"
+  "py-verify-false": "requests with verify=False",
+  "php-include-user-input": "File included from request input",
+  "php-unserialize": "PHP unserialize() of a variable",
+  "php-reflected-xss": "Request input echoed unescaped",
+  "java-deserialization": "Java native deserialisation",
+  "ruby-dynamic-dispatch": "Method or class chosen by request input",
+  "ruby-marshal-load": "Marshal / unsafe YAML load",
+  "ruby-html-safe": "Request input marked html_safe",
+  "go-template-html": "Value marked as trusted HTML in a Go template",
+  "dotnet-deserialization": "Unsafe .NET deserialiser",
+  ssrf: "Server fetches a URL from a variable (SSRF)"
 };
 var WORKFLOW = {
   "action-tag-first-party": "First-party action pinned to a mutable tag",
@@ -70227,8 +70238,8 @@ var RULE_PRECISION = {
   "ci-swallowed": { tp: 2, fp: 0 },
   "ci-tests-not-run": { tp: 0, fp: 6 },
   "commented-code": { tp: 28, fp: 8 },
-  "config-conflict": { tp: 16, fp: 0 },
-  "dead-export": { tp: 19, fp: 11 },
+  "config-conflict": { tp: 15, fp: 0 },
+  "dead-export": { tp: 16, fp: 2 },
   "dead-uikit": { tp: 1, fp: 0 },
   "debug-leftover": { tp: 3, fp: 4 },
   "dep-unused": { tp: 0, fp: 9 },
@@ -70250,22 +70261,25 @@ var RULE_PRECISION = {
   "hygiene-no-readme": { tp: 1, fp: 0 },
   "hygiene-no-tests": { tp: 5, fp: 1 },
   "insecure-eval-dynamic": { tp: 1, fp: 2 },
-  "insecure-exec-interpolated": { tp: 2, fp: 6 },
+  "insecure-exec-interpolated": { tp: 2, fp: 10 },
+  "insecure-go-template-html": { tp: 0, fp: 5 },
   "insecure-innerhtml-dynamic": { tp: 0, fp: 3 },
   "insecure-localstorage-secret": { tp: 1, fp: 1 },
-  "insecure-new-function": { tp: 3, fp: 8 },
+  "insecure-new-function": { tp: 3, fp: 9 },
+  "insecure-php-reflected-xss": { tp: 0, fp: 1 },
   "insecure-py-eval-exec": { tp: 0, fp: 7 },
   "insecure-py-os-system": { tp: 0, fp: 3 },
   "insecure-py-pickle-load": { tp: 2, fp: 8 },
-  "insecure-py-shell-true": { tp: 1, fp: 3 },
-  "insecure-py-verify-false": { tp: 1, fp: 0 },
+  "insecure-py-shell-true": { tp: 1, fp: 4 },
   "insecure-py-yaml-load": { tp: 0, fp: 2 },
-  "insecure-react-dangerous-html": { tp: 1, fp: 5 },
-  "insecure-sql-interpolated": { tp: 1, fp: 9 },
+  "insecure-react-dangerous-html": { tp: 1, fp: 8 },
+  "insecure-ruby-marshal-load": { tp: 0, fp: 1 },
+  "insecure-sql-interpolated": { tp: 1, fp: 13 },
+  "insecure-ssrf": { tp: 1, fp: 70 },
   "insecure-tls-verification-off": { tp: 0, fp: 4 },
   "insecure-weak-hash": { tp: 1, fp: 3 },
   "lockfile-missing": { tp: 15, fp: 1 },
-  "secret-generic": { tp: 0, fp: 2 },
+  "secret-generic": { tp: 0, fp: 1 },
   "secret-history": { tp: 0, fp: 3 },
   "secret-provider": { tp: 0, fp: 2 },
   "skipped-test": { tp: 17, fp: 1 },
@@ -73395,7 +73409,7 @@ var deadCodeScanner = {
     });
   }
 };
-var NOT_SHIPPED_RE = /(^|\/)(?:__tests__|_?tests?|spec|e2e|fixtures?|__fixtures__|__testfixtures__|__snapshots__|_?examples?|playgrounds?|sandbox|bench(?:mark)?s?|scripts?|website|www|docs?|tutorials?|\.github|composables)\/|\.(?:test|spec|test-d|snap)\.|\.snap\.[a-z.]+$|\.d\.[cm]?ts$|\.gen\.[cm]?[jt]sx?$/i;
+var NOT_SHIPPED_RE = /(^|\/)(?:__tests__|_?tests?|spec|e2e|fixtures?|__fixtures__|__testfixtures__|__snapshots__|_?examples?|[\w-]*playgrounds?|size-check|sandbox|bench(?:mark)?s?|scripts?|website|www|docs?|tutorials?|\.github|composables)\/|\.(?:test|spec|test-d|snap)\.|\.snap\.[a-z.]+$|\.d\.[cm]?ts$|\.gen\.[cm]?[jt]sx?$/i;
 function packageEntryFiles(ctx, fileSet) {
   return __async(this, null, function* () {
     var _a22;
@@ -73427,7 +73441,7 @@ function packageEntryFiles(ctx, fileSet) {
 }
 function scanJsTsExports(ctx, sources) {
   return __async(this, null, function* () {
-    var _a22, _b;
+    var _a22, _b, _c, _d, _e2;
     const fileSet = new Set(sources);
     const entryFiles = yield packageEntryFiles(ctx, fileSet);
     const namespaceRanges = [];
@@ -73437,6 +73451,15 @@ function scanJsTsExports(ctx, sources) {
     const exemptFiles = /* @__PURE__ */ new Set();
     const locallyUsed = /* @__PURE__ */ new Set();
     const localKey = (file2, name) => `${file2}\0${name}`;
+    const filesWithName = /* @__PURE__ */ new Map();
+    const TEXT_RE = /\.(?:[cm]?[jt]sx?|vue|svelte|astro|html)$/i;
+    for (const file2 of ctx.files.filter((f3) => TEXT_RE.test(f3)).slice(0, 2e4)) {
+      const content = yield ctx.readFile(file2);
+      if (!content) continue;
+      for (const name of new Set((_a22 = content.match(/[A-Za-z_$][\w$]*/g)) != null ? _a22 : [])) {
+        filesWithName.set(name, ((_b = filesWithName.get(name)) != null ? _b : 0) + 1);
+      }
+    }
     for (const file2 of sources) {
       const content = yield ctx.readFile(file2);
       if (!content) continue;
@@ -73445,7 +73468,7 @@ function scanJsTsExports(ctx, sources) {
       const isBarrel = /(^|\/)index(\.d)?\.[a-z]+$/.test(file2) || entryFiles.has(file2) || NOT_SHIPPED_RE.test(file2);
       const srcLines = content.split("\n");
       const snip = (n) => {
-        var _a32, _b2, _c;
+        var _a32, _b2, _c2;
         const start = lineOf3(n);
         if (start < 1) return void 0;
         const lead = [];
@@ -73460,7 +73483,7 @@ function scanJsTsExports(ctx, sources) {
         let depth = 0;
         let sawBrace = false;
         for (let i = start - 1; i < srcLines.length && body.length < 12; i++) {
-          const raw = (_c = srcLines[i]) != null ? _c : "";
+          const raw = (_c2 = srcLines[i]) != null ? _c2 : "";
           body.push(raw);
           for (const ch of raw) {
             if (ch === "{") {
@@ -73477,23 +73500,23 @@ function scanJsTsExports(ctx, sources) {
       };
       const idCounts = /* @__PURE__ */ new Map();
       walk(ast, (node) => {
-        var _a32, _b2, _c, _d, _e2, _f, _g, _h, _i, _j, _k, _l;
+        var _a32, _b2, _c2, _d2, _e22, _f, _g, _h, _i, _j, _k, _l;
         if (node.type === "TSModuleDeclaration") {
           const loc = node.loc;
           if (((_a32 = loc == null ? void 0 : loc.start) == null ? void 0 : _a32.line) && ((_b2 = loc.end) == null ? void 0 : _b2.line)) namespaceRanges.push([file2, loc.start.line, loc.end.line]);
         }
         if (node.type === "Identifier") {
           const name = node.name;
-          idCounts.set(name, ((_c = idCounts.get(name)) != null ? _c : 0) + 1);
+          idCounts.set(name, ((_c2 = idCounts.get(name)) != null ? _c2 : 0) + 1);
         }
         if (node.type === "ImportDeclaration") {
-          for (const spec of (_d = node.specifiers) != null ? _d : []) {
+          for (const spec of (_d2 = node.specifiers) != null ? _d2 : []) {
             if (spec.type === "ImportSpecifier") {
               const imported = spec.imported;
               const name = (imported == null ? void 0 : imported.type) === "Identifier" ? imported.name : imported == null ? void 0 : imported.value;
               if (name) usedNames.add(name);
             } else if (spec.type === "ImportNamespaceSpecifier") {
-              const target = resolveModule((_e2 = node.source) == null ? void 0 : _e2.value, file2, fileSet);
+              const target = resolveModule((_e22 = node.source) == null ? void 0 : _e22.value, file2, fileSet);
               if (target) exemptFiles.add(target);
             }
           }
@@ -73555,7 +73578,7 @@ function scanJsTsExports(ctx, sources) {
       }
     }
     const totalByFile = /* @__PURE__ */ new Map();
-    for (const exp of exports2) totalByFile.set(exp.file, ((_a22 = totalByFile.get(exp.file)) != null ? _a22 : 0) + 1);
+    for (const exp of exports2) totalByFile.set(exp.file, ((_c = totalByFile.get(exp.file)) != null ? _c : 0) + 1);
     const issues = [];
     const kitDead = /* @__PURE__ */ new Map();
     for (const exp of exports2) {
@@ -73563,6 +73586,7 @@ function scanJsTsExports(ctx, sources) {
       if (namespaceRanges.some(([f3, a, b3]) => f3 === exp.file && exp.line >= a && exp.line <= b3)) continue;
       if (mdxText && new RegExp(`\\b${exp.name.replace(/\$/g, "\\$")}\\b`).test(mdxText)) continue;
       if (usedNames.has(exp.name)) continue;
+      if (((_d = filesWithName.get(exp.name)) != null ? _d : 0) > 1) continue;
       if (CONVENTION_EXPORTS.has(exp.name)) continue;
       const kit = uiKitRoot(exp.file);
       if (kit) {
@@ -73585,7 +73609,7 @@ function scanJsTsExports(ctx, sources) {
     }
     for (const [kit, dead] of kitDead) {
       const deadByFile = /* @__PURE__ */ new Map();
-      for (const d2 of dead) deadByFile.set(d2.file, ((_b = deadByFile.get(d2.file)) != null ? _b : 0) + 1);
+      for (const d2 of dead) deadByFile.set(d2.file, ((_e2 = deadByFile.get(d2.file)) != null ? _e2 : 0) + 1);
       const fully = [];
       const partial2 = [];
       for (const [file2, n] of deadByFile) {
@@ -74221,12 +74245,248 @@ var commentedCodeScanner = {
 };
 var JS_RE2 = /\.(ts|tsx|js|jsx|mjs|mts|cts)$/i;
 var PY_RE2 = /\.py$/i;
+var PHP_RE = /\.(?:php|phtml|inc)$/i;
+var JAVA_RE = /\.(?:java|kt)$/i;
+var RB_RE = /\.(?:rb|erb|rake)$/i;
+var GO_RE2 = /\.go$/i;
+var CS_RE = /\.(?:cs|cshtml)$/i;
 var SKIP_RE = /(^|\/)(?:node_modules|vendor|third_party|dist|build|out|\.next)\/|\.min\.[cm]?js$/i;
 var NOT_SHIPPED_RE2 = /(^|\/)(?:_?examples?|demos?|benchmarks?|bench|perf(?:-testing)?|performance|docs?|documentation|www|website|site|scripts?|tools?|[\w-]*_assets|static|_?vendor(?:ed)?|third_party|integration-?[tT]ests|test-utils|tooling|_tools|sphinx)\/|(^|\/)jquery[-.\d]*\.js$/i;
 var TEST_RE3 = /(^|\/)(?:__tests__|tests?|specs?|fixtures?)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test\.[cm]?[jt]s$|(?:^|\/)test_[^/]+\.py$|_test\.py$|(?:^|\/)conftest\.py$/i;
 var MAX_PER_FILE4 = 6;
 var MAX_TOTAL7 = 60;
 var MAX_BYTES2 = 4e5;
+var PHP_JAVA_RULES = [
+  // --- Python SQL (VAmPI: f"SELECT … '{username}'") ---------------------------
+  {
+    id: "sql-interpolated",
+    lang: "py",
+    re: /\bf(?:"\s*(?:SELECT\b[^"'\n]*\bFROM|INSERT\s+INTO|UPDATE\b[^"'\n]*\bSET|DELETE\s+FROM)\b[^"\n]*\{|'\s*(?:SELECT\b[^"'\n]*\bFROM|INSERT\s+INTO|UPDATE\b[^"'\n]*\bSET|DELETE\s+FROM)\b[^'\n]*\{)|(?:"\s*(?:SELECT\b[^"'\n]*\bFROM|INSERT\s+INTO|UPDATE\b[^"'\n]*\bSET|DELETE\s+FROM)\b[^"\n]*"|'\s*(?:SELECT\b[^"'\n]*\bFROM|INSERT\s+INTO|UPDATE\b[^"'\n]*\bSET|DELETE\s+FROM)\b[^'\n]*')\s*(?:%\s*[(\w]|\.format\s*\(|\+\s*[A-Za-z_])/gi,
+    severity: "critical",
+    title: "SQL query assembled by string formatting",
+    detail: 'A value is formatted into the SQL text, which is what SQL injection is. Pass it as a bound parameter (`cursor.execute("\u2026 WHERE name = %s", (name,))`, or `text("\u2026 :name")` with params).'
+  },
+  // --- Server-side request forgery ------------------------------------------
+  {
+    id: "ssrf",
+    lang: "php",
+    re: /\b(?:file_get_contents|fopen|readfile|get_headers|curl_init|simplexml_load_file)\s*\(\s*\$|\bcurl_setopt\s*\([^,]+,\s*CURLOPT_URL\s*,\s*\$/g,
+    severity: "critical",
+    title: "Server fetches a URL from a variable",
+    detail: "The server requests whatever URL the variable holds. If a request supplies it, a caller can reach internal services and cloud metadata (SSRF). Allow-list hosts and schemes."
+  },
+  {
+    id: "ssrf",
+    lang: "py",
+    re: /\b(?:requests|httpx|session|client)\.(?:get|post|put|head|request)\s*\(\s*(?!["'])[A-Za-z_f]|\burllib\.request\.urlopen\s*\(\s*(?!["'])/g,
+    severity: "critical",
+    title: "Server fetches a URL from a variable",
+    detail: "The server requests whatever URL the variable holds. If a request supplies it, a caller can reach internal services and cloud metadata (SSRF). Allow-list hosts and schemes."
+  },
+  {
+    id: "ssrf",
+    lang: "js",
+    re: /\b(?:fetch|axios(?:\.(?:get|post|request))?|got|needle|superagent\.get|https?\.get)\s*\(\s*(?!['"`])[A-Za-z_$]/g,
+    severity: "critical",
+    title: "Server fetches a URL from a variable",
+    detail: "The server requests whatever URL the variable holds. If a request supplies it, a caller can reach internal services and cloud metadata (SSRF). Allow-list hosts and schemes."
+  },
+  // --- Ruby / Rails ---------------------------------------------------------
+  {
+    id: "sql-interpolated",
+    lang: "rb",
+    re: /\.(?:where|find_by_sql|order|group|having|select|joins|pluck|from|execute|exec_query|select_all|select_value|count_by_sql)\s*\(?\s*(?:"[^"\n]*#\{|'[^'\n]*'\s*\+|"[^"\n]*"\s*\+)/g,
+    severity: "critical",
+    title: "SQL fragment built by string interpolation",
+    detail: 'A value is interpolated into SQL that ActiveRecord passes through as-is, which is SQL injection. Use placeholders (`where("name = ?", name)`) or a hash condition.'
+  },
+  {
+    id: "exec-interpolated",
+    lang: "rb",
+    re: /`[^`\n]*#\{|%x[({\[][^\n]*#\{|\b(?:system|exec|spawn|IO\.popen|Open3\.\w+)\s*\(?\s*"[^"\n]*#\{/g,
+    severity: "critical",
+    title: "Shell command built by string interpolation",
+    detail: 'An interpolated value reaches a shell, so `;` or `$(\u2026)` in it runs a command of its own. Pass the arguments separately (`system("ls", dir)`), which skips the shell.'
+  },
+  {
+    id: "eval-dynamic",
+    lang: "rb",
+    re: /\b(?:eval|instance_eval|class_eval|module_eval)\b(?!\s*(?:do\b|\{|\(\s*&|&|<<|\(\s*<<))\s*\(?\s*[^\s"'(&:{|)<]/g,
+    severity: "critical",
+    title: "eval() on a non-literal value",
+    detail: "`eval` runs whatever Ruby it is given. If any part of it comes from a request, this is remote code execution."
+  },
+  {
+    id: "ruby-dynamic-dispatch",
+    lang: "rb",
+    re: /\.(?:send|public_send|constantize|safe_constantize)\b\s*\(?\s*params\b|\bparams\s*\[[^\]]+\]\s*\.\s*(?:constantize|safe_constantize)\b/g,
+    severity: "critical",
+    title: "Method or class chosen by request input",
+    detail: "The request names the method to call or the class to load, so a caller can reach any of them. Map the input to an allow-list."
+  },
+  {
+    id: "ruby-marshal-load",
+    lang: "rb",
+    re: /\bMarshal\.load\s*\(|\bYAML\.(?:load|unsafe_load)\s*\((?![^)]*permitted_classes)/g,
+    severity: "warning",
+    title: "Marshal/YAML load of a value",
+    detail: "`Marshal.load` and unsafe `YAML.load` build arbitrary objects. Use JSON, or `YAML.safe_load` with a list of permitted classes."
+  },
+  {
+    id: "ruby-html-safe",
+    lang: "rb",
+    re: /\bparams\b[^\n]*\.html_safe\b|\braw\s*\(?\s*params\b|<%==\s*params\b/g,
+    severity: "warning",
+    title: "Request input marked as safe HTML",
+    detail: "`html_safe`/`raw` turns off Rails escaping for a request value: reflected XSS."
+  },
+  // --- Go -------------------------------------------------------------------
+  {
+    id: "sql-interpolated",
+    lang: "go",
+    re: /\.(?:Query|QueryRow|Exec|QueryContext|QueryRowContext|ExecContext|Raw|Select|Get)\s*\(\s*(?:ctx\s*,\s*)?(?:fmt\.Sprintf\s*\(\s*"[^"\n]*\b(?:SELECT|INSERT|UPDATE|DELETE)\b|"[^"\n]*\b(?:SELECT|INSERT|UPDATE|DELETE)\b[^"\n]*"\s*\+)/gi,
+    severity: "critical",
+    title: "SQL query assembled with Sprintf or +",
+    detail: 'The SQL text is formatted with a value, which is what SQL injection is. Pass the value as an argument (`db.Query("\u2026 WHERE id = $1", id)`).'
+  },
+  {
+    id: "sql-interpolated",
+    lang: "go",
+    re: /:?=\s*fmt\.Sprintf\s*\(\s*(?:"\s*(?:SELECT|INSERT\s+INTO|UPDATE|DELETE\s+FROM)\b[^"\n]*%[sv]|`\s*(?:SELECT|INSERT\s+INTO|UPDATE|DELETE\s+FROM)\b[^`]*%[sv])/gi,
+    severity: "critical",
+    title: "SQL query assembled with Sprintf",
+    detail: 'The SQL text is formatted with a value, which is what SQL injection is. Pass the value as an argument (`db.Query("\u2026 WHERE id = $1", id)`).'
+  },
+  {
+    id: "exec-interpolated",
+    lang: "go",
+    re: /\bexec\.Command(?:Context)?\s*\(\s*(?:ctx\s*,\s*)?(?:"(?:sh|bash|cmd|cmd\.exe|powershell)"\s*,\s*"(?:-c|\/c|\/C|-Command)"\s*,\s*(?!")|fmt\.Sprintf)/g,
+    severity: "critical",
+    title: "Shell command built from a value",
+    detail: 'A computed string is handed to a shell. Call the program directly with separate arguments (`exec.Command("ping", "-c", "1", host)`).'
+  },
+  {
+    id: "go-template-html",
+    lang: "go",
+    re: /\btemplate\.(?:HTML|JS|URL|HTMLAttr)\s*\(\s*(?!")[^)]/g,
+    severity: "warning",
+    title: "Value marked as trusted template content",
+    detail: "`template.HTML(x)` switches off html/template escaping for `x`. If it came from a request, this is XSS."
+  },
+  // --- C# -------------------------------------------------------------------
+  {
+    id: "sql-interpolated",
+    lang: "cs",
+    re: /\b(?:new\s+(?:Sql|Npgsql|MySql|Sqlite|OleDb|Odbc)Command|\.(?:FromSqlRaw|ExecuteSqlRaw|ExecuteSqlRawAsync|Query|Execute|QueryFirst\w*|QuerySingle\w*))\s*(?:<[^>]*>)?\s*\(\s*(?:\$"[^"\n]*\b(?:SELECT|INSERT|UPDATE|DELETE)\b[^"\n]*\{|"[^"\n]*\b(?:SELECT|INSERT|UPDATE|DELETE)\b[^"\n]*"\s*\+)/gi,
+    severity: "critical",
+    title: "SQL command assembled from variables",
+    detail: "A value is pasted into the SQL text, which is what SQL injection is. Use parameters (`cmd.Parameters.AddWithValue`) or `FromSqlInterpolated`."
+  },
+  {
+    id: "sql-interpolated",
+    lang: "cs",
+    re: /=\s*(?:\$"\s*(?:SELECT|INSERT\s+INTO|UPDATE|DELETE\s+FROM)\b[^"\n]*\{|"\s*(?:SELECT|INSERT\s+INTO|UPDATE|DELETE\s+FROM)\b[^"\n]*"\s*\+\s*[A-Za-z_])/gi,
+    severity: "critical",
+    title: "SQL command assembled from variables",
+    detail: "A value is pasted into the SQL text, which is what SQL injection is. Use parameters (`cmd.Parameters.AddWithValue`) or `FromSqlInterpolated`."
+  },
+  {
+    id: "exec-interpolated",
+    lang: "cs",
+    re: /\bProcess\.Start\s*\(\s*(?:"(?:cmd(?:\.exe)?|powershell|bash|sh)"\s*,\s*(?!")|\$")/g,
+    severity: "critical",
+    title: "Process started with a computed command line",
+    detail: "A computed string reaches a shell. Start the program directly and pass validated arguments through `ProcessStartInfo.ArgumentList`."
+  },
+  {
+    id: "dotnet-deserialization",
+    lang: "cs",
+    re: /\bnew\s+(?:BinaryFormatter|LosFormatter|NetDataContractSerializer|SoapFormatter|ObjectStateFormatter)\b|TypeNameHandling\s*=\s*TypeNameHandling\.(?:All|Auto|Objects|Arrays)/g,
+    severity: "warning",
+    title: "Unsafe .NET deserialiser",
+    detail: "BinaryFormatter-style serialisers and Json.NET `TypeNameHandling` other than None can instantiate attacker-chosen types. Use System.Text.Json or `TypeNameHandling.None`."
+  },
+  {
+    id: "sql-interpolated",
+    lang: "php",
+    re: /\b(?:mysqli?_query|pg_query|sqlite_query|->query|->exec|->prepare)\s*\([^;]*?(?:\$_(?:GET|POST|REQUEST|COOKIE)|["'][^"';]*\b(?:SELECT|INSERT|UPDATE|DELETE)\b[^"';]*(?:\$\w|["']\s*\.))/gi,
+    severity: "critical",
+    title: "SQL query assembled from variables",
+    detail: "A variable is pasted into the SQL text, which is what SQL injection is. Use a prepared statement with bound parameters (PDO or mysqli `bind_param`)."
+  },
+  {
+    id: "sql-interpolated",
+    lang: "php",
+    re: /=\s*(?:"\s*(?:SELECT|INSERT\s+INTO|UPDATE|DELETE\s+FROM)\b[^"\n]*(?:\$\w|"\s*\.\s*\$)|'\s*(?:SELECT|INSERT\s+INTO|UPDATE|DELETE\s+FROM)\b[^'\n]*'\s*\.\s*\$)/gi,
+    severity: "critical",
+    title: "SQL query assembled from variables",
+    detail: "A variable is pasted into the SQL text, which is what SQL injection is. Use a prepared statement with bound parameters (PDO or mysqli `bind_param`)."
+  },
+  {
+    id: "exec-interpolated",
+    lang: "php",
+    re: /\b(?:shell_exec|exec|system|passthru|popen|proc_open)\s*\(\s*(?:[^)'"]*\$|["'][^"']*["']\s*\.\s*\$|"[^"]*\$)/g,
+    severity: "critical",
+    title: "Shell command built from variables",
+    detail: "A variable reaches a shell command, so a value containing `;` or `&&` runs its own command. Pass arguments through `escapeshellarg`, or avoid the shell."
+  },
+  {
+    id: "eval-dynamic",
+    lang: "php",
+    re: /\b(?:eval|assert|create_function)\s*\(\s*[^)'"\s]/g,
+    severity: "critical",
+    title: "eval() on a non-literal value",
+    detail: "`eval` runs whatever PHP it is given. If any part of it comes from a request, this is remote code execution."
+  },
+  {
+    id: "php-include-user-input",
+    lang: "php",
+    re: /\b(?:include|require)(?:_once)?\s*\(?\s*[^;]*\$_(?:GET|POST|REQUEST|COOKIE)/g,
+    severity: "critical",
+    title: "File included from request input",
+    detail: "The path to include comes from the request: a local or remote file inclusion. Map the input to a fixed allow-list of files instead."
+  },
+  {
+    id: "php-unserialize",
+    lang: "php",
+    re: /\bunserialize\s*\(\s*[^)'"\s]/g,
+    severity: "warning",
+    title: "unserialize() on a non-literal value",
+    detail: "`unserialize` can instantiate arbitrary classes and trigger their magic methods. Use `json_decode` for data that crosses a trust boundary."
+  },
+  {
+    id: "php-reflected-xss",
+    lang: "php",
+    re: /\b(?:echo|print)\b[^;]*\$_(?:GET|POST|REQUEST|COOKIE)\b(?![^;]*htmlspecialchars)/g,
+    severity: "warning",
+    title: "Request input echoed into the page",
+    detail: "A request value is written to the HTML unescaped: reflected XSS. Wrap it in `htmlspecialchars`."
+  },
+  {
+    id: "sql-interpolated",
+    lang: "java",
+    re: /"[^"\n]*\b(?:SELECT|INSERT\s+INTO|UPDATE|DELETE\s+FROM)\b[^"\n]*"\s*\+\s*[A-Za-z_]/gi,
+    severity: "critical",
+    title: "SQL query assembled by string concatenation",
+    detail: "The SQL text is built by concatenating a value, which is what SQL injection is. Use a `PreparedStatement` with `?` placeholders, or named parameters in JPA."
+  },
+  {
+    id: "exec-interpolated",
+    lang: "java",
+    re: /\b(?:Runtime\.getRuntime\(\)\.exec|new\s+ProcessBuilder)\s*\(\s*(?!")[^)]/g,
+    severity: "critical",
+    title: "Process started with a computed command",
+    detail: "The command line is built at run time. If a request value reaches it, the caller chooses what runs. Pass a fixed executable and validated arguments as a list."
+  },
+  {
+    id: "java-deserialization",
+    lang: "java",
+    re: /\bnew\s+ObjectInputStream\s*\(|\bXMLDecoder\s*\(|\.readObject\s*\(\s*\)/g,
+    severity: "warning",
+    title: "Java deserialisation of a stream",
+    detail: "Native Java deserialisation of untrusted bytes is a classic remote-code-execution path (gadget chains). Use a data format such as JSON, or an allow-list `ObjectInputFilter`."
+  }
+];
 var RULES = [
   // ---- JavaScript / TypeScript -------------------------------------------
   {
@@ -74266,6 +74526,16 @@ var RULES = [
     title: "SQL query assembled by string interpolation",
     detail: "The query text is built by pasting a value into SQL, which is what SQL injection is. Use a parameterised query \u2014 placeholders plus a values array \u2014 so the driver sends the value separately from the statement."
   },
+  {
+    // dvna: `var query = "SELECT … WHERE login='" + req.body.login + "'"`, run later.
+    id: "sql-interpolated",
+    lang: "js",
+    re: /['"]\s*(?:SELECT|INSERT\s+INTO|UPDATE|DELETE\s+FROM)\b[^'"\n]*['"]\s*\+\s*[A-Za-z_$]/g,
+    severity: "critical",
+    title: "SQL query assembled by string concatenation",
+    detail: "The query text is built by gluing a value into SQL, which is what SQL injection is. Use a parameterised query \u2014 placeholders plus a values array \u2014 so the driver sends the value separately from the statement."
+  },
+  ...PHP_JAVA_RULES,
   {
     id: "innerhtml-dynamic",
     lang: "js",
@@ -74344,7 +74614,7 @@ var RULES = [
   {
     id: "py-os-system",
     lang: "py",
-    re: /\bos\.system\s*\(\s*(?:f['"]|['"][^'"]*['"]\s*[+%]|[A-Za-z_])/g,
+    re: /\bos\.(?:system|popen)\s*\(\s*(?:f['"]|['"][^'"]*['"]\s*[+%]|[A-Za-z_])/g,
     severity: "critical",
     title: "os.system() with a constructed command",
     detail: "`os.system` always runs a shell, and the command here is built rather than fixed. Use `subprocess.run([...])` with an argument list, which does not involve a shell at all."
@@ -74430,11 +74700,21 @@ function literalRanges(line) {
 }
 var COMMENT_MARKERS2 = {
   js: ["//"],
-  py: ["#"]
+  py: ["#"],
+  php: ["//", "#"],
+  java: ["//"],
+  rb: ["#"],
+  go: ["//"],
+  cs: ["//"]
 };
 function langOf(path) {
   if (JS_RE2.test(path)) return "js";
   if (PY_RE2.test(path)) return "py";
+  if (PHP_RE.test(path)) return "php";
+  if (JAVA_RE.test(path)) return "java";
+  if (RB_RE.test(path)) return "rb";
+  if (GO_RE2.test(path)) return "go";
+  if (CS_RE.test(path)) return "cs";
   return null;
 }
 function lineAt3(content, index) {
@@ -74464,7 +74744,17 @@ var SKIP_IN_TEST = /* @__PURE__ */ new Set([
   "py-verify-false",
   "weak-hash",
   "py-pickle-load",
-  "random-for-secret"
+  "random-for-secret",
+  "php-include-user-input",
+  "php-unserialize",
+  "php-reflected-xss",
+  "java-deserialization",
+  "ruby-dynamic-dispatch",
+  "ruby-marshal-load",
+  "ruby-html-safe",
+  "go-template-html",
+  "dotnet-deserialization",
+  "ssrf"
 ]);
 function scanSource(content, lang) {
   var _a22;
@@ -74514,18 +74804,31 @@ function scanSource(content, lang) {
         if (literalRanges(rawLine).some(([a, b3]) => col > a && col < b3)) continue;
       }
       if (rawLine.length > 1e3) continue;
-      if (/#\s*(?:noqa|nosec)\b|\/\/\s*(?:nosemgrep|eslint-disable)|\bNOSONAR\b/.test(rawLine)) continue;
+      if (/#\s*(?:noqa|nosec)\b|\/\/\s*(?:nosemgrep|eslint-disable|phpcs:ignore)|\bNOSONAR\b/.test(rawLine)) continue;
       if (/^\s*\*/.test(rawLine) || /``/.test(rawLine)) continue;
       if (/^\s*(?:>>>|\.\.\.)\s/.test(rawLine)) continue;
       if (!contextAllows(rule.id, content, lineStart)) continue;
       const existing = byLine.get(line);
       if (existing && rank(existing.rule.severity) >= rank(rule.severity)) continue;
-      const tainted = INJECTION_RULES.has(rule.id) ? TAINT_RE[lang].test(around(content, lineStart, TAINT_WINDOW, 2)) : void 0;
+      if (!sinkAllows(rule.id, rawLine, idx - lineStart)) continue;
+      const tainted = !INJECTION_RULES.has(rule.id) ? void 0 : rule.id === "ssrf" ? SSRF_TAINT.test(around(content, lineStart, 2, 0)) : TAINT_RE[lang].test(around(content, lineStart, TAINT_WINDOW, 2));
       byLine.set(line, { rule, line, evidence: text.slice(0, 160), tainted });
     }
   }
   return [...byLine.values()].sort((a, b3) => a.line - b3.line);
 }
+var SSRF_TAINT = /\b(?:req|request)\.(?:query|body|params|args|form|values|GET|POST)\b|\$_(?:GET|POST|REQUEST|COOKIE)\b|\bparams\s*\[|\brequest\.get_json\b|\bc\.(?:Query|Param|PostForm)\s*\(|\br\.(?:FormValue|URL\.Query)\b/;
+var PHP_ESCAPED = /\b(?:htmlspecialchars|htmlentities|esc_(?:attr|html|url|js|textarea)|sanitize_\w+|wp_kses\w*|strip_tags|intval|floatval|urlencode|rawurlencode|json_encode|scrub_out|e)\s*\(|\(int\)|\(float\)/;
+function sinkAllows(ruleId, line, col) {
+  var _a22, _b;
+  if (ruleId === "php-reflected-xss") return !PHP_ESCAPED.test(line) && !/\b(?:echo|print)\b[^;$]*\w\s*\([^;]*\$_(?:GET|POST|REQUEST|COOKIE)/.test(line);
+  if (ruleId === "exec-interpolated" && line[col] === "`") {
+    return ((_b = (_a22 = line.slice(0, col).match(/"/g)) == null ? void 0 : _a22.length) != null ? _b : 0) % 2 === 0;
+  }
+  if (ruleId === "sql-interpolated") return !/\bprepare\s*\(/.test(line);
+  return true;
+}
+var BROWSER_CODE_RE = /(^|\/)(?:public|static|assets|frontend|client|ui|web|www|browser|extension|src\/components|components|pages|app\/javascript)\/|(?:^|\/)(?:sw|service-worker)\.[cm]?[jt]s$|\.(?:tsx|jsx|vue|svelte)$/i;
 var INJECTION_RULES = /* @__PURE__ */ new Set([
   "eval-dynamic",
   "new-function",
@@ -74538,12 +74841,27 @@ var INJECTION_RULES = /* @__PURE__ */ new Set([
   "py-os-system",
   "py-shell-true",
   "py-pickle-load",
-  "py-yaml-load"
+  "py-yaml-load",
+  "php-include-user-input",
+  "php-unserialize",
+  "php-reflected-xss",
+  "java-deserialization",
+  "ruby-dynamic-dispatch",
+  "ruby-marshal-load",
+  "ruby-html-safe",
+  "go-template-html",
+  "dotnet-deserialization",
+  "ssrf"
 ]);
 var TAINT_WINDOW = 25;
 var TAINT_RE = {
-  js: /\b(?:req|request|ctx\.request|ctx)\.(?:body|query|params|headers|cookies|url|originalUrl|path)\b|\bprocess\.argv\b|\blocation\.(?:search|hash|href|pathname)\b|\bsearchParams\b|\bdocument\.(?:cookie|referrer|URL)\b|\b(?:event|e|evt|msg)\.data\b|\bwindow\.name\b|\bformData\b|\.files\b|\buserInput\b/,
-  py: new RegExp("\\brequest\\.(?:args|form|json|data|values|files|GET|POST|body|query_params|path_params|cookies|headers|get_json)\\b|\\bsys\\.argv\\b|(?<![.\\w])input\\s*\\(|\\bself\\.request\\b|\\bflask\\.request\\b|\\bupload|\\brecv\\s*\\(")
+  rb: /\bparams\s*\[|\bparams\.(?:require|permit|fetch)\b|\brequest\.(?:params|body|query_string|headers|env)\b|\bcookies\s*\[/,
+  go: /\br\.(?:URL\.Query|FormValue|PostFormValue|Form|PostForm|Body|Header|URL\.Path)\b|\bc\.(?:Query|Param|PostForm|FormValue|DefaultQuery|Bind\w*|ShouldBind\w*)\s*\(|\bmux\.Vars\b|\bchi\.URLParam\b/,
+  cs: /\bRequest\.(?:Query|Form|QueryString|Params|Cookies|Headers|Body)\b|\bRequest\s*\[|\b(?:txt|tb|text)\w*\.Text\b(?!\s*=[^=])|\[From(?:Query|Body|Form|Route|Header)\]|\bHttpContext\.Request\b/,
+  php: /\$_(?:GET|POST|REQUEST|COOKIE|FILES|SERVER)\b|\$request->(?:input|get|query|post)\b|\bfile_get_contents\s*\(\s*['"]php:\/\/input/,
+  java: /\brequest\.get(?:Parameter|Header|QueryString|InputStream|Reader|Cookies)\b|@(?:RequestParam|PathVariable|RequestBody|RequestHeader|CookieValue)\b|\bcall\.(?:parameters|receive)\b/,
+  js: /\b(?:req|request|ctx\.request|ctx)\.(?:body|query|params|headers|cookies|url|originalUrl|path)\b|\blocation\.(?:search|hash|href|pathname)\b|\bsearchParams\b|\bdocument\.(?:cookie|referrer|URL)\b|\b(?:event|e|evt|msg)\.data\b|\bwindow\.name\b|\bformData\b|\.files\b|\buserInput\b/,
+  py: /\bparams\s*\[\s*["']|\bparse_qsl?\s*\(|\bQUERY_STRING\b|\bquery_string\b|\brequest\.(?:args|form|json|data|values|files|GET|POST|body|query_params|path_params|cookies|headers|get_json)\b|\bself\.request\b|\bflask\.request\b/
 };
 function around(content, lineStart, before, after) {
   let a = lineStart;
@@ -74579,7 +74897,8 @@ var insecureCodeScanner = {
       for (const file2 of ctx.files) {
         if (issues.length >= MAX_TOTAL7) break;
         const norm = file2.replace(/\\/g, "/");
-        if (SKIP_RE.test(norm) || NOT_SHIPPED_RE2.test(norm)) continue;
+        const webRoot = /\.php$/i.test(norm) && /(^|\/)(?:www|public|htdocs)\//.test(norm);
+        if (SKIP_RE.test(norm) || NOT_SHIPPED_RE2.test(norm) && !webRoot) continue;
         const lang = langOf(norm);
         if (!lang) continue;
         const size = yield (_a22 = ctx.fileSize) == null ? void 0 : _a22.call(ctx, file2);
@@ -74591,6 +74910,7 @@ var insecureCodeScanner = {
         for (const hit of scanSource(content, lang)) {
           if (issues.length >= MAX_TOTAL7 || perFile >= MAX_PER_FILE4) break;
           if (isTest && SKIP_IN_TEST.has(hit.rule.id)) continue;
+          if (hit.rule.id === "ssrf" && lang === "js" && BROWSER_CODE_RE.test(norm)) continue;
           perFile++;
           let ageDays = 0;
           try {
@@ -76898,6 +77218,43 @@ function getRepoMetadata(git, root) {
     }
   });
 }
+function streamLines(cwd, args, onLine) {
+  const MAX_BUFFERED = 1 << 20;
+  return new Promise((resolve22, reject) => {
+    const child = (0, import_child_process.spawn)("git", args, { cwd, stdio: ["ignore", "pipe", "ignore"] });
+    let pending = "";
+    let skipping = false;
+    let stopped = false;
+    child.stdout.setEncoding("utf8");
+    child.stdout.on("data", (chunk) => {
+      var _a22;
+      if (stopped) return;
+      const parts = (pending + chunk).split("\n");
+      pending = (_a22 = parts.pop()) != null ? _a22 : "";
+      for (const line of parts) {
+        if (skipping) {
+          skipping = false;
+          continue;
+        }
+        if (!onLine(line)) {
+          stopped = true;
+          child.kill();
+          return;
+        }
+      }
+      if (pending.length > MAX_BUFFERED) {
+        pending = "";
+        skipping = true;
+      }
+    });
+    child.on("error", reject);
+    child.on("close", (code) => {
+      if (!stopped && pending && !skipping) onLine(pending);
+      if (code !== 0 && !stopped) reject(new Error(`git ${args[0]} exited with ${code}`));
+      else resolve22();
+    });
+  });
+}
 function buildScanContext(root) {
   return __async(this, null, function* () {
     const git = wo(root);
@@ -77021,46 +77378,50 @@ function buildScanContext(root) {
           const MAX_LINES = 1e5;
           const MAX_LINE_LEN = 4e3;
           try {
-            const out = yield git.raw([
-              "-c",
-              "core.quotePath=false",
-              "log",
-              "--no-merges",
-              "-U0",
-              `-n`,
-              String(maxCommits),
-              "--format=%x01%h%x02%at",
-              "-p"
-            ]);
             const additions = [];
             let commit = "";
             let date5 = 0;
             let file2 = null;
-            for (const line of out.split("\n")) {
-              if (line.startsWith("")) {
-                const [sha, at2] = line.slice(1).split("");
-                commit = sha != null ? sha : "";
-                date5 = (parseInt(at2 != null ? at2 : "0", 10) || 0) * 1e3;
-                file2 = null;
-                continue;
-              }
-              if (line.startsWith("diff --git")) {
-                file2 = null;
-                continue;
-              }
-              if (line.startsWith("+++ ")) {
-                const path = line.slice(4).trim();
-                file2 = path === "/dev/null" ? null : path.replace(/^b\//, "");
-                continue;
-              }
-              if (line.startsWith("+") && !line.startsWith("+++") && file2 && commit) {
-                const text = line.slice(1);
-                if (text.length <= MAX_LINE_LEN) {
-                  additions.push({ commit, date: date5, file: file2, text });
-                  if (additions.length >= MAX_LINES) break;
+            yield streamLines(
+              root,
+              [
+                "-c",
+                "core.quotePath=false",
+                "log",
+                "--no-merges",
+                "-U0",
+                "-n",
+                String(maxCommits),
+                "--format=%x01%h%x02%at",
+                "-p"
+              ],
+              (line) => {
+                if (line.startsWith("")) {
+                  const [sha, at2] = line.slice(1).split("");
+                  commit = sha != null ? sha : "";
+                  date5 = (parseInt(at2 != null ? at2 : "0", 10) || 0) * 1e3;
+                  file2 = null;
+                  return true;
                 }
+                if (line.startsWith("diff --git")) {
+                  file2 = null;
+                  return true;
+                }
+                if (line.startsWith("+++ ")) {
+                  const path = line.slice(4).trim();
+                  file2 = path === "/dev/null" ? null : path.replace(/^b\//, "");
+                  return true;
+                }
+                if (line.startsWith("+") && !line.startsWith("+++") && file2 && commit) {
+                  const text = line.slice(1);
+                  if (text.length <= MAX_LINE_LEN) {
+                    additions.push({ commit, date: date5, file: file2, text });
+                    if (additions.length >= MAX_LINES) return false;
+                  }
+                }
+                return true;
               }
-            }
+            );
             return additions;
           } catch (e) {
             return [];
@@ -77330,7 +77691,17 @@ var INSECURE2 = {
   "py-yaml-load": "Unsafe yaml.load()",
   "py-pickle-load": "pickle.load() of untrusted data",
   "py-eval-exec": "Python eval()/exec()",
-  "py-verify-false": "requests with verify=False"
+  "py-verify-false": "requests with verify=False",
+  "php-include-user-input": "File included from request input",
+  "php-unserialize": "PHP unserialize() of a variable",
+  "php-reflected-xss": "Request input echoed unescaped",
+  "java-deserialization": "Java native deserialisation",
+  "ruby-dynamic-dispatch": "Method or class chosen by request input",
+  "ruby-marshal-load": "Marshal / unsafe YAML load",
+  "ruby-html-safe": "Request input marked html_safe",
+  "go-template-html": "Value marked as trusted HTML in a Go template",
+  "dotnet-deserialization": "Unsafe .NET deserialiser",
+  ssrf: "Server fetches a URL from a variable (SSRF)"
 };
 var WORKFLOW2 = {
   "action-tag-first-party": "First-party action pinned to a mutable tag",
@@ -80336,7 +80707,7 @@ var deadCodeScanner2 = {
     );
   }
 };
-var NOT_SHIPPED_RE3 = /(^|\/)(?:__tests__|_?tests?|spec|e2e|fixtures?|__fixtures__|__testfixtures__|__snapshots__|_?examples?|playgrounds?|sandbox|bench(?:mark)?s?|scripts?|website|www|docs?|tutorials?|\.github|composables)\/|\.(?:test|spec|test-d|snap)\.|\.snap\.[a-z.]+$|\.d\.[cm]?ts$|\.gen\.[cm]?[jt]sx?$/i;
+var NOT_SHIPPED_RE3 = /(^|\/)(?:__tests__|_?tests?|spec|e2e|fixtures?|__fixtures__|__testfixtures__|__snapshots__|_?examples?|[\w-]*playgrounds?|size-check|sandbox|bench(?:mark)?s?|scripts?|website|www|docs?|tutorials?|\.github|composables)\/|\.(?:test|spec|test-d|snap)\.|\.snap\.[a-z.]+$|\.d\.[cm]?ts$|\.gen\.[cm]?[jt]sx?$/i;
 async function packageEntryFiles2(ctx, fileSet) {
   const out = /* @__PURE__ */ new Set();
   const collect = (v2, acc) => {
@@ -80373,6 +80744,15 @@ async function scanJsTsExports2(ctx, sources) {
   const exemptFiles = /* @__PURE__ */ new Set();
   const locallyUsed = /* @__PURE__ */ new Set();
   const localKey = (file2, name) => `${file2}\0${name}`;
+  const filesWithName = /* @__PURE__ */ new Map();
+  const TEXT_RE = /\.(?:[cm]?[jt]sx?|vue|svelte|astro|html)$/i;
+  for (const file2 of ctx.files.filter((f3) => TEXT_RE.test(f3)).slice(0, 2e4)) {
+    const content = await ctx.readFile(file2);
+    if (!content) continue;
+    for (const name of new Set(content.match(/[A-Za-z_$][\w$]*/g) ?? [])) {
+      filesWithName.set(name, (filesWithName.get(name) ?? 0) + 1);
+    }
+  }
   for (const file2 of sources) {
     const content = await ctx.readFile(file2);
     if (!content) continue;
@@ -80497,6 +80877,7 @@ async function scanJsTsExports2(ctx, sources) {
     if (namespaceRanges.some(([f3, a, b3]) => f3 === exp.file && exp.line >= a && exp.line <= b3)) continue;
     if (mdxText && new RegExp(`\\b${exp.name.replace(/\$/g, "\\$")}\\b`).test(mdxText)) continue;
     if (usedNames.has(exp.name)) continue;
+    if ((filesWithName.get(exp.name) ?? 0) > 1) continue;
     if (CONVENTION_EXPORTS2.has(exp.name)) continue;
     const kit = uiKitRoot2(exp.file);
     if (kit) {
@@ -80553,7 +80934,7 @@ function lineOf7(node) {
   return loc?.start?.line ?? 0;
 }
 var PY_RE3 = /\.py$/i;
-var GO_RE2 = /\.go$/i;
+var GO_RE3 = /\.go$/i;
 var PY_TEST_RE2 = /(^|\/)(test_[^/]*\.py|[^/]*_test\.py|conftest\.py)$|(^|\/)tests?\//i;
 var GO_TEST_RE2 = /_test\.go$/i;
 var IDENT_RE2 = /[A-Za-z_][A-Za-z0-9_]*/g;
@@ -80677,7 +81058,7 @@ async function collectGoDead2(ctx, files, issues) {
 }
 async function scanPolyglotSymbols2(ctx) {
   const pyFiles = ctx.files.filter((f3) => PY_RE3.test(f3));
-  const goFiles = ctx.files.filter((f3) => GO_RE2.test(f3));
+  const goFiles = ctx.files.filter((f3) => GO_RE3.test(f3));
   if (pyFiles.length === 0 && goFiles.length === 0) return [];
   const issues = [];
   await collectPythonDead2(ctx, pyFiles, issues);
@@ -81137,12 +81518,248 @@ var commentedCodeScanner2 = {
 // ../core/src/scanners/insecure-code.ts
 var JS_RE4 = /\.(ts|tsx|js|jsx|mjs|mts|cts)$/i;
 var PY_RE4 = /\.py$/i;
+var PHP_RE2 = /\.(?:php|phtml|inc)$/i;
+var JAVA_RE2 = /\.(?:java|kt)$/i;
+var RB_RE2 = /\.(?:rb|erb|rake)$/i;
+var GO_RE4 = /\.go$/i;
+var CS_RE2 = /\.(?:cs|cshtml)$/i;
 var SKIP_RE2 = /(^|\/)(?:node_modules|vendor|third_party|dist|build|out|\.next)\/|\.min\.[cm]?js$/i;
 var NOT_SHIPPED_RE4 = /(^|\/)(?:_?examples?|demos?|benchmarks?|bench|perf(?:-testing)?|performance|docs?|documentation|www|website|site|scripts?|tools?|[\w-]*_assets|static|_?vendor(?:ed)?|third_party|integration-?[tT]ests|test-utils|tooling|_tools|sphinx)\/|(^|\/)jquery[-.\d]*\.js$/i;
 var TEST_RE7 = /(^|\/)(?:__tests__|tests?|specs?|fixtures?)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test\.[cm]?[jt]s$|(?:^|\/)test_[^/]+\.py$|_test\.py$|(?:^|\/)conftest\.py$/i;
 var MAX_PER_FILE8 = 6;
 var MAX_TOTAL14 = 60;
 var MAX_BYTES4 = 4e5;
+var PHP_JAVA_RULES2 = [
+  // --- Python SQL (VAmPI: f"SELECT … '{username}'") ---------------------------
+  {
+    id: "sql-interpolated",
+    lang: "py",
+    re: /\bf(?:"\s*(?:SELECT\b[^"'\n]*\bFROM|INSERT\s+INTO|UPDATE\b[^"'\n]*\bSET|DELETE\s+FROM)\b[^"\n]*\{|'\s*(?:SELECT\b[^"'\n]*\bFROM|INSERT\s+INTO|UPDATE\b[^"'\n]*\bSET|DELETE\s+FROM)\b[^'\n]*\{)|(?:"\s*(?:SELECT\b[^"'\n]*\bFROM|INSERT\s+INTO|UPDATE\b[^"'\n]*\bSET|DELETE\s+FROM)\b[^"\n]*"|'\s*(?:SELECT\b[^"'\n]*\bFROM|INSERT\s+INTO|UPDATE\b[^"'\n]*\bSET|DELETE\s+FROM)\b[^'\n]*')\s*(?:%\s*[(\w]|\.format\s*\(|\+\s*[A-Za-z_])/gi,
+    severity: "critical",
+    title: "SQL query assembled by string formatting",
+    detail: 'A value is formatted into the SQL text, which is what SQL injection is. Pass it as a bound parameter (`cursor.execute("\u2026 WHERE name = %s", (name,))`, or `text("\u2026 :name")` with params).'
+  },
+  // --- Server-side request forgery ------------------------------------------
+  {
+    id: "ssrf",
+    lang: "php",
+    re: /\b(?:file_get_contents|fopen|readfile|get_headers|curl_init|simplexml_load_file)\s*\(\s*\$|\bcurl_setopt\s*\([^,]+,\s*CURLOPT_URL\s*,\s*\$/g,
+    severity: "critical",
+    title: "Server fetches a URL from a variable",
+    detail: "The server requests whatever URL the variable holds. If a request supplies it, a caller can reach internal services and cloud metadata (SSRF). Allow-list hosts and schemes."
+  },
+  {
+    id: "ssrf",
+    lang: "py",
+    re: /\b(?:requests|httpx|session|client)\.(?:get|post|put|head|request)\s*\(\s*(?!["'])[A-Za-z_f]|\burllib\.request\.urlopen\s*\(\s*(?!["'])/g,
+    severity: "critical",
+    title: "Server fetches a URL from a variable",
+    detail: "The server requests whatever URL the variable holds. If a request supplies it, a caller can reach internal services and cloud metadata (SSRF). Allow-list hosts and schemes."
+  },
+  {
+    id: "ssrf",
+    lang: "js",
+    re: /\b(?:fetch|axios(?:\.(?:get|post|request))?|got|needle|superagent\.get|https?\.get)\s*\(\s*(?!['"`])[A-Za-z_$]/g,
+    severity: "critical",
+    title: "Server fetches a URL from a variable",
+    detail: "The server requests whatever URL the variable holds. If a request supplies it, a caller can reach internal services and cloud metadata (SSRF). Allow-list hosts and schemes."
+  },
+  // --- Ruby / Rails ---------------------------------------------------------
+  {
+    id: "sql-interpolated",
+    lang: "rb",
+    re: /\.(?:where|find_by_sql|order|group|having|select|joins|pluck|from|execute|exec_query|select_all|select_value|count_by_sql)\s*\(?\s*(?:"[^"\n]*#\{|'[^'\n]*'\s*\+|"[^"\n]*"\s*\+)/g,
+    severity: "critical",
+    title: "SQL fragment built by string interpolation",
+    detail: 'A value is interpolated into SQL that ActiveRecord passes through as-is, which is SQL injection. Use placeholders (`where("name = ?", name)`) or a hash condition.'
+  },
+  {
+    id: "exec-interpolated",
+    lang: "rb",
+    re: /`[^`\n]*#\{|%x[({\[][^\n]*#\{|\b(?:system|exec|spawn|IO\.popen|Open3\.\w+)\s*\(?\s*"[^"\n]*#\{/g,
+    severity: "critical",
+    title: "Shell command built by string interpolation",
+    detail: 'An interpolated value reaches a shell, so `;` or `$(\u2026)` in it runs a command of its own. Pass the arguments separately (`system("ls", dir)`), which skips the shell.'
+  },
+  {
+    id: "eval-dynamic",
+    lang: "rb",
+    re: /\b(?:eval|instance_eval|class_eval|module_eval)\b(?!\s*(?:do\b|\{|\(\s*&|&|<<|\(\s*<<))\s*\(?\s*[^\s"'(&:{|)<]/g,
+    severity: "critical",
+    title: "eval() on a non-literal value",
+    detail: "`eval` runs whatever Ruby it is given. If any part of it comes from a request, this is remote code execution."
+  },
+  {
+    id: "ruby-dynamic-dispatch",
+    lang: "rb",
+    re: /\.(?:send|public_send|constantize|safe_constantize)\b\s*\(?\s*params\b|\bparams\s*\[[^\]]+\]\s*\.\s*(?:constantize|safe_constantize)\b/g,
+    severity: "critical",
+    title: "Method or class chosen by request input",
+    detail: "The request names the method to call or the class to load, so a caller can reach any of them. Map the input to an allow-list."
+  },
+  {
+    id: "ruby-marshal-load",
+    lang: "rb",
+    re: /\bMarshal\.load\s*\(|\bYAML\.(?:load|unsafe_load)\s*\((?![^)]*permitted_classes)/g,
+    severity: "warning",
+    title: "Marshal/YAML load of a value",
+    detail: "`Marshal.load` and unsafe `YAML.load` build arbitrary objects. Use JSON, or `YAML.safe_load` with a list of permitted classes."
+  },
+  {
+    id: "ruby-html-safe",
+    lang: "rb",
+    re: /\bparams\b[^\n]*\.html_safe\b|\braw\s*\(?\s*params\b|<%==\s*params\b/g,
+    severity: "warning",
+    title: "Request input marked as safe HTML",
+    detail: "`html_safe`/`raw` turns off Rails escaping for a request value: reflected XSS."
+  },
+  // --- Go -------------------------------------------------------------------
+  {
+    id: "sql-interpolated",
+    lang: "go",
+    re: /\.(?:Query|QueryRow|Exec|QueryContext|QueryRowContext|ExecContext|Raw|Select|Get)\s*\(\s*(?:ctx\s*,\s*)?(?:fmt\.Sprintf\s*\(\s*"[^"\n]*\b(?:SELECT|INSERT|UPDATE|DELETE)\b|"[^"\n]*\b(?:SELECT|INSERT|UPDATE|DELETE)\b[^"\n]*"\s*\+)/gi,
+    severity: "critical",
+    title: "SQL query assembled with Sprintf or +",
+    detail: 'The SQL text is formatted with a value, which is what SQL injection is. Pass the value as an argument (`db.Query("\u2026 WHERE id = $1", id)`).'
+  },
+  {
+    id: "sql-interpolated",
+    lang: "go",
+    re: /:?=\s*fmt\.Sprintf\s*\(\s*(?:"\s*(?:SELECT|INSERT\s+INTO|UPDATE|DELETE\s+FROM)\b[^"\n]*%[sv]|`\s*(?:SELECT|INSERT\s+INTO|UPDATE|DELETE\s+FROM)\b[^`]*%[sv])/gi,
+    severity: "critical",
+    title: "SQL query assembled with Sprintf",
+    detail: 'The SQL text is formatted with a value, which is what SQL injection is. Pass the value as an argument (`db.Query("\u2026 WHERE id = $1", id)`).'
+  },
+  {
+    id: "exec-interpolated",
+    lang: "go",
+    re: /\bexec\.Command(?:Context)?\s*\(\s*(?:ctx\s*,\s*)?(?:"(?:sh|bash|cmd|cmd\.exe|powershell)"\s*,\s*"(?:-c|\/c|\/C|-Command)"\s*,\s*(?!")|fmt\.Sprintf)/g,
+    severity: "critical",
+    title: "Shell command built from a value",
+    detail: 'A computed string is handed to a shell. Call the program directly with separate arguments (`exec.Command("ping", "-c", "1", host)`).'
+  },
+  {
+    id: "go-template-html",
+    lang: "go",
+    re: /\btemplate\.(?:HTML|JS|URL|HTMLAttr)\s*\(\s*(?!")[^)]/g,
+    severity: "warning",
+    title: "Value marked as trusted template content",
+    detail: "`template.HTML(x)` switches off html/template escaping for `x`. If it came from a request, this is XSS."
+  },
+  // --- C# -------------------------------------------------------------------
+  {
+    id: "sql-interpolated",
+    lang: "cs",
+    re: /\b(?:new\s+(?:Sql|Npgsql|MySql|Sqlite|OleDb|Odbc)Command|\.(?:FromSqlRaw|ExecuteSqlRaw|ExecuteSqlRawAsync|Query|Execute|QueryFirst\w*|QuerySingle\w*))\s*(?:<[^>]*>)?\s*\(\s*(?:\$"[^"\n]*\b(?:SELECT|INSERT|UPDATE|DELETE)\b[^"\n]*\{|"[^"\n]*\b(?:SELECT|INSERT|UPDATE|DELETE)\b[^"\n]*"\s*\+)/gi,
+    severity: "critical",
+    title: "SQL command assembled from variables",
+    detail: "A value is pasted into the SQL text, which is what SQL injection is. Use parameters (`cmd.Parameters.AddWithValue`) or `FromSqlInterpolated`."
+  },
+  {
+    id: "sql-interpolated",
+    lang: "cs",
+    re: /=\s*(?:\$"\s*(?:SELECT|INSERT\s+INTO|UPDATE|DELETE\s+FROM)\b[^"\n]*\{|"\s*(?:SELECT|INSERT\s+INTO|UPDATE|DELETE\s+FROM)\b[^"\n]*"\s*\+\s*[A-Za-z_])/gi,
+    severity: "critical",
+    title: "SQL command assembled from variables",
+    detail: "A value is pasted into the SQL text, which is what SQL injection is. Use parameters (`cmd.Parameters.AddWithValue`) or `FromSqlInterpolated`."
+  },
+  {
+    id: "exec-interpolated",
+    lang: "cs",
+    re: /\bProcess\.Start\s*\(\s*(?:"(?:cmd(?:\.exe)?|powershell|bash|sh)"\s*,\s*(?!")|\$")/g,
+    severity: "critical",
+    title: "Process started with a computed command line",
+    detail: "A computed string reaches a shell. Start the program directly and pass validated arguments through `ProcessStartInfo.ArgumentList`."
+  },
+  {
+    id: "dotnet-deserialization",
+    lang: "cs",
+    re: /\bnew\s+(?:BinaryFormatter|LosFormatter|NetDataContractSerializer|SoapFormatter|ObjectStateFormatter)\b|TypeNameHandling\s*=\s*TypeNameHandling\.(?:All|Auto|Objects|Arrays)/g,
+    severity: "warning",
+    title: "Unsafe .NET deserialiser",
+    detail: "BinaryFormatter-style serialisers and Json.NET `TypeNameHandling` other than None can instantiate attacker-chosen types. Use System.Text.Json or `TypeNameHandling.None`."
+  },
+  {
+    id: "sql-interpolated",
+    lang: "php",
+    re: /\b(?:mysqli?_query|pg_query|sqlite_query|->query|->exec|->prepare)\s*\([^;]*?(?:\$_(?:GET|POST|REQUEST|COOKIE)|["'][^"';]*\b(?:SELECT|INSERT|UPDATE|DELETE)\b[^"';]*(?:\$\w|["']\s*\.))/gi,
+    severity: "critical",
+    title: "SQL query assembled from variables",
+    detail: "A variable is pasted into the SQL text, which is what SQL injection is. Use a prepared statement with bound parameters (PDO or mysqli `bind_param`)."
+  },
+  {
+    id: "sql-interpolated",
+    lang: "php",
+    re: /=\s*(?:"\s*(?:SELECT|INSERT\s+INTO|UPDATE|DELETE\s+FROM)\b[^"\n]*(?:\$\w|"\s*\.\s*\$)|'\s*(?:SELECT|INSERT\s+INTO|UPDATE|DELETE\s+FROM)\b[^'\n]*'\s*\.\s*\$)/gi,
+    severity: "critical",
+    title: "SQL query assembled from variables",
+    detail: "A variable is pasted into the SQL text, which is what SQL injection is. Use a prepared statement with bound parameters (PDO or mysqli `bind_param`)."
+  },
+  {
+    id: "exec-interpolated",
+    lang: "php",
+    re: /\b(?:shell_exec|exec|system|passthru|popen|proc_open)\s*\(\s*(?:[^)'"]*\$|["'][^"']*["']\s*\.\s*\$|"[^"]*\$)/g,
+    severity: "critical",
+    title: "Shell command built from variables",
+    detail: "A variable reaches a shell command, so a value containing `;` or `&&` runs its own command. Pass arguments through `escapeshellarg`, or avoid the shell."
+  },
+  {
+    id: "eval-dynamic",
+    lang: "php",
+    re: /\b(?:eval|assert|create_function)\s*\(\s*[^)'"\s]/g,
+    severity: "critical",
+    title: "eval() on a non-literal value",
+    detail: "`eval` runs whatever PHP it is given. If any part of it comes from a request, this is remote code execution."
+  },
+  {
+    id: "php-include-user-input",
+    lang: "php",
+    re: /\b(?:include|require)(?:_once)?\s*\(?\s*[^;]*\$_(?:GET|POST|REQUEST|COOKIE)/g,
+    severity: "critical",
+    title: "File included from request input",
+    detail: "The path to include comes from the request: a local or remote file inclusion. Map the input to a fixed allow-list of files instead."
+  },
+  {
+    id: "php-unserialize",
+    lang: "php",
+    re: /\bunserialize\s*\(\s*[^)'"\s]/g,
+    severity: "warning",
+    title: "unserialize() on a non-literal value",
+    detail: "`unserialize` can instantiate arbitrary classes and trigger their magic methods. Use `json_decode` for data that crosses a trust boundary."
+  },
+  {
+    id: "php-reflected-xss",
+    lang: "php",
+    re: /\b(?:echo|print)\b[^;]*\$_(?:GET|POST|REQUEST|COOKIE)\b(?![^;]*htmlspecialchars)/g,
+    severity: "warning",
+    title: "Request input echoed into the page",
+    detail: "A request value is written to the HTML unescaped: reflected XSS. Wrap it in `htmlspecialchars`."
+  },
+  {
+    id: "sql-interpolated",
+    lang: "java",
+    re: /"[^"\n]*\b(?:SELECT|INSERT\s+INTO|UPDATE|DELETE\s+FROM)\b[^"\n]*"\s*\+\s*[A-Za-z_]/gi,
+    severity: "critical",
+    title: "SQL query assembled by string concatenation",
+    detail: "The SQL text is built by concatenating a value, which is what SQL injection is. Use a `PreparedStatement` with `?` placeholders, or named parameters in JPA."
+  },
+  {
+    id: "exec-interpolated",
+    lang: "java",
+    re: /\b(?:Runtime\.getRuntime\(\)\.exec|new\s+ProcessBuilder)\s*\(\s*(?!")[^)]/g,
+    severity: "critical",
+    title: "Process started with a computed command",
+    detail: "The command line is built at run time. If a request value reaches it, the caller chooses what runs. Pass a fixed executable and validated arguments as a list."
+  },
+  {
+    id: "java-deserialization",
+    lang: "java",
+    re: /\bnew\s+ObjectInputStream\s*\(|\bXMLDecoder\s*\(|\.readObject\s*\(\s*\)/g,
+    severity: "warning",
+    title: "Java deserialisation of a stream",
+    detail: "Native Java deserialisation of untrusted bytes is a classic remote-code-execution path (gadget chains). Use a data format such as JSON, or an allow-list `ObjectInputFilter`."
+  }
+];
 var RULES3 = [
   // ---- JavaScript / TypeScript -------------------------------------------
   {
@@ -81182,6 +81799,16 @@ var RULES3 = [
     title: "SQL query assembled by string interpolation",
     detail: "The query text is built by pasting a value into SQL, which is what SQL injection is. Use a parameterised query \u2014 placeholders plus a values array \u2014 so the driver sends the value separately from the statement."
   },
+  {
+    // dvna: `var query = "SELECT … WHERE login='" + req.body.login + "'"`, run later.
+    id: "sql-interpolated",
+    lang: "js",
+    re: /['"]\s*(?:SELECT|INSERT\s+INTO|UPDATE|DELETE\s+FROM)\b[^'"\n]*['"]\s*\+\s*[A-Za-z_$]/g,
+    severity: "critical",
+    title: "SQL query assembled by string concatenation",
+    detail: "The query text is built by gluing a value into SQL, which is what SQL injection is. Use a parameterised query \u2014 placeholders plus a values array \u2014 so the driver sends the value separately from the statement."
+  },
+  ...PHP_JAVA_RULES2,
   {
     id: "innerhtml-dynamic",
     lang: "js",
@@ -81260,7 +81887,7 @@ var RULES3 = [
   {
     id: "py-os-system",
     lang: "py",
-    re: /\bos\.system\s*\(\s*(?:f['"]|['"][^'"]*['"]\s*[+%]|[A-Za-z_])/g,
+    re: /\bos\.(?:system|popen)\s*\(\s*(?:f['"]|['"][^'"]*['"]\s*[+%]|[A-Za-z_])/g,
     severity: "critical",
     title: "os.system() with a constructed command",
     detail: "`os.system` always runs a shell, and the command here is built rather than fixed. Use `subprocess.run([...])` with an argument list, which does not involve a shell at all."
@@ -81345,11 +81972,21 @@ function literalRanges2(line) {
 }
 var COMMENT_MARKERS4 = {
   js: ["//"],
-  py: ["#"]
+  py: ["#"],
+  php: ["//", "#"],
+  java: ["//"],
+  rb: ["#"],
+  go: ["//"],
+  cs: ["//"]
 };
 function langOf2(path) {
   if (JS_RE4.test(path)) return "js";
   if (PY_RE4.test(path)) return "py";
+  if (PHP_RE2.test(path)) return "php";
+  if (JAVA_RE2.test(path)) return "java";
+  if (RB_RE2.test(path)) return "rb";
+  if (GO_RE4.test(path)) return "go";
+  if (CS_RE2.test(path)) return "cs";
   return null;
 }
 function lineAt7(content, index) {
@@ -81379,7 +82016,17 @@ var SKIP_IN_TEST2 = /* @__PURE__ */ new Set([
   "py-verify-false",
   "weak-hash",
   "py-pickle-load",
-  "random-for-secret"
+  "random-for-secret",
+  "php-include-user-input",
+  "php-unserialize",
+  "php-reflected-xss",
+  "java-deserialization",
+  "ruby-dynamic-dispatch",
+  "ruby-marshal-load",
+  "ruby-html-safe",
+  "go-template-html",
+  "dotnet-deserialization",
+  "ssrf"
 ]);
 function scanSource2(content, lang) {
   const markers = COMMENT_MARKERS4[lang];
@@ -81427,18 +82074,30 @@ function scanSource2(content, lang) {
         if (literalRanges2(rawLine).some(([a, b3]) => col > a && col < b3)) continue;
       }
       if (rawLine.length > 1e3) continue;
-      if (/#\s*(?:noqa|nosec)\b|\/\/\s*(?:nosemgrep|eslint-disable)|\bNOSONAR\b/.test(rawLine)) continue;
+      if (/#\s*(?:noqa|nosec)\b|\/\/\s*(?:nosemgrep|eslint-disable|phpcs:ignore)|\bNOSONAR\b/.test(rawLine)) continue;
       if (/^\s*\*/.test(rawLine) || /``/.test(rawLine)) continue;
       if (/^\s*(?:>>>|\.\.\.)\s/.test(rawLine)) continue;
       if (!contextAllows2(rule.id, content, lineStart)) continue;
       const existing = byLine.get(line);
       if (existing && rank2(existing.rule.severity) >= rank2(rule.severity)) continue;
-      const tainted = INJECTION_RULES2.has(rule.id) ? TAINT_RE2[lang].test(around2(content, lineStart, TAINT_WINDOW2, 2)) : void 0;
+      if (!sinkAllows2(rule.id, rawLine, idx - lineStart)) continue;
+      const tainted = !INJECTION_RULES2.has(rule.id) ? void 0 : rule.id === "ssrf" ? SSRF_TAINT2.test(around2(content, lineStart, 2, 0)) : TAINT_RE2[lang].test(around2(content, lineStart, TAINT_WINDOW2, 2));
       byLine.set(line, { rule, line, evidence: text.slice(0, 160), tainted });
     }
   }
   return [...byLine.values()].sort((a, b3) => a.line - b3.line);
 }
+var SSRF_TAINT2 = /\b(?:req|request)\.(?:query|body|params|args|form|values|GET|POST)\b|\$_(?:GET|POST|REQUEST|COOKIE)\b|\bparams\s*\[|\brequest\.get_json\b|\bc\.(?:Query|Param|PostForm)\s*\(|\br\.(?:FormValue|URL\.Query)\b/;
+var PHP_ESCAPED2 = /\b(?:htmlspecialchars|htmlentities|esc_(?:attr|html|url|js|textarea)|sanitize_\w+|wp_kses\w*|strip_tags|intval|floatval|urlencode|rawurlencode|json_encode|scrub_out|e)\s*\(|\(int\)|\(float\)/;
+function sinkAllows2(ruleId, line, col) {
+  if (ruleId === "php-reflected-xss") return !PHP_ESCAPED2.test(line) && !/\b(?:echo|print)\b[^;$]*\w\s*\([^;]*\$_(?:GET|POST|REQUEST|COOKIE)/.test(line);
+  if (ruleId === "exec-interpolated" && line[col] === "`") {
+    return (line.slice(0, col).match(/"/g)?.length ?? 0) % 2 === 0;
+  }
+  if (ruleId === "sql-interpolated") return !/\bprepare\s*\(/.test(line);
+  return true;
+}
+var BROWSER_CODE_RE2 = /(^|\/)(?:public|static|assets|frontend|client|ui|web|www|browser|extension|src\/components|components|pages|app\/javascript)\/|(?:^|\/)(?:sw|service-worker)\.[cm]?[jt]s$|\.(?:tsx|jsx|vue|svelte)$/i;
 var INJECTION_RULES2 = /* @__PURE__ */ new Set([
   "eval-dynamic",
   "new-function",
@@ -81451,12 +82110,27 @@ var INJECTION_RULES2 = /* @__PURE__ */ new Set([
   "py-os-system",
   "py-shell-true",
   "py-pickle-load",
-  "py-yaml-load"
+  "py-yaml-load",
+  "php-include-user-input",
+  "php-unserialize",
+  "php-reflected-xss",
+  "java-deserialization",
+  "ruby-dynamic-dispatch",
+  "ruby-marshal-load",
+  "ruby-html-safe",
+  "go-template-html",
+  "dotnet-deserialization",
+  "ssrf"
 ]);
 var TAINT_WINDOW2 = 25;
 var TAINT_RE2 = {
-  js: /\b(?:req|request|ctx\.request|ctx)\.(?:body|query|params|headers|cookies|url|originalUrl|path)\b|\bprocess\.argv\b|\blocation\.(?:search|hash|href|pathname)\b|\bsearchParams\b|\bdocument\.(?:cookie|referrer|URL)\b|\b(?:event|e|evt|msg)\.data\b|\bwindow\.name\b|\bformData\b|\.files\b|\buserInput\b/,
-  py: /\brequest\.(?:args|form|json|data|values|files|GET|POST|body|query_params|path_params|cookies|headers|get_json)\b|\bsys\.argv\b|(?<![.\w])input\s*\(|\bself\.request\b|\bflask\.request\b|\bupload|\brecv\s*\(/
+  rb: /\bparams\s*\[|\bparams\.(?:require|permit|fetch)\b|\brequest\.(?:params|body|query_string|headers|env)\b|\bcookies\s*\[/,
+  go: /\br\.(?:URL\.Query|FormValue|PostFormValue|Form|PostForm|Body|Header|URL\.Path)\b|\bc\.(?:Query|Param|PostForm|FormValue|DefaultQuery|Bind\w*|ShouldBind\w*)\s*\(|\bmux\.Vars\b|\bchi\.URLParam\b/,
+  cs: /\bRequest\.(?:Query|Form|QueryString|Params|Cookies|Headers|Body)\b|\bRequest\s*\[|\b(?:txt|tb|text)\w*\.Text\b(?!\s*=[^=])|\[From(?:Query|Body|Form|Route|Header)\]|\bHttpContext\.Request\b/,
+  php: /\$_(?:GET|POST|REQUEST|COOKIE|FILES|SERVER)\b|\$request->(?:input|get|query|post)\b|\bfile_get_contents\s*\(\s*['"]php:\/\/input/,
+  java: /\brequest\.get(?:Parameter|Header|QueryString|InputStream|Reader|Cookies)\b|@(?:RequestParam|PathVariable|RequestBody|RequestHeader|CookieValue)\b|\bcall\.(?:parameters|receive)\b/,
+  js: /\b(?:req|request|ctx\.request|ctx)\.(?:body|query|params|headers|cookies|url|originalUrl|path)\b|\blocation\.(?:search|hash|href|pathname)\b|\bsearchParams\b|\bdocument\.(?:cookie|referrer|URL)\b|\b(?:event|e|evt|msg)\.data\b|\bwindow\.name\b|\bformData\b|\.files\b|\buserInput\b/,
+  py: /\bparams\s*\[\s*["']|\bparse_qsl?\s*\(|\bQUERY_STRING\b|\bquery_string\b|\brequest\.(?:args|form|json|data|values|files|GET|POST|body|query_params|path_params|cookies|headers|get_json)\b|\bself\.request\b|\bflask\.request\b/
 };
 function around2(content, lineStart, before, after) {
   let a = lineStart;
@@ -81490,7 +82164,8 @@ var insecureCodeScanner2 = {
     for (const file2 of ctx.files) {
       if (issues.length >= MAX_TOTAL14) break;
       const norm = file2.replace(/\\/g, "/");
-      if (SKIP_RE2.test(norm) || NOT_SHIPPED_RE4.test(norm)) continue;
+      const webRoot = /\.php$/i.test(norm) && /(^|\/)(?:www|public|htdocs)\//.test(norm);
+      if (SKIP_RE2.test(norm) || NOT_SHIPPED_RE4.test(norm) && !webRoot) continue;
       const lang = langOf2(norm);
       if (!lang) continue;
       const size = await ctx.fileSize?.(file2);
@@ -81502,6 +82177,7 @@ var insecureCodeScanner2 = {
       for (const hit of scanSource2(content, lang)) {
         if (issues.length >= MAX_TOTAL14 || perFile >= MAX_PER_FILE8) break;
         if (isTest && SKIP_IN_TEST2.has(hit.rule.id)) continue;
+        if (hit.rule.id === "ssrf" && lang === "js" && BROWSER_CODE_RE2.test(norm)) continue;
         perFile++;
         let ageDays = 0;
         try {

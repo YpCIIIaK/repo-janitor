@@ -1,5 +1,5 @@
 {
-  "overall": 0.765,
+  "overall": 0.677,
   "scanners": {
     "eol-runtime": 1,
     "todo-debt": 1,
@@ -9,10 +9,10 @@
     "workflow-security": 0.992,
     "duplicate-code": 0.946,
     "skipped-tests": 0.944,
+    "insecure-code": 0.083,
     "docs-drift": 1,
     "lockfile-drift": 0.938,
-    "dead-code": 0.645,
-    "insecure-code": 0.179,
+    "dead-code": 0.895,
     "dockerfile": 0.474,
     "leftover-debug": 0.429,
     "config-conflict": 1,
@@ -24,5 +24,5 @@
     "dependency-funeral": 0,
     "supply-chain": 1
   },
-  "lostTp": 26
+  "lostTp": 28
 }
