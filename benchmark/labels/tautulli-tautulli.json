@@ -1,4 +1,7 @@
 {
+ "insecure-py-eval-exec-lib/mako/codegen.py:115": "fp",
+ "insecure-py-eval-exec-lib/mako/codegen.py:116": "fp",
+ "insecure-py-eval-exec-lib/mako/codegen.py:130": "fp",
  "insecure-sql-interpolated-lib/typing_extensions.py:2421": "fp",
  "insecure-ssrf-plexpy/notifiers.py:3303": "fp"
 }

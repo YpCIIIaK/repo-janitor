@@ -4,5 +4,7 @@
  "docker-untagged-gcloud-firebase/Dockerfile:17": "fp",
  "docker-untagged-gcloud/Dockerfile:17": "fp",
  "docker-untagged-url-shortener-api/api/Dockerfile:14": "fp",
+ "insecure-sql-interpolated-sqlboiler/models/author.go:436": "fp",
+ "insecure-sql-interpolated-sqlboiler/models/post.go:478": "fp",
  "secret-private-key-https-tls/certs/ssl.key:1": "fp"
 }

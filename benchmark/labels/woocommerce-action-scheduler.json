@@ -1,4 +1,5 @@
 {
+ "insecure-php-unserialize-classes/ActionScheduler_ScheduleDeserializer.php:112": "fp",
  "insecure-sql-interpolated-classes/abstracts/ActionScheduler_Abstract_ListTable.php:450": "fp",
  "insecure-sql-interpolated-classes/abstracts/ActionScheduler_Abstract_ListTable.php:498": "fp"
 }

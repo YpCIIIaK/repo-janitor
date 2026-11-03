@@ -1,4 +1,5 @@
 {
+ "insecure-php-unserialize-app/core/Common.php:272": "fp",
  "insecure-ssrf-app/bootstrap.php:131": "fp",
  "insecure-ssrf-app/core/ProxyHttp.php:239": "fp",
  "insecure-ssrf-app/offline-service-worker.js:137": "fp",

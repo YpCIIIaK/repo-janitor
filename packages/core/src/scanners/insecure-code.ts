@@ -40,7 +40,7 @@ const SKIP_RE = /(^|\/)(?:node_modules|vendor|third_party|dist|build|out|\.next)
 const NOT_SHIPPED_RE =
   /(^|\/)(?:_?examples?|demos?|benchmarks?|bench|perf(?:-testing)?|performance|docs?|documentation|www|website|site|scripts?|tools?|[\w-]*_assets|static|_?vendor(?:ed)?|third_party|integration-?[tT]ests|test-utils|tooling|_tools|sphinx)\/|(^|\/)jquery[-.\d]*\.js$/i
 const TEST_RE =
-  /(^|\/)(?:__tests__|tests?|specs?|fixtures?)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test\.[cm]?[jt]s$|(?:^|\/)test_[^/]+\.py$|_test\.py$|(?:^|\/)conftest\.py$/i
+  /(^|\/)(?:__tests__|tests?|specs?|fixtures?)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test\.[cm]?[jt]s$|(?:^|\/)test_[^/]+\.py$|_test\.py$|(?:^|\/)conftest\.py$|_test\.go$|(?:Test|Tests|IT)\.(?:java|kt|cs|php)$|_spec\.rb$/i
 
 const MAX_PER_FILE = 6
 const MAX_TOTAL = 60
@@ -274,7 +274,7 @@ const PHP_JAVA_RULES: VulnRule[] = [
   {
     id: "eval-dynamic",
     lang: "php",
-    re: /\b(?:eval|assert|create_function)\s*\(\s*[^)'"\s]/g,
+    re: /\b(?:eval|create_function)\s*\(\s*[^)'"\s]/g,
     severity: "critical",
     title: "eval() on a non-literal value",
     detail: "`eval` runs whatever PHP it is given. If any part of it comes from a request, this is remote code execution.",
@@ -292,7 +292,7 @@ const PHP_JAVA_RULES: VulnRule[] = [
   {
     id: "php-unserialize",
     lang: "php",
-    re: /\bunserialize\s*\(\s*[^)'"\s]/g,
+    re: /(?<!function\s{1,4})\bunserialize\s*\(\s*[^)'"\s](?![^;\n]*allowed_classes)/g,
     severity: "warning",
     title: "unserialize() on a non-literal value",
     detail:
@@ -916,6 +916,33 @@ const FN_HEADER: Record<Lang, RegExp> = {
   cs: /(?:public|private|protected|internal|static|async|virtual|override)[\w<>\[\],.?\s]*\s(\w+)\s*\(([^)]*)\)\s*\{?\s*$/,
 }
 
+/** Sinks a caller's input can make dangerous through a parameter, by kind. */
+const CROSS_FILE_KIND: [RegExp, "sql" | "exec"][] = [
+  [/^insecure-sql-interpolated-/, "sql"],
+  [/^insecure-(?:exec-interpolated|py-os-system|py-shell-true|eval-dynamic|py-eval-exec|new-function)-/, "exec"],
+]
+
+/** Third-party code copied into a repo (Tautulli ships mako and cherrypy under lib/). */
+const VENDORED_SINK_RE = /(^|\/)(?:vendor|third_party|node_modules|lib\/(?:mako|cherrypy|jinja2|six|requests|urllib3))\//
+
+/** Does parameter `n` reach the sink text? For SQL it has to be pasted into the string. */
+function paramReaches(kind: "sql" | "exec", n: string, text: string): boolean {
+  if (kind === "exec") return new RegExp(`\\b${n}\\b`).test(text)
+  return new RegExp(
+    [
+      `\\{\\s*${n}\\b`, // f"…{n}" or $"…{n}"
+      `\\$\\{\\s*${n}\\b`, // `…${n}`
+      `#\\{\\s*${n}\\b`, // "…#{n}"
+      `\\$${n}\\b`, // "…$n" in PHP
+      `[+.]\\s*${n}\\b`, // "…" + n, "…" . $n
+      `\\b${n}\\s*[+.]`,
+      `%\\s*\\(?\\s*${n}\\b`, // "…%s" % n
+      `\\.format\\([^)]*\\b${n}\\b`,
+      `%[sv][^\\n]*,\\s*${n}\\b`, // Sprintf("…%s", n)
+    ].join("|"),
+  ).test(text)
+}
+
 /** Names too generic to link a call to one definition. */
 const GENERIC_FN = new Set([
   "get", "set", "run", "main", "init", "call", "send", "load", "save", "read", "write", "open", "close",
@@ -945,7 +972,7 @@ function enclosingFunction(lines: string[], lineNo: number, lang: Lang): { name:
     const groups = m.slice(1)
     const name = groups.find((g, k) => k % 2 === 0 && g) ?? ""
     const params = groups.find((g, k) => k % 2 === 1 && g !== undefined) ?? ""
-    if (!name || GENERIC_FN.has(name) || name.length < 4) return null
+    if (!name || GENERIC_FN.has(name.toLowerCase()) || name.length < 4) return null
     return { name, params: paramNames(params, lang) }
   }
   return null
@@ -964,6 +991,7 @@ function taintedCaller(sources: Source[], name: string, defFile: string, defLine
     for (let i = 0; i < src.lines.length; i++) {
       if (src.norm === defFile && Math.abs(i + 1 - defLine) < 80) continue
       if (!call.test(src.lines[i])) continue
+      if (TEST_RE.test(src.norm)) continue
       if (FN_HEADER[src.lang].test(src.lines[i])) continue
       const near = src.lines.slice(Math.max(0, i - TAINT_WINDOW), i + 3).join("\n")
       if (TAINT_RE[src.lang].test(near)) return `${src.norm}:${i + 1}`
@@ -1041,12 +1069,18 @@ export const insecureCodeScanner: Scanner = {
     }
 
     for (const p of pending) {
+      const kind = CROSS_FILE_KIND.find(([re]) => re.test(p.issue.id))?.[1]
+      if (!kind) continue
+      // Generated and vendored code is not the project's to fix.
+      if (VENDORED_SINK_RE.test(p.norm)) continue
+      if (/Code generated|DO NOT EDIT|@generated/.test(p.lines.slice(0, 8).join("\n"))) continue
       const fn = enclosingFunction(p.lines, p.line, p.lang)
       if (!fn || !fn.params.length) continue
       // The parameter has to reach the sink: on its line, or on the line that
       // builds the value the sink uses (`q = f"… {username}"` then `execute(q)`).
+      // For SQL it must be pasted into the text, not bound through a placeholder.
       const sinkText = p.lines.slice(Math.max(0, p.line - 3), p.line).join("\n")
-      if (!fn.params.some((n) => new RegExp(`\\b${n}\\b`).test(sinkText))) continue
+      if (!fn.params.some((n) => paramReaches(kind, n, sinkText))) continue
       const caller = taintedCaller(sources, fn.name, p.norm, p.line)
       if (!caller) continue
       p.issue.confidence = "high"

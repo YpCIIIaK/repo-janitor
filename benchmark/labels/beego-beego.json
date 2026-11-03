@@ -1,3 +1,5 @@
 {
- "dead-symbol-server/web/admin_controller.go:35": "fp"
+ "dead-symbol-server/web/admin_controller.go:35": "fp",
+ "insecure-sql-interpolated-client/orm/db.go:350": "fp",
+ "insecure-sql-interpolated-server/web/session/mysql/sess_mysql.go:182": "fp"
 }
