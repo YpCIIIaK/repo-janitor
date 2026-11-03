@@ -26863,7 +26863,7 @@ var require_lib4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-VR55GKDU.js
+// ../cli/dist/chunk-7NPFGOVU.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -45594,7 +45594,7 @@ function date4(params) {
 // ../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/external.js
 config(en_default());
 
-// ../cli/dist/chunk-VR55GKDU.js
+// ../cli/dist/chunk-7NPFGOVU.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -70214,6 +70214,18 @@ var DEFS = [
   { rule: "hygiene-no-tests", label: "No tests", test: /^hygiene-no-tests/ },
   { rule: "hygiene-no-ci", label: "No CI", test: /^hygiene-no-ci/ },
   { rule: "bloat", label: "Large or binary file in git", test: /^bloat-/ },
+  { rule: "iac-public-bucket", label: "Publicly readable storage bucket", test: /^iac-public-bucket-/ },
+  { rule: "iac-open-admin-port", label: "Admin/database port open to the internet", test: /^iac-open-admin-port-/ },
+  { rule: "iac-public-database", label: "Publicly accessible database", test: /^iac-public-database-/ },
+  { rule: "iac-unencrypted", label: "Encryption at rest switched off", test: /^iac-unencrypted-/ },
+  { rule: "iac-iam-wildcard", label: "IAM policy grants *:*", test: /^iac-iam-wildcard-/ },
+  { rule: "iac-hardcoded-password", label: "Password in infrastructure code", test: /^iac-hardcoded-password-/ },
+  { rule: "iac-privileged", label: "Privileged container", test: /^iac-privileged-/ },
+  { rule: "iac-host-namespace", label: "Container shares host network/PID", test: /^iac-host-namespace-/ },
+  { rule: "iac-docker-socket", label: "Docker socket mounted into a container", test: /^iac-docker-socket-/ },
+  { rule: "iac-privilege-escalation", label: "Container allows privilege escalation", test: /^iac-privilege-escalation-/ },
+  { rule: "iac-dangerous-capability", label: "Dangerous Linux capability added", test: /^iac-dangerous-capability-/ },
+  { rule: "iac-run-as-root", label: "Container configured to run as root", test: /^iac-run-as-root-/ },
   { rule: "docker-latest", label: "Base image uses :latest", test: /^docker-latest-/ },
   { rule: "docker-untagged", label: "Base image has no tag", test: /^docker-untagged-/ },
   { rule: "docker-root", label: "Container runs as root", test: /^docker-root-/ },
@@ -70263,6 +70275,15 @@ var RULE_PRECISION = {
   "hygiene-no-license": { tp: 6, fp: 0 },
   "hygiene-no-readme": { tp: 1, fp: 0 },
   "hygiene-no-tests": { tp: 5, fp: 1 },
+  "iac-docker-socket": { tp: 11, fp: 1 },
+  "iac-host-namespace": { tp: 8, fp: 4 },
+  "iac-open-admin-port": { tp: 12, fp: 0 },
+  "iac-privilege-escalation": { tp: 2, fp: 1 },
+  "iac-privileged": { tp: 7, fp: 3 },
+  "iac-public-bucket": { tp: 10, fp: 0 },
+  "iac-public-database": { tp: 1, fp: 0 },
+  "iac-run-as-root": { tp: 4, fp: 1 },
+  "iac-unencrypted": { tp: 2, fp: 0 },
   "insecure-eval-dynamic": { tp: 1, fp: 2 },
   "insecure-exec-interpolated": { tp: 2, fp: 10 },
   "insecure-go-template-html": { tp: 0, fp: 5 },
@@ -70826,14 +70847,22 @@ var todoDebtScanner = {
   category: "todo",
   run(ctx) {
     return __async(this, null, function* () {
+      var _a22;
       const issues = [];
       for (const file2 of ctx.files) {
         if (!SOURCE_RE.test(file2)) continue;
         if (/\.snap(\.[\w]+)*$|(^|\/)__snapshots__\//.test(file2.replace(/\\/g, "/"))) continue;
+        if (/(^|\/)(?:i18n|l10n|locales?|lang|languages|translations?)\//i.test(file2.replace(/\\/g, "/"))) continue;
+        if (/(^|\/)(?:vendor|vendored|third[-_]party|node_modules|bower_components|external|deps)\/|\.min\.[cm]?js$/i.test(file2.replace(/\\/g, "/"))) continue;
         const content = yield ctx.readFile(file2);
         if (!content) continue;
         const ast = parseFile(content, file2, { comments: true });
         const hits = ast ? collectFromAst(ast) : collectFromText(content);
+        if (hits.length > 30) {
+          const counts = /* @__PURE__ */ new Map();
+          for (const h3 of hits) counts.set(h3.text, ((_a22 = counts.get(h3.text)) != null ? _a22 : 0) + 1);
+          if (Math.max(...counts.values()) / hits.length > 0.8) continue;
+        }
         for (const hit of hits) {
           const ageDays = yield ctx.git.blameAgeDays(file2, hit.line);
           const summary = hit.text ? `: ${truncate(hit.text)}` : "";
@@ -74039,10 +74068,224 @@ var dockerfileScanner = {
     });
   }
 };
+var TF_RE = /\.tf$/i;
+var YAML_RE = /\.ya?ml$/i;
+var JSON_RE = /\.json$/i;
+var COMPOSE_RE = /(^|\/)(?:docker-)?compose(?:\.[\w-]+)?\.ya?ml$/i;
+var NOT_DEPLOYED_RE = /(^|\/)(?:[._]?examples?|samples?|demos?|guides?|tests?|testdata|test-fixtures|fixtures?|docs?|website|\.github|node_modules|vendor|dev|playwright|e2e|scripts|[\w-]*[_-]tests?|integration[_-]?tests?|test[-_]environments?)\//i;
+var DEV_COMPOSE_RE = /(^|\/)(?:docker-)?compose[.-](?:[\w.-]*[.-])?(?:ci|test|tests|dev|devel|development|local|override|example|e2e)[\w.-]*\.ya?ml$/i;
+var MAX_TOTAL5 = 60;
+var MAX_PER_FILE2 = 8;
+var ADMIN_PORTS = /* @__PURE__ */ new Set([22, 23, 3389, 5900, 3306, 5432, 1433, 1521, 27017, 6379, 11211, 9200, 9300, 2375, 2376, 5984, 8086]);
+var RULES = {
+  "public-bucket": {
+    id: "public-bucket",
+    severity: "critical",
+    title: "Storage bucket is publicly readable",
+    detail: "The bucket grants read (or write) access to everyone on the internet. Unless it hosts a public website on purpose, keep it private and serve files through signed URLs or a CDN with an origin access control."
+  },
+  "open-admin-port": {
+    id: "open-admin-port",
+    severity: "critical",
+    title: "Admin or database port open to the whole internet",
+    detail: "A security rule admits 0.0.0.0/0 on an SSH, RDP, database or cache port. Bots scan these ranges within minutes. Restrict the source to a VPN, a bastion or known address ranges."
+  },
+  "public-database": {
+    id: "public-database",
+    severity: "critical",
+    title: "Database instance is publicly accessible",
+    detail: "The managed database gets a public address. Keep it in private subnets and reach it through the application or a bastion."
+  },
+  unencrypted: {
+    id: "unencrypted",
+    severity: "warning",
+    title: "Encryption at rest is switched off",
+    detail: "Storage that holds data is explicitly left unencrypted. Turn encryption on (it is free on most providers and transparent to the application)."
+  },
+  "iam-wildcard": {
+    id: "iam-wildcard",
+    severity: "critical",
+    title: "IAM policy grants every action on every resource",
+    detail: "`Action: *` on `Resource: *` is full administrator access. Grant only the actions and resources the role needs; a leaked key for this role owns the whole account."
+  },
+  "hardcoded-password": {
+    id: "hardcoded-password",
+    severity: "critical",
+    title: "Password written into infrastructure code",
+    detail: "A password is a literal in the configuration, so it lives in git history and every state file. Read it from a secret store (AWS Secrets Manager, SSM, Vault) or a sensitive variable."
+  },
+  privileged: {
+    id: "privileged",
+    severity: "critical",
+    title: "Container runs privileged",
+    detail: "A privileged container has every capability and the host's devices: escaping it is trivial. Grant only the specific capabilities the workload needs."
+  },
+  "host-namespace": {
+    id: "host-namespace",
+    severity: "warning",
+    title: "Container shares the host's network or process namespace",
+    detail: "hostNetwork/hostPID/hostIPC (or `network_mode: host`) lets the container see and talk to everything on the node. Use regular pod networking unless the workload is a node agent that genuinely needs it."
+  },
+  "docker-socket": {
+    id: "docker-socket",
+    severity: "warning",
+    title: "Docker socket mounted into a container",
+    detail: "Access to /var/run/docker.sock is root on the host: the container can start a privileged container of its own. Mount it only into trusted infrastructure (a reverse proxy reading labels, a CI runner) and read-only."
+  },
+  "privilege-escalation": {
+    id: "privilege-escalation",
+    severity: "warning",
+    title: "Container allows privilege escalation",
+    detail: "`allowPrivilegeEscalation: true` lets a process gain more privileges than its parent (setuid binaries). Set it to false in the securityContext."
+  },
+  "dangerous-capability": {
+    id: "dangerous-capability",
+    severity: "warning",
+    title: "Container adds a dangerous Linux capability",
+    detail: "SYS_ADMIN, NET_ADMIN, SYS_PTRACE or ALL each give a container enough power to break out of it or spy on the host. Drop ALL and add back only what is needed."
+  },
+  "run-as-root": {
+    id: "run-as-root",
+    severity: "info",
+    title: "Container is configured to run as root",
+    detail: "`runAsUser: 0` (or `runAsNonRoot: false`) runs the workload as root. Pick a non-zero user id."
+  }
+};
+var near = (lines, i, before, after) => lines.slice(Math.max(0, i - before), i + after + 1).join("\n");
+function portsIn(block) {
+  const from = block.match(/\b(?:from_port|FromPort)\b["']?\s*[:=]\s*["']?(-?\d+)/);
+  const to2 = block.match(/\b(?:to_port|ToPort)\b["']?\s*[:=]\s*["']?(-?\d+)/);
+  if (!from) return null;
+  const f3 = Number(from[1]);
+  return { from: f3, to: to2 ? Number(to2[1]) : f3 };
+}
+function ruleBlock(lines, i) {
+  const indent = (l3) => l3.length - l3.trimStart().length;
+  let start = i;
+  for (let k2 = i; k2 >= Math.max(0, i - 12); k2--) {
+    if (/^\s*-\s/.test(lines[k2]) || /\{\s*$/.test(lines[k2])) {
+      start = k2;
+      break;
+    }
+  }
+  let end = i;
+  const base = indent(lines[start]);
+  for (let k2 = i + 1; k2 < Math.min(lines.length, i + 12); k2++) {
+    const l3 = lines[k2];
+    if (!l3.trim()) continue;
+    if (/^\s*-\s/.test(l3) && indent(l3) <= base) break;
+    if (/^\s*\}/.test(l3)) break;
+    if (indent(l3) < base) break;
+    end = k2;
+  }
+  return lines.slice(start, end + 1).join("\n");
+}
+function opensAdminPort(block) {
+  if (/\bprotocol\b["']?\s*[:=]\s*["']?(?:-1|all)\b/i.test(block) && !portsIn(block)) return true;
+  const p2 = portsIn(block);
+  if (!p2) return false;
+  if (p2.from <= 0 && (p2.to <= 0 || p2.to >= 65535)) return true;
+  for (const port of ADMIN_PORTS) if (port >= p2.from && port <= p2.to) return true;
+  return false;
+}
+function cloudHits(lines, isTerraform) {
+  const hits = [];
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const t2 = line.trim();
+    if (/^(?:#|\/\/)/.test(t2)) continue;
+    const push = (id) => hits.push({ rule: RULES[id], line: i + 1, evidence: t2.slice(0, 160) });
+    if (/\bacl\b\s*=\s*"public-read(?:-write)?"|AccessControl["']?\s*:\s*["']?PublicRead(?:Write)?\b/.test(line)) push("public-bucket");
+    else if (/\b(?:block_public_acls|block_public_policy|restrict_public_buckets|ignore_public_acls)\s*=\s*false\b|\b(?:BlockPublicAcls|BlockPublicPolicy|RestrictPublicBuckets)["']?\s*:\s*["']?false\b/.test(line)) push("public-bucket");
+    else if (/(?:"|\b)(?:0\.0\.0\.0\/0|::\/0)"/.test(line) || /CidrIp(?:v6)?["']?\s*:\s*["']?(?:0\.0\.0\.0\/0|::\/0)/.test(line)) {
+      const block = ruleBlock(lines, i);
+      const egress = /\begress\b|SecurityGroupEgress|type\s*=\s*"egress"/.test(near(lines, i, 6, 2)) && !/\bingress\b|SecurityGroupIngress/.test(near(lines, i, 6, 2));
+      const nacl = /\brule_number\b|RuleNumber|network_acl|acl_(?:in|e)gress/i.test(block + near(lines, i, 15, 0));
+      if (!egress && !nacl && opensAdminPort(block)) push("open-admin-port");
+    } else if (/\bpublicly_accessible\s*=\s*true\b|PubliclyAccessible["']?\s*:\s*["']?true\b/.test(line)) push("public-database");
+    else if (/\b(?:encrypted|storage_encrypted|encrypt_at_rest|enable_encryption)\s*=\s*false\b|\b(?:Encrypted|StorageEncrypted|KmsEncrypted)["']?\s*:\s*["']?(?:false|False|FALSE)\b/.test(line)) push("unencrypted");
+    else if (/["']?Action["']?\s*:\s*\[?\s*["']\*["']|\bactions\s*=\s*\[\s*"\*"\s*\]/.test(line)) {
+      const block = near(lines, i, 6, 6);
+      const allResources = /["']?Resource["']?\s*:\s*\[?\s*["']\*["']|\bresources\s*=\s*\[\s*"\*"\s*\]/.test(block);
+      const deny = /["']?Effect["']?\s*:\s*["']?Deny|\beffect\s*=\s*"Deny"/.test(block);
+      if (allResources && !deny) push("iam-wildcard");
+    } else if (isTerraform && /^\s*(?:password|master_password|admin_password|db_password|root_password)\s*=\s*"[^"$]{6,}"/.test(line) && !/"(?:changeme|password|example|xxx+|placeholder|<[^>]*>)"/i.test(line)) push("hardcoded-password");
+  }
+  return hits;
+}
+function containerHits(lines, compose) {
+  const hits = [];
+  const nodeAgent = /^\s*kind:\s*DaemonSet\b/m.test(lines.join("\n"));
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const t2 = line.trim();
+    if (t2.startsWith("#")) continue;
+    const push = (id) => hits.push({ rule: RULES[id], line: i + 1, evidence: t2.slice(0, 160) });
+    if (/\{\{-?\s*(?:if|with)\b/.test(near(lines, i, 2, 0))) continue;
+    if (/^\s*privileged:\s*true\b/.test(line)) {
+      if (!nodeAgent) push("privileged");
+    } else if (/^\s*host(?:Network|PID|IPC):\s*true\b/.test(line) || compose && /^\s*(?:network_mode|pid|ipc):\s*["']?host\b/.test(line)) {
+      if (!nodeAgent) push("host-namespace");
+    } else if (/\/var\/run\/docker\.sock/.test(line) && !/[:,]ro\b|readOnly:\s*true/.test(near(lines, i, 0, 3))) push("docker-socket");
+    else if (/^\s*allowPrivilegeEscalation:\s*true\b/.test(line)) push("privilege-escalation");
+    else if (/^\s*(?:-\s*)?["']?(?:SYS_ADMIN|NET_ADMIN|SYS_PTRACE|SYS_MODULE|ALL)["']?\s*$/.test(line) && /\badd:|cap_add:/.test(near(lines, i, 4, 0)) && !/\bdrop:/.test(near(lines, i, 1, 0))) push("dangerous-capability");
+    else if (/^\s*runAsUser:\s*0\b|^\s*runAsNonRoot:\s*false\b|^\s*user:\s*["']?(?:root|0)(?::0)?["']?\s*$/.test(line)) push("run-as-root");
+  }
+  return hits;
+}
+function isKubernetes(content) {
+  return /^\s*apiVersion:\s*\S+/m.test(content) && /^\s*kind:\s*\S+/m.test(content);
+}
+function isCloudFormation(content) {
+  return /AWSTemplateFormatVersion|["']?Type["']?\s*:\s*["']?AWS::/.test(content);
+}
+var iacSecurityScanner = {
+  id: "iac-security",
+  category: "security",
+  run(ctx) {
+    return __async(this, null, function* () {
+      const issues = [];
+      for (const file2 of ctx.files) {
+        if (issues.length >= MAX_TOTAL5) break;
+        const norm = file2.replace(/\\/g, "/");
+        if (NOT_DEPLOYED_RE.test(norm) || DEV_COMPOSE_RE.test(norm)) continue;
+        if (/(^|\/)variables\.tf$/i.test(norm)) continue;
+        const tf = TF_RE.test(norm);
+        const yaml = YAML_RE.test(norm);
+        const json2 = JSON_RE.test(norm);
+        if (!tf && !yaml && !json2) continue;
+        if (json2 && /(^|\/)(?:package|tsconfig|composer|\.?eslintrc|renovate|turbo|lerna)[\w.-]*\.json$/i.test(norm)) continue;
+        const content = yield ctx.readFile(file2);
+        if (!content || content.length > 512 * 1024) continue;
+        const lines = content.split(/\r?\n/);
+        let hits = [];
+        if (tf) hits = cloudHits(lines, true);
+        else if (isCloudFormation(content)) hits = cloudHits(lines, false);
+        else if (yaml && COMPOSE_RE.test(norm)) hits = containerHits(lines, true);
+        else if (yaml && (isKubernetes(content) || /(^|\/)templates\//.test(norm))) hits = containerHits(lines, false);
+        else continue;
+        for (const hit of hits.slice(0, MAX_PER_FILE2)) {
+          if (issues.length >= MAX_TOTAL5) break;
+          issues.push({
+            id: `iac-${hit.rule.id}-${norm}:${hit.line}`,
+            category: "security",
+            severity: hit.rule.severity,
+            title: hit.rule.title,
+            location: `${norm}:${hit.line}`,
+            ageDays: 0,
+            detail: hit.rule.detail,
+            evidence: hit.rule.id === "hardcoded-password" ? hit.evidence.replace(/"[^"]*"/, '"\u2022\u2022\u2022\u2022\u2022\u2022"') : hit.evidence
+          });
+        }
+      }
+      return issues;
+    });
+  }
+};
 var SOURCE_RE6 = /\.(ts|tsx|js|jsx|mjs|mts|cts|py)$/;
 var JS_RE = /\.(ts|tsx|js|jsx|mjs|mts|cts)$/;
-var MAX_PER_FILE2 = 10;
-var MAX_TOTAL5 = 60;
+var MAX_PER_FILE3 = 10;
+var MAX_TOTAL6 = 60;
 var HOSTS = /* @__PURE__ */ new Set(["describe", "it", "test", "context", "suite"]);
 function jsHit(node) {
   var _a22, _b, _c;
@@ -74097,7 +74340,7 @@ var skippedTestsScanner = {
       var _a22;
       const issues = [];
       for (const file2 of ctx.files) {
-        if (issues.length >= MAX_TOTAL5) break;
+        if (issues.length >= MAX_TOTAL6) break;
         const norm = file2.replace(/\\/g, "/");
         if (!SOURCE_RE6.test(norm) || norm.includes(".min.")) continue;
         if (/(^|\/)fixtures?\//i.test(norm)) continue;
@@ -74110,7 +74353,7 @@ var skippedTestsScanner = {
           const ast = parseFile(content, file2);
           if (ast) {
             walk(ast, (n) => {
-              if (byLine.size >= MAX_PER_FILE2) return;
+              if (byLine.size >= MAX_PER_FILE3) return;
               const hit = jsHit(n);
               if (!hit) return;
               const line = lineOf4(n);
@@ -74125,7 +74368,7 @@ var skippedTestsScanner = {
         const lines = content.split(/\r?\n/);
         let perFile = 0;
         for (const [lineNo, hit] of [...byLine.entries()].sort((a, b3) => a[0] - b3[0])) {
-          if (perFile >= MAX_PER_FILE2 || issues.length >= MAX_TOTAL5) break;
+          if (perFile >= MAX_PER_FILE3 || issues.length >= MAX_TOTAL6) break;
           const focused = hit.severity === "warning";
           issues.push({
             id: `skiptest-${norm}:${lineNo}`,
@@ -74146,15 +74389,15 @@ var skippedTestsScanner = {
 };
 function collectByRegex(content, rules, byLine) {
   const lines = content.split(/\r?\n/);
-  for (let i = 0; i < lines.length && byLine.size < MAX_PER_FILE2; i++) {
+  for (let i = 0; i < lines.length && byLine.size < MAX_PER_FILE3; i++) {
     const rule = rules.find((r2) => r2.re.test(lines[i]));
     if (rule && !byLine.has(i + 1)) byLine.set(i + 1, { severity: rule.severity, label: rule.label });
   }
 }
 var SOURCE_RE7 = /\.(ts|tsx|js|jsx|mjs|mts|cts|java|c|cc|cpp|h|hpp|cs|go|rs|swift|kt|scala|php)$/;
 var MIN_RUN = 3;
-var MAX_PER_FILE3 = 5;
-var MAX_TOTAL6 = 40;
+var MAX_PER_FILE4 = 5;
+var MAX_TOTAL7 = 40;
 var SKIP_PREFIX = /^(?:!|\/|@|eslint|prettier|ts-|tslint|biome|c8|istanbul|prettier-ignore|todo\b|fixme\b|note\b|hack\b|xxx\b|https?:|www\.|copyright|spdx|licen[sc]e)/i;
 var PROSE_TAIL = /[.:?!]\s*$/;
 var CODE_SIGNAL = /[;{},)]\s*$|=>|(?:^|[^=!<>])=(?:[^=]|$)|^[)}\]]/;
@@ -74178,14 +74421,14 @@ function looksLikeCode(body) {
 var NOT_PRODUCT_RE = /(^|\/)(?:flow-typed|_?examples?|samples?|bench(?:mark)?s?|website|www|docs?|lang(?:uage)?s?|locales?|i18n|assets|legacy)\/|\.config\.[cm]?[jt]s$|\.d\.[cm]?ts$|(^|\/)example_[^/]*_test\.go$/i;
 function introducesExample(lines, start, len) {
   var _a22;
-  const near = [];
+  const near22 = [];
   for (let i = start - 1; i >= Math.max(0, start - 6); i--) {
     const b3 = commentBody(lines[i]);
     if (b3 === null) break;
-    near.push(b3);
+    near22.push(b3);
   }
-  for (let i = start; i < start + len + 2 && i < lines.length; i++) near.push((_a22 = commentBody(lines[i])) != null ? _a22 : "");
-  return near.some((b3) => /```|\ba la\b|\be\.g\.|\bexample\b|like this|looks like|\bsyntax\b|\bformat\b|should be uncommented/i.test(b3));
+  for (let i = start; i < start + len + 2 && i < lines.length; i++) near22.push((_a22 = commentBody(lines[i])) != null ? _a22 : "");
+  return near22.some((b3) => /```|\ba la\b|\be\.g\.|\bexample\b|like this|looks like|\bsyntax\b|\bformat\b|should be uncommented/i.test(b3));
 }
 var commentedCodeScanner = {
   id: "commented-code",
@@ -74194,7 +74437,7 @@ var commentedCodeScanner = {
     return __async(this, null, function* () {
       const issues = [];
       for (const file2 of ctx.files) {
-        if (issues.length >= MAX_TOTAL6) break;
+        if (issues.length >= MAX_TOTAL7) break;
         const norm = file2.replace(/\\/g, "/");
         if (!SOURCE_RE7.test(norm) || norm.includes(".min.")) continue;
         if (/(^|\/)(?:vendor|third_party|node_modules)\//.test(norm)) continue;
@@ -74214,7 +74457,7 @@ var commentedCodeScanner = {
             /:\s*$/.test((_d = commentBody((_c = lines[runStart - 1]) != null ? _c : "")) != null ? _d : "") || /:\s*$/.test((_f = commentBody((_e2 = lines[runStart - 2]) != null ? _e2 : "")) != null ? _f : "") || // The prose around it presents it: "a la ```…```", "looks like", "e.g.".
             introducesExample(lines, runStart, runLen) || run.some((l3) => /::=/.test(l3))
           );
-          if (!docExample && runLen >= MIN_RUN && perFile < MAX_PER_FILE3 && issues.length < MAX_TOTAL6) {
+          if (!docExample && runLen >= MIN_RUN && perFile < MAX_PER_FILE4 && issues.length < MAX_TOTAL7) {
             const lineNo = runStart + 1;
             issues.push({
               id: `commented-${norm}:${lineNo}`,
@@ -74256,8 +74499,8 @@ var CS_RE = /\.(?:cs|cshtml)$/i;
 var SKIP_RE = /(^|\/)(?:node_modules|vendor|third_party|dist|build|out|\.next)\/|\.min\.[cm]?js$/i;
 var NOT_SHIPPED_RE2 = /(^|\/)(?:_?examples?|demos?|benchmarks?|bench|perf(?:-testing)?|performance|docs?|documentation|www|website|site|scripts?|tools?|[\w-]*_assets|static|_?vendor(?:ed)?|third_party|integration-?[tT]ests|test-utils|tooling|_tools|sphinx)\/|(^|\/)jquery[-.\d]*\.js$/i;
 var TEST_RE3 = /(^|\/)(?:__tests__|tests?|specs?|fixtures?)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test\.[cm]?[jt]s$|(?:^|\/)test_[^/]+\.py$|_test\.py$|(?:^|\/)conftest\.py$|_test\.go$|(?:Test|Tests|IT)\.(?:java|kt|cs|php)$|_spec\.rb$/i;
-var MAX_PER_FILE4 = 6;
-var MAX_TOTAL7 = 60;
+var MAX_PER_FILE5 = 6;
+var MAX_TOTAL8 = 60;
 var MAX_BYTES2 = 4e5;
 var PHP_JAVA_RULES = [
   // --- Python SQL (VAmPI: f"SELECT … '{username}'") ---------------------------
@@ -74490,7 +74733,7 @@ var PHP_JAVA_RULES = [
     detail: "Native Java deserialisation of untrusted bytes is a classic remote-code-execution path (gadget chains). Use a data format such as JSON, or an allow-list `ObjectInputFilter`."
   }
 ];
-var RULES = [
+var RULES2 = [
   // ---- JavaScript / TypeScript -------------------------------------------
   {
     id: "eval-dynamic",
@@ -74784,7 +75027,7 @@ function scanSource(content, lang) {
     }
   }
   const byLine = /* @__PURE__ */ new Map();
-  for (const rule of RULES) {
+  for (const rule of RULES2) {
     if (rule.lang !== lang) continue;
     rule.re.lastIndex = 0;
     for (const m2 of content.matchAll(rule.re)) {
@@ -74881,9 +75124,9 @@ function contextAllows(ruleId, content, lineStart) {
     return !/\bcompile\s*\(/.test(around(content, lineStart, 3, 0));
   }
   if (ruleId === "react-dangerous-html") {
-    const near = around(content, lineStart, 0, 3);
-    const html = near.match(/__html\s*:\s*([`'"])/);
-    if (html && !/\$\{/.test(near)) return false;
+    const near22 = around(content, lineStart, 0, 3);
+    const html = near22.match(/__html\s*:\s*([`'"])/);
+    if (html && !/\$\{/.test(near22)) return false;
   }
   return true;
 }
@@ -75001,8 +75244,8 @@ function taintedCaller(sources, name, defFile, defLine) {
       if (!call.test(src.lines[i])) continue;
       if (TEST_RE3.test(src.norm)) continue;
       if (FN_HEADER[src.lang].test(src.lines[i])) continue;
-      const near = src.lines.slice(Math.max(0, i - TAINT_WINDOW), i + 3).join("\n");
-      if (TAINT_RE[src.lang].test(near)) return `${src.norm}:${i + 1}`;
+      const near22 = src.lines.slice(Math.max(0, i - TAINT_WINDOW), i + 3).join("\n");
+      if (TAINT_RE[src.lang].test(near22)) return `${src.norm}:${i + 1}`;
     }
   }
   return null;
@@ -75017,7 +75260,7 @@ var insecureCodeScanner = {
       const sources = [];
       const pending = [];
       for (const file2 of ctx.files) {
-        if (issues.length >= MAX_TOTAL7) break;
+        if (issues.length >= MAX_TOTAL8) break;
         const norm = file2.replace(/\\/g, "/");
         const webRoot = /\.php$/i.test(norm) && /(^|\/)(?:www|public|htdocs)\//.test(norm);
         if (SKIP_RE.test(norm) || NOT_SHIPPED_RE2.test(norm) && !webRoot) continue;
@@ -75032,7 +75275,7 @@ var insecureCodeScanner = {
         if (!isTest && TAINT_RE[lang].test(content)) sources.push({ norm, lang, lines });
         let perFile = 0;
         for (const hit of scanSource(content, lang)) {
-          if (issues.length >= MAX_TOTAL7 || perFile >= MAX_PER_FILE4) break;
+          if (issues.length >= MAX_TOTAL8 || perFile >= MAX_PER_FILE5) break;
           if (isTest && SKIP_IN_TEST.has(hit.rule.id)) continue;
           if (hit.rule.id === "ssrf" && lang === "js" && BROWSER_CODE_RE.test(norm)) continue;
           perFile++;
@@ -75420,7 +75663,7 @@ function everyJobHasPermissions(lines) {
   }
   return jobs > 0 && withPerms === jobs;
 }
-var RULES2 = {
+var RULES3 = {
   "pr-target-checkout": {
     severity: "critical",
     title: () => "pull_request_target checks out the pull request's own code",
@@ -75475,7 +75718,7 @@ var workflowSecurityScanner = {
         if (!content) continue;
         for (const finding of scanWorkflow(content)) {
           if (issues.length >= MAX_ISSUES2) break;
-          const rule = RULES2[finding.rule];
+          const rule = RULES3[finding.rule];
           if (!rule) continue;
           let ageDays = 0;
           try {
@@ -77065,6 +77308,7 @@ var defaultScanners = [
   busFactorScanner,
   repoBloatScanner,
   dockerfileScanner,
+  iacSecurityScanner,
   skippedTestsScanner,
   commentedCodeScanner,
   insecureCodeScanner,
@@ -77913,6 +78157,18 @@ var DEFS2 = [
   { rule: "hygiene-no-tests", label: "No tests", test: /^hygiene-no-tests/ },
   { rule: "hygiene-no-ci", label: "No CI", test: /^hygiene-no-ci/ },
   { rule: "bloat", label: "Large or binary file in git", test: /^bloat-/ },
+  { rule: "iac-public-bucket", label: "Publicly readable storage bucket", test: /^iac-public-bucket-/ },
+  { rule: "iac-open-admin-port", label: "Admin/database port open to the internet", test: /^iac-open-admin-port-/ },
+  { rule: "iac-public-database", label: "Publicly accessible database", test: /^iac-public-database-/ },
+  { rule: "iac-unencrypted", label: "Encryption at rest switched off", test: /^iac-unencrypted-/ },
+  { rule: "iac-iam-wildcard", label: "IAM policy grants *:*", test: /^iac-iam-wildcard-/ },
+  { rule: "iac-hardcoded-password", label: "Password in infrastructure code", test: /^iac-hardcoded-password-/ },
+  { rule: "iac-privileged", label: "Privileged container", test: /^iac-privileged-/ },
+  { rule: "iac-host-namespace", label: "Container shares host network/PID", test: /^iac-host-namespace-/ },
+  { rule: "iac-docker-socket", label: "Docker socket mounted into a container", test: /^iac-docker-socket-/ },
+  { rule: "iac-privilege-escalation", label: "Container allows privilege escalation", test: /^iac-privilege-escalation-/ },
+  { rule: "iac-dangerous-capability", label: "Dangerous Linux capability added", test: /^iac-dangerous-capability-/ },
+  { rule: "iac-run-as-root", label: "Container configured to run as root", test: /^iac-run-as-root-/ },
   { rule: "docker-latest", label: "Base image uses :latest", test: /^docker-latest-/ },
   { rule: "docker-untagged", label: "Base image has no tag", test: /^docker-untagged-/ },
   { rule: "docker-root", label: "Container runs as root", test: /^docker-root-/ },
@@ -78378,10 +78634,17 @@ var todoDebtScanner2 = {
     for (const file2 of ctx.files) {
       if (!SOURCE_RE8.test(file2)) continue;
       if (/\.snap(\.[\w]+)*$|(^|\/)__snapshots__\//.test(file2.replace(/\\/g, "/"))) continue;
+      if (/(^|\/)(?:i18n|l10n|locales?|lang|languages|translations?)\//i.test(file2.replace(/\\/g, "/"))) continue;
+      if (/(^|\/)(?:vendor|vendored|third[-_]party|node_modules|bower_components|external|deps)\/|\.min\.[cm]?js$/i.test(file2.replace(/\\/g, "/"))) continue;
       const content = await ctx.readFile(file2);
       if (!content) continue;
       const ast = parseFile2(content, file2, { comments: true });
       const hits = ast ? collectFromAst2(ast) : collectFromText2(content);
+      if (hits.length > 30) {
+        const counts = /* @__PURE__ */ new Map();
+        for (const h3 of hits) counts.set(h3.text, (counts.get(h3.text) ?? 0) + 1);
+        if (Math.max(...counts.values()) / hits.length > 0.8) continue;
+      }
       for (const hit of hits) {
         const ageDays = await ctx.git.blameAgeDays(file2, hit.line);
         const summary = hit.text ? `: ${truncate2(hit.text)}` : "";
@@ -80366,8 +80629,8 @@ var TEST_RE6 = /(^|\/)(?:__tests__|tests?|specs?|e2e)\/|\.(?:test|spec)\.[cm]?[j
 var EXAMPLE_RE2 = /(^|\/)examples?\/|(?:^|\/)example\.[cm]?[jt]sx?$/i;
 var TOOLING_RE2 = /(^|\/)(?:_examples|[\w-]+-tests|dockers?|jakelib|dev|bench(?:mark)?s?|perf(?:ormance)?|__performance_tests__|www|static|demos?|cli|devtools|docs_src|extras|assets|support|test_files|\.github|internal|scripts?|bin|tools?|[\w-]*_assets|sandbox|playgrounds?|fixtures?|__fixtures__|docs?)\/|\.test-d\.tsx?$|\.d\.ts$|(^|\/)build\.rs$|[-_.]bin\.[cm]?[jt]s$|(^|\/)test\.[cm]?[jt]s$|^[^/]+\.[cm]?js$|(^|\/)log(?:ger|ging)?\.[cm]?[jt]s$|(^|\/)play(?:ground)?\.[cm]?[jt]sx?$/i;
 var DEBUG_METHODS2 = /* @__PURE__ */ new Set(["log", "debug", "trace", "dir", "table"]);
-var MAX_PER_FILE5 = 8;
-var MAX_TOTAL8 = 50;
+var MAX_PER_FILE6 = 8;
+var MAX_TOTAL9 = 50;
 var ENTRY_SRC_EXTS2 = ["ts", "tsx", "mts", "cts", "js", "jsx", "mjs", "cjs"];
 function joinPath3(dir, rel) {
   const parts = `${dir}/${rel}`.split("/");
@@ -80532,7 +80795,7 @@ var leftoverDebugScanner2 = {
     const entrypoints = await collectEntrypoints2(ctx);
     const internalDirs = await privateWorkspaceDirs2(ctx);
     for (const file2 of ctx.files) {
-      if (issues.length >= MAX_TOTAL8) break;
+      if (issues.length >= MAX_TOTAL9) break;
       const norm = file2.replace(/\\/g, "/");
       if (TEST_RE6.test(norm) || EXAMPLE_RE2.test(norm) || TOOLING_RE2.test(norm)) continue;
       if (internalDirs.some((d2) => norm.startsWith(d2))) continue;
@@ -80550,7 +80813,7 @@ var leftoverDebugScanner2 = {
         let perFile = 0;
         const found = [];
         walk2(ast, (n) => {
-          if (perFile >= MAX_PER_FILE5) return;
+          if (perFile >= MAX_PER_FILE6) return;
           const label = debugLabel2(n);
           if (!label) return;
           if (isEntrypoint && label !== "debugger") return;
@@ -80559,7 +80822,7 @@ var leftoverDebugScanner2 = {
           perFile++;
         });
         for (const { line, label } of found) {
-          if (issues.length >= MAX_TOTAL8) break;
+          if (issues.length >= MAX_TOTAL9) break;
           issues.push({
             id: `debug-${norm}:${line}`,
             category: "hygiene",
@@ -80575,7 +80838,7 @@ var leftoverDebugScanner2 = {
         let perFile = 0;
         for (const hit of scanRegexDebug2(content, lang)) {
           if (hit.severity !== "warning") continue;
-          if (issues.length >= MAX_TOTAL8 || perFile >= MAX_PER_FILE5) break;
+          if (issues.length >= MAX_TOTAL9 || perFile >= MAX_PER_FILE6) break;
           issues.push({
             id: `debug-${norm}:${hit.line}`,
             category: "hygiene",
@@ -80597,7 +80860,7 @@ var leftoverDebugScanner2 = {
 // ../core/src/scanners/broken-doc-links.ts
 var MD_RE3 = /\.(md|mdx|markdown)$/i;
 var LINK_RE2 = /!?\[[^\]]*\]\(([^)]+)\)/g;
-var MAX_TOTAL9 = 50;
+var MAX_TOTAL10 = 50;
 function dirOf3(path) {
   const i = path.lastIndexOf("/");
   return i === -1 ? "" : path.slice(0, i);
@@ -80662,7 +80925,7 @@ var brokenDocLinksScanner2 = {
     }
     const issues = [];
     for (const file2 of ctx.files) {
-      if (issues.length >= MAX_TOTAL9) break;
+      if (issues.length >= MAX_TOTAL10) break;
       const norm = file2.replace(/\\/g, "/");
       if (!MD_RE3.test(norm)) continue;
       if (/(^|\/)(?:testdata|fixtures?|__fixtures__)\/|(^|\/)docs?\/[a-z]{2}(?:-[A-Za-z]{2,4})?\//.test(norm)) continue;
@@ -80674,7 +80937,7 @@ var brokenDocLinksScanner2 = {
       LINK_RE2.lastIndex = 0;
       let m2;
       while ((m2 = LINK_RE2.exec(text)) !== null) {
-        if (issues.length >= MAX_TOTAL9) break;
+        if (issues.length >= MAX_TOTAL10) break;
         let target = m2[1].trim().split(/\s+/)[0].replace(/^<|>$/g, "");
         target = target.split("#")[0].split("?")[0];
         if (!isLocalRelative2(target)) continue;
@@ -80713,7 +80976,7 @@ var brokenDocLinksScanner2 = {
 var SOURCE_RE11 = /\.(ts|tsx|js|jsx|mjs|mts|cts|py|go|rs|java|rb|php|c|cc|cpp|h|hpp|cs|kt|swift|scala)$/;
 var STALE_DAYS6 = 365;
 var LOW_STAKES_RE2 = /(^|\/)(?:__tests__|tests?|spec|e2e|testdata|fixtures?|__fixtures__|examples?|playgrounds?|sandbox|bench(?:mark)?s?|docs?|scripts?|bin)\/|(^|\/)[^/]*(?:\.(?:test|spec|test-d|config|conf)\.[^/]+|_test\.\w+|_spec\.rb)$|(^|\/)test[^/]*\.\w+$|(^|\/)(?:conftest|setup|noxfile|gulpfile|gruntfile|karma\.conf)\.\w+$|(^|\/)__init__\.py$|\.d\.[cm]?ts$|(^|\/)(?:language|languages|locales?|i18n|lang|translations?)\//i;
-var MAX_TOTAL10 = 30;
+var MAX_TOTAL11 = 30;
 function years2(days) {
   if (days >= 365) {
     const y2 = Math.floor(days / 365);
@@ -80732,7 +80995,7 @@ var busFactorScanner2 = {
     const candidates = Object.entries(ownership).filter(([path, info]) => {
       const norm = path.replace(/\\/g, "/");
       return tracked.has(norm) && SOURCE_RE11.test(norm) && !LOW_STAKES_RE2.test(norm) && info.authors === 1 && info.ageDays >= STALE_DAYS6;
-    }).sort((a, b3) => b3[1].ageDays - a[1].ageDays).slice(0, MAX_TOTAL10);
+    }).sort((a, b3) => b3[1].ageDays - a[1].ageDays).slice(0, MAX_TOTAL11);
     return candidates.map(([path, info]) => {
       const norm = path.replace(/\\/g, "/");
       return {
@@ -81359,7 +81622,7 @@ var repoBloatScanner2 = {
 
 // ../core/src/scanners/dockerfile.ts
 var DOCKERFILE_RE2 = /(^|\/)Dockerfile(\.[\w.-]+)?$|\.dockerfile$/i;
-var MAX_TOTAL11 = 40;
+var MAX_TOTAL12 = 40;
 function tagOf2(image) {
   const lastSeg = image.split("/").pop() ?? image;
   const colon = lastSeg.lastIndexOf(":");
@@ -81373,7 +81636,7 @@ var dockerfileScanner2 = {
   async run(ctx) {
     const issues = [];
     for (const file2 of ctx.files) {
-      if (issues.length >= MAX_TOTAL11) break;
+      if (issues.length >= MAX_TOTAL12) break;
       const norm = file2.replace(/\\/g, "/");
       if (!DOCKERFILE_RE2.test(norm)) continue;
       if (THROWAWAY_IMAGE_RE2.test(norm)) continue;
@@ -81385,7 +81648,7 @@ var dockerfileScanner2 = {
       let hasNonRootUser = false;
       let sawFrom = false;
       for (let i = 0; i < lines.length; i++) {
-        if (issues.length >= MAX_TOTAL11) break;
+        if (issues.length >= MAX_TOTAL12) break;
         const line = lines[i];
         if (/^\s*#/.test(line)) continue;
         const lineNo = i + 1;
@@ -81448,7 +81711,7 @@ var dockerfileScanner2 = {
           });
         }
       }
-      if (sawFrom && !hasNonRootUser && !notAService && issues.length < MAX_TOTAL11) {
+      if (sawFrom && !hasNonRootUser && !notAService && issues.length < MAX_TOTAL12) {
         issues.push({
           id: `docker-root-${norm}`,
           category: "hygiene",
@@ -81464,11 +81727,225 @@ var dockerfileScanner2 = {
   }
 };
 
+// ../core/src/scanners/iac-security.ts
+var TF_RE2 = /\.tf$/i;
+var YAML_RE2 = /\.ya?ml$/i;
+var JSON_RE2 = /\.json$/i;
+var COMPOSE_RE2 = /(^|\/)(?:docker-)?compose(?:\.[\w-]+)?\.ya?ml$/i;
+var NOT_DEPLOYED_RE2 = /(^|\/)(?:[._]?examples?|samples?|demos?|guides?|tests?|testdata|test-fixtures|fixtures?|docs?|website|\.github|node_modules|vendor|dev|playwright|e2e|scripts|[\w-]*[_-]tests?|integration[_-]?tests?|test[-_]environments?)\//i;
+var DEV_COMPOSE_RE2 = /(^|\/)(?:docker-)?compose[.-](?:[\w.-]*[.-])?(?:ci|test|tests|dev|devel|development|local|override|example|e2e)[\w.-]*\.ya?ml$/i;
+var MAX_TOTAL13 = 60;
+var MAX_PER_FILE7 = 8;
+var ADMIN_PORTS2 = /* @__PURE__ */ new Set([22, 23, 3389, 5900, 3306, 5432, 1433, 1521, 27017, 6379, 11211, 9200, 9300, 2375, 2376, 5984, 8086]);
+var RULES4 = {
+  "public-bucket": {
+    id: "public-bucket",
+    severity: "critical",
+    title: "Storage bucket is publicly readable",
+    detail: "The bucket grants read (or write) access to everyone on the internet. Unless it hosts a public website on purpose, keep it private and serve files through signed URLs or a CDN with an origin access control."
+  },
+  "open-admin-port": {
+    id: "open-admin-port",
+    severity: "critical",
+    title: "Admin or database port open to the whole internet",
+    detail: "A security rule admits 0.0.0.0/0 on an SSH, RDP, database or cache port. Bots scan these ranges within minutes. Restrict the source to a VPN, a bastion or known address ranges."
+  },
+  "public-database": {
+    id: "public-database",
+    severity: "critical",
+    title: "Database instance is publicly accessible",
+    detail: "The managed database gets a public address. Keep it in private subnets and reach it through the application or a bastion."
+  },
+  unencrypted: {
+    id: "unencrypted",
+    severity: "warning",
+    title: "Encryption at rest is switched off",
+    detail: "Storage that holds data is explicitly left unencrypted. Turn encryption on (it is free on most providers and transparent to the application)."
+  },
+  "iam-wildcard": {
+    id: "iam-wildcard",
+    severity: "critical",
+    title: "IAM policy grants every action on every resource",
+    detail: "`Action: *` on `Resource: *` is full administrator access. Grant only the actions and resources the role needs; a leaked key for this role owns the whole account."
+  },
+  "hardcoded-password": {
+    id: "hardcoded-password",
+    severity: "critical",
+    title: "Password written into infrastructure code",
+    detail: "A password is a literal in the configuration, so it lives in git history and every state file. Read it from a secret store (AWS Secrets Manager, SSM, Vault) or a sensitive variable."
+  },
+  privileged: {
+    id: "privileged",
+    severity: "critical",
+    title: "Container runs privileged",
+    detail: "A privileged container has every capability and the host's devices: escaping it is trivial. Grant only the specific capabilities the workload needs."
+  },
+  "host-namespace": {
+    id: "host-namespace",
+    severity: "warning",
+    title: "Container shares the host's network or process namespace",
+    detail: "hostNetwork/hostPID/hostIPC (or `network_mode: host`) lets the container see and talk to everything on the node. Use regular pod networking unless the workload is a node agent that genuinely needs it."
+  },
+  "docker-socket": {
+    id: "docker-socket",
+    severity: "warning",
+    title: "Docker socket mounted into a container",
+    detail: "Access to /var/run/docker.sock is root on the host: the container can start a privileged container of its own. Mount it only into trusted infrastructure (a reverse proxy reading labels, a CI runner) and read-only."
+  },
+  "privilege-escalation": {
+    id: "privilege-escalation",
+    severity: "warning",
+    title: "Container allows privilege escalation",
+    detail: "`allowPrivilegeEscalation: true` lets a process gain more privileges than its parent (setuid binaries). Set it to false in the securityContext."
+  },
+  "dangerous-capability": {
+    id: "dangerous-capability",
+    severity: "warning",
+    title: "Container adds a dangerous Linux capability",
+    detail: "SYS_ADMIN, NET_ADMIN, SYS_PTRACE or ALL each give a container enough power to break out of it or spy on the host. Drop ALL and add back only what is needed."
+  },
+  "run-as-root": {
+    id: "run-as-root",
+    severity: "info",
+    title: "Container is configured to run as root",
+    detail: "`runAsUser: 0` (or `runAsNonRoot: false`) runs the workload as root. Pick a non-zero user id."
+  }
+};
+var near2 = (lines, i, before, after) => lines.slice(Math.max(0, i - before), i + after + 1).join("\n");
+function portsIn2(block) {
+  const from = block.match(/\b(?:from_port|FromPort)\b["']?\s*[:=]\s*["']?(-?\d+)/);
+  const to2 = block.match(/\b(?:to_port|ToPort)\b["']?\s*[:=]\s*["']?(-?\d+)/);
+  if (!from) return null;
+  const f3 = Number(from[1]);
+  return { from: f3, to: to2 ? Number(to2[1]) : f3 };
+}
+function ruleBlock2(lines, i) {
+  const indent = (l3) => l3.length - l3.trimStart().length;
+  let start = i;
+  for (let k2 = i; k2 >= Math.max(0, i - 12); k2--) {
+    if (/^\s*-\s/.test(lines[k2]) || /\{\s*$/.test(lines[k2])) {
+      start = k2;
+      break;
+    }
+  }
+  let end = i;
+  const base = indent(lines[start]);
+  for (let k2 = i + 1; k2 < Math.min(lines.length, i + 12); k2++) {
+    const l3 = lines[k2];
+    if (!l3.trim()) continue;
+    if (/^\s*-\s/.test(l3) && indent(l3) <= base) break;
+    if (/^\s*\}/.test(l3)) break;
+    if (indent(l3) < base) break;
+    end = k2;
+  }
+  return lines.slice(start, end + 1).join("\n");
+}
+function opensAdminPort2(block) {
+  if (/\bprotocol\b["']?\s*[:=]\s*["']?(?:-1|all)\b/i.test(block) && !portsIn2(block)) return true;
+  const p2 = portsIn2(block);
+  if (!p2) return false;
+  if (p2.from <= 0 && (p2.to <= 0 || p2.to >= 65535)) return true;
+  for (const port of ADMIN_PORTS2) if (port >= p2.from && port <= p2.to) return true;
+  return false;
+}
+function cloudHits2(lines, isTerraform) {
+  const hits = [];
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const t2 = line.trim();
+    if (/^(?:#|\/\/)/.test(t2)) continue;
+    const push = (id) => hits.push({ rule: RULES4[id], line: i + 1, evidence: t2.slice(0, 160) });
+    if (/\bacl\b\s*=\s*"public-read(?:-write)?"|AccessControl["']?\s*:\s*["']?PublicRead(?:Write)?\b/.test(line)) push("public-bucket");
+    else if (/\b(?:block_public_acls|block_public_policy|restrict_public_buckets|ignore_public_acls)\s*=\s*false\b|\b(?:BlockPublicAcls|BlockPublicPolicy|RestrictPublicBuckets)["']?\s*:\s*["']?false\b/.test(line)) push("public-bucket");
+    else if (/(?:"|\b)(?:0\.0\.0\.0\/0|::\/0)"/.test(line) || /CidrIp(?:v6)?["']?\s*:\s*["']?(?:0\.0\.0\.0\/0|::\/0)/.test(line)) {
+      const block = ruleBlock2(lines, i);
+      const egress = /\begress\b|SecurityGroupEgress|type\s*=\s*"egress"/.test(near2(lines, i, 6, 2)) && !/\bingress\b|SecurityGroupIngress/.test(near2(lines, i, 6, 2));
+      const nacl = /\brule_number\b|RuleNumber|network_acl|acl_(?:in|e)gress/i.test(block + near2(lines, i, 15, 0));
+      if (!egress && !nacl && opensAdminPort2(block)) push("open-admin-port");
+    } else if (/\bpublicly_accessible\s*=\s*true\b|PubliclyAccessible["']?\s*:\s*["']?true\b/.test(line)) push("public-database");
+    else if (/\b(?:encrypted|storage_encrypted|encrypt_at_rest|enable_encryption)\s*=\s*false\b|\b(?:Encrypted|StorageEncrypted|KmsEncrypted)["']?\s*:\s*["']?(?:false|False|FALSE)\b/.test(line)) push("unencrypted");
+    else if (/["']?Action["']?\s*:\s*\[?\s*["']\*["']|\bactions\s*=\s*\[\s*"\*"\s*\]/.test(line)) {
+      const block = near2(lines, i, 6, 6);
+      const allResources = /["']?Resource["']?\s*:\s*\[?\s*["']\*["']|\bresources\s*=\s*\[\s*"\*"\s*\]/.test(block);
+      const deny = /["']?Effect["']?\s*:\s*["']?Deny|\beffect\s*=\s*"Deny"/.test(block);
+      if (allResources && !deny) push("iam-wildcard");
+    } else if (isTerraform && /^\s*(?:password|master_password|admin_password|db_password|root_password)\s*=\s*"[^"$]{6,}"/.test(line) && !/"(?:changeme|password|example|xxx+|placeholder|<[^>]*>)"/i.test(line)) push("hardcoded-password");
+  }
+  return hits;
+}
+function containerHits2(lines, compose) {
+  const hits = [];
+  const nodeAgent = /^\s*kind:\s*DaemonSet\b/m.test(lines.join("\n"));
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const t2 = line.trim();
+    if (t2.startsWith("#")) continue;
+    const push = (id) => hits.push({ rule: RULES4[id], line: i + 1, evidence: t2.slice(0, 160) });
+    if (/\{\{-?\s*(?:if|with)\b/.test(near2(lines, i, 2, 0))) continue;
+    if (/^\s*privileged:\s*true\b/.test(line)) {
+      if (!nodeAgent) push("privileged");
+    } else if (/^\s*host(?:Network|PID|IPC):\s*true\b/.test(line) || compose && /^\s*(?:network_mode|pid|ipc):\s*["']?host\b/.test(line)) {
+      if (!nodeAgent) push("host-namespace");
+    } else if (/\/var\/run\/docker\.sock/.test(line) && !/[:,]ro\b|readOnly:\s*true/.test(near2(lines, i, 0, 3))) push("docker-socket");
+    else if (/^\s*allowPrivilegeEscalation:\s*true\b/.test(line)) push("privilege-escalation");
+    else if (/^\s*(?:-\s*)?["']?(?:SYS_ADMIN|NET_ADMIN|SYS_PTRACE|SYS_MODULE|ALL)["']?\s*$/.test(line) && /\badd:|cap_add:/.test(near2(lines, i, 4, 0)) && !/\bdrop:/.test(near2(lines, i, 1, 0))) push("dangerous-capability");
+    else if (/^\s*runAsUser:\s*0\b|^\s*runAsNonRoot:\s*false\b|^\s*user:\s*["']?(?:root|0)(?::0)?["']?\s*$/.test(line)) push("run-as-root");
+  }
+  return hits;
+}
+function isKubernetes2(content) {
+  return /^\s*apiVersion:\s*\S+/m.test(content) && /^\s*kind:\s*\S+/m.test(content);
+}
+function isCloudFormation2(content) {
+  return /AWSTemplateFormatVersion|["']?Type["']?\s*:\s*["']?AWS::/.test(content);
+}
+var iacSecurityScanner2 = {
+  id: "iac-security",
+  category: "security",
+  async run(ctx) {
+    const issues = [];
+    for (const file2 of ctx.files) {
+      if (issues.length >= MAX_TOTAL13) break;
+      const norm = file2.replace(/\\/g, "/");
+      if (NOT_DEPLOYED_RE2.test(norm) || DEV_COMPOSE_RE2.test(norm)) continue;
+      if (/(^|\/)variables\.tf$/i.test(norm)) continue;
+      const tf = TF_RE2.test(norm);
+      const yaml = YAML_RE2.test(norm);
+      const json2 = JSON_RE2.test(norm);
+      if (!tf && !yaml && !json2) continue;
+      if (json2 && /(^|\/)(?:package|tsconfig|composer|\.?eslintrc|renovate|turbo|lerna)[\w.-]*\.json$/i.test(norm)) continue;
+      const content = await ctx.readFile(file2);
+      if (!content || content.length > 512 * 1024) continue;
+      const lines = content.split(/\r?\n/);
+      let hits = [];
+      if (tf) hits = cloudHits2(lines, true);
+      else if (isCloudFormation2(content)) hits = cloudHits2(lines, false);
+      else if (yaml && COMPOSE_RE2.test(norm)) hits = containerHits2(lines, true);
+      else if (yaml && (isKubernetes2(content) || /(^|\/)templates\//.test(norm))) hits = containerHits2(lines, false);
+      else continue;
+      for (const hit of hits.slice(0, MAX_PER_FILE7)) {
+        if (issues.length >= MAX_TOTAL13) break;
+        issues.push({
+          id: `iac-${hit.rule.id}-${norm}:${hit.line}`,
+          category: "security",
+          severity: hit.rule.severity,
+          title: hit.rule.title,
+          location: `${norm}:${hit.line}`,
+          ageDays: 0,
+          detail: hit.rule.detail,
+          evidence: hit.rule.id === "hardcoded-password" ? hit.evidence.replace(/"[^"]*"/, '"\u2022\u2022\u2022\u2022\u2022\u2022"') : hit.evidence
+        });
+      }
+    }
+    return issues;
+  }
+};
+
 // ../core/src/scanners/skipped-tests.ts
 var SOURCE_RE13 = /\.(ts|tsx|js|jsx|mjs|mts|cts|py)$/;
 var JS_RE3 = /\.(ts|tsx|js|jsx|mjs|mts|cts)$/;
-var MAX_PER_FILE6 = 10;
-var MAX_TOTAL12 = 60;
+var MAX_PER_FILE8 = 10;
+var MAX_TOTAL14 = 60;
 var HOSTS2 = /* @__PURE__ */ new Set(["describe", "it", "test", "context", "suite"]);
 function jsHit2(node) {
   if (node.type !== "CallExpression" && node.type !== "OptionalCallExpression") return null;
@@ -81519,7 +81996,7 @@ var skippedTestsScanner2 = {
   async run(ctx) {
     const issues = [];
     for (const file2 of ctx.files) {
-      if (issues.length >= MAX_TOTAL12) break;
+      if (issues.length >= MAX_TOTAL14) break;
       const norm = file2.replace(/\\/g, "/");
       if (!SOURCE_RE13.test(norm) || norm.includes(".min.")) continue;
       if (/(^|\/)fixtures?\//i.test(norm)) continue;
@@ -81532,7 +82009,7 @@ var skippedTestsScanner2 = {
         const ast = parseFile2(content, file2);
         if (ast) {
           walk2(ast, (n) => {
-            if (byLine.size >= MAX_PER_FILE6) return;
+            if (byLine.size >= MAX_PER_FILE8) return;
             const hit = jsHit2(n);
             if (!hit) return;
             const line = lineOf8(n);
@@ -81547,7 +82024,7 @@ var skippedTestsScanner2 = {
       const lines = content.split(/\r?\n/);
       let perFile = 0;
       for (const [lineNo, hit] of [...byLine.entries()].sort((a, b3) => a[0] - b3[0])) {
-        if (perFile >= MAX_PER_FILE6 || issues.length >= MAX_TOTAL12) break;
+        if (perFile >= MAX_PER_FILE8 || issues.length >= MAX_TOTAL14) break;
         const focused = hit.severity === "warning";
         issues.push({
           id: `skiptest-${norm}:${lineNo}`,
@@ -81567,7 +82044,7 @@ var skippedTestsScanner2 = {
 };
 function collectByRegex2(content, rules, byLine) {
   const lines = content.split(/\r?\n/);
-  for (let i = 0; i < lines.length && byLine.size < MAX_PER_FILE6; i++) {
+  for (let i = 0; i < lines.length && byLine.size < MAX_PER_FILE8; i++) {
     const rule = rules.find((r2) => r2.re.test(lines[i]));
     if (rule && !byLine.has(i + 1)) byLine.set(i + 1, { severity: rule.severity, label: rule.label });
   }
@@ -81576,8 +82053,8 @@ function collectByRegex2(content, rules, byLine) {
 // ../core/src/scanners/commented-code.ts
 var SOURCE_RE14 = /\.(ts|tsx|js|jsx|mjs|mts|cts|java|c|cc|cpp|h|hpp|cs|go|rs|swift|kt|scala|php)$/;
 var MIN_RUN2 = 3;
-var MAX_PER_FILE7 = 5;
-var MAX_TOTAL13 = 40;
+var MAX_PER_FILE9 = 5;
+var MAX_TOTAL15 = 40;
 var SKIP_PREFIX2 = /^(?:!|\/|@|eslint|prettier|ts-|tslint|biome|c8|istanbul|prettier-ignore|todo\b|fixme\b|note\b|hack\b|xxx\b|https?:|www\.|copyright|spdx|licen[sc]e)/i;
 var PROSE_TAIL2 = /[.:?!]\s*$/;
 var CODE_SIGNAL2 = /[;{},)]\s*$|=>|(?:^|[^=!<>])=(?:[^=]|$)|^[)}\]]/;
@@ -81600,14 +82077,14 @@ function looksLikeCode2(body) {
 }
 var NOT_PRODUCT_RE2 = /(^|\/)(?:flow-typed|_?examples?|samples?|bench(?:mark)?s?|website|www|docs?|lang(?:uage)?s?|locales?|i18n|assets|legacy)\/|\.config\.[cm]?[jt]s$|\.d\.[cm]?ts$|(^|\/)example_[^/]*_test\.go$/i;
 function introducesExample2(lines, start, len) {
-  const near = [];
+  const near3 = [];
   for (let i = start - 1; i >= Math.max(0, start - 6); i--) {
     const b3 = commentBody2(lines[i]);
     if (b3 === null) break;
-    near.push(b3);
+    near3.push(b3);
   }
-  for (let i = start; i < start + len + 2 && i < lines.length; i++) near.push(commentBody2(lines[i]) ?? "");
-  return near.some((b3) => /```|\ba la\b|\be\.g\.|\bexample\b|like this|looks like|\bsyntax\b|\bformat\b|should be uncommented/i.test(b3));
+  for (let i = start; i < start + len + 2 && i < lines.length; i++) near3.push(commentBody2(lines[i]) ?? "");
+  return near3.some((b3) => /```|\ba la\b|\be\.g\.|\bexample\b|like this|looks like|\bsyntax\b|\bformat\b|should be uncommented/i.test(b3));
 }
 var commentedCodeScanner2 = {
   id: "commented-code",
@@ -81615,7 +82092,7 @@ var commentedCodeScanner2 = {
   async run(ctx) {
     const issues = [];
     for (const file2 of ctx.files) {
-      if (issues.length >= MAX_TOTAL13) break;
+      if (issues.length >= MAX_TOTAL15) break;
       const norm = file2.replace(/\\/g, "/");
       if (!SOURCE_RE14.test(norm) || norm.includes(".min.")) continue;
       if (/(^|\/)(?:vendor|third_party|node_modules)\//.test(norm)) continue;
@@ -81634,7 +82111,7 @@ var commentedCodeScanner2 = {
           /:\s*$/.test(commentBody2(lines[runStart - 1] ?? "") ?? "") || /:\s*$/.test(commentBody2(lines[runStart - 2] ?? "") ?? "") || // The prose around it presents it: "a la ```…```", "looks like", "e.g.".
           introducesExample2(lines, runStart, runLen) || run.some((l3) => /::=/.test(l3))
         );
-        if (!docExample && runLen >= MIN_RUN2 && perFile < MAX_PER_FILE7 && issues.length < MAX_TOTAL13) {
+        if (!docExample && runLen >= MIN_RUN2 && perFile < MAX_PER_FILE9 && issues.length < MAX_TOTAL15) {
           const lineNo = runStart + 1;
           issues.push({
             id: `commented-${norm}:${lineNo}`,
@@ -81677,8 +82154,8 @@ var CS_RE2 = /\.(?:cs|cshtml)$/i;
 var SKIP_RE2 = /(^|\/)(?:node_modules|vendor|third_party|dist|build|out|\.next)\/|\.min\.[cm]?js$/i;
 var NOT_SHIPPED_RE4 = /(^|\/)(?:_?examples?|demos?|benchmarks?|bench|perf(?:-testing)?|performance|docs?|documentation|www|website|site|scripts?|tools?|[\w-]*_assets|static|_?vendor(?:ed)?|third_party|integration-?[tT]ests|test-utils|tooling|_tools|sphinx)\/|(^|\/)jquery[-.\d]*\.js$/i;
 var TEST_RE7 = /(^|\/)(?:__tests__|tests?|specs?|fixtures?)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test\.[cm]?[jt]s$|(?:^|\/)test_[^/]+\.py$|_test\.py$|(?:^|\/)conftest\.py$|_test\.go$|(?:Test|Tests|IT)\.(?:java|kt|cs|php)$|_spec\.rb$/i;
-var MAX_PER_FILE8 = 6;
-var MAX_TOTAL14 = 60;
+var MAX_PER_FILE10 = 6;
+var MAX_TOTAL16 = 60;
 var MAX_BYTES4 = 4e5;
 var PHP_JAVA_RULES2 = [
   // --- Python SQL (VAmPI: f"SELECT … '{username}'") ---------------------------
@@ -81911,7 +82388,7 @@ var PHP_JAVA_RULES2 = [
     detail: "Native Java deserialisation of untrusted bytes is a classic remote-code-execution path (gadget chains). Use a data format such as JSON, or an allow-list `ObjectInputFilter`."
   }
 ];
-var RULES3 = [
+var RULES5 = [
   // ---- JavaScript / TypeScript -------------------------------------------
   {
     id: "eval-dynamic",
@@ -82202,7 +82679,7 @@ function scanSource2(content, lang) {
     }
   }
   const byLine = /* @__PURE__ */ new Map();
-  for (const rule of RULES3) {
+  for (const rule of RULES5) {
     if (rule.lang !== lang) continue;
     rule.re.lastIndex = 0;
     for (const m2 of content.matchAll(rule.re)) {
@@ -82298,9 +82775,9 @@ function contextAllows2(ruleId, content, lineStart) {
     return !/\bcompile\s*\(/.test(around2(content, lineStart, 3, 0));
   }
   if (ruleId === "react-dangerous-html") {
-    const near = around2(content, lineStart, 0, 3);
-    const html = near.match(/__html\s*:\s*([`'"])/);
-    if (html && !/\$\{/.test(near)) return false;
+    const near3 = around2(content, lineStart, 0, 3);
+    const html = near3.match(/__html\s*:\s*([`'"])/);
+    if (html && !/\$\{/.test(near3)) return false;
   }
   return true;
 }
@@ -82416,8 +82893,8 @@ function taintedCaller2(sources, name, defFile, defLine) {
       if (!call.test(src.lines[i])) continue;
       if (TEST_RE7.test(src.norm)) continue;
       if (FN_HEADER2[src.lang].test(src.lines[i])) continue;
-      const near = src.lines.slice(Math.max(0, i - TAINT_WINDOW2), i + 3).join("\n");
-      if (TAINT_RE2[src.lang].test(near)) return `${src.norm}:${i + 1}`;
+      const near3 = src.lines.slice(Math.max(0, i - TAINT_WINDOW2), i + 3).join("\n");
+      if (TAINT_RE2[src.lang].test(near3)) return `${src.norm}:${i + 1}`;
     }
   }
   return null;
@@ -82430,7 +82907,7 @@ var insecureCodeScanner2 = {
     const sources = [];
     const pending = [];
     for (const file2 of ctx.files) {
-      if (issues.length >= MAX_TOTAL14) break;
+      if (issues.length >= MAX_TOTAL16) break;
       const norm = file2.replace(/\\/g, "/");
       const webRoot = /\.php$/i.test(norm) && /(^|\/)(?:www|public|htdocs)\//.test(norm);
       if (SKIP_RE2.test(norm) || NOT_SHIPPED_RE4.test(norm) && !webRoot) continue;
@@ -82445,7 +82922,7 @@ var insecureCodeScanner2 = {
       if (!isTest && TAINT_RE2[lang].test(content)) sources.push({ norm, lang, lines });
       let perFile = 0;
       for (const hit of scanSource2(content, lang)) {
-        if (issues.length >= MAX_TOTAL14 || perFile >= MAX_PER_FILE8) break;
+        if (issues.length >= MAX_TOTAL16 || perFile >= MAX_PER_FILE10) break;
         if (isTest && SKIP_IN_TEST2.has(hit.rule.id)) continue;
         if (hit.rule.id === "ssrf" && lang === "js" && BROWSER_CODE_RE2.test(norm)) continue;
         perFile++;
@@ -82834,7 +83311,7 @@ function everyJobHasPermissions2(lines) {
   }
   return jobs > 0 && withPerms === jobs;
 }
-var RULES4 = {
+var RULES6 = {
   "pr-target-checkout": {
     severity: "critical",
     title: () => "pull_request_target checks out the pull request's own code",
@@ -82888,7 +83365,7 @@ var workflowSecurityScanner2 = {
       if (!content) continue;
       for (const finding of scanWorkflow2(content)) {
         if (issues.length >= MAX_ISSUES11) break;
-        const rule = RULES4[finding.rule];
+        const rule = RULES6[finding.rule];
         if (!rule) continue;
         let ageDays = 0;
         try {
@@ -84459,6 +84936,7 @@ var defaultScanners2 = [
   busFactorScanner2,
   repoBloatScanner2,
   dockerfileScanner2,
+  iacSecurityScanner2,
   skippedTestsScanner2,
   commentedCodeScanner2,
   insecureCodeScanner2,
