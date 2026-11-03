@@ -26863,7 +26863,7 @@ var require_lib4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-WEZWNC7W.js
+// ../cli/dist/chunk-C3FHCU3S.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -45594,7 +45594,7 @@ function date4(params) {
 // ../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/external.js
 config(en_default());
 
-// ../cli/dist/chunk-WEZWNC7W.js
+// ../cli/dist/chunk-C3FHCU3S.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -70245,38 +70245,40 @@ function ruleOf(issue2) {
   return (_a22 = issue2.scanner) != null ? _a22 : "other";
 }
 var RULE_PRECISION = {
-  "bloat": { tp: 7, fp: 6 },
+  "bloat": { tp: 7, fp: 8 },
   "bus-factor": { tp: 28, fp: 0 },
-  "ci-disabled": { tp: 2, fp: 1 },
-  "ci-no-pr-trigger": { tp: 2, fp: 1 },
-  "ci-silenced-failure": { tp: 2, fp: 2 },
+  "ci-disabled": { tp: 4, fp: 1 },
+  "ci-no-pr-trigger": { tp: 2, fp: 3 },
+  "ci-silenced-failure": { tp: 4, fp: 2 },
   "ci-swallowed": { tp: 2, fp: 0 },
-  "ci-tests-not-run": { tp: 0, fp: 6 },
-  "commented-code": { tp: 28, fp: 8 },
-  "config-conflict": { tp: 15, fp: 0 },
+  "ci-tests-not-run": { tp: 0, fp: 8 },
+  "commented-code": { tp: 28, fp: 9 },
+  "config-conflict": { tp: 17, fp: 0 },
   "dead-export": { tp: 16, fp: 2 },
-  "dead-uikit": { tp: 1, fp: 0 },
+  "dead-uikit": { tp: 3, fp: 0 },
   "debug-leftover": { tp: 3, fp: 4 },
-  "dep-unused": { tp: 0, fp: 9 },
-  "doc-link": { tp: 17, fp: 6 },
-  "docker-add-url": { tp: 1, fp: 0 },
-  "docker-latest": { tp: 3, fp: 1 },
-  "docker-root": { tp: 4, fp: 6 },
-  "docker-untagged": { tp: 1, fp: 3 },
-  "docs-badge": { tp: 6, fp: 0 },
-  "docs-script": { tp: 1, fp: 0 },
+  "dep-unused": { tp: 0, fp: 11 },
+  "doc-link": { tp: 18, fp: 7 },
+  "docker-add-url": { tp: 2, fp: 0 },
+  "docker-latest": { tp: 3, fp: 3 },
+  "docker-root": { tp: 4, fp: 8 },
+  "docker-untagged": { tp: 3, fp: 3 },
+  "docs-badge": { tp: 7, fp: 1 },
+  "docs-manager": { tp: 0, fp: 2 },
+  "docs-script": { tp: 2, fp: 0 },
   "duplicate": { tp: 35, fp: 2 },
-  "env-dead": { tp: 0, fp: 3 },
-  "env-no-example": { tp: 1, fp: 4 },
+  "env-dead": { tp: 0, fp: 5 },
+  "env-missing": { tp: 0, fp: 2 },
+  "env-no-example": { tp: 1, fp: 6 },
   "eol-node": { tp: 27, fp: 0 },
   "eol-python": { tp: 21, fp: 0 },
   "eol-runner": { tp: 5, fp: 0 },
-  "hygiene-no-ci": { tp: 7, fp: 0 },
-  "hygiene-no-license": { tp: 6, fp: 0 },
-  "hygiene-no-readme": { tp: 1, fp: 0 },
-  "hygiene-no-tests": { tp: 5, fp: 1 },
+  "hygiene-no-ci": { tp: 9, fp: 0 },
+  "hygiene-no-license": { tp: 6, fp: 2 },
+  "hygiene-no-readme": { tp: 2, fp: 0 },
+  "hygiene-no-tests": { tp: 6, fp: 2 },
   "iac-dangerous-capability": { tp: 0, fp: 2 },
-  "iac-docker-socket": { tp: 9, fp: 6 },
+  "iac-docker-socket": { tp: 9, fp: 8 },
   "iac-host-namespace": { tp: 5, fp: 36 },
   "iac-iam-wildcard": { tp: 1, fp: 0 },
   "iac-open-admin-port": { tp: 27, fp: 6 },
@@ -70286,37 +70288,40 @@ var RULE_PRECISION = {
   "iac-public-database": { tp: 10, fp: 0 },
   "iac-run-as-root": { tp: 2, fp: 19 },
   "iac-unencrypted": { tp: 2, fp: 1 },
-  "insecure-eval-dynamic": { tp: 1, fp: 2 },
-  "insecure-exec-interpolated": { tp: 2, fp: 10 },
+  "insecure-eval-dynamic": { tp: 1, fp: 3 },
+  "insecure-exec-interpolated": { tp: 2, fp: 12 },
   "insecure-go-template-html": { tp: 0, fp: 5 },
-  "insecure-innerhtml-dynamic": { tp: 0, fp: 3 },
-  "insecure-localstorage-secret": { tp: 1, fp: 1 },
-  "insecure-new-function": { tp: 3, fp: 9 },
+  "insecure-innerhtml-dynamic": { tp: 0, fp: 5 },
+  "insecure-localstorage-secret": { tp: 1, fp: 2 },
+  "insecure-new-function": { tp: 3, fp: 11 },
   "insecure-php-reflected-xss": { tp: 0, fp: 1 },
-  "insecure-py-eval-exec": { tp: 0, fp: 10 },
-  "insecure-py-os-system": { tp: 0, fp: 3 },
-  "insecure-py-pickle-load": { tp: 2, fp: 11 },
+  "insecure-php-unserialize": { tp: 0, fp: 2 },
+  "insecure-py-eval-exec": { tp: 0, fp: 12 },
+  "insecure-py-os-system": { tp: 0, fp: 4 },
+  "insecure-py-pickle-load": { tp: 2, fp: 12 },
   "insecure-py-shell-true": { tp: 1, fp: 4 },
   "insecure-py-yaml-load": { tp: 0, fp: 2 },
-  "insecure-react-dangerous-html": { tp: 1, fp: 8 },
+  "insecure-random-for-secret": { tp: 0, fp: 1 },
+  "insecure-react-dangerous-html": { tp: 1, fp: 10 },
+  "insecure-ruby-dynamic-dispatch": { tp: 0, fp: 1 },
   "insecure-ruby-marshal-load": { tp: 0, fp: 1 },
-  "insecure-sql-interpolated": { tp: 1, fp: 18 },
-  "insecure-ssrf": { tp: 1, fp: 69 },
-  "insecure-tls-verification-off": { tp: 0, fp: 4 },
-  "insecure-weak-hash": { tp: 1, fp: 3 },
+  "insecure-sql-interpolated": { tp: 1, fp: 20 },
+  "insecure-ssrf": { tp: 1, fp: 71 },
+  "insecure-tls-verification-off": { tp: 0, fp: 6 },
+  "insecure-weak-hash": { tp: 1, fp: 5 },
   "lockfile-missing": { tp: 15, fp: 1 },
-  "secret-generic": { tp: 0, fp: 1 },
-  "secret-history": { tp: 0, fp: 3 },
-  "secret-provider": { tp: 0, fp: 2 },
+  "secret-generic": { tp: 0, fp: 3 },
+  "secret-history": { tp: 0, fp: 5 },
+  "secret-provider": { tp: 0, fp: 4 },
   "skipped-test": { tp: 17, fp: 1 },
   "supply-remote-shell": { tp: 1, fp: 0 },
   "todo": { tp: 51, fp: 0 },
   "workflow-action-tag": { tp: 44, fp: 0 },
   "workflow-action-tag-first-party": { tp: 56, fp: 0 },
   "workflow-no-permissions": { tp: 28, fp: 0 },
-  "workflow-pr-target-checkout": { tp: 2, fp: 0 },
-  "workflow-script-injection": { tp: 1, fp: 1 },
-  "workflow-self-hosted-runner": { tp: 1, fp: 0 }
+  "workflow-pr-target-checkout": { tp: 2, fp: 2 },
+  "workflow-script-injection": { tp: 1, fp: 3 },
+  "workflow-self-hosted-runner": { tp: 1, fp: 2 }
 };
 var MIN_LABELLED = 3;
 var MIN_LABELLED_HIGH = 5;
@@ -72935,7 +72940,7 @@ var projectHygieneScanner = {
 var SOURCE_RE3 = /\.(ts|tsx|js|jsx|mjs|mts|cts)$/;
 var TEST_RE2 = /(^|\/)(?:__tests__|tests?|specs?|e2e)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test_[^/]+\.py$|_test\.(?:py|go|rb)$|_spec\.rb$|(?:^|\/)conftest\.py$/i;
 var EXAMPLE_RE = /(^|\/)examples?\/|(?:^|\/)example\.[cm]?[jt]sx?$/i;
-var TOOLING_RE = /(^|\/)(?:_examples|[\w-]+-tests|dockers?|jakelib|dev|bench(?:mark)?s?|perf(?:ormance)?|__performance_tests__|www|static|demos?|cli|devtools|docs_src|extras|assets|support|test_files|\.github|internal|scripts?|bin|tools?|[\w-]*_assets|sandbox|playgrounds?|fixtures?|__fixtures__|docs?)\/|\.test-d\.tsx?$|\.d\.ts$|(^|\/)build\.rs$|[-_.]bin\.[cm]?[jt]s$|(^|\/)test\.[cm]?[jt]s$|^[^/]+\.[cm]?js$|(^|\/)log(?:ger|ging)?\.[cm]?[jt]s$|(^|\/)play(?:ground)?\.[cm]?[jt]sx?$/i;
+var TOOLING_RE = /(^|\/)(?:_examples|[\w-]+-tests|dockers?|jakelib|dev|bench(?:mark)?s?|perf(?:ormance)?|__performance_tests__|www|static|demos?|cli|devtools|docs_src|extras|assets|support|test_files|\.github|internal|scripts?|bin|tools?|[\w-]*_assets|sandbox|playgrounds?|fixtures?|__fixtures__|docs?)\/|\.test-d\.tsx?$|\.d\.ts$|(^|\/)build\.rs$|[-_.]bin\.[cm]?[jt]s$|(^|\/)test\.[cm]?[jt]s$|\.(?:stories|story)\.[cm]?[jt]sx?$|(^|\/)debug(?:ger)?\.[cm]?[jt]s$|^[^/]+\.[cm]?js$|(^|\/)log(?:ger|ging)?\.[cm]?[jt]s$|(^|\/)play(?:ground)?\.[cm]?[jt]sx?$/i;
 var DEBUG_METHODS = /* @__PURE__ */ new Set(["log", "debug", "trace", "dir", "table"]);
 var MAX_PER_FILE = 8;
 var MAX_TOTAL = 50;
@@ -73443,7 +73448,7 @@ var deadCodeScanner = {
     });
   }
 };
-var NOT_SHIPPED_RE = /(^|\/)(?:__tests__|_?tests?|spec|e2e|fixtures?|__fixtures__|__testfixtures__|__snapshots__|_?examples?|[\w-]*playgrounds?|size-check|sandbox|bench(?:mark)?s?|scripts?|website|www|docs?|tutorials?|\.github|composables)\/|\.(?:test|spec|test-d|snap)\.|\.snap\.[a-z.]+$|\.d\.[cm]?ts$|\.gen\.[cm]?[jt]sx?$/i;
+var NOT_SHIPPED_RE = /(^|\/)(?:__tests__|_?tests?|spec|e2e|fixtures?|__fixtures__|__testfixtures__|__snapshots__|_?examples?|[\w-]*playgrounds?|size-check|sandbox|bench(?:mark)?s?|scripts?|website|www|docs?|tutorials?|\.github|composables)\/|\.(?:test|spec|test-d|snap)\.|\.snap\.[a-z.]+$|\.d\.[cm]?ts$|\.gen\.[cm]?[jt]sx?$|\.(?:stories|story|demos?)\.[cm]?[jt]sx?$|(^|\/)[\w@.-]*-demos?\/|(^|\/)@docs\//i;
 function packageEntryFiles(ctx, fileSet) {
   return __async(this, null, function* () {
     var _a22;
@@ -74074,7 +74079,7 @@ var TF_RE = /\.tf$/i;
 var YAML_RE = /\.ya?ml$/i;
 var JSON_RE = /\.json$/i;
 var COMPOSE_RE = /(^|\/)(?:docker-)?compose(?:\.[\w-]+)?\.ya?ml$/i;
-var NOT_DEPLOYED_RE = /(^|\/)(?:[._]?examples?|samples?|demos?|guides?|tests?|testdata|test-fixtures|fixtures?|docs?|website|\.github|node_modules|vendor|dev|playwright|e2e|scripts|_?archived?|tools|[\w-]*[_-]tests?|integration[_-]?tests?|test[-_]environments?)\//i;
+var NOT_DEPLOYED_RE = /(^|\/)(?:[._]?examples?|samples?|demos?|guides?|tests?|testdata|test-fixtures|fixtures?|docs?|website|\.github|node_modules|vendor|dev|playwright|e2e|scripts|_?archived?|tools|bench(?:mark)?s?|[\w-]*[_-]tests?|integration[_-]?tests?|test[-_]environments?)\//i;
 var DEV_COMPOSE_RE = /(^|\/)(?:docker-)?compose[.-](?:[\w.-]*[.-])?(?:ci|test|tests|dev|devel|development|local|override|example|e2e)[\w.-]*\.ya?ml$/i;
 var MAX_TOTAL5 = 60;
 var MAX_PER_FILE2 = 8;
@@ -74426,7 +74431,7 @@ function looksLikeCode(body) {
   if (PROSE_RUN.test(body) && !/[;={}]/.test(body)) return false;
   return CODE_SIGNAL.test(body);
 }
-var NOT_PRODUCT_RE = /(^|\/)(?:flow-typed|_?examples?|samples?|bench(?:mark)?s?|website|www|docs?|lang(?:uage)?s?|locales?|i18n|assets|legacy)\/|\.config\.[cm]?[jt]s$|\.d\.[cm]?ts$|(^|\/)example_[^/]*_test\.go$/i;
+var NOT_PRODUCT_RE = /(^|\/)(?:flow-typed|_?examples?|samples?|bench(?:mark)?s?|website|www|docs?|lang(?:uage)?s?|locales?|i18n|assets|legacy)\/|\.config\.[cm]?[jt]s$|\.d\.[cm]?ts$|\.(?:stories|story)\.[cm]?[jt]sx?$|(^|\/)example_[^/]*_test\.go$/i;
 function introducesExample(lines, start, len) {
   var _a22;
   const near22 = [];
@@ -75080,6 +75085,7 @@ function sinkAllows(ruleId, line, col) {
     return ((_b = (_a22 = line.slice(0, col).match(/"/g)) == null ? void 0 : _a22.length) != null ? _b : 0) % 2 === 0;
   }
   if (ruleId === "sql-interpolated") return !/\bprepare\s*\(/.test(line);
+  if (ruleId === "eval-dynamic" && /^\s*(?:async\s+|static\s+|public\s+|private\s+)*eval\s*\([^)]*\)\s*(?::\s*[\w<>[\]| ]+)?\s*\{/.test(line)) return false;
   return true;
 }
 var BROWSER_CODE_RE = /(^|\/)(?:public|static|assets|frontend|client|ui|web|www|browser|extension|src\/components|components|pages|app\/javascript)\/|(?:^|\/)(?:sw|service-worker)\.[cm]?[jt]s$|\.(?:tsx|jsx|vue|svelte)$/i;
@@ -80635,7 +80641,7 @@ var projectHygieneScanner2 = {
 var SOURCE_RE10 = /\.(ts|tsx|js|jsx|mjs|mts|cts)$/;
 var TEST_RE6 = /(^|\/)(?:__tests__|tests?|specs?|e2e)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test_[^/]+\.py$|_test\.(?:py|go|rb)$|_spec\.rb$|(?:^|\/)conftest\.py$/i;
 var EXAMPLE_RE2 = /(^|\/)examples?\/|(?:^|\/)example\.[cm]?[jt]sx?$/i;
-var TOOLING_RE2 = /(^|\/)(?:_examples|[\w-]+-tests|dockers?|jakelib|dev|bench(?:mark)?s?|perf(?:ormance)?|__performance_tests__|www|static|demos?|cli|devtools|docs_src|extras|assets|support|test_files|\.github|internal|scripts?|bin|tools?|[\w-]*_assets|sandbox|playgrounds?|fixtures?|__fixtures__|docs?)\/|\.test-d\.tsx?$|\.d\.ts$|(^|\/)build\.rs$|[-_.]bin\.[cm]?[jt]s$|(^|\/)test\.[cm]?[jt]s$|^[^/]+\.[cm]?js$|(^|\/)log(?:ger|ging)?\.[cm]?[jt]s$|(^|\/)play(?:ground)?\.[cm]?[jt]sx?$/i;
+var TOOLING_RE2 = /(^|\/)(?:_examples|[\w-]+-tests|dockers?|jakelib|dev|bench(?:mark)?s?|perf(?:ormance)?|__performance_tests__|www|static|demos?|cli|devtools|docs_src|extras|assets|support|test_files|\.github|internal|scripts?|bin|tools?|[\w-]*_assets|sandbox|playgrounds?|fixtures?|__fixtures__|docs?)\/|\.test-d\.tsx?$|\.d\.ts$|(^|\/)build\.rs$|[-_.]bin\.[cm]?[jt]s$|(^|\/)test\.[cm]?[jt]s$|\.(?:stories|story)\.[cm]?[jt]sx?$|(^|\/)debug(?:ger)?\.[cm]?[jt]s$|^[^/]+\.[cm]?js$|(^|\/)log(?:ger|ging)?\.[cm]?[jt]s$|(^|\/)play(?:ground)?\.[cm]?[jt]sx?$/i;
 var DEBUG_METHODS2 = /* @__PURE__ */ new Set(["log", "debug", "trace", "dir", "table"]);
 var MAX_PER_FILE6 = 8;
 var MAX_TOTAL9 = 50;
@@ -81129,7 +81135,7 @@ var deadCodeScanner2 = {
     );
   }
 };
-var NOT_SHIPPED_RE3 = /(^|\/)(?:__tests__|_?tests?|spec|e2e|fixtures?|__fixtures__|__testfixtures__|__snapshots__|_?examples?|[\w-]*playgrounds?|size-check|sandbox|bench(?:mark)?s?|scripts?|website|www|docs?|tutorials?|\.github|composables)\/|\.(?:test|spec|test-d|snap)\.|\.snap\.[a-z.]+$|\.d\.[cm]?ts$|\.gen\.[cm]?[jt]sx?$/i;
+var NOT_SHIPPED_RE3 = /(^|\/)(?:__tests__|_?tests?|spec|e2e|fixtures?|__fixtures__|__testfixtures__|__snapshots__|_?examples?|[\w-]*playgrounds?|size-check|sandbox|bench(?:mark)?s?|scripts?|website|www|docs?|tutorials?|\.github|composables)\/|\.(?:test|spec|test-d|snap)\.|\.snap\.[a-z.]+$|\.d\.[cm]?ts$|\.gen\.[cm]?[jt]sx?$|\.(?:stories|story|demos?)\.[cm]?[jt]sx?$|(^|\/)[\w@.-]*-demos?\/|(^|\/)@docs\//i;
 async function packageEntryFiles2(ctx, fileSet) {
   const out = /* @__PURE__ */ new Set();
   const collect = (v2, acc) => {
@@ -81740,7 +81746,7 @@ var TF_RE2 = /\.tf$/i;
 var YAML_RE2 = /\.ya?ml$/i;
 var JSON_RE2 = /\.json$/i;
 var COMPOSE_RE2 = /(^|\/)(?:docker-)?compose(?:\.[\w-]+)?\.ya?ml$/i;
-var NOT_DEPLOYED_RE2 = /(^|\/)(?:[._]?examples?|samples?|demos?|guides?|tests?|testdata|test-fixtures|fixtures?|docs?|website|\.github|node_modules|vendor|dev|playwright|e2e|scripts|_?archived?|tools|[\w-]*[_-]tests?|integration[_-]?tests?|test[-_]environments?)\//i;
+var NOT_DEPLOYED_RE2 = /(^|\/)(?:[._]?examples?|samples?|demos?|guides?|tests?|testdata|test-fixtures|fixtures?|docs?|website|\.github|node_modules|vendor|dev|playwright|e2e|scripts|_?archived?|tools|bench(?:mark)?s?|[\w-]*[_-]tests?|integration[_-]?tests?|test[-_]environments?)\//i;
 var DEV_COMPOSE_RE2 = /(^|\/)(?:docker-)?compose[.-](?:[\w.-]*[.-])?(?:ci|test|tests|dev|devel|development|local|override|example|e2e)[\w.-]*\.ya?ml$/i;
 var MAX_TOTAL13 = 60;
 var MAX_PER_FILE7 = 8;
@@ -82089,7 +82095,7 @@ function looksLikeCode2(body) {
   if (PROSE_RUN2.test(body) && !/[;={}]/.test(body)) return false;
   return CODE_SIGNAL2.test(body);
 }
-var NOT_PRODUCT_RE2 = /(^|\/)(?:flow-typed|_?examples?|samples?|bench(?:mark)?s?|website|www|docs?|lang(?:uage)?s?|locales?|i18n|assets|legacy)\/|\.config\.[cm]?[jt]s$|\.d\.[cm]?ts$|(^|\/)example_[^/]*_test\.go$/i;
+var NOT_PRODUCT_RE2 = /(^|\/)(?:flow-typed|_?examples?|samples?|bench(?:mark)?s?|website|www|docs?|lang(?:uage)?s?|locales?|i18n|assets|legacy)\/|\.config\.[cm]?[jt]s$|\.d\.[cm]?ts$|\.(?:stories|story)\.[cm]?[jt]sx?$|(^|\/)example_[^/]*_test\.go$/i;
 function introducesExample2(lines, start, len) {
   const near3 = [];
   for (let i = start - 1; i >= Math.max(0, start - 6); i--) {
@@ -82737,6 +82743,7 @@ function sinkAllows2(ruleId, line, col) {
     return (line.slice(0, col).match(/"/g)?.length ?? 0) % 2 === 0;
   }
   if (ruleId === "sql-interpolated") return !/\bprepare\s*\(/.test(line);
+  if (ruleId === "eval-dynamic" && /^\s*(?:async\s+|static\s+|public\s+|private\s+)*eval\s*\([^)]*\)\s*(?::\s*[\w<>[\]| ]+)?\s*\{/.test(line)) return false;
   return true;
 }
 var BROWSER_CODE_RE2 = /(^|\/)(?:public|static|assets|frontend|client|ui|web|www|browser|extension|src\/components|components|pages|app\/javascript)\/|(?:^|\/)(?:sw|service-worker)\.[cm]?[jt]s$|\.(?:tsx|jsx|vue|svelte)$/i;
