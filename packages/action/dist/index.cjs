@@ -26863,7 +26863,7 @@ var require_lib4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-XI2JJVTW.js
+// ../cli/dist/chunk-VR55GKDU.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -45594,7 +45594,7 @@ function date4(params) {
 // ../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/external.js
 config(en_default());
 
-// ../cli/dist/chunk-XI2JJVTW.js
+// ../cli/dist/chunk-VR55GKDU.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -69977,7 +69977,10 @@ var scanReportSchema = external_exports.object({
       warning: external_exports.number().nonnegative(),
       info: external_exports.number().nonnegative(),
       // Absent in legacy reports: preserve their uncapped informational curve.
-      infoCap: external_exports.number().nonnegative().optional()
+      infoCap: external_exports.number().nonnegative().optional(),
+      // Size discount on warning/info counts (see sizeFactor in engine.ts).
+      // Absent in reports from before it existed: those scored at factor 1.
+      sizeFactor: external_exports.number().positive().max(1).optional()
     })
   }).optional(),
   /**
@@ -70267,15 +70270,15 @@ var RULE_PRECISION = {
   "insecure-localstorage-secret": { tp: 1, fp: 1 },
   "insecure-new-function": { tp: 3, fp: 9 },
   "insecure-php-reflected-xss": { tp: 0, fp: 1 },
-  "insecure-py-eval-exec": { tp: 0, fp: 7 },
+  "insecure-py-eval-exec": { tp: 0, fp: 10 },
   "insecure-py-os-system": { tp: 0, fp: 3 },
-  "insecure-py-pickle-load": { tp: 2, fp: 8 },
+  "insecure-py-pickle-load": { tp: 2, fp: 11 },
   "insecure-py-shell-true": { tp: 1, fp: 4 },
   "insecure-py-yaml-load": { tp: 0, fp: 2 },
   "insecure-react-dangerous-html": { tp: 1, fp: 8 },
   "insecure-ruby-marshal-load": { tp: 0, fp: 1 },
-  "insecure-sql-interpolated": { tp: 1, fp: 13 },
-  "insecure-ssrf": { tp: 1, fp: 70 },
+  "insecure-sql-interpolated": { tp: 1, fp: 18 },
+  "insecure-ssrf": { tp: 1, fp: 69 },
   "insecure-tls-verification-off": { tp: 0, fp: 4 },
   "insecure-weak-hash": { tp: 1, fp: 3 },
   "lockfile-missing": { tp: 15, fp: 1 },
@@ -74252,7 +74255,7 @@ var GO_RE2 = /\.go$/i;
 var CS_RE = /\.(?:cs|cshtml)$/i;
 var SKIP_RE = /(^|\/)(?:node_modules|vendor|third_party|dist|build|out|\.next)\/|\.min\.[cm]?js$/i;
 var NOT_SHIPPED_RE2 = /(^|\/)(?:_?examples?|demos?|benchmarks?|bench|perf(?:-testing)?|performance|docs?|documentation|www|website|site|scripts?|tools?|[\w-]*_assets|static|_?vendor(?:ed)?|third_party|integration-?[tT]ests|test-utils|tooling|_tools|sphinx)\/|(^|\/)jquery[-.\d]*\.js$/i;
-var TEST_RE3 = /(^|\/)(?:__tests__|tests?|specs?|fixtures?)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test\.[cm]?[jt]s$|(?:^|\/)test_[^/]+\.py$|_test\.py$|(?:^|\/)conftest\.py$/i;
+var TEST_RE3 = /(^|\/)(?:__tests__|tests?|specs?|fixtures?)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test\.[cm]?[jt]s$|(?:^|\/)test_[^/]+\.py$|_test\.py$|(?:^|\/)conftest\.py$|_test\.go$|(?:Test|Tests|IT)\.(?:java|kt|cs|php)$|_spec\.rb$/i;
 var MAX_PER_FILE4 = 6;
 var MAX_TOTAL7 = 60;
 var MAX_BYTES2 = 4e5;
@@ -74433,7 +74436,7 @@ var PHP_JAVA_RULES = [
   {
     id: "eval-dynamic",
     lang: "php",
-    re: /\b(?:eval|assert|create_function)\s*\(\s*[^)'"\s]/g,
+    re: /\b(?:eval|create_function)\s*\(\s*[^)'"\s]/g,
     severity: "critical",
     title: "eval() on a non-literal value",
     detail: "`eval` runs whatever PHP it is given. If any part of it comes from a request, this is remote code execution."
@@ -74449,7 +74452,7 @@ var PHP_JAVA_RULES = [
   {
     id: "php-unserialize",
     lang: "php",
-    re: /\bunserialize\s*\(\s*[^)'"\s]/g,
+    re: new RegExp(`(?<!function\\s{1,4})\\bunserialize\\s*\\(\\s*[^)'"\\s](?![^;\\n]*allowed_classes)`, "g"),
     severity: "warning",
     title: "unserialize() on a non-literal value",
     detail: "`unserialize` can instantiate arbitrary classes and trigger their magic methods. Use `json_decode` for data that crosses a trust boundary."
@@ -74887,13 +74890,132 @@ function contextAllows(ruleId, content, lineStart) {
 function rank(s) {
   return s === "critical" ? 3 : s === "warning" ? 2 : 1;
 }
+var FN_HEADER = {
+  py: /^\s*(?:async\s+)?def\s+(\w+)\s*\(([^)]*)\)/,
+  js: /(?:function\s+(\w+)\s*\(([^)]*)\)|^\s*(?:export\s+)?(?:const|let|var)\s+(\w+)\s*=\s*(?:async\s*)?(?:function\s*)?\(([^)]*)\)\s*(?:=>|\{)|^\s*(?:async\s+|static\s+|public\s+|private\s+)*(\w+)\s*\(([^)]*)\)\s*\{)/,
+  php: /function\s+(\w+)\s*\(([^)]*)\)/,
+  rb: /^\s*def\s+(?:self\.)?(\w+[?!]?)\s*(?:\(([^)]*)\)|([^\n#]*))/,
+  go: /^func\s+(?:\([^)]*\)\s*)?(\w+)\s*\(([^)]*)\)/,
+  java: /(?:public|private|protected|static|final|synchronized)[\w<>\[\],.?\s]*\s(\w+)\s*\(([^)]*)\)\s*(?:throws[^{]*)?\{?\s*$/,
+  cs: /(?:public|private|protected|internal|static|async|virtual|override)[\w<>\[\],.?\s]*\s(\w+)\s*\(([^)]*)\)\s*\{?\s*$/
+};
+var CROSS_FILE_KIND = [
+  [/^insecure-sql-interpolated-/, "sql"],
+  [/^insecure-(?:exec-interpolated|py-os-system|py-shell-true|eval-dynamic|py-eval-exec|new-function)-/, "exec"]
+];
+var VENDORED_SINK_RE = /(^|\/)(?:vendor|third_party|node_modules|lib\/(?:mako|cherrypy|jinja2|six|requests|urllib3))\//;
+function paramReaches(kind, n, text) {
+  if (kind === "exec") return new RegExp(`\\b${n}\\b`).test(text);
+  return new RegExp(
+    [
+      `\\{\\s*${n}\\b`,
+      // f"…{n}" or $"…{n}"
+      `\\$\\{\\s*${n}\\b`,
+      // `…${n}`
+      `#\\{\\s*${n}\\b`,
+      // "…#{n}"
+      `\\$${n}\\b`,
+      // "…$n" in PHP
+      `[+.]\\s*${n}\\b`,
+      // "…" + n, "…" . $n
+      `\\b${n}\\s*[+.]`,
+      `%\\s*\\(?\\s*${n}\\b`,
+      // "…%s" % n
+      `\\.format\\([^)]*\\b${n}\\b`,
+      `%[sv][^\\n]*,\\s*${n}\\b`
+      // Sprintf("…%s", n)
+    ].join("|")
+  ).test(text);
+}
+var GENERIC_FN = /* @__PURE__ */ new Set([
+  "get",
+  "set",
+  "run",
+  "main",
+  "init",
+  "call",
+  "send",
+  "load",
+  "save",
+  "read",
+  "write",
+  "open",
+  "close",
+  "query",
+  "execute",
+  "exec",
+  "find",
+  "handle",
+  "handler",
+  "render",
+  "request",
+  "process",
+  "update",
+  "create",
+  "delete",
+  "remove",
+  "start",
+  "stop",
+  "test",
+  "setup",
+  "index",
+  "show",
+  "new",
+  "edit",
+  "constructor",
+  "if",
+  "for",
+  "while",
+  "switch",
+  "catch",
+  "function",
+  "return"
+]);
+function paramNames(raw, lang) {
+  return raw.split(",").map((p2) => p2.replace(/=[\s\S]*$/, "").replace(/:[\s\S]*$/, "").trim()).map((p2) => {
+    var _a22, _b, _c, _d, _e2;
+    if (lang === "php") return (_b = (_a22 = p2.match(/\$(\w+)/)) == null ? void 0 : _a22[1]) != null ? _b : "";
+    if (lang === "go") return (_c = p2.split(/\s+/)[0]) != null ? _c : "";
+    if (lang === "java" || lang === "cs") return (_d = p2.split(/\s+/).pop()) != null ? _d : "";
+    return (_e2 = p2.replace(/^[*&.\s]+/, "").split(/\s+/)[0]) != null ? _e2 : "";
+  }).filter((n) => /^[A-Za-z_]\w*$/.test(n) && !["self", "cls", "this", "ctx", "context"].includes(n));
+}
+function enclosingFunction(lines, lineNo, lang) {
+  var _a22, _b;
+  for (let i = lineNo - 1; i >= Math.max(0, lineNo - 80); i--) {
+    const m2 = lines[i].match(FN_HEADER[lang]);
+    if (!m2) continue;
+    const groups = m2.slice(1);
+    const name = (_a22 = groups.find((g2, k2) => k2 % 2 === 0 && g2)) != null ? _a22 : "";
+    const params = (_b = groups.find((g2, k2) => k2 % 2 === 1 && g2 !== void 0)) != null ? _b : "";
+    if (!name || GENERIC_FN.has(name.toLowerCase()) || name.length < 4) return null;
+    return { name, params: paramNames(params, lang) };
+  }
+  return null;
+}
+function taintedCaller(sources, name, defFile, defLine) {
+  const call = new RegExp(`(?<![\\w.$]def\\s|function\\s)\\b${name.replace(/[?!]/g, "\\$&")}\\s*\\(`);
+  for (const src of sources) {
+    for (let i = 0; i < src.lines.length; i++) {
+      if (src.norm === defFile && Math.abs(i + 1 - defLine) < 80) continue;
+      if (!call.test(src.lines[i])) continue;
+      if (TEST_RE3.test(src.norm)) continue;
+      if (FN_HEADER[src.lang].test(src.lines[i])) continue;
+      const near = src.lines.slice(Math.max(0, i - TAINT_WINDOW), i + 3).join("\n");
+      if (TAINT_RE[src.lang].test(near)) return `${src.norm}:${i + 1}`;
+    }
+  }
+  return null;
+}
 var insecureCodeScanner = {
   id: "insecure-code",
   category: "security",
   run(ctx) {
     return __async(this, null, function* () {
-      var _a22;
+      var _a22, _b;
       const issues = [];
+      const sources = [];
+      const pending = [];
       for (const file2 of ctx.files) {
         if (issues.length >= MAX_TOTAL7) break;
         const norm = file2.replace(/\\/g, "/");
@@ -74906,6 +75028,8 @@ var insecureCodeScanner = {
         const content = yield ctx.readFile(file2);
         if (!content) continue;
         const isTest = TEST_RE3.test(norm);
+        const lines = content.split(/\r?\n/);
+        if (!isTest && TAINT_RE[lang].test(content)) sources.push({ norm, lang, lines });
         let perFile = 0;
         for (const hit of scanSource(content, lang)) {
           if (issues.length >= MAX_TOTAL7 || perFile >= MAX_PER_FILE4) break;
@@ -74917,7 +75041,7 @@ var insecureCodeScanner = {
             ageDays = yield ctx.git.blameAgeDays(file2, hit.line);
           } catch (e) {
           }
-          issues.push(__spreadValues({
+          const issue2 = __spreadValues({
             id: `insecure-${hit.rule.id}-${norm}:${hit.line}`,
             category: "security",
             severity: isTest ? LOWER[hit.rule.severity] : hit.rule.severity,
@@ -74926,8 +75050,24 @@ var insecureCodeScanner = {
             ageDays,
             detail: isTest ? `${hit.rule.detail} Lowered one severity step because this is a test file, where the pattern is often deliberate.` : hit.rule.detail,
             evidence: hit.evidence
-          }, hit.tainted === void 0 ? {} : { confidence: hit.tainted ? "high" : "low" }));
+          }, hit.tainted === void 0 ? {} : { confidence: hit.tainted ? "high" : "low" });
+          issues.push(issue2);
+          if (hit.tainted === false && !isTest && hit.rule.id !== "ssrf") pending.push({ issue: issue2, lang, lines, line: hit.line, norm });
         }
+      }
+      for (const p2 of pending) {
+        const kind = (_b = CROSS_FILE_KIND.find(([re2]) => re2.test(p2.issue.id))) == null ? void 0 : _b[1];
+        if (!kind) continue;
+        if (VENDORED_SINK_RE.test(p2.norm)) continue;
+        if (/Code generated|DO NOT EDIT|@generated/.test(p2.lines.slice(0, 8).join("\n"))) continue;
+        const fn2 = enclosingFunction(p2.lines, p2.line, p2.lang);
+        if (!fn2 || !fn2.params.length) continue;
+        const sinkText = p2.lines.slice(Math.max(0, p2.line - 3), p2.line).join("\n");
+        if (!fn2.params.some((n) => paramReaches(kind, n, sinkText))) continue;
+        const caller = taintedCaller(sources, fn2.name, p2.norm, p2.line);
+        if (!caller) continue;
+        p2.issue.confidence = "high";
+        p2.issue.detail += ` Request input reaches \`${fn2.name}()\` from ${caller}.`;
       }
       return issues;
     });
@@ -76949,15 +77089,21 @@ function tierPenalty(count, weight, curve) {
   return raw;
 }
 function computeScore(issues, weights = DEFAULT_WEIGHTS) {
-  var _a22;
+  var _a22, _b;
   const counts = { critical: 0, warning: 0, info: 0 };
   for (const i of issues) if (i.confidence !== "low") counts[i.severity]++;
   let penalty = 0;
   for (const sev of ["critical", "warning", "info"]) {
-    const raw = tierPenalty(counts[sev], weights[sev], SEVERITY_CURVE[sev]);
-    penalty += sev === "info" ? Math.min(raw, (_a22 = weights.infoCap) != null ? _a22 : Infinity) : raw;
+    const n = sev === "critical" ? counts[sev] : counts[sev] * ((_a22 = weights.sizeFactor) != null ? _a22 : 1);
+    const raw = tierPenalty(n, weights[sev], SEVERITY_CURVE[sev]);
+    penalty += sev === "info" ? Math.min(raw, (_b = weights.infoCap) != null ? _b : Infinity) : raw;
   }
   return Math.max(0, Math.round(100 - penalty));
+}
+var SIZE_REFERENCE_LOC = 2e4;
+function sizeFactor(linesOfCode) {
+  if (!linesOfCode || linesOfCode <= SIZE_REFERENCE_LOC) return 1;
+  return Math.round(Math.sqrt(SIZE_REFERENCE_LOC / linesOfCode) * 1e3) / 1e3;
 }
 function scoreToGrade(score) {
   if (score >= 90) return "A";
@@ -77056,14 +77202,16 @@ function runScan(_0) {
       completed++;
       onProgress == null ? void 0 : onProgress({ scanner: scanner.id, completed, total });
     }
-    const weights = (_d = (_c = ctx.config) == null ? void 0 : _c.weights) != null ? _d : DEFAULT_WEIGHTS;
+    const baseWeights = (_d = (_c = ctx.config) == null ? void 0 : _c.weights) != null ? _d : DEFAULT_WEIGHTS;
     const mute = (_f = (_e2 = ctx.config) == null ? void 0 : _e2.mute) != null ? _f : [];
     const inlineVisible = yield applyInlineIgnores(issues, ctx);
     const visible = mute.length ? inlineVisible.filter((i) => !isMuted(i, mute)) : inlineVisible;
     const lowConfidence = visible.filter((i) => i.confidence === "low");
     const confident = lowConfidence.length ? visible.filter((i) => i.confidence !== "low") : visible;
-    const score = computeScore(confident, weights);
     const { linesOfCode, profile } = yield buildMetricsAndProfile(ctx);
+    const factor = sizeFactor(linesOfCode);
+    const weights = factor < 1 ? __spreadProps(__spreadValues({}, baseWeights), { sizeFactor: factor }) : baseWeights;
+    const score = computeScore(confident, weights);
     const report2 = __spreadProps(__spreadValues({
       schemaVersion: SCHEMA_VERSION,
       repo: ctx.repo,
@@ -77658,7 +77806,10 @@ var scanReportSchema2 = external_exports.object({
       warning: external_exports.number().nonnegative(),
       info: external_exports.number().nonnegative(),
       // Absent in legacy reports: preserve their uncapped informational curve.
-      infoCap: external_exports.number().nonnegative().optional()
+      infoCap: external_exports.number().nonnegative().optional(),
+      // Size discount on warning/info counts (see sizeFactor in engine.ts).
+      // Absent in reports from before it existed: those scored at factor 1.
+      sizeFactor: external_exports.number().positive().max(1).optional()
     })
   }).optional(),
   /**
@@ -81525,7 +81676,7 @@ var GO_RE4 = /\.go$/i;
 var CS_RE2 = /\.(?:cs|cshtml)$/i;
 var SKIP_RE2 = /(^|\/)(?:node_modules|vendor|third_party|dist|build|out|\.next)\/|\.min\.[cm]?js$/i;
 var NOT_SHIPPED_RE4 = /(^|\/)(?:_?examples?|demos?|benchmarks?|bench|perf(?:-testing)?|performance|docs?|documentation|www|website|site|scripts?|tools?|[\w-]*_assets|static|_?vendor(?:ed)?|third_party|integration-?[tT]ests|test-utils|tooling|_tools|sphinx)\/|(^|\/)jquery[-.\d]*\.js$/i;
-var TEST_RE7 = /(^|\/)(?:__tests__|tests?|specs?|fixtures?)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test\.[cm]?[jt]s$|(?:^|\/)test_[^/]+\.py$|_test\.py$|(?:^|\/)conftest\.py$/i;
+var TEST_RE7 = /(^|\/)(?:__tests__|tests?|specs?|fixtures?)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test\.[cm]?[jt]s$|(?:^|\/)test_[^/]+\.py$|_test\.py$|(?:^|\/)conftest\.py$|_test\.go$|(?:Test|Tests|IT)\.(?:java|kt|cs|php)$|_spec\.rb$/i;
 var MAX_PER_FILE8 = 6;
 var MAX_TOTAL14 = 60;
 var MAX_BYTES4 = 4e5;
@@ -81706,7 +81857,7 @@ var PHP_JAVA_RULES2 = [
   {
     id: "eval-dynamic",
     lang: "php",
-    re: /\b(?:eval|assert|create_function)\s*\(\s*[^)'"\s]/g,
+    re: /\b(?:eval|create_function)\s*\(\s*[^)'"\s]/g,
     severity: "critical",
     title: "eval() on a non-literal value",
     detail: "`eval` runs whatever PHP it is given. If any part of it comes from a request, this is remote code execution."
@@ -81722,7 +81873,7 @@ var PHP_JAVA_RULES2 = [
   {
     id: "php-unserialize",
     lang: "php",
-    re: /\bunserialize\s*\(\s*[^)'"\s]/g,
+    re: /(?<!function\s{1,4})\bunserialize\s*\(\s*[^)'"\s](?![^;\n]*allowed_classes)/g,
     severity: "warning",
     title: "unserialize() on a non-literal value",
     detail: "`unserialize` can instantiate arbitrary classes and trigger their magic methods. Use `json_decode` for data that crosses a trust boundary."
@@ -82156,11 +82307,128 @@ function contextAllows2(ruleId, content, lineStart) {
 function rank2(s) {
   return s === "critical" ? 3 : s === "warning" ? 2 : 1;
 }
+var FN_HEADER2 = {
+  py: /^\s*(?:async\s+)?def\s+(\w+)\s*\(([^)]*)\)/,
+  js: /(?:function\s+(\w+)\s*\(([^)]*)\)|^\s*(?:export\s+)?(?:const|let|var)\s+(\w+)\s*=\s*(?:async\s*)?(?:function\s*)?\(([^)]*)\)\s*(?:=>|\{)|^\s*(?:async\s+|static\s+|public\s+|private\s+)*(\w+)\s*\(([^)]*)\)\s*\{)/,
+  php: /function\s+(\w+)\s*\(([^)]*)\)/,
+  rb: /^\s*def\s+(?:self\.)?(\w+[?!]?)\s*(?:\(([^)]*)\)|([^\n#]*))/,
+  go: /^func\s+(?:\([^)]*\)\s*)?(\w+)\s*\(([^)]*)\)/,
+  java: /(?:public|private|protected|static|final|synchronized)[\w<>\[\],.?\s]*\s(\w+)\s*\(([^)]*)\)\s*(?:throws[^{]*)?\{?\s*$/,
+  cs: /(?:public|private|protected|internal|static|async|virtual|override)[\w<>\[\],.?\s]*\s(\w+)\s*\(([^)]*)\)\s*\{?\s*$/
+};
+var CROSS_FILE_KIND2 = [
+  [/^insecure-sql-interpolated-/, "sql"],
+  [/^insecure-(?:exec-interpolated|py-os-system|py-shell-true|eval-dynamic|py-eval-exec|new-function)-/, "exec"]
+];
+var VENDORED_SINK_RE2 = /(^|\/)(?:vendor|third_party|node_modules|lib\/(?:mako|cherrypy|jinja2|six|requests|urllib3))\//;
+function paramReaches2(kind, n, text) {
+  if (kind === "exec") return new RegExp(`\\b${n}\\b`).test(text);
+  return new RegExp(
+    [
+      `\\{\\s*${n}\\b`,
+      // f"…{n}" or $"…{n}"
+      `\\$\\{\\s*${n}\\b`,
+      // `…${n}`
+      `#\\{\\s*${n}\\b`,
+      // "…#{n}"
+      `\\$${n}\\b`,
+      // "…$n" in PHP
+      `[+.]\\s*${n}\\b`,
+      // "…" + n, "…" . $n
+      `\\b${n}\\s*[+.]`,
+      `%\\s*\\(?\\s*${n}\\b`,
+      // "…%s" % n
+      `\\.format\\([^)]*\\b${n}\\b`,
+      `%[sv][^\\n]*,\\s*${n}\\b`
+      // Sprintf("…%s", n)
+    ].join("|")
+  ).test(text);
+}
+var GENERIC_FN2 = /* @__PURE__ */ new Set([
+  "get",
+  "set",
+  "run",
+  "main",
+  "init",
+  "call",
+  "send",
+  "load",
+  "save",
+  "read",
+  "write",
+  "open",
+  "close",
+  "query",
+  "execute",
+  "exec",
+  "find",
+  "handle",
+  "handler",
+  "render",
+  "request",
+  "process",
+  "update",
+  "create",
+  "delete",
+  "remove",
+  "start",
+  "stop",
+  "test",
+  "setup",
+  "index",
+  "show",
+  "new",
+  "edit",
+  "constructor",
+  "if",
+  "for",
+  "while",
+  "switch",
+  "catch",
+  "function",
+  "return"
+]);
+function paramNames2(raw, lang) {
+  return raw.split(",").map((p2) => p2.replace(/=[\s\S]*$/, "").replace(/:[\s\S]*$/, "").trim()).map((p2) => {
+    if (lang === "php") return p2.match(/\$(\w+)/)?.[1] ?? "";
+    if (lang === "go") return p2.split(/\s+/)[0] ?? "";
+    if (lang === "java" || lang === "cs") return p2.split(/\s+/).pop() ?? "";
+    return p2.replace(/^[*&.\s]+/, "").split(/\s+/)[0] ?? "";
+  }).filter((n) => /^[A-Za-z_]\w*$/.test(n) && !["self", "cls", "this", "ctx", "context"].includes(n));
+}
+function enclosingFunction2(lines, lineNo, lang) {
+  for (let i = lineNo - 1; i >= Math.max(0, lineNo - 80); i--) {
+    const m2 = lines[i].match(FN_HEADER2[lang]);
+    if (!m2) continue;
+    const groups = m2.slice(1);
+    const name = groups.find((g2, k2) => k2 % 2 === 0 && g2) ?? "";
+    const params = groups.find((g2, k2) => k2 % 2 === 1 && g2 !== void 0) ?? "";
+    if (!name || GENERIC_FN2.has(name.toLowerCase()) || name.length < 4) return null;
+    return { name, params: paramNames2(params, lang) };
+  }
+  return null;
+}
+function taintedCaller2(sources, name, defFile, defLine) {
+  const call = new RegExp(`(?<![\\w.$]def\\s|function\\s)\\b${name.replace(/[?!]/g, "\\$&")}\\s*\\(`);
+  for (const src of sources) {
+    for (let i = 0; i < src.lines.length; i++) {
+      if (src.norm === defFile && Math.abs(i + 1 - defLine) < 80) continue;
+      if (!call.test(src.lines[i])) continue;
+      if (TEST_RE7.test(src.norm)) continue;
+      if (FN_HEADER2[src.lang].test(src.lines[i])) continue;
+      const near = src.lines.slice(Math.max(0, i - TAINT_WINDOW2), i + 3).join("\n");
+      if (TAINT_RE2[src.lang].test(near)) return `${src.norm}:${i + 1}`;
+    }
+  }
+  return null;
+}
 var insecureCodeScanner2 = {
   id: "insecure-code",
   category: "security",
   async run(ctx) {
     const issues = [];
+    const sources = [];
+    const pending = [];
     for (const file2 of ctx.files) {
       if (issues.length >= MAX_TOTAL14) break;
       const norm = file2.replace(/\\/g, "/");
@@ -82173,6 +82441,8 @@ var insecureCodeScanner2 = {
       const content = await ctx.readFile(file2);
       if (!content) continue;
       const isTest = TEST_RE7.test(norm);
+      const lines = content.split(/\r?\n/);
+      if (!isTest && TAINT_RE2[lang].test(content)) sources.push({ norm, lang, lines });
       let perFile = 0;
       for (const hit of scanSource2(content, lang)) {
         if (issues.length >= MAX_TOTAL14 || perFile >= MAX_PER_FILE8) break;
@@ -82184,7 +82454,7 @@ var insecureCodeScanner2 = {
           ageDays = await ctx.git.blameAgeDays(file2, hit.line);
         } catch {
         }
-        issues.push({
+        const issue2 = {
           id: `insecure-${hit.rule.id}-${norm}:${hit.line}`,
           category: "security",
           severity: isTest ? LOWER2[hit.rule.severity] : hit.rule.severity,
@@ -82197,8 +82467,24 @@ var insecureCodeScanner2 = {
           // sight: a request field, argv, user input. Without it the benchmark
           // showed these are mostly code generation and fixed commands.
           ...hit.tainted === void 0 ? {} : { confidence: hit.tainted ? "high" : "low" }
-        });
+        };
+        issues.push(issue2);
+        if (hit.tainted === false && !isTest && hit.rule.id !== "ssrf") pending.push({ issue: issue2, lang, lines, line: hit.line, norm });
       }
+    }
+    for (const p2 of pending) {
+      const kind = CROSS_FILE_KIND2.find(([re2]) => re2.test(p2.issue.id))?.[1];
+      if (!kind) continue;
+      if (VENDORED_SINK_RE2.test(p2.norm)) continue;
+      if (/Code generated|DO NOT EDIT|@generated/.test(p2.lines.slice(0, 8).join("\n"))) continue;
+      const fn2 = enclosingFunction2(p2.lines, p2.line, p2.lang);
+      if (!fn2 || !fn2.params.length) continue;
+      const sinkText = p2.lines.slice(Math.max(0, p2.line - 3), p2.line).join("\n");
+      if (!fn2.params.some((n) => paramReaches2(kind, n, sinkText))) continue;
+      const caller = taintedCaller2(sources, fn2.name, p2.norm, p2.line);
+      if (!caller) continue;
+      p2.issue.confidence = "high";
+      p2.issue.detail += ` Request input reaches \`${fn2.name}()\` from ${caller}.`;
     }
     return issues;
   }
