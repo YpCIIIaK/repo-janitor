@@ -388,3 +388,39 @@ describe("insecure-code — Python SQL and SSRF (VAmPI, SSRF lab)", () => {
     expect(out).toEqual([expect.stringMatching(/ssrf.* low$/)])
   })
 })
+
+describe("insecure-code — cross-file taint", () => {
+  const scan = async (files: Record<string, string>) =>
+    (await insecureCodeScanner.run(makeContext({ files }))).map((i) => `${i.location} ${i.confidence}`)
+
+  it("links a model's f-string SQL to a view that passes request input (VAmPI)", async () => {
+    const out = await scan({
+      "models/user_model.py":
+        "class User:\n    @staticmethod\n    def get_user(username):\n" +
+        "        user_query = f\"SELECT * FROM users WHERE username = '{username}'\"\n" +
+        "        return db.session.execute(text(user_query))\n",
+      "api_views/users.py":
+        "def get_by_username(username):\n    user = User.get_user(request.args.get('name'))\n    return user\n",
+    })
+    expect(out).toEqual(["models/user_model.py:4 high"])
+  })
+
+  it("links a C# helper to a WebForms page reading a TextBox (WebGoat.NET)", async () => {
+    const out = await scan({
+      "Code/DatabaseUtilities.cs":
+        "public class DatabaseUtilities {\n    public string GetEmailByUserID(string userid)\n    {\n" +
+        "        string sql = \"SELECT Email FROM UserList WHERE UserID = '\" + userid + \"'\";\n        return DoScalar(sql);\n    }\n}\n",
+      "Content/Lookup.aspx.cs": "protected void btn_Click(object s, EventArgs e) {\n    lblEmail.Text = du.GetEmailByUserID(txtUserID.Text);\n}\n",
+    })
+    expect(out).toEqual(["Code/DatabaseUtilities.cs:4 high"])
+  })
+
+  it("stays low when no caller passes request input", async () => {
+    const out = await scan({
+      "models/report.py":
+        "def monthly_report(table_name):\n    q = f\"SELECT * FROM {table_name} WHERE month = 1\"\n    return db.execute(q)\n",
+      "jobs/cron.py": "def nightly():\n    monthly_report('orders')\n",
+    })
+    expect(out).toEqual(["models/report.py:2 low"])
+  })
+})

@@ -899,11 +899,88 @@ function rank(s: Severity): number {
   return s === "critical" ? 3 : s === "warning" ? 2 : 1
 }
 
+// --- cross-file taint -------------------------------------------------------
+// A controller reads the request and calls a model function in another file;
+// the model builds the SQL. Local taint sees neither half as dangerous. Here a
+// low-confidence sink inside a function whose PARAMETER reaches the sink is
+// upgraded when some caller of that function has request input in sight.
+
+/** Function headers per language: group 1 is the name, group 2 the parameter list. */
+const FN_HEADER: Record<Lang, RegExp> = {
+  py: /^\s*(?:async\s+)?def\s+(\w+)\s*\(([^)]*)\)/,
+  js: /(?:function\s+(\w+)\s*\(([^)]*)\)|^\s*(?:export\s+)?(?:const|let|var)\s+(\w+)\s*=\s*(?:async\s*)?(?:function\s*)?\(([^)]*)\)\s*(?:=>|\{)|^\s*(?:async\s+|static\s+|public\s+|private\s+)*(\w+)\s*\(([^)]*)\)\s*\{)/,
+  php: /function\s+(\w+)\s*\(([^)]*)\)/,
+  rb: /^\s*def\s+(?:self\.)?(\w+[?!]?)\s*(?:\(([^)]*)\)|([^\n#]*))/,
+  go: /^func\s+(?:\([^)]*\)\s*)?(\w+)\s*\(([^)]*)\)/,
+  java: /(?:public|private|protected|static|final|synchronized)[\w<>\[\],.?\s]*\s(\w+)\s*\(([^)]*)\)\s*(?:throws[^{]*)?\{?\s*$/,
+  cs: /(?:public|private|protected|internal|static|async|virtual|override)[\w<>\[\],.?\s]*\s(\w+)\s*\(([^)]*)\)\s*\{?\s*$/,
+}
+
+/** Names too generic to link a call to one definition. */
+const GENERIC_FN = new Set([
+  "get", "set", "run", "main", "init", "call", "send", "load", "save", "read", "write", "open", "close",
+  "query", "execute", "exec", "find", "handle", "handler", "render", "request", "process", "update",
+  "create", "delete", "remove", "start", "stop", "test", "setup", "index", "show", "new", "edit",
+  "constructor", "if", "for", "while", "switch", "catch", "function", "return",
+])
+
+function paramNames(raw: string, lang: Lang): string[] {
+  return raw
+    .split(",")
+    .map((p) => p.replace(/=[\s\S]*$/, "").replace(/:[\s\S]*$/, "").trim())
+    .map((p) => {
+      if (lang === "php") return p.match(/\$(\w+)/)?.[1] ?? ""
+      if (lang === "go") return p.split(/\s+/)[0] ?? ""
+      if (lang === "java" || lang === "cs") return p.split(/\s+/).pop() ?? ""
+      return p.replace(/^[*&.\s]+/, "").split(/\s+/)[0] ?? ""
+    })
+    .filter((n) => /^[A-Za-z_]\w*$/.test(n) && !["self", "cls", "this", "ctx", "context"].includes(n))
+}
+
+/** The function enclosing a 1-based line, if its header is within 80 lines above. */
+function enclosingFunction(lines: string[], lineNo: number, lang: Lang): { name: string; params: string[] } | null {
+  for (let i = lineNo - 1; i >= Math.max(0, lineNo - 80); i--) {
+    const m = lines[i].match(FN_HEADER[lang])
+    if (!m) continue
+    const groups = m.slice(1)
+    const name = groups.find((g, k) => k % 2 === 0 && g) ?? ""
+    const params = groups.find((g, k) => k % 2 === 1 && g !== undefined) ?? ""
+    if (!name || GENERIC_FN.has(name) || name.length < 4) return null
+    return { name, params: paramNames(params, lang) }
+  }
+  return null
+}
+
+interface Source {
+  norm: string
+  lang: Lang
+  lines: string[]
+}
+
+/** First call of `name(` in another place with request input around it, as "file:line". */
+function taintedCaller(sources: Source[], name: string, defFile: string, defLine: number): string | null {
+  const call = new RegExp(`(?<![\\w.$]def\\s|function\\s)\\b${name.replace(/[?!]/g, "\\$&")}\\s*\\(`)
+  for (const src of sources) {
+    for (let i = 0; i < src.lines.length; i++) {
+      if (src.norm === defFile && Math.abs(i + 1 - defLine) < 80) continue
+      if (!call.test(src.lines[i])) continue
+      if (FN_HEADER[src.lang].test(src.lines[i])) continue
+      const near = src.lines.slice(Math.max(0, i - TAINT_WINDOW), i + 3).join("\n")
+      if (TAINT_RE[src.lang].test(near)) return `${src.norm}:${i + 1}`
+    }
+  }
+  return null
+}
+
 export const insecureCodeScanner: Scanner = {
   id: "insecure-code",
   category: "security",
   async run(ctx: ScanContext): Promise<Issue[]> {
     const issues: Issue[] = []
+    // Files with request input somewhere: the only places a tainted caller can be.
+    const sources: Source[] = []
+    // Low-confidence injection findings that may be reached from another file.
+    const pending: { issue: Issue; lang: Lang; lines: string[]; line: number; norm: string }[] = []
 
     for (const file of ctx.files) {
       if (issues.length >= MAX_TOTAL) break
@@ -922,6 +999,8 @@ export const insecureCodeScanner: Scanner = {
       if (!content) continue
 
       const isTest = TEST_RE.test(norm)
+      const lines = content.split(/\r?\n/)
+      if (!isTest && TAINT_RE[lang].test(content)) sources.push({ norm, lang, lines })
 
       let perFile = 0
       for (const hit of scanSource(content, lang)) {
@@ -939,7 +1018,7 @@ export const insecureCodeScanner: Scanner = {
           /* blame unavailable — age stays 0 */
         }
 
-        issues.push({
+        const issue: Issue = {
           id: `insecure-${hit.rule.id}-${norm}:${hit.line}`,
           category: "security",
           severity: isTest ? LOWER[hit.rule.severity] : hit.rule.severity,
@@ -955,8 +1034,23 @@ export const insecureCodeScanner: Scanner = {
           // sight: a request field, argv, user input. Without it the benchmark
           // showed these are mostly code generation and fixed commands.
           ...(hit.tainted === undefined ? {} : { confidence: hit.tainted ? "high" : "low" }),
-        })
+        }
+        issues.push(issue)
+        if (hit.tainted === false && !isTest && hit.rule.id !== "ssrf") pending.push({ issue, lang, lines, line: hit.line, norm })
       }
+    }
+
+    for (const p of pending) {
+      const fn = enclosingFunction(p.lines, p.line, p.lang)
+      if (!fn || !fn.params.length) continue
+      // The parameter has to reach the sink: on its line, or on the line that
+      // builds the value the sink uses (`q = f"… {username}"` then `execute(q)`).
+      const sinkText = p.lines.slice(Math.max(0, p.line - 3), p.line).join("\n")
+      if (!fn.params.some((n) => new RegExp(`\\b${n}\\b`).test(sinkText))) continue
+      const caller = taintedCaller(sources, fn.name, p.norm, p.line)
+      if (!caller) continue
+      p.issue.confidence = "high"
+      p.issue.detail += ` Request input reaches \`${fn.name}()\` from ${caller}.`
     }
 
     return issues

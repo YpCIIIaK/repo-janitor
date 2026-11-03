@@ -7,7 +7,7 @@ import { categoryLabels, type Grade, type Issue, type IssueCategory, type Severi
  * recomputed in the browser, so we need the exact same weights/rounding the
  * scanner used. If the engine weights change, change them here too.
  */
-export type SeverityWeights = Record<Severity, number> & { infoCap?: number }
+export type SeverityWeights = Record<Severity, number> & { infoCap?: number; sizeFactor?: number }
 
 /** Built-in defaults — must mirror the engine (packages/core/src/config.ts). */
 export const DEFAULT_WEIGHTS: SeverityWeights = { critical: 10, warning: 3, info: 0.25, infoCap: 10 }
@@ -69,13 +69,15 @@ export function penaltyBreakdown(
 
   return (["critical", "warning", "info"] as const).map((severity) => {
     const curve = SEVERITY_CURVE[severity]
-    const raw = tierPenalty(counts[severity], weights[severity], curve)
+    // Mirrors core: warning/info counts are discounted for big codebases.
+    const n = severity === "critical" ? counts[severity] : counts[severity] * (weights.sizeFactor ?? 1)
+    const raw = tierPenalty(n, weights[severity], curve)
     const penalty = severity === "info" ? Math.min(raw, weights.infoCap ?? Infinity) : raw
     return {
       severity,
       count: counts[severity],
       penalty,
-      discounted: counts[severity] > curve.full || penalty < raw,
+      discounted: n > curve.full || penalty < raw || n < counts[severity],
     }
   })
 }
