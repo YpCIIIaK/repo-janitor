@@ -1,0 +1,8 @@
+{
+ "iac-open-admin-port-python3.10/efs/{{cookiecutter.project_name}}/template.yaml:28": "fp",
+ "iac-open-admin-port-python3.11/efs/{{cookiecutter.project_name}}/template.yaml:28": "fp",
+ "iac-open-admin-port-python3.12/efs/{{cookiecutter.project_name}}/template.yaml:28": "fp",
+ "iac-open-admin-port-python3.13/efs/{{cookiecutter.project_name}}/template.yaml:28": "fp",
+ "iac-open-admin-port-python3.14/efs/{{cookiecutter.project_name}}/template.yaml:28": "fp",
+ "iac-open-admin-port-python3.9/efs/{{cookiecutter.project_name}}/template.yaml:28": "fp"
+}

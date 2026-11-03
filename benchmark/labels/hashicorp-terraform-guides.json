@@ -1,0 +1,4 @@
+{
+ "iac-open-admin-port-infrastructure-as-code/dynamic-aws-creds-from-vault/networks-firewalls-ingress.tf:7": "tp",
+ "iac-open-admin-port-infrastructure-as-code/k8s-cluster-openshift-aws/modules/openshift/03-security-groups.tf:122": "tp"
+}

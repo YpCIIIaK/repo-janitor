@@ -26863,7 +26863,7 @@ var require_lib4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-7NPFGOVU.js
+// ../cli/dist/chunk-WEZWNC7W.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -45594,7 +45594,7 @@ function date4(params) {
 // ../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/external.js
 config(en_default());
 
-// ../cli/dist/chunk-7NPFGOVU.js
+// ../cli/dist/chunk-WEZWNC7W.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -70275,15 +70275,17 @@ var RULE_PRECISION = {
   "hygiene-no-license": { tp: 6, fp: 0 },
   "hygiene-no-readme": { tp: 1, fp: 0 },
   "hygiene-no-tests": { tp: 5, fp: 1 },
-  "iac-docker-socket": { tp: 11, fp: 1 },
-  "iac-host-namespace": { tp: 8, fp: 4 },
-  "iac-open-admin-port": { tp: 12, fp: 0 },
-  "iac-privilege-escalation": { tp: 2, fp: 1 },
-  "iac-privileged": { tp: 7, fp: 3 },
-  "iac-public-bucket": { tp: 10, fp: 0 },
-  "iac-public-database": { tp: 1, fp: 0 },
-  "iac-run-as-root": { tp: 4, fp: 1 },
-  "iac-unencrypted": { tp: 2, fp: 0 },
+  "iac-dangerous-capability": { tp: 0, fp: 2 },
+  "iac-docker-socket": { tp: 9, fp: 6 },
+  "iac-host-namespace": { tp: 5, fp: 36 },
+  "iac-iam-wildcard": { tp: 1, fp: 0 },
+  "iac-open-admin-port": { tp: 27, fp: 6 },
+  "iac-privilege-escalation": { tp: 1, fp: 2 },
+  "iac-privileged": { tp: 6, fp: 27 },
+  "iac-public-bucket": { tp: 10, fp: 5 },
+  "iac-public-database": { tp: 10, fp: 0 },
+  "iac-run-as-root": { tp: 2, fp: 19 },
+  "iac-unencrypted": { tp: 2, fp: 1 },
   "insecure-eval-dynamic": { tp: 1, fp: 2 },
   "insecure-exec-interpolated": { tp: 2, fp: 10 },
   "insecure-go-template-html": { tp: 0, fp: 5 },
@@ -74072,7 +74074,7 @@ var TF_RE = /\.tf$/i;
 var YAML_RE = /\.ya?ml$/i;
 var JSON_RE = /\.json$/i;
 var COMPOSE_RE = /(^|\/)(?:docker-)?compose(?:\.[\w-]+)?\.ya?ml$/i;
-var NOT_DEPLOYED_RE = /(^|\/)(?:[._]?examples?|samples?|demos?|guides?|tests?|testdata|test-fixtures|fixtures?|docs?|website|\.github|node_modules|vendor|dev|playwright|e2e|scripts|[\w-]*[_-]tests?|integration[_-]?tests?|test[-_]environments?)\//i;
+var NOT_DEPLOYED_RE = /(^|\/)(?:[._]?examples?|samples?|demos?|guides?|tests?|testdata|test-fixtures|fixtures?|docs?|website|\.github|node_modules|vendor|dev|playwright|e2e|scripts|_?archived?|tools|[\w-]*[_-]tests?|integration[_-]?tests?|test[-_]environments?)\//i;
 var DEV_COMPOSE_RE = /(^|\/)(?:docker-)?compose[.-](?:[\w.-]*[.-])?(?:ci|test|tests|dev|devel|development|local|override|example|e2e)[\w.-]*\.ya?ml$/i;
 var MAX_TOTAL5 = 60;
 var MAX_PER_FILE2 = 8;
@@ -74215,21 +74217,24 @@ function cloudHits(lines, isTerraform) {
 }
 function containerHits(lines, compose) {
   const hits = [];
-  const nodeAgent = /^\s*kind:\s*DaemonSet\b/m.test(lines.join("\n"));
+  const text = lines.join("\n");
+  const nodeAgent = /^\s*kind:\s*DaemonSet\b/m.test(text);
+  if (/^\s*kind:\s*(?:PodSecurityPolicy|SecurityContextConstraints|ClusterPolicy|Policy|ValidatingAdmissionPolicy)\b/m.test(text)) return hits;
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     const t2 = line.trim();
     if (t2.startsWith("#")) continue;
     const push = (id) => hits.push({ rule: RULES[id], line: i + 1, evidence: t2.slice(0, 160) });
     if (/\{\{-?\s*(?:if|with)\b/.test(near(lines, i, 2, 0))) continue;
+    const inInit = /^\s*initContainers:|sysctl|chown|chmod|volume-?permissions|init-?container/i.test(near(lines, i, 25, 0));
     if (/^\s*privileged:\s*true\b/.test(line)) {
-      if (!nodeAgent) push("privileged");
+      if (!nodeAgent && !inInit) push("privileged");
     } else if (/^\s*host(?:Network|PID|IPC):\s*true\b/.test(line) || compose && /^\s*(?:network_mode|pid|ipc):\s*["']?host\b/.test(line)) {
       if (!nodeAgent) push("host-namespace");
-    } else if (/\/var\/run\/docker\.sock/.test(line) && !/[:,]ro\b|readOnly:\s*true/.test(near(lines, i, 0, 3))) push("docker-socket");
-    else if (/^\s*allowPrivilegeEscalation:\s*true\b/.test(line)) push("privilege-escalation");
-    else if (/^\s*(?:-\s*)?["']?(?:SYS_ADMIN|NET_ADMIN|SYS_PTRACE|SYS_MODULE|ALL)["']?\s*$/.test(line) && /\badd:|cap_add:/.test(near(lines, i, 4, 0)) && !/\bdrop:/.test(near(lines, i, 1, 0))) push("dangerous-capability");
-    else if (/^\s*runAsUser:\s*0\b|^\s*runAsNonRoot:\s*false\b|^\s*user:\s*["']?(?:root|0)(?::0)?["']?\s*$/.test(line)) push("run-as-root");
+    } else if (/\/var\/run\/docker\.sock/.test(line) && !nodeAgent && !/[:,]ro\b|readOnly:\s*true/.test(near(lines, i, 0, 3))) push("docker-socket");
+    else if (/^\s*allowPrivilegeEscalation:\s*true\b/.test(line) && !nodeAgent && !inInit) push("privilege-escalation");
+    else if (/^\s*(?:-\s*)?["']?(?:SYS_ADMIN|SYS_PTRACE|SYS_MODULE|ALL)["']?\s*$/.test(line) && /\badd:|cap_add:/.test(near(lines, i, 4, 0)) && !/\bdrop:/.test(near(lines, i, 1, 0)) && !nodeAgent) push("dangerous-capability");
+    else if (!compose && !nodeAgent && !inInit && /^\s*runAsUser:\s*0\b|^\s*runAsNonRoot:\s*false\b/.test(line)) push("run-as-root");
   }
   return hits;
 }
@@ -74245,11 +74250,14 @@ var iacSecurityScanner = {
   run(ctx) {
     return __async(this, null, function* () {
       const issues = [];
+      const fileSet = new Set(ctx.files.map((f3) => f3.replace(/\\/g, "/")));
       for (const file2 of ctx.files) {
         if (issues.length >= MAX_TOTAL5) break;
         const norm = file2.replace(/\\/g, "/");
         if (NOT_DEPLOYED_RE.test(norm) || DEV_COMPOSE_RE.test(norm)) continue;
-        if (/(^|\/)variables\.tf$/i.test(norm)) continue;
+        if (/(^|\/)variables\.tf$|(^|\/)values(?:[.-][\w-]+)?\.ya?ml$/i.test(norm)) continue;
+        if (/\.(?:test|fixed|bad|good|insecure|secure|vuln|positive|negative)\.[\w]+$/i.test(norm)) continue;
+        if (fileSet.has(norm.replace(/\.[^./]+$/, ".yaml")) && !/\.ya?ml$/i.test(norm)) continue;
         const tf = TF_RE.test(norm);
         const yaml = YAML_RE.test(norm);
         const json2 = JSON_RE.test(norm);
@@ -81732,7 +81740,7 @@ var TF_RE2 = /\.tf$/i;
 var YAML_RE2 = /\.ya?ml$/i;
 var JSON_RE2 = /\.json$/i;
 var COMPOSE_RE2 = /(^|\/)(?:docker-)?compose(?:\.[\w-]+)?\.ya?ml$/i;
-var NOT_DEPLOYED_RE2 = /(^|\/)(?:[._]?examples?|samples?|demos?|guides?|tests?|testdata|test-fixtures|fixtures?|docs?|website|\.github|node_modules|vendor|dev|playwright|e2e|scripts|[\w-]*[_-]tests?|integration[_-]?tests?|test[-_]environments?)\//i;
+var NOT_DEPLOYED_RE2 = /(^|\/)(?:[._]?examples?|samples?|demos?|guides?|tests?|testdata|test-fixtures|fixtures?|docs?|website|\.github|node_modules|vendor|dev|playwright|e2e|scripts|_?archived?|tools|[\w-]*[_-]tests?|integration[_-]?tests?|test[-_]environments?)\//i;
 var DEV_COMPOSE_RE2 = /(^|\/)(?:docker-)?compose[.-](?:[\w.-]*[.-])?(?:ci|test|tests|dev|devel|development|local|override|example|e2e)[\w.-]*\.ya?ml$/i;
 var MAX_TOTAL13 = 60;
 var MAX_PER_FILE7 = 8;
@@ -81875,21 +81883,24 @@ function cloudHits2(lines, isTerraform) {
 }
 function containerHits2(lines, compose) {
   const hits = [];
-  const nodeAgent = /^\s*kind:\s*DaemonSet\b/m.test(lines.join("\n"));
+  const text = lines.join("\n");
+  const nodeAgent = /^\s*kind:\s*DaemonSet\b/m.test(text);
+  if (/^\s*kind:\s*(?:PodSecurityPolicy|SecurityContextConstraints|ClusterPolicy|Policy|ValidatingAdmissionPolicy)\b/m.test(text)) return hits;
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     const t2 = line.trim();
     if (t2.startsWith("#")) continue;
     const push = (id) => hits.push({ rule: RULES4[id], line: i + 1, evidence: t2.slice(0, 160) });
     if (/\{\{-?\s*(?:if|with)\b/.test(near2(lines, i, 2, 0))) continue;
+    const inInit = /^\s*initContainers:|sysctl|chown|chmod|volume-?permissions|init-?container/i.test(near2(lines, i, 25, 0));
     if (/^\s*privileged:\s*true\b/.test(line)) {
-      if (!nodeAgent) push("privileged");
+      if (!nodeAgent && !inInit) push("privileged");
     } else if (/^\s*host(?:Network|PID|IPC):\s*true\b/.test(line) || compose && /^\s*(?:network_mode|pid|ipc):\s*["']?host\b/.test(line)) {
       if (!nodeAgent) push("host-namespace");
-    } else if (/\/var\/run\/docker\.sock/.test(line) && !/[:,]ro\b|readOnly:\s*true/.test(near2(lines, i, 0, 3))) push("docker-socket");
-    else if (/^\s*allowPrivilegeEscalation:\s*true\b/.test(line)) push("privilege-escalation");
-    else if (/^\s*(?:-\s*)?["']?(?:SYS_ADMIN|NET_ADMIN|SYS_PTRACE|SYS_MODULE|ALL)["']?\s*$/.test(line) && /\badd:|cap_add:/.test(near2(lines, i, 4, 0)) && !/\bdrop:/.test(near2(lines, i, 1, 0))) push("dangerous-capability");
-    else if (/^\s*runAsUser:\s*0\b|^\s*runAsNonRoot:\s*false\b|^\s*user:\s*["']?(?:root|0)(?::0)?["']?\s*$/.test(line)) push("run-as-root");
+    } else if (/\/var\/run\/docker\.sock/.test(line) && !nodeAgent && !/[:,]ro\b|readOnly:\s*true/.test(near2(lines, i, 0, 3))) push("docker-socket");
+    else if (/^\s*allowPrivilegeEscalation:\s*true\b/.test(line) && !nodeAgent && !inInit) push("privilege-escalation");
+    else if (/^\s*(?:-\s*)?["']?(?:SYS_ADMIN|SYS_PTRACE|SYS_MODULE|ALL)["']?\s*$/.test(line) && /\badd:|cap_add:/.test(near2(lines, i, 4, 0)) && !/\bdrop:/.test(near2(lines, i, 1, 0)) && !nodeAgent) push("dangerous-capability");
+    else if (!compose && !nodeAgent && !inInit && /^\s*runAsUser:\s*0\b|^\s*runAsNonRoot:\s*false\b/.test(line)) push("run-as-root");
   }
   return hits;
 }
@@ -81904,11 +81915,14 @@ var iacSecurityScanner2 = {
   category: "security",
   async run(ctx) {
     const issues = [];
+    const fileSet = new Set(ctx.files.map((f3) => f3.replace(/\\/g, "/")));
     for (const file2 of ctx.files) {
       if (issues.length >= MAX_TOTAL13) break;
       const norm = file2.replace(/\\/g, "/");
       if (NOT_DEPLOYED_RE2.test(norm) || DEV_COMPOSE_RE2.test(norm)) continue;
-      if (/(^|\/)variables\.tf$/i.test(norm)) continue;
+      if (/(^|\/)variables\.tf$|(^|\/)values(?:[.-][\w-]+)?\.ya?ml$/i.test(norm)) continue;
+      if (/\.(?:test|fixed|bad|good|insecure|secure|vuln|positive|negative)\.[\w]+$/i.test(norm)) continue;
+      if (fileSet.has(norm.replace(/\.[^./]+$/, ".yaml")) && !/\.ya?ml$/i.test(norm)) continue;
       const tf = TF_RE2.test(norm);
       const yaml = YAML_RE2.test(norm);
       const json2 = JSON_RE2.test(norm);

@@ -1,0 +1,14 @@
+{
+ "iac-host-namespace-kubernetes/default/home-assistant/home-assistant.yaml:79": "fp",
+ "iac-host-namespace-kubernetes/kube-system/etcd/etcd-defrag/etcd-defrag.yaml:17": "fp",
+ "iac-host-namespace-kubernetes/kube-system/etcd/etcd-defrag/etcd-defrag.yaml:18": "fp",
+ "iac-privileged-kubernetes/kube-system/etcd/etcd-defrag/etcd-defrag.yaml:69": "fp",
+ "iac-privileged-kubernetes/kube-system/intel-gpu-resource-driver/intel-gpu-resource-driver.yaml:32": "fp",
+ "iac-run-as-root-kubernetes/default/miniflux/miniflux.yaml:186": "fp",
+ "iac-run-as-root-kubernetes/default/miniflux/miniflux.yaml:187": "fp",
+ "iac-run-as-root-kubernetes/default/mousetrap/mousetrap.yaml:19": "fp",
+ "iac-run-as-root-kubernetes/kube-system/etcd/etcd-defrag/etcd-defrag.yaml:21": "fp",
+ "iac-run-as-root-kubernetes/kube-system/etcd/etcd-defrag/etcd-defrag.yaml:22": "fp",
+ "iac-run-as-root-kubernetes/monitoring/smokeping-prober/smokeping-prober.yaml:76": "fp",
+ "iac-run-as-root-kubernetes/monitoring/smokeping-prober/smokeping-prober.yaml:77": "fp"
+}

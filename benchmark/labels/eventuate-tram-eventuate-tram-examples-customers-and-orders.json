@@ -1,0 +1,6 @@
+{
+ "iac-host-namespace-deployment/kubernetes/ingress/local-nginx-ingress.yaml:328": "fp",
+ "iac-privilege-escalation-deployment/kubernetes/ingress/local-nginx-ingress.yaml:354": "fp",
+ "iac-privilege-escalation-deployment/kubernetes/ingress/nginx-ingress.yaml:315": "fp",
+ "iac-public-database-aws-fargate-terraform/main.tf:22": "tp"
+}

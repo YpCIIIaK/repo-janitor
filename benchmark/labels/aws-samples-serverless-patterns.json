@@ -1,0 +1,20 @@
+{
+ "iac-open-admin-port-apigw-http-api-lambda-rds-proxy-java/template-rds-proxy.yaml:83": "tp",
+ "iac-open-admin-port-apigw-http-api-lambda-rds-proxy/template-rds-proxy.yaml:83": "tp",
+ "iac-open-admin-port-apigw-lambda-efs-sam/template.yaml:25": "tp",
+ "iac-open-admin-port-docdb-lambda-nodejs-sam/template.yaml:74": "tp",
+ "iac-open-admin-port-docdb-lambda-nodejs-sam/template.yaml:83": "tp",
+ "iac-open-admin-port-docdb-lambda-nodejs-sam/template.yaml:95": "tp",
+ "iac-open-admin-port-ec2-s3-express-one-zone-sam/template.yaml:73": "tp",
+ "iac-open-admin-port-eventbridge-schedule-ecs-terraform/main.tf:103": "tp",
+ "iac-open-admin-port-stepfunctions-fargate-lambda/vpc.yaml:22": "tp",
+ "iac-open-admin-port-terraform-lambda-bedrock-integration/main.tf:53": "tp",
+ "iac-public-database-activemq-lambda-sam-java/template.yaml:93": "tp",
+ "iac-public-database-activemq-lambda/template.yaml:61": "tp",
+ "iac-public-database-amazonmq-rabbitmq-msg-replication/main.tf:23": "tp",
+ "iac-public-database-amazonmq-rabbitmq-msg-replication/main.tf:40": "tp",
+ "iac-public-database-lambda-esm-rabbitmq-filters-sam/template.yaml:32": "tp",
+ "iac-public-database-rabbitmq-lambda-sam-java/template.yaml:31": "tp",
+ "iac-public-database-rabbitmq-lambda-tf/main.tf:15": "tp",
+ "iac-public-database-rabbitmq-lambda/template.yaml:15": "tp"
+}

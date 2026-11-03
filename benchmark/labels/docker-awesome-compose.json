@@ -1,0 +1,7 @@
+{
+ "iac-dangerous-capability-wireguard/compose.yaml:8": "fp",
+ "iac-docker-socket-portainer/compose.yaml:5": "fp",
+ "iac-docker-socket-portainer/compose.yaml:9": "fp",
+ "iac-docker-socket-traefik-golang/compose.yaml:10": "fp",
+ "iac-host-namespace-plex/compose.yaml:5": "fp"
+}

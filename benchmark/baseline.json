@@ -1,5 +1,5 @@
 {
-  "overall": 0.679,
+  "overall": 0.617,
   "scanners": {
     "eol-runtime": 1,
     "todo-debt": 1,
@@ -21,9 +21,9 @@
     "ci-health": 0.444,
     "repo-bloat": 0.538,
     "project-hygiene": 0.95,
-    "iac-security": 0.806,
+    "iac-security": 0.412,
     "dependency-funeral": 0,
     "supply-chain": 1
   },
-  "lostTp": 30
+  "lostTp": 36
 }
