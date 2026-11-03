@@ -1,0 +1,5 @@
+{
+ "iac-run-as-root-deploy/docker/docker-compose.yml:320": "tp",
+ "iac-run-as-root-deploy/helm/templates/mailhog/deployment.yaml:29": "tp",
+ "iac-run-as-root-deploy/k8s/base/mailhog/deployment.yaml:21": "tp"
+}

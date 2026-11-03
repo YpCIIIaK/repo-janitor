@@ -1,3 +1,4 @@
 {
+ "iac-run-as-root-docker-compose example/docker-compose.example.yml:8": "fp",
  "insecure-ssrf-ui/src/components/sidebar/SidebarDownloadMedia.tsx:72": "fp"
 }

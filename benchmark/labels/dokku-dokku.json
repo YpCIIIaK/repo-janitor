@@ -1,0 +1,5 @@
+{
+ "iac-privileged-plugins/scheduler-k3s/templates/chart/cron-job.yaml:124": "fp",
+ "iac-privileged-plugins/scheduler-k3s/templates/chart/deployment.yaml:141": "fp",
+ "iac-privileged-plugins/scheduler-k3s/templates/node-sysctls-chart/templates/daemonset.yaml:40": "fp"
+}

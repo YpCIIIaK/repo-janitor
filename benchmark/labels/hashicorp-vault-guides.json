@@ -1,0 +1,15 @@
+{
+ "iac-open-admin-port-identity/vault-agent-caching/terraform-aws/security-groups.tf:15": "tp",
+ "iac-open-admin-port-identity/vault-agent-demo/terraform-aws/security-groups.tf:15": "tp",
+ "iac-open-admin-port-identity/vault-agent-templates/terraform-aws/security-groups.tf:15": "tp",
+ "iac-open-admin-port-identity/vault-chef-approle/terraform-aws/chef-node/main.tf:79": "tp",
+ "iac-open-admin-port-identity/vault-chef-approle/terraform-aws/mgmt-node/main.tf:79": "tp",
+ "iac-open-admin-port-identity/vault-chef-approle/terraform-aws/mgmt-node/main.tf:95": "tp",
+ "iac-open-admin-port-operations/aws-kms-unseal-ha/terraform/instance.tf:95": "tp",
+ "iac-open-admin-port-operations/aws-kms-unseal/terraform-aws/instance.tf:87": "tp",
+ "iac-open-admin-port-operations/benchmarking/terraform-aws-vault-benchmark/terraform/security-groups.tf:10": "tp",
+ "iac-open-admin-port-operations/benchmarking/terraform-aws-vault-benchmark/terraform/security-groups.tf:97": "tp",
+ "iac-open-admin-port-secrets/password-policies/aws/security-groups.tf:15": "tp",
+ "iac-open-admin-port-secrets/sm-ssh-otp/aws/security-groups.tf:15": "tp",
+ "iac-open-admin-port-secrets/spring-cloud-vault/aws/terraform/ec2.tf:36": "tp"
+}

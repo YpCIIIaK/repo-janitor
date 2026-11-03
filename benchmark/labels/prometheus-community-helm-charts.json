@@ -1,0 +1,11 @@
+{
+ "iac-host-namespace-charts/kube-prometheus-stack/templates/prometheus-operator/admission-webhooks/deployment/deployment.yaml:133": "fp",
+ "iac-host-namespace-charts/kube-prometheus-stack/templates/prometheus-operator/deployment.yaml:238": "fp",
+ "iac-host-namespace-charts/prometheus-adapter/templates/deployment.yaml:44": "fp",
+ "iac-host-namespace-charts/prometheus-conntrack-stats-exporter/templates/daemonset.yaml:23": "fp",
+ "iac-host-namespace-charts/prometheus/templates/deploy.yaml:344": "fp",
+ "iac-privilege-escalation-charts/prometheus-pingmesh-exporter/values.yaml:96": "fp",
+ "iac-privileged-charts/prometheus-pingmesh-exporter/values.yaml:99": "fp",
+ "iac-privileged-charts/prometheus-smartctl-exporter/templates/daemonset.yaml:69": "fp",
+ "iac-run-as-root-charts/prometheus-smartctl-exporter/templates/daemonset.yaml:70": "fp"
+}

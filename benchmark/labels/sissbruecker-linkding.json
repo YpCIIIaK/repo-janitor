@@ -1,4 +1,5 @@
 {
+ "iac-docker-socket-scripts/test-environments/authelia-oidc/compose.yml:46": "fp",
  "insecure-ssrf-bookmarks/frontend/components/dev-tool.js:216": "fp",
  "insecure-ssrf-bookmarks/views/settings.py:146": "fp"
 }

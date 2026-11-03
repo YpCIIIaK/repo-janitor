@@ -1,4 +1,6 @@
 {
+ "iac-host-namespace-docker-compose.yml:524": "fp",
+ "iac-privileged-docker-compose.yml:512": "fp",
  "insecure-php-reflected-xss-data/web/autodiscover-json.php:19": "fp",
  "insecure-php-reflected-xss-data/web/f2b-banlist.php:7": "fp",
  "insecure-php-reflected-xss-data/web/inc/ajax/qr_gen.php:8": "fp",

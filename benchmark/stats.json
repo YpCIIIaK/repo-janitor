@@ -1,18 +1,18 @@
 {
   "repos": 896,
-  "generatedAt": "2026-11-03T13:41:57.890Z",
+  "generatedAt": "2026-11-03T15:12:52.397Z",
   "grades": {
     "A": 211,
-    "B": 204,
+    "B": 207,
     "C": 269,
-    "D": 170,
-    "F": 42
+    "D": 164,
+    "F": 45
   },
   "languages": {
     "JavaScript": {
       "repos": 216,
       "medianScore": 82,
-      "findingsPer1k": 1.85
+      "findingsPer1k": 1.82
     },
     "TypeScript": {
       "repos": 181,
@@ -21,12 +21,12 @@
     },
     "Python": {
       "repos": 131,
-      "medianScore": 67,
+      "medianScore": 66,
       "findingsPer1k": 1.58
     },
     "Go": {
       "repos": 73,
-      "medianScore": 71,
+      "medianScore": 72,
       "findingsPer1k": 1.42
     },
     "other": {
@@ -37,7 +37,7 @@
     "PHP": {
       "repos": 50,
       "medianScore": 66,
-      "findingsPer1k": 1.37
+      "findingsPer1k": 1.27
     },
     "Rust": {
       "repos": 35,
@@ -46,7 +46,7 @@
     },
     "Ruby": {
       "repos": 34,
-      "medianScore": 69,
+      "medianScore": 75,
       "findingsPer1k": 1.39
     },
     "Java": {
@@ -56,7 +56,7 @@
     },
     "C": {
       "repos": 21,
-      "medianScore": 67,
+      "medianScore": 69,
       "findingsPer1k": 1.36
     },
     "C#": {
@@ -87,8 +87,8 @@
   },
   "ruleShare": {
     "bus-factor": 0.705,
-    "todo": 0.631,
     "duplicate": 0.629,
+    "todo": 0.625,
     "workflow-action-tag-first-party": 0.609,
     "workflow-no-permissions": 0.522,
     "workflow-action-tag": 0.482,
@@ -129,8 +129,8 @@
     "tests": 0.86
   },
   "todo": {
-    "dated": 19377,
-    "medianDays": 1355
+    "dated": 16047,
+    "medianDays": 1434
   },
   "activity": {
     "active": 467,
@@ -143,129 +143,129 @@
       "key": "scorecard",
       "label": "OpenSSF Scorecard",
       "repos": 30,
-      "rawScoreGap": 9,
-      "scoreGap": 7.25,
-      "densityGap": -1.340677122405716
+      "rawScoreGap": 14,
+      "scoreGap": 9,
+      "densityGap": -1.3948087093445773
     },
     {
       "key": "eslintFlat",
       "label": "ESLint flat config",
       "repos": 111,
       "rawScoreGap": -1,
-      "scoreGap": 5.792792792792793,
-      "densityGap": -0.4700998954717648
+      "scoreGap": 5.702702702702703,
+      "densityGap": -0.46116651029241396
     },
     {
       "key": "tsconfig",
       "label": "TypeScript",
       "repos": 178,
       "rawScoreGap": 3,
-      "scoreGap": 4.146067415730337,
-      "densityGap": 0.09479194047293907
+      "scoreGap": 4.078651685393258,
+      "densityGap": 0.11198692105192114
     },
     {
       "key": "prettier",
       "label": "Prettier",
       "repos": 117,
       "rawScoreGap": -1,
-      "scoreGap": 3.094017094017094,
-      "densityGap": 0.2164222033345326
-    },
-    {
-      "key": "editorconfig",
-      "label": ".editorconfig",
-      "repos": 321,
-      "rawScoreGap": -1,
-      "scoreGap": 2.7725856697819315,
-      "densityGap": -0.5410216272821966
+      "scoreGap": 2.58974358974359,
+      "densityGap": 0.22900397721466897
     },
     {
       "key": "codeql",
       "label": "CodeQL",
       "repos": 116,
-      "rawScoreGap": -5,
-      "scoreGap": 1.6120689655172413,
-      "densityGap": -0.12229711245805674
+      "rawScoreGap": -6,
+      "scoreGap": 2.4913793103448274,
+      "densityGap": -0.141558937946235
+    },
+    {
+      "key": "editorconfig",
+      "label": ".editorconfig",
+      "repos": 321,
+      "rawScoreGap": 2,
+      "scoreGap": 2.3862928348909658,
+      "densityGap": -0.5027911633779836
     },
     {
       "key": "renovate",
       "label": "Renovate",
       "repos": 62,
-      "rawScoreGap": -6,
-      "scoreGap": 0.41935483870967744,
-      "densityGap": -0.03464133736244278
+      "rawScoreGap": -5,
+      "scoreGap": 0.3387096774193548,
+      "densityGap": -0.03238163064853515
     },
     {
       "key": "security",
       "label": "SECURITY.md",
       "repos": 300,
-      "rawScoreGap": -11,
-      "scoreGap": -0.6992481203007519,
-      "densityGap": -0.33331771503162155
-    },
-    {
-      "key": "preCommit",
-      "label": "pre-commit",
-      "repos": 90,
-      "rawScoreGap": -6,
-      "scoreGap": -1.441860465116279,
-      "densityGap": -0.6331359749511397
+      "rawScoreGap": -10,
+      "scoreGap": -0.4398496240601504,
+      "densityGap": -0.3510093893960926
     },
     {
       "key": "dependabot",
       "label": "Dependabot",
       "repos": 326,
       "rawScoreGap": -10,
-      "scoreGap": -1.7365079365079366,
-      "densityGap": 0.01851391538057011
+      "scoreGap": -1.8571428571428572,
+      "densityGap": 0.040248930596795685
+    },
+    {
+      "key": "preCommit",
+      "label": "pre-commit",
+      "repos": 90,
+      "rawScoreGap": -7,
+      "scoreGap": -1.9534883720930232,
+      "densityGap": -0.5943553482780025
     },
     {
       "key": "prTemplate",
       "label": "PR template",
       "repos": 289,
       "rawScoreGap": -13,
-      "scoreGap": -2.3657587548638133,
-      "densityGap": 0.36302581185606125
+      "scoreGap": -3.2607003891050583,
+      "densityGap": 0.3732277142526406
     },
     {
       "key": "changeset",
       "label": "Changesets",
       "repos": 23,
-      "rawScoreGap": -7,
-      "scoreGap": -3.176470588235294,
-      "densityGap": 1.7917428434848681
+      "rawScoreGap": -8,
+      "scoreGap": -3.8823529411764706,
+      "densityGap": 1.8104346157559457
     },
     {
       "key": "devcontainer",
       "label": "Dev container",
       "repos": 68,
-      "rawScoreGap": -7,
-      "scoreGap": -3.7794117647058822,
-      "densityGap": 0.24740498857695217
+      "rawScoreGap": -8,
+      "scoreGap": -4.676470588235294,
+      "densityGap": 0.24252411289368647
     },
     {
       "key": "contributing",
       "label": "CONTRIBUTING",
       "repos": 425,
       "rawScoreGap": -15,
-      "scoreGap": -5.041055718475073,
-      "densityGap": 0.13181078408532293
+      "scoreGap": -4.733137829912024,
+      "densityGap": 0.1416363596845661
     },
     {
       "key": "codeowners",
       "label": "CODEOWNERS",
       "repos": 120,
       "rawScoreGap": -9,
-      "scoreGap": -6.458333333333333,
-      "densityGap": 1.1328668221178662
+      "scoreGap": -6.025,
+      "densityGap": 1.1438609677185112
     },
     {
       "key": "issueTemplates",
       "label": "Issue templates",
       "repos": 410,
       "rawScoreGap": -18,
-      "scoreGap": -7.131944444444445,
-      "densityGap": 0.32414496976360513
+      "scoreGap": -7.385416666666667,
+      "densityGap": 0.3211921107522767
     }
   ]
 }

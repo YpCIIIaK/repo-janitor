@@ -1,0 +1,10 @@
+{
+ "iac-docker-socket-.examples/docker-compose/with-nginx-proxy/mariadb/apache/compose.yaml:74": "fp",
+ "iac-docker-socket-.examples/docker-compose/with-nginx-proxy/mariadb/apache/compose.yaml:90": "fp",
+ "iac-docker-socket-.examples/docker-compose/with-nginx-proxy/mariadb/fpm/compose.yaml:103": "fp",
+ "iac-docker-socket-.examples/docker-compose/with-nginx-proxy/mariadb/fpm/compose.yaml:87": "fp",
+ "iac-docker-socket-.examples/docker-compose/with-nginx-proxy/postgres/apache/compose.yaml:68": "fp",
+ "iac-docker-socket-.examples/docker-compose/with-nginx-proxy/postgres/apache/compose.yaml:82": "fp",
+ "iac-docker-socket-.examples/docker-compose/with-nginx-proxy/postgres/fpm/compose.yaml:82": "fp",
+ "iac-docker-socket-.examples/docker-compose/with-nginx-proxy/postgres/fpm/compose.yaml:96": "fp"
+}

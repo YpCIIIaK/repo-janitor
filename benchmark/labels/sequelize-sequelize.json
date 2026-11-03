@@ -1,4 +1,6 @@
 {
  "dead-export-packages/core/src/utils/where.ts:getComplexSize": "tp",
+ "iac-privileged-dev/db2/latest/docker-compose.yml:5": "fp",
+ "iac-privileged-dev/db2/oldest/docker-compose.yml:5": "fp",
  "insecure-sql-interpolated-packages/core/src/sequelize.js:626": "fp"
 }

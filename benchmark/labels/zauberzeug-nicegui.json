@@ -3,6 +3,7 @@
  "docker-root-development.dockerfile": "fp",
  "env-no-example": "fp",
  "eol-python-development.dockerfile-1": "tp",
+ "iac-docker-socket-docker-compose.yml:30": "fp",
  "insecure-eval-dynamic-nicegui/elements/scene/scene.js:177": "fp",
  "insecure-new-function-nicegui/elements/echart/echart.js:105": "fp",
  "lockfile-missing-poetry.lock": "tp"

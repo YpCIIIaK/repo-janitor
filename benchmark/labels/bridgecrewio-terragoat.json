@@ -1,0 +1,7 @@
+{
+ "iac-open-admin-port-terraform/aws/ec2.tf:95": "tp",
+ "iac-public-bucket-terraform/alicloud/bucket.tf:7": "tp",
+ "iac-public-database-terraform/aws/db-app.tf:22": "tp",
+ "iac-unencrypted-terraform/aws/db-app.tf:19": "tp",
+ "iac-unencrypted-terraform/aws/neptune.tf:9": "tp"
+}

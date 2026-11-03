@@ -28,7 +28,12 @@ const YAML_RE = /\.ya?ml$/i
 const JSON_RE = /\.json$/i
 const COMPOSE_RE = /(^|\/)(?:docker-)?compose(?:\.[\w-]+)?\.ya?ml$/i
 const NOT_DEPLOYED_RE =
-  /(^|\/)(?:_?examples?|samples?|demos?|tests?|testdata|test-fixtures|fixtures?|docs?|website|\.github|node_modules|vendor)\//i
+  /(^|\/)(?:[._]?examples?|samples?|demos?|guides?|tests?|testdata|test-fixtures|fixtures?|docs?|website|\.github|node_modules|vendor|dev|playwright|e2e|scripts|[\w-]*[_-]tests?|integration[_-]?tests?|test[-_]environments?)\//i
+/**
+ * Compose files for development, CI and examples: they run on a laptop or a CI
+ * runner (`docker-compose.ci-test.yml`, `compose.override.yml`), not in production.
+ */
+const DEV_COMPOSE_RE = /(^|\/)(?:docker-)?compose[.-](?:[\w.-]*[.-])?(?:ci|test|tests|dev|devel|development|local|override|example|e2e)[\w.-]*\.ya?ml$/i
 const MAX_TOTAL = 60
 const MAX_PER_FILE = 8
 
@@ -157,6 +162,32 @@ function portsIn(block: string): { from: number; to: number } | null {
   return { from: f, to: to ? Number(to[1]) : f }
 }
 
+/**
+ * The text of the single rule around line `i`: the YAML list item it belongs to
+ * (`- IpProtocol: tcp` …), or the Terraform block (`ingress { … }`).
+ */
+function ruleBlock(lines: string[], i: number): string {
+  const indent = (l: string) => l.length - l.trimStart().length
+  let start = i
+  for (let k = i; k >= Math.max(0, i - 12); k--) {
+    if (/^\s*-\s/.test(lines[k]) || /\{\s*$/.test(lines[k])) {
+      start = k
+      break
+    }
+  }
+  let end = i
+  const base = indent(lines[start])
+  for (let k = i + 1; k < Math.min(lines.length, i + 12); k++) {
+    const l = lines[k]
+    if (!l.trim()) continue
+    if (/^\s*-\s/.test(l) && indent(l) <= base) break
+    if (/^\s*\}/.test(l)) break
+    if (indent(l) < base) break
+    end = k
+  }
+  return lines.slice(start, end + 1).join("\n")
+}
+
 function opensAdminPort(block: string): boolean {
   if (/\bprotocol\b["']?\s*[:=]\s*["']?(?:-1|all)\b/i.test(block) && !portsIn(block)) return true
   const p = portsIn(block)
@@ -178,12 +209,15 @@ function cloudHits(lines: string[], isTerraform: boolean): Hit[] {
     if (/\bacl\b\s*=\s*"public-read(?:-write)?"|AccessControl["']?\s*:\s*["']?PublicRead(?:Write)?\b/.test(line)) push("public-bucket")
     else if (/\b(?:block_public_acls|block_public_policy|restrict_public_buckets|ignore_public_acls)\s*=\s*false\b|\b(?:BlockPublicAcls|BlockPublicPolicy|RestrictPublicBuckets)["']?\s*:\s*["']?false\b/.test(line)) push("public-bucket")
     else if (/(?:"|\b)(?:0\.0\.0\.0\/0|::\/0)"/.test(line) || /CidrIp(?:v6)?["']?\s*:\s*["']?(?:0\.0\.0\.0\/0|::\/0)/.test(line)) {
-      // Only an ingress rule matters, and only when it opens an admin/database port.
-      const block = near(lines, i, 10, 10)
+      // Only an ingress rule matters, and only when it opens an admin/database port —
+      // of THIS rule: CloudFormation lists several rules in a row (port 80, then 22).
+      const block = ruleBlock(lines, i)
       const egress = /\begress\b|SecurityGroupEgress|type\s*=\s*"egress"/.test(near(lines, i, 6, 2)) && !/\bingress\b|SecurityGroupIngress/.test(near(lines, i, 6, 2))
-      if (!egress && opensAdminPort(block)) push("open-admin-port")
+      // Network ACL entries (`rule_number`) mirror AWS's allow-all default; security groups are the gate.
+      const nacl = /\brule_number\b|RuleNumber|network_acl|acl_(?:in|e)gress/i.test(block + near(lines, i, 15, 0))
+      if (!egress && !nacl && opensAdminPort(block)) push("open-admin-port")
     } else if (/\bpublicly_accessible\s*=\s*true\b|PubliclyAccessible["']?\s*:\s*["']?true\b/.test(line)) push("public-database")
-    else if (/\b(?:encrypted|storage_encrypted|encrypt_at_rest|enable_encryption)\s*=\s*false\b|\b(?:Encrypted|StorageEncrypted|KmsEncrypted)["']?\s*:\s*["']?false\b/.test(line)) push("unencrypted")
+    else if (/\b(?:encrypted|storage_encrypted|encrypt_at_rest|enable_encryption)\s*=\s*false\b|\b(?:Encrypted|StorageEncrypted|KmsEncrypted)["']?\s*:\s*["']?(?:false|False|FALSE)\b/.test(line)) push("unencrypted")
     else if (/["']?Action["']?\s*:\s*\[?\s*["']\*["']|\bactions\s*=\s*\[\s*"\*"\s*\]/.test(line)) {
       const block = near(lines, i, 6, 6)
       const allResources = /["']?Resource["']?\s*:\s*\[?\s*["']\*["']|\bresources\s*=\s*\[\s*"\*"\s*\]/.test(block)
@@ -201,15 +235,24 @@ function cloudHits(lines: string[], isTerraform: boolean): Hit[] {
 /** Kubernetes manifests (Helm templates included) and docker-compose services. */
 function containerHits(lines: string[], compose: boolean): Hit[] {
   const hits: Hit[] = []
+  // A DaemonSet is a node agent (CNI, log shipper, metrics exporter): host
+  // networking and privileges are what it is for.
+  const nodeAgent = /^\s*kind:\s*DaemonSet\b/m.test(lines.join("\n"))
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i]
     const t = line.trim()
     if (t.startsWith("#")) continue
     const push = (id: string) => hits.push({ rule: RULES[id], line: i + 1, evidence: t.slice(0, 160) })
+    // Inside `{{- if .Values.hostNetwork }}` the setting is an opt-in the chart's
+    // user has to ask for, not a default.
+    if (/\{\{-?\s*(?:if|with)\b/.test(near(lines, i, 2, 0))) continue
 
-    if (/^\s*privileged:\s*true\b/.test(line)) push("privileged")
-    else if (/^\s*host(?:Network|PID|IPC):\s*true\b/.test(line) || (compose && /^\s*(?:network_mode|pid|ipc):\s*["']?host\b/.test(line))) push("host-namespace")
-    else if (/\/var\/run\/docker\.sock/.test(line) && !/:ro\b|readOnly:\s*true/.test(near(lines, i, 0, 3))) push("docker-socket")
+    if (/^\s*privileged:\s*true\b/.test(line)) {
+      if (!nodeAgent) push("privileged")
+    } else if (/^\s*host(?:Network|PID|IPC):\s*true\b/.test(line) || (compose && /^\s*(?:network_mode|pid|ipc):\s*["']?host\b/.test(line))) {
+      if (!nodeAgent) push("host-namespace")
+    }
+    else if (/\/var\/run\/docker\.sock/.test(line) && !/[:,]ro\b|readOnly:\s*true/.test(near(lines, i, 0, 3))) push("docker-socket")
     else if (/^\s*allowPrivilegeEscalation:\s*true\b/.test(line)) push("privilege-escalation")
     else if (/^\s*(?:-\s*)?["']?(?:SYS_ADMIN|NET_ADMIN|SYS_PTRACE|SYS_MODULE|ALL)["']?\s*$/.test(line) && /\badd:|cap_add:/.test(near(lines, i, 4, 0)) && !/\bdrop:/.test(near(lines, i, 1, 0))) push("dangerous-capability")
     else if (/^\s*runAsUser:\s*0\b|^\s*runAsNonRoot:\s*false\b|^\s*user:\s*["']?(?:root|0)(?::0)?["']?\s*$/.test(line)) push("run-as-root")
@@ -234,7 +277,9 @@ export const iacSecurityScanner: Scanner = {
     for (const file of ctx.files) {
       if (issues.length >= MAX_TOTAL) break
       const norm = file.replace(/\\/g, "/")
-      if (NOT_DEPLOYED_RE.test(norm)) continue
+      if (NOT_DEPLOYED_RE.test(norm) || DEV_COMPOSE_RE.test(norm)) continue
+      // Module inputs: defaults a caller overrides (terraform-aws-vpc's default NACL rules).
+      if (/(^|\/)variables\.tf$/i.test(norm)) continue
       const tf = TF_RE.test(norm)
       const yaml = YAML_RE.test(norm)
       const json = JSON_RE.test(norm)

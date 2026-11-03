@@ -7,10 +7,10 @@
 | grade | repos | share |
 |---|---:|---:|
 | A | 211 | 24% |
-| B | 204 | 23% |
+| B | 207 | 23% |
 | C | 269 | 30% |
-| D | 170 | 19% |
-| F | 42 | 5% |
+| D | 164 | 18% |
+| F | 45 | 5% |
 
 Median score **71**.
 
@@ -20,14 +20,14 @@ Median score **71**.
 |---|---:|---:|---:|
 | JavaScript | 216 | 82 | 1.8 |
 | TypeScript | 181 | 71 | 1.9 |
-| Python | 131 | 67 | 1.6 |
-| Go | 73 | 71 | 1.4 |
+| Python | 131 | 66 | 1.6 |
+| Go | 73 | 72 | 1.4 |
 | other | 61 | 89 | 0.0 |
-| PHP | 50 | 66 | 1.4 |
+| PHP | 50 | 66 | 1.3 |
 | Rust | 35 | 61 | 1.7 |
-| Ruby | 34 | 69 | 1.4 |
+| Ruby | 34 | 75 | 1.4 |
 | Java | 31 | 64 | 1.5 |
-| C | 21 | 67 | 1.4 |
+| C | 21 | 69 | 1.4 |
 | C# | 21 | 61 | 2.3 |
 | C++ | 13 | 63 | 3.7 |
 | Kotlin | 12 | 64 | 1.7 |
@@ -41,8 +41,8 @@ Share of repos with at least one finding of the rule.
 | rule | repos | share |
 |---|---:|---:|
 | bus-factor | 632 | 71% |
-| todo | 565 | 63% |
 | duplicate | 564 | 63% |
+| todo | 560 | 63% |
 | workflow-action-tag-first-party | 546 | 61% |
 | workflow-no-permissions | 468 | 52% |
 | workflow-action-tag | 432 | 48% |
@@ -94,8 +94,8 @@ Share of repos with at least one finding of the rule.
 
 ## How old the debt is
 
-- Median age of a TODO/FIXME: **3.7 years** (19377 dated).
-- 36% of them are older than five years.
+- Median age of a TODO/FIXME: **3.9 years** (16047 dated).
+- 39% of them are older than five years.
 
 Oldest TODOs in the corpus:
 
@@ -109,7 +109,7 @@ Oldest TODOs in the corpus:
 
 - Active repos (≥ 50 commits last year, 467): median score **65**.
 - Quiet repos (< 10 commits, 230): median score **83**.
-- Mean findings per repo: active 86, quiet 34.
+- Mean findings per repo: active 79, quiet 33.
 
 ## Size vs score
 
@@ -118,7 +118,7 @@ Oldest TODOs in the corpus:
 | < 5k lines | 301 | 88 |
 | 5k–50k | 367 | 68 |
 | 50k–200k | 179 | 61 |
-| > 200k | 49 | 58 |
+| > 200k | 49 | 59 |
 
 ## Cleanest repos
 
@@ -138,13 +138,13 @@ Oldest TODOs in the corpus:
 - **0** webgoat-webgoat (140 findings)
 - **0** digininja-dvwa (105 findings)
 - **0** juice-shop-juice-shop (150 findings)
-- **0** owasp-crapi (182 findings)
-- **0** alist-org-alist (296 findings)
-- **0** atuinsh-atuin (172 findings)
-- **0** freshrss-freshrss (2481 findings)
+- **0** alist-org-alist (264 findings)
+- **0** atuinsh-atuin (170 findings)
 - **0** jerryhoff-webgoat-net (83 findings)
-- **0** matomo-org-matomo-for-wordpress (226 findings)
+- **0** matomo-org-matomo-for-wordpress (193 findings)
 - **0** owasp-wrongsecrets (138 findings)
+- **0** sasanlabs-vulnerableapp (105 findings)
+- **0** dagster-io-dagster (876 findings)
 
 ## Do good practices go with healthier code?
 
@@ -152,22 +152,22 @@ Median gap between repos with and without a practice. *Raw* compares everyone; *
 
 | practice | repos | score gap, raw | score gap, same size | findings/1k gap, same size |
 |---|---:|---:|---:|---:|
-| OpenSSF Scorecard | 30 | +9 | +7.3 | -1.34 |
-| ESLint flat config | 111 | -1 | +5.8 | -0.47 |
-| TypeScript | 178 | +3 | +4.1 | +0.09 |
-| Prettier | 117 | -1 | +3.1 | +0.22 |
-| .editorconfig | 321 | -1 | +2.8 | -0.54 |
-| CodeQL | 116 | -5 | +1.6 | -0.12 |
-| Renovate | 62 | -6 | +0.4 | -0.03 |
-| SECURITY.md | 300 | -11 | -0.7 | -0.33 |
-| pre-commit | 90 | -6 | -1.4 | -0.63 |
-| Dependabot | 326 | -10 | -1.7 | +0.02 |
-| PR template | 289 | -13 | -2.4 | +0.36 |
-| Changesets | 23 | -7 | -3.2 | +1.79 |
-| Dev container | 68 | -7 | -3.8 | +0.25 |
-| CONTRIBUTING | 425 | -15 | -5.0 | +0.13 |
-| CODEOWNERS | 120 | -9 | -6.5 | +1.13 |
-| Issue templates | 410 | -18 | -7.1 | +0.32 |
+| OpenSSF Scorecard | 30 | +14 | +9.0 | -1.39 |
+| ESLint flat config | 111 | -1 | +5.7 | -0.46 |
+| TypeScript | 178 | +3 | +4.1 | +0.11 |
+| Prettier | 117 | -1 | +2.6 | +0.23 |
+| CodeQL | 116 | -6 | +2.5 | -0.14 |
+| .editorconfig | 321 | +2 | +2.4 | -0.50 |
+| Renovate | 62 | -5 | +0.3 | -0.03 |
+| SECURITY.md | 300 | -10 | -0.4 | -0.35 |
+| Dependabot | 326 | -10 | -1.9 | +0.04 |
+| pre-commit | 90 | -7 | -2.0 | -0.59 |
+| PR template | 289 | -13 | -3.3 | +0.37 |
+| Changesets | 23 | -8 | -3.9 | +1.81 |
+| Dev container | 68 | -8 | -4.7 | +0.24 |
+| CONTRIBUTING | 425 | -15 | -4.7 | +0.14 |
+| CODEOWNERS | 120 | -9 | -6.0 | +1.14 |
+| Issue templates | 410 | -18 | -7.4 | +0.32 |
 
 Correlation, not causation: projects that add Dependabot are also the ones that care in other ways.
 

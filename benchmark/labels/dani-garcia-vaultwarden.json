@@ -1,0 +1,7 @@
+{
+ "iac-docker-socket-playwright/docker-compose.yml:58": "fp",
+ "iac-host-namespace-playwright/docker-compose.yml:109": "fp",
+ "iac-host-namespace-playwright/docker-compose.yml:118": "fp",
+ "iac-host-namespace-playwright/docker-compose.yml:16": "fp",
+ "iac-host-namespace-playwright/docker-compose.yml:49": "fp"
+}

@@ -1,0 +1,15 @@
+{
+ "iac-host-namespace-demo_yamls/etcdclient.yaml:29": "tp",
+ "iac-host-namespace-setup/calico.yaml:4291": "fp",
+ "iac-host-namespace-setup/privileged_psp.yaml:14": "tp",
+ "iac-host-namespace-setup/privileged_psp.yaml:18": "tp",
+ "iac-host-namespace-setup/privileged_psp.yaml:19": "tp",
+ "iac-privilege-escalation-setup/privileged_psp.yaml:9": "tp",
+ "iac-privileged-demo_yamls/nonroot_priv.yaml:16": "tp",
+ "iac-privileged-demo_yamls/root_system.yaml:16": "tp",
+ "iac-privileged-setup/calico.yaml:4334": "fp",
+ "iac-privileged-setup/calico.yaml:4375": "fp",
+ "iac-privileged-setup/calico.yaml:4399": "fp",
+ "iac-privileged-setup/calico.yaml:4479": "fp",
+ "iac-privileged-setup/privileged_psp.yaml:8": "tp"
+}

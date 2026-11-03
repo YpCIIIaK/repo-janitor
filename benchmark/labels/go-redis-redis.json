@@ -1,5 +1,7 @@
 {
  "ci-disabled-.github/workflows/test-redis-enterprise.yml-13": "tp",
  "docker-latest-maintnotifications/e2e/cmd/proxy-fi-server/Dockerfile:18": "fp",
- "env-no-example": "fp"
+ "env-no-example": "fp",
+ "iac-host-namespace-docker-compose.yml:112": "fp",
+ "iac-host-namespace-docker-compose.yml:141": "fp"
 }
