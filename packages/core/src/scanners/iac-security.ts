@@ -28,7 +28,7 @@ const YAML_RE = /\.ya?ml$/i
 const JSON_RE = /\.json$/i
 const COMPOSE_RE = /(^|\/)(?:docker-)?compose(?:\.[\w-]+)?\.ya?ml$/i
 const NOT_DEPLOYED_RE =
-  /(^|\/)(?:[._]?examples?|samples?|demos?|guides?|tests?|testdata|test-fixtures|fixtures?|docs?|website|\.github|node_modules|vendor|dev|playwright|e2e|scripts|[\w-]*[_-]tests?|integration[_-]?tests?|test[-_]environments?)\//i
+  /(^|\/)(?:[._]?examples?|samples?|demos?|guides?|tests?|testdata|test-fixtures|fixtures?|docs?|website|\.github|node_modules|vendor|dev|playwright|e2e|scripts|_?archived?|tools|[\w-]*[_-]tests?|integration[_-]?tests?|test[-_]environments?)\//i
 /**
  * Compose files for development, CI and examples: they run on a laptop or a CI
  * runner (`docker-compose.ci-test.yml`, `compose.override.yml`), not in production.
@@ -237,7 +237,11 @@ function containerHits(lines: string[], compose: boolean): Hit[] {
   const hits: Hit[] = []
   // A DaemonSet is a node agent (CNI, log shipper, metrics exporter): host
   // networking and privileges are what it is for.
-  const nodeAgent = /^\s*kind:\s*DaemonSet\b/m.test(lines.join("\n"))
+  const text = lines.join("\n")
+  const nodeAgent = /^\s*kind:\s*DaemonSet\b/m.test(text)
+  // PodSecurityPolicy / SecurityContextConstraints / Kyverno-style policies list
+  // what a cluster ALLOWS; they are not containers.
+  if (/^\s*kind:\s*(?:PodSecurityPolicy|SecurityContextConstraints|ClusterPolicy|Policy|ValidatingAdmissionPolicy)\b/m.test(text)) return hits
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i]
     const t = line.trim()
@@ -247,15 +251,16 @@ function containerHits(lines: string[], compose: boolean): Hit[] {
     // user has to ask for, not a default.
     if (/\{\{-?\s*(?:if|with)\b/.test(near(lines, i, 2, 0))) continue
 
+    const inInit = /^\s*initContainers:|sysctl|chown|chmod|volume-?permissions|init-?container/i.test(near(lines, i, 25, 0))
     if (/^\s*privileged:\s*true\b/.test(line)) {
-      if (!nodeAgent) push("privileged")
+      if (!nodeAgent && !inInit) push("privileged")
     } else if (/^\s*host(?:Network|PID|IPC):\s*true\b/.test(line) || (compose && /^\s*(?:network_mode|pid|ipc):\s*["']?host\b/.test(line))) {
       if (!nodeAgent) push("host-namespace")
     }
-    else if (/\/var\/run\/docker\.sock/.test(line) && !/[:,]ro\b|readOnly:\s*true/.test(near(lines, i, 0, 3))) push("docker-socket")
-    else if (/^\s*allowPrivilegeEscalation:\s*true\b/.test(line)) push("privilege-escalation")
-    else if (/^\s*(?:-\s*)?["']?(?:SYS_ADMIN|NET_ADMIN|SYS_PTRACE|SYS_MODULE|ALL)["']?\s*$/.test(line) && /\badd:|cap_add:/.test(near(lines, i, 4, 0)) && !/\bdrop:/.test(near(lines, i, 1, 0))) push("dangerous-capability")
-    else if (/^\s*runAsUser:\s*0\b|^\s*runAsNonRoot:\s*false\b|^\s*user:\s*["']?(?:root|0)(?::0)?["']?\s*$/.test(line)) push("run-as-root")
+    else if (/\/var\/run\/docker\.sock/.test(line) && !nodeAgent && !/[:,]ro\b|readOnly:\s*true/.test(near(lines, i, 0, 3))) push("docker-socket")
+    else if (/^\s*allowPrivilegeEscalation:\s*true\b/.test(line) && !nodeAgent && !inInit) push("privilege-escalation")
+    else if (/^\s*(?:-\s*)?["']?(?:SYS_ADMIN|SYS_PTRACE|SYS_MODULE|ALL)["']?\s*$/.test(line) && /\badd:|cap_add:/.test(near(lines, i, 4, 0)) && !/\bdrop:/.test(near(lines, i, 1, 0)) && !nodeAgent) push("dangerous-capability")
+    else if (!compose && !nodeAgent && !inInit && /^\s*runAsUser:\s*0\b|^\s*runAsNonRoot:\s*false\b/.test(line)) push("run-as-root")
   }
   return hits
 }
@@ -273,13 +278,19 @@ export const iacSecurityScanner: Scanner = {
   category: "security",
   async run(ctx: ScanContext): Promise<Issue[]> {
     const issues: Issue[] = []
+    const fileSet = new Set(ctx.files.map((f) => f.replace(/\\/g, "/")))
 
     for (const file of ctx.files) {
       if (issues.length >= MAX_TOTAL) break
       const norm = file.replace(/\\/g, "/")
       if (NOT_DEPLOYED_RE.test(norm) || DEV_COMPOSE_RE.test(norm)) continue
-      // Module inputs: defaults a caller overrides (terraform-aws-vpc's default NACL rules).
-      if (/(^|\/)variables\.tf$/i.test(norm)) continue
+      // Module inputs and chart values: defaults a caller overrides or opts into
+      // (terraform-aws-vpc's NACL rules, bitnami's volumePermissions init container).
+      if (/(^|\/)variables\.tf$|(^|\/)values(?:[.-][\w-]+)?\.ya?ml$/i.test(norm)) continue
+      // Test fixtures for policy rules: `*.test.yaml`, `*.fixed.*`, or a config
+      // next to a same-named rule file (semgrep-rules, checkov) is bad on purpose.
+      if (/\.(?:test|fixed|bad|good|insecure|secure|vuln|positive|negative)\.[\w]+$/i.test(norm)) continue
+      if (fileSet.has(norm.replace(/\.[^./]+$/, ".yaml")) && !/\.ya?ml$/i.test(norm)) continue
       const tf = TF_RE.test(norm)
       const yaml = YAML_RE.test(norm)
       const json = JSON_RE.test(norm)
