@@ -28,7 +28,7 @@ const YAML_RE = /\.ya?ml$/i
 const JSON_RE = /\.json$/i
 const COMPOSE_RE = /(^|\/)(?:docker-)?compose(?:\.[\w-]+)?\.ya?ml$/i
 const NOT_DEPLOYED_RE =
-  /(^|\/)(?:[._]?examples?|samples?|demos?|guides?|tests?|testdata|test-fixtures|fixtures?|docs?|website|\.github|node_modules|vendor|dev|playwright|e2e|scripts|_?archived?|tools|[\w-]*[_-]tests?|integration[_-]?tests?|test[-_]environments?)\//i
+  /(^|\/)(?:[._]?examples?|samples?|demos?|guides?|tests?|testdata|test-fixtures|fixtures?|docs?|website|\.github|node_modules|vendor|dev|playwright|e2e|scripts|_?archived?|tools|bench(?:mark)?s?|[\w-]*[_-]tests?|integration[_-]?tests?|test[-_]environments?)\//i
 /**
  * Compose files for development, CI and examples: they run on a laptop or a CI
  * runner (`docker-compose.ci-test.yml`, `compose.override.yml`), not in production.
