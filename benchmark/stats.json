@@ -1,266 +1,271 @@
 {
-  "repos": 812,
-  "generatedAt": "2026-11-03T11:11:02.717Z",
+  "repos": 896,
+  "generatedAt": "2026-11-03T13:41:57.890Z",
   "grades": {
-    "A": 182,
-    "B": 169,
-    "C": 189,
-    "D": 209,
-    "F": 63
+    "A": 211,
+    "B": 204,
+    "C": 269,
+    "D": 170,
+    "F": 42
   },
   "languages": {
     "JavaScript": {
-      "repos": 198,
+      "repos": 216,
       "medianScore": 82,
-      "findingsPer1k": 1.76
+      "findingsPer1k": 1.85
     },
     "TypeScript": {
-      "repos": 164,
-      "medianScore": 67,
-      "findingsPer1k": 2.01
+      "repos": 181,
+      "medianScore": 71,
+      "findingsPer1k": 1.92
     },
     "Python": {
-      "repos": 118,
-      "medianScore": 64,
-      "findingsPer1k": 1.53
+      "repos": 131,
+      "medianScore": 67,
+      "findingsPer1k": 1.58
     },
     "Go": {
-      "repos": 67,
-      "medianScore": 64,
-      "findingsPer1k": 1.38
+      "repos": 73,
+      "medianScore": 71,
+      "findingsPer1k": 1.42
     },
     "other": {
-      "repos": 55,
+      "repos": 61,
       "medianScore": 89,
       "findingsPer1k": 0
     },
     "PHP": {
-      "repos": 44,
-      "medianScore": 65,
-      "findingsPer1k": 1.18
+      "repos": 50,
+      "medianScore": 66,
+      "findingsPer1k": 1.37
     },
     "Rust": {
       "repos": 35,
-      "medianScore": 57,
+      "medianScore": 61,
       "findingsPer1k": 1.69
     },
     "Ruby": {
-      "repos": 29,
+      "repos": 34,
       "medianScore": 69,
-      "findingsPer1k": 1.24
+      "findingsPer1k": 1.39
     },
     "Java": {
-      "repos": 23,
-      "medianScore": 59,
-      "findingsPer1k": 0.8
-    },
-    "C#": {
-      "repos": 20,
-      "medianScore": 61,
-      "findingsPer1k": 1.84
+      "repos": 31,
+      "medianScore": 64,
+      "findingsPer1k": 1.48
     },
     "C": {
-      "repos": 18,
-      "medianScore": 66,
+      "repos": 21,
+      "medianScore": 67,
       "findingsPer1k": 1.36
+    },
+    "C#": {
+      "repos": 21,
+      "medianScore": 61,
+      "findingsPer1k": 2.3
     },
     "C++": {
       "repos": 13,
-      "medianScore": 58,
+      "medianScore": 63,
       "findingsPer1k": 3.65
     },
     "Kotlin": {
       "repos": 12,
-      "medianScore": 61,
+      "medianScore": 64,
       "findingsPer1k": 1.69
     },
     "Swift": {
       "repos": 10,
-      "medianScore": 65,
+      "medianScore": 72,
       "findingsPer1k": 1.16
+    },
+    "Scala": {
+      "repos": 5,
+      "medianScore": 54,
+      "findingsPer1k": 5.91
     }
   },
   "ruleShare": {
-    "bus-factor": 0.695,
-    "todo": 0.644,
-    "duplicate": 0.637,
-    "workflow-action-tag-first-party": 0.631,
-    "workflow-no-permissions": 0.532,
-    "workflow-action-tag": 0.494,
-    "commented-code": 0.299,
-    "eol-node": 0.259,
-    "doc-link": 0.19,
-    "dead-export": 0.158,
-    "skipped-test": 0.156,
-    "bloat": 0.131,
-    "hygiene-no-tests": 0.106,
-    "eol-python": 0.097,
-    "config-conflict": 0.08,
-    "lockfile-missing": 0.069,
-    "hygiene-no-ci": 0.062,
-    "secret-provider": 0.048,
-    "secret-generic": 0.043,
-    "ci-silenced-failure": 0.036,
-    "hygiene-no-license": 0.023,
-    "env-missing": 0.023,
+    "bus-factor": 0.705,
+    "todo": 0.631,
+    "duplicate": 0.629,
+    "workflow-action-tag-first-party": 0.609,
+    "workflow-no-permissions": 0.522,
+    "workflow-action-tag": 0.482,
+    "commented-code": 0.298,
+    "eol-node": 0.253,
+    "doc-link": 0.194,
+    "dead-export": 0.161,
+    "skipped-test": 0.153,
+    "bloat": 0.147,
+    "hygiene-no-tests": 0.126,
+    "eol-python": 0.095,
+    "hygiene-no-ci": 0.088,
+    "config-conflict": 0.083,
+    "lockfile-missing": 0.068,
+    "secret-provider": 0.056,
+    "secret-generic": 0.052,
+    "ci-silenced-failure": 0.038,
+    "hygiene-no-license": 0.037,
+    "env-missing": 0.03,
+    "insecure-sql-interpolated": 0.025,
     "docs-badge": 0.022,
-    "insecure-localstorage-secret": 0.018,
-    "ci-no-pr-trigger": 0.016
+    "docker-latest": 0.022
   },
   "ci": {
-    "withActions": 735,
-    "unpinned": 540,
-    "thirdPartyUnpinned": 401,
-    "noPermissions": 432
+    "withActions": 787,
+    "unpinned": 583,
+    "thirdPartyUnpinned": 432,
+    "noPermissions": 468
   },
   "checklist": {
-    "readme": 0.988,
-    "license": 0.933,
-    "contributing": 0.581,
-    "security": 0.382,
-    "codeOfConduct": 0.278,
-    "changelog": 0.457,
-    "ci": 0.936,
-    "tests": 0.879
+    "readme": 0.987,
+    "license": 0.923,
+    "contributing": 0.549,
+    "security": 0.364,
+    "codeOfConduct": 0.269,
+    "changelog": 0.433,
+    "ci": 0.91,
+    "tests": 0.86
   },
   "todo": {
-    "dated": 18316,
-    "medianDays": 1341
+    "dated": 19377,
+    "medianDays": 1355
   },
   "activity": {
-    "active": 438,
-    "activeMedian": 61,
-    "quiet": 186,
-    "quietMedian": 85
+    "active": 467,
+    "activeMedian": 65,
+    "quiet": 230,
+    "quietMedian": 83
   },
   "practices": [
     {
       "key": "scorecard",
       "label": "OpenSSF Scorecard",
-      "repos": 28,
-      "rawScoreGap": 2,
-      "scoreGap": 6.961538461538462,
-      "densityGap": -0.8005330118232229
+      "repos": 30,
+      "rawScoreGap": 9,
+      "scoreGap": 7.25,
+      "densityGap": -1.340677122405716
     },
     {
       "key": "eslintFlat",
       "label": "ESLint flat config",
-      "repos": 105,
+      "repos": 111,
       "rawScoreGap": -1,
-      "scoreGap": 5.780952380952381,
-      "densityGap": -0.3751267865814516
+      "scoreGap": 5.792792792792793,
+      "densityGap": -0.4700998954717648
     },
     {
       "key": "tsconfig",
       "label": "TypeScript",
-      "repos": 167,
-      "rawScoreGap": 1,
-      "scoreGap": 4.467065868263473,
-      "densityGap": 0.3026629428559942
+      "repos": 178,
+      "rawScoreGap": 3,
+      "scoreGap": 4.146067415730337,
+      "densityGap": 0.09479194047293907
     },
     {
       "key": "prettier",
       "label": "Prettier",
-      "repos": 109,
+      "repos": 117,
       "rawScoreGap": -1,
-      "scoreGap": 3.110091743119266,
-      "densityGap": 0.48816620965876717
+      "scoreGap": 3.094017094017094,
+      "densityGap": 0.2164222033345326
     },
     {
       "key": "editorconfig",
       "label": ".editorconfig",
-      "repos": 307,
+      "repos": 321,
       "rawScoreGap": -1,
-      "scoreGap": 2.3713355048859937,
-      "densityGap": -0.3628559372162914
-    },
-    {
-      "key": "preCommit",
-      "label": "pre-commit",
-      "repos": 82,
-      "rawScoreGap": -3,
-      "scoreGap": 0.5063291139240507,
-      "densityGap": -0.4607110997224277
+      "scoreGap": 2.7725856697819315,
+      "densityGap": -0.5410216272821966
     },
     {
       "key": "codeql",
       "label": "CodeQL",
-      "repos": 106,
-      "rawScoreGap": -7,
-      "scoreGap": -0.29245283018867924,
-      "densityGap": -0.09276566787785726
+      "repos": 116,
+      "rawScoreGap": -5,
+      "scoreGap": 1.6120689655172413,
+      "densityGap": -0.12229711245805674
     },
     {
       "key": "renovate",
       "label": "Renovate",
-      "repos": 56,
-      "rawScoreGap": -7,
-      "scoreGap": -1.6607142857142858,
-      "densityGap": 0.23726174193939686
-    },
-    {
-      "key": "dependabot",
-      "label": "Dependabot",
-      "repos": 306,
-      "rawScoreGap": -13,
-      "scoreGap": -2.3434343434343434,
-      "densityGap": 0.05408236939485706
-    },
-    {
-      "key": "codeowners",
-      "label": "CODEOWNERS",
-      "repos": 99,
-      "rawScoreGap": -10,
-      "scoreGap": -2.525252525252525,
-      "densityGap": 0.21684090508073678
+      "repos": 62,
+      "rawScoreGap": -6,
+      "scoreGap": 0.41935483870967744,
+      "densityGap": -0.03464133736244278
     },
     {
       "key": "security",
       "label": "SECURITY.md",
-      "repos": 284,
-      "rawScoreGap": -15,
-      "scoreGap": -2.884920634920635,
-      "densityGap": -0.2611064881025376
+      "repos": 300,
+      "rawScoreGap": -11,
+      "scoreGap": -0.6992481203007519,
+      "densityGap": -0.33331771503162155
+    },
+    {
+      "key": "preCommit",
+      "label": "pre-commit",
+      "repos": 90,
+      "rawScoreGap": -6,
+      "scoreGap": -1.441860465116279,
+      "densityGap": -0.6331359749511397
+    },
+    {
+      "key": "dependabot",
+      "label": "Dependabot",
+      "repos": 326,
+      "rawScoreGap": -10,
+      "scoreGap": -1.7365079365079366,
+      "densityGap": 0.01851391538057011
     },
     {
       "key": "prTemplate",
       "label": "PR template",
-      "repos": 268,
-      "rawScoreGap": -15,
-      "scoreGap": -2.9669421487603307,
-      "densityGap": 0.3049213858324501
+      "repos": 289,
+      "rawScoreGap": -13,
+      "scoreGap": -2.3657587548638133,
+      "densityGap": 0.36302581185606125
     },
     {
       "key": "changeset",
       "label": "Changesets",
-      "repos": 22,
-      "rawScoreGap": -6,
-      "scoreGap": -3.4705882352941178,
-      "densityGap": 1.8825797349152642
+      "repos": 23,
+      "rawScoreGap": -7,
+      "scoreGap": -3.176470588235294,
+      "densityGap": 1.7917428434848681
     },
     {
       "key": "devcontainer",
       "label": "Dev container",
-      "repos": 64,
-      "rawScoreGap": -8,
-      "scoreGap": -3.875,
-      "densityGap": 0.21036368034203068
+      "repos": 68,
+      "rawScoreGap": -7,
+      "scoreGap": -3.7794117647058822,
+      "densityGap": 0.24740498857695217
     },
     {
       "key": "contributing",
       "label": "CONTRIBUTING",
-      "repos": 406,
-      "rawScoreGap": -18,
-      "scoreGap": -6.083601286173633,
-      "densityGap": 0.27477939622544445
+      "repos": 425,
+      "rawScoreGap": -15,
+      "scoreGap": -5.041055718475073,
+      "densityGap": 0.13181078408532293
+    },
+    {
+      "key": "codeowners",
+      "label": "CODEOWNERS",
+      "repos": 120,
+      "rawScoreGap": -9,
+      "scoreGap": -6.458333333333333,
+      "densityGap": 1.1328668221178662
     },
     {
       "key": "issueTemplates",
       "label": "Issue templates",
-      "repos": 384,
-      "rawScoreGap": -22,
-      "scoreGap": -7.518796992481203,
-      "densityGap": 0.4499187448121703
+      "repos": 410,
+      "rawScoreGap": -18,
+      "scoreGap": -7.131944444444445,
+      "densityGap": 0.32414496976360513
     }
   ]
 }

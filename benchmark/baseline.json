@@ -1,5 +1,5 @@
 {
-  "overall": 0.677,
+  "overall": 0.667,
   "scanners": {
     "eol-runtime": 1,
     "todo-debt": 1,
@@ -9,7 +9,7 @@
     "workflow-security": 0.992,
     "duplicate-code": 0.946,
     "skipped-tests": 0.944,
-    "insecure-code": 0.083,
+    "insecure-code": 0.079,
     "docs-drift": 1,
     "lockfile-drift": 0.938,
     "dead-code": 0.895,

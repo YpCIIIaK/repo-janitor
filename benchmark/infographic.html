@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>812 репозиториев изнутри</title>
+<title>896 репозиториев изнутри</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -85,21 +85,21 @@ footer { color: var(--muted); font-size: 13px; }
 <body>
 <main>
   <header class="head">
-    <h1>812 open-source репозиториев изнутри</h1>
+    <h1>896 open-source репозиториев изнутри</h1>
     <p class="lede">Что нашёл repo-janitor в популярных библиотеках, приложениях, расширениях и инфраструктуре на 25+ языках. Каждый проект просканирован на зафиксированном коммите, вся история git прочитана. Считаются только находки, которые пользователь видит по умолчанию (высокая и средняя уверенность).</p>
   </header>
 
   <div class="tiles" id="tiles"></div>
 
   <section class="card">
-    <div class="head"><span class="num">01 · ОЦЕНКИ</span><h2>Оценки распределены почти равномерно</h2>
-    <p class="note">Медианная оценка 68 из 100. «F» у 8%: огромные монорепозитории, большие приложения и учебно-уязвимые проекты (DVWA, WebGoat, Juice Shop получили 0, как и должны).</p></div>
+    <div class="head"><span class="num">01 · ОЦЕНКИ</span><h2>Почти половина проектов получает A или B</h2>
+    <p class="note">Медианная оценка 71 из 100. Оценка теперь учитывает размер: в проектах больше 20 тысяч строк предупреждения весят меньше (×√(20k ÷ строк)), критические находки — всегда полностью. «F» у 5%, и это в основном учебно-уязвимые приложения (DVWA, WebGoat, Juice Shop, crAPI получили 0, как и должны).</p></div>
     <svg id="grades" viewBox="0 0 900 90" role="img" aria-label="Распределение оценок"></svg>
   </section>
 
   <section class="card">
-    <div class="head"><span class="num">02 · ЯЗЫКИ</span><h2>JavaScript-пакеты чище всех, C++ и Rust ниже</h2>
-    <p class="note">Слева медианная оценка, справа плотность находок на тысячу строк. Низкие оценки Rust и Kotlin объясняются размером проектов: оценка пока не делится на размер, а плотность показывает картину честнее.</p></div>
+    <div class="head"><span class="num">02 · ЯЗЫКИ</span><h2>JavaScript-пакеты чище всех, Scala и C++ плотнее всех по находкам</h2>
+    <p class="note">Слева медианная оценка, справа плотность находок на тысячу строк. С поправкой на размер разрыв между языками сократился; плотность находок показывает, где кода «на единицу проблемы» больше.</p></div>
     <div class="grid2"><svg id="langScore" viewBox="0 0 440 260" role="img" aria-label="Медианная оценка по языкам"></svg>
     <svg id="langDensity" viewBox="0 0 440 260" role="img" aria-label="Находок на тысячу строк по языкам"></svg></div>
   </section>
@@ -112,15 +112,15 @@ footer { color: var(--muted); font-size: 13px; }
 
   <section class="card">
     <div class="head"><span class="num">04 · ЦЕПОЧКА ПОСТАВОК CI</span><h2>Три четверти GitHub Actions можно подменить</h2>
-    <p class="note">Из 735 проектов с GitHub Actions. Тег вроде <code>@v4</code> автор action может перевесить на другой код; так в 2025 году прошла атака через tj-actions/changed-files. Закреплять нужно на SHA коммита. Медиана — 8 незакреплённых action на проект.</p></div>
+    <p class="note">Из 787 проектов с GitHub Actions. Тег вроде <code>@v4</code> автор action может перевесить на другой код; так в 2025 году прошла атака через tj-actions/changed-files. Закреплять нужно на SHA коммита. Медиана — 8 незакреплённых action на проект.</p></div>
     <div class="rings" id="rings"></div>
   </section>
 
   <section class="card">
     <div class="head"><span class="num">05 · УСТАРЕВШИЕ ВЕРСИИ</span><h2>Половина проектов держится за снятые с поддержки версии</h2></div>
     <div class="tiles">
-      <div class="tile"><b>48%</b><span>из 422 Node.js-проектов объявляют или тестируют end-of-life Node</span></div>
-      <div class="tile"><b>58%</b><span>из 118 Python-проектов поддерживают end-of-life Python</span></div>
+      <div class="tile"><b>47%</b><span>из 468 Node.js-проектов объявляют или тестируют end-of-life Node</span></div>
+      <div class="tile"><b>54%</b><span>из 131 Python-проекта поддерживают end-of-life Python</span></div>
       <div class="tile"><b>7%</b><span>проектов не коммитят lock-файл</span></div>
       <div class="tile"><b>5%</b><span>проектов хранят в коде ключ провайдера (AWS, Stripe, GitHub…)</span></div>
     </div>
@@ -133,20 +133,20 @@ footer { color: var(--muted); font-size: 13px; }
 
   <section class="card">
     <div class="head"><span class="num">07 · ВОЗРАСТ ДОЛГА</span><h2>Средний TODO живёт 3,7 года</h2>
-    <p class="note">18 316 TODO/FIXME с датой из git blame. 36% старше пяти лет. Самый старый — в SDL_ttf, ему 25 лет:</p></div>
+    <p class="note">19 377 TODO/FIXME с датой из git blame. 36% старше пяти лет. Самый старый — в SDL_ttf, ему 25 лет:</p></div>
     <ol class="list" id="oldest"></ol>
   </section>
 
   <section class="card">
-    <div class="head"><span class="num">08 · РАЗМЕР И АКТИВНОСТЬ</span><h2>Чем больше проект, тем ниже оценка, и активность это не спасает</h2>
-    <p class="note">Проекты до 5 тысяч строк получают медиану 89, больше 200 тысяч — 41. Активные (50+ коммитов за год) — 61, тихие (меньше 10) — 85. Тихие не лучше: активные крупнее и находок у них почти втрое больше (84 против 31). Вывод для продукта: оценку стоит нормировать на размер.</p></div>
+    <div class="head"><span class="num">08 · РАЗМЕР И АКТИВНОСТЬ</span><h2>Поправка на размер выровняла оценки больших проектов</h2>
+    <p class="note">Без поправки проекты до 5 тысяч строк получали медиану 89, а больше 200 тысяч — 41: оценка мерила размер, а не аккуратность. С поправкой — 88, 68, 61 и 58. Активные проекты (50+ коммитов за год) получают 65, тихие (меньше 10) — 83: разрыв сократился с 24 до 18 баллов.</p></div>
     <div class="grid2"><svg id="size" viewBox="0 0 440 260" role="img" aria-label="Оценка по размеру проекта"></svg>
     <svg id="activity" viewBox="0 0 440 260" role="img" aria-label="Оценка по активности"></svg></div>
   </section>
 
   <section class="card">
     <div class="head"><span class="num">09 · ПРАКТИКИ И ОЦЕНКА</span><h2>Современный инструментарий связан с чистым кодом, «бюрократия» — нет</h2>
-    <p class="note">Разница медианной оценки между проектами с практикой и без неё, внутри групп одинакового размера (иначе большие проекты, которые одновременно чаще внедряют практики и получают ниже оценки, всё исказят). Без поправки SECURITY.md «стоит» −15 баллов, с поправкой — около −3. Шаблоны issue и CONTRIBUTING — признак популярности и большого потока изменений, а не плохого кода. Это корреляция, не причина.</p></div>
+    <p class="note">Разница медианной оценки между проектами с практикой и без неё, внутри групп одинакового размера (иначе большие проекты, которые одновременно чаще внедряют практики и получают ниже оценки, всё исказят). Без поправки на размер SECURITY.md «стоит» −15 баллов, с поправкой — около −1. Шаблоны issue и CONTRIBUTING — признак популярности и большого потока изменений, а не плохого кода. Это корреляция, не причина.</p></div>
     <svg id="practices" viewBox="0 0 900 560" role="img" aria-label="Разница оценки у проектов с практикой и без"></svg>
   </section>
 
@@ -171,7 +171,7 @@ footer { color: var(--muted); font-size: 13px; }
 
   <section class="card">
     <div class="head"><span class="num">11 · ПРОВЕРКА НА ЗАВЕДОМО УЯЗВИМЫХ ПРИЛОЖЕНИЯХ</span><h2>Сканер находит дыры там, где они точно есть</h2>
-    <p class="note">В корпусе 12 учебно-уязвимых приложений, где уязвимости известны заранее. Находка получает высокую уверенность, только если рядом виден ввод из запроса, поэтому обычные библиотеки остаются тихими. Пока не видны случаи, где ввод и опасный вызов лежат в разных файлах.</p></div>
+    <p class="note">В корпусе 37 учебно-уязвимых приложений, где уязвимости известны заранее. Находка получает высокую уверенность, только если ввод из запроса виден рядом или в вызывающем коде в другом файле, поэтому обычные библиотеки остаются тихими. Пока не проверяются уязвимости конфигурации Terraform и Kubernetes (terragoat, kubernetes-goat).</p></div>
     <div class="wrap"><table>
       <thead><tr><th>Приложение</th><th>Язык</th><th class="r">Находок, высокая уверенность</th><th>Что находится</th></tr></thead>
       <tbody id="vuln"></tbody>
@@ -187,34 +187,34 @@ footer { color: var(--muted); font-size: 13px; }
   </section>
 
   <section class="card">
-    <div class="head"><span class="num">13 · НАСКОЛЬКО ВЕРИТЬ ЦИФРАМ</span><h2>Точность сканера на 705 вручную размеченных находках</h2></div>
+    <div class="head"><span class="num">13 · НАСКОЛЬКО ВЕРИТЬ ЦИФРАМ</span><h2>Точность сканера на 715 вручную размеченных находках</h2></div>
     <div class="wrap"><table>
       <thead><tr><th>Уверенность</th><th class="r">Верных</th><th class="r">Ложных</th><th class="r">Точность</th><th>Показывается</th></tr></thead>
       <tbody>
-        <tr><td><span class="pill good">высокая</span></td><td class="r">363</td><td class="r">20</td><td class="r">95%</td><td>да, со значком</td></tr>
-        <tr><td><span class="pill warn">средняя</span></td><td class="r">94</td><td class="r">33</td><td class="r">74%</td><td>да</td></tr>
-        <tr><td><span class="pill bad">низкая</span></td><td class="r">20</td><td class="r">175</td><td class="r">10%</td><td>только по запросу</td></tr>
+        <tr><td><span class="pill good">высокая</span></td><td class="r">379</td><td class="r">22</td><td class="r">95%</td><td>да, со значком</td></tr>
+        <tr><td><span class="pill warn">средняя</span></td><td class="r">78</td><td class="r">31</td><td class="r">72%</td><td>да</td></tr>
+        <tr><td><span class="pill bad">низкая</span></td><td class="r">20</td><td class="r">185</td><td class="r">10%</td><td>только по запросу</td></tr>
       </tbody>
     </table></div>
-    <p class="note">4 348 находок с низкой уверенностью (8% всего, что подняли сканеры) не вошли ни в одну цифру выше.</p>
+    <p class="note">5 096 находок с низкой уверенностью (9% всего, что подняли сканеры) не вошли ни в одну цифру выше.</p>
   </section>
 
-  <footer>repo-janitor benchmark · 812 репозиториев · история git с 2012 года · данные на 3 ноября 2026</footer>
+  <footer>repo-janitor benchmark · 896 репозиториев · история git с 2012 года · данные на 3 ноября 2026</footer>
 </main>
 
 <script>
 const D = {
-  grades: { A: 182, B: 169, C: 189, D: 209, F: 63 },
-  langs: [["JavaScript",198,82,1.8],["Ruby",29,69,1.2],["TypeScript",164,67,2.0],["C",18,66,1.4],["PHP",44,65,1.2],["Swift",10,65,1.2],["Python",118,64,1.5],["Go",67,64,1.4],["C#",20,61,1.8],["Kotlin",12,61,1.7],["Java",23,59,0.8],["C++",13,58,3.7],["Rust",35,57,1.7]],
+  grades: { A: 211, B: 204, C: 269, D: 170, F: 42 },
+  langs: [["JavaScript",216,82,1.85],["Swift",10,72,1.16],["TypeScript",181,71,1.92],["Go",73,71,1.42],["Ruby",34,69,1.39],["Python",131,67,1.58],["C",21,67,1.36],["PHP",50,66,1.37],["Java",31,64,1.48],["Kotlin",12,64,1.69],["C++",13,63,3.65],["Rust",35,61,1.69],["C#",21,61,2.3],["Scala",5,54,5.91]],
   rules: [["Старые файлы одного автора",0.695],["TODO / FIXME",0.644],["Дублированный код",0.637],["Action GitHub на теге",0.631],["Workflow без ограничения прав",0.532],["Сторонний action на теге",0.494],["Закомментированный код",0.299],["End-of-life Node.js",0.259],["Битые ссылки в документации",0.19],["Неиспользуемые экспорты",0.158],["Пропущенные тесты",0.156],["Тяжёлые файлы в git",0.131],["Нет тестов",0.106],["End-of-life Python",0.097]],
-  hygiene: [["README",0.988],["CI",0.936],["LICENSE",0.933],["Тесты",0.879],["CONTRIBUTING",0.581],["CHANGELOG",0.457],["SECURITY.md",0.382],["Code of Conduct",0.278]],
+  hygiene: [["README",0.987],["LICENSE",0.923],["CI",0.91],["Тесты",0.86],["CONTRIBUTING",0.549],["CHANGELOG",0.433],["SECURITY.md",0.364],["Code of Conduct",0.269]],
   oldest: [[25.4,"SDL_ttf","src/SDL_ttf.c:166"],[23.1,"dateutil","src/dateutil/rrule.py:1199"],[23.0,"paramiko","paramiko/ber.py:71"],[21.8,"joda-time","src/test/java/org/joda/time/chrono/TestCopticChronology.java:405"],[21.1,"joda-time","src/test/java/org/joda/time/chrono/TestEthiopicChronology.java:405"]],
-  size: [["< 5k",255,89],["5k–50k",345,67],["50k–200k",171,52],["> 200k",41,41]],
-  activity: [["Тихие (< 10)",186,85],["Активные (≥ 50)",438,61]],
-  practices: [["OpenSSF Scorecard",28,7.0],["ESLint flat config",105,5.8],["TypeScript",167,4.5],["Prettier",109,3.1],[".editorconfig",307,2.4],["pre-commit",82,0.5],["CodeQL",106,-0.3],["Renovate",56,-1.7],["Dependabot",306,-2.3],["CODEOWNERS",99,-2.5],["SECURITY.md",284,-2.9],["Шаблон PR",268,-3.0],["Changesets",22,-3.5],["Dev container",64,-3.9],["CONTRIBUTING",406,-6.1],["Шаблоны issue",384,-7.5]],
-  vuln: [["DVWA","PHP",38,"SQL-инъекции, командные инъекции, include из запроса, SSRF"],["WebGoat","Java",11,"SQL-инъекции, десериализация, SSRF"],["DSVW","Python",5,"SQL, pickle, shell=True, eval"],["RailsGoat","Ruby",3,"SQL, вызов метода по имени из params, Marshal"],["NodeGoat","JavaScript",3,"eval на вводе запроса"],["Juice Shop","TypeScript",2,"SQL-инъекции"],["dvws-node","JavaScript",2,"SQL, new Function"],["SSRF lab","PHP",1,"SSRF"],["DVNA","JavaScript",1,"командная инъекция"],["WebGoat.NET","C#",0,"34 SQL-инъекции видны, но ввод в другом файле"],["VAmPI","Python",0,"SQL через f-строку, ввод в другом файле"],["DVGA","Python",0,"os.popen, ввод в другом файле"]],
+  size: [["< 5k",301,88],["5k–50k",367,68],["50k–200k",179,61],["> 200k",49,58]],
+  activity: [["Тихие (< 10)",230,83],["Активные (≥ 50)",467,65]],
+  practices: [["OpenSSF Scorecard",30,7.3],["ESLint flat config",111,5.8],["TypeScript",178,4.1],["Prettier",117,3.1],[".editorconfig",321,2.8],["CodeQL",116,1.6],["Renovate",62,0.4],["SECURITY.md",300,-0.7],["pre-commit",90,-1.4],["Dependabot",326,-1.7],["Шаблон PR",289,-2.4],["Changesets",23,-3.2],["Dev container",68,-3.8],["CONTRIBUTING",425,-5.0],["CODEOWNERS",120,-6.5],["Шаблоны issue",410,-7.1]],
+  vuln: [["DVWA","PHP",38,"SQL-инъекции, командные инъекции, include из запроса, SSRF"],["inject-some-sql","Ruby",15,"SQL-инъекции в Rails"],["OWASP Vulnerable Web App","PHP",12,"SQL, команды, include"],["WebGoat","Java",11,"SQL-инъекции, десериализация, SSRF"],["WebGoat.NET","C#",10,"SQL-инъекции — через вызов из другого файла"],["VulnerableApp","Java",10,"SQL, команды, SSRF"],["pygoat","Python",6,"SQL, команды, eval"],["vulnerable-node","JavaScript",6,"SQL, eval"],["DSVW","Python",5,"SQL, pickle, shell=True, eval"],["JavaVulnerableLab","Java",5,"SQL-инъекции"],["WebGoat-Legacy","Java",4,"SQL — через вызов из другого файла"],["RailsGoat","Ruby",3,"SQL, вызов метода по имени из params, Marshal"],["NodeGoat","JavaScript",3,"eval на вводе запроса"],["vulpy","Python",2,"SQL — через вызов из другого файла"],["VAmPI","Python",1,"SQL через f-строку — ввод в другом файле"],["DVGA","Python",1,"os.popen — ввод в другом файле"],["terragoat","Terraform",0,"конфигурация облака пока не проверяется"],["kubernetes-goat","Kubernetes",1,"одна инъекция в коде; конфигурация кластера пока не проверяется"]],
   best: ["ai/nanoid","jshttp/cookie","jonschlinkert/is-number","fastify/fastify-cors","fastify/fastify-static","metabase/toucan","expressjs/express","rust-lang/log"],
-  worst: [[0,"FreshRSS/FreshRSS",2481],[0,"google/dagger",704],[0,"Tautulli/Tautulli",585],[0,"alist-org/alist",296],[0,"atuinsh/atuin",172],[0,"louislam/uptime-kuma",92]],
+  worst: [[0,"FreshRSS/FreshRSS",2481],[0,"alist-org/alist",296],[0,"matomo-org/matomo-for-wordpress",226],[0,"atuinsh/atuin",172]],
 };
 const H = {
   years: [2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025,2026],
@@ -232,7 +232,7 @@ const pct = (x) => Math.round(x * 100) + "%";
 const ru = (x, d = 1) => x.toFixed(d).replace(".", ",");
 
 function tiles() {
-  const t = [["812","репозиториев, 25+ языков"],["68","медианная оценка из 100"],["18 316","TODO с датой в git"],["3,7 года","средний возраст TODO"]];
+  const t = [["896","репозиториев, 25+ языков"],["71","медианная оценка из 100"],["19 377","TODO с датой в git"],["3,7 года","средний возраст TODO"]];
   document.getElementById("tiles").innerHTML = t.map(([b, s]) => `<div class="tile"><b>${b}</b><span>${s}</span></div>`).join("");
 }
 
@@ -325,7 +325,7 @@ function lines(id, series, max, unit) {
 }
 
 function rings() {
-  const data = [[540/735,"закрепляют хоть один action на изменяемом теге"],[401/735,"делают это со сторонним action"],[432/735,"не ограничивают права токена в workflow"]];
+  const data = [[583/787,"закрепляют хоть один action на изменяемом теге"],[432/787,"делают это со сторонним action"],[468/787,"не ограничивают права токена в workflow"]];
   const box = document.getElementById("rings"); box.innerHTML = "";
   for (const [v, text] of data) {
     const r = 46, c = 2 * Math.PI * r;
@@ -349,7 +349,7 @@ function lists() {
 function render() {
   tiles(); grades(); rings(); lists();
   hbars("langScore", D.langs.map((l) => [`${l[0]} · ${l[1]}`, l[2]]), 100, (v) => v, css("--accent"), 150, 28);
-  hbars("langDensity", D.langs.map((l) => [l[0], l[3]]), 4, (v) => ru(v), css("--warn"), 150, 28);
+  hbars("langDensity", D.langs.map((l) => [l[0], l[3]]), 6, (v) => ru(v), css("--warn"), 150, 28);
   hbars("rules", D.rules, 1, pct, css("--accent"), 300, 32);
   hbars("hygiene", D.hygiene, 1, pct, css("--good"), 200, 34);
   diverging("practices", D.practices, 8);
