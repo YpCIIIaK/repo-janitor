@@ -128,7 +128,7 @@ const PHP_JAVA_RULES: VulnRule[] = [
   {
     id: "eval-dynamic",
     lang: "rb",
-    re: /\b(?:eval|instance_eval|class_eval|module_eval)\b(?!\s*(?:do\b|\{|\(\s*&|&))\s*\(?\s*[^\s"'(&:{|)]/g,
+    re: /\b(?:eval|instance_eval|class_eval|module_eval)\b(?!\s*(?:do\b|\{|\(\s*&|&|<<|\(\s*<<))\s*\(?\s*[^\s"'(&:{|)<]/g,
     severity: "critical",
     title: "eval() on a non-literal value",
     detail: "`eval` runs whatever Ruby it is given. If any part of it comes from a request, this is remote code execution.",
@@ -778,13 +778,48 @@ export function scanSource(content: string, lang: Lang): CodeHit[] {
       const existing = byLine.get(line)
       // Keep the most severe rule when several match the same line.
       if (existing && rank(existing.rule.severity) >= rank(rule.severity)) continue
-      const tainted = INJECTION_RULES.has(rule.id) ? TAINT_RE[lang].test(around(content, lineStart, TAINT_WINDOW, 2)) : undefined
+      if (!sinkAllows(rule.id, rawLine, idx - lineStart)) continue
+      const tainted = !INJECTION_RULES.has(rule.id)
+        ? undefined
+        : rule.id === "ssrf"
+          // SSRF needs the request value in the call itself (or just above it): a
+          // fetch of some URL in a function that also reads `req` elsewhere is
+          // the common case in every server, and almost never SSRF.
+          ? SSRF_TAINT.test(around(content, lineStart, 2, 0))
+          : TAINT_RE[lang].test(around(content, lineStart, TAINT_WINDOW, 2))
       byLine.set(line, { rule, line, evidence: text.slice(0, 160), tainted })
     }
   }
 
   return [...byLine.values()].sort((a, b) => a.line - b.line)
 }
+
+/** Request input as a URL source, for SSRF (any language). */
+const SSRF_TAINT =
+  /\b(?:req|request)\.(?:query|body|params|args|form|values|GET|POST)\b|\$_(?:GET|POST|REQUEST|COOKIE)\b|\bparams\s*\[|\brequest\.get_json\b|\bc\.(?:Query|Param|PostForm)\s*\(|\br\.(?:FormValue|URL\.Query)\b/
+
+/** Escaping and sanitising calls that make an echoed request value safe. */
+const PHP_ESCAPED =
+  /\b(?:htmlspecialchars|htmlentities|esc_(?:attr|html|url|js|textarea)|sanitize_\w+|wp_kses\w*|strip_tags|intval|floatval|urlencode|rawurlencode|json_encode|scrub_out|e)\s*\(|\(int\)|\(float\)/
+
+/**
+ * Per-match vetoes that need the line itself:
+ *  - ssrf: browser code (service workers, components, extensions) fetches on
+ *    the user's behalf: a browser is not a server, so there is no SSRF.
+ *  - php-reflected-xss: the request value passes through an escaping call.
+ *  - Ruby backticks inside a double-quoted string are text, not a command.
+ *  - SQL handed to a prepare() call is parameterised by that call.
+ */
+function sinkAllows(ruleId: string, line: string, col: number): boolean {
+  if (ruleId === "php-reflected-xss") return !PHP_ESCAPED.test(line)
+  if (ruleId === "exec-interpolated" && line[col] === "`") {
+    return (line.slice(0, col).match(/"/g)?.length ?? 0) % 2 === 0
+  }
+  if (ruleId === "sql-interpolated") return !/\bprepare\s*\(/.test(line)
+  return true
+}
+const BROWSER_CODE_RE =
+  /(^|\/)(?:public|static|assets|frontend|client|ui|web|www|browser|extension|src\/components|components|pages|app\/javascript)\/|(?:^|\/)(?:sw|service-worker)\.[cm]?[jt]s$|\.(?:tsx|jsx|vue|svelte)$/i
 
 /** Rules whose risk depends on where the value comes from. */
 const INJECTION_RULES = new Set([
@@ -891,6 +926,7 @@ export const insecureCodeScanner: Scanner = {
       for (const hit of scanSource(content, lang)) {
         if (issues.length >= MAX_TOTAL || perFile >= MAX_PER_FILE) break
         if (isTest && SKIP_IN_TEST.has(hit.rule.id)) continue
+        if (hit.rule.id === "ssrf" && lang === "js" && BROWSER_CODE_RE.test(norm)) continue
         perFile++
 
         // Blame gives the finding an age, so a fresh regression is visible next
