@@ -5,6 +5,7 @@
 export const SCANNER_INFO: Record<string, { name: string; what: string }> = {
   secrets: { name: "Secrets", what: "Credentials committed to the tree or still in git history" },
   "vulnerable-deps": { name: "Vulnerable dependencies", what: "Packages with known CVEs / GHSAs (OSV database)" },
+  "iac-security": { name: "Infrastructure as code", what: "public buckets, open admin ports, privileged containers" },
   "insecure-code": { name: "Insecure code", what: "eval, shell/SQL interpolation, TLS off, weak hashes" },
   "workflow-security": { name: "Workflow security", what: "GitHub Actions that expose secrets or the repo to outsiders" },
   "supply-chain": { name: "Supply chain", what: "Install scripts piping to a shell, insecure dependency URLs" },

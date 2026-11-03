@@ -39,6 +39,7 @@ const LABEL_OVERRIDES: Record<string, string> = {
   "ci-health": "CI Health",
   "duplicate-code": "Duplicate Code",
   "supply-chain": "Supply Chain",
+  "iac-security": "Infrastructure as Code",
 }
 
 /**
@@ -53,6 +54,7 @@ const LEGACY_PREFIXES: { prefix: string; scanner: string }[] = [
   { prefix: "doclink-", scanner: "broken-doc-links" },
   { prefix: "workflow-", scanner: "workflow-security" },
   { prefix: "dockerfile-", scanner: "dockerfile" },
+  { prefix: "iac-", scanner: "iac-security" },
   { prefix: "license-", scanner: "license-risk" },
   { prefix: "ci-health-", scanner: "ci-health" },
   { prefix: "docs-drift-", scanner: "docs-drift" },
