@@ -270,6 +270,16 @@ function ScoringRules({
               </li>
             )
           })}
+          {weights.sizeFactor !== undefined && weights.sizeFactor < 1 && (
+            <li className="flex items-start gap-2">
+              <span className="mt-1 size-2 shrink-0 rounded-full bg-muted-foreground/40" />
+              <span className="text-muted-foreground">
+                <span className="font-medium text-foreground">Size adjustment</span> — this codebase is large, so
+                warnings and info count ×{weights.sizeFactor} (√(20k ÷ lines of code)). Critical findings always count
+                in full.
+              </span>
+            </li>
+          )}
         </ul>
 
         <div>

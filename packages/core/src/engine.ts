@@ -67,7 +67,7 @@ export const defaultScanners: Scanner[] = [
  * {@link SEVERITY_CURVE}. info is deliberately near-cosmetic — a quarter of a
  * point — so a pile of low-signal notes cannot meaningfully move the grade; a
  * repo can override these via .repo-anti-rot.json. */
-export type SeverityWeights = { critical: number; warning: number; info: number; infoCap?: number }
+export type SeverityWeights = { critical: number; warning: number; info: number; infoCap?: number; sizeFactor?: number }
 
 /** Severity tiers taper after their full-weight stretch. Informational findings
  * additionally have a 10-point budget: their volume measures maintenance work,
@@ -111,10 +111,28 @@ export function computeScore(issues: Issue[], weights: SeverityWeights = DEFAULT
   for (const i of issues) if (i.confidence !== "low") counts[i.severity]++
   let penalty = 0
   for (const sev of ["critical", "warning", "info"] as const) {
-    const raw = tierPenalty(counts[sev], weights[sev], SEVERITY_CURVE[sev])
+    // Criticals are never discounted: a vulnerability is no smaller in a big repo.
+    const n = sev === "critical" ? counts[sev] : counts[sev] * (weights.sizeFactor ?? 1)
+    const raw = tierPenalty(n, weights[sev], SEVERITY_CURVE[sev])
     penalty += sev === "info" ? Math.min(raw, weights.infoCap ?? Infinity) : raw
   }
   return Math.max(0, Math.round(100 - penalty))
+}
+
+/** Lines of code up to which no size discount applies. */
+export const SIZE_REFERENCE_LOC = 20_000
+
+/**
+ * Discount on warning and info counts for big codebases: sqrt(20k / LOC), never
+ * above 1. A 200k-line project carries ten times the code of a 20k one, and
+ * across the 812-repo benchmark it collected findings in proportion, so raw
+ * counts graded size rather than care (medians by size band were 89 / 67 / 52 /
+ * 41). The square root flattens that to 89 / 68 / 61 / 60 without rewarding
+ * size: a big repo still needs proportionally fewer findings to score well.
+ */
+export function sizeFactor(linesOfCode: number | undefined): number {
+  if (!linesOfCode || linesOfCode <= SIZE_REFERENCE_LOC) return 1
+  return Math.round(Math.sqrt(SIZE_REFERENCE_LOC / linesOfCode) * 1000) / 1000
 }
 
 export function scoreToGrade(score: number): Grade {
@@ -258,7 +276,7 @@ export async function runScan(
     onProgress?.({ scanner: scanner.id, completed, total })
   }
 
-  const weights = ctx.config?.weights ?? DEFAULT_WEIGHTS
+  const baseWeights = ctx.config?.weights ?? DEFAULT_WEIGHTS
   const mute = ctx.config?.mute ?? []
   // Two suppression layers: inline markers in source, then config `mute` rules
   // (reviewed/accepted findings). Both drop findings before they reach the score.
@@ -266,8 +284,10 @@ export async function runScan(
   const visible = mute.length ? inlineVisible.filter((i) => !isMuted(i, mute)) : inlineVisible
   const lowConfidence = visible.filter((i) => i.confidence === "low")
   const confident = lowConfidence.length ? visible.filter((i) => i.confidence !== "low") : visible
-  const score = computeScore(confident, weights)
   const { linesOfCode, profile } = await buildMetricsAndProfile(ctx)
+  const factor = sizeFactor(linesOfCode)
+  const weights = factor < 1 ? { ...baseWeights, sizeFactor: factor } : baseWeights
+  const score = computeScore(confident, weights)
   const report: ScanReport = {
     schemaVersion: SCHEMA_VERSION,
     repo: ctx.repo,

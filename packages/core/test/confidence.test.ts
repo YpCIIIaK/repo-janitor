@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { computeScore, confidenceOf, runScan } from "../src/index"
+import { computeScore, confidenceOf, runScan, sizeFactor, DEFAULT_WEIGHTS } from "../src/index"
 import type { Scanner } from "../src/scanner"
 import { makeContext } from "./helpers"
 
@@ -21,5 +21,26 @@ describe("confidence", () => {
     expect(report.issues.map((i) => i.id)).toEqual(["b"])
     expect(report.lowConfidence?.map((i) => i.id)).toEqual(["a"])
     expect(report.score).toBe(computeScore(report.issues))
+  })
+})
+
+describe("size-adjusted score", () => {
+  const warn = (n: number) =>
+    Array.from({ length: n }, (_, i) => ({ id: `w${i}`, category: "hygiene" as const, severity: "warning" as const, title: "", location: "x", ageDays: 0, detail: "" }))
+
+  it("leaves repos up to 20k lines untouched", () => {
+    expect(sizeFactor(5_000)).toBe(1)
+    expect(sizeFactor(20_000)).toBe(1)
+    expect(sizeFactor(undefined)).toBe(1)
+  })
+
+  it("discounts warnings by sqrt(20k / LOC) for big codebases", () => {
+    expect(sizeFactor(80_000)).toBe(0.5)
+    expect(computeScore(warn(20), { ...DEFAULT_WEIGHTS, sizeFactor: 0.5 })).toBeGreaterThan(computeScore(warn(20)))
+  })
+
+  it("never discounts critical findings", () => {
+    const crit = [{ ...warn(1)[0], severity: "critical" as const }]
+    expect(computeScore(crit, { ...DEFAULT_WEIGHTS, sizeFactor: 0.2 })).toBe(computeScore(crit))
   })
 })

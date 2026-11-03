@@ -163,6 +163,9 @@ export const scanReportSchema = z.object({
         info: z.number().nonnegative(),
         // Absent in legacy reports: preserve their uncapped informational curve.
         infoCap: z.number().nonnegative().optional(),
+        // Size discount on warning/info counts (see sizeFactor in engine.ts).
+        // Absent in reports from before it existed: those scored at factor 1.
+        sizeFactor: z.number().positive().max(1).optional(),
       }),
     })
     .optional(),
