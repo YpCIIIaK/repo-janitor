@@ -1,4 +1,5 @@
 import { promises as fs } from "fs";
+import { spawn } from "child_process";
 import { glob } from "tinyglobby";
 import { simpleGit, type SimpleGit } from "simple-git";
 import { runScan, loadConfig } from "@repo-anti-rot/core";
@@ -95,6 +96,48 @@ export async function getRepoMetadata(git: SimpleGit, root: string): Promise<Rep
     // Not a git repo (or git unavailable) → still produce a usable identity.
     return { owner: "local", name: folderName, defaultBranch: "main" };
   }
+}
+
+/**
+ * Run git and hand each stdout line to `onLine` as it arrives; return false to
+ * stop early (the process is killed). Lines longer than MAX_BUFFERED are
+ * dropped rather than accumulated, so no single string can grow without bound.
+ */
+function streamLines(cwd: string, args: string[], onLine: (line: string) => boolean): Promise<void> {
+  const MAX_BUFFERED = 1 << 20;
+  return new Promise((resolve, reject) => {
+    const child = spawn("git", args, { cwd, stdio: ["ignore", "pipe", "ignore"] });
+    let pending = "";
+    let skipping = false;
+    let stopped = false;
+    child.stdout.setEncoding("utf8");
+    child.stdout.on("data", (chunk: string) => {
+      if (stopped) return;
+      const parts = (pending + chunk).split("\n");
+      pending = parts.pop() ?? "";
+      for (const line of parts) {
+        if (skipping) {
+          skipping = false; // tail of an over-long line
+          continue;
+        }
+        if (!onLine(line)) {
+          stopped = true;
+          child.kill();
+          return;
+        }
+      }
+      if (pending.length > MAX_BUFFERED) {
+        pending = "";
+        skipping = true;
+      }
+    });
+    child.on("error", reject);
+    child.on("close", (code) => {
+      if (!stopped && pending && !skipping) onLine(pending);
+      if (code !== 0 && !stopped) reject(new Error(`git ${args[0]} exited with ${code}`));
+      else resolve();
+    });
+  });
 }
 
 export async function buildScanContext(root: string): Promise<ScanContext> {
@@ -240,46 +283,52 @@ export async function buildScanContext(root: string): Promise<ScanContext> {
           // `-U0` drops diff context so only true additions appear; the custom
           // --format emits ONLY a parseable header (sha + author epoch) per
           // commit, so commit messages can't leak in as fake "+ " lines.
-          const out = await git.raw([
-            "-c", "core.quotePath=false",
-            "log",
-            "--no-merges",
-            "-U0",
-            `-n`, String(maxCommits),
-            "--format=%x01%h%x02%at",
-            "-p",
-          ]);
-
+          // Streamed, not buffered: `git log -p` over 1000 commits of a repo with
+          // large fixtures (NewPipeExtractor's JSON mocks) exceeds V8's maximum
+          // string length and used to crash the whole scan.
           const additions: HistoryAddition[] = [];
           let commit = "";
           let date = 0;
           let file: string | null = null;
-          for (const line of out.split("\n")) {
-            if (line.startsWith("\x01")) {
-              const [sha, at] = line.slice(1).split("\x02");
-              commit = sha ?? "";
-              date = (parseInt(at ?? "0", 10) || 0) * 1000;
-              file = null;
-              continue;
-            }
-            if (line.startsWith("diff --git")) {
-              file = null;
-              continue;
-            }
-            if (line.startsWith("+++ ")) {
-              const path = line.slice(4).trim();
-              file = path === "/dev/null" ? null : path.replace(/^b\//, "");
-              continue;
-            }
-            // An added line (but not the `+++` file header).
-            if (line.startsWith("+") && !line.startsWith("+++") && file && commit) {
-              const text = line.slice(1);
-              if (text.length <= MAX_LINE_LEN) {
-                additions.push({ commit, date, file, text });
-                if (additions.length >= MAX_LINES) break;
+          await streamLines(
+            root,
+            [
+              "-c", "core.quotePath=false",
+              "log",
+              "--no-merges",
+              "-U0",
+              "-n", String(maxCommits),
+              "--format=%x01%h%x02%at",
+              "-p",
+            ],
+            (line) => {
+              if (line.startsWith("\x01")) {
+                const [sha, at] = line.slice(1).split("\x02");
+                commit = sha ?? "";
+                date = (parseInt(at ?? "0", 10) || 0) * 1000;
+                file = null;
+                return true;
               }
-            }
-          }
+              if (line.startsWith("diff --git")) {
+                file = null;
+                return true;
+              }
+              if (line.startsWith("+++ ")) {
+                const path = line.slice(4).trim();
+                file = path === "/dev/null" ? null : path.replace(/^b\//, "");
+                return true;
+              }
+              // An added line (but not the `+++` file header).
+              if (line.startsWith("+") && !line.startsWith("+++") && file && commit) {
+                const text = line.slice(1);
+                if (text.length <= MAX_LINE_LEN) {
+                  additions.push({ commit, date, file, text });
+                  if (additions.length >= MAX_LINES) return false;
+                }
+              }
+              return true;
+            },
+          );
           return additions;
         } catch {
           // not a git repo / git unavailable → secrets scanner stays working-tree only

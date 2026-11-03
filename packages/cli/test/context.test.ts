@@ -248,6 +248,25 @@ describe("buildScanContext git.historyAdditions (real git)", () => {
     }
   })
 
+  it("streams a history with a huge one-line file instead of buffering it", async () => {
+    // NewPipeExtractor's multi-megabyte JSON mocks made the buffered `git log -p`
+    // exceed V8's string limit and crash the scan.
+    const dir = makeRepo()
+    try {
+      writeFileSync(join(dir, "mock.json"), `${"x".repeat(3 * 1024 * 1024)}\n`)
+      writeFileSync(join(dir, "seed.ts"), 'const k = "AKIAIOSFODNN7EXAMPLE"\n')
+      add(dir, ".")
+      commit(dir, "fixtures")
+
+      const ctx = await buildScanContext(dir)
+      const additions = ctx.git.historyAdditions ? await ctx.git.historyAdditions({ maxCommits: 5 }) : []
+      expect(additions.some((a) => a.text.includes("AKIAIOSFODNN7EXAMPLE"))).toBe(true)
+      expect(additions.every((a) => a.text.length <= 4000)).toBe(true)
+    } finally {
+      rmSync(dir, { recursive: true, force: true })
+    }
+  })
+
   it("returns [] for a non-git directory (degrades, never throws)", async () => {
     const dir = mkdtempSync(join(tmpdir(), "rar-nogit-"))
     try {
