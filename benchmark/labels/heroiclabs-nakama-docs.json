@@ -1,0 +1,5 @@
+{
+ "bloat-docs/nakama/examples/unity/nakama-showreel/Assets/Nakama/Plugins/Google.Protobuf.dll": "fp",
+ "doclink-docs/nakama/getting-started/benchmarks.md:373:../gameplay-multiplayer-server-multiplayer/": "fp",
+ "hygiene-no-tests": "fp"
+}

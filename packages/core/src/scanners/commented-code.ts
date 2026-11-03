@@ -69,7 +69,7 @@ function looksLikeCode(body: string): boolean {
 }
 
 const NOT_PRODUCT_RE =
-  /(^|\/)(?:flow-typed|_?examples?|samples?|bench(?:mark)?s?|website|www|docs?|lang(?:uage)?s?|locales?|i18n|assets|legacy)\/|\.config\.[cm]?[jt]s$|\.d\.[cm]?ts$|(^|\/)example_[^/]*_test\.go$/i
+  /(^|\/)(?:flow-typed|_?examples?|samples?|bench(?:mark)?s?|website|www|docs?|lang(?:uage)?s?|locales?|i18n|assets|legacy)\/|\.config\.[cm]?[jt]s$|\.d\.[cm]?ts$|\.(?:stories|story)\.[cm]?[jt]sx?$|(^|\/)example_[^/]*_test\.go$/i
 
 /** Does the surrounding comment present the block as an example or a format? */
 function introducesExample(lines: string[], start: number, len: number): boolean {

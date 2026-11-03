@@ -1,0 +1,5 @@
+{
+ "config-conflict-ci-root": "tp",
+ "env-no-example": "fp",
+ "secret-google-api-key-docs/data/material/components/autocomplete/GoogleMaps.js:18": "fp"
+}

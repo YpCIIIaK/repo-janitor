@@ -1,0 +1,10 @@
+{
+ "docker-latest-resources/docker/ai.Dockerfile:21": "fp",
+ "docker-root-internal/impl/iceberg/bench/kafka-connector/Dockerfile": "fp",
+ "docker-untagged-resources/docker/Dockerfile:20": "tp",
+ "hygiene-no-license": "fp",
+ "iac-host-namespace-internal/impl/iceberg/bench/docker-compose.yaml:4": "fp",
+ "iac-host-namespace-internal/impl/saphana/bench/saphana-read/query/docker-compose.kc.yaml:9": "fp",
+ "insecure-sql-interpolated-internal/impl/oracledb/checkpoint_cache.go:195": "fp",
+ "secret-private-key-internal/impl/snowflake/resources/ssh_keys/snowflake_rsa_key.pem:1": "fp"
+}

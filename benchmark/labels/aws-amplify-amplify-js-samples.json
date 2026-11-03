@@ -1,0 +1,4 @@
+{
+ "hygiene-no-ci": "tp",
+ "insecure-ssrf-samples/react/auth/authenticator/src/serviceWorker.js:103": "fp"
+}

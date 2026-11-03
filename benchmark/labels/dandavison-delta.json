@@ -1,0 +1,6 @@
+{
+ "commented-src/handlers/ripgrep_json.rs:68": "fp",
+ "docker-latest-etc/docker/ubuntu.Dockerfile:1": "fp",
+ "docker-root-etc/docker/ubuntu.Dockerfile": "fp",
+ "docs-drift-badge-README.md-6": "tp"
+}

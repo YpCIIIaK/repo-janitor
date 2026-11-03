@@ -1,0 +1,4 @@
+{
+ "config-conflict-ci-root": "tp",
+ "iac-docker-socket-docker-compose.yml:14": "fp"
+}

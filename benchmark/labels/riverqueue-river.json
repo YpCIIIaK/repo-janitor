@@ -1,0 +1,5 @@
+{
+ "hygiene-no-readme": "tp",
+ "insecure-eval-dynamic-ruby/lib/cli.rb:73": "fp",
+ "insecure-ruby-dynamic-dispatch-ruby/lib/client.rb:271": "fp"
+}

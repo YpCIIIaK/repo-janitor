@@ -1,0 +1,5 @@
+{
+ "ci-disabled-.github/workflows/pr-check.yml-483": "tp",
+ "insecure-py-eval-exec-python_files/get_output_via_markers.py:19": "fp",
+ "insecure-py-eval-exec-python_files/unittestadapter/django_handler.py:107": "fp"
+}

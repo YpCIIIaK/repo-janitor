@@ -1,0 +1,4 @@
+{
+ "docker-add-url-release/dockerfile.edge:24": "tp",
+ "insecure-weak-hash-src/utils/ApacheMd5.ts:92": "fp"
+}

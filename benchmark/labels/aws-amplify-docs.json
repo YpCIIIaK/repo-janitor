@@ -1,0 +1,4 @@
+{
+ "dep-unused-parse-imports": "fp",
+ "insecure-exec-interpolated-tasks/generate-sitemap.mjs:60": "fp"
+}

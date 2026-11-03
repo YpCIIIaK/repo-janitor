@@ -1,0 +1,7 @@
+{
+ "commented-packages/@mantinex/colors-generator/src/ColorsGenerator/ColorsGenerator.story.tsx:21": "fp",
+ "dead-export-packages/@docs/demos/src/demos/schedule/WeekView/WeekView.demos.story.tsx:Demo_weekLabelFormat": "fp",
+ "debug-packages/@mantine/spotlight/src/Spotlight.story.tsx:27": "fp",
+ "insecure-react-dangerous-html-packages/@mantine/core/src/components/AppShell/AppShellNavbar/AppShellNavbar.tsx:80": "fp",
+ "insecure-ssrf-packages/@mantine/mcp-server/src/data-client.ts:48": "fp"
+}

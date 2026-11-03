@@ -1,0 +1,4 @@
+{
+ "docs-drift-script-packages/sdk/README.md-40": "tp",
+ "insecure-random-for-secret-packages/sdk/src/debug.ts:76": "fp"
+}

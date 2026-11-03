@@ -1,0 +1,4 @@
+{
+ "dead-export-packages/visx-demo/src/utils/getDocGenInfo.ts:getComponentDocs": "fp",
+ "insecure-react-dangerous-html-packages/visx-demo/src/components/Codeblock.tsx:30": "fp"
+}

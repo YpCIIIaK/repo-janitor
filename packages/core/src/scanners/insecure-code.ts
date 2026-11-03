@@ -817,6 +817,8 @@ function sinkAllows(ruleId: string, line: string, col: number): boolean {
     return (line.slice(0, col).match(/"/g)?.length ?? 0) % 2 === 0
   }
   if (ruleId === "sql-interpolated") return !/\bprepare\s*\(/.test(line)
+  // `eval(time, snapshot) {` declares a method called eval (PlayCanvas animation tracks).
+  if (ruleId === "eval-dynamic" && /^\s*(?:async\s+|static\s+|public\s+|private\s+)*eval\s*\([^)]*\)\s*(?::\s*[\w<>[\]| ]+)?\s*\{/.test(line)) return false
   return true
 }
 const BROWSER_CODE_RE =

@@ -1,0 +1,6 @@
+{
+ "env-dead-SUPABASE_ANON_KEY": "fp",
+ "env-dead-SUPABASE_SERVICE_ROLE_KEY": "fp",
+ "secret-entropy-supabase/config.toml:129": "fp",
+ "secret-history-entropy-.claude/skills/verify-supabase-swift/journeys/auth.swift@081486b1": "fp"
+}

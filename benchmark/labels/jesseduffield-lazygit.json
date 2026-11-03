@@ -1,0 +1,4 @@
+{
+ "insecure-exec-interpolated-pkg/integration/clients/tui.go:126": "fp",
+ "insecure-sql-interpolated-pkg/gui/controllers/helpers/branches_helper.go:643": "fp"
+}
