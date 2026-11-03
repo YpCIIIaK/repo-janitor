@@ -66,7 +66,7 @@ const PHP_JAVA_RULES: VulnRule[] = [
   {
     id: "sql-interpolated",
     lang: "py",
-    re: /\bf(?:"\s*(?:SELECT|INSERT\s+INTO|UPDATE|DELETE\s+FROM)\b[^"\n]*\{|'\s*(?:SELECT|INSERT\s+INTO|UPDATE|DELETE\s+FROM)\b[^'\n]*\{)|(?:"\s*(?:SELECT|INSERT\s+INTO|UPDATE|DELETE\s+FROM)\b[^"\n]*"|'\s*(?:SELECT|INSERT\s+INTO|UPDATE|DELETE\s+FROM)\b[^'\n]*')\s*(?:%\s*[(\w]|\.format\s*\(|\+\s*[A-Za-z_])/gi,
+    re: /\bf(?:"\s*(?:SELECT\b[^"'\n]*\bFROM|INSERT\s+INTO|UPDATE\b[^"'\n]*\bSET|DELETE\s+FROM)\b[^"\n]*\{|'\s*(?:SELECT\b[^"'\n]*\bFROM|INSERT\s+INTO|UPDATE\b[^"'\n]*\bSET|DELETE\s+FROM)\b[^'\n]*\{)|(?:"\s*(?:SELECT\b[^"'\n]*\bFROM|INSERT\s+INTO|UPDATE\b[^"'\n]*\bSET|DELETE\s+FROM)\b[^"\n]*"|'\s*(?:SELECT\b[^"'\n]*\bFROM|INSERT\s+INTO|UPDATE\b[^"'\n]*\bSET|DELETE\s+FROM)\b[^'\n]*')\s*(?:%\s*[(\w]|\.format\s*\(|\+\s*[A-Za-z_])/gi,
     severity: "critical",
     title: "SQL query assembled by string formatting",
     detail:
@@ -768,7 +768,7 @@ export function scanSource(content: string, lang: Lang): CodeHit[] {
       }
       if (rawLine.length > 1000) continue // minified bundle
       // The maintainers already reviewed this line for a security linter.
-      if (/#\s*(?:noqa|nosec)\b|\/\/\s*(?:nosemgrep|eslint-disable)|\bNOSONAR\b/.test(rawLine)) continue
+      if (/#\s*(?:noqa|nosec)\b|\/\/\s*(?:nosemgrep|eslint-disable|phpcs:ignore)|\bNOSONAR\b/.test(rawLine)) continue
       // Docblock lines: ` * const v = await page.$eval(`, ``pickle.loads()``.
       if (/^\s*\*/.test(rawLine) || /``/.test(rawLine)) continue
       // Doctest continuation lines are documentation: `...     pickle.loads(x)`.
@@ -811,7 +811,8 @@ const PHP_ESCAPED =
  *  - SQL handed to a prepare() call is parameterised by that call.
  */
 function sinkAllows(ruleId: string, line: string, col: number): boolean {
-  if (ruleId === "php-reflected-xss") return !PHP_ESCAPED.test(line)
+  // A request value passed into a function call is that function's output, not the raw input.
+  if (ruleId === "php-reflected-xss") return !PHP_ESCAPED.test(line) && !/\b(?:echo|print)\b[^;$]*\w\s*\([^;]*\$_(?:GET|POST|REQUEST|COOKIE)/.test(line)
   if (ruleId === "exec-interpolated" && line[col] === "`") {
     return (line.slice(0, col).match(/"/g)?.length ?? 0) % 2 === 0
   }
@@ -854,12 +855,12 @@ const TAINT_WINDOW = 25
  */
 const TAINT_RE: Record<Lang, RegExp> = {
   rb: /\bparams\s*\[|\bparams\.(?:require|permit|fetch)\b|\brequest\.(?:params|body|query_string|headers|env)\b|\bcookies\s*\[/,
-  go: /\br\.(?:URL\.Query|FormValue|PostFormValue|Form|PostForm|Body|Header|URL\.Path)\b|\bc\.(?:Query|Param|PostForm|FormValue|DefaultQuery|Bind\w*|ShouldBind\w*)\s*\(|\bmux\.Vars\b|\bchi\.URLParam\b|\bos\.Args\b/,
+  go: /\br\.(?:URL\.Query|FormValue|PostFormValue|Form|PostForm|Body|Header|URL\.Path)\b|\bc\.(?:Query|Param|PostForm|FormValue|DefaultQuery|Bind\w*|ShouldBind\w*)\s*\(|\bmux\.Vars\b|\bchi\.URLParam\b/,
   cs: /\bRequest\.(?:Query|Form|QueryString|Params|Cookies|Headers|Body)\b|\bRequest\s*\[|\b(?:txt|tb|text)\w*\.Text\b(?!\s*=[^=])|\[From(?:Query|Body|Form|Route|Header)\]|\bHttpContext\.Request\b/,
   php: /\$_(?:GET|POST|REQUEST|COOKIE|FILES|SERVER)\b|\$request->(?:input|get|query|post)\b|\bfile_get_contents\s*\(\s*['"]php:\/\/input/,
   java: /\brequest\.get(?:Parameter|Header|QueryString|InputStream|Reader|Cookies)\b|@(?:RequestParam|PathVariable|RequestBody|RequestHeader|CookieValue)\b|\bcall\.(?:parameters|receive)\b/,
-  js: /\b(?:req|request|ctx\.request|ctx)\.(?:body|query|params|headers|cookies|url|originalUrl|path)\b|\bprocess\.argv\b|\blocation\.(?:search|hash|href|pathname)\b|\bsearchParams\b|\bdocument\.(?:cookie|referrer|URL)\b|\b(?:event|e|evt|msg)\.data\b|\bwindow\.name\b|\bformData\b|\.files\b|\buserInput\b/,
-  py: /\bparams\s*\[\s*["']|\bparse_qsl?\s*\(|\bQUERY_STRING\b|\bquery_string\b|\brequest\.(?:args|form|json|data|values|files|GET|POST|body|query_params|path_params|cookies|headers|get_json)\b|\bsys\.argv\b|(?<![.\w])input\s*\(|\bself\.request\b|\bflask\.request\b|\bupload|\brecv\s*\(/,
+  js: /\b(?:req|request|ctx\.request|ctx)\.(?:body|query|params|headers|cookies|url|originalUrl|path)\b|\blocation\.(?:search|hash|href|pathname)\b|\bsearchParams\b|\bdocument\.(?:cookie|referrer|URL)\b|\b(?:event|e|evt|msg)\.data\b|\bwindow\.name\b|\bformData\b|\.files\b|\buserInput\b/,
+  py: /\bparams\s*\[\s*["']|\bparse_qsl?\s*\(|\bQUERY_STRING\b|\bquery_string\b|\brequest\.(?:args|form|json|data|values|files|GET|POST|body|query_params|path_params|cookies|headers|get_json)\b|\bself\.request\b|\bflask\.request\b/,
 }
 
 /** Up to `n` lines either side of the match, for rules that need context. */
