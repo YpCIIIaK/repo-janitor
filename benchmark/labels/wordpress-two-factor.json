@@ -1,0 +1,4 @@
+{
+ "insecure-php-reflected-xss-includes/function.login-footer.php:101": "fp",
+ "insecure-php-reflected-xss-includes/function.login-footer.php:105": "fp"
+}

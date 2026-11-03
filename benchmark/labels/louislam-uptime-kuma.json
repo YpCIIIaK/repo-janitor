@@ -1,0 +1,7 @@
+{
+ "insecure-exec-interpolated-extra/rebase-pr.js:15": "fp",
+ "insecure-exec-interpolated-extra/rebase-pr.js:29": "fp",
+ "insecure-exec-interpolated-extra/rebase-pr.js:33": "fp",
+ "insecure-ssrf-server/notification-providers/call-me-bot.js:16": "fp",
+ "insecure-ssrf-server/notification-providers/discord.js:31": "fp"
+}

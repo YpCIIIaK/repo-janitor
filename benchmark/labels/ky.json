@@ -4,6 +4,7 @@
  "action-tag-first-party-.github/workflows/main.yml-28": "tp",
  "busfactor-test/helpers/create-large-file.ts": "fp",
  "commented-test/headers.ts:286": "fp",
+ "insecure-ssrf-test-d/fetch-request.ts:9": "fp",
  "lockfile-missing": "fp",
  "no-permissions-.github/workflows/main.yml-1": "tp",
  "secret-entropy-test/hooks.ts:4674": "fp",

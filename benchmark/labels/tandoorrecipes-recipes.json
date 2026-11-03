@@ -1,0 +1,6 @@
+{
+ "insecure-ssrf-vue3/src/composables/useFileApi.ts:103": "fp",
+ "insecure-ssrf-vue3/src/composables/useFileApi.ts:139": "fp",
+ "insecure-ssrf-vue3/src/composables/useFileApi.ts:39": "fp",
+ "insecure-ssrf-vue3/src/composables/useFileApi.ts:71": "fp"
+}

@@ -1,0 +1,4 @@
+{
+ "insecure-ssrf-internal/compose/index.ts:6": "fp",
+ "insecure-ssrf-javascript/runtimes/bun/index.ts:4": "fp"
+}

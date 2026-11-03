@@ -1,4 +1,5 @@
 {
  "debug-Helper/Dumper.php:36": "fp",
- "hygiene-no-ci": "tp"
+ "hygiene-no-ci": "tp",
+ "insecure-ssrf-Command/DumpCompletionCommand.php:109": "fp"
 }

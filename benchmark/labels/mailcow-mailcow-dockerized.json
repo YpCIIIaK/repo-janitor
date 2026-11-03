@@ -1,0 +1,10 @@
+{
+ "insecure-php-reflected-xss-data/web/autodiscover-json.php:19": "fp",
+ "insecure-php-reflected-xss-data/web/f2b-banlist.php:7": "fp",
+ "insecure-php-reflected-xss-data/web/inc/ajax/qr_gen.php:8": "fp",
+ "insecure-ssrf-data/conf/rspamd/meta_exporter/pipe.php:51": "fp",
+ "insecure-ssrf-data/web/inc/ajax/qitem_details.php:199": "fp",
+ "insecure-ssrf-data/web/inc/functions.inc.php:3116": "fp",
+ "insecure-ssrf-data/web/inc/prerequisites.inc.php:269": "fp",
+ "insecure-ssrf-data/web/inc/prerequisites.inc.php:273": "fp"
+}

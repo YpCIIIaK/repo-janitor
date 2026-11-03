@@ -1,0 +1,5 @@
+{
+ "insecure-php-reflected-xss-resources/templates/install/install_config.phtml:70": "fp",
+ "insecure-php-reflected-xss-resources/templates/install/install_config.phtml:76": "fp",
+ "insecure-php-reflected-xss-resources/templates/install/install_config.phtml:82": "fp"
+}

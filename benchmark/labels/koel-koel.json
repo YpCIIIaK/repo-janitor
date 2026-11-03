@@ -1,0 +1,10 @@
+{
+ "insecure-ssrf-public/sw.js:120": "fp",
+ "insecure-ssrf-public/sw.js:150": "fp",
+ "insecure-ssrf-public/sw.js:60": "fp",
+ "insecure-ssrf-public/sw.js:99": "fp",
+ "insecure-ssrf-resources/assets/js/service-worker.ts:132": "fp",
+ "insecure-ssrf-resources/assets/js/service-worker.ts:165": "fp",
+ "insecure-ssrf-resources/assets/js/service-worker.ts:79": "fp",
+ "insecure-ssrf-resources/assets/js/services/signedUrlService.ts:17": "fp"
+}

@@ -1,0 +1,4 @@
+{
+ "insecure-eval-dynamic-php/WP_CLI/Context/Admin.php:240": "fp",
+ "insecure-exec-interpolated-php/WP_CLI/Runner.php:3059": "fp"
+}

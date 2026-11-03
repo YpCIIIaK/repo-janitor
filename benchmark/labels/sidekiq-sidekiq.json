@@ -1,3 +1,7 @@
 {
- "insecure-innerhtml-dynamic-web/assets/javascripts/application.js:2": "fp"
+ "insecure-exec-interpolated-lib/sidekiq/web/action.rb:53": "fp",
+ "insecure-exec-interpolated-lib/sidekiq/web/action.rb:60": "fp",
+ "insecure-exec-interpolated-lib/sidekiq/web/action.rb:65": "fp",
+ "insecure-innerhtml-dynamic-web/assets/javascripts/application.js:2": "fp",
+ "insecure-ssrf-web/assets/javascripts/application.js:147": "fp"
 }

@@ -1,0 +1,4 @@
+{
+ "insecure-sql-interpolated-lib/typing_extensions.py:2421": "fp",
+ "insecure-ssrf-plexpy/notifiers.py:3303": "fp"
+}

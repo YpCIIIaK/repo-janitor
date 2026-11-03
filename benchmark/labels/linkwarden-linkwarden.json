@@ -1,0 +1,4 @@
+{
+ "insecure-ssrf-apps/extension/src/@/lib/actions/links.ts:32": "fp",
+ "insecure-ssrf-apps/extension/src/@/lib/actions/links.ts:43": "fp"
+}

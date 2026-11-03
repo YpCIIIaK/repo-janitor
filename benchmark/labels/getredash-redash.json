@@ -1,0 +1,4 @@
+{
+ "insecure-ssrf-redash/query_runner/clickhouse.py:119": "fp",
+ "insecure-ssrf-redash/query_runner/prometheus.py:225": "fp"
+}

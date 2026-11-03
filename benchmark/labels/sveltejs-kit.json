@@ -1,0 +1,9 @@
+{
+ "insecure-ssrf-packages/adapter-cloudflare/files/worker.js:36": "fp",
+ "insecure-ssrf-packages/adapter-cloudflare/files/worker.js:68": "fp",
+ "insecure-ssrf-packages/kit/src/runtime/app/server/remote/prerender.js:105": "fp",
+ "insecure-ssrf-packages/kit/src/runtime/server/fetch.js:79": "fp",
+ "insecure-ssrf-packages/kit/src/runtime/server/respond.js:325": "fp",
+ "insecure-ssrf-packages/kit/src/runtime/server/respond.js:738": "fp",
+ "insecure-ssrf-packages/kit/src/runtime/server/respond.js:789": "fp"
+}

@@ -3,5 +3,10 @@
  "insecure-py-eval-exec-gluon/contrib/dbg.py:918": "fp",
  "insecure-py-os-system-gluon/widget.py:819": "fp",
  "insecure-py-shell-true-extras/build_web2py/build_web2py.py:110": "fp",
- "insecure-py-shell-true-extras/build_web2py/build_web2py.py:117": "fp"
+ "insecure-py-shell-true-extras/build_web2py/build_web2py.py:117": "fp",
+ "insecure-sql-interpolated-gluon/rewrite.py:1049": "fp",
+ "insecure-ssrf-applications/admin/controllers/default.py:304": "tp",
+ "insecure-ssrf-gluon/contrib/gae_memcache.py:38": "fp",
+ "insecure-ssrf-gluon/contrib/gae_memcache.py:48": "fp",
+ "insecure-ssrf-gluon/contrib/login_methods/oauth10a_account.py:99": "fp"
 }

@@ -1,0 +1,4 @@
+{
+ "insecure-ssrf-src/ui/main/serverView/uiOverride.ts:204": "fp",
+ "insecure-ssrf-src/ui/main/serverView/uiOverride.ts:217": "fp"
+}

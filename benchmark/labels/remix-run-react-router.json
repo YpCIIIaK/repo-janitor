@@ -1,5 +1,8 @@
 {
  "dead-export-tutorials/address-book/app/data.ts:deleteContact": "fp",
  "insecure-react-dangerous-html-packages/react-router/lib/dom/ssr/components.tsx:1000": "fp",
+ "insecure-ssrf-packages/react-router-cloudflare/worker.ts:92": "fp",
+ "insecure-ssrf-packages/react-router/lib/dom/ssr/fog-of-war.ts:169": "fp",
+ "insecure-ssrf-packages/react-router/lib/dom/ssr/fog-of-war.ts:399": "fp",
  "secret-entropy-.github/workflows/aw-command-review-proposal.lock.yml:818": "fp"
 }

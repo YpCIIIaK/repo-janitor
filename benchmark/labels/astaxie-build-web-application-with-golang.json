@@ -1,3 +1,8 @@
 {
- "bloat-th/code/src/apps/ch.5.3/foo.db": "fp"
+ "bloat-th/code/src/apps/ch.5.3/foo.db": "fp",
+ "insecure-go-template-html-de/code/src/apps/ch.4.3/main.go:20": "fp",
+ "insecure-go-template-html-en/code/src/apps/ch.4.3/main.go:20": "fp",
+ "insecure-go-template-html-fa/code/src/apps/ch.4.3/main.go:20": "fp",
+ "insecure-go-template-html-pt-br/code/src/apps/ch.4.3/main.go:20": "fp",
+ "insecure-go-template-html-th/code/src/apps/ch.4.3/main.go:20": "fp"
 }

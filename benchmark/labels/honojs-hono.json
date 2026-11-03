@@ -16,6 +16,9 @@
  "insecure-react-dangerous-html-src/jsx/index.test.tsx:301": "fp",
  "insecure-react-dangerous-html-src/jsx/index.test.tsx:307": "fp",
  "insecure-react-dangerous-html-src/jsx/intrinsic-elements.ts:22": "fp",
+ "insecure-ssrf-src/middleware/method-override/index.ts:102": "fp",
+ "insecure-ssrf-src/middleware/method-override/index.ts:134": "fp",
+ "insecure-ssrf-src/middleware/method-override/index.ts:88": "fp",
  "secret-private-key-src/utils/jwt/jwt.test.ts:1535": "fp",
  "skiptest-src/utils/buffer.test.ts:69": "tp"
 }

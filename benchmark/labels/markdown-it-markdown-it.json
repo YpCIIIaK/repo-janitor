@@ -1,3 +1,4 @@
 {
+ "insecure-ssrf-support/track-ref-pathological.mjs:16": "fp",
  "insecure-weak-hash-support/track-ref-pathological.mjs:22": "fp"
 }

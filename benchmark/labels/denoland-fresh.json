@@ -1,0 +1,4 @@
+{
+ "insecure-react-dangerous-html-packages/fresh/src/dev/middlewares/error_overlay/overlay.tsx:136": "fp",
+ "insecure-ssrf-packages/fresh/src/runtime/client/partials.ts:362": "fp"
+}

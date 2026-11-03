@@ -9,6 +9,7 @@
  "debug-src/poetry/utils/env/script_strings.py:114": "fp",
  "doclink-docs/cli.md:284:{{<": "fp",
  "doclink-docs/cli.md:740:{{<": "fp",
+ "insecure-ssrf-src/poetry/repositories/pypi_repository.py:204": "fp",
  "no-permissions-.github/workflows/.tests-matrix.yaml-1": "fp",
  "pr-target-checkout-.github/workflows/docs.yaml-40": "tp",
  "skiptest-tests/installation/test_wheel_installer.py:266": "fp"

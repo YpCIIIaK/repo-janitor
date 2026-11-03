@@ -1,4 +1,5 @@
 {
  "bloat-tests/Composer/Test/Util/Fixtures/Zip/empty.zip": "fp",
- "debug-src/Composer/Installer.php:391": "fp"
+ "debug-src/Composer/Installer.php:391": "fp",
+ "insecure-ssrf-src/Composer/Console/Application.php:418": "fp"
 }

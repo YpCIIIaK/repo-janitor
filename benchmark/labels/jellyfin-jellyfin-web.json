@@ -1,0 +1,5 @@
+{
+ "insecure-ssrf-src/plugins/comicsPlayer/plugin.js:359": "fp",
+ "insecure-ssrf-src/utils/fetch.js:40": "fp",
+ "insecure-ssrf-src/utils/fetch.js:55": "fp"
+}

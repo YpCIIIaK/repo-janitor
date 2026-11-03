@@ -1,0 +1,7 @@
+{
+ "insecure-new-function-packages/qwik/src/core/shared/qrl/qrl-class-dev.ts:100": "fp",
+ "insecure-ssrf-e2e/qwik-e2e/apps/e2e/src/components/resource/weather.tsx:129": "fp",
+ "insecure-ssrf-packages/qwik-router/src/middleware/cloudflare-pages/index.ts:40": "fp",
+ "insecure-ssrf-packages/qwik-vite/src/plugins/dev/image-size-runtime.js:162": "fp",
+ "insecure-ssrf-packages/qwik-vite/src/plugins/dev/image-size-runtime.js:89": "fp"
+}

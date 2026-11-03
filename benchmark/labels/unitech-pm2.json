@@ -1,4 +1,6 @@
 {
  "insecure-exec-interpolated-lib/API/Version.js:279": "tp",
- "insecure-new-function-modules/blessed/lib/tput.js:1151": "fp"
+ "insecure-new-function-modules/blessed/lib/tput.js:1151": "fp",
+ "insecure-ssrf-lib/API/Modules/TAR.js:344": "fp",
+ "insecure-ssrf-lib/API/pm2-plus/auth-strategies/CliAuth.js:261": "fp"
 }
