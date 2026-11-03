@@ -19,6 +19,7 @@ import { busFactorScanner } from "./scanners/bus-factor"
 import { deadCodeScanner } from "./scanners/dead-code"
 import { repoBloatScanner } from "./scanners/repo-bloat"
 import { dockerfileScanner } from "./scanners/dockerfile"
+import { iacSecurityScanner } from "./scanners/iac-security"
 import { skippedTestsScanner } from "./scanners/skipped-tests"
 import { commentedCodeScanner } from "./scanners/commented-code"
 import { insecureCodeScanner } from "./scanners/insecure-code"
@@ -49,6 +50,7 @@ export const defaultScanners: Scanner[] = [
   busFactorScanner,
   repoBloatScanner,
   dockerfileScanner,
+  iacSecurityScanner,
   skippedTestsScanner,
   commentedCodeScanner,
   insecureCodeScanner,

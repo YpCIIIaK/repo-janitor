@@ -94,3 +94,12 @@ describe("todo-debt — snapshots", () => {
     expect(out).toEqual([])
   })
 })
+
+describe("todo-debt — translation markers", () => {
+  it("skips TODO markers in translation tables (FreshRSS i18n)", async () => {
+    const lines = Array.from({ length: 40 }, (_, i) => `  'key${i}' => 'English text', // TODO`).join("\n")
+    const ctx = makeContext({ files: { "app/i18n/fr/conf.php": `<?php\nreturn array(\n${lines}\n);\n`, "src/a.ts": "// TODO: real debt\n" } })
+    const out = await todoDebtScanner.run(ctx)
+    expect(out.map((i) => i.location)).toEqual(["src/a.ts:1"])
+  })
+})

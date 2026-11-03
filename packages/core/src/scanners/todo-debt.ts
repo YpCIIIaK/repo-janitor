@@ -104,11 +104,23 @@ export const todoDebtScanner: Scanner = {
       // Snapshot fixtures copy whatever comments their input had; the TODO
       // belongs to the input file, which is reported on its own.
       if (/\.snap(\.[\w]+)*$|(^|\/)__snapshots__\//.test(file.replace(/\\/g, "/"))) continue
+      // Translation files mark untranslated strings with `// TODO` (FreshRSS has
+      // 2,378 of them): a localisation status, not code debt.
+      if (/(^|\/)(?:i18n|l10n|locales?|lang|languages|translations?)\//i.test(file.replace(/\\/g, "/"))) continue
+      // Vendored copies of other projects: their TODOs are upstream's to resolve.
+      if (/(^|\/)(?:vendor|vendored|third[-_]party|node_modules|bower_components|external|deps)\/|\.min\.[cm]?js$/i.test(file.replace(/\\/g, "/"))) continue
       const content = await ctx.readFile(file)
       if (!content) continue
 
       const ast = parseFile(content, file, { comments: true })
       const hits = ast ? collectFromAst(ast) : collectFromText(content)
+      // The same bare marker repeated dozens of times is a file-level convention
+      // (generated stubs, translation tables), not dozens of separate debts.
+      if (hits.length > 30) {
+        const counts = new Map<string, number>()
+        for (const h of hits) counts.set(h.text, (counts.get(h.text) ?? 0) + 1)
+        if (Math.max(...counts.values()) / hits.length > 0.8) continue
+      }
 
       for (const hit of hits) {
         const ageDays = await ctx.git.blameAgeDays(file, hit.line)
