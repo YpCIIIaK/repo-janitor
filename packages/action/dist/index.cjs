@@ -26863,7 +26863,7 @@ var require_lib4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-C3FHCU3S.js
+// ../cli/dist/chunk-RZSTCGXQ.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -45594,7 +45594,7 @@ function date4(params) {
 // ../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/external.js
 config(en_default());
 
-// ../cli/dist/chunk-C3FHCU3S.js
+// ../cli/dist/chunk-RZSTCGXQ.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -70809,7 +70809,7 @@ var SOURCE_RE = /\.(ts|tsx|js|jsx|mjs|mts|cts|py|go|rs|java|rb|php|c|cc|cpp|h|hp
 var MARKER_RE = /^[\s*>!-]*(TODO|FIXME|HACK|XXX)\b:?\s*(.*)$/;
 var STALE_DAYS2 = 365;
 function findMarker(text) {
-  const m2 = text.match(MARKER_RE);
+  const m2 = text.trimEnd().match(MARKER_RE);
   if (!m2) return null;
   return { marker: m2[1], rest: m2[2].trim() };
 }
@@ -73275,6 +73275,7 @@ var brokenDocLinksScanner = {
           const resolved = resolveRel(baseDir, decoded);
           if (!resolved) continue;
           if (fileSet.has(resolved) || dirSet.has(resolved)) continue;
+          if ((yield ctx.readFile(resolved)) !== null) continue;
           if (!/\.[a-z0-9]+$/i.test(decoded) && pageExists(decoded, resolved, fileSet)) continue;
           if (usesMkdocs && /\.md$/i.test(file2)) {
             const asDir = resolveRel(`${baseDir}/${file2.split("/").pop().replace(/\.md$/i, "")}`, decoded);
@@ -74562,7 +74563,7 @@ var PHP_JAVA_RULES = [
   {
     id: "exec-interpolated",
     lang: "rb",
-    re: /`[^`\n]*#\{|%x[({\[][^\n]*#\{|\b(?:system|exec|spawn|IO\.popen|Open3\.\w+)\s*\(?\s*"[^"\n]*#\{/g,
+    re: /`[^`\n]*#\{|%x[({[][^\n]*#\{|\b(?:system|exec|spawn|IO\.popen|Open3\.\w+)\s*\(?\s*"[^"\n]*#\{/g,
     severity: "critical",
     title: "Shell command built by string interpolation",
     detail: 'An interpolated value reaches a shell, so `;` or `$(\u2026)` in it runs a command of its own. Pass the arguments separately (`system("ls", dir)`), which skips the shell.'
@@ -75153,8 +75154,8 @@ var FN_HEADER = {
   php: /function\s+(\w+)\s*\(([^)]*)\)/,
   rb: /^\s*def\s+(?:self\.)?(\w+[?!]?)\s*(?:\(([^)]*)\)|([^\n#]*))/,
   go: /^func\s+(?:\([^)]*\)\s*)?(\w+)\s*\(([^)]*)\)/,
-  java: /(?:public|private|protected|static|final|synchronized)[\w<>\[\],.?\s]*\s(\w+)\s*\(([^)]*)\)\s*(?:throws[^{]*)?\{?\s*$/,
-  cs: /(?:public|private|protected|internal|static|async|virtual|override)[\w<>\[\],.?\s]*\s(\w+)\s*\(([^)]*)\)\s*\{?\s*$/
+  java: /(?:public|private|protected|static|final|synchronized)[\w<>[\],.?\s]*\s(\w+)\s*\(([^)]*)\)\s*(?:throws[^{]*)?\{?\s*$/,
+  cs: /(?:public|private|protected|internal|static|async|virtual|override)[\w<>[\],.?\s]*\s(\w+)\s*\(([^)]*)\)\s*\{?\s*$/
 };
 var CROSS_FILE_KIND = [
   [/^insecure-sql-interpolated-/, "sql"],
@@ -77712,7 +77713,9 @@ function buildScanContext(root) {
       history,
       repo,
       config: config2,
-      files,
+      // Filesystem enumeration completes in different orders across OSes/runs.
+      // Stable ordering keeps capped scanners and duplicate identities repeatable.
+      files: files.sort(),
       readFile: readRel,
       fileSize: (relPath) => __async(null, null, function* () {
         try {
@@ -78601,7 +78604,7 @@ var SOURCE_RE8 = /\.(ts|tsx|js|jsx|mjs|mts|cts|py|go|rs|java|rb|php|c|cc|cpp|h|h
 var MARKER_RE2 = /^[\s*>!-]*(TODO|FIXME|HACK|XXX)\b:?\s*(.*)$/;
 var STALE_DAYS5 = 365;
 function findMarker2(text) {
-  const m2 = text.match(MARKER_RE2);
+  const m2 = text.trimEnd().match(MARKER_RE2);
   if (!m2) return null;
   return { marker: m2[1], rest: m2[2].trim() };
 }
@@ -80963,6 +80966,7 @@ var brokenDocLinksScanner2 = {
         const resolved = resolveRel2(baseDir, decoded);
         if (!resolved) continue;
         if (fileSet.has(resolved) || dirSet.has(resolved)) continue;
+        if (await ctx.readFile(resolved) !== null) continue;
         if (!/\.[a-z0-9]+$/i.test(decoded) && pageExists2(decoded, resolved, fileSet)) continue;
         if (usesMkdocs && /\.md$/i.test(file2)) {
           const asDir = resolveRel2(`${baseDir}/${file2.split("/").pop().replace(/\.md$/i, "")}`, decoded);
@@ -82224,7 +82228,7 @@ var PHP_JAVA_RULES2 = [
   {
     id: "exec-interpolated",
     lang: "rb",
-    re: /`[^`\n]*#\{|%x[({\[][^\n]*#\{|\b(?:system|exec|spawn|IO\.popen|Open3\.\w+)\s*\(?\s*"[^"\n]*#\{/g,
+    re: /`[^`\n]*#\{|%x[({[][^\n]*#\{|\b(?:system|exec|spawn|IO\.popen|Open3\.\w+)\s*\(?\s*"[^"\n]*#\{/g,
     severity: "critical",
     title: "Shell command built by string interpolation",
     detail: 'An interpolated value reaches a shell, so `;` or `$(\u2026)` in it runs a command of its own. Pass the arguments separately (`system("ls", dir)`), which skips the shell.'
@@ -82811,8 +82815,8 @@ var FN_HEADER2 = {
   php: /function\s+(\w+)\s*\(([^)]*)\)/,
   rb: /^\s*def\s+(?:self\.)?(\w+[?!]?)\s*(?:\(([^)]*)\)|([^\n#]*))/,
   go: /^func\s+(?:\([^)]*\)\s*)?(\w+)\s*\(([^)]*)\)/,
-  java: /(?:public|private|protected|static|final|synchronized)[\w<>\[\],.?\s]*\s(\w+)\s*\(([^)]*)\)\s*(?:throws[^{]*)?\{?\s*$/,
-  cs: /(?:public|private|protected|internal|static|async|virtual|override)[\w<>\[\],.?\s]*\s(\w+)\s*\(([^)]*)\)\s*\{?\s*$/
+  java: /(?:public|private|protected|static|final|synchronized)[\w<>[\],.?\s]*\s(\w+)\s*\(([^)]*)\)\s*(?:throws[^{]*)?\{?\s*$/,
+  cs: /(?:public|private|protected|internal|static|async|virtual|override)[\w<>[\],.?\s]*\s(\w+)\s*\(([^)]*)\)\s*\{?\s*$/
 };
 var CROSS_FILE_KIND2 = [
   [/^insecure-sql-interpolated-/, "sql"],

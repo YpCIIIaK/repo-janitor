@@ -282,6 +282,18 @@ describe("buildScanContext git.historyAdditions (real git)", () => {
 })
 
 describe("buildScanContext file collection", () => {
+  it("uses a stable path order for capped scanners", async () => {
+    const dir = mkdtempSync(join(tmpdir(), "rar-order-"))
+    try {
+      mkdirSync(join(dir, "a"))
+      writeFileSync(join(dir, "z.ts"), "export const z = 1")
+      writeFileSync(join(dir, "a", "b.ts"), "export const b = 1")
+      writeFileSync(join(dir, "A.ts"), "export const a = 1")
+      for (let i = 0; i < 3; i++) {
+        expect((await buildScanContext(dir)).files).toEqual(["A.ts", "a/b.ts", "z.ts"])
+      }
+    } finally { rmSync(dir, { recursive: true, force: true }) }
+  })
   it("does not scan this tool's own state directory", async () => {
     // CI scored this repository 83 instead of 93 on a "high-entropy secret"
     // that was a watch-subscription id our own test run had written to

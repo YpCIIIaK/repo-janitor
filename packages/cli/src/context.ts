@@ -194,7 +194,9 @@ export async function buildScanContext(root: string): Promise<ScanContext> {
     history,
     repo,
     config,
-    files,
+    // Filesystem enumeration completes in different orders across OSes/runs.
+    // Stable ordering keeps capped scanners and duplicate identities repeatable.
+    files: files.sort(),
     readFile: readRel,
     fileSize: async (relPath: string): Promise<number | null> => {
       try {

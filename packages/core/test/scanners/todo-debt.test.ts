@@ -3,6 +3,18 @@ import { todoDebtScanner } from "../../src/index"
 import { makeContext } from "../helpers"
 
 describe("todoDebtScanner", () => {
+  it("preserves findings with CRLF in text fallback and block comments", async () => {
+    const files = {
+      "main.py": "# TODO: fix auth\nvalue = 1 # FIXME: validate\n",
+      "main.js": "/*\n * TODO: handle storage\n */\n",
+    }
+    const lf = await todoDebtScanner.run(makeContext({ files }))
+    const crlf = await todoDebtScanner.run(makeContext({
+      files: Object.fromEntries(Object.entries(files).map(([name, text]) => [name, text.replace(/\n/g, "\r\n")])),
+    }))
+    expect(lf).toHaveLength(3)
+    expect(crlf).toEqual(lf)
+  })
   it("flags TODO/FIXME/HACK/XXX markers in JS comments", async () => {
     const ctx = makeContext({
       files: {

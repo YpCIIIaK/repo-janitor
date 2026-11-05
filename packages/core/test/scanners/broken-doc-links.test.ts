@@ -3,6 +3,14 @@ import { brokenDocLinksScanner } from "../../src/index"
 import { makeContext } from "../helpers"
 
 describe("brokenDocLinksScanner", () => {
+  it("accepts readable symlink targets omitted from enumeration but reports dangling links", async () => {
+    const ctx = makeContext({
+      fileList: ["README.md"],
+      files: { "README.md": "[valid](docs/link.md) [broken](docs/missing.md)", "docs/link.md": "# Target" },
+    })
+    const issues = await brokenDocLinksScanner.run(ctx)
+    expect(issues.map((issue) => issue.evidence)).toEqual(["docs/missing.md"])
+  })
   it("flags a relative link whose target does not exist", async () => {
     const ctx = makeContext({
       files: { "README.md": "See [the guide](docs/guide.md) for details.\n" },

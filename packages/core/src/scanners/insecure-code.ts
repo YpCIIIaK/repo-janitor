@@ -118,7 +118,7 @@ const PHP_JAVA_RULES: VulnRule[] = [
   {
     id: "exec-interpolated",
     lang: "rb",
-    re: /`[^`\n]*#\{|%x[({\[][^\n]*#\{|\b(?:system|exec|spawn|IO\.popen|Open3\.\w+)\s*\(?\s*"[^"\n]*#\{/g,
+    re: /`[^`\n]*#\{|%x[({[][^\n]*#\{|\b(?:system|exec|spawn|IO\.popen|Open3\.\w+)\s*\(?\s*"[^"\n]*#\{/g,
     severity: "critical",
     title: "Shell command built by string interpolation",
     detail:
@@ -914,8 +914,8 @@ const FN_HEADER: Record<Lang, RegExp> = {
   php: /function\s+(\w+)\s*\(([^)]*)\)/,
   rb: /^\s*def\s+(?:self\.)?(\w+[?!]?)\s*(?:\(([^)]*)\)|([^\n#]*))/,
   go: /^func\s+(?:\([^)]*\)\s*)?(\w+)\s*\(([^)]*)\)/,
-  java: /(?:public|private|protected|static|final|synchronized)[\w<>\[\],.?\s]*\s(\w+)\s*\(([^)]*)\)\s*(?:throws[^{]*)?\{?\s*$/,
-  cs: /(?:public|private|protected|internal|static|async|virtual|override)[\w<>\[\],.?\s]*\s(\w+)\s*\(([^)]*)\)\s*\{?\s*$/,
+  java: /(?:public|private|protected|static|final|synchronized)[\w<>[\],.?\s]*\s(\w+)\s*\(([^)]*)\)\s*(?:throws[^{]*)?\{?\s*$/,
+  cs: /(?:public|private|protected|internal|static|async|virtual|override)[\w<>[\],.?\s]*\s(\w+)\s*\(([^)]*)\)\s*\{?\s*$/,
 }
 
 /** Sinks a caller's input can make dangerous through a parameter, by kind. */
