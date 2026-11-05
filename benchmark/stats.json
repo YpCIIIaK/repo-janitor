@@ -1,33 +1,33 @@
 {
   "repos": 1273,
-  "generatedAt": "2026-11-03T21:19:09.887Z",
+  "generatedAt": "2026-11-05T16:44:42.940Z",
   "grades": {
-    "A": 306,
-    "B": 281,
-    "C": 395,
-    "D": 221,
-    "F": 70
+    "A": 384,
+    "B": 348,
+    "C": 369,
+    "D": 147,
+    "F": 25
   },
   "languages": {
     "TypeScript": {
       "repos": 277,
-      "medianScore": 70,
-      "findingsPer1k": 1.84
+      "medianScore": 73,
+      "findingsPer1k": 1.71
     },
     "JavaScript": {
       "repos": 269,
       "medianScore": 80,
-      "findingsPer1k": 1.98
+      "findingsPer1k": 1.87
     },
     "Python": {
       "repos": 178,
-      "medianScore": 68,
-      "findingsPer1k": 1.67
+      "medianScore": 82,
+      "findingsPer1k": 1.06
     },
     "Go": {
       "repos": 134,
-      "medianScore": 69,
-      "findingsPer1k": 1.48
+      "medianScore": 85,
+      "findingsPer1k": 1.15
     },
     "other": {
       "repos": 122,
@@ -36,87 +36,87 @@
     },
     "PHP": {
       "repos": 69,
-      "medianScore": 68,
-      "findingsPer1k": 1.88
+      "medianScore": 77,
+      "findingsPer1k": 1.73
     },
     "Rust": {
       "repos": 50,
-      "medianScore": 61,
-      "findingsPer1k": 2.04
+      "medianScore": 67,
+      "findingsPer1k": 1.48
     },
     "Ruby": {
       "repos": 41,
-      "medianScore": 75,
-      "findingsPer1k": 1.95
+      "medianScore": 83,
+      "findingsPer1k": 1.57
     },
     "Java": {
       "repos": 36,
-      "medianScore": 65,
-      "findingsPer1k": 1.67
+      "medianScore": 88,
+      "findingsPer1k": 1.04
     },
     "C#": {
       "repos": 25,
-      "medianScore": 61,
-      "findingsPer1k": 2.3
+      "medianScore": 68,
+      "findingsPer1k": 1.8
     },
     "C": {
       "repos": 24,
-      "medianScore": 69,
-      "findingsPer1k": 1.7
+      "medianScore": 77,
+      "findingsPer1k": 1.63
     },
     "C++": {
       "repos": 16,
-      "medianScore": 64,
-      "findingsPer1k": 3.65
+      "medianScore": 76,
+      "findingsPer1k": 2.77
     },
     "Kotlin": {
       "repos": 12,
-      "medianScore": 64,
-      "findingsPer1k": 1.69
+      "medianScore": 71,
+      "findingsPer1k": 1.17
     },
     "Swift": {
       "repos": 12,
-      "medianScore": 72,
-      "findingsPer1k": 0.89
+      "medianScore": 87,
+      "findingsPer1k": 0.83
     },
     "Scala": {
       "repos": 5,
-      "medianScore": 54,
+      "medianScore": 61,
       "findingsPer1k": 5.91
     }
   },
   "ruleShare": {
     "bus-factor": 0.682,
     "duplicate": 0.605,
-    "todo": 0.589,
     "workflow-action-tag-first-party": 0.586,
-    "workflow-no-permissions": 0.532,
+    "workflow-no-permissions": 0.533,
     "workflow-action-tag": 0.483,
+    "todo": 0.405,
     "commented-code": 0.291,
     "eol-node": 0.24,
-    "doc-link": 0.209,
+    "doc-link": 0.203,
     "dead-export": 0.178,
-    "bloat": 0.158,
     "skipped-test": 0.148,
     "hygiene-no-tests": 0.148,
     "eol-python": 0.095,
     "hygiene-no-ci": 0.09,
     "config-conflict": 0.071,
-    "secret-provider": 0.068,
     "lockfile-missing": 0.057,
-    "secret-generic": 0.056,
+    "docker-untagged": 0.052,
     "ci-silenced-failure": 0.038,
     "hygiene-no-license": 0.038,
     "docker-latest": 0.03,
     "env-missing": 0.026,
     "docs-badge": 0.024,
-    "ci-no-pr-trigger": 0.017
+    "insecure-sql-interpolated": 0.017,
+    "dead-uikit": 0.012,
+    "workflow-pr-target-checkout": 0.01
   },
   "ci": {
     "withActions": 1119,
     "unpinned": 811,
     "thirdPartyUnpinned": 615,
-    "noPermissions": 677
+    "noPermissions": 678
   },
   "eol": {
     "node": {
@@ -129,73 +129,73 @@
     }
   },
   "checklist": {
-    "readme": 0.987,
+    "readme": 0.997,
     "license": 0.928,
-    "contributing": 0.54,
+    "contributing": 0.541,
     "security": 0.32,
     "codeOfConduct": 0.261,
-    "changelog": 0.414,
+    "changelog": 0.417,
     "ci": 0.907,
     "tests": 0.841
   },
   "todo": {
-    "dated": 22840,
-    "medianDays": 1302,
-    "overFiveYears": 8124,
+    "dated": 11992,
+    "medianDays": 1251,
+    "overFiveYears": 4110,
     "oldest": [
       {
-        "repo": "libsdl-org/SDL_ttf",
-        "location": "src/SDL_ttf.c:166",
-        "years": 25.4
+        "repo": "sphinx-doc/sphinx",
+        "location": "sphinx/ext/doctest.py:306",
+        "years": 18.6
       },
       {
-        "repo": "dateutil/dateutil",
-        "location": "src/dateutil/rrule.py:1199",
-        "years": 23.1
+        "repo": "sphinx-doc/sphinx",
+        "location": "sphinx/writers/text.py:506",
+        "years": 18.4
       },
       {
-        "repo": "paramiko/paramiko",
-        "location": "paramiko/ber.py:71",
-        "years": 23
+        "repo": "sphinx-doc/sphinx",
+        "location": "sphinx/writers/text.py:605",
+        "years": 18.4
       },
       {
-        "repo": "JodaOrg/joda-time",
-        "location": "src/test/java/org/joda/time/chrono/TestCopticChronology.java:405",
-        "years": 21.8
+        "repo": "sphinx-doc/sphinx",
+        "location": "sphinx/writers/text.py:857",
+        "years": 18
       },
       {
-        "repo": "JodaOrg/joda-time",
-        "location": "src/test/java/org/joda/time/chrono/TestEthiopicChronology.java:405",
-        "years": 21.1
+        "repo": "sphinx-doc/sphinx",
+        "location": "sphinx/builders/_epub_base.py:198",
+        "years": 16.9
       }
     ]
   },
   "activity": {
     "active": 667,
-    "activeMedian": 66,
+    "activeMedian": 75,
     "quiet": 330,
-    "quietMedian": 82
+    "quietMedian": 85
   },
   "sizeBands": [
     {
       "label": "< 5k lines",
       "repos": 484,
-      "medianScore": 88
+      "medianScore": 89
     },
     {
       "label": "5k–50k",
       "repos": 469,
-      "medianScore": 67
+      "medianScore": 76
     },
     {
       "label": "50k–200k",
       "repos": 234,
-      "medianScore": 61
+      "medianScore": 68
     },
     {
       "label": "> 200k",
       "repos": 86,
-      "medianScore": 62
+      "medianScore": 72
     }
   ],
   "best": [
@@ -225,6 +225,11 @@
       "findings": 0
     },
     {
+      "repo": "electron/fiddle",
+      "score": 100,
+      "findings": 0
+    },
+    {
       "repo": "metabase/toucan",
       "score": 100,
       "findings": 0
@@ -240,59 +245,54 @@
       "findings": 0
     },
     {
-      "repo": "mfussenegger/nvim-dap",
-      "score": 100,
-      "findings": 0
-    },
-    {
-      "repo": "tmux-plugins/tpm",
+      "repo": "traefik/traefik-helm-chart",
       "score": 100,
       "findings": 0
     }
   ],
   "worst": [
     {
-      "repo": "dagster-io/dagster",
-      "score": 0,
-      "findings": 876
-    },
-    {
       "repo": "aws-samples/serverless-patterns",
       "score": 0,
-      "findings": 487
-    },
-    {
-      "repo": "zricethezav/gitleaks",
-      "score": 0,
-      "findings": 432
+      "findings": 167
     },
     {
       "repo": "returntocorp/semgrep-rules",
       "score": 0,
-      "findings": 330
+      "findings": 148
     },
     {
-      "repo": "alist-org/alist",
+      "repo": "sqlmapproject/testenv",
       "score": 0,
-      "findings": 264
+      "findings": 103
     },
     {
-      "repo": "matomo-org/matomo-for-wordpress",
+      "repo": "posthog/charts-clickhouse",
       "score": 0,
-      "findings": 193
+      "findings": 36
+    },
+    {
+      "repo": "docker-library/wordpress",
+      "score": 0,
+      "findings": 32
+    },
+    {
+      "repo": "hashicorp/vault-guides",
+      "score": 1,
+      "findings": 77
     },
     {
       "repo": "aws/aws-sam-cli-app-templates",
-      "score": 0,
-      "findings": 176
+      "score": 7,
+      "findings": 124
     },
     {
-      "repo": "atuinsh/atuin",
-      "score": 0,
-      "findings": 170
+      "repo": "aws-samples/aws-cdk-examples",
+      "score": 31,
+      "findings": 125
     }
   ],
-  "medianScore": 71,
+  "medianScore": 79,
   "vulnerableApps": [
     {
       "repo": "digininja/DVWA",
@@ -328,12 +328,6 @@
       "repo": "SasanLabs/VulnerableApp",
       "language": "Java",
       "high": 10,
-      "crossFile": 0
-    },
-    {
-      "repo": "OWASP/DVSA",
-      "language": "JavaScript",
-      "high": 8,
       "crossFile": 0
     },
     {
@@ -391,12 +385,6 @@
       "crossFile": 0
     },
     {
-      "repo": "bridgecrewio/cfngoat",
-      "language": "other",
-      "high": 3,
-      "crossFile": 0
-    },
-    {
       "repo": "snoopysecurity/dvws-node",
       "language": "JavaScript",
       "high": 2,
@@ -405,6 +393,12 @@
     {
       "repo": "juice-shop/juice-shop",
       "language": "TypeScript",
+      "high": 2,
+      "crossFile": 0
+    },
+    {
+      "repo": "bridgecrewio/cfngoat",
+      "language": "other",
       "high": 2,
       "crossFile": 0
     },
@@ -481,6 +475,12 @@
       "crossFile": 0
     },
     {
+      "repo": "OWASP/DVSA",
+      "language": "JavaScript",
+      "high": 0,
+      "crossFile": 0
+    },
+    {
       "repo": "OWASP/iGoat-Swift",
       "language": "C",
       "high": 0,
@@ -516,145 +516,145 @@
       "key": "scorecard",
       "label": "OpenSSF Scorecard",
       "repos": 43,
-      "rawScoreGap": 14,
-      "scoreGap": 8.897435897435898,
-      "densityGap": -1.0516745255681335
-    },
-    {
-      "key": "eslintFlat",
-      "label": "ESLint flat config",
-      "repos": 157,
-      "rawScoreGap": -2,
-      "scoreGap": 5.6050955414012735,
-      "densityGap": -0.2749239991753806
-    },
-    {
-      "key": "tsconfig",
-      "label": "TypeScript",
-      "repos": 267,
-      "rawScoreGap": 1,
-      "scoreGap": 3.5168539325842696,
-      "densityGap": -0.08132054529762751
-    },
-    {
-      "key": "prettier",
-      "label": "Prettier",
-      "repos": 169,
-      "rawScoreGap": -1,
-      "scoreGap": 2.2840236686390534,
-      "densityGap": 0.06069552017878489
-    },
-    {
-      "key": "editorconfig",
-      "label": ".editorconfig",
-      "repos": 434,
-      "rawScoreGap": -3,
-      "scoreGap": 1.9861751152073732,
-      "densityGap": -0.5101279429678737
-    },
-    {
-      "key": "codeql",
-      "label": "CodeQL",
-      "repos": 156,
-      "rawScoreGap": -5,
-      "scoreGap": 0.5,
-      "densityGap": -0.25335305305386235
-    },
-    {
-      "key": "renovate",
-      "label": "Renovate",
-      "repos": 98,
-      "rawScoreGap": -4,
-      "scoreGap": 0.061224489795918366,
-      "densityGap": 0.13051620010614864
-    },
-    {
-      "key": "changeset",
-      "label": "Changesets",
-      "repos": 43,
-      "rawScoreGap": -8,
-      "scoreGap": -0.6153846153846154,
-      "densityGap": 0.547285508806305
+      "rawScoreGap": 10,
+      "scoreGap": 10.692307692307692,
+      "densityGap": -1.221081410220033
     },
     {
       "key": "dependabot",
       "label": "Dependabot",
       "repos": 475,
-      "rawScoreGap": -8,
-      "scoreGap": -0.8865096359743041,
-      "densityGap": -0.14333334217104832
+      "rawScoreGap": -3,
+      "scoreGap": 1.1306209850107067,
+      "densityGap": -0.2958830303952808
+    },
+    {
+      "key": "codeql",
+      "label": "CodeQL",
+      "repos": 156,
+      "rawScoreGap": -3,
+      "scoreGap": 1.0192307692307692,
+      "densityGap": -0.26736250508060755
     },
     {
       "key": "security",
       "label": "SECURITY.md",
       "repos": 380,
-      "rawScoreGap": -9,
-      "scoreGap": -0.9098360655737705,
-      "densityGap": -0.27819306770322233
+      "rawScoreGap": -6,
+      "scoreGap": 0.7814207650273224,
+      "densityGap": -0.35841011250278976
+    },
+    {
+      "key": "preCommit",
+      "label": "pre-commit",
+      "repos": 123,
+      "rawScoreGap": -4,
+      "scoreGap": 0.04065040650406504,
+      "densityGap": -1.1195535773954735
+    },
+    {
+      "key": "editorconfig",
+      "label": ".editorconfig",
+      "repos": 434,
+      "rawScoreGap": -5,
+      "scoreGap": -0.32027649769585254,
+      "densityGap": -0.4093534927388656
+    },
+    {
+      "key": "eslintFlat",
+      "label": "ESLint flat config",
+      "repos": 157,
+      "rawScoreGap": -6,
+      "scoreGap": -1.0828025477707006,
+      "densityGap": -0.04922280906806938
     },
     {
       "key": "devcontainer",
       "label": "Dev container",
       "repos": 110,
-      "rawScoreGap": -7,
-      "scoreGap": -1.5909090909090908,
-      "densityGap": 0.07620296009916953
+      "rawScoreGap": -6,
+      "scoreGap": -1.9181818181818182,
+      "densityGap": -0.07967979804024056
+    },
+    {
+      "key": "renovate",
+      "label": "Renovate",
+      "repos": 98,
+      "rawScoreGap": -3,
+      "scoreGap": -2.2857142857142856,
+      "densityGap": 0.06402869412526542
+    },
+    {
+      "key": "prettier",
+      "label": "Prettier",
+      "repos": 169,
+      "rawScoreGap": -6,
+      "scoreGap": -3.195266272189349,
+      "densityGap": 0.2709352015537151
+    },
+    {
+      "key": "tsconfig",
+      "label": "TypeScript",
+      "repos": 267,
+      "rawScoreGap": -5,
+      "scoreGap": -3.202247191011236,
+      "densityGap": 0.06274455355356008
     },
     {
       "key": "prTemplate",
       "label": "PR template",
       "repos": 420,
-      "rawScoreGap": -12,
-      "scoreGap": -3.4921052631578946,
-      "densityGap": 0.4527765670866108
+      "rawScoreGap": -10,
+      "scoreGap": -3.292105263157895,
+      "densityGap": 0.4452871133932039
     },
     {
       "key": "codeowners",
       "label": "CODEOWNERS",
       "repos": 212,
       "rawScoreGap": -8,
-      "scoreGap": -3.80188679245283,
-      "densityGap": 0.9353724869359238
+      "scoreGap": -4.066037735849057,
+      "densityGap": 0.45278307508154736
     },
     {
       "key": "contributing",
       "label": "CONTRIBUTING",
       "repos": 616,
-      "rawScoreGap": -14,
-      "scoreGap": -4.989106753812636,
-      "densityGap": 0.0220714944923416
+      "rawScoreGap": -11,
+      "scoreGap": -4.076252723311547,
+      "densityGap": -0.033283266479497677
     },
     {
       "key": "issueTemplates",
       "label": "Issue templates",
       "repos": 589,
-      "rawScoreGap": -16,
-      "scoreGap": -5.193473193473194,
-      "densityGap": 0.2783343640741256
+      "rawScoreGap": -13,
+      "scoreGap": -6.655011655011655,
+      "densityGap": 0.19350085253778973
     },
     {
-      "key": "preCommit",
-      "label": "pre-commit",
-      "repos": 123,
-      "rawScoreGap": -7,
-      "scoreGap": -6.073170731707317,
-      "densityGap": -0.5569087406791584
+      "key": "changeset",
+      "label": "Changesets",
+      "repos": 43,
+      "rawScoreGap": -15,
+      "scoreGap": -9.64102564102564,
+      "densityGap": 0.648091120776788
     }
   ],
-  "lowConfidenceHidden": 8114,
-  "shown": 73330,
+  "lowConfidenceHidden": 10594,
+  "shown": 59650,
   "precision": {
     "high": {
-      "tp": 421,
-      "fp": 37
+      "tp": 415,
+      "fp": 30
     },
     "medium": {
-      "tp": 125,
-      "fp": 151
+      "tp": 106,
+      "fp": 52
     },
     "low": {
-      "tp": 22,
-      "fp": 220
+      "tp": 45,
+      "fp": 325
     }
   }
 }

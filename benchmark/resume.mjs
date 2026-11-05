@@ -22,8 +22,10 @@ const stale = corpus
   })
 console.log(`${stale.length} of ${corpus.length} repos need a scan`)
 if (stale.length) {
-  spawnSync("node", [join(here, "run.mjs"), ...stale], {
+  const result = spawnSync("node", [join(here, "run.mjs"), ...stale], {
     stdio: "inherit",
     env: { BENCH_DROP_CLONES: "1", BENCH_JOBS: "6", ...process.env },
   })
+  if (result.error) console.error(result.error.message)
+  process.exitCode = result.status ?? 1
 }

@@ -1,9 +1,9 @@
 {
-  "overall": 0.582,
+  "overall": 0.58,
   "scanners": {
     "eol-runtime": 1,
     "todo-debt": 1,
-    "broken-doc-links": 0.72,
+    "broken-doc-links": 0.64,
     "bus-factor": 1,
     "commented-code": 0.757,
     "workflow-security": 0.95,

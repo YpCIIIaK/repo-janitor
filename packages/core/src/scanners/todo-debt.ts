@@ -39,7 +39,7 @@ interface Comment {
 }
 
 function findMarker(text: string): { marker: string; rest: string } | null {
-  const m = text.match(MARKER_RE)
+  const m = text.trimEnd().match(MARKER_RE)
   if (!m) return null
   return { marker: m[1], rest: m[2].trim() }
 }
