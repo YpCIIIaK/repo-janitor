@@ -11,5 +11,5 @@
  "iac-host-namespace-compose.override.yml:83": "fp",
  "insecure-localstorage-secret-frontend/src/hooks/useAuth.ts:45": "tp",
  "insecure-localstorage-secret-frontend/tests/login.spec.ts:112": "fp",
- "self-hosted-runner-.github/workflows/deploy-docker-compose.yml-17": "tp"
+ "self-hosted-runner-.github/workflows/deploy-docker-compose.yml-17": "fp"
 }

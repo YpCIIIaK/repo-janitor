@@ -3165,11 +3165,6 @@
     "sha": "acd510beb27d5b119608cb3af6fff1eff5d4462f"
   },
   {
-    "name": "com-lihaoyi-mill",
-    "url": "https://github.com/com-lihaoyi/mill",
-    "sha": "5ecbf10320f2d808a889c4df2c64d9b7b04de617"
-  },
-  {
     "name": "curl-trurl",
     "url": "https://github.com/curl/trurl",
     "sha": "d8edc4f5bd442e1c18fba4ebf067ce21b1bc75a9"
@@ -4143,11 +4138,6 @@
     "name": "appsecco-vyapi",
     "url": "https://github.com/appsecco/VyAPI",
     "sha": "7510df3fbbcb5281884f55ad1755f12de5bf8f63"
-  },
-  {
-    "name": "appsmithorg-appsmith-docs",
-    "url": "https://github.com/appsmithorg/appsmith-docs",
-    "sha": "f79317aa128e4a48a38cd49ead37c895a86bbe1d"
   },
   {
     "name": "appwrite-sdk-for-web",
@@ -5813,11 +5803,6 @@
     "name": "ueberdosis-tiptap",
     "url": "https://github.com/ueberdosis/tiptap",
     "sha": "60e0288b948b8b73dab58f45f92072b5f05b9a6a"
-  },
-  {
-    "name": "recharts-recharts",
-    "url": "https://github.com/recharts/recharts",
-    "sha": "6204a7c88cb7c841f18f275d32b10c2b80dee40b"
   },
   {
     "name": "excaliburjs-excalibur",

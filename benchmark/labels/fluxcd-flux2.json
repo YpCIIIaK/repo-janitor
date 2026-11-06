@@ -1,4 +1,4 @@
 {
- "ci-disabled-.github/workflows/conformance.yaml-170": "fp",
- "ci-disabled-.github/workflows/conformance.yaml-75": "fp"
+ "ci-disabled-.github/workflows/conformance.yaml-170": "tp",
+ "ci-disabled-.github/workflows/conformance.yaml-75": "tp"
 }
