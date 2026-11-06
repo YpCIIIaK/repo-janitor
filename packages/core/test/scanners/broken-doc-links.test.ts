@@ -3,6 +3,12 @@ import { brokenDocLinksScanner } from "../../src/index"
 import { makeContext } from "../helpers"
 
 describe("brokenDocLinksScanner", () => {
+  it("does not mistake a case-insensitive read for an exact link target", async () => {
+    const ctx = makeContext({ files: { "README.md": "[Chinese](README_zh_cn.md)", "README_zh_CN.md": "text" } })
+    const read = ctx.readFile
+    ctx.readFile = async path => path === "README_zh_cn.md" ? "text" : read(path)
+    expect((await brokenDocLinksScanner.run(ctx)).map(issue => issue.evidence)).toEqual(["README_zh_cn.md"])
+  })
   it("accepts readable symlink targets omitted from enumeration but reports dangling links", async () => {
     const ctx = makeContext({
       fileList: ["README.md"],

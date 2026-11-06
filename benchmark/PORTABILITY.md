@@ -46,3 +46,24 @@ does not solve invalid names; their clone cache must be a Linux Docker volume.
 Only results/history are shared with the host. The Linux run uses the same CLI
 build and direct dependency versions (commander 12.1.0, tinyglobby 0.2.17,
 simple-git 4.0.2, zod 4.4.3).
+
+## Final-pass follow-up (2026-11-06)
+
+The complete 1,273-repository pass finished without scanner failures. Two more
+labelled findings needed targeted corrections (labels and baseline unchanged):
+
+- esbuild's `npm/esbuild-wasm/package.json` was displaced by 26 deeper platform
+  packages after sorting. The EOL scanner now sorts candidate paths by depth,
+  then ordinal path, so project-level declarations precede package matrices.
+  Its limit stays 30; reversed-input tests verify deterministic selection.
+- negroni's Portuguese README links to `README_zh_cn.md`, while the pinned Git
+  tree contains `README_zh_CN.md`. Windows can read the wrong-case path, so a
+  successful read alone cannot prove a link valid. The context now supplies an
+  exact-case existence check, with realpath boundary validation, and the docs
+  scanner uses that for non-enumerated targets. Tests retain valid symlinks and
+  reject wrong-case paths and links outside the repository.
+
+Only these two repositories are rescanned after the follow-up; the full pass
+is retained. Results are not all from the final follow-up binary. A rebuild's
+mtime alone must not be mistaken for missing data or used to claim another
+complete pass was performed.

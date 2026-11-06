@@ -198,6 +198,21 @@ export async function buildScanContext(root: string): Promise<ScanContext> {
     // Stable ordering keeps capped scanners and duplicate identities repeatable.
     files: files.sort(),
     readFile: readRel,
+    fileExists: async (relPath: string): Promise<boolean> => {
+      // Validate the real target/boundary first, then check spelling explicitly:
+      // Windows can read README_zh_cn.md when only README_zh_CN.md exists.
+      if (await readRel(relPath) === null) return false;
+      const parts = relPath.replace(/\\/g, "/").split("/");
+      if (parts.some(part => !part || part === "." || part === "..")) return false;
+      let dir = root;
+      try {
+        for (const part of parts) {
+          if (!(await fs.readdir(dir)).includes(part)) return false;
+          dir = join(dir, part);
+        }
+        return true;
+      } catch { return false; }
+    },
     fileSize: async (relPath: string): Promise<number | null> => {
       try {
         const stat = await fs.stat(join(root, relPath));

@@ -15,9 +15,17 @@ it("never reads a path outside the scanned repository or oversized files", async
     await writeFile(join(outside, "credential.txt"), "outside secret");
     await symlink(outside, join(root, "linked"), process.platform === "win32" ? "junction" : "dir");
     await writeFile(join(root, "ok.txt"), "source");
+    await writeFile(join(root, "README_zh_CN.md"), "document");
+    await mkdir(join(root, "docs"));
+    await writeFile(join(root, "docs", "guide.md"), "guide");
+    await symlink(join(root, "docs"), join(root, "docs-link"), process.platform === "win32" ? "junction" : "dir");
     await writeFile(join(root, "huge.txt"), Buffer.alloc(2 * 1024 * 1024 + 1));
     const ctx = await buildScanContext(root);
     expect(await ctx.readFile("ok.txt")).toBe("source");
+    expect(await ctx.fileExists?.("README_zh_CN.md")).toBe(true);
+    expect(await ctx.fileExists?.("README_zh_cn.md")).toBe(false);
+    expect(await ctx.fileExists?.("linked/credential.txt")).toBe(false);
+    expect(await ctx.fileExists?.("docs-link/guide.md")).toBe(true);
     expect(await ctx.readFile("../secret.txt")).toBeNull();
     expect(await ctx.readFile(join(dir, "secret.txt"))).toBeNull();
     expect(await ctx.readFile("huge.txt")).toBeNull();

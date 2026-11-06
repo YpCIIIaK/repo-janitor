@@ -148,7 +148,7 @@ export const brokenDocLinksScanner: Scanner = {
         // Safe adapters can resolve an in-repository symlink even when the
         // enumeration deliberately does not follow symlinks. A valid linked
         // document is not a broken link.
-        if (await ctx.readFile(resolved) !== null) continue
+        if (await ctx.fileExists?.(resolved)) continue
         // Docs sites (VitePress, VuePress, Docusaurus, Starlight, Jekyll) route
         // `./usage` to usage.md and `running/cli/` to a page somewhere under the
         // content root. Accept an extensionless link that names an existing page.

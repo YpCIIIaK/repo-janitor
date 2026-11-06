@@ -58,6 +58,7 @@ export function makeContext(opts: FakeContextOptions = {}): ScanContext {
     },
     config: opts.config ?? defaultConfig(),
     files: fileList,
+    fileExists: async (path) => Object.prototype.hasOwnProperty.call(files, path),
     readFile: async (relPath) => {
       const norm = relPath.replace(/\\/g, "/")
       return files[relPath] ?? files[norm] ?? null

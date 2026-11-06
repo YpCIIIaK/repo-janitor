@@ -409,7 +409,11 @@ export const eolRuntimeScanner: Scanner = {
   category: "dependency",
 
   async run(ctx: ScanContext): Promise<Issue[]> {
-    const candidates = ctx.files.filter(isCandidate)
+    // Prioritize project-level declarations before deeply nested platform
+    // packages. Otherwise generated package matrices consume the entire cap.
+    const candidates = ctx.files.filter(isCandidate).sort((a, b) =>
+      a.split("/").length - b.split("/").length || (a < b ? -1 : a > b ? 1 : 0),
+    )
     if (candidates.length === 0) return []
 
     const now = Date.now()
