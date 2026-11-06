@@ -1,0 +1,13 @@
+{
+ "ci-swallowed-.github/workflows/test.yaml-75": "fp",
+ "iac-hardcoded-password-cloudgoat/scenarios/aws/sns_secrets/terraform/api_gateway.tf:52": "tp",
+ "iac-public-bucket-cloudgoat/scenarios/aws/vulnerable_cognito/terraform/s3.tf:25": "tp",
+ "iac-unencrypted-cloudgoat/scenarios/aws/vpc_peering_overexposed/terraform/rds.tf:32": "tp",
+ "insecure-exec-interpolated-cloudgoat/scenarios/aws/ecs_privesc_evade_protection/assets/ssrf-web/index.php:29": "tp",
+ "insecure-py-eval-exec-cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/cli.py:2126": "fp",
+ "insecure-py-os-system-cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/click/_termui_impl.py:366": "fp",
+ "insecure-py-shell-true-cloudgoat/scenarios/aws/ecs_privesc_evade_protection/terraform/push-dockerfile.py:13": "fp",
+ "insecure-sql-interpolated-cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/main.py:26": "tp",
+ "secret-aws-access-key-cloudgoat/scenarios/aws/sns_secrets/cheat_sheet.md:25": "fp",
+ "secret-entropy-cloudgoat/scenarios/aws/secrets_in_the_cloud/terraform/lambda_function.tf:30": "tp"
+}

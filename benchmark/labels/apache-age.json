@@ -1,0 +1,8 @@
+{
+ "ci-silenced-failure-.github/workflows/installcheck.yaml-90": "fp",
+ "dead-symbol-drivers/python/age/age.py:345": "fp",
+ "docker-root-docker/Dockerfile": "fp",
+ "eol-node-.github/workflows/nodejs-driver.yaml-27": "tp",
+ "eol-python-drivers/python/pyproject.toml-25": "tp",
+ "insecure-sql-interpolated-drivers/nodejs/src/index.ts:302": "fp"
+}

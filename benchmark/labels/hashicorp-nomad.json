@@ -1,0 +1,5 @@
+{
+ "ci-silenced-failure-.github/workflows/test-ui.yml-71": "fp",
+ "insecure-exec-interpolated-drivers/qemu/driver.go:264": "fp",
+ "self-hosted-runner-.github/workflows/test-ui.yml-101": "fp"
+}

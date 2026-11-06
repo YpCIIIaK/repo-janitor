@@ -1,0 +1,5 @@
+{
+ "insecure-py-eval-exec-dlt/common/typing.py:659": "fp",
+ "insecure-py-pickle-load-dlt/pipeline/trace.py:352": "fp",
+ "pr-target-checkout-.github/workflows/test_destinations_remote.yml-302": "fp"
+}

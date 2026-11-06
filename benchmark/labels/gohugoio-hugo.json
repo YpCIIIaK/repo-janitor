@@ -1,0 +1,5 @@
+{
+ "docker-add-url-Dockerfile:48": "tp",
+ "insecure-go-template-html-helpers/content.go:91": "fp",
+ "insecure-go-template-html-hugolib/shortcode.go:500": "fp"
+}

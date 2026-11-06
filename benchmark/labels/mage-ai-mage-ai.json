@@ -1,0 +1,15 @@
+{
+ "bloat-mage_ai/server/frontend_dist_base_path_template/_next/static/media/onig.25dd2e6f.wasm": "fp",
+ "commented-mage_ai/frontend/components/VersionControlFileDiffs/index.tsx:125": "tp",
+ "docker-latest-integrations/hadoop/Dockerfile:1": "tp",
+ "doclink-SUMMARY.md:50:docs/guides/dbt/tests.md": "tp",
+ "env-no-example": "fp",
+ "eol-node-.github/workflows/build_and_test.yml-127": "tp",
+ "eol-python-test_branch.Dockerfile-1": "tp",
+ "insecure-py-eval-exec-mage_ai/data_preparation/models/block/__init__.py:2039": "fp",
+ "insecure-react-dangerous-html-mage_ai/frontend/components/ErrorPopup/useErrorViews.tsx:134": "tp",
+ "insecure-sql-interpolated-mage_ai/data_preparation/models/block/sql/mssql.py:95": "fp",
+ "no-permissions-.github/workflows/publish_docker_image.yml-1": "tp",
+ "secret-slack-webhook-docs/observability/alerting/alerting-slack.mdx:57": "fp",
+ "skiptest-mage_integrations/mage_integrations/sources/mongodb/tests/test_mongodb_log_based_interruptible.py:101": "tp"
+}

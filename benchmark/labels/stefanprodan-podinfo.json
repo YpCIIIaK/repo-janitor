@@ -1,0 +1,4 @@
+{
+ "iac-privilege-escalation-charts/podinfo/templates/deployment.yaml:55": "fp",
+ "iac-privilege-escalation-deploy/secure/frontend/deployment.yaml:40": "fp"
+}

@@ -59,3 +59,28 @@ describe("iac-security — Kubernetes and docker-compose", () => {
     expect(await rules({ "config/app.yml": "privileged: true\n" })).toEqual([])
   })
 })
+
+describe("iac false-positive clusters (benchmark batch 12–15)", () => {
+  it("ignores deny-only and ICMP-only rules open to the world", async () => {
+    const out = await ids({
+      "fw.tf": 'resource "google_compute_firewall" "deny" {\n  deny {\n    protocol = "all"\n  }\n  source_ranges = ["0.0.0.0/0"]\n}\n',
+      "sg.tf": 'resource "aws_security_group" "ping" {\n  ingress {\n    from_port   = -1\n    to_port     = -1\n    protocol    = "icmp"\n    cidr_blocks = ["0.0.0.0/0"]\n  }\n}\n',
+    })
+    expect(out.filter((i) => i.startsWith("iac-open-admin-port"))).toEqual([])
+  })
+  it("ignores the docker socket on services built to talk to Docker", async () => {
+    const out = await ids({
+      "docker-compose.yml": "services:\n  proxy:\n    image: traefik:v3.1\n    volumes:\n      - /var/run/docker.sock:/var/run/docker.sock\n  app:\n    image: myapp:1\n    volumes:\n      - /var/run/docker.sock:/var/run/docker.sock\n",
+    })
+    expect(out.filter((i) => i.startsWith("iac-docker-socket"))).toHaveLength(1)
+  })
+})
+
+describe("iac monitoring agents (benchmark batch 12–15)", () => {
+  it("leaves cadvisor and node-exporter host access alone", async () => {
+    const out = await ids({
+      "docker-compose.exporters.yml": "services:\n  nodeexporter:\n    image: prom/node-exporter:v1.8.0\n    network_mode: host\n  cadvisor:\n    image: gcr.io/cadvisor/cadvisor:v0.49.1\n    privileged: true\n  app:\n    image: myapp:1\n    privileged: true\n",
+    })
+    expect(out.filter((i) => i.startsWith("iac-"))).toHaveLength(1)
+  })
+})

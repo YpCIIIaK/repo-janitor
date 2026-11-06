@@ -1,0 +1,8 @@
+{
+ "iac-docker-socket-compose.yaml:193": "fp",
+ "iac-docker-socket-setup/docker/nvidia/compose.yaml:252": "fp",
+ "iac-privileged-compose.nvidia.yaml:16": "fp",
+ "iac-privileged-setup/podman/docker-compose.yml:52": "tp",
+ "insecure-go-template-html-internal/config/client_assets.go:139": "fp",
+ "insecure-localstorage-secret-frontend/tests/vitest/common/session.test.js:415": "fp"
+}

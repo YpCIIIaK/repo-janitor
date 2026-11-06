@@ -1,0 +1,9 @@
+{
+ "action-tag-.github/workflows/ci.yml-128": "tp",
+ "action-tag-first-party-.github/workflows/docs-preview.yml-18": "tp",
+ "dead-symbol-litestar/utils/signature.py:47": "tp",
+ "duplicate-litestar/security/jwt/auth.py-142": "fp",
+ "no-permissions-.github/workflows/ci.yml-1": "tp",
+ "skiptest-docs/examples/testing/test_health_check_async.py:24": "fp",
+ "todo-litestar/_openapi/datastructures.py:142": "tp"
+}

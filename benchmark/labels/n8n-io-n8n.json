@@ -1,0 +1,7 @@
+{
+ "docker-latest-docker/images/runners/Dockerfile.distroless:204": "tp",
+ "iac-privileged-.devcontainer/codespaces/docker-compose.yml:19": "fp",
+ "insecure-tls-verification-off-packages/@n8n/backend-network/src/http/outbound-http.ts:308": "fp",
+ "insecure-weak-hash-packages/@n8n/backend-network/src/http/axios/utils.ts:232": "fp",
+ "secret-openai-key-packages/cli/src/modules/instance-ai/__tests__/instance-ai-verification.service.test.ts:183": "fp"
+}

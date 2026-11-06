@@ -1,0 +1,4 @@
+{
+ "eol-python-core/src/test/resources/python-myproject-toml/pyproject.toml-10": "fp",
+ "insecure-java-deserialization-core/src/main/java/org/owasp/dependencycheck/analyzer/SwiftPackageResolvedAnalyzer.java:160": "fp"
+}

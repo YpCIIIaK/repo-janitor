@@ -1,0 +1,10 @@
+{
+ "commented-scripts/build-dts.mjs:43": "fp",
+ "debug-src/goods.ts:156": "fp",
+ "docker-root-dcr/Dockerfile": "fp",
+ "doclink-docs/configuration.md:103:src/log.ts": "tp",
+ "eol-node-package.json-67": "fp",
+ "insecure-exec-interpolated-src/core.ts:1071": "fp",
+ "insecure-ssrf-src/goods.ts:120": "fp",
+ "skiptest-test/core.test.js:159": "tp"
+}

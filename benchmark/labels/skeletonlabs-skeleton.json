@@ -1,0 +1,4 @@
+{
+ "insecure-exec-interpolated-packages/cli/src/utility/install-dependencies.ts:15": "fp",
+ "skiptest-packages/skeleton-svelte/test/components/portal.test.ts:21": "tp"
+}

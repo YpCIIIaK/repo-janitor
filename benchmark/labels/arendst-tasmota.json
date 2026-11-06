@@ -1,0 +1,5 @@
+{
+ "ci-tests-not-run": "fp",
+ "docker-latest-lib/lib_div/arduino-vid6608/Dockerfile:2": "fp",
+ "insecure-py-shell-true-pio-tools/post_esp32.py:347": "fp"
+}

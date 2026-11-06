@@ -1,0 +1,5 @@
+{
+ "eol-runner-.github/workflows/torchserve-nightly-build.yml-10": "tp",
+ "insecure-py-verify-false-ts_scripts/tsutils.py:147": "fp",
+ "self-hosted-runner-.github/workflows/benchmark_torch_compile_nightly.yml-12": "fp"
+}

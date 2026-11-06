@@ -1,0 +1,4 @@
+{
+ "insecure-localstorage-secret-packages/core/admin/admin/src/utils/getFetchClient.ts:143": "fp",
+ "insecure-react-dangerous-html-packages/core/content-manager/admin/src/pages/EditView/components/FormInputs/Wysiwyg/PreviewWysiwyg.tsx:20": "fp"
+}

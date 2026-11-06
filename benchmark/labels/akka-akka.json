@@ -1,0 +1,4 @@
+{
+ "bloat-samples/akka-quickstart-java/gradle/wrapper/gradle-wrapper.jar": "fp",
+ "doclink-akka-docs/src/main/paradox/actors.md:483:akka.actor.Actor": "fp"
+}

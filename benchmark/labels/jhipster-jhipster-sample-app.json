@@ -1,0 +1,5 @@
+{
+ "dep-unused-@angular/forms": "fp",
+ "insecure-localstorage-secret-src/main/webapp/app/core/auth/auth-jwt.service.spec.ts:38": "fp",
+ "lockfile-missing": "tp"
+}

@@ -1,0 +1,6 @@
+{
+ "ci-disabled-.github/workflows/publish.yml-100": "tp",
+ "env-dead-PORT": "tp",
+ "env-missing-APP_RELATIVE_PATH": "fp",
+ "insecure-react-dangerous-html-packages/web/src/javascripts/Components/NoteView/PlainEditor/search/PlainEditorSearchBackdrop.tsx:47": "fp"
+}

@@ -1,0 +1,6 @@
+{
+ "config-conflict-babel-packages/bruno-app": "tp",
+ "docs-drift-badge-readme.md-7": "tp",
+ "insecure-tls-verification-off-packages/bruno-cli/src/commands/import.js:135": "fp",
+ "insecure-weak-hash-packages/bruno-electron/src/ipc/network/prepare-request.js:76": "fp"
+}

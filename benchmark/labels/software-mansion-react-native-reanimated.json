@@ -1,0 +1,8 @@
+{
+ "bloat-packages/react-native-worklets/android/gradle/wrapper/gradle-wrapper.jar": "fp",
+ "docs-drift-manager-apps/web-example/README.md-10": "fp",
+ "docs-drift-script-apps/web-example/README.md-33": "fp",
+ "insecure-eval-dynamic-packages/react-native-worklets/src/memory/valueUnpacker.native.ts:50": "fp",
+ "insecure-react-dangerous-html-apps/next-example/pages/_document.js:43": "fp",
+ "skiptest-apps/common-app/runtime-tests/reanimated/tests/StrictMode/StrictMode.test.tsx:49": "tp"
+}

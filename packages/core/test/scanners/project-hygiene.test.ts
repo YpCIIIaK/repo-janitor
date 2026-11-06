@@ -69,3 +69,13 @@ describe("project hygiene — benchmark false positives", () => {
     },
   )
 })
+
+describe("hygiene false-positive clusters (benchmark batch 12–15)", () => {
+  it("accepts README.mkdn, Zuul CI and Molecule tests", async () => {
+    const ctx = makeContext({ files: { "README.mkdn": "x", ".zuul.yaml": "- job: x", "molecule/default/converge.yml": "x", "src/a.ts": "x" } })
+    const ids = (await projectHygieneScanner.run(ctx)).map((i) => i.id)
+    expect(ids).not.toContain("hygiene-no-readme")
+    expect(ids).not.toContain("hygiene-no-ci")
+    expect(ids).not.toContain("hygiene-no-tests")
+  })
+})

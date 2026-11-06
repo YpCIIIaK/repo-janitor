@@ -1,0 +1,6 @@
+{
+ "hygiene-no-ci": "fp",
+ "insecure-py-eval-exec-ansible/library/kolla_toolbox.py:378": "fp",
+ "insecure-py-os-system-deploy-guide/source/conf.py:76": "fp",
+ "secret-entropy-pyproject.toml:34": "fp"
+}

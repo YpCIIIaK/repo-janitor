@@ -1,0 +1,4 @@
+{
+ "iac-public-bucket-modules/aws-s3-static-website-bucket/main.tf:22": "fp",
+ "iac-public-bucket-modules/aws-s3-static-website-bucket/main.tf:23": "fp"
+}

@@ -1,0 +1,5 @@
+{
+ "env-dead-DATABASE_URL": "fp",
+ "env-missing-REMIX_DEV_HTTP_ORIGIN": "fp",
+ "lockfile-missing": "fp"
+}

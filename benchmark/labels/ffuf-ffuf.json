@@ -1,0 +1,5 @@
+{
+ "busfactor-pkg/output/audit.go": "fp",
+ "no-permissions-.github/workflows/test.yml-1": "tp",
+ "todo-pkg/ffuf/optionsparser.go:234": "fp"
+}

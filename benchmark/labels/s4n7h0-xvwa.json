@@ -1,0 +1,4 @@
+{
+ "insecure-php-reflected-xss-vulnerabilities/reflected_xss/home.php:32": "tp",
+ "insecure-php-unserialize-vulnerabilities/php_object_injection/home.php:38": "tp"
+}

@@ -1,0 +1,4 @@
+{
+ "iac-docker-socket-deployments/docker-compose.yml:8": "fp",
+ "iac-privileged-deployments/docker-compose.yml:5": "fp"
+}

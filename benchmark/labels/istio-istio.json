@@ -1,0 +1,4 @@
+{
+ "hygiene-no-ci": "fp",
+ "insecure-java-deserialization-samples/bookinfo/src/reviews/reviews-application/src/main/java/application/rest/LibertyRestEndpoint.java:166": "fp"
+}

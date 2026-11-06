@@ -1,0 +1,4 @@
+{
+ "insecure-localstorage-secret-packages/web/src/pages/SignIn/index.tsx:19": "fp",
+ "insecure-react-dangerous-html-packages/web/src/pages/MessageDetail/index.tsx:100": "fp"
+}

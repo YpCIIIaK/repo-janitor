@@ -1,0 +1,5 @@
+{
+ "ci-disabled-.github/workflows/ci-kotlin.yml-13": "tp",
+ "ci-disabled-.github/workflows/ci-python.yml-13": "tp",
+ "iac-host-namespace-docker-compose.yml:47": "fp"
+}

@@ -1,0 +1,12 @@
+{
+ "action-tag-.github/workflows/test-templates.yml-79": "fp",
+ "action-tag-first-party-.github/workflows/command-dispatch.yml-22": "tp",
+ "busfactor-container-azure-csharp/app/Program.cs": "fp",
+ "debug-esc-connector-lambda-typescript/index.ts:59": "fp",
+ "docker-root-container-aws-csharp/app/Dockerfile": "fp",
+ "docker-untagged-container-azure-go/app/Dockerfile:11": "tp",
+ "duplicate-serverless-gcp-hcl/app/main.py-6": "fp",
+ "eol-node-.github/workflows/build-metadata.yml-24": "tp",
+ "insecure-ssrf-serverless-cloudflare-typescript/worker.js:2": "fp",
+ "no-permissions-.github/workflows/pr.yml-1": "tp"
+}

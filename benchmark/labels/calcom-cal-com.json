@@ -1,0 +1,5 @@
+{
+ "dead-code-uikit-packages/platform/atoms/src/components/ui": "fp",
+ "insecure-random-for-secret-apps/web/components/apps/make/Setup.tsx:38": "tp",
+ "insecure-weak-hash-packages/features/auth/lib/verifyEmail.ts:105": "tp"
+}

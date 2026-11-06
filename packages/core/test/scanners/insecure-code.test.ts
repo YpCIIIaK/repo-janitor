@@ -424,3 +424,25 @@ describe("insecure-code — cross-file taint", () => {
     expect(out).toEqual(["models/report.py:2 low"])
   })
 })
+
+describe("insecure-code false-positive clusters (benchmark batch 12–15)", () => {
+  const run = async (files: Record<string, string>) => (await insecureCodeScanner.run(makeContext({ files }))).map((i) => i.id)
+  it("ignores a method named eval on an object", async () => {
+    expect(await run({ "app/models/lock.rb": "def take(key)\n  LUA_HGET_DEL.eval(redis, keys: [key])\nend\n" })).toEqual([])
+  })
+  it("ignores new Function for an imported Function class", async () => {
+    expect(await run({ "index.ts": 'import { Function } from "@pulumi/aws/cloudfront"\nexport const f = new Function(name, state, opts)\n' })).toEqual([])
+  })
+  it("ignores readObject on a JSON reader", async () => {
+    expect(await run({ "src/Main.java": "class M { void r(JsonReader reader) { JsonObject o = reader.readObject(); } }\n" })).toEqual([])
+  })
+  it("ignores a BinaryFormatter that only serialises", async () => {
+    expect(await run({ "Save.cs": "var f = new BinaryFormatter();\nf.Serialize(stream, data);\n" })).toEqual([])
+  })
+  it("ignores ruamel.yaml load and literal shell=True commands", async () => {
+    expect(await run({
+      "a.py": "from ruamel.yaml import YAML\nyaml = YAML()\ndata = yaml.load(stream)\n",
+      "b.py": 'import subprocess\nsubprocess.run("hl-smi", shell=True)\n',
+    })).toEqual([])
+  })
+})

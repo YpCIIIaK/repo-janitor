@@ -1,0 +1,6 @@
+{
+ "iac-hardcoded-password-modules/aws/rds/main.tf:14": "tp",
+ "iac-iam-wildcard-modules/aws/iam/main.tf:172": "tp",
+ "iac-iam-wildcard-modules/aws/iam/main.tf:201": "tp",
+ "iac-open-admin-port-modules/aws/ec2/main.tf:102": "fp"
+}

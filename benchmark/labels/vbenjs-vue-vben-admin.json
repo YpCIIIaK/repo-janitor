@@ -1,0 +1,9 @@
+{
+ "action-tag-.github/workflows/deploy.yml-119": "tp",
+ "busfactor-packages/effects/layouts/src/basic/index.ts": "fp",
+ "commented-packages/effects/plugins/src/vxe-table/use-vxe-grid.ts:75": "tp",
+ "duplicate-apps/web-antd/src/router/guard.ts-17": "fp",
+ "insecure-ssrf-packages/effects/request/src/request-client/modules/sse.ts:90": "fp",
+ "no-permissions-.github/workflows/rerun.yml-1": "tp",
+ "todo-apps/backend-mock/utils/jwt-utils.ts:10": "fp"
+}

@@ -1,0 +1,4 @@
+{
+ "insecure-ruby-dynamic-dispatch-app/controllers/api/v1/accounts/notifications_controller.rb:68": "fp",
+ "insecure-ruby-marshal-load-lib/active_storage/migrator.rb:21": "fp"
+}

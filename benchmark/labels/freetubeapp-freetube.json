@@ -1,0 +1,4 @@
+{
+ "insecure-new-function-src/botGuardScript.js:69": "fp",
+ "insecure-ssrf-_scripts/getInstances.js:4": "fp"
+}

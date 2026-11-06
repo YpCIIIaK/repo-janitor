@@ -1,0 +1,9 @@
+{
+ "busfactor-internal/pipe/release/doc.go": "fp",
+ "docker-root-Dockerfile": "fp",
+ "duplicate-internal/pipe/aur/tmpl.go-27": "tp",
+ "eol-python-internal/builders/poetry/testdata/proj/pyproject.toml-4": "fp",
+ "secret-entropy-internal/pipe/env/env.go:45": "fp",
+ "secret-private-key-internal/http/testkey.pem:1": "fp",
+ "todo-internal/pipe/nfpm/nfpm.go:233": "tp"
+}

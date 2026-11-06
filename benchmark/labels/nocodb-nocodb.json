@@ -1,0 +1,6 @@
+{
+ "docs-drift-manager-packages/nc-gui/README.md-11": "tp",
+ "docs-drift-script-packages/nc-gui/README.md-39": "tp",
+ "insecure-innerhtml-dynamic-packages/nc-gui/helpers/tiptap-markdown/extensions/nodes/html.ts:48": "fp",
+ "insecure-tls-verification-off-packages/nocodb-sdk/src/lib/connectionConfigUtils.ts:88": "fp"
+}

@@ -1,0 +1,5 @@
+{
+ "ci-no-pr-trigger": "tp",
+ "iac-dangerous-capability-script/livekit-poc/mp-gateway/docker-compose.yml:80": "fp",
+ "iac-host-namespace-script/livekit-poc/mp-gateway/docker-compose.yml:107": "fp"
+}

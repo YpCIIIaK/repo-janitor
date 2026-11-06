@@ -1,0 +1,11 @@
+{
+ "busfactor-config/initializers/errors.rb": "fp",
+ "commented-test/javascripts/osm_test.js:1": "fp",
+ "dep-unused-@openstreetmap/id": "fp",
+ "docker-root-Dockerfile": "fp",
+ "duplicate-app/models/relation.rb-35": "fp",
+ "env-no-example": "fp",
+ "insecure-sql-interpolated-app/controllers/concerns/pagination_methods.rb:18": "fp",
+ "no-permissions-.github/workflows/devcontainer.yml-1": "tp",
+ "todo-app/models/relation.rb:123": "tp"
+}

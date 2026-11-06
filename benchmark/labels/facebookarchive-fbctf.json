@@ -1,0 +1,5 @@
+{
+ "dep-unused-dropkickjs": "fp",
+ "insecure-php-unserialize-src/models/Session.php:52": "fp",
+ "lockfile-missing": "tp"
+}

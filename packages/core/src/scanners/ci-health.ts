@@ -87,6 +87,8 @@ const TEST_ACTION = /uses:\s*\S*(?:test|coverage|codecov|coveralls|sonar)/i
 const TEST_FILE_RE =
   /(^|\/)(?:tests?|spec|__tests__|e2e)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(^|\/)test_[^/]+\.py$|[^/]+_test\.(?:py|go|rb)$|(^|\/)[^/]+Test\.(?:java|kt|cs)$|_spec\.rb$/i
 
+const INSTALL_CMD = /^(?:sudo\s+)?(?:apt(?:-get)?|pip3?|python3?\s+-m\s+pip|brew|gem|npm|yarn|pnpm|cargo|choco|apk|dnf|yum)\s+(?:-\S+\s+)*(?:install|i|add|update|upgrade)\b/
+
 export interface CiFinding {
   rule: "silenced-failure" | "disabled" | "swallowed"
   file: string
@@ -143,7 +145,12 @@ export function scanCiFile(file: string, content: string): CiFinding[] {
     // A step that rewrites fixtures or commits to the repository is doing work,
     // not checking it, and `continue-on-error` on it usually absorbs a boring
     // exit code like "nothing to commit".
-    const verifies = stepHasRun && !REGENERATES.test(stepRunText) && !MUTATES.test(stepRunText)
+    // An install step is not a check, and a step whose outcome a later step reads
+    // (`steps.x.outcome == 'failure'`) is not silenced, it is handled.
+    const cmds = stepRunText.split("\n").map((l) => l.replace(/^-?\s*run\s*:\s*[|>]?-?/, "").trim()).filter((l) => l && !/^(?:continue-on-error|if|env|with|timeout-minutes|working-directory|shell|id|name)\s*:/.test(l))
+    const installOnly = cmds.length > 0 && cmds.every((c) => INSTALL_CMD.test(c))
+    const handled = /steps\.[\w-]+\.(?:outcome|conclusion)/.test(content)
+    const verifies = stepHasRun && !installOnly && !handled && !REGENERATES.test(stepRunText) && !MUTATES.test(stepRunText)
     // Advisory steps are allowed to fail by design: an audit, a coverage
     // upload, a linter, a size report, a publish of docs or a nightly build.
     const advisory = ADVISORY.test(`${stepName}\n${stepRunText}`) || ADVISORY_FILE.test(file)
@@ -192,7 +199,10 @@ export function scanCiFile(file: string, content: string): CiFinding[] {
     // `if: false` — a job that is switched off but still listed, so the checks
     // UI keeps showing its name as if it ran.
     if (/^if\s*:\s*(?:false|'false'|"false")\s*$/.test(trimmed)) {
-      out.push({ rule: "disabled", file, line: at, evidence })
+      // A switch-off with a note beside or above it is the honest version the
+      // finding asks for (`if: false # too flaky, see #123`).
+      const noted = /#/.test(lines[i]) || /^\s*#/.test(lines[i - 1] ?? "")
+      if (!noted) out.push({ rule: "disabled", file, line: at, evidence })
       continue
     }
 

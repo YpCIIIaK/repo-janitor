@@ -1,0 +1,5 @@
+{
+ "hygiene-no-ci": "fp",
+ "hygiene-no-license": "fp",
+ "hygiene-no-tests": "fp"
+}

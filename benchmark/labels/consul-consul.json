@@ -1,0 +1,8 @@
+{
+ "env-no-example": "fp",
+ "insecure-eval-dynamic-config/initializers/routing.rb:3": "fp",
+ "insecure-exec-interpolated-config/deploy.rb:28": "fp",
+ "insecure-ruby-marshal-load-config/application.rb:40": "fp",
+ "insecure-sql-interpolated-app/models/concerns/globalizable.rb:139": "fp",
+ "secret-entropy-config/locales/zh-TW/management.yml:106": "fp"
+}

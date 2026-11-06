@@ -1,0 +1,9 @@
+{
+ "action-tag-.github/workflows/ci.yml-117": "tp",
+ "action-tag-first-party-.github/workflows/ci.yml-18": "tp",
+ "debug-projects/example-app/src/app/reducers/index.ts:49": "fp",
+ "dep-unused-firebase-admin": "tp",
+ "doclink-projects/www/src/app/pages/guide/data/extension-points.md:122:api/data/EntitySelectors": "fp",
+ "insecure-ssrf-modules/data/src/dataservices/default-data.service.ts:219": "fp",
+ "secret-entropy-nx.json:84": "fp"
+}

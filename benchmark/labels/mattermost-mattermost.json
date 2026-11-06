@@ -1,0 +1,5 @@
+{
+ "insecure-go-template-html-server/channels/app/email/email.go:632": "fp",
+ "insecure-random-for-secret-webapp/channels/src/components/apps_form/apps_form_field/apps_form_select_field.tsx:72": "fp",
+ "insecure-tls-verification-off-e2e-tests/playwright/lib/src/util.ts:68": "fp"
+}

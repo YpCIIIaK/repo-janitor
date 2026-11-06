@@ -66,6 +66,8 @@ const INJECTABLE = [
   "github.head_ref",
 ]
 
+const PUBLIC_TRIGGER = /^\s*(?:on\s*:.*\b|-\s*|)(?:pull_request(?:_target)?|issue_comment|issues|discussion(?:_comment)?|fork|watch|pull_request_review(?:_comment)?)\b/m
+
 export interface WorkflowFinding {
   rule: string
   line: number
@@ -177,7 +179,9 @@ export function scanWorkflow(content: string): WorkflowFinding[] {
     }
 
     // ---- self-hosted runners ----------------------------------------------
-    if (/^runs-on\s*:/.test(trimmed) && /self-hosted/.test(trimmed)) {
+    // Only public triggers let a stranger's code reach the runner; a
+    // schedule / manual / reusable workflow runs maintainers' code.
+    if (/^runs-on\s*:/.test(trimmed) && /self-hosted/.test(trimmed) && PUBLIC_TRIGGER.test(content)) {
       findings.push({ rule: "self-hosted-runner", line: at, evidence: trimmed })
     }
 
@@ -193,7 +197,10 @@ export function scanWorkflow(content: string): WorkflowFinding[] {
     }
   }
 
-  if (usesPullRequestTarget && checksOutPrHead !== -1) {
+  // Gated to merged PRs (backports) or to Dependabot, the checked-out code is
+  // already reviewed or comes from a trusted bot.
+  const gated = /pull_request\.merged\s*(?:==\s*true)?|(?:actor|user\.login)\s*==\s*'dependabot\[bot\]'/.test(content)
+  if (usesPullRequestTarget && checksOutPrHead !== -1 && !gated) {
     findings.push({
       rule: "pr-target-checkout",
       line: checksOutPrHead,
