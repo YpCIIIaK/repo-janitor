@@ -6515,11 +6515,6 @@
     "sha": "d73f22f5d55c856bc5e4c749e5ae3c75e22a407a"
   },
   {
-    "name": "apache-spark-website",
-    "url": "https://github.com/apache/spark-website",
-    "sha": "7a34b906f5ab16ee86e69f842d4d9a6a7cc1f468"
-  },
-  {
     "name": "haskell-cabal",
     "url": "https://github.com/haskell/cabal",
     "sha": "aca9bd448a4f837f352623881caecb5776847cc3"
@@ -7173,11 +7168,6 @@
     "name": "keycloak-keycloak-quickstarts",
     "url": "https://github.com/keycloak/keycloak-quickstarts",
     "sha": "c598d34d3b2dd85976ac96614176df351ee1a4d5"
-  },
-  {
-    "name": "apache-kafka-site",
-    "url": "https://github.com/apache/kafka-site",
-    "sha": "e6cb1ef29f17ccb21d6d56efc9331d7098ed3719"
   },
   {
     "name": "thingsboard-thingsboard",

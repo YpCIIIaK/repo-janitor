@@ -56,6 +56,12 @@ async function runOne(repo) {
     }
     if (c.status !== 0) throw new Error(`clone failed: ${repo.name}\n${c.stderr}`)
   }
+  // A website repo with years of built HTML (apache/spark-website) is 24 GB and
+  // fills the disk for every other worker. Refuse anything over BENCH_MAX_MB.
+  const maxMb = Number(process.env.BENCH_MAX_MB ?? 2000)
+  const objs = await sh2("git", ["-C", dir, "count-objects", "-v"])
+  const packKb = Number(/size-pack: (\d+)/.exec(objs.stdout)?.[1] ?? 0) + Number(/^size: (\d+)/m.exec(objs.stdout)?.[1] ?? 0)
+  if (packKb / 1024 > maxMb) throw new Error(`too large: ${repo.name} (${Math.round(packKb / 1024)} MB > BENCH_MAX_MB=${maxMb})`)
   let co = await sh2("git", ["-C", dir, "-c", "core.longpaths=true", "checkout", "--quiet", "--force", repo.sha])
   if (co.status !== 0) {
     await sh2("git", ["-C", dir, "fetch", "--quiet", "origin", repo.sha])
@@ -110,8 +116,14 @@ let failures = 0
 await Promise.all(
   Array.from({ length: workers }, async () => {
     while (queue.length) {
-      try { await runOne(queue.shift()) }
-      catch (error) { failures++; console.error(error.message) }
+      const repo = queue.shift()
+      try { await runOne(repo) }
+      catch (error) {
+        failures++
+        console.error(error.message)
+        // A failed repo must not leave its clone behind when clones are dropped.
+        if (process.env.BENCH_DROP_CLONES === "1") rmSync(join(cacheDir, repo.name), { recursive: true, force: true })
+      }
     }
   }),
 )
