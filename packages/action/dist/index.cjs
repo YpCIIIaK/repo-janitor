@@ -26863,7 +26863,7 @@ var require_lib4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-ULMSFIG2.js
+// ../cli/dist/chunk-5L5WYLC4.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -45594,7 +45594,7 @@ function date4(params) {
 // ../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/external.js
 config(en_default());
 
-// ../cli/dist/chunk-ULMSFIG2.js
+// ../cli/dist/chunk-5L5WYLC4.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -72221,6 +72221,7 @@ var SEVERITY_RANK = { info: 1, warning: 2, critical: 3 };
 function downgrade(sev) {
   return sev === "critical" ? "warning" : "info";
 }
+var AUXILIARY_WORKSPACE_RE = /(^|\/)(?:docs?|documentation|website|site|www|_?examples?|samples?|demos?|playgrounds?|sandbox|bench(?:mark)?s?|e2e|tests?|fixtures?)\//i;
 function mapSeverity(label, opts) {
   const inProd = opts.runtime !== false;
   let sev;
@@ -72516,7 +72517,8 @@ var vulnerableDepsScanner = {
         const fixed = vuln ? fixedVersion(vuln, hit.ecosystem, hit.name, hit.version) : null;
         const fixHint = fixed ? `Fixed in ${fixed} \u2014 upgrade to ${fixed} or later.` : "No fixed version has been published yet.";
         const kindNote = hit.direct ? "" : " (transitive dependency)";
-        const pathNote = hit.runtime === false ? " Build/test-only path \u2014 not reachable from the production install, so severity is lowered." : "";
+        const auxiliary = AUXILIARY_WORKSPACE_RE.test(hit.manifest.replace(/\\/g, "/"));
+        const pathNote = hit.runtime === false ? " Build/test-only path \u2014 not reachable from the production install, so severity is lowered." : auxiliary ? " Declared by the project's docs site, examples or tests, not the published package, so severity is lowered." : "";
         const evidence = ((_f = hit.dependencyPath) == null ? void 0 : _f.length) ? `Dependency path: ${hit.dependencyPath.join(" \u2192 ")}` : void 0;
         const detail = `${summary ? `${summary} ` : ""}${hit.name}@${hit.version} (${hit.ecosystem}) is affected by ${id}${label ? ` (${label.toLowerCase()} severity)` : ""}. ${fixHint}${kindNote}${pathNote} Advisory: https://osv.dev/${hit.vulnId}`;
         const issue2 = __spreadProps(__spreadValues({
@@ -72524,7 +72526,7 @@ var vulnerableDepsScanner = {
           // from whichever GHSA happened to come back first.
           id: `vuln-${hit.name}-${id}`,
           category: "security",
-          severity: mapSeverity(label, { runtime: hit.runtime, direct: hit.direct }),
+          severity: auxiliary ? downgrade(mapSeverity(label, { runtime: hit.runtime, direct: hit.direct })) : mapSeverity(label, { runtime: hit.runtime, direct: hit.direct }),
           title: `${hit.name}@${hit.version} has a known vulnerability (${id})`,
           location: hit.manifest,
           ageDays: 0,
@@ -79988,6 +79990,7 @@ var SEVERITY_RANK2 = { info: 1, warning: 2, critical: 3 };
 function downgrade2(sev) {
   return sev === "critical" ? "warning" : "info";
 }
+var AUXILIARY_WORKSPACE_RE2 = /(^|\/)(?:docs?|documentation|website|site|www|_?examples?|samples?|demos?|playgrounds?|sandbox|bench(?:mark)?s?|e2e|tests?|fixtures?)\//i;
 function mapSeverity2(label, opts) {
   const inProd = opts.runtime !== false;
   let sev;
@@ -80258,7 +80261,8 @@ var vulnerableDepsScanner2 = {
       const fixed = vuln ? fixedVersion2(vuln, hit.ecosystem, hit.name, hit.version) : null;
       const fixHint = fixed ? `Fixed in ${fixed} \u2014 upgrade to ${fixed} or later.` : "No fixed version has been published yet.";
       const kindNote = hit.direct ? "" : " (transitive dependency)";
-      const pathNote = hit.runtime === false ? " Build/test-only path \u2014 not reachable from the production install, so severity is lowered." : "";
+      const auxiliary = AUXILIARY_WORKSPACE_RE2.test(hit.manifest.replace(/\\/g, "/"));
+      const pathNote = hit.runtime === false ? " Build/test-only path \u2014 not reachable from the production install, so severity is lowered." : auxiliary ? " Declared by the project's docs site, examples or tests, not the published package, so severity is lowered." : "";
       const evidence = hit.dependencyPath?.length ? `Dependency path: ${hit.dependencyPath.join(" \u2192 ")}` : void 0;
       const detail = `${summary ? `${summary} ` : ""}${hit.name}@${hit.version} (${hit.ecosystem}) is affected by ${id}${label ? ` (${label.toLowerCase()} severity)` : ""}. ${fixHint}${kindNote}${pathNote} Advisory: https://osv.dev/${hit.vulnId}`;
       const issue2 = {
@@ -80266,7 +80270,7 @@ var vulnerableDepsScanner2 = {
         // from whichever GHSA happened to come back first.
         id: `vuln-${hit.name}-${id}`,
         category: "security",
-        severity: mapSeverity2(label, { runtime: hit.runtime, direct: hit.direct }),
+        severity: auxiliary ? downgrade2(mapSeverity2(label, { runtime: hit.runtime, direct: hit.direct })) : mapSeverity2(label, { runtime: hit.runtime, direct: hit.direct }),
         title: `${hit.name}@${hit.version} has a known vulnerability (${id})`,
         location: hit.manifest,
         ageDays: 0,

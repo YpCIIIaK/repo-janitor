@@ -25,6 +25,26 @@ describe("vulnerableDepsScanner", () => {
     expect(issues[0].severity).toBe("warning")
     expect(issues[0].detail).toContain("Build/test-only path")
   })
+  it("lowers advisories declared only by the docs site workspace", async () => {
+    const ctx = makeContext({
+      files: {
+        "package.json": JSON.stringify({ name: "lib", dependencies: {} }),
+        "packages/docs/package.json": JSON.stringify({ private: true, dependencies: { next: "15.0.0" } }),
+        "pnpm-lock.yaml": [
+          "importers:", "  .: {}", "  packages/docs:", "    dependencies:",
+          "      next:", "        version: 15.0.0",
+          "snapshots:", "  next@15.0.0: {}",
+        ].join("\n"),
+      },
+      postJson: { [BATCH_URL]: { results: [{ vulns: [{ id: "V" }] }] } },
+      fetchJson: { [`${VULN_URL}V`]: { id: "V", database_specific: { severity: "CRITICAL" } } },
+    })
+    const issues = await vulnerableDepsScanner.run(ctx)
+    expect(issues).toHaveLength(1)
+    expect(issues[0].severity).toBe("warning")
+    expect(issues[0].detail).toContain("docs site, examples or tests")
+  })
+
   it("is a no-op when there is no network adapter (offline)", async () => {
     const ctx = makeContext({
       files: { "package.json": JSON.stringify({ dependencies: { lodash: "4.17.20" } }) },
