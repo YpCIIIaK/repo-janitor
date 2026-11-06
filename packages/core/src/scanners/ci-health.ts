@@ -149,7 +149,7 @@ export function scanCiFile(file: string, content: string): CiFinding[] {
     // (`steps.x.outcome == 'failure'`) is not silenced, it is handled.
     const cmds = stepRunText.split("\n").map((l) => l.replace(/^-?\s*run\s*:\s*[|>]?-?/, "").trim()).filter((l) => l && !/^(?:continue-on-error|if|env|with|timeout-minutes|working-directory|shell|id|name)\s*:/.test(l))
     const installOnly = cmds.length > 0 && cmds.every((c) => INSTALL_CMD.test(c))
-    const handled = /steps\.[\w-]+\.(?:outcome|conclusion)/.test(content)
+    const handled = /^\s*(?:-\s*)?if\s*:[^\n]*steps\.[\w-]+\.(?:outcome|conclusion)[^\n]*\n(?:[^\n]*\n){0,2}[^\n]*(?:\bexit\s+1\b|setFailed)/m.test(content)
     const verifies = stepHasRun && !installOnly && !handled && !REGENERATES.test(stepRunText) && !MUTATES.test(stepRunText)
     // Advisory steps are allowed to fail by design: an audit, a coverage
     // upload, a linter, a size report, a publish of docs or a nightly build.
@@ -199,10 +199,7 @@ export function scanCiFile(file: string, content: string): CiFinding[] {
     // `if: false` — a job that is switched off but still listed, so the checks
     // UI keeps showing its name as if it ran.
     if (/^if\s*:\s*(?:false|'false'|"false")\s*$/.test(trimmed)) {
-      // A switch-off with a note beside or above it is the honest version the
-      // finding asks for (`if: false # too flaky, see #123`).
-      const noted = /#/.test(lines[i]) || /^\s*#/.test(lines[i - 1] ?? "")
-      if (!noted) out.push({ rule: "disabled", file, line: at, evidence })
+      out.push({ rule: "disabled", file, line: at, evidence })
       continue
     }
 

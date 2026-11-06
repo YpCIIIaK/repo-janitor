@@ -301,16 +301,13 @@ describe("ci-health — tests run through an indirection", () => {
 })
 
 describe("ci-health false-positive clusters (benchmark batch 12–15)", () => {
-  it("leaves an explained if: false alone", () => {
-    expect(rules("    if: false # too flaky at this point\n")).toEqual([])
-    expect(rules("    # disabled until the runner is fixed, see #12\n    if: false\n")).toEqual([])
-    expect(rules("    if: false\n")).toEqual(["disabled"])
-  })
   it("does not treat an install step as a silenced check", () => {
     expect(rules(["      - name: deps", "        run: sudo apt-get install -y z3", "        continue-on-error: true"].join("\n"))).toEqual([])
   })
   it("does not treat a handled outcome as silenced", () => {
-    const yaml = ["      - id: t", "        run: npm test", "        continue-on-error: true", "      - if: steps.t.outcome == 'failure'", "        run: ./report.sh"].join("\n")
+    const yaml = ["      - id: t", "        run: npm test", "        continue-on-error: true", "      - if: steps.t.outcome == 'failure'", "        run: exit 1"].join("\n")
     expect(rules(yaml)).toEqual([])
+    const printed = ["      - id: t", "        run: npm test", "        continue-on-error: true", "      - name: outcome ${{ steps.t.outcome }}", "        run: cat log"].join("\n")
+    expect(rules(printed)).toEqual(["silenced-failure"])
   })
 })
