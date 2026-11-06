@@ -34,6 +34,8 @@ export interface ScanContext {
   files: string[]
   /** read a file relative to root; returns null if missing */
   readFile: (relPath: string) => Promise<string | null>
+  /** Optional exact-case existence check for safely resolved files, including symlinks. */
+  fileExists?: (relPath: string) => Promise<boolean>
   /**
    * Optional: byte size of a file without reading its contents (fs.stat). Lets
    * scanners flag large/binary blobs cheaply. Returns null if unavailable or on

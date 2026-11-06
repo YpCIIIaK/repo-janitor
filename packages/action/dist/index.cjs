@@ -26863,7 +26863,7 @@ var require_lib4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-RZSTCGXQ.js
+// ../cli/dist/chunk-ULMSFIG2.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -45594,7 +45594,7 @@ function date4(params) {
 // ../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/external.js
 config(en_default());
 
-// ../cli/dist/chunk-RZSTCGXQ.js
+// ../cli/dist/chunk-ULMSFIG2.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -73239,6 +73239,7 @@ var brokenDocLinksScanner = {
   category: "hygiene",
   run(ctx) {
     return __async(this, null, function* () {
+      var _a22;
       const fileSet = new Set(ctx.files.map((f3) => f3.replace(/\\/g, "/")));
       const usesMkdocs = fileSet.has("mkdocs.yml") || fileSet.has("mkdocs.yaml");
       const dirSet = /* @__PURE__ */ new Set();
@@ -73275,7 +73276,7 @@ var brokenDocLinksScanner = {
           const resolved = resolveRel(baseDir, decoded);
           if (!resolved) continue;
           if (fileSet.has(resolved) || dirSet.has(resolved)) continue;
-          if ((yield ctx.readFile(resolved)) !== null) continue;
+          if (yield (_a22 = ctx.fileExists) == null ? void 0 : _a22.call(ctx, resolved)) continue;
           if (!/\.[a-z0-9]+$/i.test(decoded) && pageExists(decoded, resolved, fileSet)) continue;
           if (usesMkdocs && /\.md$/i.test(file2)) {
             const asDir = resolveRel(`${baseDir}/${file2.split("/").pop().replace(/\.md$/i, "")}`, decoded);
@@ -75971,7 +75972,9 @@ var eolRuntimeScanner = {
   category: "dependency",
   run(ctx) {
     return __async(this, null, function* () {
-      const candidates = ctx.files.filter(isCandidate);
+      const candidates = ctx.files.filter(isCandidate).sort(
+        (a, b3) => a.split("/").length - b3.split("/").length || (a < b3 ? -1 : a > b3 ? 1 : 0)
+      );
       if (candidates.length === 0) return [];
       const now = Date.now();
       const issues = [];
@@ -77717,6 +77720,21 @@ function buildScanContext(root) {
       // Stable ordering keeps capped scanners and duplicate identities repeatable.
       files: files.sort(),
       readFile: readRel,
+      fileExists: (relPath) => __async(null, null, function* () {
+        if ((yield readRel(relPath)) === null) return false;
+        const parts = relPath.replace(/\\/g, "/").split("/");
+        if (parts.some((part) => !part || part === "." || part === "..")) return false;
+        let dir = root;
+        try {
+          for (const part of parts) {
+            if (!(yield import_fs2.promises.readdir(dir)).includes(part)) return false;
+            dir = (0, import_path3.join)(dir, part);
+          }
+          return true;
+        } catch (e) {
+          return false;
+        }
+      }),
       fileSize: (relPath) => __async(null, null, function* () {
         try {
           const stat2 = yield import_fs2.promises.stat((0, import_path3.join)(root, relPath));
@@ -80966,7 +80984,7 @@ var brokenDocLinksScanner2 = {
         const resolved = resolveRel2(baseDir, decoded);
         if (!resolved) continue;
         if (fileSet.has(resolved) || dirSet.has(resolved)) continue;
-        if (await ctx.readFile(resolved) !== null) continue;
+        if (await ctx.fileExists?.(resolved)) continue;
         if (!/\.[a-z0-9]+$/i.test(decoded) && pageExists2(decoded, resolved, fileSet)) continue;
         if (usesMkdocs && /\.md$/i.test(file2)) {
           const asDir = resolveRel2(`${baseDir}/${file2.split("/").pop().replace(/\.md$/i, "")}`, decoded);
@@ -83626,7 +83644,9 @@ var eolRuntimeScanner2 = {
   id: "eol-runtime",
   category: "dependency",
   async run(ctx) {
-    const candidates = ctx.files.filter(isCandidate2);
+    const candidates = ctx.files.filter(isCandidate2).sort(
+      (a, b3) => a.split("/").length - b3.split("/").length || (a < b3 ? -1 : a > b3 ? 1 : 0)
+    );
     if (candidates.length === 0) return [];
     const now = Date.now();
     const issues = [];

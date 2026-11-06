@@ -202,6 +202,18 @@ describe("eolRuntimeScanner", () => {
     expect(issues).toEqual([])
   })
 
+  it("keeps shallow project declarations visible despite a platform package matrix", async () => {
+    const files = Object.fromEntries(Array.from({ length: 40 }, (_, i) =>
+      [`npm/@platform/target-${i}/package.json`, '{"engines":{"node":">=18"}}'],
+    ))
+    files["npm/wasm/package.json"] = '{"engines":{"node":">=18"}}'
+    const forward = await eolRuntimeScanner.run(ctx(files))
+    const reverse = await eolRuntimeScanner.run(ctx(Object.fromEntries(Object.entries(files).reverse())))
+    expect(forward).toHaveLength(30)
+    expect(forward.some(issue => issue.location?.startsWith("npm/wasm/package.json:"))).toBe(true)
+    expect(reverse).toEqual(forward)
+  })
+
   it("reports nothing when there is no manifest to read", async () => {
     expect(await eolRuntimeScanner.run(ctx({ "src/index.ts": "export {}" }))).toEqual([])
   })
