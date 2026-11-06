@@ -8210,11 +8210,6 @@
     "sha": "7482d4b9dd85d1f49ae20d01b01f36dd682dbe07"
   },
   {
-    "name": "espressif-arduino-esp32",
-    "url": "https://github.com/espressif/arduino-esp32",
-    "sha": "47ada0bc895ff0a49ca3af36c9c5fccacbc66fc8"
-  },
-  {
     "name": "espressif-esp-idf-template",
     "url": "https://github.com/espressif/esp-idf-template",
     "sha": "fc07431210543a4a47ed2664d3f7f0a84e8a1b4f"
@@ -8475,11 +8470,6 @@
     "sha": "cdf4fb05d00c56006486fa069712bc697244ad64"
   },
   {
-    "name": "pulumi-pulumi-azure-native",
-    "url": "https://github.com/pulumi/pulumi-azure-native",
-    "sha": "b5b8a6858122d8b7b762b6521d3f879c04f8fe62"
-  },
-  {
     "name": "wmnnd-nginx-certbot",
     "url": "https://github.com/wmnnd/nginx-certbot",
     "sha": "62a1c61f54244859d33d5697bb954960f130901d"
@@ -8568,11 +8558,6 @@
     "name": "jeremylong-dependencycheck",
     "url": "https://github.com/jeremylong/DependencyCheck",
     "sha": "58b4ddccbdafcb7347979c6551c4f56049126dcc"
-  },
-  {
-    "name": "owasp-cheatsheetseries",
-    "url": "https://github.com/OWASP/CheatSheetSeries",
-    "sha": "757270a26306e5edda9957bb7f86cfcde03c30f9"
   },
   {
     "name": "trailofbits-algo",
