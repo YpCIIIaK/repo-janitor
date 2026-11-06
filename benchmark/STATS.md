@@ -8,8 +8,8 @@
 |---|---:|---:|
 | A | 321 | 25% |
 | B | 296 | 23% |
-| C | 418 | 33% |
-| D | 207 | 16% |
+| C | 417 | 33% |
+| D | 208 | 16% |
 | F | 31 | 2% |
 
 Median score **73**.
@@ -47,11 +47,11 @@ Share of repos with at least one finding of the rule.
 | workflow-no-permissions | 677 | 53% |
 | workflow-action-tag | 615 | 48% |
 | commented-code | 371 | 29% |
-| eol-node | 304 | 24% |
-| doc-link | 254 | 20% |
+| eol-node | 305 | 24% |
+| doc-link | 258 | 20% |
 | dead-export | 226 | 18% |
 | skipped-test | 189 | 15% |
-| hygiene-no-tests | 188 | 15% |
+| hygiene-no-tests | 189 | 15% |
 | eol-python | 121 | 10% |
 | hygiene-no-ci | 115 | 9% |
 | config-conflict | 91 | 7% |
@@ -83,12 +83,12 @@ Share of repos with at least one finding of the rule.
 
 | has | share |
 |---|---:|
-| readme | 100% |
+| readme | 99% |
 | license | 93% |
 | contributing | 54% |
 | security | 32% |
 | codeOfConduct | 26% |
-| changelog | 42% |
+| changelog | 41% |
 | ci | 91% |
 | tests | 84% |
 
@@ -141,7 +141,7 @@ Oldest TODOs in the corpus:
 - **0** sasanlabs-vulnerableapp (101 findings)
 - **0** hashicorp-vault-guides (121 findings)
 - **0** sqlmapproject-testenv (103 findings)
-- **0** aws-samples-serverless-patterns (330 findings)
+- **0** aws-samples-serverless-patterns (332 findings)
 - **0** docker-library-wordpress (32 findings)
 - **0** posthog-charts-clickhouse (39 findings)
 - **1** returntocorp-semgrep-rules (150 findings)
@@ -154,18 +154,18 @@ Median gap between repos with and without a practice. *Raw* compares everyone; *
 |---|---:|---:|---:|---:|
 | OpenSSF Scorecard | 43 | +12 | +8.9 | -1.04 |
 | ESLint flat config | 157 | -3 | +4.7 | -0.27 |
-| TypeScript | 267 | +1 | +3.9 | -0.16 |
-| Prettier | 169 | -3 | +2.4 | +0.07 |
+| TypeScript | 267 | +1 | +3.9 | -0.07 |
+| Prettier | 169 | -3 | +2.4 | +0.08 |
 | .editorconfig | 434 | -5 | +1.5 | -0.48 |
-| CodeQL | 156 | -6 | +0.3 | -0.26 |
-| SECURITY.md | 380 | -9 | +0.1 | -0.28 |
+| CodeQL | 156 | -6 | +0.3 | -0.27 |
+| SECURITY.md | 380 | -9 | +0.1 | -0.30 |
 | Dev container | 110 | -7 | -0.5 | +0.04 |
 | Renovate | 98 | -3 | -0.6 | +0.07 |
 | Dependabot | 475 | -7 | -0.8 | -0.16 |
-| PR template | 420 | -12 | -2.3 | +0.45 |
-| CODEOWNERS | 212 | -9 | -2.5 | +0.91 |
+| PR template | 420 | -12 | -2.3 | +0.44 |
+| CODEOWNERS | 212 | -9 | -2.5 | +0.88 |
 | Changesets | 43 | -10 | -2.6 | +0.55 |
-| CONTRIBUTING | 616 | -15 | -5.0 | -0.05 |
+| CONTRIBUTING | 616 | -15 | -5.0 | -0.02 |
 | Issue templates | 589 | -16 | -5.5 | +0.24 |
 | pre-commit | 123 | -9 | -6.0 | -0.63 |
 
@@ -173,4 +173,4 @@ Correlation, not causation: projects that add Dependabot are also the ones that 
 
 ## Noise the confidence scale hides
 
-10589 low-confidence findings were kept out of these numbers (13% of everything the scanners raised).
+10574 low-confidence findings were kept out of these numbers (13% of everything the scanners raised).

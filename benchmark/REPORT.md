@@ -1,6 +1,6 @@
 # Scanner benchmark
 
-1273/1273 repos scanned offline at pinned commits. Overall precision **59%** (566 TP, 401 FP, 80178 unlabelled, 36 lost TP).
+1273/1273 repos scanned offline at pinned commits. Overall precision **59%** (566 TP, 401 FP, 80154 unlabelled, 36 lost TP).
 
 ### By scanner
 
@@ -11,20 +11,20 @@
 | insecure-code | 7% | 14 | 184 | 4111 | 0 |
 | env-lifecycle | 7% | 1 | 13 | 1337 | 0 |
 | iac-security | 41% | 73 | 105 | 11 | 0 |
-| leftover-debug | 43% | 3 | 4 | 2000 | 0 |
+| leftover-debug | 43% | 3 | 4 | 2001 | 0 |
 | ci-health | 46% | 12 | 14 | 248 | 0 |
 | dockerfile | 46% | 12 | 14 | 1479 | 0 |
-| repo-bloat | 47% | 7 | 8 | 1005 | 0 |
-| broken-doc-links | 70% | 16 | 7 | 2373 | 0 |
+| repo-bloat | 47% | 7 | 8 | 989 | 0 |
+| broken-doc-links | 70% | 16 | 7 | 2385 | 0 |
 | docs-drift | 75% | 9 | 3 | 64 | 0 |
 | commented-code | 76% | 28 | 9 | 2872 | 0 |
-| project-hygiene | 85% | 23 | 4 | 334 | 0 |
+| project-hygiene | 85% | 23 | 4 | 335 | 0 |
 | dead-code | 90% | 19 | 2 | 4157 | 0 |
 | lockfile-drift | 94% | 15 | 1 | 59 | 0 |
 | skipped-tests | 94% | 17 | 1 | 1281 | 0 |
 | duplicate-code | 95% | 35 | 2 | 7328 | 0 |
 | workflow-security | 95% | 132 | 7 | 11865 | 0 |
-| bus-factor | 100% | 28 | 0 | 13233 | 0 |
+| bus-factor | 100% | 28 | 0 | 13211 | 0 |
 | config-conflict | 100% | 17 | 0 | 80 | 0 |
 | eol-runtime | 100% | 53 | 0 | 1488 | 0 |
 | supply-chain | 100% | 1 | 0 | 1 | 0 |
@@ -74,8 +74,8 @@
 | insecure-localstorage-secret | 33% | 1 | 2 | 90 | 0 |
 | workflow-self-hosted-runner | 33% | 1 | 2 | 41 | 0 |
 | ci-no-pr-trigger | 40% | 2 | 3 | 17 | 0 |
-| debug-leftover | 43% | 3 | 4 | 2000 | 0 |
-| bloat | 47% | 7 | 8 | 1005 | 0 |
+| debug-leftover | 43% | 3 | 4 | 2001 | 0 |
+| bloat | 47% | 7 | 8 | 989 | 0 |
 | docker-latest | 50% | 3 | 3 | 128 | 0 |
 | docker-untagged | 50% | 3 | 3 | 264 | 0 |
 | workflow-pr-target-checkout | 50% | 2 | 2 | 10 | 0 |
@@ -83,9 +83,9 @@
 | ci-silenced-failure | 67% | 4 | 2 | 106 | 0 |
 | iac-public-bucket | 67% | 10 | 5 | 0 | 0 |
 | iac-unencrypted | 67% | 2 | 1 | 1 | 0 |
-| doc-link | 70% | 16 | 7 | 2373 | 0 |
+| doc-link | 70% | 16 | 7 | 2385 | 0 |
 | hygiene-no-license | 75% | 6 | 2 | 41 | 0 |
-| hygiene-no-tests | 75% | 6 | 2 | 180 | 0 |
+| hygiene-no-tests | 75% | 6 | 2 | 181 | 0 |
 | commented-code | 76% | 28 | 9 | 2872 | 0 |
 | ci-disabled | 80% | 4 | 1 | 10 | 0 |
 | iac-open-admin-port | 82% | 27 | 6 | 2 | 0 |
@@ -94,14 +94,14 @@
 | lockfile-missing | 94% | 15 | 1 | 59 | 0 |
 | skipped-test | 94% | 17 | 1 | 1281 | 0 |
 | duplicate | 95% | 35 | 2 | 7328 | 0 |
-| bus-factor | 100% | 28 | 0 | 13233 | 0 |
+| bus-factor | 100% | 28 | 0 | 13211 | 0 |
 | ci-swallowed | 100% | 2 | 0 | 3 | 0 |
 | config-conflict | 100% | 17 | 0 | 80 | 0 |
 | dead-uikit | 100% | 3 | 0 | 14 | 0 |
 | docker-add-url | 100% | 2 | 0 | 16 | 0 |
 | docs-script | 100% | 2 | 0 | 7 | 0 |
-| eol-node | 100% | 27 | 0 | 1127 | 0 |
-| eol-python | 100% | 21 | 0 | 332 | 0 |
+| eol-node | 100% | 27 | 0 | 1128 | 0 |
+| eol-python | 100% | 21 | 0 | 331 | 0 |
 | eol-runner | 100% | 5 | 0 | 29 | 0 |
 | hygiene-no-ci | 100% | 9 | 0 | 106 | 0 |
 | hygiene-no-readme | 100% | 2 | 0 | 7 | 0 |
@@ -123,6 +123,6 @@
 
 | | precision | TP | FP | unlabelled | lost TP |
 |---|---:|---:|---:|---:|---:|
-| low | 12% | 45 | 319 | 10225 | 0 |
-| medium | 67% | 106 | 52 | 7244 | 0 |
-| high | 93% | 415 | 30 | 62709 | 0 |
+| low | 12% | 45 | 319 | 10210 | 0 |
+| medium | 67% | 106 | 52 | 7260 | 0 |
+| high | 93% | 415 | 30 | 62684 | 0 |

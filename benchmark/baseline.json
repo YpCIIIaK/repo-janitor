@@ -1,15 +1,15 @@
 {
-  "overall": 0.58,
+  "overall": 0.585,
   "scanners": {
     "eol-runtime": 1,
     "todo-debt": 1,
-    "broken-doc-links": 0.64,
+    "broken-doc-links": 0.696,
     "bus-factor": 1,
     "commented-code": 0.757,
     "workflow-security": 0.95,
     "duplicate-code": 0.946,
     "skipped-tests": 0.944,
-    "insecure-code": 0.069,
+    "insecure-code": 0.071,
     "docs-drift": 0.75,
     "lockfile-drift": 0.938,
     "dead-code": 0.905,
@@ -21,7 +21,7 @@
     "ci-health": 0.462,
     "repo-bloat": 0.467,
     "project-hygiene": 0.852,
-    "iac-security": 0.408,
+    "iac-security": 0.41,
     "dependency-funeral": 0,
     "supply-chain": 1
   },

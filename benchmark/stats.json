@@ -1,11 +1,11 @@
 {
   "repos": 1273,
-  "generatedAt": "2026-11-06T13:04:09.397Z",
+  "generatedAt": "2026-11-06T14:53:33.460Z",
   "grades": {
     "A": 321,
     "B": 296,
-    "C": 418,
-    "D": 207,
+    "C": 417,
+    "D": 208,
     "F": 31
   },
   "languages": {
@@ -17,7 +17,7 @@
     "JavaScript": {
       "repos": 269,
       "medianScore": 79,
-      "findingsPer1k": 2.01
+      "findingsPer1k": 1.99
     },
     "Python": {
       "repos": 178,
@@ -93,8 +93,8 @@
     "workflow-no-permissions": 0.532,
     "workflow-action-tag": 0.483,
     "commented-code": 0.291,
-    "eol-node": 0.239,
-    "doc-link": 0.2,
+    "eol-node": 0.24,
+    "doc-link": 0.203,
     "dead-export": 0.178,
     "skipped-test": 0.148,
     "hygiene-no-tests": 0.148,
@@ -121,7 +121,7 @@
   "eol": {
     "node": {
       "repos": 650,
-      "eol": 294
+      "eol": 295
     },
     "python": {
       "repos": 178,
@@ -129,12 +129,12 @@
     }
   },
   "checklist": {
-    "readme": 0.997,
+    "readme": 0.987,
     "license": 0.928,
-    "contributing": 0.541,
+    "contributing": 0.54,
     "security": 0.32,
     "codeOfConduct": 0.261,
-    "changelog": 0.417,
+    "changelog": 0.414,
     "ci": 0.907,
     "tests": 0.841
   },
@@ -254,7 +254,7 @@
     {
       "repo": "aws-samples/serverless-patterns",
       "score": 0,
-      "findings": 330
+      "findings": 332
     },
     {
       "repo": "hashicorp/vault-guides",
@@ -518,7 +518,7 @@
       "repos": 43,
       "rawScoreGap": 12,
       "scoreGap": 8.948717948717949,
-      "densityGap": -1.039503646698862
+      "densityGap": -1.0425064266669024
     },
     {
       "key": "eslintFlat",
@@ -526,7 +526,7 @@
       "repos": 157,
       "rawScoreGap": -3,
       "scoreGap": 4.681528662420382,
-      "densityGap": -0.26956360093218573
+      "densityGap": -0.2691722143568877
     },
     {
       "key": "tsconfig",
@@ -534,7 +534,7 @@
       "repos": 267,
       "rawScoreGap": 1,
       "scoreGap": 3.9363295880149813,
-      "densityGap": -0.16264164700690698
+      "densityGap": -0.06977411738930546
     },
     {
       "key": "prettier",
@@ -542,7 +542,7 @@
       "repos": 169,
       "rawScoreGap": -3,
       "scoreGap": 2.4201183431952664,
-      "densityGap": 0.07204253328530624
+      "densityGap": 0.07516557949553736
     },
     {
       "key": "editorconfig",
@@ -550,7 +550,7 @@
       "repos": 434,
       "rawScoreGap": -5,
       "scoreGap": 1.5483870967741935,
-      "densityGap": -0.4804059870401569
+      "densityGap": -0.4791387785654325
     },
     {
       "key": "codeql",
@@ -558,7 +558,7 @@
       "repos": 156,
       "rawScoreGap": -6,
       "scoreGap": 0.2564102564102564,
-      "densityGap": -0.26476397332791224
+      "densityGap": -0.2652014116000085
     },
     {
       "key": "security",
@@ -566,7 +566,7 @@
       "repos": 380,
       "rawScoreGap": -9,
       "scoreGap": 0.1448087431693989,
-      "densityGap": -0.28491943154037097
+      "densityGap": -0.29861149261461895
     },
     {
       "key": "devcontainer",
@@ -574,7 +574,7 @@
       "repos": 110,
       "rawScoreGap": -7,
       "scoreGap": -0.45454545454545453,
-      "densityGap": 0.044233119505334616
+      "densityGap": 0.043440314379452304
     },
     {
       "key": "renovate",
@@ -582,7 +582,7 @@
       "repos": 98,
       "rawScoreGap": -3,
       "scoreGap": -0.5510204081632653,
-      "densityGap": 0.07164880471916998
+      "densityGap": 0.07149802303627072
     },
     {
       "key": "dependabot",
@@ -590,7 +590,7 @@
       "repos": 475,
       "rawScoreGap": -7,
       "scoreGap": -0.7794432548179872,
-      "densityGap": -0.15890974052085638
+      "densityGap": -0.16144240068274188
     },
     {
       "key": "prTemplate",
@@ -598,7 +598,7 @@
       "repos": 420,
       "rawScoreGap": -12,
       "scoreGap": -2.3157894736842106,
-      "densityGap": 0.44512732614598616
+      "densityGap": 0.43866140232930306
     },
     {
       "key": "codeowners",
@@ -606,7 +606,7 @@
       "repos": 212,
       "rawScoreGap": -9,
       "scoreGap": -2.481132075471698,
-      "densityGap": 0.9081841152950483
+      "densityGap": 0.8797036098369957
     },
     {
       "key": "changeset",
@@ -614,7 +614,7 @@
       "repos": 43,
       "rawScoreGap": -10,
       "scoreGap": -2.58974358974359,
-      "densityGap": 0.5547556639397503
+      "densityGap": 0.5549650823530448
     },
     {
       "key": "contributing",
@@ -622,7 +622,7 @@
       "repos": 616,
       "rawScoreGap": -15,
       "scoreGap": -5.006535947712418,
-      "densityGap": -0.04544168398323642
+      "densityGap": -0.01696067941104778
     },
     {
       "key": "issueTemplates",
@@ -630,7 +630,7 @@
       "repos": 589,
       "rawScoreGap": -16,
       "scoreGap": -5.501165501165501,
-      "densityGap": 0.24491626206912293
+      "densityGap": 0.24470780425132227
     },
     {
       "key": "preCommit",
@@ -638,11 +638,11 @@
       "repos": 123,
       "rawScoreGap": -9,
       "scoreGap": -5.959349593495935,
-      "densityGap": -0.6332230014568846
+      "densityGap": -0.6339123037746494
     }
   ],
-  "lowConfidenceHidden": 10589,
-  "shown": 70556,
+  "lowConfidenceHidden": 10574,
+  "shown": 70547,
   "precision": {
     "high": {
       "tp": 415,
