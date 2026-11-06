@@ -35,6 +35,7 @@ for (const r of corpus) {
     activity: rep.profile?.activity ?? {},
     issues: rep.issues ?? [],
     hidden: rep.lowConfidence?.length ?? 0,
+    langs,
   })
 }
 
@@ -286,6 +287,28 @@ json.precision = precisionByConfidence()
 const shown = repos.reduce((s, r) => s + r.issues.length, 0)
 out.push("## Noise the confidence scale hides", "")
 out.push(`${hidden} low-confidence findings were kept out of these numbers (${pct(hidden, hidden + shown)} of everything the scanners raised).`, "")
+
+// Score distributions for the "better than X% of projects" line on reports.
+// Same cuts and size edges as lib/scan-stats.ts; main language = most lines.
+{
+  const bucket = (n) => (n < 1e3 ? "xs" : n < 1e4 ? "s" : n < 1e5 ? "m" : n < 1e6 ? "l" : "xl")
+  const cuts = {}
+  const add = (k, s) => (cuts[k] ??= []).push(s)
+  for (const r of repos) {
+    if (typeof r.score !== "number") continue
+    const main = [...r.langs].sort((a, b) => (b.loc ?? 0) - (a.loc ?? 0))[0]?.language
+    const size = bucket(r.langs.reduce((n, l) => n + (l.loc ?? 0), 0))
+    add("all", r.score)
+    add(`size:${size}`, r.score)
+    if (main) {
+      add(`lang:${main}`, r.score)
+      add(`lang:${main}|size:${size}`, r.score)
+    }
+  }
+  for (const k of Object.keys(cuts)) if (cuts[k].length < 30) delete cuts[k]
+  for (const v of Object.values(cuts)) v.sort((a, b) => a - b)
+  writeFileSync(join(here, "../lib/benchmark-scores.json"), JSON.stringify(cuts) + "\n")
+}
 
 writeFileSync(join(here, "STATS.md"), out.join("\n"))
 writeFileSync(join(here, "stats.json"), JSON.stringify(json, null, 2) + "\n")
