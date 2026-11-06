@@ -215,7 +215,11 @@ function cloudHits(lines: string[], isTerraform: boolean): Hit[] {
       const egress = /\begress\b|SecurityGroupEgress|type\s*=\s*"egress"/.test(near(lines, i, 6, 2)) && !/\bingress\b|SecurityGroupIngress/.test(near(lines, i, 6, 2))
       // Network ACL entries (`rule_number`) mirror AWS's allow-all default; security groups are the gate.
       const nacl = /\brule_number\b|RuleNumber|network_acl|acl_(?:in|e)gress/i.test(block + near(lines, i, 15, 0))
-      if (!egress && !nacl && opensAdminPort(block)) push("open-admin-port")
+      // A GCP firewall with only a `deny {}` block, or an ICMP-only rule, opens nothing.
+      const around = near(lines, i, 15, 8)
+      const denyOnly = /\bdeny\s*\{/.test(around) && !/\ballow\s*\{/.test(around)
+      const icmpOnly = /\bprotocol\b["']?\s*[:=]\s*["']?icmp\b/i.test(block)
+      if (!egress && !nacl && !denyOnly && !icmpOnly && opensAdminPort(block)) push("open-admin-port")
     } else if (/\bpublicly_accessible\s*=\s*true\b|PubliclyAccessible["']?\s*:\s*["']?true\b/.test(line)) push("public-database")
     else if (/\b(?:encrypted|storage_encrypted|encrypt_at_rest|enable_encryption)\s*=\s*false\b|\b(?:Encrypted|StorageEncrypted|KmsEncrypted)["']?\s*:\s*["']?(?:false|False|FALSE)\b/.test(line)) push("unencrypted")
     else if (/["']?Action["']?\s*:\s*\[?\s*["']\*["']|\bactions\s*=\s*\[\s*"\*"\s*\]/.test(line)) {
@@ -231,6 +235,18 @@ function cloudHits(lines: string[], isTerraform: boolean): Hit[] {
   }
   return hits
 }
+
+/** The closest `image:` line above, i.e. the image of the service being read. */
+function nearestImage(lines: string[], i: number): string {
+  for (let j = i; j >= Math.max(0, i - 40); j--) if (/^\s*image:/.test(lines[j])) return lines[j]
+  return ""
+}
+
+// Services whose whole job is talking to the Docker API: a reverse proxy's docker
+// provider, an updater, a UI, Docker-in-Docker, a metrics or log reader.
+const DOCKER_API_IMAGE = /^\s*image:\s*["']?(?:[\w.-]+\/)*(?:traefik|watchtower|portainer|docker|cadvisor|dozzle|autoheal|nginx-proxy|docker-gen|docker-socket-proxy|socket-proxy|ofelia|kestra|node-exporter|promtail|grafana-agent|alloy|vector|telegraf|netdata)(?::[^\s"']*dind[^\s"']*|[:@\s"']|$)/m
+
+const HOST_AGENT_IMAGE = /^\s*image:\s*["']?(?:[\w.-]+\/)*(?:node-exporter|cadvisor|netdata|telegraf|promtail|grafana-agent|alloy|docker(?=:[^\s"']*dind))\b/
 
 /** Kubernetes manifests (Helm templates included) and docker-compose services. */
 function containerHits(lines: string[], compose: boolean): Hit[] {
@@ -252,12 +268,14 @@ function containerHits(lines: string[], compose: boolean): Hit[] {
     if (/\{\{-?\s*(?:if|with)\b/.test(near(lines, i, 2, 0))) continue
 
     const inInit = /^\s*initContainers:|sysctl|chown|chmod|volume-?permissions|init-?container/i.test(near(lines, i, 25, 0))
+    // Monitoring agents and Docker-in-Docker need the host: that is the job.
+    const hostAgent = compose && HOST_AGENT_IMAGE.test(nearestImage(lines, i))
     if (/^\s*privileged:\s*true\b/.test(line)) {
-      if (!nodeAgent && !inInit) push("privileged")
+      if (!nodeAgent && !inInit && !hostAgent) push("privileged")
     } else if (/^\s*host(?:Network|PID|IPC):\s*true\b/.test(line) || (compose && /^\s*(?:network_mode|pid|ipc):\s*["']?host\b/.test(line))) {
-      if (!nodeAgent) push("host-namespace")
+      if (!nodeAgent && !hostAgent) push("host-namespace")
     }
-    else if (/\/var\/run\/docker\.sock/.test(line) && !nodeAgent && !/[:,]ro\b|readOnly:\s*true/.test(near(lines, i, 0, 3))) push("docker-socket")
+    else if (/\/var\/run\/docker\.sock/.test(line) && !nodeAgent && !/[:,]ro\b|readOnly:\s*true/.test(near(lines, i, 0, 3)) && !DOCKER_API_IMAGE.test(nearestImage(lines, i))) push("docker-socket")
     else if (/^\s*allowPrivilegeEscalation:\s*true\b/.test(line) && !nodeAgent && !inInit) push("privilege-escalation")
     else if (/^\s*(?:-\s*)?["']?(?:SYS_ADMIN|SYS_PTRACE|SYS_MODULE|ALL)["']?\s*$/.test(line) && /\badd:|cap_add:/.test(near(lines, i, 4, 0)) && !/\bdrop:/.test(near(lines, i, 1, 0)) && !nodeAgent) push("dangerous-capability")
     else if (!compose && !nodeAgent && !inInit && /^\s*runAsUser:\s*0\b|^\s*runAsNonRoot:\s*false\b/.test(line)) push("run-as-root")

@@ -283,3 +283,14 @@ describe("everyJobHasPermissions", () => {
     expect(everyJobHasPermissions(y.split("\n"))).toBe(false)
   })
 })
+
+describe("workflow false-positive clusters (benchmark batch 12–15)", () => {
+  it("ignores self-hosted runners on schedule-only workflows", () => {
+    const yaml = "name: nightly\non:\n  schedule:\n    - cron: '0 0 * * *'\npermissions:\n  contents: read\njobs:\n  build:\n    runs-on: self-hosted\n    steps:\n      - run: make\n"
+    expect(rules(yaml)).not.toContain("self-hosted-runner")
+  })
+  it("ignores pull_request_target checkouts gated to merged PRs", () => {
+    const yaml = "name: backport\non:\n  pull_request_target:\n    types: [closed]\npermissions:\n  contents: read\njobs:\n  b:\n    if: github.event.pull_request.merged == true\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683\n        with:\n          ref: ${{ github.event.pull_request.head.sha }}\n"
+    expect(rules(yaml)).not.toContain("pr-target-checkout")
+  })
+})

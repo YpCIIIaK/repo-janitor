@@ -54,3 +54,10 @@ describe("repoBloatScanner", () => {
     expect(issues[0].location).toBe("big.zip")
   })
 })
+
+describe("bloat false-positive clusters (benchmark batch 12–15)", () => {
+  it("does not flag the Gradle wrapper jar", async () => {
+    const ctx = makeContext({ files: { "gradle/wrapper/gradle-wrapper.jar": "x" }, sizes: { "gradle/wrapper/gradle-wrapper.jar": 60_000 } })
+    expect(await repoBloatScanner.run(ctx)).toEqual([])
+  })
+})

@@ -115,7 +115,8 @@ export const dockerfileScanner: Scanner = {
         }
 
         // ADD of a remote URL.
-        const add = line.match(/^\s*ADD\s+(?:--\S+\s+)*(https?:\/\/\S+)/i)
+        // `ADD https://github.com/x/y.git#v1.2` is a pinned git checkout, not a download.
+        const add = /^\s*ADD\s+(?:--\S+\s+)*https?:\/\/\S+\.git#\S+/i.test(line) ? null : line.match(/^\s*ADD\s+(?:--\S+\s+)*(https?:\/\/\S+)/i)
         if (add) {
           issues.push({
             id: `docker-add-url-${norm}:${lineNo}`,

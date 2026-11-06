@@ -37,6 +37,8 @@ const ARTIFACT_EXT = new Set([
 
 const VENDORED_RE = /(^|\/)(?:vendor|third_party|deps|node_modules)\//i
 const SHIPPED_BINARY_RE = /(^|\/)(?:bin|bootloader|fallbacks|prebuilds?|native|binaries)\/[^/]+\.(?:exe|dll|so|dylib)$/i
+// Build-tool wrappers are meant to be committed (Gradle, Maven).
+const WRAPPER_RE = /(^|\/)(?:gradle\/wrapper\/gradle-wrapper\.jar|\.mvn\/wrapper\/maven-wrapper\.jar)$/
 const DATA_EXT = new Set(["db", "sqlite", "sqlite3", "bin", "dat", "gz", "tar"])
 
 // Large media / design files — flagged only above MEDIA_BYTES (legit but heavy).
@@ -80,7 +82,7 @@ export const repoBloatScanner: Scanner = {
       if (VENDORED_RE.test(norm)) continue
       // Binaries a package ships (bin/windows-kill.exe, a bootloader, a
       // clipboard fallback) and small data files (.db, .bin, .gz) are content.
-      const shipped = SHIPPED_BINARY_RE.test(norm) || (DATA_EXT.has(extOf(norm)) && size != null && size < SMALL_ARTIFACT_BYTES)
+      const shipped = SHIPPED_BINARY_RE.test(norm) || WRAPPER_RE.test(norm) || (DATA_EXT.has(extOf(norm)) && size != null && size < SMALL_ARTIFACT_BYTES)
       const fixture = FIXTURE_DIR.test(norm)
 
       if (ARTIFACT_EXT.has(ext) && !shipped && !(fixture && (size == null || size < SMALL_ARTIFACT_BYTES))) {

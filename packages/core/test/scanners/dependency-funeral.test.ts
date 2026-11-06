@@ -339,3 +339,18 @@ describe("dependencyFuneralScanner", () => {
     expect(await dependencyFuneralScanner.run(empty)).toHaveLength(0)
   })
 })
+
+describe("dependency-funeral imports the parser cannot read", () => {
+  it("counts imports in decorated TypeScript and Vue files", async () => {
+    const ctx = makeContext({
+      files: {
+        "package.json": JSON.stringify({ dependencies: { "@angular/forms": "1.0.0", dropkickjs: "1.0.0", "vue-x": "1.0.0", gone: "1.0.0" } }),
+        "src/app/register.ts": "import { FormBuilder } from '@angular/forms'\n@Component({ selector: 'x' })\nexport class R { constructor(private fb: FormBuilder) {} }\n",
+        "src/static/js/admin.js": "var Dropkick = require('dropkickjs');\n",
+        "src/App.vue": "<script setup>\nimport x from 'vue-x'\n</script>\n<template><div/></template>\n",
+      },
+    })
+    const ids = (await dependencyFuneralScanner.run(ctx)).map((i) => i.id)
+    expect(ids).toEqual(["dep-unused-gone"])
+  })
+})

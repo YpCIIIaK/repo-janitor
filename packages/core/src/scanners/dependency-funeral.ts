@@ -17,7 +17,7 @@ import { parseFile, walk } from "../ast"
  * the scanner runs offline: it still reports unused deps from static analysis and
  * skips the registry-derived findings.
  */
-const SOURCE_RE = /\.(ts|tsx|js|jsx|mjs|mts|cts|cjs)$/
+const SOURCE_RE = /\.(ts|tsx|js|jsx|mjs|mts|cts|cjs|vue|svelte|astro)$/
 const YEAR_MS = 365 * 24 * 60 * 60 * 1000
 // A 2-year publish gap is a soft note (many micro-libs are simply feature-complete);
 // only a 3+ year gap is loud enough to call a likely-unmaintained risk.
@@ -108,6 +108,8 @@ async function collectToolingText(ctx: ScanContext, scripts: Record<string, stri
   return text
 }
 
+const IMPORT_TEXT_RE = /(?:\bfrom\s*|\bimport\s*\(?\s*|\brequire\s*\(\s*)["']([^"'\s]+)["']|\bimport\s+["']([^"'\s]+)["']/g
+
 /** Collect every package name imported/required across the source tree. */
 async function collectImports(ctx: ScanContext): Promise<Set<string>> {
   const used = new Set<string>()
@@ -115,7 +117,13 @@ async function collectImports(ctx: ScanContext): Promise<Set<string>> {
     if (!SOURCE_RE.test(file)) continue
     const content = await ctx.readFile(file)
     if (!content) continue
-    const ast = parseFile(content, file)
+    // Text fallback, always on: a file the parser rejects (decorators, a .vue
+    // single-file component, syntax newer than the parser) still imports things.
+    for (const m of content.matchAll(IMPORT_TEXT_RE)) {
+      const pkg = packageOf(m[1] ?? m[2] ?? "")
+      if (pkg) used.add(pkg)
+    }
+    const ast = /\.(vue|svelte|astro)$/.test(file) ? null : parseFile(content, file)
     if (!ast) continue
 
     walk(ast, (node) => {

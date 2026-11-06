@@ -513,7 +513,7 @@ const RULES: VulnRule[] = [
     id: "py-yaml-load",
     lang: "py",
     // yaml.load without a Loader= argument constructs arbitrary Python objects.
-    re: /\byaml\.load\s*\((?![^)]*(?:Loader\s*=|Safe\w*Loader|BaseLoader))/g,
+    re: /\byaml\.load\s*\((?![^)]*(?:Loader\s*=|Safe\w*Loader|BaseLoader|CSafeLoader))/g,
     severity: "critical",
     title: "yaml.load() without a safe loader",
     detail:
@@ -817,6 +817,10 @@ function sinkAllows(ruleId: string, line: string, col: number): boolean {
     return (line.slice(0, col).match(/"/g)?.length ?? 0) % 2 === 0
   }
   if (ruleId === "sql-interpolated") return !/\bprepare\s*\(/.test(line)
+  // `redis_script.eval(...)`, `expr.eval()` — a method on an object, not Kernel#eval.
+  if (ruleId === "eval-dynamic" && line.slice(0, col).trimEnd().endsWith(".")) return false
+  // A shell=True call whose command is a plain string literal runs fixed text.
+  if (ruleId === "py-shell-true" && /subprocess\.\w+\s*\(\s*(?:r|b)?(["'])[^"'{}%]*\1\s*,/.test(line)) return false
   // `eval(time, snapshot) {` declares a method called eval (PlayCanvas animation tracks).
   if (ruleId === "eval-dynamic" && /^\s*(?:async\s+|static\s+|public\s+|private\s+)*eval\s*\([^)]*\)\s*(?::\s*[\w<>[\]| ]+)?\s*\{/.test(line)) return false
   return true
@@ -889,6 +893,22 @@ function contextAllows(ruleId: string, content: string, lineStart: number): bool
   if (ruleId === "py-eval-exec") {
     return !/\bcompile\s*\(/.test(around(content, lineStart, 3, 0))
   }
+  // `.readObject()` is also JsonReader/ObjectMapper; only Java serialisation
+  // streams count, and not when a deserialisation filter guards them.
+  if (ruleId === "java-deserialization") {
+    return /\b(?:ObjectInputStream|XMLDecoder)\b/.test(content) && !/\b(?:ObjectInputFilter|SerialFilterChecker|setObjectInputFilter)\b/.test(content)
+  }
+  // Constructing a BinaryFormatter to Serialize is harmless; the hole is Deserialize.
+  if (ruleId === "dotnet-deserialization" && /new\s+\w*Formatter\b/.test(around(content, lineStart, 0, 0))) {
+    return /\.Deserialize\s*\(/.test(content)
+  }
+  // `new Function(...)` where Function is an imported or local class (Pulumi's
+  // cloudfront.Function, a framework's Function resource) is a constructor call.
+  if (ruleId === "new-function") {
+    return !/\bimport\s*(?:type\s*)?\{[^}]*\bFunction\b[^}]*\}\s*from|\b(?:class|const|let|var)\s+Function\b|\bFunction\s*=\s*require\(/.test(content)
+  }
+  // ruamel.yaml's YAML().load is safe by default.
+  if (ruleId === "py-yaml-load") return !/\bruamel\b/.test(content)
   if (ruleId === "react-dangerous-html") {
     const near = around(content, lineStart, 0, 3)
     const html = near.match(/__html\s*:\s*([`'"])/)

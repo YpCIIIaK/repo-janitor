@@ -62,3 +62,11 @@ describe("dockerfileScanner", () => {
     expect(await dockerfileScanner.run(ctx)).toHaveLength(0)
   })
 })
+
+describe("dockerfile false-positive clusters (benchmark batch 12–15)", () => {
+  it("does not flag ADD of a pinned git ref", async () => {
+    const ctx = makeContext({ files: { Dockerfile: "FROM alpine:3.20\nADD https://github.com/pgvector/pgvector.git#v0.8.0 /src\nUSER app\n" } })
+    const issues = await dockerfileScanner.run(ctx)
+    expect(issues.some((i) => i.id.startsWith("docker-add-url-"))).toBe(false)
+  })
+})

@@ -16,14 +16,14 @@ import type { Issue } from "../schema"
  * list — no file contents are read.
  */
 
-const README_RE = /^readme(\.(md|markdown|mkd|mdown|rst|txt|adoc|asciidoc|rdoc|org|textile))?$/i
+const README_RE = /^readme(\.(md|markdown|mkd|mdown|rst|txt|adoc|asciidoc|rdoc|org|textile|mkdn|mdwn|mkdown))?$/i
 // LICENSE, LICENSE.md, COPYING, and the dual-licence split LICENSE-MIT /
 // LICENSE-APACHE that most Rust crates use.
 // …and the `MIT-LICENSE` / `GPL-LICENSE` naming Rails-era gems use (devise, rack).
 const LICENSE_RE = /^([a-z0-9.]+-)?(licen[sc]e|copying)([-._][a-z0-9.-]+)?(\.(md|txt|rst))?$/i
 const TEST_RE = new RegExp(
   [
-    String.raw`(^|/)(__tests__|tests?|spec|testdata)/`,
+    String.raw`(^|/)(__tests__|tests?|spec|testdata|molecule)/`,
     String.raw`\.(test|spec)\.[cm]?[jt]sx?$`,
     // test.js / test.node.js at any level (debug, many small npm packages)
     String.raw`(^|/)test(\.[a-z]+)*\.[cm]?[jt]sx?$`,
@@ -48,7 +48,7 @@ const README_CANDIDATES = [
 
 // CI config locations across the common providers.
 const CI_RE =
-  /^(\.github\/workflows\/.+\.ya?ml|\.gitlab-ci\.yml|\.circleci\/config\.yml|\.travis\.yml|azure-pipelines\.yml|\.drone\.yml|Jenkinsfile|\.woodpecker\.ya?ml|bitbucket-pipelines\.yml)$/i
+  /^(\.github\/workflows\/.+\.ya?ml|\.gitlab-ci\.yml|\.circleci\/config\.yml|\.travis\.yml|azure-pipelines\.yml|\.drone\.yml|Jenkinsfile|\.woodpecker\.ya?ml|bitbucket-pipelines\.yml|\.zuul\.ya?ml|zuul\.d\/.+\.ya?ml|\.buildkite\/.+\.ya?ml|OWNERS)$/i
 
 /** Basename of a repo-relative path (forward-slash normalized). */
 function baseName(p: string): string {
