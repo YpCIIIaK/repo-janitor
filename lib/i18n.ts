@@ -513,6 +513,9 @@ const en = {
   "drawer.noPermalink": "No GitHub permalink for this location.",
   "drawer.copyLink": "Copy link",
   "drawer.copyMarkdown": "Copy Markdown",
+  "drawer.howToFix": "How to fix",
+  "drawer.fixBefore": "Before",
+  "drawer.fixAfter": "After",
 } as const
 
 /** Every locale must provide exactly the English key set. */
@@ -969,6 +972,9 @@ const ru: Messages = {
   "drawer.noPermalink": "Для этого места нет постоянной ссылки на GitHub.",
   "drawer.copyLink": "Скопировать ссылку",
   "drawer.copyMarkdown": "Скопировать Markdown",
+  "drawer.howToFix": "Как исправить",
+  "drawer.fixBefore": "Было",
+  "drawer.fixAfter": "Стало",
 }
 
 export const messages: Record<Locale, Messages> = { en, ru }
