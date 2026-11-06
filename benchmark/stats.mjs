@@ -236,7 +236,8 @@ const PRACTICE_LABELS = {
 const hist = new Map()
 for (const r of repos) {
   const p = join(histDir, `${r.name}.json`)
-  if (existsSync(p)) hist.set(r.name, JSON.parse(readFileSync(p, "utf8")))
+  // A history file cut short by a killed run is skipped, not fatal.
+  if (existsSync(p)) try { hist.set(r.name, JSON.parse(readFileSync(p, "utf8"))) } catch { /* rebuilt on the next run */ }
 }
 const density = (r) => (r.loc > 500 ? (1000 * r.issues.length) / r.loc : null)
 function controlled(metric, withP) {

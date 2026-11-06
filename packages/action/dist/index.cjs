@@ -26863,7 +26863,7 @@ var require_lib4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-5L5WYLC4.js
+// ../cli/dist/chunk-CFN6RHQL.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -45594,7 +45594,7 @@ function date4(params) {
 // ../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/external.js
 config(en_default());
 
-// ../cli/dist/chunk-5L5WYLC4.js
+// ../cli/dist/chunk-CFN6RHQL.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -70245,83 +70245,90 @@ function ruleOf(issue2) {
   return (_a22 = issue2.scanner) != null ? _a22 : "other";
 }
 var RULE_PRECISION = {
-  "bloat": { tp: 7, fp: 8 },
-  "bus-factor": { tp: 28, fp: 0 },
-  "ci-disabled": { tp: 4, fp: 1 },
-  "ci-no-pr-trigger": { tp: 2, fp: 3 },
-  "ci-silenced-failure": { tp: 4, fp: 2 },
-  "ci-swallowed": { tp: 2, fp: 0 },
-  "ci-tests-not-run": { tp: 0, fp: 8 },
-  "commented-code": { tp: 28, fp: 9 },
-  "config-conflict": { tp: 17, fp: 0 },
-  "dead-export": { tp: 16, fp: 2 },
-  "dead-uikit": { tp: 3, fp: 0 },
-  "debug-leftover": { tp: 3, fp: 4 },
-  "dep-unused": { tp: 0, fp: 11 },
-  "doc-link": { tp: 18, fp: 7 },
-  "docker-add-url": { tp: 2, fp: 0 },
-  "docker-latest": { tp: 3, fp: 3 },
-  "docker-root": { tp: 4, fp: 8 },
-  "docker-untagged": { tp: 3, fp: 3 },
-  "docs-badge": { tp: 7, fp: 1 },
-  "docs-manager": { tp: 0, fp: 2 },
-  "docs-script": { tp: 2, fp: 0 },
-  "duplicate": { tp: 35, fp: 2 },
-  "env-dead": { tp: 0, fp: 5 },
-  "env-missing": { tp: 0, fp: 2 },
-  "env-no-example": { tp: 1, fp: 6 },
-  "eol-node": { tp: 27, fp: 0 },
-  "eol-python": { tp: 21, fp: 0 },
-  "eol-runner": { tp: 5, fp: 0 },
-  "hygiene-no-ci": { tp: 9, fp: 0 },
-  "hygiene-no-license": { tp: 6, fp: 2 },
+  "bloat": { tp: 8, fp: 9 },
+  "bus-factor": { tp: 28, fp: 5 },
+  "ci-disabled": { tp: 10, fp: 1 },
+  "ci-no-pr-trigger": { tp: 5, fp: 4 },
+  "ci-silenced-failure": { tp: 4, fp: 5 },
+  "ci-swallowed": { tp: 3, fp: 2 },
+  "ci-tests-not-run": { tp: 0, fp: 10 },
+  "commented-code": { tp: 31, fp: 12 },
+  "config-conflict": { tp: 19, fp: 1 },
+  "dead-export": { tp: 17, fp: 3 },
+  "dead-uikit": { tp: 3, fp: 2 },
+  "debug-leftover": { tp: 3, fp: 9 },
+  "dep-unused": { tp: 1, fp: 12 },
+  "doc-link": { tp: 18, fp: 11 },
+  "docker-add-url": { tp: 5, fp: 1 },
+  "docker-latest": { tp: 7, fp: 5 },
+  "docker-root": { tp: 4, fp: 13 },
+  "docker-untagged": { tp: 4, fp: 7 },
+  "docs-badge": { tp: 11, fp: 2 },
+  "docs-manager": { tp: 1, fp: 5 },
+  "docs-script": { tp: 4, fp: 3 },
+  "duplicate": { tp: 36, fp: 6 },
+  "env-dead": { tp: 2, fp: 8 },
+  "env-missing": { tp: 1, fp: 6 },
+  "env-no-example": { tp: 1, fp: 11 },
+  "eol-node": { tp: 32, fp: 1 },
+  "eol-python": { tp: 25, fp: 2 },
+  "eol-runner": { tp: 11, fp: 0 },
+  "hygiene-no-ci": { tp: 10, fp: 4 },
+  "hygiene-no-license": { tp: 9, fp: 3 },
   "hygiene-no-readme": { tp: 2, fp: 0 },
-  "hygiene-no-tests": { tp: 6, fp: 2 },
-  "iac-dangerous-capability": { tp: 0, fp: 2 },
-  "iac-docker-socket": { tp: 9, fp: 8 },
-  "iac-host-namespace": { tp: 5, fp: 36 },
-  "iac-iam-wildcard": { tp: 1, fp: 0 },
+  "hygiene-no-tests": { tp: 6, fp: 5 },
+  "iac-dangerous-capability": { tp: 0, fp: 4 },
+  "iac-docker-socket": { tp: 9, fp: 6 },
+  "iac-hardcoded-password": { tp: 2, fp: 0 },
+  "iac-host-namespace": { tp: 5, fp: 38 },
+  "iac-iam-wildcard": { tp: 3, fp: 0 },
   "iac-open-admin-port": { tp: 27, fp: 6 },
-  "iac-privilege-escalation": { tp: 1, fp: 2 },
-  "iac-privileged": { tp: 6, fp: 27 },
-  "iac-public-bucket": { tp: 10, fp: 5 },
+  "iac-privilege-escalation": { tp: 1, fp: 4 },
+  "iac-privileged": { tp: 7, fp: 30 },
+  "iac-public-bucket": { tp: 11, fp: 10 },
   "iac-public-database": { tp: 10, fp: 0 },
   "iac-run-as-root": { tp: 2, fp: 19 },
-  "iac-unencrypted": { tp: 2, fp: 1 },
-  "insecure-eval-dynamic": { tp: 1, fp: 3 },
-  "insecure-exec-interpolated": { tp: 2, fp: 12 },
-  "insecure-go-template-html": { tp: 0, fp: 5 },
-  "insecure-innerhtml-dynamic": { tp: 0, fp: 5 },
-  "insecure-localstorage-secret": { tp: 1, fp: 2 },
-  "insecure-new-function": { tp: 3, fp: 11 },
-  "insecure-php-reflected-xss": { tp: 0, fp: 1 },
-  "insecure-php-unserialize": { tp: 0, fp: 2 },
-  "insecure-py-eval-exec": { tp: 0, fp: 12 },
-  "insecure-py-os-system": { tp: 0, fp: 4 },
-  "insecure-py-pickle-load": { tp: 2, fp: 12 },
-  "insecure-py-shell-true": { tp: 1, fp: 4 },
+  "iac-unencrypted": { tp: 3, fp: 1 },
+  "insecure-document-write-dynamic": { tp: 0, fp: 3 },
+  "insecure-dotnet-deserialization": { tp: 0, fp: 2 },
+  "insecure-eval-dynamic": { tp: 1, fp: 6 },
+  "insecure-exec-interpolated": { tp: 3, fp: 17 },
+  "insecure-go-template-html": { tp: 0, fp: 10 },
+  "insecure-innerhtml-dynamic": { tp: 0, fp: 11 },
+  "insecure-java-deserialization": { tp: 0, fp: 3 },
+  "insecure-localstorage-secret": { tp: 1, fp: 8 },
+  "insecure-new-function": { tp: 3, fp: 15 },
+  "insecure-php-reflected-xss": { tp: 4, fp: 1 },
+  "insecure-php-unserialize": { tp: 1, fp: 7 },
+  "insecure-py-eval-exec": { tp: 0, fp: 18 },
+  "insecure-py-os-system": { tp: 0, fp: 9 },
+  "insecure-py-pickle-load": { tp: 2, fp: 18 },
+  "insecure-py-shell-true": { tp: 1, fp: 7 },
+  "insecure-py-verify-false": { tp: 1, fp: 1 },
   "insecure-py-yaml-load": { tp: 0, fp: 2 },
-  "insecure-random-for-secret": { tp: 0, fp: 1 },
-  "insecure-react-dangerous-html": { tp: 1, fp: 10 },
-  "insecure-ruby-dynamic-dispatch": { tp: 0, fp: 1 },
-  "insecure-ruby-marshal-load": { tp: 0, fp: 1 },
-  "insecure-sql-interpolated": { tp: 1, fp: 20 },
+  "insecure-random-for-secret": { tp: 1, fp: 6 },
+  "insecure-react-dangerous-html": { tp: 2, fp: 15 },
+  "insecure-ruby-dynamic-dispatch": { tp: 0, fp: 3 },
+  "insecure-ruby-marshal-load": { tp: 0, fp: 5 },
+  "insecure-sql-interpolated": { tp: 2, fp: 25 },
   "insecure-ssrf": { tp: 1, fp: 71 },
-  "insecure-tls-verification-off": { tp: 0, fp: 6 },
-  "insecure-weak-hash": { tp: 1, fp: 5 },
-  "lockfile-missing": { tp: 15, fp: 1 },
-  "secret-generic": { tp: 0, fp: 3 },
-  "secret-history": { tp: 0, fp: 5 },
-  "secret-provider": { tp: 0, fp: 4 },
-  "skipped-test": { tp: 17, fp: 1 },
+  "insecure-tls-verification-off": { tp: 0, fp: 12 },
+  "insecure-weak-hash": { tp: 2, fp: 8 },
+  "license-risk": { tp: 0, fp: 1 },
+  "lockfile-drift": { tp: 1, fp: 0 },
+  "lockfile-missing": { tp: 18, fp: 2 },
+  "secret-generic": { tp: 1, fp: 8 },
+  "secret-history": { tp: 1, fp: 15 },
+  "secret-provider": { tp: 0, fp: 10 },
+  "skipped-test": { tp: 21, fp: 3 },
   "supply-remote-shell": { tp: 1, fp: 0 },
-  "todo": { tp: 51, fp: 0 },
-  "workflow-action-tag": { tp: 44, fp: 0 },
-  "workflow-action-tag-first-party": { tp: 56, fp: 0 },
-  "workflow-no-permissions": { tp: 28, fp: 0 },
-  "workflow-pr-target-checkout": { tp: 2, fp: 2 },
-  "workflow-script-injection": { tp: 1, fp: 3 },
-  "workflow-self-hosted-runner": { tp: 1, fp: 2 }
+  "todo": { tp: 55, fp: 2 },
+  "workflow-action-tag": { tp: 48, fp: 1 },
+  "workflow-action-tag-first-party": { tp: 59, fp: 1 },
+  "workflow-no-permissions": { tp: 34, fp: 0 },
+  "workflow-pr-target-checkout": { tp: 2, fp: 5 },
+  "workflow-script-injection": { tp: 2, fp: 6 },
+  "workflow-self-hosted-runner": { tp: 2, fp: 1 }
 };
 var MIN_LABELLED = 3;
 var MIN_LABELLED_HIGH = 5;
@@ -71058,7 +71065,7 @@ var secretsScanner = {
     });
   }
 };
-var SOURCE_RE2 = /\.(ts|tsx|js|jsx|mjs|mts|cts|cjs)$/;
+var SOURCE_RE2 = /\.(ts|tsx|js|jsx|mjs|mts|cts|cjs|vue|svelte|astro)$/;
 var YEAR_MS = 365 * 24 * 60 * 60 * 1e3;
 var ABANDONED_INFO_MS = 2 * YEAR_MS;
 var ABANDONED_WARN_MS = 3 * YEAR_MS;
@@ -71099,26 +71106,32 @@ ${content}`;
     return text;
   });
 }
+var IMPORT_TEXT_RE = /(?:\bfrom\s*|\bimport\s*\(?\s*|\brequire\s*\(\s*)["']([^"'\s]+)["']|\bimport\s+["']([^"'\s]+)["']/g;
 function collectImports(ctx) {
   return __async(this, null, function* () {
+    var _a22, _b;
     const used = /* @__PURE__ */ new Set();
     for (const file2 of ctx.files) {
       if (!SOURCE_RE2.test(file2)) continue;
       const content = yield ctx.readFile(file2);
       if (!content) continue;
-      const ast = parseFile(content, file2);
+      for (const m2 of content.matchAll(IMPORT_TEXT_RE)) {
+        const pkg = packageOf((_b = (_a22 = m2[1]) != null ? _a22 : m2[2]) != null ? _b : "");
+        if (pkg) used.add(pkg);
+      }
+      const ast = /\.(vue|svelte|astro)$/.test(file2) ? null : parseFile(content, file2);
       if (!ast) continue;
       walk(ast, (node) => {
-        var _a22, _b, _c;
+        var _a32, _b2, _c;
         let spec = null;
         if ((node.type === "ImportDeclaration" || node.type === "ExportNamedDeclaration" || node.type === "ExportAllDeclaration") && node.source) {
-          spec = (_a22 = node.source.value) != null ? _a22 : null;
+          spec = (_a32 = node.source.value) != null ? _a32 : null;
         } else if (node.type === "CallExpression") {
           const callee = node.callee;
           const isRequire = (callee == null ? void 0 : callee.type) === "Identifier" && callee.name === "require";
           const isDynamicImport = (callee == null ? void 0 : callee.type) === "Import";
           if (isRequire || isDynamicImport) {
-            const arg = (_b = node.arguments) == null ? void 0 : _b[0];
+            const arg = (_b2 = node.arguments) == null ? void 0 : _b2[0];
             if ((arg == null ? void 0 : arg.type) === "StringLiteral") spec = (_c = arg.value) != null ? _c : null;
           }
         }
@@ -72840,11 +72853,11 @@ var lockfileDriftScanner = {
     });
   }
 };
-var README_RE = /^readme(\.(md|markdown|mkd|mdown|rst|txt|adoc|asciidoc|rdoc|org|textile))?$/i;
+var README_RE = /^readme(\.(md|markdown|mkd|mdown|rst|txt|adoc|asciidoc|rdoc|org|textile|mkdn|mdwn|mkdown))?$/i;
 var LICENSE_RE = /^([a-z0-9.]+-)?(licen[sc]e|copying)([-._][a-z0-9.-]+)?(\.(md|txt|rst))?$/i;
 var TEST_RE = new RegExp(
   [
-    String.raw`(^|/)(__tests__|tests?|spec|testdata)/`,
+    String.raw`(^|/)(__tests__|tests?|spec|testdata|molecule)/`,
     String.raw`\.(test|spec)\.[cm]?[jt]sx?$`,
     // test.js / test.node.js at any level (debug, many small npm packages)
     String.raw`(^|/)test(\.[a-z]+)*\.[cm]?[jt]sx?$`,
@@ -72865,7 +72878,7 @@ var README_CANDIDATES = [
   "readme.md",
   "Readme.md"
 ];
-var CI_RE = /^(\.github\/workflows\/.+\.ya?ml|\.gitlab-ci\.yml|\.circleci\/config\.yml|\.travis\.yml|azure-pipelines\.yml|\.drone\.yml|Jenkinsfile|\.woodpecker\.ya?ml|bitbucket-pipelines\.yml)$/i;
+var CI_RE = /^(\.github\/workflows\/.+\.ya?ml|\.gitlab-ci\.yml|\.circleci\/config\.yml|\.travis\.yml|azure-pipelines\.yml|\.drone\.yml|Jenkinsfile|\.woodpecker\.ya?ml|bitbucket-pipelines\.yml|\.zuul\.ya?ml|zuul\.d\/.+\.ya?ml|\.buildkite\/.+\.ya?ml|OWNERS)$/i;
 function baseName(p2) {
   const norm = p2.replace(/\\/g, "/");
   const i = norm.lastIndexOf("/");
@@ -73877,6 +73890,7 @@ var ARTIFACT_EXT = /* @__PURE__ */ new Set([
 ]);
 var VENDORED_RE = /(^|\/)(?:vendor|third_party|deps|node_modules)\//i;
 var SHIPPED_BINARY_RE = /(^|\/)(?:bin|bootloader|fallbacks|prebuilds?|native|binaries)\/[^/]+\.(?:exe|dll|so|dylib)$/i;
+var WRAPPER_RE = /(^|\/)(?:gradle\/wrapper\/gradle-wrapper\.jar|\.mvn\/wrapper\/maven-wrapper\.jar)$/;
 var DATA_EXT = /* @__PURE__ */ new Set(["db", "sqlite", "sqlite3", "bin", "dat", "gz", "tar"]);
 var MEDIA_EXT = /* @__PURE__ */ new Set([
   "png",
@@ -73927,7 +73941,7 @@ var repoBloatScanner = {
         const ext = extOf(norm);
         const size = ctx.fileSize ? yield ctx.fileSize(file2) : null;
         if (VENDORED_RE.test(norm)) continue;
-        const shipped = SHIPPED_BINARY_RE.test(norm) || DATA_EXT.has(extOf(norm)) && size != null && size < SMALL_ARTIFACT_BYTES;
+        const shipped = SHIPPED_BINARY_RE.test(norm) || WRAPPER_RE.test(norm) || DATA_EXT.has(extOf(norm)) && size != null && size < SMALL_ARTIFACT_BYTES;
         const fixture = FIXTURE_DIR.test(norm);
         if (ARTIFACT_EXT.has(ext) && !shipped && !(fixture && (size == null || size < SMALL_ARTIFACT_BYTES))) {
           candidates.push({ file: norm, size, severity: "warning", kind: "artifact" });
@@ -74049,7 +74063,7 @@ var dockerfileScanner = {
             if (user[1].startsWith("$")) hasNonRootUser = true;
             continue;
           }
-          const add = line.match(/^\s*ADD\s+(?:--\S+\s+)*(https?:\/\/\S+)/i);
+          const add = /^\s*ADD\s+(?:--\S+\s+)*https?:\/\/\S+\.git#\S+/i.test(line) ? null : line.match(/^\s*ADD\s+(?:--\S+\s+)*(https?:\/\/\S+)/i);
           if (add) {
             issues.push({
               id: `docker-add-url-${norm}:${lineNo}`,
@@ -74212,7 +74226,10 @@ function cloudHits(lines, isTerraform) {
       const block = ruleBlock(lines, i);
       const egress = /\begress\b|SecurityGroupEgress|type\s*=\s*"egress"/.test(near(lines, i, 6, 2)) && !/\bingress\b|SecurityGroupIngress/.test(near(lines, i, 6, 2));
       const nacl = /\brule_number\b|RuleNumber|network_acl|acl_(?:in|e)gress/i.test(block + near(lines, i, 15, 0));
-      if (!egress && !nacl && opensAdminPort(block)) push("open-admin-port");
+      const around22 = near(lines, i, 15, 8);
+      const denyOnly = /\bdeny\s*\{/.test(around22) && !/\ballow\s*\{/.test(around22);
+      const icmpOnly = /\bprotocol\b["']?\s*[:=]\s*["']?icmp\b/i.test(block);
+      if (!egress && !nacl && !denyOnly && !icmpOnly && opensAdminPort(block)) push("open-admin-port");
     } else if (/\bpublicly_accessible\s*=\s*true\b|PubliclyAccessible["']?\s*:\s*["']?true\b/.test(line)) push("public-database");
     else if (/\b(?:encrypted|storage_encrypted|encrypt_at_rest|enable_encryption)\s*=\s*false\b|\b(?:Encrypted|StorageEncrypted|KmsEncrypted)["']?\s*:\s*["']?(?:false|False|FALSE)\b/.test(line)) push("unencrypted");
     else if (/["']?Action["']?\s*:\s*\[?\s*["']\*["']|\bactions\s*=\s*\[\s*"\*"\s*\]/.test(line)) {
@@ -74224,6 +74241,12 @@ function cloudHits(lines, isTerraform) {
   }
   return hits;
 }
+function nearestImage(lines, i) {
+  for (let j3 = i; j3 >= Math.max(0, i - 40); j3--) if (/^\s*image:/.test(lines[j3])) return lines[j3];
+  return "";
+}
+var DOCKER_API_IMAGE = /^\s*image:\s*["']?(?:[\w.-]+\/)*(?:traefik|watchtower|portainer|docker|cadvisor|dozzle|autoheal|nginx-proxy|docker-gen|docker-socket-proxy|socket-proxy|ofelia|kestra|node-exporter|promtail|grafana-agent|alloy|vector|telegraf|netdata)(?::[^\s"']*dind[^\s"']*|[:@\s"']|$)/m;
+var HOST_AGENT_IMAGE = /^\s*image:\s*["']?(?:[\w.-]+\/)*(?:node-exporter|cadvisor|netdata|telegraf|promtail|grafana-agent|alloy|docker(?=:[^\s"']*dind))\b/;
 function containerHits(lines, compose) {
   const hits = [];
   const text = lines.join("\n");
@@ -74236,11 +74259,12 @@ function containerHits(lines, compose) {
     const push = (id) => hits.push({ rule: RULES[id], line: i + 1, evidence: t2.slice(0, 160) });
     if (/\{\{-?\s*(?:if|with)\b/.test(near(lines, i, 2, 0))) continue;
     const inInit = /^\s*initContainers:|sysctl|chown|chmod|volume-?permissions|init-?container/i.test(near(lines, i, 25, 0));
+    const hostAgent = compose && HOST_AGENT_IMAGE.test(nearestImage(lines, i));
     if (/^\s*privileged:\s*true\b/.test(line)) {
-      if (!nodeAgent && !inInit) push("privileged");
+      if (!nodeAgent && !inInit && !hostAgent) push("privileged");
     } else if (/^\s*host(?:Network|PID|IPC):\s*true\b/.test(line) || compose && /^\s*(?:network_mode|pid|ipc):\s*["']?host\b/.test(line)) {
-      if (!nodeAgent) push("host-namespace");
-    } else if (/\/var\/run\/docker\.sock/.test(line) && !nodeAgent && !/[:,]ro\b|readOnly:\s*true/.test(near(lines, i, 0, 3))) push("docker-socket");
+      if (!nodeAgent && !hostAgent) push("host-namespace");
+    } else if (/\/var\/run\/docker\.sock/.test(line) && !nodeAgent && !/[:,]ro\b|readOnly:\s*true/.test(near(lines, i, 0, 3)) && !DOCKER_API_IMAGE.test(nearestImage(lines, i))) push("docker-socket");
     else if (/^\s*allowPrivilegeEscalation:\s*true\b/.test(line) && !nodeAgent && !inInit) push("privilege-escalation");
     else if (/^\s*(?:-\s*)?["']?(?:SYS_ADMIN|SYS_PTRACE|SYS_MODULE|ALL)["']?\s*$/.test(line) && /\badd:|cap_add:/.test(near(lines, i, 4, 0)) && !/\bdrop:/.test(near(lines, i, 1, 0)) && !nodeAgent) push("dangerous-capability");
     else if (!compose && !nodeAgent && !inInit && /^\s*runAsUser:\s*0\b|^\s*runAsNonRoot:\s*false\b/.test(line)) push("run-as-root");
@@ -74886,7 +74910,7 @@ var RULES2 = [
     id: "py-yaml-load",
     lang: "py",
     // yaml.load without a Loader= argument constructs arbitrary Python objects.
-    re: /\byaml\.load\s*\((?![^)]*(?:Loader\s*=|Safe\w*Loader|BaseLoader))/g,
+    re: /\byaml\.load\s*\((?![^)]*(?:Loader\s*=|Safe\w*Loader|BaseLoader|CSafeLoader))/g,
     severity: "critical",
     title: "yaml.load() without a safe loader",
     detail: "Plain `yaml.load` can instantiate arbitrary Python objects from the document, which makes parsing an untrusted file equivalent to running it. Use `yaml.safe_load`."
@@ -75089,6 +75113,8 @@ function sinkAllows(ruleId, line, col) {
     return ((_b = (_a22 = line.slice(0, col).match(/"/g)) == null ? void 0 : _a22.length) != null ? _b : 0) % 2 === 0;
   }
   if (ruleId === "sql-interpolated") return !/\bprepare\s*\(/.test(line);
+  if (ruleId === "eval-dynamic" && line.slice(0, col).trimEnd().endsWith(".")) return false;
+  if (ruleId === "py-shell-true" && /subprocess\.\w+\s*\(\s*(?:r|b)?(["'])[^"'{}%]*\1\s*,/.test(line)) return false;
   if (ruleId === "eval-dynamic" && /^\s*(?:async\s+|static\s+|public\s+|private\s+)*eval\s*\([^)]*\)\s*(?::\s*[\w<>[\]| ]+)?\s*\{/.test(line)) return false;
   return true;
 }
@@ -75141,6 +75167,16 @@ function contextAllows(ruleId, content, lineStart) {
   if (ruleId === "py-eval-exec") {
     return !/\bcompile\s*\(/.test(around(content, lineStart, 3, 0));
   }
+  if (ruleId === "java-deserialization") {
+    return /\b(?:ObjectInputStream|XMLDecoder)\b/.test(content) && !/\b(?:ObjectInputFilter|SerialFilterChecker|setObjectInputFilter)\b/.test(content);
+  }
+  if (ruleId === "dotnet-deserialization" && /new\s+\w*Formatter\b/.test(around(content, lineStart, 0, 0))) {
+    return /\.Deserialize\s*\(/.test(content);
+  }
+  if (ruleId === "new-function") {
+    return !/\bimport\s*(?:type\s*)?\{[^}]*\bFunction\b[^}]*\}\s*from|\b(?:class|const|let|var)\s+Function\b|\bFunction\s*=\s*require\(/.test(content);
+  }
+  if (ruleId === "py-yaml-load") return !/\bruamel\b/.test(content);
   if (ruleId === "react-dangerous-html") {
     const near22 = around(content, lineStart, 0, 3);
     const html = near22.match(/__html\s*:\s*([`'"])/);
@@ -75555,6 +75591,7 @@ var INJECTABLE = [
   "github.event.pull_request.head.label",
   "github.head_ref"
 ];
+var PUBLIC_TRIGGER = /^\s*(?:on\s*:.*\b|-\s*|)(?:pull_request(?:_target)?|issue_comment|issues|discussion(?:_comment)?|fork|watch|pull_request_review(?:_comment)?)\b/m;
 function indentOf(line) {
   const match = line.match(/^[ \t]*/);
   return match ? match[0].length : 0;
@@ -75624,7 +75661,7 @@ function scanWorkflow(content) {
         }
       }
     }
-    if (/^runs-on\s*:/.test(trimmed) && /self-hosted/.test(trimmed)) {
+    if (/^runs-on\s*:/.test(trimmed) && /self-hosted/.test(trimmed) && PUBLIC_TRIGGER.test(content)) {
       findings.push({ rule: "self-hosted-runner", line: at2, evidence: trimmed });
     }
     if (/^-?\s*run\s*:/.test(trimmed)) runIndent = indent;
@@ -75636,7 +75673,8 @@ function scanWorkflow(content) {
       }
     }
   }
-  if (usesPullRequestTarget && checksOutPrHead !== -1) {
+  const gated = /pull_request\.merged\s*(?:==\s*true)?|(?:actor|user\.login)\s*==\s*'dependabot\[bot\]'/.test(content);
+  if (usesPullRequestTarget && checksOutPrHead !== -1 && !gated) {
     findings.push({
       rule: "pr-target-checkout",
       line: checksOutPrHead,
@@ -76781,6 +76819,7 @@ var OTHER_CI_CONFIG = [
 var TEST_INVOCATION = /\b(?:npm|pnpm|yarn|bun)\s+(?:run\s+)?test\b|\b(?:vitest|jest|mocha|ava|playwright|cypress|karma|tap\b)|\bpytest\b|\bpython\s+-m\s+(?:pytest|unittest)\b|\btox\b|\bnose2?\b|\bgo\s+test\b|\bcargo\s+(?:[\w-]+\s+)*test\b|\bcargo\s+nextest\b|\bmvn\s+(?:.*\s)?test\b|\bgradle(?:w)?\s+.*\btest\b|\bmake\s+.*test\b|\brake\s+(?:\S+\s+)*\S*(?:test|spec)\S*|\bbake\s+test\b|\brspec\b|\bphpunit\b|\bdotnet\s+test\b|\bbazel\s+test\b|\bnx\s+.*\btest\b|\bturbo\s+run\s+.*test\b|\bct_run\b|\bmix\s+test\b|\bswift\s+test\b/i;
 var TEST_ACTION = /uses:\s*\S*(?:test|coverage|codecov|coveralls|sonar)/i;
 var TEST_FILE_RE = /(^|\/)(?:tests?|spec|__tests__|e2e)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(^|\/)test_[^/]+\.py$|[^/]+_test\.(?:py|go|rb)$|(^|\/)[^/]+Test\.(?:java|kt|cs)$|_spec\.rb$/i;
+var INSTALL_CMD = /^(?:sudo\s+)?(?:apt(?:-get)?|pip3?|python3?\s+-m\s+pip|brew|gem|npm|yarn|pnpm|cargo|choco|apk|dnf|yum)\s+(?:-\S+\s+)*(?:install|i|add|update|upgrade)\b/;
 function withoutComment3(line) {
   return line.replace(/\s+#.*$/, "");
 }
@@ -76798,7 +76837,10 @@ function scanCiFile(file2, content) {
   let stepName = "";
   let pending = null;
   const flushStep = () => {
-    const verifies = stepHasRun && !REGENERATES.test(stepRunText) && !MUTATES.test(stepRunText);
+    const cmds = stepRunText.split("\n").map((l3) => l3.replace(/^-?\s*run\s*:\s*[|>]?-?/, "").trim()).filter((l3) => l3 && !/^(?:continue-on-error|if|env|with|timeout-minutes|working-directory|shell|id|name)\s*:/.test(l3));
+    const installOnly = cmds.length > 0 && cmds.every((c3) => INSTALL_CMD.test(c3));
+    const handled = /^\s*(?:-\s*)?if\s*:[^\n]*steps\.[\w-]+\.(?:outcome|conclusion)[^\n]*\n(?:[^\n]*\n){0,2}[^\n]*(?:\bexit\s+1\b|setFailed)/m.test(content);
+    const verifies = stepHasRun && !installOnly && !handled && !REGENERATES.test(stepRunText) && !MUTATES.test(stepRunText);
     const advisory = ADVISORY.test(`${stepName}
 ${stepRunText}`) || ADVISORY_FILE.test(file2);
     if (pending && verifies && !advisory) out.push(pending);
@@ -78870,7 +78912,7 @@ var secretsScanner2 = {
 };
 
 // ../core/src/scanners/dependency-funeral.ts
-var SOURCE_RE9 = /\.(ts|tsx|js|jsx|mjs|mts|cts|cjs)$/;
+var SOURCE_RE9 = /\.(ts|tsx|js|jsx|mjs|mts|cts|cjs|vue|svelte|astro)$/;
 var YEAR_MS2 = 365 * 24 * 60 * 60 * 1e3;
 var ABANDONED_INFO_MS2 = 2 * YEAR_MS2;
 var ABANDONED_WARN_MS2 = 3 * YEAR_MS2;
@@ -78909,13 +78951,18 @@ ${content}`;
   }
   return text;
 }
+var IMPORT_TEXT_RE2 = /(?:\bfrom\s*|\bimport\s*\(?\s*|\brequire\s*\(\s*)["']([^"'\s]+)["']|\bimport\s+["']([^"'\s]+)["']/g;
 async function collectImports2(ctx) {
   const used = /* @__PURE__ */ new Set();
   for (const file2 of ctx.files) {
     if (!SOURCE_RE9.test(file2)) continue;
     const content = await ctx.readFile(file2);
     if (!content) continue;
-    const ast = parseFile2(content, file2);
+    for (const m2 of content.matchAll(IMPORT_TEXT_RE2)) {
+      const pkg = packageOf2(m2[1] ?? m2[2] ?? "");
+      if (pkg) used.add(pkg);
+    }
+    const ast = /\.(vue|svelte|astro)$/.test(file2) ? null : parseFile2(content, file2);
     if (!ast) continue;
     walk2(ast, (node) => {
       let spec = null;
@@ -80564,11 +80611,11 @@ var lockfileDriftScanner2 = {
 };
 
 // ../core/src/scanners/project-hygiene.ts
-var README_RE2 = /^readme(\.(md|markdown|mkd|mdown|rst|txt|adoc|asciidoc|rdoc|org|textile))?$/i;
+var README_RE2 = /^readme(\.(md|markdown|mkd|mdown|rst|txt|adoc|asciidoc|rdoc|org|textile|mkdn|mdwn|mkdown))?$/i;
 var LICENSE_RE2 = /^([a-z0-9.]+-)?(licen[sc]e|copying)([-._][a-z0-9.-]+)?(\.(md|txt|rst))?$/i;
 var TEST_RE5 = new RegExp(
   [
-    String.raw`(^|/)(__tests__|tests?|spec|testdata)/`,
+    String.raw`(^|/)(__tests__|tests?|spec|testdata|molecule)/`,
     String.raw`\.(test|spec)\.[cm]?[jt]sx?$`,
     // test.js / test.node.js at any level (debug, many small npm packages)
     String.raw`(^|/)test(\.[a-z]+)*\.[cm]?[jt]sx?$`,
@@ -80589,7 +80636,7 @@ var README_CANDIDATES2 = [
   "readme.md",
   "Readme.md"
 ];
-var CI_RE2 = /^(\.github\/workflows\/.+\.ya?ml|\.gitlab-ci\.yml|\.circleci\/config\.yml|\.travis\.yml|azure-pipelines\.yml|\.drone\.yml|Jenkinsfile|\.woodpecker\.ya?ml|bitbucket-pipelines\.yml)$/i;
+var CI_RE2 = /^(\.github\/workflows\/.+\.ya?ml|\.gitlab-ci\.yml|\.circleci\/config\.yml|\.travis\.yml|azure-pipelines\.yml|\.drone\.yml|Jenkinsfile|\.woodpecker\.ya?ml|bitbucket-pipelines\.yml|\.zuul\.ya?ml|zuul\.d\/.+\.ya?ml|\.buildkite\/.+\.ya?ml|OWNERS)$/i;
 function baseName2(p2) {
   const norm = p2.replace(/\\/g, "/");
   const i = norm.lastIndexOf("/");
@@ -81570,6 +81617,7 @@ var ARTIFACT_EXT2 = /* @__PURE__ */ new Set([
 ]);
 var VENDORED_RE2 = /(^|\/)(?:vendor|third_party|deps|node_modules)\//i;
 var SHIPPED_BINARY_RE2 = /(^|\/)(?:bin|bootloader|fallbacks|prebuilds?|native|binaries)\/[^/]+\.(?:exe|dll|so|dylib)$/i;
+var WRAPPER_RE2 = /(^|\/)(?:gradle\/wrapper\/gradle-wrapper\.jar|\.mvn\/wrapper\/maven-wrapper\.jar)$/;
 var DATA_EXT2 = /* @__PURE__ */ new Set(["db", "sqlite", "sqlite3", "bin", "dat", "gz", "tar"]);
 var MEDIA_EXT2 = /* @__PURE__ */ new Set([
   "png",
@@ -81619,7 +81667,7 @@ var repoBloatScanner2 = {
       const ext = extOf2(norm);
       const size = ctx.fileSize ? await ctx.fileSize(file2) : null;
       if (VENDORED_RE2.test(norm)) continue;
-      const shipped = SHIPPED_BINARY_RE2.test(norm) || DATA_EXT2.has(extOf2(norm)) && size != null && size < SMALL_ARTIFACT_BYTES2;
+      const shipped = SHIPPED_BINARY_RE2.test(norm) || WRAPPER_RE2.test(norm) || DATA_EXT2.has(extOf2(norm)) && size != null && size < SMALL_ARTIFACT_BYTES2;
       const fixture = FIXTURE_DIR2.test(norm);
       if (ARTIFACT_EXT2.has(ext) && !shipped && !(fixture && (size == null || size < SMALL_ARTIFACT_BYTES2))) {
         candidates.push({ file: norm, size, severity: "warning", kind: "artifact" });
@@ -81737,7 +81785,7 @@ var dockerfileScanner2 = {
           if (user[1].startsWith("$")) hasNonRootUser = true;
           continue;
         }
-        const add = line.match(/^\s*ADD\s+(?:--\S+\s+)*(https?:\/\/\S+)/i);
+        const add = /^\s*ADD\s+(?:--\S+\s+)*https?:\/\/\S+\.git#\S+/i.test(line) ? null : line.match(/^\s*ADD\s+(?:--\S+\s+)*(https?:\/\/\S+)/i);
         if (add) {
           issues.push({
             id: `docker-add-url-${norm}:${lineNo}`,
@@ -81901,7 +81949,10 @@ function cloudHits2(lines, isTerraform) {
       const block = ruleBlock2(lines, i);
       const egress = /\begress\b|SecurityGroupEgress|type\s*=\s*"egress"/.test(near2(lines, i, 6, 2)) && !/\bingress\b|SecurityGroupIngress/.test(near2(lines, i, 6, 2));
       const nacl = /\brule_number\b|RuleNumber|network_acl|acl_(?:in|e)gress/i.test(block + near2(lines, i, 15, 0));
-      if (!egress && !nacl && opensAdminPort2(block)) push("open-admin-port");
+      const around3 = near2(lines, i, 15, 8);
+      const denyOnly = /\bdeny\s*\{/.test(around3) && !/\ballow\s*\{/.test(around3);
+      const icmpOnly = /\bprotocol\b["']?\s*[:=]\s*["']?icmp\b/i.test(block);
+      if (!egress && !nacl && !denyOnly && !icmpOnly && opensAdminPort2(block)) push("open-admin-port");
     } else if (/\bpublicly_accessible\s*=\s*true\b|PubliclyAccessible["']?\s*:\s*["']?true\b/.test(line)) push("public-database");
     else if (/\b(?:encrypted|storage_encrypted|encrypt_at_rest|enable_encryption)\s*=\s*false\b|\b(?:Encrypted|StorageEncrypted|KmsEncrypted)["']?\s*:\s*["']?(?:false|False|FALSE)\b/.test(line)) push("unencrypted");
     else if (/["']?Action["']?\s*:\s*\[?\s*["']\*["']|\bactions\s*=\s*\[\s*"\*"\s*\]/.test(line)) {
@@ -81913,6 +81964,12 @@ function cloudHits2(lines, isTerraform) {
   }
   return hits;
 }
+function nearestImage2(lines, i) {
+  for (let j3 = i; j3 >= Math.max(0, i - 40); j3--) if (/^\s*image:/.test(lines[j3])) return lines[j3];
+  return "";
+}
+var DOCKER_API_IMAGE2 = /^\s*image:\s*["']?(?:[\w.-]+\/)*(?:traefik|watchtower|portainer|docker|cadvisor|dozzle|autoheal|nginx-proxy|docker-gen|docker-socket-proxy|socket-proxy|ofelia|kestra|node-exporter|promtail|grafana-agent|alloy|vector|telegraf|netdata)(?::[^\s"']*dind[^\s"']*|[:@\s"']|$)/m;
+var HOST_AGENT_IMAGE2 = /^\s*image:\s*["']?(?:[\w.-]+\/)*(?:node-exporter|cadvisor|netdata|telegraf|promtail|grafana-agent|alloy|docker(?=:[^\s"']*dind))\b/;
 function containerHits2(lines, compose) {
   const hits = [];
   const text = lines.join("\n");
@@ -81925,11 +81982,12 @@ function containerHits2(lines, compose) {
     const push = (id) => hits.push({ rule: RULES4[id], line: i + 1, evidence: t2.slice(0, 160) });
     if (/\{\{-?\s*(?:if|with)\b/.test(near2(lines, i, 2, 0))) continue;
     const inInit = /^\s*initContainers:|sysctl|chown|chmod|volume-?permissions|init-?container/i.test(near2(lines, i, 25, 0));
+    const hostAgent = compose && HOST_AGENT_IMAGE2.test(nearestImage2(lines, i));
     if (/^\s*privileged:\s*true\b/.test(line)) {
-      if (!nodeAgent && !inInit) push("privileged");
+      if (!nodeAgent && !inInit && !hostAgent) push("privileged");
     } else if (/^\s*host(?:Network|PID|IPC):\s*true\b/.test(line) || compose && /^\s*(?:network_mode|pid|ipc):\s*["']?host\b/.test(line)) {
-      if (!nodeAgent) push("host-namespace");
-    } else if (/\/var\/run\/docker\.sock/.test(line) && !nodeAgent && !/[:,]ro\b|readOnly:\s*true/.test(near2(lines, i, 0, 3))) push("docker-socket");
+      if (!nodeAgent && !hostAgent) push("host-namespace");
+    } else if (/\/var\/run\/docker\.sock/.test(line) && !nodeAgent && !/[:,]ro\b|readOnly:\s*true/.test(near2(lines, i, 0, 3)) && !DOCKER_API_IMAGE2.test(nearestImage2(lines, i))) push("docker-socket");
     else if (/^\s*allowPrivilegeEscalation:\s*true\b/.test(line) && !nodeAgent && !inInit) push("privilege-escalation");
     else if (/^\s*(?:-\s*)?["']?(?:SYS_ADMIN|SYS_PTRACE|SYS_MODULE|ALL)["']?\s*$/.test(line) && /\badd:|cap_add:/.test(near2(lines, i, 4, 0)) && !/\bdrop:/.test(near2(lines, i, 1, 0)) && !nodeAgent) push("dangerous-capability");
     else if (!compose && !nodeAgent && !inInit && /^\s*runAsUser:\s*0\b|^\s*runAsNonRoot:\s*false\b/.test(line)) push("run-as-root");
@@ -82570,7 +82628,7 @@ var RULES5 = [
     id: "py-yaml-load",
     lang: "py",
     // yaml.load without a Loader= argument constructs arbitrary Python objects.
-    re: /\byaml\.load\s*\((?![^)]*(?:Loader\s*=|Safe\w*Loader|BaseLoader))/g,
+    re: /\byaml\.load\s*\((?![^)]*(?:Loader\s*=|Safe\w*Loader|BaseLoader|CSafeLoader))/g,
     severity: "critical",
     title: "yaml.load() without a safe loader",
     detail: "Plain `yaml.load` can instantiate arbitrary Python objects from the document, which makes parsing an untrusted file equivalent to running it. Use `yaml.safe_load`."
@@ -82769,6 +82827,8 @@ function sinkAllows2(ruleId, line, col) {
     return (line.slice(0, col).match(/"/g)?.length ?? 0) % 2 === 0;
   }
   if (ruleId === "sql-interpolated") return !/\bprepare\s*\(/.test(line);
+  if (ruleId === "eval-dynamic" && line.slice(0, col).trimEnd().endsWith(".")) return false;
+  if (ruleId === "py-shell-true" && /subprocess\.\w+\s*\(\s*(?:r|b)?(["'])[^"'{}%]*\1\s*,/.test(line)) return false;
   if (ruleId === "eval-dynamic" && /^\s*(?:async\s+|static\s+|public\s+|private\s+)*eval\s*\([^)]*\)\s*(?::\s*[\w<>[\]| ]+)?\s*\{/.test(line)) return false;
   return true;
 }
@@ -82821,6 +82881,16 @@ function contextAllows2(ruleId, content, lineStart) {
   if (ruleId === "py-eval-exec") {
     return !/\bcompile\s*\(/.test(around2(content, lineStart, 3, 0));
   }
+  if (ruleId === "java-deserialization") {
+    return /\b(?:ObjectInputStream|XMLDecoder)\b/.test(content) && !/\b(?:ObjectInputFilter|SerialFilterChecker|setObjectInputFilter)\b/.test(content);
+  }
+  if (ruleId === "dotnet-deserialization" && /new\s+\w*Formatter\b/.test(around2(content, lineStart, 0, 0))) {
+    return /\.Deserialize\s*\(/.test(content);
+  }
+  if (ruleId === "new-function") {
+    return !/\bimport\s*(?:type\s*)?\{[^}]*\bFunction\b[^}]*\}\s*from|\b(?:class|const|let|var)\s+Function\b|\bFunction\s*=\s*require\(/.test(content);
+  }
+  if (ruleId === "py-yaml-load") return !/\bruamel\b/.test(content);
   if (ruleId === "react-dangerous-html") {
     const near3 = around2(content, lineStart, 0, 3);
     const html = near3.match(/__html\s*:\s*([`'"])/);
@@ -83233,6 +83303,7 @@ var INJECTABLE2 = [
   "github.event.pull_request.head.label",
   "github.head_ref"
 ];
+var PUBLIC_TRIGGER2 = /^\s*(?:on\s*:.*\b|-\s*|)(?:pull_request(?:_target)?|issue_comment|issues|discussion(?:_comment)?|fork|watch|pull_request_review(?:_comment)?)\b/m;
 function indentOf2(line) {
   const match = line.match(/^[ \t]*/);
   return match ? match[0].length : 0;
@@ -83301,7 +83372,7 @@ function scanWorkflow2(content) {
         }
       }
     }
-    if (/^runs-on\s*:/.test(trimmed) && /self-hosted/.test(trimmed)) {
+    if (/^runs-on\s*:/.test(trimmed) && /self-hosted/.test(trimmed) && PUBLIC_TRIGGER2.test(content)) {
       findings.push({ rule: "self-hosted-runner", line: at2, evidence: trimmed });
     }
     if (/^-?\s*run\s*:/.test(trimmed)) runIndent = indent;
@@ -83313,7 +83384,8 @@ function scanWorkflow2(content) {
       }
     }
   }
-  if (usesPullRequestTarget && checksOutPrHead !== -1) {
+  const gated = /pull_request\.merged\s*(?:==\s*true)?|(?:actor|user\.login)\s*==\s*'dependabot\[bot\]'/.test(content);
+  if (usesPullRequestTarget && checksOutPrHead !== -1 && !gated) {
     findings.push({
       rule: "pr-target-checkout",
       line: checksOutPrHead,
@@ -84452,6 +84524,7 @@ var OTHER_CI_CONFIG2 = [
 var TEST_INVOCATION2 = /\b(?:npm|pnpm|yarn|bun)\s+(?:run\s+)?test\b|\b(?:vitest|jest|mocha|ava|playwright|cypress|karma|tap\b)|\bpytest\b|\bpython\s+-m\s+(?:pytest|unittest)\b|\btox\b|\bnose2?\b|\bgo\s+test\b|\bcargo\s+(?:[\w-]+\s+)*test\b|\bcargo\s+nextest\b|\bmvn\s+(?:.*\s)?test\b|\bgradle(?:w)?\s+.*\btest\b|\bmake\s+.*test\b|\brake\s+(?:\S+\s+)*\S*(?:test|spec)\S*|\bbake\s+test\b|\brspec\b|\bphpunit\b|\bdotnet\s+test\b|\bbazel\s+test\b|\bnx\s+.*\btest\b|\bturbo\s+run\s+.*test\b|\bct_run\b|\bmix\s+test\b|\bswift\s+test\b/i;
 var TEST_ACTION2 = /uses:\s*\S*(?:test|coverage|codecov|coveralls|sonar)/i;
 var TEST_FILE_RE2 = /(^|\/)(?:tests?|spec|__tests__|e2e)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(^|\/)test_[^/]+\.py$|[^/]+_test\.(?:py|go|rb)$|(^|\/)[^/]+Test\.(?:java|kt|cs)$|_spec\.rb$/i;
+var INSTALL_CMD2 = /^(?:sudo\s+)?(?:apt(?:-get)?|pip3?|python3?\s+-m\s+pip|brew|gem|npm|yarn|pnpm|cargo|choco|apk|dnf|yum)\s+(?:-\S+\s+)*(?:install|i|add|update|upgrade)\b/;
 function withoutComment6(line) {
   return line.replace(/\s+#.*$/, "");
 }
@@ -84469,7 +84542,10 @@ function scanCiFile2(file2, content) {
   let stepName = "";
   let pending = null;
   const flushStep = () => {
-    const verifies = stepHasRun && !REGENERATES2.test(stepRunText) && !MUTATES2.test(stepRunText);
+    const cmds = stepRunText.split("\n").map((l3) => l3.replace(/^-?\s*run\s*:\s*[|>]?-?/, "").trim()).filter((l3) => l3 && !/^(?:continue-on-error|if|env|with|timeout-minutes|working-directory|shell|id|name)\s*:/.test(l3));
+    const installOnly = cmds.length > 0 && cmds.every((c3) => INSTALL_CMD2.test(c3));
+    const handled = /^\s*(?:-\s*)?if\s*:[^\n]*steps\.[\w-]+\.(?:outcome|conclusion)[^\n]*\n(?:[^\n]*\n){0,2}[^\n]*(?:\bexit\s+1\b|setFailed)/m.test(content);
+    const verifies = stepHasRun && !installOnly && !handled && !REGENERATES2.test(stepRunText) && !MUTATES2.test(stepRunText);
     const advisory = ADVISORY2.test(`${stepName}
 ${stepRunText}`) || ADVISORY_FILE2.test(file2);
     if (pending && verifies && !advisory) out.push(pending);
