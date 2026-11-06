@@ -16,6 +16,8 @@ import { AiAnswer } from "@/components/repo-anti-rot/ai-answer"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { cn } from "@/lib/utils"
+import { fixExampleFor } from "@/lib/fix-examples"
+import { ruleOf } from "@/packages/core/src/rules"
 import { DependencyResearchGraph, type DependencyResearchGraphProps } from "@/components/repo-anti-rot/dependency-research-graph"
 
 interface Props {
@@ -282,6 +284,29 @@ export function IssueDrawer({
               )}
 
               <p className="text-sm leading-relaxed text-foreground/90">{issue.detail}</p>
+
+              {(() => {
+                const fix = fixExampleFor(issue.rule ?? ruleOf(issue))
+                if (!fix) return null
+                return (
+                  <div className="space-y-2 rounded-md border border-border p-3">
+                    <div className="text-xs font-medium text-foreground">{t("drawer.howToFix")}</div>
+                    <p className="text-sm leading-relaxed text-foreground/90">{locale === "ru" ? fix.how.ru : fix.how.en}</p>
+                    {fix.before && (
+                      <div>
+                        <div className="mb-1 text-[11px] uppercase tracking-wide text-muted-foreground">{t("drawer.fixBefore")}</div>
+                        <pre className="overflow-x-auto rounded bg-destructive/5 p-2 text-xs"><code>{fix.before}</code></pre>
+                      </div>
+                    )}
+                    {fix.after && (
+                      <div>
+                        <div className="mb-1 text-[11px] uppercase tracking-wide text-muted-foreground">{t("drawer.fixAfter")}</div>
+                        <pre className="overflow-x-auto rounded bg-success/5 p-2 text-xs"><code>{fix.after}</code></pre>
+                      </div>
+                    )}
+                  </div>
+                )
+              })()}
 
               {/* AI verdict */}
               {issue.severity !== "info" && <div className="rounded-md border border-primary/30 bg-primary/5 p-3">
