@@ -35,6 +35,7 @@ for (const r of corpus) {
     activity: rep.profile?.activity ?? {},
     issues: rep.issues ?? [],
     hidden: rep.lowConfidence?.length ?? 0,
+    low: rep.lowConfidence ?? [],
     langs,
   })
 }
@@ -325,6 +326,50 @@ out.push(`${hidden} low-confidence findings were kept out of these numbers (${pc
   for (const k of Object.keys(cuts)) if (cuts[k].length < 30) delete cuts[k]
   for (const v of Object.values(cuts)) v.sort((a, b) => a - b)
   writeFileSync(join(here, "../lib/benchmark-scores.json"), JSON.stringify(cuts) + "\n")
+}
+
+// --- anonymous per-rule breakdown (no repo names, paths or code) ---------
+{
+  const where = (loc = "") => {
+    const f = loc.split(":")[0].toLowerCase()
+    if (/^\.github\/|(^|\/)\.gitlab-ci|(^|\/)\.circleci\//.test(f)) return "ci"
+    if (/(^|\/)(tests?|__tests__|spec|e2e|fixtures?|testdata)\/|[._-](test|spec)\.\w+$/.test(f)) return "tests"
+    if (/(^|\/)(docs?|examples?|samples?|demos?|website)\/|\.(md|mdx|rst|txt)$/.test(f)) return "docs"
+    if (/(^|\/)(vendor|third_party|node_modules|dist|build)\//.test(f)) return "vendored"
+    if (/(^|\/)(dockerfile|docker-compose[^/]*|[^/]*\.(ya?ml|json|toml|tf|ini|cfg))$/.test(f)) return "config"
+    if (!f || !f.includes(".") && !f.includes("/")) return "repo"
+    return "source"
+  }
+  const rules = new Map()
+  const get = (k) => rules.get(k) ?? rules.set(k, { count: 0, hidden: 0, repos: new Set(), sev: {}, where: {}, perRepo: new Map() }).get(k)
+  for (const r of repos) {
+    for (const i of r.issues) {
+      const e = get(i.rule ?? i.scanner ?? "other")
+      e.count++
+      e.repos.add(r.name)
+      e.sev[i.severity] = (e.sev[i.severity] ?? 0) + 1
+      const w = where(i.location)
+      e.where[w] = (e.where[w] ?? 0) + 1
+      e.perRepo.set(r.name, (e.perRepo.get(r.name) ?? 0) + 1)
+    }
+    for (const i of r.low) get(i.rule ?? i.scanner ?? "other").hidden++
+  }
+  const conf = {}
+  for (const m of readFileSync(join(here, "../packages/core/src/confidence-data.ts"), "utf8").matchAll(/"([^"]+)": \{ tp: (\d+), fp: (\d+)/g)) conf[m[1]] = { tp: +m[2], fp: +m[3] }
+  const out2 = [...rules.entries()]
+    .filter(([, e]) => e.count + e.hidden >= 20)
+    .map(([rule, e]) => ({
+      rule,
+      count: e.count,
+      hidden: e.hidden,
+      repoShare: Number((e.repos.size / repos.length).toFixed(3)),
+      medianPerRepo: e.repos.size ? median([...e.perRepo.values()]) : 0,
+      severity: Object.entries(e.sev).sort((a, b) => b[1] - a[1])[0]?.[0] ?? null,
+      where: Object.fromEntries(Object.entries(e.where).map(([k, v]) => [k, Number((v / e.count).toFixed(3))])),
+      labelled: conf[rule] ?? null,
+    }))
+    .sort((a, b) => b.count + b.hidden - (a.count + a.hidden))
+  writeFileSync(join(here, "findings.json"), JSON.stringify({ generatedAt: json.generatedAt, repos: repos.length, rules: out2 }, null, 2) + "\n")
 }
 
 writeFileSync(join(here, "STATS.md"), out.join("\n"))
