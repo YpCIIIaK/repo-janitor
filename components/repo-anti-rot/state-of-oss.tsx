@@ -38,6 +38,7 @@ const T = {
     act: "Busy repos score lower",
     actNote: (a: number, q: number) => `Active: ≥ 50 commits in the last year (${a} repos). Quiet: < 10 (${q}). More churn, more debt — or simply more code being looked at.`,
     actL: { active: "active", quiet: "quiet" },
+    findingsLink: "Every rule in detail: how common, where it fires, how accurate →",
     grades: "Grades",
     gradesNote: "Score adjusts for size: warnings weigh less in big codebases, critical findings never do.",
     supply: "Most GitHub Actions can be swapped under you",
@@ -102,6 +103,7 @@ const T = {
     act: "Активные репозитории получают оценку ниже",
     actNote: (a: number, q: number) => `Активные: ≥ 50 коммитов за год (${a} репо). Тихие: < 10 (${q}). Больше изменений — больше долга, или просто больше кода под взглядом.`,
     actL: { active: "активные", quiet: "тихие" },
+    findingsLink: "Каждое правило подробно: как часто, где срабатывает, насколько точно →",
     grades: "Оценки",
     gradesNote: "Оценка учитывает размер: в больших проектах предупреждения весят меньше, критические находки — всегда полностью.",
     supply: "Большинство GitHub Actions можно подменить",
@@ -263,6 +265,7 @@ export function StateOfOpenSource() {
         <h1 className="text-3xl font-semibold tracking-tight text-balance sm:text-4xl">{t.title(stats.repos)}</h1>
         <p className="max-w-prose text-muted-foreground">{t.lede}</p>
         <p className="text-xs text-muted-foreground">{t.updated} {date}</p>
+        <a href="/state/findings" className="inline-block text-sm font-medium text-primary hover:underline">{t.findingsLink}</a>
       </header>
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
