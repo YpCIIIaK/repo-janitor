@@ -6813,5 +6813,1955 @@
     "name": "woodpecker-ci-woodpecker",
     "url": "https://github.com/woodpecker-ci/woodpecker",
     "sha": "3168c05bf465d5fe283bf8169dcc3d67b8b6a1a3"
+  },
+  {
+    "name": "zhanymkanov-fastapi-best-practices",
+    "url": "https://github.com/zhanymkanov/fastapi-best-practices",
+    "sha": "5e00aa6095521f0d00e4eec2ef0afa44cd566af4"
+  },
+  {
+    "name": "netflix-dispatch",
+    "url": "https://github.com/Netflix/dispatch",
+    "sha": "dd2837e82a0bf5565b1b4b4b91ea30b7262d4061"
+  },
+  {
+    "name": "saleor-saleor",
+    "url": "https://github.com/saleor/saleor",
+    "sha": "1d707dcf6127b098c187a181e5ee344017cdb064"
+  },
+  {
+    "name": "django-djangoproject-com",
+    "url": "https://github.com/django/djangoproject.com",
+    "sha": "6ad85a26e69d3038058357bca9db986f86e86596"
+  },
+  {
+    "name": "pypi-warehouse",
+    "url": "https://github.com/pypi/warehouse",
+    "sha": "68ab5360a4d45131c17d87878a7ca79db94ef54e"
+  },
+  {
+    "name": "mitodl-micromasters",
+    "url": "https://github.com/mitodl/micromasters",
+    "sha": "41084a6d940ed5517f8793fcf5b737832696ef03"
+  },
+  {
+    "name": "zulip-python-zulip-api",
+    "url": "https://github.com/zulip/python-zulip-api",
+    "sha": "b172347594a4634517f925f9e30522fe987dbb9c"
+  },
+  {
+    "name": "posthog-posthog-foss",
+    "url": "https://github.com/PostHog/posthog-foss",
+    "sha": "8a23678b73b9413bb2d04d3f6ada78cc57be97ea"
+  },
+  {
+    "name": "taigaio-taiga-back",
+    "url": "https://github.com/taigaio/taiga-back",
+    "sha": "8ab6a4e3b5f6fbbfcbf108a6449011f07b7308aa"
+  },
+  {
+    "name": "inventree-inventree",
+    "url": "https://github.com/inventree/InvenTree",
+    "sha": "f283aa0ca6a9eb8e3dbafa27226ac496b1b8b20a"
+  },
+  {
+    "name": "frappe-frappe",
+    "url": "https://github.com/frappe/frappe",
+    "sha": "9dc7a9a611db0e3823a28cb5f23bb7b8caca213b"
+  },
+  {
+    "name": "oca-web",
+    "url": "https://github.com/OCA/web",
+    "sha": "80f85e9bc62858b36f1c18471afba48960305a72"
+  },
+  {
+    "name": "litestar-org-litestar",
+    "url": "https://github.com/litestar-org/litestar",
+    "sha": "c5c87eba342091b6b0ffbb3cd1a9e60d452fd9ff"
+  },
+  {
+    "name": "sqlalchemy-alembic",
+    "url": "https://github.com/sqlalchemy/alembic",
+    "sha": "1bcba93ea0473c69b48e704f842ca96e9e5348f5"
+  },
+  {
+    "name": "tortoise-tortoise-orm",
+    "url": "https://github.com/tortoise/tortoise-orm",
+    "sha": "9fdb5338cfe6229f9810fbaa2ba913dcbba2c6f2"
+  },
+  {
+    "name": "coleifer-peewee",
+    "url": "https://github.com/coleifer/peewee",
+    "sha": "0fb639792b9f1f830f539ae3e5ec7ce12f2b11a6"
+  },
+  {
+    "name": "magicstack-asyncpg",
+    "url": "https://github.com/MagicStack/asyncpg",
+    "sha": "13b01910da3fe01b8241c31cc86eccb1301a2d39"
+  },
+  {
+    "name": "piccolo-orm-piccolo",
+    "url": "https://github.com/piccolo-orm/piccolo",
+    "sha": "fc1fc86d9f966d02b5f40b57edb76c7ab7e7b604"
+  },
+  {
+    "name": "sqlmodel-sqlmodel",
+    "url": "https://github.com/sqlmodel/sqlmodel",
+    "sha": "3645bf20363c4d39a9655811f3dbbeccbe7419a7"
+  },
+  {
+    "name": "fastapi-sqlmodel",
+    "url": "https://github.com/fastapi/sqlmodel",
+    "sha": "6a939fb0407438297112f102582fc0609bd3d47f"
+  },
+  {
+    "name": "jazzband-django-rest-framework-simplejwt",
+    "url": "https://github.com/jazzband/django-rest-framework-simplejwt",
+    "sha": "4949330fbe0ad380346e76fe5c60679412c41cdf"
+  },
+  {
+    "name": "strawberry-graphql-strawberry",
+    "url": "https://github.com/strawberry-graphql/strawberry",
+    "sha": "339e0bc974eccd986efe205a9db09a3a60d608bb"
+  },
+  {
+    "name": "graphql-python-graphene",
+    "url": "https://github.com/graphql-python/graphene",
+    "sha": "82903263080b3b7f22c2ad84319584d7a3b1a1f6"
+  },
+  {
+    "name": "bogdanp-dramatiq",
+    "url": "https://github.com/Bogdanp/dramatiq",
+    "sha": "01301126d869830192f3f973e0bddf24a348cdc2"
+  },
+  {
+    "name": "apache-airflow-client-python",
+    "url": "https://github.com/apache/airflow-client-python",
+    "sha": "cfbb3c5a5cd62eba423e00cbbe0af111263ba3fa"
+  },
+  {
+    "name": "astronomer-astronomer-cosmos",
+    "url": "https://github.com/astronomer/astronomer-cosmos",
+    "sha": "131cf3a72192987376622587538fde6e12368ba4"
+  },
+  {
+    "name": "dbt-labs-jaffle-shop",
+    "url": "https://github.com/dbt-labs/jaffle_shop",
+    "sha": "fd7bfacae4f497ff044a6a0275268676bf1b64c3"
+  },
+  {
+    "name": "dbt-labs-dbt-utils",
+    "url": "https://github.com/dbt-labs/dbt-utils",
+    "sha": "2a8f07bcbd02fb7a8c011298a1bdaf3e92759c14"
+  },
+  {
+    "name": "dagster-io-dagster-open-platform",
+    "url": "https://github.com/dagster-io/dagster-open-platform",
+    "sha": "52e5c122a091965164f713a42e58195baa9e3c9a"
+  },
+  {
+    "name": "dagster-io-hooli-data-eng-pipelines",
+    "url": "https://github.com/dagster-io/hooli-data-eng-pipelines",
+    "sha": "a039747bed3fe573493900d41d6659d01b7e9034"
+  },
+  {
+    "name": "great-expectations-great-expectations",
+    "url": "https://github.com/great-expectations/great_expectations",
+    "sha": "379684f5236206d464fcb7fd6eb99eedb1b41707"
+  },
+  {
+    "name": "kedro-org-kedro",
+    "url": "https://github.com/kedro-org/kedro",
+    "sha": "0c01507b41c8350fd3b794f092e2d59184322275"
+  },
+  {
+    "name": "kedro-org-kedro-starters",
+    "url": "https://github.com/kedro-org/kedro-starters",
+    "sha": "88b71ba06a9aeea7087d55af590d03a33c4e1f6a"
+  },
+  {
+    "name": "feast-dev-feast",
+    "url": "https://github.com/feast-dev/feast",
+    "sha": "fde9529def6bd39a85ce08e80253ee41b4f908e4"
+  },
+  {
+    "name": "apache-superset",
+    "url": "https://github.com/apache/superset",
+    "sha": "3782f325aa9e2a36e367d82a846f0ed89909c947"
+  },
+  {
+    "name": "dlt-hub-dlt",
+    "url": "https://github.com/dlt-hub/dlt",
+    "sha": "44d7d7497152df0f7f9b2075d8d8dfc4530a2fde"
+  },
+  {
+    "name": "mage-ai-mage-ai",
+    "url": "https://github.com/mage-ai/mage-ai",
+    "sha": "1826a3795ead8c62e56e81497edd824efb1d5472"
+  },
+  {
+    "name": "meltano-meltano",
+    "url": "https://github.com/meltano/meltano",
+    "sha": "2c94fd17384b964e6f1c828db53d2765d5726125"
+  },
+  {
+    "name": "airbytehq-airbyte-python-cdk",
+    "url": "https://github.com/airbytehq/airbyte-python-cdk",
+    "sha": "a0d630a683a98a39a8ec3ed75230fd1b750447cb"
+  },
+  {
+    "name": "spotify-luigi",
+    "url": "https://github.com/spotify/luigi",
+    "sha": "f5feb7a4655ad73ef56f0ab04d7903ab43b63e12"
+  },
+  {
+    "name": "datatalksclub-data-engineering-zoomcamp",
+    "url": "https://github.com/DataTalksClub/data-engineering-zoomcamp",
+    "sha": "8207266ca9fb30f0578cd5ffc4701cb8c3f7a52e"
+  },
+  {
+    "name": "apache-airflow-site",
+    "url": "https://github.com/apache/airflow-site",
+    "sha": "aa255e55686a6e8d9a35b65629aaa9e1fde4ce09"
+  },
+  {
+    "name": "bentoml-bentoml",
+    "url": "https://github.com/bentoml/BentoML",
+    "sha": "942344be7860065736f9d615de517ef043db2665"
+  },
+  {
+    "name": "ray-project-ray-llm",
+    "url": "https://github.com/ray-project/ray-llm",
+    "sha": "3f8f4da8d82cd7f6b15251b70bf40d14d90ceb67"
+  },
+  {
+    "name": "seldonio-mlserver",
+    "url": "https://github.com/SeldonIO/MLServer",
+    "sha": "a325e523b5a580d49aeb06e19e73e4a90176b63b"
+  },
+  {
+    "name": "cortexlabs-cortex",
+    "url": "https://github.com/cortexlabs/cortex",
+    "sha": "dc48c02ed50a523a87166709f6fe361b5c836e3e"
+  },
+  {
+    "name": "huggingface-text-generation-inference",
+    "url": "https://github.com/huggingface/text-generation-inference",
+    "sha": "b4adbf2f6e2e721280bd0ea5f91d70f7d033f5ed"
+  },
+  {
+    "name": "triton-inference-server-client",
+    "url": "https://github.com/triton-inference-server/client",
+    "sha": "feccfa70b64828a2478199439afba7ea02741f5e"
+  },
+  {
+    "name": "pytorch-serve",
+    "url": "https://github.com/pytorch/serve",
+    "sha": "62c4d6a1fdc1d071dbcf758ebd756029af20bd5e"
+  },
+  {
+    "name": "mlrun-mlrun",
+    "url": "https://github.com/mlrun/mlrun",
+    "sha": "4239f9f14ae69e371e9117166060c386e9ffbe35"
+  },
+  {
+    "name": "zenml-io-zenml",
+    "url": "https://github.com/zenml-io/zenml",
+    "sha": "2babcd8c72e39e91e16647c25cfcd87f27e6631d"
+  },
+  {
+    "name": "netflix-metaflow",
+    "url": "https://github.com/Netflix/metaflow",
+    "sha": "16bc0a20b61f696af6398093f499c8ffb4372f5e"
+  },
+  {
+    "name": "iterative-dvc",
+    "url": "https://github.com/iterative/dvc",
+    "sha": "1c06f9860af61d3947adafac99d8206f713dbfdd"
+  },
+  {
+    "name": "evidentlyai-evidently",
+    "url": "https://github.com/evidentlyai/evidently",
+    "sha": "34771fe41c08ca074d96a52aaf4a45cd640cbaf5"
+  },
+  {
+    "name": "datatalksclub-mlops-zoomcamp",
+    "url": "https://github.com/DataTalksClub/mlops-zoomcamp",
+    "sha": "1cf2248a803bf8a2685f87941a679eca2712516d"
+  },
+  {
+    "name": "gokumohandas-made-with-ml",
+    "url": "https://github.com/GokuMohandas/Made-With-ML",
+    "sha": "3361aeb8ddfc2affdba9f545c978c38c85cee764"
+  },
+  {
+    "name": "kubeflow-pipelines",
+    "url": "https://github.com/kubeflow/pipelines",
+    "sha": "e52b574733693478c37d1d7d2b8ed0dbafdb06df"
+  },
+  {
+    "name": "spring-petclinic-spring-petclinic-rest",
+    "url": "https://github.com/spring-petclinic/spring-petclinic-rest",
+    "sha": "5180cc9bd0163393c4e628bedc1bc4c27cfaab1b"
+  },
+  {
+    "name": "spring-guides-gs-rest-service",
+    "url": "https://github.com/spring-guides/gs-rest-service",
+    "sha": "e15fec6773dc1eb6028055630e3e68cbd8653240"
+  },
+  {
+    "name": "spring-projects-spring-data-examples",
+    "url": "https://github.com/spring-projects/spring-data-examples",
+    "sha": "7747029e6157cb780862826b6ae87c88d7a4df3c"
+  },
+  {
+    "name": "sqshq-piggymetrics",
+    "url": "https://github.com/sqshq/piggymetrics",
+    "sha": "6bb2cf9ddbca980b664d3edbb6ff775d75369278"
+  },
+  {
+    "name": "jhipster-jhipster-sample-app",
+    "url": "https://github.com/jhipster/jhipster-sample-app",
+    "sha": "6b000b5d23a36c45e01472471b84a44fa2464044"
+  },
+  {
+    "name": "apache-shardingsphere-elasticjob",
+    "url": "https://github.com/apache/shardingsphere-elasticjob",
+    "sha": "f2dd950dd3a2251fcb4b4dd8868938c604b5ee32"
+  },
+  {
+    "name": "mybatis-mybatis-3",
+    "url": "https://github.com/mybatis/mybatis-3",
+    "sha": "b27fe6a9949489a4f45a4468dce9d007b7a7f408"
+  },
+  {
+    "name": "jooq-jooq",
+    "url": "https://github.com/jOOQ/jOOQ",
+    "sha": "f0942cdb3fa9ef3f524ebfe7e3ffc0f755674721"
+  },
+  {
+    "name": "flyway-flyway",
+    "url": "https://github.com/flyway/flyway",
+    "sha": "1559183fb61b0e70fa605134e0349ce3b79940ad"
+  },
+  {
+    "name": "liquibase-liquibase",
+    "url": "https://github.com/liquibase/liquibase",
+    "sha": "b05f2e8d353dc4b235afbb39a041a7b401466dd0"
+  },
+  {
+    "name": "quarkusio-quarkus-quickstarts",
+    "url": "https://github.com/quarkusio/quarkus-quickstarts",
+    "sha": "81a58443e92d0080c962f4ef01aa9e6118deb7a5"
+  },
+  {
+    "name": "micronaut-projects-micronaut-core",
+    "url": "https://github.com/micronaut-projects/micronaut-core",
+    "sha": "4e94d430d79a36195cf5722c3722eecbc22383bb"
+  },
+  {
+    "name": "dropwizard-dropwizard",
+    "url": "https://github.com/dropwizard/dropwizard",
+    "sha": "a8a09d85e61af325c00bb05738f56805f0cbb4b9"
+  },
+  {
+    "name": "javalin-javalin",
+    "url": "https://github.com/javalin/javalin",
+    "sha": "3c6d62fe04e84075922b390b03c53126b093fbb3"
+  },
+  {
+    "name": "keycloak-keycloak-quickstarts",
+    "url": "https://github.com/keycloak/keycloak-quickstarts",
+    "sha": "c598d34d3b2dd85976ac96614176df351ee1a4d5"
+  },
+  {
+    "name": "apache-kafka-site",
+    "url": "https://github.com/apache/kafka-site",
+    "sha": "e6cb1ef29f17ccb21d6d56efc9331d7098ed3719"
+  },
+  {
+    "name": "thingsboard-thingsboard",
+    "url": "https://github.com/thingsboard/thingsboard",
+    "sha": "e48b5780e17b65b78dd0bd7cf5e7805706499abb"
+  },
+  {
+    "name": "yunaiv-ruoyi-vue-pro",
+    "url": "https://github.com/YunaiV/ruoyi-vue-pro",
+    "sha": "3e13d8ea901a5368a0d4824e3b55775928bd5760"
+  },
+  {
+    "name": "dromara-hutool",
+    "url": "https://github.com/dromara/hutool",
+    "sha": "87ec11862baae72914df703e25939eb44a8a843c"
+  },
+  {
+    "name": "dotnet-architecture-eshoponcontainers",
+    "url": "https://github.com/dotnet-architecture/eShopOnContainers",
+    "sha": "0d329b713e95674f7471255908759362568166ea"
+  },
+  {
+    "name": "jasontaylordev-cleanarchitecture",
+    "url": "https://github.com/jasontaylordev/CleanArchitecture",
+    "sha": "4739ae4cbd057ee142bc1e1bdc93c4fea8f0cac5"
+  },
+  {
+    "name": "ardalis-cleanarchitecture",
+    "url": "https://github.com/ardalis/CleanArchitecture",
+    "sha": "da5491f1641f3d388e6cfc2c0ddd29f763746762"
+  },
+  {
+    "name": "abpframework-abp-samples",
+    "url": "https://github.com/abpframework/abp-samples",
+    "sha": "97bc6ddfbc491843ddcd101342ce10e088c1d0d6"
+  },
+  {
+    "name": "nopsolutions-nopcommerce",
+    "url": "https://github.com/nopSolutions/nopCommerce",
+    "sha": "e9a85452b6956f2381cb5122ef7c42366db2230f"
+  },
+  {
+    "name": "orchardcms-orchardcore",
+    "url": "https://github.com/OrchardCMS/OrchardCore",
+    "sha": "376be60278340dceaab3e854d880586654854894"
+  },
+  {
+    "name": "dapperlib-dapper",
+    "url": "https://github.com/DapperLib/Dapper",
+    "sha": "eb47546a408bbf6c178bda4f04dc205bc51ffbfe"
+  },
+  {
+    "name": "jbogard-mediatr",
+    "url": "https://github.com/jbogard/MediatR",
+    "sha": "771a5ae2448960b60cbc1d6af35518366fe78058"
+  },
+  {
+    "name": "masstransit-masstransit",
+    "url": "https://github.com/MassTransit/MassTransit",
+    "sha": "d9f61f764c802785cc9a4be92547d8f5b63018d4"
+  },
+  {
+    "name": "hangfireio-hangfire",
+    "url": "https://github.com/HangfireIO/Hangfire",
+    "sha": "8bedc72533ad8a09fe8fa6666505518e2cc700c2"
+  },
+  {
+    "name": "bitwarden-server",
+    "url": "https://github.com/bitwarden/server",
+    "sha": "d3a8a1090430270fab44fd7aeca15202308a54cc"
+  },
+  {
+    "name": "kareadita-kavita",
+    "url": "https://github.com/Kareadita/Kavita",
+    "sha": "9e177701c359090fa62e2e90aba571567c6cc680"
+  },
+  {
+    "name": "dotnet-aspire-samples",
+    "url": "https://github.com/dotnet/aspire-samples",
+    "sha": "acf30fadab025b44653e8f172501f838b6e779f4"
+  },
+  {
+    "name": "sonarr-sonarr",
+    "url": "https://github.com/Sonarr/Sonarr",
+    "sha": "c018578e4b79ee048575c02d7a8aa2b929e4b837"
+  },
+  {
+    "name": "laravel-laravel",
+    "url": "https://github.com/laravel/laravel",
+    "sha": "def7ce14811161f3c689a71ca8abc1369da44bd6"
+  },
+  {
+    "name": "firefly-iii-firefly-iii",
+    "url": "https://github.com/firefly-iii/firefly-iii",
+    "sha": "d65e916130c91d8f13ca808ca088d225ddd9a939"
+  },
+  {
+    "name": "invoiceninja-invoiceninja",
+    "url": "https://github.com/invoiceninja/invoiceninja",
+    "sha": "15ea35ea63f367eba33c04b7acd9ab1227853537"
+  },
+  {
+    "name": "symfony-symfony-docs",
+    "url": "https://github.com/symfony/symfony-docs",
+    "sha": "1e8754a1a45efe9019653ce4a15cad4c2d95c257"
+  },
+  {
+    "name": "akaunting-akaunting",
+    "url": "https://github.com/akaunting/akaunting",
+    "sha": "0bf5d3cbf216ceb0fa3bf8ea02d4871ea58a9fab"
+  },
+  {
+    "name": "pixelfed-pixelfed",
+    "url": "https://github.com/pixelfed/pixelfed",
+    "sha": "b1b1c3727364aa99da6e74c43a86b1f567e8052b"
+  },
+  {
+    "name": "doctrine-orm",
+    "url": "https://github.com/doctrine/orm",
+    "sha": "d0d1f66ffc7ea8be0cfdd529b8e7e0b5db5bc665"
+  },
+  {
+    "name": "api-platform-api-platform",
+    "url": "https://github.com/api-platform/api-platform",
+    "sha": "8d7e6774a1e605814ddbc489f0f3ee95eb1d4ea6"
+  },
+  {
+    "name": "sylius-sylius",
+    "url": "https://github.com/sylius/sylius",
+    "sha": "2abafb24b2c2da186c0ccbcf2de0e965c22c2ec4"
+  },
+  {
+    "name": "matomo-org-matomo",
+    "url": "https://github.com/matomo-org/matomo",
+    "sha": "1175158baff801c34769f770effc5e633121ebc0"
+  },
+  {
+    "name": "solidtime-io-solidtime",
+    "url": "https://github.com/solidtime-io/solidtime",
+    "sha": "dc1199962aa30e4a5f7be4f5ca0dce018783d06c"
+  },
+  {
+    "name": "rubygems-rubygems-org",
+    "url": "https://github.com/rubygems/rubygems.org",
+    "sha": "324491a597d3b70bd56414cb3670a95cefafb4af"
+  },
+  {
+    "name": "openstreetmap-openstreetmap-website",
+    "url": "https://github.com/openstreetmap/openstreetmap-website",
+    "sha": "a62119f62dea26289ea17933a7b503f4a902094f"
+  },
+  {
+    "name": "spree-spree",
+    "url": "https://github.com/spree/spree",
+    "sha": "018cd001de312e95d3a956908ccb8ade732343d7"
+  },
+  {
+    "name": "codetriage-codetriage",
+    "url": "https://github.com/codetriage/CodeTriage",
+    "sha": "d1868f8634e97a111a7fca49d58cc776d206007e"
+  },
+  {
+    "name": "basecamp-kamal",
+    "url": "https://github.com/basecamp/kamal",
+    "sha": "e3ec7b625399c1262865d5c63fd0be671eb6904e"
+  },
+  {
+    "name": "rails-solid-queue",
+    "url": "https://github.com/rails/solid_queue",
+    "sha": "b9c646a8486ef3e76f70919568cac070276da0e1"
+  },
+  {
+    "name": "consul-consul",
+    "url": "https://github.com/consul/consul",
+    "sha": "04dc98faf8258b6fd8bdac7d0d8356036693ba8b"
+  },
+  {
+    "name": "prisma-prisma-examples",
+    "url": "https://github.com/prisma/prisma-examples",
+    "sha": "2c1f9c9f0e59201dafed58ee7a7db28f5cbf3331"
+  },
+  {
+    "name": "cockroachdb-examples-orms",
+    "url": "https://github.com/cockroachdb/examples-orms",
+    "sha": "4422aff128585c3e0558b530558daa31972c3a40"
+  },
+  {
+    "name": "timescale-timescaledb",
+    "url": "https://github.com/timescale/timescaledb",
+    "sha": "84feea3abb2ad45380752877b20c6a8454e1f2c5"
+  },
+  {
+    "name": "duckdb-duckdb-python",
+    "url": "https://github.com/duckdb/duckdb-python",
+    "sha": "6691773300d10c40f35289c8688a097afa17255c"
+  },
+  {
+    "name": "apache-age",
+    "url": "https://github.com/apache/age",
+    "sha": "8c7e44fd2a525dedfd3d4e8168921442eb4fce2f"
+  },
+  {
+    "name": "citusdata-citus",
+    "url": "https://github.com/citusdata/citus",
+    "sha": "ff5d19c2e74436f1835765900a48b0e98708c3c4"
+  },
+  {
+    "name": "pgvector-pgvector",
+    "url": "https://github.com/pgvector/pgvector",
+    "sha": "724588a5504b0e9c462e3126563370e8d50a01eb"
+  },
+  {
+    "name": "sqlc-dev-sqlc",
+    "url": "https://github.com/sqlc-dev/sqlc",
+    "sha": "3ad8b20fb02b5bea81591b673da0758b8685d951"
+  },
+  {
+    "name": "vbenjs-vue-vben-admin",
+    "url": "https://github.com/vbenjs/vue-vben-admin",
+    "sha": "8776a4432e7c70bc9c5f1fb226c27c33a3075c94"
+  },
+  {
+    "name": "panjiachen-vue-element-admin",
+    "url": "https://github.com/PanJiaChen/vue-element-admin",
+    "sha": "6858a9ad67483025f6a9432a926beb9327037be3"
+  },
+  {
+    "name": "elk-zone-elk",
+    "url": "https://github.com/elk-zone/elk",
+    "sha": "6b956a6d4a89a676059d83a0b0e59d7165d5f266"
+  },
+  {
+    "name": "nuxt-movies",
+    "url": "https://github.com/nuxt/movies",
+    "sha": "61bd0d8b9a6d9522b47ded19d50f0dfe465acbe0"
+  },
+  {
+    "name": "sveltejs-realworld",
+    "url": "https://github.com/sveltejs/realworld",
+    "sha": "df796708040f5200ec572b28ab7f88ecee5794dd"
+  },
+  {
+    "name": "huntabyte-shadcn-svelte",
+    "url": "https://github.com/huntabyte/shadcn-svelte",
+    "sha": "3c4152d7d3904e76f6f756ec8ffca7c9ec72f977"
+  },
+  {
+    "name": "solidos-solid-ui",
+    "url": "https://github.com/SolidOS/solid-ui",
+    "sha": "d7b8c4c0bae1a6cbec45964ead52de60533f581d"
+  },
+  {
+    "name": "withastro-astro-build",
+    "url": "https://github.com/withastro/astro.build",
+    "sha": "004cb82d7039978ba8e7ad904ae40ce685c511a9"
+  },
+  {
+    "name": "remix-run-indie-stack",
+    "url": "https://github.com/remix-run/indie-stack",
+    "sha": "56abb93bf81f635b574d9ca23eed05602699458a"
+  },
+  {
+    "name": "remix-run-blues-stack",
+    "url": "https://github.com/remix-run/blues-stack",
+    "sha": "7390646d6f3b6e6cb7ef722e4b61cdbffb997afc"
+  },
+  {
+    "name": "remix-run-examples",
+    "url": "https://github.com/remix-run/examples",
+    "sha": "f2d853ce7796524aab5af55640626be9dc2be3ac"
+  },
+  {
+    "name": "gothinkster-angular-realworld-example-app",
+    "url": "https://github.com/gothinkster/angular-realworld-example-app",
+    "sha": "d426ec804f7d035c374aa4a1b48ecdb05a03eb02"
+  },
+  {
+    "name": "gothinkster-vue-realworld-example-app",
+    "url": "https://github.com/gothinkster/vue-realworld-example-app",
+    "sha": "db749e3bb1a45755e0a3f4065abaf7346f004f36"
+  },
+  {
+    "name": "rocketseat-umbriel",
+    "url": "https://github.com/Rocketseat/umbriel",
+    "sha": "d5c7ee4d643d803a41375e5860a7ae0839be9c15"
+  },
+  {
+    "name": "dubinc-dub",
+    "url": "https://github.com/dubinc/dub",
+    "sha": "6b463b4bdd9ed2fd9aa416f67b5b77d317b1471e"
+  },
+  {
+    "name": "formbricks-formbricks",
+    "url": "https://github.com/formbricks/formbricks",
+    "sha": "9be2b62974da995c16895aff6ebf6c3372e84dfe"
+  },
+  {
+    "name": "marktext-marktext",
+    "url": "https://github.com/marktext/marktext",
+    "sha": "a520befde7ec8ea911e738d53cb26bba64b28694"
+  },
+  {
+    "name": "laurent22-joplin",
+    "url": "https://github.com/laurent22/joplin",
+    "sha": "d428762a215c6923aa5fdc8a184fe05e7eb163c7"
+  },
+  {
+    "name": "standardnotes-app",
+    "url": "https://github.com/standardnotes/app",
+    "sha": "f64d5a4a1991d0e5d1c326c6131673ab4b72684c"
+  },
+  {
+    "name": "kong-insomnia",
+    "url": "https://github.com/Kong/insomnia",
+    "sha": "54e46851ff4a4ca8a357e351ef8bed713ceda42a"
+  },
+  {
+    "name": "usebruno-bruno",
+    "url": "https://github.com/usebruno/bruno",
+    "sha": "1982a7b1bfa865194292bd08d0fa9e090ae89b4a"
+  },
+  {
+    "name": "hyperhq-hyper",
+    "url": "https://github.com/hyperhq/hyper",
+    "sha": "8a7e67dc33bbccdfc92b5e2a908bbdb1c5d9b956"
+  },
+  {
+    "name": "vercel-hyper",
+    "url": "https://github.com/vercel/hyper",
+    "sha": "890a332ed9c35ed87343647d3ec6611b8045b157"
+  },
+  {
+    "name": "freetubeapp-freetube",
+    "url": "https://github.com/FreeTubeApp/FreeTube",
+    "sha": "ee191b0a29d42b546338fc9f5d4dcc0eafd23d52"
+  },
+  {
+    "name": "th-ch-youtube-music",
+    "url": "https://github.com/th-ch/youtube-music",
+    "sha": "3337446b448454125ad261099a25f6b10fbb8cb6"
+  },
+  {
+    "name": "ferdium-ferdium-app",
+    "url": "https://github.com/Ferdium/ferdium-app",
+    "sha": "deabf8308f37cde7d9baba5729f90d885fab3341"
+  },
+  {
+    "name": "jgraph-drawio-desktop",
+    "url": "https://github.com/jgraph/drawio-desktop",
+    "sha": "0623fb3c1523639b06600d5c33e3a127bf82aa1c"
+  },
+  {
+    "name": "signalapp-signal-desktop",
+    "url": "https://github.com/signalapp/Signal-Desktop",
+    "sha": "5d1bbb7ee231b35cb9cc8cc449ffb819c528efc8"
+  },
+  {
+    "name": "upscayl-upscayl",
+    "url": "https://github.com/upscayl/upscayl",
+    "sha": "a00d55fee90e0f9435d5eaa86e76700df8199af8"
+  },
+  {
+    "name": "gorhill-ublock",
+    "url": "https://github.com/gorhill/uBlock",
+    "sha": "f3e5e5e0efa4b01035b928a084b8fe018cbcbe99"
+  },
+  {
+    "name": "bitwarden-clients",
+    "url": "https://github.com/bitwarden/clients",
+    "sha": "020347ecf66c5e248cc9630896ae230adb1421b4"
+  },
+  {
+    "name": "refined-github-refined-github",
+    "url": "https://github.com/refined-github/refined-github",
+    "sha": "5fce5392bee97da7a60a6af48b3934d7908f4a8c"
+  },
+  {
+    "name": "violentmonkey-violentmonkey",
+    "url": "https://github.com/violentmonkey/violentmonkey",
+    "sha": "b235767f125ca80e515e0d1c8d98a69270ebffcf"
+  },
+  {
+    "name": "tampermonkey-tampermonkey",
+    "url": "https://github.com/Tampermonkey/tampermonkey",
+    "sha": "cdfc253c07267104de29d8cebb88fcd621ae5167"
+  },
+  {
+    "name": "pixeltris-twitchadsolutions",
+    "url": "https://github.com/pixeltris/TwitchAdSolutions",
+    "sha": "c51ef2fe8f667f9dc9216eb550924cf0d732ce27"
+  },
+  {
+    "name": "vuejs-language-tools",
+    "url": "https://github.com/vuejs/language-tools",
+    "sha": "c59f9908b4912ee20141b53a99b1ce485bff0dc7"
+  },
+  {
+    "name": "gitkraken-vscode-gitlens",
+    "url": "https://github.com/gitkraken/vscode-gitlens",
+    "sha": "e10542d333c79ea748569ac799b229a7b7255c89"
+  },
+  {
+    "name": "pkief-vscode-material-icon-theme",
+    "url": "https://github.com/PKief/vscode-material-icon-theme",
+    "sha": "f368264282ef14ee7feb012fd54e825181eff9c3"
+  },
+  {
+    "name": "dracula-visual-studio-code",
+    "url": "https://github.com/dracula/visual-studio-code",
+    "sha": "b50e62e320906d5f57a8bf05fd6ddf23b890d6dd"
+  },
+  {
+    "name": "vscode-icons-vscode-icons",
+    "url": "https://github.com/vscode-icons/vscode-icons",
+    "sha": "9eecefcf5dad9da1d6f045da7f6764bb21c434bd"
+  },
+  {
+    "name": "ritwickdey-vscode-live-server",
+    "url": "https://github.com/ritwickdey/vscode-live-server",
+    "sha": "4153b4ba737f003804c3d9acbce78ad4fad19b36"
+  },
+  {
+    "name": "go-task-task",
+    "url": "https://github.com/go-task/task",
+    "sha": "3fd308de26981504eb7e75b5967812abb51e94ee"
+  },
+  {
+    "name": "nektos-act",
+    "url": "https://github.com/nektos/act",
+    "sha": "2540ba6c49dfbafe167d655e4044921cd2ed19e7"
+  },
+  {
+    "name": "sindresorhus-np",
+    "url": "https://github.com/sindresorhus/np",
+    "sha": "5ca53e9a04158b2fa544fb9523ecb7e6b2db7ddc"
+  },
+  {
+    "name": "antfu-ni",
+    "url": "https://github.com/antfu/ni",
+    "sha": "71e261fd497c9e5f7bc925267ff249f5b9f9bc14"
+  },
+  {
+    "name": "vitejs-vite",
+    "url": "https://github.com/vitejs/vite",
+    "sha": "a579e352a66fbdce6a51d4e1f67006ccf4f91343"
+  },
+  {
+    "name": "11ty-eleventy",
+    "url": "https://github.com/11ty/eleventy",
+    "sha": "fa512755a6fe027e3aba2cfc832c069aa9e4394c"
+  },
+  {
+    "name": "getzola-zola",
+    "url": "https://github.com/getzola/zola",
+    "sha": "48d4e7a9f63bbf5d838b977b6e0403949cac5698"
+  },
+  {
+    "name": "hexojs-hexo",
+    "url": "https://github.com/hexojs/hexo",
+    "sha": "36e6a73058cef7502291a69171f052b83eae42dd"
+  },
+  {
+    "name": "vuejs-vitepress",
+    "url": "https://github.com/vuejs/vitepress",
+    "sha": "6c9f6e6c6db43f766fce97c80c57fa123a0fdc31"
+  },
+  {
+    "name": "facebook-docusaurus",
+    "url": "https://github.com/facebook/docusaurus",
+    "sha": "25c5273ee0d25aaab820b020081cb8b98ace1f4e"
+  },
+  {
+    "name": "primer-react",
+    "url": "https://github.com/primer/react",
+    "sha": "6862a4bc1e9b67a0b0f9279a68c4271f09bfdd91"
+  },
+  {
+    "name": "carbon-design-system-carbon",
+    "url": "https://github.com/carbon-design-system/carbon",
+    "sha": "f5bdc21a0933baca91875e618f07141ff708cbe7"
+  },
+  {
+    "name": "ant-design-ant-design-pro",
+    "url": "https://github.com/ant-design/ant-design-pro",
+    "sha": "42f2cb1d303380909ea04c73b5e60679d09c321a"
+  },
+  {
+    "name": "element-plus-element-plus",
+    "url": "https://github.com/element-plus/element-plus",
+    "sha": "b824aa24d9ef7e8244b1bff792ad82a372189c76"
+  },
+  {
+    "name": "vuetifyjs-vuetify",
+    "url": "https://github.com/vuetifyjs/vuetify",
+    "sha": "6c7dc5d2cee9eb802ec503e6a15326415a3cb2ea"
+  },
+  {
+    "name": "quasarframework-quasar",
+    "url": "https://github.com/quasarframework/quasar",
+    "sha": "40eefd7a4cb36d33e877af6096977fe64bbf1f58"
+  },
+  {
+    "name": "ionic-team-ionic-framework",
+    "url": "https://github.com/ionic-team/ionic-framework",
+    "sha": "597b9e24d82650ceed982961033d8747305ad7f5"
+  },
+  {
+    "name": "skeletonlabs-skeleton",
+    "url": "https://github.com/skeletonlabs/skeleton",
+    "sha": "e65535ebfb9b37bf37ccde1ed854b96397d21550"
+  },
+  {
+    "name": "saadeghi-daisyui",
+    "url": "https://github.com/saadeghi/daisyui",
+    "sha": "bf3bac3a397b543e55641ecb2d60a2ed961f09ec"
+  },
+  {
+    "name": "nextui-org-nextui",
+    "url": "https://github.com/nextui-org/nextui",
+    "sha": "b2c65a5b5236550526f23d475b1ad0c6e5eab1a2"
+  },
+  {
+    "name": "nocodb-nocodb",
+    "url": "https://github.com/nocodb/nocodb",
+    "sha": "5f2e38194e0bda13d8818a412bd4d723fd944cb8"
+  },
+  {
+    "name": "directus-directus",
+    "url": "https://github.com/directus/directus",
+    "sha": "a7d59f95833664ef32f4fe8dd90246a104f4b0d9"
+  },
+  {
+    "name": "strapi-strapi",
+    "url": "https://github.com/strapi/strapi",
+    "sha": "fd7e93db7e65191332437442218b4779d788871b"
+  },
+  {
+    "name": "mattermost-focalboard",
+    "url": "https://github.com/mattermost/focalboard",
+    "sha": "a84bbb65e32edf972856b329417096ac413518e9"
+  },
+  {
+    "name": "makeplane-plane",
+    "url": "https://github.com/makeplane/plane",
+    "sha": "618d0eb74658329a6f6e92434ac54231422c5b96"
+  },
+  {
+    "name": "lobehub-lobe-chat",
+    "url": "https://github.com/lobehub/lobe-chat",
+    "sha": "676875e79459b5967c7d87c4f2205bf2be81d43c"
+  },
+  {
+    "name": "steven-tey-novel",
+    "url": "https://github.com/steven-tey/novel",
+    "sha": "fa95098e66476c466faebb8211baa5869c101a9c"
+  },
+  {
+    "name": "infisical-infisical",
+    "url": "https://github.com/Infisical/infisical",
+    "sha": "4a46bee79dbc4f50647ff1eb3d4962d675845327"
+  },
+  {
+    "name": "openstatushq-openstatus",
+    "url": "https://github.com/openstatusHQ/openstatus",
+    "sha": "1c16923609d6702559c4d0f94bf799f05ab0f9b5"
+  },
+  {
+    "name": "shuding-nextra",
+    "url": "https://github.com/shuding/nextra",
+    "sha": "d6e80e1dd627b781429a6ee989b15ebba688c8ea"
+  },
+  {
+    "name": "timlrx-tailwind-nextjs-starter-blog",
+    "url": "https://github.com/timlrx/tailwind-nextjs-starter-blog",
+    "sha": "b45bef66b40c63b6f57c15ee8cd090682238df4c"
+  },
+  {
+    "name": "satnaing-astro-paper",
+    "url": "https://github.com/satnaing/astro-paper",
+    "sha": "6f61e2dc0e45bbcefc05f4055f293cd7f81bcb03"
+  },
+  {
+    "name": "onwidget-astrowind",
+    "url": "https://github.com/onwidget/astrowind",
+    "sha": "14e1a691f80548dcc36370847b1a02c0d0b12821"
+  },
+  {
+    "name": "sveltejs-svelte-dev",
+    "url": "https://github.com/sveltejs/svelte.dev",
+    "sha": "e81fda2414fbb578a993b8d44e0297b854d4b657"
+  },
+  {
+    "name": "akveo-ngx-admin",
+    "url": "https://github.com/akveo/ngx-admin",
+    "sha": "dc6a442704bfef34b776b5eb15faf852d9e2f75c"
+  },
+  {
+    "name": "storybookjs-storybook",
+    "url": "https://github.com/storybookjs/storybook",
+    "sha": "44ea08aede7d3062e19740116998bde9e7c7ec98"
+  },
+  {
+    "name": "vueuse-vueuse",
+    "url": "https://github.com/vueuse/vueuse",
+    "sha": "043da374d683e5193fc684b0b2bcae7dd9340314"
+  },
+  {
+    "name": "nuxt-ui",
+    "url": "https://github.com/nuxt/ui",
+    "sha": "a11f0327cc374c2e5f8694db6aa0a7ddc6a028f8"
+  },
+  {
+    "name": "iczer-vue-antd-admin",
+    "url": "https://github.com/iczer/vue-antd-admin",
+    "sha": "10a7613e6e94f80041712201ef709d47d76c4b80"
+  },
+  {
+    "name": "halseyspicy-geeker-admin",
+    "url": "https://github.com/HalseySpicy/Geeker-Admin",
+    "sha": "ad08fdd1c08bfd2390a85fbbb359be17e2bdaae9"
+  },
+  {
+    "name": "pure-admin-vue-pure-admin",
+    "url": "https://github.com/pure-admin/vue-pure-admin",
+    "sha": "fae75ad1cd52d11a7279931ef5bba2b80e363c7b"
+  },
+  {
+    "name": "sveltejs-svelte-hackernews",
+    "url": "https://github.com/sveltejs/svelte-hackernews",
+    "sha": "595651f3399df9eedb67c1dcdc425778a40a8e22"
+  },
+  {
+    "name": "joshnuss-svelte-local-storage-store",
+    "url": "https://github.com/joshnuss/svelte-local-storage-store",
+    "sha": "37750494f74e907cae406da441b687802ac1d7c6"
+  },
+  {
+    "name": "ngrx-platform",
+    "url": "https://github.com/ngrx/platform",
+    "sha": "ddd9772e81e2db8a8964fa65f355086118d29dd9"
+  },
+  {
+    "name": "nestjs-nest-cli",
+    "url": "https://github.com/nestjs/nest-cli",
+    "sha": "4e695527a095ffb547ce4b4ae61f26916e30123c"
+  },
+  {
+    "name": "solidjs-solid-realworld",
+    "url": "https://github.com/solidjs/solid-realworld",
+    "sha": "f6e77ecd652bf32f0dc9238f291313fd1af7e98b"
+  },
+  {
+    "name": "solidjs-solid-site",
+    "url": "https://github.com/solidjs/solid-site",
+    "sha": "e7b40ef162004710122906366a0ddb3fa2c2da10"
+  },
+  {
+    "name": "withastro-blog-tutorial-demo",
+    "url": "https://github.com/withastro/blog-tutorial-demo",
+    "sha": "b3e12cc12d3292eff8c1237fb14f9b93f31ec33e"
+  },
+  {
+    "name": "mermaid-js-mermaid-live-editor",
+    "url": "https://github.com/mermaid-js/mermaid-live-editor",
+    "sha": "4e94efb6d7a20fb22fd743ac335065d24b80eb6a"
+  },
+  {
+    "name": "responsively-org-responsively-app",
+    "url": "https://github.com/responsively-org/responsively-app",
+    "sha": "b23488fce1de2a48971624f134f7f0afcec68ecf"
+  },
+  {
+    "name": "lencx-chatgpt",
+    "url": "https://github.com/lencx/ChatGPT",
+    "sha": "a6de9a8b61077fa63ad5c3ecbe2bc12e0cb4b4b9"
+  },
+  {
+    "name": "tauri-apps-tauri-docs",
+    "url": "https://github.com/tauri-apps/tauri-docs",
+    "sha": "5e49cc6e48597060f1618e0b62cb91b071b1b4a9"
+  },
+  {
+    "name": "automattic-simplenote-electron",
+    "url": "https://github.com/Automattic/simplenote-electron",
+    "sha": "a5a1a86f1ada16f97f14533491d1a85313c68edb"
+  },
+  {
+    "name": "gitsquared-edex-ui",
+    "url": "https://github.com/GitSquared/edex-ui",
+    "sha": "04a00c4079908788b371c6ecdefff96d0d9950f8"
+  },
+  {
+    "name": "kitware-vtk-js",
+    "url": "https://github.com/Kitware/vtk-js",
+    "sha": "5d46987847429e1556b3c182d21bcb92f226d9e2"
+  },
+  {
+    "name": "zadam-trilium",
+    "url": "https://github.com/zadam/trilium",
+    "sha": "7f120547683e6ff21cdb34b0763dde07b41ea1d4"
+  },
+  {
+    "name": "triliumnext-notes",
+    "url": "https://github.com/TriliumNext/Notes",
+    "sha": "6db991870216fab23c59e929ed18ff5d6e40f160"
+  },
+  {
+    "name": "notable-notable",
+    "url": "https://github.com/notable/notable",
+    "sha": "aee95988f3b0d8d0508b56eada087fcdab30a025"
+  },
+  {
+    "name": "pd4d10-octohint",
+    "url": "https://github.com/pd4d10/octohint",
+    "sha": "3682a1ccd74447e69fc70d7df0cdbfcb81044fb7"
+  },
+  {
+    "name": "ovity-octotree",
+    "url": "https://github.com/ovity/octotree",
+    "sha": "470747c7007c8335981ea7a10a631bbf9bbb11f7"
+  },
+  {
+    "name": "sindresorhus-refined-twitter",
+    "url": "https://github.com/sindresorhus/refined-twitter",
+    "sha": "bceb4440811fa97caedd0c1e1d94a5a1bf868e2e"
+  },
+  {
+    "name": "alexdima-vscode-copy-relative-path",
+    "url": "https://github.com/alexdima/vscode-copy-relative-path",
+    "sha": "a73ad6a0172e721e69caf36f6835fe2e4224dd7e"
+  },
+  {
+    "name": "vscode-org-mode-vscode-org-mode",
+    "url": "https://github.com/vscode-org-mode/vscode-org-mode",
+    "sha": "9ad422cb215c6be6a877617db984543e8ffa6584"
+  },
+  {
+    "name": "yzhang-gh-vscode-markdown",
+    "url": "https://github.com/yzhang-gh/vscode-markdown",
+    "sha": "066996a8d053f0f8d69978663a41222417b352a8"
+  },
+  {
+    "name": "johnpapa-vscode-peacock",
+    "url": "https://github.com/johnpapa/vscode-peacock",
+    "sha": "dabf412a4f55cc54bebec2cef2c9854a3a51b826"
+  },
+  {
+    "name": "atom-github",
+    "url": "https://github.com/atom/github",
+    "sha": "5e72f801c134c713658773a90452f4bfb87c990f"
+  },
+  {
+    "name": "egoist-tsup",
+    "url": "https://github.com/egoist/tsup",
+    "sha": "198479b814f5981032dc0b7cd52c4b9e4b699ac3"
+  },
+  {
+    "name": "unjs-nitro",
+    "url": "https://github.com/unjs/nitro",
+    "sha": "c7cf4fe9cc3b0f5a05ca4e48d0ad6d533b03e939"
+  },
+  {
+    "name": "unjs-citty",
+    "url": "https://github.com/unjs/citty",
+    "sha": "3e342fe7b3f67575faf51df8361d502be6fe32e8"
+  },
+  {
+    "name": "enquirer-enquirer",
+    "url": "https://github.com/enquirer/enquirer",
+    "sha": "70bdb0fedc3ed355d9d8fe4f00ac9b3874f94f61"
+  },
+  {
+    "name": "google-zx",
+    "url": "https://github.com/google/zx",
+    "sha": "3b04a6ae3e34b1a7ee6b925f1efcceb901f0d8a5"
+  },
+  {
+    "name": "ogham-exa",
+    "url": "https://github.com/ogham/exa",
+    "sha": "3d1edbb47052cb416ef9478106c3907586da5150"
+  },
+  {
+    "name": "o2sh-onefetch",
+    "url": "https://github.com/o2sh/onefetch",
+    "sha": "cbb0bbec7f6a7d27d25421c4ee775a0c147106f2"
+  },
+  {
+    "name": "goreleaser-goreleaser",
+    "url": "https://github.com/goreleaser/goreleaser",
+    "sha": "2c336825258ec3d4a690d5a0ed55b536b8e88785"
+  },
+  {
+    "name": "mikefarah-yq",
+    "url": "https://github.com/mikefarah/yq",
+    "sha": "5398715a916b88eef75435056f79e35bbf95fdb3"
+  },
+  {
+    "name": "jqlang-jq",
+    "url": "https://github.com/jqlang/jq",
+    "sha": "5c001b18d7237cce1fdba63608732163f978dd23"
+  },
+  {
+    "name": "withastro-docs",
+    "url": "https://github.com/withastro/docs",
+    "sha": "c73a3bea5a635c1afce0f0516ff22ecb34a3d7d4"
+  },
+  {
+    "name": "gridsome-gridsome",
+    "url": "https://github.com/gridsome/gridsome",
+    "sha": "e396e60ddb9435813dc56cc2d1f98c91c7d64367"
+  },
+  {
+    "name": "vuepress-core",
+    "url": "https://github.com/vuepress/core",
+    "sha": "e748f7cb9bbe075711a4090107575226872dcf46"
+  },
+  {
+    "name": "metalsmith-metalsmith",
+    "url": "https://github.com/metalsmith/metalsmith",
+    "sha": "9190ff2b66f4d72c28f417ae4a29146f49af12de"
+  },
+  {
+    "name": "shopify-polaris",
+    "url": "https://github.com/Shopify/polaris",
+    "sha": "3f7954ae42fabf26d63cee68c23ceebfd7ef0972"
+  },
+  {
+    "name": "twbs-bootstrap",
+    "url": "https://github.com/twbs/bootstrap",
+    "sha": "9062790fdb2379593a2973416dc5a3bfb203e4e3"
+  },
+  {
+    "name": "lucide-icons-lucide",
+    "url": "https://github.com/lucide-icons/lucide",
+    "sha": "53fab88ff9d1b48f4704b5b5b560d6b4d560bf4c"
+  },
+  {
+    "name": "tabler-tabler",
+    "url": "https://github.com/tabler/tabler",
+    "sha": "fa67a819939a16963391a9ce0bd0610fffceb3e5"
+  },
+  {
+    "name": "terraform-google-modules-terraform-google-project-factory",
+    "url": "https://github.com/terraform-google-modules/terraform-google-project-factory",
+    "sha": "eeda8a6ece829ceab899fbb528279bb4cff52ff7"
+  },
+  {
+    "name": "cloudposse-terraform-aws-tfstate-backend",
+    "url": "https://github.com/cloudposse/terraform-aws-tfstate-backend",
+    "sha": "13267a3853954b2e00522467ddf2fa9ffe73e062"
+  },
+  {
+    "name": "gruntwork-io-terragrunt-infrastructure-live-example",
+    "url": "https://github.com/gruntwork-io/terragrunt-infrastructure-live-example",
+    "sha": "d106b47ad1e22cae3a841cd495eae48e9bbe3a03"
+  },
+  {
+    "name": "antonbabenko-pre-commit-terraform",
+    "url": "https://github.com/antonbabenko/pre-commit-terraform",
+    "sha": "4c4437d784e93cacb1f05f1d7bc28e4354fafd20"
+  },
+  {
+    "name": "terraform-linters-tflint",
+    "url": "https://github.com/terraform-linters/tflint",
+    "sha": "33c3ee9ace2339ab98d99c25bd75170a7e5535b5"
+  },
+  {
+    "name": "bridgecrewio-checkov",
+    "url": "https://github.com/bridgecrewio/checkov",
+    "sha": "47986461a2824dfa713a302dc11c44659b61dc1e"
+  },
+  {
+    "name": "tfutils-tfenv",
+    "url": "https://github.com/tfutils/tfenv",
+    "sha": "de6ce2e809c155cbc5e2cfeb3b1bef151244e045"
+  },
+  {
+    "name": "infracost-infracost",
+    "url": "https://github.com/infracost/infracost",
+    "sha": "93b9a2d921f19966b09a3d84d2e63bd86f8587d0"
+  },
+  {
+    "name": "jetstack-cert-manager",
+    "url": "https://github.com/jetstack/cert-manager",
+    "sha": "8a358469e26a53d619268ba45154bae2bcb3ac0f"
+  },
+  {
+    "name": "fluxcd-flagger",
+    "url": "https://github.com/fluxcd/flagger",
+    "sha": "c781cdc199d44cf84e21e90aedd8ff14c1df450e"
+  },
+  {
+    "name": "stefanprodan-podinfo",
+    "url": "https://github.com/stefanprodan/podinfo",
+    "sha": "fd3a834ed8d14b80ea334cf8a2fddd4597924da6"
+  },
+  {
+    "name": "geerlingguy-ansible-role-java",
+    "url": "https://github.com/geerlingguy/ansible-role-java",
+    "sha": "8477f288afcce7d4b230ebdf250bf337d0c4ffcd"
+  },
+  {
+    "name": "geerlingguy-ansible-role-postgresql",
+    "url": "https://github.com/geerlingguy/ansible-role-postgresql",
+    "sha": "3e6b4e683f37fa519b3457a2b8c4d2df06620c3e"
+  },
+  {
+    "name": "geerlingguy-ansible-role-apache",
+    "url": "https://github.com/geerlingguy/ansible-role-apache",
+    "sha": "e81915e791c3c9d2ccf3d999454d600f6148d0d9"
+  },
+  {
+    "name": "geerlingguy-ansible-role-php",
+    "url": "https://github.com/geerlingguy/ansible-role-php",
+    "sha": "63a528609be6f53bc501fec3dc6cca4c116be610"
+  },
+  {
+    "name": "geerlingguy-ansible-role-security",
+    "url": "https://github.com/geerlingguy/ansible-role-security",
+    "sha": "7a1fe0ef8d1c5fc3c15384a1b503734d31518acd"
+  },
+  {
+    "name": "ansible-molecule",
+    "url": "https://github.com/ansible/molecule",
+    "sha": "ada645a132b9332c291696f553d93cce788b5410"
+  },
+  {
+    "name": "kubernetes-sigs-kubespray",
+    "url": "https://github.com/kubernetes-sigs/kubespray",
+    "sha": "66613e17b62c1a2b44ec1b78deca7a9835594be5"
+  },
+  {
+    "name": "pulumi-pulumi-kubernetes",
+    "url": "https://github.com/pulumi/pulumi-kubernetes",
+    "sha": "b6267904aeb4044258c732f888bbba42ac2c8394"
+  },
+  {
+    "name": "pulumi-pulumi-aws",
+    "url": "https://github.com/pulumi/pulumi-aws",
+    "sha": "add740e6fcf63ea02ccf629b23ce8c3ff4bfb049"
+  },
+  {
+    "name": "deviantony-docker-elk",
+    "url": "https://github.com/deviantony/docker-elk",
+    "sha": "da954e8262f48ceef54f2547b44f4662d354e341"
+  },
+  {
+    "name": "vegasbrianc-prometheus",
+    "url": "https://github.com/vegasbrianc/prometheus",
+    "sha": "9f727093e9d96fbd73e97e844c3511659e82d332"
+  },
+  {
+    "name": "stefanprodan-dockprom",
+    "url": "https://github.com/stefanprodan/dockprom",
+    "sha": "e7788b4fa60b0ed7b666205fbebdf41ead3cdce9"
+  },
+  {
+    "name": "kelseyhightower-kubernetes-the-hard-way",
+    "url": "https://github.com/kelseyhightower/kubernetes-the-hard-way",
+    "sha": "52eb26dad1a3e9e8083a899bc854421eb4842a73"
+  },
+  {
+    "name": "runatlantis-atlantis",
+    "url": "https://github.com/runatlantis/atlantis",
+    "sha": "dcbc0e21be4cd6f791ad8e8d411d8bf76865e441"
+  },
+  {
+    "name": "hashicorp-packer-plugin-amazon",
+    "url": "https://github.com/hashicorp/packer-plugin-amazon",
+    "sha": "de72fcb21cab5bb56f7e974da3342ae3a586d9c5"
+  },
+  {
+    "name": "owasp-serverless-goat",
+    "url": "https://github.com/OWASP/Serverless-Goat",
+    "sha": "39410bc3df8963d6544f98b50e8738ce3de1a188"
+  },
+  {
+    "name": "we45-vulnerable-flask-app",
+    "url": "https://github.com/we45/Vulnerable-Flask-App",
+    "sha": "b6a4f97afd466e83e1f60781494252dec1c37039"
+  },
+  {
+    "name": "prateek147-dvia-v2",
+    "url": "https://github.com/prateek147/DVIA-v2",
+    "sha": "96466ab85569dbcd37c69b2d15d22ff666f57031"
+  },
+  {
+    "name": "nccgroup-sadcloud",
+    "url": "https://github.com/nccgroup/sadcloud",
+    "sha": "f538652921a7f3e8e25c0afaecad2d4382f8b21e"
+  },
+  {
+    "name": "rhinosecuritylabs-cloudgoat",
+    "url": "https://github.com/RhinoSecurityLabs/cloudgoat",
+    "sha": "63c65bd26edc6919499adfa20b176c450e35c33c"
+  },
+  {
+    "name": "s4n7h0-xvwa",
+    "url": "https://github.com/s4n7h0/xvwa",
+    "sha": "fb30fa517d288e618b521d252f61107ef6a24797"
+  },
+  {
+    "name": "hackademic-hackademic",
+    "url": "https://github.com/Hackademic/hackademic",
+    "sha": "873d8b31222ff6cee8b0cbe149295e226d25396d"
+  },
+  {
+    "name": "oliverwiegers-pentest-lab",
+    "url": "https://github.com/oliverwiegers/pentest_lab",
+    "sha": "195e827b26883d92876a1d99e1e10e583fff2217"
+  },
+  {
+    "name": "ctfd-ctfd",
+    "url": "https://github.com/CTFd/CTFd",
+    "sha": "a6a81ddd921cd74f8aabc07c0f7a71cdcf5365b6"
+  },
+  {
+    "name": "facebookarchive-fbctf",
+    "url": "https://github.com/facebookarchive/fbctf",
+    "sha": "4ec9b6be404fce1bed6d1066fccf10c4255767bb"
+  },
+  {
+    "name": "rsactftool-rsactftool",
+    "url": "https://github.com/RsaCtfTool/RsaCtfTool",
+    "sha": "4ffadb014df02988a5325e4bfdf15a92f5dcd044"
+  },
+  {
+    "name": "gallopsled-pwntools",
+    "url": "https://github.com/Gallopsled/pwntools",
+    "sha": "af4918c43fe1e605ea4caf98ff9ebb1e70b97bae"
+  },
+  {
+    "name": "sqlmapproject-sqlmap",
+    "url": "https://github.com/sqlmapproject/sqlmap",
+    "sha": "397a3bde2e2c2a07680dd9402b16cb37d3721027"
+  },
+  {
+    "name": "projectdiscovery-nuclei",
+    "url": "https://github.com/projectdiscovery/nuclei",
+    "sha": "bb2da9bbea16062161ed0dddaa62ab4778bec0d1"
+  },
+  {
+    "name": "projectdiscovery-subfinder",
+    "url": "https://github.com/projectdiscovery/subfinder",
+    "sha": "3b3ce3ce8f602f743e4b67b08f3226aac655d8b9"
+  },
+  {
+    "name": "oj-gobuster",
+    "url": "https://github.com/OJ/gobuster",
+    "sha": "c77583fbb8824058d74d38240896eff610683c8e"
+  },
+  {
+    "name": "ffuf-ffuf",
+    "url": "https://github.com/ffuf/ffuf",
+    "sha": "8d65e0373e5f223530174e5694285af849770078"
+  },
+  {
+    "name": "swisskyrepo-payloadsallthethings",
+    "url": "https://github.com/swisskyrepo/PayloadsAllTheThings",
+    "sha": "08ea40e77db3f42ef8f20c65196f3936a19b6c86"
+  },
+  {
+    "name": "sullo-nikto",
+    "url": "https://github.com/sullo/nikto",
+    "sha": "312645d873478a77986627ab1fc8cffe595e85d4"
+  },
+  {
+    "name": "ne0nd0g-merlin",
+    "url": "https://github.com/Ne0nd0g/merlin",
+    "sha": "93d6898783014a1ef301466cafe8cc4cc340b969"
+  },
+  {
+    "name": "volatilityfoundation-volatility3",
+    "url": "https://github.com/volatilityfoundation/volatility3",
+    "sha": "77ff0b1932d77527f850c8ced01d85805ea7bf97"
+  },
+  {
+    "name": "esp8266-arduino",
+    "url": "https://github.com/esp8266/Arduino",
+    "sha": "7482d4b9dd85d1f49ae20d01b01f36dd682dbe07"
+  },
+  {
+    "name": "espressif-arduino-esp32",
+    "url": "https://github.com/espressif/arduino-esp32",
+    "sha": "47ada0bc895ff0a49ca3af36c9c5fccacbc66fc8"
+  },
+  {
+    "name": "espressif-esp-idf-template",
+    "url": "https://github.com/espressif/esp-idf-template",
+    "sha": "fc07431210543a4a47ed2664d3f7f0a84e8a1b4f"
+  },
+  {
+    "name": "wled-wled",
+    "url": "https://github.com/wled/WLED",
+    "sha": "fffa05a765d41d7126b66ab5a3d1ce1f41e7d11e"
+  },
+  {
+    "name": "arendst-tasmota",
+    "url": "https://github.com/arendst/Tasmota",
+    "sha": "355e2593f3ba2a0df6d56f2ea3dae27a00b3a613"
+  },
+  {
+    "name": "letscontrolit-espeasy",
+    "url": "https://github.com/letscontrolit/ESPEasy",
+    "sha": "ebaf41e7fdb2684bc191c06136fae4ed8201b5e5"
+  },
+  {
+    "name": "marlinfirmware-marlin",
+    "url": "https://github.com/MarlinFirmware/Marlin",
+    "sha": "cb555a49f8eb9c4cb9f337bb0b38960a6736a03e"
+  },
+  {
+    "name": "rust-embedded-rust-raspberrypi-os-tutorials",
+    "url": "https://github.com/rust-embedded/rust-raspberrypi-OS-tutorials",
+    "sha": "644474cc09f755249f9c55d99a5d1e07a2562fc7"
+  },
+  {
+    "name": "rust-embedded-cortex-m",
+    "url": "https://github.com/rust-embedded/cortex-m",
+    "sha": "b79801ce4884fe46105b562f701a7d2fd5c586c7"
+  },
+  {
+    "name": "rust-embedded-embedded-hal",
+    "url": "https://github.com/rust-embedded/embedded-hal",
+    "sha": "41f29f6bfced1cae0cbe712ba96ee32c075b3125"
+  },
+  {
+    "name": "rust-embedded-discovery",
+    "url": "https://github.com/rust-embedded/discovery",
+    "sha": "4ecc57b97299ef81b5b806279dcb6f8e6e77f1b4"
+  },
+  {
+    "name": "embassy-rs-embassy",
+    "url": "https://github.com/embassy-rs/embassy",
+    "sha": "e5cde5cc3ea78b3fff2714ecb2f0b92055471a15"
+  },
+  {
+    "name": "rtic-rs-rtic",
+    "url": "https://github.com/rtic-rs/rtic",
+    "sha": "832307d81450b87e6264f343eb419870957cbf7d"
+  },
+  {
+    "name": "probe-rs-probe-rs",
+    "url": "https://github.com/probe-rs/probe-rs",
+    "sha": "21c9fae1b29ef0b654bdf4a2f903ce8385c44429"
+  },
+  {
+    "name": "esp-rs-esp-hal",
+    "url": "https://github.com/esp-rs/esp-hal",
+    "sha": "24ffa6210ab04df94cb7d20dfcf7e2e372f64974"
+  },
+  {
+    "name": "esp-rs-esp-idf-hal",
+    "url": "https://github.com/esp-rs/esp-idf-hal",
+    "sha": "64f829959cfe2771b1168d2790939fcc050372ab"
+  },
+  {
+    "name": "zephyrproject-rtos-example-application",
+    "url": "https://github.com/zephyrproject-rtos/example-application",
+    "sha": "ae66c063568055ee708ec02cd56cc0973a16610f"
+  },
+  {
+    "name": "freertos-freertos-kernel",
+    "url": "https://github.com/FreeRTOS/FreeRTOS-Kernel",
+    "sha": "ca759444e9ca59cfa3a9faa6cb8b49e0772ca520"
+  },
+  {
+    "name": "riot-os-riot",
+    "url": "https://github.com/RIOT-OS/RIOT",
+    "sha": "3cd51b726ae1e40ac74b7241fb9c3aa1db5468d3"
+  },
+  {
+    "name": "adafruit-adafruit-neopixel",
+    "url": "https://github.com/adafruit/Adafruit_NeoPixel",
+    "sha": "d514fc3beae85dd4c2b19781b93faa47bd6e996f"
+  },
+  {
+    "name": "fastled-fastled",
+    "url": "https://github.com/FastLED/FastLED",
+    "sha": "9daa03b828105bbf0d297fe23fc31e1ba1770bc1"
+  },
+  {
+    "name": "me-no-dev-espasyncwebserver",
+    "url": "https://github.com/me-no-dev/ESPAsyncWebServer",
+    "sha": "ad3741d159f9cfd50c567e81b67f3bef1dc6d89f"
+  },
+  {
+    "name": "knolleary-pubsubclient",
+    "url": "https://github.com/knolleary/pubsubclient",
+    "sha": "4eb0dc703522f687bbe4629b8252b0d71e6771f2"
+  },
+  {
+    "name": "tzapu-wifimanager",
+    "url": "https://github.com/tzapu/WiFiManager",
+    "sha": "4131fe617d01d746677e8b909379597162c2ca58"
+  },
+  {
+    "name": "cfenollosa-os-tutorial",
+    "url": "https://github.com/cfenollosa/os-tutorial",
+    "sha": "8002382ee56f876119f77217220b8a5034e9bac1"
+  },
+  {
+    "name": "mit-pdos-xv6-riscv",
+    "url": "https://github.com/mit-pdos/xv6-riscv",
+    "sha": "fa2ddcb7ca87a77af579380a6eafd5aff163b44f"
+  },
+  {
+    "name": "mit-pdos-xv6-public",
+    "url": "https://github.com/mit-pdos/xv6-public",
+    "sha": "eeb7b415dbcb12cc362d0783e41c3d1f44066b17"
+  },
+  {
+    "name": "phil-opp-blog-os",
+    "url": "https://github.com/phil-opp/blog_os",
+    "sha": "94c329cb4ac57ce8f179728dde47d9567d2314c1"
+  },
+  {
+    "name": "serenityos-jakt",
+    "url": "https://github.com/SerenityOS/jakt",
+    "sha": "14c980b0f16d9cbe9136818302fb504e26583416"
+  },
+  {
+    "name": "littlekernel-lk",
+    "url": "https://github.com/littlekernel/lk",
+    "sha": "9efdb2c95ad39535ea185028ff3c840d919eef52"
+  },
+  {
+    "name": "redox-os-kernel",
+    "url": "https://github.com/redox-os/kernel",
+    "sha": "b030c6f205f08b570838befcbdc3d89f2284416e"
+  },
+  {
+    "name": "szhou42-osdev",
+    "url": "https://github.com/szhou42/osdev",
+    "sha": "52c02f0d4327442493459253a5c6c83c5f378765"
+  },
+  {
+    "name": "lvgl-lvgl",
+    "url": "https://github.com/lvgl/lvgl",
+    "sha": "793c238033d65675d70d37604ea6ad16ee1f5398"
+  },
+  {
+    "name": "olikraus-u8g2",
+    "url": "https://github.com/olikraus/u8g2",
+    "sha": "d6c8499c5f2707cac8eccd09fd8f677d12b17977"
+  },
+  {
+    "name": "bitcraze-crazyflie-firmware",
+    "url": "https://github.com/bitcraze/crazyflie-firmware",
+    "sha": "e828ed29b008675f4e7aedeb23754dbc6c2531f5"
+  },
+  {
+    "name": "klipper3d-klipper",
+    "url": "https://github.com/Klipper3d/klipper",
+    "sha": "af81d23fec795ba64882d2206bc9cbc019e4501b"
+  },
+  {
+    "name": "nanopb-nanopb",
+    "url": "https://github.com/nanopb/nanopb",
+    "sha": "fd6eeb5c2edcdab308a7564c87f72398344bc67a"
+  },
+  {
+    "name": "eclipse-paho-mqtt-c",
+    "url": "https://github.com/eclipse/paho.mqtt.c",
+    "sha": "4a939ddb01eea581a32fd6f0adcfee51b91d2601"
+  },
+  {
+    "name": "cloudposse-terraform-aws-dynamic-subnets",
+    "url": "https://github.com/cloudposse/terraform-aws-dynamic-subnets",
+    "sha": "ab53498a69d8a48b0c454482ffbbd112c29d450a"
+  },
+  {
+    "name": "hashicorp-terraform-aws-consul",
+    "url": "https://github.com/hashicorp/terraform-aws-consul",
+    "sha": "9fc09ae0e0528dfe7ba3bba71c428a4be4fa31eb"
+  },
+  {
+    "name": "hashicorp-terraform-aws-vault",
+    "url": "https://github.com/hashicorp/terraform-aws-vault",
+    "sha": "96afcb4ad7166182ef33398d54db5eaa9d1f79c3"
+  },
+  {
+    "name": "hashicorp-consul-k8s",
+    "url": "https://github.com/hashicorp/consul-k8s",
+    "sha": "4e94d7a6d2d6419d62114e27731b564336e158a4"
+  },
+  {
+    "name": "hashicorp-vault-helm",
+    "url": "https://github.com/hashicorp/vault-helm",
+    "sha": "d6db16e37ed43ad2a290e9d6ca09f1b0307bf651"
+  },
+  {
+    "name": "hashicorp-learn-terraform-modules",
+    "url": "https://github.com/hashicorp/learn-terraform-modules",
+    "sha": "7d1154ec53aa778733403987b6a5c142ff7eb599"
+  },
+  {
+    "name": "terraform-aws-modules-terraform-aws-acm",
+    "url": "https://github.com/terraform-aws-modules/terraform-aws-acm",
+    "sha": "d461daf01f5d11bf116b82cdd9680a29772eb8f7"
+  },
+  {
+    "name": "terraform-aws-modules-terraform-aws-route53",
+    "url": "https://github.com/terraform-aws-modules/terraform-aws-route53",
+    "sha": "883f987d6bb328c09bd4dfc5a04024534b371d59"
+  },
+  {
+    "name": "terraform-aws-modules-terraform-aws-sqs",
+    "url": "https://github.com/terraform-aws-modules/terraform-aws-sqs",
+    "sha": "a68b4d515f9ccc729fb8bf84c6760c6b91302ce0"
+  },
+  {
+    "name": "terraform-aws-modules-terraform-aws-dynamodb-table",
+    "url": "https://github.com/terraform-aws-modules/terraform-aws-dynamodb-table",
+    "sha": "b6cc515760466a455ff0acb97b16151fdca4511e"
+  },
+  {
+    "name": "geerlingguy-ansible-role-git",
+    "url": "https://github.com/geerlingguy/ansible-role-git",
+    "sha": "ec2d4e07ff41afe94d07853c7338c35c12e55a67"
+  },
+  {
+    "name": "geerlingguy-ansible-role-redis",
+    "url": "https://github.com/geerlingguy/ansible-role-redis",
+    "sha": "9e8c2faa4ed44add3860c117e708d9cbada99ff5"
+  },
+  {
+    "name": "geerlingguy-raspberry-pi-dramble",
+    "url": "https://github.com/geerlingguy/raspberry-pi-dramble",
+    "sha": "d3014f7f21daa94e9700ce24055cbd5ec4df5efb"
+  },
+  {
+    "name": "openstack-kolla-ansible",
+    "url": "https://github.com/openstack/kolla-ansible",
+    "sha": "1746993a2e4a37ef017ce4dcafd1e36e92ea54e5"
+  },
+  {
+    "name": "pulumi-templates",
+    "url": "https://github.com/pulumi/templates",
+    "sha": "fcf64bd79d3829b3c6557ab2a35a423a15e1e2a7"
+  },
+  {
+    "name": "pulumi-pulumi-eks",
+    "url": "https://github.com/pulumi/pulumi-eks",
+    "sha": "cdf4fb05d00c56006486fa069712bc697244ad64"
+  },
+  {
+    "name": "pulumi-pulumi-azure-native",
+    "url": "https://github.com/pulumi/pulumi-azure-native",
+    "sha": "b5b8a6858122d8b7b762b6521d3f879c04f8fe62"
+  },
+  {
+    "name": "wmnnd-nginx-certbot",
+    "url": "https://github.com/wmnnd/nginx-certbot",
+    "sha": "62a1c61f54244859d33d5697bb954960f130901d"
+  },
+  {
+    "name": "nginx-proxy-acme-companion",
+    "url": "https://github.com/nginx-proxy/acme-companion",
+    "sha": "2132a2a2621b7839acb0863480269f46af83feb1"
+  },
+  {
+    "name": "onedr0p-cluster-template",
+    "url": "https://github.com/onedr0p/cluster-template",
+    "sha": "580710091b17d89763f25bc55ccfe9610a4a7f4f"
+  },
+  {
+    "name": "yavuzlar-vulnlab",
+    "url": "https://github.com/Yavuzlar/VulnLab",
+    "sha": "6f938f78ec3bdfb5d4b0d41c302f618d74abc10d"
+  },
+  {
+    "name": "globocom-huskyci",
+    "url": "https://github.com/globocom/huskyCI",
+    "sha": "0541333390478240951660d3b919e6dc79b6e4c1"
+  },
+  {
+    "name": "zaproxy-zaproxy",
+    "url": "https://github.com/zaproxy/zaproxy",
+    "sha": "358cf089e4875aeb73a5335d3fa74b443bddeedc"
+  },
+  {
+    "name": "rapid7-metasploit-payloads",
+    "url": "https://github.com/rapid7/metasploit-payloads",
+    "sha": "02c6032202f307926c2758fdc88827ccabe5afd2"
+  },
+  {
+    "name": "mandiant-capa",
+    "url": "https://github.com/mandiant/capa",
+    "sha": "0735bf77c1534e58aab458c25c6f76578233eacc"
+  },
+  {
+    "name": "yara-rules-rules",
+    "url": "https://github.com/Yara-Rules/rules",
+    "sha": "0f93570194a80d2f2032869055808b0ddcdfb360"
+  },
+  {
+    "name": "virustotal-yara",
+    "url": "https://github.com/VirusTotal/yara",
+    "sha": "6d47342e825e59f5d8f20874d0778332bcec83a6"
+  },
+  {
+    "name": "neo23x0-loki",
+    "url": "https://github.com/Neo23x0/Loki",
+    "sha": "7688421a7094e95453802d97484f2a0b8694a664"
+  },
+  {
+    "name": "carlospolop-peass-ng",
+    "url": "https://github.com/carlospolop/PEASS-ng",
+    "sha": "950afde066029fb44779e52b7381a82957834fb2"
+  },
+  {
+    "name": "bloodhoundad-bloodhound",
+    "url": "https://github.com/BloodHoundAD/BloodHound",
+    "sha": "e8eda8653415f5095aa00091bc1d374f8f12b185"
+  },
+  {
+    "name": "fortra-impacket",
+    "url": "https://github.com/fortra/impacket",
+    "sha": "0b3ef2b979ba0f52dfc852dd41e0f90ce7b3bc42"
+  },
+  {
+    "name": "lgandx-responder",
+    "url": "https://github.com/lgandx/Responder",
+    "sha": "424fbe53d6a61824e3c7685fe5f69668721b821e"
+  },
+  {
+    "name": "hashcat-hashcat",
+    "url": "https://github.com/hashcat/hashcat",
+    "sha": "fe3c41bef2ab286432a745dd6617d5ee51c91b30"
+  },
+  {
+    "name": "openwall-john",
+    "url": "https://github.com/openwall/john",
+    "sha": "37bebbe4b6442c8dd3888e5848ef062c0783e9f3"
+  },
+  {
+    "name": "jeremylong-dependencycheck",
+    "url": "https://github.com/jeremylong/DependencyCheck",
+    "sha": "58b4ddccbdafcb7347979c6551c4f56049126dcc"
+  },
+  {
+    "name": "owasp-cheatsheetseries",
+    "url": "https://github.com/OWASP/CheatSheetSeries",
+    "sha": "757270a26306e5edda9957bb7f86cfcde03c30f9"
+  },
+  {
+    "name": "trailofbits-algo",
+    "url": "https://github.com/trailofbits/algo",
+    "sha": "b1444878b67c8bc238a4f344edf9878619deddc6"
+  },
+  {
+    "name": "google-oss-fuzz-gen",
+    "url": "https://github.com/google/oss-fuzz-gen",
+    "sha": "c0982c5d40a7e93ce70fd319705804b9a29954d0"
+  },
+  {
+    "name": "ctf-wiki-ctf-wiki",
+    "url": "https://github.com/ctf-wiki/ctf-wiki",
+    "sha": "e225ddfcd420a7f54a5940f47336ebdf8c29b875"
+  },
+  {
+    "name": "pwndbg-pwndbg",
+    "url": "https://github.com/pwndbg/pwndbg",
+    "sha": "df15257201e82a62984b139d21a14358be25f3a9"
+  },
+  {
+    "name": "longld-peda",
+    "url": "https://github.com/longld/peda",
+    "sha": "84d38bda505941ba823db7f6c1bcca1e485a2d43"
+  },
+  {
+    "name": "hugsy-gef",
+    "url": "https://github.com/hugsy/gef",
+    "sha": "49c07dc60624f264d40b5c6ea39b2bf3a4e9958f"
+  },
+  {
+    "name": "radareorg-radare2",
+    "url": "https://github.com/radareorg/radare2",
+    "sha": "c937b5d3771ed277040bbf8fd10c4c760fb1e8d9"
+  },
+  {
+    "name": "arduino-arduinocore-avr",
+    "url": "https://github.com/arduino/ArduinoCore-avr",
+    "sha": "11b9130371e8447920edb65a75706a6c951e51fc"
+  },
+  {
+    "name": "stm32duino-arduino-core-stm32",
+    "url": "https://github.com/stm32duino/Arduino_Core_STM32",
+    "sha": "b634d93e7dbfa4e231d9c520f7e0bf083a48e6e9"
+  },
+  {
+    "name": "rp-rs-rp-hal",
+    "url": "https://github.com/rp-rs/rp-hal",
+    "sha": "5458b7e2a98ff5e0cfbb3430d05e138abab3c4be"
+  },
+  {
+    "name": "raspberrypi-pico-examples",
+    "url": "https://github.com/raspberrypi/pico-examples",
+    "sha": "0d62f75bafc2c8120d3276c3343d1a9195e909e9"
+  },
+  {
+    "name": "raspberrypi-pico-sdk",
+    "url": "https://github.com/raspberrypi/pico-sdk",
+    "sha": "079c6f39023649b154152db30f1d781e884879bc"
+  },
+  {
+    "name": "nrf-rs-nrf-hal",
+    "url": "https://github.com/nrf-rs/nrf-hal",
+    "sha": "718c46c1a1a8795d17b245f511d2d7b771e7c250"
+  },
+  {
+    "name": "stm32-rs-stm32f4xx-hal",
+    "url": "https://github.com/stm32-rs/stm32f4xx-hal",
+    "sha": "0eb673dd2fc657a052e824f2693dcbd4e1a1b83d"
+  },
+  {
+    "name": "tock-tock",
+    "url": "https://github.com/tock/tock",
+    "sha": "26893d05e38075034c98f182dfd1091e1bfce922"
+  },
+  {
+    "name": "oxidecomputer-hubris",
+    "url": "https://github.com/oxidecomputer/hubris",
+    "sha": "2af2af4d18f39bc7b8a741117f2bfb14177e75d5"
+  },
+  {
+    "name": "theseus-os-theseus",
+    "url": "https://github.com/theseus-os/Theseus",
+    "sha": "1fbfe567075a65ed749b6680db1aeb538819c70c"
+  },
+  {
+    "name": "torvalds-uemacs",
+    "url": "https://github.com/torvalds/uemacs",
+    "sha": "325a8e97973729da7d288e6deb49b36afa0b252a"
+  },
+  {
+    "name": "managarm-managarm",
+    "url": "https://github.com/managarm/managarm",
+    "sha": "1631efaf78eaead3c18c65a8358c3ca9cef0f0e2"
+  },
+  {
+    "name": "limine-bootloader-limine",
+    "url": "https://github.com/limine-bootloader/limine",
+    "sha": "89a9512c623a4779cc73e3869383876d54264b28"
+  },
+  {
+    "name": "nuta-resea",
+    "url": "https://github.com/nuta/resea",
+    "sha": "5b45d5904367348c60711ceba3e5443a1fcadb66"
+  },
+  {
+    "name": "thethingsnetwork-arduino-device-lib",
+    "url": "https://github.com/TheThingsNetwork/arduino-device-lib",
+    "sha": "d2e30f1e99aa5a1909988b0b943ee700f5c5cd2d"
+  },
+  {
+    "name": "mcci-catena-arduino-lmic",
+    "url": "https://github.com/mcci-catena/arduino-lmic",
+    "sha": "92d32d943f1ec7fb9a511e7f744639478f52e17f"
+  },
+  {
+    "name": "thingsboard-thingsboard-gateway",
+    "url": "https://github.com/thingsboard/thingsboard-gateway",
+    "sha": "4106a8ffb0a8d51a666497ffc271d96e4f96f515"
+  },
+  {
+    "name": "openthread-openthread",
+    "url": "https://github.com/openthread/openthread",
+    "sha": "43fb9ad8f242fca99d81897622fc43b8849f1706"
+  },
+  {
+    "name": "armmbed-mbed-os-example-blinky",
+    "url": "https://github.com/ARMmbed/mbed-os-example-blinky",
+    "sha": "d4a75f23f45402ff6e8131cffda23674d3f876f4"
+  },
+  {
+    "name": "contiki-ng-contiki-ng",
+    "url": "https://github.com/contiki-ng/contiki-ng",
+    "sha": "a3c7119915a5d1d137cee9990c0c3ba0a32bfbb7"
+  },
+  {
+    "name": "apache-mynewt-core",
+    "url": "https://github.com/apache/mynewt-core",
+    "sha": "e5bc14256528776a6bc27d921d6e7e54b1b1d9ee"
   }
 ]
