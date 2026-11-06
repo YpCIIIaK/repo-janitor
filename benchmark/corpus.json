@@ -6510,11 +6510,6 @@
     "sha": "e28985fe2a0d7123a8fb84cbb70c72b5e3d935ca"
   },
   {
-    "name": "zio-zio",
-    "url": "https://github.com/zio/zio",
-    "sha": "d73f22f5d55c856bc5e4c749e5ae3c75e22a407a"
-  },
-  {
     "name": "haskell-cabal",
     "url": "https://github.com/haskell/cabal",
     "sha": "aca9bd448a4f837f352623881caecb5776847cc3"
@@ -6620,11 +6615,6 @@
     "sha": "36a43b296ce5cbf535f34610a57760fac0125989"
   },
   {
-    "name": "open-policy-agent-opa",
-    "url": "https://github.com/open-policy-agent/opa",
-    "sha": "b04b69a0a1a99526635d3ffad953bfe3d6b2751a"
-  },
-  {
     "name": "aquasecurity-trivy",
     "url": "https://github.com/aquasecurity/trivy",
     "sha": "c22582a1a226379b070041a9e76dcd615c343328"
@@ -6720,11 +6710,6 @@
     "sha": "de4078ec11b8e4872f417be4de30195772a1f11b"
   },
   {
-    "name": "rocketchat-rocket-chat",
-    "url": "https://github.com/RocketChat/Rocket.Chat",
-    "sha": "23f3cfb5a40652a3029307f9f0f2040e69860050"
-  },
-  {
     "name": "immich-app-immich",
     "url": "https://github.com/immich-app/immich",
     "sha": "39db71100f429da4e37262aeeace028a148da1de"
@@ -6753,11 +6738,6 @@
     "name": "calcom-cal-com",
     "url": "https://github.com/calcom/cal.com",
     "sha": "2eb48eccd8aca8a0c0ffabf28cf92e298b33ecee"
-  },
-  {
-    "name": "twentyhq-twenty",
-    "url": "https://github.com/twentyhq/twenty",
-    "sha": "6a502cbb5df97675468c3b36aed575e9e87f3301"
   },
   {
     "name": "getsentry-sentry-javascript",
@@ -6843,11 +6823,6 @@
     "name": "zulip-python-zulip-api",
     "url": "https://github.com/zulip/python-zulip-api",
     "sha": "b172347594a4634517f925f9e30522fe987dbb9c"
-  },
-  {
-    "name": "posthog-posthog-foss",
-    "url": "https://github.com/PostHog/posthog-foss",
-    "sha": "8a23678b73b9413bb2d04d3f6ada78cc57be97ea"
   },
   {
     "name": "taigaio-taiga-back",
@@ -7265,11 +7240,6 @@
     "sha": "d65e916130c91d8f13ca808ca088d225ddd9a939"
   },
   {
-    "name": "invoiceninja-invoiceninja",
-    "url": "https://github.com/invoiceninja/invoiceninja",
-    "sha": "15ea35ea63f367eba33c04b7acd9ab1227853537"
-  },
-  {
     "name": "symfony-symfony-docs",
     "url": "https://github.com/symfony/symfony-docs",
     "sha": "1e8754a1a45efe9019653ce4a15cad4c2d95c257"
@@ -7645,11 +7615,6 @@
     "sha": "6862a4bc1e9b67a0b0f9279a68c4271f09bfdd91"
   },
   {
-    "name": "carbon-design-system-carbon",
-    "url": "https://github.com/carbon-design-system/carbon",
-    "sha": "f5bdc21a0933baca91875e618f07141ff708cbe7"
-  },
-  {
     "name": "ant-design-ant-design-pro",
     "url": "https://github.com/ant-design/ant-design-pro",
     "sha": "42f2cb1d303380909ea04c73b5e60679d09c321a"
@@ -7678,11 +7643,6 @@
     "name": "skeletonlabs-skeleton",
     "url": "https://github.com/skeletonlabs/skeleton",
     "sha": "e65535ebfb9b37bf37ccde1ed854b96397d21550"
-  },
-  {
-    "name": "saadeghi-daisyui",
-    "url": "https://github.com/saadeghi/daisyui",
-    "sha": "bf3bac3a397b543e55641ecb2d60a2ed961f09ec"
   },
   {
     "name": "nextui-org-nextui",
