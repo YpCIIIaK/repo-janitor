@@ -150,6 +150,16 @@ function downgrade(sev: Severity): Severity {
 }
 
 /**
+ * Workspaces that ship next to a project but are not the project: its docs
+ * site, examples, playgrounds, benchmarks and test apps. zod's score fell to F
+ * on ~95 advisories in packages/docs (Next.js and UI kits of the docs site),
+ * none in the library itself. They stay reported — a deployed docs site with
+ * a vulnerable Next.js is still worth fixing — one severity step lower.
+ */
+const AUXILIARY_WORKSPACE_RE =
+  /(^|\/)(?:docs?|documentation|website|site|www|_?examples?|samples?|demos?|playgrounds?|sandbox|bench(?:mark)?s?|e2e|tests?|fixtures?)\//i
+
+/**
  * Map an OSV/GHSA severity label to our three-level scale.
  *
  * Two calibrations matter more than the mapping itself, because both otherwise
@@ -526,10 +536,13 @@ export const vulnerableDepsScanner: Scanner = {
         : "No fixed version has been published yet."
       const kindNote = hit.direct ? "" : " (transitive dependency)"
       // Say plainly why a high-severity advisory may be scored below its label.
+      const auxiliary = AUXILIARY_WORKSPACE_RE.test(hit.manifest.replace(/\\/g, "/"))
       const pathNote =
         hit.runtime === false
           ? " Build/test-only path — not reachable from the production install, so severity is lowered."
-          : ""
+          : auxiliary
+            ? " Declared by the project's docs site, examples or tests, not the published package, so severity is lowered."
+            : ""
       const evidence = hit.dependencyPath?.length
         ? `Dependency path: ${hit.dependencyPath.join(" → ")}`
         : undefined
@@ -543,7 +556,9 @@ export const vulnerableDepsScanner: Scanner = {
         // from whichever GHSA happened to come back first.
         id: `vuln-${hit.name}-${id}`,
         category: "security",
-        severity: mapSeverity(label, { runtime: hit.runtime, direct: hit.direct }),
+        severity: auxiliary
+          ? downgrade(mapSeverity(label, { runtime: hit.runtime, direct: hit.direct }))
+          : mapSeverity(label, { runtime: hit.runtime, direct: hit.direct }),
         title: `${hit.name}@${hit.version} has a known vulnerability (${id})`,
         location: hit.manifest,
         ageDays: 0,

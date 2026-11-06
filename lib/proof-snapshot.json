@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-05T16:39:48.593Z",
+  "updatedAt": "2026-11-06T13:40:49.921Z",
   "repos": [
     {
       "owner": "expressjs",
@@ -10,8 +10,8 @@
     {
       "owner": "colinhacks",
       "name": "zod",
-      "grade": "F",
-      "score": 30
+      "grade": "C",
+      "score": 73
     },
     {
       "owner": "tj",
@@ -47,7 +47,7 @@
       "owner": "lukeed",
       "name": "clsx",
       "grade": "A",
-      "score": 92
+      "score": 93
     }
   ]
 }
