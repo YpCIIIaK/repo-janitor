@@ -208,6 +208,8 @@ export interface Percentile {
   sample: number
   /** Which cut was used, so the sentence can say so. */
   basis: "language-size" | "language" | "size" | "all"
+  /** "benchmark" when drawn from the public open-source corpus instead of live scans. */
+  source?: "scans" | "benchmark"
 }
 
 /**

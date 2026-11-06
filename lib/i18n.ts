@@ -153,6 +153,7 @@ const en = {
   "pct.better.size": "Better than {percent}% of repositories this size",
   "pct.better.all": "Better than {percent}% of everything scanned",
   "pct.sample": "out of {count} scans",
+  "pct.sampleBenchmark": "among {count} open-source projects we benchmark",
 
   "landing.checks.title": "{count} checks, in six families",
   "summary.title": "What the average repository looks like",
@@ -616,6 +617,7 @@ const ru: Messages = {
   "pct.better.size": "Лучше, чем {percent}% репозиториев такого же размера",
   "pct.better.all": "Лучше, чем {percent}% всего просканированного",
   "pct.sample": "из {count} сканов",
+  "pct.sampleBenchmark": "среди {count} open-source проектов нашего бенчмарка",
 
   "landing.checks.title": "{count} проверок, шесть семейств",
   "summary.title": "Как выглядит средний репозиторий",

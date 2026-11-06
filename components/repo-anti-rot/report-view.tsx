@@ -151,7 +151,7 @@ export async function ReportView({
                   {tr(pct.key, { percent: pct.percent, language: primaryLanguage ?? "" })}
                 </span>
                 <span className="mt-0.5 block text-xs font-normal text-muted-foreground">
-                  {tr("pct.sample", { count: percentile?.sample ?? 0 })}
+                  {tr(percentile?.source === "benchmark" ? "pct.sampleBenchmark" : "pct.sample", { count: percentile?.sample ?? 0 })}
                 </span>
               </p>
             )}

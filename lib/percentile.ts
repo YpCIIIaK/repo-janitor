@@ -1,5 +1,6 @@
 import "server-only"
 import { supabaseConfig } from "@/lib/share-db"
+import { benchmarkPercentile } from "@/lib/benchmark-percentile"
 import { dbRecordScanStat, dbScores } from "@/lib/scan-stats-db"
 import {
   assertStatRecordable,
@@ -58,6 +59,14 @@ export async function percentileFor(
   score: number,
   opts: { language?: string | null; size?: SizeBucket } = {},
 ): Promise<Percentile | null> {
+  const live = await livePercentile(score, opts)
+  return live ?? benchmarkPercentile(score, opts)
+}
+
+async function livePercentile(
+  score: number,
+  opts: { language?: string | null; size?: SizeBucket },
+): Promise<Percentile | null> {
   const cfg = supabaseConfig()
   if (!cfg) return null
 
@@ -76,7 +85,7 @@ export async function percentileFor(
       return null // a broken stats table is silence, not an error page
     }
     const hit = choosePercentile([{ basis: step.basis, scores }], score)
-    if (hit) return hit
+    if (hit) return { ...hit, source: "scans" }
   }
   return null
 }
