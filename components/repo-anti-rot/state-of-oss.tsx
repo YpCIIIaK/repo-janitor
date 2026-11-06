@@ -24,6 +24,20 @@ const T = {
     updated: "Data from",
     tiles: { repos: "repositories scanned", median: "median health score", todos: "dated TODOs", todoAge: "median TODO age" },
     years: (y: number) => `${y.toFixed(1)} years`,
+    dist: "Score distribution",
+    distNote: (m: number) => `Repos per 10-point band. Median ${m}.`,
+    sev: "What the findings are",
+    sevNote: "All default-visible findings across the corpus, by severity.",
+    sevL: { critical: "critical", warning: "warning", info: "info" },
+    exposure: "Security exposure",
+    exposureNote: "Share of repos with at least one such finding. Hard-coded credentials are not shown: on labelled samples nearly all of them were test fixtures and examples, so they stay hidden as low confidence.",
+    expL: { critical: "any critical finding", injection: "insecure code pattern (injection, eval…)", iac: "infrastructure misconfiguration", docker: "Dockerfile issue", noLockfile: "no lockfile committed" },
+    langs: "By language",
+    langsNote: "Main language by lines of code. Density counts findings per 1,000 lines in repos over 500 lines.",
+    langH: ["language", "repos", "median", "per 1k lines"],
+    act: "Busy repos score lower",
+    actNote: (a: number, q: number) => `Active: ≥ 50 commits in the last year (${a} repos). Quiet: < 10 (${q}). More churn, more debt — or simply more code being looked at.`,
+    actL: { active: "active", quiet: "quiet" },
     grades: "Grades",
     gradesNote: "Score adjusts for size: warnings weigh less in big codebases, critical findings never do.",
     supply: "Most GitHub Actions can be swapped under you",
@@ -74,6 +88,20 @@ const T = {
     updated: "Данные на",
     tiles: { repos: "репозиториев просканировано", median: "медианная оценка", todos: "TODO с датой", todoAge: "средний возраст TODO" },
     years: (y: number) => `${y.toFixed(1).replace(".", ",")} года`,
+    dist: "Распределение оценок",
+    distNote: (m: number) => `Число репозиториев в каждом десятке баллов. Медиана ${m}.`,
+    sev: "Из чего состоят находки",
+    sevNote: "Все видимые по умолчанию находки корпуса по важности.",
+    sevL: { critical: "критичные", warning: "предупреждения", info: "инфо" },
+    exposure: "Безопасность",
+    exposureNote: "Доля репозиториев хотя бы с одной такой находкой. Ключей в коде здесь нет: в размеченных примерах почти все они оказались тестовыми фикстурами, поэтому скрыты как низкая уверенность.",
+    expL: { critical: "хотя бы одна критичная находка", injection: "небезопасный код (инъекции, eval…)", iac: "ошибка в конфигурации инфраструктуры", docker: "проблема в Dockerfile", noLockfile: "нет lockfile" },
+    langs: "По языкам",
+    langsNote: "Основной язык по числу строк. Плотность — находки на 1000 строк в репозиториях больше 500 строк.",
+    langH: ["язык", "репо", "медиана", "на 1k строк"],
+    act: "Активные репозитории получают оценку ниже",
+    actNote: (a: number, q: number) => `Активные: ≥ 50 коммитов за год (${a} репо). Тихие: < 10 (${q}). Больше изменений — больше долга, или просто больше кода под взглядом.`,
+    actL: { active: "активные", quiet: "тихие" },
     grades: "Оценки",
     gradesNote: "Оценка учитывает размер: в больших проектах предупреждения весят меньше, критические находки — всегда полностью.",
     supply: "Большинство GitHub Actions можно подменить",
@@ -262,6 +290,75 @@ export function StateOfOpenSource() {
         <div className="flex flex-wrap gap-x-4 text-xs text-muted-foreground">
           {Object.entries(stats.grades).map(([g, c]) => <span key={g}>{g}: {c} · {pct(c / totalGrades)}</span>)}
         </div>
+      </Section>
+
+      <Section title={t.dist} note={t.distNote(stats.medianScore)}>
+        <div className="flex h-40 items-end gap-1.5">
+          {stats.scoreHistogram.map((c, b) => {
+            const max = Math.max(...stats.scoreHistogram)
+            return (
+              <div key={b} className="flex flex-1 flex-col items-center gap-1" title={`${b * 10}–${b === 9 ? 100 : b * 10 + 9}: ${c}`}>
+                <span className="font-mono text-[10px] tabular-nums text-muted-foreground">{c}</span>
+                <div className={cn("w-full rounded-t", b < 4 ? "bg-destructive" : b < 6 ? "bg-warning" : b < 8 ? "bg-primary" : "bg-success")} style={{ height: `${Math.max(2, (c / max) * 120)}px` }} />
+                <span className="font-mono text-[10px] text-muted-foreground">{b * 10}</span>
+              </div>
+            )
+          })}
+        </div>
+      </Section>
+
+      <Section title={t.exposure} note={t.exposureNote}>
+          {(Object.keys(t.expL) as (keyof typeof t.expL)[]).map((k) => (
+            <Bar key={k} label={t.expL[k]} value={stats.exposure[k]} max={Math.max(...Object.values(stats.exposure))} display={pct(stats.exposure[k])} tone="destructive" />
+          ))}
+      </Section>
+
+      <Section title={t.sev} note={t.sevNote}>
+        {(() => {
+          const sev = stats.severity
+          const total = sev.critical + sev.warning + sev.info
+          const tone = { critical: "bg-destructive", warning: "bg-warning", info: "bg-muted-foreground" } as const
+          return (
+            <>
+              <div className="flex h-7 overflow-hidden rounded-md">
+                {(["critical", "warning", "info"] as const).map((k) => (
+                  <div key={k} className={tone[k]} style={{ width: `${(100 * sev[k]) / total}%` }} title={`${t.sevL[k]}: ${sev[k]}`} />
+                ))}
+              </div>
+              <div className="flex flex-wrap gap-x-4 text-xs text-muted-foreground">
+                {(["critical", "warning", "info"] as const).map((k) => <span key={k}>{t.sevL[k]}: {sev[k].toLocaleString(l)} · {pct(sev[k] / total)}</span>)}
+              </div>
+            </>
+          )
+        })()}
+      </Section>
+
+      <Section title={t.langs} note={t.langsNote}>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead className="text-left text-xs text-muted-foreground">
+              <tr>{t.langH.map((h, i) => <th key={h} className={cn("pb-2 font-medium", i > 0 && "text-right")}>{h}</th>)}</tr>
+            </thead>
+            <tbody>
+              {Object.entries(stats.languages as Record<string, { repos: number; medianScore: number; findingsPer1k: number }>)
+                .filter(([lang, v]) => v.repos >= 10 && lang !== "other")
+                .sort((a, b) => b[1].repos - a[1].repos)
+                .map(([lang, v]) => (
+                  <tr key={lang} className="border-t border-border">
+                    <td className="py-1.5">{lang}</td>
+                    <td className="py-1.5 text-right font-mono tabular-nums">{v.repos}</td>
+                    <td className={cn("py-1.5 text-right font-mono tabular-nums", v.medianScore >= 80 ? "text-success" : v.medianScore < 60 ? "text-warning" : "")}>{v.medianScore}</td>
+                    <td className="py-1.5 text-right font-mono tabular-nums text-muted-foreground">{v.findingsPer1k.toFixed(1)}</td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
+      </Section>
+
+      <Section title={t.act} note={t.actNote(stats.activity.active, stats.activity.quiet)}>
+        <Bar label={t.actL.active} value={stats.activity.activeMedian} max={100} display={String(stats.activity.activeMedian)} tone="warning" />
+        <Bar label={t.actL.quiet} value={stats.activity.quietMedian} max={100} display={String(stats.activity.quietMedian)} tone="success" />
       </Section>
 
       <Section title={t.supply} note={t.supplyNote(ci.withActions)}>

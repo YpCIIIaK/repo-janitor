@@ -281,6 +281,23 @@ json.practices = practiceRows
 
 // --- the scanner on itself ----------------------------------------------------------------
 const hidden = repos.reduce((s, r) => s + r.hidden, 0)
+// --- distribution, severity, exposure ------------------------------------
+json.scoreHistogram = Array.from({ length: 10 }, (_, b) =>
+  repos.filter((r) => Math.min(9, Math.floor(r.score / 10)) === b).length)
+json.severity = { critical: 0, warning: 0, info: 0 }
+for (const r of repos) for (const i of r.issues) if (i.severity in json.severity) json.severity[i.severity]++
+{
+  const has = (r, re) => r.issues.some((i) => re.test(i.rule ?? ""))
+  const share = (re, pool = repos) => (pool.length ? Number((pool.filter((r) => has(r, re)).length / pool.length).toFixed(3)) : 0)
+  json.exposure = {
+    injection: share(/^insecure-/),
+    critical: Number((repos.filter((r) => r.issues.some((i) => i.severity === "critical")).length / repos.length).toFixed(3)),
+    iac: share(/^iac-/),
+    docker: share(/^docker-/),
+    noLockfile: share(/^lockfile-missing$/),
+  }
+}
+
 json.lowConfidenceHidden = hidden
 json.shown = repos.reduce((s, r) => s + r.issues.length, 0)
 json.precision = precisionByConfidence()

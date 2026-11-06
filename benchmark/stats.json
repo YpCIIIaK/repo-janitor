@@ -1,6 +1,6 @@
 {
   "repos": 1273,
-  "generatedAt": "2026-11-06T14:53:33.460Z",
+  "generatedAt": "2026-11-06T15:20:33.320Z",
   "grades": {
     "A": 321,
     "B": 296,
@@ -641,6 +641,30 @@
       "densityGap": -0.6339123037746494
     }
   ],
+  "scoreHistogram": [
+    14,
+    1,
+    4,
+    12,
+    41,
+    167,
+    344,
+    158,
+    211,
+    321
+  ],
+  "severity": {
+    "critical": 352,
+    "warning": 30899,
+    "info": 39296
+  },
+  "exposure": {
+    "injection": 0.051,
+    "critical": 0.06,
+    "iac": 0.017,
+    "docker": 0.078,
+    "noLockfile": 0.057
+  },
   "lowConfidenceHidden": 10574,
   "shown": 70547,
   "precision": {
