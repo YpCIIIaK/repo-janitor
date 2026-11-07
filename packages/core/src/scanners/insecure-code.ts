@@ -1,3 +1,4 @@
+import { scanCppTlsSource } from "./insecure-cpp"
 import { scanRustTlsSource } from "./insecure-rust"
 import { scanKotlinSource } from "./insecure-kotlin"
 import { scanPhpSecurity } from "./php-security"
@@ -1071,12 +1072,13 @@ export const insecureCodeScanner: Scanner = {
       const webRoot = /\.php$/i.test(norm) && /(^|\/)(?:www|public|htdocs)\//.test(norm)
       if (SKIP_RE.test(norm) || (NOT_SHIPPED_RE.test(norm) && !webRoot)) continue
 
-      if (/\.rs$/i.test(norm)) {
+      if (/\.(?:rs|c|cc|cpp|cxx|h|hpp|hxx)$/i.test(norm)) {
         const size = await ctx.fileSize?.(file)
         if (size !== null && size !== undefined && size > MAX_BYTES) continue
         const content = await ctx.readFile(file)
         if (!content) continue
-        for (const hit of scanRustTlsSource(content).slice(0, MAX_PER_FILE)) {
+        const nativeHits = /\.rs$/i.test(norm) ? scanRustTlsSource(content) : scanCppTlsSource(content)
+        for (const hit of nativeHits.slice(0, MAX_PER_FILE)) {
           if (issues.length >= MAX_TOTAL) break
           let ageDays = 0
           try { ageDays = await ctx.git.blameAgeDays(file, hit.line) } catch { /* blame unavailable */ }
