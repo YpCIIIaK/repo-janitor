@@ -1,3 +1,4 @@
+import { scanRustTlsSource } from "./insecure-rust"
 import { scanKotlinSource } from "./insecure-kotlin"
 import { scanPhpSecurity } from "./php-security"
 import { scanSwiftSource } from "./insecure-swift"
@@ -1069,6 +1070,23 @@ export const insecureCodeScanner: Scanner = {
       // In PHP apps `www/` (or `public/`) is the web root itself, not a docs site.
       const webRoot = /\.php$/i.test(norm) && /(^|\/)(?:www|public|htdocs)\//.test(norm)
       if (SKIP_RE.test(norm) || (NOT_SHIPPED_RE.test(norm) && !webRoot)) continue
+
+      if (/\.rs$/i.test(norm)) {
+        const size = await ctx.fileSize?.(file)
+        if (size !== null && size !== undefined && size > MAX_BYTES) continue
+        const content = await ctx.readFile(file)
+        if (!content) continue
+        for (const hit of scanRustTlsSource(content).slice(0, MAX_PER_FILE)) {
+          if (issues.length >= MAX_TOTAL) break
+          let ageDays = 0
+          try { ageDays = await ctx.git.blameAgeDays(file, hit.line) } catch { /* blame unavailable */ }
+          issues.push({ id: `insecure-${hit.rule.id}-${norm}:${hit.line}`, category: "security",
+            severity: TEST_RE.test(norm) ? LOWER[hit.rule.severity] : hit.rule.severity,
+            title: hit.rule.title, location: `${norm}:${hit.line}`, ageDays,
+            detail: hit.rule.detail, evidence: hit.evidence, confidence: "high" })
+        }
+        continue
+      }
 
       const lang = langOf(norm)
       if (!lang && !/\.swift$/i.test(norm)) continue
