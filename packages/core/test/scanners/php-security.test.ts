@@ -9,6 +9,14 @@ describe("PHP request-to-sink coverage", () => {
   it("permits fixed paths, sanitized names, resets, comments and strings", () => {
     for (const code of ["readfile('/srv/data.txt');", "$path = basename($_GET['file']);\nreadfile($path);", "$path = $_GET['file'];\n$path = '/srv/static';\nreadfile($path);", "// readfile($_GET['file']);", "/*\nreadfile($_GET['file']);\n*/", "$example = 'readfile($_GET[file])';", "$path = $_GET['file'];\nfunction safe() {\nreadfile($path);\n}"]) expect(rules(code)).not.toContain("php-path-traversal")
   })
+  it("does not taint quoted request names or report write-only fopen calls", () => {
+    expect(rules("$path = '$_GET[file]';\nreadfile($path);")).not.toContain("php-path-traversal")
+    expect(rules("fopen($_POST['path'], 'w');")).not.toContain("php-path-traversal")
+  })
+  it("tracks the raw request body into XXE sinks", () => {
+    expect(rules("$xml = file_get_contents('php://input');\n$doc->loadXML($xml, LIBXML_NOENT);")).toContain("php-xxe")
+    expect(rules("$xml = file_get_contents('/srv/static.xml');\n$doc->loadXML($xml, LIBXML_NOENT);")).not.toContain("php-xxe")
+  })
   it("requires tainted XML and explicit external entity options", () => {
     expect(rules("$xml = $_POST['xml'];\n$doc->loadXML($xml, LIBXML_NOENT | LIBXML_NONET);")).toContain("php-xxe")
     expect(rules("simplexml_load_string($_POST['xml'], 'SimpleXMLElement', LIBXML_DTDLOAD);")).toContain("php-xxe")

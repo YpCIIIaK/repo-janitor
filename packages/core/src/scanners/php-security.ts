@@ -35,7 +35,7 @@ export function scanPhpSecurity(content: string): CodeHit[] {
     // Quoted documentation cannot introduce executable sinks or variable reads.
     const executable = code.replace(/'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*"/g, s => " ".repeat(s.length))
     const carries = (expr: string) => {
-      const value = expr.replace(/'(?:\\.|[^'\\])*'/g, "")
+      const value = expr.replace(/\\\$/g, "").replace(/'(?:\\.|[^'\\])*'/g, "")
       return REQUEST.test(value) || /\bfile_get_contents\s*\(\s*['"]php:\/\/input['"]/.test(expr) ||
         [...value.matchAll(/\$[A-Za-z_]\w*/g)].some(m => tainted.has(m[0]))
     }
@@ -45,7 +45,8 @@ export function scanPhpSecurity(content: string): CodeHit[] {
         const [, name, value] = assignment
         // Only plain values, concatenation and aliases propagate. A function
         // might validate or map to an allowlist, so do not infer its output.
-        if (carries(value) && !/\b[A-Za-z_]\w*\s*\(/.test(value)) tainted.add(name)
+        const rawBody = /^\s*file_get_contents\s*\(\s*['"]php:\/\/input['"]\s*\)\s*$/.test(value)
+        if (rawBody || carries(value) && !/\b[A-Za-z_]\w*\s*\(/.test(value)) tainted.add(name)
         else tainted.delete(name)
       }
     }
