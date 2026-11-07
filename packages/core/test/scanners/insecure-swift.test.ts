@@ -68,3 +68,11 @@ describe("Swift block cipher mode", () => {
     expect(await scan('CCCrypt(kCCEncrypt, kCCAlgorithmAES, CCOptions(kCCOptionPKCS7Padding), key, 16, iv, input, length, output, capacity, &written)\nAES.GCM.seal(data, using: key)\nlet documentation = "kCCOptionECBMode"\n// CCCrypt(kCCEncrypt, kCCAlgorithmAES, kCCOptionECBMode, key)')).toEqual([])
   })
 })
+
+describe("Swift configuration confidence", () => {
+  it("leaves configuration rules to learned confidence without claiming request taint", async () => {
+    const issues = await scan('let evaluator = DisabledTrustEvaluator()\nUserDefaults.standard.set("secret", forKey: "PIN")\nCCCrypt(kCCEncrypt, kCCAlgorithmAES, kCCOptionECBMode, key, 16, nil, input, length, output, capacity, &written)')
+    expect(issues).toHaveLength(3)
+    expect(issues.every(issue => issue.confidence === undefined)).toBe(true)
+  })
+})

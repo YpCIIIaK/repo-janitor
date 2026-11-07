@@ -1110,7 +1110,8 @@ export const insecureCodeScanner: Scanner = {
             id: `insecure-${hit.rule.id}-${norm}:${hit.line}`,
             category: "security", severity: isLanguageTest ? LOWER[hit.rule.severity] : hit.rule.severity,
             title: hit.rule.title, location: `${norm}:${hit.line}`, ageDays,
-            detail: hit.rule.detail, evidence: hit.evidence, confidence: "high",
+            detail: hit.rule.detail, evidence: hit.evidence,
+            ...(hit.tainted === undefined ? {} : { confidence: hit.tainted ? "high" : "low" }),
           })
         }
         continue

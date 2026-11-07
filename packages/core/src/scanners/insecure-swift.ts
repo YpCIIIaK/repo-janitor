@@ -1,5 +1,5 @@
 import type { Severity } from "../schema"
-interface SwiftHit { rule: { id: string; severity: Severity; title: string; detail: string }; line: number; evidence: string; tainted: boolean }
+interface SwiftHit { rule: { id: string; severity: Severity; title: string; detail: string }; line: number; evidence: string; tainted?: boolean }
 
 /** Swift's local, straight-line flows only. Unknown transformations and scope
  * boundaries deliberately stop propagation; this is not whole-program analysis. */
@@ -82,7 +82,7 @@ export function scanSwiftSource(content: string): SwiftHit[] {
         id: "swift-tls-validation-disabled", severity: "critical",
         title: "TLS server certificate validation is disabled",
         detail: "Alamofire's disabled trust evaluator accepts unverified server certificates. Use DefaultTrustEvaluator or certificate/public-key pinning for production connections.",
-      }, line: i + 1, evidence: line.trim(), tainted: false })
+      }, line: i + 1, evidence: line.trim() })
     }
     const defaultsWrite = /\b(?:UserDefaults|NSUserDefaults)\.standard\.(?:set|setValue)\s*\(/.exec(code)
     if (defaultsWrite) {
@@ -94,7 +94,7 @@ export function scanSwiftSource(content: string): SwiftHit[] {
         id: "swift-plaintext-credential-storage", severity: "warning",
         title: "Credential stored in plaintext preferences",
         detail: "UserDefaults is a preferences store, not a credential vault. Store passwords, authentication tokens and PINs in the Keychain with an appropriate accessibility policy.",
-      }, line: i + 1, evidence: line.trim(), tainted: false })
+      }, line: i + 1, evidence: line.trim() })
     }
     const cryptCall = /\bCCCrypt\s*\(/.exec(code)
     if (cryptCall) {
@@ -103,7 +103,7 @@ export function scanSwiftSource(content: string): SwiftHit[] {
         id: "swift-ecb-encryption", severity: "warning",
         title: "CommonCrypto encryption explicitly uses ECB mode",
         detail: "ECB encrypts identical plaintext blocks identically and exposes patterns. Prefer authenticated encryption such as CryptoKit AES.GCM; preserve unique nonces and authentication tags.",
-      }, line: i + 1, evidence: line.trim(), tainted: false })
+      }, line: i + 1, evidence: line.trim() })
     }
     const sqlSink = /\b(?:sqlite3_(?:exec|prepare_v2|prepare_v3)|(?:\w+\.)?(?:executeQuery|executeUpdate))\s*\(/.exec(code)
     const htmlSink = /\.loadHTMLString\s*\(/.exec(code)
