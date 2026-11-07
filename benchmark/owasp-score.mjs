@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /** Evaluate external OWASP BenchmarkJava truth data; never writes labels. */
 import { readFileSync, readdirSync } from "node:fs"
-import { resolve, join, basename } from "node:path"
+import { resolve, join, basename, relative } from "node:path"
 import { fileURLToPath } from "node:url"
 import { execFileSync } from "node:child_process"
 
@@ -22,11 +22,12 @@ export function parseExpected(csv) {
   })
 }
 
-export function evaluate(expected, report, availableCases, { confidence = "all", totalCap = 60, fileCap = 6 } = {}) {
+export function evaluate(expected, report, availableCases, { confidence = "all", totalCap = 60, fileCap = 6, sourcePaths = {}, pathFilters = "current" } = {}) {
   if (!["all", "visible"].includes(confidence)) throw new Error("confidence must be all or visible")
   if (!Array.isArray(report.findings) && !Array.isArray(report.issues)) throw new Error("Expected findings array or CLI report issues")
   const findings = report.findings ?? [...(report.issues ?? []), ...(report.lowConfidence ?? [])]
   if (!Array.isArray(findings)) throw new Error("Expected findings array or CLI report")
+  if (!["current", "legacy"].includes(pathFilters)) throw new Error("path-filters must be current or legacy")
   const available = new Set(availableCases), supported = new Set(Object.values(JAVA_RULE_CWE))
   const security = findings.filter(f => f.scanner === "insecure-code" || f.id?.startsWith("insecure-"))
   const fileCounts = new Map(), detected = new Set(), unmatched = []
@@ -48,10 +49,17 @@ export function evaluate(expected, report, availableCases, { confidence = "all",
   const cappedFiles = [...fileCounts].filter(([, n]) => n >= fileCap).map(([f]) => f)
   const globalCapSuspected = security.length >= totalCap
   const scannerFailures = report.diagnostics?.failedScanners ?? []
-  const byCwe = {}, missingCases = [], unsupported = {}, cases = []
+  const byCwe = {}, missingCases = [], excludedSourceCases = [], unsupported = {}, cases = []
+  // Match the scanner's known nonshipping benchmark path exclusion. This is
+  // especially important because OWASP's Java package itself is /benchmark/.
+  const excludedPath = /(^|\/)(?:benchmarks?|bench)\//i
   for (const row of expected) {
     if (!supported.has(row.cwe)) { unsupported[row.cwe] = (unsupported[row.cwe] ?? 0) + 1; continue }
     if (!available.has(row.name)) { missingCases.push(row.name); continue }
+    const path = sourcePaths[row.name]
+    const productionRoot = path ? /(?:^|\/)src\/main\/(?:java|kotlin)\//.exec(path) : null
+    const purposePath = pathFilters !== "legacy" && productionRoot ? path.slice(0, productionRoot.index + productionRoot[0].length) : path
+    if (purposePath && excludedPath.test(purposePath)) { excludedSourceCases.push({ name: row.name, path, reason: "insecure-code nonshipping benchmark path filter" }); continue }
     const positive = detected.has(`${row.name}:${row.cwe}`)
     const outcome = row.vulnerable ? positive ? "tp" : "fn" : positive ? "fp" : "tn"
     const counts = byCwe[row.cwe] ??= { tp: 0, fp: 0, fn: 0, tn: 0 }
@@ -61,34 +69,38 @@ export function evaluate(expected, report, availableCases, { confidence = "all",
   const totals = { tp: 0, fp: 0, fn: 0, tn: 0 }
   for (const counts of Object.values(byCwe)) for (const key of Object.keys(totals)) totals[key] += counts[key]
   return {
-    confidence, supportedCwes: [...supported].sort((a, b) => a - b), totals, byCwe,
-    coverage: { expected: expected.length, evaluated: cases.length, missingCases, unsupportedCwes: unsupported },
+    confidence, pathFilters, supportedCwes: [...supported].sort((a, b) => a - b), totals, byCwe,
+    coverage: { expected: expected.length, evaluated: cases.length, missingCases, excludedSourceCases, unsupportedCwes: unsupported },
     limitations: {
       globalCapSuspected, cappedFiles, scannerFailures, analysisCompleteness: "not-proven", capThresholds: { total: totalCap, perFile: fileCap },
-      negativeCasesReliable: !globalCapSuspected && !cappedFiles.length && !missingCases.length && !scannerFailures.length,
+      negativeCasesReliable: !globalCapSuspected && !cappedFiles.length && !missingCases.length && !excludedSourceCases.length && !scannerFailures.length,
       note: "FN/TN describe absent findings, not proof of completed analysis. Caps are inferred from emitted finding counts; scanner file filters, failures and unsupported flows can also reduce coverage. Missing source cases are excluded from confusion counts.",
     }, unmatchedFindings: unmatched, cases,
   }
 }
 
 function sourceCases(root) {
-  const names = []
+  const names = [], paths = {}
   function visit(dir) {
     for (const entry of readdirSync(dir, { withFileTypes: true })) {
       if (entry.name === ".git" || entry.name === "node_modules") continue
       const path = join(dir, entry.name)
       if (entry.isDirectory()) visit(path)
-      else if (entry.isFile() && /^BenchmarkTest\d+\.java$/.test(entry.name)) names.push(basename(entry.name, ".java"))
+      else if (entry.isFile() && /^BenchmarkTest\d+\.java$/.test(entry.name)) {
+        const name = basename(entry.name, ".java")
+        names.push(name)
+        paths[name] = relative(root, path).replace(/\\/g, "/")
+      }
     }
   }
   visit(root)
-  return names
+  return { names, paths }
 }
 
 function main(argv) {
   const options = {}
   for (let i = 0; i < argv.length; i += 2) {
-    if (!["--checkout", "--results", "--expected", "--confidence"].includes(argv[i]) || !argv[i + 1]) throw new Error("Usage: node benchmark/owasp-score.mjs --checkout <external-clone> --results <report.json> [--expected <csv>] [--confidence all|visible]")
+    if (!["--checkout", "--results", "--expected", "--confidence", "--path-filters"].includes(argv[i]) || !argv[i + 1]) throw new Error("Usage: node benchmark/owasp-score.mjs --checkout <external-clone> --results <report.json> [--expected <csv>] [--confidence all|visible] [--path-filters current|legacy]")
     options[argv[i].slice(2)] = argv[i + 1]
   }
   if (!options.checkout || !options.results) throw new Error("--checkout and --results are required")
@@ -97,7 +109,8 @@ function main(argv) {
   if (!options.expected && candidates.length !== 1) throw new Error("Select --expected explicitly: checkout must contain exactly one expectedresults-*.csv")
   const expectedPath = options.expected ? resolve(options.expected) : join(checkout, candidates[0])
   const report = JSON.parse(readFileSync(options.results, "utf8"))
-  const output = evaluate(parseExpected(readFileSync(expectedPath, "utf8")), report, sourceCases(checkout), { confidence: options.confidence ?? "all" })
+  const sources = sourceCases(checkout)
+  const output = evaluate(parseExpected(readFileSync(expectedPath, "utf8")), report, sources.names, { confidence: options.confidence ?? "all", sourcePaths: sources.paths, pathFilters: options["path-filters"] ?? "current" })
   const checkoutSha = execFileSync("git", ["-C", checkout, "rev-parse", "HEAD"], { encoding: "utf8" }).trim()
   const resultsSha = report.sha ?? report.repo?.commit ?? null
   output.provenance = { checkoutSha, resultsSha, sameCommit: resultsSha === checkoutSha, expectedFile: basename(expectedPath) }
