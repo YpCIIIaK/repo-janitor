@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest"
+import { scanSource } from "../../src/scanners/insecure-code"
 import { scanPhpSecurity } from "../../src/scanners/php-security"
 const rules = (code: string) => scanPhpSecurity(code).map(hit => hit.rule.id)
 describe("PHP request-to-sink coverage", () => {
@@ -29,5 +30,19 @@ describe("PHP request-to-sink coverage", () => {
   it("requires Twig and tainted template source, not template data", () => {
     expect(rules("$twig = new Twig\\Environment($loader);\n$template = $_GET['template'];\n$twig->createTemplate($template);")).toContain("php-ssti")
     for (const code of ["$twig = new Twig\\Environment($loader);\n$twig->render('page.twig', ['name' => $_GET['name']]);", "$twig = new Twig\\Environment($loader);\n$twig->createTemplate('Hello {{ name }}');", "$service->createTemplate($_GET['template']);"]) expect(rules(code)).not.toContain("php-ssti")
+  })
+})
+
+
+describe("PHP command and deserialization request aliases", () => {
+  it("finds shell commands and object deserialization from request aliases", () => {
+    const hits = scanSource("$input = $_GET['value'];\n$alias = $input;\nshell_exec($alias);\nunserialize($alias);", "php")
+    expect(hits.filter(h => h.rule.id === "exec-interpolated" || h.rule.id === "php-unserialize")).toHaveLength(2)
+    expect(hits.every(h => h.tainted)).toBe(true)
+  })
+  it("permits a shell argument array and explicitly escaped shell argument", () => {
+    for (const code of ["$input = $_GET['value'];\nproc_open(['echo', $input], [], $pipes);", "$input = $_GET['value'];\nshell_exec('echo ' . escapeshellarg($input));", "$input = $_GET['value'];\nunserialize($input, ['allowed_classes' => false]);"]) {
+      expect(scanSource(code, "php").filter(h => h.rule.id === "exec-interpolated" || h.rule.id === "php-unserialize")).toHaveLength(0)
+    }
   })
 })
