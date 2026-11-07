@@ -34,7 +34,12 @@ export function evaluate(expected, report, availableCases, { confidence = "all",
     const location = String(f.location ?? "").replace(/\\/g, "/")
     const file = location.replace(/:\d+$/, "")
     fileCounts.set(file, (fileCounts.get(file) ?? 0) + 1)
-    const cwe = JAVA_RULE_CWE[f.rule]
+    // Benchmark slim results use taxonomy IDs (insecure-*); raw scanner/CLI
+    // issues may carry only the finding ID. Match known rule prefixes exactly.
+    const explicitRule = typeof f.rule === "string" ? f.rule.replace(/^insecure-/, "") : null
+    const rule = explicitRule && JAVA_RULE_CWE[explicitRule] ? explicitRule :
+      Object.keys(JAVA_RULE_CWE).find(key => f.id?.startsWith(`insecure-${key}-`))
+    const cwe = JAVA_RULE_CWE[rule]
     if (!cwe || confidence === "visible" && f.confidence === "low") continue
     const name = /(?:^|\/)(BenchmarkTest\d+)\.java(?::\d+)?$/.exec(location)?.[1]
     if (!name) { unmatched.push(f.id); continue }
