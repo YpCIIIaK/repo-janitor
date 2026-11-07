@@ -27,7 +27,7 @@ import { parseFile, walk, type Node } from "../ast"
 const JS_RE = /\.(ts|tsx|js|jsx|mjs|mts|cts)$/i
 const PY_RE = /\.py$/i
 const PHP_RE = /\.(?:php|phtml|inc)$/i
-const JAVA_RE = /\.(?:java|kt)$/i
+const JAVA_RE = /\.(?:java|kts?)$/i
 const RB_RE = /\.(?:rb|erb|rake)$/i
 const GO_RE = /\.go$/i
 const CS_RE = /\.(?:cs|cshtml)$/i
@@ -782,6 +782,8 @@ export function scanSource(content: string, lang: Lang): CodeHit[] {
       // Keep the most severe rule when several match the same line.
       if (existing && rank(existing.rule.severity) >= rank(rule.severity)) continue
       if (!sinkAllows(rule.id, rawLine, idx - lineStart)) continue
+      if (lang === "php" && rule.id === "exec-interpolated" &&
+        /\bproc_open\s*\(\s*\[/.test(rawLine)) continue
       // Variable-only PHP includes and HTML output need a local request-to-sink flow.
       if ((rule.id === "php-include-user-input" || rule.id === "php-reflected-xss") && !/\$_(?:GET|POST|REQUEST|COOKIE)\b/.test(m[0]) &&
         !phpLocalRequestValue(content, idx, m[0])) continue
@@ -1098,7 +1100,10 @@ export const insecureCodeScanner: Scanner = {
       if (!isTest && TAINT_RE[lang].test(content)) sources.push({ norm, lang, lines })
 
       let perFile = 0
-      const hits = scanSource(content, lang)
+      const hits = scanSource(content, lang).filter(hit => !(
+        /\.kts?$/i.test(norm) && hit.rule.id === "exec-interpolated" &&
+        /\bRuntime\s*\.\s*getRuntime\s*\(\s*\)\s*\.\s*exec\s*\(/.test(lines[hit.line - 1] ?? "")
+      ))
       if (/\.kts?$/i.test(norm)) for (const hit of scanKotlinSource(content)) {
         const existing = hits.findIndex(h => h.line === hit.line && h.rule.id === hit.rule.id)
         if (existing >= 0) hits[existing] = hit
