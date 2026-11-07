@@ -84,6 +84,18 @@ export function scanSwiftSource(content: string): SwiftHit[] {
         detail: "Alamofire's disabled trust evaluator accepts unverified server certificates. Use DefaultTrustEvaluator or certificate/public-key pinning for production connections.",
       }, line: i + 1, evidence: line.trim(), tainted: false })
     }
+    const defaultsWrite = /\b(?:UserDefaults|NSUserDefaults)\.standard\.(?:set|setValue)\s*\(/.exec(code)
+    if (defaultsWrite) {
+      const args = argumentsOf(line.slice(defaultsWrite.index + defaultsWrite[0].length))
+      const key = /^\s*forKey:\s*"(?:password|passwd|passcode|pin|(?:access[_-]?|refresh[_-]?|auth[_-]?)?token|client[_-]?secret)"\s*$/i.test(args[1] ?? "")
+      const value = (args[0] ?? "").trim()
+      const rawCredential = /^"[^"\\]+"$/.test(value) || /^(?:\w*password\w*|\w*passcode\w*|\w*token\w*|pin)[!?]?$/i.test(value) || usesInput(value)
+      if (key && rawCredential) hits.push({ rule: {
+        id: "swift-plaintext-credential-storage", severity: "warning",
+        title: "Credential stored in plaintext preferences",
+        detail: "UserDefaults is a preferences store, not a credential vault. Store passwords, authentication tokens and PINs in the Keychain with an appropriate accessibility policy.",
+      }, line: i + 1, evidence: line.trim(), tainted: false })
+    }
     const sqlSink = /\b(?:sqlite3_(?:exec|prepare_v2|prepare_v3)|(?:\w+\.)?(?:executeQuery|executeUpdate))\s*\(/.exec(code)
     const htmlSink = /\.loadHTMLString\s*\(/.exec(code)
     let id: string | undefined

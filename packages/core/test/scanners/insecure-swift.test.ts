@@ -46,3 +46,14 @@ describe("Swift TLS validation", () => {
     expect(await scan('let evaluator = DefaultTrustEvaluator()\nlet pinned = PinnedCertificatesTrustEvaluator()\n// DisabledTrustEvaluator()\nlet help = "DisabledTrustEvaluator()"')).toEqual([])
   })
 })
+
+describe("Swift credential storage", () => {
+  it("detects literal PIN and raw password preferences", async () => {
+    const issues = await scan('UserDefaults.standard.set("53cr3tP", forKey: "PIN")\nUserDefaults.standard.setValue(password, forKey: "password")')
+    expect(issues).toHaveLength(2)
+    expect(issues.every(i => i.id.includes("swift-plaintext-credential-storage"))).toBe(true)
+  })
+  it("allows ordinary preferences, removal, encrypted values and Keychain writes", async () => {
+    expect(await scan('UserDefaults.standard.set("dark", forKey: "theme")\nUserDefaults.standard.set(false, forKey: "password")\nUserDefaults.standard.set(nil, forKey: "token")\nUserDefaults.standard.set(encrypt(password), forKey: "password")\nKeychain.standard.set(password, forKey: "password")\n// UserDefaults.standard.set("secret", forKey: "password")')).toEqual([])
+  })
+})
