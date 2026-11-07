@@ -57,3 +57,13 @@ test("CLI reads an external checkout and reports mismatched scan provenance", as
   assert.equal(result.provenance.sameCommit, false)
   assert.equal(result.limitations.negativeCasesReliable, false)
 })
+
+
+test("normalizes benchmark taxonomy rule IDs and raw CLI findings without rule metadata", () => {
+  const benchmark = { ...finding(names[0], "sql-interpolated"), rule: "insecure-sql-interpolated" }
+  const raw = { id: `insecure-exec-interpolated-src/${names[2]}.java:4`, location: `src/${names[2]}.java:4`, confidence: "high" }
+  assert.equal(evaluate(expected, { findings: [benchmark] }, names).totals.tp, 1)
+  assert.equal(evaluate(expected, { issues: [raw] }, names).totals.tp, 1)
+  const wrongPrefix = { ...raw, id: `insecure-exec-interpolatedish-src/${names[2]}.java:4`, location: `src/${names[2]}.java:4` }
+  assert.equal(evaluate(expected, { issues: [wrongPrefix] }, names).totals.tp, 0)
+})
