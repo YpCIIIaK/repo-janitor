@@ -1,0 +1,6 @@
+{
+ "action-tag-.github/workflows/dependabot_assets.yml-43": "tp",
+ "ci-silenced-failure-.github/workflows/perf.yml-54": "fp",
+ "no-permissions-.github/workflows/lint.yml-1": "tp",
+ "script-injection-.github/workflows/dependabot_assets.yml-63": "fp"
+}
