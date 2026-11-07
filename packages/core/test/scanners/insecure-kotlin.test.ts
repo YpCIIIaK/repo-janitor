@@ -8,6 +8,11 @@ describe("Kotlin request SQL interpolation", () => {
     expect(issues).toHaveLength(1)
     expect(issues[0]).toMatchObject({ confidence: "high", severity: "critical", location: "src/Route.kt:3" })
   })
+  it("scans Kotlin script extensions", async () => {
+    const issues = await insecureCodeScanner.run(makeContext({ files: { "src/Route.kts": 'val name = request.getParameter("name")\nstatement.executeQuery("SELECT * FROM users WHERE name = \'$name\'")' } }))
+    expect(issues).toHaveLength(1)
+    expect(issues[0].location).toBe("src/Route.kts:2")
+  })
   it("tracks servlet input and braced interpolation", async () => {
     expect(await scan('val name = request.getParameter("name")\nstatement.executeQuery("SELECT * FROM users WHERE name = \'${name}\'")')).toHaveLength(1)
   })
@@ -25,5 +30,30 @@ describe("Kotlin request SQL interpolation", () => {
   })
   it("ignores transformed input, comments and literal source mentions", async () => {
     expect(await scan('// statement.executeQuery("SELECT $name FROM users")\n/* val name = request.getParameter("name") */\nval name = "call.parameters[name]"\nstatement.executeQuery("SELECT * FROM users WHERE name = \'$name\'")\nval safe = escapeSql(call.parameters["name"])\nstatement.executeQuery("SELECT * FROM users WHERE name = \'$safe\'")')).toEqual([])
+  })
+})
+
+describe("Kotlin request process commands", () => {
+  it("detects request-controlled executable selection", async () => {
+    const issues = await scan('val command = request.getParameter("cmd")\nRuntime.getRuntime().exec(command)')
+    expect(issues).toHaveLength(1)
+    expect(issues[0]).toMatchObject({ confidence: "high", severity: "critical" })
+    expect(issues[0].id).toContain("exec-interpolated")
+  })
+  it("detects interpolated shell command arguments", async () => {
+    const issues = await scan('val host = call.request.queryParameters["host"]!!\nProcessBuilder("/bin/sh", "-c", "ping $host").start()')
+    expect(issues).toHaveLength(1)
+    expect(issues[0].id).toContain("exec-interpolated")
+  })
+  it("preserves uncertain Runtime commands as low confidence", async () => {
+    const issues = await scan('fun run(command: String) {\nRuntime.getRuntime().exec(command)\n}')
+    expect(issues).toHaveLength(1)
+    expect(issues[0].confidence).toBe("low")
+  })
+  it("allows a fixed executable with separate arguments and unrelated request data", async () => {
+    expect(await scan('val host = call.parameters["host"]!!\nProcessBuilder("ping", host).start()\nRuntime.getRuntime().exec("uptime")\nProcessBuilder("sh", "-c", "uptime", host)')).toEqual([])
+  })
+  it("does not mistake command examples or reassignment for input", async () => {
+    expect(await scan('var command = request.getParameter("cmd")\ncommand = "uptime"\nRuntime.getRuntime().exec(command)\n// ProcessBuilder("sh", "-c", call.receiveText())\nval example = "Runtime.getRuntime().exec(command)"')).toEqual([])
   })
 })
