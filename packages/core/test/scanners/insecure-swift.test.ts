@@ -35,3 +35,14 @@ describe("Swift injection flows", () => {
     expect(await scan('// webView.loadHTMLString(textView.text, baseURL: nil)\n/* nested /* block */\nwebView.loadHTMLString(textView.text, baseURL: nil)\n*/\nlet help = "webView.loadHTMLString(textView.text, baseURL: nil)"')).toEqual([])
   })
 })
+
+describe("Swift TLS validation", () => {
+  it("reports explicit Alamofire verification bypasses", async () => {
+    const issues = await scan('let evaluator = DisabledTrustEvaluator()\nlet policy = ServerTrustPolicy.disableEvaluation')
+    expect(issues).toHaveLength(2)
+    expect(issues.every(i => i.id.includes("swift-tls-validation-disabled"))).toBe(true)
+  })
+  it("allows default and pinned evaluators, comments and string mentions", async () => {
+    expect(await scan('let evaluator = DefaultTrustEvaluator()\nlet pinned = PinnedCertificatesTrustEvaluator()\n// DisabledTrustEvaluator()\nlet help = "DisabledTrustEvaluator()"')).toEqual([])
+  })
+})
