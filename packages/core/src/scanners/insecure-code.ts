@@ -1,3 +1,4 @@
+import { scanPhpSecurity } from "./php-security"
 import type { Scanner, ScanContext } from "../scanner"
 import type { Issue, Severity } from "../schema"
 import { parseFile, walk, type Node } from "../ast"
@@ -794,6 +795,9 @@ export function scanSource(content: string, lang: Lang): CodeHit[] {
     }
   }
 
+  if (lang === "php") for (const hit of scanPhpSecurity(content)) {
+    if (!byLine.has(hit.line)) byLine.set(hit.line, hit)
+  }
   return [...byLine.values()].sort((a, b) => a.line - b.line)
 }
 
