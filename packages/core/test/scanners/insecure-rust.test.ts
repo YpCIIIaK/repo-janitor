@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest"
+import { ruleOf } from "../../src/rules"
 import { scanRustTlsSource } from "../../src/scanners/insecure-rust"
 import { insecureCodeScanner } from "../../src/index"
 import { makeContext } from "../helpers"
@@ -17,6 +18,7 @@ describe("Rust TLS verification bypass", () => {
   it("preserves locations, lowers test severity and skips example paths", async () => {
     const issues = await insecureCodeScanner.run(makeContext({ files: { "src/client.rs": 'use reqwest::Client;\nClient::builder().danger_accept_invalid_certs(true);', "tests/tls.rs": 'native_tls::TlsConnector::builder().danger_accept_invalid_hostnames(true);', "examples/client.rs": 'reqwest::Client::builder().danger_accept_invalid_certs(true);' } }))
     expect(issues).toHaveLength(2)
+    expect(ruleOf(issues[0])).toBe("insecure-rust-tls-validation-disabled")
     expect(issues).toEqual(expect.arrayContaining([expect.objectContaining({ location: "src/client.rs:2", confidence: "high", severity: "critical" }), expect.objectContaining({ location: "tests/tls.rs:1", severity: "warning" })]))
   })
 })

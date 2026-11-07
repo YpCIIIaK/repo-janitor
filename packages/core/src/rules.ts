@@ -14,6 +14,8 @@ interface RuleDef {
 }
 
 const INSECURE: Record<string, string> = {
+  "rust-tls-validation-disabled": "Rust TLS server verification disabled",
+  "cpp-tls-validation-disabled": "libcurl TLS server verification disabled",
   "eval-dynamic": "eval() on a dynamic value",
   "new-function": "new Function() on a dynamic value",
   "exec-interpolated": "Shell command built from variables",
