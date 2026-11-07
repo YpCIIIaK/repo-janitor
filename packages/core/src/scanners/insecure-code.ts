@@ -302,7 +302,7 @@ const PHP_JAVA_RULES: VulnRule[] = [
   {
     id: "php-reflected-xss",
     lang: "php",
-    re: /\b(?:echo|print)\b[^;]*\$_(?:GET|POST|REQUEST|COOKIE)\b(?![^;]*htmlspecialchars)/g,
+    re: /\b(?:echo|print)\b(?:[^;]*\$_(?:GET|POST|REQUEST|COOKIE)\b(?![^;]*htmlspecialchars)|\s+(?:['"][^'"\n]*['"]\s*\.\s*)?\$[A-Za-z_]\w*\b)/g,
     severity: "warning",
     title: "Request input echoed into the page",
     detail: "A request value is written to the HTML unescaped: reflected XSS. Wrap it in `htmlspecialchars`.",
@@ -779,8 +779,8 @@ export function scanSource(content: string, lang: Lang): CodeHit[] {
       // Keep the most severe rule when several match the same line.
       if (existing && rank(existing.rule.severity) >= rank(rule.severity)) continue
       if (!sinkAllows(rule.id, rawLine, idx - lineStart)) continue
-      // Variable-only PHP includes need an actual local request-to-sink flow.
-      if (rule.id === "php-include-user-input" && !/\$_(?:GET|POST|REQUEST|COOKIE)\b/.test(m[0]) &&
+      // Variable-only PHP includes and HTML output need a local request-to-sink flow.
+      if ((rule.id === "php-include-user-input" || rule.id === "php-reflected-xss") && !/\$_(?:GET|POST|REQUEST|COOKIE)\b/.test(m[0]) &&
         !phpLocalRequestValue(content, idx, m[0])) continue
       const tainted = !INJECTION_RULES.has(rule.id)
         ? undefined
