@@ -461,3 +461,20 @@ describe("insecure-code — PHP local include request flow", () => {
     expect(issues.map((i) => [i.location, i.confidence])).toEqual([["src/unsafe.php:4", "high"]])
   })
 })
+
+
+describe("insecure-code — PHP local reflected XSS request flow", () => {
+  it("finds echoed request aliases without treating safe or unrelated locals as XSS", async () => {
+    const files = {
+      "src/unsafe.php": "<?php\n$name = $_POST['name'];\n$alias = $name;\necho 'Hello ' . $alias;\n",
+      "src/print.php": "<?php\n$name = $_GET['name'];\nprint $name;\n",
+      "src/escaped.php": "<?php\n$name = $_GET['name'];\n$name = htmlspecialchars($name);\necho $name;\n",
+      "src/escape-at-sink.php": "<?php\n$name = $_GET['name'];\necho htmlspecialchars($name);\n",
+      "src/fixed.php": "<?php\n$name = $_GET['name'];\n$name = 'safe';\necho $name;\n",
+      "src/unrelated.php": "<?php\n$other = $_GET['name'];\n$name = 'safe';\necho $name;\n",
+      "src/scope.php": "<?php\nfunction first() {\n$name = $_GET['name'];\n}\nfunction second($name) {\necho $name;\n}\n",
+    }
+    const issues = (await insecureCodeScanner.run(makeContext({ files }))).filter((i) => i.id.includes("php-reflected-xss"))
+    expect(issues.map((i) => [i.location, i.confidence])).toEqual([["src/unsafe.php:4", "high"], ["src/print.php:3", "high"]])
+  })
+})
