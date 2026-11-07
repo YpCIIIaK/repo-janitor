@@ -46,7 +46,8 @@ export function scanPhpSecurity(content: string): CodeHit[] {
         // Only plain values, concatenation and aliases propagate. A function
         // might validate or map to an allowlist, so do not infer its output.
         const rawBody = /^\s*file_get_contents\s*\(\s*['"]php:\/\/input['"]\s*\)\s*$/.test(value)
-        if (rawBody || carries(value) && !/\b[A-Za-z_]\w*\s*\(/.test(value)) tainted.add(name)
+        const requestFetch = value.match(/^\s*file_get_contents\s*\(([^;]*)\)\s*$/)
+        if (rawBody || requestFetch && carries(requestFetch[1]) || carries(value) && !/\b[A-Za-z_]\w*\s*\(/.test(value)) tainted.add(name)
         else tainted.delete(name)
       }
     }
@@ -66,7 +67,9 @@ export function scanPhpSecurity(content: string): CodeHit[] {
     }
     const xml = /(?:\bsimplexml_load_string|->\s*loadXML)\s*\(/g
     for (const m of executable.matchAll(xml)) {
-      const args = code.slice((m.index ?? 0) + m[0].length)
+      const first = code.slice((m.index ?? 0) + m[0].length)
+      const args = first.includes(");") ? first.split(");")[0] : first + " " +
+        lines.slice(i + 1, i + 4).join("\n").split(");")[0].replace(/\/\/[^\n]*|\/\*[\s\S]*?\*\//g, "")
       if (carries(args.split(",")[0]) && /\bLIBXML_(?:NOENT|DTDLOAD)\b/.test(args) && !/\bLIBXML_NO_XXE\b/.test(args)) {
         add("php-xxe", "Untrusted XML enables external entity processing", "Request-controlled XML is parsed with LIBXML_NOENT or LIBXML_DTDLOAD. Remove external entity/DTD loading options, reject document types, and use LIBXML_NO_XXE where supported; LIBXML_NONET alone does not block local file entities.")
         break
