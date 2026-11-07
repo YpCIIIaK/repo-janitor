@@ -1,3 +1,4 @@
+import { scanKotlinSource } from "./insecure-kotlin"
 import { scanPhpSecurity } from "./php-security"
 import { scanSwiftSource } from "./insecure-swift"
 import type { Scanner, ScanContext } from "../scanner"
@@ -1097,7 +1098,13 @@ export const insecureCodeScanner: Scanner = {
       if (!isTest && TAINT_RE[lang].test(content)) sources.push({ norm, lang, lines })
 
       let perFile = 0
-      for (const hit of scanSource(content, lang)) {
+      const hits = scanSource(content, lang)
+      if (/\.kts?$/i.test(norm)) for (const hit of scanKotlinSource(content)) {
+        const existing = hits.findIndex(h => h.line === hit.line && h.rule.id === hit.rule.id)
+        if (existing >= 0) hits[existing] = hit
+        else hits.push(hit)
+      }
+      for (const hit of hits) {
         if (issues.length >= MAX_TOTAL || perFile >= MAX_PER_FILE) break
         if (isTest && SKIP_IN_TEST.has(hit.rule.id)) continue
         if (hit.rule.id === "ssrf" && lang === "js" && BROWSER_CODE_RE.test(norm)) continue
