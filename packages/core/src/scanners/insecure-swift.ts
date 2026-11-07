@@ -58,8 +58,10 @@ export function scanSwiftSource(content: string): SwiftHit[] {
     const outsideStrings = value.replace(/"(?:\\.|[^"\\])*"/g, "")
     if (/\b[A-Za-z_]\w*\s*\(/.test(outsideStrings.replace(/\b(?:get)\s*\(/g, "")) && !INPUT.test(value)) return false
     if (/^\s*(?:try[!?]?\s+)?\w+\s*\(/.test(value) && !/^\s*(?:req|request)\./.test(value)) return false
-    const inputs = outsideStrings + " " + [...value.matchAll(/\\\(([^)]*)\)/g)].map(m => m[1]).join(" ")
-    return INPUT.test(inputs) || [...tainted].some(n => new RegExp(`\\b${n}\\b`).test(outsideStrings) || new RegExp(`\\\\\\([^)]*\\b${n}\\b`).test(value))
+    const interpolations = [...value.matchAll(/\\\(([^)]*)\)/g)]
+      .map(m => m[1]).filter(part => !/\b\w+\s*\(/.test(part)).join(" ")
+    const inputs = outsideStrings + " " + interpolations
+    return INPUT.test(inputs) || [...tainted].some(n => new RegExp(`\\b${n}\\b`).test(inputs))
   }
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i]
