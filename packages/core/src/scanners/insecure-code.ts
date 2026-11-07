@@ -25,7 +25,7 @@ import { parseFile, walk, type Node } from "../ast"
  * normal, the same line in `src/` is not.
  */
 
-const JS_RE = /\.(ts|tsx|js|jsx|mjs|mts|cts)$/i
+const JS_RE = /\.(ts|tsx|js|jsx|mjs|cjs|mts|cts)$/i
 const PY_RE = /\.py$/i
 const PHP_RE = /\.(?:php|phtml|inc)$/i
 const JAVA_RE = /\.(?:java|kts?)$/i
