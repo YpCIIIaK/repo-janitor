@@ -1074,7 +1074,7 @@ export const insecureCodeScanner: Scanner = {
       // Java/Kotlin package names are namespaces, not directory purposes:
       // com/example and org/owasp/benchmark below Maven/Gradle production
       // source roots must be scanned. Outer examples/docs trees still skip.
-      const productionRoot = JAVA_RE.test(norm) ? /(?:^|\/)src\/main\/(?:java|kotlin)\//.exec(norm) : null
+      const productionRoot = (JAVA_RE.test(norm) || /\.scala$/i.test(norm)) ? /(?:^|\/)src\/main\/(?:java|kotlin|scala)\//.exec(norm) : null
       const purposePath = productionRoot ? norm.slice(0, productionRoot.index + productionRoot[0].length) : norm
       if (SKIP_RE.test(norm) || (NOT_SHIPPED_RE.test(purposePath) && !webRoot)) continue
 

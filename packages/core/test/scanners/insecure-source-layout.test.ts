@@ -16,6 +16,12 @@ describe("production JVM namespaces", () => {
     expect(issues).toHaveLength(1)
     expect(issues[0].confidence).toBe("high")
   })
+  it("scans Scala production namespace paths", async () => {
+    const source = 'val name = request.getQueryString("name").get\nstmt.executeQuery(s"SELECT * FROM users WHERE name = \'$name\'")'
+    const issues = await insecureCodeScanner.run(makeContext({ files: { "src/main/scala/com/example/Route.scala": source } }))
+    expect(issues).toHaveLength(1)
+    expect(issues[0].confidence).toBe("high")
+  })
   it("preserves outer documentation/example exclusions and vendored exclusions", async () => {
     for (const path of ["examples/app/src/main/java/com/example/Route.java", "examples/src/main/java/Route.java", "docs/app/src/main/java/Route.java", "vendor/app/src/main/java/Route.java", "module/src/main/java/vendor/Route.java", "benchmark/Route.java"]) {
       expect(await insecureCodeScanner.run(makeContext({ files: { [path]: java } }))).toEqual([])
