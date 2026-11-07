@@ -73,3 +73,109 @@ describe("commented-code — documentation examples", () => {
     expect(await count("x := 1\n// a := foo();\n// b := bar(a);\n// baz(a, b);\n")).toBe(1)
   })
 })
+
+describe("commented-code — input schemas and complete documentation blocks", () => {
+  const scan = (path: string, source: string) => commentedCodeScanner.run(makeContext({ files: { [path]: source } }))
+
+  it("ignores XML input schemas in Java parser documentation", async () => {
+    expect(await scan("src/XMLConfigBuilder.java", [
+      '// <dataSource type="POOLED">',
+      '//   <property name="driver" value="${driver}"/>',
+      '//   <property name="url" value="${url}"/>',
+      '// </dataSource>',
+      'void parse() {}',
+    ].join("\n"))).toHaveLength(0)
+    expect(await scan("src/XMLMapperBuilder.java", [
+      '// Identifier ("resultMap[userResultMap]")',
+      '// <resultMap id="userResultMap" type="User">',
+      '//   <id property="id" column="user_id"/>',
+      '//   <result property="username" column="username"/>',
+      '// </resultMap>',
+    ].join("\n"))).toHaveLength(0)
+  })
+
+  it("ignores the commented SQL schema explaining a binary Go test fixture", async () => {
+    expect(await scan("replication/row_event_test.go", [
+      'func TestEnum(t *testing.T) {',
+      '// CREATE TABLE numbers (',
+      '// id int auto_increment,',
+      "// num ENUM('0', '1', '256')",
+      '',
+      '// ),',
+      '// primary key(id)',
+      '// );',
+      'data := []byte("fixture")',
+      '}',
+    ].join("\n"))).toHaveLength(0)
+  })
+
+  it("does not read apparent line comments inside block documentation as code", async () => {
+    expect(await scan("source/index.ts", [
+      '/**',
+      '@example',
+      '```',
+      'console.log(tasks);',
+      '// }, {',
+      "//   id: 'next',",
+      '//   priority: 1,',
+      '//   startTime: 123,',
+      '// }]',
+      '```',
+      '*/',
+      'function tasks() {}',
+    ].join("\n"))).toHaveLength(0)
+  })
+
+  it("keeps an example introduction across multiple runs in one comment paragraph", async () => {
+    expect(await scan("src/runtime.js", [
+      '// This transform is used like this:',
+      '// var mark = signature()',
+      '//',
+      '// function Hello() {',
+      '//   const value = useState(0);',
+      '//   mark();',
+      '//   return value;',
+      '// }',
+      '//',
+      '// mark(',
+      '//   Hello,',
+      "//   'state(value)',",
+      '//   () => [useState],',
+      '// );',
+    ].join("\n"))).toHaveLength(0)
+  })
+
+  it("keeps genuine disabled implementations and JSX even beside ordinary comments", async () => {
+    expect(await scan("src/parser.java", [
+      '/** Parse a documented input. */',
+      '// Parser old = new Parser();',
+      '// old.parse(input);',
+      '// return old.result();',
+    ].join("\n"))).toHaveLength(1)
+    expect(await scan("src/View.tsx", [
+      '// const view = <section title="old">;',
+      '// const child = <span role="text">;',
+      '// return <Widget value="old"/>;',
+    ].join("\n"))).toHaveLength(1)
+  })
+
+  it("does not turn comment markers inside strings or line comments into block comments", async () => {
+    expect(await scan("src/parser.ts", [
+      'const marker = "/*";',
+      '// legacy.start(); /* old annotation',
+      '// legacy.parse(input);',
+      '// legacy.end();',
+      '// legacy.cleanup();',
+    ].join("\n"))).toHaveLength(1)
+  })
+})
+
+it("preserves disabled implementations using samples or followed by sample-stream prose", async () => {
+  const cases = {
+    "src/analysis.js": "// const samples = collect();\n// print(samples);\n// return samples;\n",
+    "src/histogram.go": "// numBuckets := 1\n// for i := range bounds {\n// bounds[i] = make([]float64, numBuckets)\n// }\n// A histogram counts observations in a sample stream.\n",
+  }
+  for (const [path, source] of Object.entries(cases)) {
+    expect(await commentedCodeScanner.run(makeContext({ files: { [path]: source } }))).toHaveLength(1)
+  }
+})
