@@ -1,0 +1,5 @@
+{
+ "insecure-sql-interpolated-iGoat-Swift/iGoat-Swift/Source/Exercises/Injection Flaws/SQL Injection/SQLInjectionExerciseVC.swift:22": "tp",
+ "insecure-swift-plaintext-credential-storage-iGoat-Swift/iGoat-Swift/Source/Exercises/InsecureLocalDataStorage/NSUserDefaults/NSUserDefaultsStorageExerciseVC.swift:13": "tp",
+ "insecure-swift-webview-html-iGoat-Swift/iGoat-Swift/Source/Exercises/Injection Flaws/XSS/CrossSiteScriptingExerciseVC.swift:9": "tp"
+}

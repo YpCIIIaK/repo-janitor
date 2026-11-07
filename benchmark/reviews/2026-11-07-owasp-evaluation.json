@@ -1,0 +1,68 @@
+{
+  "confidence": "all",
+  "pathFilters": "current",
+  "supportedCwes": [
+    78,
+    89,
+    502
+  ],
+  "totals": {
+    "tp": 38,
+    "fp": 20,
+    "fn": 360,
+    "tn": 337
+  },
+  "byCwe": {
+    "78": {
+      "tp": 4,
+      "fp": 2,
+      "fn": 122,
+      "tn": 123
+    },
+    "89": {
+      "tp": 34,
+      "fp": 18,
+      "fn": 238,
+      "tn": 214
+    }
+  },
+  "coverage": {
+    "expected": 2740,
+    "evaluated": 755,
+    "missingCases": [],
+    "excludedSourceCases": [],
+    "unsupportedCwes": {
+      "22": 268,
+      "79": 455,
+      "90": 59,
+      "327": 246,
+      "328": 236,
+      "330": 493,
+      "501": 126,
+      "614": 67,
+      "643": 35
+    }
+  },
+  "limitations": {
+    "globalCapSuspected": true,
+    "cappedFiles": [],
+    "scannerFailures": [],
+    "analysisCompleteness": "not-proven",
+    "capThresholds": {
+      "total": 60,
+      "perFile": 6
+    },
+    "negativeCasesReliable": false,
+    "note": "FN/TN describe absent findings, not proof of completed analysis. Caps are inferred from emitted finding counts; scanner file filters, failures and unsupported flows can also reduce coverage. Missing source cases are excluded from confusion counts."
+  },
+  "unmatchedFindings": [
+    "insecure-sql-interpolated-src/main/java/org/owasp/benchmark/helpers/DatabaseHelper.java:192",
+    "insecure-sql-interpolated-src/main/java/org/owasp/benchmark/helpers/DatabaseHelper.java:184"
+  ],
+  "provenance": {
+    "checkoutSha": "d4f6f3a53be73c3c8a24dafc7f4e486d82e6744a",
+    "resultsSha": "d4f6f3a53be73c3c8a24dafc7f4e486d82e6744a",
+    "sameCommit": true,
+    "expectedFile": "expectedresults-1.2.csv"
+  }
+}
