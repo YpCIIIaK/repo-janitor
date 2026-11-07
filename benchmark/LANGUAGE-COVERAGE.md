@@ -1,5 +1,11 @@
 # Coverage audit (2026-11-07)
 
+## Implemented in this cycle
+
+Swift: request/UI-to-SQL and WebView HTML, explicit Alamofire TLS bypass, credential UserDefaults writes, CommonCrypto ECB. PHP: include/XSS aliases, XXE, Twig template-source injection, request-selected file reads. Kotlin: native SQL interpolation and request-controlled process commands, including `.kts`. Scala: Play-to-JDBC SQL and Slick raw splices, preserving bound interpolation. Rust: explicit reqwest/native-tls verification bypasses. C/C++: explicit libcurl peer/host verification bypasses. CommonJS `.cjs` now uses JavaScript rules. These are specific rule families, not full language coverage.
+
+## Initial audit before these changes
+
 Recognition is not security coverage. `profile.ts:14` attributes LOC to JS/TS, Python, Go, Rust, Java, Ruby, PHP, C, C++, C#, Kotlin, Swift, Scala, Vue and Svelte.
 
 `insecure-code.ts:26–32,644` routes JS/TS, Python, PHP, Java/Kotlin, Ruby, Go and C# to language-specific regexes. The in-progress Swift module adds a separate `.swift` path. Rust, C/C++, Scala, Vue and Svelte have no injection-source scan path. `.cjs` also does not match JS_RE despite being common JavaScript. Kotlin `.kts` is excluded. PHP `.phtml`/`.inc`, Ruby `.erb`/`.rake`, and C# `.cshtml` are scanned even though profile LOC language mapping omits them.
