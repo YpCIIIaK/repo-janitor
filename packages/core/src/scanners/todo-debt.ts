@@ -122,7 +122,19 @@ export const todoDebtScanner: Scanner = {
         if (Math.max(...counts.values()) / hits.length > 0.8) continue
       }
 
+      const sourceLines = content.split(/\r?\n/)
+      const normalized = file.replace(/\\/g, "/")
       for (const hit of hits) {
+        // Student prompts and empty textbook exercise stubs are intentional
+        // incomplete code. Keep concrete maintenance debt in these folders.
+        if (hit.marker === "TODO") {
+          const exercisePrompt = /(^|\/)exercises?\//i.test(normalized) &&
+            /\b(?:exercise|fix the code|your task)\b/i.test(hit.text)
+          const textbookStub = /(^|\/)chapter[-_]?\d+\//i.test(normalized) &&
+            !hit.text && /^\s*}\s*;?\s*$/.test(sourceLines[hit.line] ?? "") &&
+            /^\s*{\s*$/.test(sourceLines[hit.line - 2] ?? "")
+          if (exercisePrompt || textbookStub) continue
+        }
         const ageDays = await ctx.git.blameAgeDays(file, hit.line)
         const summary = hit.text ? `: ${truncate(hit.text)}` : ""
         issues.push({
