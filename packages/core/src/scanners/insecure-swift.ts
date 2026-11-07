@@ -52,29 +52,52 @@ export function scanSwiftSource(content: string): SwiftHit[] {
   if (/"""|#+"/.test(content)) return []
   const hits: SwiftHit[] = [], tainted = new Set<string>(), sqlValues = new Set<string>()
   const lines = uncomment(content).split(/\r?\n/)
+  const typedInputs = new Set<string>()
+  const scopes: { names: Set<string>; inputs: Set<string>; function: boolean }[] = []
+  const closeScope = () => {
+    const scope = scopes.pop()
+    if (!scope) return
+    for (const name of scope.names) { tainted.delete(name); sqlValues.delete(name) }
+    for (const name of scope.inputs) typedInputs.delete(name)
+    if (scope.function) { tainted.clear(); sqlValues.clear() }
+  }
+  const hasSource = (value: string) => INPUT.test(value) || [...typedInputs].some(name =>
+    new RegExp(`\\b${name}\\s*\\.\\s*text\\b`).test(value))
   const usesInput = (value: string): boolean => {
     // Only raw values, concatenation and interpolation propagate. A call such as
     // escapeHTML(field.text) is a transformation whose semantics are unknown.
     const outsideStrings = value.replace(/"(?:\\.|[^"\\])*"/g, "")
-    if (/\b[A-Za-z_]\w*\s*\(/.test(outsideStrings.replace(/\b(?:get)\s*\(/g, "")) && !INPUT.test(value)) return false
+    if (/\b[A-Za-z_]\w*\s*\(/.test(outsideStrings.replace(/\b(?:get)\s*\(/g, "")) && !hasSource(value)) return false
     if (/^\s*(?:try[!?]?\s+)?\w+\s*\(/.test(value) && !/^\s*(?:req|request)\./.test(value)) return false
     const interpolations = [...value.matchAll(/\\\(([^)]*)\)/g)]
       .map(m => m[1]).filter(part => !/\b\w+\s*\(/.test(part)).join(" ")
     const inputs = outsideStrings + " " + interpolations
-    return INPUT.test(inputs) || [...tainted].some(n => new RegExp(`\\b${n}\\b`).test(inputs))
+    return hasSource(inputs) || [...tainted].some(n => new RegExp(`\\b${n}\\b`).test(inputs))
   }
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i]
-    if (/\b(?:func|init|deinit)\b|^\s*}/.test(line)) { tainted.clear(); sqlValues.clear() }
+    const code = line.replace(/"(?:\\.|[^"\\])*"/g, m => " ".repeat(m.length))
+    const leadingCloses = /^\s*(}+)/.exec(code)?.[1].length ?? 0
+    for (let n = 0; n < leadingCloses; n++) closeScope()
+    const functionStart = /\b(?:func\s+\w+|init|deinit)\s*\(/.test(code)
+    if (functionStart) { tainted.clear(); sqlValues.clear() }
+    const opens = (code.match(/{/g) ?? []).length
+    for (let n = 0; n < opens; n++) scopes.push({ names: new Set(), inputs: new Set(), function: functionStart && n === 0 })
+    const typedInput = /\b(?:let|var)\s+(\w+)\s*:\s*(?:UIKit\.)?(?:UITextField|UITextView|UISearchBar)\b/.exec(code)
+    if (typedInput) {
+      typedInputs.add(typedInput[1])
+      // Class properties survive method exits; local input declarations do not.
+      scopes.at(-1)?.inputs.add(typedInput[1])
+    }
     const assignment = /^\s*(?:(?:let|var)\s+)?([A-Za-z_]\w*)(?:\s*:\s*[^=]+)?\s*=\s*(?!=)(.*)/.exec(line)
     if (assignment) {
       const [, name, value] = assignment
+      if (/^\s*(?:let|var)\b/.test(line)) scopes.at(-1)?.names.add(name)
       if (usesInput(value)) tainted.add(name); else tainted.delete(name)
       if (tainted.has(name) && SQL.test(value)) sqlValues.add(name); else sqlValues.delete(name)
     }
     // A sink must occur outside a string literal. This also rejects examples
     // embedded in an ordinary Swift string.
-    const code = line.replace(/"(?:\\.|[^"\\])*"/g, m => " ".repeat(m.length))
     // Alamofire explicitly documents this evaluator as disabling verification.
     // Match executable construction, not a declaration or documentation string.
     if (/\bDisabledTrustEvaluator\s*\(/.test(code) || /\bServerTrustPolicy\s*\.\s*disableEvaluation\b/.test(code)) {
@@ -114,6 +137,8 @@ export function scanSwiftSource(content: string): SwiftHit[] {
       if ((SQL.test(query) && usesInput(query)) || [...sqlValues].some(n => new RegExp(`^\\s*${n}\\s*$`).test(query))) id = "sql-interpolated"
     }
     if (htmlSink && usesInput(argumentsOf(line.slice(htmlSink.index + htmlSink[0].length))[0] ?? "")) id = "swift-webview-html"
+    const trailingCloses = (code.match(/}/g) ?? []).length - leadingCloses
+    for (let n = 0; n < trailingCloses; n++) closeScope()
     if (!id) continue
     hits.push({
       rule: {

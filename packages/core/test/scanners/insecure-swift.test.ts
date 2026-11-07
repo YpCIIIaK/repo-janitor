@@ -76,3 +76,42 @@ describe("Swift configuration confidence", () => {
     expect(issues.every(issue => issue.confidence === undefined)).toBe(true)
   })
 })
+
+describe("Swift typed input and nested scopes", () => {
+  it("follows an arbitrarily named typed field through conditional reassignment", async () => {
+    const issues = await scan([
+      'class SearchController {',
+      '  @IBOutlet weak var searchField: UITextField!',
+      '  func search() {',
+      '    var pattern = "%"',
+      '    if !(searchField.text?.isEmpty ?? true) {',
+      '      pattern = "%" + "\\(searchField.text!)" + "%"',
+      '    }',
+      '    let query = "SELECT title FROM article WHERE title LIKE \\(pattern)"',
+      '    sqlite3_prepare_v2(db, query, -1, &stmt, nil)',
+      '  }',
+      '}',
+    ].join("\n"))
+    expect(issues).toHaveLength(1)
+    expect(issues[0]).toMatchObject({ confidence: "high", location: "src/App.swift:9" })
+  })
+  it("does not leak block-local values or local input types into another scope", async () => {
+    expect(await scan([
+      'func first() {',
+      '  let arbitrary: UITextView = makeView()',
+      '  let payload = arbitrary.text',
+      '}',
+      'func second() {',
+      '  webView.loadHTMLString(payload, baseURL: nil)',
+      '  webView.loadHTMLString(arbitrary.text, baseURL: nil)',
+      '  if enabled {',
+      '    let local = textField.text',
+      '  }',
+      '  webView.loadHTMLString(local, baseURL: nil)',
+      '}',
+    ].join("\n"))).toEqual([])
+  })
+  it("does not infer user input from a UILabel text property", async () => {
+    expect(await scan('let searchField: UILabel = makeLabel()\nwebView.loadHTMLString(searchField.text, baseURL: nil)')).toEqual([])
+  })
+})
