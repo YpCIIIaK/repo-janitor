@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "purpose": "Reviewable source/sink/safe-case contracts, independently implemented; not imported external rule packs. See SECURITY-SOURCES.md for licenses and limits.",
+  "models": [
+    {
+      "rule": "php-include-user-input",
+      "languages": "PHP",
+      "cwe": "CWE-98",
+      "reference": "https://www.php.net/manual/en/function.include.php",
+      "unsafe": "request value or local alias chooses include path",
+      "safe": "fixed include path; sanitized or reassigned aliases"
+    },
+    {
+      "rule": "php-reflected-xss",
+      "languages": "PHP",
+      "cwe": "CWE-79",
+      "reference": "https://www.php.net/manual/en/function.htmlspecialchars.php",
+      "unsafe": "request value or alias echoed as HTML",
+      "safe": "htmlspecialchars/htmlentities; fixed output"
+    },
+    {
+      "rule": "php-xxe",
+      "languages": "PHP",
+      "cwe": "CWE-611",
+      "reference": "https://www.php.net/manual/en/libxml.constants.php",
+      "unsafe": "request XML with entity/DTD expansion flags",
+      "safe": "secure parser defaults; LIBXML_NO_XXE"
+    },
+    {
+      "rule": "php-path-traversal",
+      "languages": "PHP",
+      "cwe": "CWE-22",
+      "reference": "https://owasp.org/www-community/attacks/Path_Traversal",
+      "unsafe": "request-selected local file read",
+      "safe": "fixed paths; write-only fopen; explicit path transformations"
+    },
+    {
+      "rule": "php-ssti",
+      "languages": "PHP",
+      "cwe": "CWE-1336",
+      "reference": "https://twig.symfony.com/doc/3.x/api.html",
+      "unsafe": "request-derived Twig template source",
+      "safe": "static template with render-context input"
+    },
+    {
+      "rule": "sql-interpolated",
+      "languages": "Swift, Kotlin, Scala",
+      "cwe": "CWE-89",
+      "reference": "https://codeql.github.com/codeql-query-help/",
+      "unsafe": "request or UI input assembled into executable SQL text",
+      "safe": "bound SQL parameters; fixed SQL; Slick bound interpolation"
+    },
+    {
+      "rule": "exec-interpolated",
+      "languages": "Kotlin",
+      "cwe": "CWE-78",
+      "reference": "https://owasp.org/www-community/attacks/Command_Injection",
+      "unsafe": "request chooses executable or shell program text",
+      "safe": "fixed executable with separate argument values"
+    },
+    {
+      "rule": "swift-webview-html",
+      "languages": "Swift",
+      "cwe": "CWE-79",
+      "reference": "https://developer.apple.com/documentation/webkit/wkwebview/loadhtmlstring(_:baseurl:)",
+      "unsafe": "UI or request input loaded as HTML",
+      "safe": "escaped or static HTML"
+    },
+    {
+      "rule": "swift-tls-validation-disabled",
+      "languages": "Swift",
+      "cwe": "CWE-295",
+      "reference": "https://github.com/Alamofire/Alamofire/blob/master/Documentation/AdvancedUsage.md",
+      "unsafe": "explicit server trust evaluation bypass",
+      "safe": "certificate pinning and default trust evaluators"
+    }
+  ]
+}
