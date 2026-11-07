@@ -1071,7 +1071,12 @@ export const insecureCodeScanner: Scanner = {
       const norm = file.replace(/\\/g, "/")
       // In PHP apps `www/` (or `public/`) is the web root itself, not a docs site.
       const webRoot = /\.php$/i.test(norm) && /(^|\/)(?:www|public|htdocs)\//.test(norm)
-      if (SKIP_RE.test(norm) || (NOT_SHIPPED_RE.test(norm) && !webRoot)) continue
+      // Java/Kotlin package names are namespaces, not directory purposes:
+      // com/example and org/owasp/benchmark below Maven/Gradle production
+      // source roots must be scanned. Outer examples/docs trees still skip.
+      const productionRoot = JAVA_RE.test(norm) ? /(?:^|\/)src\/main\/(?:java|kotlin)\//.exec(norm) : null
+      const purposePath = productionRoot ? norm.slice(0, productionRoot.index + productionRoot[0].length) : norm
+      if (SKIP_RE.test(norm) || (NOT_SHIPPED_RE.test(purposePath) && !webRoot)) continue
 
       if (/\.(?:rs|c|cc|cpp|cxx|h|hpp|hxx)$/i.test(norm)) {
         // Reviewed native TLS fixtures intentionally bypass verification.
