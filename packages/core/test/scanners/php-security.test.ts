@@ -17,6 +17,10 @@ describe("PHP request-to-sink coverage", () => {
     expect(rules("$xml = file_get_contents('php://input');\n$doc->loadXML($xml, LIBXML_NOENT);")).toContain("php-xxe")
     expect(rules("$xml = file_get_contents('/srv/static.xml');\n$doc->loadXML($xml, LIBXML_NOENT);")).not.toContain("php-xxe")
   })
+  it("tracks fetched request XML and multiline parser options", () => {
+    expect(rules("$content = file_get_contents($_GET['url']);\n$doc = simplexml_load_string($content, NULL,\n LIBXML_NOENT);")).toContain("php-xxe")
+    expect(rules("$xml = $_POST['xml'];\n$doc->loadXML($xml);\n$options = LIBXML_NOENT;")).not.toContain("php-xxe")
+  })
   it("requires tainted XML and explicit external entity options", () => {
     expect(rules("$xml = $_POST['xml'];\n$doc->loadXML($xml, LIBXML_NOENT | LIBXML_NONET);")).toContain("php-xxe")
     expect(rules("simplexml_load_string($_POST['xml'], 'SimpleXMLElement', LIBXML_DTDLOAD);")).toContain("php-xxe")
