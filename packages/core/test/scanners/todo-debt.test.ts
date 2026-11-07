@@ -115,3 +115,20 @@ describe("todo-debt — translation markers", () => {
     expect(out.map((i) => i.location)).toEqual(["src/a.ts:1"])
   })
 })
+
+
+describe("student TODO prompts", () => {
+  it("ignores exercise instructions and empty textbook stubs, retaining concrete debt", async () => {
+    const issues = await todoDebtScanner.run(makeContext({ files: {
+      "exercises/00_intro/intro1.rs": '// TODO: We encourage you to keep trying an exercise.\nfn main() {}',
+      "exercises/00_intro/intro2.rs": 'fn main() {\n // TODO: Fix the code to print "Hello world!".\n printline!("Hello world!");\n}',
+      "concurrency/chapter2/2.2_transfer.cpp": 'void process_big_object(std::unique_ptr<X>)\n{\n // TODO\n}\n',
+      "src/production.cpp": 'void save()\n{\n // TODO\n}\n',
+      "exercises/support.rs": '// FIXME: avoid losing learner progress\n// TODO: handle corrupted files',
+      "concurrency/chapter2/runtime.cpp": '// TODO: join the worker before shutdown',
+    } }))
+    expect(issues.map(i => i.location)).toEqual([
+      "src/production.cpp:3", "exercises/support.rs:1", "exercises/support.rs:2", "concurrency/chapter2/runtime.cpp:1",
+    ])
+  })
+})
