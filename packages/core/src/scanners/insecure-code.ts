@@ -1,3 +1,4 @@
+import { scanScalaSource } from "./insecure-scala"
 import { scanCppTlsSource } from "./insecure-cpp"
 import { scanRustTlsSource } from "./insecure-rust"
 import { scanKotlinSource } from "./insecure-kotlin"
@@ -1091,7 +1092,7 @@ export const insecureCodeScanner: Scanner = {
       }
 
       const lang = langOf(norm)
-      if (!lang && !/\.swift$/i.test(norm)) continue
+      if (!lang && !/\.(?:swift|scala)$/i.test(norm)) continue
 
       const size = await ctx.fileSize?.(file)
       if (size !== null && size !== undefined && size > MAX_BYTES) continue
@@ -1100,14 +1101,14 @@ export const insecureCodeScanner: Scanner = {
       if (!content) continue
 
       if (!lang) {
-        const isSwiftTest = TEST_RE.test(norm) || /Tests?\.swift$/i.test(norm)
-        for (const hit of scanSwiftSource(content).slice(0, MAX_PER_FILE)) {
+        const isLanguageTest = TEST_RE.test(norm) || /Tests?\.(?:swift|scala)$/i.test(norm)
+        for (const hit of (/\.scala$/i.test(norm) ? scanScalaSource(content) : scanSwiftSource(content)).slice(0, MAX_PER_FILE)) {
           if (issues.length >= MAX_TOTAL) break
           let ageDays = 0
           try { ageDays = await ctx.git.blameAgeDays(file, hit.line) } catch { /* blame unavailable */ }
           issues.push({
             id: `insecure-${hit.rule.id}-${norm}:${hit.line}`,
-            category: "security", severity: isSwiftTest ? LOWER[hit.rule.severity] : hit.rule.severity,
+            category: "security", severity: isLanguageTest ? LOWER[hit.rule.severity] : hit.rule.severity,
             title: hit.rule.title, location: `${norm}:${hit.line}`, ageDays,
             detail: hit.rule.detail, evidence: hit.evidence, confidence: "high",
           })

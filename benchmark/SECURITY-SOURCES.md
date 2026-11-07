@@ -36,3 +36,12 @@ Swift path traversal reference: https://codeql.github.com/codeql-query-help/swif
 Maintain a small provenance manifest (rule ID, CWE, authoritative reference URL, source/sink/safe cases and test IDs). Keep each language helper independent; return normal findings with existing confidence behavior. Add paired positive/negative regression cases, then run against intentionally vulnerable corpus AND real-world repos. A database of sink names cannot replace scope-aware taint/sanitizer analysis, and generic exclusions must be verified against recall gates.
 
 Research fetched only licenses, READMEs, query documentation, and project metadata; no Semgrep rule implementations were copied into scanner code.
+
+## Scala SQL implementation references
+
+- CWE-89: https://cwe.mitre.org/data/definitions/89.html (retrieved).
+- JDBC prepared statements: https://docs.oracle.com/javase/tutorial/jdbc/basics/prepared.html (retrieved).
+- Slick Plain SQL: https://scala-slick.org/doc/stable/sql.html (retrieved). Ordinary `$value` interpolation creates bind variables, whereas `#$value` splices literal SQL text. The Scala scanner follows this documented distinction.
+- Play request docs: https://www.playframework.com/documentation/3.0.x/ScalaRequests returned HTTP 403 in this environment; request accessor support is explicitly bounded to `request/req.queryString`, `getQueryString`, and `body.asText`.
+
+Scala checks are independently authored, use local straight-line request/alias tracking, and require tainted SQL at a JDBC sink or an explicit Slick raw splice. Bound parameters, constant raw splices, numeric/boolean conversions, comments, ordinary string examples, reassignment, and function boundaries have negative regression cases. Unknown transformations stop taint; whole-program propagation is outside this check.
