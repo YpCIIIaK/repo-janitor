@@ -96,6 +96,15 @@ export function scanSwiftSource(content: string): SwiftHit[] {
         detail: "UserDefaults is a preferences store, not a credential vault. Store passwords, authentication tokens and PINs in the Keychain with an appropriate accessibility policy.",
       }, line: i + 1, evidence: line.trim(), tainted: false })
     }
+    const cryptCall = /\bCCCrypt\s*\(/.exec(code)
+    if (cryptCall) {
+      const options = argumentsOf(line.slice(cryptCall.index + cryptCall[0].length))[2] ?? ""
+      if (/\bkCCOptionECBMode\b/.test(options.replace(/"(?:\\.|[^"\\])*"/g, ""))) hits.push({ rule: {
+        id: "swift-ecb-encryption", severity: "warning",
+        title: "CommonCrypto encryption explicitly uses ECB mode",
+        detail: "ECB encrypts identical plaintext blocks identically and exposes patterns. Prefer authenticated encryption such as CryptoKit AES.GCM; preserve unique nonces and authentication tags.",
+      }, line: i + 1, evidence: line.trim(), tainted: false })
+    }
     const sqlSink = /\b(?:sqlite3_(?:exec|prepare_v2|prepare_v3)|(?:\w+\.)?(?:executeQuery|executeUpdate))\s*\(/.exec(code)
     const htmlSink = /\.loadHTMLString\s*\(/.exec(code)
     let id: string | undefined
