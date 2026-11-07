@@ -1,0 +1,82 @@
+{
+  "corpusBefore": 1737,
+  "corpusAfter": 2140,
+  "newPinnedRepos": 403,
+  "newLabels": {
+    "tp": 94,
+    "fp": 25
+  },
+  "gateBeforeBaselineUpdate": "pass",
+  "baselineBefore": {
+    "overall": 0.518,
+    "scanners": {
+      "eol-runtime": 0.958,
+      "todo-debt": 0.965,
+      "broken-doc-links": 0.621,
+      "bus-factor": 0.848,
+      "commented-code": 0.721,
+      "workflow-security": 0.913,
+      "duplicate-code": 0.857,
+      "skipped-tests": 0.875,
+      "insecure-code": 0.081,
+      "docs-drift": 0.615,
+      "lockfile-drift": 0.905,
+      "dead-code": 0.8,
+      "dockerfile": 0.435,
+      "leftover-debug": 0.25,
+      "config-conflict": 0.95,
+      "secrets": 0.057,
+      "env-lifecycle": 0.138,
+      "ci-health": 0.5,
+      "repo-bloat": 0.471,
+      "project-hygiene": 0.692,
+      "iac-security": 0.404,
+      "dependency-funeral": 0.077,
+      "supply-chain": 1,
+      "license-risk": 0
+    },
+    "lostTp": 36
+  },
+  "baselineAfter": {
+    "overall": 0.547,
+    "scanners": {
+      "eol-runtime": 0.958,
+      "todo-debt": 0.966,
+      "broken-doc-links": 0.621,
+      "bus-factor": 0.848,
+      "commented-code": 0.734,
+      "workflow-security": 0.936,
+      "duplicate-code": 0.857,
+      "skipped-tests": 0.875,
+      "insecure-code": 0.089,
+      "docs-drift": 0.615,
+      "lockfile-drift": 0.905,
+      "dead-code": 0.8,
+      "dockerfile": 0.426,
+      "leftover-debug": 0.25,
+      "config-conflict": 0.95,
+      "secrets": 0.057,
+      "env-lifecycle": 0.138,
+      "ci-health": 0.489,
+      "repo-bloat": 0.471,
+      "project-hygiene": 0.692,
+      "iac-security": 0.404,
+      "dependency-funeral": 0.077,
+      "supply-chain": 1,
+      "license-risk": 0
+    },
+    "lostTp": 36
+  },
+  "previousVulnerableApps": {
+    "count": 39,
+    "highFindingsBefore": 158,
+    "highFindingsAfter": 167,
+    "lostHighFindingIds": []
+  },
+  "finalBuildRescans": 224,
+  "allCorpusResultShasMatchPins": true,
+  "publication": {
+    "status": "blocked",
+    "reason": "git push and GitHub create_branch both return HTTP 403"
+  }
+}
