@@ -10683,5 +10683,20 @@
     "name": "aureuserp-aureuserp",
     "url": "https://github.com/aureuserp/aureuserp",
     "sha": "c31a0db21e00fa436c4949eb4f60ceef81e116ec"
+  },
+  {
+    "name": "owasp-benchmark-benchmarkjava",
+    "url": "https://github.com/OWASP-Benchmark/BenchmarkJava",
+    "sha": "d4f6f3a53be73c3c8a24dafc7f4e486d82e6744a"
+  },
+  {
+    "name": "ine-labs-awsgoat",
+    "url": "https://github.com/ine-labs/AWSGoat",
+    "sha": "0ca9678211403d94bf42b53c6d575f2c59c89270"
+  },
+  {
+    "name": "owasp-owaspwebgoatphp",
+    "url": "https://github.com/OWASP/OWASPWebGoatPHP",
+    "sha": "b54f87daf476d4d80493e9d1d55cf48d119c09b3"
   }
 ]
