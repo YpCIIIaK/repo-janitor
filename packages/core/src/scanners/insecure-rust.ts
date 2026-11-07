@@ -6,7 +6,16 @@ export interface NativeTlsHit { rule: { id: string; severity: Severity; title: s
  * https://docs.rs/reqwest/latest/reqwest/struct.ClientBuilder.html
  * https://docs.rs/native-tls/latest/native_tls/struct.TlsConnectorBuilder.html */
 export function scanRustTlsSource(source: string): NativeTlsHit[] {
-  const code = maskNativeSource(source)
+  let code = maskNativeSource(source)
+  // Rust unit tests commonly live beside production code. Hide only explicit
+  // #[cfg(test)] mod blocks; code is already free of strings/comments, so a
+  // balanced-brace walk cannot be confused by braces in fixtures.
+  for (const m of [...code.matchAll(/#\s*\[\s*cfg\s*\(\s*test\s*\)\s*\]\s*(?:pub\s+)?mod\s+\w+\s*\{/g)]) {
+    const start = m.index!, brace = start + m[0].lastIndexOf("{")
+    let end = brace + 1, depth = 1
+    for (; end < code.length && depth; end++) { if (code[end] === "{") depth++; else if (code[end] === "}") depth-- }
+    code = code.slice(0, start) + code.slice(start, end).replace(/[^\r\n]/g, " ") + code.slice(end)
+  }
   // These method names also occur on user types. Require a known TLS crate.
   if (!/\b(?:reqwest|native_tls)\s*::/.test(code)) return []
   const hits: NativeTlsHit[] = []

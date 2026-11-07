@@ -1074,6 +1074,8 @@ export const insecureCodeScanner: Scanner = {
       if (SKIP_RE.test(norm) || (NOT_SHIPPED_RE.test(norm) && !webRoot)) continue
 
       if (/\.(?:rs|c|cc|cpp|cxx|h|hpp|hxx)$/i.test(norm)) {
+        // Reviewed native TLS fixtures intentionally bypass verification.
+        if (TEST_RE.test(norm) || /(?:^|\/)(?:test|tests)\.(?:rs|c|cc|cpp|cxx)$|_test\.(?:rs|c|cc|cpp|cxx)$/i.test(norm)) continue
         const size = await ctx.fileSize?.(file)
         if (size !== null && size !== undefined && size > MAX_BYTES) continue
         const content = await ctx.readFile(file)
@@ -1086,7 +1088,7 @@ export const insecureCodeScanner: Scanner = {
           issues.push({ id: `insecure-${hit.rule.id}-${norm}:${hit.line}`, category: "security",
             severity: TEST_RE.test(norm) ? LOWER[hit.rule.severity] : hit.rule.severity,
             title: hit.rule.title, location: `${norm}:${hit.line}`, ageDays,
-            detail: hit.rule.detail, evidence: hit.evidence, confidence: "high" })
+            detail: hit.rule.detail, evidence: hit.evidence })
         }
         continue
       }
