@@ -28,6 +28,9 @@ describe("Swift injection flows", () => {
   it("does not mistake a string mentioning an input property for user data", async () => {
     expect(await scan('let html = "textView.text"\nwebView.loadHTMLString(html, baseURL: nil)')).toEqual([])
   })
+  it("does not propagate through an escaping call inside interpolation", async () => {
+    expect(await scan('let name = nameTextField.text!\nwebView.loadHTMLString("<p>\\(escapeHTML(name))</p>", baseURL: nil)')).toEqual([])
+  })
   it("ignores comments and string examples", async () => {
     expect(await scan('// webView.loadHTMLString(textView.text, baseURL: nil)\n/* nested /* block */\nwebView.loadHTMLString(textView.text, baseURL: nil)\n*/\nlet help = "webView.loadHTMLString(textView.text, baseURL: nil)"')).toEqual([])
   })
