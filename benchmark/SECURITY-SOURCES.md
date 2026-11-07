@@ -45,3 +45,19 @@ Research fetched only licenses, READMEs, query documentation, and project metada
 - Play request docs: https://www.playframework.com/documentation/3.0.x/ScalaRequests returned HTTP 403 in this environment; request accessor support is explicitly bounded to `request/req.queryString`, `getQueryString`, and `body.asText`.
 
 Scala checks are independently authored, use local straight-line request/alias tracking, and require tainted SQL at a JDBC sink or an explicit Slick raw splice. Bound parameters, constant raw splices, numeric/boolean conversions, comments, ordinary string examples, reassignment, and function boundaries have negative regression cases. Unknown transformations stop taint; whole-program propagation is outside this check.
+
+## External OWASP ground-truth evaluation
+
+`benchmark/owasp-score.mjs` reads truth data **from an external pinned BenchmarkJava checkout** and compares case-level findings from either a CLI `.report.json` or benchmark `.results/*.json`. It does not import application source, copy GPL fixtures into this project, run the application, or write hand labels.
+
+```sh
+node benchmark/owasp-score.mjs --checkout /path/to/BenchmarkJava --results benchmark/.results/owasp-benchmark-benchmarkjava.json > work/owasp-score.json
+node benchmark/owasp-score.mjs --checkout /path/to/BenchmarkJava --results /path/to/scan.report.json --confidence visible
+node --test benchmark/owasp-score.test.mjs
+```
+
+The checkout must be at the result's pinned SHA. The adapter records both SHAs and marks mismatches. It auto-selects `expectedresults-*.csv` only when exactly one exists; otherwise pass `--expected /path/to/expectedresults-1.2.csv`. Default `--confidence all` includes low-confidence findings to measure detector recall; `visible` measures the user-facing output.
+
+Currently supported Java mappings are SQL injection → CWE-89, command execution → CWE-78, and unsafe Java deserialization → CWE-502 (only CWEs present in the selected truth CSV contribute counts). Other categories such as path traversal, LDAP/XPath injection, weak crypto, and trust boundaries are listed as unsupported, rather than counted as false negatives for an unimplemented Java detector. Cases match by `BenchmarkTestNNNNN.java` filename and CWE; repeated findings count once per case. Truth cases missing from the checkout are reported separately and excluded from TP/FP/FN/TN.
+
+**A full BenchmarkJava scan can hit the insecure-code scanner's 60-finding total cap or six findings per file.** The adapter flags suspected truncation using all emitted security findings, even for visible-only evaluation. Its FN/TN counts then remain censored observations, unsuitable for claiming full-suite recall or true-negative performance. A scan without a cap warning still does not prove every file was analyzed: filters, diagnostics and unsupported flows matter. Use smaller, explicitly selected case batches to obtain uncapped evidence, preserve each batch's truth set and scan provenance, and inspect `limitations` rather than publishing the confusion table alone. Synthetic adapter tests include duplicate findings, unsupported CWEs, wrong-CWE matches, missing files, hidden findings, caps and CLI provenance.
