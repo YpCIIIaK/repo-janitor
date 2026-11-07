@@ -53,10 +53,27 @@ function commentBody(line: string): string | null {
   return m ? m[1].trim() : null
 }
 
+/** Tabular explanatory rows with syntax that cannot be host-language code.
+ * These appear in binary format docs, type-inference tables and test diagrams.
+ * Ordinary assignments, expression arrows and container initializers stay eligible.
+ */
+function isDocumentationRow(body: string): boolean {
+  // Chained numeric equalities, e.g. day = 1 = 0b00001, are equations, not assignments.
+  if (/^[\w*+ /-]+\s*=\s*(?:0x[\da-f]+|0b[01]+|\d+)\s*=\s*(?:0x[\da-f]+|0b[01]+|\d+)\s*$/i.test(body)) return true
+  // Go range type placeholders cannot be identifiers on the assignment's left.
+  if (/^\[[^\]]+\](?:,\s*\[[^\]]+\])?\s*:=\s*range\s*\[[^\]]+\]$/.test(body)) return true
+  // A numbered diagram label followed by prose, not a language's arrow expression.
+  if (/^Index\s+\d+\s*->\s+\S/.test(body)) return true
+  // ASCII field diagrams begin and end cells with pipes, not expression operands.
+  if (/^\|\s*[A-Za-z0-9_]+\s*\|/.test(body)) return true
+  // Hex code mapping annotated with parenthetical names/prose, not function calls.
+  return /^[A-Za-z_]\w*(?:\s+is\s+alias\s+for\s+[A-Za-z_]\w*)?\s*=\s*0x[\da-f]+\s+\([A-Za-z][^)]*\)(?:\s+\([^)]+\))*$/.test(body)
+}
+
 /** Does a comment body look like commented-out code (vs. a real prose comment)? */
 function looksLikeCode(body: string): boolean {
   if (!body || body.length < 2) return false
-  if (SKIP_PREFIX.test(body)) return false
+  if (SKIP_PREFIX.test(body) || isDocumentationRow(body)) return false
   // `//=> value`: the result line of a documented example (type-fest, sindresorhus).
   if (body.startsWith("=>")) return false
   if (PROSE_TAIL.test(body)) return false

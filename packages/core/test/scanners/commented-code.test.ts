@@ -179,3 +179,48 @@ it("preserves disabled implementations using samples or followed by sample-strea
     expect(await commentedCodeScanner.run(makeContext({ files: { [path]: source } }))).toHaveLength(1)
   }
 })
+
+
+describe("commented-code — non-code table grammar", () => {
+  const scan = (file: string, lines: string[]) => commentedCodeScanner.run(makeContext({ files: { [file]: lines.join("\n") } }))
+  it("ignores bit-field equations rather than treating numeric equalities as assignments", async () => {
+    expect(await scan("replication/time.go", [
+      "// year*13+month = 25611 = 0b110010000001011",
+      "// day = 1 = 0b00001", "// hour = 0 = 0b00000", "// minute = 0 = 0b000000",
+    ])).toHaveLength(0)
+  })
+  it("ignores type placeholder tables and numbered index-to-container diagrams", async () => {
+    expect(await scan("src/decl.go", [
+      "// [int], [int] := range [string]", "// [int], [value] := range [slice or array]",
+      "// [key], [value] := range [map]", "// [value], [nil] := range [chan]",
+    ])).toHaveLength(0)
+    expect(await scan("src/util_test.go", [
+      "// Index 0 -> init container 0 (empty)", "// Index 1 -> init container 1 (empty)",
+      "// Index 2 -> regular container 0 (has device, regularIdx = 2 - 2 = 0)",
+    ])).toHaveLength(0)
+  })
+  it("ignores ASCII field layouts and annotated numeric key-code tables", async () => {
+    expect(await scan("src/Image.cc", [
+      '// Read the IFD0 ("Image File Directory 0")',
+      "// | NN |                     n entries in directory (2 bytes)",
+      "// | TT | tt | nnnn | vvvv |  entry: tag (2b), data type (2b),",
+      "//                             n components (4b), value/offset (4b)",
+    ])).toHaveLength(0)
+    expect(await scan("src/tcell_test.go", [
+      "// KeyBackspace2 is alias for KeyDEL = 0x7F (ASCII) (allegedly unused by Windows)",
+      "// KeyDelete = 0x2E (VK_DELETE constant in Windows)",
+      "// KeyBackspace is alias for KeyBS = 0x08 (ASCII) (implicit alias with KeyCtrlH)",
+    ])).toHaveLength(0)
+  })
+  it("preserves valid Go assignments, C++ bitwise expressions, and JS arrows", async () => {
+    expect(await scan("src/worker.go", [
+      "// count := 1", "// for index, value := range values {", "// process(index, value);", "// }",
+    ])).toHaveLength(1)
+    expect(await scan("src/flags.cpp", [
+      "// auto flags = FIRST | SECOND;", "// flags |= THIRD;", "// return flags;",
+    ])).toHaveLength(1)
+    expect(await scan("src/worker.js", [
+      "// const fn = value => value + 1;", "// const key = 0x7F;", "// return fn(key);",
+    ])).toHaveLength(1)
+  })
+})
