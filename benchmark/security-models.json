@@ -73,6 +73,38 @@
       "reference": "https://github.com/Alamofire/Alamofire/blob/master/Documentation/AdvancedUsage.md",
       "unsafe": "explicit server trust evaluation bypass",
       "safe": "certificate pinning and default trust evaluators"
+    },
+    {
+      "rule": "rust-tls-validation-disabled",
+      "languages": "Rust",
+      "cwe": "CWE-295",
+      "reference": "https://docs.rs/reqwest/latest/reqwest/struct.ClientBuilder.html",
+      "unsafe": "known TLS crate and explicit invalid certificate/hostname acceptance",
+      "safe": "default verification; false bypass flags; comments and raw strings"
+    },
+    {
+      "rule": "cpp-tls-validation-disabled",
+      "languages": "C/C++",
+      "cwe": "CWE-295",
+      "reference": "https://curl.se/libcurl/c/CURLOPT_SSL_VERIFYPEER.html",
+      "unsafe": "curl_easy_setopt verification option set to zero",
+      "safe": "verified peer/host values; source examples"
+    },
+    {
+      "rule": "swift-plaintext-credential-storage",
+      "languages": "Swift",
+      "cwe": "CWE-312",
+      "reference": "https://mas.owasp.org/MASTG/",
+      "unsafe": "credential written unencrypted to UserDefaults",
+      "safe": "noncredential preferences; transformed/encrypted values"
+    },
+    {
+      "rule": "swift-ecb-encryption",
+      "languages": "Swift",
+      "cwe": "CWE-327",
+      "reference": "https://developer.apple.com/library/archive/documentation/Security/Conceptual/cryptoservices/CryptographicServicesAPIs.html",
+      "unsafe": "explicit ECB flag passed as CCCrypt options",
+      "safe": "flag elsewhere; secure cipher modes"
     }
   ]
 }
