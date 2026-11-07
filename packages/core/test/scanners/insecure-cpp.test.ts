@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest"
+import { ruleOf } from "../../src/rules"
 import { scanCppTlsSource } from "../../src/scanners/insecure-cpp"
 import { insecureCodeScanner } from "../../src/index"
 import { makeContext } from "../helpers"
@@ -16,6 +17,7 @@ describe("C/C++ libcurl TLS verification bypass", () => {
     const source = '\n// setup\ncurl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);'
     const issues = await insecureCodeScanner.run(makeContext({ files: { "src/client.cpp": source, "tests/client.c": source, "vendor/client.h": source, "examples/client.cc": source } }))
     expect(issues).toHaveLength(2)
+    expect(ruleOf(issues[0])).toBe("insecure-cpp-tls-validation-disabled")
     expect(issues).toEqual(expect.arrayContaining([expect.objectContaining({ location: "src/client.cpp:3", severity: "critical", confidence: "high" }), expect.objectContaining({ location: "tests/client.c:3", severity: "warning" })]))
   })
 })
