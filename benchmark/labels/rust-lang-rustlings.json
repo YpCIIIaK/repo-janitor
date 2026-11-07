@@ -1,0 +1,10 @@
+{
+ "action-tag-.github/workflows/rust.yml-40": "tp",
+ "action-tag-.github/workflows/rust.yml-49": "tp",
+ "action-tag-first-party-.github/workflows/rust.yml-24": "tp",
+ "action-tag-first-party-.github/workflows/rust.yml-30": "tp",
+ "no-permissions-.github/workflows/rust.yml-1": "tp",
+ "no-permissions-.github/workflows/website.yml-1": "tp",
+ "todo-exercises/00_intro/intro1.rs:1": "fp",
+ "todo-exercises/00_intro/intro2.rs:2": "fp"
+}
