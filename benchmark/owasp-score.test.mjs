@@ -67,3 +67,20 @@ test("normalizes benchmark taxonomy rule IDs and raw CLI findings without rule m
   const wrongPrefix = { ...raw, id: `insecure-exec-interpolatedish-src/${names[2]}.java:4`, location: `src/${names[2]}.java:4` }
   assert.equal(evaluate(expected, { issues: [wrongPrefix] }, names).totals.tp, 0)
 })
+
+
+test("reports OWASP package paths excluded by scanner instead of claiming analyzed negatives", () => {
+  const result = evaluate(expected, { findings: [] }, names, { pathFilters: "legacy", sourcePaths: { [names[0]]: `src/main/java/org/owasp/benchmark/testcode/${names[0]}.java` } })
+  assert.equal(result.coverage.excludedSourceCases.length, 1)
+  assert.equal(result.coverage.evaluated, 3)
+  assert.equal(result.totals.fn, 1)
+  assert.equal(result.limitations.negativeCasesReliable, false)
+})
+
+
+test("current production namespaces are not excluded while outer benchmark trees remain excluded", () => {
+  const result = evaluate(expected, { findings: [] }, names, { sourcePaths: { [names[0]]: `src/main/java/org/owasp/benchmark/testcode/${names[0]}.java`, [names[2]]: `benchmark/app/src/main/java/${names[2]}.java` } })
+  assert.equal(result.coverage.excludedSourceCases.length, 1)
+  assert.equal(result.coverage.excludedSourceCases[0].name, names[2])
+  assert.equal(result.totals.fn, 1)
+})
