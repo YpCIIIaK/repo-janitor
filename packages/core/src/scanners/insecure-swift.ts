@@ -75,6 +75,15 @@ export function scanSwiftSource(content: string): SwiftHit[] {
     // A sink must occur outside a string literal. This also rejects examples
     // embedded in an ordinary Swift string.
     const code = line.replace(/"(?:\\.|[^"\\])*"/g, m => " ".repeat(m.length))
+    // Alamofire explicitly documents this evaluator as disabling verification.
+    // Match executable construction, not a declaration or documentation string.
+    if (/\bDisabledTrustEvaluator\s*\(/.test(code) || /\bServerTrustPolicy\s*\.\s*disableEvaluation\b/.test(code)) {
+      hits.push({ rule: {
+        id: "swift-tls-validation-disabled", severity: "critical",
+        title: "TLS server certificate validation is disabled",
+        detail: "Alamofire's disabled trust evaluator accepts unverified server certificates. Use DefaultTrustEvaluator or certificate/public-key pinning for production connections.",
+      }, line: i + 1, evidence: line.trim(), tainted: false })
+    }
     const sqlSink = /\b(?:sqlite3_(?:exec|prepare_v2|prepare_v3)|(?:\w+\.)?(?:executeQuery|executeUpdate))\s*\(/.exec(code)
     const htmlSink = /\.loadHTMLString\s*\(/.exec(code)
     let id: string | undefined
