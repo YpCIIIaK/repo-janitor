@@ -282,7 +282,7 @@ const PHP_JAVA_RULES: VulnRule[] = [
   {
     id: "php-include-user-input",
     lang: "php",
-    re: /\b(?:include|require)(?:_once)?\s*\(?\s*[^;]*\$_(?:GET|POST|REQUEST|COOKIE)/g,
+    re: /\b(?:include|require)(?:_once)?\s*\(?\s*(?:[^;]*\$_(?:GET|POST|REQUEST|COOKIE)|\$[A-Za-z_]\w*)/g,
     severity: "critical",
     title: "File included from request input",
     detail:
@@ -779,6 +779,9 @@ export function scanSource(content: string, lang: Lang): CodeHit[] {
       // Keep the most severe rule when several match the same line.
       if (existing && rank(existing.rule.severity) >= rank(rule.severity)) continue
       if (!sinkAllows(rule.id, rawLine, idx - lineStart)) continue
+      // Variable-only PHP includes need an actual local request-to-sink flow.
+      if (rule.id === "php-include-user-input" && !/\$_(?:GET|POST|REQUEST|COOKIE)\b/.test(m[0]) &&
+        !phpLocalRequestValue(content, idx, m[0])) continue
       const tainted = !INJECTION_RULES.has(rule.id)
         ? undefined
         : rule.id === "ssrf"
@@ -797,6 +800,26 @@ export function scanSource(content: string, lang: Lang): CodeHit[] {
 /** Request input as a URL source, for SSRF (any language). */
 const SSRF_TAINT =
   /\b(?:req|request)\.(?:query|body|params|args|form|values|GET|POST)\b|\$_(?:GET|POST|REQUEST|COOKIE)\b|\bparams\s*\[|\brequest\.get_json\b|\bc\.(?:Query|Param|PostForm)\s*\(|\br\.(?:FormValue|URL\.Query)\b/
+
+/** Conservative PHP assignment flow: plain request values and aliases only.
+ * Reassignments kill taint; function boundaries prevent borrowing another scope.
+ * Calls, array lookups on locals, and multi-line expressions are left unclassified.
+ */
+function phpLocalRequestValue(content: string, sinkOffset: number, sink: string): boolean {
+  const tainted = new Set<string>()
+  const prefix = content.slice(0, sinkOffset).split(/\r?\n/).slice(-TAINT_WINDOW).join("\n")
+  for (const statement of prefix.split(/[;\n]/)) {
+    if (/\b(?:function|fn)\b|^\s*}/.test(statement)) tainted.clear()
+    const assignment = statement.match(/^\s*(?:<\?php\s*)?(\$[A-Za-z_]\w*)\s*=\s*([\s\S]*)$/)
+    if (!assignment) continue
+    const [, target, value] = assignment
+    const direct = /^\$_(?:GET|POST|REQUEST|COOKIE)\s*\[\s*(['"])[^'"]+\1\s*\]\s*$/.test(value)
+    const alias = value.trim()
+    if (direct || tainted.has(alias)) tainted.add(target)
+    else tainted.delete(target)
+  }
+  return [...sink.matchAll(/\$[A-Za-z_]\w*/g)].some(([name]) => tainted.has(name))
+}
 
 /** Escaping and sanitising calls that make an echoed request value safe. */
 const PHP_ESCAPED =

@@ -446,3 +446,18 @@ describe("insecure-code false-positive clusters (benchmark batch 12–15)", () =
     })).toEqual([])
   })
 })
+
+
+describe("insecure-code — PHP local include request flow", () => {
+  it("finds variable includes only when their current value comes from a request", async () => {
+    const files = {
+      "src/unsafe.php": "<?php\n$page = $_GET['page'];\n$alias = $page;\nrequire_once($alias);\n",
+      "src/fixed.php": "<?php\n$page = $_GET['page'];\n$page = 'safe.php';\ninclude($page);\n",
+      "src/unrelated.php": "<?php\n$other = $_GET['page'];\n$page = 'safe.php';\ninclude $page;\n",
+      "src/scope.php": "<?php\nfunction first() {\n$page = $_GET['page'];\n}\nfunction second($page) {\ninclude $page;\n}\n",
+      "src/allowlist.php": "<?php\n$page = $_GET['page'];\n$page = basename($page);\ninclude $page;\n",
+    }
+    const issues = (await insecureCodeScanner.run(makeContext({ files }))).filter((i) => i.id.includes("php-include-user-input"))
+    expect(issues.map((i) => [i.location, i.confidence])).toEqual([["src/unsafe.php:4", "high"]])
+  })
+})
