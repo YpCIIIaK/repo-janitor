@@ -55,7 +55,7 @@ export function scanPhpSecurity(content: string): CodeHit[] {
     })
     // Reading an arbitrary request-selected file exposes server files. Keep
     // basename/allowlist transformations out of this deliberately narrow rule.
-    const read = /\b(?:readfile|file_get_contents|fopen)\s*\(/g
+    const read = /\b(?:readfile|file_get_contents)\s*\(/g
     for (const m of executable.matchAll(read)) {
       const args = code.slice((m.index ?? 0) + m[0].length).split(/[,;]/)[0]
       if (carries(args) && !/\b(?:basename|realpath|filter_var)\s*\(/.test(args)) {
