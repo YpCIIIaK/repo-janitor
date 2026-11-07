@@ -57,3 +57,14 @@ describe("Swift credential storage", () => {
     expect(await scan('UserDefaults.standard.set("dark", forKey: "theme")\nUserDefaults.standard.set(false, forKey: "password")\nUserDefaults.standard.set(nil, forKey: "token")\nUserDefaults.standard.set(encrypt(password), forKey: "password")\nKeychain.standard.set(password, forKey: "password")\n// UserDefaults.standard.set("secret", forKey: "password")')).toEqual([])
   })
 })
+
+describe("Swift block cipher mode", () => {
+  it("reports ECB in the CommonCrypto options argument", async () => {
+    const issues = await scan('CCCrypt(kCCEncrypt, kCCAlgorithmAES, CCOptions(kCCOptionECBMode | kCCOptionPKCS7Padding), key, 16, nil, input, length, output, capacity, &written)')
+    expect(issues).toHaveLength(1)
+    expect(issues[0].id).toContain("swift-ecb-encryption")
+  })
+  it("allows CBC options, AES.GCM and unrelated ECB mentions", async () => {
+    expect(await scan('CCCrypt(kCCEncrypt, kCCAlgorithmAES, CCOptions(kCCOptionPKCS7Padding), key, 16, iv, input, length, output, capacity, &written)\nAES.GCM.seal(data, using: key)\nlet documentation = "kCCOptionECBMode"\n// CCCrypt(kCCEncrypt, kCCAlgorithmAES, kCCOptionECBMode, key)')).toEqual([])
+  })
+})
