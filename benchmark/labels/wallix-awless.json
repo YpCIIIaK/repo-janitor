@@ -1,0 +1,5 @@
+{
+ "commented-aws/services/services_test.go:1398": "tp",
+ "commented-graph/type_test.go:237": "tp",
+ "docker-latest-vendor/github.com/wallix/awless-scheduler/Dockerfile:1": "fp"
+}

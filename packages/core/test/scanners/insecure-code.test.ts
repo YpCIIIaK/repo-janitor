@@ -446,3 +446,35 @@ describe("insecure-code false-positive clusters (benchmark batch 12–15)", () =
     })).toEqual([])
   })
 })
+
+
+describe("insecure-code — PHP local include request flow", () => {
+  it("finds variable includes only when their current value comes from a request", async () => {
+    const files = {
+      "src/unsafe.php": "<?php\n$page = $_GET['page'];\n$alias = $page;\nrequire_once($alias);\n",
+      "src/fixed.php": "<?php\n$page = $_GET['page'];\n$page = 'safe.php';\ninclude($page);\n",
+      "src/unrelated.php": "<?php\n$other = $_GET['page'];\n$page = 'safe.php';\ninclude $page;\n",
+      "src/scope.php": "<?php\nfunction first() {\n$page = $_GET['page'];\n}\nfunction second($page) {\ninclude $page;\n}\n",
+      "src/allowlist.php": "<?php\n$page = $_GET['page'];\n$page = basename($page);\ninclude $page;\n",
+    }
+    const issues = (await insecureCodeScanner.run(makeContext({ files }))).filter((i) => i.id.includes("php-include-user-input"))
+    expect(issues.map((i) => [i.location, i.confidence])).toEqual([["src/unsafe.php:4", "high"]])
+  })
+})
+
+
+describe("insecure-code — PHP local reflected XSS request flow", () => {
+  it("finds echoed request aliases without treating safe or unrelated locals as XSS", async () => {
+    const files = {
+      "src/unsafe.php": "<?php\n$name = $_POST['name'];\n$alias = $name;\necho 'Hello ' . $alias;\n",
+      "src/print.php": "<?php\n$name = $_GET['name'];\nprint $name;\n",
+      "src/escaped.php": "<?php\n$name = $_GET['name'];\n$name = htmlspecialchars($name);\necho $name;\n",
+      "src/escape-at-sink.php": "<?php\n$name = $_GET['name'];\necho htmlspecialchars($name);\n",
+      "src/fixed.php": "<?php\n$name = $_GET['name'];\n$name = 'safe';\necho $name;\n",
+      "src/unrelated.php": "<?php\n$other = $_GET['name'];\n$name = 'safe';\necho $name;\n",
+      "src/scope.php": "<?php\nfunction first() {\n$name = $_GET['name'];\n}\nfunction second($name) {\necho $name;\n}\n",
+    }
+    const issues = (await insecureCodeScanner.run(makeContext({ files }))).filter((i) => i.id.includes("php-reflected-xss"))
+    expect(issues.map((i) => [i.location, i.confidence])).toEqual([["src/unsafe.php:4", "high"], ["src/print.php:3", "high"]])
+  })
+})

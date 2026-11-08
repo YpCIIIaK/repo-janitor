@@ -22,6 +22,16 @@ describe("ruleOf", () => {
     expect(ruleLabel(rule)).toBeTruthy()
   })
 
+  it.each([
+    "php-path-traversal", "php-xxe", "php-ssti", "swift-webview-html",
+    "swift-tls-validation-disabled", "swift-plaintext-credential-storage",
+    "swift-ecb-encryption", "rust-tls-validation-disabled", "cpp-tls-validation-disabled",
+  ])("preserves new security rule identity: %s", (suffix) => {
+    const rule = `insecure-${suffix}`
+    expect(ruleOf({ id: `${rule}-src/file:9`, scanner: "insecure-code" })).toBe(rule)
+    expect(ruleLabel(rule)).toBeTruthy()
+  })
+
   it("falls back to the scanner", () => {
     expect(ruleOf({ id: "something-new", scanner: "x-scanner" })).toBe("x-scanner")
   })

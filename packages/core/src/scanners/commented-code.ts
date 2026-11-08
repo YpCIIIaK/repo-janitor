@@ -53,10 +53,27 @@ function commentBody(line: string): string | null {
   return m ? m[1].trim() : null
 }
 
+/** Tabular explanatory rows with syntax that cannot be host-language code.
+ * These appear in binary format docs, type-inference tables and test diagrams.
+ * Ordinary assignments, expression arrows and container initializers stay eligible.
+ */
+function isDocumentationRow(body: string): boolean {
+  // Chained numeric equalities, e.g. day = 1 = 0b00001, are equations, not assignments.
+  if (/^[\w*+ /-]+\s*=\s*(?:0x[\da-f]+|0b[01]+|\d+)\s*=\s*(?:0x[\da-f]+|0b[01]+|\d+)\s*$/i.test(body)) return true
+  // Go range type placeholders cannot be identifiers on the assignment's left.
+  if (/^\[[^\]]+\](?:,\s*\[[^\]]+\])?\s*:=\s*range\s*\[[^\]]+\]$/.test(body)) return true
+  // A numbered diagram label followed by prose, not a language's arrow expression.
+  if (/^Index\s+\d+\s*->\s+\S/.test(body)) return true
+  // ASCII field diagrams begin and end cells with pipes, not expression operands.
+  if (/^\|\s*[A-Za-z0-9_]+\s*\|/.test(body)) return true
+  // Hex code mapping annotated with parenthetical names/prose, not function calls.
+  return /^[A-Za-z_]\w*(?:\s+is\s+alias\s+for\s+[A-Za-z_]\w*)?\s*=\s*0x[\da-f]+\s+\([A-Za-z][^)]*\)(?:\s+\([^)]+\))*$/.test(body)
+}
+
 /** Does a comment body look like commented-out code (vs. a real prose comment)? */
 function looksLikeCode(body: string): boolean {
   if (!body || body.length < 2) return false
-  if (SKIP_PREFIX.test(body)) return false
+  if (SKIP_PREFIX.test(body) || isDocumentationRow(body)) return false
   // `//=> value`: the result line of a documented example (type-fest, sindresorhus).
   if (body.startsWith("=>")) return false
   if (PROSE_TAIL.test(body)) return false
@@ -71,16 +88,61 @@ function looksLikeCode(body: string): boolean {
 const NOT_PRODUCT_RE =
   /(^|\/)(?:flow-typed|_?examples?|samples?|bench(?:mark)?s?|website|www|docs?|lang(?:uage)?s?|locales?|i18n|assets|legacy)\/|\.config\.[cm]?[jt]s$|\.d\.[cm]?ts$|\.(?:stories|story)\.[cm]?[jt]sx?$|(^|\/)example_[^/]*_test\.go$/i
 
-/** Does the surrounding comment present the block as an example or a format? */
-function introducesExample(lines: string[], start: number, len: number): boolean {
-  const near: string[] = []
-  for (let i = start - 1; i >= Math.max(0, start - 6); i--) {
-    const b = commentBody(lines[i])
-    if (b === null) break
-    near.push(b)
+/** Only actual line comments count: examples inside block documentation
+ * and string literals are not executable source the user commented out.
+ */
+function lineCommentLines(lines: string[], nestedComments: boolean): Set<number> {
+  const result = new Set<number>()
+  let blockDepth = 0, quote = ""
+  for (let n = 0; n < lines.length; n++) {
+    const line = lines[n]
+    for (let i = 0; i < line.length; i++) {
+      const c = line[i], next = line[i + 1]
+      if (blockDepth) {
+        if (nestedComments && c === "/" && next === "*") { blockDepth++; i++ }
+        else if (c === "*" && next === "/") { blockDepth--; i++ }
+      } else if (quote) {
+        if (quote !== '"""' && c === "\\") { i++; continue }
+        if (line.startsWith(quote, i)) { i += quote.length - 1; quote = "" }
+      } else if (c === "/" && next === "/") {
+        if (!line.slice(0, i).trim()) result.add(n)
+        break
+      } else if (c === "/" && next === "*") { blockDepth++; i++ }
+      else if (c === '"' || c === "'" || c === "`") {
+        quote = line.startsWith('"""', i) ? '"""' : c
+        i += quote.length - 1
+      }
+    }
+    // Ordinary source string/character literals end on this line. Template and
+    // triple strings may legitimately contain lines beginning with //.
+    if (quote === '"' || quote === "'") quote = ""
   }
-  for (let i = start; i < start + len + 2 && i < lines.length; i++) near.push(commentBody(lines[i]) ?? "")
-  return near.some((b) => /```|\ba la\b|\be\.g\.|\bexample\b|like this|looks like|\bsyntax\b|\bformat\b|should be uncommented/i.test(b))
+  return result
+}
+
+/** A documentation paragraph can contain several short runs of example code.
+ * Permit blank separators, but never cross executable source into another block.
+ */
+function commentParagraph(lines: string[], start: number, len: number): string[] {
+  let a = start, b = start + len
+  while (a > 0 && (commentBody(lines[a - 1]) !== null || !lines[a - 1].trim())) a--
+  while (b < lines.length && (commentBody(lines[b]) !== null || !lines[b].trim())) b++
+  return lines.slice(a, b).map(line => commentBody(line) ?? "")
+}
+
+/** Does the surrounding comment present the block as an example or input schema? */
+function introducesExample(lines: string[], start: number, len: number, file: string): boolean {
+  const near = commentParagraph(lines, start, len)
+  if (near.some(b => /```|\ba la\b|\be\.g\.|\bexamples?\b|^sample\s*:?\s*$|^sample\s+(?:input|output|usage)\s*:|\buse case\b|like this|looks like|\bsyntax\b|\bformat\b|should be uncommented/i.test(b))) return true
+  // SQL DDL in a Go/Java/etc comment describes the schema consumed by the
+  // implementation or its fixtures; it is not commented host-language code.
+  if (near.some(b => /^CREATE\s+TABLE\b/i.test(b))) return true
+  // These languages cannot execute XML tags as source. Keep JS/JSX/TSX, PHP
+  // templates and Scala (which supports XML literals) eligible for normal checks.
+  if (/\.(?:java|go|c|cc|cpp|h|hpp|cs|rs|swift|kt)$/.test(file)) {
+    return near.filter(b => /^<\/?[A-Za-z_][\w:.-]*(?:\s|\/?[>])/.test(b)).length >= 2
+  }
+  return false
 }
 
 export const commentedCodeScanner: Scanner = {
@@ -104,11 +166,13 @@ export const commentedCodeScanner: Scanner = {
       if (!content || !content.includes("//")) continue
 
       const lines = content.split(/\r?\n/)
+      const lineComments = lineCommentLines(lines, /\.(?:rs|swift|scala|kt)$/.test(norm))
       let perFile = 0
       let runStart = -1
       let runLen = 0
 
       const flush = () => {
+        if (runLen < MIN_RUN) { runStart = -1; runLen = 0; return }
         const run = runStart === -1 ? [] : lines.slice(runStart, runStart + runLen)
         const docExample =
           // …unless the line above opens the expression the indented lines continue.
@@ -118,7 +182,7 @@ export const commentedCodeScanner: Scanner = {
           /:\s*$/.test(commentBody(lines[runStart - 1] ?? "") ?? "") ||
           /:\s*$/.test(commentBody(lines[runStart - 2] ?? "") ?? "") ||
           // The prose around it presents it: "a la ```…```", "looks like", "e.g.".
-          introducesExample(lines, runStart, runLen) ||
+          introducesExample(lines, runStart, runLen, norm) ||
           run.some((l) => /::=/.test(l))
         if (!docExample && runLen >= MIN_RUN && perFile < MAX_PER_FILE && issues.length < MAX_TOTAL) {
           const lineNo = runStart + 1
@@ -141,7 +205,7 @@ export const commentedCodeScanner: Scanner = {
       }
 
       for (let i = 0; i < lines.length; i++) {
-        const body = commentBody(lines[i])
+        const body = lineComments.has(i) ? commentBody(lines[i]) : null
         if (body !== null && looksLikeCode(body)) {
           if (runStart === -1) runStart = i
           runLen++
