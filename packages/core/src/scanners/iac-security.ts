@@ -244,7 +244,7 @@ function nearestImage(lines: string[], i: number): string {
 
 // Services whose whole job is talking to the Docker API: a reverse proxy's docker
 // provider, an updater, a UI, Docker-in-Docker, a metrics or log reader.
-const DOCKER_API_IMAGE = /^\s*image:\s*["']?(?:[\w.-]+\/)*(?:traefik|watchtower|portainer|docker|cadvisor|dozzle|autoheal|nginx-proxy|docker-gen|docker-socket-proxy|socket-proxy|ofelia|kestra|node-exporter|promtail|grafana-agent|alloy|vector|telegraf|netdata)(?::[^\s"']*dind[^\s"']*|[:@\s"']|$)/m
+const DOCKER_API_IMAGE = /^\s*image:\s*["']?(?:[\w.-]+\/)*(?:traefik|watchtower|portainer|portainer-ce|lazydocker|docker|cadvisor|dozzle|autoheal|nginx-proxy|docker-gen|docker-socket-proxy|socket-proxy|ofelia|kestra|node-exporter|promtail|grafana-agent|alloy|vector|telegraf|netdata)(?::[^\s"']*dind[^\s"']*|[:@\s"']|$)/m
 
 const HOST_AGENT_IMAGE = /^\s*image:\s*["']?(?:[\w.-]+\/)*(?:node-exporter|cadvisor|netdata|telegraf|promtail|grafana-agent|alloy|docker(?=:[^\s"']*dind))\b/
 
