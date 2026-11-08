@@ -85,7 +85,10 @@ node benchmark/score.mjs --check
 
 Pass criteria — **all** must hold, else revert the last fix:
 
-- `score.mjs --check` exits 0.
+- `score.mjs --check` exits 0. It compares precision on the labels the baseline
+  was measured on, so new honest labels never fail it; it prints how much they
+  moved the measured precision. Report that shift, do not "fix" it by
+  relabelling or by narrowing rules without a real false-positive cluster.
 - "lost TP" did not increase.
 - Precision of each changed rule did not drop.
 - Every deliberately vulnerable app keeps its high-confidence true positives
