@@ -1,0 +1,7 @@
+# Named example packages in dead-code, 2026-11-08
+
+This is one confirmed dead-export FP, supported by the shared non-product naming classification audited across four duplicate-code FP repositories in `2026-11-08-duplicate.md`. It is not three independently confirmed dead-code FP. The task owner explicitly requested applying the same narrow example-name convention consistently across scanners.
+
+[Smartknob App.tsx:471](https://github.com/scottbez1/smartknob/blob/4eb988399c3fda6ffd3006772856093dfe9adb86/software/js/packages/example-webserial-timeline/src/App.tsx#L471) exports Timeline inside a standalone Web Serial timeline demonstration. Existing dead-code policy already treats example application exports as non-shipped; exact `examples/` recognition missed `example-webserial-timeline/`. ±20 source snapshot: `work/cycle8/dead-example-snapshots.txt`.
+
+Extend only the existing example directory alternative to support delimited `example-*` / `example_*` names, matching duplicate-code policy. No public-export/API suppression. The test fails before the change by reporting example exports; 22/22 tests pass after. It checks that similarly named product `exampleParser/`, source file `example-utils.ts` and ordinary production exports still report. All 20 current active visible labelled dead-code TP locations were checked; none matches the new example-directory suffix convention, so classification cannot hide them. Root's final affected-repository rescan remains the benchmark-level verification. No CLI rebuild, labels or baseline changes.
