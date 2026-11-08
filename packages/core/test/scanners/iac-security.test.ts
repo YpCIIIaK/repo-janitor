@@ -104,3 +104,20 @@ describe("Docker API image names from pinned socket reviews", () => {
     expect(out.filter(i => i.startsWith("iac-docker-socket"))).toHaveLength(1)
   })
 })
+
+// OCI uses ingress_security_rules/egress_security_rules rather than AWS ingress/egress.
+describe("OCI security-list traffic direction", () => {
+  it.each([false, true])("reports ingress but never adjacent egress (egress first: %s)", async egressFirst => {
+    const ingress = '  ingress_security_rules {\n    protocol = "all"\n    source = "0.0.0.0/0"\n  }\n'
+    const egress = '  egress_security_rules {\n    protocol = "all"\n    destination = "0.0.0.0/0"\n  }\n'
+    const source = 'resource "oci_core_default_security_list" "web" {\n' + (egressFirst ? egress + ingress : ingress + egress) + '}\n'
+    const out = (await iacSecurityScanner.run(makeContext({files: {"network.tf": source}})))
+      .filter(i => i.id.startsWith("iac-open-admin-port"))
+    expect(out.map(i => i.location)).toEqual([`network.tf:${egressFirst ? 8 : 4}`])
+  })
+
+  it("does not hide unrestricted OCI ingress when egress is restricted", async () => {
+    const out = await ids({"network.tf": 'resource "oci_core_security_list" "web" {\n  egress_security_rules {\n    protocol = "all"\n    destination = "10.0.0.0/8"\n  }\n  ingress_security_rules {\n    protocol = "all"\n    source = "::/0"\n  }\n}\n'})
+    expect(out.filter(i => i.startsWith("iac-open-admin-port"))).toEqual(["iac-open-admin-port-network.tf:8"])
+  })
+})
