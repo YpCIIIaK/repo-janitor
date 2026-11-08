@@ -132,6 +132,26 @@ function commentParagraph(lines: string[], start: number, len: number): string[]
   return lines.slice(a, b).map(line => commentBody(line) ?? "")
 }
 
+/** Non-host-language notation: protocol grammar, embedded-script argument maps,
+ * and labelled bit-layout equations. Require a whole matching run and its
+ * distinguishing syntax rather than treating arbitrary assignments as docs.
+ */
+function isDocumentationNotation(lines: string[], start: number, len: number, file: string): boolean {
+  const bodies = lines.slice(start, start + len).map(line => commentBody(line) ?? "")
+  if (/\.go$/.test(file)) {
+    // ABNF rule names contain hyphens; %d/%x terminals and repetition are not Go.
+    if (bodies.every(body => /^[A-Za-z][\w]*-[\w-]+\s*=\s*.+$/.test(body)) &&
+        bodies.some(body => /%[dx][\da-f]+(?:-[\da-f]+)?/i.test(body))) return true
+    // Redis Lua argument declarations immediately introduce an embedded script.
+    if (bodies.every(body => /^(?:KEYS|ARGV)\[\d+\]\s*=\s*\S/.test(body))) {
+      const nextSource = lines.slice(start + len).find(line => line.trim() && commentBody(line) === null) ?? ""
+      if (/\bredis\.NewScript\s*\(/.test(nextSource)) return true
+    }
+  }
+  // Labels followed by symbolic binary fields and explicit bit widths, not calls.
+  return bodies.every(body => /^[A-Za-z][A-Za-z0-9 -]*:\s+[01xy]{4,}(?:\s*\+\s*[01xy]{4,})*\s+\(\d+ bits\)$/.test(body))
+}
+
 /** Does the surrounding comment present the block as an example or input schema? */
 function introducesExample(lines: string[], start: number, len: number, file: string): boolean {
   const near = commentParagraph(lines, start, len)
@@ -185,6 +205,7 @@ export const commentedCodeScanner: Scanner = {
           /:\s*$/.test(commentBody(lines[runStart - 2] ?? "") ?? "") ||
           // The prose around it presents it: "a la ```…```", "looks like", "e.g.".
           introducesExample(lines, runStart, runLen, norm) ||
+          isDocumentationNotation(lines, runStart, runLen, norm) ||
           run.some((l) => /::=/.test(l))
         if (!docExample && runLen >= MIN_RUN && perFile < MAX_PER_FILE && issues.length < MAX_TOTAL) {
           const lineNo = runStart + 1

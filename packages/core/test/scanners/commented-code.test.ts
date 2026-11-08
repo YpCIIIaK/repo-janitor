@@ -255,3 +255,45 @@ describe("commented-code — Kubebuilder markers", () => {
     expect(issues[0].location).toBe("api/types.go:2")
   })
 })
+
+
+describe("commented-code — non-host documentation notation", () => {
+  const scan = async (source: string, file = "src/parser.go") =>
+    commentedCodeScanner.run(makeContext({ files: { [file]: source } }))
+
+  it("preserves SMTP ABNF grammar with numeric terminals", async () => {
+    expect(await scan([
+      '// esmtp-param = esmtp-keyword ["=" esmtp-value]',
+      '// esmtp-keyword = (ALPHA / DIGIT) *(ALPHA / DIGIT / "-")',
+      '// esmtp-value = 1*(%d33-60 / %d62-126)',
+      'func parse() {}',
+    ].join("\n"))).toHaveLength(0)
+  })
+
+  it("preserves Redis Lua parameter maps immediately before embedded scripts", async () => {
+    expect(await scan([
+      '// KEYS[1] = data:{<id>} (LIST)',
+      '// KEYS[2] = consumers:{<id>} (SET)',
+      '// ARGV[1] = consumerID',
+      '//',
+      '// Returns: array of strings.',
+      'var script = redis.NewScript(`return ARGV[1]`)',
+    ].join("\n"))).toHaveLength(0)
+  })
+
+  it("preserves labelled UTF bit-layout equations", async () => {
+    expect(await scan([
+      '// UTF-16 high surrogate: 110110xxxxxxxxxx (10 bits)',
+      '// UTF-16 low surrogate: 110111yyyyyyyyyy (10 bits)',
+      '// Unicode code point: 00010000000000000000 + xxxxxxxxxxyyyyyyyyyy (21 bits)',
+    ].join("\n"), "src/Utf8.kt")).toHaveLength(0)
+  })
+
+  it("retains array assignments without Redis embedded-script context", async () => {
+    expect(await scan('// KEYS[1] = first;\n// KEYS[2] = second;\n// ARGV[1] = third;\nfunc run() {}')).toHaveLength(1)
+  })
+
+  it("retains ordinary code alongside grammar words and bit-width prose", async () => {
+    expect(await scan('// grammar = ALPHA;\n// bits = compute(10);\n// emit(bits);')).toHaveLength(1)
+  })
+})
