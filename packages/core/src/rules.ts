@@ -14,6 +14,15 @@ interface RuleDef {
 }
 
 const INSECURE: Record<string, string> = {
+  "php-path-traversal": "PHP request input used as a filesystem path",
+  "php-xxe": "PHP XML parser allows external entities",
+  "php-ssti": "PHP template source built from request input",
+  "swift-webview-html": "Swift request input loaded as WebView HTML",
+  "swift-tls-validation-disabled": "Swift TLS server verification disabled",
+  "swift-plaintext-credential-storage": "Swift credential stored in plaintext preferences",
+  "swift-ecb-encryption": "Swift encryption uses insecure ECB mode",
+  "rust-tls-validation-disabled": "Rust TLS server verification disabled",
+  "cpp-tls-validation-disabled": "libcurl TLS server verification disabled",
   "eval-dynamic": "eval() on a dynamic value",
   "new-function": "new Function() on a dynamic value",
   "exec-interpolated": "Shell command built from variables",

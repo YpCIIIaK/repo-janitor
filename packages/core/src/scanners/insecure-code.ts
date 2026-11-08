@@ -1,3 +1,9 @@
+import { scanScalaSource } from "./insecure-scala"
+import { scanCppTlsSource } from "./insecure-cpp"
+import { scanRustTlsSource } from "./insecure-rust"
+import { scanKotlinSource } from "./insecure-kotlin"
+import { scanPhpSecurity } from "./php-security"
+import { scanSwiftSource } from "./insecure-swift"
 import type { Scanner, ScanContext } from "../scanner"
 import type { Issue, Severity } from "../schema"
 import { parseFile, walk, type Node } from "../ast"
@@ -21,10 +27,10 @@ import { parseFile, walk, type Node } from "../ast"
  * normal, the same line in `src/` is not.
  */
 
-const JS_RE = /\.(ts|tsx|js|jsx|mjs|mts|cts)$/i
+const JS_RE = /\.(ts|tsx|js|jsx|mjs|cjs|mts|cts)$/i
 const PY_RE = /\.py$/i
 const PHP_RE = /\.(?:php|phtml|inc)$/i
-const JAVA_RE = /\.(?:java|kt)$/i
+const JAVA_RE = /\.(?:java|kts?)$/i
 const RB_RE = /\.(?:rb|erb|rake)$/i
 const GO_RE = /\.go$/i
 const CS_RE = /\.(?:cs|cshtml)$/i
@@ -282,7 +288,7 @@ const PHP_JAVA_RULES: VulnRule[] = [
   {
     id: "php-include-user-input",
     lang: "php",
-    re: /\b(?:include|require)(?:_once)?\s*\(?\s*[^;]*\$_(?:GET|POST|REQUEST|COOKIE)/g,
+    re: /\b(?:include|require)(?:_once)?\s*\(?\s*(?:[^;]*\$_(?:GET|POST|REQUEST|COOKIE)|\$[A-Za-z_]\w*)/g,
     severity: "critical",
     title: "File included from request input",
     detail:
@@ -302,7 +308,7 @@ const PHP_JAVA_RULES: VulnRule[] = [
   {
     id: "php-reflected-xss",
     lang: "php",
-    re: /\b(?:echo|print)\b[^;]*\$_(?:GET|POST|REQUEST|COOKIE)\b(?![^;]*htmlspecialchars)/g,
+    re: /\b(?:echo|print)\b(?:[^;]*\$_(?:GET|POST|REQUEST|COOKIE)\b(?![^;]*htmlspecialchars)|\s+(?:['"][^'"\n]*['"]\s*\.\s*)?\$[A-Za-z_]\w*\b)/g,
     severity: "warning",
     title: "Request input echoed into the page",
     detail: "A request value is written to the HTML unescaped: reflected XSS. Wrap it in `htmlspecialchars`.",
@@ -779,6 +785,11 @@ export function scanSource(content: string, lang: Lang): CodeHit[] {
       // Keep the most severe rule when several match the same line.
       if (existing && rank(existing.rule.severity) >= rank(rule.severity)) continue
       if (!sinkAllows(rule.id, rawLine, idx - lineStart)) continue
+      if (lang === "php" && rule.id === "exec-interpolated" &&
+        /\bproc_open\s*\(\s*\[/.test(rawLine)) continue
+      // Variable-only PHP includes and HTML output need a local request-to-sink flow.
+      if ((rule.id === "php-include-user-input" || rule.id === "php-reflected-xss") && !/\$_(?:GET|POST|REQUEST|COOKIE)\b/.test(m[0]) &&
+        !phpLocalRequestValue(content, idx, m[0])) continue
       const tainted = !INJECTION_RULES.has(rule.id)
         ? undefined
         : rule.id === "ssrf"
@@ -791,12 +802,35 @@ export function scanSource(content: string, lang: Lang): CodeHit[] {
     }
   }
 
+  if (lang === "php") for (const hit of scanPhpSecurity(content)) {
+    if (!byLine.has(hit.line)) byLine.set(hit.line, hit)
+  }
   return [...byLine.values()].sort((a, b) => a.line - b.line)
 }
 
 /** Request input as a URL source, for SSRF (any language). */
 const SSRF_TAINT =
   /\b(?:req|request)\.(?:query|body|params|args|form|values|GET|POST)\b|\$_(?:GET|POST|REQUEST|COOKIE)\b|\bparams\s*\[|\brequest\.get_json\b|\bc\.(?:Query|Param|PostForm)\s*\(|\br\.(?:FormValue|URL\.Query)\b/
+
+/** Conservative PHP assignment flow: plain request values and aliases only.
+ * Reassignments kill taint; function boundaries prevent borrowing another scope.
+ * Calls, array lookups on locals, and multi-line expressions are left unclassified.
+ */
+function phpLocalRequestValue(content: string, sinkOffset: number, sink: string): boolean {
+  const tainted = new Set<string>()
+  const prefix = content.slice(0, sinkOffset).split(/\r?\n/).slice(-TAINT_WINDOW).join("\n")
+  for (const statement of prefix.split(/[;\n]/)) {
+    if (/\b(?:function|fn)\b|^\s*}/.test(statement)) tainted.clear()
+    const assignment = statement.match(/^\s*(?:<\?php\s*)?(\$[A-Za-z_]\w*)\s*=\s*([\s\S]*)$/)
+    if (!assignment) continue
+    const [, target, value] = assignment
+    const direct = /^\$_(?:GET|POST|REQUEST|COOKIE)\s*\[\s*(['"])[^'"]+\1\s*\]\s*$/.test(value)
+    const alias = value.trim()
+    if (direct || tainted.has(alias)) tainted.add(target)
+    else tainted.delete(target)
+  }
+  return [...sink.matchAll(/\$[A-Za-z_]\w*/g)].some(([name]) => tainted.has(name))
+}
 
 /** Escaping and sanitising calls that make an echoed request value safe. */
 const PHP_ESCAPED =
@@ -1037,10 +1071,35 @@ export const insecureCodeScanner: Scanner = {
       const norm = file.replace(/\\/g, "/")
       // In PHP apps `www/` (or `public/`) is the web root itself, not a docs site.
       const webRoot = /\.php$/i.test(norm) && /(^|\/)(?:www|public|htdocs)\//.test(norm)
-      if (SKIP_RE.test(norm) || (NOT_SHIPPED_RE.test(norm) && !webRoot)) continue
+      // Java/Kotlin package names are namespaces, not directory purposes:
+      // com/example and org/owasp/benchmark below Maven/Gradle production
+      // source roots must be scanned. Outer examples/docs trees still skip.
+      const productionRoot = (JAVA_RE.test(norm) || /\.scala$/i.test(norm)) ? /(?:^|\/)src\/main\/(?:java|kotlin|scala)\//.exec(norm) : null
+      const purposePath = productionRoot ? norm.slice(0, productionRoot.index + productionRoot[0].length) : norm
+      if (SKIP_RE.test(norm) || (NOT_SHIPPED_RE.test(purposePath) && !webRoot)) continue
+
+      if (/\.(?:rs|c|cc|cpp|cxx|h|hpp|hxx)$/i.test(norm)) {
+        // Reviewed native TLS fixtures intentionally bypass verification.
+        if (TEST_RE.test(norm) || /(?:^|\/)(?:test|tests)\.(?:rs|c|cc|cpp|cxx)$|_test\.(?:rs|c|cc|cpp|cxx)$/i.test(norm)) continue
+        const size = await ctx.fileSize?.(file)
+        if (size !== null && size !== undefined && size > MAX_BYTES) continue
+        const content = await ctx.readFile(file)
+        if (!content) continue
+        const nativeHits = /\.rs$/i.test(norm) ? scanRustTlsSource(content) : scanCppTlsSource(content)
+        for (const hit of nativeHits.slice(0, MAX_PER_FILE)) {
+          if (issues.length >= MAX_TOTAL) break
+          let ageDays = 0
+          try { ageDays = await ctx.git.blameAgeDays(file, hit.line) } catch { /* blame unavailable */ }
+          issues.push({ id: `insecure-${hit.rule.id}-${norm}:${hit.line}`, category: "security",
+            severity: TEST_RE.test(norm) ? LOWER[hit.rule.severity] : hit.rule.severity,
+            title: hit.rule.title, location: `${norm}:${hit.line}`, ageDays,
+            detail: hit.rule.detail, evidence: hit.evidence })
+        }
+        continue
+      }
 
       const lang = langOf(norm)
-      if (!lang) continue
+      if (!lang && !/\.(?:swift|scala)$/i.test(norm)) continue
 
       const size = await ctx.fileSize?.(file)
       if (size !== null && size !== undefined && size > MAX_BYTES) continue
@@ -1048,12 +1107,38 @@ export const insecureCodeScanner: Scanner = {
       const content = await ctx.readFile(file)
       if (!content) continue
 
+      if (!lang) {
+        const isLanguageTest = TEST_RE.test(norm) || /Tests?\.(?:swift|scala)$/i.test(norm)
+        for (const hit of (/\.scala$/i.test(norm) ? scanScalaSource(content) : scanSwiftSource(content)).slice(0, MAX_PER_FILE)) {
+          if (issues.length >= MAX_TOTAL) break
+          let ageDays = 0
+          try { ageDays = await ctx.git.blameAgeDays(file, hit.line) } catch { /* blame unavailable */ }
+          issues.push({
+            id: `insecure-${hit.rule.id}-${norm}:${hit.line}`,
+            category: "security", severity: isLanguageTest ? LOWER[hit.rule.severity] : hit.rule.severity,
+            title: hit.rule.title, location: `${norm}:${hit.line}`, ageDays,
+            detail: hit.rule.detail, evidence: hit.evidence,
+            ...(hit.tainted === undefined ? {} : { confidence: hit.tainted ? "high" : "low" }),
+          })
+        }
+        continue
+      }
+
       const isTest = TEST_RE.test(norm)
       const lines = content.split(/\r?\n/)
       if (!isTest && TAINT_RE[lang].test(content)) sources.push({ norm, lang, lines })
 
       let perFile = 0
-      for (const hit of scanSource(content, lang)) {
+      const hits = scanSource(content, lang).filter(hit => !(
+        /\.kts?$/i.test(norm) && hit.rule.id === "exec-interpolated" &&
+        /\bRuntime\s*\.\s*getRuntime\s*\(\s*\)\s*\.\s*exec\s*\(/.test(lines[hit.line - 1] ?? "")
+      ))
+      if (/\.kts?$/i.test(norm)) for (const hit of scanKotlinSource(content)) {
+        const existing = hits.findIndex(h => h.line === hit.line && h.rule.id === hit.rule.id)
+        if (existing >= 0) hits[existing] = hit
+        else hits.push(hit)
+      }
+      for (const hit of hits) {
         if (issues.length >= MAX_TOTAL || perFile >= MAX_PER_FILE) break
         if (isTest && SKIP_IN_TEST.has(hit.rule.id)) continue
         if (hit.rule.id === "ssrf" && lang === "js" && BROWSER_CODE_RE.test(norm)) continue

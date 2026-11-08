@@ -1,0 +1,154 @@
+import type { Severity } from "../schema"
+interface SwiftHit { rule: { id: string; severity: Severity; title: string; detail: string }; line: number; evidence: string; tainted?: boolean }
+
+/** Swift's local, straight-line flows only. Unknown transformations and scope
+ * boundaries deliberately stop propagation; this is not whole-program analysis. */
+const INPUT = /\b(?:\w*(?:[Tt]extField|[Tt]extView|[Ss]earchBar)|textField|textView|searchBar)\s*\.\s*text\b|\b(?:req|request)\s*\.\s*(?:query\s*\[|content\s*\.\s*get\s*\()/
+const SQL = /\b(?:SELECT\b.*\bFROM|INSERT\s+INTO|UPDATE\b.*\bSET|DELETE\s+FROM)\b/i
+
+/** Replace comments with spaces, keeping line numbers and quoted source intact. */
+function uncomment(content: string): string {
+  let out = "", depth = 0, quoted = false, escaped = false
+  for (let i = 0; i < content.length; i++) {
+    const c = content[i], next = content[i + 1]
+    if (depth) {
+      if (c === "/" && next === "*") { depth++; out += "  "; i++ }
+      else if (c === "*" && next === "/") { depth--; out += "  "; i++ }
+      else out += c === "\n" ? "\n" : " "
+    } else if (!quoted && c === "/" && next === "*") { depth++; out += "  "; i++ }
+    else if (!quoted && c === "/" && next === "/") {
+      while (i < content.length && content[i] !== "\n") { out += " "; i++ }
+      if (i < content.length) out += "\n"
+    } else {
+      out += c
+      if (c === '"' && !escaped) quoted = !quoted
+      escaped = c === "\\" && !escaped
+    }
+  }
+  return out
+}
+
+/** Split only the call's outer arguments, preserving Swift string commas. */
+function argumentsOf(value: string): string[] {
+  const args: string[] = []
+  let start = 0, depth = 0, quoted = false, escaped = false
+  for (let i = 0; i < value.length; i++) {
+    const c = value[i]
+    if (c === '"' && !escaped) quoted = !quoted
+    if (!quoted) {
+      if (c === "(" || c === "[") depth++
+      if (c === ")" && depth === 0) { args.push(value.slice(start, i)); return args }
+      if (c === ")" || c === "]") depth--
+      if (c === "," && depth === 0) { args.push(value.slice(start, i)); start = i + 1 }
+    }
+    escaped = c === "\\" && !escaped
+  }
+  args.push(value.slice(start))
+  return args
+}
+
+export function scanSwiftSource(content: string): SwiftHit[] {
+  // Raw/multiline strings require a Swift parser to disambiguate safely.
+  if (/"""|#+"/.test(content)) return []
+  const hits: SwiftHit[] = [], tainted = new Set<string>(), sqlValues = new Set<string>()
+  const lines = uncomment(content).split(/\r?\n/)
+  const typedInputs = new Set<string>()
+  const scopes: { names: Set<string>; inputs: Set<string>; function: boolean }[] = []
+  const closeScope = () => {
+    const scope = scopes.pop()
+    if (!scope) return
+    for (const name of scope.names) { tainted.delete(name); sqlValues.delete(name) }
+    for (const name of scope.inputs) typedInputs.delete(name)
+    if (scope.function) { tainted.clear(); sqlValues.clear() }
+  }
+  const hasSource = (value: string) => INPUT.test(value) || [...typedInputs].some(name =>
+    new RegExp(`\\b${name}\\s*\\.\\s*text\\b`).test(value))
+  const usesInput = (value: string): boolean => {
+    // Only raw values, concatenation and interpolation propagate. A call such as
+    // escapeHTML(field.text) is a transformation whose semantics are unknown.
+    const outsideStrings = value.replace(/"(?:\\.|[^"\\])*"/g, "")
+    if (/\b[A-Za-z_]\w*\s*\(/.test(outsideStrings.replace(/\b(?:get)\s*\(/g, "")) && !hasSource(value)) return false
+    if (/^\s*(?:try[!?]?\s+)?\w+\s*\(/.test(value) && !/^\s*(?:req|request)\./.test(value)) return false
+    const interpolations = [...value.matchAll(/\\\(([^)]*)\)/g)]
+      .map(m => m[1]).filter(part => !/\b\w+\s*\(/.test(part)).join(" ")
+    const inputs = outsideStrings + " " + interpolations
+    return hasSource(inputs) || [...tainted].some(n => new RegExp(`\\b${n}\\b`).test(inputs))
+  }
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i]
+    const code = line.replace(/"(?:\\.|[^"\\])*"/g, m => " ".repeat(m.length))
+    const leadingCloses = /^\s*(}+)/.exec(code)?.[1].length ?? 0
+    for (let n = 0; n < leadingCloses; n++) closeScope()
+    const functionStart = /\b(?:func\s+\w+|init|deinit)\s*\(/.test(code)
+    if (functionStart) { tainted.clear(); sqlValues.clear() }
+    const opens = (code.match(/{/g) ?? []).length
+    for (let n = 0; n < opens; n++) scopes.push({ names: new Set(), inputs: new Set(), function: functionStart && n === 0 })
+    const typedInput = /\b(?:let|var)\s+(\w+)\s*:\s*(?:UIKit\.)?(?:UITextField|UITextView|UISearchBar)\b/.exec(code)
+    if (typedInput) {
+      typedInputs.add(typedInput[1])
+      // Class properties survive method exits; local input declarations do not.
+      scopes.at(-1)?.inputs.add(typedInput[1])
+    }
+    const assignment = /^\s*(?:(?:let|var)\s+)?([A-Za-z_]\w*)(?:\s*:\s*[^=]+)?\s*=\s*(?!=)(.*)/.exec(line)
+    if (assignment) {
+      const [, name, value] = assignment
+      if (/^\s*(?:let|var)\b/.test(line)) scopes.at(-1)?.names.add(name)
+      if (usesInput(value)) tainted.add(name); else tainted.delete(name)
+      if (tainted.has(name) && SQL.test(value)) sqlValues.add(name); else sqlValues.delete(name)
+    }
+    // A sink must occur outside a string literal. This also rejects examples
+    // embedded in an ordinary Swift string.
+    // Alamofire explicitly documents this evaluator as disabling verification.
+    // Match executable construction, not a declaration or documentation string.
+    if (/\bDisabledTrustEvaluator\s*\(/.test(code) || /\bServerTrustPolicy\s*\.\s*disableEvaluation\b/.test(code)) {
+      hits.push({ rule: {
+        id: "swift-tls-validation-disabled", severity: "critical",
+        title: "TLS server certificate validation is disabled",
+        detail: "Alamofire's disabled trust evaluator accepts unverified server certificates. Use DefaultTrustEvaluator or certificate/public-key pinning for production connections.",
+      }, line: i + 1, evidence: line.trim() })
+    }
+    const defaultsWrite = /\b(?:UserDefaults|NSUserDefaults)\.standard\.(?:set|setValue)\s*\(/.exec(code)
+    if (defaultsWrite) {
+      const args = argumentsOf(line.slice(defaultsWrite.index + defaultsWrite[0].length))
+      const key = /^\s*forKey:\s*"(?:password|passwd|passcode|pin|(?:access[_-]?|refresh[_-]?|auth[_-]?)?token|client[_-]?secret)"\s*$/i.test(args[1] ?? "")
+      const value = (args[0] ?? "").trim()
+      const rawCredential = /^"[^"\\]+"$/.test(value) || /^(?:\w*password\w*|\w*passcode\w*|\w*token\w*|pin)[!?]?$/i.test(value) || usesInput(value)
+      if (key && rawCredential) hits.push({ rule: {
+        id: "swift-plaintext-credential-storage", severity: "warning",
+        title: "Credential stored in plaintext preferences",
+        detail: "UserDefaults is a preferences store, not a credential vault. Store passwords, authentication tokens and PINs in the Keychain with an appropriate accessibility policy.",
+      }, line: i + 1, evidence: line.trim() })
+    }
+    const cryptCall = /\bCCCrypt\s*\(/.exec(code)
+    if (cryptCall) {
+      const options = argumentsOf(line.slice(cryptCall.index + cryptCall[0].length))[2] ?? ""
+      if (/\bkCCOptionECBMode\b/.test(options.replace(/"(?:\\.|[^"\\])*"/g, ""))) hits.push({ rule: {
+        id: "swift-ecb-encryption", severity: "warning",
+        title: "CommonCrypto encryption explicitly uses ECB mode",
+        detail: "ECB encrypts identical plaintext blocks identically and exposes patterns. Prefer authenticated encryption such as CryptoKit AES.GCM; preserve unique nonces and authentication tags.",
+      }, line: i + 1, evidence: line.trim() })
+    }
+    const sqlSink = /\b(?:sqlite3_(?:exec|prepare_v2|prepare_v3)|(?:\w+\.)?(?:executeQuery|executeUpdate))\s*\(/.exec(code)
+    const htmlSink = /\.loadHTMLString\s*\(/.exec(code)
+    let id: string | undefined
+    if (sqlSink) {
+      const args = argumentsOf(line.slice(sqlSink.index + sqlSink[0].length))
+      const query = args[sqlSink[0].startsWith("sqlite3_") ? 1 : 0] ?? ""
+      if ((SQL.test(query) && usesInput(query)) || [...sqlValues].some(n => new RegExp(`^\\s*${n}\\s*$`).test(query))) id = "sql-interpolated"
+    }
+    if (htmlSink && usesInput(argumentsOf(line.slice(htmlSink.index + htmlSink[0].length))[0] ?? "")) id = "swift-webview-html"
+    const trailingCloses = (code.match(/}/g) ?? []).length - leadingCloses
+    for (let n = 0; n < trailingCloses; n++) closeScope()
+    if (!id) continue
+    hits.push({
+      rule: {
+        id, severity: id === "sql-interpolated" ? "critical" : "warning",
+        title: id === "sql-interpolated" ? "SQL query includes Swift user input" : "User input loaded as WebView HTML",
+        detail: id === "sql-interpolated"
+          ? "User input is assembled into SQL text. Use sqlite3_bind_* or your database library's bound parameters."
+          : "A text field or request value reaches loadHTMLString without escaping. Escape it as text or use a fixed HTML template with escaped values.",
+      }, line: i + 1, evidence: line.trim(), tainted: true,
+    })
+  }
+  return hits
+}
