@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-11-08T14:55:14.276Z",
+  "generatedAt": "2026-11-08T18:10:01.318Z",
   "repos": 2538,
   "rules": [
     {
       "rule": "todo",
-      "count": 77769,
+      "count": 77724,
       "hidden": 0,
       "repoShare": 0.615,
       "medianPerRepo": 10,
@@ -23,7 +23,7 @@
     },
     {
       "rule": "bus-factor",
-      "count": 32761,
+      "count": 32764,
       "hidden": 0,
       "repoShare": 0.748,
       "medianPerRepo": 18,
@@ -42,14 +42,14 @@
     },
     {
       "rule": "duplicate",
-      "count": 17501,
+      "count": 17463,
       "hidden": 0,
-      "repoShare": 0.682,
+      "repoShare": 0.681,
       "medianPerRepo": 15,
       "severity": "info",
       "where": {
-        "source": 0.961,
-        "docs": 0.03,
+        "source": 0.962,
+        "docs": 0.029,
         "tests": 0.008,
         "ci": 0.001
       },
@@ -92,17 +92,17 @@
     },
     {
       "rule": "commented-code",
-      "count": 7360,
+      "count": 7070,
       "hidden": 0,
-      "repoShare": 0.339,
+      "repoShare": 0.335,
       "medianPerRepo": 4,
       "severity": "info",
       "where": {
-        "source": 0.733,
-        "tests": 0.262,
+        "source": 0.721,
+        "tests": 0.273,
         "docs": 0.001,
         "ci": 0,
-        "vendored": 0.004
+        "vendored": 0.005
       },
       "labelled": {
         "tp": 55,
@@ -798,7 +798,7 @@
     },
     {
       "rule": "iac-open-admin-port",
-      "count": 62,
+      "count": 60,
       "hidden": 0,
       "repoShare": 0.007,
       "medianPerRepo": 2,

@@ -6,10 +6,10 @@
 
 | grade | repos | share |
 |---|---:|---:|
-| A | 614 | 24% |
-| B | 584 | 23% |
-| C | 788 | 31% |
-| D | 464 | 18% |
+| A | 617 | 24% |
+| B | 581 | 23% |
+| C | 790 | 31% |
+| D | 462 | 18% |
 | F | 88 | 3% |
 
 Median score **72**.
@@ -42,12 +42,12 @@ Share of repos with at least one finding of the rule.
 | rule | repos | share |
 |---|---:|---:|
 | bus-factor | 1898 | 75% |
-| duplicate | 1731 | 68% |
+| duplicate | 1729 | 68% |
 | todo | 1562 | 62% |
 | workflow-action-tag-first-party | 1495 | 59% |
 | workflow-no-permissions | 1332 | 52% |
 | workflow-action-tag | 1256 | 49% |
-| commented-code | 860 | 34% |
+| commented-code | 851 | 34% |
 | doc-link | 559 | 22% |
 | dead-export | 492 | 19% |
 | hygiene-no-tests | 468 | 18% |
@@ -95,7 +95,7 @@ Share of repos with at least one finding of the rule.
 
 ## How old the debt is
 
-- Median age of a TODO/FIXME: **3.3 years** (77767 dated).
+- Median age of a TODO/FIXME: **3.3 years** (77722 dated).
 - 36% of them are older than five years.
 
 Oldest TODOs in the corpus:
@@ -110,7 +110,7 @@ Oldest TODOs in the corpus:
 
 - Active repos (≥ 50 commits last year, 1246): median score **66**.
 - Quiet repos (< 10 commits, 816): median score **83**.
-- Mean findings per repo: active 110, quiet 38.
+- Mean findings per repo: active 109, quiet 38.
 
 ## Size vs score
 
@@ -118,7 +118,7 @@ Oldest TODOs in the corpus:
 |---|---:|---:|
 | < 5k lines | 846 | 89 |
 | 5k–50k | 964 | 68 |
-| 50k–200k | 476 | 62 |
+| 50k–200k | 476 | 63 |
 | > 200k | 252 | 60 |
 
 ## Cleanest repos
@@ -153,20 +153,20 @@ Median gap between repos with and without a practice. *Raw* compares everyone; *
 
 | practice | repos | score gap, raw | score gap, same size | findings/1k gap, same size |
 |---|---:|---:|---:|---:|
-| OpenSSF Scorecard | 63 | +3 | +7.2 | -0.89 |
-| ESLint flat config | 223 | -5 | +4.0 | -0.58 |
+| OpenSSF Scorecard | 63 | +4 | +7.2 | -0.90 |
+| ESLint flat config | 223 | -5 | +3.8 | -0.58 |
 | TypeScript | 355 | -1 | +3.5 | -0.15 |
 | .editorconfig | 721 | -6 | +1.2 | -0.53 |
 | SECURITY.md | 665 | -9 | +0.5 | -0.36 |
 | Prettier | 241 | -5 | -0.1 | +0.09 |
-| Renovate | 170 | -4 | -0.2 | +0.02 |
-| CodeQL | 277 | -7 | -0.2 | -0.25 |
+| CodeQL | 277 | -7 | -0.2 | -0.24 |
+| Renovate | 170 | -4 | -0.5 | +0.03 |
 | Dev container | 196 | -7 | -0.7 | -0.12 |
-| Changesets | 58 | -8 | -1.3 | +0.46 |
+| Changesets | 58 | -8 | -1.4 | +0.46 |
 | Dependabot | 802 | -9 | -1.6 | -0.13 |
-| CODEOWNERS | 390 | -8 | -1.7 | +0.13 |
-| CONTRIBUTING | 1175 | -14 | -1.8 | -0.17 |
-| PR template | 777 | -12 | -2.0 | +0.20 |
+| CODEOWNERS | 390 | -8 | -1.7 | +0.14 |
+| CONTRIBUTING | 1175 | -14 | -2.0 | -0.17 |
+| PR template | 777 | -12 | -2.2 | +0.20 |
 | Issue templates | 1147 | -15 | -3.4 | +0.27 |
 | pre-commit | 216 | -8 | -6.1 | -0.48 |
 

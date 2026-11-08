@@ -1,11 +1,11 @@
 {
   "repos": 2538,
-  "generatedAt": "2026-11-08T14:55:14.276Z",
+  "generatedAt": "2026-11-08T18:10:01.318Z",
   "grades": {
-    "A": 614,
-    "B": 584,
-    "C": 788,
-    "D": 464,
+    "A": 617,
+    "B": 581,
+    "C": 790,
+    "D": 462,
     "F": 88
   },
   "languages": {
@@ -27,7 +27,7 @@
     "Go": {
       "repos": 276,
       "medianScore": 70,
-      "findingsPer1k": 1.54
+      "findingsPer1k": 1.52
     },
     "other": {
       "repos": 177,
@@ -57,7 +57,7 @@
     "C#": {
       "repos": 98,
       "medianScore": 67,
-      "findingsPer1k": 1.33
+      "findingsPer1k": 1.28
     },
     "C": {
       "repos": 82,
@@ -92,12 +92,12 @@
   },
   "ruleShare": {
     "bus-factor": 0.748,
-    "duplicate": 0.682,
+    "duplicate": 0.681,
     "todo": 0.615,
     "workflow-action-tag-first-party": 0.589,
     "workflow-no-permissions": 0.525,
     "workflow-action-tag": 0.495,
-    "commented-code": 0.339,
+    "commented-code": 0.335,
     "doc-link": 0.22,
     "dead-export": 0.194,
     "hygiene-no-tests": 0.184,
@@ -144,9 +144,9 @@
     "tests": 0.801
   },
   "todo": {
-    "dated": 77767,
+    "dated": 77722,
     "medianDays": 1220,
-    "overFiveYears": 27808,
+    "overFiveYears": 27798,
     "oldest": [
       {
         "repo": "libsdl-org/SDL_ttf",
@@ -195,7 +195,7 @@
     {
       "label": "50k–200k",
       "repos": 476,
-      "medianScore": 62
+      "medianScore": 63
     },
     {
       "label": "> 200k",
@@ -575,17 +575,17 @@
       "key": "scorecard",
       "label": "OpenSSF Scorecard",
       "repos": 63,
-      "rawScoreGap": 3,
+      "rawScoreGap": 4,
       "scoreGap": 7.222222222222222,
-      "densityGap": -0.8913911785265312
+      "densityGap": -0.8986683892640999
     },
     {
       "key": "eslintFlat",
       "label": "ESLint flat config",
       "repos": 223,
       "rawScoreGap": -5,
-      "scoreGap": 3.9551569506726456,
-      "densityGap": -0.5836937026954382
+      "scoreGap": 3.802690582959641,
+      "densityGap": -0.5832134881217256
     },
     {
       "key": "tsconfig",
@@ -593,7 +593,7 @@
       "repos": 355,
       "rawScoreGap": -1,
       "scoreGap": 3.4507042253521125,
-      "densityGap": -0.1544279518577163
+      "densityGap": -0.14903334393885329
     },
     {
       "key": "editorconfig",
@@ -601,7 +601,7 @@
       "repos": 721,
       "rawScoreGap": -6,
       "scoreGap": 1.1816920943134535,
-      "densityGap": -0.5343853728210755
+      "densityGap": -0.5254787058657475
     },
     {
       "key": "security",
@@ -609,7 +609,7 @@
       "repos": 665,
       "rawScoreGap": -9,
       "scoreGap": 0.507223113964687,
-      "densityGap": -0.3614003065147172
+      "densityGap": -0.3568406534460161
     },
     {
       "key": "prettier",
@@ -617,15 +617,7 @@
       "repos": 241,
       "rawScoreGap": -5,
       "scoreGap": -0.07053941908713693,
-      "densityGap": 0.08507918334635364
-    },
-    {
-      "key": "renovate",
-      "label": "Renovate",
-      "repos": 170,
-      "rawScoreGap": -4,
-      "scoreGap": -0.2,
-      "densityGap": 0.02348000191189629
+      "densityGap": 0.08933319379233642
     },
     {
       "key": "codeql",
@@ -633,7 +625,15 @@
       "repos": 277,
       "rawScoreGap": -7,
       "scoreGap": -0.20577617328519857,
-      "densityGap": -0.24953240036187266
+      "densityGap": -0.2429459140538106
+    },
+    {
+      "key": "renovate",
+      "label": "Renovate",
+      "repos": 170,
+      "rawScoreGap": -4,
+      "scoreGap": -0.5058823529411764,
+      "densityGap": 0.026867052765489265
     },
     {
       "key": "devcontainer",
@@ -641,15 +641,15 @@
       "repos": 196,
       "rawScoreGap": -7,
       "scoreGap": -0.7091836734693877,
-      "densityGap": -0.12215937536542792
+      "densityGap": -0.1182951941224261
     },
     {
       "key": "changeset",
       "label": "Changesets",
       "repos": 58,
       "rawScoreGap": -8,
-      "scoreGap": -1.2758620689655173,
-      "densityGap": 0.45771812287609354
+      "scoreGap": -1.3793103448275863,
+      "densityGap": 0.460154630522112
     },
     {
       "key": "dependabot",
@@ -657,7 +657,7 @@
       "repos": 802,
       "rawScoreGap": -9,
       "scoreGap": -1.5773067331670823,
-      "densityGap": -0.12638144754193337
+      "densityGap": -0.12756191833339084
     },
     {
       "key": "codeowners",
@@ -665,23 +665,23 @@
       "repos": 390,
       "rawScoreGap": -8,
       "scoreGap": -1.7102564102564102,
-      "densityGap": 0.13031164940398954
+      "densityGap": 0.13783439222299607
     },
     {
       "key": "contributing",
       "label": "CONTRIBUTING",
       "repos": 1175,
       "rawScoreGap": -14,
-      "scoreGap": -1.7597765363128492,
-      "densityGap": -0.16908801979903612
+      "scoreGap": -2.0145251396648045,
+      "densityGap": -0.173034963684227
     },
     {
       "key": "prTemplate",
       "label": "PR template",
       "repos": 777,
       "rawScoreGap": -12,
-      "scoreGap": -2.0345781466113415,
-      "densityGap": 0.1986195700647355
+      "scoreGap": -2.239280774550484,
+      "densityGap": 0.19763649629244878
     },
     {
       "key": "issueTemplates",
@@ -689,7 +689,7 @@
       "repos": 1147,
       "rawScoreGap": -15,
       "scoreGap": -3.3684848484848486,
-      "densityGap": 0.26654921183376773
+      "densityGap": 0.26934677487736575
     },
     {
       "key": "preCommit",
@@ -697,7 +697,7 @@
       "repos": 216,
       "rawScoreGap": -8,
       "scoreGap": -6.143518518518518,
-      "densityGap": -0.4814489727516608
+      "densityGap": -0.48463623592348937
     }
   ],
   "scoreHistogram": [
@@ -706,16 +706,16 @@
     14,
     39,
     103,
-    361,
-    644,
-    296,
-    432,
-    614
+    359,
+    643,
+    298,
+    430,
+    617
   ],
   "severity": {
-    "critical": 737,
-    "warning": 90174,
-    "info": 94083
+    "critical": 735,
+    "warning": 90085,
+    "info": 93802
   },
   "exposure": {
     "injection": 0.047,
@@ -725,15 +725,15 @@
     "noLockfile": 0.042
   },
   "lowConfidenceHidden": 27505,
-  "shown": 184994,
+  "shown": 184622,
   "precision": {
     "high": {
-      "tp": 618,
-      "fp": 68
+      "tp": 581,
+      "fp": 59
     },
     "medium": {
-      "tp": 169,
-      "fp": 84
+      "tp": 206,
+      "fp": 93
     },
     "low": {
       "tp": 68,
