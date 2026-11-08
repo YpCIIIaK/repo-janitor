@@ -26,6 +26,8 @@ const bump = (map, key, field) => {
   map.set(key, row)
 }
 let missing = 0
+/** Every labelled finding still present, so --check can judge on a fixed label set. */
+const judged = []
 
 for (const repo of corpus) {
   const resultPath = join(here, ".results", `${repo.name}.json`)
@@ -39,6 +41,7 @@ for (const repo of corpus) {
   const seen = new Set()
   for (const f of findings) {
     seen.add(f.id)
+    if (labels[f.id] === "tp" || labels[f.id] === "fp") judged.push({ key: `${repo.name}\t${f.id}`, scanner: f.scanner, tp: labels[f.id] === "tp" })
     const verdict = labels[f.id]
     const field = verdict === "tp" ? "tp" : verdict === "fp" ? "fp" : "unlabelled"
     bump(by.scanner, f.scanner, field)
@@ -90,7 +93,19 @@ const current = Object.fromEntries(
   [...by.scanner.entries()].filter(([, r]) => precision(r) !== null).map(([k, r]) => [k, Number(precision(r).toFixed(3))]),
 )
 if (args.has("--update")) {
-  writeFileSync(baselinePath, JSON.stringify({ overall: Number(precision(all).toFixed(3)), scanners: current, lostTp: all.goneTp }, null, 2) + "\n")
+  // The labels the baseline was measured on, grouped by repo. --check compares
+  // precision on exactly these, so adding honest labels later is a measurement,
+  // not a regression; only a scanner change can move it.
+  const labelled = {}
+  for (const j of judged) {
+    const [repo, id] = j.key.split("\t")
+    ;(labelled[repo] ??= []).push(id)
+  }
+  for (const ids of Object.values(labelled)) ids.sort()
+  writeFileSync(
+    baselinePath,
+    JSON.stringify({ overall: Number(precision(all).toFixed(3)), scanners: current, lostTp: all.goneTp, labelled }, null, 1) + "\n",
+  )
   console.log("baseline.json updated")
   // Per-rule labelled counts feed the confidence each finding ships with.
   const rules = [...by.rule.entries()]
@@ -108,8 +123,27 @@ if (args.has("--check")) {
   const base = JSON.parse(readFileSync(baselinePath, "utf8"))
   const problems = []
   if (missing) problems.push(`${missing} repos have no results — run pnpm bench:run`)
+  // Same-label precision when the baseline recorded its label set; otherwise
+  // (an older baseline) fall back to comparing against every current label.
+  let compare = current
+  if (base.labelled) {
+    const known = new Set(Object.entries(base.labelled).flatMap(([repo, ids]) => ids.map((id) => `${repo}\t${id}`)))
+    const rows = new Map()
+    for (const j of judged) {
+      if (!known.has(j.key)) continue
+      const r = rows.get(j.scanner) ?? { tp: 0, fp: 0 }
+      r[j.tp ? "tp" : "fp"]++
+      rows.set(j.scanner, r)
+    }
+    compare = Object.fromEntries([...rows].map(([k, r]) => [k, Number(precision(r).toFixed(3))]))
+    const shifted = Object.entries(current).filter(([k, p]) => compare[k] !== undefined && Math.abs(p - compare[k]) >= TOLERANCE)
+    if (shifted.length) {
+      console.log("\nNew labels moved measured precision (not a regression):")
+      for (const [k, p] of shifted) console.log(`- ${k}: ${pct(compare[k])} on baseline labels, ${pct(p)} with new labels`)
+    }
+  }
   for (const [k, p] of Object.entries(base.scanners)) {
-    if (current[k] !== undefined && current[k] < p - TOLERANCE) problems.push(`${k}: precision ${pct(current[k])} < baseline ${pct(p)}`)
+    if (compare[k] !== undefined && compare[k] < p - TOLERANCE) problems.push(`${k}: precision ${pct(compare[k])} < baseline ${pct(p)} on the same labels`)
   }
   if (all.goneTp > base.lostTp) problems.push(`${all.goneTp - base.lostTp} confirmed findings disappeared`)
   if (problems.length) {
