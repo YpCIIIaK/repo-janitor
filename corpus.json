@@ -5485,11 +5485,6 @@
     "sha": "02d8931b626d9764c133cbb3fbf99966c03c757c"
   },
   {
-    "name": "plotly-plotly-js",
-    "url": "https://github.com/plotly/plotly.js",
-    "sha": "0316e60d4b618a7c8bd27110e77218d7b94e86c8"
-  },
-  {
     "name": "supabase-supabase-swift",
     "url": "https://github.com/supabase/supabase-swift",
     "sha": "040d4d433510dad079f815e53a0dad0c624efd9b"
@@ -7668,11 +7663,6 @@
     "name": "steven-tey-novel",
     "url": "https://github.com/steven-tey/novel",
     "sha": "fa95098e66476c466faebb8211baa5869c101a9c"
-  },
-  {
-    "name": "infisical-infisical",
-    "url": "https://github.com/Infisical/infisical",
-    "sha": "4a46bee79dbc4f50647ff1eb3d4962d675845327"
   },
   {
     "name": "openstatushq-openstatus",

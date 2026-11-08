@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-07T18:03:12.995Z",
+ "generatedAt": "2026-11-08T12:39:28.624Z",
  "chunkSize": 100,
  "chunks": {
   "chunk-000": [
@@ -830,7 +830,6 @@
    "ine-labs-awsgoat",
    "inertiajs-inertia",
    "infinitered-ignite",
-   "infisical-infisical",
    "infracost-infracost",
    "inikulin-parse5",
    "inngest-inngest-js",
@@ -918,10 +917,10 @@
    "js-joda-js-joda",
    "jsdom-jsdom",
    "jsdom-whatwg-url",
-   "jshttp-cookie"
+   "jshttp-cookie",
+   "jshttp-mime-types"
   ],
   "chunk-009": [
-   "jshttp-mime-types",
    "juanpe-skeletonview",
    "juice-shop-juice-shop",
    "juliadata-dataframes-jl",
@@ -1020,10 +1019,10 @@
    "lencx-chatgpt",
    "less-less-js",
    "letscontrolit-espeasy",
-   "lewis6991-gitsigns-nvim"
+   "lewis6991-gitsigns-nvim",
+   "lgandx-responder"
   ],
   "chunk-010": [
-   "lgandx-responder",
    "lhartikk-arnoldc",
    "liabru-matter-js",
    "libsdl-org-sdl-ttf",
@@ -1122,10 +1121,10 @@
    "memstechtips-winhance",
    "mengto-spring",
    "mermaid-js-mermaid-live-editor",
-   "mesos-chronos"
+   "mesos-chronos",
+   "meta-folly"
   ],
   "chunk-011": [
-   "meta-folly",
    "meta-fresco",
    "metabase-toucan",
    "metalsmith-metalsmith",
@@ -1224,10 +1223,10 @@
    "nektos-act",
    "neo23x0-loki",
    "neovim-nvim-lspconfig",
-   "nestjs-nest"
+   "nestjs-nest",
+   "nestjs-nest-cli"
   ],
   "chunk-012": [
-   "nestjs-nest-cli",
    "nestjs-typeorm",
    "netbox-community-netbox-docker",
    "netchx-netch",
@@ -1326,10 +1325,10 @@
    "openapitools-openapi-generator-cli",
    "openfaas-faas",
    "opengvlab-draggan",
-   "openra-openra"
+   "openra-openra",
+   "openstack-kolla-ansible"
   ],
   "chunk-013": [
-   "openstack-kolla-ansible",
    "openstatushq-openstatus",
    "openstreetmap-openstreetmap-website",
    "openthread-openthread",
@@ -1420,7 +1419,6 @@
    "playframework-play-samples",
    "playframework-playframework",
    "plopjs-plop",
-   "plotly-plotly-js",
    "plotly-plotly-py-docs",
    "plouc-nivo",
    "pmndrs-drei",
@@ -1428,11 +1426,11 @@
    "pmndrs-react-spring",
    "pmndrs-react-three-fiber",
    "pmndrs-valtio",
-   "pmndrs-zustand"
+   "pmndrs-zustand",
+   "pocketbase-js-sdk",
+   "pocketbase-pocketbase"
   ],
   "chunk-014": [
-   "pocketbase-js-sdk",
-   "pocketbase-pocketbase",
    "poem-web-poem",
    "pointfreeco-swift-composable-architecture",
    "portainer-agent",
@@ -1530,11 +1528,11 @@
    "rails-solid-queue",
    "railwayapp-templates",
    "ramda-ramda",
-   "ramotion-folding-cell-android"
+   "ramotion-folding-cell-android",
+   "ramsey-uuid",
+   "rancher-local-path-provisioner"
   ],
   "chunk-015": [
-   "ramsey-uuid",
-   "rancher-local-path-provisioner",
    "rapid7-hackazon",
    "rapid7-metasploit-payloads",
    "rapptz-discord-ext-menus",
@@ -1632,11 +1630,11 @@
    "rust-embedded-embedded-hal",
    "rust-embedded-rust-raspberrypi-os-tutorials",
    "rust-lang-log",
-   "rust-lang-regex"
+   "rust-lang-regex",
+   "rust-lang-rustlings",
+   "rust-random-rand"
   ],
   "chunk-016": [
-   "rust-lang-rustlings",
-   "rust-random-rand",
    "rust-unofficial-awesome-rust",
    "rustdesk-rustdesk",
    "rxhanson-rectangle",
@@ -1734,11 +1732,11 @@
    "sindresorhus-execa",
    "sindresorhus-globby",
    "sindresorhus-got",
-   "sindresorhus-ky-universal"
+   "sindresorhus-ky-universal",
+   "sindresorhus-meow",
+   "sindresorhus-np"
   ],
   "chunk-017": [
-   "sindresorhus-meow",
-   "sindresorhus-np",
    "sindresorhus-open",
    "sindresorhus-ora",
    "sindresorhus-p-limit",
@@ -1836,11 +1834,11 @@
    "stern-stern",
    "stevearc-oil-nvim",
    "steveltn-https-portal",
-   "steven-tey-novel"
+   "steven-tey-novel",
+   "stleary-json-java",
+   "stm32-rs-stm32f4xx-hal"
   ],
   "chunk-018": [
-   "stleary-json-java",
-   "stm32-rs-stm32f4xx-hal",
    "stm32duino-arduino-core-stm32",
    "storybookjs-storybook",
    "strapi-foodadvisor",
@@ -1938,11 +1936,11 @@
    "testdrivenio-fastapi-tdd-docker",
    "textualize-rich",
    "textualize-textual-dev",
-   "tfutils-tfenv"
+   "tfutils-tfenv",
+   "tgsan-cmwtat-digital-edition",
+   "th-ch-youtube-music"
   ],
   "chunk-019": [
-   "tgsan-cmwtat-digital-edition",
-   "th-ch-youtube-music",
    "thangchung-awesome-dotnet-core",
    "thanos-io-kube-thanos",
    "thelounge-thelounge",
@@ -2040,11 +2038,11 @@
    "uber-go-zap",
    "ueberdosis-tiptap",
    "ultrafunkamsterdam-nodriver",
-   "ultraworkers-claw-code"
+   "ultraworkers-claw-code",
+   "umami-software-umami",
+   "umputun-remark42"
   ],
   "chunk-020": [
-   "umami-software-umami",
-   "umputun-remark42",
    "unitech-pm2",
    "unjs-citty",
    "unjs-h3",
@@ -2142,11 +2140,11 @@
    "xcpretty-xcpretty",
    "xinliangnote-go",
    "xmartlabs-eureka",
-   "xtool-org-xtool"
+   "xtool-org-xtool",
+   "xunit-xunit",
+   "yahoo-cmak"
   ],
   "chunk-021": [
-   "xunit-xunit",
-   "yahoo-cmak",
    "yanx27-pointnet-pointnet2-pytorch",
    "yara-rules-rules",
    "yargs-yargs",
