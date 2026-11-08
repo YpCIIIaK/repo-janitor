@@ -224,3 +224,34 @@ describe("commented-code — non-code table grammar", () => {
     ])).toHaveLength(1)
   })
 })
+
+
+describe("commented-code — Kubebuilder markers", () => {
+  it.each(["// ", "//"])("preserves CRD generator directives with %s spacing", async (prefix) => {
+    const source = [
+      '+kubebuilder:object:root=true',
+      '+kubebuilder:resource:scope=Cluster',
+      '+kubebuilder:printcolumn:name="Members",type="string",JSONPath=".spec.members",description="community members"',
+      '+kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp",description="Age"',
+    ].map(body => prefix + body).join("\n")
+    expect(await commentedCodeScanner.run(makeContext({ files: { "api/types.go": source } }))).toHaveLength(0)
+  })
+
+  it.each(["+kubebuilders:", "+kubebuilderExtra:", "+other:", "+value = "])("retains code-like blocks beginning with %s", async (prefix) => {
+    const source = ["first=1;", "second=2;", "third=3;"].map(body => "// " + prefix + body).join("\n")
+    expect(await commentedCodeScanner.run(makeContext({ files: { "api/types.go": source } }))).toHaveLength(1)
+  })
+
+  it("still reports actual commented code beside CRD markers", async () => {
+    const source = [
+      "// +kubebuilder:object:root=true",
+      "// old := load();",
+      "// update(old);",
+      "// persist(old);",
+      "type Cluster struct {}",
+    ].join("\n")
+    const issues = await commentedCodeScanner.run(makeContext({ files: { "api/types.go": source } }))
+    expect(issues).toHaveLength(1)
+    expect(issues[0].location).toBe("api/types.go:2")
+  })
+})

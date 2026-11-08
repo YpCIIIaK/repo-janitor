@@ -73,6 +73,8 @@ function isDocumentationRow(body: string): boolean {
 /** Does a comment body look like commented-out code (vs. a real prose comment)? */
 function looksLikeCode(body: string): boolean {
   if (!body || body.length < 2) return false
+  // Kubebuilder consumes these CRD schema/resource markers during generation.
+  if (body.startsWith("+kubebuilder:")) return false
   if (SKIP_PREFIX.test(body) || isDocumentationRow(body)) return false
   // `//=> value`: the result line of a documented example (type-fest, sindresorhus).
   if (body.startsWith("=>")) return false
