@@ -76,7 +76,9 @@
   "finalBuildRescans": 224,
   "allCorpusResultShasMatchPins": true,
   "publication": {
-    "status": "blocked",
-    "reason": "git push and GitHub create_branch both return HTTP 403"
+    "status": "pushed",
+    "sourceBranch": "bench/2026-11-07-1",
+    "dataBranch": "bench-data",
+    "initialFailure": "HTTP 403 resolved after GitHub connection permissions were updated"
   }
 }
