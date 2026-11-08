@@ -313,6 +313,15 @@ describe("duplicateCodeScanner", () => {
     expect(issues).toEqual([])
   })
 
+  it.each([
+    "packages/example-webserial-basic/src/App.tsx",
+    "DiscordChatExporter.Cli.Tests/Specs/DateRangeSpecs.cs",
+    "app/src/androidTest/java/com/acme/ApplicationTestModule.java",
+    "docs/docsets/Widget.docset/Contents/Resources/Documents/js/jazzy.js",
+  ])("does not report an implementation copied into intentional scaffolding: %s", async file => {
+    expect(await duplicateCodeScanner.run(ctx({"src/implementation.ts": CLONE, [file]: CLONE}))).toEqual([])
+  })
+
   it("ignores a minified bundle with no newlines", async () => {
     const min = `const a=1;${"x".repeat(3000)}`
     const issues = await duplicateCodeScanner.run(ctx({ "src/a.js": min, "src/b.js": min }))
@@ -338,5 +347,28 @@ describe("duplicate-code — declarations are not copies", () => {
       ["d.py", significantLines(sig)],
     ])
     expect(findDuplicates(files)).toEqual([])
+  })
+})
+
+describe("intentional file-kind directory conventions from pinned reviews", () => {
+  it.each([
+    "software/js/packages/example-webserial-basic/src/App.tsx",
+    "packages/example_webserial_basic/src/App.tsx",
+    "DiscordChatExporter.Cli.Tests/Specs/DateRangeSpecs.cs",
+    "app/src/androidTest/java/com/mindorks/framework/mvp/di/module/ApplicationTestModule.java",
+    "docs/docsets/RAMAnimatedTabBarDemo.docset/Contents/Resources/Documents/js/jazzy.js",
+  ])("excludes demonstration, test-project and generated docset files: %s", file => {
+    expect(isComparable(file)).toBe(false)
+  })
+
+  it.each([
+    "packages/exampleParser/src/index.ts",
+    "src/testing/validate.ts",
+    "Contest/TestsController.cs",
+    "app/src/main/java/com/acme/app/ApplicationModule.java",
+    "docs/tools/build-docset.js",
+    "src/docset/parse.js",
+  ])("preserves ordinary implementation files: %s", file => {
+    expect(isComparable(file)).toBe(true)
   })
 })
