@@ -1,30 +1,2499 @@
 {
-  "overall": 0.549,
-  "scanners": {
-    "eol-runtime": 0.958,
-    "todo-debt": 0.966,
-    "broken-doc-links": 0.621,
-    "bus-factor": 0.848,
-    "commented-code": 0.734,
-    "workflow-security": 0.936,
-    "duplicate-code": 0.857,
-    "skipped-tests": 0.875,
-    "insecure-code": 0.117,
-    "docs-drift": 0.615,
-    "lockfile-drift": 0.905,
-    "dead-code": 0.8,
-    "dockerfile": 0.426,
-    "leftover-debug": 0.25,
-    "config-conflict": 0.95,
-    "secrets": 0.057,
-    "env-lifecycle": 0.138,
-    "ci-health": 0.489,
-    "repo-bloat": 0.471,
-    "project-hygiene": 0.692,
-    "iac-security": 0.404,
-    "dependency-funeral": 0.077,
-    "supply-chain": 1,
-    "license-risk": 0
-  },
-  "lostTp": 36
+ "overall": 0.549,
+ "scanners": {
+  "eol-runtime": 0.958,
+  "todo-debt": 0.966,
+  "broken-doc-links": 0.621,
+  "bus-factor": 0.848,
+  "commented-code": 0.734,
+  "workflow-security": 0.936,
+  "duplicate-code": 0.857,
+  "skipped-tests": 0.875,
+  "insecure-code": 0.117,
+  "docs-drift": 0.615,
+  "lockfile-drift": 0.905,
+  "dead-code": 0.8,
+  "dockerfile": 0.426,
+  "leftover-debug": 0.25,
+  "config-conflict": 0.95,
+  "secrets": 0.057,
+  "env-lifecycle": 0.138,
+  "ci-health": 0.489,
+  "repo-bloat": 0.471,
+  "project-hygiene": 0.692,
+  "iac-security": 0.404,
+  "dependency-funeral": 0.077,
+  "supply-chain": 1,
+  "license-risk": 0
+ },
+ "lostTp": 36,
+ "labelled": {
+  "express": [
+   "eol-node-package.json-83"
+  ],
+  "zod": [
+   "action-tag-.github/workflows/claude.yml-35",
+   "action-tag-.github/workflows/pullfrog.yml-31",
+   "action-tag-.github/workflows/release.yml-250",
+   "action-tag-first-party-.github/workflows/iso-4217.yml-22",
+   "action-tag-first-party-.github/workflows/pullfrog.yml-27",
+   "action-tag-first-party-.github/workflows/stale.yml-13",
+   "commented-packages/zod/src/v3/tests/language-server.test.ts:183",
+   "doclink-packages/docs-v3/CONTRIBUTING.md:43:playground.ts",
+   "doclink-packages/docs-v3/CONTRIBUTING.md:72:playground.ts",
+   "duplicate-packages/zod/src/v4/core/memoizer.ts-142",
+   "no-permissions-.github/workflows/lockstep.yml-1",
+   "no-permissions-.github/workflows/release.yml-1",
+   "todo-packages/zod/src/v4/classic/tests/lazy.test.ts:175",
+   "todo-packages/zod/src/v4/classic/tests/refine.test.ts:557"
+  ],
+  "commander": [
+   "commented-tests/command.copySettings.test.js:50",
+   "duplicate-lib/argument.js-98",
+   "skiptest-tests/command.executableSubcommand.lookup.test.js:94"
+  ],
+  "ky": [
+   "action-tag-first-party-.github/workflows/main.yml-17",
+   "action-tag-first-party-.github/workflows/main.yml-18",
+   "action-tag-first-party-.github/workflows/main.yml-28",
+   "insecure-ssrf-test-d/fetch-request.ts:9",
+   "no-permissions-.github/workflows/main.yml-1",
+   "todo-source/types/ResponsePromise.ts:23",
+   "todo-source/utils/merge.ts:339"
+  ],
+  "ms": [
+   "action-tag-.github/workflows/quality.yml-25",
+   "action-tag-.github/workflows/release.yml-20",
+   "action-tag-.github/workflows/test.yml-24",
+   "action-tag-first-party-.github/workflows/quality.yml-22",
+   "action-tag-first-party-.github/workflows/release.yml-17",
+   "action-tag-first-party-.github/workflows/release.yml-25",
+   "docs-drift-badge-README.md-6",
+   "eol-node-package.json-23",
+   "no-permissions-.github/workflows/quality.yml-1",
+   "no-permissions-.github/workflows/test.yml-1"
+  ],
+  "debug": [
+   "lockfile-missing",
+   "todo-src/browser.js:111",
+   "todo-src/browser.js:209",
+   "todo-src/browser.js:225"
+  ],
+  "chalk": [
+   "action-tag-first-party-.github/workflows/main.yml-16",
+   "action-tag-first-party-.github/workflows/main.yml-17",
+   "commented-test/no-color-support.js:12",
+   "commented-test/no-color-support.js:6",
+   "no-permissions-.github/workflows/main.yml-1",
+   "todo-source/index.d.ts:1",
+   "todo-source/index.d.ts:374",
+   "todo-source/index.js:250"
+  ],
+  "clsx": [
+   "action-tag-first-party-.github/workflows/ci.yml-13",
+   "action-tag-first-party-.github/workflows/ci.yml-14",
+   "action-tag-first-party-.github/workflows/ci.yml-19",
+   "busfactor-src/lite.js",
+   "lockfile-missing",
+   "no-permissions-.github/workflows/ci.yml-1"
+  ],
+  "axios": [
+   "busfactor-lib/helpers/null.js",
+   "busfactor-lib/platform/browser/classes/FormData.js",
+   "busfactor-lib/platform/node/classes/URLSearchParams.js"
+  ],
+  "fastify": [
+   "busfactor-lib/noop-set.js",
+   "commented-test/types/hooks.tst.ts:520",
+   "eol-node-.github/workflows/ci.yml-133",
+   "todo-test/hooks.on-ready.test.js:306",
+   "todo-test/types/hooks.tst.ts:519",
+   "todo-test/types/instance.tst.ts:329"
+  ],
+  "vite-plugin-react": [
+   "commented-packages/plugin-rsc/e2e/basic.test.ts:1178",
+   "commented-packages/plugin-rsc/e2e/basic.test.ts:1185",
+   "dead-export-packages/plugin-rsc/src/plugins/vite-utils.ts:joinUrlSegments",
+   "dead-export-packages/plugin-rsc/src/plugins/vite-utils.ts:unwrapId",
+   "eol-node-package.json-71",
+   "eol-node-packages/plugin-react-swc/package.json-49",
+   "eol-node-packages/plugin-react/package.json-77",
+   "insecure-new-function-packages/plugin-rsc/src/plugins/vite-utils.ts:159",
+   "todo-packages/plugin-rsc/src/transforms/proxy-export.test.ts:48",
+   "todo-packages/plugin-rsc/src/transforms/server-action.ts:31"
+  ],
+  "requests": [
+   "duplicate-src/requests/adapters.py-492",
+   "eol-python-.github/workflows/run-tests.yml-54",
+   "eol-python-.github/workflows/run-tests.yml-76",
+   "eol-python-pyproject.toml-17",
+   "skiptest-tests/test_testserver.py:94",
+   "todo-src/requests/auth.py:213",
+   "todo-src/requests/auth.py:247",
+   "todo-src/requests/auth.py:252"
+  ],
+  "click": [
+   "duplicate-src/click/shell_completion.py-432",
+   "eol-python-examples/aliases/pyproject.toml-5",
+   "eol-python-examples/complex/pyproject.toml-5",
+   "eol-python-examples/termui/pyproject.toml-5",
+   "eol-python-examples/validation/pyproject.toml-5",
+   "todo-src/click/core.py:2411"
+  ],
+  "httpx": [
+   "action-tag-first-party-.github/workflows/publish.yml-17",
+   "action-tag-first-party-.github/workflows/publish.yml-18",
+   "action-tag-first-party-.github/workflows/test-suite.yml-20",
+   "duplicate-httpx/_decoders.py-238",
+   "eol-python-.github/workflows/publish.yml-20",
+   "eol-python-pyproject.toml-9",
+   "no-permissions-.github/workflows/publish.yml-1",
+   "no-permissions-.github/workflows/test-suite.yml-1",
+   "todo-httpx/_auth.py:267"
+  ],
+  "cobra": [
+   "action-tag-.github/workflows/test.yml-107",
+   "action-tag-.github/workflows/test.yml-50",
+   "action-tag-first-party-.github/workflows/test.yml-117",
+   "action-tag-first-party-.github/workflows/test.yml-119",
+   "action-tag-first-party-.github/workflows/test.yml-21",
+   "duplicate-doc/md_docs.go-91",
+   "todo-cobra.go:109",
+   "todo-cobra.go:141",
+   "todo-cobra.go:163"
+  ],
+  "gin": [
+   "action-tag-.github/workflows/gin.yml-27",
+   "action-tag-.github/workflows/trivy-scan.yml-30",
+   "action-tag-.github/workflows/trivy-scan.yml-47",
+   "action-tag-first-party-.github/workflows/codeql.yml-36",
+   "action-tag-first-party-.github/workflows/codeql.yml-40",
+   "action-tag-first-party-.github/workflows/codeql.yml-49",
+   "busfactor-codec/json/api.go",
+   "busfactor-codec/json/json.go",
+   "busfactor-codec/json/jsoniter.go",
+   "busfactor-codec/json/sonic.go",
+   "commented-githubapi_test.go:221",
+   "duplicate-binding/form_mapping.go-253",
+   "duplicate-tree.go-468",
+   "duplicate-tree.go-765",
+   "todo-context_test.go:1767"
+  ],
+  "anyhow": [
+   "action-tag-.github/workflows/ci.yml-105",
+   "action-tag-.github/workflows/ci.yml-108",
+   "action-tag-.github/workflows/ci.yml-118",
+   "action-tag-first-party-.github/workflows/ci.yml-30",
+   "action-tag-first-party-.github/workflows/ci.yml-44",
+   "action-tag-first-party-.github/workflows/ci.yml-62",
+   "todo-src/ensure.rs:251"
+  ],
+  "serde-json": [
+   "action-tag-.github/workflows/ci.yml-109",
+   "action-tag-.github/workflows/ci.yml-121",
+   "action-tag-.github/workflows/ci.yml-133",
+   "action-tag-first-party-.github/workflows/ci.yml-25",
+   "action-tag-first-party-.github/workflows/ci.yml-34",
+   "action-tag-first-party-.github/workflows/ci.yml-57",
+   "busfactor-src/lexical/rounding.rs",
+   "duplicate-src/de.rs-573",
+   "duplicate-src/ser.rs-1103",
+   "duplicate-src/ser.rs-1281",
+   "todo-src/read.rs:912"
+  ],
+  "sinatra": [
+   "action-tag-.github/workflows/release.yml-17",
+   "action-tag-.github/workflows/test.yml-141",
+   "action-tag-.github/workflows/test.yml-172",
+   "action-tag-first-party-.github/workflows/release.yml-16",
+   "action-tag-first-party-.github/workflows/test.yml-139",
+   "action-tag-first-party-.github/workflows/test.yml-42",
+   "busfactor-rack-protection/lib/rack_protection.rb",
+   "duplicate-lib/sinatra/base.rb-1557",
+   "todo-lib/sinatra/base.rb:1106",
+   "todo-sinatra-contrib/spec/content_for_spec.rb:93"
+  ],
+  "guzzle": [
+   "action-tag-.github/workflows/ci.yml-21",
+   "action-tag-.github/workflows/ci.yml-60",
+   "action-tag-.github/workflows/ci.yml-99",
+   "action-tag-first-party-.github/workflows/ci.yml-29",
+   "action-tag-first-party-.github/workflows/ci.yml-37",
+   "action-tag-first-party-.github/workflows/ci.yml-68",
+   "docker-latest-Dockerfile:1",
+   "docker-root-Dockerfile",
+   "duplicate-src/Client.php-738",
+   "duplicate-src/Cookie/FileCookieJar.php-140",
+   "duplicate-src/Handler/CurlFactory.php-981",
+   "todo-src/Cookie/SetCookie.php:318",
+   "todo-src/HandlerStack.php:167"
+  ],
+  "expressjs-cors": [
+   "eol-node-.github/workflows/ci.yml-101",
+   "lockfile-missing"
+  ],
+  "expressjs-body-parser": [
+   "eol-node-package.json-52",
+   "lockfile-missing"
+  ],
+  "sindresorhus-execa": [
+   "no-permissions-.github/workflows/main.yml-1"
+  ],
+  "sindresorhus-got": [
+   "skiptest-test/zstd.ts:108"
+  ],
+  "tj-co": [
+   "lockfile-missing"
+  ],
+  "vuejs-pinia": [
+   "action-tag-.github/workflows/update-sponsors.yml-21",
+   "action-tag-first-party-.github/workflows/pkg.pr.new.yml-29",
+   "busfactor-packages/testing/src/index.ts",
+   "commented-packages/playground/src/stores/nasa.ts:10",
+   "doclink-packages/docs/cookbook/testing.md:356:../api/@pinia/testing/interfaces/TestingOptions.html",
+   "duplicate-packages/docs/.vitepress/config/en.ts-10",
+   "skiptest-packages/pinia/__tests__/state.spec.ts:521",
+   "todo-packages/pinia/__tests__/subscriptions.spec.ts:374"
+  ],
+  "motdotla-dotenv": [
+   "debug-lib/main.js:253"
+  ],
+  "pmndrs-zustand": [
+   "config-conflict-lockfiles-root"
+  ],
+  "uuidjs-uuid": [
+   "pr-target-checkout-.github/workflows/browser.yml-25"
+  ],
+  "yargs-yargs": [
+   "eol-node-package.json-101",
+   "todo-lib/platform-shims/browser.mjs:70"
+  ],
+  "jprichardson-node-fs-extra": [
+   "eol-node-package.json-6"
+  ],
+  "nodemailer-nodemailer": [
+   "debug-src/shared/index.ts:1068"
+  ],
+  "websockets-ws": [
+   "action-tag-.github/workflows/ci.yml-69",
+   "action-tag-first-party-.github/workflows/ci.yml-50",
+   "busfactor-lib/subprotocol.js",
+   "duplicate-lib/extension.js-44",
+   "eol-node-package.json-32"
+  ],
+  "mochajs-mocha": [
+   "action-tag-.github/workflows/slop-detection.yml-30",
+   "action-tag-first-party-.github/workflows/stale.yml-16",
+   "commented-test/integration/fixtures/multiple-done-async.fixture.js:6",
+   "eol-node-package.json-46",
+   "no-permissions-.github/workflows/add-to-project.yml-1"
+  ],
+  "winstonjs-winston": [
+   "action-tag-.github/workflows/ci.yml-50",
+   "action-tag-first-party-.github/workflows/ci.yml-31",
+   "commented-test/unit/winston/transports/file.test.js:542",
+   "commented-test/unit/winston/transports/file.test.js:566",
+   "config-conflict-eslint-root",
+   "eol-node-package.json-73",
+   "skiptest-test/unit/winston/logger.test.js:865"
+  ],
+  "markdown-it-markdown-it": [
+   "insecure-ssrf-support/track-ref-pathological.mjs:16"
+  ],
+  "node-fetch-node-fetch": [
+   "insecure-ssrf-@types/index.test-d.ts:53",
+   "insecure-ssrf-src/index.js:236"
+  ],
+  "unjs-ofetch": [
+   "commented-test/index.test.ts:23"
+  ],
+  "form-data-form-data": [
+   "action-tag-.github/workflows/node-pretest.yml-10",
+   "action-tag-first-party-.github/workflows/rebase.yml-19",
+   "todo-lib/form_data.js:135"
+  ],
+  "knex-knex": [
+   "ci-swallowed-.github/workflows/coverage.yml-84",
+   "ci-swallowed-.github/workflows/integration-tests.yml-121",
+   "lockfile-missing"
+  ],
+  "solidjs-solid": [
+   "doclink-packages/solid-ssr/README.md:60:\"https://jamstack.org/what-is-jamstack/\""
+  ],
+  "bigskysoftware-htmx": [
+   "bloat-www/static/img/you-cant/log_exp_with_cache.mp4",
+   "insecure-eval-dynamic-src/htmx.js:865",
+   "insecure-new-function-src/htmx.js:2958"
+  ],
+  "alpinejs-alpine": [
+   "dead-export-packages/alpinejs/src/binds.js:addVirtualBindings",
+   "dead-export-packages/alpinejs/src/scope.js:closestDataProxy",
+   "debug-packages/morph/src/old_morph.js:176",
+   "insecure-innerhtml-dynamic-packages/morph/src/morph.js:564",
+   "insecure-new-function-packages/alpinejs/src/evaluator.js:215"
+  ],
+  "immerjs-immer": [
+   "commented-perf-testing/read-cpuprofile.js:439",
+   "skiptest-__tests__/regressions.js:215"
+  ],
+  "sinonjs-sinon": [
+   "eol-node-.github/workflows/docs.yml-39",
+   "eol-node-.github/workflows/docs.yml-71",
+   "skiptest-test/issues/issues-test.js:62"
+  ],
+  "socketio-socket-io": [
+   "eol-node-examples/cluster-httpd/server/Dockerfile-1",
+   "insecure-sql-interpolated-packages/socket.io-postgres-emitter/lib/index.ts:401"
+  ],
+  "honojs-hono": [
+   "busfactor-src/router/reg-exp-router/matcher.ts",
+   "config-conflict-lockfiles-benchmarks/query-param",
+   "dead-export-src/helper/css/common.ts:IS_CSS_ESCAPED",
+   "dead-export-src/helper/ssg/middleware.ts:SSG_DISABLED_RESPONSE",
+   "debug-src/jsx/streaming.ts:186",
+   "debug-src/middleware/cache/index.ts:91",
+   "duplicate-adapters/cloudflare-workers/src/websocket.ts-5",
+   "eol-node-adapters/bun/package.json-32",
+   "eol-node-adapters/vercel/package.json-32",
+   "insecure-ssrf-src/middleware/method-override/index.ts:102",
+   "insecure-ssrf-src/middleware/method-override/index.ts:134",
+   "insecure-ssrf-src/middleware/method-override/index.ts:88",
+   "skiptest-src/utils/buffer.test.ts:69"
+  ],
+  "pallets-flask": [
+   "dead-symbol-src/flask/cli.py:691"
+  ],
+  "chartjs-chart-js": [
+   "action-tag-.github/workflows/ci.yml-111",
+   "action-tag-first-party-.github/workflows/deploy-docs.yml-26",
+   "busfactor-src/helpers/helpers.color.ts",
+   "duplicate-src/helpers/helpers.canvas.ts-261",
+   "todo-src/core/core.datasetController.js:977"
+  ],
+  "pallets-werkzeug": [
+   "dead-symbol-src/werkzeug/http.py:344",
+   "dead-symbol-src/werkzeug/http.py:832",
+   "duplicate-src/werkzeug/datastructures/__init__.py-31",
+   "todo-src/werkzeug/datastructures/range.py:193"
+  ],
+  "python-poetry-poetry": [
+   "insecure-ssrf-src/poetry/repositories/pypi_repository.py:204",
+   "pr-target-checkout-.github/workflows/docs.yaml-40"
+  ],
+  "httpie-cli": [
+   "eol-runner-.github/workflows/release-choco.yml-14"
+  ],
+  "pallets-jinja": [
+   "insecure-py-eval-exec-src/jinja2/environment.py:1225",
+   "insecure-py-pickle-load-src/jinja2/bccache.py:71"
+  ],
+  "psf-black": [
+   "docker-root-Dockerfile",
+   "docs-drift-badge-README.md-6",
+   "insecure-py-pickle-load-src/black/cache.py:81",
+   "insecure-py-pickle-load-src/blib2to3/pgen2/grammar.py:124",
+   "insecure-py-pickle-load-src/blib2to3/pgen2/grammar.py:129"
+  ],
+  "dateutil-dateutil": [
+   "skiptest-tests/test_tz.py:435"
+  ],
+  "tqdm-tqdm": [
+   "action-tag-.github/workflows/test.yml-110",
+   "action-tag-first-party-.github/workflows/comment-bot.yml-11",
+   "busfactor-tqdm/dask.py",
+   "duplicate-tqdm/contrib/discord.py-36",
+   "eol-python-pyproject.toml-22",
+   "no-permissions-.github/workflows/check.yml-1",
+   "todo-tests/tests_synchronisation.py:115"
+  ],
+  "benoitc-gunicorn": [
+   "config-conflict-ci-root"
+  ],
+  "marshmallow-code-marshmallow": [
+   "duplicate-src/marshmallow/fields.py-1820",
+   "eol-python-pyproject.toml-23",
+   "todo-src/marshmallow/fields.py:2026"
+  ],
+  "tornadoweb-tornado": [
+   "action-tag-.github/workflows/test.yml-251",
+   "action-tag-first-party-.github/workflows/test.yml-116",
+   "dead-symbol-tornado/gen.py:160",
+   "duplicate-demos/chat/static/chat.js-15",
+   "todo-tornado/http1connection.py:248"
+  ],
+  "fastapi-typer": [
+   "docker-latest-scripts/docker/Dockerfile:1",
+   "doclink-README.md:57:tutorial/install.md"
+  ],
+  "aio-libs-aiohttp": [
+   "ci-disabled-.github/workflows/ci-cd.yml-49"
+  ],
+  "pygithub-pygithub": [
+   "busfactor-github/CodeSecurityConfigRepository.py",
+   "duplicate-github/AuthenticatedUser.py-252",
+   "eol-python-pyproject.toml-27",
+   "insecure-py-os-system-openapi/Cli.py:108",
+   "insecure-py-os-system-openapi/Cli.py:59",
+   "insecure-py-pickle-load-github/MainClass.py:1088",
+   "no-permissions-.github/workflows/top-issues.yaml-1",
+   "todo-scripts/openapi.py:1042"
+  ],
+  "labstack-echo": [
+   "commented-router_test.go:415"
+  ],
+  "sirupsen-logrus": [
+   "config-conflict-ci-root"
+  ],
+  "gofiber-fiber": [
+   "commented-client/cookiejar.go:723"
+  ],
+  "stretchr-testify": [
+   "no-permissions-.github/workflows/main.yml-1"
+  ],
+  "go-chi-chi": [
+   "busfactor-middleware/request_size.go",
+   "commented-tree_test.go:125",
+   "duplicate-tree.go-470",
+   "no-permissions-.github/workflows/ci.yml-1",
+   "todo-middleware/compress.go:109"
+  ],
+  "jmoiron-sqlx": [
+   "commented-sqlx_test.go:1580"
+  ],
+  "golang-migrate-migrate": [
+   "commented-database/mysql/mysql_test.go:390",
+   "config-conflict-ci-root",
+   "config-conflict-ci-root",
+   "docker-root-Dockerfile.github-actions",
+   "no-permissions-.github/workflows/ci.yaml-1"
+  ],
+  "sharkdp-bat": [
+   "bloat-assets/syntaxes.bin"
+  ],
+  "burntsushi-toml": [
+   "action-tag-.github/workflows/cifuzz.yml-15",
+   "action-tag-first-party-.github/workflows/test.yml-9",
+   "duplicate-internal/toml-test/runner.go-466",
+   "no-permissions-.github/workflows/test.yml-1",
+   "todo-internal/toml-test/runner.go:217"
+  ],
+  "rayon-rs-rayon": [
+   "lockfile-missing-Cargo.lock"
+  ],
+  "heartcombo-devise": [
+   "action-tag-.github/workflows/test.yml-65",
+   "action-tag-first-party-.github/workflows/test.yml-64"
+  ],
+  "symfony-console": [
+   "hygiene-no-ci",
+   "insecure-ssrf-Command/DumpCompletionCommand.php:109"
+  ],
+  "phpmailer-phpmailer": [
+   "docker-untagged-.github/actions/build-docs/Dockerfile:1",
+   "duplicate-src/PHPMailer.php-3161"
+  ],
+  "puma-puma": [
+   "action-tag-.github/workflows/rack_conform.yml-54",
+   "action-tag-first-party-.github/workflows/rack_conform.yml-42",
+   "ci-silenced-failure-.github/workflows/rack_conform.yml-69"
+  ],
+  "composer-composer": [
+   "insecure-ssrf-src/Composer/Console/Application.php:418"
+  ],
+  "jekyll-jekyll": [
+   "action-tag-.github/workflows/docs.yml-23",
+   "action-tag-first-party-.github/workflows/release-please.yml-37",
+   "busfactor-lib/jekyll/profiler.rb",
+   "doclink-.github/SECURITY.markdown:18:docs/pages/team.md",
+   "no-permissions-.github/workflows/benchmark.yml-1",
+   "no-permissions-.github/workflows/ci.yml-1",
+   "todo-lib/jekyll/filters.rb:212"
+  ],
+  "tanstack-query": [
+   "insecure-react-dangerous-html-packages/react-query-next-experimental/src/HydrationStreamProvider.tsx:157"
+  ],
+  "actix-actix-web": [
+   "ci-disabled-.github/workflows/lint.yml-114",
+   "commented-actix-web/tests/weird_poll.rs:3"
+  ],
+  "apollographql-apollo-server": [
+   "config-conflict-ci-root"
+  ],
+  "brianc-node-postgres": [
+   "insecure-tls-verification-off-packages/pg/lib/connection-parameters.js:35"
+  ],
+  "cli-cli": [
+   "commented-git/client_test.go:1175"
+  ],
+  "date-fns-date-fns": [
+   "hygiene-no-license"
+  ],
+  "diesel-rs-diesel": [
+   "env-dead-MYSQL_DATABASE_URL",
+   "env-dead-MYSQL_UNIT_TEST_DATABASE_URL",
+   "env-dead-PG_DATABASE_URL",
+   "secret-entropy-diesel/src/mysql_like/connection/url.rs:320"
+  ],
+  "encode-django-rest-framework": [
+   "eol-python-pyproject.toml-12"
+  ],
+  "evanw-esbuild": [
+   "dead-symbol-internal/js_lexer/js_lexer.go:2576",
+   "dead-symbol-internal/js_lexer/js_lexer.go:2580",
+   "eol-node-npm/esbuild-wasm/package.json-11",
+   "insecure-exec-interpolated-lib/npm/node-install.ts:124"
+  ],
+  "expressjs-morgan": [
+   "insecure-new-function-index.js:458",
+   "lockfile-missing"
+  ],
+  "formik-formik": [
+   "action-tag-.github/workflows/ci.yml-123",
+   "skiptest-packages/formik/test/ErrorMessage.test.tsx:19"
+  ],
+  "go-redis-redis": [
+   "ci-disabled-.github/workflows/test-redis-enterprise.yml-13",
+   "env-no-example",
+   "iac-host-namespace-docker-compose.yml:112",
+   "iac-host-namespace-docker-compose.yml:141"
+  ],
+  "hanami-hanami": [
+   "dep-unused-hanami-assets",
+   "lockfile-missing"
+  ],
+  "hapijs-joi": [
+   "ci-tests-not-run"
+  ],
+  "helmetjs-helmet": [
+   "ci-no-pr-trigger"
+  ],
+  "isaacs-minimatch": [
+   "action-tag-first-party-.github/workflows/ci.yml-55",
+   "bloat-benchmark/matches-minimatch-3.json",
+   "eol-node-.github/workflows/typedoc.yml-29"
+  ],
+  "jquense-yup": [
+   "commented-test/object.ts:954"
+  ],
+  "kelektiv-node-bcrypt-js": [
+   "dep-unused-node-addon-api",
+   "docker-root-Dockerfile",
+   "eol-node-.github/workflows/build-pack-publish.yml-36"
+  ],
+  "laravel-framework": [
+   "bloat-bin/splitsh-lite",
+   "env-no-example"
+  ],
+  "less-less-js": [
+   "ci-silenced-failure-.github/workflows/ci.yml-53",
+   "config-conflict-lockfiles-root",
+   "insecure-new-function-packages/less/lib/less/tree/js-eval-node.js:37"
+  ],
+  "mde-ejs": [
+   "config-conflict-ci-root",
+   "lockfile-missing"
+  ],
+  "mkdocs-mkdocs": [
+   "action-tag-.github/workflows/autofix.yml-23",
+   "eol-python-pyproject.toml-34",
+   "insecure-py-yaml-load-mkdocs/utils/meta.py:67"
+  ],
+  "mysqljs-mysql": [
+   "eol-runner-.github/workflows/ci.yml-9",
+   "insecure-weak-hash-lib/protocol/Auth.js:18"
+  ],
+  "paramiko-paramiko": [
+   "secret-history-private-key-lol@e534b1ab"
+  ],
+  "parcel-bundler-parcel": [
+   "doclink-packages/utils/parcelforvscode/vscode-extension-TODO.md:6:./packages/utils/parcel-lsp-protocol",
+   "insecure-eval-dynamic-packages/dev/query/src/cli.js:921",
+   "insecure-exec-interpolated-packages/core/utils/src/openInBrowser.js:31",
+   "insecure-react-dangerous-html-packages/dev/repl/src/components/helper.js:18",
+   "script-injection-.github/workflows/ci.yml-169",
+   "skiptest-packages/core/integration-tests/test/output-formats.js:71"
+  ],
+  "paulmillr-chokidar": [
+   "dead-export-src/runtime.ts:isFreeBSD"
+  ],
+  "prometheus-client-golang": [
+   "commented-prometheus/histogram.go:210"
+  ],
+  "psf-requests-html": [
+   "duplicate-requests_html.py-666",
+   "eol-python-setup.py-85"
+  ],
+  "pugjs-pug": [
+   "action-tag-first-party-.github/workflows/rollingversions.yml-18",
+   "busfactor-.prettierrc.js",
+   "debug-packages/pug-parser/index.js:269",
+   "duplicate-packages/pug-lexer/index.js-704",
+   "hygiene-no-license",
+   "insecure-new-function-packages/pug/lib/index.js:288",
+   "no-permissions-.github/workflows/test.yml-1",
+   "todo-packages/pug-filters/lib/run-filter.js:34"
+  ],
+  "puppeteer-puppeteer": [
+   "doclink-docs/guides/webmcp.md:166:../api/puppeteer.elementhandle"
+  ],
+  "pydantic-pydantic": [
+   "insecure-py-eval-exec-pydantic/_internal/_namespace_utils.py:38",
+   "insecure-py-pickle-load-pydantic/v1/parse.py:42"
+  ],
+  "pypa-pip": [
+   "insecure-py-shell-true-src/pip/_internal/commands/configuration.py:269"
+  ],
+  "pypa-virtualenv": [
+   "skiptest-tests/unit/create/test_creator.py:946"
+  ],
+  "react-hook-form-react-hook-form": [
+   "doclink-docs/README.V7.ja-JP.md:328:CONTRIBUTING.md"
+  ],
+  "reduxjs-redux-toolkit": [
+   "hygiene-no-readme"
+  ],
+  "remix-run-react-router": [
+   "insecure-react-dangerous-html-packages/react-router/lib/dom/ssr/components.tsx:1000",
+   "insecure-ssrf-packages/react-router-cloudflare/worker.ts:92",
+   "insecure-ssrf-packages/react-router/lib/dom/ssr/fog-of-war.ts:169",
+   "insecure-ssrf-packages/react-router/lib/dom/ssr/fog-of-war.ts:399"
+  ],
+  "rubocop-rubocop": [
+   "action-tag-.github/workflows/spell_checking.yml-18",
+   "action-tag-first-party-.github/workflows/rubocop.yml-31",
+   "busfactor-lib/rubocop/config_obsoletion/split_cop.rb",
+   "no-permissions-.github/workflows/linting.yml-1",
+   "todo-spec/rubocop/cop/style/mutable_constant_spec.rb:84"
+  ],
+  "sequelize-sequelize": [
+   "dead-export-packages/core/src/utils/where.ts:getComplexSize",
+   "insecure-sql-interpolated-packages/core/src/sequelize.js:626"
+  ],
+  "starship-starship": [
+   "busfactor-src/configs/cc.rs",
+   "commented-src/configs/os.rs:93",
+   "duplicate-src/modules/gradle.rs-135",
+   "no-permissions-.github/workflows/crowdin-pretranslate.yml-1",
+   "todo-src/modules/git_state.rs:86"
+  ],
+  "taskforcesh-bullmq": [
+   "insecure-sql-interpolated-vitest.postgres.global-setup.ts:20"
+  ],
+  "typeorm-typeorm": [
+   "insecure-sql-interpolated-packages/typeorm/src/persistence/tree/ClosureSubjectExecutor.ts:120"
+  ],
+  "clap-rs-clap-verbosity-flag": [
+   "hygiene-no-tests"
+  ],
+  "ajv-validator-ajv": [
+   "doclink-docs/guide/managing-schemas.md:231:./api.md",
+   "doclink-docs/guide/managing-schemas.md:231:./api.md",
+   "insecure-new-function-lib/compile/index.ts:171"
+  ],
+  "expressjs-serve-static": [
+   "eol-node-package.json-35",
+   "lockfile-missing"
+  ],
+  "getsentry-sentry-python": [
+   "dead-symbol-sentry_sdk/integrations/starlette.py:280"
+  ],
+  "unjs-h3": [
+   "dead-export-src/utils/event-stream.ts:isEventStream"
+  ],
+  "katex-katex": [
+   "docker-add-url-dockers/texcmp/Dockerfile:5",
+   "docker-root-dockers/fonts/Dockerfile",
+   "insecure-innerhtml-dynamic-contrib/copy-tex/katex2tex.ts:43",
+   "insecure-innerhtml-dynamic-contrib/copy-tex/katex2tex.ts:51"
+  ],
+  "agronholm-anyio": [
+   "insecure-py-pickle-load-src/anyio/to_process.py:95"
+  ],
+  "ianstormtaylor-superstruct": [
+   "lockfile-missing"
+  ],
+  "sindresorhus-type-fest": [
+   "action-tag-.github/workflows/claude.yml-32",
+   "action-tag-first-party-.github/workflows/claude.yml-27",
+   "duplicate-test-d/require-exactly-one.ts-49",
+   "eol-node-package.json-21",
+   "no-permissions-.github/workflows/ts-canary.yml-1",
+   "todo-source/arrayable.d.ts:30"
+  ],
+  "unitech-pm2": [
+   "insecure-exec-interpolated-lib/API/Version.js:279",
+   "insecure-new-function-modules/blessed/lib/tput.js:1151",
+   "insecure-ssrf-lib/API/Modules/TAR.js:344",
+   "insecure-ssrf-lib/API/pm2-plus/auth-strategies/CliAuth.js:261"
+  ],
+  "keystonejs-keystone-classic": [
+   "commented-admin/client/App/screens/List/actions/dragdrop.js:134",
+   "insecure-react-dangerous-html-admin/client/App/elemental/FormNote/index.js:20",
+   "insecure-react-dangerous-html-fields/types/color/ColorField.js:66",
+   "insecure-react-dangerous-html-fields/types/color/ColorField.js:71",
+   "insecure-weak-hash-lib/security/csrf.js:21"
+  ],
+  "lostisland-faraday": [
+   "doclink-docs/middleware/included/raising-errors.md:7:getting-started/errors.md"
+  ],
+  "slimphp-twig-view": [
+   "ci-tests-not-run"
+  ],
+  "request-request": [
+   "insecure-weak-hash-lib/oauth.js:70",
+   "lockfile-missing"
+  ],
+  "typicode-husky": [
+   "ci-no-pr-trigger",
+   "ci-tests-not-run"
+  ],
+  "hypothesisworks-hypothesis": [
+   "insecure-py-eval-exec-hypothesis/src/hypothesis/internal/lambda_sources.py:265",
+   "skiptest-hypothesis/tests/pandas/test_data_frame.py:302"
+  ],
+  "hyperium-tonic": [
+   "bloat-interop/bin/client_darwin_amd64",
+   "commented-grpc/src/client/load_balancing/pick_first.rs:1054"
+  ],
+  "commitizen-cz-cli": [
+   "insecure-exec-interpolated-src/commitizen/staging.js:9"
+  ],
+  "socketio-engine-io": [
+   "hygiene-no-ci",
+   "hygiene-no-license",
+   "hygiene-no-tests"
+  ],
+  "feathersjs-feathers": [
+   "docs-drift-badge-packages/adapter-commons/README.md-3"
+  ],
+  "mathjax-mathjax-src": [
+   "dep-unused-mhchemparser",
+   "docs-drift-badge-README.md-13"
+  ],
+  "jazzband-django-debug-toolbar": [
+   "busfactor-debug_toolbar/panels/templates/jinja2.py",
+   "duplicate-debug_toolbar/panels/sql/views.py-55",
+   "eol-python-.github/workflows/test.yml-296",
+   "todo-debug_toolbar/panels/sql/panel.py:230"
+  ],
+  "urfave-negroni": [
+   "doclink-translations/README_pt_br.md:18:./README_zh_cn.md"
+  ],
+  "rack-rack-test": [
+   "action-tag-.github/workflows/ci.yml-36"
+  ],
+  "semantic-release-semantic-release": [
+   "dep-unused-@semantic-release/github"
+  ],
+  "psf-pyperf": [
+   "busfactor-pyperf/_win_memory.py",
+   "duplicate-pyperf/_compare.py-157",
+   "eol-python-pyproject.toml-54",
+   "todo-pyperf/_utils.py:223"
+  ],
+  "php-fig-log": [
+   "hygiene-no-ci",
+   "hygiene-no-tests"
+  ],
+  "google-uuid": [
+   "action-tag-first-party-.github/workflows/tests.yaml-16"
+  ],
+  "nock-nock": [
+   "docs-drift-script-CONTRIBUTING.md-92"
+  ],
+  "delgan-loguru": [
+   "secret-history-slack-webhook-loguru/_notifier.py@d0a57f2"
+  ],
+  "unjs-unstorage": [
+   "insecure-sql-interpolated-src/drivers/planetscale.ts:67",
+   "insecure-sql-interpolated-src/drivers/planetscale.ts:73",
+   "insecure-sql-interpolated-src/drivers/planetscale.ts:79",
+   "skiptest-test/drivers/azure-storage-blob.test.ts:8"
+  ],
+  "mrdoob-stats-js": [
+   "hygiene-no-ci"
+  ],
+  "python-jsonschema-jsonschema": [
+   "ci-tests-not-run"
+  ],
+  "jazzband-pip-tools": [
+   "eol-python-pyproject.toml-7",
+   "no-permissions-.github/workflows/ci.yml-1"
+  ],
+  "tj-node-migrate": [
+   "dep-unused-commander"
+  ],
+  "mitchellh-mapstructure": [
+   "action-tag-first-party-.github/workflows/test.yml-12",
+   "busfactor-error.go",
+   "no-permissions-.github/workflows/test.yml-1"
+  ],
+  "tiangolo-sqlmodel": [
+   "env-no-example"
+  ],
+  "remy-nodemon": [
+   "config-conflict-ci-root",
+   "docker-root-Dockerfile",
+   "insecure-exec-interpolated-lib/monitor/run.js:346"
+  ],
+  "ladjs-superagent": [
+   "doclink-docs/index.md:21:docs/test.html"
+  ],
+  "jsdom-jsdom": [
+   "bloat-test/web-platform-tests/wpt-manifest.json"
+  ],
+  "highlightjs-highlight-js": [
+   "config-conflict-ts-strict-root",
+   "docker-root-Dockerfile",
+   "docs-drift-badge-README.md-11"
+  ],
+  "http-party-node-http-proxy": [
+   "commented-test/lib-http-proxy-test.js:278",
+   "commented-test/lib-http-proxy-test.js:312",
+   "eol-node-package.json-38",
+   "skiptest-test/lib-http-proxy-test.js:23"
+  ],
+  "pyca-cryptography": [
+   "dead-symbol-src/cryptography/hazmat/primitives/serialization/pkcs7.py:314",
+   "insecure-py-eval-exec-src/_cffi_src/utils.py:17"
+  ],
+  "vuejs-vue-router": [
+   "action-tag-.github/workflows/release-tag.yml-17",
+   "commented-test/e2e/specs/hash-mode.js:52",
+   "config-conflict-ci-root",
+   "doclink-docs-gitbook/ru/advanced/navigation-guards.md:35:../api/router-instance.html"
+  ],
+  "rspec-rspec-core": [
+   "eol-runner-.github/workflows/ci.yml-26",
+   "eol-runner-.github/workflows/ci.yml-40",
+   "eol-runner-.github/workflows/ci.yml-96"
+  ],
+  "npm-node-semver": [
+   "ci-silenced-failure-.github/workflows/pull-request.yml-47"
+  ],
+  "isaacs-node-tar": [
+   "bloat-test/fixtures/parses.tar"
+  ],
+  "bower-bower": [
+   "insecure-exec-interpolated-publish.js:87"
+  ],
+  "knex-knex-schema-inspector": [
+   "insecure-sql-interpolated-lib/dialects/postgres.ts:120",
+   "insecure-sql-interpolated-lib/dialects/postgres.ts:90",
+   "insecure-sql-interpolated-lib/dialects/sqlite.ts:216"
+  ],
+  "ipython-ipykernel": [
+   "skiptest-tests/test_kernel.py:328"
+  ],
+  "hopding-pdf-lib": [
+   "bloat-assets/pdfs/bixby_guide.pdf",
+   "doclink-docs/CONTRIBUTING.md:129:./apps",
+   "insecure-exec-interpolated-apps/node/index.ts:38",
+   "insecure-exec-interpolated-apps/node/index.ts:46"
+  ],
+  "grpc-grpc-node": [
+   "ci-tests-not-run",
+   "skiptest-packages/grpc-js/test/test-weighted-round-robin.ts:351"
+  ],
+  "expressjs-method-override": [
+   "config-conflict-ci-root",
+   "lockfile-missing"
+  ],
+  "go-gitea-tea": [
+   "busfactor-vendor/code.gitea.io/sdk/gitea/lfs_lock.go",
+   "doclink-CONTRIBUTING.md:189:MAINTAINERS",
+   "doclink-CONTRIBUTING.md:29:contrib/ide/",
+   "hygiene-no-tests"
+  ],
+  "gobuffalo-buffalo": [
+   "dead-symbol-mail/dialer.go:43",
+   "docker-latest-Dockerfile:1"
+  ],
+  "mqttjs-mqtt-js": [
+   "commented-src/lib/client.ts:1550",
+   "config-conflict-ts-strict-root",
+   "insecure-tls-verification-off-example.ts:7"
+  ],
+  "sheetjs-sheetjs": [
+   "hygiene-no-ci"
+  ],
+  "archiverjs-node-archiver": [
+   "action-tag-.github/workflows/release-drafter.yml-17",
+   "eol-node-package.json-25",
+   "no-permissions-.github/workflows/labels.yaml-1"
+  ],
+  "webpack-webpack-dev-middleware": [
+   "insecure-new-function-src/utils.js:1499"
+  ],
+  "gulpjs-gulp": [
+   "doclink-docs/CLI.md:11:./API.md"
+  ],
+  "octokit-octokit-rb": [
+   "secret-aws-access-key-spec/cassettes/Octokit_Client_Organizations/_migrations/downloads_a_migration_archive.json:1",
+   "secret-history-private-key-integration.private-key.pem@06b7d87f"
+  ],
+  "typicode-json-server": [
+   "ci-no-pr-trigger"
+  ],
+  "mdx-js-mdx": [
+   "insecure-new-function-packages/mdx/lib/run.js:43"
+  ],
+  "astaxie-build-web-application-with-golang": [
+   "insecure-go-template-html-de/code/src/apps/ch.4.3/main.go:20",
+   "insecure-go-template-html-en/code/src/apps/ch.4.3/main.go:20",
+   "insecure-go-template-html-fa/code/src/apps/ch.4.3/main.go:20",
+   "insecure-go-template-html-pt-br/code/src/apps/ch.4.3/main.go:20",
+   "insecure-go-template-html-th/code/src/apps/ch.4.3/main.go:20"
+  ],
+  "pyinstaller-pyinstaller": [
+   "action-tag-.github/workflows/ci.yml-425",
+   "action-tag-first-party-.github/workflows/lint.yml-13",
+   "bloat-PyInstaller/bootloader/Windows-64bit-intel/runw.exe",
+   "bloat-PyInstaller/bootloader/Windows-64bit-intel/runw_d.exe",
+   "busfactor-bootloader/waflib/Tools/c.py",
+   "docker-root-bootloader/Dockerfile.osxcross",
+   "duplicate-bootloader/zlib/crc32.h-7",
+   "eol-python-pyproject.toml-6",
+   "insecure-py-eval-exec-PyInstaller/hooks/rthooks/pyi_rth_multiprocessing.py:64",
+   "insecure-py-eval-exec-PyInstaller/loader/pyimod02_importers.py:457",
+   "no-permissions-.github/workflows/validate-new-news.yml-1",
+   "todo-PyInstaller/lib/modulegraph/modulegraph.py:1075"
+  ],
+  "streamlit-streamlit-example": [
+   "hygiene-no-ci",
+   "hygiene-no-license"
+  ],
+  "beego-beego": [
+   "insecure-sql-interpolated-client/orm/db.go:350",
+   "insecure-sql-interpolated-server/web/session/mysql/sess_mysql.go:182"
+  ],
+  "automattic-node-canvas": [
+   "hygiene-no-license",
+   "lockfile-missing",
+   "skiptest-test/wpt/generated/pixel-manipulation.js:218"
+  ],
+  "gofiber-recipes": [
+   "docker-latest-asynq/worker/Dockerfile:6",
+   "docker-untagged-gcloud-firebase/Dockerfile:17",
+   "docker-untagged-gcloud/Dockerfile:17",
+   "docker-untagged-url-shortener-api/api/Dockerfile:14",
+   "insecure-sql-interpolated-sqlboiler/models/author.go:436",
+   "insecure-sql-interpolated-sqlboiler/models/post.go:478",
+   "secret-private-key-https-tls/certs/ssl.key:1"
+  ],
+  "protobufjs-protobuf-js": [
+   "action-tag-.github/workflows/release.yaml-17",
+   "action-tag-first-party-.github/workflows/test.yml-15",
+   "bloat-tests/data/mapbox/vector_tile.bin",
+   "busfactor-cli/wrappers/closure.js",
+   "duplicate-cli/lib/catharsis/lib/parser.js-1697",
+   "eol-node-package.json-10",
+   "no-permissions-.github/workflows/test.yml-1",
+   "todo-tests/api_writer-reader.js:126"
+  ],
+  "mattermost-mattermost-plugin-starter-template": [
+   "docs-drift-badge-README.md-4"
+  ],
+  "broofa-mime": [
+   "doclink-CONTRIBUTING.md:3:src/README_md.js",
+   "eol-node-.nvmrc-1"
+  ],
+  "zeit-ncc": [
+   "debug-src/typescript.js:9"
+  ],
+  "zauberzeug-nicegui": [
+   "dep-unused-sass",
+   "docker-root-development.dockerfile",
+   "env-no-example",
+   "eol-python-development.dockerfile-1",
+   "insecure-eval-dynamic-nicegui/elements/scene/scene.js:177",
+   "insecure-new-function-nicegui/elements/echart/echart.js:105",
+   "lockfile-missing-poetry.lock"
+  ],
+  "amqp-node-amqplib": [
+   "insecure-tls-verification-off-types/callback_api.ts:30",
+   "insecure-tls-verification-off-types/channel_api.ts:32"
+  ],
+  "jekyll-minima": [
+   "hygiene-no-tests"
+  ],
+  "jsdom-whatwg-url": [
+   "action-tag-first-party-.github/workflows/ci.yml-31",
+   "dep-unused-webidl-conversions",
+   "todo-lib/urlencoded.js:51"
+  ],
+  "sindresorhus-clipboardy": [
+   "bloat-fallbacks/windows/clipboard_aarch64.exe"
+  ],
+  "tiangolo-full-stack-fastapi-template": [
+   "dead-code-uikit-frontend/src/components/ui",
+   "docker-root-backend/Dockerfile",
+   "duplicate-frontend/src/components/Admin/DeleteUser.tsx-41",
+   "env-no-example",
+   "insecure-localstorage-secret-frontend/src/hooks/useAuth.ts:45",
+   "insecure-localstorage-secret-frontend/tests/login.spec.ts:112"
+  ],
+  "python-telegram-bot-python-telegram-bot": [
+   "script-injection-.github/workflows/chango.yml-30"
+  ],
+  "kataras-iris": [
+   "bloat-_examples/file-server/send-files/files/first.zip",
+   "ci-silenced-failure-.github/workflows/ci.yml-40",
+   "doclink-_examples/README.md:167:view/parse-parse/handlebars/main.go"
+  ],
+  "nats-io-nats-js": [
+   "commented-jetstream/tests/jetstream409_test.ts:180",
+   "dep-unused-tweetnacl",
+   "supply-scripts-curl-pipe-transport-node/package.json-setup"
+  ],
+  "tootallnate-proxy-agents": [
+   "hygiene-no-license"
+  ],
+  "hapijs-hapi": [
+   "ci-tests-not-run"
+  ],
+  "bottlepy-bottle": [
+   "insecure-py-pickle-load-bottle.py:1184"
+  ],
+  "cherrypy-cherrypy": [
+   "eol-python-pyproject.toml-40",
+   "insecure-py-pickle-load-cherrypy/lib/sessions.py:569",
+   "insecure-py-shell-true-cherrypy/_cpmodpy.py:305"
+  ],
+  "web2py-web2py": [
+   "insecure-py-eval-exec-gluon/contrib/dbg.py:918",
+   "insecure-py-os-system-gluon/widget.py:819",
+   "insecure-py-pickle-load-gluon/contrib/redis_cache.py:196",
+   "insecure-py-pickle-load-gluon/storage.py:174",
+   "insecure-py-shell-true-extras/build_web2py/build_web2py.py:110",
+   "insecure-ssrf-applications/admin/controllers/default.py:304",
+   "insecure-ssrf-gluon/contrib/gae_memcache.py:38",
+   "insecure-ssrf-gluon/contrib/gae_memcache.py:48",
+   "insecure-ssrf-gluon/contrib/login_methods/oauth10a_account.py:99"
+  ],
+  "sequelize-umzug": [
+   "doclink-examples/7-bundling-codegen/readme.md:3:./barrel.ts"
+  ],
+  "expressjs-csurf": [
+   "hygiene-no-ci"
+  ],
+  "discourse-discourse-docker": [
+   "hygiene-no-tests"
+  ],
+  "mongodb-node-mongodb-native": [
+   "insecure-weak-hash-src/cmap/auth/scram.ts:245"
+  ],
+  "pylons-pyramid": [
+   "insecure-py-pickle-load-src/pyramid/session.py:70"
+  ],
+  "honojs-middleware": [
+   "insecure-ssrf-packages/auth-js/src/client.ts:120"
+  ],
+  "fmtlib-fmt": [
+   "insecure-ssrf-support/release.py:223"
+  ],
+  "digininja-dvwa": [
+   "insecure-php-path-traversal-vulnerabilities/view_source_all.php:14",
+   "insecure-php-path-traversal-vulnerabilities/view_source_all.php:18",
+   "insecure-php-path-traversal-vulnerabilities/view_source_all.php:22",
+   "insecure-php-path-traversal-vulnerabilities/view_source_all.php:26"
+  ],
+  "onevcat-kingfisher": [
+   "insecure-ruby-marshal-load-fastlane/actions/extract_current_change_log.rb:7"
+  ],
+  "solidjs-solid-start": [
+   "insecure-ssrf-packages/start/src/config/dev-server.ts:76"
+  ],
+  "qwikdev-qwik": [
+   "insecure-new-function-packages/qwik/src/core/shared/qrl/qrl-class-dev.ts:100",
+   "insecure-ssrf-packages/qwik-router/src/middleware/cloudflare-pages/index.ts:40",
+   "insecure-ssrf-packages/qwik-vite/src/plugins/dev/image-size-runtime.js:162",
+   "insecure-ssrf-packages/qwik-vite/src/plugins/dev/image-size-runtime.js:89"
+  ],
+  "sveltejs-kit": [
+   "insecure-ssrf-packages/adapter-cloudflare/files/worker.js:36",
+   "insecure-ssrf-packages/adapter-cloudflare/files/worker.js:68",
+   "insecure-ssrf-packages/kit/src/runtime/app/server/remote/prerender.js:105",
+   "insecure-ssrf-packages/kit/src/runtime/server/fetch.js:79",
+   "insecure-ssrf-packages/kit/src/runtime/server/respond.js:325",
+   "insecure-ssrf-packages/kit/src/runtime/server/respond.js:738",
+   "insecure-ssrf-packages/kit/src/runtime/server/respond.js:789"
+  ],
+  "bookstackapp-bookstack": [
+   "insecure-ssrf-resources/js/services/http.ts:106"
+  ],
+  "owasp-crapi": [
+   "iac-run-as-root-deploy/helm/templates/mailhog/deployment.yaml:29",
+   "iac-run-as-root-deploy/k8s/base/mailhog/deployment.yaml:21"
+  ],
+  "tautulli-tautulli": [
+   "insecure-py-eval-exec-lib/mako/codegen.py:115",
+   "insecure-py-eval-exec-lib/mako/codegen.py:116",
+   "insecure-py-eval-exec-lib/mako/codegen.py:130",
+   "insecure-sql-interpolated-lib/typing_extensions.py:2421"
+  ],
+  "yourls-yourls": [
+   "insecure-sql-interpolated-includes/functions-shorturls.php:393",
+   "insecure-sql-interpolated-includes/functions-upgrade.php:415"
+  ],
+  "coollabsio-coolify-examples": [
+   "insecure-ssrf-internal/compose/index.ts:6",
+   "insecure-ssrf-javascript/runtimes/bun/index.ts:4"
+  ],
+  "flarum-framework": [
+   "insecure-ssrf-extensions/package-manager/src/Work/FreshCode.php:79"
+  ],
+  "getredash-redash": [
+   "insecure-ssrf-redash/query_runner/clickhouse.py:119",
+   "insecure-ssrf-redash/query_runner/prometheus.py:225"
+  ],
+  "jellyfin-jellyfin-web": [
+   "insecure-ssrf-src/plugins/comicsPlayer/plugin.js:359",
+   "insecure-ssrf-src/utils/fetch.js:40",
+   "insecure-ssrf-src/utils/fetch.js:55"
+  ],
+  "lobsters-lobsters": [
+   "insecure-sql-interpolated-app/controllers/mod/mod_controller.rb:15"
+  ],
+  "louislam-uptime-kuma": [
+   "insecure-exec-interpolated-extra/rebase-pr.js:15",
+   "insecure-exec-interpolated-extra/rebase-pr.js:29",
+   "insecure-exec-interpolated-extra/rebase-pr.js:33",
+   "insecure-ssrf-server/notification-providers/call-me-bot.js:16",
+   "insecure-ssrf-server/notification-providers/discord.js:31"
+  ],
+  "mailcow-mailcow-dockerized": [
+   "iac-host-namespace-docker-compose.yml:524",
+   "iac-privileged-docker-compose.yml:512",
+   "insecure-php-reflected-xss-data/web/inc/ajax/qr_gen.php:8",
+   "insecure-ssrf-data/conf/rspamd/meta_exporter/pipe.php:51",
+   "insecure-ssrf-data/web/inc/ajax/qitem_details.php:199",
+   "insecure-ssrf-data/web/inc/functions.inc.php:3116",
+   "insecure-ssrf-data/web/inc/prerequisites.inc.php:269",
+   "insecure-ssrf-data/web/inc/prerequisites.inc.php:273"
+  ],
+  "matomo-org-matomo-for-wordpress": [
+   "insecure-ssrf-app/bootstrap.php:131",
+   "insecure-ssrf-app/core/ProxyHttp.php:239"
+  ],
+  "mattermost-desktop": [
+   "insecure-ssrf-src/main/app/initialize.ts:305"
+  ],
+  "monicahq-monica": [
+   "insecure-ssrf-resources/js/sentry.js:19"
+  ],
+  "sissbruecker-linkding": [
+   "insecure-ssrf-bookmarks/views/settings.py:146"
+  ],
+  "tandoorrecipes-recipes": [
+   "insecure-ssrf-vue3/src/composables/useFileApi.ts:103",
+   "insecure-ssrf-vue3/src/composables/useFileApi.ts:139",
+   "insecure-ssrf-vue3/src/composables/useFileApi.ts:39",
+   "insecure-ssrf-vue3/src/composables/useFileApi.ts:71"
+  ],
+  "umami-software-umami": [
+   "insecure-ssrf-packages/api-client/src/http.ts:230"
+  ],
+  "denoland-fresh": [
+   "insecure-react-dangerous-html-packages/fresh/src/dev/middlewares/error_overlay/overlay.tsx:136"
+  ],
+  "expo-examples": [
+   "insecure-ssrf-with-formdata-image-upload/App.js:188"
+  ],
+  "livewire-livewire": [
+   "insecure-ssrf-legacy_tests/Browser/TestCase.php:82"
+  ],
+  "microsoft-vscode-extension-samples": [
+   "insecure-ssrf-mcp-extension-sample/src/extension.ts:76"
+  ],
+  "caijimmy-hugo-theme-stack": [
+   "insecure-react-dangerous-html-assets/ts/search.tsx:309",
+   "insecure-react-dangerous-html-assets/ts/search.tsx:310"
+  ],
+  "googlechrome-chrome-extensions-samples": [
+   "insecure-ssrf-_archive/apps/samples/text-editor/lib/ace/edit_session.js:502"
+  ],
+  "wordpress-performance": [
+   "insecure-ssrf-plugins/optimization-detective/detect.js:1125"
+  ],
+  "darkreader-darkreader": [
+   "insecure-ssrf-src/inject/dynamic-theme/network.ts:18"
+  ],
+  "micropython-micropython-lib": [
+   "insecure-py-pickle-load-unix-ffi/multiprocessing/multiprocessing.py:56"
+  ],
+  "woocommerce-action-scheduler": [
+   "insecure-sql-interpolated-classes/abstracts/ActionScheduler_Abstract_ListTable.php:498"
+  ],
+  "wp-cli-wp-cli": [
+   "insecure-exec-interpolated-php/WP_CLI/Runner.php:3059"
+  ],
+  "owasp-dvsa": [
+   "iac-public-bucket-template.yml:457",
+   "iac-public-bucket-template.yml:458",
+   "iac-public-bucket-template.yml:460",
+   "iac-public-bucket-template.yml:486",
+   "iac-public-bucket-template.yml:487",
+   "iac-public-bucket-template.yml:489",
+   "iac-public-bucket-template.yml:539",
+   "iac-public-bucket-template.yml:540"
+  ],
+  "owasp-go-scp": [
+   "iac-host-namespace-docker-compose.yml:7"
+  ],
+  "owasp-igoat-swift": [
+   "insecure-sql-interpolated-iGoat-Swift/iGoat-Swift/Source/Exercises/Injection Flaws/SQL Injection/SQLInjectionExerciseVC.swift:22",
+   "insecure-swift-plaintext-credential-storage-iGoat-Swift/iGoat-Swift/Source/Exercises/InsecureLocalDataStorage/NSUserDefaults/NSUserDefaultsStorageExerciseVC.swift:13",
+   "insecure-swift-webview-html-iGoat-Swift/iGoat-Swift/Source/Exercises/Injection Flaws/XSS/CrossSiteScriptingExerciseVC.swift:9"
+  ],
+  "adeyosemanputra-pygoat": [
+   "iac-docker-socket-docker-compose.yml:14",
+   "iac-docker-socket-docker-compose.yml:29"
+  ],
+  "bridgecrewio-cfngoat": [
+   "iac-public-bucket-cfngoat.yaml:923"
+  ],
+  "bridgecrewio-terragoat": [
+   "iac-open-admin-port-terraform/aws/ec2.tf:95",
+   "iac-public-bucket-terraform/alicloud/bucket.tf:7",
+   "iac-public-database-terraform/aws/db-app.tf:22",
+   "iac-unencrypted-terraform/aws/db-app.tf:19",
+   "iac-unencrypted-terraform/aws/neptune.tf:9"
+  ],
+  "hashicorp-vault-guides": [
+   "iac-open-admin-port-identity/vault-agent-caching/terraform-aws/security-groups.tf:15",
+   "iac-open-admin-port-identity/vault-agent-demo/terraform-aws/security-groups.tf:15",
+   "iac-open-admin-port-identity/vault-agent-templates/terraform-aws/security-groups.tf:15",
+   "iac-open-admin-port-identity/vault-chef-approle/terraform-aws/chef-node/main.tf:79",
+   "iac-open-admin-port-identity/vault-chef-approle/terraform-aws/mgmt-node/main.tf:79",
+   "iac-open-admin-port-operations/aws-kms-unseal-ha/terraform/instance.tf:95",
+   "iac-open-admin-port-operations/aws-kms-unseal/terraform-aws/instance.tf:87",
+   "iac-open-admin-port-operations/benchmarking/terraform-aws-vault-benchmark/terraform/security-groups.tf:10",
+   "iac-open-admin-port-secrets/password-policies/aws/security-groups.tf:15",
+   "iac-open-admin-port-secrets/sm-ssh-otp/aws/security-groups.tf:15",
+   "iac-open-admin-port-secrets/spring-cloud-vault/aws/terraform/ec2.tf:36"
+  ],
+  "madhuakula-kubernetes-goat": [
+   "iac-docker-socket-scenarios/health-check/deployment-simple-alternative.yaml:54",
+   "iac-docker-socket-scenarios/health-check/deployment.yaml:27",
+   "iac-docker-socket-scenarios/health-check/deployment.yaml:28",
+   "iac-docker-socket-scenarios/health-check/deployment.yaml:30",
+   "iac-docker-socket-scenarios/health-check/deployment.yaml:39",
+   "iac-docker-socket-scenarios/health-check/deployment.yaml:71",
+   "iac-docker-socket-scenarios/health-check/deployment.yaml:97",
+   "iac-host-namespace-scenarios/kube-bench-security/master-job.yaml:9",
+   "iac-host-namespace-scenarios/kube-bench-security/node-job.yaml:9",
+   "iac-host-namespace-scenarios/system-monitor/deployment.yaml:25",
+   "iac-host-namespace-scenarios/system-monitor/deployment.yaml:26",
+   "iac-privilege-escalation-scenarios/system-monitor/deployment.yaml:40",
+   "iac-privileged-scenarios/health-check/deployment-simple-alternative.yaml:30",
+   "iac-privileged-scenarios/health-check/deployment.yaml:52",
+   "iac-privileged-scenarios/health-check/deployment.yaml:64",
+   "iac-privileged-scenarios/system-monitor/deployment.yaml:41"
+  ],
+  "snoopysecurity-dvws": [
+   "insecure-php-xxe-vulnerabilities/xxe2/server.php:6"
+  ],
+  "snyk-labs-goof-kubernetes": [
+   "iac-host-namespace-demo_yamls/etcdclient.yaml:29",
+   "iac-privileged-demo_yamls/nonroot_priv.yaml:16",
+   "iac-privileged-demo_yamls/root_system.yaml:16"
+  ],
+  "ansible-ansible-examples": [
+   "iac-iam-wildcard-language_features/files/cloudformation-example.json:351",
+   "iac-open-admin-port-language_features/files/cloudformation-example.json:190"
+  ],
+  "aquasecurity-kube-bench": [
+   "iac-host-namespace-hack/debug.yaml:9",
+   "iac-host-namespace-hack/kind-stig.yaml:12",
+   "iac-host-namespace-hack/kind.yaml:12",
+   "iac-host-namespace-job-ack.yaml:9",
+   "iac-host-namespace-job-aks.yaml:9",
+   "iac-host-namespace-job-eks-asff.yaml:30",
+   "iac-host-namespace-job-eks-stig.yaml:9",
+   "iac-host-namespace-job-eks.yaml:9",
+   "iac-host-namespace-job-gke.yaml:9",
+   "iac-host-namespace-job-iks.yaml:9",
+   "iac-host-namespace-job-master.yaml:9",
+   "iac-host-namespace-job-node.yaml:9",
+   "iac-host-namespace-job-tkgi.yaml:9",
+   "iac-host-namespace-job.yaml:53"
+  ],
+  "googlecloudplatform-kubernetes-engine-samples": [
+   "iac-dangerous-capability-ai-ml/gke-slurm/autopilot/slurm-worker-allowlist.yaml:72",
+   "iac-host-namespace-ai-ml/gke-tpu-dynamic-slicing/tpu-multislice-jax.yaml:39",
+   "iac-host-namespace-ai-ml/llm-multihost-tpus-saxml/sax-model-server-set.yaml:36",
+   "iac-host-namespace-hpc/mpi/hpl-demo-pv-custom-hpl-dat.tpl.yaml:30",
+   "iac-host-namespace-hpc/mpi/hpl-demo-pv-custom-hpl-dat.tpl.yaml:31",
+   "iac-host-namespace-hpc/mpi/hpl-demo-pv.tpl.yaml:31",
+   "iac-host-namespace-hpc/mpi/hpl-demo-pv.tpl.yaml:32",
+   "iac-host-namespace-hpc/mpi/hpl-demo.tpl.yaml:31",
+   "iac-host-namespace-hpc/mpi/hpl-demo.tpl.yaml:32",
+   "iac-privileged-ai-ml/gke-ray/raytrain/maxtext/ray-cluster.tpu-multi-slice.yaml:124",
+   "iac-privileged-ai-ml/gke-slurm/autopilot/slurm-worker-allowlist.yaml:74",
+   "iac-privileged-ai-ml/gke-slurm/k8s-bridge/workloadmixing.yaml:38",
+   "iac-privileged-ai-ml/gke-tpu-dynamic-slicing/tpu-multislice-jax.yaml:50",
+   "iac-privileged-ai-ml/llm-multihost-tpus-saxml/sax-admin-server.yaml:36",
+   "iac-privileged-ai-ml/llm-multihost-tpus-saxml/sax-model-server-set.yaml:49",
+   "iac-privileged-ai-ml/llm-serving-gemma/saxml/saxml-admin-server.yaml:35",
+   "iac-privileged-ai-ml/llm-serving-gemma/saxml/saxml-model-server-1x1.yaml:52",
+   "iac-privileged-ai-ml/llm-serving-gemma/saxml/saxml-model-server-2x2.yaml:52",
+   "iac-privileged-ai-ml/llm-serving-optimum-tpu/optimum-tpu-gemma-2b-2x4.yaml:44",
+   "iac-privileged-ai-ml/maxdiffusion-tpu/serve_sdxl_v6e.yaml:41",
+   "iac-privileged-ai-ml/maxtext-rl-on-gke/llama3.1-8b-grpo-dws-2x2x1-training.yaml:68",
+   "iac-privileged-ai-ml/maxtext-rl-on-gke/llama3.1-8b-grpo-spot-2x2x1-training.yaml:65",
+   "iac-privileged-hpc/mpi/hpl-demo-pv-custom-hpl-dat.tpl.yaml:136",
+   "iac-privileged-hpc/mpi/hpl-demo-pv-custom-hpl-dat.tpl.yaml:57",
+   "iac-privileged-hpc/mpi/hpl-demo-pv.tpl.yaml:131",
+   "iac-privileged-hpc/mpi/hpl-demo-pv.tpl.yaml:58",
+   "iac-privileged-hpc/mpi/hpl-demo.tpl.yaml:121",
+   "iac-privileged-hpc/mpi/hpl-demo.tpl.yaml:53",
+   "iac-run-as-root-ai-ml/maxtext-rl-on-gke/llama3.1-8b-grpo-dws-2x2x1-training.yaml:49",
+   "iac-run-as-root-ai-ml/maxtext-rl-on-gke/llama3.1-8b-grpo-dws-2x2x1-training.yaml:69",
+   "iac-run-as-root-ai-ml/maxtext-rl-on-gke/llama3.1-8b-grpo-spot-2x2x1-training.yaml:46",
+   "iac-run-as-root-ai-ml/maxtext-rl-on-gke/llama3.1-8b-grpo-spot-2x2x1-training.yaml:66",
+   "iac-run-as-root-observability/elastic-stack-tutorial/fleet-server-and-agents.yaml:119",
+   "iac-run-as-root-observability/elastic-stack-tutorial/fleet-server-and-agents.yaml:174",
+   "iac-run-as-root-observability/elastic-stack-tutorial/fleet-server-and-agents.yaml:66"
+  ],
+  "aws-samples-aws-cdk-examples": [
+   "iac-open-admin-port-python/servicecatalog/portfolio-with-ec2-product/assets/ec2_vpc.json:230",
+   "iac-open-admin-port-typescript/servicecatalog/portfolio-with-ec2-product/assets/ec2_vpc.json:230"
+  ],
+  "aws-samples-serverless-patterns": [
+   "iac-open-admin-port-apigw-http-api-lambda-rds-proxy-java/template-rds-proxy.yaml:83",
+   "iac-open-admin-port-apigw-http-api-lambda-rds-proxy/template-rds-proxy.yaml:83",
+   "iac-open-admin-port-apigw-lambda-efs-sam/template.yaml:25",
+   "iac-open-admin-port-docdb-lambda-nodejs-sam/template.yaml:74",
+   "iac-open-admin-port-docdb-lambda-nodejs-sam/template.yaml:83",
+   "iac-open-admin-port-docdb-lambda-nodejs-sam/template.yaml:95",
+   "iac-open-admin-port-ec2-s3-express-one-zone-sam/template.yaml:73",
+   "iac-open-admin-port-eventbridge-schedule-ecs-terraform/main.tf:103",
+   "iac-open-admin-port-stepfunctions-fargate-lambda/vpc.yaml:22",
+   "iac-open-admin-port-terraform-lambda-bedrock-integration/main.tf:53",
+   "iac-public-database-activemq-lambda-sam-java/template.yaml:93",
+   "iac-public-database-activemq-lambda/template.yaml:61",
+   "iac-public-database-amazonmq-rabbitmq-msg-replication/main.tf:23",
+   "iac-public-database-amazonmq-rabbitmq-msg-replication/main.tf:40",
+   "iac-public-database-lambda-esm-rabbitmq-filters-sam/template.yaml:32",
+   "iac-public-database-rabbitmq-lambda-sam-java/template.yaml:31",
+   "iac-public-database-rabbitmq-lambda-tf/main.tf:15",
+   "iac-public-database-rabbitmq-lambda/template.yaml:15"
+  ],
+  "aws-aws-sam-cli-app-templates": [
+   "iac-open-admin-port-python3.10/efs/{{cookiecutter.project_name}}/template.yaml:28",
+   "iac-open-admin-port-python3.11/efs/{{cookiecutter.project_name}}/template.yaml:28",
+   "iac-open-admin-port-python3.12/efs/{{cookiecutter.project_name}}/template.yaml:28",
+   "iac-open-admin-port-python3.13/efs/{{cookiecutter.project_name}}/template.yaml:28",
+   "iac-open-admin-port-python3.14/efs/{{cookiecutter.project_name}}/template.yaml:28",
+   "iac-open-admin-port-python3.9/efs/{{cookiecutter.project_name}}/template.yaml:28"
+  ],
+  "billimek-k8s-gitops": [
+   "iac-host-namespace-kubernetes/default/home-assistant/home-assistant.yaml:79",
+   "iac-host-namespace-kubernetes/kube-system/etcd/etcd-defrag/etcd-defrag.yaml:17",
+   "iac-host-namespace-kubernetes/kube-system/etcd/etcd-defrag/etcd-defrag.yaml:18",
+   "iac-privileged-kubernetes/kube-system/etcd/etcd-defrag/etcd-defrag.yaml:69",
+   "iac-privileged-kubernetes/kube-system/intel-gpu-resource-driver/intel-gpu-resource-driver.yaml:32",
+   "iac-run-as-root-kubernetes/default/miniflux/miniflux.yaml:186",
+   "iac-run-as-root-kubernetes/default/miniflux/miniflux.yaml:187",
+   "iac-run-as-root-kubernetes/default/mousetrap/mousetrap.yaml:19",
+   "iac-run-as-root-kubernetes/kube-system/etcd/etcd-defrag/etcd-defrag.yaml:21",
+   "iac-run-as-root-kubernetes/kube-system/etcd/etcd-defrag/etcd-defrag.yaml:22",
+   "iac-run-as-root-kubernetes/monitoring/smokeping-prober/smokeping-prober.yaml:76",
+   "iac-run-as-root-kubernetes/monitoring/smokeping-prober/smokeping-prober.yaml:77"
+  ],
+  "docker-awesome-compose": [
+   "iac-dangerous-capability-wireguard/compose.yaml:8",
+   "iac-docker-socket-portainer/compose.yaml:5",
+   "iac-docker-socket-portainer/compose.yaml:9",
+   "iac-host-namespace-plex/compose.yaml:5"
+  ],
+  "eventuate-tram-eventuate-tram-examples-customers-and-orders": [
+   "iac-host-namespace-deployment/kubernetes/ingress/local-nginx-ingress.yaml:328",
+   "iac-privilege-escalation-deployment/kubernetes/ingress/local-nginx-ingress.yaml:354",
+   "iac-privilege-escalation-deployment/kubernetes/ingress/nginx-ingress.yaml:315",
+   "iac-public-database-aws-fargate-terraform/main.tf:22"
+  ],
+  "bitnami-charts": [
+   "iac-run-as-root-bitnami/fluentd/templates/aggregator-statefulset.yaml:107"
+  ],
+  "hashicorp-terraform-guides": [
+   "iac-open-admin-port-infrastructure-as-code/dynamic-aws-creds-from-vault/networks-firewalls-ingress.tf:7",
+   "iac-open-admin-port-infrastructure-as-code/k8s-cluster-openshift-aws/modules/openshift/03-security-groups.tf:122"
+  ],
+  "khuedoan-homelab": [
+   "iac-host-namespace-metal/roles/pxe_server/files/docker-compose.yml:10",
+   "iac-host-namespace-metal/roles/pxe_server/files/docker-compose.yml:15"
+  ],
+  "longhorn-charts": [
+   "iac-privileged-charts/longhorn/templates/preupgrade-job.yaml:24",
+   "iac-run-as-root-charts/longhorn/templates/deployment-driver.yaml:155"
+  ],
+  "linkerd-linkerd2-proxy-init": [
+   "iac-run-as-root-proxy-init/integration/iptables/iptablestest-lab.yaml:102",
+   "iac-run-as-root-proxy-init/integration/iptables/iptablestest-lab.yaml:103"
+  ],
+  "open-telemetry-opentelemetry-demo": [
+   "iac-host-namespace-compose.profiling.yaml:17",
+   "iac-privileged-compose.profiling.yaml:16"
+  ],
+  "open-telemetry-opentelemetry-helm-charts": [
+   "iac-run-as-root-charts/opentelemetry-kube-stack/templates/collector.yaml:104"
+  ],
+  "pulumi-examples": [
+   "iac-public-bucket-aws-hcl-s3-folder/main.tf:22"
+  ],
+  "onedr0p-home-ops": [
+   "iac-privileged-kubernetes/apps/kube-system/intel-gpu-resource-driver/app/helmrelease.yaml:17"
+  ],
+  "nats-io-k8s": [
+   "iac-privileged-kine-nats/docker-compose.yml:33"
+  ],
+  "returntocorp-semgrep-rules": [
+   "iac-public-bucket-json/aws/security/public-s3-bucket.yaml:40",
+   "iac-public-bucket-json/aws/security/public-s3-bucket.yaml:52",
+   "iac-public-bucket-json/aws/security/public-s3-bucket.yaml:58",
+   "iac-unencrypted-terraform/aws/security/aws-ec2-launch-configuration-root-block-device-unencrypted.tf:26"
+  ],
+  "serverless-examples": [
+   "iac-public-bucket-aws-node-single-page-app-via-cloudfront/serverless.yml:21"
+  ],
+  "windmill-labs-windmill-helm-charts": [
+   "iac-docker-socket-charts/windmill/templates/worker-groups.yaml:252"
+  ],
+  "mantinedev-mantine": [
+   "insecure-react-dangerous-html-packages/@mantine/core/src/components/AppShell/AppShellNavbar/AppShellNavbar.tsx:80",
+   "insecure-ssrf-packages/@mantine/mcp-server/src/data-client.ts:48"
+  ],
+  "supabase-supabase-swift": [
+   "env-dead-SUPABASE_ANON_KEY",
+   "env-dead-SUPABASE_SERVICE_ROLE_KEY",
+   "secret-entropy-supabase/config.toml:129",
+   "secret-history-entropy-.claude/skills/verify-supabase-swift/journeys/auth.swift@081486b1"
+  ],
+  "l3mon4d3-luasnip": [
+   "pr-target-checkout-.github/workflows/push.yaml-16",
+   "pr-target-checkout-.github/workflows/test.yaml-12"
+  ],
+  "slimphp-slim-skeleton": [
+   "env-no-example"
+  ],
+  "facebook-lexical": [
+   "insecure-new-function-packages/lexical-compiler/src/SchemaJsonCodegen.ts:1058"
+  ],
+  "denoland-deno-docker": [
+   "docker-untagged-distroless.dockerfile:23"
+  ],
+  "apache-echarts": [
+   "insecure-new-function-src/coord/geo/GeoJSONResource.ts:168"
+  ],
+  "mui-material-ui-docs": [
+   "config-conflict-ci-root",
+   "env-no-example",
+   "secret-google-api-key-docs/data/material/components/autocomplete/GoogleMaps.js:18"
+  ],
+  "folke-which-key-nvim": [
+   "ci-tests-not-run"
+  ],
+  "tpope-vim-fugitive": [
+   "hygiene-no-license"
+  ],
+  "dandavison-delta": [
+   "commented-src/handlers/ripgrep_json.rs:68",
+   "docker-latest-etc/docker/ubuntu.Dockerfile:1",
+   "docker-root-etc/docker/ubuntu.Dockerfile",
+   "docs-drift-badge-README.md-6"
+  ],
+  "benthosdev-benthos": [
+   "docker-latest-resources/docker/ai.Dockerfile:21",
+   "docker-root-internal/impl/iceberg/bench/kafka-connector/Dockerfile",
+   "docker-untagged-resources/docker/Dockerfile:20",
+   "hygiene-no-license",
+   "insecure-sql-interpolated-internal/impl/oracledb/checkpoint_cache.go:195",
+   "secret-private-key-internal/impl/snowflake/resources/ssh_keys/snowflake_rsa_key.pem:1"
+  ],
+  "airbnb-visx": [
+   "insecure-react-dangerous-html-packages/visx-demo/src/components/Codeblock.tsx:30"
+  ],
+  "heroiclabs-nakama-docs": [
+   "bloat-docs/nakama/examples/unity/nakama-showreel/Assets/Nakama/Plugins/Google.Protobuf.dll",
+   "doclink-docs/nakama/getting-started/benchmarks.md:373:../gameplay-multiplayer-server-multiplayer/",
+   "hygiene-no-tests"
+  ],
+  "tulios-kafkajs": [
+   "iac-docker-socket-docker-compose.1_1.yml:57"
+  ],
+  "firebase-functions-samples": [
+   "insecure-innerhtml-dynamic-Node-1st-gen/exif-images/public/main.js:71"
+  ],
+  "pusher-pusher-js": [
+   "docs-drift-manager-README.md-622"
+  ],
+  "timgit-pg-boss": [
+   "dead-code-uikit-packages/dashboard/app/components/ui",
+   "insecure-tls-verification-off-src/cli.ts:142"
+  ],
+  "temporalio-samples-go": [
+   "script-injection-.github/workflows/ci.yml-17"
+  ],
+  "cloudflare-workers-rs": [
+   "script-injection-.github/workflows/create-release.yml-23"
+  ],
+  "jesseduffield-lazydocker": [
+   "config-conflict-ci-root",
+   "iac-docker-socket-docker-compose.yml:14"
+  ],
+  "supabase-supabase-flutter": [
+   "ci-silenced-failure-.github/workflows/example-integration-tests.yml-324",
+   "secret-entropy-supabase/config.toml:363"
+  ],
+  "hibiken-asynq": [
+   "ci-disabled-.github/workflows/benchstat.yml-12"
+  ],
+  "microsoft-vscode-js-debug": [
+   "insecure-tls-verification-off-src/adapter/resourceProvider/basicResourceProvider.ts:95"
+  ],
+  "api-platform-demo": [
+   "insecure-php-unserialize-api/src/Security/Voter/OidcRoleVoter.php:54"
+  ],
+  "symfony-demo": [
+   "bloat-data/database.sqlite"
+  ],
+  "aws-amplify-docs": [
+   "dep-unused-parse-imports",
+   "insecure-exec-interpolated-tasks/generate-sitemap.mjs:60"
+  ],
+  "caprover-caprover": [
+   "docker-add-url-release/dockerfile.edge:24",
+   "insecure-weak-hash-src/utils/ApacheMd5.ts:92"
+  ],
+  "temporalio-samples-typescript": [
+   "docs-drift-manager-nestjs-exchange-rates/README.md-14"
+  ],
+  "microsoft-vscode-python": [
+   "ci-disabled-.github/workflows/pr-check.yml-483",
+   "insecure-py-eval-exec-python_files/get_output_via_markers.py:19",
+   "insecure-py-eval-exec-python_files/unittestadapter/django_handler.py:107"
+  ],
+  "alacritty-alacritty-theme": [
+   "hygiene-no-tests"
+  ],
+  "mezzio-mezzio-skeleton": [
+   "ci-tests-not-run"
+  ],
+  "colyseus-colyseus": [
+   "docs-drift-script-packages/sdk/README.md-40",
+   "insecure-random-for-secret-packages/sdk/src/debug.ts:76"
+  ],
+  "laravel-telescope": [
+   "insecure-innerhtml-dynamic-resources/js/screens/dumps/sfdump.js:223",
+   "insecure-php-unserialize-src/Watchers/JobWatcher.php:244"
+  ],
+  "aws-amplify-amplify-js-samples": [
+   "hygiene-no-ci",
+   "insecure-ssrf-samples/react/auth/authenticator/src/serviceWorker.js:103"
+  ],
+  "coollabsio-coolify-docs": [
+   "env-missing-CONCURRENCY",
+   "env-missing-DOCS_URL"
+  ],
+  "temporalio-samples-python": [
+   "insecure-py-os-system-openai_agents/mcp/workflows/prompt_server_workflow.py:67"
+  ],
+  "pmndrs-drei": [
+   "ci-no-pr-trigger"
+  ],
+  "codemirror-dev": [
+   "docs-drift-badge-README.md-7"
+  ],
+  "jesseduffield-lazygit": [
+   "insecure-exec-interpolated-pkg/integration/clients/tui.go:126",
+   "insecure-sql-interpolated-pkg/gui/controllers/helpers/branches_helper.go:643"
+  ],
+  "dokploy-dokploy": [
+   "insecure-localstorage-secret-apps/dokploy/pages/swagger.tsx:51",
+   "insecure-weak-hash-packages/server/src/utils/dns/ovh.ts:69"
+  ],
+  "fastly-compute-starter-kit-javascript-default": [
+   "dep-unused-@fastly/js-compute"
+  ],
+  "vercel-examples": [
+   "ci-no-pr-trigger",
+   "dead-code-uikit-apps/vibe-coding-platform/components/ui"
+  ],
+  "rq-rq": [
+   "insecure-py-pickle-load-rq/worker/worker_classes.py:248"
+  ],
+  "radix-ui-primitives": [
+   "secret-history-npm-token-.npmrc@9904dc32"
+  ],
+  "tj-n": [
+   "hygiene-no-ci"
+  ],
+  "riverqueue-river": [
+   "hygiene-no-readme",
+   "insecure-ruby-dynamic-dispatch-ruby/lib/client.rb:271"
+  ],
+  "motiondivision-motion": [
+   "config-conflict-ci-root",
+   "eol-node-.devcontainer/Dockerfile-5",
+   "insecure-innerhtml-dynamic-dev/html/src/vgpu.js:142"
+  ],
+  "vapor-vapor": [
+   "secret-private-key-Sources/Development/configure.swift:95"
+  ],
+  "square-leakcanary": [
+   "insecure-java-deserialization-leakcanary/leakcanary-app/src/main/java/org/leakcanary/util/Serializables.kt:21"
+  ],
+  "cfug-dio": [
+   "secret-history-google-api-key-example/post_stream_and_bytes.dart@63e78bf"
+  ],
+  "software-mansion-react-native-reanimated": [
+   "docs-drift-manager-apps/web-example/README.md-10",
+   "docs-drift-script-apps/web-example/README.md-33",
+   "insecure-eval-dynamic-packages/react-native-worklets/src/memory/valueUnpacker.native.ts:50",
+   "insecure-react-dangerous-html-apps/next-example/pages/_document.js:43",
+   "skiptest-apps/common-app/runtime-tests/reanimated/tests/StrictMode/StrictMode.test.tsx:49"
+  ],
+  "expo-expo-cli": [
+   "eol-runner-.github/workflows/issue-triage.yml-52"
+  ],
+  "akka-akka": [
+   "doclink-akka-docs/src/main/paradox/actors.md:483:akka.actor.Actor"
+  ],
+  "postgrest-postgrest": [
+   "secret-history-entropy-nix/tools/loadtest.nix@69072116"
+  ],
+  "gohugoio-hugo": [
+   "docker-add-url-Dockerfile:48",
+   "insecure-go-template-html-helpers/content.go:91",
+   "insecure-go-template-html-hugolib/shortcode.go:500"
+  ],
+  "minio-minio": [
+   "docker-latest-Dockerfile.release.old_cpu:35"
+  ],
+  "etcd-io-etcd": [
+   "docs-drift-badge-README.md-5",
+   "script-injection-.github/workflows/bump-devcontainer-version.yml-44"
+  ],
+  "hashicorp-consul": [
+   "eol-runner-.github/workflows/reusable-dev-build-windows.yml-29",
+   "insecure-document-write-dynamic-ui/packages/consul-ui/app/router.js:64",
+   "insecure-document-write-dynamic-ui/packages/consul-ui/app/utils/get-environment.js:77"
+  ],
+  "hashicorp-nomad": [
+   "ci-silenced-failure-.github/workflows/test-ui.yml-71",
+   "insecure-exec-interpolated-drivers/qemu/driver.go:264",
+   "self-hosted-runner-.github/workflows/test-ui.yml-101"
+  ],
+  "argoproj-argo-cd": [
+   "config-conflict-babel-ui",
+   "docker-latest-hack/Dockerfile.dev-tools:1",
+   "docker-untagged-Dockerfile.dev:4",
+   "env-no-example"
+  ],
+  "fluxcd-flux2": [
+   "ci-disabled-.github/workflows/conformance.yaml-170",
+   "ci-disabled-.github/workflows/conformance.yaml-75"
+  ],
+  "cilium-cilium": [
+   "insecure-go-template-html-cilium-cli/sysdump/writers.go:100"
+  ],
+  "istio-istio": [
+   "hygiene-no-ci"
+  ],
+  "linkerd-linkerd2": [
+   "docker-untagged-viz/metrics-api/Dockerfile:13"
+  ],
+  "anchore-grype": [
+   "docs-drift-badge-README.md-10"
+  ],
+  "forem-forem": [
+   "iac-docker-socket-docker-compose.yml:68",
+   "insecure-innerhtml-dynamic-app/javascript/utilities/podcastPlayback.js:213",
+   "insecure-ruby-dynamic-dispatch-app/controllers/reactions_controller.rb:92",
+   "insecure-ruby-marshal-load-app/models/settings/base.rb:219"
+  ],
+  "chatwoot-chatwoot": [
+   "insecure-ruby-dynamic-dispatch-app/controllers/api/v1/accounts/notifications_controller.rb:68",
+   "insecure-ruby-marshal-load-lib/active_storage/migrator.rb:21"
+  ],
+  "mattermost-mattermost": [
+   "insecure-go-template-html-server/channels/app/email/email.go:632",
+   "insecure-random-for-secret-webapp/channels/src/components/apps_form/apps_form_field/apps_form_select_field.tsx:72",
+   "insecure-tls-verification-off-e2e-tests/playwright/lib/src/util.ts:68"
+  ],
+  "immich-app-immich": [
+   "insecure-py-pickle-load-machine-learning/immich_ml/sessions/prepare.py:19"
+  ],
+  "n8n-io-n8n": [
+   "docker-latest-docker/images/runners/Dockerfile.distroless:204",
+   "iac-privileged-.devcontainer/codespaces/docker-compose.yml:19",
+   "insecure-tls-verification-off-packages/@n8n/backend-network/src/http/outbound-http.ts:308",
+   "insecure-weak-hash-packages/@n8n/backend-network/src/http/axios/utils.ts:232",
+   "secret-openai-key-packages/cli/src/modules/instance-ai/__tests__/instance-ai-verification.service.test.ts:183"
+  ],
+  "calcom-cal-com": [
+   "dead-code-uikit-packages/platform/atoms/src/components/ui",
+   "insecure-random-for-secret-apps/web/components/apps/make/Setup.tsx:38",
+   "insecure-weak-hash-packages/features/auth/lib/verifyEmail.ts:105"
+  ],
+  "getsentry-sentry-javascript": [
+   "docs-drift-script-packages/profiling-node/README.md-46"
+  ],
+  "excalidraw-excalidraw": [
+   "insecure-random-for-secret-packages/excalidraw/components/CursorHint.tsx:77"
+  ],
+  "tldraw-tldraw": [
+   "action-tag-.github/workflows/playwright-dotcom.yml-38",
+   "action-tag-first-party-.github/workflows/playwright-dotcom.yml-35",
+   "bloat-apps/vscode/extension/release/tldraw-vscode.vsix",
+   "commented-packages/tldraw/src/test/SelectTool.test.ts:579",
+   "debug-packages/create-tldraw/src/utils.ts:38",
+   "doclink-skills/tldraw-migrate/SKILL.md:29:references/tldraw-full-docs.txt",
+   "docs-drift-manager-templates/branching-chat/README.md-29",
+   "insecure-exec-interpolated-skills/tldraw-migrate/detect-versions.mjs:86",
+   "insecure-innerhtml-dynamic-packages/tldraw/src/lib/ui/components/DefaultDebugPanel.tsx:69",
+   "insecure-react-dangerous-html-packages/commenting/src/canvas/comment-body.tsx:20",
+   "insecure-ssrf-packages/editor/src/lib/license/LicenseManager.ts:353",
+   "secret-entropy-internal/scripts/lib/posthog.ts:8",
+   "skiptest-packages/tldraw/src/test/commands/setPageState.test.ts:9",
+   "todo-packages/tlschema/src/misc/TLHandle.ts:95"
+  ],
+  "siyuan-note-siyuan": [
+   "ci-silenced-failure-.github/workflows/cd.yml-32"
+  ],
+  "photoprism-photoprism": [
+   "iac-privileged-compose.nvidia.yaml:16",
+   "iac-privileged-setup/podman/docker-compose.yml:52",
+   "insecure-go-template-html-internal/config/client_assets.go:139",
+   "insecure-localstorage-secret-frontend/tests/vitest/common/session.test.js:415"
+  ],
+  "go-gitea-gitea": [
+   "script-injection-.github/workflows/pull-labeler.yml-44"
+  ],
+  "zhanymkanov-fastapi-best-practices": [
+   "hygiene-no-ci"
+  ],
+  "saleor-saleor": [
+   "env-missing-RSA_PRIVATE_KEY"
+  ],
+  "litestar-org-litestar": [
+   "action-tag-.github/workflows/ci.yml-128",
+   "action-tag-first-party-.github/workflows/docs-preview.yml-18",
+   "dead-symbol-litestar/utils/signature.py:47",
+   "duplicate-litestar/security/jwt/auth.py-142",
+   "no-permissions-.github/workflows/ci.yml-1",
+   "skiptest-docs/examples/testing/test_health_check_async.py:24",
+   "todo-litestar/_openapi/datastructures.py:142"
+  ],
+  "sqlalchemy-alembic": [
+   "insecure-py-eval-exec-alembic/util/langhelpers.py:214"
+  ],
+  "bogdanp-dramatiq": [
+   "insecure-py-pickle-load-dramatiq/encoder.py:79"
+  ],
+  "apache-airflow-client-python": [
+   "eol-runner-.github/workflows/stale.yml-30"
+  ],
+  "astronomer-astronomer-cosmos": [
+   "pr-target-checkout-.github/workflows/test-unprivileged.yml-358"
+  ],
+  "dagster-io-hooli-data-eng-pipelines": [
+   "hygiene-no-license"
+  ],
+  "kedro-org-kedro": [
+   "script-injection-.github/workflows/pipeline-performance-test.yml-53"
+  ],
+  "apache-superset": [
+   "iac-host-namespace-docker-compose.yml:295"
+  ],
+  "dlt-hub-dlt": [
+   "insecure-py-eval-exec-dlt/common/typing.py:659",
+   "insecure-py-pickle-load-dlt/pipeline/trace.py:352",
+   "pr-target-checkout-.github/workflows/test_destinations_remote.yml-302"
+  ],
+  "mage-ai-mage-ai": [
+   "bloat-mage_ai/server/frontend_dist_base_path_template/_next/static/media/onig.25dd2e6f.wasm",
+   "commented-mage_ai/frontend/components/VersionControlFileDiffs/index.tsx:125",
+   "docker-latest-integrations/hadoop/Dockerfile:1",
+   "doclink-SUMMARY.md:50:docs/guides/dbt/tests.md",
+   "env-no-example",
+   "eol-node-.github/workflows/build_and_test.yml-127",
+   "eol-python-test_branch.Dockerfile-1",
+   "insecure-py-eval-exec-mage_ai/data_preparation/models/block/__init__.py:2039",
+   "insecure-react-dangerous-html-mage_ai/frontend/components/ErrorPopup/useErrorViews.tsx:134",
+   "insecure-sql-interpolated-mage_ai/data_preparation/models/block/sql/mssql.py:95",
+   "no-permissions-.github/workflows/publish_docker_image.yml-1",
+   "secret-slack-webhook-docs/observability/alerting/alerting-slack.mdx:57",
+   "skiptest-mage_integrations/mage_integrations/sources/mongodb/tests/test_mongodb_log_based_interruptible.py:101"
+  ],
+  "datatalksclub-data-engineering-zoomcamp": [
+   "docker-untagged-07-streaming/extras/extras/python/docker/spark/spark-master.Dockerfile:1",
+   "secret-slack-webhook-cohorts/2023/week_2_workflow_orchestration/homework.md:82"
+  ],
+  "apache-airflow-site": [
+   "doclink-CONTRIBUTE.md:274:image.png",
+   "eol-python-sphinx_airflow_theme/pyproject.toml-50",
+   "insecure-innerhtml-dynamic-landing-pages/src/js/meetupsList.js:54"
+  ],
+  "huggingface-text-generation-inference": [
+   "docker-add-url-Dockerfile.neuron:8",
+   "insecure-py-shell-true-backends/gaudi/server/text_generation_server/utils/version.py:11"
+  ],
+  "pytorch-serve": [
+   "eol-runner-.github/workflows/torchserve-nightly-build.yml-10",
+   "insecure-py-verify-false-ts_scripts/tsutils.py:147"
+  ],
+  "mlrun-mlrun": [
+   "insecure-py-pickle-load-mlrun/frameworks/lgbm/model_handler.py:218",
+   "insecure-py-shell-true-automation/package_test/test.py:222"
+  ],
+  "evidentlyai-evidently": [
+   "insecure-py-verify-false-src/evidently/legacy/ui/demo_projects/bikes.py:38"
+  ],
+  "jhipster-jhipster-sample-app": [
+   "insecure-localstorage-secret-src/main/webapp/app/core/auth/auth-jwt.service.spec.ts:38",
+   "lockfile-missing"
+  ],
+  "quarkusio-quarkus-quickstarts": [
+   "ci-tests-not-run"
+  ],
+  "micronaut-projects-micronaut-core": [
+   "insecure-java-deserialization-core/src/main/java/io/micronaut/core/serialize/JdkSerializer.java:101"
+  ],
+  "yunaiv-ruoyi-vue-pro": [
+   "ci-no-pr-trigger",
+   "iac-dangerous-capability-script/livekit-poc/mp-gateway/docker-compose.yml:80",
+   "iac-host-namespace-script/livekit-poc/mp-gateway/docker-compose.yml:107"
+  ],
+  "masstransit-masstransit": [
+   "ci-disabled-.github/workflows/build.yml-133"
+  ],
+  "hangfireio-hangfire": [
+   "insecure-dotnet-deserialization-src/Hangfire.Core/Common/SerializationHelper.cs:215"
+  ],
+  "kareadita-kavita": [
+   "insecure-sql-interpolated-Kavita.Server/ManualMigrations/v0.9.1/ManualMigrationMetadataSettingFieldRenumber.cs:39"
+  ],
+  "laravel-laravel": [
+   "env-dead-BROADCAST_CONNECTION"
+  ],
+  "firefly-iii-firefly-iii": [
+   "env-dead-PUSHER_KEY",
+   "env-missing-DEBUGBAR_OPEN_STORAGE"
+  ],
+  "symfony-symfony-docs": [
+   "hygiene-no-tests"
+  ],
+  "akaunting-akaunting": [
+   "insecure-php-unserialize-app/Providers/Queue.php:97",
+   "insecure-php-unserialize-app/Utilities/ReportCache.php:133"
+  ],
+  "pixelfed-pixelfed": [
+   "env-missing-INSTANCE_LANDING_SHOW_EXPLORE",
+   "insecure-new-function-resources/assets/js/polyfill.js:532"
+  ],
+  "doctrine-orm": [
+   "insecure-php-unserialize-src/Id/SequenceGenerator.php:103"
+  ],
+  "sylius-sylius": [
+   "insecure-php-unserialize-src/Sylius/Behat/Service/SecurityService.php:70"
+  ],
+  "matomo-org-matomo": [
+   "license-unknown-chroma-js"
+  ],
+  "solidtime-io-solidtime": [
+   "env-dead-NGINX_HOST_NAME"
+  ],
+  "rubygems-rubygems-org": [
+   "docker-add-url-Dockerfile:125",
+   "secret-history-entropy-config/deploy/staging/secrets.ejson@54d9c4f8e",
+   "secret-history-entropy-config/deploy/staging/secrets.ejson@54d9c4f8e",
+   "secret-history-entropy-config/deploy/staging/secrets.ejson@54d9c4f8e",
+   "secret-history-entropy-config/deploy/staging/secrets.ejson@54d9c4f8e",
+   "secret-history-entropy-config/deploy/staging/secrets.ejson@54d9c4f8e",
+   "secret-history-entropy-config/deploy/staging/secrets.ejson@54d9c4f8e",
+   "secret-history-entropy-config/deploy/staging/secrets.ejson@54d9c4f8e"
+  ],
+  "openstreetmap-openstreetmap-website": [
+   "busfactor-config/initializers/errors.rb",
+   "commented-test/javascripts/osm_test.js:1",
+   "dep-unused-@openstreetmap/id",
+   "docker-root-Dockerfile",
+   "duplicate-app/models/relation.rb-35",
+   "env-no-example",
+   "insecure-sql-interpolated-app/controllers/concerns/pagination_methods.rb:18",
+   "no-permissions-.github/workflows/devcontainer.yml-1",
+   "todo-app/models/relation.rb:123"
+  ],
+  "rails-solid-queue": [
+   "insecure-eval-dynamic-app/jobs/solid_queue/recurring_job.rb:7"
+  ],
+  "consul-consul": [
+   "env-no-example",
+   "insecure-eval-dynamic-config/initializers/routing.rb:3",
+   "insecure-exec-interpolated-config/deploy.rb:28",
+   "insecure-ruby-marshal-load-config/application.rb:40",
+   "insecure-sql-interpolated-app/models/concerns/globalizable.rb:139",
+   "secret-entropy-config/locales/zh-TW/management.yml:106"
+  ],
+  "apache-age": [
+   "ci-silenced-failure-.github/workflows/installcheck.yaml-90",
+   "dead-symbol-drivers/python/age/age.py:345",
+   "docker-root-docker/Dockerfile",
+   "eol-node-.github/workflows/nodejs-driver.yaml-27",
+   "eol-python-drivers/python/pyproject.toml-25",
+   "insecure-sql-interpolated-drivers/nodejs/src/index.ts:302"
+  ],
+  "sqlc-dev-sqlc": [
+   "ci-disabled-.github/workflows/ci-kotlin.yml-13",
+   "ci-disabled-.github/workflows/ci-python.yml-13",
+   "iac-host-namespace-docker-compose.yml:47"
+  ],
+  "vbenjs-vue-vben-admin": [
+   "action-tag-.github/workflows/deploy.yml-119",
+   "busfactor-packages/effects/layouts/src/basic/index.ts",
+   "commented-packages/effects/plugins/src/vxe-table/use-vxe-grid.ts:75",
+   "duplicate-apps/web-antd/src/router/guard.ts-17",
+   "insecure-ssrf-packages/effects/request/src/request-client/modules/sse.ts:90",
+   "no-permissions-.github/workflows/rerun.yml-1",
+   "todo-apps/backend-mock/utils/jwt-utils.ts:10"
+  ],
+  "solidos-solid-ui": [
+   "insecure-innerhtml-dynamic-src/login/login.ts:1053"
+  ],
+  "remix-run-indie-stack": [
+   "env-dead-DATABASE_URL",
+   "env-missing-REMIX_DEV_HTTP_ORIGIN",
+   "lockfile-missing"
+  ],
+  "rocketseat-umbriel": [
+   "insecure-localstorage-secret-packages/web/src/pages/SignIn/index.tsx:19",
+   "insecure-react-dangerous-html-packages/web/src/pages/MessageDetail/index.tsx:100"
+  ],
+  "standardnotes-app": [
+   "ci-disabled-.github/workflows/publish.yml-100",
+   "env-dead-PORT",
+   "env-missing-APP_RELATIVE_PATH",
+   "insecure-react-dangerous-html-packages/web/src/javascripts/Components/NoteView/PlainEditor/search/PlainEditorSearchBackdrop.tsx:47"
+  ],
+  "kong-insomnia": [
+   "ci-swallowed-.github/workflows/insomnia-test.yml-179"
+  ],
+  "usebruno-bruno": [
+   "config-conflict-babel-packages/bruno-app",
+   "docs-drift-badge-readme.md-7",
+   "insecure-tls-verification-off-packages/bruno-cli/src/commands/import.js:135",
+   "insecure-weak-hash-packages/bruno-electron/src/ipc/network/prepare-request.js:76"
+  ],
+  "freetubeapp-freetube": [
+   "insecure-new-function-src/botGuardScript.js:69",
+   "insecure-ssrf-_scripts/getInstances.js:4"
+  ],
+  "th-ch-youtube-music": [
+   "insecure-localstorage-secret-src/plugins/synced-lyrics/providers/MusixMatch.ts:273",
+   "insecure-weak-hash-src/plugins/scrobbler/services/lastfm.ts:228"
+  ],
+  "ferdium-ferdium-app": [
+   "insecure-localstorage-secret-src/stores/UserStore.ts:375"
+  ],
+  "upscayl-upscayl": [
+   "ci-no-pr-trigger",
+   "eol-runner-.github/workflows/main.yml-12"
+  ],
+  "gorhill-ublock": [
+   "insecure-random-for-secret-platform/mv3/extension/js/scripting/tool-overlay.js:40"
+  ],
+  "vuejs-language-tools": [
+   "script-injection-.github/workflows/auto-fix.yml-41"
+  ],
+  "gitkraken-vscode-gitlens": [
+   "insecure-tls-verification-off-src/env/node/fetch.ts:14"
+  ],
+  "pkief-vscode-material-icon-theme": [
+   "pr-target-checkout-.github/workflows/icon-review.yml-25"
+  ],
+  "quasarframework-quasar": [
+   "insecure-document-write-dynamic-ui/src/components/editor/editor-caret.js:274",
+   "insecure-new-function-create-quasar/lib/template.js:287"
+  ],
+  "skeletonlabs-skeleton": [
+   "insecure-exec-interpolated-packages/cli/src/utility/install-dependencies.ts:15",
+   "skiptest-packages/skeleton-svelte/test/components/portal.test.ts:21"
+  ],
+  "nocodb-nocodb": [
+   "docs-drift-manager-packages/nc-gui/README.md-11",
+   "docs-drift-script-packages/nc-gui/README.md-39",
+   "insecure-innerhtml-dynamic-packages/nc-gui/helpers/tiptap-markdown/extensions/nodes/html.ts:48",
+   "insecure-tls-verification-off-packages/nocodb-sdk/src/lib/connectionConfigUtils.ts:88"
+  ],
+  "strapi-strapi": [
+   "insecure-localstorage-secret-packages/core/admin/admin/src/utils/getFetchClient.ts:143",
+   "insecure-react-dangerous-html-packages/core/content-manager/admin/src/pages/EditView/components/FormInputs/Wysiwyg/PreviewWysiwyg.tsx:20"
+  ],
+  "lobehub-lobe-chat": [
+   "docs-drift-script-packages/memory-user-memory/benchmarks/locomo/README.md-125",
+   "iac-host-namespace-docker-compose/eval/docker-compose.yml:93"
+  ],
+  "openstatushq-openstatus": [
+   "dead-code-uikit-packages/ui/src/components/ui"
+  ],
+  "storybookjs-storybook": [
+   "insecure-random-for-secret-code/renderers/web-components/src/docgen/story-docs/template-print.ts:69"
+  ],
+  "iczer-vue-antd-admin": [
+   "docs-drift-manager-README.md-51",
+   "insecure-random-for-secret-src/mock/user/login.js:32"
+  ],
+  "pure-admin-vue-pure-admin": [
+   "insecure-eval-dynamic-public/wasm/capture.worker.js:10414"
+  ],
+  "ngrx-platform": [
+   "action-tag-.github/workflows/ci.yml-117",
+   "action-tag-first-party-.github/workflows/ci.yml-18",
+   "debug-projects/example-app/src/app/reducers/index.ts:49",
+   "dep-unused-firebase-admin",
+   "doclink-projects/www/src/app/pages/guide/data/extension-points.md:122:api/data/EntitySelectors",
+   "insecure-ssrf-modules/data/src/dataservices/default-data.service.ts:219",
+   "secret-entropy-nx.json:84"
+  ],
+  "solidjs-solid-realworld": [
+   "hygiene-no-license"
+  ],
+  "lencx-chatgpt": [
+   "hygiene-no-ci",
+   "hygiene-no-license"
+  ],
+  "kitware-vtk-js": [
+   "dep-unused-@webgpu/types"
+  ],
+  "notable-notable": [
+   "hygiene-no-ci",
+   "hygiene-no-license",
+   "hygiene-no-tests"
+  ],
+  "ovity-octotree": [
+   "lockfile-drift-chromedriver"
+  ],
+  "alexdima-vscode-copy-relative-path": [
+   "lockfile-missing"
+  ],
+  "google-zx": [
+   "commented-scripts/build-dts.mjs:43",
+   "debug-src/goods.ts:156",
+   "docker-root-dcr/Dockerfile",
+   "doclink-docs/configuration.md:103:src/log.ts",
+   "eol-node-package.json-67",
+   "insecure-exec-interpolated-src/core.ts:1071",
+   "insecure-ssrf-src/goods.ts:120",
+   "skiptest-test/core.test.js:159"
+  ],
+  "goreleaser-goreleaser": [
+   "busfactor-internal/pipe/release/doc.go",
+   "docker-root-Dockerfile",
+   "duplicate-internal/pipe/aur/tmpl.go-27",
+   "eol-python-internal/builders/poetry/testdata/proj/pyproject.toml-4",
+   "secret-entropy-internal/pipe/env/env.go:45",
+   "secret-private-key-internal/http/testkey.pem:1",
+   "todo-internal/pipe/nfpm/nfpm.go:233"
+  ],
+  "metalsmith-metalsmith": [
+   "docs-drift-script-CONTRIBUTING.md-32",
+   "eol-node-package.json-91"
+  ],
+  "tabler-tabler": [
+   "env-no-example"
+  ],
+  "jetstack-cert-manager": [
+   "ci-no-pr-trigger"
+  ],
+  "fluxcd-flagger": [
+   "docker-add-url-Dockerfile.loadtester:61"
+  ],
+  "stefanprodan-podinfo": [
+   "iac-privilege-escalation-charts/podinfo/templates/deployment.yaml:55",
+   "iac-privilege-escalation-deploy/secure/frontend/deployment.yaml:40"
+  ],
+  "runatlantis-atlantis": [
+   "iac-public-bucket-runatlantis.io/blog/2018/hosting-our-static-site/code/full.tf:3",
+   "iac-public-bucket-runatlantis.io/blog/2018/hosting-our-static-site/code/s3-bucket.tf:6"
+  ],
+  "owasp-serverless-goat": [
+   "iac-public-bucket-template.yaml:50"
+  ],
+  "nccgroup-sadcloud": [
+   "iac-hardcoded-password-modules/aws/rds/main.tf:14",
+   "iac-iam-wildcard-modules/aws/iam/main.tf:172",
+   "iac-iam-wildcard-modules/aws/iam/main.tf:201"
+  ],
+  "rhinosecuritylabs-cloudgoat": [
+   "ci-swallowed-.github/workflows/test.yaml-75",
+   "iac-hardcoded-password-cloudgoat/scenarios/aws/sns_secrets/terraform/api_gateway.tf:52",
+   "iac-public-bucket-cloudgoat/scenarios/aws/vulnerable_cognito/terraform/s3.tf:25",
+   "iac-unencrypted-cloudgoat/scenarios/aws/vpc_peering_overexposed/terraform/rds.tf:32",
+   "insecure-exec-interpolated-cloudgoat/scenarios/aws/ecs_privesc_evade_protection/assets/ssrf-web/index.php:29",
+   "insecure-py-eval-exec-cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/sqlite_utils/cli.py:2126",
+   "insecure-py-os-system-cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/click/_termui_impl.py:366",
+   "insecure-py-shell-true-cloudgoat/scenarios/aws/ecs_privesc_evade_protection/terraform/push-dockerfile.py:13",
+   "insecure-sql-interpolated-cloudgoat/scenarios/aws/vulnerable_lambda/terraform/lambda_source_code/policy_applier_lambda1_src/main.py:26",
+   "secret-aws-access-key-cloudgoat/scenarios/aws/sns_secrets/cheat_sheet.md:25",
+   "secret-entropy-cloudgoat/scenarios/aws/secrets_in_the_cloud/terraform/lambda_function.tf:30"
+  ],
+  "s4n7h0-xvwa": [
+   "insecure-php-reflected-xss-vulnerabilities/reflected_xss/home.php:32",
+   "insecure-php-unserialize-vulnerabilities/php_object_injection/home.php:38"
+  ],
+  "hackademic-hackademic": [
+   "insecure-php-reflected-xss-challenges/ch018/index.php:120"
+  ],
+  "oliverwiegers-pentest-lab": [
+   "secret-history-entropy-etc/heimdall/config/www/SupportedApps/GitLab/GitLab.php@1991575"
+  ],
+  "facebookarchive-fbctf": [
+   "insecure-php-unserialize-src/models/Session.php:52",
+   "lockfile-missing"
+  ],
+  "rsactftool-rsactftool": [
+   "secret-history-private-key-attacks/single_key/partial_d.py@c42f959"
+  ],
+  "sqlmapproject-sqlmap": [
+   "insecure-py-eval-exec-lib/request/inject.py:832",
+   "insecure-py-os-system-extra/beep/beep.py:41"
+  ],
+  "projectdiscovery-nuclei": [
+   "docker-latest-Dockerfile:11",
+   "insecure-java-deserialization-pkg/protocols/common/helpers/deserialization/testdata/Deserialize.java:17"
+  ],
+  "ffuf-ffuf": [
+   "busfactor-pkg/output/audit.go",
+   "no-permissions-.github/workflows/test.yml-1",
+   "todo-pkg/ffuf/optionsparser.go:234"
+  ],
+  "swisskyrepo-payloadsallthethings": [
+   "insecure-ruby-marshal-load-Insecure Deserialization/Files/Ruby_universal_gadget_generate_verify.rb:47"
+  ],
+  "sullo-nikto": [
+   "ci-no-pr-trigger"
+  ],
+  "espressif-esp-idf-template": [
+   "hygiene-no-ci"
+  ],
+  "arendst-tasmota": [
+   "ci-tests-not-run",
+   "docker-latest-lib/lib_div/arduino-vid6608/Dockerfile:2",
+   "insecure-py-shell-true-pio-tools/post_esp32.py:347"
+  ],
+  "marlinfirmware-marlin": [
+   "insecure-py-shell-true-buildroot/bin/parallel_build.py:224"
+  ],
+  "rust-embedded-rust-raspberrypi-os-tutorials": [
+   "docs-drift-badge-README.md-3"
+  ],
+  "fastled-fastled": [
+   "insecure-new-function-src/platforms/wasm/compiler/modules/core/fastled_background_worker.ts:379",
+   "insecure-py-yaml-load-ci/release_gate.py:36"
+  ],
+  "serenityos-jakt": [
+   "debug-editors/vscode/server/src/server.ts:88"
+  ],
+  "lvgl-lvgl": [
+   "self-hosted-runner-.github/workflows/build_hardware.yml-11"
+  ],
+  "klipper3d-klipper": [
+   "insecure-py-os-system-klippy/chelper/__init__.py:270"
+  ],
+  "hashicorp-consul-k8s": [
+   "docker-untagged-control-plane/Dockerfile.dev:7"
+  ],
+  "hashicorp-learn-terraform-modules": [
+   "iac-public-bucket-modules/aws-s3-static-website-bucket/main.tf:22",
+   "iac-public-bucket-modules/aws-s3-static-website-bucket/main.tf:23"
+  ],
+  "openstack-kolla-ansible": [
+   "insecure-py-eval-exec-ansible/library/kolla_toolbox.py:378",
+   "insecure-py-os-system-deploy-guide/source/conf.py:76",
+   "secret-entropy-pyproject.toml:34"
+  ],
+  "pulumi-templates": [
+   "action-tag-.github/workflows/test-templates.yml-79",
+   "action-tag-first-party-.github/workflows/command-dispatch.yml-22",
+   "busfactor-container-azure-csharp/app/Program.cs",
+   "debug-esc-connector-lambda-typescript/index.ts:59",
+   "docker-root-container-aws-csharp/app/Dockerfile",
+   "docker-untagged-container-azure-go/app/Dockerfile:11",
+   "duplicate-serverless-gcp-hcl/app/main.py-6",
+   "eol-node-.github/workflows/build-metadata.yml-24",
+   "insecure-ssrf-serverless-cloudflare-typescript/worker.js:2",
+   "no-permissions-.github/workflows/pr.yml-1"
+  ],
+  "pulumi-pulumi-eks": [
+   "insecure-tls-verification-off-nodejs/eks/cluster/cluster.ts:821"
+  ],
+  "yavuzlar-vulnlab": [
+   "insecure-php-reflected-xss-app/lab/xss/basic-dom-based/index.php:44",
+   "insecure-php-reflected-xss-app/lab/xss/basic-dom-based/index.php:45"
+  ],
+  "globocom-huskyci": [
+   "iac-privileged-deployments/docker-compose.yml:5"
+  ],
+  "rapid7-metasploit-payloads": [
+   "insecure-py-pickle-load-c/meterpreter/source/extensions/python/Lib/subprocess.py:1334"
+  ],
+  "neo23x0-loki": [
+   "ci-swallowed-.github/workflows/lint_python.yml-16"
+  ],
+  "carlospolop-peass-ng": [
+   "insecure-dotnet-deserialization-winPEAS/winPEASexe/winPEAS/TaskScheduler/Task.cs:2173",
+   "insecure-py-os-system-linPEAS/builder/src/yamlGlobals.py:10"
+  ],
+  "fortra-impacket": [
+   "ci-silenced-failure-.github/workflows/build_and_test.yml-90"
+  ],
+  "hashcat-hashcat": [
+   "docs-drift-badge-deps/sse2neon/README.md-2"
+  ],
+  "jeremylong-dependencycheck": [
+   "eol-python-core/src/test/resources/python-myproject-toml/pyproject.toml-10"
+  ],
+  "google-oss-fuzz-gen": [
+   "iac-privileged-ci/k8s/pr-exp.yaml:40",
+   "insecure-py-pickle-load-ossfuzz_py/data/storage_manager.py:236"
+  ],
+  "pwndbg-pwndbg": [
+   "iac-dangerous-capability-docker-compose.yml:7"
+  ],
+  "raspberrypi-pico-sdk": [
+   "self-hosted-runner-.github/workflows/cmake.yml-16"
+  ],
+  "tock-tock": [
+   "eol-python-tools/svd2regs/pyproject.toml-10"
+  ],
+  "theseus-os-theseus": [
+   "hygiene-no-tests"
+  ],
+  "nuta-resea": [
+   "eol-runner-.github/workflows/unit_tests.yml-11"
+  ],
+  "thethingsnetwork-arduino-device-lib": [
+   "commented-src/TheThingsNetwork.cpp:1068"
+  ],
+  "ddnexus-pagy": [
+   "action-tag-.github/workflows/api-test.yml-34",
+   "no-permissions-.github/workflows/api-test.yml-1"
+  ],
+  "roncoo-roncoo-pay": [
+   "commented-roncoo-pay-common-core/src/main/java/com/roncoo/pay/common/core/utils/DateUtils.java:590",
+   "commented-roncoo-pay-web-boss/src/main/webapp/common/scan/pay_files/common.js:29",
+   "commented-roncoo-pay-web-boss/src/main/webapp/common/scan/pay_files/common.js:31663",
+   "commented-roncoo-pay-web-boss/src/main/webapp/common/scan/pay_files/common.js:39",
+   "commented-roncoo-pay-web-boss/src/main/webapp/common/scan/pay_files/common.js:9131"
+  ],
+  "mbleigh-acts-as-taggable-on": [
+   "action-tag-.github/workflows/spec.yml-58",
+   "no-permissions-.github/workflows/spec.yml-1"
+  ],
+  "trinea-android-common": [
+   "commented-src/main/java/cn/trinea/android/common/util/ViewUtils.java:71",
+   "commented-src/main/java/cn/trinea/android/common/util/ViewUtils.java:89",
+   "commented-src/main/java/cn/trinea/android/common/util/ViewUtils.java:96"
+  ],
+  "react-native-config-react-native-config": [
+   "action-tag-.github/workflows/example-ci.yml-56",
+   "no-permissions-.github/workflows/example-ci.yml-1"
+  ],
+  "go-mysql-org-go-mysql": [
+   "action-tag-.github/workflows/ci.yml-141"
+  ],
+  "alvinreal-awesome-opensource-ai": [
+   "no-permissions-.github/workflows/validate-awesome.yml-1"
+  ],
+  "rubensousa-gravitysnaphelper": [
+   "action-tag-.github/workflows/pullrequest.yml-25",
+   "no-permissions-.github/workflows/pullrequest.yml-1"
+  ],
+  "slack-go-slack": [
+   "commented-slackevents/inner_events.go:434"
+  ],
+  "opal-opal": [
+   "action-tag-.github/workflows/build.yml-101"
+  ],
+  "spring-cloud-spring-cloud-netflix": [
+   "commented-spring-cloud-netflix-eureka-client/src/main/java/org/springframework/cloud/netflix/eureka/EurekaClientAutoConfiguration.java:240"
+  ],
+  "wallix-awless": [
+   "commented-aws/services/services_test.go:1398",
+   "commented-graph/type_test.go:237",
+   "docker-latest-vendor/github.com/wallix/awless-scheduler/Dockerfile:1"
+  ],
+  "jorgebastida-awslogs": [
+   "no-permissions-.github/workflows/test.yml-1"
+  ],
+  "simplecov-ruby-simplecov": [
+   "action-tag-.github/workflows/dependabot_assets.yml-43",
+   "ci-silenced-failure-.github/workflows/perf.yml-54",
+   "no-permissions-.github/workflows/lint.yml-1",
+   "script-injection-.github/workflows/dependabot_assets.yml-63"
+  ],
+  "querz-mcaselector": [
+   "action-tag-.github/workflows/release.yml-29",
+   "no-permissions-.github/workflows/release.yml-1"
+  ],
+  "red-data-tools-youplot": [
+   "action-tag-.github/workflows/ci.yml-15"
+  ],
+  "backup-backup": [
+   "action-tag-.github/workflows/rspec.yml-28",
+   "no-permissions-.github/workflows/rspec.yml-1"
+  ],
+  "googlemaps-google-maps-services-python": [
+   "action-tag-.github/workflows/docs.yml-54",
+   "no-permissions-.github/workflows/docs.yml-1"
+  ],
+  "prawnpdf-prawn": [
+   "action-tag-.github/workflows/ci.yml-15",
+   "no-permissions-.github/workflows/ci.yml-1"
+  ],
+  "thoas-go-funk": [
+   "action-tag-.github/workflows/golangci-lint.yml-17",
+   "no-permissions-.github/workflows/go.yml-1"
+  ],
+  "fractal-compute-orchestrations-fractalcore": [
+   "no-permissions-.github/workflows/ci.yml-1"
+  ],
+  "theoleecj-semif-openjev": [
+   "insecure-innerhtml-dynamic-webgpu-demo/app.js:94"
+  ],
+  "binarylogic-authlogic": [
+   "action-tag-.github/workflows/test.yml-13",
+   "action-tag-.github/workflows/test.yml-69",
+   "no-permissions-.github/workflows/test.yml-1"
+  ],
+  "terraform-docs-terraform-docs": [
+   "action-tag-.github/workflows/ci.yaml-128",
+   "action-tag-.github/workflows/ci.yaml-45",
+   "no-permissions-.github/workflows/ci.yaml-1",
+   "no-permissions-.github/workflows/codeql.yaml-1"
+  ],
+  "aipotheosis-labs-aci": [
+   "commented-frontend/src/components/project/useAgentsTableColumns.tsx:211",
+   "commented-frontend/src/components/project/useAgentsTableColumns.tsx:233"
+  ],
+  "fog-fog": [
+   "action-tag-.github/workflows/ci.yml-16"
+  ],
+  "zhongerxin-iphone-use": [
+   "no-permissions-.github/workflows/check.yml-1"
+  ],
+  "eventmachine-eventmachine": [
+   "action-tag-.github/workflows/workflow.yml-64",
+   "action-tag-.github/workflows/workflow.yml-7",
+   "no-permissions-.github/workflows/workflow.yml-1"
+  ],
+  "olekukonko-tablewriter": [
+   "action-tag-.github/workflows/release.yaml-37",
+   "commented-renderer/blueprint.go:287",
+   "commented-tests/streamer_test.go:29",
+   "no-permissions-.github/workflows/go.yml-1"
+  ],
+  "opengvlab-draggan": [
+   "no-permissions-.github/workflows/docker-hub.yml-1"
+  ],
+  "grosser-parallel": [
+   "action-tag-.github/workflows/actions.yml-27"
+  ],
+  "gomods-athens": [
+   "action-tag-.github/workflows/ci.yml-176",
+   "action-tag-.github/workflows/ci.yml-39",
+   "no-permissions-.github/workflows/ci.yml-1",
+   "no-permissions-.github/workflows/codeql.yml-1"
+  ],
+  "stleary-json-java": [
+   "no-permissions-.github/workflows/pipeline.yml-1"
+  ],
+  "schollz-find3": [
+   "commented-server/main/scratch/sufee-admin-dashboard/static/js/dashboard.js:75",
+   "commented-server/main/scratch/sufee-admin-dashboard/static/js/lib/chart-js/Chart.bundle.js:5482",
+   "insecure-innerhtml-dynamic-server/main/scratch/sufee-admin-dashboard/assets/js/selectFx.js:142"
+  ],
+  "google-leveldb": [
+   "action-tag-first-party-.github/workflows/build.yml-63",
+   "todo-db/c.cc:154",
+   "todo-db/db_impl.cc:593"
+  ],
+  "doctrine-lexer": [
+   "action-tag-.github/workflows/coding-standards.yml-27",
+   "action-tag-.github/workflows/composer-lint.yml-20",
+   "no-permissions-.github/workflows/coding-standards.yml-1",
+   "no-permissions-.github/workflows/composer-lint.yml-1"
+  ],
+  "rust-lang-rustlings": [
+   "action-tag-.github/workflows/rust.yml-40",
+   "action-tag-.github/workflows/rust.yml-49",
+   "action-tag-first-party-.github/workflows/rust.yml-24",
+   "action-tag-first-party-.github/workflows/rust.yml-30",
+   "no-permissions-.github/workflows/rust.yml-1",
+   "no-permissions-.github/workflows/website.yml-1"
+  ],
+  "light-city-cplusplusthings": [
+   "commented-design_pattern/singleton/barrier_singleton.cpp:13",
+   "commented-learn_class/modern_cpp_30/compilerpoly/template.cpp:27",
+   "commented-learn_class/modern_cpp_30/constexpr/output_container.h:97"
+  ],
+  "orhanobut-logger": [
+   "action-tag-.github/workflows/build.yml-19",
+   "action-tag-.github/workflows/build.yml-20",
+   "action-tag-first-party-.github/workflows/build.yml-14",
+   "action-tag-first-party-.github/workflows/build.yml-15"
+  ],
+  "piotrplenik-clean-code-php": [
+   "action-tag-.github/workflows/coding_standard.yaml-14",
+   "action-tag-first-party-.github/workflows/coding_standard.yaml-12",
+   "no-permissions-.github/workflows/coding_standard.yaml-1"
+  ],
+  "xai-org-x-algorithm": [
+   "eol-python-bdsm/pyproject.toml-5"
+  ],
+  "ochococo-design-patterns-in-swift": [
+   "action-tag-.github/workflows/generate-playground.yml-39",
+   "action-tag-first-party-.github/workflows/generate-playground.yml-19",
+   "no-permissions-.github/workflows/generate-playground.yml-1"
+  ],
+  "ntdevlabs-tiny11builder": [
+   "action-tag-first-party-.github/workflows/build.yml-15"
+  ],
+  "doctrine-instantiator": [
+   "action-tag-.github/workflows/coding-standards.yml-15",
+   "action-tag-first-party-.github/workflows/phpbench.yml-28",
+   "no-permissions-.github/workflows/coding-standards.yml-1"
+  ],
+  "rust-unofficial-awesome-rust": [
+   "insecure-rust-tls-validation-disabled-src/bin/hacktoberfest.rs:60",
+   "insecure-rust-tls-validation-disabled-src/main.rs:218"
+  ],
+  "matsuridayo-nekoboxforandroid": [
+   "commented-libcore/http.go:93"
+  ],
+  "sxyazi-yazi": [
+   "commented-yazi-shared/src/url/component.rs:42"
+  ],
+  "yahoo-cmak": [
+   "commented-test/kafka/manager/TestKafkaManager.scala:100"
+  ],
+  "aristocratos-btop": [
+   "commented-src/btop_tools.cpp:188"
+  ],
+  "amir1376-ab-download-manager": [
+   "commented-android/app/src/main/kotlin/com/abdownloadmanager/android/pages/add/shared/CategorySelect.kt:75"
+  ],
+  "typesense-typesense": [
+   "insecure-cpp-tls-validation-disabled-src/http_client.cpp:783",
+   "insecure-cpp-tls-validation-disabled-src/http_client.cpp:784"
+  ],
+  "clash-verge-rev-clash-verge-rev": [
+   "insecure-rust-tls-validation-disabled-src-tauri/src/cmd/media_unlock_checker/mod.rs:20",
+   "insecure-rust-tls-validation-disabled-src-tauri/src/cmd/media_unlock_checker/mod.rs:21",
+   "insecure-rust-tls-validation-disabled-src-tauri/src/core/backup.rs:108"
+  ]
+ }
 }
