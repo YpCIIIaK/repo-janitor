@@ -84,3 +84,23 @@ describe("iac monitoring agents (benchmark batch 12–15)", () => {
     expect(out.filter((i) => i.startsWith("iac-"))).toHaveLength(1)
   })
 })
+
+
+describe("Docker API image names from pinned socket reviews", () => {
+  it("accepts Portainer CE command and mount and lazydocker's required mount", async () => {
+    // docker/awesome-compose@30f4b7f portainer/compose.yaml:3-9;
+    // jesseduffield/lazydocker@7e7aadc docker-compose.yml:9-14.
+    const out = await ids({
+      "portainer/compose.yaml": 'services:\n  portainer:\n    image: portainer/portainer-ce:alpine\n    command: -H unix:///var/run/docker.sock\n    volumes:\n      - "/var/run/docker.sock:/var/run/docker.sock"\n',
+      "docker-compose.yml": 'services:\n  lazydocker:\n    image: lazyteam/lazydocker\n    volumes:\n      - /var/run/docker.sock:/var/run/docker.sock\n',
+    })
+    expect(out.filter(i => i.startsWith("iac-docker-socket"))).toEqual([])
+  })
+
+  it.each(["myapp:1", "my-portainer-ce:1", "portainer-ce-helper:1", "lazydocker-app:1", "notlazydocker:1"])("still flags application socket mounts for %s", async image => {
+    const out = await ids({
+      "compose.yaml": `services:\n  app:\n    image: ${image}\n    volumes:\n      - /var/run/docker.sock:/var/run/docker.sock\n`,
+    })
+    expect(out.filter(i => i.startsWith("iac-docker-socket"))).toHaveLength(1)
+  })
+})
