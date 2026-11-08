@@ -24942,12 +24942,12 @@ var require_syml3 = __commonJS({
     };
     function peg$parse(input, options) {
       options = options !== void 0 ? options : {};
-      var peg$FAILED = {}, peg$startRuleFunctions = { Start: peg$parseStart }, peg$startRuleFunction = peg$parseStart, peg$c0 = function(statements) {
-        return [].concat(...statements);
+      var peg$FAILED = {}, peg$startRuleFunctions = { Start: peg$parseStart }, peg$startRuleFunction = peg$parseStart, peg$c0 = function(statements3) {
+        return [].concat(...statements3);
       }, peg$c1 = "-", peg$c2 = peg$literalExpectation("-", false), peg$c3 = function(value) {
         return value;
-      }, peg$c4 = function(statements) {
-        return Object.assign({}, ...statements);
+      }, peg$c4 = function(statements3) {
+        return Object.assign({}, ...statements3);
       }, peg$c5 = "#", peg$c6 = peg$literalExpectation("#", false), peg$c7 = peg$anyExpectation(), peg$c8 = function() {
         return {};
       }, peg$c9 = ":", peg$c10 = peg$literalExpectation(":", false), peg$c11 = function(property, value) {
@@ -24956,8 +24956,8 @@ var require_syml3 = __commonJS({
         return other;
       }, peg$c15 = function(property, others, value) {
         return Object.assign({}, ...[property].concat(others).map((property2) => ({ [property2]: value })));
-      }, peg$c16 = function(statements) {
-        return statements;
+      }, peg$c16 = function(statements3) {
+        return statements3;
       }, peg$c17 = function(expression) {
         return expression;
       }, peg$c18 = peg$otherExpectation("correct indentation"), peg$c19 = " ", peg$c20 = peg$literalExpectation(" ", false), peg$c21 = function(spaces) {
@@ -26863,7 +26863,7 @@ var require_lib4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-CFN6RHQL.js
+// ../cli/dist/chunk-JAS42KQD.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -45594,7 +45594,7 @@ function date4(params) {
 // ../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/external.js
 config(en_default());
 
-// ../cli/dist/chunk-CFN6RHQL.js
+// ../cli/dist/chunk-JAS42KQD.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -67934,12 +67934,12 @@ var require_syml = __commonJS2({
     };
     function peg$parse(input, options) {
       options = options !== void 0 ? options : {};
-      var peg$FAILED = {}, peg$startRuleFunctions = { Start: peg$parseStart }, peg$startRuleFunction = peg$parseStart, peg$c0 = function(statements) {
-        return [].concat(...statements);
+      var peg$FAILED = {}, peg$startRuleFunctions = { Start: peg$parseStart }, peg$startRuleFunction = peg$parseStart, peg$c0 = function(statements22) {
+        return [].concat(...statements22);
       }, peg$c1 = "-", peg$c2 = peg$literalExpectation("-", false), peg$c3 = function(value) {
         return value;
-      }, peg$c4 = function(statements) {
-        return Object.assign({}, ...statements);
+      }, peg$c4 = function(statements22) {
+        return Object.assign({}, ...statements22);
       }, peg$c5 = "#", peg$c6 = peg$literalExpectation("#", false), peg$c7 = peg$anyExpectation(), peg$c8 = function() {
         return {};
       }, peg$c9 = ":", peg$c10 = peg$literalExpectation(":", false), peg$c11 = function(property, value) {
@@ -67948,8 +67948,8 @@ var require_syml = __commonJS2({
         return other;
       }, peg$c15 = function(property, others, value) {
         return Object.assign({}, ...[property].concat(others).map((property2) => ({ [property2]: value })));
-      }, peg$c16 = function(statements) {
-        return statements;
+      }, peg$c16 = function(statements22) {
+        return statements22;
       }, peg$c17 = function(expression) {
         return expression;
       }, peg$c18 = peg$otherExpectation("correct indentation"), peg$c19 = " ", peg$c20 = peg$literalExpectation(" ", false), peg$c21 = function(spaces) {
@@ -70127,6 +70127,15 @@ function summarizeActivity(commits, lastCommitAt, now = Date.now()) {
   };
 }
 var INSECURE = {
+  "php-path-traversal": "PHP request input used as a filesystem path",
+  "php-xxe": "PHP XML parser allows external entities",
+  "php-ssti": "PHP template source built from request input",
+  "swift-webview-html": "Swift request input loaded as WebView HTML",
+  "swift-tls-validation-disabled": "Swift TLS server verification disabled",
+  "swift-plaintext-credential-storage": "Swift credential stored in plaintext preferences",
+  "swift-ecb-encryption": "Swift encryption uses insecure ECB mode",
+  "rust-tls-validation-disabled": "Rust TLS server verification disabled",
+  "cpp-tls-validation-disabled": "libcurl TLS server verification disabled",
   "eval-dynamic": "eval() on a dynamic value",
   "new-function": "new Function() on a dynamic value",
   "exec-interpolated": "Shell command built from variables",
@@ -70249,10 +70258,10 @@ var RULE_PRECISION = {
   "bus-factor": { tp: 28, fp: 5 },
   "ci-disabled": { tp: 10, fp: 1 },
   "ci-no-pr-trigger": { tp: 5, fp: 4 },
-  "ci-silenced-failure": { tp: 4, fp: 5 },
+  "ci-silenced-failure": { tp: 4, fp: 6 },
   "ci-swallowed": { tp: 3, fp: 2 },
   "ci-tests-not-run": { tp: 0, fp: 10 },
-  "commented-code": { tp: 31, fp: 12 },
+  "commented-code": { tp: 47, fp: 17 },
   "config-conflict": { tp: 19, fp: 1 },
   "dead-export": { tp: 17, fp: 3 },
   "dead-uikit": { tp: 3, fp: 2 },
@@ -70260,7 +70269,7 @@ var RULE_PRECISION = {
   "dep-unused": { tp: 1, fp: 12 },
   "doc-link": { tp: 18, fp: 11 },
   "docker-add-url": { tp: 5, fp: 1 },
-  "docker-latest": { tp: 7, fp: 5 },
+  "docker-latest": { tp: 7, fp: 6 },
   "docker-root": { tp: 4, fp: 13 },
   "docker-untagged": { tp: 4, fp: 7 },
   "docs-badge": { tp: 11, fp: 2 },
@@ -70271,7 +70280,7 @@ var RULE_PRECISION = {
   "env-missing": { tp: 1, fp: 6 },
   "env-no-example": { tp: 1, fp: 11 },
   "eol-node": { tp: 32, fp: 1 },
-  "eol-python": { tp: 25, fp: 2 },
+  "eol-python": { tp: 26, fp: 2 },
   "eol-runner": { tp: 11, fp: 0 },
   "hygiene-no-ci": { tp: 10, fp: 4 },
   "hygiene-no-license": { tp: 9, fp: 3 },
@@ -70294,7 +70303,7 @@ var RULE_PRECISION = {
   "insecure-eval-dynamic": { tp: 1, fp: 6 },
   "insecure-exec-interpolated": { tp: 3, fp: 17 },
   "insecure-go-template-html": { tp: 0, fp: 10 },
-  "insecure-innerhtml-dynamic": { tp: 0, fp: 11 },
+  "insecure-innerhtml-dynamic": { tp: 0, fp: 13 },
   "insecure-java-deserialization": { tp: 0, fp: 3 },
   "insecure-localstorage-secret": { tp: 1, fp: 8 },
   "insecure-new-function": { tp: 3, fp: 15 },
@@ -70310,8 +70319,10 @@ var RULE_PRECISION = {
   "insecure-react-dangerous-html": { tp: 2, fp: 15 },
   "insecure-ruby-dynamic-dispatch": { tp: 0, fp: 3 },
   "insecure-ruby-marshal-load": { tp: 0, fp: 5 },
-  "insecure-sql-interpolated": { tp: 2, fp: 25 },
+  "insecure-sql-interpolated": { tp: 3, fp: 25 },
   "insecure-ssrf": { tp: 1, fp: 71 },
+  "insecure-swift-plaintext-credential-storage": { tp: 1, fp: 0 },
+  "insecure-swift-webview-html": { tp: 1, fp: 0 },
   "insecure-tls-verification-off": { tp: 0, fp: 12 },
   "insecure-weak-hash": { tp: 2, fp: 8 },
   "license-risk": { tp: 0, fp: 1 },
@@ -70322,12 +70333,12 @@ var RULE_PRECISION = {
   "secret-provider": { tp: 0, fp: 10 },
   "skipped-test": { tp: 21, fp: 3 },
   "supply-remote-shell": { tp: 1, fp: 0 },
-  "todo": { tp: 55, fp: 2 },
-  "workflow-action-tag": { tp: 48, fp: 1 },
-  "workflow-action-tag-first-party": { tp: 59, fp: 1 },
-  "workflow-no-permissions": { tp: 34, fp: 0 },
+  "todo": { tp: 57, fp: 2 },
+  "workflow-action-tag": { tp: 81, fp: 1 },
+  "workflow-action-tag-first-party": { tp: 68, fp: 1 },
+  "workflow-no-permissions": { tp: 64, fp: 0 },
   "workflow-pr-target-checkout": { tp: 2, fp: 5 },
-  "workflow-script-injection": { tp: 2, fp: 6 },
+  "workflow-script-injection": { tp: 2, fp: 7 },
   "workflow-self-hosted-runner": { tp: 2, fp: 1 }
 };
 var MIN_LABELLED = 3;
@@ -70861,7 +70872,7 @@ var todoDebtScanner = {
   category: "todo",
   run(ctx) {
     return __async(this, null, function* () {
-      var _a22;
+      var _a22, _b, _c;
       const issues = [];
       for (const file2 of ctx.files) {
         if (!SOURCE_RE.test(file2)) continue;
@@ -70877,7 +70888,14 @@ var todoDebtScanner = {
           for (const h3 of hits) counts.set(h3.text, ((_a22 = counts.get(h3.text)) != null ? _a22 : 0) + 1);
           if (Math.max(...counts.values()) / hits.length > 0.8) continue;
         }
+        const sourceLines = content.split(/\r?\n/);
+        const normalized = file2.replace(/\\/g, "/");
         for (const hit of hits) {
+          if (hit.marker === "TODO") {
+            const exercisePrompt = /(^|\/)exercises?\//i.test(normalized) && /\b(?:exercise|fix the code|your task)\b/i.test(hit.text);
+            const textbookStub = /(^|\/)chapter[-_]?\d+\//i.test(normalized) && !hit.text && /^\s*}\s*;?\s*$/.test((_b = sourceLines[hit.line]) != null ? _b : "") && /^\s*{\s*$/.test((_c = sourceLines[hit.line - 2]) != null ? _c : "");
+            if (exercisePrompt || textbookStub) continue;
+          }
           const ageDays = yield ctx.git.blameAgeDays(file2, hit.line);
           const summary = hit.text ? `: ${truncate(hit.text)}` : "";
           issues.push({
@@ -74450,9 +74468,16 @@ function commentBody(line) {
   const m2 = line.match(/^\s*\/\/(.*)$/);
   return m2 ? m2[1].trim() : null;
 }
+function isDocumentationRow(body) {
+  if (/^[\w*+ /-]+\s*=\s*(?:0x[\da-f]+|0b[01]+|\d+)\s*=\s*(?:0x[\da-f]+|0b[01]+|\d+)\s*$/i.test(body)) return true;
+  if (/^\[[^\]]+\](?:,\s*\[[^\]]+\])?\s*:=\s*range\s*\[[^\]]+\]$/.test(body)) return true;
+  if (/^Index\s+\d+\s*->\s+\S/.test(body)) return true;
+  if (/^\|\s*[A-Za-z0-9_]+\s*\|/.test(body)) return true;
+  return /^[A-Za-z_]\w*(?:\s+is\s+alias\s+for\s+[A-Za-z_]\w*)?\s*=\s*0x[\da-f]+\s+\([A-Za-z][^)]*\)(?:\s+\([^)]+\))*$/.test(body);
+}
 function looksLikeCode(body) {
   if (!body || body.length < 2) return false;
-  if (SKIP_PREFIX.test(body)) return false;
+  if (SKIP_PREFIX.test(body) || isDocumentationRow(body)) return false;
   if (body.startsWith("=>")) return false;
   if (PROSE_TAIL.test(body)) return false;
   if (body.includes("`")) return false;
@@ -74460,16 +74485,62 @@ function looksLikeCode(body) {
   return CODE_SIGNAL.test(body);
 }
 var NOT_PRODUCT_RE = /(^|\/)(?:flow-typed|_?examples?|samples?|bench(?:mark)?s?|website|www|docs?|lang(?:uage)?s?|locales?|i18n|assets|legacy)\/|\.config\.[cm]?[jt]s$|\.d\.[cm]?ts$|\.(?:stories|story)\.[cm]?[jt]sx?$|(^|\/)example_[^/]*_test\.go$/i;
-function introducesExample(lines, start, len) {
-  var _a22;
-  const near22 = [];
-  for (let i = start - 1; i >= Math.max(0, start - 6); i--) {
-    const b3 = commentBody(lines[i]);
-    if (b3 === null) break;
-    near22.push(b3);
+function lineCommentLines(lines, nestedComments) {
+  const result = /* @__PURE__ */ new Set();
+  let blockDepth = 0, quote = "";
+  for (let n = 0; n < lines.length; n++) {
+    const line = lines[n];
+    for (let i = 0; i < line.length; i++) {
+      const c3 = line[i], next = line[i + 1];
+      if (blockDepth) {
+        if (nestedComments && c3 === "/" && next === "*") {
+          blockDepth++;
+          i++;
+        } else if (c3 === "*" && next === "/") {
+          blockDepth--;
+          i++;
+        }
+      } else if (quote) {
+        if (quote !== '"""' && c3 === "\\") {
+          i++;
+          continue;
+        }
+        if (line.startsWith(quote, i)) {
+          i += quote.length - 1;
+          quote = "";
+        }
+      } else if (c3 === "/" && next === "/") {
+        if (!line.slice(0, i).trim()) result.add(n);
+        break;
+      } else if (c3 === "/" && next === "*") {
+        blockDepth++;
+        i++;
+      } else if (c3 === '"' || c3 === "'" || c3 === "`") {
+        quote = line.startsWith('"""', i) ? '"""' : c3;
+        i += quote.length - 1;
+      }
+    }
+    if (quote === '"' || quote === "'") quote = "";
   }
-  for (let i = start; i < start + len + 2 && i < lines.length; i++) near22.push((_a22 = commentBody(lines[i])) != null ? _a22 : "");
-  return near22.some((b3) => /```|\ba la\b|\be\.g\.|\bexample\b|like this|looks like|\bsyntax\b|\bformat\b|should be uncommented/i.test(b3));
+  return result;
+}
+function commentParagraph(lines, start, len) {
+  let a = start, b3 = start + len;
+  while (a > 0 && (commentBody(lines[a - 1]) !== null || !lines[a - 1].trim())) a--;
+  while (b3 < lines.length && (commentBody(lines[b3]) !== null || !lines[b3].trim())) b3++;
+  return lines.slice(a, b3).map((line) => {
+    var _a22;
+    return (_a22 = commentBody(line)) != null ? _a22 : "";
+  });
+}
+function introducesExample(lines, start, len, file2) {
+  const near22 = commentParagraph(lines, start, len);
+  if (near22.some((b3) => /```|\ba la\b|\be\.g\.|\bexamples?\b|^sample\s*:?\s*$|^sample\s+(?:input|output|usage)\s*:|\buse case\b|like this|looks like|\bsyntax\b|\bformat\b|should be uncommented/i.test(b3))) return true;
+  if (near22.some((b3) => /^CREATE\s+TABLE\b/i.test(b3))) return true;
+  if (/\.(?:java|go|c|cc|cpp|h|hpp|cs|rs|swift|kt)$/.test(file2)) {
+    return near22.filter((b3) => /^<\/?[A-Za-z_][\w:.-]*(?:\s|\/?[>])/.test(b3)).length >= 2;
+  }
+  return false;
 }
 var commentedCodeScanner = {
   id: "commented-code",
@@ -74486,17 +74557,23 @@ var commentedCodeScanner = {
         const content = yield ctx.readFile(file2);
         if (!content || !content.includes("//")) continue;
         const lines = content.split(/\r?\n/);
+        const lineComments = lineCommentLines(lines, /\.(?:rs|swift|scala|kt)$/.test(norm));
         let perFile = 0;
         let runStart = -1;
         let runLen = 0;
         const flush = () => {
           var _a22, _b, _c, _d, _e2, _f;
+          if (runLen < MIN_RUN) {
+            runStart = -1;
+            runLen = 0;
+            return;
+          }
           const run = runStart === -1 ? [] : lines.slice(runStart, runStart + runLen);
           const docExample = (
             // …unless the line above opens the expression the indented lines continue.
             run.every(isDocIndent) && !/[({[,]\s*$|=>\s*$/.test((_b = commentBody((_a22 = lines[runStart - 1]) != null ? _a22 : "")) != null ? _b : "") || run.some((l3) => /^\s*\/\/\s*[*-]\s/.test(l3)) || // introduced by "For example:" / "Testing for these options:"
             /:\s*$/.test((_d = commentBody((_c = lines[runStart - 1]) != null ? _c : "")) != null ? _d : "") || /:\s*$/.test((_f = commentBody((_e2 = lines[runStart - 2]) != null ? _e2 : "")) != null ? _f : "") || // The prose around it presents it: "a la ```…```", "looks like", "e.g.".
-            introducesExample(lines, runStart, runLen) || run.some((l3) => /::=/.test(l3))
+            introducesExample(lines, runStart, runLen, norm) || run.some((l3) => /::=/.test(l3))
           );
           if (!docExample && runLen >= MIN_RUN && perFile < MAX_PER_FILE4 && issues.length < MAX_TOTAL7) {
             const lineNo = runStart + 1;
@@ -74516,7 +74593,7 @@ var commentedCodeScanner = {
           runLen = 0;
         };
         for (let i = 0; i < lines.length; i++) {
-          const body = commentBody(lines[i]);
+          const body = lineComments.has(i) ? commentBody(lines[i]) : null;
           if (body !== null && looksLikeCode(body)) {
             if (runStart === -1) runStart = i;
             runLen++;
@@ -74530,10 +74607,653 @@ var commentedCodeScanner = {
     });
   }
 };
-var JS_RE2 = /\.(ts|tsx|js|jsx|mjs|mts|cts)$/i;
+var SQL = /\b(?:SELECT|INSERT\s+INTO|UPDATE|DELETE\s+FROM|WITH)\b/i;
+var SOURCE = /\b(?:req|request)\s*\.\s*(?:queryString\b|getQueryString\s*\(|body\s*\.\s*asText\b)/;
+function literalAt(source, start) {
+  var _a22, _b;
+  const delimiter = source.startsWith('"""', start) ? '"""' : '"';
+  const prefix = (_b = (_a22 = /[A-Za-z_]\w*$/.exec(source.slice(0, start))) == null ? void 0 : _a22[0]) != null ? _b : "";
+  const interpolated = /^(?:s|sql|sqlu)$/.test(prefix);
+  const expressions = [];
+  let i = start + delimiter.length;
+  for (; i < source.length; ) {
+    if (source.startsWith(delimiter, i)) {
+      return { start, end: i + delimiter.length, prefix, text: source.slice(start + delimiter.length, i), expressions };
+    }
+    if (delimiter === '"' && source[i] === "\\") {
+      i += 2;
+      continue;
+    }
+    if (interpolated && source[i] === "$" && source[i + 1] === "$") {
+      i += 2;
+      continue;
+    }
+    if (interpolated && source[i] === "$") {
+      const raw = source[i - 1] === "#";
+      if (source[i + 1] === "{") {
+        const beginning = i + 2;
+        let depth = 1;
+        i = beginning;
+        for (; i < source.length && depth; i++) {
+          if (source[i] === '"') {
+            i = literalAt(source, i).end - 1;
+            continue;
+          }
+          if (source[i] === "{") depth++;
+          if (source[i] === "}") depth--;
+        }
+        if (!depth) expressions.push({ value: source.slice(beginning, i - 1), raw });
+        continue;
+      }
+      const name = /^[A-Za-z_]\w*/.exec(source.slice(i + 1));
+      if (name) {
+        expressions.push({ value: name[0], raw });
+        i += name[0].length + 1;
+        continue;
+      }
+    }
+    i++;
+  }
+  return { start, end: source.length, prefix, text: "", expressions: [] };
+}
+function literals(source) {
+  const result = [];
+  for (let i = 0; i < source.length; i++) {
+    if (source[i] !== '"') continue;
+    const literal2 = literalAt(source, i);
+    result.push(literal2);
+    i = literal2.end - 1;
+  }
+  return result;
+}
+function maskStrings(source) {
+  let result = source;
+  for (const literal2 of literals(source).reverse()) {
+    result = result.slice(0, literal2.start) + " ".repeat(literal2.end - literal2.start) + result.slice(literal2.end);
+  }
+  return result;
+}
+function uncomment(source) {
+  let result = "", depth = 0;
+  for (let i = 0; i < source.length; i++) {
+    const c3 = source[i], next = source[i + 1];
+    if (depth) {
+      if (c3 === "/" && next === "*") {
+        depth++;
+        result += "  ";
+        i++;
+      } else if (c3 === "*" && next === "/") {
+        depth--;
+        result += "  ";
+        i++;
+      } else result += c3 === "\n" ? "\n" : " ";
+    } else if (c3 === '"') {
+      const literal2 = literalAt(source, i);
+      result += source.slice(i, literal2.end);
+      i = literal2.end - 1;
+    } else if (c3 === "/" && next === "*") {
+      depth++;
+      result += "  ";
+      i++;
+    } else if (c3 === "/" && next === "/") {
+      while (i < source.length && source[i] !== "\n") {
+        result += " ";
+        i++;
+      }
+      if (i < source.length) result += "\n";
+    } else result += c3;
+  }
+  return result;
+}
+function statements(source) {
+  const result = [];
+  let start = 0, line = 1, startLine = 1, parentheses = 0;
+  for (let i = 0; i < source.length; i++) {
+    const c3 = source[i];
+    if (c3 === '"') {
+      const literal2 = literalAt(source, i);
+      line += source.slice(i, literal2.end).split("\n").length - 1;
+      i = literal2.end - 1;
+      continue;
+    }
+    if (c3 === "(" || c3 === "[") parentheses++;
+    if (c3 === ")" || c3 === "]") parentheses = Math.max(0, parentheses - 1);
+    if (c3 === ";" || c3 === "\n" && !parentheses) {
+      result.push({ text: source.slice(start, i), line: startLine });
+      start = i + 1;
+      startLine = line + (c3 === "\n" ? 1 : 0);
+    }
+    if (c3 === "\n") line++;
+  }
+  result.push({ text: source.slice(start), line: startLine });
+  return result;
+}
+function firstArgument(source) {
+  const masked = maskStrings(source);
+  let depth = 0;
+  for (let i = 0; i < masked.length; i++) {
+    if ((masked[i] === "," || masked[i] === ")") && !depth) return source.slice(0, i);
+    if (masked[i] === "(" || masked[i] === "[") depth++;
+    if (masked[i] === ")" || masked[i] === "]") depth--;
+  }
+  return source;
+}
+function scanScalaSource(content) {
+  var _a22, _b;
+  const hits = [], tainted = /* @__PURE__ */ new Set(), queries = /* @__PURE__ */ new Set();
+  const carries = (expression) => {
+    const outside = maskStrings(expression);
+    if (/\.(?:toInt|toLong|toShort|toByte|toFloat|toDouble|toBoolean)(?:Option)?\b/.test(outside)) return false;
+    const calls = [...outside.matchAll(/\b([A-Za-z_]\w*)\s*\(/g)];
+    if (calls.some((m2) => !/^(?:queryString|getQueryString|getOrElse|mkString)$/.test(m2[1]))) return false;
+    return SOURCE.test(outside) || [...tainted].some((name) => new RegExp(`\\b${name}\\b`).test(outside)) || literals(expression).some((literal2) => literal2.expressions.some((part) => (!(literal2.prefix === "sql" || literal2.prefix === "sqlu") || part.raw) && carries(part.value)));
+  };
+  const isQuery = (expression) => literals(expression).some((l3) => SQL.test(l3.text)) || [...queries].some((name) => new RegExp(`\\b${name}\\b`).test(maskStrings(expression)));
+  for (const statement of statements(uncomment(content))) {
+    const code = statement.text, executable = maskStrings(code);
+    if (/\b(?:def|class|object|trait)\b|^\s*}|\b(?:if|for|while|catch|match)\b/.test(executable)) {
+      tainted.clear();
+      queries.clear();
+    }
+    const assignment = /^\s*(?:(?:val|var)\s+)?([A-Za-z_]\w*)(?:\s*:\s*[^=]+)?\s*=\s*(?!=)([\s\S]*)$/.exec(code);
+    if (assignment) {
+      const [, name, value] = assignment;
+      const input = carries(value), sql = input && isQuery(value);
+      if (input) tainted.add(name);
+      else tainted.delete(name);
+      if (sql) queries.add(name);
+      else queries.delete(name);
+    }
+    const add = (offset) => {
+      var _a32, _b2;
+      const line = statement.line + code.slice(0, offset).split("\n").length - 1;
+      if (hits.some((hit) => hit.line === line)) return;
+      hits.push({ rule: {
+        id: "sql-interpolated",
+        severity: "critical",
+        title: "Scala request input interpolated into SQL text",
+        detail: "Request input becomes SQL source text. Use JDBC prepared statements with bound parameters, or Slick's ordinary $ interpolation; #$ splices literal SQL and must not contain request data."
+      }, line, evidence: (_b2 = (_a32 = content.split(/\r?\n/)[line - 1]) == null ? void 0 : _a32.trim().slice(0, 160)) != null ? _b2 : "", tainted: true });
+    };
+    for (const sink of executable.matchAll(/\.\s*(?:executeQuery|executeUpdate|executeLargeUpdate|execute|prepareStatement|prepareCall)\s*\(/g)) {
+      const argument = firstArgument(code.slice(((_a22 = sink.index) != null ? _a22 : 0) + sink[0].length));
+      if (carries(argument) && isQuery(argument)) add((_b = sink.index) != null ? _b : 0);
+    }
+    for (const literal2 of literals(code)) {
+      if (/^(?:sql|sqlu)$/.test(literal2.prefix) && SQL.test(literal2.text) && literal2.expressions.some((part) => part.raw && carries(part.value))) add(literal2.start);
+    }
+  }
+  return hits;
+}
+function maskNativeSource(source) {
+  const chars = source.split("");
+  const hide = (start, end) => {
+    for (let k2 = start; k2 < end; k2++) if (chars[k2] !== "\n" && chars[k2] !== "\r") chars[k2] = " ";
+  };
+  let i = 0;
+  while (i < source.length) {
+    const start = i;
+    if (source.startsWith("//", i)) {
+      const end = source.indexOf("\n", i);
+      i = end < 0 ? source.length : end;
+      hide(start, i);
+      continue;
+    }
+    if (source.startsWith("/*", i)) {
+      let depth = 1;
+      i += 2;
+      while (i < source.length && depth) {
+        if (source.startsWith("/*", i)) {
+          depth++;
+          i += 2;
+        } else if (source.startsWith("*/", i)) {
+          depth--;
+          i += 2;
+        } else i++;
+      }
+      hide(start, i);
+      continue;
+    }
+    const rust = /^(?:br|r)(#{0,255})"/.exec(source.slice(i));
+    const cpp = /^R"([^\s()\\]{0,16})\(/.exec(source.slice(i));
+    if (rust || cpp) {
+      const open = (rust != null ? rust : cpp)[0], close = rust ? `"${rust[1]}` : `)${cpp[1]}"`;
+      const end = source.indexOf(close, i + open.length);
+      i = end < 0 ? source.length : end + close.length;
+      hide(start, i);
+      continue;
+    }
+    if (source[i] === '"' || source[i] === "'" && /^'(?:\\.|[^'\\\n])'/.test(source.slice(i))) {
+      const quote = source[i++];
+      while (i < source.length) {
+        if (source[i] === "\\") {
+          i += 2;
+          continue;
+        }
+        ;
+        if (source[i++] === quote) break;
+      }
+      hide(start, Math.min(i, source.length));
+      continue;
+    }
+    i++;
+  }
+  return chars.join("");
+}
+function scanCppTlsSource(source) {
+  var _a22;
+  const code = maskNativeSource(source), hits = [];
+  for (const m2 of code.matchAll(/\bcurl_easy_setopt\s*\(\s*[A-Za-z_]\w*\s*,\s*CURLOPT_SSL_VERIFY(?:PEER|HOST)\s*,\s*(?:0(?:[uUlL]{0,3})|false)\s*\)/g)) {
+    if (/[.>\w]/.test((_a22 = code[m2.index - 1]) != null ? _a22 : "")) continue;
+    const line = code.slice(0, m2.index).split("\n").length;
+    hits.push({ rule: { id: "cpp-tls-validation-disabled", severity: "critical", title: "libcurl TLS server verification is explicitly disabled", detail: "Setting CURLOPT_SSL_VERIFYPEER or CURLOPT_SSL_VERIFYHOST to zero disables server authentication and permits man-in-the-middle connections. Keep peer verification at 1L and host verification at 2L; configure trusted CA roots for private certificates." }, line, evidence: source.split(/\r?\n/)[line - 1].trim() });
+  }
+  return hits;
+}
+function scanRustTlsSource(source) {
+  let code = maskNativeSource(source);
+  for (const m2 of [...code.matchAll(/#\s*\[\s*cfg\s*\(\s*test\s*\)\s*\]\s*(?:pub\s+)?mod\s+\w+\s*\{/g)]) {
+    const start = m2.index, brace = start + m2[0].lastIndexOf("{");
+    let end = brace + 1, depth = 1;
+    for (; end < code.length && depth; end++) {
+      if (code[end] === "{") depth++;
+      else if (code[end] === "}") depth--;
+    }
+    code = code.slice(0, start) + code.slice(start, end).replace(/[^\r\n]/g, " ") + code.slice(end);
+  }
+  if (!/\b(?:reqwest|native_tls)\s*::/.test(code)) return [];
+  const hits = [];
+  for (const m2 of code.matchAll(/\.\s*(?:tls_)?danger_accept_invalid_(?:certs|hostnames)\s*\(\s*true\s*\)/g)) {
+    const line = code.slice(0, m2.index).split("\n").length;
+    hits.push({ rule: { id: "rust-tls-validation-disabled", severity: "critical", title: "TLS server verification is explicitly disabled", detail: "Accepting invalid server certificates or hostnames allows a man-in-the-middle connection. Remove the true bypass flag; use the default verifier and add trusted roots for a private CA." }, line, evidence: source.split(/\r?\n/)[line - 1].trim() });
+  }
+  return hits;
+}
+function callArguments(rest) {
+  const args = [];
+  let start = 0, depth = 0, quoted = false;
+  for (let j3 = 0; j3 < rest.length; j3++) {
+    const c3 = rest[j3];
+    if (c3 === "\\" && quoted) {
+      j3++;
+      continue;
+    }
+    if (c3 === '"') quoted = !quoted;
+    if (quoted) continue;
+    if ((c3 === "," || c3 === ")") && depth === 0) {
+      args.push(rest.slice(start, j3).trim());
+      start = j3 + 1;
+      if (c3 === ")") return args;
+    }
+    if (c3 === "(" || c3 === "[") depth++;
+    if (c3 === ")" || c3 === "]") depth--;
+  }
+  args.push(rest.slice(start).trim());
+  return args;
+}
+function scanKotlinSource(content) {
+  var _a22, _b, _c, _d, _e2, _f;
+  const hits = [], input = /* @__PURE__ */ new Set(), queries = /* @__PURE__ */ new Set(), safeValues = /* @__PURE__ */ new Set();
+  let blockDepth = 0, rawString = false;
+  for (const [i, raw] of content.split(/\r?\n/).entries()) {
+    const triples = (_b = (_a22 = raw.match(/"""/g)) == null ? void 0 : _a22.length) != null ? _b : 0;
+    if (rawString || triples) {
+      input.clear();
+      queries.clear();
+      safeValues.clear();
+      if (triples % 2) rawString = !rawString;
+      continue;
+    }
+    let code = "", quoted = false;
+    for (let j3 = 0; j3 < raw.length; j3++) {
+      const c3 = raw[j3], n = raw[j3 + 1];
+      if (blockDepth) {
+        if (c3 === "/" && n === "*") {
+          blockDepth++;
+          j3++;
+        } else if (c3 === "*" && n === "/") {
+          blockDepth--;
+          j3++;
+        }
+      } else if (quoted) {
+        code += c3;
+        if (c3 === "\\") {
+          code += n != null ? n : "";
+          j3++;
+        } else if (c3 === '"') quoted = false;
+      } else if (c3 === '"') {
+        quoted = true;
+        code += c3;
+      } else if (c3 === "/" && n === "*") {
+        blockDepth++;
+        j3++;
+      } else if (c3 === "/" && n === "/") break;
+      else code += c3;
+    }
+    if (/\bfun\b|^\s*}|\b(?:if|when|for|while|catch)\s*\(/.test(code)) {
+      input.clear();
+      queries.clear();
+      safeValues.clear();
+    }
+    if (code.includes('"""')) {
+      input.clear();
+      queries.clear();
+      safeValues.clear();
+      continue;
+    }
+    const carries = (v2) => {
+      const outside = v2.replace(/"(?:\\.|[^"\\])*"/g, "");
+      if (/^\s*[\w.]+\s*\(/.test(v2) && !/^\s*(?:request\.getParameter|call\.receiveText)\s*\(/.test(v2)) return false;
+      if (/\b(?:call\.(?:parameters|request\.queryParameters)\s*\[|request\.getParameter\s*\(|call\.receiveText\s*\()/.test(outside)) return true;
+      const names = [...v2.matchAll(new RegExp("(?<!\\\\)\\$(?:([A-Za-z_]\\w*)|\\{\\s*([A-Za-z_]\\w*)\\s*\\})", "g"))].map((m2) => {
+        var _a32;
+        return (_a32 = m2[1]) != null ? _a32 : m2[2];
+      });
+      return [...input].some((n) => new RegExp(`\\b${n}\\b`).test(outside) || names.includes(n));
+    };
+    const assignment = /^\s*(?:(?:val|var)\s+)?([A-Za-z_]\w*)(?:\s*:\s*[^=]+)?\s*=\s*(?!=)(.*)/.exec(code);
+    if (assignment) {
+      const [, n, v2] = assignment;
+      if (carries(v2)) {
+        input.add(n);
+        safeValues.delete(n);
+      } else {
+        input.delete(n);
+        safeValues.add(n);
+      }
+      if (input.has(n) && /\b(?:SELECT|INSERT|UPDATE|DELETE)\b/i.test(v2)) queries.add(n);
+      else queries.delete(n);
+    }
+    const executable = code.replace(/"(?:\\.|[^"\\])*"/g, (s) => " ".repeat(s.length));
+    const command = /\bRuntime\s*\.\s*getRuntime\s*\(\s*\)\s*\.\s*exec\s*\(/.exec(executable);
+    const builder = /\bProcessBuilder\s*\(/.exec(executable);
+    const unknownCommand = (argument) => {
+      const names = [...argument.matchAll(new RegExp("(?<!\\\\)\\$(?:([A-Za-z_]\\w*)|\\{\\s*([A-Za-z_]\\w*)\\s*\\})", "g"))].map((m2) => {
+        var _a32;
+        return (_a32 = m2[1]) != null ? _a32 : m2[2];
+      });
+      if (/^[A-Za-z_]\w*$/.test(argument)) names.push(argument);
+      return names.some((name) => !safeValues.has(name));
+    };
+    let unsafeCommand = false, uncertainCommand = false;
+    if (command) {
+      const argument = (_c = callArguments(code.slice(command.index + command[0].length))[0]) != null ? _c : "";
+      unsafeCommand = carries(argument);
+      uncertainCommand = unknownCommand(argument);
+    }
+    if (builder) {
+      const args = callArguments(code.slice(builder.index + builder[0].length));
+      if (/^"(?:\/bin\/)?(?:sh|bash|zsh)"$/.test((_d = args[0]) != null ? _d : "") && args[1] === '"-c"') unsafeCommand || (unsafeCommand = carries((_e2 = args[2]) != null ? _e2 : ""));
+    }
+    if (unsafeCommand || uncertainCommand) hits.push({ rule: { id: "exec-interpolated", re: /$^/g, lang: "java", severity: "critical", title: "Kotlin request input controls a process command", detail: "Request input chooses an executable or is interpreted as shell code. Use a fixed executable with separate argument values and avoid a shell command string." }, line: i + 1, evidence: raw.trim().slice(0, 160), tainted: unsafeCommand });
+    const sink = /\.\s*(?:executeQuery|executeUpdate|prepareStatement|createNativeQuery|query)\s*\(/.exec(executable);
+    if (!sink) continue;
+    const query = (_f = callArguments(code.slice(sink.index + sink[0].length))[0]) != null ? _f : "";
+    if (!(queries.has(query) || /\b(?:SELECT|INSERT|UPDATE|DELETE)\b/i.test(query) && carries(query))) continue;
+    hits.push({ rule: { id: "sql-interpolated", re: /$^/g, lang: "java", severity: "critical", title: "SQL query includes Kotlin request input", detail: "Request input is interpolated into SQL text. Keep SQL static and bind input through prepared-statement parameters." }, line: i + 1, evidence: raw.trim().slice(0, 160), tainted: true });
+  }
+  return hits;
+}
+var REQUEST = /\$_(?:GET|POST|REQUEST|COOKIE|FILES)\b|\bfile_get_contents\s*\(\s*['"]php:\/\/input['"]/i;
+function scanPhpSecurity(content) {
+  var _a22, _b, _c;
+  const hits = [];
+  const tainted = /* @__PURE__ */ new Set();
+  let blockComment = false;
+  const lines = content.split(/\r?\n/);
+  for (let i = 0; i < lines.length; i++) {
+    const raw = lines[i];
+    if (/\/\/\s*(?:nosemgrep|phpcs:ignore)|\bNOSONAR\b/.test(raw)) continue;
+    let code = "";
+    let quote = "";
+    for (let j3 = 0; j3 < raw.length; j3++) {
+      const c3 = raw[j3], next = raw[j3 + 1];
+      if (blockComment) {
+        if (c3 === "*" && next === "/") {
+          blockComment = false;
+          j3++;
+        }
+        continue;
+      }
+      if (quote) {
+        code += c3;
+        if (c3 === "\\") {
+          code += next != null ? next : "";
+          j3++;
+        } else if (c3 === quote) quote = "";
+      } else if (c3 === "'" || c3 === '"') {
+        quote = c3;
+        code += c3;
+      } else if (c3 === "/" && next === "*") {
+        blockComment = true;
+        j3++;
+      } else if (c3 === "#" || c3 === "/" && next === "/") break;
+      else code += c3;
+    }
+    if (/\b(?:function|if|else|switch|for|foreach|while|try|catch)\b|^\s*}/.test(code)) tainted.clear();
+    const executable = code.replace(/'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*"/g, (s) => " ".repeat(s.length));
+    const carries = (expr) => {
+      const value = expr.replace(/\\\$/g, "").replace(/'(?:\\.|[^'\\])*'/g, "");
+      return REQUEST.test(value) || /\bfile_get_contents\s*\(\s*['"]php:\/\/input['"]/.test(expr) || [...value.matchAll(/\$[A-Za-z_]\w*/g)].some((m2) => tainted.has(m2[0]));
+    };
+    for (const statement of code.split(";")) {
+      const assignment = statement.match(/^\s*(?:<\?php\s*)?(\$[A-Za-z_]\w*)\s*=\s*(.*)$/);
+      if (assignment) {
+        const [, name, value] = assignment;
+        const rawBody = /^\s*file_get_contents\s*\(\s*['"]php:\/\/input['"]\s*\)\s*$/.test(value);
+        const requestFetch = value.match(/^\s*file_get_contents\s*\(([^;]*)\)\s*$/);
+        if (rawBody || requestFetch && carries(requestFetch[1]) || carries(value) && !/\b[A-Za-z_]\w*\s*\(/.test(value)) tainted.add(name);
+        else tainted.delete(name);
+      }
+    }
+    const add = (id, title, detail) => hits.push({
+      rule: { id, lang: "php", re: /$^/g, severity: "critical", title, detail },
+      line: i + 1,
+      evidence: raw.trim().slice(0, 160),
+      tainted: true
+    });
+    const read = /\b(?:readfile|file_get_contents)\s*\(/g;
+    for (const m2 of executable.matchAll(read)) {
+      const args = code.slice(((_a22 = m2.index) != null ? _a22 : 0) + m2[0].length).split(/[,;]/)[0];
+      if (carries(args) && !/\b(?:basename|realpath|filter_var)\s*\(/.test(args)) {
+        add("php-path-traversal", "Request input selects a local file", "A request-controlled path reaches a file read. Map input to an explicit allowlist of files, or canonicalize the path and verify it stays inside the intended directory before opening it.");
+        break;
+      }
+    }
+    const xml = /(?:\bsimplexml_load_string|->\s*loadXML)\s*\(/g;
+    for (const m2 of executable.matchAll(xml)) {
+      const first = code.slice(((_b = m2.index) != null ? _b : 0) + m2[0].length);
+      const args = first.includes(");") ? first.split(");")[0] : first + " " + lines.slice(i + 1, i + 4).join("\n").split(");")[0].replace(/\/\/[^\n]*|\/\*[\s\S]*?\*\//g, "");
+      if (carries(args.split(",")[0]) && /\bLIBXML_(?:NOENT|DTDLOAD)\b/.test(args) && !/\bLIBXML_NO_XXE\b/.test(args)) {
+        add("php-xxe", "Untrusted XML enables external entity processing", "Request-controlled XML is parsed with LIBXML_NOENT or LIBXML_DTDLOAD. Remove external entity/DTD loading options, reject document types, and use LIBXML_NO_XXE where supported; LIBXML_NONET alone does not block local file entities.");
+        break;
+      }
+    }
+    if (/\bTwig\\(?:Environment|Loader)|\bTwig_Environment\b/.test(content)) {
+      const template = /->\s*createTemplate\s*\(/g;
+      for (const m2 of executable.matchAll(template)) {
+        if (carries(code.slice(((_c = m2.index) != null ? _c : 0) + m2[0].length).split(/[,;]/)[0])) {
+          add("php-ssti", "Request input becomes Twig template source", "An attacker-controlled value is compiled as Twig template code. Keep template source static and pass request values as render context data; HTML escaping does not prevent template injection.");
+          break;
+        }
+      }
+    }
+  }
+  return hits;
+}
+var INPUT = /\b(?:\w*(?:[Tt]extField|[Tt]extView|[Ss]earchBar)|textField|textView|searchBar)\s*\.\s*text\b|\b(?:req|request)\s*\.\s*(?:query\s*\[|content\s*\.\s*get\s*\()/;
+var SQL2 = /\b(?:SELECT\b.*\bFROM|INSERT\s+INTO|UPDATE\b.*\bSET|DELETE\s+FROM)\b/i;
+function uncomment2(content) {
+  let out = "", depth = 0, quoted = false, escaped = false;
+  for (let i = 0; i < content.length; i++) {
+    const c3 = content[i], next = content[i + 1];
+    if (depth) {
+      if (c3 === "/" && next === "*") {
+        depth++;
+        out += "  ";
+        i++;
+      } else if (c3 === "*" && next === "/") {
+        depth--;
+        out += "  ";
+        i++;
+      } else out += c3 === "\n" ? "\n" : " ";
+    } else if (!quoted && c3 === "/" && next === "*") {
+      depth++;
+      out += "  ";
+      i++;
+    } else if (!quoted && c3 === "/" && next === "/") {
+      while (i < content.length && content[i] !== "\n") {
+        out += " ";
+        i++;
+      }
+      if (i < content.length) out += "\n";
+    } else {
+      out += c3;
+      if (c3 === '"' && !escaped) quoted = !quoted;
+      escaped = c3 === "\\" && !escaped;
+    }
+  }
+  return out;
+}
+function argumentsOf(value) {
+  const args = [];
+  let start = 0, depth = 0, quoted = false, escaped = false;
+  for (let i = 0; i < value.length; i++) {
+    const c3 = value[i];
+    if (c3 === '"' && !escaped) quoted = !quoted;
+    if (!quoted) {
+      if (c3 === "(" || c3 === "[") depth++;
+      if (c3 === ")" && depth === 0) {
+        args.push(value.slice(start, i));
+        return args;
+      }
+      if (c3 === ")" || c3 === "]") depth--;
+      if (c3 === "," && depth === 0) {
+        args.push(value.slice(start, i));
+        start = i + 1;
+      }
+    }
+    escaped = c3 === "\\" && !escaped;
+  }
+  args.push(value.slice(start));
+  return args;
+}
+function scanSwiftSource(content) {
+  var _a22, _b, _c, _d, _e2, _f, _g, _h, _i, _j, _k;
+  if (/"""|#+"/.test(content)) return [];
+  const hits = [], tainted = /* @__PURE__ */ new Set(), sqlValues = /* @__PURE__ */ new Set();
+  const lines = uncomment2(content).split(/\r?\n/);
+  const typedInputs = /* @__PURE__ */ new Set();
+  const scopes = [];
+  const closeScope = () => {
+    const scope = scopes.pop();
+    if (!scope) return;
+    for (const name of scope.names) {
+      tainted.delete(name);
+      sqlValues.delete(name);
+    }
+    for (const name of scope.inputs) typedInputs.delete(name);
+    if (scope.function) {
+      tainted.clear();
+      sqlValues.clear();
+    }
+  };
+  const hasSource = (value) => INPUT.test(value) || [...typedInputs].some((name) => new RegExp(`\\b${name}\\s*\\.\\s*text\\b`).test(value));
+  const usesInput = (value) => {
+    const outsideStrings = value.replace(/"(?:\\.|[^"\\])*"/g, "");
+    if (/\b[A-Za-z_]\w*\s*\(/.test(outsideStrings.replace(/\b(?:get)\s*\(/g, "")) && !hasSource(value)) return false;
+    if (/^\s*(?:try[!?]?\s+)?\w+\s*\(/.test(value) && !/^\s*(?:req|request)\./.test(value)) return false;
+    const interpolations = [...value.matchAll(/\\\(([^)]*)\)/g)].map((m2) => m2[1]).filter((part) => !/\b\w+\s*\(/.test(part)).join(" ");
+    const inputs = outsideStrings + " " + interpolations;
+    return hasSource(inputs) || [...tainted].some((n) => new RegExp(`\\b${n}\\b`).test(inputs));
+  };
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const code = line.replace(/"(?:\\.|[^"\\])*"/g, (m2) => " ".repeat(m2.length));
+    const leadingCloses = (_b = (_a22 = /^\s*(}+)/.exec(code)) == null ? void 0 : _a22[1].length) != null ? _b : 0;
+    for (let n = 0; n < leadingCloses; n++) closeScope();
+    const functionStart = /\b(?:func\s+\w+|init|deinit)\s*\(/.test(code);
+    if (functionStart) {
+      tainted.clear();
+      sqlValues.clear();
+    }
+    const opens = ((_c = code.match(/{/g)) != null ? _c : []).length;
+    for (let n = 0; n < opens; n++) scopes.push({ names: /* @__PURE__ */ new Set(), inputs: /* @__PURE__ */ new Set(), function: functionStart && n === 0 });
+    const typedInput = /\b(?:let|var)\s+(\w+)\s*:\s*(?:UIKit\.)?(?:UITextField|UITextView|UISearchBar)\b/.exec(code);
+    if (typedInput) {
+      typedInputs.add(typedInput[1]);
+      (_d = scopes.at(-1)) == null ? void 0 : _d.inputs.add(typedInput[1]);
+    }
+    const assignment = /^\s*(?:(?:let|var)\s+)?([A-Za-z_]\w*)(?:\s*:\s*[^=]+)?\s*=\s*(?!=)(.*)/.exec(line);
+    if (assignment) {
+      const [, name, value] = assignment;
+      if (/^\s*(?:let|var)\b/.test(line)) (_e2 = scopes.at(-1)) == null ? void 0 : _e2.names.add(name);
+      if (usesInput(value)) tainted.add(name);
+      else tainted.delete(name);
+      if (tainted.has(name) && SQL2.test(value)) sqlValues.add(name);
+      else sqlValues.delete(name);
+    }
+    if (/\bDisabledTrustEvaluator\s*\(/.test(code) || /\bServerTrustPolicy\s*\.\s*disableEvaluation\b/.test(code)) {
+      hits.push({ rule: {
+        id: "swift-tls-validation-disabled",
+        severity: "critical",
+        title: "TLS server certificate validation is disabled",
+        detail: "Alamofire's disabled trust evaluator accepts unverified server certificates. Use DefaultTrustEvaluator or certificate/public-key pinning for production connections."
+      }, line: i + 1, evidence: line.trim() });
+    }
+    const defaultsWrite = /\b(?:UserDefaults|NSUserDefaults)\.standard\.(?:set|setValue)\s*\(/.exec(code);
+    if (defaultsWrite) {
+      const args = argumentsOf(line.slice(defaultsWrite.index + defaultsWrite[0].length));
+      const key = /^\s*forKey:\s*"(?:password|passwd|passcode|pin|(?:access[_-]?|refresh[_-]?|auth[_-]?)?token|client[_-]?secret)"\s*$/i.test((_f = args[1]) != null ? _f : "");
+      const value = ((_g = args[0]) != null ? _g : "").trim();
+      const rawCredential = /^"[^"\\]+"$/.test(value) || /^(?:\w*password\w*|\w*passcode\w*|\w*token\w*|pin)[!?]?$/i.test(value) || usesInput(value);
+      if (key && rawCredential) hits.push({ rule: {
+        id: "swift-plaintext-credential-storage",
+        severity: "warning",
+        title: "Credential stored in plaintext preferences",
+        detail: "UserDefaults is a preferences store, not a credential vault. Store passwords, authentication tokens and PINs in the Keychain with an appropriate accessibility policy."
+      }, line: i + 1, evidence: line.trim() });
+    }
+    const cryptCall = /\bCCCrypt\s*\(/.exec(code);
+    if (cryptCall) {
+      const options = (_h = argumentsOf(line.slice(cryptCall.index + cryptCall[0].length))[2]) != null ? _h : "";
+      if (/\bkCCOptionECBMode\b/.test(options.replace(/"(?:\\.|[^"\\])*"/g, ""))) hits.push({ rule: {
+        id: "swift-ecb-encryption",
+        severity: "warning",
+        title: "CommonCrypto encryption explicitly uses ECB mode",
+        detail: "ECB encrypts identical plaintext blocks identically and exposes patterns. Prefer authenticated encryption such as CryptoKit AES.GCM; preserve unique nonces and authentication tags."
+      }, line: i + 1, evidence: line.trim() });
+    }
+    const sqlSink = /\b(?:sqlite3_(?:exec|prepare_v2|prepare_v3)|(?:\w+\.)?(?:executeQuery|executeUpdate))\s*\(/.exec(code);
+    const htmlSink = /\.loadHTMLString\s*\(/.exec(code);
+    let id;
+    if (sqlSink) {
+      const args = argumentsOf(line.slice(sqlSink.index + sqlSink[0].length));
+      const query = (_i = args[sqlSink[0].startsWith("sqlite3_") ? 1 : 0]) != null ? _i : "";
+      if (SQL2.test(query) && usesInput(query) || [...sqlValues].some((n) => new RegExp(`^\\s*${n}\\s*$`).test(query))) id = "sql-interpolated";
+    }
+    if (htmlSink && usesInput((_j = argumentsOf(line.slice(htmlSink.index + htmlSink[0].length))[0]) != null ? _j : "")) id = "swift-webview-html";
+    const trailingCloses = ((_k = code.match(/}/g)) != null ? _k : []).length - leadingCloses;
+    for (let n = 0; n < trailingCloses; n++) closeScope();
+    if (!id) continue;
+    hits.push({
+      rule: {
+        id,
+        severity: id === "sql-interpolated" ? "critical" : "warning",
+        title: id === "sql-interpolated" ? "SQL query includes Swift user input" : "User input loaded as WebView HTML",
+        detail: id === "sql-interpolated" ? "User input is assembled into SQL text. Use sqlite3_bind_* or your database library's bound parameters." : "A text field or request value reaches loadHTMLString without escaping. Escape it as text or use a fixed HTML template with escaped values."
+      },
+      line: i + 1,
+      evidence: line.trim(),
+      tainted: true
+    });
+  }
+  return hits;
+}
+var JS_RE2 = /\.(ts|tsx|js|jsx|mjs|cjs|mts|cts)$/i;
 var PY_RE2 = /\.py$/i;
 var PHP_RE = /\.(?:php|phtml|inc)$/i;
-var JAVA_RE = /\.(?:java|kt)$/i;
+var JAVA_RE = /\.(?:java|kts?)$/i;
 var RB_RE = /\.(?:rb|erb|rake)$/i;
 var GO_RE2 = /\.go$/i;
 var CS_RE = /\.(?:cs|cshtml)$/i;
@@ -74728,7 +75448,7 @@ var PHP_JAVA_RULES = [
   {
     id: "php-include-user-input",
     lang: "php",
-    re: /\b(?:include|require)(?:_once)?\s*\(?\s*[^;]*\$_(?:GET|POST|REQUEST|COOKIE)/g,
+    re: /\b(?:include|require)(?:_once)?\s*\(?\s*(?:[^;]*\$_(?:GET|POST|REQUEST|COOKIE)|\$[A-Za-z_]\w*)/g,
     severity: "critical",
     title: "File included from request input",
     detail: "The path to include comes from the request: a local or remote file inclusion. Map the input to a fixed allow-list of files instead."
@@ -74744,7 +75464,7 @@ var PHP_JAVA_RULES = [
   {
     id: "php-reflected-xss",
     lang: "php",
-    re: /\b(?:echo|print)\b[^;]*\$_(?:GET|POST|REQUEST|COOKIE)\b(?![^;]*htmlspecialchars)/g,
+    re: /\b(?:echo|print)\b(?:[^;]*\$_(?:GET|POST|REQUEST|COOKIE)\b(?![^;]*htmlspecialchars)|\s+(?:['"][^'"\n]*['"]\s*\.\s*)?\$[A-Za-z_]\w*\b)/g,
     severity: "warning",
     title: "Request input echoed into the page",
     detail: "A request value is written to the HTML unescaped: reflected XSS. Wrap it in `htmlspecialchars`."
@@ -75098,13 +75818,33 @@ function scanSource(content, lang) {
       const existing = byLine.get(line);
       if (existing && rank(existing.rule.severity) >= rank(rule.severity)) continue;
       if (!sinkAllows(rule.id, rawLine, idx - lineStart)) continue;
+      if (lang === "php" && rule.id === "exec-interpolated" && /\bproc_open\s*\(\s*\[/.test(rawLine)) continue;
+      if ((rule.id === "php-include-user-input" || rule.id === "php-reflected-xss") && !/\$_(?:GET|POST|REQUEST|COOKIE)\b/.test(m2[0]) && !phpLocalRequestValue(content, idx, m2[0])) continue;
       const tainted = !INJECTION_RULES.has(rule.id) ? void 0 : rule.id === "ssrf" ? SSRF_TAINT.test(around(content, lineStart, 2, 0)) : TAINT_RE[lang].test(around(content, lineStart, TAINT_WINDOW, 2));
       byLine.set(line, { rule, line, evidence: text.slice(0, 160), tainted });
     }
   }
+  if (lang === "php") for (const hit of scanPhpSecurity(content)) {
+    if (!byLine.has(hit.line)) byLine.set(hit.line, hit);
+  }
   return [...byLine.values()].sort((a, b3) => a.line - b3.line);
 }
 var SSRF_TAINT = /\b(?:req|request)\.(?:query|body|params|args|form|values|GET|POST)\b|\$_(?:GET|POST|REQUEST|COOKIE)\b|\bparams\s*\[|\brequest\.get_json\b|\bc\.(?:Query|Param|PostForm)\s*\(|\br\.(?:FormValue|URL\.Query)\b/;
+function phpLocalRequestValue(content, sinkOffset, sink) {
+  const tainted = /* @__PURE__ */ new Set();
+  const prefix = content.slice(0, sinkOffset).split(/\r?\n/).slice(-TAINT_WINDOW).join("\n");
+  for (const statement of prefix.split(/[;\n]/)) {
+    if (/\b(?:function|fn)\b|^\s*}/.test(statement)) tainted.clear();
+    const assignment = statement.match(/^\s*(?:<\?php\s*)?(\$[A-Za-z_]\w*)\s*=\s*([\s\S]*)$/);
+    if (!assignment) continue;
+    const [, target, value] = assignment;
+    const direct = /^\$_(?:GET|POST|REQUEST|COOKIE)\s*\[\s*(['"])[^'"]+\1\s*\]\s*$/.test(value);
+    const alias = value.trim();
+    if (direct || tainted.has(alias)) tainted.add(target);
+    else tainted.delete(target);
+  }
+  return [...sink.matchAll(/\$[A-Za-z_]\w*/g)].some(([name]) => tainted.has(name));
+}
 var PHP_ESCAPED = /\b(?:htmlspecialchars|htmlentities|esc_(?:attr|html|url|js|textarea)|sanitize_\w+|wp_kses\w*|strip_tags|intval|floatval|urlencode|rawurlencode|json_encode|scrub_out|e)\s*\(|\(int\)|\(float\)/;
 function sinkAllows(ruleId, line, col) {
   var _a22, _b;
@@ -75309,7 +76049,7 @@ var insecureCodeScanner = {
   category: "security",
   run(ctx) {
     return __async(this, null, function* () {
-      var _a22, _b;
+      var _a22, _b, _c;
       const issues = [];
       const sources = [];
       const pending = [];
@@ -75317,18 +76057,78 @@ var insecureCodeScanner = {
         if (issues.length >= MAX_TOTAL8) break;
         const norm = file2.replace(/\\/g, "/");
         const webRoot = /\.php$/i.test(norm) && /(^|\/)(?:www|public|htdocs)\//.test(norm);
-        if (SKIP_RE.test(norm) || NOT_SHIPPED_RE2.test(norm) && !webRoot) continue;
+        const productionRoot = JAVA_RE.test(norm) || /\.scala$/i.test(norm) ? /(?:^|\/)src\/main\/(?:java|kotlin|scala)\//.exec(norm) : null;
+        const purposePath = productionRoot ? norm.slice(0, productionRoot.index + productionRoot[0].length) : norm;
+        if (SKIP_RE.test(norm) || NOT_SHIPPED_RE2.test(purposePath) && !webRoot) continue;
+        if (/\.(?:rs|c|cc|cpp|cxx|h|hpp|hxx)$/i.test(norm)) {
+          if (TEST_RE3.test(norm) || /(?:^|\/)(?:test|tests)\.(?:rs|c|cc|cpp|cxx)$|_test\.(?:rs|c|cc|cpp|cxx)$/i.test(norm)) continue;
+          const size2 = yield (_a22 = ctx.fileSize) == null ? void 0 : _a22.call(ctx, file2);
+          if (size2 !== null && size2 !== void 0 && size2 > MAX_BYTES2) continue;
+          const content2 = yield ctx.readFile(file2);
+          if (!content2) continue;
+          const nativeHits = /\.rs$/i.test(norm) ? scanRustTlsSource(content2) : scanCppTlsSource(content2);
+          for (const hit of nativeHits.slice(0, MAX_PER_FILE5)) {
+            if (issues.length >= MAX_TOTAL8) break;
+            let ageDays = 0;
+            try {
+              ageDays = yield ctx.git.blameAgeDays(file2, hit.line);
+            } catch (e) {
+            }
+            issues.push({
+              id: `insecure-${hit.rule.id}-${norm}:${hit.line}`,
+              category: "security",
+              severity: TEST_RE3.test(norm) ? LOWER[hit.rule.severity] : hit.rule.severity,
+              title: hit.rule.title,
+              location: `${norm}:${hit.line}`,
+              ageDays,
+              detail: hit.rule.detail,
+              evidence: hit.evidence
+            });
+          }
+          continue;
+        }
         const lang = langOf(norm);
-        if (!lang) continue;
-        const size = yield (_a22 = ctx.fileSize) == null ? void 0 : _a22.call(ctx, file2);
+        if (!lang && !/\.(?:swift|scala)$/i.test(norm)) continue;
+        const size = yield (_b = ctx.fileSize) == null ? void 0 : _b.call(ctx, file2);
         if (size !== null && size !== void 0 && size > MAX_BYTES2) continue;
         const content = yield ctx.readFile(file2);
         if (!content) continue;
+        if (!lang) {
+          const isLanguageTest = TEST_RE3.test(norm) || /Tests?\.(?:swift|scala)$/i.test(norm);
+          for (const hit of (/\.scala$/i.test(norm) ? scanScalaSource(content) : scanSwiftSource(content)).slice(0, MAX_PER_FILE5)) {
+            if (issues.length >= MAX_TOTAL8) break;
+            let ageDays = 0;
+            try {
+              ageDays = yield ctx.git.blameAgeDays(file2, hit.line);
+            } catch (e) {
+            }
+            issues.push(__spreadValues({
+              id: `insecure-${hit.rule.id}-${norm}:${hit.line}`,
+              category: "security",
+              severity: isLanguageTest ? LOWER[hit.rule.severity] : hit.rule.severity,
+              title: hit.rule.title,
+              location: `${norm}:${hit.line}`,
+              ageDays,
+              detail: hit.rule.detail,
+              evidence: hit.evidence
+            }, hit.tainted === void 0 ? {} : { confidence: hit.tainted ? "high" : "low" }));
+          }
+          continue;
+        }
         const isTest = TEST_RE3.test(norm);
         const lines = content.split(/\r?\n/);
         if (!isTest && TAINT_RE[lang].test(content)) sources.push({ norm, lang, lines });
         let perFile = 0;
-        for (const hit of scanSource(content, lang)) {
+        const hits = scanSource(content, lang).filter((hit) => {
+          var _a32;
+          return !(/\.kts?$/i.test(norm) && hit.rule.id === "exec-interpolated" && /\bRuntime\s*\.\s*getRuntime\s*\(\s*\)\s*\.\s*exec\s*\(/.test((_a32 = lines[hit.line - 1]) != null ? _a32 : ""));
+        });
+        if (/\.kts?$/i.test(norm)) for (const hit of scanKotlinSource(content)) {
+          const existing = hits.findIndex((h3) => h3.line === hit.line && h3.rule.id === hit.rule.id);
+          if (existing >= 0) hits[existing] = hit;
+          else hits.push(hit);
+        }
+        for (const hit of hits) {
           if (issues.length >= MAX_TOTAL8 || perFile >= MAX_PER_FILE5) break;
           if (isTest && SKIP_IN_TEST.has(hit.rule.id)) continue;
           if (hit.rule.id === "ssrf" && lang === "js" && BROWSER_CODE_RE.test(norm)) continue;
@@ -75353,7 +76153,7 @@ var insecureCodeScanner = {
         }
       }
       for (const p2 of pending) {
-        const kind = (_b = CROSS_FILE_KIND.find(([re2]) => re2.test(p2.issue.id))) == null ? void 0 : _b[1];
+        const kind = (_c = CROSS_FILE_KIND.find(([re2]) => re2.test(p2.issue.id))) == null ? void 0 : _c[1];
         if (!kind) continue;
         if (VENDORED_SINK_RE.test(p2.norm)) continue;
         if (/Code generated|DO NOT EDIT|@generated/.test(p2.lines.slice(0, 8).join("\n"))) continue;
@@ -78149,6 +78949,15 @@ var scanReportSchema2 = external_exports.object({
 
 // ../core/src/rules.ts
 var INSECURE2 = {
+  "php-path-traversal": "PHP request input used as a filesystem path",
+  "php-xxe": "PHP XML parser allows external entities",
+  "php-ssti": "PHP template source built from request input",
+  "swift-webview-html": "Swift request input loaded as WebView HTML",
+  "swift-tls-validation-disabled": "Swift TLS server verification disabled",
+  "swift-plaintext-credential-storage": "Swift credential stored in plaintext preferences",
+  "swift-ecb-encryption": "Swift encryption uses insecure ECB mode",
+  "rust-tls-validation-disabled": "Rust TLS server verification disabled",
+  "cpp-tls-validation-disabled": "libcurl TLS server verification disabled",
   "eval-dynamic": "eval() on a dynamic value",
   "new-function": "new Function() on a dynamic value",
   "exec-interpolated": "Shell command built from variables",
@@ -78724,7 +79533,14 @@ var todoDebtScanner2 = {
         for (const h3 of hits) counts.set(h3.text, (counts.get(h3.text) ?? 0) + 1);
         if (Math.max(...counts.values()) / hits.length > 0.8) continue;
       }
+      const sourceLines = content.split(/\r?\n/);
+      const normalized = file2.replace(/\\/g, "/");
       for (const hit of hits) {
+        if (hit.marker === "TODO") {
+          const exercisePrompt = /(^|\/)exercises?\//i.test(normalized) && /\b(?:exercise|fix the code|your task)\b/i.test(hit.text);
+          const textbookStub = /(^|\/)chapter[-_]?\d+\//i.test(normalized) && !hit.text && /^\s*}\s*;?\s*$/.test(sourceLines[hit.line] ?? "") && /^\s*{\s*$/.test(sourceLines[hit.line - 2] ?? "");
+          if (exercisePrompt || textbookStub) continue;
+        }
         const ageDays = await ctx.git.blameAgeDays(file2, hit.line);
         const summary = hit.text ? `: ${truncate2(hit.text)}` : "";
         issues.push({
@@ -82170,9 +82986,16 @@ function commentBody2(line) {
   const m2 = line.match(/^\s*\/\/(.*)$/);
   return m2 ? m2[1].trim() : null;
 }
+function isDocumentationRow2(body) {
+  if (/^[\w*+ /-]+\s*=\s*(?:0x[\da-f]+|0b[01]+|\d+)\s*=\s*(?:0x[\da-f]+|0b[01]+|\d+)\s*$/i.test(body)) return true;
+  if (/^\[[^\]]+\](?:,\s*\[[^\]]+\])?\s*:=\s*range\s*\[[^\]]+\]$/.test(body)) return true;
+  if (/^Index\s+\d+\s*->\s+\S/.test(body)) return true;
+  if (/^\|\s*[A-Za-z0-9_]+\s*\|/.test(body)) return true;
+  return /^[A-Za-z_]\w*(?:\s+is\s+alias\s+for\s+[A-Za-z_]\w*)?\s*=\s*0x[\da-f]+\s+\([A-Za-z][^)]*\)(?:\s+\([^)]+\))*$/.test(body);
+}
 function looksLikeCode2(body) {
   if (!body || body.length < 2) return false;
-  if (SKIP_PREFIX2.test(body)) return false;
+  if (SKIP_PREFIX2.test(body) || isDocumentationRow2(body)) return false;
   if (body.startsWith("=>")) return false;
   if (PROSE_TAIL2.test(body)) return false;
   if (body.includes("`")) return false;
@@ -82180,15 +83003,59 @@ function looksLikeCode2(body) {
   return CODE_SIGNAL2.test(body);
 }
 var NOT_PRODUCT_RE2 = /(^|\/)(?:flow-typed|_?examples?|samples?|bench(?:mark)?s?|website|www|docs?|lang(?:uage)?s?|locales?|i18n|assets|legacy)\/|\.config\.[cm]?[jt]s$|\.d\.[cm]?ts$|\.(?:stories|story)\.[cm]?[jt]sx?$|(^|\/)example_[^/]*_test\.go$/i;
-function introducesExample2(lines, start, len) {
-  const near3 = [];
-  for (let i = start - 1; i >= Math.max(0, start - 6); i--) {
-    const b3 = commentBody2(lines[i]);
-    if (b3 === null) break;
-    near3.push(b3);
+function lineCommentLines2(lines, nestedComments) {
+  const result = /* @__PURE__ */ new Set();
+  let blockDepth = 0, quote = "";
+  for (let n = 0; n < lines.length; n++) {
+    const line = lines[n];
+    for (let i = 0; i < line.length; i++) {
+      const c3 = line[i], next = line[i + 1];
+      if (blockDepth) {
+        if (nestedComments && c3 === "/" && next === "*") {
+          blockDepth++;
+          i++;
+        } else if (c3 === "*" && next === "/") {
+          blockDepth--;
+          i++;
+        }
+      } else if (quote) {
+        if (quote !== '"""' && c3 === "\\") {
+          i++;
+          continue;
+        }
+        if (line.startsWith(quote, i)) {
+          i += quote.length - 1;
+          quote = "";
+        }
+      } else if (c3 === "/" && next === "/") {
+        if (!line.slice(0, i).trim()) result.add(n);
+        break;
+      } else if (c3 === "/" && next === "*") {
+        blockDepth++;
+        i++;
+      } else if (c3 === '"' || c3 === "'" || c3 === "`") {
+        quote = line.startsWith('"""', i) ? '"""' : c3;
+        i += quote.length - 1;
+      }
+    }
+    if (quote === '"' || quote === "'") quote = "";
   }
-  for (let i = start; i < start + len + 2 && i < lines.length; i++) near3.push(commentBody2(lines[i]) ?? "");
-  return near3.some((b3) => /```|\ba la\b|\be\.g\.|\bexample\b|like this|looks like|\bsyntax\b|\bformat\b|should be uncommented/i.test(b3));
+  return result;
+}
+function commentParagraph2(lines, start, len) {
+  let a = start, b3 = start + len;
+  while (a > 0 && (commentBody2(lines[a - 1]) !== null || !lines[a - 1].trim())) a--;
+  while (b3 < lines.length && (commentBody2(lines[b3]) !== null || !lines[b3].trim())) b3++;
+  return lines.slice(a, b3).map((line) => commentBody2(line) ?? "");
+}
+function introducesExample2(lines, start, len, file2) {
+  const near3 = commentParagraph2(lines, start, len);
+  if (near3.some((b3) => /```|\ba la\b|\be\.g\.|\bexamples?\b|^sample\s*:?\s*$|^sample\s+(?:input|output|usage)\s*:|\buse case\b|like this|looks like|\bsyntax\b|\bformat\b|should be uncommented/i.test(b3))) return true;
+  if (near3.some((b3) => /^CREATE\s+TABLE\b/i.test(b3))) return true;
+  if (/\.(?:java|go|c|cc|cpp|h|hpp|cs|rs|swift|kt)$/.test(file2)) {
+    return near3.filter((b3) => /^<\/?[A-Za-z_][\w:.-]*(?:\s|\/?[>])/.test(b3)).length >= 2;
+  }
+  return false;
 }
 var commentedCodeScanner2 = {
   id: "commented-code",
@@ -82204,16 +83071,22 @@ var commentedCodeScanner2 = {
       const content = await ctx.readFile(file2);
       if (!content || !content.includes("//")) continue;
       const lines = content.split(/\r?\n/);
+      const lineComments = lineCommentLines2(lines, /\.(?:rs|swift|scala|kt)$/.test(norm));
       let perFile = 0;
       let runStart = -1;
       let runLen = 0;
       const flush = () => {
+        if (runLen < MIN_RUN2) {
+          runStart = -1;
+          runLen = 0;
+          return;
+        }
         const run = runStart === -1 ? [] : lines.slice(runStart, runStart + runLen);
         const docExample = (
           // …unless the line above opens the expression the indented lines continue.
           run.every(isDocIndent2) && !/[({[,]\s*$|=>\s*$/.test(commentBody2(lines[runStart - 1] ?? "") ?? "") || run.some((l3) => /^\s*\/\/\s*[*-]\s/.test(l3)) || // introduced by "For example:" / "Testing for these options:"
           /:\s*$/.test(commentBody2(lines[runStart - 1] ?? "") ?? "") || /:\s*$/.test(commentBody2(lines[runStart - 2] ?? "") ?? "") || // The prose around it presents it: "a la ```…```", "looks like", "e.g.".
-          introducesExample2(lines, runStart, runLen) || run.some((l3) => /::=/.test(l3))
+          introducesExample2(lines, runStart, runLen, norm) || run.some((l3) => /::=/.test(l3))
         );
         if (!docExample && runLen >= MIN_RUN2 && perFile < MAX_PER_FILE9 && issues.length < MAX_TOTAL15) {
           const lineNo = runStart + 1;
@@ -82233,7 +83106,7 @@ var commentedCodeScanner2 = {
         runLen = 0;
       };
       for (let i = 0; i < lines.length; i++) {
-        const body = commentBody2(lines[i]);
+        const body = lineComments.has(i) ? commentBody2(lines[i]) : null;
         if (body !== null && looksLikeCode2(body)) {
           if (runStart === -1) runStart = i;
           runLen++;
@@ -82247,11 +83120,655 @@ var commentedCodeScanner2 = {
   }
 };
 
+// ../core/src/scanners/insecure-scala.ts
+var SQL3 = /\b(?:SELECT|INSERT\s+INTO|UPDATE|DELETE\s+FROM|WITH)\b/i;
+var SOURCE2 = /\b(?:req|request)\s*\.\s*(?:queryString\b|getQueryString\s*\(|body\s*\.\s*asText\b)/;
+function literalAt2(source, start) {
+  const delimiter = source.startsWith('"""', start) ? '"""' : '"';
+  const prefix = /[A-Za-z_]\w*$/.exec(source.slice(0, start))?.[0] ?? "";
+  const interpolated = /^(?:s|sql|sqlu)$/.test(prefix);
+  const expressions = [];
+  let i = start + delimiter.length;
+  for (; i < source.length; ) {
+    if (source.startsWith(delimiter, i)) {
+      return { start, end: i + delimiter.length, prefix, text: source.slice(start + delimiter.length, i), expressions };
+    }
+    if (delimiter === '"' && source[i] === "\\") {
+      i += 2;
+      continue;
+    }
+    if (interpolated && source[i] === "$" && source[i + 1] === "$") {
+      i += 2;
+      continue;
+    }
+    if (interpolated && source[i] === "$") {
+      const raw = source[i - 1] === "#";
+      if (source[i + 1] === "{") {
+        const beginning = i + 2;
+        let depth = 1;
+        i = beginning;
+        for (; i < source.length && depth; i++) {
+          if (source[i] === '"') {
+            i = literalAt2(source, i).end - 1;
+            continue;
+          }
+          if (source[i] === "{") depth++;
+          if (source[i] === "}") depth--;
+        }
+        if (!depth) expressions.push({ value: source.slice(beginning, i - 1), raw });
+        continue;
+      }
+      const name = /^[A-Za-z_]\w*/.exec(source.slice(i + 1));
+      if (name) {
+        expressions.push({ value: name[0], raw });
+        i += name[0].length + 1;
+        continue;
+      }
+    }
+    i++;
+  }
+  return { start, end: source.length, prefix, text: "", expressions: [] };
+}
+function literals2(source) {
+  const result = [];
+  for (let i = 0; i < source.length; i++) {
+    if (source[i] !== '"') continue;
+    const literal2 = literalAt2(source, i);
+    result.push(literal2);
+    i = literal2.end - 1;
+  }
+  return result;
+}
+function maskStrings2(source) {
+  let result = source;
+  for (const literal2 of literals2(source).reverse()) {
+    result = result.slice(0, literal2.start) + " ".repeat(literal2.end - literal2.start) + result.slice(literal2.end);
+  }
+  return result;
+}
+function uncomment3(source) {
+  let result = "", depth = 0;
+  for (let i = 0; i < source.length; i++) {
+    const c3 = source[i], next = source[i + 1];
+    if (depth) {
+      if (c3 === "/" && next === "*") {
+        depth++;
+        result += "  ";
+        i++;
+      } else if (c3 === "*" && next === "/") {
+        depth--;
+        result += "  ";
+        i++;
+      } else result += c3 === "\n" ? "\n" : " ";
+    } else if (c3 === '"') {
+      const literal2 = literalAt2(source, i);
+      result += source.slice(i, literal2.end);
+      i = literal2.end - 1;
+    } else if (c3 === "/" && next === "*") {
+      depth++;
+      result += "  ";
+      i++;
+    } else if (c3 === "/" && next === "/") {
+      while (i < source.length && source[i] !== "\n") {
+        result += " ";
+        i++;
+      }
+      if (i < source.length) result += "\n";
+    } else result += c3;
+  }
+  return result;
+}
+function statements2(source) {
+  const result = [];
+  let start = 0, line = 1, startLine = 1, parentheses = 0;
+  for (let i = 0; i < source.length; i++) {
+    const c3 = source[i];
+    if (c3 === '"') {
+      const literal2 = literalAt2(source, i);
+      line += source.slice(i, literal2.end).split("\n").length - 1;
+      i = literal2.end - 1;
+      continue;
+    }
+    if (c3 === "(" || c3 === "[") parentheses++;
+    if (c3 === ")" || c3 === "]") parentheses = Math.max(0, parentheses - 1);
+    if (c3 === ";" || c3 === "\n" && !parentheses) {
+      result.push({ text: source.slice(start, i), line: startLine });
+      start = i + 1;
+      startLine = line + (c3 === "\n" ? 1 : 0);
+    }
+    if (c3 === "\n") line++;
+  }
+  result.push({ text: source.slice(start), line: startLine });
+  return result;
+}
+function firstArgument2(source) {
+  const masked = maskStrings2(source);
+  let depth = 0;
+  for (let i = 0; i < masked.length; i++) {
+    if ((masked[i] === "," || masked[i] === ")") && !depth) return source.slice(0, i);
+    if (masked[i] === "(" || masked[i] === "[") depth++;
+    if (masked[i] === ")" || masked[i] === "]") depth--;
+  }
+  return source;
+}
+function scanScalaSource2(content) {
+  const hits = [], tainted = /* @__PURE__ */ new Set(), queries = /* @__PURE__ */ new Set();
+  const carries = (expression) => {
+    const outside = maskStrings2(expression);
+    if (/\.(?:toInt|toLong|toShort|toByte|toFloat|toDouble|toBoolean)(?:Option)?\b/.test(outside)) return false;
+    const calls = [...outside.matchAll(/\b([A-Za-z_]\w*)\s*\(/g)];
+    if (calls.some((m2) => !/^(?:queryString|getQueryString|getOrElse|mkString)$/.test(m2[1]))) return false;
+    return SOURCE2.test(outside) || [...tainted].some((name) => new RegExp(`\\b${name}\\b`).test(outside)) || literals2(expression).some((literal2) => literal2.expressions.some((part) => (!(literal2.prefix === "sql" || literal2.prefix === "sqlu") || part.raw) && carries(part.value)));
+  };
+  const isQuery = (expression) => literals2(expression).some((l3) => SQL3.test(l3.text)) || [...queries].some((name) => new RegExp(`\\b${name}\\b`).test(maskStrings2(expression)));
+  for (const statement of statements2(uncomment3(content))) {
+    const code = statement.text, executable = maskStrings2(code);
+    if (/\b(?:def|class|object|trait)\b|^\s*}|\b(?:if|for|while|catch|match)\b/.test(executable)) {
+      tainted.clear();
+      queries.clear();
+    }
+    const assignment = /^\s*(?:(?:val|var)\s+)?([A-Za-z_]\w*)(?:\s*:\s*[^=]+)?\s*=\s*(?!=)([\s\S]*)$/.exec(code);
+    if (assignment) {
+      const [, name, value] = assignment;
+      const input = carries(value), sql = input && isQuery(value);
+      if (input) tainted.add(name);
+      else tainted.delete(name);
+      if (sql) queries.add(name);
+      else queries.delete(name);
+    }
+    const add = (offset) => {
+      const line = statement.line + code.slice(0, offset).split("\n").length - 1;
+      if (hits.some((hit) => hit.line === line)) return;
+      hits.push({ rule: {
+        id: "sql-interpolated",
+        severity: "critical",
+        title: "Scala request input interpolated into SQL text",
+        detail: "Request input becomes SQL source text. Use JDBC prepared statements with bound parameters, or Slick's ordinary $ interpolation; #$ splices literal SQL and must not contain request data."
+      }, line, evidence: content.split(/\r?\n/)[line - 1]?.trim().slice(0, 160) ?? "", tainted: true });
+    };
+    for (const sink of executable.matchAll(/\.\s*(?:executeQuery|executeUpdate|executeLargeUpdate|execute|prepareStatement|prepareCall)\s*\(/g)) {
+      const argument = firstArgument2(code.slice((sink.index ?? 0) + sink[0].length));
+      if (carries(argument) && isQuery(argument)) add(sink.index ?? 0);
+    }
+    for (const literal2 of literals2(code)) {
+      if (/^(?:sql|sqlu)$/.test(literal2.prefix) && SQL3.test(literal2.text) && literal2.expressions.some((part) => part.raw && carries(part.value))) add(literal2.start);
+    }
+  }
+  return hits;
+}
+
+// ../core/src/scanners/native-source-mask.ts
+function maskNativeSource2(source) {
+  const chars = source.split("");
+  const hide = (start, end) => {
+    for (let k2 = start; k2 < end; k2++) if (chars[k2] !== "\n" && chars[k2] !== "\r") chars[k2] = " ";
+  };
+  let i = 0;
+  while (i < source.length) {
+    const start = i;
+    if (source.startsWith("//", i)) {
+      const end = source.indexOf("\n", i);
+      i = end < 0 ? source.length : end;
+      hide(start, i);
+      continue;
+    }
+    if (source.startsWith("/*", i)) {
+      let depth = 1;
+      i += 2;
+      while (i < source.length && depth) {
+        if (source.startsWith("/*", i)) {
+          depth++;
+          i += 2;
+        } else if (source.startsWith("*/", i)) {
+          depth--;
+          i += 2;
+        } else i++;
+      }
+      hide(start, i);
+      continue;
+    }
+    const rust = /^(?:br|r)(#{0,255})"/.exec(source.slice(i));
+    const cpp = /^R"([^\s()\\]{0,16})\(/.exec(source.slice(i));
+    if (rust || cpp) {
+      const open = (rust ?? cpp)[0], close = rust ? `"${rust[1]}` : `)${cpp[1]}"`;
+      const end = source.indexOf(close, i + open.length);
+      i = end < 0 ? source.length : end + close.length;
+      hide(start, i);
+      continue;
+    }
+    if (source[i] === '"' || source[i] === "'" && /^'(?:\\.|[^'\\\n])'/.test(source.slice(i))) {
+      const quote = source[i++];
+      while (i < source.length) {
+        if (source[i] === "\\") {
+          i += 2;
+          continue;
+        }
+        ;
+        if (source[i++] === quote) break;
+      }
+      hide(start, Math.min(i, source.length));
+      continue;
+    }
+    i++;
+  }
+  return chars.join("");
+}
+
+// ../core/src/scanners/insecure-cpp.ts
+function scanCppTlsSource2(source) {
+  const code = maskNativeSource2(source), hits = [];
+  for (const m2 of code.matchAll(/\bcurl_easy_setopt\s*\(\s*[A-Za-z_]\w*\s*,\s*CURLOPT_SSL_VERIFY(?:PEER|HOST)\s*,\s*(?:0(?:[uUlL]{0,3})|false)\s*\)/g)) {
+    if (/[.>\w]/.test(code[m2.index - 1] ?? "")) continue;
+    const line = code.slice(0, m2.index).split("\n").length;
+    hits.push({ rule: { id: "cpp-tls-validation-disabled", severity: "critical", title: "libcurl TLS server verification is explicitly disabled", detail: "Setting CURLOPT_SSL_VERIFYPEER or CURLOPT_SSL_VERIFYHOST to zero disables server authentication and permits man-in-the-middle connections. Keep peer verification at 1L and host verification at 2L; configure trusted CA roots for private certificates." }, line, evidence: source.split(/\r?\n/)[line - 1].trim() });
+  }
+  return hits;
+}
+
+// ../core/src/scanners/insecure-rust.ts
+function scanRustTlsSource2(source) {
+  let code = maskNativeSource2(source);
+  for (const m2 of [...code.matchAll(/#\s*\[\s*cfg\s*\(\s*test\s*\)\s*\]\s*(?:pub\s+)?mod\s+\w+\s*\{/g)]) {
+    const start = m2.index, brace = start + m2[0].lastIndexOf("{");
+    let end = brace + 1, depth = 1;
+    for (; end < code.length && depth; end++) {
+      if (code[end] === "{") depth++;
+      else if (code[end] === "}") depth--;
+    }
+    code = code.slice(0, start) + code.slice(start, end).replace(/[^\r\n]/g, " ") + code.slice(end);
+  }
+  if (!/\b(?:reqwest|native_tls)\s*::/.test(code)) return [];
+  const hits = [];
+  for (const m2 of code.matchAll(/\.\s*(?:tls_)?danger_accept_invalid_(?:certs|hostnames)\s*\(\s*true\s*\)/g)) {
+    const line = code.slice(0, m2.index).split("\n").length;
+    hits.push({ rule: { id: "rust-tls-validation-disabled", severity: "critical", title: "TLS server verification is explicitly disabled", detail: "Accepting invalid server certificates or hostnames allows a man-in-the-middle connection. Remove the true bypass flag; use the default verifier and add trusted roots for a private CA." }, line, evidence: source.split(/\r?\n/)[line - 1].trim() });
+  }
+  return hits;
+}
+
+// ../core/src/scanners/insecure-kotlin.ts
+function callArguments2(rest) {
+  const args = [];
+  let start = 0, depth = 0, quoted = false;
+  for (let j3 = 0; j3 < rest.length; j3++) {
+    const c3 = rest[j3];
+    if (c3 === "\\" && quoted) {
+      j3++;
+      continue;
+    }
+    if (c3 === '"') quoted = !quoted;
+    if (quoted) continue;
+    if ((c3 === "," || c3 === ")") && depth === 0) {
+      args.push(rest.slice(start, j3).trim());
+      start = j3 + 1;
+      if (c3 === ")") return args;
+    }
+    if (c3 === "(" || c3 === "[") depth++;
+    if (c3 === ")" || c3 === "]") depth--;
+  }
+  args.push(rest.slice(start).trim());
+  return args;
+}
+function scanKotlinSource2(content) {
+  const hits = [], input = /* @__PURE__ */ new Set(), queries = /* @__PURE__ */ new Set(), safeValues = /* @__PURE__ */ new Set();
+  let blockDepth = 0, rawString = false;
+  for (const [i, raw] of content.split(/\r?\n/).entries()) {
+    const triples = raw.match(/"""/g)?.length ?? 0;
+    if (rawString || triples) {
+      input.clear();
+      queries.clear();
+      safeValues.clear();
+      if (triples % 2) rawString = !rawString;
+      continue;
+    }
+    let code = "", quoted = false;
+    for (let j3 = 0; j3 < raw.length; j3++) {
+      const c3 = raw[j3], n = raw[j3 + 1];
+      if (blockDepth) {
+        if (c3 === "/" && n === "*") {
+          blockDepth++;
+          j3++;
+        } else if (c3 === "*" && n === "/") {
+          blockDepth--;
+          j3++;
+        }
+      } else if (quoted) {
+        code += c3;
+        if (c3 === "\\") {
+          code += n ?? "";
+          j3++;
+        } else if (c3 === '"') quoted = false;
+      } else if (c3 === '"') {
+        quoted = true;
+        code += c3;
+      } else if (c3 === "/" && n === "*") {
+        blockDepth++;
+        j3++;
+      } else if (c3 === "/" && n === "/") break;
+      else code += c3;
+    }
+    if (/\bfun\b|^\s*}|\b(?:if|when|for|while|catch)\s*\(/.test(code)) {
+      input.clear();
+      queries.clear();
+      safeValues.clear();
+    }
+    if (code.includes('"""')) {
+      input.clear();
+      queries.clear();
+      safeValues.clear();
+      continue;
+    }
+    const carries = (v2) => {
+      const outside = v2.replace(/"(?:\\.|[^"\\])*"/g, "");
+      if (/^\s*[\w.]+\s*\(/.test(v2) && !/^\s*(?:request\.getParameter|call\.receiveText)\s*\(/.test(v2)) return false;
+      if (/\b(?:call\.(?:parameters|request\.queryParameters)\s*\[|request\.getParameter\s*\(|call\.receiveText\s*\()/.test(outside)) return true;
+      const names = [...v2.matchAll(/(?<!\\)\$(?:([A-Za-z_]\w*)|\{\s*([A-Za-z_]\w*)\s*\})/g)].map((m2) => m2[1] ?? m2[2]);
+      return [...input].some((n) => new RegExp(`\\b${n}\\b`).test(outside) || names.includes(n));
+    };
+    const assignment = /^\s*(?:(?:val|var)\s+)?([A-Za-z_]\w*)(?:\s*:\s*[^=]+)?\s*=\s*(?!=)(.*)/.exec(code);
+    if (assignment) {
+      const [, n, v2] = assignment;
+      if (carries(v2)) {
+        input.add(n);
+        safeValues.delete(n);
+      } else {
+        input.delete(n);
+        safeValues.add(n);
+      }
+      if (input.has(n) && /\b(?:SELECT|INSERT|UPDATE|DELETE)\b/i.test(v2)) queries.add(n);
+      else queries.delete(n);
+    }
+    const executable = code.replace(/"(?:\\.|[^"\\])*"/g, (s) => " ".repeat(s.length));
+    const command = /\bRuntime\s*\.\s*getRuntime\s*\(\s*\)\s*\.\s*exec\s*\(/.exec(executable);
+    const builder = /\bProcessBuilder\s*\(/.exec(executable);
+    const unknownCommand = (argument) => {
+      const names = [...argument.matchAll(/(?<!\\)\$(?:([A-Za-z_]\w*)|\{\s*([A-Za-z_]\w*)\s*\})/g)].map((m2) => m2[1] ?? m2[2]);
+      if (/^[A-Za-z_]\w*$/.test(argument)) names.push(argument);
+      return names.some((name) => !safeValues.has(name));
+    };
+    let unsafeCommand = false, uncertainCommand = false;
+    if (command) {
+      const argument = callArguments2(code.slice(command.index + command[0].length))[0] ?? "";
+      unsafeCommand = carries(argument);
+      uncertainCommand = unknownCommand(argument);
+    }
+    if (builder) {
+      const args = callArguments2(code.slice(builder.index + builder[0].length));
+      if (/^"(?:\/bin\/)?(?:sh|bash|zsh)"$/.test(args[0] ?? "") && args[1] === '"-c"') unsafeCommand ||= carries(args[2] ?? "");
+    }
+    if (unsafeCommand || uncertainCommand) hits.push({ rule: { id: "exec-interpolated", re: /$^/g, lang: "java", severity: "critical", title: "Kotlin request input controls a process command", detail: "Request input chooses an executable or is interpreted as shell code. Use a fixed executable with separate argument values and avoid a shell command string." }, line: i + 1, evidence: raw.trim().slice(0, 160), tainted: unsafeCommand });
+    const sink = /\.\s*(?:executeQuery|executeUpdate|prepareStatement|createNativeQuery|query)\s*\(/.exec(executable);
+    if (!sink) continue;
+    const query = callArguments2(code.slice(sink.index + sink[0].length))[0] ?? "";
+    if (!(queries.has(query) || /\b(?:SELECT|INSERT|UPDATE|DELETE)\b/i.test(query) && carries(query))) continue;
+    hits.push({ rule: { id: "sql-interpolated", re: /$^/g, lang: "java", severity: "critical", title: "SQL query includes Kotlin request input", detail: "Request input is interpolated into SQL text. Keep SQL static and bind input through prepared-statement parameters." }, line: i + 1, evidence: raw.trim().slice(0, 160), tainted: true });
+  }
+  return hits;
+}
+
+// ../core/src/scanners/php-security.ts
+var REQUEST2 = /\$_(?:GET|POST|REQUEST|COOKIE|FILES)\b|\bfile_get_contents\s*\(\s*['"]php:\/\/input['"]/i;
+function scanPhpSecurity2(content) {
+  const hits = [];
+  const tainted = /* @__PURE__ */ new Set();
+  let blockComment = false;
+  const lines = content.split(/\r?\n/);
+  for (let i = 0; i < lines.length; i++) {
+    const raw = lines[i];
+    if (/\/\/\s*(?:nosemgrep|phpcs:ignore)|\bNOSONAR\b/.test(raw)) continue;
+    let code = "";
+    let quote = "";
+    for (let j3 = 0; j3 < raw.length; j3++) {
+      const c3 = raw[j3], next = raw[j3 + 1];
+      if (blockComment) {
+        if (c3 === "*" && next === "/") {
+          blockComment = false;
+          j3++;
+        }
+        continue;
+      }
+      if (quote) {
+        code += c3;
+        if (c3 === "\\") {
+          code += next ?? "";
+          j3++;
+        } else if (c3 === quote) quote = "";
+      } else if (c3 === "'" || c3 === '"') {
+        quote = c3;
+        code += c3;
+      } else if (c3 === "/" && next === "*") {
+        blockComment = true;
+        j3++;
+      } else if (c3 === "#" || c3 === "/" && next === "/") break;
+      else code += c3;
+    }
+    if (/\b(?:function|if|else|switch|for|foreach|while|try|catch)\b|^\s*}/.test(code)) tainted.clear();
+    const executable = code.replace(/'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*"/g, (s) => " ".repeat(s.length));
+    const carries = (expr) => {
+      const value = expr.replace(/\\\$/g, "").replace(/'(?:\\.|[^'\\])*'/g, "");
+      return REQUEST2.test(value) || /\bfile_get_contents\s*\(\s*['"]php:\/\/input['"]/.test(expr) || [...value.matchAll(/\$[A-Za-z_]\w*/g)].some((m2) => tainted.has(m2[0]));
+    };
+    for (const statement of code.split(";")) {
+      const assignment = statement.match(/^\s*(?:<\?php\s*)?(\$[A-Za-z_]\w*)\s*=\s*(.*)$/);
+      if (assignment) {
+        const [, name, value] = assignment;
+        const rawBody = /^\s*file_get_contents\s*\(\s*['"]php:\/\/input['"]\s*\)\s*$/.test(value);
+        const requestFetch = value.match(/^\s*file_get_contents\s*\(([^;]*)\)\s*$/);
+        if (rawBody || requestFetch && carries(requestFetch[1]) || carries(value) && !/\b[A-Za-z_]\w*\s*\(/.test(value)) tainted.add(name);
+        else tainted.delete(name);
+      }
+    }
+    const add = (id, title, detail) => hits.push({
+      rule: { id, lang: "php", re: /$^/g, severity: "critical", title, detail },
+      line: i + 1,
+      evidence: raw.trim().slice(0, 160),
+      tainted: true
+    });
+    const read = /\b(?:readfile|file_get_contents)\s*\(/g;
+    for (const m2 of executable.matchAll(read)) {
+      const args = code.slice((m2.index ?? 0) + m2[0].length).split(/[,;]/)[0];
+      if (carries(args) && !/\b(?:basename|realpath|filter_var)\s*\(/.test(args)) {
+        add("php-path-traversal", "Request input selects a local file", "A request-controlled path reaches a file read. Map input to an explicit allowlist of files, or canonicalize the path and verify it stays inside the intended directory before opening it.");
+        break;
+      }
+    }
+    const xml = /(?:\bsimplexml_load_string|->\s*loadXML)\s*\(/g;
+    for (const m2 of executable.matchAll(xml)) {
+      const first = code.slice((m2.index ?? 0) + m2[0].length);
+      const args = first.includes(");") ? first.split(");")[0] : first + " " + lines.slice(i + 1, i + 4).join("\n").split(");")[0].replace(/\/\/[^\n]*|\/\*[\s\S]*?\*\//g, "");
+      if (carries(args.split(",")[0]) && /\bLIBXML_(?:NOENT|DTDLOAD)\b/.test(args) && !/\bLIBXML_NO_XXE\b/.test(args)) {
+        add("php-xxe", "Untrusted XML enables external entity processing", "Request-controlled XML is parsed with LIBXML_NOENT or LIBXML_DTDLOAD. Remove external entity/DTD loading options, reject document types, and use LIBXML_NO_XXE where supported; LIBXML_NONET alone does not block local file entities.");
+        break;
+      }
+    }
+    if (/\bTwig\\(?:Environment|Loader)|\bTwig_Environment\b/.test(content)) {
+      const template = /->\s*createTemplate\s*\(/g;
+      for (const m2 of executable.matchAll(template)) {
+        if (carries(code.slice((m2.index ?? 0) + m2[0].length).split(/[,;]/)[0])) {
+          add("php-ssti", "Request input becomes Twig template source", "An attacker-controlled value is compiled as Twig template code. Keep template source static and pass request values as render context data; HTML escaping does not prevent template injection.");
+          break;
+        }
+      }
+    }
+  }
+  return hits;
+}
+
+// ../core/src/scanners/insecure-swift.ts
+var INPUT2 = /\b(?:\w*(?:[Tt]extField|[Tt]extView|[Ss]earchBar)|textField|textView|searchBar)\s*\.\s*text\b|\b(?:req|request)\s*\.\s*(?:query\s*\[|content\s*\.\s*get\s*\()/;
+var SQL4 = /\b(?:SELECT\b.*\bFROM|INSERT\s+INTO|UPDATE\b.*\bSET|DELETE\s+FROM)\b/i;
+function uncomment4(content) {
+  let out = "", depth = 0, quoted = false, escaped = false;
+  for (let i = 0; i < content.length; i++) {
+    const c3 = content[i], next = content[i + 1];
+    if (depth) {
+      if (c3 === "/" && next === "*") {
+        depth++;
+        out += "  ";
+        i++;
+      } else if (c3 === "*" && next === "/") {
+        depth--;
+        out += "  ";
+        i++;
+      } else out += c3 === "\n" ? "\n" : " ";
+    } else if (!quoted && c3 === "/" && next === "*") {
+      depth++;
+      out += "  ";
+      i++;
+    } else if (!quoted && c3 === "/" && next === "/") {
+      while (i < content.length && content[i] !== "\n") {
+        out += " ";
+        i++;
+      }
+      if (i < content.length) out += "\n";
+    } else {
+      out += c3;
+      if (c3 === '"' && !escaped) quoted = !quoted;
+      escaped = c3 === "\\" && !escaped;
+    }
+  }
+  return out;
+}
+function argumentsOf2(value) {
+  const args = [];
+  let start = 0, depth = 0, quoted = false, escaped = false;
+  for (let i = 0; i < value.length; i++) {
+    const c3 = value[i];
+    if (c3 === '"' && !escaped) quoted = !quoted;
+    if (!quoted) {
+      if (c3 === "(" || c3 === "[") depth++;
+      if (c3 === ")" && depth === 0) {
+        args.push(value.slice(start, i));
+        return args;
+      }
+      if (c3 === ")" || c3 === "]") depth--;
+      if (c3 === "," && depth === 0) {
+        args.push(value.slice(start, i));
+        start = i + 1;
+      }
+    }
+    escaped = c3 === "\\" && !escaped;
+  }
+  args.push(value.slice(start));
+  return args;
+}
+function scanSwiftSource2(content) {
+  if (/"""|#+"/.test(content)) return [];
+  const hits = [], tainted = /* @__PURE__ */ new Set(), sqlValues = /* @__PURE__ */ new Set();
+  const lines = uncomment4(content).split(/\r?\n/);
+  const typedInputs = /* @__PURE__ */ new Set();
+  const scopes = [];
+  const closeScope = () => {
+    const scope = scopes.pop();
+    if (!scope) return;
+    for (const name of scope.names) {
+      tainted.delete(name);
+      sqlValues.delete(name);
+    }
+    for (const name of scope.inputs) typedInputs.delete(name);
+    if (scope.function) {
+      tainted.clear();
+      sqlValues.clear();
+    }
+  };
+  const hasSource = (value) => INPUT2.test(value) || [...typedInputs].some((name) => new RegExp(`\\b${name}\\s*\\.\\s*text\\b`).test(value));
+  const usesInput = (value) => {
+    const outsideStrings = value.replace(/"(?:\\.|[^"\\])*"/g, "");
+    if (/\b[A-Za-z_]\w*\s*\(/.test(outsideStrings.replace(/\b(?:get)\s*\(/g, "")) && !hasSource(value)) return false;
+    if (/^\s*(?:try[!?]?\s+)?\w+\s*\(/.test(value) && !/^\s*(?:req|request)\./.test(value)) return false;
+    const interpolations = [...value.matchAll(/\\\(([^)]*)\)/g)].map((m2) => m2[1]).filter((part) => !/\b\w+\s*\(/.test(part)).join(" ");
+    const inputs = outsideStrings + " " + interpolations;
+    return hasSource(inputs) || [...tainted].some((n) => new RegExp(`\\b${n}\\b`).test(inputs));
+  };
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const code = line.replace(/"(?:\\.|[^"\\])*"/g, (m2) => " ".repeat(m2.length));
+    const leadingCloses = /^\s*(}+)/.exec(code)?.[1].length ?? 0;
+    for (let n = 0; n < leadingCloses; n++) closeScope();
+    const functionStart = /\b(?:func\s+\w+|init|deinit)\s*\(/.test(code);
+    if (functionStart) {
+      tainted.clear();
+      sqlValues.clear();
+    }
+    const opens = (code.match(/{/g) ?? []).length;
+    for (let n = 0; n < opens; n++) scopes.push({ names: /* @__PURE__ */ new Set(), inputs: /* @__PURE__ */ new Set(), function: functionStart && n === 0 });
+    const typedInput = /\b(?:let|var)\s+(\w+)\s*:\s*(?:UIKit\.)?(?:UITextField|UITextView|UISearchBar)\b/.exec(code);
+    if (typedInput) {
+      typedInputs.add(typedInput[1]);
+      scopes.at(-1)?.inputs.add(typedInput[1]);
+    }
+    const assignment = /^\s*(?:(?:let|var)\s+)?([A-Za-z_]\w*)(?:\s*:\s*[^=]+)?\s*=\s*(?!=)(.*)/.exec(line);
+    if (assignment) {
+      const [, name, value] = assignment;
+      if (/^\s*(?:let|var)\b/.test(line)) scopes.at(-1)?.names.add(name);
+      if (usesInput(value)) tainted.add(name);
+      else tainted.delete(name);
+      if (tainted.has(name) && SQL4.test(value)) sqlValues.add(name);
+      else sqlValues.delete(name);
+    }
+    if (/\bDisabledTrustEvaluator\s*\(/.test(code) || /\bServerTrustPolicy\s*\.\s*disableEvaluation\b/.test(code)) {
+      hits.push({ rule: {
+        id: "swift-tls-validation-disabled",
+        severity: "critical",
+        title: "TLS server certificate validation is disabled",
+        detail: "Alamofire's disabled trust evaluator accepts unverified server certificates. Use DefaultTrustEvaluator or certificate/public-key pinning for production connections."
+      }, line: i + 1, evidence: line.trim() });
+    }
+    const defaultsWrite = /\b(?:UserDefaults|NSUserDefaults)\.standard\.(?:set|setValue)\s*\(/.exec(code);
+    if (defaultsWrite) {
+      const args = argumentsOf2(line.slice(defaultsWrite.index + defaultsWrite[0].length));
+      const key = /^\s*forKey:\s*"(?:password|passwd|passcode|pin|(?:access[_-]?|refresh[_-]?|auth[_-]?)?token|client[_-]?secret)"\s*$/i.test(args[1] ?? "");
+      const value = (args[0] ?? "").trim();
+      const rawCredential = /^"[^"\\]+"$/.test(value) || /^(?:\w*password\w*|\w*passcode\w*|\w*token\w*|pin)[!?]?$/i.test(value) || usesInput(value);
+      if (key && rawCredential) hits.push({ rule: {
+        id: "swift-plaintext-credential-storage",
+        severity: "warning",
+        title: "Credential stored in plaintext preferences",
+        detail: "UserDefaults is a preferences store, not a credential vault. Store passwords, authentication tokens and PINs in the Keychain with an appropriate accessibility policy."
+      }, line: i + 1, evidence: line.trim() });
+    }
+    const cryptCall = /\bCCCrypt\s*\(/.exec(code);
+    if (cryptCall) {
+      const options = argumentsOf2(line.slice(cryptCall.index + cryptCall[0].length))[2] ?? "";
+      if (/\bkCCOptionECBMode\b/.test(options.replace(/"(?:\\.|[^"\\])*"/g, ""))) hits.push({ rule: {
+        id: "swift-ecb-encryption",
+        severity: "warning",
+        title: "CommonCrypto encryption explicitly uses ECB mode",
+        detail: "ECB encrypts identical plaintext blocks identically and exposes patterns. Prefer authenticated encryption such as CryptoKit AES.GCM; preserve unique nonces and authentication tags."
+      }, line: i + 1, evidence: line.trim() });
+    }
+    const sqlSink = /\b(?:sqlite3_(?:exec|prepare_v2|prepare_v3)|(?:\w+\.)?(?:executeQuery|executeUpdate))\s*\(/.exec(code);
+    const htmlSink = /\.loadHTMLString\s*\(/.exec(code);
+    let id;
+    if (sqlSink) {
+      const args = argumentsOf2(line.slice(sqlSink.index + sqlSink[0].length));
+      const query = args[sqlSink[0].startsWith("sqlite3_") ? 1 : 0] ?? "";
+      if (SQL4.test(query) && usesInput(query) || [...sqlValues].some((n) => new RegExp(`^\\s*${n}\\s*$`).test(query))) id = "sql-interpolated";
+    }
+    if (htmlSink && usesInput(argumentsOf2(line.slice(htmlSink.index + htmlSink[0].length))[0] ?? "")) id = "swift-webview-html";
+    const trailingCloses = (code.match(/}/g) ?? []).length - leadingCloses;
+    for (let n = 0; n < trailingCloses; n++) closeScope();
+    if (!id) continue;
+    hits.push({
+      rule: {
+        id,
+        severity: id === "sql-interpolated" ? "critical" : "warning",
+        title: id === "sql-interpolated" ? "SQL query includes Swift user input" : "User input loaded as WebView HTML",
+        detail: id === "sql-interpolated" ? "User input is assembled into SQL text. Use sqlite3_bind_* or your database library's bound parameters." : "A text field or request value reaches loadHTMLString without escaping. Escape it as text or use a fixed HTML template with escaped values."
+      },
+      line: i + 1,
+      evidence: line.trim(),
+      tainted: true
+    });
+  }
+  return hits;
+}
+
 // ../core/src/scanners/insecure-code.ts
-var JS_RE4 = /\.(ts|tsx|js|jsx|mjs|mts|cts)$/i;
+var JS_RE4 = /\.(ts|tsx|js|jsx|mjs|cjs|mts|cts)$/i;
 var PY_RE4 = /\.py$/i;
 var PHP_RE2 = /\.(?:php|phtml|inc)$/i;
-var JAVA_RE2 = /\.(?:java|kt)$/i;
+var JAVA_RE2 = /\.(?:java|kts?)$/i;
 var RB_RE2 = /\.(?:rb|erb|rake)$/i;
 var GO_RE4 = /\.go$/i;
 var CS_RE2 = /\.(?:cs|cshtml)$/i;
@@ -82446,7 +83963,7 @@ var PHP_JAVA_RULES2 = [
   {
     id: "php-include-user-input",
     lang: "php",
-    re: /\b(?:include|require)(?:_once)?\s*\(?\s*[^;]*\$_(?:GET|POST|REQUEST|COOKIE)/g,
+    re: /\b(?:include|require)(?:_once)?\s*\(?\s*(?:[^;]*\$_(?:GET|POST|REQUEST|COOKIE)|\$[A-Za-z_]\w*)/g,
     severity: "critical",
     title: "File included from request input",
     detail: "The path to include comes from the request: a local or remote file inclusion. Map the input to a fixed allow-list of files instead."
@@ -82462,7 +83979,7 @@ var PHP_JAVA_RULES2 = [
   {
     id: "php-reflected-xss",
     lang: "php",
-    re: /\b(?:echo|print)\b[^;]*\$_(?:GET|POST|REQUEST|COOKIE)\b(?![^;]*htmlspecialchars)/g,
+    re: /\b(?:echo|print)\b(?:[^;]*\$_(?:GET|POST|REQUEST|COOKIE)\b(?![^;]*htmlspecialchars)|\s+(?:['"][^'"\n]*['"]\s*\.\s*)?\$[A-Za-z_]\w*\b)/g,
     severity: "warning",
     title: "Request input echoed into the page",
     detail: "A request value is written to the HTML unescaped: reflected XSS. Wrap it in `htmlspecialchars`."
@@ -82813,13 +84330,33 @@ function scanSource2(content, lang) {
       const existing = byLine.get(line);
       if (existing && rank2(existing.rule.severity) >= rank2(rule.severity)) continue;
       if (!sinkAllows2(rule.id, rawLine, idx - lineStart)) continue;
+      if (lang === "php" && rule.id === "exec-interpolated" && /\bproc_open\s*\(\s*\[/.test(rawLine)) continue;
+      if ((rule.id === "php-include-user-input" || rule.id === "php-reflected-xss") && !/\$_(?:GET|POST|REQUEST|COOKIE)\b/.test(m2[0]) && !phpLocalRequestValue2(content, idx, m2[0])) continue;
       const tainted = !INJECTION_RULES2.has(rule.id) ? void 0 : rule.id === "ssrf" ? SSRF_TAINT2.test(around2(content, lineStart, 2, 0)) : TAINT_RE2[lang].test(around2(content, lineStart, TAINT_WINDOW2, 2));
       byLine.set(line, { rule, line, evidence: text.slice(0, 160), tainted });
     }
   }
+  if (lang === "php") for (const hit of scanPhpSecurity2(content)) {
+    if (!byLine.has(hit.line)) byLine.set(hit.line, hit);
+  }
   return [...byLine.values()].sort((a, b3) => a.line - b3.line);
 }
 var SSRF_TAINT2 = /\b(?:req|request)\.(?:query|body|params|args|form|values|GET|POST)\b|\$_(?:GET|POST|REQUEST|COOKIE)\b|\bparams\s*\[|\brequest\.get_json\b|\bc\.(?:Query|Param|PostForm)\s*\(|\br\.(?:FormValue|URL\.Query)\b/;
+function phpLocalRequestValue2(content, sinkOffset, sink) {
+  const tainted = /* @__PURE__ */ new Set();
+  const prefix = content.slice(0, sinkOffset).split(/\r?\n/).slice(-TAINT_WINDOW2).join("\n");
+  for (const statement of prefix.split(/[;\n]/)) {
+    if (/\b(?:function|fn)\b|^\s*}/.test(statement)) tainted.clear();
+    const assignment = statement.match(/^\s*(?:<\?php\s*)?(\$[A-Za-z_]\w*)\s*=\s*([\s\S]*)$/);
+    if (!assignment) continue;
+    const [, target, value] = assignment;
+    const direct = /^\$_(?:GET|POST|REQUEST|COOKIE)\s*\[\s*(['"])[^'"]+\1\s*\]\s*$/.test(value);
+    const alias = value.trim();
+    if (direct || tainted.has(alias)) tainted.add(target);
+    else tainted.delete(target);
+  }
+  return [...sink.matchAll(/\$[A-Za-z_]\w*/g)].some(([name]) => tainted.has(name));
+}
 var PHP_ESCAPED2 = /\b(?:htmlspecialchars|htmlentities|esc_(?:attr|html|url|js|textarea)|sanitize_\w+|wp_kses\w*|strip_tags|intval|floatval|urlencode|rawurlencode|json_encode|scrub_out|e)\s*\(|\(int\)|\(float\)/;
 function sinkAllows2(ruleId, line, col) {
   if (ruleId === "php-reflected-xss") return !PHP_ESCAPED2.test(line) && !/\b(?:echo|print)\b[^;$]*\w\s*\([^;]*\$_(?:GET|POST|REQUEST|COOKIE)/.test(line);
@@ -83027,18 +84564,76 @@ var insecureCodeScanner2 = {
       if (issues.length >= MAX_TOTAL16) break;
       const norm = file2.replace(/\\/g, "/");
       const webRoot = /\.php$/i.test(norm) && /(^|\/)(?:www|public|htdocs)\//.test(norm);
-      if (SKIP_RE2.test(norm) || NOT_SHIPPED_RE4.test(norm) && !webRoot) continue;
+      const productionRoot = JAVA_RE2.test(norm) || /\.scala$/i.test(norm) ? /(?:^|\/)src\/main\/(?:java|kotlin|scala)\//.exec(norm) : null;
+      const purposePath = productionRoot ? norm.slice(0, productionRoot.index + productionRoot[0].length) : norm;
+      if (SKIP_RE2.test(norm) || NOT_SHIPPED_RE4.test(purposePath) && !webRoot) continue;
+      if (/\.(?:rs|c|cc|cpp|cxx|h|hpp|hxx)$/i.test(norm)) {
+        if (TEST_RE7.test(norm) || /(?:^|\/)(?:test|tests)\.(?:rs|c|cc|cpp|cxx)$|_test\.(?:rs|c|cc|cpp|cxx)$/i.test(norm)) continue;
+        const size2 = await ctx.fileSize?.(file2);
+        if (size2 !== null && size2 !== void 0 && size2 > MAX_BYTES4) continue;
+        const content2 = await ctx.readFile(file2);
+        if (!content2) continue;
+        const nativeHits = /\.rs$/i.test(norm) ? scanRustTlsSource2(content2) : scanCppTlsSource2(content2);
+        for (const hit of nativeHits.slice(0, MAX_PER_FILE10)) {
+          if (issues.length >= MAX_TOTAL16) break;
+          let ageDays = 0;
+          try {
+            ageDays = await ctx.git.blameAgeDays(file2, hit.line);
+          } catch {
+          }
+          issues.push({
+            id: `insecure-${hit.rule.id}-${norm}:${hit.line}`,
+            category: "security",
+            severity: TEST_RE7.test(norm) ? LOWER2[hit.rule.severity] : hit.rule.severity,
+            title: hit.rule.title,
+            location: `${norm}:${hit.line}`,
+            ageDays,
+            detail: hit.rule.detail,
+            evidence: hit.evidence
+          });
+        }
+        continue;
+      }
       const lang = langOf2(norm);
-      if (!lang) continue;
+      if (!lang && !/\.(?:swift|scala)$/i.test(norm)) continue;
       const size = await ctx.fileSize?.(file2);
       if (size !== null && size !== void 0 && size > MAX_BYTES4) continue;
       const content = await ctx.readFile(file2);
       if (!content) continue;
+      if (!lang) {
+        const isLanguageTest = TEST_RE7.test(norm) || /Tests?\.(?:swift|scala)$/i.test(norm);
+        for (const hit of (/\.scala$/i.test(norm) ? scanScalaSource2(content) : scanSwiftSource2(content)).slice(0, MAX_PER_FILE10)) {
+          if (issues.length >= MAX_TOTAL16) break;
+          let ageDays = 0;
+          try {
+            ageDays = await ctx.git.blameAgeDays(file2, hit.line);
+          } catch {
+          }
+          issues.push({
+            id: `insecure-${hit.rule.id}-${norm}:${hit.line}`,
+            category: "security",
+            severity: isLanguageTest ? LOWER2[hit.rule.severity] : hit.rule.severity,
+            title: hit.rule.title,
+            location: `${norm}:${hit.line}`,
+            ageDays,
+            detail: hit.rule.detail,
+            evidence: hit.evidence,
+            ...hit.tainted === void 0 ? {} : { confidence: hit.tainted ? "high" : "low" }
+          });
+        }
+        continue;
+      }
       const isTest = TEST_RE7.test(norm);
       const lines = content.split(/\r?\n/);
       if (!isTest && TAINT_RE2[lang].test(content)) sources.push({ norm, lang, lines });
       let perFile = 0;
-      for (const hit of scanSource2(content, lang)) {
+      const hits = scanSource2(content, lang).filter((hit) => !(/\.kts?$/i.test(norm) && hit.rule.id === "exec-interpolated" && /\bRuntime\s*\.\s*getRuntime\s*\(\s*\)\s*\.\s*exec\s*\(/.test(lines[hit.line - 1] ?? "")));
+      if (/\.kts?$/i.test(norm)) for (const hit of scanKotlinSource2(content)) {
+        const existing = hits.findIndex((h3) => h3.line === hit.line && h3.rule.id === hit.rule.id);
+        if (existing >= 0) hits[existing] = hit;
+        else hits.push(hit);
+      }
+      for (const hit of hits) {
         if (issues.length >= MAX_TOTAL16 || perFile >= MAX_PER_FILE10) break;
         if (isTest && SKIP_IN_TEST2.has(hit.rule.id)) continue;
         if (hit.rule.id === "ssrf" && lang === "js" && BROWSER_CODE_RE2.test(norm)) continue;
