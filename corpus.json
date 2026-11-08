@@ -10688,5 +10688,2005 @@
     "name": "owasp-owaspwebgoatphp",
     "url": "https://github.com/OWASP/OWASPWebGoatPHP",
     "sha": "b54f87daf476d4d80493e9d1d55cf48d119c09b3"
+  },
+  {
+    "name": "theowni-damn-vulnerable-restaurant-api-game",
+    "url": "https://github.com/theowni/Damn-Vulnerable-RESTaurant-API-Game",
+    "sha": "d32d09972aec7830f5f1d4a5d274cac7aae7eb82"
+  },
+  {
+    "name": "veracode-research-actuator-testbed",
+    "url": "https://github.com/veracode-research/actuator-testbed",
+    "sha": "708d2a2bc19ea1f73bbeee3349a167b177c7516a"
+  },
+  {
+    "name": "terracotta-bank-terracotta-bank",
+    "url": "https://github.com/terracotta-bank/terracotta-bank",
+    "sha": "2039956dcaa67e3f9131c1ee71c1b9147ad194d5"
+  },
+  {
+    "name": "projectdiscovery-interactsh",
+    "url": "https://github.com/projectdiscovery/interactsh",
+    "sha": "b9fea16e57ea1c7eba13ca3f345fdfdd7caa156d"
+  },
+  {
+    "name": "arthepsy-ssh-audit",
+    "url": "https://github.com/arthepsy/ssh-audit",
+    "sha": "22b671e15f0c8acdaed8594d0a8ae9f7c3303452"
+  },
+  {
+    "name": "dreamhead-moco",
+    "url": "https://github.com/dreamhead/moco",
+    "sha": "905c546e2276d6ad27eb67940dd098602d4195f2"
+  },
+  {
+    "name": "mizzy-serverspec",
+    "url": "https://github.com/mizzy/serverspec",
+    "sha": "4950dba20813f6890b7c89f7cab3c319af626307"
+  },
+  {
+    "name": "okd-project-okd",
+    "url": "https://github.com/okd-project/okd",
+    "sha": "389a9fb6dcf1092eeeba6a0c6de2f2d10d7c8a8c"
+  },
+  {
+    "name": "flashmob-go-guerrilla",
+    "url": "https://github.com/flashmob/go-guerrilla",
+    "sha": "858ac36f3a048344549643e68c89cc1d6d489e29"
+  },
+  {
+    "name": "christophetd-cloudflair",
+    "url": "https://github.com/christophetd/CloudFlair",
+    "sha": "13e3d806e6e730412a2f73b46f34d8a5677b163c"
+  },
+  {
+    "name": "postrank-labs-goliath",
+    "url": "https://github.com/postrank-labs/goliath",
+    "sha": "70f7493e78468a6f655f7dca4ee992e975de06f6"
+  },
+  {
+    "name": "poseidon-typhoon",
+    "url": "https://github.com/poseidon/typhoon",
+    "sha": "e1c507e315c341368291511edb08c715084005d9"
+  },
+  {
+    "name": "telmate-terraform-provider-proxmox",
+    "url": "https://github.com/Telmate/terraform-provider-proxmox",
+    "sha": "a864b97abd1b9bfc97a602b5627783a422863aa0"
+  },
+  {
+    "name": "microsoft-restler-fuzzer",
+    "url": "https://github.com/microsoft/restler-fuzzer",
+    "sha": "6d984deedbc54aad957fa3da0c7e9e5df23a2aee"
+  },
+  {
+    "name": "widdix-aws-cf-templates",
+    "url": "https://github.com/widdix/aws-cf-templates",
+    "sha": "f4c49a4c4648dd6047939b1a98281ce4748b739e"
+  },
+  {
+    "name": "scenic-views-scenic",
+    "url": "https://github.com/scenic-views/scenic",
+    "sha": "f2162dbddb0fb0eb5d4b04d640dcec5303a387e8"
+  },
+  {
+    "name": "rapha-borges-oke-free",
+    "url": "https://github.com/Rapha-Borges/oke-free",
+    "sha": "16cd94f21f9064e3ebac238acdf5aaf5dbb861be"
+  },
+  {
+    "name": "glauth-glauth",
+    "url": "https://github.com/glauth/glauth",
+    "sha": "251ec3ef667e7e51f4b38c3f52c048f7f20dfc32"
+  },
+  {
+    "name": "wdullaer-materialdatetimepicker",
+    "url": "https://github.com/wdullaer/MaterialDateTimePicker",
+    "sha": "f849a5c2704c974ba182fe4e2e205fa7f4fd395d"
+  },
+  {
+    "name": "ankane-pgsync",
+    "url": "https://github.com/ankane/pgsync",
+    "sha": "bc0a7ffdb43c312ac118608522a4d62f8f056b44"
+  },
+  {
+    "name": "chadgeary-cloudblock",
+    "url": "https://github.com/chadgeary/cloudblock",
+    "sha": "585d09b2c699f2ffe5b0f384f1fb26eee37b3213"
+  },
+  {
+    "name": "topfreegames-pitaya",
+    "url": "https://github.com/topfreegames/pitaya",
+    "sha": "f3d0af570f76e2608aee35900dcea20015b36978"
+  },
+  {
+    "name": "jendrikseipp-vulture",
+    "url": "https://github.com/jendrikseipp/vulture",
+    "sha": "edd5806f56f0bec1d0fbb45c466c0f7a258a1795"
+  },
+  {
+    "name": "databasecleaner-database-cleaner",
+    "url": "https://github.com/DatabaseCleaner/database_cleaner",
+    "sha": "09b47d03cce420c915b10eb595936ef4397b55ac"
+  },
+  {
+    "name": "arminc-terraform-ecs",
+    "url": "https://github.com/arminc/terraform-ecs",
+    "sha": "38f562cee06f95048565c557a7b698ab5e31da94"
+  },
+  {
+    "name": "knadh-dns-toys",
+    "url": "https://github.com/knadh/dns.toys",
+    "sha": "26a52af361652e07d3f9ffcc5d49133798527957"
+  },
+  {
+    "name": "geopy-geopy",
+    "url": "https://github.com/geopy/geopy",
+    "sha": "402cbba8b093e5e3f89c81b902f576d65608a123"
+  },
+  {
+    "name": "netflix-ribbon",
+    "url": "https://github.com/Netflix/ribbon",
+    "sha": "2a55b5da9749cd416350193b0ea739d7cd6b2a2e"
+  },
+  {
+    "name": "influitive-apartment",
+    "url": "https://github.com/influitive/apartment",
+    "sha": "f266f73e58835f94e4ec7c16f28443fe5eada1ac"
+  },
+  {
+    "name": "maxpert-marmot",
+    "url": "https://github.com/maxpert/marmot",
+    "sha": "2a8acbe965b782f0bda95c618a8b569c09503695"
+  },
+  {
+    "name": "jz-darkal-androidhttpcapture",
+    "url": "https://github.com/JZ-Darkal/AndroidHttpCapture",
+    "sha": "6935cbb0790af02ff96dde03a225f4170c359422"
+  },
+  {
+    "name": "thiagopradi-octopus",
+    "url": "https://github.com/thiagopradi/octopus",
+    "sha": "1c0abed4a2cd58869b4aa05e46e1a49a2e0f670f"
+  },
+  {
+    "name": "hcloud-k8s-terraform-hcloud-kubernetes",
+    "url": "https://github.com/hcloud-k8s/terraform-hcloud-kubernetes",
+    "sha": "d9cc38410924402b88e785212c046a80da080537"
+  },
+  {
+    "name": "xiaonanln-goworld",
+    "url": "https://github.com/xiaonanln/goworld",
+    "sha": "71ff877f1b92ea1df9d2e1b10d19b2da242a1df2"
+  },
+  {
+    "name": "pudo-dataset",
+    "url": "https://github.com/pudo/dataset",
+    "sha": "db592cc041014762bba55fd544e982170831f227"
+  },
+  {
+    "name": "jacoco-jacoco",
+    "url": "https://github.com/jacoco/jacoco",
+    "sha": "0e426a2b2a3bf1808df83492b5dbf17ee3a8ed25"
+  },
+  {
+    "name": "mojombo-god",
+    "url": "https://github.com/mojombo/god",
+    "sha": "92c06aa5f6293cf26498a306e9bb7ac856d7dca0"
+  },
+  {
+    "name": "kz8s-tack",
+    "url": "https://github.com/kz8s/tack",
+    "sha": "10bc69869881f20335051430ba45b553caabe5b4"
+  },
+  {
+    "name": "jsha-minica",
+    "url": "https://github.com/jsha/minica",
+    "sha": "2efa5c5f15e8a8df09cc8eb2b27d0a2ab75c7522"
+  },
+  {
+    "name": "cvg-lightglue",
+    "url": "https://github.com/cvg/LightGlue",
+    "sha": "5a650c444718caffc2669dc0094cde908f42dd73"
+  },
+  {
+    "name": "termux-termux-api",
+    "url": "https://github.com/termux/termux-api",
+    "sha": "fc26ce17e3badf85d4df191af364fcf7798047f1"
+  },
+  {
+    "name": "tobi-delayed-job",
+    "url": "https://github.com/tobi/delayed_job",
+    "sha": "719b628bdd54566f80ae3a99c4a02dd39d386c07"
+  },
+  {
+    "name": "kbst-terraform-kubestack",
+    "url": "https://github.com/kbst/terraform-kubestack",
+    "sha": "f76c9513664908e4955551e418a50c9bd7e07378"
+  },
+  {
+    "name": "flant-shell-operator",
+    "url": "https://github.com/flant/shell-operator",
+    "sha": "0e636316d16778c8f75d06948f02f343a9778b09"
+  },
+  {
+    "name": "llm-attacks-llm-attacks",
+    "url": "https://github.com/llm-attacks/llm-attacks",
+    "sha": "098262edf85f807224e70ecd87b9d83716bf6b73"
+  },
+  {
+    "name": "iberianpig-fusuma",
+    "url": "https://github.com/iberianpig/fusuma",
+    "sha": "43a7eb04fe6c0709a646be183a612e56e5f60a2e"
+  },
+  {
+    "name": "cattle-ops-terraform-aws-gitlab-runner",
+    "url": "https://github.com/cattle-ops/terraform-aws-gitlab-runner",
+    "sha": "942215a946f58410d6ef13e19d9464f7922b2c76"
+  },
+  {
+    "name": "projectcapsule-capsule",
+    "url": "https://github.com/projectcapsule/capsule",
+    "sha": "619606a23fa76baa61237afa9f5f4464dd12559a"
+  },
+  {
+    "name": "sakurallm-sakurallm",
+    "url": "https://github.com/SakuraLLM/SakuraLLM",
+    "sha": "0ff69116222ca66c7a15dcff00fd4f9f86b18d5c"
+  },
+  {
+    "name": "tiann-epic",
+    "url": "https://github.com/tiann/epic",
+    "sha": "c67d0d3e3769c19119465784a579c659dd88c4ce"
+  },
+  {
+    "name": "maddevsio-aws-eks-base",
+    "url": "https://github.com/maddevsio/aws-eks-base",
+    "sha": "a1ee242ebd12d75615dbab2cd5e9961ee33a1773"
+  },
+  {
+    "name": "open-telemetry-opentelemetry-operator",
+    "url": "https://github.com/open-telemetry/opentelemetry-operator",
+    "sha": "beb7489973f9b0fbbbd8d05b3fd8c41cf5b69210"
+  },
+  {
+    "name": "mzucker-noteshrink",
+    "url": "https://github.com/mzucker/noteshrink",
+    "sha": "7d876e5b43923c6bf8d64b7ef18f6855bfb30ce3"
+  },
+  {
+    "name": "ankane-groupdate",
+    "url": "https://github.com/ankane/groupdate",
+    "sha": "9933b82405985420a31e7a71d90a1ea9d4bb4a3b"
+  },
+  {
+    "name": "datawranglerai-self-host-n8n-on-gcr",
+    "url": "https://github.com/datawranglerai/self-host-n8n-on-gcr",
+    "sha": "0ae5976084065898988b68d8ab6e573b0d381dda"
+  },
+  {
+    "name": "kube-green-kube-green",
+    "url": "https://github.com/kube-green/kube-green",
+    "sha": "1045c7062173af5b204863ccd533567aa0492584"
+  },
+  {
+    "name": "ahmadhassan-bted-rosewish",
+    "url": "https://github.com/AhmadHassan-BTed/RoseWish",
+    "sha": "6d3e9e155ba509396966c48b9c9d22b7980e8da0"
+  },
+  {
+    "name": "splashcodes-javiewer",
+    "url": "https://github.com/SplashCodes/JAViewer",
+    "sha": "52be616b03d9440b14a80f5ba53bd93656d48e4c"
+  },
+  {
+    "name": "stefankroes-ancestry",
+    "url": "https://github.com/stefankroes/ancestry",
+    "sha": "e8c09d27929a292452901c8b5f34b1b0a1b882b4"
+  },
+  {
+    "name": "aztfmod-terraform-azurerm-caf",
+    "url": "https://github.com/aztfmod/terraform-azurerm-caf",
+    "sha": "e09d494a521cb23e30ff7af6ceff2c06b043bab7"
+  },
+  {
+    "name": "reactive-tech-kubegres",
+    "url": "https://github.com/reactive-tech/kubegres",
+    "sha": "4d08d616066b9e39b010da688e492317e369cc2c"
+  },
+  {
+    "name": "phishman3579-java-algorithms-implementation",
+    "url": "https://github.com/phishman3579/java-algorithms-implementation",
+    "sha": "f2d115704691e8e4f6cfe490231d0adb0c3ce7d0"
+  },
+  {
+    "name": "celluloid-celluloid",
+    "url": "https://github.com/celluloid/celluloid",
+    "sha": "0a307cff21e1a55ddbc5687bcd6ba9e47f89796d"
+  },
+  {
+    "name": "terraform-aws-modules-terraform-aws-atlantis",
+    "url": "https://github.com/terraform-aws-modules/terraform-aws-atlantis",
+    "sha": "7b7073e574bdd1a8f07a501f91c3a408c042cfb1"
+  },
+  {
+    "name": "grafana-k6-operator",
+    "url": "https://github.com/grafana/k6-operator",
+    "sha": "06fa5f888466086ada5d9f2f6c66d1c557128a48"
+  },
+  {
+    "name": "guanyixuan-pyjianyingdraft",
+    "url": "https://github.com/GuanYixuan/pyJianYingDraft",
+    "sha": "1e228479dda361e312e85f6037002346cf6dca9a"
+  },
+  {
+    "name": "danielzeller-depth-lib-android-",
+    "url": "https://github.com/danielzeller/Depth-LIB-Android-",
+    "sha": "8962cd7c2d6f81a585465448d538d7e62686863f"
+  },
+  {
+    "name": "ryanb-letter-opener",
+    "url": "https://github.com/ryanb/letter_opener",
+    "sha": "4d1b6acbc95ed30fd775899c53bd02d9624c6564"
+  },
+  {
+    "name": "zimmertr-tjs-kubernetes-service",
+    "url": "https://github.com/zimmertr/TJs-Kubernetes-Service",
+    "sha": "bc1fa2e9ff8c6a15f0eb788a3705b58bfd9e3524"
+  },
+  {
+    "name": "padok-team-burrito",
+    "url": "https://github.com/padok-team/burrito",
+    "sha": "845afa3bef6d84df9944a414287835fd27db1cd3"
+  },
+  {
+    "name": "deepseek-ai-engram",
+    "url": "https://github.com/deepseek-ai/Engram",
+    "sha": "fb7f84a21f91223715394a33a1dc24bbfb7f788e"
+  },
+  {
+    "name": "castorflex-smoothprogressbar",
+    "url": "https://github.com/castorflex/SmoothProgressBar",
+    "sha": "c620eacc77d55d7039dc13c8fb29cfedb9cf09c3"
+  },
+  {
+    "name": "haml-haml",
+    "url": "https://github.com/haml/haml",
+    "sha": "4a89a4639a5bb4e6e28e1763227cabfb106e5d8b"
+  },
+  {
+    "name": "cloudposse-terraform-aws-eks-cluster",
+    "url": "https://github.com/cloudposse/terraform-aws-eks-cluster",
+    "sha": "602c64297d9cbbbb0f81959f9963bb963850f6ec"
+  },
+  {
+    "name": "ricoberger-vault-secrets-operator",
+    "url": "https://github.com/ricoberger/vault-secrets-operator",
+    "sha": "6945f0ba7af393f67b755578edf3c5c548068898"
+  },
+  {
+    "name": "opendrivelab-uniad",
+    "url": "https://github.com/OpenDriveLab/UniAD",
+    "sha": "609ee083ea51c3521c323f1279dfc4cee0e60467"
+  },
+  {
+    "name": "fnando-i18n-js",
+    "url": "https://github.com/fnando/i18n-js",
+    "sha": "8a75353191741da46738eadec28614db1455e800"
+  },
+  {
+    "name": "rskriegs-finnhub-streaming-data-pipeline",
+    "url": "https://github.com/RSKriegs/finnhub-streaming-data-pipeline",
+    "sha": "3a4219ff500078c0e12c0345d002a6506d1a7ade"
+  },
+  {
+    "name": "1password-onepassword-operator",
+    "url": "https://github.com/1Password/onepassword-operator",
+    "sha": "252031374ca9b862506bd66ef66840b9b4c44a19"
+  },
+  {
+    "name": "pywebio-pywebio",
+    "url": "https://github.com/pywebio/PyWebIO",
+    "sha": "b37a78d29625f7428116e01a36a2a400254cc8a2"
+  },
+  {
+    "name": "flipboard-bottomsheet",
+    "url": "https://github.com/Flipboard/bottomsheet",
+    "sha": "2792f24d60a19e0948ff0e9977ea6ccff4a6a35d"
+  },
+  {
+    "name": "defunkt-gist",
+    "url": "https://github.com/defunkt/gist",
+    "sha": "18404b82e767c56355d60213fe80f1b8cbbb3f66"
+  },
+  {
+    "name": "turnerlabs-terraform-ecs-fargate",
+    "url": "https://github.com/turnerlabs/terraform-ecs-fargate",
+    "sha": "e51d5f3bafdaa7cb29527da979a006d0b7bb1dfb"
+  },
+  {
+    "name": "mogenius-renovate-operator",
+    "url": "https://github.com/mogenius/renovate-operator",
+    "sha": "555424d3521aa5e93691ab86fe5388f63be1b625"
+  },
+  {
+    "name": "bing-su-adetailer",
+    "url": "https://github.com/Bing-su/adetailer",
+    "sha": "3a599f5d4607d8f9d8b9fc5a15526197418dae1a"
+  },
+  {
+    "name": "water8394-flink-recommandsystem-demo",
+    "url": "https://github.com/water8394/flink-recommandSystem-demo",
+    "sha": "20ae382ee2463678637921bd389f5277d2a01701"
+  },
+  {
+    "name": "cesarferreira-dryrun",
+    "url": "https://github.com/cesarferreira/dryrun",
+    "sha": "3cdd6e89b25b10bcc97394a2537bf4725a98780a"
+  },
+  {
+    "name": "nix-community-terraform-nixos",
+    "url": "https://github.com/nix-community/terraform-nixos",
+    "sha": "646cacb12439ca477c05315a7bfd49e9832bc4e3"
+  },
+  {
+    "name": "hashicorp-vault-secrets-operator",
+    "url": "https://github.com/hashicorp/vault-secrets-operator",
+    "sha": "ade4f948881d5d14822f56b44e2de0d6ea8217a6"
+  },
+  {
+    "name": "integuru-ai-integuru",
+    "url": "https://github.com/Integuru-AI/Integuru",
+    "sha": "b063940a23deb9ac4d4ca4452731bc479b688f87"
+  },
+  {
+    "name": "snailclimb-guide-rpc-framework",
+    "url": "https://github.com/Snailclimb/guide-rpc-framework",
+    "sha": "704a4a82240d02fdcf89192c6d185cd07594b9f3"
+  },
+  {
+    "name": "trogdoro-xiki",
+    "url": "https://github.com/trogdoro/xiki",
+    "sha": "be9b5eb87fb6eac11c70adbbb602bb71895834a8"
+  },
+  {
+    "name": "ilhaan-kubecdn",
+    "url": "https://github.com/ilhaan/kubeCDN",
+    "sha": "e8deb2916d22ce16f304f05820426c7c3d4f3e99"
+  },
+  {
+    "name": "lyft-flinkk8soperator",
+    "url": "https://github.com/lyft/flinkk8soperator",
+    "sha": "2099cc007bd0a9fc8e7182c660e655a38a4fb92c"
+  },
+  {
+    "name": "pyinvoke-invoke",
+    "url": "https://github.com/pyinvoke/invoke",
+    "sha": "6a71e680c535ba6520e935c497099fbca011d03c"
+  },
+  {
+    "name": "jetbrains-fernflower",
+    "url": "https://github.com/JetBrains/fernflower",
+    "sha": "b162bddab900a88a193332e66dbf580e37bcfbb2"
+  },
+  {
+    "name": "solnic-virtus",
+    "url": "https://github.com/solnic/virtus",
+    "sha": "fce56bd6676d767f287e4051176d3d323e48902f"
+  },
+  {
+    "name": "aws-ia-terraform-aws-eks-blueprints-addons",
+    "url": "https://github.com/aws-ia/terraform-aws-eks-blueprints-addons",
+    "sha": "b8f7da457994519fe521aec5a4a8c1c4364d48ee"
+  },
+  {
+    "name": "piraeusdatastore-piraeus-operator",
+    "url": "https://github.com/piraeusdatastore/piraeus-operator",
+    "sha": "995247767c911d656dd743d9ed276e0bfa304544"
+  },
+  {
+    "name": "weiaicunzai-pytorch-cifar100",
+    "url": "https://github.com/weiaicunzai/pytorch-cifar100",
+    "sha": "11d8418f415b261e4ae3cb1ffe20d06ec95b98e4"
+  },
+  {
+    "name": "janishar-android-mvp-architecture",
+    "url": "https://github.com/janishar/android-mvp-architecture",
+    "sha": "2499fb2ba3aa65125a39999b2b2013bce75c9059"
+  },
+  {
+    "name": "laserlemon-figaro",
+    "url": "https://github.com/laserlemon/figaro",
+    "sha": "a2d7dcb70c1af1e758089b7d529e0089177c5f51"
+  },
+  {
+    "name": "scarolan-ansible-terraform",
+    "url": "https://github.com/scarolan/ansible-terraform",
+    "sha": "eb76af8a43acd2b8a5314e90abae94829bb697c9"
+  },
+  {
+    "name": "spotahome-kooper",
+    "url": "https://github.com/spotahome/kooper",
+    "sha": "6064d2611599f8c12ddbc88ced3f123570bdc25a"
+  },
+  {
+    "name": "listen1-listen1",
+    "url": "https://github.com/listen1/listen1",
+    "sha": "8b5298d02f80c26c4fe5cc3e8d5aa44ee17f3fe4"
+  },
+  {
+    "name": "eirslett-frontend-maven-plugin",
+    "url": "https://github.com/eirslett/frontend-maven-plugin",
+    "sha": "9322a2dffec2f8ce83bf5dea5c7fbcbeb4f404b4"
+  },
+  {
+    "name": "thoughtbot-clearance",
+    "url": "https://github.com/thoughtbot/clearance",
+    "sha": "fd775ced5c6526b2a37cb1efaa6392edcd4fb4ec"
+  },
+  {
+    "name": "cogini-multi-env-deploy",
+    "url": "https://github.com/cogini/multi-env-deploy",
+    "sha": "e4d95407913849b949a4cad8b128e2dc0df6d203"
+  },
+  {
+    "name": "fabedge-fabedge",
+    "url": "https://github.com/FabEdge/fabedge",
+    "sha": "4d44cdf846ba6dbd48fad9b9179030642c51858f"
+  },
+  {
+    "name": "divamgupta-image-segmentation-keras",
+    "url": "https://github.com/divamgupta/image-segmentation-keras",
+    "sha": "1b2ba53ae49387c2d1abbd9a2f4a9a45eea6912f"
+  },
+  {
+    "name": "robinhood-ticker",
+    "url": "https://github.com/robinhood/ticker",
+    "sha": "856935b4c8a535431b28f80b23ca9c39d88d35a9"
+  },
+  {
+    "name": "pluginaweek-state-machine",
+    "url": "https://github.com/pluginaweek/state_machine",
+    "sha": "8a3ba81801782ac4ef9d4ace1209d8d50ffccdb0"
+  },
+  {
+    "name": "lukemwila-multi-container-nginx-react-node-mongo",
+    "url": "https://github.com/LukeMwila/multi-container-nginx-react-node-mongo",
+    "sha": "5c03f124bf1021a40e2007e797a57bb20b406579"
+  },
+  {
+    "name": "flant-addon-operator",
+    "url": "https://github.com/flant/addon-operator",
+    "sha": "aad2628f3c9ed409cf607d8ce05ab4adf90e883f"
+  },
+  {
+    "name": "donkie-spoolman",
+    "url": "https://github.com/Donkie/Spoolman",
+    "sha": "eccb05eadd0e012cfe23b72a08492f8ed58e8a7c"
+  },
+  {
+    "name": "jlegewie-zotfile",
+    "url": "https://github.com/jlegewie/zotfile",
+    "sha": "7b2c98b5a08ddfcfdcc99f6d3fa1a8aff776eb01"
+  },
+  {
+    "name": "jwt-ruby-jwt",
+    "url": "https://github.com/jwt/ruby-jwt",
+    "sha": "3f6c9adfdc511f4b3f612d1dc2a1db9f6e13b817"
+  },
+  {
+    "name": "wandb-server",
+    "url": "https://github.com/wandb/server",
+    "sha": "878de79e2dba25f850d085629f5d88215eb6f19d"
+  },
+  {
+    "name": "k8sgpt-ai-k8sgpt-operator",
+    "url": "https://github.com/k8sgpt-ai/k8sgpt-operator",
+    "sha": "dda8abf5d8c6a13788ba1fdf68a37cf3f97bd699"
+  },
+  {
+    "name": "yangjianxin1-gpt2-chitchat",
+    "url": "https://github.com/yangjianxin1/GPT2-chitchat",
+    "sha": "9066954a7896ec1ce058517bc48934394672901a"
+  },
+  {
+    "name": "evv1e-waylandcraft",
+    "url": "https://github.com/EVV1E/waylandcraft",
+    "sha": "49a25db3f98d67ebe8660d12b519f3995d0f56c7"
+  },
+  {
+    "name": "sds-scss-lint",
+    "url": "https://github.com/sds/scss-lint",
+    "sha": "9099df2a76c24a36fd53a258505ce4ce10dbf3aa"
+  },
+  {
+    "name": "particuleio-teks",
+    "url": "https://github.com/particuleio/teks",
+    "sha": "0b71bbc97a5598d54ffcc14703523e22708ec839"
+  },
+  {
+    "name": "tongdun-td-redis-operator",
+    "url": "https://github.com/tongdun/td-redis-operator",
+    "sha": "c36eba5c4b4de329054e46a8f8628c932c8ee76f"
+  },
+  {
+    "name": "jfzhang95-pytorch-deeplab-xception",
+    "url": "https://github.com/jfzhang95/pytorch-deeplab-xception",
+    "sha": "9135e104a7a51ea9effa9c6676a2fcffe6a6a2e6"
+  },
+  {
+    "name": "jd-alexander-likebutton",
+    "url": "https://github.com/jd-alexander/LikeButton",
+    "sha": "42cc1ec18c72bd3b3efa7e7620fb073b2926ab0e"
+  },
+  {
+    "name": "mikel-mail",
+    "url": "https://github.com/mikel/mail",
+    "sha": "d645d7b5b7d03218b0bc8971ef041c991a63f5f7"
+  },
+  {
+    "name": "terraform-google-modules-terraform-example-foundation",
+    "url": "https://github.com/terraform-google-modules/terraform-example-foundation",
+    "sha": "7d6a14bcd3c0ecfee68caa97660b0295c40c28a2"
+  },
+  {
+    "name": "evryfs-github-actions-runner-operator",
+    "url": "https://github.com/evryfs/github-actions-runner-operator",
+    "sha": "9475e3e94818a7d9edfda70dd0e6527a22566ffc"
+  },
+  {
+    "name": "keithito-tacotron",
+    "url": "https://github.com/keithito/tacotron",
+    "sha": "d26c763342518d4e432e9c4036a1aff3b4fdaa1e"
+  },
+  {
+    "name": "sharpie7-circuitjs1",
+    "url": "https://github.com/sharpie7/circuitjs1",
+    "sha": "dd47cf43a1baa91e2d6ae0f5884ccf0f589989bf"
+  },
+  {
+    "name": "ytti-oxidized",
+    "url": "https://github.com/ytti/oxidized",
+    "sha": "76e630b70e04901a48eda3bf14a7773d94d7a482"
+  },
+  {
+    "name": "rishavnandi-ansible-homelab",
+    "url": "https://github.com/rishavnandi/ansible_homelab",
+    "sha": "8f2a5469d7f6396ffc710b332c176b4f85e775d8"
+  },
+  {
+    "name": "valkey-io-valkey-operator",
+    "url": "https://github.com/valkey-io/valkey-operator",
+    "sha": "95a6649686ba9195df1d8b22b85b518640bae4cf"
+  },
+  {
+    "name": "libffcv-ffcv",
+    "url": "https://github.com/libffcv/ffcv",
+    "sha": "3a12966b3afe3a81733a732e633317d747bfaac7"
+  },
+  {
+    "name": "yui-yuicompressor",
+    "url": "https://github.com/yui/yuicompressor",
+    "sha": "cf0497e53fffe4ddbd50e71518c40e0c07d120de"
+  },
+  {
+    "name": "nesquena-rabl",
+    "url": "https://github.com/nesquena/rabl",
+    "sha": "ca1ecfc370e51677aef0a9f73bc6f57d7c65379e"
+  },
+  {
+    "name": "jpetazzo-ampernetacle",
+    "url": "https://github.com/jpetazzo/ampernetacle",
+    "sha": "8fa1d3a758c5ad9b2e0e4e6bdc1aa91eb2c5e4a4"
+  },
+  {
+    "name": "cert-manager-trust-manager",
+    "url": "https://github.com/cert-manager/trust-manager",
+    "sha": "31467ca1d932f91d4b3a890e3375e5ff5921d7ef"
+  },
+  {
+    "name": "rashevskyv-dbi",
+    "url": "https://github.com/rashevskyv/dbi",
+    "sha": "742ccfa93f23382a18569702a826a9d4f2f67fb0"
+  },
+  {
+    "name": "jgilfelt-android-viewbadger",
+    "url": "https://github.com/jgilfelt/android-viewbadger",
+    "sha": "e08c3a78cb92c0c8587790b15e73434f972912cf"
+  },
+  {
+    "name": "thoughtbot-shoulda-matchers",
+    "url": "https://github.com/thoughtbot/shoulda-matchers",
+    "sha": "79cdfbc326e97c9b43991b644434ca53c1f62c4c"
+  },
+  {
+    "name": "stubbi-openclaw-operator",
+    "url": "https://github.com/stubbi/openclaw-operator",
+    "sha": "7b334ed9e3166641c773e245a737044330b8233e"
+  },
+  {
+    "name": "striver-ing-wechat-spider",
+    "url": "https://github.com/striver-ing/wechat-spider",
+    "sha": "671081d0011519cdf379943cd21fafebb9353c7f"
+  },
+  {
+    "name": "salomonbrys-anr-watchdog",
+    "url": "https://github.com/SalomonBrys/ANR-WatchDog",
+    "sha": "4d7b4bb288d34a604be80c3c1b13ec85c0c5b06a"
+  },
+  {
+    "name": "roidrage-lograge",
+    "url": "https://github.com/roidrage/lograge",
+    "sha": "106e8333d65d35d013f728af81e9a938cafd9f7b"
+  },
+  {
+    "name": "andrewguenther-fck-nat",
+    "url": "https://github.com/AndrewGuenther/fck-nat",
+    "sha": "e4a64e5a5359d33be0904e7537ea033e5c1290fe"
+  },
+  {
+    "name": "ucloud-redis-cluster-operator",
+    "url": "https://github.com/ucloud/redis-cluster-operator",
+    "sha": "d1824cf248b3d68992158c0d7994ba74b4a36a8f"
+  },
+  {
+    "name": "pharmapsychotic-clip-interrogator",
+    "url": "https://github.com/pharmapsychotic/clip-interrogator",
+    "sha": "bc07ce62c179d3aab3053a623d96a071101d11cb"
+  },
+  {
+    "name": "keyboardsurfer-crouton",
+    "url": "https://github.com/keyboardsurfer/Crouton",
+    "sha": "7806b15e4d52793e1f5aeaa4a55b1e220289e619"
+  },
+  {
+    "name": "viewcomponent-view-component",
+    "url": "https://github.com/ViewComponent/view_component",
+    "sha": "05b5c98b97405c46ce6fdebc82406e84b1d55ce5"
+  },
+  {
+    "name": "slinkyproject-slurm-operator",
+    "url": "https://github.com/SlinkyProject/slurm-operator",
+    "sha": "65782e8ddf8cb787f1b328a5b3650cf42a5fe7cf"
+  },
+  {
+    "name": "dmytrodanylyk-android-process-button",
+    "url": "https://github.com/dmytrodanylyk/android-process-button",
+    "sha": "c08f374da24538b66f38b894b89d5d12f1df6d3d"
+  },
+  {
+    "name": "mileszs-wicked-pdf",
+    "url": "https://github.com/mileszs/wicked_pdf",
+    "sha": "bce498de547cdf00d037fdbec29fae844d69ee8e"
+  },
+  {
+    "name": "chime-terraform-aws-alternat",
+    "url": "https://github.com/chime/terraform-aws-alternat",
+    "sha": "89e575c7f5dc7f4a8ac7a67116bea4e6c9ca79c3"
+  },
+  {
+    "name": "mellanox-network-operator",
+    "url": "https://github.com/Mellanox/network-operator",
+    "sha": "fe631dddf1f9b990c10245ab9a67f2b81839ca2f"
+  },
+  {
+    "name": "kotartemiy-newscatcher",
+    "url": "https://github.com/kotartemiy/newscatcher",
+    "sha": "b86b1a650241be4e82941319698e01a33c0c01ac"
+  },
+  {
+    "name": "scottyab-rootbeer",
+    "url": "https://github.com/scottyab/rootbeer",
+    "sha": "de7bc7b4b09c9db148b62b331b4a44076b2eb480"
+  },
+  {
+    "name": "lynndylanhurley-devise-token-auth",
+    "url": "https://github.com/lynndylanhurley/devise_token_auth",
+    "sha": "b02076a930f7d0a4a155e25feaa7a50b86dbc625"
+  },
+  {
+    "name": "galleybytes-terraform-operator",
+    "url": "https://github.com/GalleyBytes/terraform-operator",
+    "sha": "75eab98ed87e29b08e1a9f5556ec72997e0f481d"
+  },
+  {
+    "name": "oauthlib-oauthlib",
+    "url": "https://github.com/oauthlib/oauthlib",
+    "sha": "179287a5f9067aac7b1c0d71c4c5e083ccbf58f2"
+  },
+  {
+    "name": "eugenmayer-docker-sync",
+    "url": "https://github.com/EugenMayer/docker-sync",
+    "sha": "4eab6de164d44c724c739c17bd574efa9008aae1"
+  },
+  {
+    "name": "envygeeks-jekyll-docker",
+    "url": "https://github.com/envygeeks/jekyll-docker",
+    "sha": "66caad662719c1d8fd995d1cb88e1edef6fb6fdd"
+  },
+  {
+    "name": "planetscale-vitess-operator",
+    "url": "https://github.com/planetscale/vitess-operator",
+    "sha": "30651a3661302889d1e40ae12b1470bac481d297"
+  },
+  {
+    "name": "sovrasov-flops-counter-pytorch",
+    "url": "https://github.com/sovrasov/flops-counter.pytorch",
+    "sha": "d612c7547445841a325fd2a1ff2ab27583f01bae"
+  },
+  {
+    "name": "janishar-android-mvvm-architecture",
+    "url": "https://github.com/janishar/android-mvvm-architecture",
+    "sha": "93080fb3cb0ace039e0ab64bb141a35dd6592011"
+  },
+  {
+    "name": "whitesmith-rubycritic",
+    "url": "https://github.com/whitesmith/rubycritic",
+    "sha": "8e63cc2382cd4610834a42293cb109edc5829003"
+  },
+  {
+    "name": "dragonflydb-dragonfly-operator",
+    "url": "https://github.com/dragonflydb/dragonfly-operator",
+    "sha": "3bf0712c4a2564a09212b3dda4a0fa4e50186217"
+  },
+  {
+    "name": "0xemmkty-quantmuse",
+    "url": "https://github.com/0xemmkty/QuantMuse",
+    "sha": "f86ede35a81830ab6aded9dc745eb291ccd3efe1"
+  },
+  {
+    "name": "jasonross-nuwa",
+    "url": "https://github.com/jasonross/Nuwa",
+    "sha": "750c6394036b50734546443b3359c57327565a62"
+  },
+  {
+    "name": "collectiveidea-audited",
+    "url": "https://github.com/collectiveidea/audited",
+    "sha": "dbf8432604ec97734bcfb3dc6df61f4faa0d1b84"
+  },
+  {
+    "name": "jameswoolfenden-pike",
+    "url": "https://github.com/JamesWoolfenden/pike",
+    "sha": "716798c1e676a533c66d080573957b0d63610ca6"
+  },
+  {
+    "name": "zalando-incubator-es-operator",
+    "url": "https://github.com/zalando-incubator/es-operator",
+    "sha": "fd761923010f00b799d1d5a272879d8cdfec6d43"
+  },
+  {
+    "name": "teamultroid-ultroid",
+    "url": "https://github.com/TeamUltroid/Ultroid",
+    "sha": "0b926def3ea91f7dbe69e2209242f6e3076a78d9"
+  },
+  {
+    "name": "lovetuzitong-multiimageselector",
+    "url": "https://github.com/lovetuzitong/MultiImageSelector",
+    "sha": "bed718f773a637d6f3c6e6bd8ac316cd03404b8f"
+  },
+  {
+    "name": "trailblazer-trailblazer",
+    "url": "https://github.com/trailblazer/trailblazer",
+    "sha": "4d49a1601875d2223c3ac78c5c0d52610f9e2a6f"
+  },
+  {
+    "name": "zopdev-opentofu-modules",
+    "url": "https://github.com/zopdev/opentofu-modules",
+    "sha": "c69a974649b05c9b2cad67e4115992f90e7d0ddc"
+  },
+  {
+    "name": "mumoshu-aws-secret-operator",
+    "url": "https://github.com/mumoshu/aws-secret-operator",
+    "sha": "8ce284bc00c5d294c8b822f5cd62c6b00156e737"
+  },
+  {
+    "name": "bethgelab-foolbox",
+    "url": "https://github.com/bethgelab/foolbox",
+    "sha": "2513a9a8675d7017e5266d3b0ed89124cb436ec5"
+  },
+  {
+    "name": "sockeqwe-adapterdelegates",
+    "url": "https://github.com/sockeqwe/AdapterDelegates",
+    "sha": "e855771c3ed8b256287e46350ebc3ada2085c41a"
+  },
+  {
+    "name": "rouge-ruby-rouge",
+    "url": "https://github.com/rouge-ruby/rouge",
+    "sha": "8f70612b0020b4f313abfea620f1bc0b2b4389f2"
+  },
+  {
+    "name": "aws-ia-terraform-aws-control-tower-account-factory",
+    "url": "https://github.com/aws-ia/terraform-aws-control_tower_account_factory",
+    "sha": "3531688103767a7d05e58a854fd957cf824cabd9"
+  },
+  {
+    "name": "apache-rocketmq-operator",
+    "url": "https://github.com/apache/rocketmq-operator",
+    "sha": "03741c8521a8d5063a1d5c1d1d704f1072e9d767"
+  },
+  {
+    "name": "reloadware-reloadium",
+    "url": "https://github.com/reloadware/reloadium",
+    "sha": "de40ab2eac806fcc019e496d2a33cf19c10e0a72"
+  },
+  {
+    "name": "whatsapp-stickers",
+    "url": "https://github.com/WhatsApp/stickers",
+    "sha": "06144a1f6077bbb346e1230032fc4e0bce996d03"
+  },
+  {
+    "name": "ekzhu-datasketch",
+    "url": "https://github.com/ekzhu/datasketch",
+    "sha": "c7eaaeea3f39909f906a9cf8ad4d21a878cb4e07"
+  },
+  {
+    "name": "altbeacon-android-beacon-library",
+    "url": "https://github.com/AltBeacon/android-beacon-library",
+    "sha": "72d2c6bfc50f8fb8cbd08dde348329e845ac1369"
+  },
+  {
+    "name": "olivr-free-domain",
+    "url": "https://github.com/Olivr/free-domain",
+    "sha": "ae9923fe4b145a0653128082c6a6b1ae1495c3d0"
+  },
+  {
+    "name": "x0rz-tweets-analyzer",
+    "url": "https://github.com/x0rz/tweets_analyzer",
+    "sha": "8d6bd3c2a93e400d81bc46115598f347487fba0c"
+  },
+  {
+    "name": "pay-group-best-pay-sdk",
+    "url": "https://github.com/Pay-Group/best-pay-sdk",
+    "sha": "c95accb7baa0ec786a56fab1f2d47bc277777930"
+  },
+  {
+    "name": "collectiveidea-interactor",
+    "url": "https://github.com/collectiveidea/interactor",
+    "sha": "c0e0079375e8d447eadcd062d7bb3b550fcb60bb"
+  },
+  {
+    "name": "nic-delhi-aarogyasetu-android",
+    "url": "https://github.com/nic-delhi/AarogyaSetu_Android",
+    "sha": "b81f31a4a1e1c7c20159a608fc305de402deff4b"
+  },
+  {
+    "name": "fengquanli-resnetgpt",
+    "url": "https://github.com/FengQuanLi/ResnetGPT",
+    "sha": "5981806417f822a59dd4977886353611ac794ea4"
+  },
+  {
+    "name": "everythingme-overscroll-decor",
+    "url": "https://github.com/EverythingMe/overscroll-decor",
+    "sha": "96f6f55afaeae4d780f151828a809c36a44d6323"
+  },
+  {
+    "name": "datarevenue-berlin-openmlops",
+    "url": "https://github.com/datarevenue-berlin/OpenMLOps",
+    "sha": "a9820e23730824d102ad2103130cde9b04cf81e2"
+  },
+  {
+    "name": "gitops-bridge-dev-gitops-bridge",
+    "url": "https://github.com/gitops-bridge-dev/gitops-bridge",
+    "sha": "cac900a22e6b82fd011f0f5f94dc35a1614cf24d"
+  },
+  {
+    "name": "rhsimplex-image-match",
+    "url": "https://github.com/rhsimplex/image-match",
+    "sha": "cbb1dc031922002006f2a4590a8da244e5aa0e7f"
+  },
+  {
+    "name": "p0ssuidao-terraguard",
+    "url": "https://github.com/P0ssuidao/terraguard",
+    "sha": "0575faefa680ac5c31ebae9df7b617a1160410cd"
+  },
+  {
+    "name": "donkingliang-consecutivescroller",
+    "url": "https://github.com/donkingliang/ConsecutiveScroller",
+    "sha": "bad427106fa54044b22c632d9f3a7a546bd9f7e3"
+  },
+  {
+    "name": "bretfisher-dogvscat",
+    "url": "https://github.com/BretFisher/dogvscat",
+    "sha": "fc16b7359b2e06002b0dc8d67ce8115fbe30a4f5"
+  },
+  {
+    "name": "theboredteam-boring-notch",
+    "url": "https://github.com/TheBoredTeam/boring.notch",
+    "sha": "b7611bbf32c627a3427408fc142486900d71a23f"
+  },
+  {
+    "name": "ackites-nrfr",
+    "url": "https://github.com/Ackites/Nrfr",
+    "sha": "c8044fe7d42beea496d66fae43b9683fcf942ce4"
+  },
+  {
+    "name": "twitter-algebird",
+    "url": "https://github.com/twitter/algebird",
+    "sha": "464917d6a3f2b1c9f2048e3dd38df5dd97edc965"
+  },
+  {
+    "name": "tyrrrz-discordchatexporter",
+    "url": "https://github.com/Tyrrrz/DiscordChatExporter",
+    "sha": "494737cc19dbe1ad2f56ac00945839b5530aab2a"
+  },
+  {
+    "name": "scottbez1-smartknob",
+    "url": "https://github.com/scottbez1/smartknob",
+    "sha": "4eb988399c3fda6ffd3006772856093dfe9adb86"
+  },
+  {
+    "name": "niri-wm-niri",
+    "url": "https://github.com/niri-wm/niri",
+    "sha": "90d5c1bf7381a81c953cb8b3f26c5ddcaa3f48cb"
+  },
+  {
+    "name": "w7corp-easywechat",
+    "url": "https://github.com/w7corp/easywechat",
+    "sha": "ba8022698a613e37b10ed1e4db604c5a96af0a63"
+  },
+  {
+    "name": "ramotion-animated-tab-bar",
+    "url": "https://github.com/Ramotion/animated-tab-bar",
+    "sha": "52174249fa7b296c0fce1114be8f34081b85ffc3"
+  },
+  {
+    "name": "zhanghai-materialfiles",
+    "url": "https://github.com/zhanghai/MaterialFiles",
+    "sha": "93c333960aa897836ba3f215a19d0cb0de494db1"
+  },
+  {
+    "name": "riscv-boom-riscv-boom",
+    "url": "https://github.com/riscv-boom/riscv-boom",
+    "sha": "ba03175e0a3cf5c0d5a7f14d385ac1c8998c4428"
+  },
+  {
+    "name": "lostindark-driverstoreexplorer",
+    "url": "https://github.com/lostindark/DriverStoreExplorer",
+    "sha": "ac7f4dfb36fead69daf452464bf2f0b96eab98db"
+  },
+  {
+    "name": "translucenttb-translucenttb",
+    "url": "https://github.com/TranslucentTB/TranslucentTB",
+    "sha": "d4636e439865df0a1a1419db408e055740ce5c74"
+  },
+  {
+    "name": "cloudflare-pingora",
+    "url": "https://github.com/cloudflare/pingora",
+    "sha": "1adcb3815b70d6594379db044b5aa67f9bc1af76"
+  },
+  {
+    "name": "guyueyingmu-avbook",
+    "url": "https://github.com/guyueyingmu/avbook",
+    "sha": "d3780741288c68da826fc2bb0df542caa8d91fb5"
+  },
+  {
+    "name": "ninjaprox-nvactivityindicatorview",
+    "url": "https://github.com/ninjaprox/NVActivityIndicatorView",
+    "sha": "9777b047a904a8972ad81b48ecdaac394a24c5ce"
+  },
+  {
+    "name": "lysine-dev-okio",
+    "url": "https://github.com/lysine-dev/okio",
+    "sha": "f0e3f479f83531332de076ed39bc001a5618d538"
+  },
+  {
+    "name": "typelevel-doobie",
+    "url": "https://github.com/typelevel/doobie",
+    "sha": "6efda164db231b68cc055c859d03a88f5eeed201"
+  },
+  {
+    "name": "lucasg-dependencies",
+    "url": "https://github.com/lucasg/Dependencies",
+    "sha": "1997a40000b77bd3326cbc33672a7b9f78bb23f3"
+  },
+  {
+    "name": "rizinorg-cutter",
+    "url": "https://github.com/rizinorg/cutter",
+    "sha": "e1f94ecc55022fc3751df2f6f3413c02cc41824d"
+  },
+  {
+    "name": "schniz-fnm",
+    "url": "https://github.com/Schniz/fnm",
+    "sha": "07f13237ae208f531f8ea88d4cfde3160c22f99a"
+  },
+  {
+    "name": "php-fig-container",
+    "url": "https://github.com/php-fig/container",
+    "sha": "707984727bd5b2b670e59559d3ed2500240cf875"
+  },
+  {
+    "name": "krzyzanowskim-cryptoswift",
+    "url": "https://github.com/krzyzanowskim/CryptoSwift",
+    "sha": "c7987723fe4452dec9ad9e46ff3283d661f1ea4e"
+  },
+  {
+    "name": "uber-ribs",
+    "url": "https://github.com/uber/RIBs",
+    "sha": "d1da82772c389d2d167ff641dfb41e95e8e600aa"
+  },
+  {
+    "name": "laurilehmijoki-s3-website",
+    "url": "https://github.com/laurilehmijoki/s3_website",
+    "sha": "292a9e335731c3782513618c84151fb5f4b9d70b"
+  },
+  {
+    "name": "spectreconsole-spectre-console",
+    "url": "https://github.com/spectreconsole/spectre.console",
+    "sha": "e8045f7c53c3c217a7f93f362f5256f1fadc0020"
+  },
+  {
+    "name": "id-software-doom",
+    "url": "https://github.com/id-Software/DOOM",
+    "sha": "a77dfb96cb91780ca334d0d4cfd86957558007e0"
+  },
+  {
+    "name": "firecrawl-anydoc",
+    "url": "https://github.com/firecrawl/anydoc",
+    "sha": "e7178e099b6bf9171e2c52b832cbdb4134b69112"
+  },
+  {
+    "name": "bobthecow-psysh",
+    "url": "https://github.com/bobthecow/psysh",
+    "sha": "64b18aa0d5f8bc14087b030f0f92cd76892f8dc3"
+  },
+  {
+    "name": "stephencelis-sqlite-swift",
+    "url": "https://github.com/stephencelis/SQLite.swift",
+    "sha": "fa0763a8b908dc1017935c2ea6c2b6926ac1e1b4"
+  },
+  {
+    "name": "readyouapp-readyou",
+    "url": "https://github.com/ReadYouApp/ReadYou",
+    "sha": "d2b979ccad9a3e54b9499929a9dc2824578b0fd9"
+  },
+  {
+    "name": "zio-zio-quill",
+    "url": "https://github.com/zio/zio-quill",
+    "sha": "2c3d3264835765aa80d7fc3e3de805f4c86b5c86"
+  },
+  {
+    "name": "cysharp-unitask",
+    "url": "https://github.com/Cysharp/UniTask",
+    "sha": "a77a1b4a89824fb6df293099de3060daf2a432c1"
+  },
+  {
+    "name": "trojan-gfw-trojan",
+    "url": "https://github.com/trojan-gfw/trojan",
+    "sha": "3e7bb9aecdc694f9bcae8d646fae395f773d60f8"
+  },
+  {
+    "name": "rust-lang-mdbook",
+    "url": "https://github.com/rust-lang/mdBook",
+    "sha": "0accb8a3ff59e311c60e2267581fea6407d64c73"
+  },
+  {
+    "name": "googleapis-google-api-php-client",
+    "url": "https://github.com/googleapis/google-api-php-client",
+    "sha": "31b577e7012c4e68d5289d63aaf7e6d471ec1ff1"
+  },
+  {
+    "name": "pock-pock",
+    "url": "https://github.com/pock/pock",
+    "sha": "127aac1986e2dc5a3d6995ddbd35e19bf2f0c85a"
+  },
+  {
+    "name": "zetbaitsu-compressor",
+    "url": "https://github.com/zetbaitsu/Compressor",
+    "sha": "a920146ba10421bcf214261870a69d56c52d5cc1"
+  },
+  {
+    "name": "pocorall-scaloid",
+    "url": "https://github.com/pocorall/scaloid",
+    "sha": "b9d13c782f6b8364c4f63e50df74054802b31127"
+  },
+  {
+    "name": "itsfatduck-optimizerduck",
+    "url": "https://github.com/itsfatduck/optimizerDuck",
+    "sha": "dd3b21ced1bdb06913afee6ad24c50af754e8f66"
+  },
+  {
+    "name": "kyleneideck-backgroundmusic",
+    "url": "https://github.com/kyleneideck/BackgroundMusic",
+    "sha": "8c25450e9b0d3867417c4872018b03fb30c0c85c"
+  },
+  {
+    "name": "leptos-rs-leptos",
+    "url": "https://github.com/leptos-rs/leptos",
+    "sha": "6482868eb32c956213256344462e1efd56c2f0b2"
+  },
+  {
+    "name": "denvercoder1-readme-typing-svg",
+    "url": "https://github.com/DenverCoder1/readme-typing-svg",
+    "sha": "5d4601b766f83ffd477b6ae219258684282f5e5b"
+  },
+  {
+    "name": "ronitsingh10-finetune",
+    "url": "https://github.com/ronitsingh10/FineTune",
+    "sha": "2285279d36d3f8115c1c2d4aecd904f1bdf96a51"
+  },
+  {
+    "name": "aistra0528-hail",
+    "url": "https://github.com/aistra0528/Hail",
+    "sha": "67a43c8ea7d43eddf51d840f3615b97ce6079c9b"
+  },
+  {
+    "name": "mojojolo-textteaser",
+    "url": "https://github.com/MojoJolo/textteaser",
+    "sha": "f96cc7422e9a175977a2935bb2fe571aadf0293e"
+  },
+  {
+    "name": "mathewsachin-captura",
+    "url": "https://github.com/MathewSachin/Captura",
+    "sha": "3fdf41529bf4d50cd7a85aedd856f30e34279a47"
+  },
+  {
+    "name": "unetworking-uwebsockets",
+    "url": "https://github.com/uNetworking/uWebSockets",
+    "sha": "838754e2b2e1cc5b580d737843c15e8eeae426a4"
+  },
+  {
+    "name": "valeriansaliou-sonic",
+    "url": "https://github.com/valeriansaliou/sonic",
+    "sha": "f16560b6ea67fd223354c065f7157646931db1b2"
+  },
+  {
+    "name": "dingo-api",
+    "url": "https://github.com/dingo/api",
+    "sha": "42b6afa6e20a27f938a45e676665e57d26422cea"
+  },
+  {
+    "name": "gao-sun-eul",
+    "url": "https://github.com/gao-sun/eul",
+    "sha": "b5c3bd0a5be2679ca7e22da676be5ac73e300f4a"
+  },
+  {
+    "name": "reactivex-rxkotlin",
+    "url": "https://github.com/ReactiveX/RxKotlin",
+    "sha": "88176f6691de8de39d092f144671341bec30d4f8"
+  },
+  {
+    "name": "sangria-graphql-sangria",
+    "url": "https://github.com/sangria-graphql/sangria",
+    "sha": "adc0f612a453c68dcd38b75ecb7607795523688c"
+  },
+  {
+    "name": "runcat-dev-runcat365",
+    "url": "https://github.com/runcat-dev/RunCat365",
+    "sha": "a6aa5b16e11cefbceacf8ed9a3e2c0bbcc1b050e"
+  },
+  {
+    "name": "pybind-pybind11",
+    "url": "https://github.com/pybind/pybind11",
+    "sha": "3beb3764ae967fa39dba1fe43b5a867f73da19ef"
+  },
+  {
+    "name": "bee-san-rustscan",
+    "url": "https://github.com/bee-san/RustScan",
+    "sha": "b46f982b9ba5cee8feb79cfca2208f1809f31fd8"
+  },
+  {
+    "name": "phpdocumentor-reflectiondocblock",
+    "url": "https://github.com/phpDocumentor/ReflectionDocBlock",
+    "sha": "8426ea0fc242413c930d2d2508684efaae4b0a17"
+  },
+  {
+    "name": "quick-quick",
+    "url": "https://github.com/Quick/Quick",
+    "sha": "2b4547b230e94d84320724fd6df65e418b058be2"
+  },
+  {
+    "name": "samolego-canta",
+    "url": "https://github.com/samolego/Canta",
+    "sha": "d40f8b868b299372807de90adcc1632501acd70c"
+  },
+  {
+    "name": "monix-monix",
+    "url": "https://github.com/monix/monix",
+    "sha": "cfa987c73f6ad9868074e4b0e30085546152bced"
+  },
+  {
+    "name": "technitiumsoftware-dnsserver",
+    "url": "https://github.com/TechnitiumSoftware/DnsServer",
+    "sha": "c11fec68b7d64b728d74028b754c94f2ef9b36b1"
+  },
+  {
+    "name": "tindy2013-subconverter",
+    "url": "https://github.com/tindy2013/subconverter",
+    "sha": "a0d4eab28cb8b6c782d4ce5c3a918de4829b4a72"
+  },
+  {
+    "name": "0x192-universal-android-debloater",
+    "url": "https://github.com/0x192/universal-android-debloater",
+    "sha": "11f27c671cba278d71296cdef4c5a5dba06add5e"
+  },
+  {
+    "name": "phpdocumentor-typeresolver",
+    "url": "https://github.com/phpDocumentor/TypeResolver",
+    "sha": "dbe2133bb23e2e33a6834f4ed417f24a1b167769"
+  },
+  {
+    "name": "mac-cain13-r-swift",
+    "url": "https://github.com/mac-cain13/R.swift",
+    "sha": "f0a0d531686138e9f7ad4c2b6bf6115149aeb08b"
+  },
+  {
+    "name": "sourcerer-io-sourcerer-app",
+    "url": "https://github.com/sourcerer-io/sourcerer-app",
+    "sha": "af3d7737ba20ccd4734546b03defae10f6627573"
+  },
+  {
+    "name": "foundweekends-giter8",
+    "url": "https://github.com/foundweekends/giter8",
+    "sha": "1c2612983949cc5d60c1eae5f439dd448e73d1cc"
+  },
+  {
+    "name": "bchavez-bogus",
+    "url": "https://github.com/bchavez/Bogus",
+    "sha": "6ece18c5c22648ab4606e45a0aaf2f07fc5259e4"
+  },
+  {
+    "name": "yhirose-cpp-httplib",
+    "url": "https://github.com/yhirose/cpp-httplib",
+    "sha": "6d8dec3c3edaffc0a02e2651168fdcc5b501b63f"
+  },
+  {
+    "name": "firecrawl-pdf-inspector",
+    "url": "https://github.com/firecrawl/pdf-inspector",
+    "sha": "bcf387d1f4ab91d702f417fd9600694da0c166c3"
+  },
+  {
+    "name": "reactphp-reactphp",
+    "url": "https://github.com/reactphp/reactphp",
+    "sha": "91aea37b23e9fb5466f03ead0924445b8cbe37fd"
+  },
+  {
+    "name": "finb-bark",
+    "url": "https://github.com/Finb/Bark",
+    "sha": "967f289a9c6e4d1e6ccf49c0bc3d348b0a4a9f3b"
+  },
+  {
+    "name": "mygod-vpnhotspot",
+    "url": "https://github.com/Mygod/VPNHotspot",
+    "sha": "6e3d4a4f9db4f72d0d4a422350b5234cddb52c48"
+  },
+  {
+    "name": "fthomas-refined",
+    "url": "https://github.com/fthomas/refined",
+    "sha": "2d9cd42102e2936a725e7bdcea254883d533dab8"
+  },
+  {
+    "name": "perfare-il2cppdumper",
+    "url": "https://github.com/Perfare/Il2CppDumper",
+    "sha": "4741d46ba9cd6159c5d853eb9d6fc48b4bfa2b1a"
+  },
+  {
+    "name": "chenshuo-muduo",
+    "url": "https://github.com/chenshuo/muduo",
+    "sha": "f1fc77e0c13b80e5086ff457362c8a86d1b609d4"
+  },
+  {
+    "name": "xi-editor-xi-editor",
+    "url": "https://github.com/xi-editor/xi-editor",
+    "sha": "a2dea3059312795c77caadc639df49bf8a7008eb"
+  },
+  {
+    "name": "phpdocumentor-reflectioncommon",
+    "url": "https://github.com/phpDocumentor/ReflectionCommon",
+    "sha": "ee15a5a2022c8383906b225055e9496a6a5e6e3b"
+  },
+  {
+    "name": "krishkrosh-trackweight",
+    "url": "https://github.com/KrishKrosh/TrackWeight",
+    "sha": "e322cae241d29afbee2860a6b585e9fe3974bd0c"
+  },
+  {
+    "name": "acra-acra",
+    "url": "https://github.com/ACRA/acra",
+    "sha": "45c64e2c74aea7ad584256d5b86b0ba858505093"
+  },
+  {
+    "name": "typelevel-skunk",
+    "url": "https://github.com/typelevel/skunk",
+    "sha": "1045d3b2317ed21d7554c92676cc77edb3d1cd18"
+  },
+  {
+    "name": "felixse-fluentterminal",
+    "url": "https://github.com/felixse/FluentTerminal",
+    "sha": "67504455c74b17853dd6fa8cc684860cd0afb21b"
+  },
+  {
+    "name": "alibaba-zvec",
+    "url": "https://github.com/alibaba/zvec",
+    "sha": "30d662db4d2467937d843443074b34743bcc9baa"
+  },
+  {
+    "name": "fathyb-carbonyl",
+    "url": "https://github.com/fathyb/carbonyl",
+    "sha": "ab80a276b1bd1c2c8dcefc8f248415dfc61dc2bf"
+  },
+  {
+    "name": "myclabs-deepcopy",
+    "url": "https://github.com/myclabs/DeepCopy",
+    "sha": "958a0803aae2ade58a9fa4ae31b7cade3bb9ed6f"
+  },
+  {
+    "name": "tristanhimmelman-objectmapper",
+    "url": "https://github.com/tristanhimmelman/ObjectMapper",
+    "sha": "6021c6035e83a306047348666f6400dc61445d3b"
+  },
+  {
+    "name": "capcom6-android-sms-gateway",
+    "url": "https://github.com/capcom6/android-sms-gateway",
+    "sha": "adaa6c41c0fffcf0bd980de01a742c2574c73e40"
+  },
+  {
+    "name": "japgolly-scalajs-react",
+    "url": "https://github.com/japgolly/scalajs-react",
+    "sha": "757dd2471c2743685f83503ef89631d1a00e0e2a"
+  },
+  {
+    "name": "reactiveui-refit",
+    "url": "https://github.com/reactiveui/refit",
+    "sha": "89779cd474bc6d788f3f10e3f58fa0a5877dadb2"
+  },
+  {
+    "name": "k2-fsa-sherpa-onnx",
+    "url": "https://github.com/k2-fsa/sherpa-onnx",
+    "sha": "347ec768a01ca53e766780f7759b14e145b643e6"
+  },
+  {
+    "name": "rigellute-spotify-tui",
+    "url": "https://github.com/Rigellute/spotify-tui",
+    "sha": "c4dcf6b9fd8318017acbdd7ec005955e26cf2794"
+  },
+  {
+    "name": "ellite-wallos",
+    "url": "https://github.com/ellite/Wallos",
+    "sha": "50e92d710e080455b2363281a913a1548aec4620"
+  },
+  {
+    "name": "apple-containerization",
+    "url": "https://github.com/apple/containerization",
+    "sha": "fd4a84a9aa85c717bd502c585c29b910fdde817a"
+  },
+  {
+    "name": "kotlin-kotlinx-serialization",
+    "url": "https://github.com/Kotlin/kotlinx.serialization",
+    "sha": "6f6a2e66c3dbf4a34e86a030368ecb0f7a734d22"
+  },
+  {
+    "name": "thehive-project-cortex",
+    "url": "https://github.com/TheHive-Project/Cortex",
+    "sha": "f3b23eaed858cb2412c4af621df4ab6f051e2ada"
+  },
+  {
+    "name": "git-ecosystem-git-credential-manager",
+    "url": "https://github.com/git-ecosystem/git-credential-manager",
+    "sha": "4fc94be76aff68f8ef64bc6435414dbc38bed395"
+  },
+  {
+    "name": "polybar-polybar",
+    "url": "https://github.com/polybar/polybar",
+    "sha": "f99e0b1c7a5b094f5a04b14101899d0cb4ece69d"
+  },
+  {
+    "name": "ccusage-ccusage",
+    "url": "https://github.com/ccusage/ccusage",
+    "sha": "208516a682c983854fa7311ac59b9f2481fb88c8"
+  },
+  {
+    "name": "aimeos-aimeos-laravel",
+    "url": "https://github.com/aimeos/aimeos-laravel",
+    "sha": "b9b2900af5a280edc1284b59168bd9addc2e5493"
+  },
+  {
+    "name": "yonaskolb-xcodegen",
+    "url": "https://github.com/yonaskolb/XcodeGen",
+    "sha": "783a19e863ff906e042d061aa0a1d569d3c52ffa"
+  },
+  {
+    "name": "fcitx5-android-fcitx5-android",
+    "url": "https://github.com/fcitx5-android/fcitx5-android",
+    "sha": "eb5b50216e70484a009933d9519db76005f1faf3"
+  },
+  {
+    "name": "philippus-elastic4s",
+    "url": "https://github.com/Philippus/elastic4s",
+    "sha": "fcdf4756aa1822701e3cecb765f4629a760321a1"
+  },
+  {
+    "name": "gibbed-steamachievementmanager",
+    "url": "https://github.com/gibbed/SteamAchievementManager",
+    "sha": "de8b71048a0cee3c3e97cd8535e0f55ca86513e4"
+  },
+  {
+    "name": "mobile-shell-mosh",
+    "url": "https://github.com/mobile-shell/mosh",
+    "sha": "decd9b705eb81626f694335b8d5940538beb06da"
+  },
+  {
+    "name": "rightnow-ai-openfang",
+    "url": "https://github.com/RightNow-AI/openfang",
+    "sha": "acf2587e46be174c10200489c9a2d23a39a98aeb"
+  },
+  {
+    "name": "symfony-http-foundation",
+    "url": "https://github.com/symfony/http-foundation",
+    "sha": "0858a2934147ea26c2680a292e2bdb494b11e4d5"
+  },
+  {
+    "name": "lihaoyun6-quickrecorder",
+    "url": "https://github.com/lihaoyun6/QuickRecorder",
+    "sha": "e82051787f013ec2e811fcceab2d7de80e9d4dbe"
+  },
+  {
+    "name": "drakeet-multitype",
+    "url": "https://github.com/drakeet/MultiType",
+    "sha": "84cd8fad89b0c6df661f32afae3b090cbf0cb0f5"
+  },
+  {
+    "name": "twitter-twitter-server",
+    "url": "https://github.com/twitter/twitter-server",
+    "sha": "24e15a4b0110e9807ed104c1ae2097ae8769d0db"
+  },
+  {
+    "name": "librehardwaremonitor-librehardwaremonitor",
+    "url": "https://github.com/LibreHardwareMonitor/LibreHardwareMonitor",
+    "sha": "b4718a6208ebbcf028cc29f2aea30e58b138e830"
+  },
+  {
+    "name": "sogou-workflow",
+    "url": "https://github.com/sogou/workflow",
+    "sha": "bd4556fc90274be21e7e106fa20ccb40c27f37d0"
+  },
+  {
+    "name": "asciinema-asciinema",
+    "url": "https://github.com/asciinema/asciinema",
+    "sha": "f0775199bf249acea91e104df4712547ffd2c61e"
+  },
+  {
+    "name": "symfony-event-dispatcher",
+    "url": "https://github.com/symfony/event-dispatcher",
+    "sha": "b18c4241475a44e262ceee9066eac8927324a64c"
+  },
+  {
+    "name": "toptal-gitignore-io",
+    "url": "https://github.com/toptal/gitignore.io",
+    "sha": "fd3331d935ac5029c59d4f4455c4bd1b29dcb3b1"
+  },
+  {
+    "name": "dr-tsng-hide-my-applist",
+    "url": "https://github.com/Dr-TSNG/Hide-My-Applist",
+    "sha": "bd5466b37bae15e3ea2a66694e7624ce3d33479d"
+  },
+  {
+    "name": "finagle-finch",
+    "url": "https://github.com/finagle/finch",
+    "sha": "5834b3c0d42f6ce14dc0ef20d550202468820bc1"
+  },
+  {
+    "name": "raywangqvq-bilibilitoolpro",
+    "url": "https://github.com/RayWangQvQ/BiliBiliToolPro",
+    "sha": "401698e88abedd1ff16ac0e5833b78369d29c631"
+  },
+  {
+    "name": "drogonframework-drogon",
+    "url": "https://github.com/drogonframework/drogon",
+    "sha": "553b7f32b6e761c4662eee97055e83c02430ce17"
+  },
+  {
+    "name": "transact-rs-sqlx",
+    "url": "https://github.com/transact-rs/sqlx",
+    "sha": "7908fe79fabc816ce172ac1ac59f6b4bd548ca39"
+  },
+  {
+    "name": "phpspec-prophecy",
+    "url": "https://github.com/phpspec/prophecy",
+    "sha": "09c2e5949d676286358a62af818f8407167a9dd6"
+  },
+  {
+    "name": "kean-nuke",
+    "url": "https://github.com/kean/Nuke",
+    "sha": "b047c909fcc423f9d9a4f75f5135811934a5d3da"
+  },
+  {
+    "name": "kizitonwose-calendar",
+    "url": "https://github.com/kizitonwose/Calendar",
+    "sha": "c2711b3c7fdf027e9a6bad55be9a7d979a288699"
+  },
+  {
+    "name": "oscpu-nutshell",
+    "url": "https://github.com/OSCPU/NutShell",
+    "sha": "aa012afae711e2a496c13a17f49eaba380715a37"
+  },
+  {
+    "name": "nilaoda-n-m3u8dl-re",
+    "url": "https://github.com/nilaoda/N_m3u8DL-RE",
+    "sha": "7849be8437148b33324d5ba298804d49d3add3d8"
+  },
+  {
+    "name": "webview-webview",
+    "url": "https://github.com/webview/webview",
+    "sha": "f244320ab0d82fdab98a094e02996fc26d0ffd0c"
+  },
+  {
+    "name": "ryancodrai-turbovec",
+    "url": "https://github.com/RyanCodrai/turbovec",
+    "sha": "c3b043b992290ff223b903046af7f6683768241c"
+  },
+  {
+    "name": "symfony-finder",
+    "url": "https://github.com/symfony/finder",
+    "sha": "ec42ab967ff3ae1c12861a073b60189e11755e36"
+  },
+  {
+    "name": "daltoniam-starscream",
+    "url": "https://github.com/daltoniam/Starscream",
+    "sha": "c6bfd1af48efcc9a9ad203665db12375ba6b145a"
+  },
+  {
+    "name": "dovecoteescapee-byedpiandroid",
+    "url": "https://github.com/dovecoteescapee/ByeDPIAndroid",
+    "sha": "43db0955de687d43f9473374dc7c5548eaa55359"
+  },
+  {
+    "name": "ucb-bar-gemmini",
+    "url": "https://github.com/ucb-bar/gemmini",
+    "sha": "8c3f9923a44a2fe2c7930587be297d6d4f8c09ca"
+  },
+  {
+    "name": "bepinex-bepinex",
+    "url": "https://github.com/BepInEx/BepInEx",
+    "sha": "dbc82f05b8ea34833de5b6a723eb60dd8398e0b1"
+  },
+  {
+    "name": "spotify-annoy",
+    "url": "https://github.com/spotify/annoy",
+    "sha": "379f744667aba6b40ba3db8a07678df173a88f74"
+  },
+  {
+    "name": "ast-grep-ast-grep",
+    "url": "https://github.com/ast-grep/ast-grep",
+    "sha": "46feb40534466c3a262aef285edf26aaeaa56f32"
+  },
+  {
+    "name": "twigphp-twig",
+    "url": "https://github.com/twigphp/Twig",
+    "sha": "beb4b229784425ceb6514cec9c573b3e42b30703"
+  },
+  {
+    "name": "apple-swift-nio",
+    "url": "https://github.com/apple/swift-nio",
+    "sha": "02d6d9ada2aac9dd15455548e497824b8a5ae9f3"
+  },
+  {
+    "name": "hxh19950701-webviewtvlive",
+    "url": "https://github.com/hxh19950701/WebViewTvLive",
+    "sha": "f84d817baf1b3f9407cbb525db9534842637090e"
+  },
+  {
+    "name": "holdenk-spark-testing-base",
+    "url": "https://github.com/holdenk/spark-testing-base",
+    "sha": "649d3c501facc2704027c52bede940a932fcaff7"
+  },
+  {
+    "name": "threemammals-ocelot",
+    "url": "https://github.com/ThreeMammals/Ocelot",
+    "sha": "8ce4fb6712dbf3c5c4194694da5e9995a439b939"
+  },
+  {
+    "name": "ninja-build-ninja",
+    "url": "https://github.com/ninja-build/ninja",
+    "sha": "1a8fee23135e57cda12d47aedb19f795353fa13c"
+  },
+  {
+    "name": "lsd-rs-lsd",
+    "url": "https://github.com/lsd-rs/lsd",
+    "sha": "4b6c14a110fe0fd544ec0204501b5fd3a5d6218f"
+  },
+  {
+    "name": "paragonie-random-compat",
+    "url": "https://github.com/paragonie/random_compat",
+    "sha": "b5d188cc9d5e02f94d2c41da23093f1ef557c5b1"
+  },
+  {
+    "name": "kishikawakatsumi-keychainaccess",
+    "url": "https://github.com/kishikawakatsumi/KeychainAccess",
+    "sha": "e0c7eebc5a4465a3c4680764f26b7a61f567cdaf"
+  },
+  {
+    "name": "diogobernardino-williamchart",
+    "url": "https://github.com/diogobernardino/williamchart",
+    "sha": "45316179c2fd2f7580165a17d60c716084891a1f"
+  },
+  {
+    "name": "combust-mleap",
+    "url": "https://github.com/combust/mleap",
+    "sha": "53697f872274eb9a4603363c51138e76a47dbec2"
+  },
+  {
+    "name": "mxgmn-markovjunior",
+    "url": "https://github.com/mxgmn/MarkovJunior",
+    "sha": "42aaf24bcf54ae164fba49c0a59348297904a676"
+  },
+  {
+    "name": "deepseek-ai-flashmla",
+    "url": "https://github.com/deepseek-ai/FlashMLA",
+    "sha": "395cb3afbb331fef7b1b21e9340861b9436b42d8"
+  },
+  {
+    "name": "benfred-py-spy",
+    "url": "https://github.com/benfred/py-spy",
+    "sha": "7a7ac96e96e0f9b4ba3eee80de3f4d255698170b"
+  },
+  {
+    "name": "symfony-http-kernel",
+    "url": "https://github.com/symfony/http-kernel",
+    "sha": "cd149c1b4ead48dccf8791c1b35ba96f028b35c9"
+  },
+  {
+    "name": "intitni-copilotforxcode",
+    "url": "https://github.com/intitni/CopilotForXcode",
+    "sha": "b59c57aa8c1d777d6c5d7057e9a5fc97ed5b8aab"
+  },
+  {
+    "name": "didi-booster",
+    "url": "https://github.com/didi/booster",
+    "sha": "904f046116661ad8613d45f7701057663b24180c"
+  },
+  {
+    "name": "pureconfig-pureconfig",
+    "url": "https://github.com/pureconfig/pureconfig",
+    "sha": "80379ed386e965d7b09a2f79ecbe81b111bd6d4c"
+  },
+  {
+    "name": "thebookisclosed-vive",
+    "url": "https://github.com/thebookisclosed/ViVe",
+    "sha": "3f8c6a3425983412da1e8b26cd757c3aa17b3f25"
+  },
+  {
+    "name": "acaudwell-gource",
+    "url": "https://github.com/acaudwell/Gource",
+    "sha": "70db547c6b8b40745fb41a8db7e8d28897be1a9e"
+  },
+  {
+    "name": "y2z-monolith",
+    "url": "https://github.com/Y2Z/monolith",
+    "sha": "ed66868566094350bc16c1304280a5ede1bdad80"
+  },
+  {
+    "name": "php-fig-simple-cache",
+    "url": "https://github.com/php-fig/simple-cache",
+    "sha": "2d280c2aaa23a120f35d55cfde8581954a8e77fa"
+  },
+  {
+    "name": "swiftuix-swiftuix",
+    "url": "https://github.com/SwiftUIX/SwiftUIX",
+    "sha": "3a99044b7045fb5907a7df18c7fe323e5656c6ab"
+  },
+  {
+    "name": "react-native-async-storage-async-storage",
+    "url": "https://github.com/react-native-async-storage/async-storage",
+    "sha": "eaa7b60f834d31fb422787c7723081a4dff93de8"
+  },
+  {
+    "name": "softwaremill-sttp",
+    "url": "https://github.com/softwaremill/sttp",
+    "sha": "bb1ba9b2035cdd3f1b7c0a2f888578de9e96cc45"
+  },
+  {
+    "name": "beeradmoore-dlss-swapper",
+    "url": "https://github.com/beeradmoore/dlss-swapper",
+    "sha": "53b1ecc9d9ae59a23bb3e6194a55ba6243426d9c"
+  },
+  {
+    "name": "zealdocs-zeal",
+    "url": "https://github.com/zealdocs/zeal",
+    "sha": "1b45004ac0c0375319c88f0acfc2db8536259326"
+  },
+  {
+    "name": "vosen-zluda",
+    "url": "https://github.com/vosen/ZLUDA",
+    "sha": "f4df215edbc3b6698a1c61ef7a8688fdff3872be"
+  },
+  {
+    "name": "symfony-thanks",
+    "url": "https://github.com/symfony/thanks",
+    "sha": "f455cc9ba4e0c61dcc18ea7e52bd725ee661aa64"
+  },
+  {
+    "name": "lexrus-ltmorphinglabel",
+    "url": "https://github.com/lexrus/LTMorphingLabel",
+    "sha": "bf629bd1ea03d92a1a2673bb2689a4ed2981e7b7"
+  },
+  {
+    "name": "orhanobut-dialogplus",
+    "url": "https://github.com/orhanobut/dialogplus",
+    "sha": "836e98d8981aa60baa5e4ea119881514d02a2ff0"
+  },
+  {
+    "name": "json4s-json4s",
+    "url": "https://github.com/json4s/json4s",
+    "sha": "85388aa954cff10805aa590cfdd165d5a8351fd5"
+  },
+  {
+    "name": "electronnet-electron-net",
+    "url": "https://github.com/ElectronNET/Electron.NET",
+    "sha": "87cc6f98b6a9c5968d7846c0e775ea713bd0d7b2"
+  },
+  {
+    "name": "cameron314-concurrentqueue",
+    "url": "https://github.com/cameron314/concurrentqueue",
+    "sha": "36c5755dc0789e5bcddbbb9a201d3af2bbf3024c"
+  },
+  {
+    "name": "microsoft-edit",
+    "url": "https://github.com/microsoft/edit",
+    "sha": "b7f83220868373945945e2218e852c24cbb4dcf0"
+  },
+  {
+    "name": "vrana-adminer",
+    "url": "https://github.com/vrana/adminer",
+    "sha": "38cdecba2a413483109d9c37edeacf16346c7985"
+  },
+  {
+    "name": "farzaa-clicky",
+    "url": "https://github.com/farzaa/clicky",
+    "sha": "e71105ce091d71dff4d89cf5d8d37ea1df460961"
+  },
+  {
+    "name": "fractal-compute-orchestrations-fractalandroid",
+    "url": "https://github.com/Fractal-Compute-Orchestrations/FractalAndroid",
+    "sha": "d5ca4d931a1f4a321e2b2cd1a69c0bb10c6ca9b4"
+  },
+  {
+    "name": "pathikrit-better-files",
+    "url": "https://github.com/pathikrit/better-files",
+    "sha": "faffdb87ec0656f56c9f8e2f0dd9e846285bf4f2"
+  },
+  {
+    "name": "orbmu2k-nvidiaprofileinspector",
+    "url": "https://github.com/Orbmu2k/nvidiaProfileInspector",
+    "sha": "2994194abe61f6807a3ea2015cdd875f6e1fc67b"
+  },
+  {
+    "name": "alinshans-mytinystl",
+    "url": "https://github.com/Alinshans/MyTinySTL",
+    "sha": "f86437ecffe8800cf247f9a21d55ee002d519e3f"
+  },
+  {
+    "name": "rathole-org-rathole",
+    "url": "https://github.com/rathole-org/rathole",
+    "sha": "a292f7ed5402f840415fc6a53827da2f34337856"
+  },
+  {
+    "name": "doctrine-cache",
+    "url": "https://github.com/doctrine/cache",
+    "sha": "e0a9919443c1e918251c23b65eddd9a66fafacb3"
+  },
+  {
+    "name": "ashleymills-reachability-swift",
+    "url": "https://github.com/ashleymills/Reachability.swift",
+    "sha": "21d1dc412cfecbe6e34f1f4c4eb88d3f912654a6"
+  },
+  {
+    "name": "ahmadhassan-bted-ahsilence",
+    "url": "https://github.com/AhmadHassan-BTed/AhSilence",
+    "sha": "d5eae72c82e115b3b28de8e92a39d9faf4929600"
+  },
+  {
+    "name": "paypal-squbs",
+    "url": "https://github.com/paypal/squbs",
+    "sha": "2569bf50c7510a4a0817e50978be0826f07b6dcd"
+  },
+  {
+    "name": "xm4ddy-ofgb",
+    "url": "https://github.com/xM4ddy/OFGB",
+    "sha": "a2f3ecf6a51f394eb86113076ee9400db714db71"
+  },
+  {
+    "name": "alexays-waybar",
+    "url": "https://github.com/Alexays/Waybar",
+    "sha": "567368cbd3ef0fc02ffdcb7085e1618014432aab"
+  },
+  {
+    "name": "hydra-db-hydradb",
+    "url": "https://github.com/hydra-db/hydradb",
+    "sha": "07457a81f8094bddca9f7f2e2411be4b21a387eb"
+  },
+  {
+    "name": "devinvinson-wordpress-plugin-boilerplate",
+    "url": "https://github.com/DevinVinson/WordPress-Plugin-Boilerplate",
+    "sha": "a8291082b5fd23bb84541e7c4089feaa1e99e597"
+  },
+  {
+    "name": "stengo-deskpad",
+    "url": "https://github.com/Stengo/DeskPad",
+    "sha": "c3349f0e237e000cb4826fb3ea1cdd1c44949461"
+  },
+  {
+    "name": "agrosner-dbflow",
+    "url": "https://github.com/agrosner/DBFlow",
+    "sha": "2523371a40da011ffbb0e72936030653c6ae32c6"
+  },
+  {
+    "name": "kamon-io-kamon",
+    "url": "https://github.com/kamon-io/Kamon",
+    "sha": "a376f39873921a1b2def82942e06950756522307"
+  },
+  {
+    "name": "builtbybel-flyoobe",
+    "url": "https://github.com/builtbybel/Flyoobe",
+    "sha": "3ea0acf3d2c9cb08acf3690eaa4e643b384b8fef"
+  },
+  {
+    "name": "snowie2000-mactype",
+    "url": "https://github.com/snowie2000/mactype",
+    "sha": "05052e88c7ce134f93b66db95132284a1ed10de7"
+  },
+  {
+    "name": "run-llama-liteparse",
+    "url": "https://github.com/run-llama/liteparse",
+    "sha": "9bd22ec9ddd2b64b47c49827b35970931641efcd"
+  },
+  {
+    "name": "symfony-polyfill-mbstring",
+    "url": "https://github.com/symfony/polyfill-mbstring",
+    "sha": "122889ed24dc000165bcbfd77ec412f15cbdfc6a"
+  },
+  {
+    "name": "openai-tart",
+    "url": "https://github.com/openai/tart",
+    "sha": "c20da4f9bea82ed4794144c6c753c4d66066663b"
+  },
+  {
+    "name": "android10-android-cleanarchitecture-kotlin",
+    "url": "https://github.com/android10/Android-CleanArchitecture-Kotlin",
+    "sha": "e11746a29b1b83ba7bb01943e8876fb4c50ad08c"
+  },
+  {
+    "name": "akka-alpakka-kafka",
+    "url": "https://github.com/akka/alpakka-kafka",
+    "sha": "4e1e9fb11cb125a331031d8631f1232938421098"
+  },
+  {
+    "name": "dotnetcore-cap",
+    "url": "https://github.com/dotnetcore/CAP",
+    "sha": "ad19c5003eadfa35be8322fcd169bc9641adbe7a"
+  },
+  {
+    "name": "microsoft-wslg",
+    "url": "https://github.com/microsoft/wslg",
+    "sha": "6942bb534b537302a7a22617261d9274db3cfa37"
+  },
+  {
+    "name": "glzr-io-glazewm",
+    "url": "https://github.com/glzr-io/glazewm",
+    "sha": "5709ad0a3c7c386bbc3e38166a865ffc12937515"
+  },
+  {
+    "name": "predis-predis",
+    "url": "https://github.com/predis/predis",
+    "sha": "1685693b83eff82663dea4e810d4c3739762a70f"
+  },
+  {
+    "name": "momenbasel-puremac",
+    "url": "https://github.com/momenbasel/PureMac",
+    "sha": "c64bd7362892204dbf083eec67714d4d6b932773"
+  },
+  {
+    "name": "izhangzhihao-intellij-rainbow-brackets",
+    "url": "https://github.com/izhangzhihao/intellij-rainbow-brackets",
+    "sha": "c7bdbda6ce7baa7720eba436d528335b73a61e5a"
+  },
+  {
+    "name": "akka-akka-http",
+    "url": "https://github.com/akka/akka-http",
+    "sha": "e4eb1adaab133cc328826d435b88b7de98927cb7"
+  },
+  {
+    "name": "randyrants-sharpkeys",
+    "url": "https://github.com/randyrants/sharpkeys",
+    "sha": "2dc476b702283347129aad70287eaf9a38518df7"
   }
 ]
