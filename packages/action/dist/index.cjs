@@ -26863,7 +26863,7 @@ var require_lib4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-JAS42KQD.js
+// ../cli/dist/chunk-BMNEYH6D.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -45594,7 +45594,7 @@ function date4(params) {
 // ../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/external.js
 config(en_default());
 
-// ../cli/dist/chunk-JAS42KQD.js
+// ../cli/dist/chunk-BMNEYH6D.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -70298,6 +70298,7 @@ var RULE_PRECISION = {
   "iac-public-database": { tp: 10, fp: 0 },
   "iac-run-as-root": { tp: 2, fp: 19 },
   "iac-unencrypted": { tp: 3, fp: 1 },
+  "insecure-cpp-tls-validation-disabled": { tp: 2, fp: 0 },
   "insecure-document-write-dynamic": { tp: 0, fp: 3 },
   "insecure-dotnet-deserialization": { tp: 0, fp: 2 },
   "insecure-eval-dynamic": { tp: 1, fp: 6 },
@@ -70307,8 +70308,10 @@ var RULE_PRECISION = {
   "insecure-java-deserialization": { tp: 0, fp: 3 },
   "insecure-localstorage-secret": { tp: 1, fp: 8 },
   "insecure-new-function": { tp: 3, fp: 15 },
+  "insecure-php-path-traversal": { tp: 4, fp: 0 },
   "insecure-php-reflected-xss": { tp: 4, fp: 1 },
   "insecure-php-unserialize": { tp: 1, fp: 7 },
+  "insecure-php-xxe": { tp: 1, fp: 0 },
   "insecure-py-eval-exec": { tp: 0, fp: 18 },
   "insecure-py-os-system": { tp: 0, fp: 9 },
   "insecure-py-pickle-load": { tp: 2, fp: 18 },
@@ -70319,6 +70322,7 @@ var RULE_PRECISION = {
   "insecure-react-dangerous-html": { tp: 2, fp: 15 },
   "insecure-ruby-dynamic-dispatch": { tp: 0, fp: 3 },
   "insecure-ruby-marshal-load": { tp: 0, fp: 5 },
+  "insecure-rust-tls-validation-disabled": { tp: 3, fp: 2 },
   "insecure-sql-interpolated": { tp: 3, fp: 25 },
   "insecure-ssrf": { tp: 1, fp: 71 },
   "insecure-swift-plaintext-credential-storage": { tp: 1, fp: 0 },
@@ -70881,6 +70885,10 @@ var todoDebtScanner = {
         if (/(^|\/)(?:vendor|vendored|third[-_]party|node_modules|bower_components|external|deps)\/|\.min\.[cm]?js$/i.test(file2.replace(/\\/g, "/"))) continue;
         const content = yield ctx.readFile(file2);
         if (!content) continue;
+        if (file2.endsWith(".go")) {
+          const packageOffset = content.search(/^[ \t]*package[ \t]+\w/m);
+          if (packageOffset >= 0 && /^\/\/ Code generated [^\r\n]+ DO NOT EDIT\.\r?$/m.test(content.slice(0, packageOffset))) continue;
+        }
         const ast = parseFile(content, file2, { comments: true });
         const hits = ast ? collectFromAst(ast) : collectFromText(content);
         if (hits.length > 30) {
@@ -73483,7 +73491,7 @@ var deadCodeScanner = {
     });
   }
 };
-var NOT_SHIPPED_RE = /(^|\/)(?:__tests__|_?tests?|spec|e2e|fixtures?|__fixtures__|__testfixtures__|__snapshots__|_?examples?|[\w-]*playgrounds?|size-check|sandbox|bench(?:mark)?s?|scripts?|website|www|docs?|tutorials?|\.github|composables)\/|\.(?:test|spec|test-d|snap)\.|\.snap\.[a-z.]+$|\.d\.[cm]?ts$|\.gen\.[cm]?[jt]sx?$|\.(?:stories|story|demos?)\.[cm]?[jt]sx?$|(^|\/)[\w@.-]*-demos?\/|(^|\/)@docs\//i;
+var NOT_SHIPPED_RE = /(^|\/)(?:__tests__|_?tests?|spec|e2e|fixtures?|__fixtures__|__testfixtures__|__snapshots__|_?examples?(?:[-_][\w.-]+)?|[\w-]*playgrounds?|size-check|sandbox|bench(?:mark)?s?|scripts?|website|www|docs?|tutorials?|\.github|composables)\/|\.(?:test|spec|test-d|snap)\.|\.snap\.[a-z.]+$|\.d\.[cm]?ts$|\.gen\.[cm]?[jt]sx?$|\.(?:stories|story|demos?)\.[cm]?[jt]sx?$|(^|\/)[\w@.-]*-demos?\/|(^|\/)@docs\//i;
 function packageEntryFiles(ctx, fileSet) {
   return __async(this, null, function* () {
     var _a22;
@@ -74242,7 +74250,8 @@ function cloudHits(lines, isTerraform) {
     else if (/\b(?:block_public_acls|block_public_policy|restrict_public_buckets|ignore_public_acls)\s*=\s*false\b|\b(?:BlockPublicAcls|BlockPublicPolicy|RestrictPublicBuckets)["']?\s*:\s*["']?false\b/.test(line)) push("public-bucket");
     else if (/(?:"|\b)(?:0\.0\.0\.0\/0|::\/0)"/.test(line) || /CidrIp(?:v6)?["']?\s*:\s*["']?(?:0\.0\.0\.0\/0|::\/0)/.test(line)) {
       const block = ruleBlock(lines, i);
-      const egress = /\begress\b|SecurityGroupEgress|type\s*=\s*"egress"/.test(near(lines, i, 6, 2)) && !/\bingress\b|SecurityGroupIngress/.test(near(lines, i, 6, 2));
+      const ociEgress = isTerraform && /^\s*egress_security_rules\s*\{/m.test(block);
+      const egress = ociEgress || /\begress\b|SecurityGroupEgress|type\s*=\s*"egress"/.test(near(lines, i, 6, 2)) && !/\bingress\b|SecurityGroupIngress/.test(near(lines, i, 6, 2));
       const nacl = /\brule_number\b|RuleNumber|network_acl|acl_(?:in|e)gress/i.test(block + near(lines, i, 15, 0));
       const around22 = near(lines, i, 15, 8);
       const denyOnly = /\bdeny\s*\{/.test(around22) && !/\ballow\s*\{/.test(around22);
@@ -74263,7 +74272,7 @@ function nearestImage(lines, i) {
   for (let j3 = i; j3 >= Math.max(0, i - 40); j3--) if (/^\s*image:/.test(lines[j3])) return lines[j3];
   return "";
 }
-var DOCKER_API_IMAGE = /^\s*image:\s*["']?(?:[\w.-]+\/)*(?:traefik|watchtower|portainer|docker|cadvisor|dozzle|autoheal|nginx-proxy|docker-gen|docker-socket-proxy|socket-proxy|ofelia|kestra|node-exporter|promtail|grafana-agent|alloy|vector|telegraf|netdata)(?::[^\s"']*dind[^\s"']*|[:@\s"']|$)/m;
+var DOCKER_API_IMAGE = /^\s*image:\s*["']?(?:[\w.-]+\/)*(?:traefik|watchtower|portainer|portainer-ce|lazydocker|docker|cadvisor|dozzle|autoheal|nginx-proxy|docker-gen|docker-socket-proxy|socket-proxy|ofelia|kestra|node-exporter|promtail|grafana-agent|alloy|vector|telegraf|netdata)(?::[^\s"']*dind[^\s"']*|[:@\s"']|$)/m;
 var HOST_AGENT_IMAGE = /^\s*image:\s*["']?(?:[\w.-]+\/)*(?:node-exporter|cadvisor|netdata|telegraf|promtail|grafana-agent|alloy|docker(?=:[^\s"']*dind))\b/;
 function containerHits(lines, compose) {
   const hits = [];
@@ -74477,6 +74486,7 @@ function isDocumentationRow(body) {
 }
 function looksLikeCode(body) {
   if (!body || body.length < 2) return false;
+  if (body.startsWith("+kubebuilder:")) return false;
   if (SKIP_PREFIX.test(body) || isDocumentationRow(body)) return false;
   if (body.startsWith("=>")) return false;
   if (PROSE_TAIL.test(body)) return false;
@@ -74533,6 +74543,21 @@ function commentParagraph(lines, start, len) {
     return (_a22 = commentBody(line)) != null ? _a22 : "";
   });
 }
+function isDocumentationNotation(lines, start, len, file2) {
+  var _a22;
+  const bodies = lines.slice(start, start + len).map((line) => {
+    var _a32;
+    return (_a32 = commentBody(line)) != null ? _a32 : "";
+  });
+  if (/\.go$/.test(file2)) {
+    if (bodies.every((body) => /^[A-Za-z][\w]*-[\w-]+\s*=\s*.+$/.test(body)) && bodies.some((body) => /%[dx][\da-f]+(?:-[\da-f]+)?/i.test(body))) return true;
+    if (bodies.every((body) => /^(?:KEYS|ARGV)\[\d+\]\s*=\s*\S/.test(body))) {
+      const nextSource = (_a22 = lines.slice(start + len).find((line) => line.trim() && commentBody(line) === null)) != null ? _a22 : "";
+      if (/\bredis\.NewScript\s*\(/.test(nextSource)) return true;
+    }
+  }
+  return bodies.every((body) => /^[A-Za-z][A-Za-z0-9 -]*:\s+[01xy]{4,}(?:\s*\+\s*[01xy]{4,})*\s+\(\d+ bits\)$/.test(body));
+}
 function introducesExample(lines, start, len, file2) {
   const near22 = commentParagraph(lines, start, len);
   if (near22.some((b3) => /```|\ba la\b|\be\.g\.|\bexamples?\b|^sample\s*:?\s*$|^sample\s+(?:input|output|usage)\s*:|\buse case\b|like this|looks like|\bsyntax\b|\bformat\b|should be uncommented/i.test(b3))) return true;
@@ -74573,7 +74598,7 @@ var commentedCodeScanner = {
             // …unless the line above opens the expression the indented lines continue.
             run.every(isDocIndent) && !/[({[,]\s*$|=>\s*$/.test((_b = commentBody((_a22 = lines[runStart - 1]) != null ? _a22 : "")) != null ? _b : "") || run.some((l3) => /^\s*\/\/\s*[*-]\s/.test(l3)) || // introduced by "For example:" / "Testing for these options:"
             /:\s*$/.test((_d = commentBody((_c = lines[runStart - 1]) != null ? _c : "")) != null ? _d : "") || /:\s*$/.test((_f = commentBody((_e2 = lines[runStart - 2]) != null ? _e2 : "")) != null ? _f : "") || // The prose around it presents it: "a la ```…```", "looks like", "e.g.".
-            introducesExample(lines, runStart, runLen, norm) || run.some((l3) => /::=/.test(l3))
+            introducesExample(lines, runStart, runLen, norm) || isDocumentationNotation(lines, runStart, runLen, norm) || run.some((l3) => /::=/.test(l3))
           );
           if (!docExample && runLen >= MIN_RUN && perFile < MAX_PER_FILE4 && issues.length < MAX_TOTAL7) {
             const lineNo = runStart + 1;
@@ -77845,9 +77870,9 @@ var MAX_FILES = 4e3;
 var MANY_COPIES = 4;
 var LARGE_BLOCK = 30;
 var CODE_EXT = /\.(?:[cm]?[jt]sx?|py|go|rs|rb|php|java|kt|kts|swift|scala|cs|c|cc|cpp|h|hpp|m|mm|dart|ex|exs|vue|svelte)$/i;
-var SKIP_PATH = /(^|\/)(?:node_modules|vendor|third_party|thirdparty|dist|build|out|target|generated|__generated__|\.next|\.nuxt|coverage|migrations|__snapshots__|__fixtures__|fixtures?|testdata|examples?|templates?(?:[-_.][\w.-]*)?|scaffolds?|starters?|playgrounds?|bench(?:mark)?s?|locales?|i18n|translations?)\//i;
+var SKIP_PATH = /(^|\/)(?:node_modules|vendor|third_party|thirdparty|dist|build|out|target|generated|__generated__|\.next|\.nuxt|coverage|migrations|__snapshots__|__fixtures__|fixtures?|testdata|examples?(?:[-_][\w.-]+)?|[^/]+\.docset|templates?(?:[-_.][\w.-]*)?|scaffolds?|starters?|playgrounds?|bench(?:mark)?s?|locales?|i18n|translations?)\//i;
 var GENERATED_FILE = /(?:\.min\.[jt]s|\.bundle\.js|\.g\.dart|_pb2?\.py|\.pb\.go|\.generated\.[a-z]+|\.d\.ts)$/i;
-var TEST_FILE = /(^|\/)(?:tests?|spec|__tests__|e2e)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(^|\/)test_[^/]+\.py$|[^/]+_test\.(?:py|go|rb)$|[^/]+Test\.(?:java|kt|cs)$|_spec\.rb$/i;
+var TEST_FILE = /(^|\/)(?:tests?|spec|__tests__|e2e|[^/]+\.Tests?)\/|(^|\/)src\/androidTest\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(^|\/)test_[^/]+\.py$|[^/]+_test\.(?:py|go|rb)$|[^/]+Test\.(?:java|kt|cs)$|_spec\.rb$/i;
 var NOISE = /^(?:[{}()[\];,]+|else\s*\{?|\}?\s*else\s*(?:if.*)?\{?|return;?|break;?|continue;?|pass|end|fi|done|<\/?\w+\s*\/?>)$/;
 var IMPORTISH = /^(?:\}\s*from\s|import\b|from\s+\S+\s+import\b|#include\b|using\s+\w|require\s*\(|use\s+\w|package\b|export\s+\*|export\s+\{)/;
 var COMMENT = /^(?:\/\/|#|\*|\/\*|--|;;)/;
@@ -79526,6 +79551,10 @@ var todoDebtScanner2 = {
       if (/(^|\/)(?:vendor|vendored|third[-_]party|node_modules|bower_components|external|deps)\/|\.min\.[cm]?js$/i.test(file2.replace(/\\/g, "/"))) continue;
       const content = await ctx.readFile(file2);
       if (!content) continue;
+      if (file2.endsWith(".go")) {
+        const packageOffset = content.search(/^[ \t]*package[ \t]+\w/m);
+        if (packageOffset >= 0 && /^\/\/ Code generated [^\r\n]+ DO NOT EDIT\.\r?$/m.test(content.slice(0, packageOffset))) continue;
+      }
       const ast = parseFile2(content, file2, { comments: true });
       const hits = ast ? collectFromAst2(ast) : collectFromText2(content);
       if (hits.length > 30) {
@@ -82024,7 +82053,7 @@ var deadCodeScanner2 = {
     );
   }
 };
-var NOT_SHIPPED_RE3 = /(^|\/)(?:__tests__|_?tests?|spec|e2e|fixtures?|__fixtures__|__testfixtures__|__snapshots__|_?examples?|[\w-]*playgrounds?|size-check|sandbox|bench(?:mark)?s?|scripts?|website|www|docs?|tutorials?|\.github|composables)\/|\.(?:test|spec|test-d|snap)\.|\.snap\.[a-z.]+$|\.d\.[cm]?ts$|\.gen\.[cm]?[jt]sx?$|\.(?:stories|story|demos?)\.[cm]?[jt]sx?$|(^|\/)[\w@.-]*-demos?\/|(^|\/)@docs\//i;
+var NOT_SHIPPED_RE3 = /(^|\/)(?:__tests__|_?tests?|spec|e2e|fixtures?|__fixtures__|__testfixtures__|__snapshots__|_?examples?(?:[-_][\w.-]+)?|[\w-]*playgrounds?|size-check|sandbox|bench(?:mark)?s?|scripts?|website|www|docs?|tutorials?|\.github|composables)\/|\.(?:test|spec|test-d|snap)\.|\.snap\.[a-z.]+$|\.d\.[cm]?ts$|\.gen\.[cm]?[jt]sx?$|\.(?:stories|story|demos?)\.[cm]?[jt]sx?$|(^|\/)[\w@.-]*-demos?\/|(^|\/)@docs\//i;
 async function packageEntryFiles2(ctx, fileSet) {
   const out = /* @__PURE__ */ new Set();
   const collect = (v2, acc) => {
@@ -82763,7 +82792,8 @@ function cloudHits2(lines, isTerraform) {
     else if (/\b(?:block_public_acls|block_public_policy|restrict_public_buckets|ignore_public_acls)\s*=\s*false\b|\b(?:BlockPublicAcls|BlockPublicPolicy|RestrictPublicBuckets)["']?\s*:\s*["']?false\b/.test(line)) push("public-bucket");
     else if (/(?:"|\b)(?:0\.0\.0\.0\/0|::\/0)"/.test(line) || /CidrIp(?:v6)?["']?\s*:\s*["']?(?:0\.0\.0\.0\/0|::\/0)/.test(line)) {
       const block = ruleBlock2(lines, i);
-      const egress = /\begress\b|SecurityGroupEgress|type\s*=\s*"egress"/.test(near2(lines, i, 6, 2)) && !/\bingress\b|SecurityGroupIngress/.test(near2(lines, i, 6, 2));
+      const ociEgress = isTerraform && /^\s*egress_security_rules\s*\{/m.test(block);
+      const egress = ociEgress || /\begress\b|SecurityGroupEgress|type\s*=\s*"egress"/.test(near2(lines, i, 6, 2)) && !/\bingress\b|SecurityGroupIngress/.test(near2(lines, i, 6, 2));
       const nacl = /\brule_number\b|RuleNumber|network_acl|acl_(?:in|e)gress/i.test(block + near2(lines, i, 15, 0));
       const around3 = near2(lines, i, 15, 8);
       const denyOnly = /\bdeny\s*\{/.test(around3) && !/\ballow\s*\{/.test(around3);
@@ -82784,7 +82814,7 @@ function nearestImage2(lines, i) {
   for (let j3 = i; j3 >= Math.max(0, i - 40); j3--) if (/^\s*image:/.test(lines[j3])) return lines[j3];
   return "";
 }
-var DOCKER_API_IMAGE2 = /^\s*image:\s*["']?(?:[\w.-]+\/)*(?:traefik|watchtower|portainer|docker|cadvisor|dozzle|autoheal|nginx-proxy|docker-gen|docker-socket-proxy|socket-proxy|ofelia|kestra|node-exporter|promtail|grafana-agent|alloy|vector|telegraf|netdata)(?::[^\s"']*dind[^\s"']*|[:@\s"']|$)/m;
+var DOCKER_API_IMAGE2 = /^\s*image:\s*["']?(?:[\w.-]+\/)*(?:traefik|watchtower|portainer|portainer-ce|lazydocker|docker|cadvisor|dozzle|autoheal|nginx-proxy|docker-gen|docker-socket-proxy|socket-proxy|ofelia|kestra|node-exporter|promtail|grafana-agent|alloy|vector|telegraf|netdata)(?::[^\s"']*dind[^\s"']*|[:@\s"']|$)/m;
 var HOST_AGENT_IMAGE2 = /^\s*image:\s*["']?(?:[\w.-]+\/)*(?:node-exporter|cadvisor|netdata|telegraf|promtail|grafana-agent|alloy|docker(?=:[^\s"']*dind))\b/;
 function containerHits2(lines, compose) {
   const hits = [];
@@ -82995,6 +83025,7 @@ function isDocumentationRow2(body) {
 }
 function looksLikeCode2(body) {
   if (!body || body.length < 2) return false;
+  if (body.startsWith("+kubebuilder:")) return false;
   if (SKIP_PREFIX2.test(body) || isDocumentationRow2(body)) return false;
   if (body.startsWith("=>")) return false;
   if (PROSE_TAIL2.test(body)) return false;
@@ -83048,6 +83079,17 @@ function commentParagraph2(lines, start, len) {
   while (b3 < lines.length && (commentBody2(lines[b3]) !== null || !lines[b3].trim())) b3++;
   return lines.slice(a, b3).map((line) => commentBody2(line) ?? "");
 }
+function isDocumentationNotation2(lines, start, len, file2) {
+  const bodies = lines.slice(start, start + len).map((line) => commentBody2(line) ?? "");
+  if (/\.go$/.test(file2)) {
+    if (bodies.every((body) => /^[A-Za-z][\w]*-[\w-]+\s*=\s*.+$/.test(body)) && bodies.some((body) => /%[dx][\da-f]+(?:-[\da-f]+)?/i.test(body))) return true;
+    if (bodies.every((body) => /^(?:KEYS|ARGV)\[\d+\]\s*=\s*\S/.test(body))) {
+      const nextSource = lines.slice(start + len).find((line) => line.trim() && commentBody2(line) === null) ?? "";
+      if (/\bredis\.NewScript\s*\(/.test(nextSource)) return true;
+    }
+  }
+  return bodies.every((body) => /^[A-Za-z][A-Za-z0-9 -]*:\s+[01xy]{4,}(?:\s*\+\s*[01xy]{4,})*\s+\(\d+ bits\)$/.test(body));
+}
 function introducesExample2(lines, start, len, file2) {
   const near3 = commentParagraph2(lines, start, len);
   if (near3.some((b3) => /```|\ba la\b|\be\.g\.|\bexamples?\b|^sample\s*:?\s*$|^sample\s+(?:input|output|usage)\s*:|\buse case\b|like this|looks like|\bsyntax\b|\bformat\b|should be uncommented/i.test(b3))) return true;
@@ -83086,7 +83128,7 @@ var commentedCodeScanner2 = {
           // …unless the line above opens the expression the indented lines continue.
           run.every(isDocIndent2) && !/[({[,]\s*$|=>\s*$/.test(commentBody2(lines[runStart - 1] ?? "") ?? "") || run.some((l3) => /^\s*\/\/\s*[*-]\s/.test(l3)) || // introduced by "For example:" / "Testing for these options:"
           /:\s*$/.test(commentBody2(lines[runStart - 1] ?? "") ?? "") || /:\s*$/.test(commentBody2(lines[runStart - 2] ?? "") ?? "") || // The prose around it presents it: "a la ```…```", "looks like", "e.g.".
-          introducesExample2(lines, runStart, runLen, norm) || run.some((l3) => /::=/.test(l3))
+          introducesExample2(lines, runStart, runLen, norm) || isDocumentationNotation2(lines, runStart, runLen, norm) || run.some((l3) => /::=/.test(l3))
         );
         if (!docExample && runLen >= MIN_RUN2 && perFile < MAX_PER_FILE9 && issues.length < MAX_TOTAL15) {
           const lineNo = runStart + 1;
@@ -86335,9 +86377,9 @@ var MAX_FILES2 = 4e3;
 var MANY_COPIES2 = 4;
 var LARGE_BLOCK2 = 30;
 var CODE_EXT2 = /\.(?:[cm]?[jt]sx?|py|go|rs|rb|php|java|kt|kts|swift|scala|cs|c|cc|cpp|h|hpp|m|mm|dart|ex|exs|vue|svelte)$/i;
-var SKIP_PATH2 = /(^|\/)(?:node_modules|vendor|third_party|thirdparty|dist|build|out|target|generated|__generated__|\.next|\.nuxt|coverage|migrations|__snapshots__|__fixtures__|fixtures?|testdata|examples?|templates?(?:[-_.][\w.-]*)?|scaffolds?|starters?|playgrounds?|bench(?:mark)?s?|locales?|i18n|translations?)\//i;
+var SKIP_PATH2 = /(^|\/)(?:node_modules|vendor|third_party|thirdparty|dist|build|out|target|generated|__generated__|\.next|\.nuxt|coverage|migrations|__snapshots__|__fixtures__|fixtures?|testdata|examples?(?:[-_][\w.-]+)?|[^/]+\.docset|templates?(?:[-_.][\w.-]*)?|scaffolds?|starters?|playgrounds?|bench(?:mark)?s?|locales?|i18n|translations?)\//i;
 var GENERATED_FILE2 = /(?:\.min\.[jt]s|\.bundle\.js|\.g\.dart|_pb2?\.py|\.pb\.go|\.generated\.[a-z]+|\.d\.ts)$/i;
-var TEST_FILE2 = /(^|\/)(?:tests?|spec|__tests__|e2e)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(^|\/)test_[^/]+\.py$|[^/]+_test\.(?:py|go|rb)$|[^/]+Test\.(?:java|kt|cs)$|_spec\.rb$/i;
+var TEST_FILE2 = /(^|\/)(?:tests?|spec|__tests__|e2e|[^/]+\.Tests?)\/|(^|\/)src\/androidTest\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(^|\/)test_[^/]+\.py$|[^/]+_test\.(?:py|go|rb)$|[^/]+Test\.(?:java|kt|cs)$|_spec\.rb$/i;
 var NOISE2 = /^(?:[{}()[\];,]+|else\s*\{?|\}?\s*else\s*(?:if.*)?\{?|return;?|break;?|continue;?|pass|end|fi|done|<\/?\w+\s*\/?>)$/;
 var IMPORTISH2 = /^(?:\}\s*from\s|import\b|from\s+\S+\s+import\b|#include\b|using\s+\w|require\s*\(|use\s+\w|package\b|export\s+\*|export\s+\{)/;
 var COMMENT2 = /^(?:\/\/|#|\*|\/\*|--|;;)/;
