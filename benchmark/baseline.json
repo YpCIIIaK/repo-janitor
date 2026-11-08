@@ -1,19 +1,19 @@
 {
- "overall": 0.549,
+ "overall": 0.565,
  "scanners": {
-  "eol-runtime": 0.958,
-  "todo-debt": 0.966,
-  "broken-doc-links": 0.621,
+  "eol-runtime": 0.951,
+  "todo-debt": 0.905,
+  "broken-doc-links": 0.606,
   "bus-factor": 0.848,
-  "commented-code": 0.734,
-  "workflow-security": 0.936,
-  "duplicate-code": 0.857,
+  "commented-code": 0.724,
+  "workflow-security": 0.946,
+  "duplicate-code": 0.804,
   "skipped-tests": 0.875,
-  "insecure-code": 0.117,
+  "insecure-code": 0.119,
   "docs-drift": 0.615,
   "lockfile-drift": 0.905,
   "dead-code": 0.8,
-  "dockerfile": 0.426,
+  "dockerfile": 0.438,
   "leftover-debug": 0.25,
   "config-conflict": 0.95,
   "secrets": 0.057,
@@ -21,7 +21,7 @@
   "ci-health": 0.489,
   "repo-bloat": 0.471,
   "project-hygiene": 0.692,
-  "iac-security": 0.404,
+  "iac-security": 0.42,
   "dependency-funeral": 0.077,
   "supply-chain": 1,
   "license-risk": 0
@@ -1404,8 +1404,6 @@
   ],
   "docker-awesome-compose": [
    "iac-dangerous-capability-wireguard/compose.yaml:8",
-   "iac-docker-socket-portainer/compose.yaml:5",
-   "iac-docker-socket-portainer/compose.yaml:9",
    "iac-host-namespace-plex/compose.yaml:5"
   ],
   "eventuate-tram-eventuate-tram-examples-customers-and-orders": [
@@ -1540,8 +1538,7 @@
    "script-injection-.github/workflows/create-release.yml-23"
   ],
   "jesseduffield-lazydocker": [
-   "config-conflict-ci-root",
-   "iac-docker-socket-docker-compose.yml:14"
+   "config-conflict-ci-root"
   ],
   "supabase-supabase-flutter": [
    "ci-silenced-failure-.github/workflows/example-integration-tests.yml-324",
@@ -2494,6 +2491,202 @@
    "insecure-rust-tls-validation-disabled-src-tauri/src/cmd/media_unlock_checker/mod.rs:20",
    "insecure-rust-tls-validation-disabled-src-tauri/src/cmd/media_unlock_checker/mod.rs:21",
    "insecure-rust-tls-validation-disabled-src-tauri/src/core/backup.rs:108"
+  ],
+  "theowni-damn-vulnerable-restaurant-api-game": [
+   "eol-python-Dockerfile-10",
+   "iac-dangerous-capability-docker-compose.yml:14",
+   "iac-privileged-docker-compose.yml:12"
+  ],
+  "terracotta-bank-terracotta-bank": [
+   "insecure-java-deserialization-terracotta-bank-servlet/src/main/java/com/joshcummings/codeplay/terracotta/app/ContentParsingFilter.java:133",
+   "insecure-java-deserialization-terracotta-bank-servlet/src/main/java/com/joshcummings/codeplay/terracotta/app/ContentParsingFilter.java:134"
+  ],
+  "projectdiscovery-interactsh": [
+   "action-tag-.github/workflows/build-test.yml-23",
+   "action-tag-first-party-.github/workflows/stale.yml-16",
+   "eol-python-.github/workflows/manual-deploy.yml-22",
+   "no-permissions-.github/workflows/release-test.yml-1"
+  ],
+  "arthepsy-ssh-audit": [
+   "todo-ssh-audit.py:1219"
+  ],
+  "dreamhead-moco": [
+   "action-tag-.github/workflows/build.yaml-28",
+   "action-tag-first-party-.github/workflows/build.yaml-19",
+   "action-tag-first-party-.github/workflows/build.yaml-22",
+   "action-tag-first-party-.github/workflows/build.yaml-38",
+   "no-permissions-.github/workflows/build.yaml-1"
+  ],
+  "mizzy-serverspec": [
+   "insecure-exec-interpolated-lib/serverspec/setup.rb:284",
+   "insecure-exec-interpolated-lib/serverspec/setup.rb:287"
+  ],
+  "flashmob-go-guerrilla": [
+   "insecure-sql-interpolated-backends/p_sql.go:89",
+   "todo-guerrilla.go:339"
+  ],
+  "christophetd-cloudflair": [
+   "insecure-ssrf-cloudfront_utils.py:16"
+  ],
+  "postrank-labs-goliath": [
+   "insecure-eval-dynamic-lib/goliath/server.rb:138"
+  ],
+  "telmate-terraform-provider-proxmox": [
+   "action-tag-.github/workflows/release.yml-24",
+   "action-tag-first-party-.github/workflows/go.yml-26",
+   "commented-proxmox/timeouts.go:10",
+   "no-permissions-.github/workflows/go.yml-1"
+  ],
+  "microsoft-restler-fuzzer": [
+   "insecure-py-pickle-load-restler/utils/saver.py:79",
+   "insecure-py-shell-true-restler-quick-start.py:124",
+   "insecure-ssrf-demo_server/demo_server/routers/blog.py:110"
+  ],
+  "widdix-aws-cf-templates": [
+   "iac-public-bucket-state/s3.yaml:189"
+  ],
+  "scenic-views-scenic": [
+   "action-tag-.github/workflows/ci.yml-71",
+   "action-tag-first-party-.github/workflows/ci.yml-16",
+   "action-tag-first-party-.github/workflows/ci.yml-68",
+   "action-tag-first-party-.github/workflows/ci.yml-82"
+  ],
+  "rapha-borges-oke-free": [
+   "action-tag-first-party-.github/workflows/close-inactive-issues.yaml-13"
+  ],
+  "ankane-pgsync": [
+   "insecure-exec-interpolated-lib/pgsync/sync.rb:157"
+  ],
+  "databasecleaner-database-cleaner": [
+   "insecure-exec-interpolated-features/support/env.rb:37"
+  ],
+  "janishar-android-mvp-architecture": [
+   "duplicate-app/src/main/java/com/mindorks/framework/mvp/ui/base/BaseDialog.java-72",
+   "duplicate-app/src/main/java/com/mindorks/framework/mvp/ui/feed/blogs/BlogAdapter.java-182",
+   "duplicate-app/src/main/java/com/mindorks/framework/mvp/ui/login/LoginPresenter.java-76",
+   "todo-app/src/androidTest/java/com/mindorks/framework/mvp/di/module/ApplicationTestModule.java:85"
+  ],
+  "laserlemon-figaro": [
+   "action-tag-.github/workflows/test.yml-80",
+   "action-tag-first-party-.github/workflows/test.yml-78"
+  ],
+  "spotahome-kooper": [
+   "action-tag-.github/workflows/ci.yaml-38",
+   "action-tag-first-party-.github/workflows/ci.yaml-12",
+   "action-tag-first-party-.github/workflows/ci.yaml-20",
+   "action-tag-first-party-.github/workflows/ci.yaml-21",
+   "action-tag-first-party-.github/workflows/ci.yaml-34",
+   "doclink-docs/operator-tutorial.md:6:controller-tutorial.md",
+   "no-permissions-.github/workflows/ci.yaml-1",
+   "todo-examples/pod-terminator-operator/service/chaos/podkill.go:179"
+  ],
+  "eirslett-frontend-maven-plugin": [
+   "todo-frontend-maven-plugin/src/main/java/com/github/eirslett/maven/plugins/frontend/mojo/InstallNodeAndPnpmMojo.java:84"
+  ],
+  "thoughtbot-clearance": [
+   "action-tag-.github/workflows/dynamic-readme.yml-17",
+   "action-tag-.github/workflows/dynamic-security.yml-17",
+   "action-tag-.github/workflows/standardrb.yml-18",
+   "action-tag-.github/workflows/tests.yml-38",
+   "action-tag-first-party-.github/workflows/codeql.yml-28"
+  ],
+  "fabedge-fabedge": [
+   "doclink-docs/get-started.md:391:./manually-install-zh.md"
+  ],
+  "lukemwila-multi-container-nginx-react-node-mongo": [
+   "eol-node-client/Dockerfile-1"
+  ],
+  "flant-addon-operator": [
+   "commented-pkg/addon-operator/operator.go:846",
+   "commented-pkg/addon-operator/operator_test.go:636",
+   "eol-runner-.github/workflows/docs.yaml-11"
+  ],
+  "donkie-spoolman": [
+   "eol-python-pyproject.toml-36"
+  ],
+  "jlegewie-zotfile": [
+   "commented-chrome/content/zotfile/pdfextract/pdfjs/src/core/network.js:30"
+  ],
+  "evv1e-waylandcraft": [
+   "no-permissions-.github/workflows/build.yml-1",
+   "todo-src/main/java/dev/evvie/waylandcraft/gui/AppListWidget.java:71"
+  ],
+  "particuleio-teks": [
+   "eol-node-.github/workflows/renovate.yml-20"
+  ],
+  "jd-alexander-likebutton": [
+   "duplicate-likebutton/src/main/java/com/like/CircleView.java-63"
+  ],
+  "rishavnandi-ansible-homelab": [
+   "iac-open-admin-port-main.tf:69"
+  ],
+  "libffcv-ffcv": [
+   "docker-latest-docker/Dockerfile:1"
+  ],
+  "jpetazzo-ampernetacle": [
+   "iac-open-admin-port-network.tf:24"
+  ],
+  "theboredteam-boring-notch": [
+   "commented-boringNotch/components/Settings/SettingsView.swift:1062",
+   "todo-boringNotch/animations/drop.swift:27"
+  ],
+  "ackites-nrfr": [
+   "action-tag-.github/workflows/build.yml-75",
+   "action-tag-first-party-.github/workflows/build.yml-17",
+   "eol-node-.github/workflows/build.yml-102"
+  ],
+  "twitter-algebird": [
+   "action-tag-.github/workflows/ci.yml-72",
+   "action-tag-first-party-.github/workflows/ci.yml-8",
+   "commented-algebird-spark/src/test/scala/com/twitter/algebird/spark/AlgebirdRDDTests.scala:26",
+   "doclink-docs/src/main/mdoc/datatypes/averaged_value.md:98:decayed_value.html",
+   "todo-algebird-bijection/src/test/scala/com/twitter/algebird/bijection/AlgebirdBijectionLaws.scala:22"
+  ],
+  "tyrrrz-discordchatexporter": [
+   "todo-DiscordChatExporter.Cli/Commands/ExportChannelsCommand.cs:15"
+  ],
+  "scottbez1-smartknob": [
+   "action-tag-.github/workflows/electronics.yml-105",
+   "action-tag-first-party-.github/workflows/electronics.yml-24",
+   "commented-firmware/src/interface_task.cpp:30",
+   "eol-node-.github/workflows/js.yml-37",
+   "eol-runner-.github/workflows/pio.yml-21",
+   "todo-firmware/src/interface_task.cpp:411"
+  ],
+  "niri-wm-niri": [
+   "action-tag-.github/workflows/ci.yml-34",
+   "action-tag-first-party-.github/workflows/ci.yml-25",
+   "commented-src/ui/hotkey_overlay.rs:347",
+   "eol-python-docs/pyproject.toml-4",
+   "todo-niri-config/src/error.rs:17"
+  ],
+  "w7corp-easywechat": [
+   "action-tag-.github/workflows/deploy.yml-39",
+   "action-tag-first-party-.github/workflows/deploy.yml-38",
+   "commented-src/Kernel/HttpClient/RequestWithPresets.php:163",
+   "doclink-docs/src/3.x/contributing.md:54:troubleshooting.html",
+   "todo-src/Kernel/HttpClient/RequestUtil.php:135"
+  ],
+  "zhanghai-materialfiles": [
+   "action-tag-first-party-.github/workflows/android.yml-12",
+   "todo-app/src/main/java/me/zhanghai/android/files/app/BackgroundActivityStarter.kt:40"
+  ],
+  "riscv-boom-riscv-boom": [
+   "commented-src/main/scala/v3/exu/decode.scala:594",
+   "todo-src/main/scala/v3/common/consts.scala:123"
+  ],
+  "lostindark-driverstoreexplorer": [
+   "action-tag-.github/workflows/ci.yml-74",
+   "action-tag-first-party-.github/workflows/ci.yml-21"
+  ],
+  "translucenttb-translucenttb": [
+   "todo-Common/config/config.hpp:18"
+  ],
+  "guyueyingmu-avbook": [
+   "commented-app/Console/Commands/Bttool.php:54"
+  ],
+  "lucasg-dependencies": [
+   "commented-DependenciesGui/MainWindow.xaml.cs:212"
   ]
  }
 }
