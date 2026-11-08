@@ -111,6 +111,13 @@ export const todoDebtScanner: Scanner = {
       if (/(^|\/)(?:vendor|vendored|third[-_]party|node_modules|bower_components|external|deps)\/|\.min\.[cm]?js$/i.test(file.replace(/\\/g, "/"))) continue
       const content = await ctx.readFile(file)
       if (!content) continue
+      // Go generators copy their own TODOs into output that must not be edited.
+      // Require the canonical marker before the package declaration; filenames
+      // and generated-header examples inside handwritten code are not enough.
+      if (file.endsWith(".go")) {
+        const packageOffset = content.search(/^[ \t]*package[ \t]+\w/m)
+        if (packageOffset >= 0 && /^\/\/ Code generated [^\r\n]+ DO NOT EDIT\.\r?$/m.test(content.slice(0, packageOffset))) continue
+      }
 
       const ast = parseFile(content, file, { comments: true })
       const hits = ast ? collectFromAst(ast) : collectFromText(content)
