@@ -212,7 +212,10 @@ function cloudHits(lines: string[], isTerraform: boolean): Hit[] {
       // Only an ingress rule matters, and only when it opens an admin/database port —
       // of THIS rule: CloudFormation lists several rules in a row (port 80, then 22).
       const block = ruleBlock(lines, i)
-      const egress = /\begress\b|SecurityGroupEgress|type\s*=\s*"egress"/.test(near(lines, i, 6, 2)) && !/\bingress\b|SecurityGroupIngress/.test(near(lines, i, 6, 2))
+      // OCI security lists use suffixed block names. Read this rule's block,
+      // not nearby ingress rules: an outbound destination is not an exposed port.
+      const ociEgress = isTerraform && /^\s*egress_security_rules\s*\{/m.test(block)
+      const egress = ociEgress || (/\begress\b|SecurityGroupEgress|type\s*=\s*"egress"/.test(near(lines, i, 6, 2)) && !/\bingress\b|SecurityGroupIngress/.test(near(lines, i, 6, 2)))
       // Network ACL entries (`rule_number`) mirror AWS's allow-all default; security groups are the gate.
       const nacl = /\brule_number\b|RuleNumber|network_acl|acl_(?:in|e)gress/i.test(block + near(lines, i, 15, 0))
       // A GCP firewall with only a `deny {}` block, or an ICMP-only rule, opens nothing.
