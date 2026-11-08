@@ -31,8 +31,8 @@ to report**, so a reviewer can check your work quickly.
   language" and the corpus itself). Mix applications, infrastructure,
   libraries, and at least 2–3 deliberately vulnerable apps if any new ones exist.
 - Resolve each with `GIT_TERMINAL_PROMPT=0 git ls-remote https://github.com/<o>/<r> HEAD`.
-- Skip: already present (by url, name, or SHA), archived mirrors, repos larger
-  than ~1 GB, renamed duplicates.
+- Skip: already present (by url, name, or SHA), archived mirrors, renamed
+  duplicates, and repos whose clone would exceed the scan limit (1.2).
 - Append to `corpus.json` as `{"name": "<owner>-<repo>" lowercased with non-alnum → "-", "url", "sha"}`.
 - Commit: `Corpus: add N repos (<themes>)`.
 
@@ -46,6 +46,10 @@ BENCH_DROP_CLONES=1 BENCH_JOBS=4 node benchmark/run.mjs <names…>
 - Run as a tracked background job; batches over ~120 repos → split.
 - If interrupted: `node benchmark/resume.mjs` (only rescans missing/stale).
 - A repo that fails to clone 4×: remove it from `corpus.json`, list it in the report.
+- **Clone size limit: 2000 MB, the `run.mjs` default (`BENCH_MAX_MB`).** Do not
+  set `BENCH_MAX_MB`; every cycle must use the same limit, or repos between two
+  limits are silently left on old results. A repo rejected as "too large":
+  remove it from `corpus.json` and list it in the report.
 
 ### 1.3 Label
 
