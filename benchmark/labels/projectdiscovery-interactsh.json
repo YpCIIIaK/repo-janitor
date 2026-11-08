@@ -1,0 +1,7 @@
+{
+ "action-tag-.github/workflows/build-test.yml-23": "tp",
+ "action-tag-first-party-.github/workflows/stale.yml-16": "tp",
+ "commented-pkg/storage/storage_redis_lua.go:15": "fp",
+ "eol-python-.github/workflows/manual-deploy.yml-22": "tp",
+ "no-permissions-.github/workflows/release-test.yml-1": "tp"
+}

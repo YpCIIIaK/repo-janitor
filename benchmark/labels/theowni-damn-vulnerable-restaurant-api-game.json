@@ -1,0 +1,5 @@
+{
+ "eol-python-Dockerfile-10": "tp",
+ "iac-dangerous-capability-docker-compose.yml:14": "tp",
+ "iac-privileged-docker-compose.yml:12": "tp"
+}

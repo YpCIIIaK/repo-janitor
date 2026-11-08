@@ -1,0 +1,6 @@
+{
+ "action-tag-.github/workflows/release.yml-24": "tp",
+ "action-tag-first-party-.github/workflows/go.yml-26": "tp",
+ "commented-proxmox/timeouts.go:10": "tp",
+ "no-permissions-.github/workflows/go.yml-1": "tp"
+}
