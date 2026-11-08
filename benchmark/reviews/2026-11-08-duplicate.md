@@ -1,0 +1,18 @@
+# Duplicate-code file-kind review, 2026-11-08
+
+Four labelled FP in four repositories expose naming conventions missing from exclusions that already intentionally cover examples, tests and generated output. This change extends those existing classes; it does not change duplicate detection thresholds or suppress ordinary documentation, product code, Android callbacks or framework boilerplate.
+
+Pinned sources reviewed at ±20 lines; snapshots: `work/cycle8/duplicate-cluster-snapshots.txt`.
+
+* [Smartknob App.tsx:37](https://github.com/scottbez1/smartknob/blob/4eb988399c3fda6ffd3006772856093dfe9adb86/software/js/packages/example-webserial-basic/src/App.tsx#L37): standalone Web Serial demonstration app; setup repeats across demonstration variants. Recognize delimited `example-*` / `example_*` directory names, analogous to existing `template-*` support. `exampleParser` remains eligible.
+* [DiscordChatExporter DateRangeSpecs.cs:119](https://github.com/Tyrrrz/DiscordChatExporter/blob/494737cc19dbe1ad2f56ac00945839b5530aab2a/DiscordChatExporter.Cli.Tests/Specs/DateRangeSpecs.cs#L119): `[Fact]` with explicit Arrange/Act/Assert; independent date-boundary tests intentionally repeat setup. Recognize .NET `.Tests` project directories (and conventional `.Test`), rather than missing them because the folder is not exactly `test/`. Ordinary `TestsController.cs` stays eligible.
+* [Android MVP ApplicationTestModule.java:53](https://github.com/janishar/android-mvp-architecture/blob/2499fb2ba3aa65125a39999b2b2013bce75c9059/app/src/androidTest/java/com/mindorks/framework/mvp/di/module/ApplicationTestModule.java#L53): Android instrumentation test dependency module deliberately mirrors production providers; `src/androidTest/` is the standard instrumentation source set. Production `src/main/` remains eligible except pre-existing excluded folder names.
+* [Ramotion jazzy.js:1](https://github.com/Ramotion/animated-tab-bar/blob/52174249fa7b296c0fce1114be8f34081b85ffc3/docs/docsets/RAMAnimatedTabBarDemo.docset/Contents/Resources/Documents/js/jazzy.js#L1): generated Jazzy/Dash documentation bundle, including docset/browser detection. Recognize `.docset/` generated directory; authored `docs/tools/build-docset.js` and `src/docset/parse.js` remain eligible.
+
+## Verification
+
+Nine new assertions fail on the previous implementation: five file-kind cases and four scanner-level clone fixtures. After change 48/48 duplicate tests pass. Scanner-level tests copy substantial implementation into each intentional scaffold class and require no warning, while existing positive tests still require warnings for real product duplication. Six near-name/source paths remain eligible.
+
+All current 37 visible labelled TP primary/counterpart paths across 31 repositories stay eligible under the new matcher. A pinned source replay fetched 59 files and compared pre-change/post-change duplicate scanner output separately per repository: 31/31 outputs identical. This is a reduced-source comparison, not a full repository replay: initial exact-ID assertions reproduced only 14 repositories completely, with eight unavailable counterpart paths from prose extraction and other IDs sensitive to omitted file ordering/merging. Full final affected-repository rescans are still required before reporting benchmark recall. Snapshots/logs: `work/cycle8/duplicate-replay-snapshots.txt`, `duplicate-replay.log`, `duplicate-replay-compare.log`, `duplicate-before.log`, `duplicate-after.log`. Temporary replay tests and baseline scanner copy removed.
+
+No CLI rebuild, baseline edits or label edits. Existing Android View/RecyclerView short-boilerplate FP remain untouched; they require a separate justified semantic cluster.
