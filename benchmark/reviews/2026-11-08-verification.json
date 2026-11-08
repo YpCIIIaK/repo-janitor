@@ -1,0 +1,207 @@
+{
+  "baseCommit": "a499b00",
+  "corpusBefore": 2138,
+  "corpusAfter": 2538,
+  "newPinnedRepos": 400,
+  "newLabels": {
+    "tp": 80,
+    "fp": 43
+  },
+  "allResultShasMatchPins": true,
+  "newRepoScanFailures": 0,
+  "finalScans": {
+    "planned": 220,
+    "successful": 216,
+    "skippedExistingOversized": [
+      {
+        "repo": "tldraw-tldraw",
+        "packedMb": 1600,
+        "status": "prior matching-SHA result retained; pre-existing repository exceeds1000MB repeat-scan budget"
+      },
+      {
+        "repo": "calcom-cal-com",
+        "packedMb": 1135,
+        "status": "prior matching-SHA result retained; pre-existing repository exceeds1000MB repeat-scan budget"
+      },
+      {
+        "repo": "forem-forem",
+        "packedMb": 1798,
+        "status": "prior matching-SHA result retained; pre-existing repository exceeds1000MB repeat-scan budget"
+      },
+      {
+        "repo": "apache-superset",
+        "packedMb": 1453,
+        "status": "prior matching-SHA result retained; pre-existing repository exceeds1000MB repeat-scan budget"
+      }
+    ]
+  },
+  "benchmarkGate": {
+    "exitCode": 1,
+    "status": "blocked",
+    "failedScanners": [
+      "todo-debt",
+      "duplicate-code"
+    ],
+    "previousPrecision": {
+      "todo-debt": 0.966,
+      "duplicate-code": 0.857
+    },
+    "currentMetrics": {
+      "eol-runtime": {
+        "tp": 78,
+        "fp": 4,
+        "precision": 0.95122
+      },
+      "todo-debt": {
+        "tp": 67,
+        "fp": 7,
+        "precision": 0.905405
+      },
+      "broken-doc-links": {
+        "tp": 20,
+        "fp": 13,
+        "precision": 0.606061
+      },
+      "commented-code": {
+        "tp": 55,
+        "fp": 21,
+        "precision": 0.723684
+      },
+      "workflow-security": {
+        "tp": 262,
+        "fp": 15,
+        "precision": 0.945848
+      },
+      "duplicate-code": {
+        "tp": 37,
+        "fp": 9,
+        "precision": 0.804348
+      },
+      "skipped-tests": {
+        "tp": 21,
+        "fp": 3,
+        "precision": 0.875
+      },
+      "insecure-code": {
+        "tp": 40,
+        "fp": 297,
+        "precision": 0.118694
+      },
+      "docs-drift": {
+        "tp": 16,
+        "fp": 10,
+        "precision": 0.615385
+      },
+      "lockfile-drift": {
+        "tp": 19,
+        "fp": 2,
+        "precision": 0.904762
+      },
+      "bus-factor": {
+        "tp": 28,
+        "fp": 5,
+        "precision": 0.848485
+      },
+      "dead-code": {
+        "tp": 20,
+        "fp": 5,
+        "precision": 0.8
+      },
+      "dockerfile": {
+        "tp": 21,
+        "fp": 27,
+        "precision": 0.4375
+      },
+      "leftover-debug": {
+        "tp": 3,
+        "fp": 9,
+        "precision": 0.25
+      },
+      "config-conflict": {
+        "tp": 19,
+        "fp": 1,
+        "precision": 0.95
+      },
+      "ci-health": {
+        "tp": 22,
+        "fp": 23,
+        "precision": 0.488889
+      },
+      "repo-bloat": {
+        "tp": 8,
+        "fp": 9,
+        "precision": 0.470588
+      },
+      "project-hygiene": {
+        "tp": 27,
+        "fp": 12,
+        "precision": 0.692308
+      },
+      "env-lifecycle": {
+        "tp": 4,
+        "fp": 25,
+        "precision": 0.137931
+      },
+      "secrets": {
+        "tp": 2,
+        "fp": 33,
+        "precision": 0.057143
+      },
+      "iac-security": {
+        "tp": 84,
+        "fp": 116,
+        "precision": 0.42
+      },
+      "dependency-funeral": {
+        "tp": 1,
+        "fp": 12,
+        "precision": 0.076923
+      },
+      "supply-chain": {
+        "tp": 1,
+        "fp": 0,
+        "precision": 1.0
+      },
+      "license-risk": {
+        "tp": 0,
+        "fp": 1,
+        "precision": 0.0
+      }
+    },
+    "lostTpBefore": 36,
+    "lostTpAfter": 36,
+    "baselineAndCalibrationPromoted": false
+  },
+  "oldVulnerableApps": {
+    "count": 42,
+    "highBefore": 254,
+    "highAfter": 254,
+    "missingHighIds": []
+  },
+  "totalVulnerableApps": 45,
+  "reviewDataBranch": "bench-data-2026-11-08-1",
+  "reviewDataCommit": "259a91c0fc4ec289814855de8d2bcf3ec06ec833",
+  "canonicalDataUpdatedByThisCycle": false,
+  "beforeFinalFixesWithSameLabels": {
+    "todo-debt": {
+      "tp": 67,
+      "fp": 10,
+      "precision": 0.87013
+    },
+    "duplicate-code": {
+      "tp": 37,
+      "fp": 13,
+      "precision": 0.74
+    },
+    "commented-code": {
+      "tp": 55,
+      "fp": 27,
+      "precision": 0.670732
+    },
+    "dead-code": {
+      "tp": 20,
+      "fp": 6,
+      "precision": 0.769231
+    }
+  }
+}
