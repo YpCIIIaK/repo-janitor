@@ -1,0 +1,7 @@
+{
+ "action-tag-.github/workflows/ci.yml-72": "tp",
+ "action-tag-first-party-.github/workflows/ci.yml-8": "tp",
+ "commented-algebird-spark/src/test/scala/com/twitter/algebird/spark/AlgebirdRDDTests.scala:26": "fp",
+ "doclink-docs/src/main/mdoc/datatypes/averaged_value.md:98:decayed_value.html": "fp",
+ "todo-algebird-bijection/src/test/scala/com/twitter/algebird/bijection/AlgebirdBijectionLaws.scala:22": "tp"
+}

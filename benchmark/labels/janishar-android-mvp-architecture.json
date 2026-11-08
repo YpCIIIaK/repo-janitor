@@ -1,0 +1,7 @@
+{
+ "duplicate-app/src/androidTest/java/com/mindorks/framework/mvp/di/module/ApplicationTestModule.java-53": "fp",
+ "duplicate-app/src/main/java/com/mindorks/framework/mvp/ui/base/BaseDialog.java-72": "fp",
+ "duplicate-app/src/main/java/com/mindorks/framework/mvp/ui/feed/blogs/BlogAdapter.java-182": "fp",
+ "duplicate-app/src/main/java/com/mindorks/framework/mvp/ui/login/LoginPresenter.java-76": "tp",
+ "todo-app/src/androidTest/java/com/mindorks/framework/mvp/di/module/ApplicationTestModule.java:85": "fp"
+}

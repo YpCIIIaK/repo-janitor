@@ -1,0 +1,11 @@
+{
+ "action-tag-.github/workflows/ci.yaml-38": "tp",
+ "action-tag-first-party-.github/workflows/ci.yaml-12": "tp",
+ "action-tag-first-party-.github/workflows/ci.yaml-20": "tp",
+ "action-tag-first-party-.github/workflows/ci.yaml-21": "tp",
+ "action-tag-first-party-.github/workflows/ci.yaml-34": "tp",
+ "doclink-docs/operator-tutorial.md:6:controller-tutorial.md": "tp",
+ "no-permissions-.github/workflows/ci.yaml-1": "tp",
+ "todo-examples/pod-terminator-operator/client/k8s/informers/externalversions/generic.go:36": "fp",
+ "todo-examples/pod-terminator-operator/service/chaos/podkill.go:179": "fp"
+}

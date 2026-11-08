@@ -1,0 +1,5 @@
+{
+ "commented-pkg/apis/v1alpha1/cluster_types.go:40": "fp",
+ "commented-pkg/apis/v1alpha1/community_types.go:27": "fp",
+ "doclink-docs/get-started.md:391:./manually-install-zh.md": "tp"
+}
