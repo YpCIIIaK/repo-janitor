@@ -149,7 +149,7 @@ export const deadCodeScanner: Scanner = {
  * consumed by a runner or a reader, not by an import.
  */
 const NOT_SHIPPED_RE =
-  /(^|\/)(?:__tests__|_?tests?|spec|e2e|fixtures?|__fixtures__|__testfixtures__|__snapshots__|_?examples?|[\w-]*playgrounds?|size-check|sandbox|bench(?:mark)?s?|scripts?|website|www|docs?|tutorials?|\.github|composables)\/|\.(?:test|spec|test-d|snap)\.|\.snap\.[a-z.]+$|\.d\.[cm]?ts$|\.gen\.[cm]?[jt]sx?$|\.(?:stories|story|demos?)\.[cm]?[jt]sx?$|(^|\/)[\w@.-]*-demos?\/|(^|\/)@docs\//i
+  /(^|\/)(?:__tests__|_?tests?|spec|e2e|fixtures?|__fixtures__|__testfixtures__|__snapshots__|_?examples?(?:[-_][\w.-]+)?|[\w-]*playgrounds?|size-check|sandbox|bench(?:mark)?s?|scripts?|website|www|docs?|tutorials?|\.github|composables)\/|\.(?:test|spec|test-d|snap)\.|\.snap\.[a-z.]+$|\.d\.[cm]?ts$|\.gen\.[cm]?[jt]sx?$|\.(?:stories|story|demos?)\.[cm]?[jt]sx?$|(^|\/)[\w@.-]*-demos?\/|(^|\/)@docs\//i
 
 /**
  * Files a package publishes, from each package.json's main/module/types/exports.

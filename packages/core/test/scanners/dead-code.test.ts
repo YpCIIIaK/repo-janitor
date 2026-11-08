@@ -224,3 +224,18 @@ describe("dead-code — namespaces and docs", () => {
     ).toEqual(["dead-export-src/a.ts:x"])
   })
 })
+
+it("recognizes delimited standalone example packages without hiding production near-names", async () => {
+  const issues = await deadCodeScanner.run(makeContext({files: {
+    "packages/example-webserial-timeline/src/App.tsx": "export const Timeline = () => null\n",
+    "packages/example_webserial_basic/src/App.tsx": "export const App = () => null\n",
+    "packages/exampleParser/src/parser.ts": "export const orphanParser = 1\n",
+    "src/example-utils.ts": "export const orphanHelper = 2\n",
+    "src/production.ts": "export const orphan = 3\n",
+  }}))
+  expect(issues.map(i => i.id).sort()).toEqual([
+    "dead-export-packages/exampleParser/src/parser.ts:orphanParser",
+    "dead-export-src/example-utils.ts:orphanHelper",
+    "dead-export-src/production.ts:orphan",
+  ])
+})
