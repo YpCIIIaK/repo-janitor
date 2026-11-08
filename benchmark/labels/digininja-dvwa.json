@@ -1,0 +1,6 @@
+{
+ "insecure-php-path-traversal-vulnerabilities/view_source_all.php:14": "tp",
+ "insecure-php-path-traversal-vulnerabilities/view_source_all.php:18": "tp",
+ "insecure-php-path-traversal-vulnerabilities/view_source_all.php:22": "tp",
+ "insecure-php-path-traversal-vulnerabilities/view_source_all.php:26": "tp"
+}

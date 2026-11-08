@@ -1,0 +1,4 @@
+{
+ "insecure-rust-tls-validation-disabled-src/bin/hacktoberfest.rs:60": "fp",
+ "insecure-rust-tls-validation-disabled-src/main.rs:218": "fp"
+}

@@ -1,0 +1,5 @@
+{
+ "insecure-rust-tls-validation-disabled-src-tauri/src/cmd/media_unlock_checker/mod.rs:20": "tp",
+ "insecure-rust-tls-validation-disabled-src-tauri/src/cmd/media_unlock_checker/mod.rs:21": "tp",
+ "insecure-rust-tls-validation-disabled-src-tauri/src/core/backup.rs:108": "tp"
+}
