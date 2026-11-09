@@ -65,6 +65,19 @@ const T = {
     messyNote: "We do not name the projects with the most problems. Language, size and what dominates is the useful part.",
     sizeWord: { small: "small", "mid-size": "mid-size", large: "large", "very large": "very large" } as Record<string, string>,
     cat: { todo: "old TODOs", "dead-code": "dead code", security: "security", dependency: "dependencies", hygiene: "hygiene", env: "env vars", branch: "stale branches" } as Record<string, string>,
+    outside: "Outside view",
+    pop: "Popular projects score lower — because they are bigger",
+    popNote: "Median score and findings per 1,000 lines by GitHub stars. Stars from deps.dev. Popular projects have fewer problems per line; they simply have many more lines.",
+    popScore: "median score",
+    popDensity: "findings / 1k lines",
+    licensesT: "Licenses",
+    licensesNote: "As reported by deps.dev for each repository.",
+    scT: "Cross-checked with OpenSSF Scorecard",
+    scNote: (n: number, rho: string) => `${n} of our repos have a Scorecard result on deps.dev. The overall scores measure different things — Scorecard rates security process, we rate the state of the code — and barely correlate (ρ = ${rho}). Where both check the same thing, they agree:`,
+    scPinned: "pinning of actions and dependencies",
+    scTokens: "workflow token permissions",
+    scBad: "Scorecard 0–2: we flag",
+    scGood: "Scorecard 8–10: we flag",
     grades: "Grades",
     gradesNote: "Score adjusts for size: warnings weigh less in big codebases, critical findings never do.",
     supply: "Most GitHub Actions can be swapped under you",
@@ -156,6 +169,19 @@ const T = {
     messyNote: "Мы не называем проекты, где больше всего проблем. Полезная часть — язык, размер и что преобладает.",
     sizeWord: { small: "небольшой", "mid-size": "средний", large: "крупный", "very large": "очень крупный" } as Record<string, string>,
     cat: { todo: "старые TODO", "dead-code": "мёртвый код", security: "безопасность", dependency: "зависимости", hygiene: "гигиена", env: "переменные окружения", branch: "старые ветки" } as Record<string, string>,
+    outside: "Взгляд со стороны",
+    pop: "Популярные проекты получают оценку ниже — потому что они больше",
+    popNote: "Медианная оценка и находки на 1000 строк по числу звёзд на GitHub. Звёзды из deps.dev. На строку кода у популярных проектов проблем меньше; просто строк у них намного больше.",
+    popScore: "медианная оценка",
+    popDensity: "находок на 1000 строк",
+    licensesT: "Лицензии",
+    licensesNote: "По данным deps.dev для каждого репозитория.",
+    scT: "Сверка с OpenSSF Scorecard",
+    scNote: (n: number, rho: string) => `У ${n} наших репозиториев есть результат Scorecard на deps.dev. Общие оценки меряют разное — Scorecard оценивает процессы безопасности, мы оцениваем состояние кода — и почти не связаны (ρ = ${rho}). Там, где обе системы проверяют одно и то же, они сходятся:`,
+    scPinned: "закрепление actions и зависимостей",
+    scTokens: "права токена в workflow",
+    scBad: "Scorecard 0–2: у нас находка",
+    scGood: "Scorecard 8–10: у нас находка",
     grades: "Оценки",
     gradesNote: "Оценка учитывает размер: в больших проектах предупреждения весят меньше, критические находки — всегда полностью.",
     supply: "Большинство GitHub Actions можно подменить",
@@ -489,6 +515,48 @@ export function StateOfOpenSource() {
           </div>
         ))}
       </Section>
+
+      <h2 className="pt-4 text-xl font-semibold tracking-tight">{t.outside}</h2>
+
+      <Section title={t.pop} note={t.popNote}>
+        <div className="grid grid-cols-[minmax(0,6rem)_1fr_1fr] gap-x-3 text-xs text-muted-foreground">
+          <span />
+          <span>{t.popScore}</span>
+          <span>{t.popDensity}</span>
+        </div>
+        {(() => {
+          const bands = stats.popularity.bands.filter((b) => b.repos >= 30)
+          const maxD = Math.max(...bands.map((b) => b.density ?? 0))
+          return bands.map((b) => (
+            <div key={b.label} className="grid grid-cols-[minmax(0,6rem)_1fr_1fr] items-center gap-x-3 text-sm">
+              <span className="truncate">{b.label}<span className="text-muted-foreground"> · {b.repos}</span></span>
+              {([[b.medianScore ?? 0, 100, "bg-primary", String(b.medianScore)], [b.density ?? 0, maxD, "bg-warning", (b.density ?? 0).toFixed(1)]] as const).map(([v, max, tone, label], i) => (
+                <span key={i} className="flex min-w-0 items-center gap-2">
+                  <span className="h-2 min-w-0 flex-1 overflow-hidden rounded-full bg-secondary"><span className={cn("block h-full rounded-full", tone)} style={{ width: `${(v / max) * 100}%` }} /></span>
+                  <span className="w-9 shrink-0 text-right font-mono text-xs tabular-nums text-muted-foreground">{label}</span>
+                </span>
+              ))}
+            </div>
+          ))
+        })()}
+      </Section>
+
+      <div className="grid gap-6 md:grid-cols-2">
+        <Section title={t.scT} note={t.scNote(stats.scorecard.repos, stats.scorecard.spearman?.toFixed(2) ?? "—")}>
+          {([[t.scPinned, stats.scorecard.pinned], [t.scTokens, stats.scorecard.tokens]] as const).map(([label, a]) => (
+            <div key={label} className="space-y-1.5">
+              <p className="text-sm font-medium">{label}</p>
+              <Bar label={t.scBad} value={a.flaggedWhenScorecardBad ?? 0} max={1} display={pct(a.flaggedWhenScorecardBad ?? 0)} tone="destructive" />
+              <Bar label={t.scGood} value={a.flaggedWhenScorecardGood ?? 0} max={1} display={pct(a.flaggedWhenScorecardGood ?? 0)} tone="success" />
+            </div>
+          ))}
+        </Section>
+        <Section title={t.licensesT} note={t.licensesNote}>
+          {stats.licenses.map((x) => (
+            <Bar key={x.license} label={x.license} value={x.share} max={stats.licenses[0].share} display={pct(x.share)} />
+          ))}
+        </Section>
+      </div>
 
       <Section title={t.supply} note={t.supplyNote(ci.withActions)}>
         <div className="grid gap-4 sm:grid-cols-3">
