@@ -1,0 +1,34 @@
+{
+  "removed": [
+    {
+      "name": "esbenp-prettier-vscode",
+      "url": "https://github.com/esbenp/prettier-vscode",
+      "sha": "b3d5ea136fadf5a4cac835df074dc12fcb398b0c"
+    },
+    {
+      "name": "plausible-hosting",
+      "url": "https://github.com/plausible/hosting",
+      "sha": "ec6c4da776547516d8f48159ce1a704df4f475ad"
+    }
+  ],
+  "retainedCanonical": [
+    "prettier-prettier-vscode",
+    "plausible-community-edition"
+  ],
+  "githubRepositoryIds": {
+    "prettier/prettier-vscode": 78566876,
+    "plausible/community-edition": 299603525
+  },
+  "added": [
+    {
+      "name": "scenee-floatingpanel",
+      "url": "https://github.com/scenee/FloatingPanel",
+      "sha": "de51f81e938d0a04a073582c69f13eaae10dc7cb"
+    },
+    {
+      "name": "hierynomus-sshj",
+      "url": "https://github.com/hierynomus/sshj",
+      "sha": "6fad160fe36605a68847ac8a527750c615b4bd04"
+    }
+  ]
+}

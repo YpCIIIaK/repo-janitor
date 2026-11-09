@@ -1,0 +1,7 @@
+{
+ "action-tag-first-party-.github/workflows/ci.yml-23": "tp",
+ "commented-Sources/Pulse/LoggerStore/LoggerStore.swift:252": "fp",
+ "doclink-Sources/Pulse/Pulse.docc/Articles/GettingStarted.md:113:remote-logging.png": "fp",
+ "no-permissions-.github/workflows/ci.yml-1": "tp",
+ "todo-Sources/PulseUI/Features/FileViewer/RichTextView/RichTextView.swift:99": "tp"
+}

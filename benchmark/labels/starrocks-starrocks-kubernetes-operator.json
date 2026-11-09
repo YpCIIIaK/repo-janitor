@@ -1,0 +1,10 @@
+{
+ "action-tag-.github/workflows/action-golangci-lint.yml-22": "tp",
+ "action-tag-.github/workflows/action-helm-template.yml-20": "tp",
+ "action-tag-first-party-.github/workflows/action-golangci-lint.yml-17": "tp",
+ "action-tag-first-party-.github/workflows/action-golangci-lint.yml-18": "tp",
+ "action-tag-first-party-.github/workflows/action-helm-template.yml-16": "tp",
+ "action-tag-first-party-.github/workflows/action-make-test.yml-16": "tp",
+ "action-tag-first-party-.github/workflows/action-make-test.yml-20": "tp",
+ "commented-pkg/k8sutils/templates/service/spec_test.go:199": "fp"
+}

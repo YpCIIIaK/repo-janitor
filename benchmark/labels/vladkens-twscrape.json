@@ -1,0 +1,6 @@
+{
+ "action-tag-.github/workflows/main.yml-39": "tp",
+ "action-tag-.github/workflows/main.yml-51": "tp",
+ "insecure-ssrf-twscrape/api.py:248": "fp",
+ "insecure-ssrf-twscrape/api.py:283": "fp"
+}

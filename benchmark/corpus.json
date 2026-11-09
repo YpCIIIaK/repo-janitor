@@ -3720,11 +3720,6 @@
     "sha": "7aeea3bb6348de705a5b67f813048bc72e7d9a6e"
   },
   {
-    "name": "esbenp-prettier-vscode",
-    "url": "https://github.com/esbenp/prettier-vscode",
-    "sha": "b3d5ea136fadf5a4cac835df074dc12fcb398b0c"
-  },
-  {
     "name": "esphome-esphome-docs",
     "url": "https://github.com/esphome/esphome-docs",
     "sha": "6923529eaa9f5f7b74624b9ba28fb04ac5c4e094"
@@ -5448,11 +5443,6 @@
     "name": "geerlingguy-ansible-role-kubernetes",
     "url": "https://github.com/geerlingguy/ansible-role-kubernetes",
     "sha": "a65dfbae3983ff6ee2f227d04c8e46ee8ed00057"
-  },
-  {
-    "name": "plausible-hosting",
-    "url": "https://github.com/plausible/hosting",
-    "sha": "ec6c4da776547516d8f48159ce1a704df4f475ad"
   },
   {
     "name": "wilfred-difftastic",
@@ -14998,5 +14988,15 @@
     "name": "itaysk-kubectl-neat",
     "url": "https://github.com/itaysk/kubectl-neat",
     "sha": "387aa88e3839b89ccc179f3f33a08e6b6f940aad"
+  },
+  {
+    "name": "scenee-floatingpanel",
+    "url": "https://github.com/scenee/FloatingPanel",
+    "sha": "de51f81e938d0a04a073582c69f13eaae10dc7cb"
+  },
+  {
+    "name": "hierynomus-sshj",
+    "url": "https://github.com/hierynomus/sshj",
+    "sha": "6fad160fe36605a68847ac8a527750c615b4bd04"
   }
 ]
