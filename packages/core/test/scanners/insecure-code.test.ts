@@ -478,3 +478,17 @@ describe("insecure-code — PHP local reflected XSS request flow", () => {
     expect(issues.map((i) => [i.location, i.confidence])).toEqual([["src/unsafe.php:4", "high"], ["src/print.php:3", "high"]])
   })
 })
+
+describe("ssrf with a fixed host (benchmark cycle 2026-11-08-2)", () => {
+  const run = async (files: Record<string, string>) => (await insecureCodeScanner.run(makeContext({ files }))).map((i) => i.id)
+  it("ignores URLs whose host is a constant and only the path varies", async () => {
+    expect(await run({
+      "api.py": 'from fastapi import Request\nGQL_URL = "https://x.com/i/api/graphql"\nasync def q(request: Request, op):\n    return await client.get(f"{GQL_URL}/{op}", params=request.query_params)\n',
+      "auth.js": "const BASE_URI = 'https://id.example.com'\nexport function token(req) { return fetch(BASE_URI + '/api/oauth/token', { body: req.body }) }\n",
+    })).toEqual([])
+  })
+  it("still reports a URL taken from the request", async () => {
+    const ids = await run({ "proxy.py": "from flask import request\nimport requests\ndef p():\n    url = request.args['url']\n    return requests.get(url)\n" })
+    expect(ids.some((i) => i.startsWith("insecure-ssrf-"))).toBe(true)
+  })
+})

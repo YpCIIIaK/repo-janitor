@@ -851,6 +851,10 @@ function sinkAllows(ruleId: string, line: string, col: number): boolean {
     return (line.slice(0, col).match(/"/g)?.length ?? 0) % 2 === 0
   }
   if (ruleId === "sql-interpolated") return !/\bprepare\s*\(/.test(line)
+  // The host is fixed and only the path or query varies: `f"{API_URL}/{op}"`,
+  // `f"https://api.x.com/{id}"`, `BASE_URI + "/token"`. A caller can choose
+  // which endpoint of that server, not which server — not SSRF.
+  if (ruleId === "ssrf" && /^[^(]*\(\s*(?:f["'](?:\{\s*(?:self\.|this\.)?[A-Z][A-Z0-9_]*\s*\}|https?:\/\/[\w.-]+)|(?:self\.|this\.)?[A-Z][A-Z0-9_]*\s*\+)/.test(line.slice(col))) return false
   // `redis_script.eval(...)`, `expr.eval()` — a method on an object, not Kernel#eval.
   if (ruleId === "eval-dynamic" && line.slice(0, col).trimEnd().endsWith(".")) return false
   // A shell=True call whose command is a plain string literal runs fixed text.
