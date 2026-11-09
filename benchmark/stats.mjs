@@ -439,7 +439,11 @@ for (const r of repos) for (const i of r.issues) if (i.severity in json.severity
   const osv = repos
     .map((r) => {
       const p = join(here, ".results", `${r.name}.osv.json`)
-      return existsSync(p) ? { r, f: JSON.parse(readFileSync(p, "utf8")).findings } : null
+      if (!existsSync(p)) return null
+      // The online pass holds two scanners; vulnerabilities are vulnerable-deps only
+      // (older files predate the scanner field and hold nothing else).
+      const all = JSON.parse(readFileSync(p, "utf8")).findings
+      return { r, all, f: all.filter((i) => !i.scanner || i.scanner === "vulnerable-deps") }
     })
     .filter(Boolean)
   if (osv.length) {
@@ -450,6 +454,25 @@ for (const r of repos) for (const i of r.issues) if (i.severity in json.severity
     const counts = new Map()
     for (const x of osv) for (const p of new Set(shipped(x).map((i) => pkgOf(i.title)).filter(Boolean))) counts.set(p, (counts.get(p) ?? 0) + 1)
     const affected = osv.filter((x) => shipped(x).length > 0)
+    // Dependency licenses (license-risk, npm only), from the same online pass.
+    const lic = osv.map((x) => ({ ...x, l: x.all.filter((i) => i.scanner === "license-risk") }))
+    const npm = lic.filter((x) => {
+      const p = join(here, ".inventory", `${x.r.name}.json`)
+      return existsSync(p) && (JSON.parse(readFileSync(p, "utf8")).names?.["package.json"] ?? 0) > 0
+    })
+    const kind = (i) => (/^license-network/.test(i.id) ? "network" : /^license-strong/.test(i.id) ? "strong" : /^license-weak/.test(i.id) ? "weak" : /^license-proprietary/.test(i.id) ? "proprietary" : "unrecognised")
+    const licShipped = (x) => x.l.filter((i) => i.severity !== "info")
+    const shareNpm = (pred) => (npm.length ? Number((npm.filter(pred).length / npm.length).toFixed(3)) : 0)
+    json.dependencyLicenses = {
+      // Not shown on /state until license-risk's precision is measured as usable.
+      published: false,
+      npmRepos: npm.length,
+      anyShipped: shareNpm((x) => licShipped(x).length > 0),
+      network: shareNpm((x) => licShipped(x).some((i) => kind(i) === "network")),
+      strong: shareNpm((x) => licShipped(x).some((i) => kind(i) === "strong")),
+      proprietary: shareNpm((x) => licShipped(x).some((i) => kind(i) === "proprietary")),
+      devOnly: shareNpm((x) => x.l.length > 0 && licShipped(x).length === 0),
+    }
     json.vulnerableDeps = {
       repos: osv.length,
       checkedAt: osv.map((x) => x).length ? new Date().toISOString().slice(0, 10) : null,
