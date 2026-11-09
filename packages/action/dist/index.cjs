@@ -26863,7 +26863,7 @@ var require_lib4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-BDUU6RFY.js
+// ../cli/dist/chunk-DXCMBVHK.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -45594,7 +45594,7 @@ function date4(params) {
 // ../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/external.js
 config(en_default());
 
-// ../cli/dist/chunk-BDUU6RFY.js
+// ../cli/dist/chunk-DXCMBVHK.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -70331,7 +70331,11 @@ var RULE_PRECISION = {
   "insecure-swift-webview-html": { tp: 1, fp: 0 },
   "insecure-tls-verification-off": { tp: 0, fp: 12 },
   "insecure-weak-hash": { tp: 2, fp: 8 },
-  "license-risk": { tp: 0, fp: 1 },
+  "license-network": { tp: 2, fp: 4 },
+  "license-proprietary": { tp: 1, fp: 2 },
+  "license-strong": { tp: 2, fp: 2 },
+  "license-unrecognised": { tp: 0, fp: 6 },
+  "license-weak": { tp: 0, fp: 14 },
   "lockfile-drift": { tp: 1, fp: 0 },
   "lockfile-missing": { tp: 18, fp: 2 },
   "secret-generic": { tp: 1, fp: 8 },
