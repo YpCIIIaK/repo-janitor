@@ -123,7 +123,9 @@ const PREFIXES: [string, LicenseClass][] = [
   ["unlicensed", "proprietary"],
   ["proprietary", "proprietary"],
   ["commercial", "proprietary"],
-  ["see license", "proprietary"],
+  // "SEE LICENSE IN <file>" points at a file that is as often MIT or CC0 as it
+  // is a commercial license; without reading it, it is a gap, not a verdict.
+  ["see license", "unknown"],
   ["nonstandard", "unknown"],
 ]
 
@@ -338,6 +340,38 @@ function describe(
   }
 }
 
+/**
+ * The highest published version a declared range allows, for the common range
+ * forms (exact, ^, ~, x-ranges, >=). Null when the range cannot be read; the
+ * caller then falls back to the package's top-level license.
+ */
+export function pickVersion(range: string | undefined, versions: Record<string, unknown> | undefined): string | null {
+  if (!range || !versions) return null
+  const r = range.trim().replace(/^npm:[^@]+@/, "")
+  const parse = (v: string) => /^(\d+)\.(\d+)\.(\d+)$/.exec(v)?.slice(1).map(Number) ?? null
+  const published = Object.keys(versions).map((v) => [v, parse(v)] as const).filter((x): x is [string, number[]] => !!x[1])
+  if (versions[r]) return r
+  let m: RegExpExecArray | null
+  let ok: (v: number[]) => boolean
+  if ((m = /^\^(\d+)(?:\.(\d+))?(?:\.(\d+))?/.exec(r))) {
+    const [maj, min = 0, pat = 0] = [Number(m[1]), Number(m[2] ?? 0), Number(m[3] ?? 0)]
+    const ge = (v: number[]) => v[0] > maj || (v[0] === maj && (v[1] > min || (v[1] === min && v[2] >= pat)))
+    ok = maj > 0 ? (v) => v[0] === maj && ge(v) : (v) => v[0] === 0 && v[1] === min && v[2] >= pat
+  } else if ((m = /^~(\d+)\.(\d+)(?:\.(\d+))?/.exec(r))) {
+    const [maj, min, pat] = [Number(m[1]), Number(m[2]), Number(m[3] ?? 0)]
+    ok = (v) => v[0] === maj && v[1] === min && v[2] >= pat
+  } else if ((m = /^(\d+)(?:\.(\d+|x|\*))?(?:\.(?:x|\*))?$/.exec(r))) {
+    const maj = Number(m[1])
+    const min = m[2] && /^\d+$/.test(m[2]) ? Number(m[2]) : null
+    ok = (v) => v[0] === maj && (min === null || v[1] === min)
+  } else if ((m = /^>=\s*(\d+)\.(\d+)\.(\d+)$/.exec(r))) {
+    const lo = [Number(m[1]), Number(m[2]), Number(m[3])]
+    ok = (v) => v[0] > lo[0] || (v[0] === lo[0] && (v[1] > lo[1] || (v[1] === lo[1] && v[2] >= lo[2])))
+  } else return null
+  const hits = published.filter(([, v]) => ok(v)).sort((a, b) => a[1][0] - b[1][0] || a[1][1] - b[1][1] || a[1][2] - b[1][2])
+  return hits.length ? hits[hits.length - 1][0] : null
+}
+
 /** Sniff a license from LICENSE file text, for repos that ship no manifest field. */
 export function licenseFromText(text: string): string | null {
   const head = text.slice(0, 4000)
@@ -378,6 +412,7 @@ export const licenseRiskScanner: Scanner = {
       dependencies?: Record<string, string>
       devDependencies?: Record<string, string>
       private?: boolean
+      name?: string
     }
     try {
       pkgJson = JSON.parse(raw)
@@ -401,12 +436,24 @@ export const licenseRiskScanner: Scanner = {
     const names = [...prod, ...new Set(dev.filter((d) => !prod.includes(d)))]
     if (names.length === 0) return []
 
-    const shippedSet = new Set(prod)
+    // Tools that run as a separate process (a process manager, a CLI) are not
+    // linked into the shipped program, so a copyleft license does not reach it.
+    const separateProcess = new Set(["pm2", "@sentry/cli", "nodemon", "forever"])
+    // A documentation site is not the product: what it bundles is not shipped.
+    const docsSite = /(^|[-_./])(docs?|website|site)([-_./]|$)/i.test(`${ctx.repo.name} ${pkgJson.name ?? ""}`)
+    const shippedSet = new Set(docsSite ? [] : prod.filter((d) => !separateProcess.has(d)))
+    // The project's own organisation (npm scope or GitHub owner) licenses its packages to itself.
+    const ownScopes = new Set(
+      [ctx.repo.owner, /^@([^/]+)\//.exec(pkgJson.name ?? "")?.[1]].filter(Boolean).map((x) => String(x).toLowerCase()),
+    )
+    const ranges: Record<string, string> = { ...(pkgJson.devDependencies ?? {}), ...(pkgJson.dependencies ?? {}) }
     const issues: Issue[] = []
     let lookups = 0
 
     for (const name of names.slice(0, 300)) {
       if (issues.length >= MAX_ISSUES) break
+      const scope = /^@([^/]+)\//.exec(name)?.[1]?.toLowerCase()
+      if (scope && ownScopes.has(scope)) continue
 
       // Installed copy first: it is exact, it is offline, and it is the version
       // actually in use rather than whatever the registry publishes today.
@@ -427,8 +474,12 @@ export const licenseRiskScanner: Scanner = {
         lookups++
         const data = await ctx.fetchJson(`https://registry.npmjs.org/${name}`)
         if (!data) continue
-        license = readDeclaredLicense(data)
-        source = "the npm registry"
+        // The license of the version the project declares, not of the latest
+        // release: packages relicense between majors (ua-parser-js went AGPL in 2.0).
+        const version = pickVersion(ranges[name], (data as { versions?: Record<string, unknown> }).versions)
+        const versioned = version ? readDeclaredLicense((data as { versions: Record<string, unknown> }).versions[version]) : null
+        license = versioned ?? readDeclaredLicense(data)
+        source = version ? `the npm registry (${name}@${version})` : "the npm registry"
         // A registry record with no license at all is far more often a fetch
         // that returned something unexpected than a package that truly declares
         // none. Only the installed copy is trusted to prove an absence.
