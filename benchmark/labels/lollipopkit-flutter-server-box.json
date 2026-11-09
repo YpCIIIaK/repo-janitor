@@ -1,0 +1,9 @@
+{
+ "duplicate-lib/data/model/virt/virt_hardware.freezed.dart-109": "fp",
+ "iac-host-namespace-store/apps/homeassistant.home_assistant/compose.yaml:50": "fp",
+ "insecure-exec-interpolated-monitor/frontend/e2e/proxy_app.e2e.ts:66": "fp",
+ "insecure-localstorage-secret-monitor/frontend/src/tests/servers.test.ts:107": "fp",
+ "insecure-random-for-secret-monitor/frontend/e2e/sharing.e2e.ts:84": "fp",
+ "secret-slack-webhook-monitor/src/api/push.rs:1033": "fp",
+ "skiptest-monitor/frontend/src/desk/agent/autosize.ts:54": "fp"
+}
