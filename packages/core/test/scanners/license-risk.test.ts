@@ -322,3 +322,18 @@ describe("licenseRiskScanner", () => {
     expect(await licenseRiskScanner.run(ctx({ "README.md": "# hi" }))).toEqual([])
   })
 })
+
+describe("classifyLicense: licenses the benchmark's online pass did not know", () => {
+  it("reads PSF, W3C, Unicode, OFL and public-domain dedications as permissive", () => {
+    for (const id of ["PSF-2.0", "W3C", "Unicode-DFS-2016", "OFL-1.1", "SIL OPEN FONT LICENSE", "Dedicated to the public domain", "(CC-BY-4.0 AND OFL-1.1 AND MIT)"]) {
+      expect(classifyLicense(id), id).toBe("permissive")
+    }
+  })
+  it("reads source-available licenses as not open source", () => {
+    expect(classifyLicense("Elastic-2.0")).toBe("proprietary")
+    expect(classifyLicense("FSL-1.1-MIT")).toBe("proprietary")
+  })
+  it("reads an unversioned GNU LGPL as weak copyleft", () => {
+    expect(classifyLicense("GNU LGPL")).toBe("weak-copyleft")
+  })
+})
