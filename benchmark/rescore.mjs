@@ -11,7 +11,7 @@
  */
 import { existsSync, readFileSync, statSync, writeFileSync } from "node:fs"
 import { dirname, join } from "node:path"
-import { fileURLToPath } from "node:url"
+import { fileURLToPath, pathToFileURL } from "node:url"
 
 const here = dirname(fileURLToPath(import.meta.url))
 const coreDist = join(here, "..", "packages", "core", "dist", "index.js")
@@ -20,7 +20,7 @@ if (!existsSync(coreDist) || statSync(coreDist).mtimeMs < statSync(data).mtimeMs
   console.error("Core build is older than confidence-data.ts: pnpm --filter ./packages/core build")
   process.exit(1)
 }
-const { computeScore, confidenceOf, scoreToGrade } = await import(coreDist)
+const { computeScore, confidenceOf, scoreToGrade } = await import(pathToFileURL(coreDist).href)
 const SELF_STAMPED = new Set(["insecure-code"])
 const conf = (f) => (SELF_STAMPED.has(f.scanner) ? f.confidence : confidenceOf(f.rule))
 
