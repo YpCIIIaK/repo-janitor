@@ -1,6 +1,6 @@
 {
   "repos": 3000,
-  "generatedAt": "2026-11-09T07:56:45.795Z",
+  "generatedAt": "2026-11-09T08:14:46.672Z",
   "grades": {
     "A": 758,
     "B": 707,
@@ -257,44 +257,60 @@
   ],
   "worst": [
     {
-      "repo": "zju3dv/EasyMocap",
+      "language": "C",
+      "size": "very large",
       "score": 0,
-      "findings": 549
+      "findings": 549,
+      "top": "todo"
     },
     {
-      "repo": "aws-samples/serverless-patterns",
+      "language": "Python",
+      "size": "very large",
       "score": 0,
-      "findings": 322
+      "findings": 322,
+      "top": "todo"
     },
     {
-      "repo": "expo/expo-cli",
+      "language": "TypeScript",
+      "size": "large",
       "score": 0,
-      "findings": 268
+      "findings": 268,
+      "top": "todo"
     },
     {
-      "repo": "thingsboard/thingsboard",
+      "language": "Java",
+      "size": "very large",
       "score": 0,
-      "findings": 206
+      "findings": 206,
+      "top": "todo"
     },
     {
-      "repo": "pytorch/serve",
+      "language": "Python",
+      "size": "large",
       "score": 0,
-      "findings": 182
+      "findings": 182,
+      "top": "hygiene"
     },
     {
-      "repo": "lagom/lagom",
+      "language": "Scala",
+      "size": "large",
       "score": 0,
-      "findings": 151
+      "findings": 151,
+      "top": "hygiene"
     },
     {
-      "repo": "rustdesk/rustdesk",
+      "language": "Rust",
+      "size": "large",
       "score": 0,
-      "findings": 130
+      "findings": 130,
+      "top": "hygiene"
     },
     {
-      "repo": "hashicorp/vault-guides",
+      "language": "C",
+      "size": "large",
       "score": 0,
-      "findings": 121
+      "findings": 121,
+      "top": "hygiene"
     }
   ],
   "medianScore": 74,
@@ -736,6 +752,177 @@
     "docker": 0.038,
     "noLockfile": 0.038
   },
+  "busFactor": {
+    "repos": 3000,
+    "over80": 0.139,
+    "bands": [
+      {
+        "label": "under 50%",
+        "share": 0.594
+      },
+      {
+        "label": "50–80%",
+        "share": 0.267
+      },
+      {
+        "label": "80–95%",
+        "share": 0.098
+      },
+      {
+        "label": "95% or more",
+        "share": 0.041
+      }
+    ],
+    "medianAuthors": 88,
+    "bySize": [
+      {
+        "size": "small",
+        "repos": 1013,
+        "over80": 0.178
+      },
+      {
+        "size": "mid-size",
+        "repos": 1176,
+        "over80": 0.137
+      },
+      {
+        "size": "large",
+        "repos": 549,
+        "over80": 0.115
+      },
+      {
+        "size": "very large",
+        "repos": 262,
+        "over80": 0.05
+      }
+    ]
+  },
+  "age": [
+    {
+      "label": "before 2010",
+      "repos": 199,
+      "medianScore": 68,
+      "medianAuthors": 206
+    },
+    {
+      "label": "2010–2014",
+      "repos": 808,
+      "medianScore": 77,
+      "medianAuthors": 126
+    },
+    {
+      "label": "2015–2018",
+      "repos": 998,
+      "medianScore": 74,
+      "medianAuthors": 84
+    },
+    {
+      "label": "2019–2022",
+      "repos": 734,
+      "medianScore": 69,
+      "medianAuthors": 62
+    },
+    {
+      "label": "2023 or later",
+      "repos": 261,
+      "medianScore": 83,
+      "medianAuthors": 25
+    }
+  ],
+  "pulse": {
+    "repos": 3000,
+    "activeLastMonth": 0.519,
+    "quietOverYear": 0.222,
+    "quietOverThreeYears": 0.117,
+    "dormantWithEol": 0.182,
+    "activeWithEol": 0.268
+  },
+  "testsByLanguage": [
+    {
+      "language": "Go",
+      "repos": 338,
+      "withTests": 0.967,
+      "withCi": 0.935
+    },
+    {
+      "language": "Scala",
+      "repos": 97,
+      "withTests": 0.938,
+      "withCi": 0.887
+    },
+    {
+      "language": "Ruby",
+      "repos": 194,
+      "withTests": 0.933,
+      "withCi": 0.928
+    },
+    {
+      "language": "TypeScript",
+      "repos": 375,
+      "withTests": 0.907,
+      "withCi": 0.955
+    },
+    {
+      "language": "PHP",
+      "repos": 173,
+      "withTests": 0.861,
+      "withCi": 0.815
+    },
+    {
+      "language": "Rust",
+      "repos": 162,
+      "withTests": 0.84,
+      "withCi": 0.975
+    },
+    {
+      "language": "JavaScript",
+      "repos": 323,
+      "withTests": 0.796,
+      "withCi": 0.885
+    },
+    {
+      "language": "Python",
+      "repos": 404,
+      "withTests": 0.775,
+      "withCi": 0.79
+    },
+    {
+      "language": "C++",
+      "repos": 102,
+      "withTests": 0.755,
+      "withCi": 0.863
+    },
+    {
+      "language": "Kotlin",
+      "repos": 104,
+      "withTests": 0.731,
+      "withCi": 0.846
+    },
+    {
+      "language": "Java",
+      "repos": 204,
+      "withTests": 0.73,
+      "withCi": 0.603
+    },
+    {
+      "language": "C",
+      "repos": 90,
+      "withTests": 0.722,
+      "withCi": 0.756
+    },
+    {
+      "language": "Swift",
+      "repos": 107,
+      "withTests": 0.617,
+      "withCi": 0.804
+    },
+    {
+      "language": "C#",
+      "repos": 131,
+      "withTests": 0.55,
+      "withCi": 0.74
+    }
+  ],
   "lowConfidenceHidden": 28824,
   "shown": 204904,
   "precision": {

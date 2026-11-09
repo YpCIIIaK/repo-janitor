@@ -39,6 +39,32 @@ const T = {
     actNote: (a: number, q: number) => `Active: ≥ 50 commits in the last year (${a} repos). Quiet: < 10 (${q}). More churn, more debt — or simply more code being looked at.`,
     actL: { active: "active", quiet: "quiet" },
     findingsLink: "Every rule in detail: how common, where it fires, how accurate →",
+    facts: "In one glance",
+    fact: {
+      todo: (y: number) => `years: the age of the oldest TODO still in the code`,
+      solo: "of projects: one person wrote 80%+ of the commits",
+      quiet: "have had no commit for a year or more",
+      pin: "pin a GitHub Action to a tag that can be moved",
+    },
+    people: "People and time",
+    bus: "Bus factor: how much rests on one person",
+    busNote: (m: number) => `Share of all commits made by the single most active author. Median project has ${m} contributors over its life.`,
+    busBySize: "One person wrote 80%+ of commits, by project size",
+    sizeL: { small: "< 5k lines", "mid-size": "5k–50k", large: "50k–200k", "very large": "> 200k" } as Record<string, string>,
+    age: "Older projects are not the worst ones",
+    ageNote: "Median score by the year of the first commit. Very old and very young projects differ in why they score as they do: one carries legacy, the other has had less time to collect it.",
+    contributors: "contributors",
+    pulse: "Pulse",
+    pulseL: { month: "committed in the last month", year: "quiet for a year or more", three: "quiet for three years or more" },
+    pulseEol: (q: string, a: string) => `Quiet projects ship end-of-life runtimes less often than active ones: ${q} against ${a}. Many quiet projects are finished libraries with few runtime pins.`,
+    tests: "Tests and CI by language",
+    testsNote: "Languages with at least 30 projects. A test file anywhere counts; this says nothing about coverage.",
+    testsL: "tests",
+    ciL: "CI",
+    messyAnon: "Lowest scores — anonymous",
+    messyNote: "We do not name the projects with the most problems. Language, size and what dominates is the useful part.",
+    sizeWord: { small: "small", "mid-size": "mid-size", large: "large", "very large": "very large" } as Record<string, string>,
+    cat: { todo: "old TODOs", "dead-code": "dead code", security: "security", dependency: "dependencies", hygiene: "hygiene", env: "env vars", branch: "stale branches" } as Record<string, string>,
     grades: "Grades",
     gradesNote: "Score adjusts for size: warnings weigh less in big codebases, critical findings never do.",
     supply: "Most GitHub Actions can be swapped under you",
@@ -104,6 +130,32 @@ const T = {
     actNote: (a: number, q: number) => `Активные: ≥ 50 коммитов за год (${a} репо). Тихие: < 10 (${q}). Больше изменений — больше долга, или просто больше кода под взглядом.`,
     actL: { active: "активные", quiet: "тихие" },
     findingsLink: "Каждое правило подробно: как часто, где срабатывает, насколько точно →",
+    facts: "Коротко",
+    fact: {
+      todo: (y: number) => `лет — возраст самого старого TODO в коде`,
+      solo: "проектов: один человек сделал 80%+ коммитов",
+      quiet: "без единого коммита год и больше",
+      pin: "держат GitHub Action на теге, который можно перевесить",
+    },
+    people: "Люди и время",
+    bus: "Bus factor: сколько держится на одном человеке",
+    busNote: (m: number) => `Доля всех коммитов самого активного автора. У медианного проекта за всю жизнь ${m} участников.`,
+    busBySize: "Один человек сделал 80%+ коммитов, по размеру проекта",
+    sizeL: { small: "< 5 тыс. строк", "mid-size": "5–50 тыс.", large: "50–200 тыс.", "very large": "> 200 тыс." } as Record<string, string>,
+    age: "Старые проекты — не самые плохие",
+    ageNote: "Медианная оценка по году первого коммита. У очень старых и очень молодых проектов разные причины: одни несут наследие, другие просто не успели его накопить.",
+    contributors: "участников",
+    pulse: "Пульс",
+    pulseL: { month: "был коммит за последний месяц", year: "тишина год и больше", three: "тишина три года и больше" },
+    pulseEol: (q: string, a: string) => `Затихшие проекты реже тянут устаревшие рантаймы, чем активные: ${q} против ${a}. Многие из них — законченные библиотеки, которым почти нечего закреплять.`,
+    tests: "Тесты и CI по языкам",
+    testsNote: "Языки, где хотя бы 30 проектов. Считается любой тестовый файл; о покрытии это ничего не говорит.",
+    testsL: "тесты",
+    ciL: "CI",
+    messyAnon: "Самые низкие оценки — без имён",
+    messyNote: "Мы не называем проекты, где больше всего проблем. Полезная часть — язык, размер и что преобладает.",
+    sizeWord: { small: "небольшой", "mid-size": "средний", large: "крупный", "very large": "очень крупный" } as Record<string, string>,
+    cat: { todo: "старые TODO", "dead-code": "мёртвый код", security: "безопасность", dependency: "зависимости", hygiene: "гигиена", env: "переменные окружения", branch: "старые ветки" } as Record<string, string>,
     grades: "Оценки",
     gradesNote: "Оценка учитывает размер: в больших проектах предупреждения весят меньше, критические находки — всегда полностью.",
     supply: "Большинство GitHub Actions можно подменить",
@@ -260,7 +312,7 @@ export function StateOfOpenSource() {
   const maxGap = Math.max(...practices.map((p) => Math.abs(p.scoreGap)), 1)
 
   return (
-    <main className="mx-auto grid max-w-4xl gap-6 px-4 py-10">
+    <main className="mx-auto grid max-w-4xl gap-6 px-4 py-10 [&>*]:min-w-0">
       <header className="space-y-3">
         <h1 className="text-3xl font-semibold tracking-tight text-balance sm:text-4xl">{t.title(stats.repos)}</h1>
         <p className="max-w-prose text-muted-foreground">{t.lede}</p>
@@ -281,6 +333,22 @@ export function StateOfOpenSource() {
           </Card>
         ))}
       </div>
+
+      <Section title={t.facts}>
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+          {[
+            [String(Math.floor(stats.todo.oldest[0]?.years ?? 0)), t.fact.todo(stats.todo.oldest[0]?.years ?? 0), "text-warning"],
+            [pct(stats.busFactor.over80), t.fact.solo, "text-warning"],
+            [pct(stats.pulse.quietOverYear), t.fact.quiet, "text-muted-foreground"],
+            [pct(ci.unpinned / ci.withActions), t.fact.pin, "text-destructive"],
+          ].map(([v, label, tone]) => (
+            <div key={label} className="space-y-1">
+              <span className={cn("font-mono text-3xl font-semibold tabular-nums", tone)}>{v}</span>
+              <p className="text-xs text-muted-foreground">{label}</p>
+            </div>
+          ))}
+        </div>
+      </Section>
 
       <Section title={t.grades} note={t.gradesNote}>
         <div className="flex h-9 overflow-hidden rounded-md">
@@ -362,6 +430,64 @@ export function StateOfOpenSource() {
       <Section title={t.act} note={t.actNote(stats.activity.active, stats.activity.quiet)}>
         <Bar label={t.actL.active} value={stats.activity.activeMedian} max={100} display={String(stats.activity.activeMedian)} tone="warning" />
         <Bar label={t.actL.quiet} value={stats.activity.quietMedian} max={100} display={String(stats.activity.quietMedian)} tone="success" />
+      </Section>
+
+      <h2 className="pt-4 text-xl font-semibold tracking-tight">{t.people}</h2>
+
+      <Section title={t.bus} note={t.busNote(stats.busFactor.medianAuthors)}>
+        <div className="flex h-7 overflow-hidden rounded-md">
+          {stats.busFactor.bands.map((b, i) => (
+            <div key={b.label} className={["bg-success", "bg-primary", "bg-warning", "bg-destructive"][i]} style={{ width: `${b.share * 100}%` }} title={`${b.label}: ${pct(b.share)}`} />
+          ))}
+        </div>
+        <div className="flex flex-wrap gap-x-4 text-xs text-muted-foreground">
+          {stats.busFactor.bands.map((b) => <span key={b.label}>{b.label}: {pct(b.share)}</span>)}
+        </div>
+        <p className="pt-2 text-xs text-muted-foreground">{t.busBySize}</p>
+        {stats.busFactor.bySize.map((b) => (
+          <Bar key={b.size} label={t.sizeL[b.size]} value={b.over80 ?? 0} max={Math.max(...stats.busFactor.bySize.map((x) => x.over80 ?? 0))} display={pct(b.over80 ?? 0)} tone="warning" />
+        ))}
+      </Section>
+
+      <div className="grid gap-6 md:grid-cols-2">
+        <Section title={t.age} note={t.ageNote}>
+          {stats.age.map((a) => (
+            <Bar key={a.label} label={`${a.label} · ${a.repos}`} value={a.medianScore} max={100} display={String(a.medianScore)} tone={a.medianScore >= 75 ? "success" : a.medianScore < 70 ? "warning" : "primary"} />
+          ))}
+        </Section>
+        <Section title={t.pulse} note={t.pulseEol(pct(stats.pulse.dormantWithEol), pct(stats.pulse.activeWithEol))}>
+          <div className="grid gap-4">
+            {[
+              [stats.pulse.activeLastMonth, t.pulseL.month, "text-success"],
+              [stats.pulse.quietOverYear, t.pulseL.year, "text-warning"],
+              [stats.pulse.quietOverThreeYears, t.pulseL.three, "text-muted-foreground"],
+            ].map(([v, label, tone]) => (
+              <div key={label as string} className="flex items-baseline gap-3">
+                <span className={cn("w-16 font-mono text-2xl font-semibold tabular-nums", tone as string)}>{pct(v as number)}</span>
+                <span className="text-sm text-muted-foreground">{label as string}</span>
+              </div>
+            ))}
+          </div>
+        </Section>
+      </div>
+
+      <Section title={t.tests} note={t.testsNote}>
+        <div className="grid grid-cols-[minmax(0,6rem)_1fr_1fr] gap-x-3 text-xs text-muted-foreground">
+          <span />
+          <span className="inline-flex items-center gap-1.5"><span className="inline-block size-2 rounded-full bg-success" />{t.testsL}</span>
+          <span className="inline-flex items-center gap-1.5"><span className="inline-block size-2 rounded-full bg-sky-500" />{t.ciL}</span>
+        </div>
+        {stats.testsByLanguage.map((x) => (
+          <div key={x.language} className="grid grid-cols-[minmax(0,6rem)_1fr_1fr] items-center gap-x-3 text-sm">
+            <span className="truncate">{x.language}</span>
+            {([[x.withTests, "bg-success"], [x.withCi, "bg-sky-500"]] as const).map(([v, tone], i) => (
+              <span key={i} className="flex min-w-0 items-center gap-2">
+                <span className="h-2 min-w-0 flex-1 overflow-hidden rounded-full bg-secondary"><span className={cn("block h-full rounded-full", tone)} style={{ width: `${v * 100}%` }} /></span>
+                <span className="w-9 shrink-0 text-right font-mono text-xs tabular-nums text-muted-foreground">{pct(v)}</span>
+              </span>
+            ))}
+          </div>
+        ))}
       </Section>
 
       <Section title={t.supply} note={t.supplyNote(ci.withActions)}>
@@ -479,19 +605,28 @@ export function StateOfOpenSource() {
       </Section>
 
       <Section title={t.extremes}>
-        <div className="grid gap-6 sm:grid-cols-2">
-          {[[t.clean, stats.best.slice(0, 8)], [t.messy, stats.worst]].map(([title, list]) => (
-            <div key={title as string} className="space-y-1.5">
-              <p className="text-xs text-muted-foreground">{title as string}</p>
-              {(list as { repo: string; score: number; findings: number }[]).map((r) => (
-                <div key={r.repo} className="flex items-baseline gap-3 text-sm">
-                  <span className="w-8 font-mono tabular-nums">{r.score}</span>
-                  <a className="min-w-0 truncate underline-offset-2 hover:underline" href={`https://github.com/${r.repo}`} target="_blank" rel="noreferrer">{r.repo}</a>
-                  <span className="ml-auto shrink-0 font-mono text-xs text-muted-foreground">{r.findings.toLocaleString(l)} {t.findings}</span>
-                </div>
-              ))}
-            </div>
-          ))}
+        <div className="grid gap-6 sm:grid-cols-2 [&>*]:min-w-0">
+          <div className="space-y-1.5">
+            <p className="text-xs text-muted-foreground">{t.clean}</p>
+            {stats.best.slice(0, 8).map((r) => (
+              <div key={r.repo} className="flex items-baseline gap-3 text-sm">
+                <span className="w-8 font-mono tabular-nums">{r.score}</span>
+                <a className="min-w-0 truncate underline-offset-2 hover:underline" href={`https://github.com/${r.repo}`} target="_blank" rel="noreferrer">{r.repo}</a>
+                <span className="ml-auto shrink-0 font-mono text-xs text-muted-foreground">{r.findings.toLocaleString(l)} {t.findings}</span>
+              </div>
+            ))}
+          </div>
+          <div className="space-y-1.5">
+            <p className="text-xs text-muted-foreground">{t.messyAnon}</p>
+            {(stats.worst as { language: string; size: string; score: number; findings: number; top: string | null }[]).map((r, i) => (
+              <div key={i} className="flex items-baseline gap-3 text-sm">
+                <span className="w-8 font-mono tabular-nums">{r.score}</span>
+                <span className="min-w-0 truncate">{t.sizeWord[r.size] ?? r.size} {r.language}{r.top ? <span className="text-muted-foreground"> · {t.cat[r.top] ?? r.top}</span> : null}</span>
+                <span className="ml-auto shrink-0 font-mono text-xs text-muted-foreground">{r.findings.toLocaleString(l)} {t.findings}</span>
+              </div>
+            ))}
+            <p className="pt-1 text-xs text-muted-foreground">{t.messyNote}</p>
+          </div>
         </div>
       </Section>
 

@@ -194,20 +194,30 @@ for (const [label, a, b] of buckets) {
 }
 out.push("")
 
+const band = (loc) => (loc < 5e3 ? "small" : loc < 5e4 ? "mid-size" : loc < 2e5 ? "large" : "very large")
+function topCategory(r) {
+  const c = {}
+  for (const i of r.issues) c[i.category] = (c[i.category] ?? 0) + 1
+  return Object.entries(c).sort((a, b) => b[1] - a[1])[0]?.[0] ?? null
+}
+
 // --- leaderboards ---------------------------------------------------------------------------
 const best = [...repos].sort((a, b) => b.score - a.score || a.issues.length - b.issues.length).slice(0, 10)
 const worst = [...repos].sort((a, b) => a.score - b.score).slice(0, 10)
 out.push("## Cleanest repos", "")
 for (const r of best) out.push(`- **${r.score}** ${r.name} (${r.issues.length} findings)`)
 out.push("", "## Most to clean up", "")
-for (const r of worst) out.push(`- **${r.score}** ${r.name} (${r.issues.length} findings)`)
+for (const r of worst) out.push(`- **${r.score}** a ${band(r.loc)} ${r.language} project (${r.issues.length} findings)`)
 out.push("")
 json.best = best.map((r) => ({ repo: urlOf(r.name), score: r.score, findings: r.issues.length }))
 json.worst = [...repos]
   .filter((r) => !VULNERABLE_RE.test(r.name))
   .sort((a, b) => a.score - b.score || b.issues.length - a.issues.length)
   .slice(0, 8)
-  .map((r) => ({ repo: urlOf(r.name), score: r.score, findings: r.issues.length }))
+  // Anonymous on purpose: naming the repos with the most problems would turn a
+  // statistic into a public shaming list. Language, size and what dominates is
+  // the useful part.
+  .map((r) => ({ language: r.language, size: band(r.loc), score: r.score, findings: r.issues.length, top: topCategory(r) }))
 json.medianScore = median(repos.map((r) => r.score))
 
 // --- deliberately vulnerable apps: what the scanner finds where holes are known -----------
@@ -298,6 +308,61 @@ for (const r of repos) for (const i of r.issues) if (i.severity in json.severity
     docker: share(/^docker-/),
     noLockfile: share(/^lockfile-missing$/),
   }
+}
+
+// --- people, age and pulse (from git history) ------------------------------
+{
+  const withHist = repos.map((r) => ({ r, h: hist.get(r.name) })).filter((x) => x.h)
+  // Bus factor: share of all commits by the single most active author.
+  const shares = withHist.map((x) => x.h.topAuthorShare).filter((v) => typeof v === "number")
+  const bands = [[0, 0.5, "under 50%"], [0.5, 0.8, "50–80%"], [0.8, 0.95, "80–95%"], [0.95, 1.01, "95% or more"]]
+  json.busFactor = {
+    repos: shares.length,
+    over80: Number((shares.filter((v) => v >= 0.8).length / shares.length).toFixed(3)),
+    bands: bands.map(([a, b, label]) => ({ label, share: Number((shares.filter((v) => v >= a && v < b).length / shares.length).toFixed(3)) })),
+    medianAuthors: median(withHist.map((x) => x.h.authorsTotal ?? 0)),
+    bySize: ["small", "mid-size", "large", "very large"].map((s) => {
+      const l = withHist.filter((x) => band(x.r.loc) === s && typeof x.h.topAuthorShare === "number")
+      return { size: s, repos: l.length, over80: l.length ? Number((l.filter((x) => x.h.topAuthorShare >= 0.8).length / l.length).toFixed(3)) : null }
+    }),
+  }
+  // Age: does an old project score worse than a young one?
+  const cohorts = [[0, 2010, "before 2010"], [2010, 2015, "2010–2014"], [2015, 2019, "2015–2018"], [2019, 2023, "2019–2022"], [2023, 9999, "2023 or later"]]
+  json.age = cohorts.map(([a, b, label]) => {
+    const l = withHist.filter((x) => Number(x.h.firstCommit) >= a && Number(x.h.firstCommit) < b)
+    return { label, repos: l.length, medianScore: median(l.map((x) => x.r.score)), medianAuthors: median(l.map((x) => x.h.authorsTotal ?? 0)) }
+  })
+}
+// Pulse: how many projects have gone quiet, and what they keep shipping.
+{
+  const last = (r) => (r.activity?.lastCommitAt ? Date.parse(r.activity.lastCommitAt) : null)
+  const ref = Math.max(...repos.map(last).filter(Boolean))
+  const year = 365 * 24 * 3600 * 1000
+  const quietFor = (r) => (last(r) ? (ref - last(r)) / year : null)
+  const known = repos.filter((r) => quietFor(r) !== null)
+  const dormant = known.filter((r) => quietFor(r) >= 1)
+  const eol = (r) => r.issues.some((i) => /^eol-/.test(i.rule ?? ""))
+  json.pulse = {
+    repos: known.length,
+    activeLastMonth: Number((known.filter((r) => quietFor(r) < 1 / 12).length / known.length).toFixed(3)),
+    quietOverYear: Number((dormant.length / known.length).toFixed(3)),
+    quietOverThreeYears: Number((known.filter((r) => quietFor(r) >= 3).length / known.length).toFixed(3)),
+    dormantWithEol: dormant.length ? Number((dormant.filter(eol).length / dormant.length).toFixed(3)) : 0,
+    activeWithEol: Number((known.filter((r) => quietFor(r) < 1 && eol(r)).length / Math.max(1, known.length - dormant.length)).toFixed(3)),
+  }
+}
+// Tests by main language (languages with at least 30 repos).
+{
+  const by = new Map()
+  for (const r of repos) {
+    const l = by.get(r.language) ?? []
+    l.push(r)
+    by.set(r.language, l)
+  }
+  json.testsByLanguage = [...by]
+    .filter(([lang, l]) => l.length >= 30 && lang !== "other")
+    .map(([lang, l]) => ({ language: lang, repos: l.length, withTests: Number((l.filter((r) => r.checklist?.tests).length / l.length).toFixed(3)), withCi: Number((l.filter((r) => r.checklist?.ci).length / l.length).toFixed(3)) }))
+    .sort((a, b) => b.withTests - a.withTests)
 }
 
 json.lowConfidenceHidden = hidden

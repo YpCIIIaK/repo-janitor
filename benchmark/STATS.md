@@ -136,16 +136,16 @@ Oldest TODOs in the corpus:
 
 ## Most to clean up
 
-- **0** webgoat-webgoat (133 findings)
-- **0** digininja-dvwa (110 findings)
-- **0** jerryhoff-webgoat-net (74 findings)
-- **0** sasanlabs-vulnerableapp (100 findings)
-- **0** hashicorp-vault-guides (121 findings)
-- **0** sqlmapproject-testenv (103 findings)
-- **0** aws-samples-serverless-patterns (322 findings)
-- **0** docker-library-wordpress (32 findings)
-- **0** posthog-charts-clickhouse (39 findings)
-- **0** expo-expo-cli (268 findings)
+- **0** a large JavaScript project (133 findings)
+- **0** a mid-size PHP project (110 findings)
+- **0** a mid-size C# project (74 findings)
+- **0** a mid-size Java project (100 findings)
+- **0** a large C project (121 findings)
+- **0** a small PHP project (103 findings)
+- **0** a very large Python project (322 findings)
+- **0** a small PHP project (32 findings)
+- **0** a small Python project (39 findings)
+- **0** a large TypeScript project (268 findings)
 
 ## Do good practices go with healthier code?
 
