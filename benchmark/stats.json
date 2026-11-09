@@ -1,6 +1,6 @@
 {
   "repos": 3000,
-  "generatedAt": "2026-11-09T11:18:24.843Z",
+  "generatedAt": "2026-11-09T12:39:20.427Z",
   "grades": {
     "A": 758,
     "B": 707,
@@ -1619,6 +1619,20 @@
     ],
     "latestOrUntagged": 0.278,
     "digestPinned": 0.059
+  },
+  "corpus": {
+    "repos": 3000,
+    "linesOfCode": 250657128,
+    "files": 3213031,
+    "commits": 7545352,
+    "contributorsSummed": 554160,
+    "stars": 32730388,
+    "medianStars": 5653,
+    "under1kStars": 0.135,
+    "activeLastYear": 0.772,
+    "languages": 16,
+    "vulnerableApps": 47,
+    "labelled": 1621
   },
   "lowConfidenceHidden": 28824,
   "shown": 204904,

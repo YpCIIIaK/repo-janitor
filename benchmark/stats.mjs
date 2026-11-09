@@ -539,6 +539,32 @@ for (const r of repos) for (const i of r.issues) if (i.severity in json.severity
   }
 }
 
+// --- what the corpus is: totals and its known biases -------------------------
+{
+  const metaPath = join(here, "meta.json")
+  const meta = existsSync(metaPath) ? JSON.parse(readFileSync(metaPath, "utf8")) : {}
+  const invOf = (n) => {
+    const p = join(here, ".inventory", `${n}.json`)
+    return existsSync(p) ? JSON.parse(readFileSync(p, "utf8")) : null
+  }
+  const stars = repos.map((r) => meta[r.name]?.stars).filter((v) => typeof v === "number").sort((a, b) => a - b)
+  const hs = repos.map((r) => hist.get(r.name)).filter(Boolean)
+  json.corpus = {
+    repos: repos.length,
+    linesOfCode: repos.reduce((a, r) => a + (r.loc ?? 0), 0),
+    files: repos.reduce((a, r) => a + (invOf(r.name)?.files ?? 0), 0),
+    commits: hs.reduce((a, h) => a + Object.values(h.commitsByYear ?? {}).reduce((x, y) => x + y, 0), 0),
+    contributorsSummed: hs.reduce((a, h) => a + (h.authorsTotal ?? 0), 0),
+    stars: stars.reduce((a, b) => a + b, 0),
+    medianStars: stars.length ? stars[stars.length >> 1] : null,
+    under1kStars: stars.length ? Number((stars.filter((v) => v < 1000).length / stars.length).toFixed(3)) : null,
+    activeLastYear: Number((repos.filter((r) => (r.activity?.commitsLastYear ?? 0) > 0).length / repos.length).toFixed(3)),
+    languages: new Set(repos.map((r) => r.language).filter((l) => l && l !== "other")).size,
+    vulnerableApps: repos.filter((r) => VULNERABLE_RE.test(r.name)).length,
+    labelled: Object.values(precisionByConfidence()).reduce((a, p) => a + (p.tp ?? 0) + (p.fp ?? 0), 0),
+  }
+}
+
 json.lowConfidenceHidden = hidden
 json.shown = repos.reduce((s, r) => s + r.issues.length, 0)
 json.precision = precisionByConfidence()
