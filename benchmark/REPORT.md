@@ -1,6 +1,6 @@
 # Scanner benchmark
 
-3000/3000 repos scanned offline at pinned commits. Overall precision **58%** (950 TP, 674 FP, 232158 unlabelled, 36 lost TP).
+3000/3000 repos scanned offline at pinned commits. Overall precision **59%** (950 TP, 671 FP, 232107 unlabelled, 36 lost TP).
 
 ### By scanner
 
@@ -9,7 +9,7 @@
 | license-risk | 0% | 0 | 1 | 0 | 0 |
 | secrets | 6% | 2 | 33 | 3767 | 0 |
 | dependency-funeral | 8% | 1 | 12 | 695 | 0 |
-| insecure-code | 12% | 40 | 299 | 10391 | 0 |
+| insecure-code | 12% | 40 | 296 | 10339 | 0 |
 | env-lifecycle | 14% | 4 | 25 | 5082 | 0 |
 | leftover-debug | 25% | 3 | 9 | 3404 | 0 |
 | iac-security | 42% | 84 | 116 | 132 | 0 |
@@ -22,7 +22,7 @@
 | project-hygiene | 69% | 27 | 12 | 1179 | 0 |
 | duplicate-code | 77% | 37 | 11 | 20280 | 0 |
 | dead-code | 80% | 20 | 5 | 11121 | 0 |
-| bus-factor | 85% | 28 | 5 | 38570 | 0 |
+| bus-factor | 85% | 28 | 5 | 38571 | 0 |
 | skipped-tests | 88% | 21 | 3 | 2549 | 0 |
 | todo-debt | 89% | 76 | 9 | 83724 | 0 |
 | lockfile-drift | 90% | 19 | 2 | 98 | 0 |
@@ -49,13 +49,13 @@
 | insecure-tls-verification-off | 0% | 0 | 12 | 46 | 0 |
 | license-risk | 0% | 0 | 1 | 0 | 0 |
 | secret-provider | 0% | 0 | 10 | 2323 | 0 |
-| insecure-ssrf | 1% | 1 | 75 | 4489 | 0 |
+| insecure-ssrf | 1% | 1 | 72 | 4434 | 0 |
 | secret-history | 6% | 1 | 15 | 162 | 0 |
 | dep-unused | 8% | 1 | 12 | 695 | 0 |
 | env-no-example | 8% | 1 | 11 | 128 | 0 |
 | iac-run-as-root | 10% | 2 | 19 | 3 | 0 |
-| insecure-py-pickle-load | 10% | 2 | 19 | 212 | 0 |
-| insecure-sql-interpolated | 10% | 3 | 26 | 2229 | 0 |
+| insecure-py-pickle-load | 10% | 2 | 19 | 214 | 0 |
+| insecure-sql-interpolated | 10% | 3 | 26 | 2230 | 0 |
 | insecure-localstorage-secret | 11% | 1 | 8 | 150 | 0 |
 | insecure-py-shell-true | 11% | 1 | 8 | 107 | 0 |
 | secret-generic | 11% | 1 | 8 | 1282 | 0 |
@@ -102,7 +102,7 @@
 | iac-open-admin-port | 83% | 29 | 6 | 25 | 0 |
 | docker-add-url | 83% | 5 | 1 | 83 | 0 |
 | docs-badge | 85% | 11 | 2 | 109 | 0 |
-| bus-factor | 85% | 28 | 5 | 38570 | 0 |
+| bus-factor | 85% | 28 | 5 | 38571 | 0 |
 | dead-export | 85% | 17 | 3 | 11093 | 0 |
 | skipped-test | 88% | 21 | 3 | 2549 | 0 |
 | eol-python | 89% | 31 | 4 | 818 | 0 |
@@ -136,6 +136,6 @@
 
 | | precision | TP | FP | unlabelled | lost TP |
 |---|---:|---:|---:|---:|---:|
-| low | 12% | 68 | 507 | 28301 | 0 |
+| low | 12% | 68 | 506 | 28250 | 0 |
 | medium | 68% | 214 | 103 | 35412 | 0 |
-| high | 91% | 668 | 64 | 168445 | 0 |
+| high | 92% | 668 | 62 | 168445 | 0 |

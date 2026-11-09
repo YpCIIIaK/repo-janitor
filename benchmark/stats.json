@@ -1,10 +1,10 @@
 {
   "repos": 3000,
-  "generatedAt": "2026-11-09T06:40:21.617Z",
+  "generatedAt": "2026-11-09T07:56:45.795Z",
   "grades": {
-    "A": 757,
+    "A": 758,
     "B": 707,
-    "C": 928,
+    "C": 927,
     "D": 513,
     "F": 95
   },
@@ -146,7 +146,7 @@
   "todo": {
     "dated": 83807,
     "medianDays": 1217,
-    "overFiveYears": 29894,
+    "overFiveYears": 29897,
     "oldest": [
       {
         "repo": "libsdl-org/SDL_ttf",
@@ -719,29 +719,29 @@
     41,
     111,
     402,
-    751,
+    750,
     360,
     524,
-    757
+    758
   ],
   "severity": {
-    "critical": 773,
-    "warning": 98360,
-    "info": 105773
+    "critical": 770,
+    "warning": 98362,
+    "info": 105772
   },
   "exposure": {
     "injection": 0.043,
-    "critical": 0.056,
+    "critical": 0.055,
     "iac": 0.013,
     "docker": 0.038,
     "noLockfile": 0.038
   },
-  "lowConfidenceHidden": 28876,
-  "shown": 204906,
+  "lowConfidenceHidden": 28824,
+  "shown": 204904,
   "precision": {
     "high": {
       "tp": 668,
-      "fp": 64
+      "fp": 62
     },
     "medium": {
       "tp": 214,
@@ -749,7 +749,7 @@
     },
     "low": {
       "tp": 68,
-      "fp": 507
+      "fp": 506
     }
   }
 }

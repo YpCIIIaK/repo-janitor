@@ -70,7 +70,7 @@ export const RULE_PRECISION: Record<string, { tp: number; fp: number }> = {
   "insecure-ruby-marshal-load": { tp: 0, fp: 5 },
   "insecure-rust-tls-validation-disabled": { tp: 3, fp: 2 },
   "insecure-sql-interpolated": { tp: 3, fp: 26 },
-  "insecure-ssrf": { tp: 1, fp: 75 },
+  "insecure-ssrf": { tp: 1, fp: 72 },
   "insecure-swift-plaintext-credential-storage": { tp: 1, fp: 0 },
   "insecure-swift-webview-html": { tp: 1, fp: 0 },
   "insecure-tls-verification-off": { tp: 0, fp: 12 },

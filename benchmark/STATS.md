@@ -6,9 +6,9 @@
 
 | grade | repos | share |
 |---|---:|---:|
-| A | 757 | 25% |
+| A | 758 | 25% |
 | B | 707 | 24% |
-| C | 928 | 31% |
+| C | 927 | 31% |
 | D | 513 | 17% |
 | F | 95 | 3% |
 
@@ -174,4 +174,4 @@ Correlation, not causation: projects that add Dependabot are also the ones that 
 
 ## Noise the confidence scale hides
 
-28876 low-confidence findings were kept out of these numbers (12% of everything the scanners raised).
+28824 low-confidence findings were kept out of these numbers (12% of everything the scanners raised).

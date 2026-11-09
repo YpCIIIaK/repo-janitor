@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-09T06:40:21.617Z",
+  "generatedAt": "2026-11-09T07:56:45.795Z",
   "repos": 3000,
   "rules": [
     {
@@ -23,7 +23,7 @@
     },
     {
       "rule": "bus-factor",
-      "count": 38603,
+      "count": 38604,
       "hidden": 0,
       "repoShare": 0.754,
       "medianPerRepo": 16,
@@ -157,8 +157,8 @@
     },
     {
       "rule": "insecure-ssrf",
-      "count": 28,
-      "hidden": 4537,
+      "count": 25,
+      "hidden": 4482,
       "repoShare": 0.005,
       "medianPerRepo": 1,
       "severity": "critical",
@@ -167,7 +167,7 @@
       },
       "labelled": {
         "tp": 1,
-        "fp": 75
+        "fp": 72
       }
     },
     {
@@ -245,7 +245,7 @@
     {
       "rule": "insecure-sql-interpolated",
       "count": 336,
-      "hidden": 1922,
+      "hidden": 1923,
       "repoShare": 0.017,
       "medianPerRepo": 2,
       "severity": "critical",
@@ -482,7 +482,7 @@
     {
       "rule": "insecure-py-pickle-load",
       "count": 8,
-      "hidden": 225,
+      "hidden": 227,
       "repoShare": 0.002,
       "medianPerRepo": 1,
       "severity": "warning",
