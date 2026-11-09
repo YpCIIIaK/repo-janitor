@@ -2,7 +2,8 @@
 /**
  * Keep benchmark data on GitHub instead of on the local disk, in small parts.
  *
- *   node benchmark/archive.mjs pack            pack .results (scans, OSV) + .history + .inventory into chunks of 100 repos
+ *   node benchmark/archive.mjs pack            pack .results (scans, OSV) + .history + .inventory into chunks of 100 repos,
+ *                                              and .gitlog into separate gitlog-NNN chunks
  *   node benchmark/archive.mjs push            commit the chunks to the `bench-data` branch and push
  *   node benchmark/archive.mjs pull [repo…]    fetch `bench-data` and unpack only the chunks
  *                                              holding these repos (all chunks with no names)
@@ -19,6 +20,7 @@
 import { spawnSync } from "node:child_process"
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs"
 import { dirname, join } from "node:path"
+import { gzipSync } from "node:zlib"
 import { fileURLToPath } from "node:url"
 
 const here = dirname(fileURLToPath(import.meta.url))
@@ -31,6 +33,18 @@ function sh(cmd, args, opts = {}) {
   const r = spawnSync(cmd, args, { encoding: "utf8", ...opts })
   if (r.status !== 0) throw new Error(`${cmd} ${args.join(" ")} failed:\n${r.stderr}`)
   return r.stdout
+}
+
+/**
+ * A byte-for-byte reproducible .tar.gz: sorted names, zero mtimes, no owner
+ * names, and a gzip header without a timestamp (node's default). An unchanged
+ * chunk then has the same blob on the data branch, so a push only adds the
+ * chunks whose contents really changed and the branch history stays small.
+ */
+function deterministicTarGz(listFile, out, gzip = true) {
+  const tar = spawnSync("tar", ["--sort=name", "--mtime=@0", "--owner=0", "--group=0", "--numeric-owner", "--mode=u+rw,go+r", "-cf", "-", "-C", here, "-T", listFile], { maxBuffer: 2 ** 31 })
+  if (tar.status !== 0) throw new Error(`tar failed: ${tar.stderr}`)
+  writeFileSync(out, gzip ? gzipSync(tar.stdout, { level: 9 }) : tar.stdout)
 }
 
 function pack() {
@@ -50,9 +64,23 @@ function pack() {
     }
     if (!files.length) continue
     writeFileSync(join(archiveDir, `${id}.list`), files.join("\n") + "\n")
-    sh("tar", ["-czf", join(archiveDir, `${id}.tar.gz`), "-C", here, "-T", join(archiveDir, `${id}.list`)])
+    deterministicTarGz(join(archiveDir, `${id}.list`), join(archiveDir, `${id}.tar.gz`))
     rmSync(join(archiveDir, `${id}.list`))
     manifest.chunks[id] = part
+  }
+  // Raw git data (.gitlog, already gzipped per repo) in chunks of their own: it
+  // changes only when a repo is added or re-pinned, so these chunks stay
+  // byte-identical across most pushes and cost nothing to re-push.
+  manifest.gitlog = {}
+  for (let i = 0; i < names.length; i += CHUNK) {
+    const part = names.slice(i, i + CHUNK)
+    const id = `gitlog-${String(i / CHUNK).padStart(3, "0")}`
+    const files = part.map((n) => `.gitlog/${n}.json.gz`).filter((f) => existsSync(join(here, f)))
+    if (!files.length) continue
+    writeFileSync(join(archiveDir, `${id}.list`), files.join("\n") + "\n")
+    deterministicTarGz(join(archiveDir, `${id}.list`), join(archiveDir, `${id}.tar`), false)
+    rmSync(join(archiveDir, `${id}.list`))
+    manifest.gitlog[id] = part
   }
   // Labels and the confidence inputs are already in the code branch; the
   // corpus pins the exact commits these results belong to.
@@ -108,7 +136,16 @@ function pull(wanted) {
     sh("tar", ["-xzf", tmp, "-C", here])
     rmSync(tmp)
   }
-  console.log(`unpacked ${ids.length} chunk(s): ${ids.join(", ")}`)
+  const logIds = Object.entries(manifest.gitlog ?? {})
+    .filter(([, repos]) => !wanted.length || repos.some((r) => wanted.includes(r)))
+    .map(([id]) => id)
+  for (const id of logIds) {
+    const tmp = join(here, `.${id}.tar`)
+    writeFileSync(tmp, show(`${id}.tar`).stdout)
+    sh("tar", ["-xf", tmp, "-C", here])
+    rmSync(tmp)
+  }
+  console.log(`unpacked ${ids.length} chunk(s)${logIds.length ? ` and ${logIds.length} git-log chunk(s)` : ""}: ${ids.join(", ")}`)
 }
 
 const [cmd, ...rest] = process.argv.slice(2)
