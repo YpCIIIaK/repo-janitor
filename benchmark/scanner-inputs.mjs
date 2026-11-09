@@ -25,6 +25,8 @@ export const INPUTS = {
   "skipped-tests": { exts: [...JS, "py"] },
   "dependency-funeral": { names: /^package\.json$/ },
   "supply-chain": { names: /^package\.json$/ },
+  // npm only: direct dependencies of package.json files, compared with the root license file.
+  "license-risk": { names: /^package\.json$/ },
   "lockfile-drift": { names: MANIFESTS },
   "outdated-deps": { names: MANIFESTS },
   "vulnerable-deps": { names: MANIFESTS },
@@ -41,7 +43,6 @@ export const INPUTS = {
   "project-hygiene": { always: true },
   "repo-bloat": { always: true },
   "secrets": { always: true },
-  "license-risk": { always: true },
   "config-conflict": { always: true },
   "eol-runtime": { always: true },
   "env-lifecycle": { always: true },
@@ -62,6 +63,7 @@ export function mayProduce(id, inv) {
 const NAME_GLOBS = {
   "dependency-funeral": ["package.json"],
   "supply-chain": ["package.json"],
+  "license-risk": ["package.json"],
   "lockfile-drift": ["package.json", "package-lock.json", "npm-shrinkwrap.json", "pnpm-lock.yaml", "yarn.lock", "bun.lock*", "pyproject.toml", "poetry.lock", "uv.lock", "Pipfile*", "requirements*.txt", "go.mod", "go.sum", "Cargo.toml", "Cargo.lock", "Gemfile*", "composer.json", "composer.lock"],
   "dockerfile": ["Dockerfile*", "*.dockerfile", "*.Dockerfile"],
 }
@@ -69,6 +71,7 @@ const NAME_GLOBS = {
 const EXTRA_GLOBS = {
   "dependency-funeral": ["*.ts", "*.tsx", "*.js", "*.jsx", "*.mjs", "*.mts", "*.cts", "*.cjs", "*.vue", "*.svelte", "*.astro", "*.config.*", ".*rc*"],
   "dead-code": ["package.json", "tsconfig*.json", "*.config.*"],
+  "license-risk": ["/LICENSE*", "/LICENCE*", "/COPYING*", "/license*"],
 }
 
 /**
