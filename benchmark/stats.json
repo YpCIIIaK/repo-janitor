@@ -1,6 +1,6 @@
 {
   "repos": 3000,
-  "generatedAt": "2026-11-09T13:57:20.328Z",
+  "generatedAt": "2026-11-09T14:01:29.147Z",
   "grades": {
     "A": 758,
     "B": 707,
@@ -1634,6 +1634,86 @@
     "vulnerableApps": 47,
     "labelled": 1621
   },
+  "tracks": [
+    {
+      "id": "general",
+      "label": "General",
+      "population": "Every hand-picked repository in the corpus.",
+      "purpose": "Coverage and the cuts on /state (language, size, tools).",
+      "labelsPerRule": 10,
+      "repos": 3000,
+      "medianScore": 74,
+      "labelled": 1047,
+      "precision": 0.842,
+      "rulesFiring": 68,
+      "rulesAtTarget": 34
+    },
+    {
+      "id": "random",
+      "label": "Random layer",
+      "population": "Repositories drawn at random from active public GitHub projects (see random-layer.mjs).",
+      "purpose": "Corpus-wide percentages without selection bias.",
+      "labelsPerRule": 5,
+      "repos": 0,
+      "medianScore": null,
+      "labelled": 0,
+      "precision": null,
+      "rulesFiring": 0,
+      "rulesAtTarget": 0
+    },
+    {
+      "id": "security",
+      "label": "Security",
+      "population": "Deliberately vulnerable applications and labs.",
+      "purpose": "Recall: known holes are still found. Every high-confidence finding is labelled.",
+      "labelsPerRule": 30,
+      "repos": 47,
+      "medianScore": 51,
+      "labelled": 40,
+      "precision": 0.95,
+      "rulesFiring": 50,
+      "rulesAtTarget": 0
+    },
+    {
+      "id": "infra",
+      "label": "Infrastructure",
+      "population": "Repositories with at least 3 Terraform files, a Helm chart or a kustomization.",
+      "purpose": "Precision of IaC and CI rules, per format.",
+      "labelsPerRule": 30,
+      "repos": 237,
+      "medianScore": 67,
+      "labelled": 112,
+      "precision": 0.777,
+      "rulesFiring": 41,
+      "rulesAtTarget": 0
+    },
+    {
+      "id": "mobile",
+      "label": "Mobile",
+      "population": "Main language Swift, Kotlin or Dart, or at least 20 Swift or Dart files.",
+      "purpose": "Rules for languages that have few labels so far.",
+      "labelsPerRule": 30,
+      "repos": 234,
+      "medianScore": 76,
+      "labelled": 46,
+      "precision": 0.848,
+      "rulesFiring": 35,
+      "rulesAtTarget": 0
+    },
+    {
+      "id": "webBackends",
+      "label": "Web backends",
+      "population": "Main language PHP, Ruby, Java, C#, Python or Go, and runs as a service: it ships a docker-compose / compose file.",
+      "purpose": "Injection, deserialisation, SSRF and dependency rules.",
+      "labelsPerRule": 30,
+      "repos": 256,
+      "medianScore": 68,
+      "labelled": 80,
+      "precision": 0.75,
+      "rulesFiring": 40,
+      "rulesAtTarget": 0
+    }
+  ],
   "lowConfidenceHidden": 28824,
   "shown": 204904,
   "precision": {
