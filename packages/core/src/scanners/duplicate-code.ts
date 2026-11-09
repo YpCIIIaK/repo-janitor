@@ -78,6 +78,9 @@ const GENERATED_FILE =
 const TEST_FILE =
   /(^|\/)(?:tests?|spec|__tests__|e2e|[^/]+\.Tests?)\/|(^|\/)src\/androidTest\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(^|\/)test_[^/]+\.py$|[^/]+_test\.(?:py|go|rb)$|[^/]+Test\.(?:java|kt|cs)$|_spec\.rb$/i
 
+/** Swift XCTest and Swift Testing target/file conventions. */
+const SWIFT_TEST_FILE = /(?:^|\/)[^/]+Tests(?:\/.*)?\.swift$/i
+
 /**
  * Lines that carry no weight of their own.
  *
@@ -336,7 +339,8 @@ export function isComparable(file: string): boolean {
     CODE_EXT.test(norm) &&
     !SKIP_PATH.test(norm) &&
     !GENERATED_FILE.test(norm) &&
-    !TEST_FILE.test(norm)
+    !TEST_FILE.test(norm) &&
+    !SWIFT_TEST_FILE.test(norm)
   )
 }
 
