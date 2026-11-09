@@ -59,7 +59,25 @@ const PRACTICES = {
   changeset: [".changeset/"],
   editorconfig: [".editorconfig"],
   nvmrc: [".nvmrc", ".node-version"],
+  // Python packaging: which tool a project settled on.
+  uvLock: ["uv.lock"],
+  poetryLock: ["poetry.lock"],
+  pipenv: ["Pipfile", "Pipfile.lock"],
+  requirements: ["requirements.txt"],
+  // Front-end build tools.
+  vite: ["vite.config.js", "vite.config.ts", "vite.config.mjs", "vite.config.mts"],
+  webpack: ["webpack.config.js", "webpack.config.ts", "webpack.config.cjs", "webpack.config.mjs"],
+  // Instructions written for AI coding agents.
+  aiClaude: ["CLAUDE.md", ".claude/"],
+  aiAgents: ["AGENTS.md"],
+  aiCursor: [".cursorrules", ".cursor/rules/"],
+  aiCopilot: [".github/copilot-instructions.md"],
+  aiGemini: ["GEMINI.md"],
+  aiWindsurf: [".windsurfrules"],
 }
+/** Bumped when a record gains fields, so cached records are rebuilt. */
+const SCHEMA = 2
+const AI = ["aiClaude", "aiAgents", "aiCursor", "aiCopilot", "aiGemini", "aiWindsurf"]
 
 function git(dir, args) {
   return new Promise((resolve) => {
@@ -76,7 +94,7 @@ async function one(repo) {
   const outFile = join(outDir, `${repo.name}.json`)
   if (existsSync(outFile)) {
     const prev = JSON.parse(readFileSync(outFile, "utf8"))
-    if (prev.sha === repo.sha) return prev
+    if (prev.sha === repo.sha && prev.schema === SCHEMA) return prev
   }
 
   // Commits and authors by year, on the history leading to the pinned commit.
@@ -124,7 +142,37 @@ async function one(repo) {
     else if (present) practices[name] = { present, added: years[0] ? `${years[0]}-01-01` : undefined }
   }
 
+  // Snapshot at the pinned commit: which action versions and base images it uses.
+  const show = (f) => git(dir, ["show", `${repo.sha}:${f}`])
+  const actions = {}
+  let usesTotal = 0
+  let usesSha = 0
+  for (const f of [...tree].filter((f) => /^\.github\/workflows\/[^/]+\.ya?ml$/.test(f)).slice(0, 40)) {
+    for (const m of (await show(f)).matchAll(/^\s*-?\s*uses:\s*["']?([\w.-]+\/[\w.-]+)(?:\/[^@\s"']*)?@([^\s"'#]+)["']?(?:\s*#\s*(\S+))?/gm)) {
+      const [, name, ref, comment] = m
+      usesTotal++
+      if (/^[0-9a-f]{40}$/.test(ref)) usesSha++
+      // Keep the oldest major version seen per action: that is the one that ages out first.
+      // A SHA pin carries its version in the trailing comment (`@<sha> # v4.2.2`).
+      const label = /^[0-9a-f]{40}$/.test(ref) ? comment ?? "" : ref
+      const major = /^v?(\d+)(?:\.|$)/.exec(label)?.[1]
+      if (major === undefined) continue
+      if (actions[name] === undefined || Number(major) < actions[name]) actions[name] = Number(major)
+    }
+  }
+  const dockerBases = []
+  for (const f of [...tree].filter((f) => /(^|\/)(?:Dockerfile|[\w.-]+\.Dockerfile|Dockerfile\.[\w.-]+)$/.test(f) && !/(^|\/)(?:vendor|node_modules|third_party)\//.test(f)).slice(0, 10)) {
+    const text = await show(f)
+    const stages = new Set([...text.matchAll(/^\s*FROM\s+\S+\s+AS\s+(\S+)/gim)].map((m) => m[1].toLowerCase()))
+    for (const m of text.matchAll(/^\s*FROM\s+(?:--platform=\S+\s+)?(\S+)/gim)) {
+      const image = m[1].toLowerCase()
+      if (stages.has(image) || image.includes("$")) continue
+      dockerBases.push(image)
+    }
+  }
+
   const rec = {
+    schema: SCHEMA,
     repo: repo.name,
     url: repo.url,
     sha: repo.sha,
@@ -134,6 +182,9 @@ async function one(repo) {
     authorsTotal: allAuthors.size,
     topAuthorShare: total ? Number((top / total).toFixed(3)) : 0,
     practices,
+    actions,
+    actionUses: { total: usesTotal, sha: usesSha },
+    dockerBases: [...new Set(dockerBases)].slice(0, 20),
   }
   writeFileSync(outFile, JSON.stringify(rec))
   return rec
@@ -171,6 +222,21 @@ for (const name of Object.keys(PRACTICES)) {
     adoption[name][y] = Number((pool.filter((r) => usedIn(r.practices[name], y)).length / pool.length).toFixed(3))
   }
 }
+// AI agent instructions arrived in 2024–2026: yearly points are too coarse, so
+// also a monthly curve from 2023 of the share of all repos that had any such file.
+const aiMonthly = {}
+const months = []
+for (let y = 2023; y <= new Date().getFullYear(); y++) for (let m = 1; m <= 12; m++) months.push(`${y}-${String(m).padStart(2, "0")}`)
+const lastSeen = results.reduce((a, r) => Math.max(a, ...Object.values(r.practices ?? {}).map((p) => (p.added ? Date.parse(p.added) : 0))), 0)
+const cutoff = new Date(lastSeen).toISOString().slice(0, 7)
+for (const name of [...AI, "any"]) aiMonthly[name] = {}
+for (const mo of months.filter((m) => m <= cutoff)) {
+  const pool = results.filter((r) => r.firstCommit && r.firstCommit <= mo.slice(0, 4))
+  const on = (p) => p && p.added && p.added.slice(0, 7) <= mo && (!p.removed || p.present || p.removed.slice(0, 7) > mo)
+  for (const name of AI) aiMonthly[name][mo] = Number((pool.filter((r) => on(r.practices[name])).length / pool.length).toFixed(4))
+  aiMonthly.any[mo] = Number((pool.filter((r) => AI.some((n) => on(r.practices[n]))).length / pool.length).toFixed(4))
+}
+
 const activity = {}
 for (const y of yearsAll) {
   const pool = results.filter((r) => alive(r, y))
@@ -186,6 +252,6 @@ for (const y of yearsAll) {
 }
 writeFileSync(
   join(here, "history.json"),
-  JSON.stringify({ generatedAt: new Date().toISOString(), repos: results.length, adoption, activity }, null, 2) + "\n",
+  JSON.stringify({ generatedAt: new Date().toISOString(), repos: results.length, adoption, aiMonthly, activity }, null, 2) + "\n",
 )
 console.log(`history for ${results.length} repos → benchmark/history.json`)
