@@ -1,3 +1,4 @@
 {
- "insecure-ssrf-packages/api-client/src/http.ts:230": "fp"
+ "insecure-ssrf-packages/api-client/src/http.ts:230": "fp",
+ "license-network-ua-parser-js": "tp"
 }

@@ -6,5 +6,6 @@
  "insecure-ssrf-resources/assets/js/service-worker.ts:132": "fp",
  "insecure-ssrf-resources/assets/js/service-worker.ts:165": "fp",
  "insecure-ssrf-resources/assets/js/service-worker.ts:79": "fp",
- "insecure-ssrf-resources/assets/js/services/signedUrlService.ts:17": "fp"
+ "insecure-ssrf-resources/assets/js/services/signedUrlService.ts:17": "fp",
+ "license-weak-@koel-project/projectm-wasm": "fp"
 }

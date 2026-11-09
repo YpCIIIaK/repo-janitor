@@ -1,5 +1,7 @@
 {
  "config-conflict-ci-root": "fp",
  "eol-node-.devcontainer/Dockerfile-5": "tp",
- "insecure-innerhtml-dynamic-dev/html/src/vgpu.js:142": "fp"
+ "insecure-innerhtml-dynamic-dev/html/src/vgpu.js:142": "fp",
+ "license-proprietary-@gsap/react": "fp",
+ "license-unrecognised-gsap": "fp"
 }

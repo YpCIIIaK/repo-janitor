@@ -1,4 +1,5 @@
 {
  "env-missing-CONCURRENCY": "fp",
- "env-missing-DOCS_URL": "fp"
+ "env-missing-DOCS_URL": "fp",
+ "license-weak-@resvg/resvg-js": "fp"
 }

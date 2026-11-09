@@ -1,5 +1,6 @@
 {
  "ci-no-pr-trigger": "fp",
  "config-conflict-ci-root": "tp",
- "doclink-DEVELOPMENT.md:37:changesets": "tp"
+ "doclink-DEVELOPMENT.md:37:changesets": "tp",
+ "license-proprietary-@apollo/gateway": "fp"
 }

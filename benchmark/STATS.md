@@ -6,34 +6,34 @@
 
 | grade | repos | share |
 |---|---:|---:|
-| A | 758 | 25% |
-| B | 707 | 24% |
-| C | 927 | 31% |
-| D | 513 | 17% |
-| F | 95 | 3% |
+| A | 746 | 25% |
+| B | 661 | 22% |
+| C | 859 | 29% |
+| D | 559 | 19% |
+| F | 175 | 6% |
 
-Median score **74**.
+Median score **71**.
 
 ## By main language
 
 | language | repos | median score | findings / 1k lines |
 |---|---:|---:|---:|
-| Python | 404 | 73 | 2.0 |
-| TypeScript | 375 | 69 | 1.6 |
-| Go | 338 | 71 | 1.6 |
-| JavaScript | 323 | 79 | 2.0 |
-| Java | 204 | 80 | 2.9 |
-| Ruby | 194 | 84 | 2.3 |
-| other | 180 | 91 | 0.0 |
-| PHP | 173 | 79 | 1.6 |
-| Rust | 162 | 62 | 2.0 |
-| C# | 131 | 73 | 1.3 |
-| Swift | 107 | 83 | 1.8 |
-| Kotlin | 104 | 72 | 2.5 |
-| C++ | 102 | 62 | 1.8 |
-| Scala | 97 | 63 | 2.4 |
-| C | 90 | 64 | 1.1 |
-| Vue | 13 | 78 | 2.3 |
+| Python | 400 | 73 | 2.4 |
+| other | 380 | 65 | 0.0 |
+| JavaScript | 360 | 75 | 2.5 |
+| Go | 301 | 74 | 1.9 |
+| TypeScript | 280 | 74 | 2.9 |
+| Java | 194 | 82 | 3.1 |
+| Ruby | 188 | 84 | 2.5 |
+| PHP | 161 | 79 | 2.1 |
+| Rust | 140 | 62 | 2.2 |
+| C# | 114 | 76 | 1.8 |
+| Swift | 105 | 83 | 1.9 |
+| Kotlin | 99 | 72 | 2.7 |
+| Scala | 93 | 63 | 2.6 |
+| C++ | 90 | 62 | 1.9 |
+| C | 82 | 64 | 1.1 |
+| Vue | 11 | 82 | 2.5 |
 
 ## How common each problem is
 
@@ -69,7 +69,7 @@ Share of repos with at least one finding of the rule.
 
 ## CI supply chain
 
-- **79%** of 2373 repos with GitHub Actions pin at least one action to a mutable tag instead of a commit SHA.
+- **79%** of 2372 repos with GitHub Actions pin at least one action to a mutable tag instead of a commit SHA.
 - **62%** do it for a *third-party* action — the tj-actions/changed-files attack vector.
 - **66%** have a workflow that never restricts its token permissions.
 - Median unpinned actions per repo: **9**.
@@ -77,21 +77,21 @@ Share of repos with at least one finding of the rule.
 ## End-of-life runtimes
 
 - **43%** of 1039 Node.js projects still declare or test on an end-of-life Node version.
-- **50%** of 404 Python projects still support an end-of-life Python.
+- **49%** of 400 Python projects still support an end-of-life Python.
 - **1%** of all repos run CI on a retired runner image.
 
 ## Project hygiene
 
 | has | share |
 |---|---:|
-| readme | 99% |
+| readme | 89% |
 | license | 91% |
-| contributing | 48% |
-| security | 25% |
-| codeOfConduct | 23% |
-| changelog | 36% |
+| contributing | 41% |
+| security | 20% |
+| codeOfConduct | 19% |
+| changelog | 31% |
 | ci | 84% |
-| tests | 79% |
+| tests | 72% |
 
 ## How old the debt is
 
@@ -108,18 +108,18 @@ Oldest TODOs in the corpus:
 
 ## Does activity mean health?
 
-- Active repos (≥ 50 commits last year, 1395): median score **67**.
-- Quiet repos (< 10 commits, 1047): median score **84**.
-- Mean findings per repo: active 105, quiet 37.
+- Active repos (≥ 50 commits last year, 1098): median score **68**.
+- Quiet repos (< 10 commits, 1356): median score **72**.
+- Mean findings per repo: active 71, quiet 80.
 
 ## Size vs score
 
 | size | repos | median score |
 |---|---:|---:|
-| < 5k lines | 1013 | 90 |
-| 5k–50k | 1176 | 68 |
-| 50k–200k | 549 | 63 |
-| > 200k | 262 | 60 |
+| < 5k lines | 1325 | 84 |
+| 5k–50k | 1189 | 68 |
+| 50k–200k | 376 | 64 |
+| > 200k | 110 | 62 |
 
 ## Cleanest repos
 
@@ -140,9 +140,9 @@ Oldest TODOs in the corpus:
 - **0** a mid-size PHP project (110 findings)
 - **0** a mid-size C# project (74 findings)
 - **0** a mid-size Java project (100 findings)
-- **0** a large C project (121 findings)
+- **0** a small other project (121 findings)
 - **0** a small PHP project (103 findings)
-- **0** a very large Python project (322 findings)
+- **0** a small JavaScript project (322 findings)
 - **0** a small PHP project (32 findings)
 - **0** a small Python project (39 findings)
 - **0** a large TypeScript project (268 findings)
@@ -153,22 +153,22 @@ Median gap between repos with and without a practice. *Raw* compares everyone; *
 
 | practice | repos | score gap, raw | score gap, same size | findings/1k gap, same size |
 |---|---:|---:|---:|---:|
-| OpenSSF Scorecard | 65 | +4 | +6.4 | -0.90 |
-| ESLint flat config | 224 | -6 | +3.4 | -0.57 |
-| TypeScript | 356 | -3 | +2.4 | -0.15 |
-| .editorconfig | 782 | -6 | +0.3 | -0.57 |
-| Renovate | 188 | -5 | +0.0 | +0.13 |
-| Prettier | 244 | -6 | -0.1 | +0.03 |
-| SECURITY.md | 719 | -9 | -0.6 | -0.42 |
-| Dev container | 212 | -8 | -0.6 | -0.18 |
-| CodeQL | 298 | -9 | -0.7 | -0.23 |
-| Changesets | 58 | -9 | -1.4 | +0.46 |
-| CODEOWNERS | 425 | -9 | -1.6 | +0.02 |
-| PR template | 855 | -12 | -2.2 | -0.01 |
-| Dependabot | 907 | -10 | -2.4 | -0.16 |
-| CONTRIBUTING | 1321 | -13 | -2.6 | -0.23 |
-| Issue templates | 1281 | -16 | -3.6 | +0.18 |
-| pre-commit | 238 | -9 | -5.4 | -0.51 |
+| OpenSSF Scorecard | 65 | -2 | +6.2 | -1.07 |
+| Renovate | 188 | -6 | -7.6 | +0.18 |
+| Dependabot | 907 | -10 | -7.9 | -0.06 |
+| .editorconfig | 782 | -8 | -8.3 | -0.55 |
+| pre-commit | 238 | -7 | -9.4 | -0.62 |
+| TypeScript | 356 | -6 | -10.2 | +0.17 |
+| ESLint flat config | 224 | -6 | -10.9 | -0.53 |
+| SECURITY.md | 719 | -11 | -11.2 | -0.26 |
+| CONTRIBUTING | 1321 | -15 | -11.6 | -0.07 |
+| CodeQL | 298 | -9 | -11.7 | +0.20 |
+| CODEOWNERS | 425 | -9 | -11.8 | +0.98 |
+| Prettier | 244 | -7 | -12.0 | +0.48 |
+| PR template | 855 | -13 | -12.6 | +0.47 |
+| Dev container | 212 | -9 | -12.8 | -0.19 |
+| Issue templates | 1281 | -17 | -13.4 | +0.45 |
+| Changesets | 58 | -12 | -18.3 | +0.83 |
 
 Correlation, not causation: projects that add Dependabot are also the ones that care in other ways.
 

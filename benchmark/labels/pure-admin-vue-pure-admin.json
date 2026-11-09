@@ -1,3 +1,6 @@
 {
- "insecure-eval-dynamic-public/wasm/capture.worker.js:10414": "fp"
+ "insecure-eval-dynamic-public/wasm/capture.worker.js:10414": "fp",
+ "license-network-intro.js": "tp",
+ "license-proprietary-vue-waterfall-plugin-next": "tp",
+ "license-strong-typeit": "tp"
 }
