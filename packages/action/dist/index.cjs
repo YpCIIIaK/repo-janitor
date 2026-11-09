@@ -26863,7 +26863,7 @@ var require_lib4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-7XHBTARM.js
+// ../cli/dist/chunk-WDIEP3WL.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -45594,7 +45594,7 @@ function date4(params) {
 // ../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/external.js
 config(en_default());
 
-// ../cli/dist/chunk-7XHBTARM.js
+// ../cli/dist/chunk-WDIEP3WL.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -70324,7 +70324,7 @@ var RULE_PRECISION = {
   "insecure-ruby-marshal-load": { tp: 0, fp: 5 },
   "insecure-rust-tls-validation-disabled": { tp: 3, fp: 2 },
   "insecure-sql-interpolated": { tp: 3, fp: 26 },
-  "insecure-ssrf": { tp: 1, fp: 75 },
+  "insecure-ssrf": { tp: 1, fp: 72 },
   "insecure-swift-plaintext-credential-storage": { tp: 1, fp: 0 },
   "insecure-swift-webview-html": { tp: 1, fp: 0 },
   "insecure-tls-verification-off": { tp: 0, fp: 12 },
@@ -75878,6 +75878,7 @@ function sinkAllows(ruleId, line, col) {
     return ((_b = (_a22 = line.slice(0, col).match(/"/g)) == null ? void 0 : _a22.length) != null ? _b : 0) % 2 === 0;
   }
   if (ruleId === "sql-interpolated") return !/\bprepare\s*\(/.test(line);
+  if (ruleId === "ssrf" && /^[^(]*\(\s*(?:f["'](?:\{\s*(?:self\.|this\.)?[A-Z][A-Z0-9_]*\s*\}|https?:\/\/[\w.-]+)|(?:self\.|this\.)?[A-Z][A-Z0-9_]*\s*\+)/.test(line.slice(col))) return false;
   if (ruleId === "eval-dynamic" && line.slice(0, col).trimEnd().endsWith(".")) return false;
   if (ruleId === "py-shell-true" && /subprocess\.\w+\s*\(\s*(?:r|b)?(["'])[^"'{}%]*\1\s*,/.test(line)) return false;
   if (ruleId === "eval-dynamic" && /^\s*(?:async\s+|static\s+|public\s+|private\s+)*eval\s*\([^)]*\)\s*(?::\s*[\w<>[\]| ]+)?\s*\{/.test(line)) return false;
@@ -84406,6 +84407,7 @@ function sinkAllows2(ruleId, line, col) {
     return (line.slice(0, col).match(/"/g)?.length ?? 0) % 2 === 0;
   }
   if (ruleId === "sql-interpolated") return !/\bprepare\s*\(/.test(line);
+  if (ruleId === "ssrf" && /^[^(]*\(\s*(?:f["'](?:\{\s*(?:self\.|this\.)?[A-Z][A-Z0-9_]*\s*\}|https?:\/\/[\w.-]+)|(?:self\.|this\.)?[A-Z][A-Z0-9_]*\s*\+)/.test(line.slice(col))) return false;
   if (ruleId === "eval-dynamic" && line.slice(0, col).trimEnd().endsWith(".")) return false;
   if (ruleId === "py-shell-true" && /subprocess\.\w+\s*\(\s*(?:r|b)?(["'])[^"'{}%]*\1\s*,/.test(line)) return false;
   if (ruleId === "eval-dynamic" && /^\s*(?:async\s+|static\s+|public\s+|private\s+)*eval\s*\([^)]*\)\s*(?::\s*[\w<>[\]| ]+)?\s*\{/.test(line)) return false;
