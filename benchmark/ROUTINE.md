@@ -23,6 +23,20 @@ to report**, so a reviewer can check your work quickly.
 7. If you are unsure whether something is a true positive, label nothing and
    list it under "Unsure" in the report.
 
+## 0.5 Tracks — one track per cycle
+
+The corpus is read in tracks (`benchmark/tracks.mjs`): general, random,
+security, infra, mobile, webBackends. Each has an explicit population, a
+labels-per-rule target and its own precision (`score.mjs --track X`,
+shown on /state). Work one track per cycle:
+
+- add repos that fit the track's population (or list `"tracks": [...]` on a
+  corpus entry to add it by hand);
+- sample with `node benchmark/sample.mjs --spread 4 --track X`, which aims at
+  that track's target;
+- report the track's precision and rules-at-target before and after.
+Do not add repos to the random layer by hand: only `random-layer.mjs` draws it.
+
 ## 1. One cycle
 
 ### 1.1 Add repos (target 100–200)

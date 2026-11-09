@@ -19,6 +19,7 @@
 import { existsSync, readFileSync } from "node:fs"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
+import { TRACKS, inTrack } from "./tracks.mjs"
 
 const here = dirname(fileURLToPath(import.meta.url))
 const argv = process.argv.slice(2)
@@ -27,8 +28,10 @@ const per = perIdx >= 0 ? Number(argv[perIdx + 1]) : 3
 const spreadIdx = argv.indexOf("--spread")
 const spread = spreadIdx >= 0 ? Number(argv[spreadIdx + 1]) : 0
 const allRules = argv.includes("--all-rules")
+const trackIdx = argv.indexOf("--track")
+const track = trackIdx >= 0 ? argv[trackIdx + 1] : ""
 const only = argv.filter(
-  (a, i) => a !== "--per" && i !== perIdx + 1 && a !== "--spread" && i !== spreadIdx + 1 && a !== "--all-rules",
+  (a, i) => a !== "--per" && i !== perIdx + 1 && a !== "--spread" && i !== spreadIdx + 1 && a !== "--all-rules" && a !== "--track" && i !== trackIdx + 1,
 )
 
 /** Corpus-wide labelled counts per rule, as shipped in confidence-data.ts. */
@@ -50,7 +53,8 @@ export function labelNeed(c) {
   if (n < 10 || p < 0.8) return 2
   return 1
 }
-const corpus = JSON.parse(readFileSync(join(here, "corpus.json"), "utf8"))
+// --track X samples only that track, with its own labels-per-rule target.
+const corpus = inTrack(JSON.parse(readFileSync(join(here, "corpus.json"), "utf8")), track)
 
 // Stable pseudo-random order so the same sample comes back every run.
 const hash = (s) => [...s].reduce((h, c) => (Math.imul(h, 31) + c.charCodeAt(0)) >>> 0, 7)
@@ -110,9 +114,13 @@ if (spread > 0) {
   const need = (rule) => (allRules ? 1 : labelNeed(corpusLabels.get(rule)))
   const skipped = [...byRule.keys()].filter((r) => need(r) === 0).sort()
   if (skipped.length) console.log(`# skipped, already well measured: ${skipped.join(", ")}\n`)
-  const order = [...byRule].filter(([r]) => need(r) > 0).sort((a, b) => need(b[0]) - need(a[0]) || a[0].localeCompare(b[0]))
+  const order = [...byRule].filter(([r]) => track || need(r) > 0).sort((a, b) => need(b[0]) - need(a[0]) || a[0].localeCompare(b[0]))
   for (const [rule, m] of order) {
-    let budget = Math.max(0, spread * need(rule) - (labelledPerRule.get(rule) ?? 0))
+    // In a track, aim at the track's own target (labels per rule within the
+    // track); a cycle takes at most twice --spread towards it.
+    let budget = track
+      ? Math.min(spread * 2, Math.max(0, TRACKS[track].labelsPerRule - (labelledPerRule.get(rule) ?? 0)))
+      : Math.max(0, spread * need(rule) - (labelledPerRule.get(rule) ?? 0))
     const repos = [...m.keys()].sort((a, b) => hash(a) - hash(b))
     for (let round = 0; budget > 0; round++) {
       let took = false

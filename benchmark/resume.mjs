@@ -12,11 +12,14 @@ import { existsSync, readFileSync, writeFileSync } from "node:fs"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
 import { scanFingerprint, scannerFingerprints, staleScanners } from "./fingerprint.mjs"
+import { inTrack } from "./tracks.mjs"
 import { readInventory } from "./inventory.mjs"
 import { mayProduce } from "./scanner-inputs.mjs"
 
 const here = dirname(fileURLToPath(import.meta.url))
-const corpus = JSON.parse(readFileSync(join(here, "corpus.json"), "utf8"))
+// `resume.mjs --track X` limits the rescan to one track.
+const trackIdx = process.argv.indexOf("--track")
+const corpus = inTrack(JSON.parse(readFileSync(join(here, "corpus.json"), "utf8")), trackIdx >= 0 ? process.argv[trackIdx + 1] : "")
 const fingerprint = scanFingerprint()
 const fps = scannerFingerprints()
 const stampOnly = []

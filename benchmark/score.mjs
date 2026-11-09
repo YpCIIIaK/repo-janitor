@@ -13,10 +13,18 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
+import { inTrack } from "./tracks.mjs"
 
 const here = dirname(fileURLToPath(import.meta.url))
-const corpus = JSON.parse(readFileSync(join(here, "corpus.json"), "utf8"))
-const args = new Set(process.argv.slice(2))
+const argv = process.argv.slice(2)
+const trackIdx = argv.indexOf("--track")
+const track = trackIdx >= 0 ? argv[trackIdx + 1] : ""
+const args = new Set(argv)
+if (track && (args.has("--update") || args.has("--check"))) {
+  console.error("--track reports one track; --update and --check work on the whole corpus")
+  process.exit(1)
+}
+const corpus = inTrack(JSON.parse(readFileSync(join(here, "corpus.json"), "utf8")), track)
 const TOLERANCE = 0.02
 
 const by = { scanner: new Map(), rule: new Map(), confidence: new Map() }
@@ -85,7 +93,7 @@ const report = [
   table(by.confidence, "By scanner-stamped confidence"),
   "",
 ].join("\n")
-writeFileSync(join(here, "REPORT.md"), report)
+if (!track) writeFileSync(join(here, "REPORT.md"), report)
 console.log(report)
 
 const baselinePath = join(here, "baseline.json")

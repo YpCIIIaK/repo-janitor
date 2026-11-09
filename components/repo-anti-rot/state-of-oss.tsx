@@ -107,6 +107,20 @@ const T = {
       `It is not a random sample. It leans towards well-known projects (median ${c.medianStars?.toLocaleString("en-US") ?? "—"} stars; ${pct(c.under1kStars ?? 0)} under 1,000) and active ones (${pct(c.activeLastYear)} had a commit in the last year), and JavaScript, TypeScript and Python are the largest groups. Read the numbers as "popular open source", not "all code".`,
       `Precision is measured on ${c.labelled.toLocaleString("en-US")} findings checked by hand; only high and medium confidence findings are counted.`,
     ],
+    tracksT: "Tracks: where the numbers are measured",
+    tracksNote: "The corpus is scanned once and read in slices. Each track has its own population, its own labelling target and its own measured precision. A repository can sit in several tracks.",
+    trackCols: { track: "track", repos: "repos", median: "median score", precision: "precision", coverage: "rules labelled to target" },
+    trackNoLabels: "not measured yet",
+    trackName: { general: "General", random: "Random layer", security: "Security", infra: "Infrastructure", mobile: "Mobile", webBackends: "Web backends" } as Record<string, string>,
+    trackPlanned: "being assembled",
+    trackText: {
+      general: ["Every hand-picked repository.", "Coverage and the cuts on this page."],
+      random: ["Random active public repositories.", "Corpus-wide percentages without selection bias."],
+      security: ["Deliberately vulnerable apps and labs.", "Recall: known holes are still found."],
+      infra: ["≥ 3 Terraform files, a Helm chart or a kustomization.", "IaC and CI rules, per format."],
+      mobile: ["Main language Swift, Kotlin or Dart.", "Rules for languages with few labels so far."],
+      webBackends: ["Server-side language and a compose file.", "Injection, deserialisation, SSRF, dependencies."],
+    } as Record<string, [string, string]>,
     grades: "Grades",
     gradesNote: "Score adjusts for size: warnings weigh less in big codebases, critical findings never do.",
     supply: "Most GitHub Actions can be swapped under you",
@@ -240,6 +254,20 @@ const T = {
       `Это не случайная выборка. Она смещена к известным проектам (медиана ${c.medianStars?.toLocaleString("ru-RU") ?? "—"} звёзд; меньше 1000 звёзд у ${pct(c.under1kStars ?? 0)}) и к активным (у ${pct(c.activeLastYear)} был коммит за последний год), а крупнее всего группы JavaScript, TypeScript и Python. Читайте цифры как «популярный open source», а не «весь код».`,
       `Точность измерена на ${c.labelled.toLocaleString("ru-RU")} находках, проверенных вручную; учитываются только находки с высокой и средней уверенностью.`,
     ],
+    tracksT: "Направления: где измеряются цифры",
+    tracksNote: "Корпус сканируется один раз и читается срезами. У каждого направления своя совокупность, свой план разметки и своя измеренная точность. Один репозиторий может входить в несколько направлений.",
+    trackCols: { track: "направление", repos: "репо", median: "медиана", precision: "точность", coverage: "правил размечено по плану" },
+    trackNoLabels: "ещё не измерена",
+    trackName: { general: "Общее", random: "Случайный слой", security: "Безопасность", infra: "Инфраструктура", mobile: "Мобильные", webBackends: "Веб-бэкенды" } as Record<string, string>,
+    trackPlanned: "собирается",
+    trackText: {
+      general: ["Все отобранные вручную репозитории.", "Охват и разрезы на этой странице."],
+      random: ["Случайные активные публичные репозитории.", "Общие проценты без перекоса отбора."],
+      security: ["Учебные уязвимые приложения и лаборатории.", "Полнота: известные дыры находятся."],
+      infra: ["≥ 3 файлов Terraform, Helm-чарт или kustomization.", "IaC- и CI-правила по форматам."],
+      mobile: ["Основной язык Swift, Kotlin или Dart.", "Правила для языков, где меток пока мало."],
+      webBackends: ["Серверный язык и compose-файл.", "Инъекции, десериализация, SSRF, зависимости."],
+    } as Record<string, [string, string]>,
     grades: "Оценки",
     gradesNote: "Оценка учитывает размер: в больших проектах предупреждения весят меньше, критические находки — всегда полностью.",
     supply: "Большинство GitHub Actions можно подменить",
@@ -931,6 +959,42 @@ export function StateOfOpenSource() {
             ))}
             <p className="pt-1 text-xs text-muted-foreground">{t.messyNote}</p>
           </div>
+        </div>
+      </Section>
+
+      <Section title={t.tracksT} note={t.tracksNote}>
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[620px] text-sm">
+            <thead className="text-left text-xs text-muted-foreground">
+              <tr>
+                <th className="pb-2 font-medium">{t.trackCols.track}</th>
+                <th className="pb-2 pl-5 text-right font-medium">{t.trackCols.repos}</th>
+                <th className="pb-2 pl-5 text-right font-medium">{t.trackCols.median}</th>
+                <th className="pb-2 pl-5 text-right font-medium">{t.trackCols.precision}</th>
+                <th className="pb-2 pl-5 text-right font-medium">{t.trackCols.coverage}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {(stats.tracks as { id: string; label: string; repos: number; medianScore: number | null; labelled: number; precision: number | null; rulesFiring: number; rulesAtTarget: number; labelsPerRule: number }[]).map((tr) => (
+                <tr key={tr.id} className="border-t border-border align-top">
+                  <td className="py-2 pr-3">
+                    <div className="font-medium">{t.trackName[tr.id] ?? tr.label}</div>
+                    <div className="text-xs text-muted-foreground">{t.trackText[tr.id]?.[0]} {t.trackText[tr.id]?.[1]}</div>
+                  </td>
+                  {tr.repos === 0 ? (
+                    <td colSpan={4} className="py-2 text-right text-xs text-muted-foreground">{t.trackPlanned}</td>
+                  ) : (
+                    <>
+                      <td className="py-2 pl-5 text-right font-mono tabular-nums whitespace-nowrap">{tr.repos.toLocaleString(l)}</td>
+                      <td className="py-2 pl-5 text-right font-mono tabular-nums whitespace-nowrap">{tr.medianScore}</td>
+                      <td className="py-2 pl-5 text-right font-mono tabular-nums whitespace-nowrap">{tr.precision === null ? <span className="text-xs text-muted-foreground">{t.trackNoLabels}</span> : <span className={tr.precision >= 0.85 ? "text-success" : tr.precision < 0.7 ? "text-warning" : ""}>{pct(tr.precision)}<span className="text-xs text-muted-foreground"> · {tr.labelled}</span></span>}</td>
+                      <td className="py-2 pl-5 text-right font-mono tabular-nums whitespace-nowrap text-muted-foreground">{tr.rulesAtTarget}/{tr.rulesFiring} <span className="text-xs">(≥{tr.labelsPerRule})</span></td>
+                    </>
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </Section>
 

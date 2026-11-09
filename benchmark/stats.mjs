@@ -565,6 +565,47 @@ for (const r of repos) for (const i of r.issues) if (i.severity in json.severity
   }
 }
 
+// --- tracks: per-slice size, health, measured precision and label coverage --
+{
+  const { TRACKS, tracksOf } = await import("./tracks.mjs")
+  const member = new Map(corpus.map((r) => [r.name, tracksOf(r)]))
+  json.tracks = Object.entries(TRACKS).map(([id, t]) => {
+    const l = repos.filter((r) => member.get(r.name)?.includes(id))
+    let tp = 0
+    let fp = 0
+    const perRule = new Map()
+    for (const r of l) {
+      const lp = join(here, "labels", `${r.name}.json`)
+      const rp = join(here, ".results", `${r.name}.json`)
+      if (!existsSync(lp) || !existsSync(rp)) continue
+      const labels = JSON.parse(readFileSync(lp, "utf8"))
+      for (const f of JSON.parse(readFileSync(rp, "utf8")).findings) {
+        const v = labels[f.id]
+        if (v !== "tp" && v !== "fp") continue
+        perRule.set(f.rule, (perRule.get(f.rule) ?? 0) + 1)
+        if (f.confidence === "low") continue
+        if (v === "tp") tp++
+        else fp++
+      }
+    }
+    const firing = new Set(l.flatMap((r) => r.issues.map((i) => i.rule)))
+    const covered = [...firing].filter((rule) => (perRule.get(rule) ?? 0) >= t.labelsPerRule).length
+    return {
+      id,
+      label: t.label,
+      population: t.population,
+      purpose: t.purpose,
+      labelsPerRule: t.labelsPerRule,
+      repos: l.length,
+      medianScore: l.length ? median(l.map((r) => r.score)) : null,
+      labelled: tp + fp,
+      precision: tp + fp ? Number((tp / (tp + fp)).toFixed(3)) : null,
+      rulesFiring: firing.size,
+      rulesAtTarget: covered,
+    }
+  })
+}
+
 json.lowConfidenceHidden = hidden
 json.shown = repos.reduce((s, r) => s + r.issues.length, 0)
 json.precision = precisionByConfidence()
