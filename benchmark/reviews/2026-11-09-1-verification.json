@@ -102,7 +102,8 @@
     "branch": "bench-data-2026-11-09-1",
     "parent": "39c9e21e1eca3190d0a64da597b404ed4b3ac6c1",
     "chunks": 34,
-    "gitlogParts": 34
+    "gitlogParts": 34,
+    "commit": "9522aeb4177eeb4a977fc58c9af5fdbde66fdd34"
   },
   "validation": {
     "dashboardPassed": 932,
