@@ -78,6 +78,11 @@ const T = {
     scTokens: "workflow token permissions",
     scBad: "Scorecard 0–2: we flag",
     scGood: "Scorecard 8–10: we flag",
+    vdeps: "Known vulnerabilities in dependencies",
+    vdepsNote: (n: number, d: string) => `${n.toLocaleString("en-US")} repos checked against OSV (osv.dev) on ${d}, at their pinned commits. Versions come from lockfiles; without one, from the lowest version a manifest allows, which can overstate. Dev, test and docs dependencies count only in the first number.`,
+    vdepsL: { any: "have at least one known vulnerability", shipped: "in dependencies that ship (not dev, test or docs)", critical: "have a critical one" },
+    vdepsMedian: (m: number) => `An affected project typically carries ${m} of them.`,
+    vdepsTop: "Packages most often behind them, share of all repos",
     grades: "Grades",
     gradesNote: "Score adjusts for size: warnings weigh less in big codebases, critical findings never do.",
     supply: "Most GitHub Actions can be swapped under you",
@@ -182,6 +187,11 @@ const T = {
     scTokens: "права токена в workflow",
     scBad: "Scorecard 0–2: у нас находка",
     scGood: "Scorecard 8–10: у нас находка",
+    vdeps: "Известные уязвимости в зависимостях",
+    vdepsNote: (n: number, d: string) => `${n.toLocaleString("ru-RU")} репозиториев проверены по базе OSV (osv.dev) ${d}, на закреплённых коммитах. Версии берутся из lock-файлов, а без них — по нижней границе диапазона в манифесте, что может завышать. Зависимости для разработки, тестов и документации учитываются только в первой цифре.`,
+    vdepsL: { any: "имеют хотя бы одну известную уязвимость", shipped: "в зависимостях, которые попадают в продукт", critical: "имеют критичную" },
+    vdepsMedian: (m: number) => `У затронутого проекта их обычно ${m}.`,
+    vdepsTop: "Пакеты, которые чаще всего за этим стоят, доля всех репозиториев",
     grades: "Оценки",
     gradesNote: "Оценка учитывает размер: в больших проектах предупреждения весят меньше, критические находки — всегда полностью.",
     supply: "Большинство GitHub Actions можно подменить",
@@ -409,6 +419,28 @@ export function StateOfOpenSource() {
             <Bar key={k} label={t.expL[k]} value={stats.exposure[k]} max={Math.max(...Object.values(stats.exposure))} display={pct(stats.exposure[k])} tone="destructive" />
           ))}
       </Section>
+
+      {stats.vulnerableDeps && (
+        <Section title={t.vdeps} note={t.vdepsNote(stats.vulnerableDeps.repos, stats.vulnerableDeps.checkedAt ?? "")}>
+          <div className="grid gap-4 sm:grid-cols-3">
+            {([
+              [stats.vulnerableDeps.any, t.vdepsL.any, "text-warning"],
+              [stats.vulnerableDeps.shipped, t.vdepsL.shipped, "text-warning"],
+              [stats.vulnerableDeps.critical, t.vdepsL.critical, "text-destructive"],
+            ] as const).map(([v, label, tone]) => (
+              <div key={label} className="space-y-1">
+                <span className={cn("font-mono text-3xl font-semibold tabular-nums", tone)}>{pct(v)}</span>
+                <p className="text-sm text-muted-foreground">{label}</p>
+              </div>
+            ))}
+          </div>
+          <p className="text-sm text-muted-foreground">{t.vdepsMedian(stats.vulnerableDeps.medianAffected)}</p>
+          <p className="pt-2 text-xs text-muted-foreground">{t.vdepsTop}</p>
+          {stats.vulnerableDeps.topPackages.map((x) => (
+            <Bar key={x.name} label={x.name} value={x.share} max={stats.vulnerableDeps.topPackages[0].share} display={pct(x.share)} tone="destructive" />
+          ))}
+        </Section>
+      )}
 
       <Section title={t.sev} note={t.sevNote}>
         {(() => {
