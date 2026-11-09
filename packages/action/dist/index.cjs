@@ -26863,7 +26863,7 @@ var require_lib4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-BDUU6RFY.js
+// ../cli/dist/chunk-Q7UZKXYM.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -45594,7 +45594,7 @@ function date4(params) {
 // ../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/external.js
 config(en_default());
 
-// ../cli/dist/chunk-BDUU6RFY.js
+// ../cli/dist/chunk-Q7UZKXYM.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -70260,24 +70260,24 @@ var RULE_PRECISION = {
   "bus-factor": { tp: 28, fp: 5 },
   "ci-disabled": { tp: 10, fp: 1 },
   "ci-no-pr-trigger": { tp: 5, fp: 4 },
-  "ci-silenced-failure": { tp: 4, fp: 6 },
+  "ci-silenced-failure": { tp: 4, fp: 7 },
   "ci-swallowed": { tp: 3, fp: 2 },
   "ci-tests-not-run": { tp: 0, fp: 10 },
-  "commented-code": { tp: 58, fp: 26 },
+  "commented-code": { tp: 69, fp: 32 },
   "config-conflict": { tp: 19, fp: 1 },
   "dead-export": { tp: 17, fp: 3 },
   "dead-uikit": { tp: 3, fp: 2 },
-  "debug-leftover": { tp: 3, fp: 9 },
+  "debug-leftover": { tp: 4, fp: 11 },
   "dep-unused": { tp: 1, fp: 12 },
-  "doc-link": { tp: 24, fp: 15 },
+  "doc-link": { tp: 31, fp: 16 },
   "docker-add-url": { tp: 5, fp: 1 },
   "docker-latest": { tp: 9, fp: 6 },
   "docker-root": { tp: 4, fp: 13 },
   "docker-untagged": { tp: 4, fp: 7 },
   "docs-badge": { tp: 11, fp: 2 },
   "docs-manager": { tp: 1, fp: 5 },
-  "docs-script": { tp: 4, fp: 3 },
-  "duplicate": { tp: 37, fp: 11 },
+  "docs-script": { tp: 5, fp: 3 },
+  "duplicate": { tp: 39, fp: 11 },
   "env-dead": { tp: 2, fp: 8 },
   "env-missing": { tp: 1, fp: 6 },
   "env-no-example": { tp: 1, fp: 11 },
@@ -70288,10 +70288,10 @@ var RULE_PRECISION = {
   "hygiene-no-license": { tp: 9, fp: 3 },
   "hygiene-no-readme": { tp: 2, fp: 0 },
   "hygiene-no-tests": { tp: 6, fp: 5 },
-  "iac-dangerous-capability": { tp: 1, fp: 4 },
+  "iac-dangerous-capability": { tp: 1, fp: 5 },
   "iac-docker-socket": { tp: 9, fp: 3 },
   "iac-hardcoded-password": { tp: 2, fp: 0 },
-  "iac-host-namespace": { tp: 5, fp: 38 },
+  "iac-host-namespace": { tp: 5, fp: 39 },
   "iac-iam-wildcard": { tp: 3, fp: 0 },
   "iac-open-admin-port": { tp: 29, fp: 6 },
   "iac-privilege-escalation": { tp: 1, fp: 4 },
@@ -70304,42 +70304,47 @@ var RULE_PRECISION = {
   "insecure-document-write-dynamic": { tp: 0, fp: 3 },
   "insecure-dotnet-deserialization": { tp: 0, fp: 2 },
   "insecure-eval-dynamic": { tp: 1, fp: 7 },
-  "insecure-exec-interpolated": { tp: 3, fp: 21 },
+  "insecure-exec-interpolated": { tp: 3, fp: 23 },
   "insecure-go-template-html": { tp: 0, fp: 10 },
   "insecure-innerhtml-dynamic": { tp: 0, fp: 13 },
   "insecure-java-deserialization": { tp: 2, fp: 3 },
-  "insecure-localstorage-secret": { tp: 1, fp: 8 },
+  "insecure-localstorage-secret": { tp: 2, fp: 9 },
   "insecure-new-function": { tp: 3, fp: 15 },
   "insecure-php-path-traversal": { tp: 4, fp: 0 },
   "insecure-php-reflected-xss": { tp: 4, fp: 1 },
   "insecure-php-unserialize": { tp: 1, fp: 7 },
   "insecure-php-xxe": { tp: 1, fp: 0 },
-  "insecure-py-eval-exec": { tp: 0, fp: 18 },
+  "insecure-py-eval-exec": { tp: 0, fp: 19 },
   "insecure-py-os-system": { tp: 0, fp: 9 },
   "insecure-py-pickle-load": { tp: 2, fp: 19 },
   "insecure-py-shell-true": { tp: 1, fp: 8 },
   "insecure-py-verify-false": { tp: 1, fp: 1 },
   "insecure-py-yaml-load": { tp: 0, fp: 2 },
-  "insecure-random-for-secret": { tp: 1, fp: 6 },
-  "insecure-react-dangerous-html": { tp: 2, fp: 15 },
+  "insecure-random-for-secret": { tp: 1, fp: 7 },
+  "insecure-react-dangerous-html": { tp: 2, fp: 16 },
   "insecure-ruby-dynamic-dispatch": { tp: 0, fp: 3 },
   "insecure-ruby-marshal-load": { tp: 0, fp: 5 },
   "insecure-rust-tls-validation-disabled": { tp: 3, fp: 2 },
   "insecure-sql-interpolated": { tp: 3, fp: 26 },
-  "insecure-ssrf": { tp: 1, fp: 72 },
+  "insecure-ssrf": { tp: 1, fp: 74 },
   "insecure-swift-plaintext-credential-storage": { tp: 1, fp: 0 },
   "insecure-swift-webview-html": { tp: 1, fp: 0 },
   "insecure-tls-verification-off": { tp: 0, fp: 12 },
   "insecure-weak-hash": { tp: 2, fp: 8 },
+  "license-network": { tp: 2, fp: 4 },
+  "license-proprietary": { tp: 1, fp: 2 },
   "license-risk": { tp: 0, fp: 1 },
+  "license-strong": { tp: 2, fp: 2 },
+  "license-unrecognised": { tp: 0, fp: 6 },
+  "license-weak": { tp: 0, fp: 14 },
   "lockfile-drift": { tp: 1, fp: 0 },
   "lockfile-missing": { tp: 18, fp: 2 },
   "secret-generic": { tp: 1, fp: 8 },
   "secret-history": { tp: 1, fp: 15 },
-  "secret-provider": { tp: 0, fp: 10 },
-  "skipped-test": { tp: 21, fp: 3 },
+  "secret-provider": { tp: 0, fp: 14 },
+  "skipped-test": { tp: 21, fp: 4 },
   "supply-remote-shell": { tp: 1, fp: 0 },
-  "todo": { tp: 76, fp: 9 },
+  "todo": { tp: 92, fp: 9 },
   "workflow-action-tag": { tp: 123, fp: 1 },
   "workflow-action-tag-first-party": { tp: 119, fp: 1 },
   "workflow-no-permissions": { tp: 86, fp: 0 },
@@ -77930,8 +77935,9 @@ var MANY_COPIES = 4;
 var LARGE_BLOCK = 30;
 var CODE_EXT = /\.(?:[cm]?[jt]sx?|py|go|rs|rb|php|java|kt|kts|swift|scala|cs|c|cc|cpp|h|hpp|m|mm|dart|ex|exs|vue|svelte)$/i;
 var SKIP_PATH = /(^|\/)(?:node_modules|vendor|third_party|thirdparty|dist|build|out|target|generated|__generated__|\.next|\.nuxt|coverage|migrations|__snapshots__|__fixtures__|fixtures?|testdata|examples?(?:[-_][\w.-]+)?|[^/]+\.docset|templates?(?:[-_.][\w.-]*)?|scaffolds?|starters?|playgrounds?|bench(?:mark)?s?|locales?|i18n|translations?)\//i;
-var GENERATED_FILE = /(?:\.min\.[jt]s|\.bundle\.js|\.g\.dart|_pb2?\.py|\.pb\.go|\.generated\.[a-z]+|\.d\.ts)$/i;
+var GENERATED_FILE = /(?:\.min\.[jt]s|\.bundle\.js|\.(?:g|freezed)\.dart|_pb2?\.py|\.pb\.go|\.generated\.[a-z]+|\.d\.ts)$/i;
 var TEST_FILE = /(^|\/)(?:tests?|spec|__tests__|e2e|[^/]+\.Tests?)\/|(^|\/)src\/androidTest\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(^|\/)test_[^/]+\.py$|[^/]+_test\.(?:py|go|rb)$|[^/]+Test\.(?:java|kt|cs)$|_spec\.rb$/i;
+var SWIFT_TEST_FILE = /(?:^|\/)[^/]+Tests(?:\/.*)?\.swift$/i;
 var NOISE = /^(?:[{}()[\];,]+|else\s*\{?|\}?\s*else\s*(?:if.*)?\{?|return;?|break;?|continue;?|pass|end|fi|done|<\/?\w+\s*\/?>)$/;
 var IMPORTISH = /^(?:\}\s*from\s|import\b|from\s+\S+\s+import\b|#include\b|using\s+\w|require\s*\(|use\s+\w|package\b|export\s+\*|export\s+\{)/;
 var COMMENT = /^(?:\/\/|#|\*|\/\*|--|;;)/;
@@ -78081,7 +78087,7 @@ function findDuplicates(files) {
 }
 function isComparable(file2) {
   const norm = file2.replace(/\\/g, "/");
-  return CODE_EXT.test(norm) && !SKIP_PATH.test(norm) && !GENERATED_FILE.test(norm) && !TEST_FILE.test(norm);
+  return CODE_EXT.test(norm) && !SKIP_PATH.test(norm) && !GENERATED_FILE.test(norm) && !TEST_FILE.test(norm) && !SWIFT_TEST_FILE.test(norm);
 }
 var duplicateCodeScanner = {
   id: "duplicate-code",
@@ -86495,8 +86501,9 @@ var MANY_COPIES2 = 4;
 var LARGE_BLOCK2 = 30;
 var CODE_EXT2 = /\.(?:[cm]?[jt]sx?|py|go|rs|rb|php|java|kt|kts|swift|scala|cs|c|cc|cpp|h|hpp|m|mm|dart|ex|exs|vue|svelte)$/i;
 var SKIP_PATH2 = /(^|\/)(?:node_modules|vendor|third_party|thirdparty|dist|build|out|target|generated|__generated__|\.next|\.nuxt|coverage|migrations|__snapshots__|__fixtures__|fixtures?|testdata|examples?(?:[-_][\w.-]+)?|[^/]+\.docset|templates?(?:[-_.][\w.-]*)?|scaffolds?|starters?|playgrounds?|bench(?:mark)?s?|locales?|i18n|translations?)\//i;
-var GENERATED_FILE2 = /(?:\.min\.[jt]s|\.bundle\.js|\.g\.dart|_pb2?\.py|\.pb\.go|\.generated\.[a-z]+|\.d\.ts)$/i;
+var GENERATED_FILE2 = /(?:\.min\.[jt]s|\.bundle\.js|\.(?:g|freezed)\.dart|_pb2?\.py|\.pb\.go|\.generated\.[a-z]+|\.d\.ts)$/i;
 var TEST_FILE2 = /(^|\/)(?:tests?|spec|__tests__|e2e|[^/]+\.Tests?)\/|(^|\/)src\/androidTest\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(^|\/)test_[^/]+\.py$|[^/]+_test\.(?:py|go|rb)$|[^/]+Test\.(?:java|kt|cs)$|_spec\.rb$/i;
+var SWIFT_TEST_FILE2 = /(?:^|\/)[^/]+Tests(?:\/.*)?\.swift$/i;
 var NOISE2 = /^(?:[{}()[\];,]+|else\s*\{?|\}?\s*else\s*(?:if.*)?\{?|return;?|break;?|continue;?|pass|end|fi|done|<\/?\w+\s*\/?>)$/;
 var IMPORTISH2 = /^(?:\}\s*from\s|import\b|from\s+\S+\s+import\b|#include\b|using\s+\w|require\s*\(|use\s+\w|package\b|export\s+\*|export\s+\{)/;
 var COMMENT2 = /^(?:\/\/|#|\*|\/\*|--|;;)/;
@@ -86642,7 +86649,7 @@ function findDuplicates2(files) {
 }
 function isComparable2(file2) {
   const norm = file2.replace(/\\/g, "/");
-  return CODE_EXT2.test(norm) && !SKIP_PATH2.test(norm) && !GENERATED_FILE2.test(norm) && !TEST_FILE2.test(norm);
+  return CODE_EXT2.test(norm) && !SKIP_PATH2.test(norm) && !GENERATED_FILE2.test(norm) && !TEST_FILE2.test(norm) && !SWIFT_TEST_FILE2.test(norm);
 }
 var duplicateCodeScanner2 = {
   id: "duplicate-code",
