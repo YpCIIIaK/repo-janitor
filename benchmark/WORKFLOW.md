@@ -45,7 +45,7 @@ archive.mjs ─ pack/push/pull ────────▶ orphan branch `bench-
 |---|---|
 | `pnpm run build:cli` | Rebuild the CLI the benchmark runs. **Do this after every scanner change**, and never while a run is in progress (a mid-run rebuild mixes versions). |
 | `BENCH_DROP_CLONES=1 node benchmark/run.mjs <repo…>` | Clone, scan offline, record history, delete the clone. No names = whole corpus. One job per CPU core by default (`BENCH_JOBS` overrides); heaviest repos first. Refuses to run if the CLI is older than its sources. |
-| `node benchmark/resume.mjs` | Scan every repo whose result is missing or was produced by different scanner code (fingerprint of `packages/core/src` + `packages/cli/src`, see `fingerprint.mjs`). Safe to rerun after interruptions. A confidence-data change does NOT make results stale. |
+| `node benchmark/resume.mjs` | Rescan what changed. Every result records a base fingerprint (CLI + engine + rules + schema) and one per scanner (its module and runtime imports). Base changed → full scan; one scanner changed → only that scanner reruns (`--only`) and its findings are merged with the cached ones, score recomputed; new scanner → only it runs; confidence data → nothing (use `rescore.mjs`). Prints the plan, e.g. `partial: insecure-code ×3000`. `BENCH_FULL=1` forces full scans. |
 | `pnpm --filter ./packages/core build && node benchmark/rescore.mjs` | After `score.mjs --update`: reapply confidence to stored findings and recompute every score. No scan. |
 | `node benchmark/score.mjs` | Precision by scanner, rule and confidence. `--update` rewrites baseline + confidence-data.ts; `--check` fails on regressions. |
 | `node benchmark/sample.mjs --spread N <repo…>` | Up to N unlabelled findings per rule from those repos, for labelling. |

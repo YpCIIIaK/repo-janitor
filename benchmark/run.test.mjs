@@ -23,6 +23,9 @@ for (const mode of ["success", "exit-failure", "scanner-failure"]) {
       writeFileSync(join(bench, "corpus.json"), JSON.stringify([{ name: "fixture", url: repo, sha }]))
       copyFileSync(new URL("./run.mjs", import.meta.url), join(bench, "run.mjs"))
       copyFileSync(new URL("./fingerprint.mjs", import.meta.url), join(bench, "fingerprint.mjs"))
+      // A core build exporting what run.mjs uses to merge partial scans.
+      mkdirSync(join(root, "packages/core/dist"), { recursive: true })
+      writeFileSync(join(root, "packages/core/dist/index.js"), "export const computeScore = () => 100\nexport const scoreToGrade = () => 'A'\n")
       // Scanner sources the fingerprint hashes, older than the CLI build below.
       for (const d of ["packages/core/src", "packages/cli/src"]) {
         mkdirSync(join(root, d), { recursive: true })
