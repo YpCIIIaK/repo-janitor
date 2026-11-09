@@ -15,7 +15,7 @@ import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
 import { newestSource, scanFingerprint, scannerFingerprints, staleScanners } from "./fingerprint.mjs"
 import { readInventory, writeInventory } from "./inventory.mjs"
-import { mayProduce } from "./scanner-inputs.mjs"
+import { mayProduce, sparseGlobs } from "./scanner-inputs.mjs"
 
 const here = dirname(fileURLToPath(import.meta.url))
 const root = join(here, "..")
@@ -88,6 +88,32 @@ async function runOne(repo) {
     console.log(`${repo.name.padEnd(28)} current`)
     return
   }
+  // A targeted rerun of scanners that read only named files and need no history
+  // (beyond a line's age, kept from the previous result) fetches just those
+  // files: a depth-1, blob-less clone with a sparse checkout. A full scan, or
+  // any scanner with broad inputs, takes the normal full clone.
+  const globs = only && only.length && process.env.BENCH_SPARSE !== "0" ? sparseGlobs(only) : null
+  if (globs) {
+    const sdir = join(cacheDir, `${repo.name}.sparse`)
+    rmSync(sdir, { recursive: true, force: true })
+    try {
+      await sh2("git", ["init", "--quiet", sdir])
+      await sh2("git", ["-C", sdir, "remote", "add", "origin", repo.url])
+      await sh2("git", ["-C", sdir, "sparse-checkout", "set", "--no-cone", ...globs])
+      let f
+      for (let attempt = 0; attempt < 4; attempt++) {
+        f = await sh2("git", ["-C", sdir, "fetch", "--quiet", "--depth=1", "--filter=blob:none", "origin", repo.sha])
+        if (f.status === 0) break
+        await new Promise((r) => setTimeout(r, 15000 * 2 ** attempt))
+      }
+      if (f.status !== 0) throw new Error(`sparse fetch failed: ${repo.name}\n${f.stderr}`)
+      const co = await sh2("git", ["-C", sdir, "-c", "core.longpaths=true", "checkout", "--quiet", "FETCH_HEAD"])
+      if (co.status !== 0) throw new Error(`sparse checkout failed: ${repo.name}\n${co.stderr}`)
+      return await scanAndStore(repo, sdir, only, prevResult, prevReport, inv, true)
+    } finally {
+      rmSync(sdir, { recursive: true, force: true })
+    }
+  }
   const dir = join(cacheDir, repo.name)
   if (!existsSync(dir)) {
     // Network hiccups (a proxy restart, a dropped TLS stream) are common over a
@@ -113,7 +139,12 @@ async function runOne(repo) {
     co = await sh2("git", ["-C", dir, "-c", "core.longpaths=true", "checkout", "--quiet", "--force", repo.sha])
     if (co.status !== 0) throw new Error(`checkout failed: ${repo.name}\n${co.stderr}`)
   }
-  if (!inv) {
+  return await scanAndStore(repo, dir, only, prevResult, prevReport, inv, false)
+}
+
+/** Scan a checked-out tree, merge a partial scan with the cached result, store. */
+async function scanAndStore(repo, dir, only, prevResult, prevReport, inv, sparse) {
+  if (!inv && !sparse) {
     const ls = await sh2("git", ["-C", dir, "ls-tree", "-r", "--name-only", repo.sha])
     if (ls.status === 0) writeInventory(repo.name, ls.stdout.split("\n"), repo.sha)
   }
@@ -133,7 +164,11 @@ async function runOne(repo) {
     // fresh ones from those that did, and score the union as the engine would.
     const rerun = new Set(only)
     const kept = [...(prevReport.issues ?? []), ...(prevReport.lowConfidence ?? [])].filter((i) => !rerun.has(i.scanner))
-    const all = [...kept, ...(report.issues ?? []), ...(report.lowConfidence ?? [])]
+    // A shallow checkout cannot blame a line's real age; keep the age a finding
+    // had last time (ages are display only, they never change what is found).
+    const prevAge = new Map([...(prevReport.issues ?? []), ...(prevReport.lowConfidence ?? [])].map((i) => [i.id, i.ageDays]))
+    const fresh = [...(report.issues ?? []), ...(report.lowConfidence ?? [])].map((i) => (sparse && prevAge.has(i.id) ? { ...i, ageDays: prevAge.get(i.id) } : i))
+    const all = [...kept, ...fresh]
     const confident = all.filter((i) => i.confidence !== "low")
     const low = all.filter((i) => i.confidence === "low")
     const score = computeScore(confident, report.config?.weights)
@@ -176,15 +211,18 @@ async function runOne(repo) {
   // .git with `checkout --force`. Keeping 500 working trees fills the disk.
   // BENCH_DROP_CLONES=1 removes the whole clone (the next run clones again by SHA),
   // so a corpus far larger than the disk can still be scanned one repo at a time.
-  if (process.env.BENCH_DROP_CLONES === "1") {
+  if (sparse) {
+    // The sparse clone is removed by the caller; it must not feed history.
+  } else if (process.env.BENCH_DROP_CLONES === "1") {
     await sh2("node", [join(here, "history.mjs"), repo.name])
     rmSync(dir, { recursive: true, force: true })
   }
   else if (process.env.BENCH_KEEP_TREES !== "1") {
     for (const entry of readdirSync(dir)) if (entry !== ".git") rmSync(join(dir, entry), { recursive: true, force: true })
   }
-  console.log(`${repo.name.padEnd(28)} ${String(findings.length).padStart(5)} findings  ${((Date.now() - started) / 1000).toFixed(0)}s`)
+  console.log(`${repo.name.padEnd(28)} ${String(findings.length).padStart(5)} findings  ${((Date.now() - started) / 1000).toFixed(0)}s${sparse ? " (sparse)" : ""}`)
 }
+
 
 // Heaviest repos first, by last scan time (or size when never timed): one
 // 20-minute repo started last would otherwise hold the whole run open.
