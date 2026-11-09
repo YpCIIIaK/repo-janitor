@@ -2125,11 +2125,65 @@
    "stars": 78,
    "created": "2024-10-27",
    "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/CodePlato3721/shiro-redis",
+   "stars": 1166,
+   "created": "2013-06-07",
+   "language": "Java"
+  },
+  {
+   "url": "https://github.com/hsol/jaso",
+   "stars": 65,
+   "created": "2024-04-21",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/ivpn/moddns",
+   "stars": 43,
+   "created": "2025-12-10",
+   "language": "Go"
+  },
+  {
+   "url": "https://github.com/EdwinVW/dapr-traffic-control",
+   "stars": 338,
+   "created": "2020-09-07",
+   "language": "JavaScript"
+  },
+  {
+   "url": "https://github.com/yangweijie/perry-php",
+   "stars": 13,
+   "created": "2026-05-05",
+   "language": "PHP"
+  },
+  {
+   "url": "https://github.com/NirDiamant/Blind_SR_Michaeli_Irani",
+   "stars": 16,
+   "created": "2019-12-27",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/BoostLabsAU/BST-LB-SPEC",
+   "stars": 32,
+   "created": "2026-02-21",
+   "language": null
+  },
+  {
+   "url": "https://github.com/summernote/awesome-summernote",
+   "stars": 409,
+   "created": "2015-09-25",
+   "language": null
+  },
+  {
+   "url": "https://github.com/dennisivy/Voice-Chat-Rooms",
+   "stars": 51,
+   "created": "2023-01-21",
+   "language": "JavaScript"
   }
  ],
- "tries": 756,
+ "tries": 770,
  "population": "public, not a fork, not archived, stars >= 10, pushed since 2025-11-09, created 2010-01-01..2026-10-10",
- "rngCalls": 1872,
+ "rngCalls": 1909,
  "windows": 1686,
  "overCap": 15
 }
