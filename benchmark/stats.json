@@ -1,6 +1,6 @@
 {
   "repos": 3000,
-  "generatedAt": "2026-11-09T08:14:46.672Z",
+  "generatedAt": "2026-11-09T08:23:11.546Z",
   "grades": {
     "A": 758,
     "B": 707,
@@ -923,6 +923,117 @@
       "withCi": 0.74
     }
   ],
+  "popularity": {
+    "repos": 2735,
+    "bands": [
+      {
+        "label": "under 100",
+        "repos": 20,
+        "medianScore": 82,
+        "gradeA": 0.2,
+        "density": 3.4
+      },
+      {
+        "label": "100–1k",
+        "repos": 348,
+        "medianScore": 77,
+        "gradeA": 0.313,
+        "density": 2.77
+      },
+      {
+        "label": "1k–10k",
+        "repos": 1443,
+        "medianScore": 78,
+        "gradeA": 0.281,
+        "density": 2.22
+      },
+      {
+        "label": "10k–50k",
+        "repos": 821,
+        "medianScore": 66,
+        "gradeA": 0.147,
+        "density": 1.36
+      },
+      {
+        "label": "50k+",
+        "repos": 103,
+        "medianScore": 63,
+        "gradeA": 0.136,
+        "density": 0.97
+      }
+    ]
+  },
+  "licenses": [
+    {
+      "license": "MIT",
+      "share": 0.442
+    },
+    {
+      "license": "Apache-2.0",
+      "share": 0.241
+    },
+    {
+      "license": "other or none",
+      "share": 0.192
+    },
+    {
+      "license": "GPL-3.0",
+      "share": 0.045
+    },
+    {
+      "license": "BSD-3-Clause",
+      "share": 0.038
+    },
+    {
+      "license": "AGPL-3.0",
+      "share": 0.024
+    },
+    {
+      "license": "GPL-2.0",
+      "share": 0.011
+    },
+    {
+      "license": "others",
+      "share": 0.007
+    }
+  ],
+  "scorecard": {
+    "repos": 1943,
+    "medianScorecard": 4.6,
+    "spearman": -0.18,
+    "bands": [
+      {
+        "label": "0–4",
+        "repos": 686,
+        "medianOurScore": 81
+      },
+      {
+        "label": "4–6",
+        "repos": 821,
+        "medianOurScore": 68
+      },
+      {
+        "label": "6–8",
+        "repos": 380,
+        "medianOurScore": 66
+      },
+      {
+        "label": "8–10",
+        "repos": 56,
+        "medianOurScore": 71
+      }
+    ],
+    "pinned": {
+      "repos": 1618,
+      "flaggedWhenScorecardGood": 0.152,
+      "flaggedWhenScorecardBad": 0.918
+    },
+    "tokens": {
+      "repos": 1559,
+      "flaggedWhenScorecardGood": 0.012,
+      "flaggedWhenScorecardBad": 0.858
+    }
+  },
   "lowConfidenceHidden": 28824,
   "shown": 204904,
   "precision": {
