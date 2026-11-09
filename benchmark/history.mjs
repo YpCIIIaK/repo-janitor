@@ -14,6 +14,7 @@
 import { spawn } from "node:child_process"
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs"
 import { gunzipSync, gzipSync } from "node:zlib"
+import { createHash } from "node:crypto"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
 
@@ -102,8 +103,28 @@ const VENDORED = /(^|\/)(?:vendor|node_modules|third_party)\//
  * Dockerfiles. Stored gzipped in .gitlog/, so a new practice marker or a new
  * statistic is recomputed for 3,000 repos without cloning any of them.
  */
+/**
+ * Author emails are personal data and only ever counted, never read, so they
+ * are replaced by a hash before anything is stored: keyed by the repo's pinned
+ * SHA, so the same person maps to the same token within one repo (distinct
+ * counts stay exact) but a stored log cannot be turned back into an address
+ * list in bulk.
+ */
+export function pseudonymiseLog(log, sha) {
+  return log
+    .split("\n")
+    .map((line) => {
+      const tab = line.indexOf("\t")
+      if (tab < 0) return line
+      const email = line.slice(tab + 1)
+      if (/^[0-9a-f]{16}$/.test(email)) return line // already a token
+      return `${line.slice(0, tab)}\t${createHash("sha256").update(`${sha}\0${email.toLowerCase()}`).digest("hex").slice(0, 16)}`
+    })
+    .join("\n")
+}
+
 export async function collectGitData(dir, sha) {
-  const log = await git(dir, ["log", sha, "--format=%ad\t%aE", "--date=format:%Y", "--no-merges"])
+  const log = pseudonymiseLog(await git(dir, ["log", sha, "--format=%ad\t%aE", "--date=format:%Y", "--no-merges"]), sha)
   const changes = await git(dir, ["log", sha, "--reverse", "--format=@%ad", "--date=short", "--name-status", "--diff-filter=AD", "--no-renames"])
   const tree = (await git(dir, ["ls-tree", "-r", "--name-only", sha])).split("\n").filter(Boolean)
   const files = {}
