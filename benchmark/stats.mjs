@@ -434,6 +434,34 @@ for (const r of repos) for (const i of r.issues) if (i.severity in json.severity
   }
 }
 
+// --- known vulnerabilities in dependencies (online OSV check, osv.mjs) --------
+{
+  const osv = repos
+    .map((r) => {
+      const p = join(here, ".results", `${r.name}.osv.json`)
+      return existsSync(p) ? { r, f: JSON.parse(readFileSync(p, "utf8")).findings } : null
+    })
+    .filter(Boolean)
+  if (osv.length) {
+    const shareOf = (pred) => Number((osv.filter(pred).length / osv.length).toFixed(3))
+    // A finding's severity already accounts for dev/test/docs paths (lowered to info).
+    const shipped = (x) => x.f.filter((i) => i.severity !== "info")
+    const pkgOf = (title) => /^(.+?)@[^@\s]+ has a known vulnerabilit/.exec(title ?? "")?.[1] ?? null
+    const counts = new Map()
+    for (const x of osv) for (const p of new Set(shipped(x).map((i) => pkgOf(i.title)).filter(Boolean))) counts.set(p, (counts.get(p) ?? 0) + 1)
+    const affected = osv.filter((x) => shipped(x).length > 0)
+    json.vulnerableDeps = {
+      repos: osv.length,
+      checkedAt: osv.map((x) => x).length ? new Date().toISOString().slice(0, 10) : null,
+      any: shareOf((x) => x.f.length > 0),
+      shipped: shareOf((x) => shipped(x).length > 0),
+      critical: shareOf((x) => x.f.some((i) => i.severity === "critical")),
+      medianAffected: affected.length ? median(affected.map((x) => shipped(x).length)) : 0,
+      topPackages: [...counts].sort((a, b) => b[1] - a[1]).slice(0, 10).map(([name, n]) => ({ name, share: Number((n / osv.length).toFixed(3)) })),
+    }
+  }
+}
+
 json.lowConfidenceHidden = hidden
 json.shown = repos.reduce((s, r) => s + r.issues.length, 0)
 json.precision = precisionByConfidence()

@@ -1,6 +1,6 @@
 {
   "repos": 3000,
-  "generatedAt": "2026-11-09T08:23:11.546Z",
+  "generatedAt": "2026-11-09T09:05:14.028Z",
   "grades": {
     "A": 758,
     "B": 707,
@@ -146,7 +146,7 @@
   "todo": {
     "dated": 83807,
     "medianDays": 1217,
-    "overFiveYears": 29897,
+    "overFiveYears": 29903,
     "oldest": [
       {
         "repo": "libsdl-org/SDL_ttf",
@@ -742,8 +742,8 @@
   ],
   "severity": {
     "critical": 770,
-    "warning": 98362,
-    "info": 105772
+    "warning": 98365,
+    "info": 105769
   },
   "exposure": {
     "injection": 0.043,
@@ -1033,6 +1033,56 @@
       "flaggedWhenScorecardGood": 0.012,
       "flaggedWhenScorecardBad": 0.858
     }
+  },
+  "vulnerableDeps": {
+    "repos": 3000,
+    "checkedAt": "2026-11-09",
+    "any": 0.431,
+    "shipped": 0.372,
+    "critical": 0.189,
+    "medianAffected": 10,
+    "topPackages": [
+      {
+        "name": "golang.org/x/net",
+        "share": 0.058
+      },
+      {
+        "name": "minimatch",
+        "share": 0.057
+      },
+      {
+        "name": "golang.org/x/crypto",
+        "share": 0.051
+      },
+      {
+        "name": "brace-expansion",
+        "share": 0.045
+      },
+      {
+        "name": "qs",
+        "share": 0.036
+      },
+      {
+        "name": "form-data",
+        "share": 0.032
+      },
+      {
+        "name": "uuid",
+        "share": 0.032
+      },
+      {
+        "name": "glob",
+        "share": 0.031
+      },
+      {
+        "name": "js-yaml",
+        "share": 0.03
+      },
+      {
+        "name": "source-map-js",
+        "share": 0.029
+      }
+    ]
   },
   "lowConfidenceHidden": 28824,
   "shown": 204904,
