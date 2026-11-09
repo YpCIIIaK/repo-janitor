@@ -150,7 +150,7 @@ function stored(r) {
 async function baseline(only) {
   const started = Date.now()
   const found = await run(only)
-  writeFileSync(baselinePath, JSON.stringify({ only, found }))
+  const fidelity = {}
   // Fidelity: of the stored findings in replayed files, how many does the replay reproduce?
   const per = {}
   for (const p of plan()) {
@@ -164,6 +164,8 @@ async function baseline(only) {
       if (got.has(f.id)) row.reproduced++
     }
   }
+  for (const [k, v] of Object.entries(per)) fidelity[k] = Number((v.reproduced / v.stored).toFixed(3))
+  writeFileSync(baselinePath, JSON.stringify({ only, found, fidelity }))
   console.log(`baseline recorded in ${Math.round((Date.now() - started) / 1000)} s`)
   console.log("fidelity (stored findings in replayed files that the replay reproduces):")
   for (const [k, v] of Object.entries(per).sort((a, b) => b[1].stored - a[1].stored)) {
@@ -185,19 +187,24 @@ async function check(only) {
   for (const p of plan()) {
     const labels = readJson(join(here, "labels", `${p.repo.name}.json`)) ?? {}
     const before = new Set((base.found[p.repo.name] ?? []).map((x) => x.split("\t")[1]))
-    const beforeHigh = new Set((base.found[p.repo.name] ?? []).filter((x) => x.endsWith("\thigh")).map((x) => x.split("\t")[1]))
+    const beforeHigh = new Set((base.found[p.repo.name] ?? []).filter((x) => x.endsWith("\thigh") && scope(x.split("\t")[0])).map((x) => x.split("\t")[1]))
     const now = new Set((found[p.repo.name] ?? []).map((x) => x.split("\t")[1]))
     for (const x of found[p.repo.name] ?? []) if (!before.has(x.split("\t")[1])) added++
     for (const [id, v] of Object.entries(labels)) {
       if (!before.has(id)) continue // not reproduced by replay even before the change
       const scanner = (base.found[p.repo.name] ?? []).find((x) => x.split("\t")[1] === id)?.split("\t")[0]
-      if (!scope(scanner)) continue
+      if (!scope(scanner) || (base.fidelity?.[scanner] ?? 0) < 0.95) continue
       if (v === "tp" && !now.has(id)) tpLost.push(`${p.repo.name} ${id}`)
       if (v === "fp") { fpTotal++; if (!now.has(id)) fpRemoved++ }
     }
     if (p.vuln) for (const id of beforeHigh) if (!now.has(id)) vulnLost.push(`${p.repo.name} ${id}`)
   }
   console.log(`checked in ${Math.round((Date.now() - started) / 1000)} s`)
+  // Only scanners the replay reproduces faithfully can be judged here.
+  const TRUST = 0.95
+  const scanners = only.length ? only : base.only.length ? base.only : Object.keys(base.fidelity ?? {})
+  const weak = scanners.filter((k) => (base.fidelity?.[k] ?? 0) < TRUST)
+  if (weak.length) console.log(`not judged here (replay fidelity < 95%; use a partial rescan): ${weak.join(", ")}`)
   console.log(`labelled FP removed: ${fpRemoved} of ${fpTotal}`)
   console.log(`new findings (unlabelled, review a sample): ${added}`)
   console.log(`labelled TP lost: ${tpLost.length}`)
