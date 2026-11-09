@@ -68,3 +68,5 @@ backups/
 benchmark/.osvcache/
 benchmark/.invcache/
 benchmark/.inventory/
+benchmark/.gitlog/
+benchmark/.gitlogcache/

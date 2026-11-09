@@ -7,11 +7,13 @@
  *
  * Per repo: the first commit, commits and distinct authors per year, and the
  * date each practice first appeared (file added) or was dropped (file removed).
- * Needs the full clones `run.mjs` keeps in .cache. Cached per repo by commit,
- * so a rerun only reads repos whose pinned SHA changed.
+ * Reads raw git data from .gitlog/<repo>.json.gz (built by run.mjs from its
+ * clone, or by gitlog.mjs from blob-less clones); a record is rebuilt from it
+ * without any clone when the schema or a marker changes.
  */
 import { spawn } from "node:child_process"
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs"
+import { gunzipSync, gzipSync } from "node:zlib"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
 
@@ -88,17 +90,66 @@ function git(dir, args) {
   })
 }
 
+/** Files whose text a record needs: workflows (action versions) and Dockerfiles (base images). */
+const WORKFLOW_FILE = /^\.github\/workflows\/[^/]+\.ya?ml$/
+const DOCKER_FILE = /(^|\/)(?:Dockerfile|[\w.-]+\.Dockerfile|Dockerfile\.[\w.-]+)$/
+const VENDORED = /(^|\/)(?:vendor|node_modules|third_party)\//
+
+/**
+ * Everything a history record is computed from, read once from a clone (full
+ * or blob-less): commits with author and year, every add/delete with its date,
+ * the file list at the pinned commit, and the texts of workflows and
+ * Dockerfiles. Stored gzipped in .gitlog/, so a new practice marker or a new
+ * statistic is recomputed for 3,000 repos without cloning any of them.
+ */
+export async function collectGitData(dir, sha) {
+  const log = await git(dir, ["log", sha, "--format=%ad\t%aE", "--date=format:%Y", "--no-merges"])
+  const changes = await git(dir, ["log", sha, "--reverse", "--format=@%ad", "--date=short", "--name-status", "--diff-filter=AD", "--no-renames"])
+  const tree = (await git(dir, ["ls-tree", "-r", "--name-only", sha])).split("\n").filter(Boolean)
+  const files = {}
+  const wanted = [
+    ...tree.filter((f) => WORKFLOW_FILE.test(f)).slice(0, 40),
+    ...tree.filter((f) => DOCKER_FILE.test(f) && !VENDORED.test(f)).slice(0, 10),
+  ]
+  for (const f of wanted) files[f] = await git(dir, ["show", `${sha}:${f}`])
+  return { sha, log, changes, tree, files }
+}
+
+const gitlogDir = join(here, ".gitlog")
+export function saveGitData(name, data) {
+  mkdirSync(gitlogDir, { recursive: true })
+  writeFileSync(join(gitlogDir, `${name}.json.gz`), gzipSync(JSON.stringify(data)))
+}
+export function loadGitData(name, sha) {
+  const p = join(gitlogDir, `${name}.json.gz`)
+  if (!existsSync(p)) return null
+  try {
+    const d = JSON.parse(gunzipSync(readFileSync(p)).toString("utf8"))
+    return d.sha === sha ? d : null
+  } catch {
+    return null
+  }
+}
+
 async function one(repo) {
-  const dir = join(cacheDir, repo.name)
-  if (!existsSync(dir)) return null
   const outFile = join(outDir, `${repo.name}.json`)
   if (existsSync(outFile)) {
     const prev = JSON.parse(readFileSync(outFile, "utf8"))
     if (prev.sha === repo.sha && prev.schema === SCHEMA) return prev
   }
+  let data = loadGitData(repo.name, repo.sha)
+  if (!data) {
+    const dir = join(cacheDir, repo.name)
+    if (!existsSync(dir)) return null
+    data = await collectGitData(dir, repo.sha)
+    saveGitData(repo.name, data)
+  }
+  return buildRecord(repo, data, outFile)
+}
 
+export function buildRecord(repo, data, outFile) {
+  const { log, changes } = data
   // Commits and authors by year, on the history leading to the pinned commit.
-  const log = await git(dir, ["log", repo.sha, "--format=%ad\t%aE", "--date=format:%Y", "--no-merges"])
   const byYear = {}
   const authors = {}
   const allAuthors = new Map()
@@ -114,9 +165,6 @@ async function one(repo) {
   const top = Math.max(0, ...allAuthors.values())
 
   // One pass over every add/delete in history, oldest first.
-  const changes = await git(dir, [
-    "log", repo.sha, "--reverse", "--format=@%ad", "--date=short", "--name-status", "--diff-filter=AD", "--no-renames",
-  ])
   const practices = {}
   let date = ""
   for (const line of changes.split("\n")) {
@@ -135,7 +183,7 @@ async function one(repo) {
     }
   }
   // Present at the pinned commit? A file can be removed and re-added.
-  const tree = new Set((await git(dir, ["ls-tree", "-r", "--name-only", repo.sha])).split("\n"))
+  const tree = new Set(data.tree)
   for (const [name, paths] of Object.entries(PRACTICES)) {
     const present = [...tree].some((f) => paths.some((p) => (p.endsWith("/") ? f.startsWith(p) : f === p)))
     if (practices[name]) practices[name].present = present
@@ -143,12 +191,12 @@ async function one(repo) {
   }
 
   // Snapshot at the pinned commit: which action versions and base images it uses.
-  const show = (f) => git(dir, ["show", `${repo.sha}:${f}`])
+  const show = (f) => data.files[f] ?? ""
   const actions = {}
   let usesTotal = 0
   let usesSha = 0
-  for (const f of [...tree].filter((f) => /^\.github\/workflows\/[^/]+\.ya?ml$/.test(f)).slice(0, 40)) {
-    for (const m of (await show(f)).matchAll(/^\s*-?\s*uses:\s*["']?([\w.-]+\/[\w.-]+)(?:\/[^@\s"']*)?@([^\s"'#]+)["']?(?:\s*#\s*(\S+))?/gm)) {
+  for (const f of [...tree].filter((f) => WORKFLOW_FILE.test(f)).slice(0, 40)) {
+    for (const m of show(f).matchAll(/^\s*-?\s*uses:\s*["']?([\w.-]+\/[\w.-]+)(?:\/[^@\s"']*)?@([^\s"'#]+)["']?(?:\s*#\s*(\S+))?/gm)) {
       const [, name, ref, comment] = m
       usesTotal++
       if (/^[0-9a-f]{40}$/.test(ref)) usesSha++
@@ -161,8 +209,8 @@ async function one(repo) {
     }
   }
   const dockerBases = []
-  for (const f of [...tree].filter((f) => /(^|\/)(?:Dockerfile|[\w.-]+\.Dockerfile|Dockerfile\.[\w.-]+)$/.test(f) && !/(^|\/)(?:vendor|node_modules|third_party)\//.test(f)).slice(0, 10)) {
-    const text = await show(f)
+  for (const f of [...tree].filter((f) => DOCKER_FILE.test(f) && !VENDORED.test(f)).slice(0, 10)) {
+    const text = show(f)
     const stages = new Set([...text.matchAll(/^\s*FROM\s+\S+\s+AS\s+(\S+)/gim)].map((m) => m[1].toLowerCase()))
     for (const m of text.matchAll(/^\s*FROM\s+(?:--platform=\S+\s+)?(\S+)/gim)) {
       const image = m[1].toLowerCase()
@@ -190,6 +238,7 @@ async function one(repo) {
   return rec
 }
 
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
 // `history.mjs repo…` refreshes just those repos (run.mjs calls it before it
 // drops a clone); the corpus-wide curves are always rebuilt from every cached file.
 const only = process.argv.slice(2)
@@ -255,3 +304,4 @@ writeFileSync(
   JSON.stringify({ generatedAt: new Date().toISOString(), repos: results.length, adoption, aiMonthly, activity }, null, 2) + "\n",
 )
 console.log(`history for ${results.length} repos → benchmark/history.json`)
+}
