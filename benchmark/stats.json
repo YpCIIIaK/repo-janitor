@@ -1,6 +1,6 @@
 {
   "repos": 3000,
-  "generatedAt": "2026-11-09T09:05:14.028Z",
+  "generatedAt": "2026-11-09T11:18:24.843Z",
   "grades": {
     "A": 758,
     "B": 707,
@@ -146,7 +146,7 @@
   "todo": {
     "dated": 83807,
     "medianDays": 1217,
-    "overFiveYears": 29903,
+    "overFiveYears": 29905,
     "oldest": [
       {
         "repo": "libsdl-org/SDL_ttf",
@@ -742,8 +742,8 @@
   ],
   "severity": {
     "critical": 770,
-    "warning": 98365,
-    "info": 105769
+    "warning": 98378,
+    "info": 105756
   },
   "exposure": {
     "injection": 0.043,
@@ -1083,6 +1083,542 @@
         "share": 0.029
       }
     ]
+  },
+  "toolWars": {
+    "jsPackageManagers": {
+      "2016": {
+        "repos": 35,
+        "packageLock": 0.029,
+        "yarnLock": 0.971,
+        "pnpmLock": 0,
+        "bunLock": 0
+      },
+      "2017": {
+        "repos": 178,
+        "packageLock": 0.702,
+        "yarnLock": 0.489,
+        "pnpmLock": 0,
+        "bunLock": 0
+      },
+      "2018": {
+        "repos": 290,
+        "packageLock": 0.683,
+        "yarnLock": 0.462,
+        "pnpmLock": 0,
+        "bunLock": 0
+      },
+      "2019": {
+        "repos": 374,
+        "packageLock": 0.668,
+        "yarnLock": 0.452,
+        "pnpmLock": 0,
+        "bunLock": 0
+      },
+      "2020": {
+        "repos": 455,
+        "packageLock": 0.615,
+        "yarnLock": 0.488,
+        "pnpmLock": 0.004,
+        "bunLock": 0
+      },
+      "2021": {
+        "repos": 513,
+        "packageLock": 0.6,
+        "yarnLock": 0.448,
+        "pnpmLock": 0.033,
+        "bunLock": 0
+      },
+      "2022": {
+        "repos": 561,
+        "packageLock": 0.563,
+        "yarnLock": 0.389,
+        "pnpmLock": 0.121,
+        "bunLock": 0.002
+      },
+      "2023": {
+        "repos": 587,
+        "packageLock": 0.533,
+        "yarnLock": 0.342,
+        "pnpmLock": 0.177,
+        "bunLock": 0.003
+      },
+      "2024": {
+        "repos": 597,
+        "packageLock": 0.533,
+        "yarnLock": 0.285,
+        "pnpmLock": 0.223,
+        "bunLock": 0.017
+      },
+      "2025": {
+        "repos": 603,
+        "packageLock": 0.504,
+        "yarnLock": 0.245,
+        "pnpmLock": 0.255,
+        "bunLock": 0.022
+      },
+      "2026": {
+        "repos": 627,
+        "packageLock": 0.486,
+        "yarnLock": 0.179,
+        "pnpmLock": 0.322,
+        "bunLock": 0.022
+      }
+    },
+    "pythonPackaging": {
+      "2016": {
+        "repos": 67,
+        "requirements": 1,
+        "pipenv": 0,
+        "poetryLock": 0,
+        "uvLock": 0
+      },
+      "2017": {
+        "repos": 95,
+        "requirements": 0.989,
+        "pipenv": 0.032,
+        "poetryLock": 0,
+        "uvLock": 0
+      },
+      "2018": {
+        "repos": 112,
+        "requirements": 0.92,
+        "pipenv": 0.125,
+        "poetryLock": 0.018,
+        "uvLock": 0
+      },
+      "2019": {
+        "repos": 131,
+        "requirements": 0.863,
+        "pipenv": 0.145,
+        "poetryLock": 0.069,
+        "uvLock": 0
+      },
+      "2020": {
+        "repos": 136,
+        "requirements": 0.875,
+        "pipenv": 0.103,
+        "poetryLock": 0.096,
+        "uvLock": 0
+      },
+      "2021": {
+        "repos": 159,
+        "requirements": 0.868,
+        "pipenv": 0.101,
+        "poetryLock": 0.107,
+        "uvLock": 0
+      },
+      "2022": {
+        "repos": 159,
+        "requirements": 0.849,
+        "pipenv": 0.094,
+        "poetryLock": 0.119,
+        "uvLock": 0
+      },
+      "2023": {
+        "repos": 181,
+        "requirements": 0.84,
+        "pipenv": 0.077,
+        "poetryLock": 0.138,
+        "uvLock": 0
+      },
+      "2024": {
+        "repos": 192,
+        "requirements": 0.797,
+        "pipenv": 0.073,
+        "poetryLock": 0.146,
+        "uvLock": 0.036
+      },
+      "2025": {
+        "repos": 215,
+        "requirements": 0.674,
+        "pipenv": 0.06,
+        "poetryLock": 0.079,
+        "uvLock": 0.256
+      },
+      "2026": {
+        "repos": 236,
+        "requirements": 0.593,
+        "pipenv": 0.055,
+        "poetryLock": 0.064,
+        "uvLock": 0.339
+      }
+    },
+    "jsLinters": {
+      "2016": {
+        "repos": 134,
+        "eslintLegacy": 1,
+        "eslintFlat": 0,
+        "biome": 0
+      },
+      "2017": {
+        "repos": 175,
+        "eslintLegacy": 1,
+        "eslintFlat": 0,
+        "biome": 0
+      },
+      "2018": {
+        "repos": 209,
+        "eslintLegacy": 1,
+        "eslintFlat": 0,
+        "biome": 0
+      },
+      "2019": {
+        "repos": 262,
+        "eslintLegacy": 1,
+        "eslintFlat": 0,
+        "biome": 0
+      },
+      "2020": {
+        "repos": 323,
+        "eslintLegacy": 1,
+        "eslintFlat": 0,
+        "biome": 0
+      },
+      "2021": {
+        "repos": 357,
+        "eslintLegacy": 1,
+        "eslintFlat": 0,
+        "biome": 0
+      },
+      "2022": {
+        "repos": 396,
+        "eslintLegacy": 1,
+        "eslintFlat": 0,
+        "biome": 0
+      },
+      "2023": {
+        "repos": 419,
+        "eslintLegacy": 0.983,
+        "eslintFlat": 0.014,
+        "biome": 0.007
+      },
+      "2024": {
+        "repos": 429,
+        "eslintLegacy": 0.704,
+        "eslintFlat": 0.263,
+        "biome": 0.047
+      },
+      "2025": {
+        "repos": 451,
+        "eslintLegacy": 0.508,
+        "eslintFlat": 0.435,
+        "biome": 0.071
+      },
+      "2026": {
+        "repos": 423,
+        "eslintLegacy": 0.39,
+        "eslintFlat": 0.532,
+        "biome": 0.095
+      }
+    },
+    "bundlers": {
+      "2017": {
+        "repos": 32,
+        "webpack": 1,
+        "vite": 0
+      },
+      "2018": {
+        "repos": 41,
+        "webpack": 1,
+        "vite": 0
+      },
+      "2019": {
+        "repos": 48,
+        "webpack": 1,
+        "vite": 0
+      },
+      "2020": {
+        "repos": 50,
+        "webpack": 1,
+        "vite": 0
+      },
+      "2021": {
+        "repos": 53,
+        "webpack": 0.887,
+        "vite": 0.113
+      },
+      "2022": {
+        "repos": 64,
+        "webpack": 0.656,
+        "vite": 0.359
+      },
+      "2023": {
+        "repos": 69,
+        "webpack": 0.58,
+        "vite": 0.449
+      },
+      "2024": {
+        "repos": 71,
+        "webpack": 0.535,
+        "vite": 0.465
+      },
+      "2025": {
+        "repos": 71,
+        "webpack": 0.437,
+        "vite": 0.563
+      },
+      "2026": {
+        "repos": 79,
+        "webpack": 0.316,
+        "vite": 0.684
+      }
+    }
+  },
+  "ai": {
+    "repos": 3000,
+    "any": 0.197,
+    "byTool": [
+      {
+        "tool": "aiAgents",
+        "share": 0.145
+      },
+      {
+        "tool": "aiClaude",
+        "share": 0.113
+      },
+      {
+        "tool": "aiCopilot",
+        "share": 0.029
+      },
+      {
+        "tool": "aiCursor",
+        "share": 0.01
+      },
+      {
+        "tool": "aiGemini",
+        "share": 0.005
+      },
+      {
+        "tool": "aiWindsurf",
+        "share": 0.001
+      }
+    ]
+  },
+  "actionVersions": [
+    {
+      "name": "actions/checkout",
+      "repos": 2269,
+      "outdated": 0.191,
+      "current": 4,
+      "majors": [
+        {
+          "major": 1,
+          "share": 0.016
+        },
+        {
+          "major": 2,
+          "share": 0.098
+        },
+        {
+          "major": 3,
+          "share": 0.078
+        },
+        {
+          "major": 4,
+          "share": 0.234
+        },
+        {
+          "major": 5,
+          "share": 0.041
+        },
+        {
+          "major": 6,
+          "share": 0.145
+        },
+        {
+          "major": 7,
+          "share": 0.389
+        }
+      ]
+    },
+    {
+      "name": "actions/setup-node",
+      "repos": 750,
+      "outdated": 0.116,
+      "current": 4,
+      "majors": [
+        {
+          "major": 1,
+          "share": 0.024
+        },
+        {
+          "major": 2,
+          "share": 0.023
+        },
+        {
+          "major": 3,
+          "share": 0.069
+        },
+        {
+          "major": 4,
+          "share": 0.247
+        },
+        {
+          "major": 5,
+          "share": 0.032
+        },
+        {
+          "major": 6,
+          "share": 0.188
+        },
+        {
+          "major": 7,
+          "share": 0.417
+        }
+      ]
+    },
+    {
+      "name": "actions/setup-python",
+      "repos": 452,
+      "outdated": 0.17,
+      "current": 5,
+      "majors": [
+        {
+          "major": 1,
+          "share": 0.022
+        },
+        {
+          "major": 2,
+          "share": 0.042
+        },
+        {
+          "major": 3,
+          "share": 0.015
+        },
+        {
+          "major": 4,
+          "share": 0.091
+        },
+        {
+          "major": 5,
+          "share": 0.243
+        },
+        {
+          "major": 6,
+          "share": 0.177
+        },
+        {
+          "major": 7,
+          "share": 0.409
+        }
+      ]
+    },
+    {
+      "name": "actions/cache",
+      "repos": 538,
+      "outdated": 0.141,
+      "current": 4,
+      "majors": [
+        {
+          "major": 1,
+          "share": 0.017
+        },
+        {
+          "major": 2,
+          "share": 0.043
+        },
+        {
+          "major": 3,
+          "share": 0.082
+        },
+        {
+          "major": 4,
+          "share": 0.266
+        },
+        {
+          "major": 5,
+          "share": 0.123
+        },
+        {
+          "major": 6,
+          "share": 0.47
+        }
+      ]
+    },
+    {
+      "name": "actions/upload-artifact",
+      "repos": 960,
+      "outdated": 0.03,
+      "current": 4,
+      "majors": [
+        {
+          "major": 1,
+          "share": 0.006
+        },
+        {
+          "major": 2,
+          "share": 0.013
+        },
+        {
+          "major": 3,
+          "share": 0.011
+        },
+        {
+          "major": 4,
+          "share": 0.314
+        },
+        {
+          "major": 5,
+          "share": 0.022
+        },
+        {
+          "major": 6,
+          "share": 0.037
+        },
+        {
+          "major": 7,
+          "share": 0.597
+        }
+      ]
+    }
+  ],
+  "actionPinning": {
+    "repos": 2326,
+    "usesShaPinned": 0.465,
+    "reposFullyPinned": 0.208
+  },
+  "dockerBases": {
+    "repos": 809,
+    "families": [
+      {
+        "family": "Alpine",
+        "share": 0.408
+      },
+      {
+        "family": "other",
+        "share": 0.315
+      },
+      {
+        "family": "language image (full)",
+        "share": 0.305
+      },
+      {
+        "family": "Debian",
+        "share": 0.304
+      },
+      {
+        "family": "Ubuntu",
+        "share": 0.157
+      },
+      {
+        "family": "scratch / busybox",
+        "share": 0.126
+      },
+      {
+        "family": "distroless / Wolfi",
+        "share": 0.109
+      },
+      {
+        "family": "RHEL family",
+        "share": 0.049
+      },
+      {
+        "family": "service image",
+        "share": 0.031
+      }
+    ],
+    "latestOrUntagged": 0.278,
+    "digestPinned": 0.059
   },
   "lowConfidenceHidden": 28824,
   "shown": 204904,
