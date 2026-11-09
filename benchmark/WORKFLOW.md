@@ -52,7 +52,7 @@ archive.mjs ─ pack/push/pull ────────▶ orphan branch `bench-
 | `node benchmark/sample.mjs --spread N <repo…>` | Up to N unlabelled findings per rule from those repos, for labelling. |
 | `node benchmark/label.mjs < lines` | Record labels; each line `<repo-name> <tp|fp> <finding-id>`. |
 | `node benchmark/stats.mjs` | Corpus statistics → STATS.md + stats.json. |
-| `node benchmark/history.mjs [repo…]` | Git-history records and curves, built from `.gitlog/<repo>.json.gz` (raw commits, add/delete log, file list, workflow and Dockerfile texts). `run.mjs` writes that cache from its clone; `node benchmark/gitlog.mjs` builds it for the corpus from blob-less clones (~30 KB per repo). A new practice marker or statistic: add it, bump `SCHEMA` in history.mjs, run `history.mjs` — no clones. The cache is not archived (size); rebuild it with gitlog.mjs in a new environment. |
+| `node benchmark/history.mjs [repo…]` | Git-history records and curves, built from `.gitlog/<repo>.json.gz` (raw commits, add/delete log, file list, workflow and Dockerfile texts). `run.mjs` writes that cache from its clone; `node benchmark/gitlog.mjs` builds it for the corpus from blob-less clones (~30 KB per repo). A new practice marker or statistic: add it, bump `SCHEMA` in history.mjs, run `history.mjs` — no clones. It is archived in separate `gitlog-NNN` chunks (`archive.mjs pull` restores it). |
 | `node benchmark/archive.mjs pack && node benchmark/archive.mjs push` | Save data to the `bench-data` branch. |
 | `pnpm test`, `npx tsc --noEmit -p .`, `npx eslint .`, `pnpm run build:packages` | Full checks before every merge. |
 
