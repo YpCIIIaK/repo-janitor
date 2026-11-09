@@ -13,7 +13,7 @@ import { availableParallelism } from "node:os"
 import { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, rmSync, statSync, writeFileSync } from "node:fs"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
-import { newestSource, scanFingerprint } from "./fingerprint.mjs"
+import { newestSource, scanFingerprint, scannerFingerprints, staleScanners } from "./fingerprint.mjs"
 
 const here = dirname(fileURLToPath(import.meta.url))
 const root = join(here, "..")
@@ -35,6 +35,18 @@ if (statSync(cli).mtimeMs < newestSource()) {
   process.exit(1)
 }
 const fingerprint = scanFingerprint()
+const fps = scannerFingerprints()
+// Merging a partial scan needs the engine's own score function.
+const coreDist = join(root, "packages", "core", "dist", "index.js")
+if (!existsSync(coreDist) || statSync(coreDist).mtimeMs < newestSource()) {
+  console.error("The core build is older than its sources: pnpm run build:packages")
+  process.exit(1)
+}
+const { computeScore, scoreToGrade } = await import(coreDist)
+const forced = (process.env.BENCH_FORCE_SCANNERS ?? "").split(",").filter(Boolean)
+const readJson = (p) => {
+  try { return JSON.parse(readFileSync(p, "utf8")) } catch { return null }
+}
 mkdirSync(cacheDir, { recursive: true })
 mkdirSync(outDir, { recursive: true })
 
@@ -52,6 +64,19 @@ function sh2(cmd, args, opts = {}) {
 }
 
 async function runOne(repo) {
+  const resultPath0 = join(outDir, `${repo.name}.json`)
+  const reportPath0 = join(outDir, `${repo.name}.report.json`)
+  const prevResult = readJson(resultPath0)
+  const prevReport = readJson(reportPath0)
+  // Which scanners to run: all, none, or only those whose code changed.
+  let only = process.env.BENCH_FULL === "1" ? null : staleScanners(prevResult, repo.sha, fps, fingerprint)
+  if (forced.length && prevResult?.sha === repo.sha) only = forced
+  if (only && !prevReport) only = null
+  if (only && only.length === 0) {
+    if (!prevResult.scanners) writeFileSync(resultPath0, JSON.stringify({ ...prevResult, base: fps.base, scanners: fps.scanners }, null, 1))
+    console.log(`${repo.name.padEnd(28)} current`)
+    return
+  }
   const dir = join(cacheDir, repo.name)
   if (!existsSync(dir)) {
     // Network hiccups (a proxy restart, a dropped TLS stream) are common over a
@@ -80,13 +105,38 @@ async function runOne(repo) {
   const reportPath = join(outDir, `${repo.name}.report.json`)
   const pendingReport = `${reportPath}.pending`
   const started = Date.now()
-  const scan = await sh2("node", [cli, "scan", dir, "--format", "json", "--output", pendingReport], {
+  const scan = await sh2("node", [cli, "scan", dir, ...(only ? ["--only", only.join(",")] : []), "--format", "json", "--output", pendingReport], {
     env: { ...process.env, REPO_ANTI_ROT_OFFLINE: "1" },
   })
   if (scan.status !== 0 && scan.status !== 2) throw new Error(`scan failed: ${repo.name}\n${scan.stderr}`)
-  const report = JSON.parse(readFileSync(pendingReport, "utf8"))
+  let report = JSON.parse(readFileSync(pendingReport, "utf8"))
   if (report.diagnostics?.failedScanners?.length) {
     throw new Error(`incomplete scan: ${repo.name}: ${JSON.stringify(report.diagnostics.failedScanners)}`)
+  }
+  if (only) {
+    // Keep the cached findings of every scanner that did not rerun, take the
+    // fresh ones from those that did, and score the union as the engine would.
+    const rerun = new Set(only)
+    const kept = [...(prevReport.issues ?? []), ...(prevReport.lowConfidence ?? [])].filter((i) => !rerun.has(i.scanner))
+    const all = [...kept, ...(report.issues ?? []), ...(report.lowConfidence ?? [])]
+    const confident = all.filter((i) => i.confidence !== "low")
+    const low = all.filter((i) => i.confidence === "low")
+    const score = computeScore(confident, report.config?.weights)
+    const prevDiag = prevReport.diagnostics ?? {}
+    report = {
+      ...report,
+      score,
+      grade: scoreToGrade(score),
+      issues: confident,
+      ...(low.length ? { lowConfidence: low } : {}),
+      diagnostics: {
+        ...report.diagnostics,
+        completedScanners: [...new Set([...(prevDiag.completedScanners ?? []), ...only])],
+        durations: { ...(prevDiag.durations ?? {}), ...(report.diagnostics?.durations ?? {}) },
+      },
+    }
+    if (!low.length) delete report.lowConfidence
+    writeFileSync(pendingReport, JSON.stringify(report))
   }
   // The benchmark judges every rule, including the ones shipped as low confidence.
   const findings = [...report.issues, ...(report.lowConfidence ?? [])].map((i) => ({
@@ -103,7 +153,7 @@ async function runOne(repo) {
   const resultPath = join(outDir, `${repo.name}.json`)
   writeFileSync(
     `${resultPath}.pending`,
-    JSON.stringify({ repo: repo.name, sha: repo.sha, fingerprint, seconds: Math.round((Date.now() - started) / 1000), findings }, null, 1),
+    JSON.stringify({ repo: repo.name, sha: repo.sha, fingerprint, base: fps.base, scanners: fps.scanners, seconds: only ? prevResult?.seconds : Math.round((Date.now() - started) / 1000), ...(only ? { rerun: only } : {}), findings }, null, 1),
   )
   renameSync(pendingReport, reportPath)
   renameSync(`${resultPath}.pending`, resultPath)
