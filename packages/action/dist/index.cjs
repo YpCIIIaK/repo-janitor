@@ -26863,7 +26863,7 @@ var require_lib4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-YT27ENXT.js
+// ../cli/dist/chunk-BDUU6RFY.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -45594,7 +45594,7 @@ function date4(params) {
 // ../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/external.js
 config(en_default());
 
-// ../cli/dist/chunk-YT27ENXT.js
+// ../cli/dist/chunk-BDUU6RFY.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -77441,7 +77441,9 @@ var PREFIXES = [
   ["unlicensed", "proprietary"],
   ["proprietary", "proprietary"],
   ["commercial", "proprietary"],
-  ["see license", "proprietary"],
+  // "SEE LICENSE IN <file>" points at a file that is as often MIT or CC0 as it
+  // is a commercial license; without reading it, it is a gap, not a verdict.
+  ["see license", "unknown"],
   ["nonstandard", "unknown"]
 ];
 function classifyAtom(id) {
@@ -77542,6 +77544,36 @@ function describe32(dep, verdict, projectLicense) {
       };
   }
 }
+function pickVersion(range, versions) {
+  var _a22, _b, _c;
+  if (!range || !versions) return null;
+  const r2 = range.trim().replace(/^npm:[^@]+@/, "");
+  const parse22 = (v2) => {
+    var _a32, _b2;
+    return (_b2 = (_a32 = /^(\d+)\.(\d+)\.(\d+)$/.exec(v2)) == null ? void 0 : _a32.slice(1).map(Number)) != null ? _b2 : null;
+  };
+  const published = Object.keys(versions).map((v2) => [v2, parse22(v2)]).filter((x3) => !!x3[1]);
+  if (versions[r2]) return r2;
+  let m2;
+  let ok;
+  if (m2 = /^\^(\d+)(?:\.(\d+))?(?:\.(\d+))?/.exec(r2)) {
+    const [maj, min = 0, pat = 0] = [Number(m2[1]), Number((_a22 = m2[2]) != null ? _a22 : 0), Number((_b = m2[3]) != null ? _b : 0)];
+    const ge2 = (v2) => v2[0] > maj || v2[0] === maj && (v2[1] > min || v2[1] === min && v2[2] >= pat);
+    ok = maj > 0 ? (v2) => v2[0] === maj && ge2(v2) : (v2) => v2[0] === 0 && v2[1] === min && v2[2] >= pat;
+  } else if (m2 = /^~(\d+)\.(\d+)(?:\.(\d+))?/.exec(r2)) {
+    const [maj, min, pat] = [Number(m2[1]), Number(m2[2]), Number((_c = m2[3]) != null ? _c : 0)];
+    ok = (v2) => v2[0] === maj && v2[1] === min && v2[2] >= pat;
+  } else if (m2 = /^(\d+)(?:\.(\d+|x|\*))?(?:\.(?:x|\*))?$/.exec(r2)) {
+    const maj = Number(m2[1]);
+    const min = m2[2] && /^\d+$/.test(m2[2]) ? Number(m2[2]) : null;
+    ok = (v2) => v2[0] === maj && (min === null || v2[1] === min);
+  } else if (m2 = /^>=\s*(\d+)\.(\d+)\.(\d+)$/.exec(r2)) {
+    const lo = [Number(m2[1]), Number(m2[2]), Number(m2[3])];
+    ok = (v2) => v2[0] > lo[0] || v2[0] === lo[0] && (v2[1] > lo[1] || v2[1] === lo[1] && v2[2] >= lo[2]);
+  } else return null;
+  const hits = published.filter(([, v2]) => ok(v2)).sort((a, b3) => a[1][0] - b3[1][0] || a[1][1] - b3[1][1] || a[1][2] - b3[1][2]);
+  return hits.length ? hits[hits.length - 1][0] : null;
+}
 function licenseFromText(text) {
   const head = text.slice(0, 4e3);
   const patterns = [
@@ -77568,7 +77600,7 @@ var licenseRiskScanner = {
   category: "dependency",
   run(ctx) {
     return __async(this, null, function* () {
-      var _a22, _b, _c;
+      var _a22, _b, _c, _d, _e2, _f, _g, _h, _i, _j;
       const raw = yield ctx.readFile("package.json");
       if (!raw) return [];
       let pkgJson;
@@ -77590,11 +77622,19 @@ var licenseRiskScanner = {
       const dev = Object.keys((_b = pkgJson.devDependencies) != null ? _b : {});
       const names = [...prod, ...new Set(dev.filter((d2) => !prod.includes(d2)))];
       if (names.length === 0) return [];
-      const shippedSet = new Set(prod);
+      const separateProcess = /* @__PURE__ */ new Set(["pm2", "@sentry/cli", "nodemon", "forever"]);
+      const docsSite = /(^|[-_./])(docs?|website|site)([-_./]|$)/i.test(`${ctx.repo.name} ${(_c = pkgJson.name) != null ? _c : ""}`);
+      const shippedSet = new Set(docsSite ? [] : prod.filter((d2) => !separateProcess.has(d2)));
+      const ownScopes = new Set(
+        [ctx.repo.owner, (_e2 = /^@([^/]+)\//.exec((_d = pkgJson.name) != null ? _d : "")) == null ? void 0 : _e2[1]].filter(Boolean).map((x3) => String(x3).toLowerCase())
+      );
+      const ranges = __spreadValues(__spreadValues({}, (_f = pkgJson.devDependencies) != null ? _f : {}), (_g = pkgJson.dependencies) != null ? _g : {});
       const issues = [];
       let lookups = 0;
       for (const name of names.slice(0, 300)) {
         if (issues.length >= MAX_ISSUES6) break;
+        const scope = (_i = (_h = /^@([^/]+)\//.exec(name)) == null ? void 0 : _h[1]) == null ? void 0 : _i.toLowerCase();
+        if (scope && ownScopes.has(scope)) continue;
         let license = null;
         let source = "";
         const installed = yield ctx.readFile(`node_modules/${name}/package.json`);
@@ -77610,8 +77650,10 @@ var licenseRiskScanner = {
           lookups++;
           const data = yield ctx.fetchJson(`https://registry.npmjs.org/${name}`);
           if (!data) continue;
-          license = readDeclaredLicense(data);
-          source = "the npm registry";
+          const version2 = pickVersion(ranges[name], data.versions);
+          const versioned = version2 ? readDeclaredLicense(data.versions[version2]) : null;
+          license = versioned != null ? versioned : readDeclaredLicense(data);
+          source = version2 ? `the npm registry (${name}@${version2})` : "the npm registry";
           if (license === null) continue;
         }
         const dep = {
@@ -77632,7 +77674,7 @@ var licenseRiskScanner = {
           location: "package.json",
           ageDays: 0,
           detail,
-          evidence: `${name}: ${(_c = dep.license) != null ? _c : "(no license field)"} \u2014 ${CLASS_LABEL[dep.klass]}`
+          evidence: `${name}: ${(_j = dep.license) != null ? _j : "(no license field)"} \u2014 ${CLASS_LABEL[dep.klass]}`
         });
       }
       return issues;
@@ -85980,7 +86022,9 @@ var PREFIXES2 = [
   ["unlicensed", "proprietary"],
   ["proprietary", "proprietary"],
   ["commercial", "proprietary"],
-  ["see license", "proprietary"],
+  // "SEE LICENSE IN <file>" points at a file that is as often MIT or CC0 as it
+  // is a commercial license; without reading it, it is a gap, not a verdict.
+  ["see license", "unknown"],
   ["nonstandard", "unknown"]
 ];
 function classifyAtom2(id) {
@@ -86081,6 +86125,32 @@ function describe6(dep, verdict, projectLicense) {
       };
   }
 }
+function pickVersion2(range, versions) {
+  if (!range || !versions) return null;
+  const r2 = range.trim().replace(/^npm:[^@]+@/, "");
+  const parse4 = (v2) => /^(\d+)\.(\d+)\.(\d+)$/.exec(v2)?.slice(1).map(Number) ?? null;
+  const published = Object.keys(versions).map((v2) => [v2, parse4(v2)]).filter((x3) => !!x3[1]);
+  if (versions[r2]) return r2;
+  let m2;
+  let ok;
+  if (m2 = /^\^(\d+)(?:\.(\d+))?(?:\.(\d+))?/.exec(r2)) {
+    const [maj, min = 0, pat = 0] = [Number(m2[1]), Number(m2[2] ?? 0), Number(m2[3] ?? 0)];
+    const ge2 = (v2) => v2[0] > maj || v2[0] === maj && (v2[1] > min || v2[1] === min && v2[2] >= pat);
+    ok = maj > 0 ? (v2) => v2[0] === maj && ge2(v2) : (v2) => v2[0] === 0 && v2[1] === min && v2[2] >= pat;
+  } else if (m2 = /^~(\d+)\.(\d+)(?:\.(\d+))?/.exec(r2)) {
+    const [maj, min, pat] = [Number(m2[1]), Number(m2[2]), Number(m2[3] ?? 0)];
+    ok = (v2) => v2[0] === maj && v2[1] === min && v2[2] >= pat;
+  } else if (m2 = /^(\d+)(?:\.(\d+|x|\*))?(?:\.(?:x|\*))?$/.exec(r2)) {
+    const maj = Number(m2[1]);
+    const min = m2[2] && /^\d+$/.test(m2[2]) ? Number(m2[2]) : null;
+    ok = (v2) => v2[0] === maj && (min === null || v2[1] === min);
+  } else if (m2 = /^>=\s*(\d+)\.(\d+)\.(\d+)$/.exec(r2)) {
+    const lo = [Number(m2[1]), Number(m2[2]), Number(m2[3])];
+    ok = (v2) => v2[0] > lo[0] || v2[0] === lo[0] && (v2[1] > lo[1] || v2[1] === lo[1] && v2[2] >= lo[2]);
+  } else return null;
+  const hits = published.filter(([, v2]) => ok(v2)).sort((a, b3) => a[1][0] - b3[1][0] || a[1][1] - b3[1][1] || a[1][2] - b3[1][2]);
+  return hits.length ? hits[hits.length - 1][0] : null;
+}
 function licenseFromText2(text) {
   const head = text.slice(0, 4e3);
   const patterns = [
@@ -86126,11 +86196,19 @@ var licenseRiskScanner2 = {
     const dev = Object.keys(pkgJson.devDependencies ?? {});
     const names = [...prod, ...new Set(dev.filter((d2) => !prod.includes(d2)))];
     if (names.length === 0) return [];
-    const shippedSet = new Set(prod);
+    const separateProcess = /* @__PURE__ */ new Set(["pm2", "@sentry/cli", "nodemon", "forever"]);
+    const docsSite = /(^|[-_./])(docs?|website|site)([-_./]|$)/i.test(`${ctx.repo.name} ${pkgJson.name ?? ""}`);
+    const shippedSet = new Set(docsSite ? [] : prod.filter((d2) => !separateProcess.has(d2)));
+    const ownScopes = new Set(
+      [ctx.repo.owner, /^@([^/]+)\//.exec(pkgJson.name ?? "")?.[1]].filter(Boolean).map((x3) => String(x3).toLowerCase())
+    );
+    const ranges = { ...pkgJson.devDependencies ?? {}, ...pkgJson.dependencies ?? {} };
     const issues = [];
     let lookups = 0;
     for (const name of names.slice(0, 300)) {
       if (issues.length >= MAX_ISSUES15) break;
+      const scope = /^@([^/]+)\//.exec(name)?.[1]?.toLowerCase();
+      if (scope && ownScopes.has(scope)) continue;
       let license = null;
       let source = "";
       const installed = await ctx.readFile(`node_modules/${name}/package.json`);
@@ -86146,8 +86224,10 @@ var licenseRiskScanner2 = {
         lookups++;
         const data = await ctx.fetchJson(`https://registry.npmjs.org/${name}`);
         if (!data) continue;
-        license = readDeclaredLicense2(data);
-        source = "the npm registry";
+        const version2 = pickVersion2(ranges[name], data.versions);
+        const versioned = version2 ? readDeclaredLicense2(data.versions[version2]) : null;
+        license = versioned ?? readDeclaredLicense2(data);
+        source = version2 ? `the npm registry (${name}@${version2})` : "the npm registry";
         if (license === null) continue;
       }
       const dep = {
