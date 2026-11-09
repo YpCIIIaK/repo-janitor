@@ -4201,11 +4201,17 @@
    "stars": 29,
    "created": "2014-10-31",
    "language": "Python"
+  },
+  {
+   "url": "https://github.com/MiaAI-Lab/Nemotron3.5-Lightning-DGX-Spark-RTX-5090-6000-PRO",
+   "stars": 25,
+   "created": "2026-08-11",
+   "language": "Shell"
   }
  ],
- "tries": 1461,
+ "tries": 1462,
  "population": "public, not a fork, not archived, stars >= 10, pushed since 2025-11-09, created 2010-01-01..2026-10-10",
- "rngCalls": 3632,
+ "rngCalls": 3635,
  "windows": 1686,
  "overCap": 24
 }
