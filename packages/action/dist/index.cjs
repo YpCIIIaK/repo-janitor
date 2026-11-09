@@ -26863,7 +26863,7 @@ var require_lib4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-WDIEP3WL.js
+// ../cli/dist/chunk-6NT23WGB.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -45594,7 +45594,7 @@ function date4(params) {
 // ../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/external.js
 config(en_default());
 
-// ../cli/dist/chunk-WDIEP3WL.js
+// ../cli/dist/chunk-6NT23WGB.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -69964,7 +69964,9 @@ var scanReportSchema = external_exports.object({
   diagnostics: external_exports.object({
     completedScanners: external_exports.array(external_exports.string()),
     failedScanners: external_exports.array(external_exports.string()),
-    history: external_exports.enum(["shallow", "available", "unavailable"])
+    history: external_exports.enum(["shallow", "available", "unavailable"]),
+    /** Wall time of each scanner in milliseconds, to find the slow ones. */
+    durations: external_exports.record(external_exports.string(), external_exports.number()).optional()
   }).optional(),
   /**
    * Effective scan configuration echoed into the report. Lets the dashboard
@@ -78316,10 +78318,12 @@ function runScan(_0) {
     const issues = [];
     const completedScanners = [];
     const failedScanners = [];
+    const durations = {};
     const total = scanners.length;
     onProgress == null ? void 0 : onProgress({ completed: 0, total });
     let completed = 0;
     for (const scanner of scanners) {
+      const started = Date.now();
       try {
         for (const issue2 of yield scanner.run(ctx)) {
           const stamped = __spreadProps(__spreadValues({}, issue2), { scanner: scanner.id });
@@ -78331,6 +78335,7 @@ function runScan(_0) {
         failedScanners.push(scanner.id);
         ctx.log(`[repo-anti-rot] scanner "${scanner.id}" failed: ${String(err)}`);
       }
+      durations[scanner.id] = Date.now() - started;
       completed++;
       onProgress == null ? void 0 : onProgress({ scanner: scanner.id, completed, total });
     }
@@ -78352,7 +78357,7 @@ function runScan(_0) {
       grade: scoreToGrade(score),
       issues: confident
     }, lowConfidence.length ? { lowConfidence } : {}), {
-      diagnostics: { completedScanners, failedScanners, history: (_g = ctx.history) != null ? _g : "unavailable" },
+      diagnostics: { completedScanners, failedScanners, history: (_g = ctx.history) != null ? _g : "unavailable", durations },
       // Echo effective weights so the dashboard recomputes the score identically.
       config: { weights },
       metrics: { linesOfCode },
@@ -78942,7 +78947,9 @@ var scanReportSchema2 = external_exports.object({
   diagnostics: external_exports.object({
     completedScanners: external_exports.array(external_exports.string()),
     failedScanners: external_exports.array(external_exports.string()),
-    history: external_exports.enum(["shallow", "available", "unavailable"])
+    history: external_exports.enum(["shallow", "available", "unavailable"]),
+    /** Wall time of each scanner in milliseconds, to find the slow ones. */
+    durations: external_exports.record(external_exports.string(), external_exports.number()).optional()
   }).optional(),
   /**
    * Effective scan configuration echoed into the report. Lets the dashboard
