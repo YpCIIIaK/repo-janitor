@@ -22,7 +22,7 @@ for (const mode of ["success", "exit-failure", "scanner-failure"]) {
       const sha = execFileSync("git", ["-C", repo, "rev-parse", "HEAD"], { encoding: "utf8" }).trim()
       writeFileSync(join(bench, "corpus.json"), JSON.stringify([{ name: "fixture", url: repo, sha }]))
       copyFileSync(new URL("./run.mjs", import.meta.url), join(bench, "run.mjs"))
-      copyFileSync(new URL("./fingerprint.mjs", import.meta.url), join(bench, "fingerprint.mjs"))
+      for (const m of ["fingerprint.mjs", "inventory.mjs", "scanner-inputs.mjs"]) copyFileSync(new URL(`./${m}`, import.meta.url), join(bench, m))
       // A core build exporting what run.mjs uses to merge partial scans.
       mkdirSync(join(root, "packages/core/dist"), { recursive: true })
       writeFileSync(join(root, "packages/core/dist/index.js"), "export const computeScore = () => 100\nexport const scoreToGrade = () => 'A'\n")
@@ -60,7 +60,7 @@ test("benchmark refuses to scan with a CLI older than its sources", () => {
     mkdirSync(join(root, "packages/cli/dist"), { recursive: true })
     writeFileSync(join(bench, "corpus.json"), "[]")
     copyFileSync(new URL("./run.mjs", import.meta.url), join(bench, "run.mjs"))
-    copyFileSync(new URL("./fingerprint.mjs", import.meta.url), join(bench, "fingerprint.mjs"))
+    for (const m of ["fingerprint.mjs", "inventory.mjs", "scanner-inputs.mjs"]) copyFileSync(new URL(`./${m}`, import.meta.url), join(bench, m))
     writeFileSync(join(root, "packages/cli/dist/index.js"), "")
     utimesSync(join(root, "packages/cli/dist/index.js"), new Date(2000, 0, 1), new Date(2000, 0, 1))
     for (const d of ["packages/core/src", "packages/cli/src"]) {
