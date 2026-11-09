@@ -72,7 +72,7 @@ const SKIP_PATH =
 
 /** Files that are machine output even when their directory looks ordinary. */
 const GENERATED_FILE =
-  /(?:\.min\.[jt]s|\.bundle\.js|\.g\.dart|_pb2?\.py|\.pb\.go|\.generated\.[a-z]+|\.d\.ts)$/i
+  /(?:\.min\.[jt]s|\.bundle\.js|\.(?:g|freezed)\.dart|_pb2?\.py|\.pb\.go|\.generated\.[a-z]+|\.d\.ts)$/i
 
 /** Test files: repetition there is a feature. */
 const TEST_FILE =
