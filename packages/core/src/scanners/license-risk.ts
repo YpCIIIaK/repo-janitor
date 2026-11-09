@@ -106,6 +106,20 @@ const PREFIXES: [string, LicenseClass][] = [
   ["artistic", "weak-copyleft"],
   ["blueoak", "permissive"],
   ["ms-pl", "permissive"],
+  // Seen as "does not know" across the 3,000-repo benchmark (online pass):
+  // Python's PSF license, W3C, Unicode data, SIL Open Font (fonts may be
+  // bundled and redistributed), public-domain dedications — all permissive;
+  // Elastic and FSL are source-available, not open source.
+  ["psf", "permissive"],
+  ["w3c", "permissive"],
+  ["unicode", "permissive"],
+  ["ofl", "permissive"],
+  ["sil open font", "permissive"],
+  ["public domain", "permissive"],
+  ["dedicated to the public domain", "permissive"],
+  ["gnu lgpl", "weak-copyleft"],
+  ["elastic", "proprietary"],
+  ["fsl-", "proprietary"],
   ["unlicensed", "proprietary"],
   ["proprietary", "proprietary"],
   ["commercial", "proprietary"],

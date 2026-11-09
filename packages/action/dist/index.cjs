@@ -26863,7 +26863,7 @@ var require_lib4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-6NT23WGB.js
+// ../cli/dist/chunk-YT27ENXT.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -45594,7 +45594,7 @@ function date4(params) {
 // ../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/external.js
 config(en_default());
 
-// ../cli/dist/chunk-6NT23WGB.js
+// ../cli/dist/chunk-YT27ENXT.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -77424,6 +77424,20 @@ var PREFIXES = [
   ["artistic", "weak-copyleft"],
   ["blueoak", "permissive"],
   ["ms-pl", "permissive"],
+  // Seen as "does not know" across the 3,000-repo benchmark (online pass):
+  // Python's PSF license, W3C, Unicode data, SIL Open Font (fonts may be
+  // bundled and redistributed), public-domain dedications — all permissive;
+  // Elastic and FSL are source-available, not open source.
+  ["psf", "permissive"],
+  ["w3c", "permissive"],
+  ["unicode", "permissive"],
+  ["ofl", "permissive"],
+  ["sil open font", "permissive"],
+  ["public domain", "permissive"],
+  ["dedicated to the public domain", "permissive"],
+  ["gnu lgpl", "weak-copyleft"],
+  ["elastic", "proprietary"],
+  ["fsl-", "proprietary"],
   ["unlicensed", "proprietary"],
   ["proprietary", "proprietary"],
   ["commercial", "proprietary"],
@@ -85949,6 +85963,20 @@ var PREFIXES2 = [
   ["artistic", "weak-copyleft"],
   ["blueoak", "permissive"],
   ["ms-pl", "permissive"],
+  // Seen as "does not know" across the 3,000-repo benchmark (online pass):
+  // Python's PSF license, W3C, Unicode data, SIL Open Font (fonts may be
+  // bundled and redistributed), public-domain dedications — all permissive;
+  // Elastic and FSL are source-available, not open source.
+  ["psf", "permissive"],
+  ["w3c", "permissive"],
+  ["unicode", "permissive"],
+  ["ofl", "permissive"],
+  ["sil open font", "permissive"],
+  ["public domain", "permissive"],
+  ["dedicated to the public domain", "permissive"],
+  ["gnu lgpl", "weak-copyleft"],
+  ["elastic", "proprietary"],
+  ["fsl-", "proprietary"],
   ["unlicensed", "proprietary"],
   ["proprietary", "proprietary"],
   ["commercial", "proprietary"],
