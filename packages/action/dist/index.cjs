@@ -26863,7 +26863,7 @@ var require_lib4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-IO7HLZRU.js
+// ../cli/dist/chunk-7XHBTARM.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -45594,7 +45594,7 @@ function date4(params) {
 // ../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/external.js
 config(en_default());
 
-// ../cli/dist/chunk-IO7HLZRU.js
+// ../cli/dist/chunk-7XHBTARM.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -70261,27 +70261,27 @@ var RULE_PRECISION = {
   "ci-silenced-failure": { tp: 4, fp: 6 },
   "ci-swallowed": { tp: 3, fp: 2 },
   "ci-tests-not-run": { tp: 0, fp: 10 },
-  "commented-code": { tp: 55, fp: 21 },
+  "commented-code": { tp: 58, fp: 26 },
   "config-conflict": { tp: 19, fp: 1 },
   "dead-export": { tp: 17, fp: 3 },
   "dead-uikit": { tp: 3, fp: 2 },
   "debug-leftover": { tp: 3, fp: 9 },
   "dep-unused": { tp: 1, fp: 12 },
-  "doc-link": { tp: 20, fp: 13 },
+  "doc-link": { tp: 24, fp: 15 },
   "docker-add-url": { tp: 5, fp: 1 },
-  "docker-latest": { tp: 8, fp: 6 },
+  "docker-latest": { tp: 9, fp: 6 },
   "docker-root": { tp: 4, fp: 13 },
   "docker-untagged": { tp: 4, fp: 7 },
   "docs-badge": { tp: 11, fp: 2 },
   "docs-manager": { tp: 1, fp: 5 },
   "docs-script": { tp: 4, fp: 3 },
-  "duplicate": { tp: 37, fp: 9 },
+  "duplicate": { tp: 37, fp: 11 },
   "env-dead": { tp: 2, fp: 8 },
   "env-missing": { tp: 1, fp: 6 },
   "env-no-example": { tp: 1, fp: 11 },
   "eol-node": { tp: 36, fp: 1 },
-  "eol-python": { tp: 29, fp: 3 },
-  "eol-runner": { tp: 13, fp: 0 },
+  "eol-python": { tp: 31, fp: 4 },
+  "eol-runner": { tp: 17, fp: 0 },
   "hygiene-no-ci": { tp: 10, fp: 4 },
   "hygiene-no-license": { tp: 9, fp: 3 },
   "hygiene-no-readme": { tp: 2, fp: 0 },
@@ -70324,7 +70324,7 @@ var RULE_PRECISION = {
   "insecure-ruby-marshal-load": { tp: 0, fp: 5 },
   "insecure-rust-tls-validation-disabled": { tp: 3, fp: 2 },
   "insecure-sql-interpolated": { tp: 3, fp: 26 },
-  "insecure-ssrf": { tp: 1, fp: 73 },
+  "insecure-ssrf": { tp: 1, fp: 75 },
   "insecure-swift-plaintext-credential-storage": { tp: 1, fp: 0 },
   "insecure-swift-webview-html": { tp: 1, fp: 0 },
   "insecure-tls-verification-off": { tp: 0, fp: 12 },
@@ -70337,13 +70337,13 @@ var RULE_PRECISION = {
   "secret-provider": { tp: 0, fp: 10 },
   "skipped-test": { tp: 21, fp: 3 },
   "supply-remote-shell": { tp: 1, fp: 0 },
-  "todo": { tp: 67, fp: 7 },
-  "workflow-action-tag": { tp: 97, fp: 1 },
-  "workflow-action-tag-first-party": { tp: 90, fp: 1 },
-  "workflow-no-permissions": { tp: 69, fp: 0 },
+  "todo": { tp: 76, fp: 9 },
+  "workflow-action-tag": { tp: 123, fp: 1 },
+  "workflow-action-tag-first-party": { tp: 119, fp: 1 },
+  "workflow-no-permissions": { tp: 86, fp: 0 },
   "workflow-pr-target-checkout": { tp: 2, fp: 5 },
   "workflow-script-injection": { tp: 2, fp: 7 },
-  "workflow-self-hosted-runner": { tp: 2, fp: 1 }
+  "workflow-self-hosted-runner": { tp: 2, fp: 2 }
 };
 var MIN_LABELLED = 3;
 var MIN_LABELLED_HIGH = 5;
