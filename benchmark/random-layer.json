@@ -2179,11 +2179,65 @@
    "stars": 51,
    "created": "2023-01-21",
    "language": "JavaScript"
+  },
+  {
+   "url": "https://github.com/Ekey/NFS.BIN.Tool",
+   "stars": 20,
+   "created": "2021-12-15",
+   "language": "C#"
+  },
+  {
+   "url": "https://github.com/abort-retry-ignore/joplock",
+   "stars": 22,
+   "created": "2026-04-20",
+   "language": "JavaScript"
+  },
+  {
+   "url": "https://github.com/koliploik/gemini-go",
+   "stars": 13,
+   "created": "2026-01-10",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/fastbyte19/Solana-NFT-Marketplace-by-CandyMachine",
+   "stars": 121,
+   "created": "2025-08-21",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/LeanBitLab/LeanType-Voice-Plugin",
+   "stars": 35,
+   "created": "2026-08-19",
+   "language": "Kotlin"
+  },
+  {
+   "url": "https://github.com/XueshiQiao/PastePaw",
+   "stars": 164,
+   "created": "2026-01-27",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/ikramagix/ikramagix",
+   "stars": 15,
+   "created": "2024-01-25",
+   "language": null
+  },
+  {
+   "url": "https://github.com/kasmtech/KasmOS-KDE-Desktop",
+   "stars": 10,
+   "created": "2024-04-15",
+   "language": "QML"
+  },
+  {
+   "url": "https://github.com/posit-dev/querychat",
+   "stars": 213,
+   "created": "2025-03-13",
+   "language": "Python"
   }
  ],
- "tries": 770,
+ "tries": 787,
  "population": "public, not a fork, not archived, stars >= 10, pushed since 2025-11-09, created 2010-01-01..2026-10-10",
- "rngCalls": 1909,
+ "rngCalls": 1952,
  "windows": 1686,
  "overCap": 15
 }
