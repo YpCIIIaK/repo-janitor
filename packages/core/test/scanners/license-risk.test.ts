@@ -5,6 +5,7 @@ import {
   licenseFromText,
   assess,
   licenseRiskScanner,
+  pickVersion,
   type DepLicense,
   type LicenseClass,
 } from "../../src/scanners/license-risk"
@@ -335,5 +336,53 @@ describe("classifyLicense: licenses the benchmark's online pass did not know", (
   })
   it("reads an unversioned GNU LGPL as weak copyleft", () => {
     expect(classifyLicense("GNU LGPL")).toBe("weak-copyleft")
+  })
+})
+
+describe("license-risk false-positive clusters (online benchmark, 5 tp / 60 fp)", () => {
+  const ctx = (pkg: object, registry: Record<string, unknown>, repo = { owner: "acme", name: "widget" }): ScanContext =>
+    ({
+      root: "/repo",
+      repo: { ...repo, defaultBranch: "main" },
+      files: ["package.json"],
+      readFile: async (p: string) => (p === "package.json" ? JSON.stringify(pkg) : null),
+      fetchJson: async (url: string) => registry[url.replace("https://registry.npmjs.org/", "")] ?? null,
+      git: { blameAgeDays: async () => 0, listBranches: async () => [] },
+      log: () => {},
+    }) as unknown as ScanContext
+  const uaParser = { license: "AGPL-3.0-or-later", versions: { "0.7.40": { license: "MIT" }, "1.0.39": { license: "MIT" }, "2.0.10": { license: "AGPL-3.0-or-later" } } }
+
+  it("picks the highest version a range allows", () => {
+    const v = { "0.7.1": {}, "0.7.40": {}, "1.0.2": {}, "1.0.39": {}, "2.0.0": {}, "2.0.10": {} }
+    expect(pickVersion("^0.7.0", v)).toBe("0.7.40")
+    expect(pickVersion("^1.0.2", v)).toBe("1.0.39")
+    expect(pickVersion("~2.0.0", v)).toBe("2.0.10")
+    expect(pickVersion("1.0.2", v)).toBe("1.0.2")
+    expect(pickVersion("1.x", v)).toBe("1.0.39")
+    expect(pickVersion("latest", v)).toBeNull()
+  })
+
+  it("reads the license of the declared version, not of the latest release", async () => {
+    const old = await licenseRiskScanner.run(ctx({ license: "MIT", dependencies: { "ua-parser-js": "^0.7.21" } }, { "ua-parser-js": uaParser }))
+    expect(old).toEqual([])
+    const v2 = await licenseRiskScanner.run(ctx({ license: "MIT", dependencies: { "ua-parser-js": "^2.0.10" } }, { "ua-parser-js": uaParser }))
+    expect(v2.map((i) => [i.id, i.severity])).toEqual([["license-network-ua-parser-js", "critical"]])
+  })
+
+  it("does not call SEE LICENSE IN proprietary, and skips the project's own scope", async () => {
+    const issues = await licenseRiskScanner.run(
+      ctx(
+        { license: "MIT", dependencies: { "@acme/core": "^1.0.0", "astro-compress": "^2.0.0" } },
+        { "@acme/core": { license: "UNLICENSED" }, "astro-compress": { license: "SEE LICENSE IN LICENSE" } },
+      ),
+    )
+    expect(issues.map((i) => [i.id, i.severity])).toEqual([["license-unrecognised-astro-compress", "info"]])
+  })
+
+  it("treats process runners and documentation sites as not shipped", async () => {
+    const pm2 = await licenseRiskScanner.run(ctx({ license: "MIT", dependencies: { pm2: "^5.0.0" } }, { pm2: { license: "AGPL-3.0" } }))
+    expect(pm2.map((i) => i.severity)).toEqual(["info"])
+    const docs = await licenseRiskScanner.run(ctx({ license: "MIT", dependencies: { gsap: "^3.0.0" } }, { gsap: { license: "Standard 'no charge' license" } }, { owner: "esphome", name: "esphome-docs" }))
+    expect(docs.every((i) => i.severity === "info")).toBe(true)
   })
 })
