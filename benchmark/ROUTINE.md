@@ -45,8 +45,9 @@ Do not add repos to the random layer by hand: only `random-layer.mjs` draws it.
   language" and the corpus itself). Mix applications, infrastructure,
   libraries, and at least 2–3 deliberately vulnerable apps if any new ones exist.
 - Resolve each with `GIT_TERMINAL_PROMPT=0 git ls-remote https://github.com/<o>/<r> HEAD`.
-- Skip: already present (by url, name, or SHA), archived mirrors, renamed
+- Skip: already present (by GitHub repository ID, url, name, or SHA), archived mirrors, renamed
   duplicates, and repos whose clone would exceed the scan limit (1.2).
+- Check the candidate's GitHub repository ID against `benchmark/identities.json` and extend that snapshot for new entries. A rename keeps the same ID even when the URL and pinned SHA differ. Existing alias groups are recorded in the cycle reviews; do not count another alias as a new project.
 - Append to `corpus.json` as `{"name": "<owner>-<repo>" lowercased with non-alnum → "-", "url", "sha"}`.
 - Commit: `Corpus: add N repos (<themes>)`.
 
