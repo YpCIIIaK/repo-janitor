@@ -324,6 +324,18 @@ describe("duplicateCodeScanner", () => {
     }))).toHaveLength(1)
   })
 
+  it("excludes Freezed output without hiding handwritten Dart models", async () => {
+    // Reviewed generated clones in Provider, Server Box and Musify.
+    expect(await duplicateCodeScanner.run(ctx({
+      "lib/models/video.freezed.dart": CLONE,
+      "lib/models/instance_details.freezed.dart": CLONE,
+    }))).toEqual([])
+    expect(await duplicateCodeScanner.run(ctx({
+      "lib/models/video.dart": CLONE,
+      "lib/models/freezed_helpers.dart": CLONE,
+    }))).toHaveLength(1)
+  })
+
   it("ignores duplication between test files", async () => {
     const issues = await duplicateCodeScanner.run(
       ctx({ "src/a.test.ts": CLONE, "src/b.test.ts": CLONE }),
