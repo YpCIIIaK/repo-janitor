@@ -462,6 +462,83 @@ for (const r of repos) for (const i of r.issues) if (i.severity in json.severity
   }
 }
 
+// --- tool wars, AI files, action versions, Docker bases (history schema 2) ---
+{
+  const recs = repos.map((r) => hist.get(r.name)).filter((h) => h && h.schema >= 2)
+  const years = []
+  for (let y = 2016; y <= new Date().getFullYear(); y++) years.push(String(y))
+  const usedIn = (p, y) => p && p.added && p.added.slice(0, 4) <= y && (!p.removed || p.present || p.removed.slice(0, 4) > y)
+  // Market share inside a category: of the repos using ANY tool of the category
+  // that year, the share using each one (a repo can use two, so shares can top 100%).
+  const war = (tools) => {
+    const out = {}
+    for (const y of years) {
+      const pool = recs.filter((h) => tools.some((t) => usedIn(h.practices?.[t], y)))
+      if (pool.length < 30) continue
+      out[y] = { repos: pool.length, ...Object.fromEntries(tools.map((t) => [t, Number((pool.filter((h) => usedIn(h.practices?.[t], y)).length / pool.length).toFixed(3))])) }
+    }
+    return out
+  }
+  json.toolWars = {
+    jsPackageManagers: war(["packageLock", "yarnLock", "pnpmLock", "bunLock"]),
+    pythonPackaging: war(["requirements", "pipenv", "poetryLock", "uvLock"]),
+    jsLinters: war(["eslintLegacy", "eslintFlat", "biome"]),
+    bundlers: war(["webpack", "vite"]),
+  }
+
+  const AI = ["aiClaude", "aiAgents", "aiCursor", "aiCopilot", "aiGemini", "aiWindsurf"]
+  const now = (h, t) => !!h.practices?.[t]?.present
+  json.ai = {
+    repos: recs.length,
+    any: Number((recs.filter((h) => AI.some((t) => now(h, t))).length / recs.length).toFixed(3)),
+    byTool: AI.map((t) => ({ tool: t, share: Number((recs.filter((h) => now(h, t)).length / recs.length).toFixed(3)) })).sort((a, b) => b.share - a.share),
+  }
+
+  // Oldest major in use per repo, for the most common first-party actions.
+  const WATCH = { "actions/checkout": 4, "actions/setup-node": 4, "actions/setup-python": 5, "actions/cache": 4, "actions/upload-artifact": 4 }
+  const withActions = recs.filter((h) => Object.keys(h.actions ?? {}).length)
+  json.actionVersions = Object.entries(WATCH).map(([name, current]) => {
+    const l = withActions.filter((h) => typeof h.actions[name] === "number")
+    const byMajor = {}
+    for (const h of l) byMajor[h.actions[name]] = (byMajor[h.actions[name]] ?? 0) + 1
+    return {
+      name,
+      repos: l.length,
+      outdated: l.length ? Number((l.filter((h) => h.actions[name] < current).length / l.length).toFixed(3)) : 0,
+      current,
+      majors: Object.entries(byMajor).sort((a, b) => Number(a[0]) - Number(b[0])).map(([m, c]) => ({ major: Number(m), share: Number((c / l.length).toFixed(3)) })),
+    }
+  })
+  const uses = withActions.reduce((a, h) => ({ total: a.total + (h.actionUses?.total ?? 0), sha: a.sha + (h.actionUses?.sha ?? 0) }), { total: 0, sha: 0 })
+  json.actionPinning = { repos: withActions.length, usesShaPinned: uses.total ? Number((uses.sha / uses.total).toFixed(3)) : 0, reposFullyPinned: Number((withActions.filter((h) => h.actionUses?.total && h.actionUses.sha === h.actionUses.total).length / withActions.length).toFixed(3)) }
+
+  // Docker base images: family of each image a repo builds from.
+  const family = (img) => {
+    const [ref] = img.split("@")
+    const name = ref.replace(/:[^/]*$/, "").split("/").pop()
+    const tag = /:([^/]+)$/.exec(ref)?.[1] ?? ""
+    if (name === "scratch" || name === "busybox") return "scratch / busybox"
+    if (/distroless/.test(ref) || /chainguard|wolfi/.test(ref)) return "distroless / Wolfi"
+    if (name === "alpine" || /alpine/.test(tag)) return "Alpine"
+    if (name === "ubuntu" || /jammy|noble|focal|bionic/.test(tag)) return "Ubuntu"
+    if (name === "debian" || /slim|bookworm|bullseye|buster|trixie/.test(tag)) return "Debian"
+    if (/^(node|python|golang|rust|ruby|php|openjdk|eclipse-temurin|amazoncorretto|maven|gradle|dotnet|mcr\.microsoft\.com)$/.test(name) || /dotnet/.test(ref)) return "language image (full)"
+    if (/^(nginx|httpd|caddy|postgres|redis|mysql)$/.test(name)) return "service image"
+    if (/^(centos|rockylinux|almalinux|fedora(-minimal)?|ubi\d*(-minimal|-micro)?|ubi-minimal|amazonlinux)$/.test(name)) return "RHEL family"
+    return "other"
+  }
+  const docker = recs.filter((h) => (h.dockerBases ?? []).length)
+  const fam = new Map()
+  for (const h of docker) for (const f of new Set(h.dockerBases.map(family))) fam.set(f, (fam.get(f) ?? 0) + 1)
+  const loose = (img) => !img.includes("@") && (!/:[^/]+$/.test(img) || /:latest$/.test(img)) && !/^scratch$/.test(img)
+  json.dockerBases = {
+    repos: docker.length,
+    families: [...fam].sort((a, b) => b[1] - a[1]).map(([f, c]) => ({ family: f, share: Number((c / docker.length).toFixed(3)) })),
+    latestOrUntagged: Number((docker.filter((h) => h.dockerBases.some(loose)).length / docker.length).toFixed(3)),
+    digestPinned: Number((docker.filter((h) => h.dockerBases.every((i) => i.includes("@") || i === "scratch")).length / docker.length).toFixed(3)),
+  }
+}
+
 json.lowConfidenceHidden = hidden
 json.shown = repos.reduce((s, r) => s + r.issues.length, 0)
 json.precision = precisionByConfidence()

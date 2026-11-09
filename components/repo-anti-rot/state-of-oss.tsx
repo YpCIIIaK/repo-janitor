@@ -83,6 +83,21 @@ const T = {
     vdepsL: { any: "have at least one known vulnerability", shipped: "in dependencies that ship (not dev, test or docs)", critical: "have a critical one" },
     vdepsMedian: (m: number) => `An affected project typically carries ${m} of them.`,
     vdepsTop: "Packages most often behind them, share of all repos",
+    habits: "Tools and habits",
+    wars: "Tool wars",
+    warsNote: "Of the projects using any tool of a kind that year, the share using each one. A project can use two at once.",
+    warT: { jsPackageManagers: "JavaScript package managers", pythonPackaging: "Python packaging", jsLinters: "JavaScript linters", bundlers: "Bundlers" } as Record<string, string>,
+    aiT: "Instructions for AI coding agents",
+    aiNote: (p: string) => `Share of all projects with a file written for AI agents (CLAUDE.md, AGENTS.md, Cursor rules, Copilot instructions…), by month. Today: ${p}.`,
+    aiNow: "Which file, today",
+    ghaT: "Workflows still on retired runtimes",
+    ghaNote: "Oldest major version of each official action a project uses. Red: versions whose Node 12/16 runtime GitHub has retired; upload-artifact v3 stopped working entirely in 2025.",
+    ghaRetired: "on a retired version",
+    ghaPin: (u: string, r: string) => `${u} of all action uses are pinned to a commit SHA; ${r} of projects pin every one.`,
+    dockT: "What containers are built from",
+    dockNote: (n: number) => `Base images in ${n} projects with a Dockerfile. A project can use several.`,
+    dockLoose: "use :latest or no tag",
+    dockDigest: "pin every base image by digest",
     grades: "Grades",
     gradesNote: "Score adjusts for size: warnings weigh less in big codebases, critical findings never do.",
     supply: "Most GitHub Actions can be swapped under you",
@@ -192,6 +207,21 @@ const T = {
     vdepsL: { any: "имеют хотя бы одну известную уязвимость", shipped: "в зависимостях, которые попадают в продукт", critical: "имеют критичную" },
     vdepsMedian: (m: number) => `У затронутого проекта их обычно ${m}.`,
     vdepsTop: "Пакеты, которые чаще всего за этим стоят, доля всех репозиториев",
+    habits: "Инструменты и привычки",
+    wars: "Войны инструментов",
+    warsNote: "Среди проектов, которые в этом году пользуются хоть каким-то инструментом данного вида, — доля каждого. Проект может использовать два сразу.",
+    warT: { jsPackageManagers: "Пакетные менеджеры JavaScript", pythonPackaging: "Упаковка Python", jsLinters: "Линтеры JavaScript", bundlers: "Сборщики" } as Record<string, string>,
+    aiT: "Инструкции для ИИ-агентов",
+    aiNote: (p: string) => `Доля всех проектов, где есть файл для ИИ-агентов (CLAUDE.md, AGENTS.md, правила Cursor, инструкции Copilot…), по месяцам. Сейчас: ${p}.`,
+    aiNow: "Какой файл — сейчас",
+    ghaT: "Workflow на выключенных рантаймах",
+    ghaNote: "Самая старая major-версия каждого официального action, которую использует проект. Красным — версии на Node 12/16, которые GitHub выключил; upload-artifact v3 вовсе перестал работать в 2025 году.",
+    ghaRetired: "на выключенной версии",
+    ghaPin: (u: string, r: string) => `${u} всех использований actions закреплены по SHA коммита; ${r} проектов закрепляют все.`,
+    dockT: "Из чего собирают контейнеры",
+    dockNote: (n: number) => `Базовые образы в ${n} проектах с Dockerfile. Проект может использовать несколько.`,
+    dockLoose: "используют :latest или образ без тега",
+    dockDigest: "закрепляют все базовые образы по digest",
     grades: "Оценки",
     gradesNote: "Оценка учитывает размер: в больших проектах предупреждения весят меньше, критические находки — всегда полностью.",
     supply: "Большинство GitHub Actions можно подменить",
@@ -328,6 +358,38 @@ function Lines({ series, max, unit = "%" }: { series: { label: string; values: n
         ))}
       </figcaption>
     </figure>
+  )
+}
+
+const TOOL_NAMES: Record<string, string> = {
+  packageLock: "npm", yarnLock: "Yarn", pnpmLock: "pnpm", bunLock: "Bun",
+  requirements: "requirements.txt", pipenv: "Pipenv", poetryLock: "Poetry", uvLock: "uv",
+  eslintLegacy: "ESLint (legacy config)", eslintFlat: "ESLint (flat config)", biome: "Biome",
+  webpack: "webpack", vite: "Vite",
+  aiAgents: "AGENTS.md", aiClaude: "CLAUDE.md / .claude", aiCopilot: "Copilot instructions", aiCursor: "Cursor rules", aiGemini: "GEMINI.md", aiWindsurf: "Windsurf rules",
+}
+
+/** A small month-by-month area chart, for curves too recent for the yearly charts. */
+function MonthArea({ points }: { points: [string, number][] }) {
+  const W = 820, H = 220, L = 40, R = 12, T = 12, B = 24
+  const max = Math.max(0.01, ...points.map(([, v]) => v))
+  const x = (i: number) => L + (i * (W - L - R)) / Math.max(1, points.length - 1)
+  const y = (v: number) => T + (H - T - B) * (1 - v / max)
+  const line = points.map(([, v], i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join("")
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img">
+      {[0, max / 2, max].map((g) => (
+        <g key={g}>
+          <line x1={L} x2={W - R} y1={y(g)} y2={y(g)} className="stroke-border" />
+          <text x={L - 6} y={y(g) + 4} textAnchor="end" className="fill-muted-foreground text-[10px]">{Math.round(g * 100)}%</text>
+        </g>
+      ))}
+      {points.map(([m], i) => m.endsWith("-01") && (
+        <text key={m} x={x(i)} y={H - 4} textAnchor="middle" className="fill-muted-foreground text-[10px]">{m.slice(0, 4)}</text>
+      ))}
+      <path d={`${line}L${x(points.length - 1)},${y(0)}L${x(0)},${y(0)}Z`} className="fill-primary/15" />
+      <path d={line} fill="none" className="stroke-primary" strokeWidth={2.5} strokeLinejoin="round" />
+    </svg>
   )
 }
 
@@ -547,6 +609,79 @@ export function StateOfOpenSource() {
           </div>
         ))}
       </Section>
+
+      <h2 className="pt-4 text-xl font-semibold tracking-tight">{t.habits}</h2>
+
+      <Section title={t.wars} note={t.warsNote}>
+        <div className="grid gap-6 sm:grid-cols-2 [&>*]:min-w-0">
+          {Object.entries(stats.toolWars as Record<string, Record<string, Record<string, number>>>).map(([kind, byYear]) => {
+            const ys = Object.keys(byYear).sort()
+            if (ys.length === 0) return null
+            const first = ys.find((y) => y >= "2020") ?? ys[0]
+            const last = ys[ys.length - 1]
+            const tools = Object.keys(byYear[last]).filter((k) => k !== "repos")
+            return (
+              <div key={kind} className="space-y-2">
+                <p className="text-sm font-medium">{t.warT[kind] ?? kind} <span className="font-normal text-muted-foreground">· {first} → {last}</span></p>
+                {tools.sort((a, b) => byYear[last][b] - byYear[last][a]).map((tool) => {
+                  const a = byYear[first][tool] ?? 0
+                  const b = byYear[last][tool] ?? 0
+                  return (
+                    <div key={tool} className="grid grid-cols-[minmax(0,8rem)_1fr_4.5rem] items-center gap-2 text-sm">
+                      <span className="truncate">{TOOL_NAMES[tool] ?? tool}</span>
+                      <span className="relative h-2.5 overflow-hidden rounded-full bg-secondary">
+                        <span className="absolute inset-y-0 left-0 rounded-full bg-muted-foreground/40" style={{ width: `${a * 100}%` }} />
+                        <span className={cn("absolute inset-y-[3px] left-0 rounded-full", b >= a ? "bg-success" : "bg-warning")} style={{ width: `${b * 100}%` }} />
+                      </span>
+                      <span className="text-right font-mono text-xs tabular-nums text-muted-foreground">{Math.round(a * 100)}→{Math.round(b * 100)}%</span>
+                    </div>
+                  )
+                })}
+              </div>
+            )
+          })}
+        </div>
+      </Section>
+
+      <Section title={t.aiT} note={t.aiNote(pct(stats.ai.any))}>
+        <MonthArea points={Object.entries((history as { aiMonthly?: Record<string, Record<string, number>> }).aiMonthly?.any ?? {})} />
+        <p className="pt-1 text-xs text-muted-foreground">{t.aiNow}</p>
+        {stats.ai.byTool.filter((x) => x.share > 0).map((x) => (
+          <Bar key={x.tool} label={TOOL_NAMES[x.tool] ?? x.tool} value={x.share} max={stats.ai.byTool[0].share} display={pct(x.share)} />
+        ))}
+      </Section>
+
+      <div className="grid gap-6 md:grid-cols-2">
+        <Section title={t.ghaT} note={t.ghaNote}>
+          {stats.actionVersions.map((a) => (
+            <div key={a.name} className="space-y-1">
+              <div className="flex items-baseline justify-between gap-2 text-sm">
+                <span className="truncate font-mono text-xs">{a.name}</span>
+                <span className="shrink-0 font-mono text-xs tabular-nums text-destructive">{pct(a.outdated)} {t.ghaRetired}</span>
+              </div>
+              <div className="flex h-2.5 overflow-hidden rounded-full bg-secondary">
+                {a.majors.map((m) => (
+                  <span key={m.major} className={m.major < a.current ? "bg-destructive" : m.major === Math.max(...a.majors.map((x) => x.major)) ? "bg-success" : "bg-primary/70"} style={{ width: `${m.share * 100}%` }} title={`v${m.major}: ${pct(m.share)}`} />
+                ))}
+              </div>
+            </div>
+          ))}
+          <p className="pt-1 text-xs text-muted-foreground">{t.ghaPin(pct(stats.actionPinning.usesShaPinned), pct(stats.actionPinning.reposFullyPinned))}</p>
+        </Section>
+        <Section title={t.dockT} note={t.dockNote(stats.dockerBases.repos)}>
+          {stats.dockerBases.families.filter((f) => f.family !== "other").map((f) => (
+            <Bar key={f.family} label={f.family} value={f.share} max={stats.dockerBases.families[0].share} display={pct(f.share)} />
+          ))}
+          <div className="grid grid-cols-2 gap-3 pt-2">
+            {([[stats.dockerBases.latestOrUntagged, t.dockLoose, "text-warning"], [stats.dockerBases.digestPinned, t.dockDigest, "text-muted-foreground"]] as const).map(([v, label, tone]) => (
+              <div key={label} className="space-y-0.5">
+                <span className={cn("font-mono text-2xl font-semibold tabular-nums", tone)}>{pct(v)}</span>
+                <p className="text-xs text-muted-foreground">{label}</p>
+              </div>
+            ))}
+          </div>
+        </Section>
+      </div>
 
       <h2 className="pt-4 text-xl font-semibold tracking-tight">{t.outside}</h2>
 
