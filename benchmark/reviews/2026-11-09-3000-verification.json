@@ -1,0 +1,40 @@
+{
+  "baseCommit": "c917115ca3eb0358e1539b7be753bc5681bc5d35",
+  "corpusBefore": 2538,
+  "corpusAfter": 3000,
+  "newRepos": 464,
+  "renamedAliasesRemoved": 2,
+  "interruptedBatch": {
+    "saved": 294,
+    "resumed": 168,
+    "extraReplacements": 2
+  },
+  "uniqueNamesUrlsShas": true,
+  "allResultsMatchPins": true,
+  "allHistoriesPresent": true,
+  "newLabels": {
+    "tp": 95,
+    "fp": 15
+  },
+  "existingLabelsUnchanged": true,
+  "lostTP": {
+    "before": 36,
+    "after": 36
+  },
+  "oldVulnerableApps": {
+    "checked": 45,
+    "highInsecureCodeBefore": 263,
+    "highInsecureCodeAfter": 263,
+    "missing": 0
+  },
+  "vulnerableAppsTotal": 47,
+  "preUpdateRegressionGate": "pass",
+  "confidenceClassesChanged": 0,
+  "confidenceRulesCompared": 90,
+  "cloneLimitMB": 2000,
+  "cloneLimitOverride": false,
+  "dataBranch": "bench-data-2026-11-08-2",
+  "dataCommit": "38d8c74d6681e256124dc4cc773cc089902bd320",
+  "archiveChunks": 30,
+  "scannerImplementationChanged": false
+}

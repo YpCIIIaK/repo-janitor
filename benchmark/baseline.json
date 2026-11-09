@@ -1,19 +1,19 @@
 {
- "overall": 0.565,
+ "overall": 0.585,
  "scanners": {
-  "eol-runtime": 0.951,
-  "todo-debt": 0.905,
-  "broken-doc-links": 0.606,
+  "eol-runtime": 0.944,
+  "todo-debt": 0.894,
+  "broken-doc-links": 0.615,
   "bus-factor": 0.848,
-  "commented-code": 0.724,
-  "workflow-security": 0.946,
-  "duplicate-code": 0.804,
+  "commented-code": 0.69,
+  "workflow-security": 0.954,
+  "duplicate-code": 0.771,
   "skipped-tests": 0.875,
-  "insecure-code": 0.119,
+  "insecure-code": 0.118,
   "docs-drift": 0.615,
   "lockfile-drift": 0.905,
   "dead-code": 0.8,
-  "dockerfile": 0.438,
+  "dockerfile": 0.449,
   "leftover-debug": 0.25,
   "config-conflict": 0.95,
   "secrets": 0.057,
@@ -2687,6 +2687,208 @@
   ],
   "lucasg-dependencies": [
    "commented-DependenciesGui/MainWindow.xaml.cs:212"
+  ],
+  "reswift-reswift": [
+   "action-tag-.github/workflows/test.yml-21",
+   "action-tag-first-party-.github/workflows/test.yml-18",
+   "doclink-Docs/templates/toc.md:11:example-projects.html",
+   "duplicate-ReSwiftTests/StoreSubscriptionTests.swift-301",
+   "eol-runner-.github/workflows/test.yml-14",
+   "eol-runner-.github/workflows/test.yml-29",
+   "eol-runner-.github/workflows/update-docs.yml-13",
+   "no-permissions-.github/workflows/test.yml-1"
+  ],
+  "kitura-kitura": [
+   "commented-Tests/KituraTests/TestCRUDTypeRouter.swift:91"
+  ],
+  "swiftkickmobile-swiftmessages": [
+   "doclink-ViewControllers.md:121:./SwiftMessages/ViewControllerContainerView.swift",
+   "todo-SwiftMessages/Presenter.swift:255"
+  ],
+  "kean-pulse": [
+   "action-tag-first-party-.github/workflows/ci.yml-23",
+   "commented-Sources/Pulse/LoggerStore/LoggerStore.swift:252",
+   "doclink-Sources/Pulse/Pulse.docc/Articles/GettingStarted.md:113:remote-logging.png",
+   "no-permissions-.github/workflows/ci.yml-1",
+   "todo-Sources/PulseUI/Features/FileViewer/RichTextView/RichTextView.swift:99"
+  ],
+  "linearmouse-linearmouse": [
+   "action-tag-.github/workflows/build.yml-74",
+   "action-tag-first-party-.github/workflows/stale.yml-12",
+   "commented-LinearMouse/EventTransformer/GestureButtonTransformer.swift:246",
+   "no-permissions-.github/workflows/build.yml-1"
+  ],
+  "swinject-swinject": [
+   "action-tag-.github/workflows/SPM Testing.yml-18"
+  ],
+  "rime-squirrel": [
+   "action-tag-.github/workflows/release-ci.yml-60"
+  ],
+  "argmaxinc-argmax-oss-swift": [
+   "eol-python-Examples/ServeCLIClient/Python/pyproject.toml-5",
+   "todo-Examples/WhisperAX/WhisperAX/Views/ContentView.swift:1374"
+  ],
+  "ahmadhassan-bted-motionshot": [
+   "doclink-CONTRIBUTING.md:9:CODE_OF_CONDUCT.md"
+  ],
+  "zly2006-zhihu-plus-plus": [
+   "action-tag-first-party-.github/workflows/pr.yml-16"
+  ],
+  "airbnb-deeplinkdispatch": [
+   "no-permissions-.github/workflows/build_test.yml-1"
+  ],
+  "rumboalla-apkupdater": [
+   "todo-app/src/main/kotlin/com/apkupdater/util/SessionInstaller.kt:235"
+  ],
+  "brahmkshatriya-echo": [
+   "commented-app/src/main/java/dev/brahmkshatriya/echo/utils/PermsUtils.kt:43"
+  ],
+  "twosigma-flint": [
+   "commented-src/main/scala/com/twosigma/flint/timeseries/TimeSeriesRDD.scala:1849"
+  ],
+  "lihaoyi-scala-rx": [
+   "eol-runner-.github/workflows/test.yml-13"
+  ],
+  "fullstackhero-dotnet-starter-kit": [
+   "action-tag-first-party-.github/workflows/backend.yml-139"
+  ],
+  "naudio-naudio": [
+   "action-tag-.github/workflows/release.yml-215"
+  ],
+  "dmtrkovalenko-fff": [
+   "action-tag-.github/workflows/external-tests.yml-55"
+  ],
+  "sigoden-dufs": [
+   "action-tag-first-party-.github/workflows/release.yaml-177"
+  ],
+  "phiresky-ripgrep-all": [
+   "no-permissions-.github/workflows/release.yml-1"
+  ],
+  "bottlerocket-os-bottlerocket": [
+   "doclink-variants/README.md:495:aws-k8s-1.26/Cargo.toml"
+  ],
+  "loco-rs-loco": [
+   "doclink-CONTRIBUTING.md:111:./starters/README.md"
+  ],
+  "numz-comfyui-seedvr2-videoupscaler": [
+   "action-tag-.github/workflows/publish.yml-24",
+   "action-tag-first-party-.github/workflows/publish.yml-20"
+  ],
+  "clickhouse-clickhouse-operator": [
+   "commented-api/v1alpha1/keepercluster_types.go:162"
+  ],
+  "quik-sms-quik": [
+   "commented-android-smsmms/src/main/java/com/google/android/mms/pdu_alt/PduComposer.java:687",
+   "no-permissions-.github/workflows/build-on-pull.yml-1"
+  ],
+  "travisjeffery-timecop": [
+   "action-tag-.github/workflows/CI.yml-35",
+   "action-tag-first-party-.github/workflows/CI.yml-34",
+   "no-permissions-.github/workflows/CI.yml-1"
+  ],
+  "hyperspike-valkey-operator": [
+   "todo-internal/controller/valkey_controller_test.go:44"
+  ],
+  "minitest-minitest": [
+   "action-tag-.github/workflows/ci.yml-53",
+   "action-tag-first-party-.github/workflows/ci.yml-50",
+   "no-permissions-.github/workflows/ci.yml-1"
+  ],
+  "gzu-liyujiang-android-cn-oaid": [
+   "action-tag-.github/workflows/gradle-publish.yml-28",
+   "action-tag-first-party-.github/workflows/release-apk.yml-19",
+   "duplicate-library/src/main/java/repeackage/com/asus/msa/SupplementaryDID/IDidAidlInterface.java-176",
+   "no-permissions-.github/workflows/gradle-publish.yml-1"
+  ],
+  "cirruslabs-macos-image-templates": [
+   "self-hosted-runner-.github/workflows/template-validation.yml-132"
+  ],
+  "public-activity-public-activity": [
+   "action-tag-.github/workflows/main.yml-28",
+   "action-tag-first-party-.github/workflows/main.yml-26",
+   "no-permissions-.github/workflows/main.yml-1"
+  ],
+  "rubysherpas-paranoia": [
+   "action-tag-.github/workflows/build.yml-32",
+   "action-tag-first-party-.github/workflows/build.yml-31",
+   "no-permissions-.github/workflows/build.yml-1"
+  ],
+  "monzo-egress-operator": [
+   "action-tag-first-party-.github/workflows/go.yml-11",
+   "action-tag-first-party-.github/workflows/go.yml-17",
+   "no-permissions-.github/workflows/go.yml-1"
+  ],
+  "rails-spring": [
+   "action-tag-.github/workflows/ci.yml-34",
+   "action-tag-first-party-.github/workflows/ci.yml-31",
+   "no-permissions-.github/workflows/ci.yml-1"
+  ],
+  "splitrb-split": [
+   "action-tag-.github/workflows/ci.yml-46",
+   "action-tag-first-party-.github/workflows/ci.yml-44",
+   "no-permissions-.github/workflows/ci.yml-1"
+  ],
+  "prontolabs-pronto": [
+   "action-tag-.github/workflows/pronto.yml-15",
+   "action-tag-first-party-.github/workflows/pronto.yml-11",
+   "no-permissions-.github/workflows/pronto.yml-1"
+  ],
+  "wemake-services-wemake-python-styleguide": [
+   "action-tag-.github/workflows/depup.yml-22",
+   "action-tag-.github/workflows/depup.yml-29",
+   "action-tag-.github/workflows/test.yml-46",
+   "action-tag-first-party-.github/workflows/depup.yml-19",
+   "action-tag-first-party-.github/workflows/test.yml-25",
+   "action-tag-first-party-.github/workflows/test.yml-29",
+   "action-tag-first-party-.github/workflows/wps.yml-19",
+   "todo-wemake_python_styleguide/visitors/tokenize/primitives.py:232"
+  ],
+  "brandonhilkert-sucker-punch": [
+   "action-tag-.github/workflows/build.yml-28",
+   "action-tag-first-party-.github/workflows/build.yml-25",
+   "no-permissions-.github/workflows/build.yml-1"
+  ],
+  "starrocks-starrocks-kubernetes-operator": [
+   "action-tag-.github/workflows/action-golangci-lint.yml-22",
+   "action-tag-.github/workflows/action-helm-template.yml-20",
+   "action-tag-first-party-.github/workflows/action-golangci-lint.yml-17",
+   "action-tag-first-party-.github/workflows/action-golangci-lint.yml-18",
+   "action-tag-first-party-.github/workflows/action-helm-template.yml-16",
+   "action-tag-first-party-.github/workflows/action-make-test.yml-16",
+   "action-tag-first-party-.github/workflows/action-make-test.yml-20",
+   "commented-pkg/k8sutils/templates/service/spec_test.go:199"
+  ],
+  "haujetzhao-quickcut": [
+   "eol-python-setup.py-94"
+  ],
+  "gcacace-android-signaturepad": [
+   "action-tag-.github/workflows/ci.yml-29",
+   "action-tag-.github/workflows/ci.yml-38",
+   "action-tag-first-party-.github/workflows/ci.yml-20",
+   "action-tag-first-party-.github/workflows/ci.yml-23",
+   "no-permissions-.github/workflows/ci.yml-1"
+  ],
+  "randym-axlsx": [
+   "todo-lib/axlsx/drawing/axis.rb:158",
+   "todo-lib/axlsx/drawing/axis.rb:175",
+   "todo-lib/axlsx/workbook/worksheet/auto_filter/filters.rb:42",
+   "todo-lib/axlsx/workbook/worksheet/cell.rb:371",
+   "todo-lib/axlsx/workbook/worksheet/cell.rb:58"
+  ],
+  "vladkens-twscrape": [
+   "action-tag-.github/workflows/main.yml-39",
+   "action-tag-.github/workflows/main.yml-51",
+   "insecure-ssrf-twscrape/api.py:248",
+   "insecure-ssrf-twscrape/api.py:283"
+  ],
+  "xcpretty-xcode-install": [
+   "action-tag-.github/workflows/ci.yml-15"
+  ],
+  "contentful-labs-kube-secret-syncer": [
+   "docker-latest-Dockerfile:38"
+  ],
+  "keleshev-schema": [
+   "eol-python-.github/workflows/python-test.yml-19"
   ]
  }
 }
