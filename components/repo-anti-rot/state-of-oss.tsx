@@ -99,6 +99,14 @@ const T = {
     dockNote: (n: number) => `Base images in ${n} projects with a Dockerfile. A project can use several.`,
     dockLoose: "use :latest or no tag",
     dockDigest: "pin every base image by digest",
+    totals: { loc: "lines of code", files: "files", commits: "commits read", stars: "GitHub stars between them" },
+    chosen: "How the corpus was chosen",
+    chosenBody: (c: { repos: number; languages: number; vulnerableApps: number; medianStars: number | null; under1kStars: number | null; activeLastYear: number; labelled: number }) => [
+      `${c.repos.toLocaleString("en-US")} public GitHub repositories, picked by hand in batches to cover libraries, applications, infrastructure and IaC, mobile, games, embedded, data and developer tools across ${c.languages} main languages — plus ${c.vulnerableApps} deliberately vulnerable apps, used to check that real holes are still found.`,
+      "Each is pinned to one commit and scanned offline with the same build; repos whose clone exceeds 2 GB are left out.",
+      `It is not a random sample. It leans towards well-known projects (median ${c.medianStars?.toLocaleString("en-US") ?? "—"} stars; ${pct(c.under1kStars ?? 0)} under 1,000) and active ones (${pct(c.activeLastYear)} had a commit in the last year), and JavaScript, TypeScript and Python are the largest groups. Read the numbers as "popular open source", not "all code".`,
+      `Precision is measured on ${c.labelled.toLocaleString("en-US")} findings checked by hand; only high and medium confidence findings are counted.`,
+    ],
     grades: "Grades",
     gradesNote: "Score adjusts for size: warnings weigh less in big codebases, critical findings never do.",
     supply: "Most GitHub Actions can be swapped under you",
@@ -224,6 +232,14 @@ const T = {
     dockNote: (n: number) => `Базовые образы в ${n} проектах с Dockerfile. Проект может использовать несколько.`,
     dockLoose: "используют :latest или образ без тега",
     dockDigest: "закрепляют все базовые образы по digest",
+    totals: { loc: "строк кода", files: "файлов", commits: "коммитов прочитано", stars: "звёзд на GitHub у них вместе" },
+    chosen: "Как отбирался корпус",
+    chosenBody: (c: { repos: number; languages: number; vulnerableApps: number; medianStars: number | null; under1kStars: number | null; activeLastYear: number; labelled: number }) => [
+      `${c.repos.toLocaleString("ru-RU")} публичных репозиториев GitHub, отобранных вручную пачками так, чтобы покрыть библиотеки, приложения, инфраструктуру и IaC, мобильные проекты, игры, embedded, данные и инструменты разработчика на ${c.languages} основных языках, — плюс ${c.vulnerableApps} учебных уязвимых приложений, на которых проверяем, что настоящие дыры по-прежнему находятся.`,
+      "Каждый закреплён на одном коммите и просканирован без сети одной и той же сборкой; репозитории, чей клон больше 2 ГБ, исключены.",
+      `Это не случайная выборка. Она смещена к известным проектам (медиана ${c.medianStars?.toLocaleString("ru-RU") ?? "—"} звёзд; меньше 1000 звёзд у ${pct(c.under1kStars ?? 0)}) и к активным (у ${pct(c.activeLastYear)} был коммит за последний год), а крупнее всего группы JavaScript, TypeScript и Python. Читайте цифры как «популярный open source», а не «весь код».`,
+      `Точность измерена на ${c.labelled.toLocaleString("ru-RU")} находках, проверенных вручную; учитываются только находки с высокой и средней уверенностью.`,
+    ],
     grades: "Оценки",
     gradesNote: "Оценка учитывает размер: в больших проектах предупреждения весят меньше, критические находки — всегда полностью.",
     supply: "Большинство GitHub Actions можно подменить",
@@ -455,6 +471,19 @@ export function StateOfOpenSource() {
             <span className="font-mono text-2xl font-semibold tabular-nums text-primary">{v}</span>
             <span className="text-xs text-muted-foreground">{label}</span>
           </Card>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-sm sm:grid-cols-4">
+        {([
+          [stats.corpus.linesOfCode, t.totals.loc],
+          [stats.corpus.files, t.totals.files],
+          [stats.corpus.commits, t.totals.commits],
+          [stats.corpus.stars, t.totals.stars],
+        ] as const).map(([v, label]) => (
+          <p key={label} className="text-muted-foreground">
+            <span className="font-mono font-semibold tabular-nums text-foreground">{new Intl.NumberFormat(l === "ru" ? "ru-RU" : "en-US", { notation: "compact", maximumFractionDigits: 1 }).format(v)}</span> {label}
+          </p>
         ))}
       </div>
 
@@ -903,6 +932,12 @@ export function StateOfOpenSource() {
             <p className="pt-1 text-xs text-muted-foreground">{t.messyNote}</p>
           </div>
         </div>
+      </Section>
+
+      <Section title={t.chosen}>
+        {t.chosenBody(stats.corpus).map((para) => (
+          <p key={para.slice(0, 24)} className="max-w-prose text-sm leading-relaxed text-muted-foreground">{para}</p>
+        ))}
       </Section>
 
       <p className="max-w-prose text-xs text-muted-foreground">{t.method}</p>
