@@ -49,5 +49,19 @@ for (const repo of corpus) {
   const result = JSON.parse(readFileSync(resultPath, "utf8"))
   result.findings = result.findings.map((f) => ({ ...f, confidence: conf(f) }))
   writeFileSync(resultPath, JSON.stringify(result, null, 1))
+
+  // The online pass omits rule names in older snapshots. Keep its confidence
+  // consistent with the offline reports after calibration too.
+  const onlinePath = join(here, ".results", `${repo.name}.osv.json`)
+  if (existsSync(onlinePath)) {
+    const online = JSON.parse(readFileSync(onlinePath, "utf8"))
+    online.findings = online.findings.map((f) => {
+      const rule = f.rule ?? (f.id.startsWith("license-") ? "license-" + f.id.split("-")[1] : "vuln")
+      const confidence = confidenceOf(rule)
+      if (confidence !== f.confidence) changedConfidence++
+      return { ...f, confidence }
+    })
+    writeFileSync(onlinePath, JSON.stringify(online))
+  }
 }
 console.log(`rescored ${corpus.length} repos: ${changedConfidence} confidences and ${changedScores} scores changed`)
