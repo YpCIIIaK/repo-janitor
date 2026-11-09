@@ -70,6 +70,13 @@ clone) and read ±20 lines. Criterion:
 Record: `printf '%s\n' "<repo> tp <finding-id>" … | node benchmark/label.mjs`.
 Target: **≥ 60 new labels per cycle**, high and medium confidence first.
 
+Spend labels where they teach something. `sample.mjs --spread` already skips
+saturated rules (≥ 30 labels at ≥ 95% precision — e.g. action pinning, token
+permissions) and gives weak or barely labelled rules (< 80% or < 10 labels)
+a double quota. Do not add labels to a skipped rule unless you are checking
+a suspected regression. At most **15 labels per cycle** may go to rules that
+are already above 90% precision; the rest go to the weak ones.
+
 ### 1.4 Fix false-positive clusters
 
 - Group the fp by *why* (directory kind, file kind, framework convention).
