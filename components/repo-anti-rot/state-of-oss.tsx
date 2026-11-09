@@ -88,8 +88,9 @@ const T = {
     warsNote: "Of the projects using any tool of a kind that year, the share using each one. A project can use two at once.",
     warT: { jsPackageManagers: "JavaScript package managers", pythonPackaging: "Python packaging", jsLinters: "JavaScript linters", bundlers: "Bundlers" } as Record<string, string>,
     aiT: "Instructions for AI coding agents",
-    aiNote: (p: string) => `Share of all projects with a file written for AI agents (CLAUDE.md, AGENTS.md, Cursor rules, Copilot instructions…), by month. Today: ${p}.`,
+    aiNote: (p: string) => `Share of all projects with a file written for AI agents (CLAUDE.md, AGENTS.md, Cursor rules, Copilot instructions…), by month: dashed area is any file, lines are each file. Today: ${p}.`,
     aiNow: "Which file, today",
+    aiAny: "any of them",
     ghaT: "Workflows still on retired runtimes",
     ghaNote: "Oldest major version of each official action a project uses. Red: versions whose Node 12/16 runtime GitHub has retired; upload-artifact v3 stopped working entirely in 2025.",
     ghaRetired: "on a retired version",
@@ -212,8 +213,9 @@ const T = {
     warsNote: "Среди проектов, которые в этом году пользуются хоть каким-то инструментом данного вида, — доля каждого. Проект может использовать два сразу.",
     warT: { jsPackageManagers: "Пакетные менеджеры JavaScript", pythonPackaging: "Упаковка Python", jsLinters: "Линтеры JavaScript", bundlers: "Сборщики" } as Record<string, string>,
     aiT: "Инструкции для ИИ-агентов",
-    aiNote: (p: string) => `Доля всех проектов, где есть файл для ИИ-агентов (CLAUDE.md, AGENTS.md, правила Cursor, инструкции Copilot…), по месяцам. Сейчас: ${p}.`,
+    aiNote: (p: string) => `Доля всех проектов, где есть файл для ИИ-агентов (CLAUDE.md, AGENTS.md, правила Cursor, инструкции Copilot…), по месяцам: пунктирная заливка — любой файл, линии — каждый файл отдельно. Сейчас: ${p}.`,
     aiNow: "Какой файл — сейчас",
+    aiAny: "любой из них",
     ghaT: "Workflow на выключенных рантаймах",
     ghaNote: "Самая старая major-версия каждого официального action, которую использует проект. Красным — версии на Node 12/16, которые GitHub выключил; upload-artifact v3 вовсе перестал работать в 2025 году.",
     ghaRetired: "на выключенной версии",
@@ -369,27 +371,51 @@ const TOOL_NAMES: Record<string, string> = {
   aiAgents: "AGENTS.md", aiClaude: "CLAUDE.md / .claude", aiCopilot: "Copilot instructions", aiCursor: "Cursor rules", aiGemini: "GEMINI.md", aiWindsurf: "Windsurf rules",
 }
 
-/** A small month-by-month area chart, for curves too recent for the yearly charts. */
-function MonthArea({ points }: { points: [string, number][] }) {
-  const W = 820, H = 220, L = 40, R = 12, T = 12, B = 24
-  const max = Math.max(0.01, ...points.map(([, v]) => v))
-  const x = (i: number) => L + (i * (W - L - R)) / Math.max(1, points.length - 1)
+const AI_COLORS: Record<string, string> = { aiAgents: "text-sky-500", aiClaude: "text-orange-500", aiCopilot: "text-violet-500", aiCursor: "text-emerald-500", aiGemini: "text-rose-500", aiWindsurf: "text-amber-500" }
+
+/** Month-by-month chart: the total as a filled area, each series as its own coloured line. */
+function MonthLines({ total, series, totalLabel }: { total: [string, number][]; series: { label: string; points: [string, number][]; className: string }[]; totalLabel: string }) {
+  const W = 820, H = 240, L = 40, R = 12, T = 12, B = 24
+  const max = Math.max(0.01, ...total.map(([, v]) => v))
+  const x = (i: number) => L + (i * (W - L - R)) / Math.max(1, total.length - 1)
   const y = (v: number) => T + (H - T - B) * (1 - v / max)
-  const line = points.map(([, v], i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join("")
+  const path = (pts: [string, number][]) => pts.map(([, v], i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join("")
+  const last = (pts: [string, number][]) => pts[pts.length - 1]?.[1] ?? 0
+  const pctOf = (v: number) => (v > 0 && v < 0.01 ? "<1%" : `${Math.round(v * 100)}%`)
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img">
-      {[0, max / 2, max].map((g) => (
-        <g key={g}>
-          <line x1={L} x2={W - R} y1={y(g)} y2={y(g)} className="stroke-border" />
-          <text x={L - 6} y={y(g) + 4} textAnchor="end" className="fill-muted-foreground text-[10px]">{Math.round(g * 100)}%</text>
-        </g>
-      ))}
-      {points.map(([m], i) => m.endsWith("-01") && (
-        <text key={m} x={x(i)} y={H - 4} textAnchor="middle" className="fill-muted-foreground text-[10px]">{m.slice(0, 4)}</text>
-      ))}
-      <path d={`${line}L${x(points.length - 1)},${y(0)}L${x(0)},${y(0)}Z`} className="fill-primary/15" />
-      <path d={line} fill="none" className="stroke-primary" strokeWidth={2.5} strokeLinejoin="round" />
-    </svg>
+    <figure className="space-y-2">
+      <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img">
+        {[0, max / 2, max].map((g) => (
+          <g key={g}>
+            <line x1={L} x2={W - R} y1={y(g)} y2={y(g)} className="stroke-border" />
+            <text x={L - 6} y={y(g) + 4} textAnchor="end" className="fill-muted-foreground text-[10px]">{Math.round(g * 100)}%</text>
+          </g>
+        ))}
+        {total.map(([m], i) => m.endsWith("-01") && (
+          <text key={m} x={x(i)} y={H - 4} textAnchor="middle" className="fill-muted-foreground text-[10px]">{m.slice(0, 4)}</text>
+        ))}
+        <path d={`${path(total)}L${x(total.length - 1)},${y(0)}L${x(0)},${y(0)}Z`} className="fill-muted-foreground/15" />
+        <path d={path(total)} fill="none" className="stroke-muted-foreground/60" strokeWidth={1.5} strokeDasharray="4 4" />
+        {series.map((s) => (
+          <g key={s.label} className={s.className}>
+            <path d={path(s.points)} fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinejoin="round" />
+            <circle cx={x(s.points.length - 1)} cy={y(last(s.points))} r={3.5} fill="currentColor" />
+          </g>
+        ))}
+      </svg>
+      <figcaption className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
+        <span className="inline-flex items-center gap-1.5">
+          <span className="inline-block h-2.5 w-3 rounded-sm bg-muted-foreground/30" />
+          {totalLabel} {pctOf(last(total))}
+        </span>
+        {series.map((s) => (
+          <span key={s.label} className="inline-flex items-center gap-1.5">
+            <span className={cn("inline-block h-0.5 w-3 rounded bg-current", s.className)} />
+            {s.label} {pctOf(last(s.points))}
+          </span>
+        ))}
+      </figcaption>
+    </figure>
   )
 }
 
@@ -644,11 +670,25 @@ export function StateOfOpenSource() {
       </Section>
 
       <Section title={t.aiT} note={t.aiNote(pct(stats.ai.any))}>
-        <MonthArea points={Object.entries((history as { aiMonthly?: Record<string, Record<string, number>> }).aiMonthly?.any ?? {})} />
-        <p className="pt-1 text-xs text-muted-foreground">{t.aiNow}</p>
-        {stats.ai.byTool.filter((x) => x.share > 0).map((x) => (
-          <Bar key={x.tool} label={TOOL_NAMES[x.tool] ?? x.tool} value={x.share} max={stats.ai.byTool[0].share} display={pct(x.share)} />
-        ))}
+        {(() => {
+          const monthly = (history as { aiMonthly?: Record<string, Record<string, number>> }).aiMonthly ?? {}
+          const series = stats.ai.byTool
+            .filter((x) => x.share >= 0.005 && monthly[x.tool])
+            .map((x) => ({ label: TOOL_NAMES[x.tool] ?? x.tool, points: Object.entries(monthly[x.tool]) as [string, number][], className: AI_COLORS[x.tool] ?? "text-primary" }))
+          return <MonthLines total={Object.entries(monthly.any ?? {}) as [string, number][]} series={series} totalLabel={t.aiAny} />
+        })()}
+        <div className="mt-4 space-y-3 border-t border-border pt-4">
+          <p className="text-sm font-medium">{t.aiNow}</p>
+          {stats.ai.byTool.filter((x) => x.share > 0).map((x) => (
+            <div key={x.tool} className="grid grid-cols-[minmax(0,11rem)_1fr_3.5rem] items-center gap-3 text-sm sm:grid-cols-[minmax(0,15rem)_1fr_3.5rem]">
+              <span className="truncate">{TOOL_NAMES[x.tool] ?? x.tool}</span>
+              <span className="h-2.5 overflow-hidden rounded-full bg-secondary">
+                <span className={cn("block h-full rounded-full bg-current", AI_COLORS[x.tool] ?? "text-primary")} style={{ width: `${Math.max(1, (x.share / stats.ai.byTool[0].share) * 100)}%` }} />
+              </span>
+              <span className="text-right font-mono text-xs tabular-nums text-muted-foreground">{x.share < 0.01 ? "<1%" : pct(x.share)}</span>
+            </div>
+          ))}
+        </div>
       </Section>
 
       <div className="grid gap-6 md:grid-cols-2">
