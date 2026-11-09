@@ -41,7 +41,7 @@ const T = {
     findingsLink: "Every rule in detail: how common, where it fires, how accurate →",
     facts: "In one glance",
     fact: {
-      todo: (y: number) => `years: the age of the oldest TODO still in the code`,
+      todo: "years: the age of the oldest TODO still in the code",
       solo: "of projects: one person wrote 80%+ of the commits",
       quiet: "have had no commit for a year or more",
       pin: "pin a GitHub Action to a tag that can be moved",
@@ -132,7 +132,7 @@ const T = {
     findingsLink: "Каждое правило подробно: как часто, где срабатывает, насколько точно →",
     facts: "Коротко",
     fact: {
-      todo: (y: number) => `лет — возраст самого старого TODO в коде`,
+      todo: "лет — возраст самого старого TODO в коде",
       solo: "проектов: один человек сделал 80%+ коммитов",
       quiet: "без единого коммита год и больше",
       pin: "держат GitHub Action на теге, который можно перевесить",
@@ -337,7 +337,7 @@ export function StateOfOpenSource() {
       <Section title={t.facts}>
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
           {[
-            [String(Math.floor(stats.todo.oldest[0]?.years ?? 0)), t.fact.todo(stats.todo.oldest[0]?.years ?? 0), "text-warning"],
+            [String(Math.floor(stats.todo.oldest[0]?.years ?? 0)), t.fact.todo, "text-warning"],
             [pct(stats.busFactor.over80), t.fact.solo, "text-warning"],
             [pct(stats.pulse.quietOverYear), t.fact.quiet, "text-muted-foreground"],
             [pct(ci.unpinned / ci.withActions), t.fact.pin, "text-destructive"],
