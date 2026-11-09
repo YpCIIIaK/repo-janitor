@@ -256,10 +256,12 @@ export async function runScan(
   const issues: Issue[] = []
   const completedScanners: string[] = []
   const failedScanners: string[] = []
+  const durations: Record<string, number> = {}
   const total = scanners.length
   onProgress?.({ completed: 0, total })
   let completed = 0
   for (const scanner of scanners) {
+    const started = Date.now()
     try {
       // Stamp the producing scanner here rather than asking every scanner to set
       // it: one place, impossible to forget, and a scanner cannot claim to be
@@ -274,6 +276,7 @@ export async function runScan(
       failedScanners.push(scanner.id)
       ctx.log(`[repo-anti-rot] scanner "${scanner.id}" failed: ${String(err)}`)
     }
+    durations[scanner.id] = Date.now() - started
     completed++
     onProgress?.({ scanner: scanner.id, completed, total })
   }
@@ -298,7 +301,7 @@ export async function runScan(
     grade: scoreToGrade(score),
     issues: confident,
     ...(lowConfidence.length ? { lowConfidence } : {}),
-    diagnostics: { completedScanners, failedScanners, history: ctx.history ?? "unavailable" },
+    diagnostics: { completedScanners, failedScanners, history: ctx.history ?? "unavailable", durations },
     // Echo effective weights so the dashboard recomputes the score identically.
     config: { weights },
     metrics: { linesOfCode },

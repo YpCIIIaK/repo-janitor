@@ -9,9 +9,11 @@
  * history-based scanners run as they do in the CLI).
  */
 import { spawn } from "node:child_process"
-import { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs"
+import { availableParallelism } from "node:os"
+import { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, rmSync, statSync, writeFileSync } from "node:fs"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
+import { newestSource, scanFingerprint } from "./fingerprint.mjs"
 
 const here = dirname(fileURLToPath(import.meta.url))
 const root = join(here, "..")
@@ -26,6 +28,13 @@ if (!existsSync(cli)) {
   console.error("Build the CLI first: pnpm run build:cli")
   process.exit(1)
 }
+// A CLI older than the sources it was built from would scan with old rules
+// while stamping results with the new fingerprint.
+if (statSync(cli).mtimeMs < newestSource()) {
+  console.error("The CLI is older than packages/core or packages/cli sources: pnpm run build:cli")
+  process.exit(1)
+}
+const fingerprint = scanFingerprint()
 mkdirSync(cacheDir, { recursive: true })
 mkdirSync(outDir, { recursive: true })
 
@@ -92,7 +101,10 @@ async function runOne(repo) {
     evidence: i.evidence,
   }))
   const resultPath = join(outDir, `${repo.name}.json`)
-  writeFileSync(`${resultPath}.pending`, JSON.stringify({ repo: repo.name, sha: repo.sha, findings }, null, 1))
+  writeFileSync(
+    `${resultPath}.pending`,
+    JSON.stringify({ repo: repo.name, sha: repo.sha, fingerprint, seconds: Math.round((Date.now() - started) / 1000), findings }, null, 1),
+  )
   renameSync(pendingReport, reportPath)
   renameSync(`${resultPath}.pending`, resultPath)
   // The checkout is only needed while scanning: the next run restores it from
@@ -109,8 +121,26 @@ async function runOne(repo) {
   console.log(`${repo.name.padEnd(28)} ${String(findings.length).padStart(5)} findings  ${((Date.now() - started) / 1000).toFixed(0)}s`)
 }
 
-const queue = corpus.filter((r) => !only.length || only.includes(r.name))
-const workers = Number(process.env.BENCH_JOBS ?? 6)
+// Heaviest repos first, by last scan time (or size when never timed): one
+// 20-minute repo started last would otherwise hold the whole run open.
+const weight = (r) => {
+  const p = join(outDir, `${r.name}.json`)
+  if (existsSync(p)) {
+    try {
+      const prev = JSON.parse(readFileSync(p, "utf8"))
+      if (typeof prev.seconds === "number") return prev.seconds
+    } catch { /* fall through */ }
+  }
+  const rp = join(outDir, `${r.name}.report.json`)
+  if (existsSync(rp)) {
+    try { return (JSON.parse(readFileSync(rp, "utf8")).metrics?.linesOfCode ?? 0) / 5000 } catch { /* unknown */ }
+  }
+  return 0
+}
+const queue = corpus.filter((r) => !only.length || only.includes(r.name)).map((r) => [r, weight(r)]).sort((a, b) => b[1] - a[1]).map(([r]) => r)
+// One scan per core: scans are CPU-bound, and six jobs on four cores measured
+// slower (about 770 repos/h) than four (about 890).
+const workers = Number(process.env.BENCH_JOBS ?? availableParallelism())
 if (!Number.isInteger(workers) || workers < 1 || workers > 32) throw new Error("BENCH_JOBS must be an integer from 1 to 32")
 let failures = 0
 await Promise.all(

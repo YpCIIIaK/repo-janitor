@@ -1,6 +1,6 @@
 import { test } from "node:test"
 import assert from "node:assert/strict"
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, copyFileSync, rmSync } from "node:fs"
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, copyFileSync, rmSync, utimesSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { execFileSync, spawnSync } from "node:child_process"
@@ -22,6 +22,13 @@ for (const mode of ["success", "exit-failure", "scanner-failure"]) {
       const sha = execFileSync("git", ["-C", repo, "rev-parse", "HEAD"], { encoding: "utf8" }).trim()
       writeFileSync(join(bench, "corpus.json"), JSON.stringify([{ name: "fixture", url: repo, sha }]))
       copyFileSync(new URL("./run.mjs", import.meta.url), join(bench, "run.mjs"))
+      copyFileSync(new URL("./fingerprint.mjs", import.meta.url), join(bench, "fingerprint.mjs"))
+      // Scanner sources the fingerprint hashes, older than the CLI build below.
+      for (const d of ["packages/core/src", "packages/cli/src"]) {
+        mkdirSync(join(root, d), { recursive: true })
+        writeFileSync(join(root, d, "index.ts"), "export {}\n")
+        utimesSync(join(root, d, "index.ts"), new Date(2000, 0, 1), new Date(2000, 0, 1))
+      }
       writeFileSync(join(dist, "index.js"), `
         const fs = require('node:fs');
         const output = process.argv[process.argv.indexOf('--output') + 1];
@@ -41,3 +48,24 @@ for (const mode of ["success", "exit-failure", "scanner-failure"]) {
     } finally { rmSync(root, { recursive: true, force: true }) }
   })
 }
+
+test("benchmark refuses to scan with a CLI older than its sources", () => {
+  const root = mkdtempSync(join(tmpdir(), "benchmark-stale-"))
+  try {
+    const bench = join(root, "benchmark")
+    mkdirSync(join(bench, ".results"), { recursive: true })
+    mkdirSync(join(root, "packages/cli/dist"), { recursive: true })
+    writeFileSync(join(bench, "corpus.json"), "[]")
+    copyFileSync(new URL("./run.mjs", import.meta.url), join(bench, "run.mjs"))
+    copyFileSync(new URL("./fingerprint.mjs", import.meta.url), join(bench, "fingerprint.mjs"))
+    writeFileSync(join(root, "packages/cli/dist/index.js"), "")
+    utimesSync(join(root, "packages/cli/dist/index.js"), new Date(2000, 0, 1), new Date(2000, 0, 1))
+    for (const d of ["packages/core/src", "packages/cli/src"]) {
+      mkdirSync(join(root, d), { recursive: true })
+      writeFileSync(join(root, d, "index.ts"), "export {}\n")
+    }
+    const result = spawnSync(process.execPath, [join(bench, "run.mjs")], { encoding: "utf8" })
+    assert.equal(result.status, 1)
+    assert.match(result.stderr, /older than/)
+  } finally { rmSync(root, { recursive: true, force: true }) }
+})

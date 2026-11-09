@@ -109,6 +109,7 @@ Pass criteria — **all** must hold, else revert the last fix:
 
 ```
 node benchmark/score.mjs --update
+pnpm --filter ./packages/core build && node benchmark/rescore.mjs   # confidence → scores, no rescan
 node benchmark/history.mjs
 node benchmark/stats.mjs
 node benchmark/archive.mjs pack && node benchmark/archive.mjs push

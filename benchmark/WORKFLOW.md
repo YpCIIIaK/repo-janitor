@@ -44,8 +44,9 @@ archive.mjs ─ pack/push/pull ────────▶ orphan branch `bench-
 | Command | What it does |
 |---|---|
 | `pnpm run build:cli` | Rebuild the CLI the benchmark runs. **Do this after every scanner change**, and never while a run is in progress (a mid-run rebuild mixes versions). |
-| `BENCH_DROP_CLONES=1 BENCH_JOBS=6 node benchmark/run.mjs <repo…>` | Clone, scan offline, record history, delete the clone. No names = whole corpus. |
-| `node benchmark/resume.mjs` | Scan every repo whose result is missing or older than the current CLI build. Safe to rerun after interruptions. (A rebuild makes EVERY repo stale — then it rescans all.) |
+| `BENCH_DROP_CLONES=1 node benchmark/run.mjs <repo…>` | Clone, scan offline, record history, delete the clone. No names = whole corpus. One job per CPU core by default (`BENCH_JOBS` overrides); heaviest repos first. Refuses to run if the CLI is older than its sources. |
+| `node benchmark/resume.mjs` | Scan every repo whose result is missing or was produced by different scanner code (fingerprint of `packages/core/src` + `packages/cli/src`, see `fingerprint.mjs`). Safe to rerun after interruptions. A confidence-data change does NOT make results stale. |
+| `pnpm --filter ./packages/core build && node benchmark/rescore.mjs` | After `score.mjs --update`: reapply confidence to stored findings and recompute every score. No scan. |
 | `node benchmark/score.mjs` | Precision by scanner, rule and confidence. `--update` rewrites baseline + confidence-data.ts; `--check` fails on regressions. |
 | `node benchmark/sample.mjs --spread N <repo…>` | Up to N unlabelled findings per rule from those repos, for labelling. |
 | `node benchmark/label.mjs < lines` | Record labels; each line `<repo-name> <tp|fp> <finding-id>`. |
@@ -73,7 +74,7 @@ archive.mjs ─ pack/push/pull ────────▶ orphan branch `bench-
 5. **Verify**: rebuild, rerun ONLY the repos that had those findings plus the
    deliberately vulnerable apps (recall must not drop), check `score.mjs`
    (precision up, "lost TP" not up).
-6. **Refresh**: `score.mjs --update`, `history.mjs`, `stats.mjs`, full checks,
+6. **Refresh**: `score.mjs --update`, core build + `rescore.mjs`, `history.mjs`, `stats.mjs`, full checks,
    `archive.mjs pack && push`, commit, merge to main, push.
 
 ### Labelling criterion

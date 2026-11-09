@@ -149,6 +149,8 @@ export const scanReportSchema = z.object({
     completedScanners: z.array(z.string()),
     failedScanners: z.array(z.string()),
     history: z.enum(["shallow", "available", "unavailable"]),
+    /** Wall time of each scanner in milliseconds, to find the slow ones. */
+    durations: z.record(z.string(), z.number()).optional(),
   }).optional(),
   /**
    * Effective scan configuration echoed into the report. Lets the dashboard
