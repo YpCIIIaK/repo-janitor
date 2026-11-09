@@ -1,5 +1,6 @@
 {
  "duplicate-MaccyTests/SearchTests.swift-28": "fp",
  "duplicate-MaccyUITests/MaccyUITests.swift-458": "fp",
+ "todo-Maccy/FloatingPanel.swift:40": "tp",
  "todo-Maccy/Observables/AppState.swift:69": "tp"
 }

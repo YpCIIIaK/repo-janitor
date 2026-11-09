@@ -1,0 +1,5 @@
+{
+ "insecure-localstorage-secret-web-ui/app/services/api.ts:109": "tp",
+ "insecure-react-dangerous-html-web-ui/app/components/markdown/code-block.tsx:109": "fp",
+ "insecure-ssrf-.agents/skills/claude-api/shared/preserved-thinking-migration/drop_block_probe.py:428": "fp"
+}

@@ -40,7 +40,7 @@ for (const r of corpus) {
   })
 }
 
-const VULNERABLE_RE = /jzheaux-spel-injection|eoftedal-deserialize|veracode-research-actuator-testbed|terracotta-bank-terracotta-bank|owasp-benchmark-benchmarkjava|goat|dvwa|dvna|dvws|juice-shop$|juice-shop-juice-shop|vampi|dsvw|vulnerable|crapi|govwa|pygoat|vulpy|dvpwa|goof|inject-some-sql|vulnado|javavulnerablelab|dvsa/i
+const VULNERABLE_RE = /mochiruntime-android-ctf|jzheaux-spel-injection|eoftedal-deserialize|veracode-research-actuator-testbed|terracotta-bank-terracotta-bank|owasp-benchmark-benchmarkjava|goat|dvwa|dvna|dvws|juice-shop$|juice-shop-juice-shop|vampi|dsvw|vulnerable|crapi|govwa|pygoat|vulpy|dvpwa|goof|inject-some-sql|vulnado|javavulnerablelab|dvsa/i
 const urlByName = new Map(corpus.map((r) => [r.name, r.url.replace("https://github.com/", "")]))
 const urlOf = (name) => urlByName.get(name) ?? name
 
