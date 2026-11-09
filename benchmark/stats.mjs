@@ -365,6 +365,75 @@ for (const r of repos) for (const i of r.issues) if (i.severity in json.severity
     .sort((a, b) => b.withTests - a.withTests)
 }
 
+// --- public metadata (deps.dev): popularity, licenses, OpenSSF Scorecard ------
+{
+  const metaPath = join(here, "meta.json")
+  const meta = existsSync(metaPath) ? JSON.parse(readFileSync(metaPath, "utf8")) : {}
+  const withMeta = repos.map((r) => ({ r, m: meta[r.name] })).filter((x) => x.m && x.m.stars != null)
+  const starBands = [[0, 100, "under 100"], [100, 1e3, "100–1k"], [1e3, 1e4, "1k–10k"], [1e4, 5e4, "10k–50k"], [5e4, Infinity, "50k+"]]
+  json.popularity = {
+    repos: withMeta.length,
+    bands: starBands.map(([a, b, label]) => {
+      const l = withMeta.filter((x) => x.m.stars >= a && x.m.stars < b)
+      return {
+        label,
+        repos: l.length,
+        medianScore: l.length ? median(l.map((x) => x.r.score)) : null,
+        gradeA: l.length ? Number((l.filter((x) => x.r.grade === "A").length / l.length).toFixed(3)) : null,
+        density: l.length ? Number(median(l.filter((x) => x.r.loc > 500).map((x) => (1000 * x.r.issues.length) / x.r.loc)).toFixed(2)) : null,
+      }
+    }),
+  }
+  const lic = new Map()
+  for (const x of withMeta) {
+    const k = x.m.license && x.m.license !== "non-standard" ? x.m.license : "other or none"
+    lic.set(k, (lic.get(k) ?? 0) + 1)
+  }
+  const licRows = [...lic].sort((a, b) => b[1] - a[1])
+  const top = licRows.slice(0, 7)
+  const rest = licRows.slice(7).reduce((a, [, c]) => a + c, 0)
+  json.licenses = [...top, ...(rest ? [["others", rest]] : [])].map(([k, c]) => ({ license: k, share: Number((c / withMeta.length).toFixed(3)) }))
+
+  // Scorecard: does an independent security score agree with ours?
+  const sc = repos.map((r) => ({ r, s: meta[r.name]?.scorecard })).filter((x) => x.s && typeof x.s.score === "number")
+  const rank = (arr) => {
+    const idx = arr.map((v, i) => [v, i]).sort((a, b) => a[0] - b[0])
+    const out = new Array(arr.length)
+    for (let i = 0; i < idx.length; ) {
+      let j = i
+      while (j + 1 < idx.length && idx[j + 1][0] === idx[i][0]) j++
+      for (let k = i; k <= j; k++) out[idx[k][1]] = (i + j) / 2
+      i = j + 1
+    }
+    return out
+  }
+  const spearman = (a, b) => {
+    const ra = rank(a), rb = rank(b), n = a.length
+    const ma = ra.reduce((x, y) => x + y, 0) / n, mb = rb.reduce((x, y) => x + y, 0) / n
+    let num = 0, da = 0, db = 0
+    for (let i = 0; i < n; i++) { num += (ra[i] - ma) * (rb[i] - mb); da += (ra[i] - ma) ** 2; db += (rb[i] - mb) ** 2 }
+    return num / Math.sqrt(da * db)
+  }
+  const has = (r, re) => r.issues.some((i) => re.test(i.rule ?? ""))
+  const agree = (check, re) => {
+    const l = sc.filter((x) => typeof x.s.checks?.[check] === "number" && x.s.checks[check] >= 0)
+    const good = l.filter((x) => x.s.checks[check] >= 8), bad = l.filter((x) => x.s.checks[check] <= 2)
+    const share = (arr) => (arr.length ? Number((arr.filter((x) => has(x.r, re)).length / arr.length).toFixed(3)) : null)
+    return { repos: l.length, flaggedWhenScorecardGood: share(good), flaggedWhenScorecardBad: share(bad) }
+  }
+  json.scorecard = {
+    repos: sc.length,
+    medianScorecard: Number(median(sc.map((x) => x.s.score)).toFixed(1)),
+    spearman: sc.length > 30 ? Number(spearman(sc.map((x) => x.s.score), sc.map((x) => x.r.score)).toFixed(2)) : null,
+    bands: [[0, 4, "0–4"], [4, 6, "4–6"], [6, 8, "6–8"], [8, 10.1, "8–10"]].map(([a, b, label]) => {
+      const l = sc.filter((x) => x.s.score >= a && x.s.score < b)
+      return { label, repos: l.length, medianOurScore: l.length ? median(l.map((x) => x.r.score)) : null }
+    }),
+    pinned: agree("Pinned-Dependencies", /^workflow-action-(tag|tag-first-party|unpinned)$/),
+    tokens: agree("Token-Permissions", /^workflow-no-permissions$/),
+  }
+}
+
 json.lowConfidenceHidden = hidden
 json.shown = repos.reduce((s, r) => s + r.issues.length, 0)
 json.precision = precisionByConfidence()
