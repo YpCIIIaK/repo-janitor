@@ -2845,11 +2845,95 @@
    "stars": 63,
    "created": "2017-06-16",
    "language": "Python"
+  },
+  {
+   "url": "https://github.com/citusdata/postgresql-hll",
+   "stars": 1236,
+   "created": "2013-02-01",
+   "language": "C"
+  },
+  {
+   "url": "https://github.com/nntrainer/nntrainer",
+   "stars": 215,
+   "created": "2020-03-23",
+   "language": "C++"
+  },
+  {
+   "url": "https://github.com/aiczk/ULinq",
+   "stars": 12,
+   "created": "2026-02-09",
+   "language": "C#"
+  },
+  {
+   "url": "https://github.com/guanyx/LLM_questions",
+   "stars": 23,
+   "created": "2026-01-12",
+   "language": "HTML"
+  },
+  {
+   "url": "https://github.com/jdx/hk",
+   "stars": 1308,
+   "created": "2025-01-26",
+   "language": "Rust"
+  },
+  {
+   "url": "https://github.com/mad1na2010/phyton1",
+   "stars": 24,
+   "created": "2026-05-13",
+   "language": null
+  },
+  {
+   "url": "https://github.com/veracode/gen-ir",
+   "stars": 10,
+   "created": "2022-12-06",
+   "language": "Swift"
+  },
+  {
+   "url": "https://github.com/panedrone/sqldalmaker",
+   "stars": 25,
+   "created": "2019-02-01",
+   "language": "Java"
+  },
+  {
+   "url": "https://github.com/sonata-project/SonataUserBundle",
+   "stars": 346,
+   "created": "2011-05-13",
+   "language": "PHP"
+  },
+  {
+   "url": "https://github.com/IS-UMK/lemkis",
+   "stars": 14,
+   "created": "2024-03-04",
+   "language": "C++"
+  },
+  {
+   "url": "https://github.com/tianfeng66/coze-anime-biography-workflow",
+   "stars": 14,
+   "created": "2026-09-28",
+   "language": null
+  },
+  {
+   "url": "https://github.com/nityeshaga/claude-home-base",
+   "stars": 84,
+   "created": "2026-03-20",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/INSPIRE-MIF/helpdesk-geoportal",
+   "stars": 13,
+   "created": "2020-11-30",
+   "language": null
+  },
+  {
+   "url": "https://github.com/Spirt007/Tvru",
+   "stars": 33,
+   "created": "2023-11-02",
+   "language": null
   }
  ],
- "tries": 991,
+ "tries": 1015,
  "population": "public, not a fork, not archived, stars >= 10, pushed since 2025-11-09, created 2010-01-01..2026-10-10",
- "rngCalls": 2462,
+ "rngCalls": 2524,
  "windows": 1686,
- "overCap": 17
+ "overCap": 19
 }
