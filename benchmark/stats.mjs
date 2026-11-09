@@ -570,7 +570,14 @@ for (const r of repos) for (const i of r.issues) if (i.severity in json.severity
     const p = join(here, ".inventory", `${n}.json`)
     return existsSync(p) ? JSON.parse(readFileSync(p, "utf8")) : null
   }
-  const stars = repos.map((r) => meta[r.name]?.stars).filter((v) => typeof v === "number").sort((a, b) => a - b)
+  const layer = new Map(corpus.map((c) => [c.name, c.layer]))
+  const picked = repos.filter((r) => layer.get(r.name) !== "random")
+  const randomRepos = repos.filter((r) => layer.get(r.name) === "random")
+  const rlPath = join(here, "random-layer.json")
+  const rl = existsSync(rlPath) ? JSON.parse(readFileSync(rlPath, "utf8")) : { picked: [] }
+  const rStars = rl.picked.map((p) => p.stars).filter((v) => typeof v === "number").sort((a, b) => a - b)
+  // Bias figures describe the hand-picked part; the random layer is reported on its own.
+  const stars = picked.map((r) => meta[r.name]?.stars).filter((v) => typeof v === "number").sort((a, b) => a - b)
   const hs = repos.map((r) => hist.get(r.name)).filter(Boolean)
   json.corpus = {
     repos: repos.length,
@@ -578,10 +585,14 @@ for (const r of repos) for (const i of r.issues) if (i.severity in json.severity
     files: repos.reduce((a, r) => a + (invOf(r.name)?.files ?? 0), 0),
     commits: hs.reduce((a, h) => a + Object.values(h.commitsByYear ?? {}).reduce((x, y) => x + y, 0), 0),
     contributorsSummed: hs.reduce((a, h) => a + (h.authorsTotal ?? 0), 0),
-    stars: stars.reduce((a, b) => a + b, 0),
+    handPicked: picked.length,
+    randomLayer: randomRepos.length,
+    randomMedianStars: rStars.length ? rStars[rStars.length >> 1] : null,
+    randomPopulation: rl.population ?? null,
+    stars: stars.reduce((a, b) => a + b, 0) + rStars.reduce((a, b) => a + b, 0),
     medianStars: stars.length ? stars[stars.length >> 1] : null,
     under1kStars: stars.length ? Number((stars.filter((v) => v < 1000).length / stars.length).toFixed(3)) : null,
-    activeLastYear: Number((repos.filter((r) => (r.activity?.commitsLastYear ?? 0) > 0).length / repos.length).toFixed(3)),
+    activeLastYear: Number((picked.filter((r) => (r.activity?.commitsLastYear ?? 0) > 0).length / picked.length).toFixed(3)),
     languages: new Set(repos.map((r) => r.language).filter((l) => l && l !== "other")).size,
     vulnerableApps: repos.filter((r) => VULNERABLE_RE.test(r.name)).length,
     labelled: Object.values(precisionByConfidence()).reduce((a, p) => a + (p.tp ?? 0) + (p.fp ?? 0), 0),

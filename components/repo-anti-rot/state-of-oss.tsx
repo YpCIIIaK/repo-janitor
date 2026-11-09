@@ -101,10 +101,11 @@ const T = {
     dockDigest: "pin every base image by digest",
     totals: { loc: "lines of code", files: "files", commits: "commits read", stars: "GitHub stars between them" },
     chosen: "How the corpus was chosen",
-    chosenBody: (c: { repos: number; languages: number; vulnerableApps: number; medianStars: number | null; under1kStars: number | null; activeLastYear: number; labelled: number }) => [
-      `${c.repos.toLocaleString("en-US")} public GitHub repositories, picked by hand in batches to cover libraries, applications, infrastructure and IaC, mobile, games, embedded, data and developer tools across ${c.languages} main languages — plus ${c.vulnerableApps} deliberately vulnerable apps, used to check that real holes are still found.`,
+    chosenBody: (c: { repos: number; languages: number; vulnerableApps: number; medianStars: number | null; under1kStars: number | null; activeLastYear: number; labelled: number; handPicked?: number; randomLayer?: number; randomMedianStars?: number | null }) => [
+      `${(c.handPicked ?? c.repos).toLocaleString("en-US")} public GitHub repositories, picked by hand in batches to cover libraries, applications, infrastructure and IaC, mobile, games, embedded, data and developer tools across ${c.languages} main languages — plus ${c.vulnerableApps} deliberately vulnerable apps, used to check that real holes are still found.`,
       "Each is pinned to one commit and scanned offline with the same build; repos whose clone exceeds 2 GB are left out.",
       `It is not a random sample. It leans towards well-known projects (median ${c.medianStars?.toLocaleString("en-US") ?? "—"} stars; ${pct(c.under1kStars ?? 0)} under 1,000) and active ones (${pct(c.activeLastYear)} had a commit in the last year), and JavaScript, TypeScript and Python are the largest groups. Read the numbers as "popular open source", not "all code".`,
+      ...(c.randomLayer ? [`On top of that, a random layer of ${c.randomLayer.toLocaleString("en-US")} repositories drawn uniformly from active public GitHub projects (not forks, not archived, at least 10 stars, pushed in the last year; median ${c.randomMedianStars ?? "—"} stars). It is kept apart as its own track, so it can say what typical code looks like without the hand-picked bias.`] : []),
       `Precision is measured on ${c.labelled.toLocaleString("en-US")} findings checked by hand; only high and medium confidence findings are counted.`,
     ],
     tracksT: "Tracks: where the numbers are measured",
@@ -251,10 +252,11 @@ const T = {
     dockDigest: "закрепляют все базовые образы по digest",
     totals: { loc: "строк кода", files: "файлов", commits: "коммитов прочитано", stars: "звёзд на GitHub у них вместе" },
     chosen: "Как отбирался корпус",
-    chosenBody: (c: { repos: number; languages: number; vulnerableApps: number; medianStars: number | null; under1kStars: number | null; activeLastYear: number; labelled: number }) => [
-      `${c.repos.toLocaleString("ru-RU")} публичных репозиториев GitHub, отобранных вручную пачками так, чтобы покрыть библиотеки, приложения, инфраструктуру и IaC, мобильные проекты, игры, embedded, данные и инструменты разработчика на ${c.languages} основных языках, — плюс ${c.vulnerableApps} учебных уязвимых приложений, на которых проверяем, что настоящие дыры по-прежнему находятся.`,
+    chosenBody: (c: { repos: number; languages: number; vulnerableApps: number; medianStars: number | null; under1kStars: number | null; activeLastYear: number; labelled: number; handPicked?: number; randomLayer?: number; randomMedianStars?: number | null }) => [
+      `${(c.handPicked ?? c.repos).toLocaleString("ru-RU")} публичных репозиториев GitHub, отобранных вручную пачками так, чтобы покрыть библиотеки, приложения, инфраструктуру и IaC, мобильные проекты, игры, embedded, данные и инструменты разработчика на ${c.languages} основных языках, — плюс ${c.vulnerableApps} учебных уязвимых приложений, на которых проверяем, что настоящие дыры по-прежнему находятся.`,
       "Каждый закреплён на одном коммите и просканирован без сети одной и той же сборкой; репозитории, чей клон больше 2 ГБ, исключены.",
       `Это не случайная выборка. Она смещена к известным проектам (медиана ${c.medianStars?.toLocaleString("ru-RU") ?? "—"} звёзд; меньше 1000 звёзд у ${pct(c.under1kStars ?? 0)}) и к активным (у ${pct(c.activeLastYear)} был коммит за последний год), а крупнее всего группы JavaScript, TypeScript и Python. Читайте цифры как «популярный open source», а не «весь код».`,
+      ...(c.randomLayer ? [`Сверх этого — случайный слой из ${c.randomLayer.toLocaleString("ru-RU")} репозиториев, равномерно выбранных среди активных публичных проектов GitHub (не форки, не архивные, от 10 звёзд, с коммитом за последний год; медиана ${c.randomMedianStars ?? "—"} звёзд). Он считается отдельным направлением и показывает, как выглядит типичный код, без смещения ручного отбора.`] : []),
       `Точность измерена на ${c.labelled.toLocaleString("ru-RU")} находках, проверенных вручную; учитываются только находки с высокой и средней уверенностью.`,
     ],
     tracksT: "Направления: где измеряются цифры",
