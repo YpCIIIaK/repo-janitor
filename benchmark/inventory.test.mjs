@@ -19,7 +19,7 @@ test("one Swift file in a Go repo still selects Swift-reading scanners", () => {
 })
 
 test("scanners without inputs in the repo are skipped", () => {
-  assert.equal(mayProduce("dead-code", inv), false) // no JS/TS
+  assert.equal(mayProduce("skipped-tests", inv), false) // no JS/TS or Python
   assert.equal(mayProduce("dependency-funeral", inv), false) // no package.json
   assert.ok(mayProduce("dockerfile", inv))
   assert.ok(mayProduce("workflow-security", inv))
