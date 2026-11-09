@@ -1,0 +1,149 @@
+{
+ "seed": 20261109,
+ "drawnAt": "2026-11-09",
+ "picked": [
+  {
+   "url": "https://github.com/wushenperson/throwCheckOpen",
+   "stars": 17,
+   "created": "2024-05-06",
+   "language": "HTML"
+  },
+  {
+   "url": "https://github.com/TradeTrust/tradetrust-website",
+   "stars": 18,
+   "created": "2019-07-26",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/suifei/shownet",
+   "stars": 13,
+   "created": "2026-08-02",
+   "language": "Rust"
+  },
+  {
+   "url": "https://github.com/superwerker/superwerker",
+   "stars": 552,
+   "created": "2020-06-27",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/Victus0660/ZTimer---Professional-Web-Based-Rubik-s-Cube-Timer",
+   "stars": 50,
+   "created": "2026-05-27",
+   "language": "HTML"
+  },
+  {
+   "url": "https://github.com/yawkat/javap",
+   "stars": 139,
+   "created": "2016-05-20",
+   "language": "Kotlin"
+  },
+  {
+   "url": "https://github.com/AntigoneRandy/DREAM",
+   "stars": 14,
+   "created": "2025-09-24",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/OutSystems/cloud-connector",
+   "stars": 21,
+   "created": "2022-07-23",
+   "language": "Go"
+  },
+  {
+   "url": "https://github.com/fenzaiway/ui-html",
+   "stars": 24,
+   "created": "2025-04-14",
+   "language": "HTML"
+  },
+  {
+   "url": "https://github.com/sevinalucia/image-reader",
+   "stars": 14,
+   "created": "2021-05-21",
+   "language": "JavaScript"
+  },
+  {
+   "url": "https://github.com/ruzbeh0/Time2Work",
+   "stars": 13,
+   "created": "2024-03-31",
+   "language": "C#"
+  },
+  {
+   "url": "https://github.com/Yelp/aactivator",
+   "stars": 152,
+   "created": "2016-05-13",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/ZhongyiChen/ego-c",
+   "stars": 10,
+   "created": "2019-07-26",
+   "language": "C"
+  },
+  {
+   "url": "https://github.com/maragudk/goqite",
+   "stars": 542,
+   "created": "2024-01-13",
+   "language": "Go"
+  },
+  {
+   "url": "https://github.com/lindseynguyen/ReadingDataOT",
+   "stars": 12,
+   "created": "2024-12-29",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/hurlybird/Duck",
+   "stars": 18,
+   "created": "2014-04-04",
+   "language": "C"
+  },
+  {
+   "url": "https://github.com/Copenhagen0x/solana-security-standard",
+   "stars": 38,
+   "created": "2026-05-26",
+   "language": "JavaScript"
+  },
+  {
+   "url": "https://github.com/headllines/hackernews-weekly",
+   "stars": 147,
+   "created": "2020-08-18",
+   "language": "JavaScript"
+  },
+  {
+   "url": "https://github.com/segment-integrations/analytics-ios-integration-amplitude",
+   "stars": 11,
+   "created": "2015-11-06",
+   "language": "Objective-C"
+  },
+  {
+   "url": "https://github.com/bilfeldt/laravel-request-logger",
+   "stars": 128,
+   "created": "2021-11-05",
+   "language": "PHP"
+  },
+  {
+   "url": "https://github.com/welcloud-io/wio-from-diagram-to-code-with-amazon-q-developer",
+   "stars": 15,
+   "created": "2025-01-06",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/privatenumber/git-squash-branch",
+   "stars": 23,
+   "created": "2023-01-30",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/Andrew-most-likely/Linux2Windows",
+   "stars": 13,
+   "created": "2026-04-07",
+   "language": "Python"
+  }
+ ],
+ "tries": 42,
+ "population": "public, not a fork, not archived, stars >= 10, pushed since 2025-11-09, created 2010-01-01..2026-10-10",
+ "rngCalls": 108,
+ "windows": 1686,
+ "overCap": 0
+}
