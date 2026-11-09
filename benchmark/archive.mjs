@@ -2,7 +2,7 @@
 /**
  * Keep benchmark data on GitHub instead of on the local disk, in small parts.
  *
- *   node benchmark/archive.mjs pack            pack .results + .history into chunks of 100 repos
+ *   node benchmark/archive.mjs pack            pack .results (scans, OSV) + .history + .inventory into chunks of 100 repos
  *   node benchmark/archive.mjs push            commit the chunks to the `bench-data` branch and push
  *   node benchmark/archive.mjs pull [repo…]    fetch `bench-data` and unpack only the chunks
  *                                              holding these repos (all chunks with no names)
@@ -44,7 +44,7 @@ function pack() {
     const id = `chunk-${String(i / CHUNK).padStart(3, "0")}`
     const files = []
     for (const n of part) {
-      for (const f of [`.results/${n}.json`, `.results/${n}.report.json`, `.history/${n}.json`]) {
+      for (const f of [`.results/${n}.json`, `.results/${n}.report.json`, `.results/${n}.osv.json`, `.history/${n}.json`, `.inventory/${n}.json`]) {
         if (existsSync(join(here, f))) files.push(f)
       }
     }

@@ -12,16 +12,29 @@ import { existsSync, readFileSync, writeFileSync } from "node:fs"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
 import { scanFingerprint, scannerFingerprints, staleScanners } from "./fingerprint.mjs"
+import { readInventory } from "./inventory.mjs"
+import { mayProduce } from "./scanner-inputs.mjs"
 
 const here = dirname(fileURLToPath(import.meta.url))
 const corpus = JSON.parse(readFileSync(join(here, "corpus.json"), "utf8"))
 const fingerprint = scanFingerprint()
 const fps = scannerFingerprints()
+const stampOnly = []
 const plans = corpus.map((r) => {
   const f = join(here, ".results", `${r.name}.json`)
   let prev = null
   try { prev = existsSync(f) ? JSON.parse(readFileSync(f, "utf8")) : null } catch { prev = null }
-  return { name: r.name, plan: staleScanners(prev, r.sha, fps, fingerprint) }
+  let plan = staleScanners(prev, r.sha, fps, fingerprint)
+  // Same filter as run.mjs: a scanner with no input files here and no finding
+  // last time cannot change this result.
+  const inv = plan && plan.length ? readInventory(r.name, r.sha) : null
+  if (inv) {
+    const had = new Set(prev.findings.map((f) => f.scanner))
+    const skipped = plan.filter((id) => !mayProduce(id, inv) && !had.has(id))
+    plan = plan.filter((id) => !skipped.includes(id))
+    if (skipped.length && !plan.length) stampOnly.push(r.name)
+  }
+  return { name: r.name, plan }
 })
 // Stamp per-scanner fingerprints on results that are current but predate them.
 for (const p of plans) {
@@ -30,6 +43,13 @@ for (const p of plans) {
   const prev = JSON.parse(readFileSync(f, "utf8"))
   if (!prev.scanners) writeFileSync(f, JSON.stringify({ ...prev, base: fps.base, scanners: fps.scanners }, null, 1))
 }
+// Repos where every stale scanner was skipped: record the new fingerprints, no scan.
+for (const name of stampOnly) {
+  const f = join(here, ".results", `${name}.json`)
+  const prev = JSON.parse(readFileSync(f, "utf8"))
+  writeFileSync(f, JSON.stringify({ ...prev, base: fps.base, scanners: fps.scanners }, null, 1))
+}
+if (stampOnly.length) console.log(`no input files for the changed scanners, marked current: ${stampOnly.length}`)
 const stale = plans.filter((p) => p.plan === null || p.plan.length > 0).map((p) => p.name)
 const full = plans.filter((p) => p.plan === null).length
 const byScanner = {}

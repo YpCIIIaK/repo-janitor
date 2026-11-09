@@ -14,6 +14,8 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, rmSync, s
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
 import { newestSource, scanFingerprint, scannerFingerprints, staleScanners } from "./fingerprint.mjs"
+import { readInventory, writeInventory } from "./inventory.mjs"
+import { mayProduce } from "./scanner-inputs.mjs"
 
 const here = dirname(fileURLToPath(import.meta.url))
 const root = join(here, "..")
@@ -72,8 +74,17 @@ async function runOne(repo) {
   let only = process.env.BENCH_FULL === "1" ? null : staleScanners(prevResult, repo.sha, fps, fingerprint)
   if (forced.length && prevResult?.sha === repo.sha) only = forced
   if (only && !prevReport) only = null
+  // Skip scanners that cannot find anything here: none of their input files in
+  // the repo, and no finding from them last time. They are marked current.
+  const inv = readInventory(repo.name, repo.sha)
+  if (only && only.length && inv && !forced.length) {
+    const hadFindings = new Set((prevResult?.findings ?? []).map((f) => f.scanner))
+    only = only.filter((id) => mayProduce(id, inv) || hadFindings.has(id))
+  }
   if (only && only.length === 0) {
-    if (!prevResult.scanners) writeFileSync(resultPath0, JSON.stringify({ ...prevResult, base: fps.base, scanners: fps.scanners }, null, 1))
+    if (!prevResult.scanners || Object.keys(fps.scanners).some((id) => prevResult.scanners[id] !== fps.scanners[id])) {
+      writeFileSync(resultPath0, JSON.stringify({ ...prevResult, base: fps.base, scanners: fps.scanners }, null, 1))
+    }
     console.log(`${repo.name.padEnd(28)} current`)
     return
   }
@@ -101,6 +112,10 @@ async function runOne(repo) {
     await sh2("git", ["-C", dir, "fetch", "--quiet", "origin", repo.sha])
     co = await sh2("git", ["-C", dir, "-c", "core.longpaths=true", "checkout", "--quiet", "--force", repo.sha])
     if (co.status !== 0) throw new Error(`checkout failed: ${repo.name}\n${co.stderr}`)
+  }
+  if (!inv) {
+    const ls = await sh2("git", ["-C", dir, "ls-tree", "-r", "--name-only", repo.sha])
+    if (ls.status === 0) writeInventory(repo.name, ls.stdout.split("\n"), repo.sha)
   }
   const reportPath = join(outDir, `${repo.name}.report.json`)
   const pendingReport = `${reportPath}.pending`
