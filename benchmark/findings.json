@@ -1,37 +1,37 @@
 {
-  "generatedAt": "2026-11-09T16:14:41.097Z",
-  "repos": 3000,
+  "generatedAt": "2026-11-09T17:13:24.142Z",
+  "repos": 3400,
   "rules": [
     {
       "rule": "todo",
-      "count": 83809,
+      "count": 92924,
       "hidden": 0,
-      "repoShare": 0.608,
+      "repoShare": 0.595,
       "medianPerRepo": 9,
       "severity": "warning",
       "where": {
-        "tests": 0.137,
-        "source": 0.849,
+        "tests": 0.141,
+        "source": 0.845,
         "docs": 0.014,
         "ci": 0,
         "vendored": 0
       },
       "labelled": {
-        "tp": 76,
+        "tp": 92,
         "fp": 9
       }
     },
     {
       "rule": "bus-factor",
-      "count": 38604,
+      "count": 44120,
       "hidden": 0,
-      "repoShare": 0.754,
-      "medianPerRepo": 16,
+      "repoShare": 0.751,
+      "medianPerRepo": 17,
       "severity": "info",
       "where": {
-        "source": 0.941,
-        "docs": 0.03,
-        "vendored": 0.028,
+        "source": 0.945,
+        "docs": 0.029,
+        "vendored": 0.024,
         "ci": 0.001,
         "tests": 0.001
       },
@@ -42,27 +42,27 @@
     },
     {
       "rule": "duplicate",
-      "count": 20328,
+      "count": 24015,
       "hidden": 0,
-      "repoShare": 0.686,
+      "repoShare": 0.708,
       "medianPerRepo": 15,
       "severity": "info",
       "where": {
-        "source": 0.964,
-        "docs": 0.028,
-        "tests": 0.007,
+        "source": 0.966,
+        "docs": 0.027,
+        "tests": 0.006,
         "ci": 0.001
       },
       "labelled": {
-        "tp": 37,
+        "tp": 39,
         "fp": 11
       }
     },
     {
       "rule": "workflow-action-tag-first-party",
-      "count": 17450,
+      "count": 20252,
       "hidden": 0,
-      "repoShare": 0.583,
+      "repoShare": 0.59,
       "medianPerRepo": 7,
       "severity": "info",
       "where": {
@@ -75,15 +75,16 @@
     },
     {
       "rule": "dead-export",
-      "count": 11113,
+      "count": 11253,
       "hidden": 0,
-      "repoShare": 0.175,
+      "repoShare": 0.163,
       "medianPerRepo": 3,
       "severity": "info",
       "where": {
         "source": 0.991,
         "docs": 0.001,
-        "tests": 0.008
+        "tests": 0.008,
+        "vendored": 0
       },
       "labelled": {
         "tp": 17,
@@ -91,29 +92,10 @@
       }
     },
     {
-      "rule": "commented-code",
-      "count": 7880,
-      "hidden": 0,
-      "repoShare": 0.324,
-      "medianPerRepo": 4,
-      "severity": "info",
-      "where": {
-        "source": 0.732,
-        "tests": 0.262,
-        "docs": 0.001,
-        "ci": 0,
-        "vendored": 0.004
-      },
-      "labelled": {
-        "tp": 58,
-        "fp": 26
-      }
-    },
-    {
       "rule": "workflow-action-tag",
-      "count": 7754,
+      "count": 9173,
       "hidden": 0,
-      "repoShare": 0.488,
+      "repoShare": 0.495,
       "medianPerRepo": 3,
       "severity": "warning",
       "where": {
@@ -125,21 +107,40 @@
       }
     },
     {
-      "rule": "doc-link",
-      "count": 5615,
+      "rule": "commented-code",
+      "count": 8552,
       "hidden": 0,
-      "repoShare": 0.209,
+      "repoShare": 0.316,
+      "medianPerRepo": 3,
+      "severity": "info",
+      "where": {
+        "source": 0.737,
+        "tests": 0.257,
+        "docs": 0.001,
+        "ci": 0,
+        "vendored": 0.005
+      },
+      "labelled": {
+        "tp": 69,
+        "fp": 32
+      }
+    },
+    {
+      "rule": "doc-link",
+      "count": 6096,
+      "hidden": 0,
+      "repoShare": 0.208,
       "medianPerRepo": 2,
       "severity": "warning",
       "where": {
-        "docs": 0.99,
-        "ci": 0.009,
+        "docs": 0.989,
+        "ci": 0.01,
         "tests": 0.001,
         "source": 0.001
       },
       "labelled": {
-        "tp": 24,
-        "fp": 15
+        "tp": 31,
+        "fp": 16
       }
     },
     {
@@ -157,9 +158,9 @@
     },
     {
       "rule": "insecure-ssrf",
-      "count": 25,
-      "hidden": 4482,
-      "repoShare": 0.005,
+      "count": 26,
+      "hidden": 4574,
+      "repoShare": 0.004,
       "medianPerRepo": 1,
       "severity": "critical",
       "where": {
@@ -167,12 +168,12 @@
       },
       "labelled": {
         "tp": 1,
-        "fp": 72
+        "fp": 74
       }
     },
     {
       "rule": "workflow-no-permissions",
-      "count": 4021,
+      "count": 4523,
       "hidden": 0,
       "repoShare": 0.523,
       "medianPerRepo": 2,
@@ -188,38 +189,20 @@
     {
       "rule": "debug-leftover",
       "count": 0,
-      "hidden": 3416,
+      "hidden": 3566,
       "repoShare": 0,
       "medianPerRepo": 0,
       "severity": null,
       "where": {},
       "labelled": {
-        "tp": 3,
-        "fp": 9
-      }
-    },
-    {
-      "rule": "skipped-test",
-      "count": 2573,
-      "hidden": 0,
-      "repoShare": 0.106,
-      "medianPerRepo": 3,
-      "severity": "info",
-      "where": {
-        "tests": 0.91,
-        "docs": 0.004,
-        "source": 0.084,
-        "vendored": 0.002
-      },
-      "labelled": {
-        "tp": 21,
-        "fp": 3
+        "tp": 4,
+        "fp": 11
       }
     },
     {
       "rule": "bloat",
       "count": 0,
-      "hidden": 2434,
+      "hidden": 2900,
       "repoShare": 0,
       "medianPerRepo": 0,
       "severity": null,
@@ -230,23 +213,41 @@
       }
     },
     {
+      "rule": "skipped-test",
+      "count": 2655,
+      "hidden": 0,
+      "repoShare": 0.096,
+      "medianPerRepo": 3,
+      "severity": "info",
+      "where": {
+        "tests": 0.907,
+        "docs": 0.004,
+        "source": 0.088,
+        "vendored": 0.002
+      },
+      "labelled": {
+        "tp": 21,
+        "fp": 4
+      }
+    },
+    {
       "rule": "secret-provider",
       "count": 0,
-      "hidden": 2333,
+      "hidden": 2588,
       "repoShare": 0,
       "medianPerRepo": 0,
       "severity": null,
       "where": {},
       "labelled": {
         "tp": 0,
-        "fp": 10
+        "fp": 14
       }
     },
     {
       "rule": "insecure-sql-interpolated",
-      "count": 336,
-      "hidden": 1923,
-      "repoShare": 0.017,
+      "count": 337,
+      "hidden": 1992,
+      "repoShare": 0.015,
       "medianPerRepo": 2,
       "severity": "critical",
       "where": {
@@ -261,7 +262,7 @@
     {
       "rule": "docker-root",
       "count": 0,
-      "hidden": 1994,
+      "hidden": 2025,
       "repoShare": 0,
       "medianPerRepo": 0,
       "severity": null,
@@ -273,17 +274,17 @@
     },
     {
       "rule": "eol-node",
-      "count": 1708,
+      "count": 1767,
       "hidden": 0,
-      "repoShare": 0.158,
+      "repoShare": 0.15,
       "medianPerRepo": 1,
       "severity": "info",
       "where": {
-        "config": 0.56,
-        "ci": 0.31,
-        "docs": 0.046,
-        "source": 0.042,
-        "tests": 0.042
+        "config": 0.55,
+        "ci": 0.32,
+        "docs": 0.048,
+        "source": 0.041,
+        "tests": 0.04
       },
       "labelled": {
         "tp": 36,
@@ -293,7 +294,7 @@
     {
       "rule": "secret-generic",
       "count": 0,
-      "hidden": 1291,
+      "hidden": 1395,
       "repoShare": 0,
       "medianPerRepo": 0,
       "severity": null,
@@ -306,8 +307,8 @@
     {
       "rule": "insecure-exec-interpolated",
       "count": 49,
-      "hidden": 914,
-      "repoShare": 0.007,
+      "hidden": 954,
+      "repoShare": 0.006,
       "medianPerRepo": 2,
       "severity": "critical",
       "where": {
@@ -315,22 +316,22 @@
       },
       "labelled": {
         "tp": 3,
-        "fp": 21
+        "fp": 23
       }
     },
     {
       "rule": "eol-python",
-      "count": 853,
+      "count": 864,
       "hidden": 0,
-      "repoShare": 0.1,
+      "repoShare": 0.091,
       "medianPerRepo": 1,
       "severity": "warning",
       "where": {
         "config": 0.361,
-        "ci": 0.401,
-        "docs": 0.086,
-        "tests": 0.048,
-        "source": 0.104
+        "ci": 0.404,
+        "docs": 0.084,
+        "tests": 0.047,
+        "source": 0.103
       },
       "labelled": {
         "tp": 31,
@@ -340,7 +341,7 @@
     {
       "rule": "dep-unused",
       "count": 0,
-      "hidden": 708,
+      "hidden": 717,
       "repoShare": 0,
       "medianPerRepo": 0,
       "severity": null,
@@ -352,9 +353,9 @@
     },
     {
       "rule": "hygiene-no-tests",
-      "count": 579,
+      "count": 673,
       "hidden": 0,
-      "repoShare": 0.193,
+      "repoShare": 0.198,
       "medianPerRepo": 1,
       "severity": "warning",
       "where": {
@@ -368,7 +369,7 @@
     {
       "rule": "docker-untagged",
       "count": 0,
-      "hidden": 558,
+      "hidden": 602,
       "repoShare": 0,
       "medianPerRepo": 0,
       "severity": null,
@@ -380,9 +381,9 @@
     },
     {
       "rule": "hygiene-no-ci",
-      "count": 460,
+      "count": 540,
       "hidden": 0,
-      "repoShare": 0.153,
+      "repoShare": 0.159,
       "medianPerRepo": 1,
       "severity": "info",
       "where": {
@@ -396,7 +397,7 @@
     {
       "rule": "insecure-react-dangerous-html",
       "count": 7,
-      "hidden": 444,
+      "hidden": 447,
       "repoShare": 0.002,
       "medianPerRepo": 1,
       "severity": "warning",
@@ -405,13 +406,26 @@
       },
       "labelled": {
         "tp": 2,
-        "fp": 15
+        "fp": 16
+      }
+    },
+    {
+      "rule": "ci-tests-not-run",
+      "count": 0,
+      "hidden": 413,
+      "repoShare": 0,
+      "medianPerRepo": 0,
+      "severity": null,
+      "where": {},
+      "labelled": {
+        "tp": 0,
+        "fp": 10
       }
     },
     {
       "rule": "insecure-innerhtml-dynamic",
       "count": 10,
-      "hidden": 317,
+      "hidden": 318,
       "repoShare": 0.002,
       "medianPerRepo": 1,
       "severity": "warning",
@@ -424,22 +438,9 @@
       }
     },
     {
-      "rule": "ci-tests-not-run",
-      "count": 0,
-      "hidden": 318,
-      "repoShare": 0,
-      "medianPerRepo": 0,
-      "severity": null,
-      "where": {},
-      "labelled": {
-        "tp": 0,
-        "fp": 10
-      }
-    },
-    {
       "rule": "insecure-eval-dynamic",
-      "count": 34,
-      "hidden": 266,
+      "count": 35,
+      "hidden": 267,
       "repoShare": 0.002,
       "medianPerRepo": 3,
       "severity": "critical",
@@ -454,7 +455,7 @@
     {
       "rule": "env-dead",
       "count": 0,
-      "hidden": 291,
+      "hidden": 296,
       "repoShare": 0,
       "medianPerRepo": 0,
       "severity": null,
@@ -467,7 +468,7 @@
     {
       "rule": "insecure-py-eval-exec",
       "count": 10,
-      "hidden": 234,
+      "hidden": 274,
       "repoShare": 0.002,
       "medianPerRepo": 1,
       "severity": "critical",
@@ -476,13 +477,26 @@
       },
       "labelled": {
         "tp": 0,
-        "fp": 18
+        "fp": 19
+      }
+    },
+    {
+      "rule": "ci-silenced-failure",
+      "count": 0,
+      "hidden": 242,
+      "repoShare": 0,
+      "medianPerRepo": 0,
+      "severity": null,
+      "where": {},
+      "labelled": {
+        "tp": 4,
+        "fp": 7
       }
     },
     {
       "rule": "insecure-py-pickle-load",
       "count": 8,
-      "hidden": 227,
+      "hidden": 232,
       "repoShare": 0.002,
       "medianPerRepo": 1,
       "severity": "warning",
@@ -495,29 +509,16 @@
       }
     },
     {
-      "rule": "ci-silenced-failure",
-      "count": 0,
-      "hidden": 232,
-      "repoShare": 0,
-      "medianPerRepo": 0,
-      "severity": null,
-      "where": {},
-      "labelled": {
-        "tp": 4,
-        "fp": 6
-      }
-    },
-    {
       "rule": "docker-latest",
-      "count": 215,
+      "count": 222,
       "hidden": 0,
-      "repoShare": 0.029,
+      "repoShare": 0.028,
       "medianPerRepo": 1,
       "severity": "warning",
       "where": {
-        "config": 0.758,
+        "config": 0.752,
         "ci": 0.009,
-        "source": 0.223,
+        "source": 0.23,
         "vendored": 0.009
       },
       "labelled": {
@@ -527,15 +528,15 @@
     },
     {
       "rule": "config-conflict",
-      "count": 213,
+      "count": 221,
       "hidden": 0,
-      "repoShare": 0.062,
+      "repoShare": 0.057,
       "medianPerRepo": 1,
       "severity": "info",
       "where": {
-        "config": 0.742,
-        "source": 0.019,
-        "ci": 0.216,
+        "config": 0.733,
+        "source": 0.018,
+        "ci": 0.226,
         "repo": 0.023
       },
       "labelled": {
@@ -546,7 +547,7 @@
     {
       "rule": "secret-history",
       "count": 0,
-      "hidden": 178,
+      "hidden": 199,
       "repoShare": 0,
       "medianPerRepo": 0,
       "severity": null,
@@ -557,23 +558,8 @@
       }
     },
     {
-      "rule": "insecure-py-os-system",
-      "count": 7,
-      "hidden": 161,
-      "repoShare": 0.001,
-      "medianPerRepo": 6,
-      "severity": "critical",
-      "where": {
-        "source": 1
-      },
-      "labelled": {
-        "tp": 0,
-        "fp": 9
-      }
-    },
-    {
       "rule": "hygiene-no-license",
-      "count": 166,
+      "count": 187,
       "hidden": 0,
       "repoShare": 0.055,
       "medianPerRepo": 1,
@@ -587,22 +573,37 @@
       }
     },
     {
+      "rule": "insecure-py-os-system",
+      "count": 7,
+      "hidden": 175,
+      "repoShare": 0.001,
+      "medianPerRepo": 6,
+      "severity": "critical",
+      "where": {
+        "source": 1
+      },
+      "labelled": {
+        "tp": 0,
+        "fp": 9
+      }
+    },
+    {
       "rule": "insecure-localstorage-secret",
       "count": 0,
-      "hidden": 159,
+      "hidden": 163,
       "repoShare": 0,
       "medianPerRepo": 0,
       "severity": null,
       "where": {},
       "labelled": {
-        "tp": 1,
-        "fp": 8
+        "tp": 2,
+        "fp": 9
       }
     },
     {
       "rule": "insecure-go-template-html",
       "count": 22,
-      "hidden": 134,
+      "hidden": 136,
       "repoShare": 0.001,
       "medianPerRepo": 6,
       "severity": "warning",
@@ -615,9 +616,41 @@
       }
     },
     {
+      "rule": "insecure-java-deserialization",
+      "count": 4,
+      "hidden": 153,
+      "repoShare": 0.001,
+      "medianPerRepo": 2,
+      "severity": "warning",
+      "where": {
+        "source": 1
+      },
+      "labelled": {
+        "tp": 2,
+        "fp": 3
+      }
+    },
+    {
+      "rule": "docs-badge",
+      "count": 145,
+      "hidden": 0,
+      "repoShare": 0.023,
+      "medianPerRepo": 1,
+      "severity": "warning",
+      "where": {
+        "docs": 0.979,
+        "tests": 0.014,
+        "ci": 0.007
+      },
+      "labelled": {
+        "tp": 11,
+        "fp": 2
+      }
+    },
+    {
       "rule": "env-no-example",
       "count": 0,
-      "hidden": 140,
+      "hidden": 144,
       "repoShare": 0,
       "medianPerRepo": 0,
       "severity": null,
@@ -630,7 +663,7 @@
     {
       "rule": "insecure-new-function",
       "count": 11,
-      "hidden": 126,
+      "hidden": 130,
       "repoShare": 0.003,
       "medianPerRepo": 1,
       "severity": "critical",
@@ -640,21 +673,6 @@
       "labelled": {
         "tp": 3,
         "fp": 15
-      }
-    },
-    {
-      "rule": "insecure-java-deserialization",
-      "count": 4,
-      "hidden": 132,
-      "repoShare": 0.001,
-      "medianPerRepo": 2,
-      "severity": "warning",
-      "where": {
-        "source": 1
-      },
-      "labelled": {
-        "tp": 2,
-        "fp": 3
       }
     },
     {
@@ -673,33 +691,16 @@
       }
     },
     {
-      "rule": "docs-badge",
-      "count": 122,
-      "hidden": 0,
-      "repoShare": 0.022,
-      "medianPerRepo": 1,
-      "severity": "warning",
-      "where": {
-        "docs": 0.975,
-        "tests": 0.016,
-        "ci": 0.008
-      },
-      "labelled": {
-        "tp": 11,
-        "fp": 2
-      }
-    },
-    {
       "rule": "lockfile-missing",
-      "count": 118,
+      "count": 128,
       "hidden": 0,
-      "repoShare": 0.038,
+      "repoShare": 0.037,
       "medianPerRepo": 1,
       "severity": "warning",
       "where": {
-        "config": 0.89,
-        "repo": 0.076,
-        "source": 0.034
+        "config": 0.883,
+        "repo": 0.086,
+        "source": 0.031
       },
       "labelled": {
         "tp": 18,
@@ -709,7 +710,7 @@
     {
       "rule": "insecure-py-shell-true",
       "count": 3,
-      "hidden": 113,
+      "hidden": 122,
       "repoShare": 0.001,
       "medianPerRepo": 1,
       "severity": "critical",
@@ -722,42 +723,10 @@
       }
     },
     {
-      "rule": "docker-add-url",
-      "count": 89,
-      "hidden": 0,
-      "repoShare": 0.009,
-      "medianPerRepo": 1,
-      "severity": "info",
-      "where": {
-        "config": 0.528,
-        "source": 0.461,
-        "docs": 0.011
-      },
-      "labelled": {
-        "tp": 5,
-        "fp": 1
-      }
-    },
-    {
-      "rule": "eol-runner",
-      "count": 88,
-      "hidden": 0,
-      "repoShare": 0.012,
-      "medianPerRepo": 1,
-      "severity": "critical",
-      "where": {
-        "ci": 1
-      },
-      "labelled": {
-        "tp": 17,
-        "fp": 0
-      }
-    },
-    {
       "rule": "ci-no-pr-trigger",
-      "count": 80,
+      "count": 106,
       "hidden": 0,
-      "repoShare": 0.027,
+      "repoShare": 0.031,
       "medianPerRepo": 1,
       "severity": "info",
       "where": {
@@ -769,10 +738,42 @@
       }
     },
     {
+      "rule": "eol-runner",
+      "count": 100,
+      "hidden": 0,
+      "repoShare": 0.013,
+      "medianPerRepo": 1,
+      "severity": "critical",
+      "where": {
+        "ci": 1
+      },
+      "labelled": {
+        "tp": 17,
+        "fp": 0
+      }
+    },
+    {
+      "rule": "docker-add-url",
+      "count": 91,
+      "hidden": 0,
+      "repoShare": 0.008,
+      "medianPerRepo": 2,
+      "severity": "info",
+      "where": {
+        "config": 0.516,
+        "source": 0.473,
+        "docs": 0.011
+      },
+      "labelled": {
+        "tp": 5,
+        "fp": 1
+      }
+    },
+    {
       "rule": "insecure-php-reflected-xss",
       "count": 63,
       "hidden": 7,
-      "repoShare": 0.004,
+      "repoShare": 0.003,
       "medianPerRepo": 2,
       "severity": "warning",
       "where": {
@@ -786,14 +787,44 @@
     {
       "rule": "iac-host-namespace",
       "count": 0,
-      "hidden": 65,
+      "hidden": 67,
       "repoShare": 0,
       "medianPerRepo": 0,
       "severity": null,
       "where": {},
       "labelled": {
         "tp": 5,
-        "fp": 38
+        "fp": 39
+      }
+    },
+    {
+      "rule": "workflow-self-hosted-runner",
+      "count": 62,
+      "hidden": 0,
+      "repoShare": 0.006,
+      "medianPerRepo": 2,
+      "severity": "warning",
+      "where": {
+        "ci": 1
+      },
+      "labelled": {
+        "tp": 2,
+        "fp": 2
+      }
+    },
+    {
+      "rule": "iac-open-admin-port",
+      "count": 62,
+      "hidden": 0,
+      "repoShare": 0.006,
+      "medianPerRepo": 2,
+      "severity": "critical",
+      "where": {
+        "config": 1
+      },
+      "labelled": {
+        "tp": 29,
+        "fp": 6
       }
     },
     {
@@ -812,54 +843,11 @@
       }
     },
     {
-      "rule": "workflow-self-hosted-runner",
-      "count": 60,
-      "hidden": 0,
-      "repoShare": 0.007,
-      "medianPerRepo": 2,
-      "severity": "warning",
-      "where": {
-        "ci": 1
-      },
-      "labelled": {
-        "tp": 2,
-        "fp": 2
-      }
-    },
-    {
-      "rule": "iac-open-admin-port",
-      "count": 60,
-      "hidden": 0,
-      "repoShare": 0.006,
-      "medianPerRepo": 2,
-      "severity": "critical",
-      "where": {
-        "config": 1
-      },
-      "labelled": {
-        "tp": 29,
-        "fp": 6
-      }
-    },
-    {
-      "rule": "insecure-tls-verification-off",
-      "count": 0,
-      "hidden": 58,
-      "repoShare": 0,
-      "medianPerRepo": 0,
-      "severity": null,
-      "where": {},
-      "labelled": {
-        "tp": 0,
-        "fp": 12
-      }
-    },
-    {
       "rule": "ci-disabled",
-      "count": 57,
+      "count": 61,
       "hidden": 0,
       "repoShare": 0.008,
-      "medianPerRepo": 1,
+      "medianPerRepo": 2,
       "severity": "warning",
       "where": {
         "ci": 1
@@ -870,10 +858,23 @@
       }
     },
     {
+      "rule": "insecure-tls-verification-off",
+      "count": 0,
+      "hidden": 59,
+      "repoShare": 0,
+      "medianPerRepo": 0,
+      "severity": null,
+      "where": {},
+      "labelled": {
+        "tp": 0,
+        "fp": 12
+      }
+    },
+    {
       "rule": "iac-public-bucket",
       "count": 50,
       "hidden": 0,
-      "repoShare": 0.005,
+      "repoShare": 0.004,
       "medianPerRepo": 2,
       "severity": "critical",
       "where": {
@@ -898,6 +899,19 @@
       }
     },
     {
+      "rule": "workflow-pr-target-checkout",
+      "count": 0,
+      "hidden": 41,
+      "repoShare": 0,
+      "medianPerRepo": 0,
+      "severity": null,
+      "where": {},
+      "labelled": {
+        "tp": 2,
+        "fp": 5
+      }
+    },
+    {
       "rule": "insecure-dotnet-deserialization",
       "count": 0,
       "hidden": 41,
@@ -911,52 +925,39 @@
       }
     },
     {
-      "rule": "workflow-pr-target-checkout",
-      "count": 0,
-      "hidden": 39,
-      "repoShare": 0,
-      "medianPerRepo": 0,
-      "severity": null,
-      "where": {},
-      "labelled": {
-        "tp": 2,
-        "fp": 5
-      }
-    },
-    {
       "rule": "insecure-random-for-secret",
       "count": 0,
-      "hidden": 36,
+      "hidden": 38,
       "repoShare": 0,
       "medianPerRepo": 0,
       "severity": null,
       "where": {},
       "labelled": {
         "tp": 1,
-        "fp": 6
+        "fp": 7
       }
     },
     {
       "rule": "docs-script",
-      "count": 35,
+      "count": 37,
       "hidden": 0,
       "repoShare": 0.006,
-      "medianPerRepo": 1,
+      "medianPerRepo": 2,
       "severity": "warning",
       "where": {
-        "docs": 0.971,
-        "ci": 0.029
+        "docs": 0.973,
+        "ci": 0.027
       },
       "labelled": {
-        "tp": 4,
+        "tp": 5,
         "fp": 3
       }
     },
     {
       "rule": "dead-uikit",
-      "count": 33,
+      "count": 34,
       "hidden": 0,
-      "repoShare": 0.01,
+      "repoShare": 0.009,
       "medianPerRepo": 1,
       "severity": "info",
       "where": {
@@ -965,6 +966,19 @@
       "labelled": {
         "tp": 3,
         "fp": 2
+      }
+    },
+    {
+      "rule": "workflow-script-injection",
+      "count": 0,
+      "hidden": 30,
+      "repoShare": 0,
+      "medianPerRepo": 0,
+      "severity": null,
+      "where": {},
+      "labelled": {
+        "tp": 2,
+        "fp": 7
       }
     },
     {
@@ -983,22 +997,9 @@
       }
     },
     {
-      "rule": "docs-manager",
-      "count": 0,
-      "hidden": 28,
-      "repoShare": 0,
-      "medianPerRepo": 0,
-      "severity": null,
-      "where": {},
-      "labelled": {
-        "tp": 1,
-        "fp": 5
-      }
-    },
-    {
       "rule": "insecure-weak-hash",
       "count": 0,
-      "hidden": 27,
+      "hidden": 28,
       "repoShare": 0,
       "medianPerRepo": 0,
       "severity": null,
@@ -1009,16 +1010,16 @@
       }
     },
     {
-      "rule": "workflow-script-injection",
+      "rule": "docs-manager",
       "count": 0,
-      "hidden": 25,
+      "hidden": 28,
       "repoShare": 0,
       "medianPerRepo": 0,
       "severity": null,
       "where": {},
       "labelled": {
-        "tp": 2,
-        "fp": 7
+        "tp": 1,
+        "fp": 5
       }
     },
     {
@@ -1061,6 +1062,36 @@
       },
       "labelled": {
         "tp": 0,
+        "fp": 2
+      }
+    },
+    {
+      "rule": "insecure-cpp-tls-validation-disabled",
+      "count": 21,
+      "hidden": 0,
+      "repoShare": 0.002,
+      "medianPerRepo": 2,
+      "severity": "critical",
+      "where": {
+        "source": 1
+      },
+      "labelled": {
+        "tp": 2,
+        "fp": 0
+      }
+    },
+    {
+      "rule": "insecure-rust-tls-validation-disabled",
+      "count": 21,
+      "hidden": 0,
+      "repoShare": 0.003,
+      "medianPerRepo": 2,
+      "severity": "critical",
+      "where": {
+        "source": 1
+      },
+      "labelled": {
+        "tp": 3,
         "fp": 2
       }
     }

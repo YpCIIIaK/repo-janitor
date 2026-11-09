@@ -1,30 +1,30 @@
 {
- "overall": 0.586,
+ "overall": 0.579,
  "scanners": {
   "eol-runtime": 0.944,
-  "todo-debt": 0.894,
-  "broken-doc-links": 0.615,
+  "todo-debt": 0.911,
+  "broken-doc-links": 0.66,
   "bus-factor": 0.848,
-  "commented-code": 0.69,
+  "commented-code": 0.683,
   "workflow-security": 0.954,
-  "duplicate-code": 0.771,
-  "skipped-tests": 0.875,
+  "duplicate-code": 0.78,
+  "skipped-tests": 0.84,
   "insecure-code": 0.119,
-  "docs-drift": 0.615,
+  "docs-drift": 0.63,
   "lockfile-drift": 0.905,
   "dead-code": 0.8,
   "dockerfile": 0.449,
-  "leftover-debug": 0.25,
+  "leftover-debug": 0.267,
   "config-conflict": 0.95,
-  "secrets": 0.057,
+  "secrets": 0.051,
   "env-lifecycle": 0.138,
-  "ci-health": 0.489,
+  "ci-health": 0.478,
   "repo-bloat": 0.471,
   "project-hygiene": 0.692,
-  "iac-security": 0.42,
+  "license-risk": 0.147,
+  "iac-security": 0.416,
   "dependency-funeral": 0.077,
-  "supply-chain": 1,
-  "license-risk": 0
+  "supply-chain": 1
  },
  "lostTp": 36,
  "labelled": {
@@ -517,7 +517,8 @@
    "commented-actix-web/tests/weird_poll.rs:3"
   ],
   "apollographql-apollo-server": [
-   "config-conflict-ci-root"
+   "config-conflict-ci-root",
+   "license-proprietary-@apollo/gateway"
   ],
   "brianc-node-postgres": [
    "insecure-tls-verification-off-packages/pg/lib/connection-parameters.js:35"
@@ -730,7 +731,8 @@
    "insecure-react-dangerous-html-admin/client/App/elemental/FormNote/index.js:20",
    "insecure-react-dangerous-html-fields/types/color/ColorField.js:66",
    "insecure-react-dangerous-html-fields/types/color/ColorField.js:71",
-   "insecure-weak-hash-lib/security/csrf.js:21"
+   "insecure-weak-hash-lib/security/csrf.js:21",
+   "license-weak-greenlock-express"
   ],
   "lostisland-faraday": [
    "doclink-docs/middleware/included/raising-errors.md:7:getting-started/errors.md"
@@ -1091,17 +1093,29 @@
   "fmtlib-fmt": [
    "insecure-ssrf-support/release.py:223"
   ],
+  "hagopj13-node-express-boilerplate": [
+   "license-network-pm2"
+  ],
+  "shadcn-ui-taxonomy": [
+   "license-weak-@vercel/og"
+  ],
   "digininja-dvwa": [
    "insecure-php-path-traversal-vulnerabilities/view_source_all.php:14",
    "insecure-php-path-traversal-vulnerabilities/view_source_all.php:18",
    "insecure-php-path-traversal-vulnerabilities/view_source_all.php:22",
    "insecure-php-path-traversal-vulnerabilities/view_source_all.php:26"
   ],
+  "danielfsousa-express-rest-es2017-boilerplate": [
+   "license-network-pm2"
+  ],
   "onevcat-kingfisher": [
    "insecure-ruby-marshal-load-fastlane/actions/extract_current_change_log.rb:7"
   ],
   "solidjs-solid-start": [
    "insecure-ssrf-packages/start/src/config/dev-server.ts:76"
+  ],
+  "immutable-js-immutable-js": [
+   "license-unrecognised-transducers-js"
   ],
   "qwikdev-qwik": [
    "insecure-new-function-packages/qwik/src/core/shared/qrl/qrl-class-dev.ts:100",
@@ -1151,6 +1165,9 @@
    "insecure-ssrf-src/utils/fetch.js:40",
    "insecure-ssrf-src/utils/fetch.js:55"
   ],
+  "koel-koel": [
+   "license-weak-@koel-project/projectm-wasm"
+  ],
   "lobsters-lobsters": [
    "insecure-sql-interpolated-app/controllers/mod/mod_controller.rb:15"
   ],
@@ -1190,8 +1207,12 @@
    "insecure-ssrf-vue3/src/composables/useFileApi.ts:39",
    "insecure-ssrf-vue3/src/composables/useFileApi.ts:71"
   ],
+  "thelounge-thelounge": [
+   "license-weak-web-push-neo"
+  ],
   "umami-software-umami": [
-   "insecure-ssrf-packages/api-client/src/http.ts:230"
+   "insecure-ssrf-packages/api-client/src/http.ts:230",
+   "license-network-ua-parser-js"
   ],
   "denoland-fresh": [
    "insecure-react-dangerous-html-packages/fresh/src/dev/middlewares/error_overlay/overlay.tsx:136"
@@ -1217,6 +1238,9 @@
   ],
   "darkreader-darkreader": [
    "insecure-ssrf-src/inject/dynamic-theme/network.ts:18"
+  ],
+  "esphome-esphome-docs": [
+   "license-unrecognised-gsap"
   ],
   "micropython-micropython-lib": [
    "insecure-py-pickle-load-unix-ffi/multiprocessing/multiprocessing.py:56"
@@ -1258,6 +1282,9 @@
    "iac-public-database-terraform/aws/db-app.tf:22",
    "iac-unencrypted-terraform/aws/db-app.tf:19",
    "iac-unencrypted-terraform/aws/neptune.tf:9"
+  ],
+  "chatwoot-chatwoot-mobile-app": [
+   "license-weak-ffmpeg-kit-react-native"
   ],
   "hashicorp-vault-guides": [
    "iac-open-admin-port-identity/vault-agent-caching/terraform-aws/security-groups.tf:15",
@@ -1301,6 +1328,9 @@
   "ansible-ansible-examples": [
    "iac-iam-wildcard-language_features/files/cloudformation-example.json:351",
    "iac-open-admin-port-language_features/files/cloudformation-example.json:190"
+  ],
+  "berriai-litellm-docs": [
+   "license-unrecognised-@inkeep/cxkit-react"
   ],
   "aquasecurity-kube-bench": [
    "iac-host-namespace-hack/debug.yaml:9",
@@ -1533,6 +1563,9 @@
   "temporalio-samples-go": [
    "script-injection-.github/workflows/ci.yml-17"
   ],
+  "framer-motion": [
+   "license-unrecognised-gsap"
+  ],
   "cloudflare-workers-rs": [
    "script-injection-.github/workflows/create-release.yml-23"
   ],
@@ -1593,6 +1626,9 @@
    "env-missing-CONCURRENCY",
    "env-missing-DOCS_URL"
   ],
+  "liabru-matter-js": [
+   "license-unrecognised-pathseg"
+  ],
   "temporalio-samples-python": [
    "insecure-py-os-system-openai_agents/mcp/workflows/prompt_server_workflow.py:67"
   ],
@@ -1633,7 +1669,8 @@
   "motiondivision-motion": [
    "config-conflict-ci-root",
    "eol-node-.devcontainer/Dockerfile-5",
-   "insecure-innerhtml-dynamic-dev/html/src/vgpu.js:142"
+   "insecure-innerhtml-dynamic-dev/html/src/vgpu.js:142",
+   "license-unrecognised-gsap"
   ],
   "vapor-vapor": [
    "secret-private-key-Sources/Development/configure.swift:95"
@@ -1712,7 +1749,8 @@
   ],
   "chatwoot-chatwoot": [
    "insecure-ruby-dynamic-dispatch-app/controllers/api/v1/accounts/notifications_controller.rb:68",
-   "insecure-ruby-marshal-load-lib/active_storage/migrator.rb:21"
+   "insecure-ruby-marshal-load-lib/active_storage/migrator.rb:21",
+   "license-weak-@breezystack/lamejs"
   ],
   "mattermost-mattermost": [
    "insecure-go-template-html-server/channels/app/email/email.go:632",
@@ -1752,6 +1790,7 @@
    "insecure-innerhtml-dynamic-packages/tldraw/src/lib/ui/components/DefaultDebugPanel.tsx:69",
    "insecure-react-dangerous-html-packages/commenting/src/canvas/comment-body.tsx:20",
    "insecure-ssrf-packages/editor/src/lib/license/LicenseManager.ts:353",
+   "license-proprietary-@sentry/cli",
    "secret-entropy-internal/scripts/lib/posthog.ts:8",
    "skiptest-packages/tldraw/src/test/commands/setPageState.test.ts:9",
    "todo-packages/tlschema/src/misc/TLHandle.ts:95"
@@ -1766,6 +1805,7 @@
    "insecure-localstorage-secret-frontend/tests/vitest/common/session.test.js:415"
   ],
   "go-gitea-gitea": [
+   "license-weak-@resvg/resvg-wasm",
    "script-injection-.github/workflows/pull-labeler.yml-44"
   ],
   "zhanymkanov-fastapi-best-practices": [
@@ -1773,6 +1813,12 @@
   ],
   "saleor-saleor": [
    "env-missing-RSA_PRIVATE_KEY"
+  ],
+  "mitodl-micromasters": [
+   "license-strong-@fancyapps/fancybox"
+  ],
+  "frappe-frappe": [
+   "license-weak-qz-tray"
   ],
   "litestar-org-litestar": [
    "action-tag-.github/workflows/ci.yml-128",
@@ -1968,6 +2014,9 @@
    "insecure-localstorage-secret-packages/web/src/pages/SignIn/index.tsx:19",
    "insecure-react-dangerous-html-packages/web/src/pages/MessageDetail/index.tsx:100"
   ],
+  "laurent22-joplin": [
+   "license-network-@joplin/utils"
+  ],
   "standardnotes-app": [
    "ci-disabled-.github/workflows/publish.yml-100",
    "env-dead-PORT",
@@ -1989,7 +2038,10 @@
   ],
   "th-ch-youtube-music": [
    "insecure-localstorage-secret-src/plugins/synced-lyrics/providers/MusixMatch.ts:273",
-   "insecure-weak-hash-src/plugins/scrobbler/services/lastfm.ts:228"
+   "insecure-weak-hash-src/plugins/scrobbler/services/lastfm.ts:228",
+   "license-weak-@dehoist/romanize-thai",
+   "license-weak-@ghostery/adblocker-electron",
+   "license-weak-@ghostery/adblocker-electron-preload"
   ],
   "ferdium-ferdium-app": [
    "insecure-localstorage-secret-src/stores/UserStore.ts:375"
@@ -2000,6 +2052,9 @@
   ],
   "gorhill-ublock": [
    "insecure-random-for-secret-platform/mv3/extension/js/scripting/tool-overlay.js:40"
+  ],
+  "violentmonkey-violentmonkey": [
+   "license-strong-@automattic/webpack-inline-constant-exports-plugin"
   ],
   "vuejs-language-tools": [
    "script-injection-.github/workflows/auto-fix.yml-41"
@@ -2035,6 +2090,12 @@
   "openstatushq-openstatus": [
    "dead-code-uikit-packages/ui/src/components/ui"
   ],
+  "satnaing-astro-paper": [
+   "license-weak-satori"
+  ],
+  "akveo-ngx-admin": [
+   "license-weak-ckeditor"
+  ],
   "storybookjs-storybook": [
    "insecure-random-for-secret-code/renderers/web-components/src/docgen/story-docs/template-print.ts:69"
   ],
@@ -2043,7 +2104,10 @@
    "insecure-random-for-secret-src/mock/user/login.js:32"
   ],
   "pure-admin-vue-pure-admin": [
-   "insecure-eval-dynamic-public/wasm/capture.worker.js:10414"
+   "insecure-eval-dynamic-public/wasm/capture.worker.js:10414",
+   "license-network-intro.js",
+   "license-proprietary-vue-waterfall-plugin-next",
+   "license-strong-typeit"
   ],
   "ngrx-platform": [
    "action-tag-.github/workflows/ci.yml-117",
@@ -2056,6 +2120,9 @@
   ],
   "solidjs-solid-realworld": [
    "hygiene-no-license"
+  ],
+  "solidjs-solid-site": [
+   "license-network-https-localhost"
   ],
   "lencx-chatgpt": [
    "hygiene-no-ci",
@@ -2071,6 +2138,9 @@
   ],
   "ovity-octotree": [
    "lockfile-drift-chromedriver"
+  ],
+  "sindresorhus-refined-twitter": [
+   "license-weak-webextension-polyfill"
   ],
   "alexdima-vscode-copy-relative-path": [
    "lockfile-missing"
@@ -2148,6 +2218,7 @@
   ],
   "facebookarchive-fbctf": [
    "insecure-php-unserialize-src/models/Session.php:52",
+   "license-strong-typed.js",
    "lockfile-missing"
   ],
   "rsactftool-rsactftool": [
@@ -2691,7 +2762,6 @@
    "action-tag-.github/workflows/test.yml-21",
    "action-tag-first-party-.github/workflows/test.yml-18",
    "doclink-Docs/templates/toc.md:11:example-projects.html",
-   "duplicate-ReSwiftTests/StoreSubscriptionTests.swift-301",
    "eol-runner-.github/workflows/test.yml-14",
    "eol-runner-.github/workflows/test.yml-29",
    "eol-runner-.github/workflows/update-docs.yml-13",
@@ -2886,6 +2956,135 @@
   ],
   "keleshev-schema": [
    "eol-python-.github/workflows/python-test.yml-19"
+  ],
+  "permissionlesstech-bitchat": [
+   "commented-bitchat/Services/UnifiedPeerService.swift:170",
+   "todo-bitchat/Services/BLE/BLEService.swift:2012"
+  ],
+  "utmapp-utm": [
+   "ci-silenced-failure-.github/workflows/build.yml-284",
+   "doclink-Documentation/Dependencies.md:40:../scripts/qapi/",
+   "duplicate-Configuration/QEMUConstantGenerated.swift-7218",
+   "todo-Scripting/UTMScriptingVirtualMachineImpl.swift:80",
+   "todo-utmctl/UTMCtl.swift:488"
+  ],
+  "vorssaint-vorssaint-utils": [
+   "duplicate-Sources/Vorssaint/Services/QuickTools/QuickLauncherService.swift-485"
+  ],
+  "shadowsocks-shadowsocksx-ng": [
+   "doclink-docs/research/sslocal-password-environment.md:150:../../CONTEXT.md",
+   "duplicate-ShadowsocksX-NG2/Scripts/convert-china-ipv4.py-95"
+  ],
+  "p0deje-maccy": [
+   "todo-Maccy/FloatingPanel.swift:40",
+   "todo-Maccy/Observables/AppState.swift:69"
+  ],
+  "caldis-mos": [
+   "commented-Mos/Windows/MonitorWindow/Logger.swift:51",
+   "commented-MosTests/ScrollFilterTests.swift:53",
+   "todo-Mos/Logi/Debug/LogiSelfTestRunner.swift:75",
+   "todo-Mos/Utils/Archieve.swift:59"
+  ],
+  "altic-dev-fluidvoice": [
+   "commented-Sources/Fluid/UI/GlossyEffects.swift:94"
+  ],
+  "thaw-app-thaw": [
+   "doclink-docs/ARCHITECTURE.md:118:../MenuBarCaptureService"
+  ],
+  "audiokit-audiokit": [
+   "commented-Sources/AudioKit/Audio Files/Format Converter/FormatConverter+Utilities.swift:95",
+   "doclink-Sources/AudioKit/AudioKit.docc/MigrationGuide.md:189:Examples.md",
+   "todo-Sources/AudioKit/Internals/Utilities/AVAudioTimeShim.swift:5"
+  ],
+  "ranchero-software-netnewswire": [
+   "commented-Modules/RSCore/Tests/RSCoreTests/StripHTMLTests.swift:128",
+   "insecure-py-eval-exec-buildscripts/gyb.py:725",
+   "secret-google-api-key-Modules/RSParser/Tests/RSParserTests/Resources/YouTubeTheVolvoRocks.html:18"
+  ],
+  "sjj1024-pakeplus-ios": [
+   "debug-PakePlus/custom.js:121",
+   "docs-drift-script-README.md-141",
+   "insecure-ssrf-PakePlus/custom.js:42"
+  ],
+  "swiftlang-swift-package-manager": [
+   "commented-Sources/SBOMModel/Core/SBOMRelationship.swift:24",
+   "iac-dangerous-capability-.devcontainer/docker-compose.yaml:8",
+   "todo-Tests/FunctionalTests/MiscellaneousTests.swift:718"
+  ],
+  "swiftgen-swiftgen": [
+   "doclink-Documentation/SwiftGenKit Contexts/MigrationGuide.md:58:Colors.md",
+   "insecure-exec-interpolated-rakelib/lint.rake:58"
+  ],
+  "maxgoedjen-secretive": [
+   "commented-Sources/Secretive/Views/Views/AgentStatusView.swift:139",
+   "todo-Sources/Secretive/Controllers/AgentStatusChecker.swift:44"
+  ],
+  "darrylmorley-whatcable": [
+   "commented-Tests/WhatCableCoreTests/PDODecodingTests.swift:74",
+   "todo-Sources/WhatCableCore/Snapshot/CableSnapshot.swift:160"
+  ],
+  "xcodesorg-xcodesapp": [
+   "todo-Xcodes/Backend/AppState.swift:916"
+  ],
+  "mihonapp-mihon": [
+   "secret-google-api-key-app/google-services.json:37"
+  ],
+  "deniscerri-ytdlnis": [
+   "commented-app/src/main/java/com/deniscerri/ytdl/ui/more/terminal/ShortcutBinding.kt:137"
+  ],
+  "rikkahub-rikkahub": [
+   "insecure-localstorage-secret-web-ui/app/services/api.ts:109",
+   "insecure-react-dangerous-html-web-ui/app/components/markdown/code-block.tsx:109",
+   "insecure-ssrf-.agents/skills/claude-api/shared/preserved-thinking-migration/drop_block_probe.py:428"
+  ],
+  "libchecker-libchecker": [
+   "secret-google-api-key-app/google-services.json:37"
+  ],
+  "cyqawa-yunx": [
+   "todo-app/src/main/kotlin/com/yunx/app/ui/screens/DriveScreen.kt:131"
+  ],
+  "arrow-kt-arrow": [
+   "commented-arrow-libs/fx/arrow-fx-stm/src/commonTest/kotlin/arrow/fx/stm/STMTest.kt:260",
+   "todo-arrow-libs/fx/arrow-fx-stm/src/commonMain/kotlin/arrow/fx/stm/internal/Impl.kt:183"
+  ],
+  "meta-facebook-android-sdk": [
+   "commented-facebook-core/src/test/kotlin/com/facebook/internal/NativeProtocolTest.kt:248"
+  ],
+  "teamamaze-amazefilemanager": [
+   "doclink-file_operations/src/main/rust/README.md:7:../doc/RUST_MIGRATION.md"
+  ],
+  "kickstarter-android-oss": [
+   "commented-app/src/test/java/com/kickstarter/features/pledgedprojectsoverview/viewmodel/PledgedProjectsOverviewViewModelTest.kt:522"
+  ],
+  "outertune-outertune": [
+   "commented-app/src/main/java/com/dd3boh/outertune/constants/PreferenceKeys.kt:38",
+   "todo-app/src/main/java/com/dd3boh/outertune/ui/screens/HomeScreen.kt:497"
+  ],
+  "predidit-kazumi": [
+   "commented-windows/runner/flutter_window.cpp:64",
+   "todo-ios/Runner/AppDelegate.swift:66"
+  ],
+  "hiddify-hiddify-app": [
+   "commented-android/app/src/main/kotlin/com/hiddify/hiddify/ActiveGroupsChannel.kt:13",
+   "debug-web/drift_worker.js:5033"
+  ],
+  "bagisto-opensource-ecommerce-mobile-app": [
+   "doclink-Configuration_guide.md:101:android/app/src/main/AndroidManifest.xml:17"
+  ],
+  "anxcye-anx-reader": [
+   "doclink-third_party/googleai_dart/README.md:1498:example/file_search_example.dart"
+  ],
+  "lollipopkit-flutter-server-box": [
+   "iac-host-namespace-store/apps/homeassistant.home_assistant/compose.yaml:50",
+   "insecure-exec-interpolated-monitor/frontend/e2e/proxy_app.e2e.ts:66",
+   "insecure-localstorage-secret-monitor/frontend/src/tests/servers.test.ts:107",
+   "insecure-random-for-secret-monitor/frontend/e2e/sharing.e2e.ts:84",
+   "secret-slack-webhook-monitor/src/api/push.rs:1033",
+   "skiptest-monitor/frontend/src/desk/agent/autosize.ts:54"
+  ],
+  "mylxsw-aidea": [
+   "commented-scripts/main.go:20",
+   "debug-web/sqflite_sw.js:4575"
   ]
  }
 }
