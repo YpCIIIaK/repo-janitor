@@ -70,3 +70,5 @@ benchmark/.invcache/
 benchmark/.inventory/
 benchmark/.gitlog/
 benchmark/.gitlogcache/
+benchmark/.replay/
+benchmark/.replaycache/
