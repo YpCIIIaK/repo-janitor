@@ -4207,11 +4207,263 @@
    "stars": 25,
    "created": "2026-08-11",
    "language": "Shell"
+  },
+  {
+   "url": "https://github.com/tilo/embedded_localization",
+   "stars": 12,
+   "created": "2012-01-20",
+   "language": "Ruby"
+  },
+  {
+   "url": "https://github.com/OpenAPI-Qraft/openapi-qraft",
+   "stars": 99,
+   "created": "2024-02-09",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/keerthanaa-0911/Servo-Stabilizer-with-Display",
+   "stars": 15,
+   "created": "2026-02-22",
+   "language": "C"
+  },
+  {
+   "url": "https://github.com/a-digital/help-links",
+   "stars": 10,
+   "created": "2018-10-05",
+   "language": "PHP"
+  },
+  {
+   "url": "https://github.com/casperstorm/ferra",
+   "stars": 91,
+   "created": "2023-04-03",
+   "language": "KakouneScript"
+  },
+  {
+   "url": "https://github.com/Osiris-DevWorks/sc-profile-editor",
+   "stars": 35,
+   "created": "2025-10-14",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/scala/community-build",
+   "stars": 141,
+   "created": "2013-09-20",
+   "language": "Scala"
+  },
+  {
+   "url": "https://github.com/utuhiro78/mozcdic-ut-edict2",
+   "stars": 20,
+   "created": "2023-01-15",
+   "language": null
+  },
+  {
+   "url": "https://github.com/geektcp/UeCore",
+   "stars": 857,
+   "created": "2017-01-20",
+   "language": "C++"
+  },
+  {
+   "url": "https://github.com/MrRobotoGit/tiramisu",
+   "stars": 156,
+   "created": "2026-02-27",
+   "language": "Go"
+  },
+  {
+   "url": "https://github.com/1Birdo/BotnetGo",
+   "stars": 20,
+   "created": "2024-10-21",
+   "language": "Go"
+  },
+  {
+   "url": "https://github.com/Lambda-Mountain-Compiler-Backend/LSTS",
+   "stars": 125,
+   "created": "2021-09-10",
+   "language": null
+  },
+  {
+   "url": "https://github.com/evelyyyyynnnnn/2.0-Healthcare-Ai-Systems",
+   "stars": 225,
+   "created": "2026-03-18",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/vectorsim/embed_sim_project",
+   "stars": 37,
+   "created": "2026-02-23",
+   "language": "C"
+  },
+  {
+   "url": "https://github.com/pchev/ccdciel",
+   "stars": 59,
+   "created": "2018-02-23",
+   "language": "Pascal"
+  },
+  {
+   "url": "https://github.com/MassivDash/AstroX",
+   "stars": 23,
+   "created": "2024-01-04",
+   "language": "Rust"
+  },
+  {
+   "url": "https://github.com/WebPAI/DesignBench",
+   "stars": 61,
+   "created": "2025-06-03",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/protwis/protwis",
+   "stars": 44,
+   "created": "2016-01-15",
+   "language": "JavaScript"
+  },
+  {
+   "url": "https://github.com/DaehwanKimLab/centrifuge",
+   "stars": 281,
+   "created": "2015-07-10",
+   "language": "C++"
+  },
+  {
+   "url": "https://github.com/gdsfactory/quantum-rf-pdk",
+   "stars": 36,
+   "created": "2025-08-13",
+   "language": "Jupyter Notebook"
+  },
+  {
+   "url": "https://github.com/Yellow-Dog-Man/Renderite.Unity.Renderer",
+   "stars": 39,
+   "created": "2026-04-15",
+   "language": "C#"
+  },
+  {
+   "url": "https://github.com/line72/boldaric",
+   "stars": 14,
+   "created": "2025-05-17",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/mrdouglasny/jacobian-challenge",
+   "stars": 15,
+   "created": "2026-04-19",
+   "language": "Lean"
+  },
+  {
+   "url": "https://github.com/JaidedAI/EasyOCR",
+   "stars": 30133,
+   "created": "2020-03-11",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/locomotion-pro/locomotion",
+   "stars": 19,
+   "created": "2026-03-31",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/okisdev/ChatChat",
+   "stars": 1267,
+   "created": "2023-03-13",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/openstack/python-freezerclient",
+   "stars": 17,
+   "created": "2016-03-18",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/zNitche/ao3-web-reader",
+   "stars": 17,
+   "created": "2022-12-10",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/willlzl/Perpetual",
+   "stars": 39,
+   "created": "2026-09-24",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/saeedahmed725/turnable_page",
+   "stars": 18,
+   "created": "2025-07-28",
+   "language": "Dart"
+  },
+  {
+   "url": "https://github.com/unprodstudio/UnityTranslate",
+   "stars": 47,
+   "created": "2024-08-22",
+   "language": "Kotlin"
+  },
+  {
+   "url": "https://github.com/google-marketing-solutions/adspace_agent",
+   "stars": 38,
+   "created": "2026-01-12",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/highkay/tencent-ima-copilot-mcp",
+   "stars": 136,
+   "created": "2025-10-05",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/tolkonepiu/best-of-nix",
+   "stars": 96,
+   "created": "2025-05-11",
+   "language": null
+  },
+  {
+   "url": "https://github.com/just1nGH/5G-NR-LDPC-CPP",
+   "stars": 25,
+   "created": "2021-10-12",
+   "language": "C++"
+  },
+  {
+   "url": "https://github.com/amazon-science/text_generation_diffusion_llm_topic",
+   "stars": 15,
+   "created": "2024-01-28",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/PeppaWu/SPT",
+   "stars": 16,
+   "created": "2025-03-30",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/stanislaushimovolos/aiofence",
+   "stars": 14,
+   "created": "2026-02-24",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/livekit/client-sdk-unity",
+   "stars": 101,
+   "created": "2023-01-03",
+   "language": "C#"
+  },
+  {
+   "url": "https://github.com/Bucket-Protocol/sui-dapp-scaffold-v1",
+   "stars": 28,
+   "created": "2024-05-03",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/me-shaon/pulsedeck",
+   "stars": 20,
+   "created": "2026-06-20",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/hashcat/team-hashcat",
+   "stars": 57,
+   "created": "2021-08-13",
+   "language": "C"
   }
  ],
- "tries": 1462,
+ "tries": 1547,
  "population": "public, not a fork, not archived, stars >= 10, pushed since 2025-11-09, created 2010-01-01..2026-10-10",
- "rngCalls": 3635,
+ "rngCalls": 3847,
  "windows": 1686,
- "overCap": 24
+ "overCap": 27
 }
