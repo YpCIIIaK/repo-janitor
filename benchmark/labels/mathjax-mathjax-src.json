@@ -3,6 +3,7 @@
  "dead-export-ts/input/tex/physics/PhysicsConfiguration.ts:PhysicsConfiguration": "fp",
  "dep-unused-mhchemparser": "fp",
  "docs-drift-badge-README.md-13": "tp",
+ "license-proprietary-xslt3": "fp",
  "secret-entropy-ts/input/asciimath/legacy/jax/input/AsciiMath/jax.js:1238": "fp",
  "secret-entropy-ts/input/asciimath/legacy/jax/input/AsciiMath/jax.js:1239": "fp"
 }

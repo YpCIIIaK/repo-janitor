@@ -1,4 +1,7 @@
 {
  "insecure-localstorage-secret-src/plugins/synced-lyrics/providers/MusixMatch.ts:273": "fp",
- "insecure-weak-hash-src/plugins/scrobbler/services/lastfm.ts:228": "fp"
+ "insecure-weak-hash-src/plugins/scrobbler/services/lastfm.ts:228": "fp",
+ "license-weak-@dehoist/romanize-thai": "fp",
+ "license-weak-@ghostery/adblocker-electron": "fp",
+ "license-weak-@ghostery/adblocker-electron-preload": "fp"
 }

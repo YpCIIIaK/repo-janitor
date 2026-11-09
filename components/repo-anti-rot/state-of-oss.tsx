@@ -121,6 +121,9 @@ const T = {
       mobile: ["Main language Swift, Kotlin or Dart.", "Rules for languages with few labels so far."],
       webBackends: ["Server-side language and a compose file.", "Injection, deserialisation, SSRF, dependencies."],
     } as Record<string, [string, string]>,
+    licT: "Licenses of dependencies",
+    licNote: (n: number) => `${n.toLocaleString("en-US")} JavaScript / TypeScript projects: each direct npm dependency's license (from the npm registry) compared with the project's own. A copyleft dependency is a problem only in a project licensed under something else; "shipped" means a runtime dependency, not a dev one.`,
+    licL: { anyShipped: "any shipped conflict", network: "AGPL / SSPL shipped", strong: "GPL shipped", proprietary: "no open license, shipped", devOnly: "dev dependencies only" },
     grades: "Grades",
     gradesNote: "Score adjusts for size: warnings weigh less in big codebases, critical findings never do.",
     supply: "Most GitHub Actions can be swapped under you",
@@ -268,6 +271,9 @@ const T = {
       mobile: ["Основной язык Swift, Kotlin или Dart.", "Правила для языков, где меток пока мало."],
       webBackends: ["Серверный язык и compose-файл.", "Инъекции, десериализация, SSRF, зависимости."],
     } as Record<string, [string, string]>,
+    licT: "Лицензии зависимостей",
+    licNote: (n: number) => `${n.toLocaleString("ru-RU")} проектов на JavaScript / TypeScript: лицензия каждой прямой npm-зависимости (из реестра npm) сравнивается с лицензией самого проекта. Копилефт-зависимость — проблема только в проекте под другой лицензией; «в поставке» — рантайм-зависимость, а не dev.`,
+    licL: { anyShipped: "любой конфликт в поставке", network: "AGPL / SSPL в поставке", strong: "GPL в поставке", proprietary: "без открытой лицензии", devOnly: "только dev-зависимости" },
     grades: "Оценки",
     gradesNote: "Оценка учитывает размер: в больших проектах предупреждения весят меньше, критические находки — всегда полностью.",
     supply: "Большинство GitHub Actions можно подменить",
@@ -583,6 +589,15 @@ export function StateOfOpenSource() {
           <p className="pt-2 text-xs text-muted-foreground">{t.vdepsTop}</p>
           {stats.vulnerableDeps.topPackages.map((x) => (
             <Bar key={x.name} label={x.name} value={x.share} max={stats.vulnerableDeps.topPackages[0].share} display={pct(x.share)} tone="destructive" />
+          ))}
+        </Section>
+      )}
+
+      {/* Hidden until license-risk is fixed: 5 of 65 labelled findings were true (Nov 2026). */}
+      {stats.dependencyLicenses && (stats.dependencyLicenses as { published?: boolean }).published && (
+        <Section title={t.licT} note={t.licNote(stats.dependencyLicenses.npmRepos)}>
+          {(["anyShipped", "network", "strong", "proprietary", "devOnly"] as const).map((k) => (
+            <Bar key={k} label={t.licL[k]} value={stats.dependencyLicenses[k]} max={Math.max(stats.dependencyLicenses.anyShipped, stats.dependencyLicenses.devOnly)} display={stats.dependencyLicenses[k] > 0 && stats.dependencyLicenses[k] < 0.01 ? "<1%" : `${(stats.dependencyLicenses[k] * 100).toFixed(1)}%`} tone={k === "devOnly" ? "primary" : "warning"} />
           ))}
         </Section>
       )}

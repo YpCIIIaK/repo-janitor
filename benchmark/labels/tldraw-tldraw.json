@@ -10,6 +10,7 @@
  "insecure-innerhtml-dynamic-packages/tldraw/src/lib/ui/components/DefaultDebugPanel.tsx:69": "fp",
  "insecure-react-dangerous-html-packages/commenting/src/canvas/comment-body.tsx:20": "fp",
  "insecure-ssrf-packages/editor/src/lib/license/LicenseManager.ts:353": "fp",
+ "license-proprietary-@sentry/cli": "fp",
  "secret-entropy-internal/scripts/lib/posthog.ts:8": "fp",
  "skiptest-packages/tldraw/src/test/commands/setPageState.test.ts:9": "fp",
  "todo-packages/tlschema/src/misc/TLHandle.ts:95": "tp"

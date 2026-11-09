@@ -43,7 +43,17 @@ for (const repo of corpus) {
     missing++
     continue
   }
-  const { findings } = JSON.parse(readFileSync(resultPath, "utf8"))
+  const offline = JSON.parse(readFileSync(resultPath, "utf8")).findings
+  // The online pass (osv.mjs) adds the network scanners the offline scan skips:
+  // vulnerable-deps and license-risk. Their findings are judged like any other.
+  const onlinePath = join(here, ".results", `${repo.name}.osv.json`)
+  const seenIds = new Set(offline.map((f) => f.id))
+  const online = existsSync(onlinePath)
+    ? JSON.parse(readFileSync(onlinePath, "utf8")).findings
+        .filter((f) => !seenIds.has(f.id))
+        .map((f) => ({ ...f, scanner: f.scanner ?? "vulnerable-deps", rule: f.rule ?? (f.id.startsWith("license-") ? "license-" + f.id.split("-")[1] : "vuln") }))
+    : []
+  const findings = [...offline, ...online]
   const labelPath = join(here, "labels", `${repo.name}.json`)
   const labels = existsSync(labelPath) ? JSON.parse(readFileSync(labelPath, "utf8")) : {}
   const seen = new Set()
