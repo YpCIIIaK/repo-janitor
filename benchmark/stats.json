@@ -1,6 +1,6 @@
 {
   "repos": 3000,
-  "generatedAt": "2026-11-09T12:39:20.427Z",
+  "generatedAt": "2026-11-09T13:57:20.328Z",
   "grades": {
     "A": 758,
     "B": 707,
@@ -754,19 +754,19 @@
   },
   "busFactor": {
     "repos": 3000,
-    "over80": 0.139,
+    "over80": 0.14,
     "bands": [
       {
         "label": "under 50%",
-        "share": 0.594
+        "share": 0.593
       },
       {
         "label": "50–80%",
-        "share": 0.267
+        "share": 0.266
       },
       {
         "label": "80–95%",
-        "share": 0.098
+        "share": 0.099
       },
       {
         "label": "95% or more",
@@ -778,12 +778,12 @@
       {
         "size": "small",
         "repos": 1013,
-        "over80": 0.178
+        "over80": 0.179
       },
       {
         "size": "mid-size",
         "repos": 1176,
-        "over80": 0.137
+        "over80": 0.139
       },
       {
         "size": "large",
@@ -1625,7 +1625,7 @@
     "linesOfCode": 250657128,
     "files": 3213031,
     "commits": 7545352,
-    "contributorsSummed": 554160,
+    "contributorsSummed": 553575,
     "stars": 32730388,
     "medianStars": 5653,
     "under1kStars": 0.135,
