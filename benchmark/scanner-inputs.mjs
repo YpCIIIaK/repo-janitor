@@ -57,3 +57,37 @@ export function mayProduce(id, inv) {
   if (spec.paths?.some((p) => (inv.paths[p] ?? 0) > 0)) return true
   return false
 }
+
+/** Name patterns as checkout globs, for scanners whose inputs are named files. */
+const NAME_GLOBS = {
+  "dependency-funeral": ["package.json"],
+  "supply-chain": ["package.json"],
+  "lockfile-drift": ["package.json", "package-lock.json", "npm-shrinkwrap.json", "pnpm-lock.yaml", "yarn.lock", "bun.lock*", "pyproject.toml", "poetry.lock", "uv.lock", "Pipfile*", "requirements*.txt", "go.mod", "go.sum", "Cargo.toml", "Cargo.lock", "Gemfile*", "composer.json", "composer.lock"],
+  "dockerfile": ["Dockerfile*", "*.dockerfile", "*.Dockerfile"],
+}
+/** Scanners that also need files outside their declared inputs (other modules, manifests). */
+const EXTRA_GLOBS = {
+  "dependency-funeral": ["*.ts", "*.tsx", "*.js", "*.jsx", "*.mjs", "*.mts", "*.cts", "*.cjs", "*.vue", "*.svelte", "*.astro", "*.config.*", ".*rc*"],
+  "dead-code": ["package.json", "tsconfig*.json", "*.config.*"],
+}
+
+/**
+ * Checkout globs covering everything a scanner reads, for a sparse checkout,
+ * or null when its inputs cannot be listed as globs (broad scanners).
+ * Root dotfiles and config are always included: the CLI reads its own config.
+ */
+export function sparseGlobs(ids) {
+  const out = new Set(["/.*", "/package.json"])
+  for (const id of ids) {
+    const spec = INPUTS[id]
+    if (!spec || spec.always) return null
+    for (const e of spec.exts ?? []) out.add(`*.${e}`)
+    for (const p of spec.paths ?? []) out.add(`/${p}**`)
+    if (spec.names) {
+      if (!NAME_GLOBS[id]) return null
+      for (const g of NAME_GLOBS[id]) out.add(g)
+    }
+    for (const g of EXTRA_GLOBS[id] ?? []) out.add(g)
+  }
+  return [...out, "!**/node_modules/**"]
+}
