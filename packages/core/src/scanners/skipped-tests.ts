@@ -60,7 +60,7 @@ function jsHit(node: Node): Hit | null {
 
   if (callee.type === "Identifier") {
     const name = (callee as { name?: string }).name ?? ""
-    if (/^f(?:it|describe|test)$/.test(name)) return { severity: "warning", label: "focused test (fit/fdescribe)" }
+    if (/^f(?:it|describe|test)$/.test(name) && (node.arguments as Node[] | undefined)?.length) return { severity: "warning", label: "focused test (fit/fdescribe)" }
     if (/^x(?:it|describe|test|context)$/.test(name)) return { severity: "info", label: "skipped test (xit/xdescribe)" }
   }
   return null
@@ -75,7 +75,7 @@ interface Rule {
 // Line-regex rules for the JS fallback (unparseable files) and Python.
 const JS_RULES: Rule[] = [
   { re: /\b(?:describe|it|test|context|suite)\.only\s*\(/, severity: "warning", label: "focused test (.only)" },
-  { re: /\bf(?:it|describe|test)\s*\(/, severity: "warning", label: "focused test (fit/fdescribe)" },
+  { re: /\bf(?:it|describe|test)\s*\((?!\s*\))/, severity: "warning", label: "focused test (fit/fdescribe)" },
   { re: /\b(?:describe|it|test|context|suite)\.skip\s*\(/, severity: "info", label: "skipped test (.skip)" },
   { re: /\bx(?:it|describe|test|context)\s*\(/, severity: "info", label: "skipped test (xit/xdescribe)" },
   { re: /\b(?:it|test)\.todo\s*\(/, severity: "info", label: "unimplemented test (.todo)" },
