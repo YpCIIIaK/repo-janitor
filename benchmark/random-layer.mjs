@@ -21,6 +21,7 @@
  *
  * Unauthenticated search allows 10 requests a minute; a draw of 1,000 takes
  * a few hours and is resumable (progress is kept in random-layer.json).
+ * With GITHUB_SEARCH_TOKEN (or GITHUB_TOKEN) set, 30 a minute: about 3x faster.
  */
 import { execFileSync } from "node:child_process"
 import { existsSync, readFileSync, writeFileSync } from "node:fs"
@@ -51,14 +52,17 @@ function rng(seed) {
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 let lastCall = 0
+// Optional token (no scopes needed): search allows 30 requests a minute instead of 10.
+const token = process.env.GITHUB_SEARCH_TOKEN || process.env.GITHUB_TOKEN || ""
+const gap = token ? 2200 : 6500
 async function search(q, page = 1, perPage = 100) {
-  // Stay under 10 requests a minute.
-  const wait = lastCall + 6500 - Date.now()
+  // Stay under the search rate limit.
+  const wait = lastCall + gap - Date.now()
   if (wait > 0) await sleep(wait)
   lastCall = Date.now()
   const url = `https://api.github.com/search/repositories?q=${encodeURIComponent(q)}&per_page=${perPage}&page=${page}`
   for (let attempt = 0; attempt < 5; attempt++) {
-    const res = await fetch(url, { headers: { Accept: "application/vnd.github+json", "User-Agent": "repo-janitor-benchmark" } })
+    const res = await fetch(url, { headers: { Accept: "application/vnd.github+json", "User-Agent": "repo-janitor-benchmark", ...(token ? { Authorization: `Bearer ${token}` } : {}) } })
     if (res.ok) return res.json()
     if (res.status === 403 || res.status === 429) {
       const reset = Number(res.headers.get("x-ratelimit-reset") ?? 0) * 1000
