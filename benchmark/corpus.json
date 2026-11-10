@@ -34351,7 +34351,10 @@
   {
     "name": "zhuifengshaonianhanlu-pikachu",
     "url": "https://github.com/zhuifengshaonianhanlu/pikachu",
-    "sha": "5e1e8d9d14a3ba61d62f28cf35531c4df4dd24fc"
+    "sha": "5e1e8d9d14a3ba61d62f28cf35531c4df4dd24fc",
+    "tracks": [
+      "security"
+    ]
   },
   {
     "name": "cakephp-phinx",
