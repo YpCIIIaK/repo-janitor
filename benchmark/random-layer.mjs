@@ -64,6 +64,7 @@ async function search(q, page = 1, perPage = 100) {
   for (let attempt = 0; attempt < 5; attempt++) {
     const res = await fetch(url, { headers: { Accept: "application/vnd.github+json", "User-Agent": "repo-janitor-benchmark", ...(token ? { Authorization: `Bearer ${token}` } : {}) } })
     if (res.ok) return res.json()
+    if (res.status === 401 || res.status >= 500) { await sleep(10000 * (attempt + 1)); continue }
     if (res.status === 403 || res.status === 429) {
       const reset = Number(res.headers.get("x-ratelimit-reset") ?? 0) * 1000
       await sleep(Math.max(15000, reset - Date.now() + 2000))
