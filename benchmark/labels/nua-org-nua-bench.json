@@ -1,6 +1,6 @@
 {
  "insecure-php-reflected-xss-nua-lab-03/phpliteadmin.php:927": "fp",
- "insecure-py-yaml-load-nua-lab-03/app.py:704": "tp",
+ "insecure-py-yaml-load-nua-lab-03/app.py:704": "fp",
  "insecure-sql-interpolated-nua-lab-02/dexmovies/app.py:150": "tp",
  "insecure-sql-interpolated-nua-lab-02/dexmovies/app.py:605": "tp",
  "insecure-sql-interpolated-nua-lab-02/dexmovies/app.py:913": "tp",
