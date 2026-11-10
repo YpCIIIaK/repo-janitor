@@ -3,6 +3,19 @@ import { skippedTestsScanner } from "../../src/index"
 import { makeContext } from "../helpers"
 
 describe("skippedTestsScanner", () => {
+  it("ignores zero-argument fitting callbacks in parsed and fallback code, preserving focused tests", async () => {
+    const ui = "function fit() {}\nfit();\nfit( );\nfit?.();\n"
+    expect(await skippedTestsScanner.run(makeContext({ files: { "layout.ts": ui } }))).toEqual([])
+    expect(await skippedTestsScanner.run(makeContext({ files: {
+      "broken.ts": "fit();\nthis is not valid <<< ts\n",
+    } }))).toEqual([])
+    const focused = await skippedTestsScanner.run(makeContext({ files: {
+      "focus.test.ts": "fit('one', () => {});\nfit(title, callback);\nfdescribe('suite', () => {});\nftest('ref', testBody);\n",
+    } }))
+    expect(focused).toHaveLength(4)
+    expect(focused.every(issue => issue.severity === "warning")).toBe(true)
+  })
+
   it("warns on a focused test (.only)", async () => {
     const ctx = makeContext({
       files: { "a.test.ts": "describe.only('x', () => {})\n" },
