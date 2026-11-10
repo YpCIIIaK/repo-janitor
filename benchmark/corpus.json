@@ -32657,5 +32657,505 @@
     "url": "https://github.com/samunohito/kanaria",
     "sha": "a29b1223ed53c4e50613c4f519a373cc9f691227",
     "layer": "random"
+  },
+  {
+    "name": "filosottile-age",
+    "url": "https://github.com/FiloSottile/age",
+    "sha": "b74dce4cdbe35b5e5f66c06d9612b72f89028758"
+  },
+  {
+    "name": "666ghj-mirofish",
+    "url": "https://github.com/666ghj/MiroFish",
+    "sha": "7657031ac01184afe2cb220f5ee3545573b5e843"
+  },
+  {
+    "name": "satwikkansal-wtfpython",
+    "url": "https://github.com/satwikkansal/wtfpython",
+    "sha": "9323b863218670404405e0a0b9f54d2841a7452e"
+  },
+  {
+    "name": "vercel-labs-agent-desktop",
+    "url": "https://github.com/vercel-labs/agent-desktop",
+    "sha": "ab7dfb218cddc1594aa1d87a5bfcd0ac76da2276"
+  },
+  {
+    "name": "aalhour-c-sharp-algorithms",
+    "url": "https://github.com/aalhour/C-Sharp-Algorithms",
+    "sha": "8f9dee298a79ad44e67b0a9dcfded9ef7ce0d9c0"
+  },
+  {
+    "name": "goldfire-howler-js",
+    "url": "https://github.com/goldfire/howler.js",
+    "sha": "1d3053576a860e9854645493ad6c4a72c6cc6e45"
+  },
+  {
+    "name": "indiff-qttabbar",
+    "url": "https://github.com/indiff/qttabbar",
+    "sha": "9b81f7222fc47356659c224855bdd799d044e93c"
+  },
+  {
+    "name": "jiafeimiao-k-cat-discimagestudio",
+    "url": "https://github.com/JiaFeiMiao-K-Cat/DiscImageStudio",
+    "sha": "9b74ca323d71505e76cbaff91eb59f81a8ea4bdf"
+  },
+  {
+    "name": "ent-ent",
+    "url": "https://github.com/ent/ent",
+    "sha": "8037bc89bcab9a264099afa2672581237a3e079b"
+  },
+  {
+    "name": "fecshop-yii2-fecshop",
+    "url": "https://github.com/fecshop/yii2_fecshop",
+    "sha": "19c5cb8f4848a6ef0194e3b9add050c5853cae94"
+  },
+  {
+    "name": "dotnet-wpf",
+    "url": "https://github.com/dotnet/wpf",
+    "sha": "1fdaaaab9b20a0c00c3a53fa1a61d047fac96d2a"
+  },
+  {
+    "name": "nikivdev-code",
+    "url": "https://github.com/nikivdev/code",
+    "sha": "a747e741ae92c09071d0ae946ab48488adcff1ce"
+  },
+  {
+    "name": "ebookfoundation-free-programming-books",
+    "url": "https://github.com/EbookFoundation/free-programming-books",
+    "sha": "8bc5e371226d32ce14ee85ce304f56d4ba190a1c"
+  },
+  {
+    "name": "sansan0-trendradar",
+    "url": "https://github.com/sansan0/TrendRadar",
+    "sha": "8a316628215c53ad34b7200ecb0fba76de3ef6c7"
+  },
+  {
+    "name": "ayoubfaouzi-al-khaser",
+    "url": "https://github.com/ayoubfaouzi/al-khaser",
+    "sha": "f0e5559073fe02c4f50cc8c3ed8d5b302a6a0659"
+  },
+  {
+    "name": "pion-webrtc",
+    "url": "https://github.com/pion/webrtc",
+    "sha": "60271fb5672cfd886433c533a1d33579126f2bd4"
+  },
+  {
+    "name": "kalcaddle-kodexplorer",
+    "url": "https://github.com/kalcaddle/KodExplorer",
+    "sha": "4145dc102afb2ba4c2646158f895a48a3eee2da9"
+  },
+  {
+    "name": "php-ffmpeg-php-ffmpeg",
+    "url": "https://github.com/PHP-FFMpeg/PHP-FFMpeg",
+    "sha": "41fa00949ea2758cd34f076a8030df7198d57759"
+  },
+  {
+    "name": "greensock-gsap",
+    "url": "https://github.com/greensock/GSAP",
+    "sha": "5e6c35ff8eedea12d4f229129def635277d8b0f2"
+  },
+  {
+    "name": "wavetermdev-waveterm",
+    "url": "https://github.com/wavetermdev/waveterm",
+    "sha": "9f1c9670d407be3b93cf090319a63ef30bf54d0e"
+  },
+  {
+    "name": "tauricresearch-tradingagents",
+    "url": "https://github.com/TauricResearch/TradingAgents",
+    "sha": "9fa1196fffbcfd9de5146d2dd2869df84ab99838"
+  },
+  {
+    "name": "uxlfoundation-onetbb",
+    "url": "https://github.com/uxlfoundation/oneTBB",
+    "sha": "93a8cb5541fa66915fef75bd42d2cf0a26d19f03"
+  },
+  {
+    "name": "tyrrrz-cliwrap",
+    "url": "https://github.com/Tyrrrz/CliWrap",
+    "sha": "6d1c90bced37aa384d609d2a31f891d8b3c33734"
+  },
+  {
+    "name": "projectdiscovery-katana",
+    "url": "https://github.com/projectdiscovery/katana",
+    "sha": "763bebd838e8482279dd8bda335e28c2ecb47da4"
+  },
+  {
+    "name": "tencent-mmkv",
+    "url": "https://github.com/Tencent/MMKV",
+    "sha": "007a393cd5e255e9aa68d6648f7179159bdf0f9d"
+  },
+  {
+    "name": "moudey-shell",
+    "url": "https://github.com/moudey/Shell",
+    "sha": "81ec1a410d1277efa58aff52be912a254f66e5a3"
+  },
+  {
+    "name": "tstack-lnav",
+    "url": "https://github.com/tstack/lnav",
+    "sha": "ff25694c85cf1f1c32add97833a47348d8b7cac7"
+  },
+  {
+    "name": "cemu-project-cemu",
+    "url": "https://github.com/cemu-project/Cemu",
+    "sha": "b487cb70ed96cf6a3b5385d1aeff6ea41eaa3f63"
+  },
+  {
+    "name": "xai-org-grok-build",
+    "url": "https://github.com/xai-org/grok-build",
+    "sha": "2bdd1d6a6369de0e8c68132ea4539e9abd9e14a8"
+  },
+  {
+    "name": "dyang886-game-cheats-manager",
+    "url": "https://github.com/dyang886/Game-Cheats-Manager",
+    "sha": "ac1d997fa11934abb29d90a6da1934006312366a"
+  },
+  {
+    "name": "storytold-cadcraft",
+    "url": "https://github.com/storytold/cadcraft",
+    "sha": "6f0f1fefa81d08031bde56a8b3d5b1556810f397"
+  },
+  {
+    "name": "phpro-grumphp",
+    "url": "https://github.com/phpro/grumphp",
+    "sha": "c469dc05dcb81d6893bda31ff87eb48512c30fc7"
+  },
+  {
+    "name": "huggingface-candle",
+    "url": "https://github.com/huggingface/candle",
+    "sha": "cfcbd7186d13271843ce7eb41d25659bd0835850"
+  },
+  {
+    "name": "dimsemenov-photoswipe",
+    "url": "https://github.com/dimsemenov/PhotoSwipe",
+    "sha": "cd41cb587a460634e4cae53134f3d01d06e284a6"
+  },
+  {
+    "name": "jackwener-opencli",
+    "url": "https://github.com/jackwener/OpenCLI",
+    "sha": "9bc5f5ca132ec4d4e48d7ee517d4303bf159e8e8"
+  },
+  {
+    "name": "catppuccin-catppuccin",
+    "url": "https://github.com/catppuccin/catppuccin",
+    "sha": "d09787dd98ca6fba08af5ef2ae94a7e09f17daca"
+  },
+  {
+    "name": "tecnickcom-tcpdf",
+    "url": "https://github.com/tecnickcom/TCPDF",
+    "sha": "e3e1ac6855a0f663b0012ab13158b2f2baa5fa71"
+  },
+  {
+    "name": "mapstermapper-mapster",
+    "url": "https://github.com/MapsterMapper/Mapster",
+    "sha": "cbc1e5f04e6e003744b04f83d4705670a85e459b"
+  },
+  {
+    "name": "unicity-aos-aos-ce",
+    "url": "https://github.com/unicity-aos/aos-ce",
+    "sha": "6e4e8ec147ea693a895721c04811d69cee3268ed"
+  },
+  {
+    "name": "pollen-robotics-microduck",
+    "url": "https://github.com/pollen-robotics/microduck",
+    "sha": "ef666aada8a7e945cbbeefbf1577a091b8a8294b"
+  },
+  {
+    "name": "remoteintech-remote-jobs",
+    "url": "https://github.com/remoteintech/remote-jobs",
+    "sha": "fa2253f1ed02cc4d8f59ab3ccc831b008cdd7189"
+  },
+  {
+    "name": "deepseek-ai-dsh-superagent-prototype",
+    "url": "https://github.com/deepseek-ai/dsh-superagent-prototype",
+    "sha": "8c32a9dc5d72c033816c6a8110b37f40cf94fba4"
+  },
+  {
+    "name": "bililiverecorder-bililiverecorder",
+    "url": "https://github.com/BililiveRecorder/BililiveRecorder",
+    "sha": "2744d605b93fec44d00a7957de93ec3148e412fc"
+  },
+  {
+    "name": "binary-husky-gpt-academic",
+    "url": "https://github.com/binary-husky/gpt_academic",
+    "sha": "d6bde0fa54373309bd05823a49bda8da019d2c77"
+  },
+  {
+    "name": "air-verse-air",
+    "url": "https://github.com/air-verse/air",
+    "sha": "71ea1dee05248122ed22b5870c7fb20a90d80ddd"
+  },
+  {
+    "name": "chokcoco-icss",
+    "url": "https://github.com/chokcoco/iCSS",
+    "sha": "e03eb3e59021dff1e51434cc81626e8a53c525cc"
+  },
+  {
+    "name": "jedwatson-react-select",
+    "url": "https://github.com/JedWatson/react-select",
+    "sha": "4b6948078684bee394e09dd8e7cdc2d7f89e0fad"
+  },
+  {
+    "name": "blueheisenberg-scskiller",
+    "url": "https://github.com/BlueHeisenberg/SCSKiller",
+    "sha": "a996cfe737bff9ece0e8117c463339c3b9fbdac4"
+  },
+  {
+    "name": "everyinc-compound-engineering-plugin",
+    "url": "https://github.com/EveryInc/compound-engineering-plugin",
+    "sha": "dd9b7921c9c80498eba84994ff1b8e1e81dbc1db"
+  },
+  {
+    "name": "focus-creative-games-luban",
+    "url": "https://github.com/focus-creative-games/luban",
+    "sha": "029f714f935ba58d7e33530da87e6371ee3c519f"
+  },
+  {
+    "name": "google-sentencepiece",
+    "url": "https://github.com/google/sentencepiece",
+    "sha": "a28cbf07e16d6437e63ad0cf1d3c30ada69a42f8"
+  },
+  {
+    "name": "storytold-wordcraft",
+    "url": "https://github.com/storytold/wordcraft",
+    "sha": "8548b33be1c9238e6d42fb2a72fe27ccdd56be7f"
+  },
+  {
+    "name": "firecrawl-open-lovable",
+    "url": "https://github.com/firecrawl/open-lovable",
+    "sha": "806b8072f28afea11fa2b028cac1449eff74c511"
+  },
+  {
+    "name": "microsoft-stl",
+    "url": "https://github.com/microsoft/STL",
+    "sha": "e1ed302683e5e822f663fbb0f44cee7e9ddc6af0"
+  },
+  {
+    "name": "pure-css-pure",
+    "url": "https://github.com/pure-css/pure",
+    "sha": "24084b968af9632693e6cf2b4f8c4eb0138c3b0d"
+  },
+  {
+    "name": "tatsu-syo-nomeiryoui",
+    "url": "https://github.com/Tatsu-syo/noMeiryoUI",
+    "sha": "688e4ccd6aa0e2e228f2af11aa8586ff01bd84be"
+  },
+  {
+    "name": "react-yoga",
+    "url": "https://github.com/react/yoga",
+    "sha": "41118bd3a86c637fdb43a90fd596e78375137d0f"
+  },
+  {
+    "name": "ultralytics-ultralytics",
+    "url": "https://github.com/ultralytics/ultralytics",
+    "sha": "b9e811560aeeaa0fa3e777cdf8d09025ae12e3ae"
+  },
+  {
+    "name": "toon-format-toon",
+    "url": "https://github.com/toon-format/toon",
+    "sha": "9622df2ae49927924a4f0ace9b76e59a60c53d3d"
+  },
+  {
+    "name": "huynhsontung-screenbox",
+    "url": "https://github.com/huynhsontung/Screenbox",
+    "sha": "def0f1cae6e4197cec0bbf80d123f97ab9d8b33d"
+  },
+  {
+    "name": "timber-timber",
+    "url": "https://github.com/timber/timber",
+    "sha": "42c665dda081a705fb60b7b4be3c8980358328e5"
+  },
+  {
+    "name": "albertlauncher-albert",
+    "url": "https://github.com/albertlauncher/albert",
+    "sha": "c703546832dd8e7c961b74895d43b8d0cdadf7c8"
+  },
+  {
+    "name": "chatboxai-chatbox",
+    "url": "https://github.com/chatboxai/chatbox",
+    "sha": "abc7024cba8958913ccb2d8c25c72d749c9adefb"
+  },
+  {
+    "name": "1remote-1remote",
+    "url": "https://github.com/1Remote/1Remote",
+    "sha": "5088d439c21415e8dd60479999b6700662e65675"
+  },
+  {
+    "name": "leonardomso-33-js-concepts",
+    "url": "https://github.com/leonardomso/33-js-concepts",
+    "sha": "16d0d95c02b19df6a8c841f1a0012d7b7367a340"
+  },
+  {
+    "name": "ponderfly-googletranslateipcheck",
+    "url": "https://github.com/Ponderfly/GoogleTranslateIpCheck",
+    "sha": "85ea71af1167e8cbb0a8793e5966e9083aa4ac10"
+  },
+  {
+    "name": "libnyanpasu-clash-nyanpasu",
+    "url": "https://github.com/libnyanpasu/clash-nyanpasu",
+    "sha": "8fa21ed30868800c26026a91461033792112012c"
+  },
+  {
+    "name": "yuesong-feng-30daymakecppserver",
+    "url": "https://github.com/yuesong-feng/30dayMakeCppServer",
+    "sha": "6f4fc0e04267557c386234fd9ea4cb3287f7b10c"
+  },
+  {
+    "name": "spatie-laravel-query-builder",
+    "url": "https://github.com/spatie/laravel-query-builder",
+    "sha": "5a3e431f52d63a2a96f00b31143e9d5a34f67fb3"
+  },
+  {
+    "name": "2noise-chattts",
+    "url": "https://github.com/2noise/ChatTTS",
+    "sha": "77b89ee281cd479f5b1a787ada330dc975ca1f2a"
+  },
+  {
+    "name": "h4ckf0r0day-obscura",
+    "url": "https://github.com/h4ckf0r0day/obscura",
+    "sha": "74b4bec959117b9da309f113bb2b08aea39539ac"
+  },
+  {
+    "name": "nanmicoder-mediacrawler",
+    "url": "https://github.com/NanmiCoder/MediaCrawler",
+    "sha": "306ab4ca26c0e44fb87ede0e40e98748752815a6"
+  },
+  {
+    "name": "neon-bindings-neon",
+    "url": "https://github.com/neon-bindings/neon",
+    "sha": "d2eecc83db5f8dd1d4981c4abc20ec9a449a0a80"
+  },
+  {
+    "name": "docsifyjs-docsify",
+    "url": "https://github.com/docsifyjs/docsify",
+    "sha": "9ad3c422153f16455d5eaae2b1a8cdf9959a9a5b"
+  },
+  {
+    "name": "liriliri-eruda",
+    "url": "https://github.com/liriliri/eruda",
+    "sha": "0c55928fec802fb2102934c4b5928686178b467b"
+  },
+  {
+    "name": "micro-editor-micro",
+    "url": "https://github.com/micro-editor/micro",
+    "sha": "ab37da303ae719a469236697239a00e3e1ca8b16"
+  },
+  {
+    "name": "cxasm-notepad-",
+    "url": "https://github.com/cxasm/notepad--",
+    "sha": "4510896f716e71db9f4b25ed8559b9c39a4f23d4"
+  },
+  {
+    "name": "drawdb-io-drawdb",
+    "url": "https://github.com/drawdb-io/drawdb",
+    "sha": "602778410be211b39f011c706f7521a75f668930"
+  },
+  {
+    "name": "chai2010-advanced-go-programming-book",
+    "url": "https://github.com/chai2010/advanced-go-programming-book",
+    "sha": "4447d098a22be363b6d3f1c202b6f887982962dd"
+  },
+  {
+    "name": "styled-components-styled-components",
+    "url": "https://github.com/styled-components/styled-components",
+    "sha": "e2aa1c8f6e40b74ae164e7489f68067019d47772"
+  },
+  {
+    "name": "sophia-community-sophiapp",
+    "url": "https://github.com/Sophia-Community/SophiApp",
+    "sha": "a774d3ade4fe291852b008ad47f6cefdfa329a7e"
+  },
+  {
+    "name": "anthropics-claude-plugins-official",
+    "url": "https://github.com/anthropics/claude-plugins-official",
+    "sha": "dceb15d50832e6adf380bedc26dde03d251324b9"
+  },
+  {
+    "name": "jaegertracing-jaeger",
+    "url": "https://github.com/jaegertracing/jaeger",
+    "sha": "4ca709708bca38a889266d85e2f4cccd9c45b55a"
+  },
+  {
+    "name": "rustls-rustls",
+    "url": "https://github.com/rustls/rustls",
+    "sha": "0312b11d3cecbd1145dfe4a5597fa2c22ae6519f"
+  },
+  {
+    "name": "vuejs-vue-cli",
+    "url": "https://github.com/vuejs/vue-cli",
+    "sha": "7eb93c169c7520935252e2473387f923ef80d856"
+  },
+  {
+    "name": "timqian-chinese-independent-blogs",
+    "url": "https://github.com/timqian/chinese-independent-blogs",
+    "sha": "ff17938abc037eac3bcef5e829ccd02698d53f97"
+  },
+  {
+    "name": "pimalaya-himalaya",
+    "url": "https://github.com/pimalaya/himalaya",
+    "sha": "42134fd20ca6d37aa86e02d6777487231cfe7032"
+  },
+  {
+    "name": "chatgptnextweb-nextchat",
+    "url": "https://github.com/ChatGPTNextWeb/NextChat",
+    "sha": "1d3dc331512929a4b1d3e82354e72acce33b5c7a"
+  },
+  {
+    "name": "osquery-osquery",
+    "url": "https://github.com/osquery/osquery",
+    "sha": "2169fcd0024b615a2d5c576b0ae9024095efa62a"
+  },
+  {
+    "name": "dnshe-dnshe-freedomains",
+    "url": "https://github.com/dnshe/DNSHE-FreeDomains",
+    "sha": "19530755ffb9b5b99e0e71c9bd13494c54a56a37"
+  },
+  {
+    "name": "snapchat-keydb",
+    "url": "https://github.com/Snapchat/KeyDB",
+    "sha": "603ebb27fb82a27fb98b0feb6749b0f7661a1c4b"
+  },
+  {
+    "name": "mihomo-party-org-clash-party",
+    "url": "https://github.com/mihomo-party-org/clash-party",
+    "sha": "72af7d82cc217a64d6cd6c147ac70534c0eb8308"
+  },
+  {
+    "name": "moghtech-komodo",
+    "url": "https://github.com/moghtech/komodo",
+    "sha": "780ac68b992094a9fccd5fffb760e0c84fd3c3d1"
+  },
+  {
+    "name": "tiiny-ai-powerinfer",
+    "url": "https://github.com/Tiiny-AI/PowerInfer",
+    "sha": "8bd56d69906c9d2dba4d3bf6899763401e01a9a4"
+  },
+  {
+    "name": "microsoft-wpf-samples",
+    "url": "https://github.com/microsoft/WPF-Samples",
+    "sha": "811d01e95c8c929e68539d698d0a0609e94fd185"
+  },
+  {
+    "name": "airbnb-javascript",
+    "url": "https://github.com/airbnb/javascript",
+    "sha": "8ed19247bef145e3cc41b24a02dd1fe6d9b5e681"
+  },
+  {
+    "name": "epi052-feroxbuster",
+    "url": "https://github.com/epi052/feroxbuster",
+    "sha": "5d159d7086fb330d642cc710b85f97b96dcb3062"
+  },
+  {
+    "name": "yeasy-docker-practice",
+    "url": "https://github.com/yeasy/docker_practice",
+    "sha": "c803802f95471cd14e55d14c85fae66b13e3d620"
+  },
+  {
+    "name": "decolua-9router",
+    "url": "https://github.com/decolua/9router",
+    "sha": "1339107e624d1ab150c6a0c2c2ee22caa7e9db2f"
+  },
+  {
+    "name": "php-debugbar-php-debugbar",
+    "url": "https://github.com/php-debugbar/php-debugbar",
+    "sha": "d04a382b80e320c7abdbe9fc66e83b34e80edef4"
   }
 ]
