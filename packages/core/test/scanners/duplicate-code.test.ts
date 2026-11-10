@@ -306,6 +306,36 @@ describe("duplicateCodeScanner", () => {
     expect(issue.title).toMatch(/repeated in 4 places/)
   })
 
+  it("excludes Swift test targets without hiding production Swift clones", async () => {
+    // bitchatTests and MaccyTests/MaccyUITests produced three reviewed FPs.
+    // Swift Testing uses @Test; neither a .test suffix nor XCTest inheritance
+    // is required, so the target and Swift filename conventions matter.
+    for (const file of [
+      "bitchatTests/Services/BLEFileTransferHandlerTests.swift",
+      "MaccyTests/SearchTests.swift",
+      "MaccyUITests/MaccyUITests.swift",
+      "Modules/Parser/ParserTests.swift",
+    ]) {
+      expect(await duplicateCodeScanner.run(ctx({ "Sources/production.swift": CLONE, [file]: CLONE }))).toEqual([])
+    }
+    expect(await duplicateCodeScanner.run(ctx({
+      "Sources/Contest/Controller.swift": CLONE,
+      "Sources/Latest/Controller.swift": CLONE,
+    }))).toHaveLength(1)
+  })
+
+  it("excludes Freezed output without hiding handwritten Dart models", async () => {
+    // Reviewed generated clones in Provider, Server Box and Musify.
+    expect(await duplicateCodeScanner.run(ctx({
+      "lib/models/video.freezed.dart": CLONE,
+      "lib/models/instance_details.freezed.dart": CLONE,
+    }))).toEqual([])
+    expect(await duplicateCodeScanner.run(ctx({
+      "lib/models/video.dart": CLONE,
+      "lib/models/freezed_helpers.dart": CLONE,
+    }))).toHaveLength(1)
+  })
+
   it("ignores duplication between test files", async () => {
     const issues = await duplicateCodeScanner.run(
       ctx({ "src/a.test.ts": CLONE, "src/b.test.ts": CLONE }),

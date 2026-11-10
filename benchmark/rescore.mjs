@@ -11,7 +11,7 @@
  */
 import { existsSync, readFileSync, statSync, writeFileSync } from "node:fs"
 import { dirname, join } from "node:path"
-import { fileURLToPath } from "node:url"
+import { fileURLToPath, pathToFileURL } from "node:url"
 
 const here = dirname(fileURLToPath(import.meta.url))
 const coreDist = join(here, "..", "packages", "core", "dist", "index.js")
@@ -20,7 +20,7 @@ if (!existsSync(coreDist) || statSync(coreDist).mtimeMs < statSync(data).mtimeMs
   console.error("Core build is older than confidence-data.ts: pnpm --filter ./packages/core build")
   process.exit(1)
 }
-const { computeScore, confidenceOf, scoreToGrade } = await import(coreDist)
+const { computeScore, confidenceOf, scoreToGrade } = await import(pathToFileURL(coreDist).href)
 const SELF_STAMPED = new Set(["insecure-code"])
 const conf = (f) => (SELF_STAMPED.has(f.scanner) ? f.confidence : confidenceOf(f.rule))
 
@@ -49,5 +49,19 @@ for (const repo of corpus) {
   const result = JSON.parse(readFileSync(resultPath, "utf8"))
   result.findings = result.findings.map((f) => ({ ...f, confidence: conf(f) }))
   writeFileSync(resultPath, JSON.stringify(result, null, 1))
+
+  // The online pass omits rule names in older snapshots. Keep its confidence
+  // consistent with the offline reports after calibration too.
+  const onlinePath = join(here, ".results", `${repo.name}.osv.json`)
+  if (existsSync(onlinePath)) {
+    const online = JSON.parse(readFileSync(onlinePath, "utf8"))
+    online.findings = online.findings.map((f) => {
+      const rule = f.rule ?? (f.id.startsWith("license-") ? "license-" + f.id.split("-")[1] : "vuln")
+      const confidence = confidenceOf(rule)
+      if (confidence !== f.confidence) changedConfidence++
+      return { ...f, confidence }
+    })
+    writeFileSync(onlinePath, JSON.stringify(online))
+  }
 }
 console.log(`rescored ${corpus.length} repos: ${changedConfidence} confidences and ${changedScores} scores changed`)

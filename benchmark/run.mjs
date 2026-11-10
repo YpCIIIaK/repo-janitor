@@ -12,7 +12,7 @@ import { spawn } from "node:child_process"
 import { availableParallelism } from "node:os"
 import { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, rmSync, statSync, writeFileSync } from "node:fs"
 import { dirname, join } from "node:path"
-import { fileURLToPath } from "node:url"
+import { fileURLToPath, pathToFileURL } from "node:url"
 import { newestSource, scanFingerprint, scannerFingerprints, staleScanners } from "./fingerprint.mjs"
 import { readInventory, writeInventory } from "./inventory.mjs"
 import { mayProduce, sparseGlobs } from "./scanner-inputs.mjs"
@@ -44,7 +44,7 @@ if (!existsSync(coreDist) || statSync(coreDist).mtimeMs < newestSource()) {
   console.error("The core build is older than its sources: pnpm run build:packages")
   process.exit(1)
 }
-const { computeScore, scoreToGrade } = await import(coreDist)
+const { computeScore, scoreToGrade } = await import(pathToFileURL(coreDist).href)
 const forced = (process.env.BENCH_FORCE_SCANNERS ?? "").split(",").filter(Boolean)
 const readJson = (p) => {
   try { return JSON.parse(readFileSync(p, "utf8")) } catch { return null }

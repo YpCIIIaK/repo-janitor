@@ -40,7 +40,7 @@ for (const r of corpus) {
   })
 }
 
-const VULNERABLE_RE = /jzheaux-spel-injection|eoftedal-deserialize|veracode-research-actuator-testbed|terracotta-bank-terracotta-bank|owasp-benchmark-benchmarkjava|goat|dvwa|dvna|dvws|juice-shop$|juice-shop-juice-shop|vampi|dsvw|vulnerable|crapi|govwa|pygoat|vulpy|dvpwa|goof|inject-some-sql|vulnado|javavulnerablelab|dvsa/i
+const VULNERABLE_RE = /mochiruntime-android-ctf|jzheaux-spel-injection|eoftedal-deserialize|veracode-research-actuator-testbed|terracotta-bank-terracotta-bank|owasp-benchmark-benchmarkjava|goat|dvwa|dvna|dvws|juice-shop$|juice-shop-juice-shop|vampi|dsvw|vulnerable|crapi|govwa|pygoat|vulpy|dvpwa|goof|inject-some-sql|vulnado|javavulnerablelab|dvsa/i
 const urlByName = new Map(corpus.map((r) => [r.name, r.url.replace("https://github.com/", "")]))
 const urlOf = (name) => urlByName.get(name) ?? name
 
@@ -442,8 +442,10 @@ for (const r of repos) for (const i of r.issues) if (i.severity in json.severity
       if (!existsSync(p)) return null
       // The online pass holds two scanners; vulnerabilities are vulnerable-deps only
       // (older files predate the scanner field and hold nothing else).
-      const all = JSON.parse(readFileSync(p, "utf8")).findings
-      return { r, all, f: all.filter((i) => !i.scanner || i.scanner === "vulnerable-deps") }
+      const snapshot = JSON.parse(readFileSync(p, "utf8"))
+      const all = snapshot.findings
+      const licenseChecked = snapshot.scanners?.includes("license-risk") || all.some((i) => i.scanner === "license-risk")
+      return { r, all, licenseChecked, f: all.filter((i) => !i.scanner || i.scanner === "vulnerable-deps") }
     })
     .filter(Boolean)
   if (osv.length) {
@@ -455,7 +457,7 @@ for (const r of repos) for (const i of r.issues) if (i.severity in json.severity
     for (const x of osv) for (const p of new Set(shipped(x).map((i) => pkgOf(i.title)).filter(Boolean))) counts.set(p, (counts.get(p) ?? 0) + 1)
     const affected = osv.filter((x) => shipped(x).length > 0)
     // Dependency licenses (license-risk, npm only), from the same online pass.
-    const lic = osv.map((x) => ({ ...x, l: x.all.filter((i) => i.scanner === "license-risk") }))
+    const lic = osv.filter((x) => x.licenseChecked).map((x) => ({ ...x, l: x.all.filter((i) => i.scanner === "license-risk") }))
     const npm = lic.filter((x) => {
       const p = join(here, ".inventory", `${x.r.name}.json`)
       return existsSync(p) && (JSON.parse(readFileSync(p, "utf8")).names?.["package.json"] ?? 0) > 0
