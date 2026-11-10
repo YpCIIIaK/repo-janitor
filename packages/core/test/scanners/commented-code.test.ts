@@ -297,3 +297,108 @@ describe("commented-code — non-host documentation notation", () => {
     expect(await scan('// grammar = ALPHA;\n// bits = compute(10);\n// emit(bits);')).toHaveLength(1)
   })
 })
+
+describe("commented-code — explicit usage and semantic documentation", () => {
+  const scan = (file: string, lines: string[]) => commentedCodeScanner.run(makeContext({ files: { [file]: lines.join("\n") } }))
+
+  it("preserves an explicitly headed Swift Usage section", async () => {
+    expect(await scan("src/SWGlowSweep.swift", [
+      "// Usage:",
+      "//   // Fully custom parameters",
+      "//   SWGlowSweep(",
+      "//       baseColor: .accentColor,",
+      "//       glowColor: .white,",
+      "//       duration: 1.5,",
+      "//       bandWidth: 200",
+      "//   )",
+      "// Parameters:",
+      "//   duration: animation duration in seconds.",
+      "import SwiftUI",
+    ])).toHaveLength(0)
+  })
+
+  it("preserves mixed yes/no AST reference examples", async () => {
+    expect(await scan("src/babelUtils.ts", [
+      "// no: class { NODE() {} }",
+      "// yes: class { [NODE]() {} }",
+      "// no: class { foo(NODE) {} }",
+      "switch (parent.type) {}",
+    ])).toHaveLength(0)
+  })
+
+  it("preserves mixed object and export reference examples without suppressing unlabelled exports", async () => {
+    for (const rows of [
+      ['// yes: { [NODE]: "" }', '// no: { NODE: "" }', '// depends: { NODE }'],
+      ['// no: export { foo as NODE };', '// yes: export { NODE as foo };', '// no: export { NODE as foo } from "foo";'],
+    ]) expect(await scan("src/references.ts", rows)).toHaveLength(0)
+    expect(await scan("src/exports.ts", [
+      '// export const old = load();', '// export const next = update(old);', '// export default next;',
+    ])).toHaveLength(1)
+  })
+
+  it("preserves explicitly introduced CSS grammar productions", async () => {
+    expect(await scan("src/polyfills.test.ts", [
+      "// Spec: text-wrap shorthand = <text-wrap-mode> || <text-wrap-style>",
+      "//   text-wrap-mode  = wrap | nowrap",
+      "//   text-wrap-style = auto | balance | stable | pretty",
+      "describe('text-wrap', () => {})",
+    ])).toHaveLength(0)
+  })
+
+  it("retains a disabled implementation after executable code ends a Usage comment", async () => {
+    const issues = await scan("src/widget.swift", [
+      "// Usage:",
+      "//   Widget()",
+      "import SwiftUI",
+      "// let old = load();",
+      "// update(old);",
+      "// persist(old);",
+    ])
+    expect(issues).toHaveLength(1)
+    expect(issues[0].location).toBe("src/widget.swift:4")
+  })
+
+  it("retains dead code when usage, yes/no, and spec are ordinary identifiers", async () => {
+    expect(await scan("src/worker.ts", [
+      "// const usage = load();",
+      "// const yes = spec(usage);",
+      "// const no = emit(yes);",
+    ])).toHaveLength(1)
+  })
+
+  it("does not extend a yes/no example exemption to adjacent dead statements", async () => {
+    const issues = await scan("src/babelUtils.ts", [
+      "// no: class { NODE() {} }",
+      "// yes: class { [NODE]() {} }",
+      "// no: class { foo(NODE) {} }",
+      "// const old = load();",
+      "// update(old);",
+      "// persist(old);",
+    ])
+    expect(issues).toHaveLength(1)
+    expect(issues[0].location).toBe("src/babelUtils.ts:4")
+  })
+})
+
+it("retains valid JavaScript labelled statements named yes/no/depends", async () => {
+  const source = [
+    "// yes: load();",
+    "// no: update();",
+    "// depends: persist();",
+  ].join("\n")
+  const issues = await commentedCodeScanner.run(makeContext({ files: { "src/worker.js": source } }))
+  expect(issues).toHaveLength(1)
+  expect(issues[0].location).toBe("src/worker.js:1")
+})
+
+it("retains real labelled JavaScript blocks, including bare expression blocks", async () => {
+  for (const bodies of [
+    ['yes: { load(); }', 'no: { update(); }', 'depends: { persist(); }'],
+    ['yes: { load }', 'no: { update }', 'depends: { persist }'],
+  ]) {
+    const source = bodies.map(body => '// ' + body).join("\n")
+    const issues = await commentedCodeScanner.run(makeContext({ files: { "src/worker.js": source } }))
+    expect(issues).toHaveLength(1)
+    expect(issues[0].location).toBe("src/worker.js:1")
+  }
+})
