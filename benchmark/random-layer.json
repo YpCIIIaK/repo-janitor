@@ -6703,11 +6703,17 @@
    "stars": 1478,
    "created": "2021-05-25",
    "language": "Go"
+  },
+  {
+   "url": "https://github.com/LegacyTemplates/vue-vite",
+   "stars": 16,
+   "created": "2021-11-17",
+   "language": "Vue"
   }
  ],
- "tries": 2355,
+ "tries": 2358,
  "population": "public, not a fork, not archived, stars >= 10, pushed since 2025-11-09, created 2010-01-01..2026-10-10",
- "rngCalls": 5841,
+ "rngCalls": 5848,
  "windows": 1686,
  "overCap": 35
 }
