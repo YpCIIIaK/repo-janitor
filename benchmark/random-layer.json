@@ -6985,11 +6985,101 @@
    "stars": 107,
    "created": "2021-06-02",
    "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/Distributive-Network/bifrost2",
+   "stars": 12,
+   "created": "2024-04-03",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/DiazzzDev/BFlow-Financial-Engine",
+   "stars": 29,
+   "created": "2025-11-20",
+   "language": "Java"
+  },
+  {
+   "url": "https://github.com/kaarmu/typst.vim",
+   "stars": 388,
+   "created": "2023-03-22",
+   "language": "Vim Script"
+  },
+  {
+   "url": "https://github.com/AshameTheDestroyer/Engineers-Mathematical-Guide",
+   "stars": 12,
+   "created": "2025-01-30",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/nicebots-xyz/botkit",
+   "stars": 12,
+   "created": "2024-04-03",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/gaoqiangz/pfw",
+   "stars": 96,
+   "created": "2018-04-06",
+   "language": "PowerBuilder"
+  },
+  {
+   "url": "https://github.com/ShoaibAhmedSoomro/lovable-pro-extension",
+   "stars": 21,
+   "created": "2026-06-21",
+   "language": "JavaScript"
+  },
+  {
+   "url": "https://github.com/firebase/quickstart-flutter",
+   "stars": 199,
+   "created": "2022-03-05",
+   "language": "Dart"
+  },
+  {
+   "url": "https://github.com/cruiseresearchgroup/KDD-Cup-2025-Meta-CRAG-MM",
+   "stars": 10,
+   "created": "2025-07-25",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/Seattle-Aquarium/Coastal_Climate_Resilience",
+   "stars": 34,
+   "created": "2022-03-05",
+   "language": "TeX"
+  },
+  {
+   "url": "https://github.com/muratozturkdev/OpenAI-Dall-E-2",
+   "stars": 67,
+   "created": "2022-11-04",
+   "language": "Kotlin"
+  },
+  {
+   "url": "https://github.com/pinqy520/revas",
+   "stars": 143,
+   "created": "2020-02-12",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/JPro-one/JPro",
+   "stars": 15,
+   "created": "2017-11-10",
+   "language": null
+  },
+  {
+   "url": "https://github.com/ObjectKjq/yolov8-train",
+   "stars": 20,
+   "created": "2025-12-19",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/TwidereProject/MetaTextKit",
+   "stars": 15,
+   "created": "2021-06-18",
+   "language": "Swift"
   }
  ],
- "tries": 2465,
+ "tries": 2492,
  "population": "public, not a fork, not archived, stars >= 10, pushed since 2025-11-09, created 2010-01-01..2026-10-10",
- "rngCalls": 6110,
+ "rngCalls": 6179,
  "windows": 1686,
  "overCap": 39
 }
