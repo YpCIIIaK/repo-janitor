@@ -1,0 +1,11 @@
+{
+ "commented-packages/compiler-core/src/ast.ts:537": "fp",
+ "commented-packages/compiler-core/src/babelUtils.ts:397": "fp",
+ "commented-packages/compiler-core/src/babelUtils.ts:404": "fp",
+ "commented-packages/compiler-core/src/babelUtils.ts:415": "fp",
+ "commented-packages/compiler-core/src/babelUtils.ts:425": "fp",
+ "commented-packages/compiler-core/src/babelUtils.ts:480": "fp",
+ "commented-packages/runtime-core/src/errorHandling.ts:17": "fp",
+ "commented-packages/runtime-core/src/renderer.ts:1925": "fp",
+ "commented-packages/runtime-core/src/renderer.ts:1954": "fp"
+}

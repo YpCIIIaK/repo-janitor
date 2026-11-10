@@ -1,4 +1,7 @@
 {
+ "commented-src/Microsoft.DotNet.Wpf/src/DirectWriteForwarder/CPP/DWriteWrapper/DWriteTypeConverter.cpp:338": "fp",
+ "commented-src/Microsoft.DotNet.Wpf/src/PresentationCore/MS/Win32/UnsafeNativeMethodsTablet.cs:152": "fp",
+ "commented-src/Microsoft.DotNet.Wpf/src/PresentationCore/MS/Win32/UnsafeNativeMethodsTablet.cs:169": "fp",
  "commented-src/Microsoft.DotNet.Wpf/src/PresentationCore/MS/internal/Media3D/M3DUtil.cs:431": "fp",
  "duplicate-src/Microsoft.DotNet.Wpf/cycle-breakers/PresentationFramework/PresentationFramework.cs-10707": "fp"
 }
