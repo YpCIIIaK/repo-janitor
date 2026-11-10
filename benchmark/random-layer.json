@@ -9553,11 +9553,179 @@
    "stars": 13,
    "created": "2025-10-21",
    "language": "C"
+  },
+  {
+   "url": "https://github.com/kaku2015/Docs",
+   "stars": 10,
+   "created": "2019-05-17",
+   "language": null
+  },
+  {
+   "url": "https://github.com/cruip/tailwind-landing-page-template",
+   "stars": 4528,
+   "created": "2020-10-13",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/otter-sec/qemu-escape",
+   "stars": 34,
+   "created": "2026-03-10",
+   "language": "C"
+  },
+  {
+   "url": "https://github.com/a-partovii/GitHub.Gadgets",
+   "stars": 21,
+   "created": "2026-01-30",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/aws-samples/sample-advanced-rag-using-bedrock-and-sagemaker",
+   "stars": 65,
+   "created": "2025-03-13",
+   "language": "Jupyter Notebook"
+  },
+  {
+   "url": "https://github.com/opensnap/antigravity",
+   "stars": 82,
+   "created": "2026-06-03",
+   "language": "Shell"
+  },
+  {
+   "url": "https://github.com/eGovFramework/egovframe-msa-common-components",
+   "stars": 12,
+   "created": "2025-03-07",
+   "language": "CSS"
+  },
+  {
+   "url": "https://github.com/VocaHQ/vocaphone",
+   "stars": 52,
+   "created": "2026-07-31",
+   "language": "Swift"
+  },
+  {
+   "url": "https://github.com/charlotty2026/bid-toolkit",
+   "stars": 10,
+   "created": "2026-08-31",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/netology-code/iqa-homeworks",
+   "stars": 27,
+   "created": "2019-04-26",
+   "language": null
+  },
+  {
+   "url": "https://github.com/oliver006/elasticsearch-gmail",
+   "stars": 2060,
+   "created": "2014-10-31",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/mapbox/mapbox-plugins-android",
+   "stars": 242,
+   "created": "2017-03-31",
+   "language": "Java"
+  },
+  {
+   "url": "https://github.com/liuchaonaoc/AstroStatistics2026",
+   "stars": 13,
+   "created": "2026-03-03",
+   "language": "Jupyter Notebook"
+  },
+  {
+   "url": "https://github.com/apache/beam-starter-java",
+   "stars": 10,
+   "created": "2022-02-05",
+   "language": "Java"
+  },
+  {
+   "url": "https://github.com/microsoft/Microsoft-Store-Services-Sample",
+   "stars": 13,
+   "created": "2021-03-26",
+   "language": "C#"
+  },
+  {
+   "url": "https://github.com/MarkusFreitag/keepassxc-go",
+   "stars": 28,
+   "created": "2021-04-23",
+   "language": "Go"
+  },
+  {
+   "url": "https://github.com/djotahub/Taller-Ciberseguridad-ofensiva-",
+   "stars": 63,
+   "created": "2025-08-30",
+   "language": null
+  },
+  {
+   "url": "https://github.com/clerk/nextjs-auth-starter-template",
+   "stars": 432,
+   "created": "2023-07-20",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/mouredev/adeviento-web",
+   "stars": 472,
+   "created": "2023-11-26",
+   "language": "JavaScript"
+  },
+  {
+   "url": "https://github.com/lapaygroup/RussianPost",
+   "stars": 113,
+   "created": "2017-01-27",
+   "language": "PHP"
+  },
+  {
+   "url": "https://github.com/rugbedbugg/How-To-Linux",
+   "stars": 13,
+   "created": "2026-02-19",
+   "language": null
+  },
+  {
+   "url": "https://github.com/kakaxi12/vox-director-codex",
+   "stars": 14,
+   "created": "2026-07-16",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/bannedbook/v2ray.vpn",
+   "stars": 603,
+   "created": "2019-12-27",
+   "language": "Kotlin"
+  },
+  {
+   "url": "https://github.com/b2a3e8/jekyll-theme-console-demo-hacker",
+   "stars": 12,
+   "created": "2020-06-27",
+   "language": "Ruby"
+  },
+  {
+   "url": "https://github.com/blockchain-certificates/blockcerts-verifier",
+   "stars": 69,
+   "created": "2018-09-07",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/NetRiceCake/loco-wrapper",
+   "stars": 16,
+   "created": "2025-11-22",
+   "language": "Java"
+  },
+  {
+   "url": "https://github.com/leap71/LEAP71_ShapeKernel",
+   "stars": 320,
+   "created": "2023-10-15",
+   "language": "C#"
+  },
+  {
+   "url": "https://github.com/samunohito/kanaria",
+   "stars": 21,
+   "created": "2019-01-04",
+   "language": "Rust"
   }
  ],
- "tries": 3337,
+ "tries": 3402,
  "population": "public, not a fork, not archived, stars >= 10, pushed since 2025-11-09, created 2010-01-01..2026-10-10",
- "rngCalls": 8283,
+ "rngCalls": 8442,
  "windows": 1686,
- "overCap": 52
+ "overCap": 53
 }
