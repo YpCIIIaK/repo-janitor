@@ -1,28 +1,28 @@
 {
- "overall": 0.578,
+ "overall": 0.579,
  "scanners": {
   "eol-runtime": 0.944,
-  "todo-debt": 0.894,
-  "broken-doc-links": 0.615,
+  "todo-debt": 0.911,
+  "broken-doc-links": 0.66,
   "bus-factor": 0.848,
-  "commented-code": 0.69,
+  "commented-code": 0.683,
   "workflow-security": 0.954,
-  "duplicate-code": 0.771,
-  "skipped-tests": 0.875,
+  "duplicate-code": 0.78,
+  "skipped-tests": 0.84,
   "insecure-code": 0.119,
-  "docs-drift": 0.615,
+  "docs-drift": 0.63,
   "lockfile-drift": 0.905,
   "dead-code": 0.8,
   "dockerfile": 0.449,
-  "leftover-debug": 0.25,
+  "leftover-debug": 0.267,
   "config-conflict": 0.95,
-  "secrets": 0.057,
+  "secrets": 0.051,
   "env-lifecycle": 0.138,
-  "ci-health": 0.489,
+  "ci-health": 0.478,
   "repo-bloat": 0.471,
   "project-hygiene": 0.692,
   "license-risk": 0.152,
-  "iac-security": 0.42,
+  "iac-security": 0.416,
   "dependency-funeral": 0.077,
   "supply-chain": 1
  },
@@ -2759,7 +2759,6 @@
    "action-tag-.github/workflows/test.yml-21",
    "action-tag-first-party-.github/workflows/test.yml-18",
    "doclink-Docs/templates/toc.md:11:example-projects.html",
-   "duplicate-ReSwiftTests/StoreSubscriptionTests.swift-301",
    "eol-runner-.github/workflows/test.yml-14",
    "eol-runner-.github/workflows/test.yml-29",
    "eol-runner-.github/workflows/update-docs.yml-13",
@@ -2954,6 +2953,135 @@
   ],
   "keleshev-schema": [
    "eol-python-.github/workflows/python-test.yml-19"
+  ],
+  "permissionlesstech-bitchat": [
+   "commented-bitchat/Services/UnifiedPeerService.swift:170",
+   "todo-bitchat/Services/BLE/BLEService.swift:2012"
+  ],
+  "utmapp-utm": [
+   "ci-silenced-failure-.github/workflows/build.yml-284",
+   "doclink-Documentation/Dependencies.md:40:../scripts/qapi/",
+   "duplicate-Configuration/QEMUConstantGenerated.swift-7218",
+   "todo-Scripting/UTMScriptingVirtualMachineImpl.swift:80",
+   "todo-utmctl/UTMCtl.swift:488"
+  ],
+  "vorssaint-vorssaint-utils": [
+   "duplicate-Sources/Vorssaint/Services/QuickTools/QuickLauncherService.swift-485"
+  ],
+  "shadowsocks-shadowsocksx-ng": [
+   "doclink-docs/research/sslocal-password-environment.md:150:../../CONTEXT.md",
+   "duplicate-ShadowsocksX-NG2/Scripts/convert-china-ipv4.py-95"
+  ],
+  "p0deje-maccy": [
+   "todo-Maccy/FloatingPanel.swift:40",
+   "todo-Maccy/Observables/AppState.swift:69"
+  ],
+  "caldis-mos": [
+   "commented-Mos/Windows/MonitorWindow/Logger.swift:51",
+   "commented-MosTests/ScrollFilterTests.swift:53",
+   "todo-Mos/Logi/Debug/LogiSelfTestRunner.swift:75",
+   "todo-Mos/Utils/Archieve.swift:59"
+  ],
+  "altic-dev-fluidvoice": [
+   "commented-Sources/Fluid/UI/GlossyEffects.swift:94"
+  ],
+  "thaw-app-thaw": [
+   "doclink-docs/ARCHITECTURE.md:118:../MenuBarCaptureService"
+  ],
+  "audiokit-audiokit": [
+   "commented-Sources/AudioKit/Audio Files/Format Converter/FormatConverter+Utilities.swift:95",
+   "doclink-Sources/AudioKit/AudioKit.docc/MigrationGuide.md:189:Examples.md",
+   "todo-Sources/AudioKit/Internals/Utilities/AVAudioTimeShim.swift:5"
+  ],
+  "ranchero-software-netnewswire": [
+   "commented-Modules/RSCore/Tests/RSCoreTests/StripHTMLTests.swift:128",
+   "insecure-py-eval-exec-buildscripts/gyb.py:725",
+   "secret-google-api-key-Modules/RSParser/Tests/RSParserTests/Resources/YouTubeTheVolvoRocks.html:18"
+  ],
+  "sjj1024-pakeplus-ios": [
+   "debug-PakePlus/custom.js:121",
+   "docs-drift-script-README.md-141",
+   "insecure-ssrf-PakePlus/custom.js:42"
+  ],
+  "swiftlang-swift-package-manager": [
+   "commented-Sources/SBOMModel/Core/SBOMRelationship.swift:24",
+   "iac-dangerous-capability-.devcontainer/docker-compose.yaml:8",
+   "todo-Tests/FunctionalTests/MiscellaneousTests.swift:718"
+  ],
+  "swiftgen-swiftgen": [
+   "doclink-Documentation/SwiftGenKit Contexts/MigrationGuide.md:58:Colors.md",
+   "insecure-exec-interpolated-rakelib/lint.rake:58"
+  ],
+  "maxgoedjen-secretive": [
+   "commented-Sources/Secretive/Views/Views/AgentStatusView.swift:139",
+   "todo-Sources/Secretive/Controllers/AgentStatusChecker.swift:44"
+  ],
+  "darrylmorley-whatcable": [
+   "commented-Tests/WhatCableCoreTests/PDODecodingTests.swift:74",
+   "todo-Sources/WhatCableCore/Snapshot/CableSnapshot.swift:160"
+  ],
+  "xcodesorg-xcodesapp": [
+   "todo-Xcodes/Backend/AppState.swift:916"
+  ],
+  "mihonapp-mihon": [
+   "secret-google-api-key-app/google-services.json:37"
+  ],
+  "deniscerri-ytdlnis": [
+   "commented-app/src/main/java/com/deniscerri/ytdl/ui/more/terminal/ShortcutBinding.kt:137"
+  ],
+  "rikkahub-rikkahub": [
+   "insecure-localstorage-secret-web-ui/app/services/api.ts:109",
+   "insecure-react-dangerous-html-web-ui/app/components/markdown/code-block.tsx:109",
+   "insecure-ssrf-.agents/skills/claude-api/shared/preserved-thinking-migration/drop_block_probe.py:428"
+  ],
+  "libchecker-libchecker": [
+   "secret-google-api-key-app/google-services.json:37"
+  ],
+  "cyqawa-yunx": [
+   "todo-app/src/main/kotlin/com/yunx/app/ui/screens/DriveScreen.kt:131"
+  ],
+  "arrow-kt-arrow": [
+   "commented-arrow-libs/fx/arrow-fx-stm/src/commonTest/kotlin/arrow/fx/stm/STMTest.kt:260",
+   "todo-arrow-libs/fx/arrow-fx-stm/src/commonMain/kotlin/arrow/fx/stm/internal/Impl.kt:183"
+  ],
+  "meta-facebook-android-sdk": [
+   "commented-facebook-core/src/test/kotlin/com/facebook/internal/NativeProtocolTest.kt:248"
+  ],
+  "teamamaze-amazefilemanager": [
+   "doclink-file_operations/src/main/rust/README.md:7:../doc/RUST_MIGRATION.md"
+  ],
+  "kickstarter-android-oss": [
+   "commented-app/src/test/java/com/kickstarter/features/pledgedprojectsoverview/viewmodel/PledgedProjectsOverviewViewModelTest.kt:522"
+  ],
+  "outertune-outertune": [
+   "commented-app/src/main/java/com/dd3boh/outertune/constants/PreferenceKeys.kt:38",
+   "todo-app/src/main/java/com/dd3boh/outertune/ui/screens/HomeScreen.kt:497"
+  ],
+  "predidit-kazumi": [
+   "commented-windows/runner/flutter_window.cpp:64",
+   "todo-ios/Runner/AppDelegate.swift:66"
+  ],
+  "hiddify-hiddify-app": [
+   "commented-android/app/src/main/kotlin/com/hiddify/hiddify/ActiveGroupsChannel.kt:13",
+   "debug-web/drift_worker.js:5033"
+  ],
+  "bagisto-opensource-ecommerce-mobile-app": [
+   "doclink-Configuration_guide.md:101:android/app/src/main/AndroidManifest.xml:17"
+  ],
+  "anxcye-anx-reader": [
+   "doclink-third_party/googleai_dart/README.md:1498:example/file_search_example.dart"
+  ],
+  "lollipopkit-flutter-server-box": [
+   "iac-host-namespace-store/apps/homeassistant.home_assistant/compose.yaml:50",
+   "insecure-exec-interpolated-monitor/frontend/e2e/proxy_app.e2e.ts:66",
+   "insecure-localstorage-secret-monitor/frontend/src/tests/servers.test.ts:107",
+   "insecure-random-for-secret-monitor/frontend/e2e/sharing.e2e.ts:84",
+   "secret-slack-webhook-monitor/src/api/push.rs:1033",
+   "skiptest-monitor/frontend/src/desk/agent/autosize.ts:54"
+  ],
+  "mylxsw-aidea": [
+   "commented-scripts/main.go:20",
+   "debug-web/sqflite_sw.js:4575"
   ]
  }
 }
