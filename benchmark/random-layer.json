@@ -6979,11 +6979,17 @@
    "stars": 17,
    "created": "2026-06-22",
    "language": "Python"
+  },
+  {
+   "url": "https://github.com/tespkg/actions-cache",
+   "stars": 107,
+   "created": "2021-06-02",
+   "language": "TypeScript"
   }
  ],
- "tries": 2462,
+ "tries": 2465,
  "population": "public, not a fork, not archived, stars >= 10, pushed since 2025-11-09, created 2010-01-01..2026-10-10",
- "rngCalls": 6103,
+ "rngCalls": 6110,
  "windows": 1686,
  "overCap": 39
 }
