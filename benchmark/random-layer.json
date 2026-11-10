@@ -6691,11 +6691,23 @@
    "stars": 10,
    "created": "2025-07-28",
    "language": "Python"
+  },
+  {
+   "url": "https://github.com/FrizzleFur/AwesomeTools",
+   "stars": 15,
+   "created": "2017-03-17",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/formancehq/ledger",
+   "stars": 1478,
+   "created": "2021-05-25",
+   "language": "Go"
   }
  ],
- "tries": 2353,
+ "tries": 2355,
  "population": "public, not a fork, not archived, stars >= 10, pushed since 2025-11-09, created 2010-01-01..2026-10-10",
- "rngCalls": 5835,
+ "rngCalls": 5841,
  "windows": 1686,
  "overCap": 35
 }
