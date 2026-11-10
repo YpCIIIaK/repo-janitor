@@ -40,7 +40,7 @@ for (const r of corpus) {
   })
 }
 
-const VULNERABLE_RE = /mochiruntime-android-ctf|jzheaux-spel-injection|eoftedal-deserialize|veracode-research-actuator-testbed|terracotta-bank-terracotta-bank|owasp-benchmark-benchmarkjava|goat|dvwa|dvna|dvws|juice-shop$|juice-shop-juice-shop|vampi|dsvw|vulnerable|crapi|govwa|pygoat|vulpy|dvpwa|goof|inject-some-sql|vulnado|javavulnerablelab|dvsa/i
+const VULNERABLE_RE = /nua-org-nua-bench|cyllective-oauth-labs|mochiruntime-android-ctf|jzheaux-spel-injection|eoftedal-deserialize|veracode-research-actuator-testbed|terracotta-bank-terracotta-bank|owasp-benchmark-benchmarkjava|goat|dvwa|dvna|dvws|juice-shop$|juice-shop-juice-shop|vampi|dsvw|vulnerable|crapi|govwa|pygoat|vulpy|dvpwa|goof|inject-some-sql|vulnado|javavulnerablelab|dvsa/i
 const urlByName = new Map(corpus.map((r) => [r.name, r.url.replace("https://github.com/", "")]))
 const urlOf = (name) => urlByName.get(name) ?? name
 
@@ -80,6 +80,18 @@ out.push(
     "a user sees by default (high + medium confidence) are counted.",
   "",
 )
+
+// A corpus may retain several pinned revisions under historical rename aliases.
+const identityPath = join(here, "identities.json")
+if (existsSync(identityPath)) {
+  const identities = JSON.parse(readFileSync(identityPath, "utf8")).repositories ?? {}
+  const ids = repos.map((r) => identities[r.name]?.id).filter((id) => id != null)
+  if (ids.length === n) {
+    json.uniqueRepositories = new Set(ids).size
+    json.aliasRecords = n - json.uniqueRepositories
+    out.push(`Identity audit: **${json.uniqueRepositories} distinct GitHub repositories** in ${n} pinned records; ${json.aliasRecords} legacy alias records are retained.`, "")
+  }
+}
 
 // --- grades -----------------------------------------------------------------
 const grades = ["A", "B", "C", "D", "F"].map((g) => [g, repos.filter((r) => r.grade === g).length])
