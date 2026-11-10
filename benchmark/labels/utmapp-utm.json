@@ -1,0 +1,7 @@
+{
+ "ci-silenced-failure-.github/workflows/build.yml-284": "fp",
+ "doclink-Documentation/Dependencies.md:40:../scripts/qapi/": "tp",
+ "duplicate-Configuration/QEMUConstantGenerated.swift-7218": "fp",
+ "todo-Scripting/UTMScriptingVirtualMachineImpl.swift:80": "tp",
+ "todo-utmctl/UTMCtl.swift:488": "tp"
+}

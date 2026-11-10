@@ -1,0 +1,4 @@
+{
+ "doclink-Documentation/SwiftGenKit Contexts/MigrationGuide.md:58:Colors.md": "tp",
+ "insecure-exec-interpolated-rakelib/lint.rake:58": "fp"
+}

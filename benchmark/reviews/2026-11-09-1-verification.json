@@ -1,0 +1,120 @@
+{
+  "baseCommit": "8eddd1e60325305eaeb087506d623724a408b813",
+  "corpusBefore": 3000,
+  "corpusAfter": 3400,
+  "newRepos": 400,
+  "uniqueNamesUrlsShas": true,
+  "allResultsMatchPins": true,
+  "incompleteReports": [],
+  "existingLabelsUnchanged": true,
+  "newLabels": {
+    "tp": 39,
+    "fp": 32
+  },
+  "lostTP": {
+    "before": 36,
+    "after": 36
+  },
+  "vulnerableRecall": {
+    "apps": 47,
+    "highInsecureCodeBefore": 263,
+    "highInsecureCodeAfter": 263,
+    "missing": 0
+  },
+  "cloneLimitMB": 2000,
+  "cloneLimitOverride": false,
+  "track": "mobile",
+  "primarySourceCommit": "fd37cf503d49e03d989362424fe25df05650360b",
+  "newUniqueGitHubRepositories": 400,
+  "uniqueGitHubRepositories": 3393,
+  "preExistingAliasPairs": 7,
+  "allGitHubIdentitiesResolved": true,
+  "newArchivedOrForkedRepositories": 0,
+  "newLabelsOnRulesAbove90Percent": 0,
+  "targetedReruns": {
+    "normal": 279,
+    "vulnerable": 49,
+    "unique": 328
+  },
+  "newLabelledDuplicateFPRemoved": [
+    {
+      "repo": "permissionlesstech-bitchat",
+      "id": "duplicate-bitchatTests/Services/BLEFileTransferHandlerTests.swift-1411"
+    },
+    {
+      "repo": "p0deje-maccy",
+      "id": "duplicate-MaccyUITests/MaccyUITests.swift-458"
+    },
+    {
+      "repo": "p0deje-maccy",
+      "id": "duplicate-MaccyTests/SearchTests.swift-28"
+    },
+    {
+      "repo": "rrousselgit-provider",
+      "id": "duplicate-packages/provider_devtools_extension/lib/src/instance_viewer/instance_details.freezed.dart-1378"
+    },
+    {
+      "repo": "lollipopkit-flutter-server-box",
+      "id": "duplicate-lib/data/model/virt/virt_hardware.freezed.dart-109"
+    },
+    {
+      "repo": "gokadzev-musify",
+      "id": "duplicate-packages/youtube_explode_dart/lib/src/videos/video.freezed.dart-243"
+    }
+  ],
+  "existingLabelledDuplicateFPRemoved": [
+    {
+      "repo": "reswift-reswift",
+      "id": "duplicate-ReSwiftTests/StoreSubscriptionTests.swift-301"
+    }
+  ],
+  "regressionGateBeforeUpdate": "pass",
+  "regressionGateAfterRescore": "pass",
+  "confidenceClassChanges": [
+    {
+      "rule": "license-unrecognised",
+      "before": "medium",
+      "after": "low"
+    },
+    {
+      "rule": "license-weak",
+      "before": "medium",
+      "after": "low"
+    },
+    {
+      "rule": "license-network",
+      "before": "medium",
+      "after": "low"
+    },
+    {
+      "rule": "license-proprietary",
+      "before": "medium",
+      "after": "low"
+    }
+  ],
+  "rescoredReports": 3400,
+  "confidenceValuesChanged": 43,
+  "offlineScoresChangedByCalibration": 0,
+  "onlineSnapshots": 3000,
+  "onlineLicenseCheckedSnapshots": 52,
+  "upstreamLicenseTPPreserved": 5,
+  "archive": {
+    "branch": "bench-data-2026-11-09-1",
+    "parent": "39c9e21e1eca3190d0a64da597b404ed4b3ac6c1",
+    "chunks": 34,
+    "gitlogParts": 34,
+    "commit": "9522aeb4177eeb4a977fc58c9af5fdbde66fdd34"
+  },
+  "validation": {
+    "dashboardPassed": 932,
+    "existingDashboardLiveSkip": 1,
+    "corePassed": 873,
+    "cliPassed": 41,
+    "actionPassed": 21,
+    "benchmarkPassed": 27,
+    "typecheck": "pass",
+    "eslintErrors": 0,
+    "eslintExistingWarnings": 8,
+    "packageBuild": "pass"
+  }
+}

@@ -1,0 +1,5 @@
+{
+ "commented-Sources/SBOMModel/Core/SBOMRelationship.swift:24": "tp",
+ "iac-dangerous-capability-.devcontainer/docker-compose.yaml:8": "fp",
+ "todo-Tests/FunctionalTests/MiscellaneousTests.swift:718": "tp"
+}

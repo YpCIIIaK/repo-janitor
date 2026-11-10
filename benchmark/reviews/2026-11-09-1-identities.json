@@ -1,0 +1,150 @@
+{
+  "repos": 3400,
+  "resolved": 3400,
+  "unresolved": [],
+  "duplicateIdentities": [
+    [
+      {
+        "name": "launchbadge-sqlx",
+        "sha": "e5cbd61a2fd8b100698bc5ad626a04ef8d1fa724",
+        "new": false,
+        "databaseId": 230595891,
+        "nameWithOwner": "transact-rs/sqlx",
+        "isArchived": false,
+        "isFork": false
+      },
+      {
+        "name": "transact-rs-sqlx",
+        "sha": "7908fe79fabc816ce172ac1ac59f6b4bd548ca39",
+        "new": false,
+        "databaseId": 230595891,
+        "nameWithOwner": "transact-rs/sqlx",
+        "isArchived": false,
+        "isFork": false
+      }
+    ],
+    [
+      {
+        "name": "tiangolo-sqlmodel",
+        "sha": "462b59d9cd1cc3d9072735435330ef9ab6d15cbf",
+        "new": false,
+        "databaseId": 399495186,
+        "nameWithOwner": "fastapi/sqlmodel",
+        "isArchived": false,
+        "isFork": false
+      },
+      {
+        "name": "fastapi-sqlmodel",
+        "sha": "6a939fb0407438297112f102582fc0609bd3d47f",
+        "new": false,
+        "databaseId": 399495186,
+        "nameWithOwner": "fastapi/sqlmodel",
+        "isArchived": false,
+        "isFork": false
+      }
+    ],
+    [
+      {
+        "name": "square-okhttp",
+        "sha": "16fb6aef3aee1c4645fc8d24af01f8a4dc128ebf",
+        "new": false,
+        "databaseId": 5152285,
+        "nameWithOwner": "lysine-dev/okhttp",
+        "isArchived": false,
+        "isFork": false
+      },
+      {
+        "name": "lysine-dev-okhttp",
+        "sha": "528a88f506e34416541e417db64b89965adaefe9",
+        "new": false,
+        "databaseId": 5152285,
+        "nameWithOwner": "lysine-dev/okhttp",
+        "isArchived": false,
+        "isFork": false
+      }
+    ],
+    [
+      {
+        "name": "cert-manager-cert-manager",
+        "sha": "bddb08f8c9d5db65e2cb9fe57c442da3d9aaf6d6",
+        "new": false,
+        "databaseId": 92313258,
+        "nameWithOwner": "cert-manager/cert-manager",
+        "isArchived": false,
+        "isFork": false
+      },
+      {
+        "name": "jetstack-cert-manager",
+        "sha": "8a358469e26a53d619268ba45154bae2bcb3ac0f",
+        "new": false,
+        "databaseId": 92313258,
+        "nameWithOwner": "cert-manager/cert-manager",
+        "isArchived": false,
+        "isFork": false
+      }
+    ],
+    [
+      {
+        "name": "benthosdev-benthos",
+        "sha": "442f9499f6f0b0c06ec2a1f9e3ce9c1836c95af0",
+        "new": false,
+        "databaseId": 54435102,
+        "nameWithOwner": "redpanda-data/connect",
+        "isArchived": false,
+        "isFork": false
+      },
+      {
+        "name": "redpanda-data-connect",
+        "sha": "e8cb1bc8c17a6557bcdaaa13fa7c88fef968b478",
+        "new": false,
+        "databaseId": 54435102,
+        "nameWithOwner": "redpanda-data/connect",
+        "isArchived": false,
+        "isFork": false
+      }
+    ],
+    [
+      {
+        "name": "framer-motion",
+        "sha": "7415b6cd14dfdb35d91dfc5b9758994444cc228b",
+        "new": false,
+        "databaseId": 157846876,
+        "nameWithOwner": "motiondivision/motion",
+        "isArchived": false,
+        "isFork": false
+      },
+      {
+        "name": "motiondivision-motion",
+        "sha": "78f3ff51b5508f7e8c1c283d8e80bcd26fec37d7",
+        "new": false,
+        "databaseId": 157846876,
+        "nameWithOwner": "motiondivision/motion",
+        "isArchived": false,
+        "isFork": false
+      }
+    ],
+    [
+      {
+        "name": "carlospolop-peass-ng",
+        "sha": "950afde066029fb44779e52b7381a82957834fb2",
+        "new": false,
+        "databaseId": 165548191,
+        "nameWithOwner": "peass-ng/PEASS-ng",
+        "isArchived": false,
+        "isFork": false
+      },
+      {
+        "name": "peass-ng-peass-ng",
+        "sha": "1cb17613afc33a2374ab6d209d280068109c4cb1",
+        "new": false,
+        "databaseId": 165548191,
+        "nameWithOwner": "peass-ng/PEASS-ng",
+        "isArchived": false,
+        "isFork": false
+      }
+    ]
+  ],
+  "newDuplicateIdentities": [],
+  "newUniqueRepositories": 400,
+  "uniqueRepositories": 3393
+}
