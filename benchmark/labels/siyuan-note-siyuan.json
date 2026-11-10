@@ -1,3 +1,4 @@
 {
- "ci-silenced-failure-.github/workflows/cd.yml-32": "fp"
+ "ci-silenced-failure-.github/workflows/cd.yml-32": "fp",
+ "skiptest-app/src/protyle/render/av/columnWidth.test.ts:55": "fp"
 }

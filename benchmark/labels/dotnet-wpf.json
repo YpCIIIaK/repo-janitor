@@ -1,0 +1,4 @@
+{
+ "commented-src/Microsoft.DotNet.Wpf/src/PresentationCore/MS/internal/Media3D/M3DUtil.cs:431": "fp",
+ "duplicate-src/Microsoft.DotNet.Wpf/cycle-breakers/PresentationFramework/PresentationFramework.cs-10707": "fp"
+}
