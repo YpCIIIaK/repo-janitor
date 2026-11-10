@@ -6661,11 +6661,41 @@
    "stars": 32,
    "created": "2026-03-27",
    "language": "PHP"
+  },
+  {
+   "url": "https://github.com/8LWXpg/PowerToysRun-SSH",
+   "stars": 53,
+   "created": "2024-09-30",
+   "language": "C#"
+  },
+  {
+   "url": "https://github.com/allenai/marg-reviewer",
+   "stars": 66,
+   "created": "2023-12-20",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/gopro2027/ArduinoAirSuspensionController",
+   "stars": 79,
+   "created": "2022-10-03",
+   "language": "C"
+  },
+  {
+   "url": "https://github.com/DerGamer009/PlayerDataSyncReloaded",
+   "stars": 14,
+   "created": "2026-04-05",
+   "language": "Java"
+  },
+  {
+   "url": "https://github.com/acelemore/ss_translator",
+   "stars": 10,
+   "created": "2025-07-28",
+   "language": "Python"
   }
  ],
- "tries": 2343,
+ "tries": 2353,
  "population": "public, not a fork, not archived, stars >= 10, pushed since 2025-11-09, created 2010-01-01..2026-10-10",
- "rngCalls": 5810,
+ "rngCalls": 5835,
  "windows": 1686,
  "overCap": 35
 }
