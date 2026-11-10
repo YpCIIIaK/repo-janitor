@@ -7075,11 +7075,2483 @@
    "stars": 15,
    "created": "2021-06-18",
    "language": "Swift"
+  },
+  {
+   "url": "https://github.com/b-data/data-science-devcontainers",
+   "stars": 41,
+   "created": "2023-06-20",
+   "language": "Dockerfile"
+  },
+  {
+   "url": "https://github.com/taylanbakircioglu/flowfish",
+   "stars": 59,
+   "created": "2026-03-02",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/juneHQ/changelog",
+   "stars": 234,
+   "created": "2023-02-08",
+   "language": "MDX"
+  },
+  {
+   "url": "https://github.com/mdbergmann/cl-gserver",
+   "stars": 261,
+   "created": "2020-02-24",
+   "language": "Common Lisp"
+  },
+  {
+   "url": "https://github.com/FernandoHansen666/ScaryRF-315-433mhz",
+   "stars": 297,
+   "created": "2023-12-05",
+   "language": "C"
+  },
+  {
+   "url": "https://github.com/vathsalvathsa/diet-workout-recommender",
+   "stars": 11,
+   "created": "2026-09-20",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/patchew-project/patchew",
+   "stars": 80,
+   "created": "2014-11-14",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/robotraconteur/robotraconteur",
+   "stars": 80,
+   "created": "2018-09-07",
+   "language": "C++"
+  },
+  {
+   "url": "https://github.com/litecoin-project/litecoin-detached-sigs",
+   "stars": 12,
+   "created": "2016-10-21",
+   "language": null
+  },
+  {
+   "url": "https://github.com/byt3hx/research",
+   "stars": 14,
+   "created": "2022-12-22",
+   "language": "HTML"
+  },
+  {
+   "url": "https://github.com/langrenlibai/product-manager-workflow",
+   "stars": 29,
+   "created": "2026-08-13",
+   "language": null
+  },
+  {
+   "url": "https://github.com/test-kitchen/busser-rspec",
+   "stars": 11,
+   "created": "2013-05-24",
+   "language": "Ruby"
+  },
+  {
+   "url": "https://github.com/Job-SDF/benchmark",
+   "stars": 40,
+   "created": "2024-05-30",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/OctopusDeploy/Octodiff",
+   "stars": 56,
+   "created": "2014-06-06",
+   "language": "C#"
+  },
+  {
+   "url": "https://github.com/openthc/data",
+   "stars": 12,
+   "created": "2020-01-19",
+   "language": "PHP"
+  },
+  {
+   "url": "https://github.com/kubuszok/refined-compat",
+   "stars": 10,
+   "created": "2026-05-04",
+   "language": "Scala"
+  },
+  {
+   "url": "https://github.com/ParaLogicTech/textile",
+   "stars": 42,
+   "created": "2023-02-05",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/jingsongliujing/Feishu-CLI-Web",
+   "stars": 84,
+   "created": "2026-04-18",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/robertoecf/OpenFinData",
+   "stars": 13,
+   "created": "2026-04-18",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/bernhard-42/ocp-tessellate",
+   "stars": 15,
+   "created": "2023-01-21",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/ppbrown/vlm-utils",
+   "stars": 11,
+   "created": "2024-04-30",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/codeany-ai/codeany",
+   "stars": 183,
+   "created": "2026-04-01",
+   "language": "Go"
+  },
+  {
+   "url": "https://github.com/danikf/tik4net",
+   "stars": 199,
+   "created": "2015-08-14",
+   "language": "C#"
+  },
+  {
+   "url": "https://github.com/boatbomber/EditableImageBlur",
+   "stars": 28,
+   "created": "2024-03-01",
+   "language": "Luau"
+  },
+  {
+   "url": "https://github.com/jblanked/FlipMap",
+   "stars": 19,
+   "created": "2025-08-29",
+   "language": "C"
+  },
+  {
+   "url": "https://github.com/ministryofjustice/intranet",
+   "stars": 11,
+   "created": "2017-08-11",
+   "language": "HTML"
+  },
+  {
+   "url": "https://github.com/harsh98trivedi/links",
+   "stars": 216,
+   "created": "2021-07-04",
+   "language": "HTML"
+  },
+  {
+   "url": "https://github.com/fsavje/distances",
+   "stars": 18,
+   "created": "2017-02-24",
+   "language": "C++"
+  },
+  {
+   "url": "https://github.com/ohai/ruby-sdl2",
+   "stars": 76,
+   "created": "2014-10-17",
+   "language": "C"
+  },
+  {
+   "url": "https://github.com/cqels/CQELS4J",
+   "stars": 10,
+   "created": "2016-03-25",
+   "language": "Shell"
+  },
+  {
+   "url": "https://github.com/oxylusengine/Oxylus",
+   "stars": 282,
+   "created": "2022-06-21",
+   "language": "C++"
+  },
+  {
+   "url": "https://github.com/Uniswap/v4-core",
+   "stars": 2563,
+   "created": "2021-11-01",
+   "language": "Solidity"
+  },
+  {
+   "url": "https://github.com/TheAndersMadsen/humane-aipin-ghostlock",
+   "stars": 15,
+   "created": "2026-09-20",
+   "language": "C"
+  },
+  {
+   "url": "https://github.com/jguadagno/jjgnet-broadcast",
+   "stars": 18,
+   "created": "2020-07-01",
+   "language": "C#"
+  },
+  {
+   "url": "https://github.com/Victorola-coder/VickyJay",
+   "stars": 29,
+   "created": "2023-08-04",
+   "language": "JavaScript"
+  },
+  {
+   "url": "https://github.com/Seunkola/burger-restaurant-app",
+   "stars": 16,
+   "created": "2019-04-26",
+   "language": "CSS"
+  },
+  {
+   "url": "https://github.com/lfdt-ap3/ap3",
+   "stars": 18,
+   "created": "2026-04-19",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/GetStream/nextjs-ai-chat-app",
+   "stars": 11,
+   "created": "2024-10-27",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/Richard-Raph/masterpiece-construction",
+   "stars": 18,
+   "created": "2025-04-17",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/UfaqTech/UHT-Framework",
+   "stars": 21,
+   "created": "2025-07-13",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/takahiroanno2024/anno-ai-avatar",
+   "stars": 88,
+   "created": "2024-09-24",
+   "language": "C#"
+  },
+  {
+   "url": "https://github.com/popgenDK/courses",
+   "stars": 12,
+   "created": "2023-08-01",
+   "language": "HTML"
+  },
+  {
+   "url": "https://github.com/Lewiscowles1986/php-ulid",
+   "stars": 83,
+   "created": "2016-07-29",
+   "language": "PHP"
+  },
+  {
+   "url": "https://github.com/sonoro1234/LuaJIT-ImGui",
+   "stars": 317,
+   "created": "2018-02-23",
+   "language": "Lua"
+  },
+  {
+   "url": "https://github.com/veegee82/agent-workflow-protocol",
+   "stars": 19,
+   "created": "2026-03-23",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/nhchiu/VoronMods",
+   "stars": 217,
+   "created": "2022-01-16",
+   "language": null
+  },
+  {
+   "url": "https://github.com/bee-san/Python-Zero-to-Hero",
+   "stars": 32,
+   "created": "2020-10-29",
+   "language": null
+  },
+  {
+   "url": "https://github.com/gprem09/gprem09",
+   "stars": 10,
+   "created": "2024-03-01",
+   "language": null
+  },
+  {
+   "url": "https://github.com/Yuangun-create/fisco-gm-crypto-measure",
+   "stars": 16,
+   "created": "2026-05-02",
+   "language": "C++"
+  },
+  {
+   "url": "https://github.com/MAXXTANG/claude-stick-buddy",
+   "stars": 27,
+   "created": "2026-07-07",
+   "language": "C"
+  },
+  {
+   "url": "https://github.com/composer/metadata-minifier",
+   "stars": 182,
+   "created": "2021-04-07",
+   "language": "PHP"
+  },
+  {
+   "url": "https://github.com/lopadova/AskMyDocs",
+   "stars": 10,
+   "created": "2026-04-16",
+   "language": "PHP"
+  },
+  {
+   "url": "https://github.com/irods-contrib/metalnx-web",
+   "stars": 39,
+   "created": "2016-06-03",
+   "language": "JavaScript"
+  },
+  {
+   "url": "https://github.com/datallmhub/agentflow4j",
+   "stars": 50,
+   "created": "2026-04-29",
+   "language": "Java"
+  },
+  {
+   "url": "https://github.com/ifduyue/xxtea",
+   "stars": 30,
+   "created": "2012-05-25",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/Beargruug/skipper.nvim",
+   "stars": 10,
+   "created": "2024-02-21",
+   "language": "Lua"
+  },
+  {
+   "url": "https://github.com/thomasorgeval/ngx-better-auth",
+   "stars": 19,
+   "created": "2025-08-29",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/MohamadHajjRabee/quran-qcf4",
+   "stars": 20,
+   "created": "2026-03-08",
+   "language": "HTML"
+  },
+  {
+   "url": "https://github.com/doctordooktoor/bamboohr-hr-portal-tool",
+   "stars": 114,
+   "created": "2026-06-28",
+   "language": "HTML"
+  },
+  {
+   "url": "https://github.com/auuunya/eventwatcher",
+   "stars": 12,
+   "created": "2024-06-11",
+   "language": "Go"
+  },
+  {
+   "url": "https://github.com/mmisty/cypress-allure-adapter",
+   "stars": 25,
+   "created": "2023-06-26",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/619dev/Paperphone-plus",
+   "stars": 130,
+   "created": "2026-04-11",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/quickjs-zh/QuickJS",
+   "stars": 3523,
+   "created": "2019-07-12",
+   "language": "C"
+  },
+  {
+   "url": "https://github.com/abdelghanimeliani/gdg-events-app",
+   "stars": 13,
+   "created": "2022-01-16",
+   "language": "Dart"
+  },
+  {
+   "url": "https://github.com/akretion/odoo-usability",
+   "stars": 144,
+   "created": "2014-12-12",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/christopherkarani/Hive",
+   "stars": 26,
+   "created": "2026-01-30",
+   "language": "Swift"
+  },
+  {
+   "url": "https://github.com/davemollen/dm-GrainDelay",
+   "stars": 25,
+   "created": "2021-11-29",
+   "language": "CSS"
+  },
+  {
+   "url": "https://github.com/mailxem/mail",
+   "stars": 45,
+   "created": "2025-08-01",
+   "language": "Go"
+  },
+  {
+   "url": "https://github.com/pulumi/pulumi-postgresql",
+   "stars": 42,
+   "created": "2019-06-14",
+   "language": "Makefile"
+  },
+  {
+   "url": "https://github.com/ftuyama/git-light",
+   "stars": 20,
+   "created": "2026-06-25",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/luizgustavo76/Linka",
+   "stars": 25,
+   "created": "2026-03-22",
+   "language": "Java"
+  },
+  {
+   "url": "https://github.com/Ptt-official-app/Ptt-backend",
+   "stars": 213,
+   "created": "2020-12-28",
+   "language": "Go"
+  },
+  {
+   "url": "https://github.com/ThisIsLittleSky/WaterPaper",
+   "stars": 40,
+   "created": "2026-06-21",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/pnp/sp-site-designs-studio",
+   "stars": 58,
+   "created": "2020-05-06",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/bellingcat/ukraine-timemap",
+   "stars": 297,
+   "created": "2022-03-21",
+   "language": "JavaScript"
+  },
+  {
+   "url": "https://github.com/9boom/Godot-Android-Exporter",
+   "stars": 16,
+   "created": "2025-02-23",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/Brajesh31/USER_MANAGEMENt",
+   "stars": 10,
+   "created": "2025-06-21",
+   "language": "HTML"
+  },
+  {
+   "url": "https://github.com/0merle0/cleo",
+   "stars": 10,
+   "created": "2024-08-07",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/a825167/Chili",
+   "stars": 10,
+   "created": "2025-12-13",
+   "language": null
+  },
+  {
+   "url": "https://github.com/Koenkk/zigbee2mqtt",
+   "stars": 15807,
+   "created": "2018-04-06",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/itext/itext-publications-jumpstart-java",
+   "stars": 18,
+   "created": "2016-11-18",
+   "language": "Java"
+  },
+  {
+   "url": "https://github.com/google/netbsd-gce",
+   "stars": 45,
+   "created": "2017-02-03",
+   "language": "Shell"
+  },
+  {
+   "url": "https://github.com/MotrixLab/ADHMR",
+   "stars": 47,
+   "created": "2025-05-08",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/mfazza/agentic_muscle_memory",
+   "stars": 12,
+   "created": "2026-03-12",
+   "language": null
+  },
+  {
+   "url": "https://github.com/whatwg/html",
+   "stars": 9445,
+   "created": "2013-08-02",
+   "language": "HTML"
+  },
+  {
+   "url": "https://github.com/DLR-FT/a653rs-linux",
+   "stars": 11,
+   "created": "2022-10-23",
+   "language": "Rust"
+  },
+  {
+   "url": "https://github.com/gistya/swift-concurrency-reference",
+   "stars": 12,
+   "created": "2026-07-05",
+   "language": null
+  },
+  {
+   "url": "https://github.com/WhitzardAgent/Whitzard",
+   "stars": 29,
+   "created": "2026-07-21",
+   "language": null
+  },
+  {
+   "url": "https://github.com/manymore13/report",
+   "stars": 553,
+   "created": "2024-01-28",
+   "language": "HTML"
+  },
+  {
+   "url": "https://github.com/sky22333/shell",
+   "stars": 145,
+   "created": "2024-02-06",
+   "language": "Shell"
+  },
+  {
+   "url": "https://github.com/PaulOgier/Wordpress",
+   "stars": 17,
+   "created": "2026-09-04",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/uphy/obsidian-reminder",
+   "stars": 662,
+   "created": "2021-08-01",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/emanuele-em/cove",
+   "stars": 181,
+   "created": "2026-03-15",
+   "language": "Swift"
+  },
+  {
+   "url": "https://github.com/claudegel/sinope-zha",
+   "stars": 53,
+   "created": "2022-02-09",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/easemob/im_flutter_sdk",
+   "stars": 237,
+   "created": "2019-08-30",
+   "language": "Dart"
+  },
+  {
+   "url": "https://github.com/Jiarui-0410/real-time-recommendation-analytics",
+   "stars": 96,
+   "created": "2026-09-28",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/qfpl/hedgehog-fn",
+   "stars": 20,
+   "created": "2018-06-29",
+   "language": "Haskell"
+  },
+  {
+   "url": "https://github.com/0x414c49/AzureAutoNumber",
+   "stars": 20,
+   "created": "2020-02-04",
+   "language": "C#"
+  },
+  {
+   "url": "https://github.com/digital-bombyx/OYO",
+   "stars": 10,
+   "created": "2026-01-14",
+   "language": "JavaScript"
+  },
+  {
+   "url": "https://github.com/bailey/bailey",
+   "stars": 13,
+   "created": "2020-06-15",
+   "language": null
+  },
+  {
+   "url": "https://github.com/Armanidrisi/chatgpt-telegram-bot-php",
+   "stars": 18,
+   "created": "2023-03-01",
+   "language": "PHP"
+  },
+  {
+   "url": "https://github.com/wqq64842-commits/holojarvis",
+   "stars": 76,
+   "created": "2026-06-17",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/AxiSEMunity/AxiSEM3D",
+   "stars": 57,
+   "created": "2020-07-09",
+   "language": "GLSL"
+  },
+  {
+   "url": "https://github.com/KyleAMathews/linux-config",
+   "stars": 16,
+   "created": "2010-12-17",
+   "language": "Shell"
+  },
+  {
+   "url": "https://github.com/carvel-dev/carvel",
+   "stars": 408,
+   "created": "2019-04-19",
+   "language": "HTML"
+  },
+  {
+   "url": "https://github.com/nuxt-modules/web-vitals",
+   "stars": 387,
+   "created": "2020-05-06",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/SWViewer/tool-swviewer",
+   "stars": 17,
+   "created": "2020-06-03",
+   "language": "PHP"
+  },
+  {
+   "url": "https://github.com/infoslack/awesome-kafka",
+   "stars": 594,
+   "created": "2016-04-29",
+   "language": null
+  },
+  {
+   "url": "https://github.com/paipaiio/iCloud_Distribution",
+   "stars": 39,
+   "created": "2026-08-04",
+   "language": "Go"
+  },
+  {
+   "url": "https://github.com/aau-cph-sw5/case-c-operational-restrictions",
+   "stars": 10,
+   "created": "2026-07-30",
+   "language": "C#"
+  },
+  {
+   "url": "https://github.com/mastering-genkit/mastering-genkit-go",
+   "stars": 44,
+   "created": "2025-07-16",
+   "language": "Go"
+  },
+  {
+   "url": "https://github.com/ppy/SDL3-CS",
+   "stars": 190,
+   "created": "2024-04-03",
+   "language": "C#"
+  },
+  {
+   "url": "https://github.com/mehdieidi/tunelo",
+   "stars": 16,
+   "created": "2023-08-31",
+   "language": "Go"
+  },
+  {
+   "url": "https://github.com/dTmC0945/L-MCI-BSc-Academic-Writing",
+   "stars": 10,
+   "created": "2025-07-08",
+   "language": "TeX"
+  },
+  {
+   "url": "https://github.com/nanodlp/ui",
+   "stars": 34,
+   "created": "2016-03-18",
+   "language": "HTML"
+  },
+  {
+   "url": "https://github.com/vonahisec/pentesting_scripts",
+   "stars": 19,
+   "created": "2018-04-20",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/milldr/crono",
+   "stars": 46,
+   "created": "2026-02-11",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/openshift/must-gather-operator",
+   "stars": 16,
+   "created": "2020-08-26",
+   "language": "Go"
+  },
+  {
+   "url": "https://github.com/jeremywrnr/codepilot",
+   "stars": 10,
+   "created": "2015-10-23",
+   "language": "JavaScript"
+  },
+  {
+   "url": "https://github.com/juntossomosmais/frontend-challenge",
+   "stars": 488,
+   "created": "2020-01-27",
+   "language": null
+  },
+  {
+   "url": "https://github.com/pop-os/plymouth-theme",
+   "stars": 22,
+   "created": "2017-10-13",
+   "language": "Shell"
+  },
+  {
+   "url": "https://github.com/gravity-ui/websql-autocomplete",
+   "stars": 25,
+   "created": "2023-05-24",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/yoloytang/MMPerspective",
+   "stars": 14,
+   "created": "2025-05-23",
+   "language": null
+  },
+  {
+   "url": "https://github.com/h3llrais3r/Auto-Subliminal",
+   "stars": 45,
+   "created": "2013-12-13",
+   "language": "CSS"
+  },
+  {
+   "url": "https://github.com/MaxDevv/Un-LOCC",
+   "stars": 75,
+   "created": "2025-10-23",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/yandex-research/agentic-hpset",
+   "stars": 11,
+   "created": "2026-09-16",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/Preloading/TubeReplacer",
+   "stars": 124,
+   "created": "2025-11-13",
+   "language": "Objective-C"
+  },
+  {
+   "url": "https://github.com/YuMinHui825/omnibreak-skill",
+   "stars": 12,
+   "created": "2026-05-10",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/jackwh/laravel-new-relic",
+   "stars": 113,
+   "created": "2022-05-20",
+   "language": "PHP"
+  },
+  {
+   "url": "https://github.com/carrycooldude/EdgeAIApp-ExecuTorch",
+   "stars": 12,
+   "created": "2025-08-26",
+   "language": "C++"
+  },
+  {
+   "url": "https://github.com/leoleelxh/obsidian-memos-ai-sync",
+   "stars": 14,
+   "created": "2024-12-02",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/dev7shah/contextl",
+   "stars": 10,
+   "created": "2026-06-16",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/UjuiUjuMandan/exhentai-igneous-generator",
+   "stars": 66,
+   "created": "2024-11-20",
+   "language": "JavaScript"
+  },
+  {
+   "url": "https://github.com/trustcrypto/libraries",
+   "stars": 32,
+   "created": "2016-04-01",
+   "language": "C"
+  },
+  {
+   "url": "https://github.com/xo/usql",
+   "stars": 10168,
+   "created": "2017-02-24",
+   "language": "Go"
+  },
+  {
+   "url": "https://github.com/SpamScope/mail-parser",
+   "stars": 460,
+   "created": "2016-08-26",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/k1lgor/container-diet",
+   "stars": 74,
+   "created": "2025-11-22",
+   "language": "Go"
+  },
+  {
+   "url": "https://github.com/alanmitchell/bmon",
+   "stars": 17,
+   "created": "2014-10-31",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/Abolfazlrwm/awesome-scripts",
+   "stars": 80,
+   "created": "2026-08-16",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/psarando/shire-reckoning",
+   "stars": 20,
+   "created": "2014-09-19",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/Zuimeng-0710/java-audit-lab",
+   "stars": 72,
+   "created": "2026-09-29",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/lkk989/Deep-Agent-Real-Estate-Orchestrator",
+   "stars": 13,
+   "created": "2024-02-27",
+   "language": "PHP"
+  },
+  {
+   "url": "https://github.com/kyrie111/EFINet",
+   "stars": 14,
+   "created": "2021-11-21",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/linuxserver/docker-vscodium",
+   "stars": 77,
+   "created": "2023-03-31",
+   "language": "Dockerfile"
+  },
+  {
+   "url": "https://github.com/hiragram/cccsc",
+   "stars": 15,
+   "created": "2025-07-02",
+   "language": "JavaScript"
+  },
+  {
+   "url": "https://github.com/johnvouros/skillmaxxing",
+   "stars": 33,
+   "created": "2026-04-09",
+   "language": "Shell"
+  },
+  {
+   "url": "https://github.com/Semtea1/codex-chat-history-exporter",
+   "stars": 26,
+   "created": "2026-03-26",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/brainglobe/brainglobe-workflows",
+   "stars": 13,
+   "created": "2023-08-31",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/cosinus-code/spring-swing",
+   "stars": 15,
+   "created": "2020-02-24",
+   "language": "Java"
+  },
+  {
+   "url": "https://github.com/iconicwp/WordPress-Settings-Framework",
+   "stars": 335,
+   "created": "2012-08-24",
+   "language": "PHP"
+  },
+  {
+   "url": "https://github.com/Raboro/Obsidian-Birthday-Tracker-Plugin",
+   "stars": 22,
+   "created": "2023-08-16",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/dahan8473/snake-and-commits",
+   "stars": 30,
+   "created": "2026-07-20",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/epiforecasts/socialmixr",
+   "stars": 44,
+   "created": "2016-11-18",
+   "language": "R"
+  },
+  {
+   "url": "https://github.com/jayleaton/localrouter",
+   "stars": 100,
+   "created": "2026-10-08",
+   "language": "Zig"
+  },
+  {
+   "url": "https://github.com/fastai/dotfiles",
+   "stars": 43,
+   "created": "2018-01-19",
+   "language": "Vim Script"
+  },
+  {
+   "url": "https://github.com/ma6174/myhttpdns",
+   "stars": 55,
+   "created": "2017-04-07",
+   "language": "Go"
+  },
+  {
+   "url": "https://github.com/alonefact/RBLX-UGC-Emotes",
+   "stars": 22,
+   "created": "2026-01-02",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/RishikeshDarandale/serverless-graphql-boilerplate",
+   "stars": 12,
+   "created": "2019-03-08",
+   "language": "JavaScript"
+  },
+  {
+   "url": "https://github.com/ZhanYiHui06/PaperPilot",
+   "stars": 11,
+   "created": "2026-07-13",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/Sachinart/Indian-Recipe-API",
+   "stars": 14,
+   "created": "2020-04-16",
+   "language": "JavaScript"
+  },
+  {
+   "url": "https://github.com/AuxiDev/svelte-bottom-sheet",
+   "stars": 66,
+   "created": "2025-01-31",
+   "language": "Svelte"
+  },
+  {
+   "url": "https://github.com/abs-tudelft/Tydi-Chisel",
+   "stars": 21,
+   "created": "2023-06-14",
+   "language": "Scala"
+  },
+  {
+   "url": "https://github.com/MikeYankeeOscarBeta/EZDOOMBAKE",
+   "stars": 10,
+   "created": "2024-09-21",
+   "language": null
+  },
+  {
+   "url": "https://github.com/matthiasbruns/rxandroid2-retrofit2",
+   "stars": 52,
+   "created": "2017-05-19",
+   "language": "Java"
+  },
+  {
+   "url": "https://github.com/bluehalo/ngx-leaflet-d3",
+   "stars": 22,
+   "created": "2017-04-07",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/aisamanra/rrecutils",
+   "stars": 28,
+   "created": "2017-11-24",
+   "language": "Rust"
+  },
+  {
+   "url": "https://github.com/vercel/microfrontends",
+   "stars": 45,
+   "created": "2025-10-22",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/dgilland/cacheout",
+   "stars": 437,
+   "created": "2018-01-12",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/HanxinKING/nanogpt-zynq-backups",
+   "stars": 16,
+   "created": "2026-05-24",
+   "language": "Verilog"
+  },
+  {
+   "url": "https://github.com/Arcaniax-Development/Builders-Utilities",
+   "stars": 33,
+   "created": "2018-07-13",
+   "language": "Java"
+  },
+  {
+   "url": "https://github.com/ff14-advanced-market-search/AzerothAuctionAssassin",
+   "stars": 23,
+   "created": "2024-01-13",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/PolymerElements/iron-localstorage",
+   "stars": 11,
+   "created": "2015-04-24",
+   "language": "HTML"
+  },
+  {
+   "url": "https://github.com/jolespin/kegg_pathway_profiler",
+   "stars": 11,
+   "created": "2024-08-22",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/openwebwork/webwork-open-problem-library",
+   "stars": 258,
+   "created": "2012-06-15",
+   "language": "HTML"
+  },
+  {
+   "url": "https://github.com/kyhau/saml2aws-multi",
+   "stars": 19,
+   "created": "2020-07-09",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/brownag/rgeomorphon",
+   "stars": 29,
+   "created": "2025-05-31",
+   "language": "R"
+  },
+  {
+   "url": "https://github.com/alezost/config",
+   "stars": 24,
+   "created": "2015-09-11",
+   "language": "Tree-sitter Query"
+  },
+  {
+   "url": "https://github.com/xvalegendary/SecureBootBypass",
+   "stars": 18,
+   "created": "2026-03-16",
+   "language": "C"
+  },
+  {
+   "url": "https://github.com/Sidsector9/ManimWire",
+   "stars": 16,
+   "created": "2026-09-07",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/Vastyen/essential",
+   "stars": 19,
+   "created": "2025-12-04",
+   "language": "Swift"
+  },
+  {
+   "url": "https://github.com/Javlonbek1233/CryptoVision",
+   "stars": 59,
+   "created": "2026-05-13",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/tmm1/stackprof",
+   "stars": 2194,
+   "created": "2013-10-04",
+   "language": "Ruby"
+  },
+  {
+   "url": "https://github.com/m-webster/codeDistancePYPI",
+   "stars": 26,
+   "created": "2026-03-03",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/Java-Chains/chains-plugin-demo",
+   "stars": 14,
+   "created": "2025-02-04",
+   "language": "Java"
+  },
+  {
+   "url": "https://github.com/innovator-zero/piper-aio",
+   "stars": 57,
+   "created": "2026-04-26",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/devyuji/isave",
+   "stars": 59,
+   "created": "2021-08-01",
+   "language": "Svelte"
+  },
+  {
+   "url": "https://github.com/bstillitano/scyther",
+   "stars": 116,
+   "created": "2020-12-04",
+   "language": "Swift"
+  },
+  {
+   "url": "https://github.com/withlang-dev/open-jai",
+   "stars": 113,
+   "created": "2026-05-01",
+   "language": "Jai"
+  },
+  {
+   "url": "https://github.com/vaadin/charts",
+   "stars": 57,
+   "created": "2013-10-04",
+   "language": "Java"
+  },
+  {
+   "url": "https://github.com/Hacking-Notes/VulnScan",
+   "stars": 70,
+   "created": "2023-02-26",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/90-008/nix-cargo-integration",
+   "stars": 217,
+   "created": "2021-04-07",
+   "language": "Nix"
+  },
+  {
+   "url": "https://github.com/junaidify/video_clipper",
+   "stars": 15,
+   "created": "2026-05-06",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/mgoellnitz/trackdown",
+   "stars": 38,
+   "created": "2015-12-11",
+   "language": "Shell"
+  },
+  {
+   "url": "https://github.com/aws-samples/aws-saas-factory-hybrid-saas-identity",
+   "stars": 19,
+   "created": "2021-05-17",
+   "language": "JavaScript"
+  },
+  {
+   "url": "https://github.com/shicks/marginfix",
+   "stars": 20,
+   "created": "2010-06-18",
+   "language": "TeX"
+  },
+  {
+   "url": "https://github.com/open-telemetry/opentelemetry-go-build-tools",
+   "stars": 61,
+   "created": "2021-07-16",
+   "language": "Go"
+  },
+  {
+   "url": "https://github.com/apache/netbeans-website",
+   "stars": 242,
+   "created": "2016-11-25",
+   "language": null
+  },
+  {
+   "url": "https://github.com/NBrangerF/thumb-brake-3s",
+   "stars": 13,
+   "created": "2026-06-25",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/piyushverma0/android-agent-skills",
+   "stars": 15,
+   "created": "2026-03-14",
+   "language": null
+  },
+  {
+   "url": "https://github.com/duckdb/extension-template",
+   "stars": 295,
+   "created": "2023-02-02",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/divmain/treebeard",
+   "stars": 12,
+   "created": "2026-01-05",
+   "language": "Rust"
+  },
+  {
+   "url": "https://github.com/neruneru0419/yukimi_learning",
+   "stars": 10,
+   "created": "2020-02-20",
+   "language": "Ruby"
+  },
+  {
+   "url": "https://github.com/Kicksecure/bootclockrandomization",
+   "stars": 16,
+   "created": "2014-04-25",
+   "language": "Shell"
+  },
+  {
+   "url": "https://github.com/commonwealthga/commonwealth-ga-server",
+   "stars": 11,
+   "created": "2025-09-21",
+   "language": "C++"
+  },
+  {
+   "url": "https://github.com/AfaanBilal/bookstore",
+   "stars": 12,
+   "created": "2023-03-19",
+   "language": "Rust"
+  },
+  {
+   "url": "https://github.com/walkman2021/PC-DSDT-Patches",
+   "stars": 16,
+   "created": "2015-10-16",
+   "language": null
+  },
+  {
+   "url": "https://github.com/fredrikaverpil/neotest-golang",
+   "stars": 270,
+   "created": "2024-04-15",
+   "language": "Lua"
+  },
+  {
+   "url": "https://github.com/nascab/NasCabOS",
+   "stars": 571,
+   "created": "2022-12-22",
+   "language": "Dart"
+  },
+  {
+   "url": "https://github.com/dapr/mechanical-markdown",
+   "stars": 19,
+   "created": "2020-12-24",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/coclique/inkclip",
+   "stars": 10,
+   "created": "2025-03-31",
+   "language": "Svelte"
+  },
+  {
+   "url": "https://github.com/ptiede/VIDA.jl",
+   "stars": 16,
+   "created": "2020-06-07",
+   "language": "Julia"
+  },
+  {
+   "url": "https://github.com/turbot/steampipe-postgres-fdw",
+   "stars": 85,
+   "created": "2021-01-17",
+   "language": "Go"
+  },
+  {
+   "url": "https://github.com/embassy-rs/ekv",
+   "stars": 125,
+   "created": "2022-09-09",
+   "language": "Rust"
+  },
+  {
+   "url": "https://github.com/wzab/agwb",
+   "stars": 12,
+   "created": "2018-11-09",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/getsentry/.github",
+   "stars": 28,
+   "created": "2019-10-18",
+   "language": null
+  },
+  {
+   "url": "https://github.com/postcss/postcss-selector-parser",
+   "stars": 217,
+   "created": "2015-05-29",
+   "language": "JavaScript"
+  },
+  {
+   "url": "https://github.com/mayflower/contextmine",
+   "stars": 24,
+   "created": "2025-12-27",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/moqui/mantle-edi",
+   "stars": 13,
+   "created": "2016-01-22",
+   "language": "Groovy"
+  },
+  {
+   "url": "https://github.com/rzeldent/esp32-smartdisplay-demo",
+   "stars": 138,
+   "created": "2023-03-10",
+   "language": "C++"
+  },
+  {
+   "url": "https://github.com/TheMalwareGuardian/Awesome-Bootkits-Rootkits-Development",
+   "stars": 289,
+   "created": "2023-12-08",
+   "language": "HTML"
+  },
+  {
+   "url": "https://github.com/Kyant0/Shapes",
+   "stars": 45,
+   "created": "2026-01-26",
+   "language": "Kotlin"
+  },
+  {
+   "url": "https://github.com/KhoaSuperman/Finmori",
+   "stars": 20,
+   "created": "2026-03-30",
+   "language": null
+  },
+  {
+   "url": "https://github.com/Linruopu/KNOWLEDGE_QA_ASSISTANT",
+   "stars": 15,
+   "created": "2026-05-13",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/Tereneckla/mod-profession-experience",
+   "stars": 12,
+   "created": "2025-07-25",
+   "language": "C++"
+  },
+  {
+   "url": "https://github.com/apimartjwjg/api-gateway-pricing-cn",
+   "stars": 62,
+   "created": "2026-09-28",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/AikidoSec/firewall-php",
+   "stars": 163,
+   "created": "2024-05-15",
+   "language": "Go"
+  },
+  {
+   "url": "https://github.com/zendesk/term-check",
+   "stars": 23,
+   "created": "2019-01-11",
+   "language": "Go"
+  },
+  {
+   "url": "https://github.com/sbt/sbt-protobuf",
+   "stars": 173,
+   "created": "2011-06-24",
+   "language": "Scala"
+  },
+  {
+   "url": "https://github.com/MichaelTMatthews/Jax2D",
+   "stars": 75,
+   "created": "2024-10-21",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/hdev505/vuejs_boilerplate",
+   "stars": 11,
+   "created": "2023-01-30",
+   "language": "JavaScript"
+  },
+  {
+   "url": "https://github.com/Wizard-Software/nexum",
+   "stars": 35,
+   "created": "2026-02-14",
+   "language": "C#"
+  },
+  {
+   "url": "https://github.com/NoM0Re/PallyPower-Improved-3.3.5",
+   "stars": 31,
+   "created": "2024-04-30",
+   "language": "Lua"
+  },
+  {
+   "url": "https://github.com/fltwr/generative-image-dynamics",
+   "stars": 213,
+   "created": "2024-06-02",
+   "language": "Jupyter Notebook"
+  },
+  {
+   "url": "https://github.com/fracpete/python-weka-wrapper3-examples",
+   "stars": 19,
+   "created": "2016-03-25",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/thijse/Arduino-CmdMessenger",
+   "stars": 222,
+   "created": "2015-04-17",
+   "language": "C#"
+  },
+  {
+   "url": "https://github.com/xlab/vorbis-go",
+   "stars": 27,
+   "created": "2016-01-08",
+   "language": "C"
+  },
+  {
+   "url": "https://github.com/nosfertm/perchance-character-database",
+   "stars": 40,
+   "created": "2025-01-20",
+   "language": "JavaScript"
+  },
+  {
+   "url": "https://github.com/nlee0212/BLEnD",
+   "stars": 51,
+   "created": "2024-06-02",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/octopyid/laravel-impersonate",
+   "stars": 327,
+   "created": "2020-08-02",
+   "language": "PHP"
+  },
+  {
+   "url": "https://github.com/HPDell/typst-starter-journal-article",
+   "stars": 13,
+   "created": "2024-03-19",
+   "language": "Typst"
+  },
+  {
+   "url": "https://github.com/trivial-garbage/trivial-garbage",
+   "stars": 47,
+   "created": "2011-05-27",
+   "language": "Common Lisp"
+  },
+  {
+   "url": "https://github.com/devczero/tanstackstart-convex-clerk-polarsh-starter",
+   "stars": 10,
+   "created": "2026-01-12",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/drittich/DnsTube",
+   "stars": 329,
+   "created": "2018-05-25",
+   "language": "C#"
+  },
+  {
+   "url": "https://github.com/Cyber-Hive-Security/ion-drift",
+   "stars": 10,
+   "created": "2026-03-14",
+   "language": "Rust"
+  },
+  {
+   "url": "https://github.com/senshi-x/ComdirectPostboxDownloader",
+   "stars": 94,
+   "created": "2019-09-27",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/drozdowsky/django-tracking-model",
+   "stars": 23,
+   "created": "2019-06-07",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/MLCIL/scikit-fingerprints",
+   "stars": 404,
+   "created": "2023-04-09",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/hari2k7/portfolio",
+   "stars": 15,
+   "created": "2026-02-17",
+   "language": "HTML"
+  },
+  {
+   "url": "https://github.com/cbaggers/cepl",
+   "stars": 893,
+   "created": "2012-04-27",
+   "language": "Common Lisp"
+  },
+  {
+   "url": "https://github.com/Shawn220528/ozon-erp",
+   "stars": 11,
+   "created": "2026-05-19",
+   "language": null
+  },
+  {
+   "url": "https://github.com/redscientistlabs/RTCV",
+   "stars": 397,
+   "created": "2018-01-05",
+   "language": "C#"
+  },
+  {
+   "url": "https://github.com/gkaramanis/30DayChartChallenge",
+   "stars": 50,
+   "created": "2021-03-30",
+   "language": "R"
+  },
+  {
+   "url": "https://github.com/Patchself/CodexMacro",
+   "stars": 20,
+   "created": "2026-07-19",
+   "language": "Kotlin"
+  },
+  {
+   "url": "https://github.com/ZSYMAX/OpcNetApi",
+   "stars": 12,
+   "created": "2021-02-22",
+   "language": "C#"
+  },
+  {
+   "url": "https://github.com/BerkleyTechnologyServices/restdocs-spec-example",
+   "stars": 17,
+   "created": "2018-09-07",
+   "language": "Java"
+  },
+  {
+   "url": "https://github.com/nielsfaber/alarmo-card",
+   "stars": 196,
+   "created": "2021-07-28",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/bobbydigitales/move-anything",
+   "stars": 134,
+   "created": "2025-06-21",
+   "language": "C"
+  },
+  {
+   "url": "https://github.com/coolbat/anidiagram",
+   "stars": 58,
+   "created": "2026-07-04",
+   "language": "HTML"
+  },
+  {
+   "url": "https://github.com/reactplay/react-play",
+   "stars": 1602,
+   "created": "2022-01-08",
+   "language": "JavaScript"
+  },
+  {
+   "url": "https://github.com/Azeemqureshi-max/PETAL",
+   "stars": 10,
+   "created": "2026-10-03",
+   "language": null
+  },
+  {
+   "url": "https://github.com/yabeda-rb/yabeda-rails",
+   "stars": 195,
+   "created": "2018-09-28",
+   "language": "Ruby"
+  },
+  {
+   "url": "https://github.com/ttscoff/bunch",
+   "stars": 136,
+   "created": "2021-01-13",
+   "language": "Ruby"
+  },
+  {
+   "url": "https://github.com/pcapriotti/optparse-applicative",
+   "stars": 957,
+   "created": "2012-05-11",
+   "language": "Haskell"
+  },
+  {
+   "url": "https://github.com/signalfi/MoltAudit",
+   "stars": 13,
+   "created": "2026-01-28",
+   "language": "Shell"
+  },
+  {
+   "url": "https://github.com/vladutilie/euplatesc",
+   "stars": 18,
+   "created": "2022-09-21",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/Aestheticsuraj234/fullstack-chat-app-new-yt",
+   "stars": 11,
+   "created": "2026-02-17",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/HUPO-PSI/mzML",
+   "stars": 39,
+   "created": "2015-09-18",
+   "language": "Java"
+  },
+  {
+   "url": "https://github.com/OPCFoundation/UA-LDS",
+   "stars": 49,
+   "created": "2016-02-05",
+   "language": "C"
+  },
+  {
+   "url": "https://github.com/vntechies/aws-saa-c03",
+   "stars": 230,
+   "created": "2026-02-19",
+   "language": null
+  },
+  {
+   "url": "https://github.com/sammy183/UAVDEX",
+   "stars": 11,
+   "created": "2026-01-18",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/caligo-mentis/smart-bus",
+   "stars": 27,
+   "created": "2015-10-09",
+   "language": "JavaScript"
+  },
+  {
+   "url": "https://github.com/ieedan/errf",
+   "stars": 11,
+   "created": "2025-07-11",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/LienJack/learn-agent",
+   "stars": 26,
+   "created": "2026-05-02",
+   "language": "Mermaid"
+  },
+  {
+   "url": "https://github.com/hugefiver/mystars",
+   "stars": 16,
+   "created": "2023-02-14",
+   "language": null
+  },
+  {
+   "url": "https://github.com/VortexOfRainbows/SOTS",
+   "stars": 20,
+   "created": "2019-08-02",
+   "language": "C#"
+  },
+  {
+   "url": "https://github.com/Dandandans/stolemojis",
+   "stars": 11,
+   "created": "2020-05-10",
+   "language": "JavaScript"
+  },
+  {
+   "url": "https://github.com/ralphbarendse/swarmwright",
+   "stars": 12,
+   "created": "2026-05-03",
+   "language": "JavaScript"
+  },
+  {
+   "url": "https://github.com/pydcs/dcs",
+   "stars": 189,
+   "created": "2016-03-04",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/PipeGenie/PipeGenie",
+   "stars": 12,
+   "created": "2025-07-04",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/akamai/AkamaiOPEN-edgegrid-C-Sharp",
+   "stars": 16,
+   "created": "2014-09-26",
+   "language": "C#"
+  },
+  {
+   "url": "https://github.com/GDani31/factorio-3d-mod",
+   "stars": 26,
+   "created": "2026-07-12",
+   "language": "Rust"
+  },
+  {
+   "url": "https://github.com/Dominic-Pi-Sunyer/web-speed-oss",
+   "stars": 11,
+   "created": "2026-05-02",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/decrn/tilogics",
+   "stars": 12,
+   "created": "2022-10-27",
+   "language": "Coq"
+  },
+  {
+   "url": "https://github.com/ad-si/FlatCV",
+   "stars": 64,
+   "created": "2025-06-16",
+   "language": "C"
+  },
+  {
+   "url": "https://github.com/Future-Element/pinset",
+   "stars": 11,
+   "created": "2026-07-28",
+   "language": "Rust"
+  },
+  {
+   "url": "https://github.com/canterbury-air-patrol/search-management-map",
+   "stars": 11,
+   "created": "2019-03-22",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/mojolicious/mojo.js",
+   "stars": 510,
+   "created": "2021-04-23",
+   "language": "JavaScript"
+  },
+  {
+   "url": "https://github.com/toshism/netz",
+   "stars": 25,
+   "created": "2021-12-11",
+   "language": "Emacs Lisp"
+  },
+  {
+   "url": "https://github.com/spotify/java-locales",
+   "stars": 12,
+   "created": "2024-12-11",
+   "language": "Java"
+  },
+  {
+   "url": "https://github.com/rizavelioglu/awesome-virtual-try-off",
+   "stars": 57,
+   "created": "2024-10-30",
+   "language": null
+  },
+  {
+   "url": "https://github.com/kzhdev/alpaca_zorro_plugin",
+   "stars": 19,
+   "created": "2020-09-27",
+   "language": "C++"
+  },
+  {
+   "url": "https://github.com/dineshsonachalam/tech-courses-search-engine",
+   "stars": 147,
+   "created": "2019-01-04",
+   "language": "JavaScript"
+  },
+  {
+   "url": "https://github.com/Umio-Yasuno/libdrm-amdgpu-sys-rs",
+   "stars": 16,
+   "created": "2022-05-04",
+   "language": "Rust"
+  },
+  {
+   "url": "https://github.com/i0Ek3/fuckit",
+   "stars": 30,
+   "created": "2021-09-30",
+   "language": null
+  },
+  {
+   "url": "https://github.com/Stovoy/codex-notify-chime",
+   "stars": 11,
+   "created": "2025-10-23",
+   "language": "Rust"
+  },
+  {
+   "url": "https://github.com/JerszHub/dragon-q6a-android",
+   "stars": 10,
+   "created": "2026-06-13",
+   "language": "C"
+  },
+  {
+   "url": "https://github.com/tehryanx/whorl",
+   "stars": 16,
+   "created": "2026-03-15",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/RomeoV/KSVD.jl",
+   "stars": 23,
+   "created": "2024-07-08",
+   "language": "Julia"
+  },
+  {
+   "url": "https://github.com/PrismRebalance/Prism",
+   "stars": 22,
+   "created": "2026-04-04",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/SrWither/OpenSpeedRun",
+   "stars": 32,
+   "created": "2025-06-18",
+   "language": "Rust"
+  },
+  {
+   "url": "https://github.com/Li-yachuan/EDMB",
+   "stars": 20,
+   "created": "2024-08-31",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/PDB-REDO/libcifpp",
+   "stars": 43,
+   "created": "2020-09-19",
+   "language": "C++"
+  },
+  {
+   "url": "https://github.com/hjerpbakk/OpenFolderInVSCode",
+   "stars": 156,
+   "created": "2017-01-27",
+   "language": null
+  },
+  {
+   "url": "https://github.com/generalroboticslab/DukeHumanoidv1",
+   "stars": 72,
+   "created": "2024-09-24",
+   "language": null
+  },
+  {
+   "url": "https://github.com/jmagly/aiwg",
+   "stars": 229,
+   "created": "2025-08-14",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/bablilayoub/openhole",
+   "stars": 13,
+   "created": "2026-06-07",
+   "language": "Go"
+  },
+  {
+   "url": "https://github.com/hoxxep/isitworththetime",
+   "stars": 22,
+   "created": "2025-12-05",
+   "language": "Astro"
+  },
+  {
+   "url": "https://github.com/mnfst/startup-info",
+   "stars": 11,
+   "created": "2026-02-24",
+   "language": null
+  },
+  {
+   "url": "https://github.com/laolunsi/spring-boot-examples",
+   "stars": 280,
+   "created": "2019-12-06",
+   "language": "Java"
+  },
+  {
+   "url": "https://github.com/marcuscaisey/please.nvim",
+   "stars": 13,
+   "created": "2022-03-25",
+   "language": "Lua"
+  },
+  {
+   "url": "https://github.com/hylarucoder/prompts-for-vibe-coder",
+   "stars": 64,
+   "created": "2025-11-04",
+   "language": null
+  },
+  {
+   "url": "https://github.com/ethereum/homebrew-ethereum",
+   "stars": 490,
+   "created": "2014-03-07",
+   "language": "Ruby"
+  },
+  {
+   "url": "https://github.com/tmghd272/bc250-custom-bios-logo",
+   "stars": 12,
+   "created": "2026-01-08",
+   "language": null
+  },
+  {
+   "url": "https://github.com/vitejs/ecosystem",
+   "stars": 17,
+   "created": "2026-03-06",
+   "language": null
+  },
+  {
+   "url": "https://github.com/pautown/llizardOS",
+   "stars": 23,
+   "created": "2026-01-19",
+   "language": "Shell"
+  },
+  {
+   "url": "https://github.com/chainguard-dev/image-comparison",
+   "stars": 21,
+   "created": "2022-09-17",
+   "language": "HTML"
+  },
+  {
+   "url": "https://github.com/zzamong5/gpt-image-2",
+   "stars": 10,
+   "created": "2026-06-17",
+   "language": null
+  },
+  {
+   "url": "https://github.com/sunhailin-Leo/fastapi_profiler",
+   "stars": 366,
+   "created": "2020-10-29",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/royisme/pikabaka",
+   "stars": 35,
+   "created": "2026-03-27",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/localstack/verdin",
+   "stars": 23,
+   "created": "2021-09-22",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/BRGZ3/PS5-Log-Collector",
+   "stars": 11,
+   "created": "2026-09-13",
+   "language": null
+  },
+  {
+   "url": "https://github.com/itsubaki/qasm",
+   "stars": 18,
+   "created": "2021-08-01",
+   "language": "Go"
+  },
+  {
+   "url": "https://github.com/jorgebucaran/awsm.fish",
+   "stars": 5117,
+   "created": "2015-10-09",
+   "language": null
+  },
+  {
+   "url": "https://github.com/PasarGuard/panel",
+   "stars": 2821,
+   "created": "2025-08-30",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/Hearmeman24/ComfyGen",
+   "stars": 32,
+   "created": "2026-03-13",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/rumbleminze/nes-to-snes-template",
+   "stars": 16,
+   "created": "2024-04-12",
+   "language": "Assembly"
+  },
+  {
+   "url": "https://github.com/Stupidoodle/hinge-client",
+   "stars": 11,
+   "created": "2025-07-20",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/ProtonNoir/SNES-decompression-tools",
+   "stars": 32,
+   "created": "2018-02-16",
+   "language": "C++"
+  },
+  {
+   "url": "https://github.com/yyt-2378/AutoMat",
+   "stars": 107,
+   "created": "2025-04-09",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/jnordwick/zmida",
+   "stars": 13,
+   "created": "2024-01-13",
+   "language": "Zig"
+  },
+  {
+   "url": "https://github.com/HoshiKurama/TicketManager",
+   "stars": 18,
+   "created": "2021-03-18",
+   "language": "Kotlin"
+  },
+  {
+   "url": "https://github.com/qt/qtbridge-csharp",
+   "stars": 109,
+   "created": "2026-01-09",
+   "language": "C#"
+  },
+  {
+   "url": "https://github.com/notcpuid/pe-packer",
+   "stars": 139,
+   "created": "2025-07-01",
+   "language": "C++"
+  },
+  {
+   "url": "https://github.com/raphaelRPC/dr-claudio",
+   "stars": 10,
+   "created": "2026-09-01",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/dwslab/melt",
+   "stars": 60,
+   "created": "2019-05-03",
+   "language": "Java"
+  },
+  {
+   "url": "https://github.com/talhasiddique7/sys-monitor",
+   "stars": 12,
+   "created": "2026-05-05",
+   "language": "JavaScript"
+  },
+  {
+   "url": "https://github.com/secdev02/EasyTokens",
+   "stars": 76,
+   "created": "2026-06-21",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/zululima/zululima",
+   "stars": 16,
+   "created": "2020-11-30",
+   "language": null
+  },
+  {
+   "url": "https://github.com/r3xmax/PhantomCtx",
+   "stars": 315,
+   "created": "2026-06-16",
+   "language": "C"
+  },
+  {
+   "url": "https://github.com/TianciGao/DiffPPO",
+   "stars": 138,
+   "created": "2024-08-28",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/ffalt/xlsx-extract",
+   "stars": 48,
+   "created": "2013-11-29",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/Lucky-Lance/PhoStream",
+   "stars": 10,
+   "created": "2026-05-05",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/it22318466/Fashion_WebSite_ALFAR_Company",
+   "stars": 22,
+   "created": "2025-11-19",
+   "language": "HTML"
+  },
+  {
+   "url": "https://github.com/zukunft/zukunft.com",
+   "stars": 13,
+   "created": "2014-06-27",
+   "language": "HTML"
+  },
+  {
+   "url": "https://github.com/Gaius-Augustus/BRAKER",
+   "stars": 471,
+   "created": "2018-08-17",
+   "language": "Perl"
+  },
+  {
+   "url": "https://github.com/sunshangquan/Awesome-Computer-Vision-Adverse-Weather",
+   "stars": 19,
+   "created": "2025-09-02",
+   "language": "CSS"
+  },
+  {
+   "url": "https://github.com/proger/hippogriff",
+   "stars": 88,
+   "created": "2024-03-01",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/aryx/syncweb",
+   "stars": 43,
+   "created": "2010-07-23",
+   "language": "OCaml"
+  },
+  {
+   "url": "https://github.com/colleenjg/OpenScope_CA_Analysis",
+   "stars": 13,
+   "created": "2018-07-20",
+   "language": "Jupyter Notebook"
+  },
+  {
+   "url": "https://github.com/surgitaix/sdclib",
+   "stars": 26,
+   "created": "2016-03-18",
+   "language": "C++"
+  },
+  {
+   "url": "https://github.com/lacymorrow/paperclip-hub",
+   "stars": 15,
+   "created": "2026-05-07",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/d99kris/spacy-cpp",
+   "stars": 108,
+   "created": "2017-12-22",
+   "language": "C++"
+  },
+  {
+   "url": "https://github.com/glideapps/quicktype-xcode",
+   "stars": 1667,
+   "created": "2017-12-22",
+   "language": "JavaScript"
+  },
+  {
+   "url": "https://github.com/polystat/odin",
+   "stars": 10,
+   "created": "2021-09-06",
+   "language": "Scala"
+  },
+  {
+   "url": "https://github.com/bmqy/bbs_quickreply",
+   "stars": 10,
+   "created": "2017-12-22",
+   "language": "Vue"
+  },
+  {
+   "url": "https://github.com/vapayev1/Dash",
+   "stars": 12,
+   "created": "2026-06-11",
+   "language": null
+  },
+  {
+   "url": "https://github.com/Roenbaeck/sisula",
+   "stars": 27,
+   "created": "2014-07-04",
+   "language": "JavaScript"
+  },
+  {
+   "url": "https://github.com/combit/ll-samples",
+   "stars": 12,
+   "created": "2019-02-08",
+   "language": "C"
+  },
+  {
+   "url": "https://github.com/gotgenes/getignore",
+   "stars": 14,
+   "created": "2016-10-21",
+   "language": "Go"
+  },
+  {
+   "url": "https://github.com/nlct/texparser",
+   "stars": 16,
+   "created": "2013-10-04",
+   "language": "Java"
+  },
+  {
+   "url": "https://github.com/noyitz/flowstory",
+   "stars": 26,
+   "created": "2026-05-11",
+   "language": "JavaScript"
+  },
+  {
+   "url": "https://github.com/WZ-CS/HiCo-GS",
+   "stars": 10,
+   "created": "2026-07-11",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/egnrse/configs",
+   "stars": 11,
+   "created": "2024-11-05",
+   "language": "Shell"
+  },
+  {
+   "url": "https://github.com/fien-atone/third-eye",
+   "stars": 29,
+   "created": "2026-04-14",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/JulianSoto/solid-keep-alive",
+   "stars": 17,
+   "created": "2022-06-25",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/symfony/models-dev",
+   "stars": 16,
+   "created": "2026-03-01",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/catezi/MAPT",
+   "stars": 11,
+   "created": "2023-12-11",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/Aragas/Bannerlord.MBOptionScreen",
+   "stars": 52,
+   "created": "2020-04-12",
+   "language": "C#"
+  },
+  {
+   "url": "https://github.com/INCONNU-BOY-SENSEI/WhatsApp-report",
+   "stars": 11,
+   "created": "2026-08-18",
+   "language": "JavaScript"
+  },
+  {
+   "url": "https://github.com/guqing/willow-mde",
+   "stars": 15,
+   "created": "2023-10-12",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/MPogoda/dotfiles",
+   "stars": 11,
+   "created": "2011-08-19",
+   "language": "Lua"
+  },
+  {
+   "url": "https://github.com/vaamonde/ubuntu-2604",
+   "stars": 34,
+   "created": "2025-12-01",
+   "language": "HTML"
+  },
+  {
+   "url": "https://github.com/B-M-dev/Bilingual_Manga_databases",
+   "stars": 15,
+   "created": "2023-12-20",
+   "language": null
+  },
+  {
+   "url": "https://github.com/marcjulianschwarz/obsidian-raycast",
+   "stars": 155,
+   "created": "2021-10-20",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/natsuneco/magic-draw",
+   "stars": 19,
+   "created": "2026-02-13",
+   "language": "C"
+  },
+  {
+   "url": "https://github.com/AuroraTeam/AuroraLauncher",
+   "stars": 25,
+   "created": "2020-10-01",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/googleapis/js-genai",
+   "stars": 1708,
+   "created": "2024-12-05",
+   "language": "TypeScript"
+  },
+  {
+   "url": "https://github.com/rose-pine/rose-pine-theme",
+   "stars": 1634,
+   "created": "2020-03-19",
+   "language": null
+  },
+  {
+   "url": "https://github.com/Trustdev-eth/Trustdev-eth",
+   "stars": 10,
+   "created": "2025-02-13",
+   "language": null
+  },
+  {
+   "url": "https://github.com/adhocore/docker-phpfpm",
+   "stars": 102,
+   "created": "2019-02-01",
+   "language": "Dockerfile"
+  },
+  {
+   "url": "https://github.com/fortify/skills",
+   "stars": 24,
+   "created": "2026-04-22",
+   "language": null
+  },
+  {
+   "url": "https://github.com/gagandeepahuja09/saardb",
+   "stars": 16,
+   "created": "2025-12-21",
+   "language": "Go"
+  },
+  {
+   "url": "https://github.com/Setasign/tFPDF",
+   "stars": 42,
+   "created": "2018-08-31",
+   "language": "PHP"
+  },
+  {
+   "url": "https://github.com/CoFH/CoFHCore",
+   "stars": 42,
+   "created": "2021-08-01",
+   "language": "Java"
+  },
+  {
+   "url": "https://github.com/iamkaant/interactive_mol_grid",
+   "stars": 12,
+   "created": "2025-11-18",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/specstoryai/docs",
+   "stars": 16,
+   "created": "2024-12-11",
+   "language": "MDX"
+  },
+  {
+   "url": "https://github.com/Bhai4You/otpbomber",
+   "stars": 436,
+   "created": "2018-06-15",
+   "language": "Shell"
+  },
+  {
+   "url": "https://github.com/thinking-machines-lab/tinker-feedback",
+   "stars": 44,
+   "created": "2025-11-05",
+   "language": null
+  },
+  {
+   "url": "https://github.com/nashaudio/klang",
+   "stars": 123,
+   "created": "2022-08-12",
+   "language": "C++"
+  },
+  {
+   "url": "https://github.com/cbinyu/bidsphysio",
+   "stars": 14,
+   "created": "2020-02-04",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/halleysfifthinc/AVCLAN-Mockingboard",
+   "stars": 65,
+   "created": "2015-07-17",
+   "language": "C++"
+  },
+  {
+   "url": "https://github.com/sobomax/microsippy",
+   "stars": 19,
+   "created": "2020-01-03",
+   "language": "C"
+  },
+  {
+   "url": "https://github.com/ProudMuBai/GoFilm",
+   "stars": 2468,
+   "created": "2023-04-03",
+   "language": "Go"
+  },
+  {
+   "url": "https://github.com/manish-850/gentlerain.ai",
+   "stars": 46,
+   "created": "2025-08-31",
+   "language": "JavaScript"
+  },
+  {
+   "url": "https://github.com/blackjetrock/pico-rom-emulator",
+   "stars": 14,
+   "created": "2021-08-17",
+   "language": "Makefile"
+  },
+  {
+   "url": "https://github.com/chaunsin/netease-cloud-music",
+   "stars": 420,
+   "created": "2024-01-04",
+   "language": "Go"
+  },
+  {
+   "url": "https://github.com/Roboparty/I-BFM-Code",
+   "stars": 71,
+   "created": "2026-10-08",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/python-poetry/poetry-core",
+   "stars": 482,
+   "created": "2020-02-04",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/Tarang74/QUT",
+   "stars": 11,
+   "created": "2023-08-04",
+   "language": null
+  },
+  {
+   "url": "https://github.com/openwallet-foundation/owl-mobile-wallet-test-harness",
+   "stars": 19,
+   "created": "2021-11-05",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/emiee27707-debug/how-to-fish-boost-rod",
+   "stars": 55,
+   "created": "2026-08-24",
+   "language": "HTML"
+  },
+  {
+   "url": "https://github.com/cojocaru-david/cojocarudavid.me",
+   "stars": 72,
+   "created": "2023-10-15",
+   "language": "Astro"
+  },
+  {
+   "url": "https://github.com/aplus-framework/framework",
+   "stars": 272,
+   "created": "2021-08-29",
+   "language": "PHP"
+  },
+  {
+   "url": "https://github.com/Norlaner/reinforcement-learning-course",
+   "stars": 17,
+   "created": "2026-03-31",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/XeduR/www.solar2dplayground.com",
+   "stars": 11,
+   "created": "2020-05-06",
+   "language": "Lua"
+  },
+  {
+   "url": "https://github.com/gooseworks-ai/gooseworks-skills",
+   "stars": 12,
+   "created": "2026-04-03",
+   "language": "Python"
+  },
+  {
+   "url": "https://github.com/unlayer/unlayer-skills",
+   "stars": 14,
+   "created": "2026-02-12",
+   "language": null
+  },
+  {
+   "url": "https://github.com/imjohnbo/issue-bot",
+   "stars": 108,
+   "created": "2019-04-19",
+   "language": "JavaScript"
+  },
+  {
+   "url": "https://github.com/FreeTAKTeam/Reticulum-Community-Hub",
+   "stars": 113,
+   "created": "2024-08-31",
+   "language": "Rust"
+  },
+  {
+   "url": "https://github.com/evdenis/spec-utils",
+   "stars": 11,
+   "created": "2014-08-29",
+   "language": "Perl"
+  },
+  {
+   "url": "https://github.com/camenduru/camenduru",
+   "stars": 150,
+   "created": "2023-02-17",
+   "language": null
+  },
+  {
+   "url": "https://github.com/finitelabs/control4-mqtt",
+   "stars": 14,
+   "created": "2025-12-29",
+   "language": "Lua"
   }
  ],
- "tries": 2492,
+ "tries": 3334,
  "population": "public, not a fork, not archived, stars >= 10, pushed since 2025-11-09, created 2010-01-01..2026-10-10",
- "rngCalls": 6179,
+ "rngCalls": 8276,
  "windows": 1686,
- "overCap": 39
+ "overCap": 52
 }

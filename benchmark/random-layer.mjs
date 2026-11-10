@@ -62,7 +62,13 @@ async function search(q, page = 1, perPage = 100) {
   lastCall = Date.now()
   const url = `https://api.github.com/search/repositories?q=${encodeURIComponent(q)}&per_page=${perPage}&page=${page}`
   for (let attempt = 0; attempt < 5; attempt++) {
-    const res = await fetch(url, { headers: { Accept: "application/vnd.github+json", "User-Agent": "repo-janitor-benchmark", ...(token ? { Authorization: `Bearer ${token}` } : {}) } })
+    let res
+    try {
+      res = await fetch(url, { headers: { Accept: "application/vnd.github+json", "User-Agent": "repo-janitor-benchmark", ...(token ? { Authorization: `Bearer ${token}` } : {}) } })
+    } catch {
+      await sleep(10000 * (attempt + 1)) // connection reset or similar: retry
+      continue
+    }
     if (res.ok) return res.json()
     if (res.status === 401 || res.status >= 500) { await sleep(10000 * (attempt + 1)); continue }
     if (res.status === 403 || res.status === 429) {

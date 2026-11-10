@@ -27178,978 +27178,4029 @@
     "name": "platformsh-templates-wordpress-bedrock",
     "url": "https://github.com/platformsh-templates/wordpress-bedrock",
     "sha": "723c158e2d6dac91d0fbba41246f6f2fb5cebcc6",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "omslice-openescrow",
     "url": "https://github.com/omslice/OpenEscrow",
     "sha": "abebc3b6543a975e7ec5943e9bdd53cea6dc168a",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "chicogong-obsidian-claude-code",
     "url": "https://github.com/chicogong/obsidian-claude-code",
     "sha": "3c18f98bef68df51cb4157c8c62d72318ca58700",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "marmelo-streaming-pt",
     "url": "https://github.com/marmelo/streaming-pt",
     "sha": "4701f644c60fe4c35b9b53300bb1742e0fcd52cf",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "scf-public-goods-maintenance-scf-public-goods-maintenance-github-io",
     "url": "https://github.com/SCF-Public-Goods-Maintenance/scf-public-goods-maintenance.github.io",
     "sha": "54857f266ab6c075c76a0902b887a53bd87da24e",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "drkostas-hgn",
     "url": "https://github.com/drkostas/HGN",
     "sha": "54d467bb28e4f13fb0cbf1fbfe162557b67510c1",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "reinehonoka-voicedenoiser",
     "url": "https://github.com/reinehonoka/VoiceDenoiser",
     "sha": "9a960783c84b840e701e1352c897436a55a25740",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "stuerp-foo-vis-midi",
     "url": "https://github.com/stuerp/foo_vis_midi",
     "sha": "d8419c635d5c704c3ddfd1b0ea76703d6a4df894",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "stellar-vaultlink-invofi-contracts",
     "url": "https://github.com/Stellar-VaultLink/invofi-contracts",
     "sha": "ae89db695cbae842e28431e47dc02ff63e7c4c06",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "shmolf-obsidian-editor-background",
     "url": "https://github.com/shmolf/obsidian-editor-background",
     "sha": "422f6fac260c5d6242e767376d1cc6a31724b121",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "rstar327-rstar327",
     "url": "https://github.com/rstar327/rstar327",
     "sha": "eccebdf88e8aef87d2e152d696647f2642aa0ea1",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "talhaorak-pytaiga-mcp",
     "url": "https://github.com/talhaorak/pytaiga-mcp",
     "sha": "ec361ec2ed65b6612443087ebf5a483858d81b8c",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "denrox-nestjs-microservices-example",
     "url": "https://github.com/Denrox/nestjs-microservices-example",
     "sha": "112c1d352157b9e7942cfa3627ab9a78962fe182",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "vinta-awesome-python",
     "url": "https://github.com/vinta/awesome-python",
     "sha": "bcd84599acc172208f0544a61f3bfa47fd39e9b6",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "bougou-go-ipmi",
     "url": "https://github.com/bougou/go-ipmi",
     "sha": "d0ee8a526f5ebb2f5276c3131a6470dd18d7d57a",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "speytech-c-sentinel",
     "url": "https://github.com/SpeyTech/c-sentinel",
     "sha": "834f4fa0997a6a11654d898779c672c60c78a715",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "noctillio-ai-autotimm",
     "url": "https://github.com/Noctillio-Ai/AutoTimm",
     "sha": "8cfbddc41e605d3058a92337803d284060410a45",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "michaelhoste-xmoto-js",
     "url": "https://github.com/MichaelHoste/xmoto.js",
     "sha": "f1baaf9c51872284f5cd59970ce2fa5ca4bf19bc",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "helsinki1-swebench-harness",
     "url": "https://github.com/Helsinki1/swebench-harness",
     "sha": "2cd34a17a4d5bed1b83262a2aeec753e29cc0e7b",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "fuma-nama-fuma-content",
     "url": "https://github.com/fuma-nama/fuma-content",
     "sha": "62eb3732b1ff484c6e659e4e6cca567212a11064",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "clarashafiq-jiwen",
     "url": "https://github.com/ClaraShafiq/jiwen",
     "sha": "1c15a1f697816cd75e769f1df06278322293034a",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "azhzx-leafc",
     "url": "https://github.com/azhzx/leafc",
     "sha": "9ff989236b655b91c6554aec5a5e2640d18aa97e",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "buwebdev-web-340",
     "url": "https://github.com/buwebdev/web-340",
     "sha": "0120c24b095f72f2761b94c29892c7e30965f498",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "jenkinsci-nodejs-plugin",
     "url": "https://github.com/jenkinsci/nodejs-plugin",
     "sha": "125f3a4eb7a977fb3b6ab190422a37de2fc4b332",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "volans-gjson-py",
     "url": "https://github.com/volans-/gjson-py",
     "sha": "d053b69a6e03f82ec2138971d2c8e8577e0074f0",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "yadahan-laravel-authentication-log",
     "url": "https://github.com/yadahan/laravel-authentication-log",
     "sha": "4f4b9b03a491cc23f7d81980e906946b134dc656",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "vivek-v-rao-yfinance-corporate-actions-prices",
     "url": "https://github.com/vivek-v-rao/yfinance-corporate-actions-prices",
     "sha": "1fc308c0a84bbc687626b47f92f426dc382761d0",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "internetofwater-geoconnex-us",
     "url": "https://github.com/internetofwater/geoconnex.us",
     "sha": "0932dfe963a231aaf472beb377ae60575cd41e8c",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "lany192-box",
     "url": "https://github.com/lany192/box",
     "sha": "a3add019a99d6abfd2b72d448f6520a1d9611b1a",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "dexie-dexie-website-old",
     "url": "https://github.com/dexie/dexie-website-old",
     "sha": "d9b76dcace1b613fe83d1c2028ea30b7c61b3173",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "nvidia-qcaleval",
     "url": "https://github.com/NVIDIA/QCalEval",
     "sha": "e9e9b9eb8b95f93e0db1c578e699fc212cf0bb84",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "phys2real-phys2real",
     "url": "https://github.com/phys2real/phys2real",
     "sha": "2376bb2b806b5afb20dd48e9b483e61990430e67",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "jwoglom-controlx2",
     "url": "https://github.com/jwoglom/controlX2",
     "sha": "45e3795bad357472c1ff736dbfd7013e574dd28c",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "kbtechnologies-pocketcrypto",
     "url": "https://github.com/KBtechnologies/PocketCrypto",
     "sha": "5b6b1b4cce46689153407f9af41fa677d3a4fdde",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "giulio2002-bend-collections",
     "url": "https://github.com/Giulio2002/bend-collections",
     "sha": "4a2821dbcaeb8b57f6a6c61e18483750aedae07d",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "b0o-tmux-conf",
     "url": "https://github.com/b0o/tmux-conf",
     "sha": "546a693cd448c2e4628a85fc3a0c585b3a73ec95",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "d1str4ught-m2dev-client-src",
     "url": "https://github.com/d1str4ught/m2dev-client-src",
     "sha": "a7555110828182f20d0a0306aac0552142cf0039",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "yugoru-qa-kit",
     "url": "https://github.com/yugoru/qa_kit",
     "sha": "9a6bd6a0ab8c2d2c19355e98f40829621aa91b20",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "castor6-openviking-plugins",
     "url": "https://github.com/Castor6/openviking-plugins",
     "sha": "72435e20764de3ff4932a3ccb561200983823a6a",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "armpitmfg-ossm-parts",
     "url": "https://github.com/armpitMFG/OSSM-Parts",
     "sha": "c5626c7f026bef4d33e5df1148898bc53d1cff67",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "quarkiverse-quarkus-shardingsphere-jdbc",
     "url": "https://github.com/quarkiverse/quarkus-shardingsphere-jdbc",
     "sha": "4bc3b268ad33c5fd7e942dfd97d11bd43cb76441",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "whyisthisbroken-atmo-weather-card",
     "url": "https://github.com/whyisthisbroken/atmo-weather-card",
     "sha": "d0a49113af3666729d45ea51cd6fc29a709a4c53",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "agenttestingclamp-r02-alirezarezvani-claude-skills-seo",
     "url": "https://github.com/AgentTestingClamp/r02-alirezarezvani-claude-skills-seo",
     "sha": "09a31a051434968f2082d7c070986369bc7826dd",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "kmno4-zx-anyrouter-status-page",
     "url": "https://github.com/KMnO4-zx/anyrouter-status-page",
     "sha": "339519dc89f9d6084287db370f9a07b51f4c79f8",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "pymc-labs-semantic-similarity-rating",
     "url": "https://github.com/pymc-labs/semantic-similarity-rating",
     "sha": "86dcd2597c7824e4fd6546b884c5500c43a4b022",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "tabilabs-mandated-vault-factory",
     "url": "https://github.com/tabilabs/mandated-vault-factory",
     "sha": "a32bd2d056f5e143c4561631e40887bfd4272818",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "ptsource-minivmdos",
     "url": "https://github.com/ptsource/MiniVMDOS",
     "sha": "217a7928a17e557692e5da10696d291e14d4fd04",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "ghbset-dialogui-wotlk",
     "url": "https://github.com/ghbset/DialogUI-WotLK",
     "sha": "505c5ff941f270e03c983e38a6cfac3759108ada",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "krishnavamshi23-07-df-lab-experiments",
     "url": "https://github.com/krishnavamshi23-07/df-lab-experiments",
     "sha": "6508eb16cf720b495002fb5e5828fb3e75046d21",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "chietears-popup-mcp",
     "url": "https://github.com/Chietears/popup-mcp",
     "sha": "a5db05f514576338686023ace8eeeb1157e48c66",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "equinor-fusion-web-components",
     "url": "https://github.com/equinor/fusion-web-components",
     "sha": "06a4ddc04cb78a3e40ec0a7fc4799b155115a526",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "joe91-fun-bots",
     "url": "https://github.com/Joe91/fun-bots",
     "sha": "ab0ae6e87a29239bd742bf96ef2e720a1f4f99f9",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "wighawag-mandalas",
     "url": "https://github.com/wighawag/mandalas",
     "sha": "82e199078a29ed2a39229d5103a3b0cad039fde5",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "moov-io-pinblock",
     "url": "https://github.com/moov-io/pinblock",
     "sha": "c7c589fcacc06138465321830627e89f501a6495",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "juliangruber-level-exists",
     "url": "https://github.com/juliangruber/level-exists",
     "sha": "8a0a9ac47d0e59046c684f5ed7e000c05f42610f",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "therustypickle-talon",
     "url": "https://github.com/TheRustyPickle/Talon",
     "sha": "aebdf98a6395a48d072978414dee2fc70aadce03",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "qter-project-qter",
     "url": "https://github.com/qter-project/qter",
     "sha": "7fe22deaaaf3a66693cdc5f0b535a036f23a9365",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "tree-sitter-grammars-tree-sitter-csv",
     "url": "https://github.com/tree-sitter-grammars/tree-sitter-csv",
     "sha": "f6bf6e35eb0b95fbadea4bb39cb9709507fcb181",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "ditronix-epem-ethernet-power-energy-monitor",
     "url": "https://github.com/DitroniX/EPEM-Ethernet-Power-Energy-Monitor",
     "sha": "a0ce2cf5cd0a1beeaad05119b6859f0da5a96cac",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "fuzzy-st-errors",
     "url": "https://github.com/fuzzy-st/errors",
     "sha": "4e465e4cee76976ff6711fe9a13f5ad66b8adc0f",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "fleio-fleio-whmcs",
     "url": "https://github.com/fleio/fleio-whmcs",
     "sha": "fc30216ba00c52f95f2a64b933a0b3c3f3ebc4a4",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "zju-llms-agent-kernel",
     "url": "https://github.com/ZJU-LLMs/Agent-Kernel",
     "sha": "c14b6e59ab6df517238ae64e9a9b0ac1a7bb3be7",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "salesforceairesearch-beagle",
     "url": "https://github.com/SalesforceAIResearch/Beagle",
     "sha": "73e112f892aefe6226e4ee7723f23ae849eeb13f",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "sixarm-unix-shell-script-kit",
     "url": "https://github.com/SixArm/unix-shell-script-kit",
     "sha": "16670b436ea358caf9dddb9e5989bbc6620410e5",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "neraud-home-server",
     "url": "https://github.com/Neraud/home-server",
     "sha": "dca55f2f677db49638b7e19b1b0ac6e98ec56769",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "barryoo-tabcleaner",
     "url": "https://github.com/barryoo/TabCleaner",
     "sha": "ea715d83b3755419103afba2f35f5f7c9d7e82a7",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "decompals-ultralib",
     "url": "https://github.com/decompals/ultralib",
     "sha": "e24c836796df4bf520ff8b11a5c9d2cea3a66cbd",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "cookiey-yearning",
     "url": "https://github.com/cookieY/Yearning",
     "sha": "6e56e685beb2fff830ddd55ac406f842d575b82c",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "ulyssa-iamb",
     "url": "https://github.com/ulyssa/iamb",
     "sha": "55ad2d3402026e9824dc4fcdd3dce2added05575",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "opensprinkler-opensprinkler-hardware",
     "url": "https://github.com/OpenSprinkler/OpenSprinkler-Hardware",
     "sha": "d09810d1cbcb840c0e027b0d6da32a8f461c063f",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "jellyfin-jellyfin-server-windows",
     "url": "https://github.com/jellyfin/jellyfin-server-windows",
     "sha": "6952a548230f0b9d4f75ee2335419a794817bba6",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "sosml-sosml",
     "url": "https://github.com/SOSML/SOSML",
     "sha": "c91fc4900ab244c0557652f3206a1c9a2e4d5f25",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "eilinwis-playwright-chat-lab",
     "url": "https://github.com/eilinwis/playwright-chat-lab",
     "sha": "d4b7915449799442fa30a094e88dc9a264643a83",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "flowdesktech-snapboard",
     "url": "https://github.com/Flowdesktech/Snapboard",
     "sha": "379651086cd7ce6eb50733925ffe4c74f006fdab",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "kraln-hackrf-2fsk",
     "url": "https://github.com/kraln/hackrf-2fsk",
     "sha": "0b5349a2f2c7def0d171990ed081ff4e9887f1e2",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "kigstn-bungio",
     "url": "https://github.com/Kigstn/BungIO",
     "sha": "c7f48762e203bdafefd7930e1b7f0b7395e911c1",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "majidh1-majidh1-github-io",
     "url": "https://github.com/majidh1/majidh1.github.io",
     "sha": "324f5374b5c4a33a86cd36987fbaaaa96e21399c",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "harlan-zw-eslint-plugin-harlanzw",
     "url": "https://github.com/harlan-zw/eslint-plugin-harlanzw",
     "sha": "977060a004561ff1e14cd9dfd574e9d8aa6f789c",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "qubrabench-qubrabench",
     "url": "https://github.com/qubrabench/qubrabench",
     "sha": "31fb0a65e7964c6e63189526b9935f623b00bb3b",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "ceorkm-kratos-mcp",
     "url": "https://github.com/ceorkm/kratos-mcp",
     "sha": "26003c5cc8c24c49a55d68fdb1a4cde8b2078378",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "swingerman-ha-dual-smart-thermostat",
     "url": "https://github.com/swingerman/ha-dual-smart-thermostat",
     "sha": "3cfbf8e3da5594b9ae0b174e809ceca8d19bbd20",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "projectbluefin-dakota",
     "url": "https://github.com/projectbluefin/dakota",
     "sha": "1280a312e21b0ee5db36b96325e7bff88329def1",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "reviewdog-action-tflint",
     "url": "https://github.com/reviewdog/action-tflint",
     "sha": "e6970a1d9d8722b5b38793bc6ac5d81bdf39a140",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "hoodballgh-shiftboard",
     "url": "https://github.com/HoodballGH/shiftboard",
     "sha": "77cca6d3a5091cbe579f41aa619925030d1b665f",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "undp-undp-national-carbon-registry",
     "url": "https://github.com/undp/undp-national-carbon-registry",
     "sha": "e317d00f94036c40afc08598b63cff9006c76ddb",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "jtang613-qnx-dumpers",
     "url": "https://github.com/jtang613/qnx_dumpers",
     "sha": "68424a67efbcc0ff0f63e45223a530a0f3bde3fe",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "richardcsuwandi-awesome-bo",
     "url": "https://github.com/richardcsuwandi/awesome-bo",
     "sha": "059cb4402e31b40214b524c29507fa466323e37a",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "anyesh-wardrowbe",
     "url": "https://github.com/Anyesh/wardrowbe",
     "sha": "f56e2e95e3569b60ef814fc2d8892fdf951eb97a",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "luyingyilong-godot-fmodplayer",
     "url": "https://github.com/LuYingYiLong/godot-fmodplayer",
     "sha": "96632b638486ac93cb086558064302ecadd4323b",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "clovalink-clovalink",
     "url": "https://github.com/ClovaLink/ClovaLink",
     "sha": "29299ef99d88999545092cb8e967b4411fd39bcd",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "robdevops-finbot",
     "url": "https://github.com/robdevops/finbot",
     "sha": "982acdeabf61b796569d002708befd397d7de1af",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "woodwing-csde-components-boilerplate",
     "url": "https://github.com/WoodWing/csde-components-boilerplate",
     "sha": "c2111e5340b777d5900531911d4cbe8d04b7480d",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "ossrs-signaling",
     "url": "https://github.com/ossrs/signaling",
     "sha": "928249d4c7055ae2641e1a858f2e6715a1c93e7d",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "sparkadium-watchyalmanac",
     "url": "https://github.com/Sparkadium/WatchyAlmanac",
     "sha": "5997f427166f1d9576d8b6afdd8e1502e7514cbe",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "chocobo1-bencode-online",
     "url": "https://github.com/Chocobo1/bencode_online",
     "sha": "336ae2d1175ef736938841057f377dc0e2906efb",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "maximecb-groovie",
     "url": "https://github.com/maximecb/groovie",
     "sha": "7ad01cd57c95134f0945d6f1159b5bf232d3dd0e",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "smped-simpleupset",
     "url": "https://github.com/smped/SimpleUpset",
     "sha": "ce183ec55533cd5322b0f57c2f2ff6845aa1c308",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "rmoffitt-pdacr",
     "url": "https://github.com/rmoffitt/pdacR",
     "sha": "5b044b2f3258bb2ac9d7d4300b31b6b65d9520af",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "hxpeng666-mips32-5stage-pipeline",
     "url": "https://github.com/hxpeng666/MIPS32-5Stage-Pipeline",
     "sha": "f837a544f6438e790fe4658f6147ba3250ebad6e",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "diaoquesang-paper-list-for-medical-anomaly-detection",
     "url": "https://github.com/diaoquesang/Paper-List-for-Medical-Anomaly-Detection",
     "sha": "0f964a474234ce2e116d863ef72ba9f3f1fb2954",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "alterem-knowledge-grab",
     "url": "https://github.com/alterem/knowledge-grab",
     "sha": "8e1021786f41d2075f1e7591c06dcde0a83b444b",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "thebuggeddev-mechlab",
     "url": "https://github.com/thebuggeddev/mechlab",
     "sha": "636c1e3a55f09ce6f7521cfda6be2f594f1d92de",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "intenzi-showdownreplaystudio",
     "url": "https://github.com/Intenzi/ShowdownReplayStudio",
     "sha": "af8deca1e7123e534bedbf4fbeb193cd2d319450",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "ddaretrogamer-rom-hack-labels",
     "url": "https://github.com/Ddaretrogamer/ROM-Hack-Labels",
     "sha": "b4279f136b015e0b202274f67259cca25376909e",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "hwenshuo-ircsd",
     "url": "https://github.com/Hwenshuo/IRCSD",
     "sha": "fca575e5d0f1829673ca056e08d360dad960e9a2",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "lamhotsiagian-ai-ml-evaluation",
     "url": "https://github.com/lamhotsiagian/ai-ml-evaluation",
     "sha": "c22d876bde2e1aff0507e20f8f216ad226e5e8d7",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "aditya109-software-engineering-interview-rampup",
     "url": "https://github.com/aditya109/software-engineering-interview-rampup",
     "sha": "344dbd74bc430db84489d95ed5af7463903d2e3d",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "polterguy-magic",
     "url": "https://github.com/polterguy/magic",
     "sha": "4ae24d563cf98c662fd42aee3dcd9fd05ef712bb",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "permitio-docs",
     "url": "https://github.com/permitio/docs",
     "sha": "49efe82e04f9182f482b1fe80b629be7476f050a",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "globus-studio-cortex-atomic",
     "url": "https://github.com/GLOBUS-studio/Cortex-Atomic",
     "sha": "8a364dbbc65bf423389b662c0cf52ccd85948ce1",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "8lwxpg-powertoysrun-ssh",
     "url": "https://github.com/8LWXpg/PowerToysRun-SSH",
     "sha": "4031a38159f70f5a3d17e9021351bf7f89b49c63",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "allenai-marg-reviewer",
     "url": "https://github.com/allenai/marg-reviewer",
     "sha": "e4acd42e3a1c39d993258b5409a332b2c20f433c",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "gopro2027-arduinoairsuspensioncontroller",
     "url": "https://github.com/gopro2027/ArduinoAirSuspensionController",
     "sha": "ce313411ce8889a14f5778d323960719e2487bbb",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "dergamer009-playerdatasyncreloaded",
     "url": "https://github.com/DerGamer009/PlayerDataSyncReloaded",
     "sha": "1bd94ef2d9e3438de3d47c3b74cbf031c295b1a1",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "acelemore-ss-translator",
     "url": "https://github.com/acelemore/ss_translator",
     "sha": "7ad4bae30ff925166fa743b3b1c9612de2f7c649",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "frizzlefur-awesometools",
     "url": "https://github.com/FrizzleFur/AwesomeTools",
     "sha": "f27942fc1eadf61017d41796c23395a388105711",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "formancehq-ledger",
     "url": "https://github.com/formancehq/ledger",
     "sha": "da067e848ee6e31afdc460a22b75094c3d41777b",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "legacytemplates-vue-vite",
     "url": "https://github.com/LegacyTemplates/vue-vite",
     "sha": "65e34f22008dbe5b6725a6c3730224da2ca45613",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "rohansx-workz",
     "url": "https://github.com/rohansx/workz",
     "sha": "84b6688bee54229c043eb2dac837b142a07221e5",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "fridfn-reminder-apps",
     "url": "https://github.com/fridfn/reminder-apps",
     "sha": "988b3318cb427bb6df579d8ae1be9144132462e2",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "codedbyhermez-redpandaos",
     "url": "https://github.com/CodedByHermez/RedPandaOS",
     "sha": "b8f9baccc6c61c043d92ad1c03a16cf97cbbfd29",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "ayhanmansur-3x-ui-on-railway",
     "url": "https://github.com/AyhanMansur/3X-Ui-on-railway",
     "sha": "e4a516cab10740387764ad5ebb10be9238d40c4d",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "thelifenadine-recipe-data-scraper",
     "url": "https://github.com/thelifenadine/recipe-data-scraper",
     "sha": "2d3bbd716071348f1221072fe0e56f232fa50f15",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "wul7chaos-vmp-reverse-skill",
     "url": "https://github.com/wul7chaos/vmp-reverse-skill",
     "sha": "212e7ce9be0fded727274faae821159779763105",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "franvy-gtab",
     "url": "https://github.com/Franvy/gtab",
     "sha": "a1180d0e781433759e755ffaf80a4ffb5ae84a67",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "deadlyapps-speedreader",
     "url": "https://github.com/DeadlyApps/SpeedReader",
     "sha": "e59fbfbbf3f120e1f8ff2a536a51080be8287458",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "richiemcmullen-laravel-reorderable",
     "url": "https://github.com/RichieMcMullen/laravel-reorderable",
     "sha": "696c480ba48ff60a9dd9124364d6b27fd3c5c0b1",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "luiscleto-shepherdr",
     "url": "https://github.com/luiscleto/shepherdr",
     "sha": "36dc6a08aede96fd07893672cb20436f69dbb270",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "andreasarvidsson-andreas-talon-vscode",
     "url": "https://github.com/AndreasArvidsson/andreas-talon-vscode",
     "sha": "f0e6af6f29ee8597048b52782e6d761f55fd32dc",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "mapbox-wellknown",
     "url": "https://github.com/mapbox/wellknown",
     "sha": "ed53c0efd12ca6b85d2cf601218d83f1ac976b0e",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "amoutonbrady-lz-string",
     "url": "https://github.com/amoutonbrady/lz-string",
     "sha": "903f02251028ec280122412f1d89bc1199029307",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "international-society-for-tractography-ist-tractography-db",
     "url": "https://github.com/International-Society-for-Tractography/ist-tractography-db",
     "sha": "f258e2ae1de188e72002e892ebf2ef292eec277a",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "sunny-liu2100-ebook-reader-skill",
     "url": "https://github.com/Sunny-Liu2100/Ebook-Reader-skill",
     "sha": "3a3a28366ea0c6de21c2a0822bd0a6b6b112163f",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "hoangsonww-bouncing-ball-game-javafx",
     "url": "https://github.com/hoangsonww/Bouncing-Ball-Game-JavaFX",
     "sha": "4a0b4028af95b671752e200b8bdd84ab8f25b68b",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "tiarait-webdav-fs",
     "url": "https://github.com/Tiarait/WebDav-FS",
     "sha": "50072b5280f46227b076a3502ea8c68cefda01b5",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "appwrite-starter-for-flutter",
     "url": "https://github.com/appwrite/starter-for-flutter",
     "sha": "7effd844273faec36230837e62f9c7eecff26503",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "adarshkumar0509-dsa",
     "url": "https://github.com/Adarshkumar0509/DSA",
     "sha": "32222d50e9b01ce4d2f72d7017fcd5101d281b0b",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "tongminglaic-tilelang-tpu",
     "url": "https://github.com/TongmingLAIC/tilelang-tpu",
     "sha": "303759f8d7358ab0a9d5711e3bfb23af8938466a",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "povle-spark-synth",
     "url": "https://github.com/povle/spark-synth",
     "sha": "82755a07a1e263eefe2710c090af4523b243001d",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "deepnote-vscode-deepnote",
     "url": "https://github.com/deepnote/vscode-deepnote",
     "sha": "6cb33fb6d26a3c3adbef57ede57a54e1e1bdeb86",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "cyberdex-pixi-game-ui",
     "url": "https://github.com/CyberDex/pixi-game-ui",
     "sha": "64031aace3b2f3ab9c557bd69b9ee130eaf315d2",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "await-of-of",
     "url": "https://github.com/await-of/of",
     "sha": "c84ace8e20ca85965f3499c526808268083d3712",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "hhoppe-advent-of-code",
     "url": "https://github.com/hhoppe/advent_of_code",
     "sha": "ecb72174cbc47cb776202d7968aeaa86fc8b7b79",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "apache-rocketmq-eventbridge",
     "url": "https://github.com/apache/rocketmq-eventbridge",
     "sha": "83123f13129efeb35bb4d1ce6463e9486c80937f",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "flexivrobotics-isaac-sim-ws",
     "url": "https://github.com/flexivrobotics/isaac_sim_ws",
     "sha": "9378b06fea73e338dc05cc047272b47c74101379",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "gnustep-libs-xcode",
     "url": "https://github.com/gnustep/libs-xcode",
     "sha": "0e7efad01e76fed0e7aab5f13b7900cf460df414",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "divyavardhanbandi-svg-gcp-based-data-lake-architecture",
     "url": "https://github.com/divyavardhanbandi-svg/gcp-based-data-lake-architecture",
     "sha": "76dc24a78cfbfbc4fae42e57238775b79b218147",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "dongsheng123132-gaokao-mentor-wisdom",
     "url": "https://github.com/dongsheng123132/gaokao-mentor-wisdom",
     "sha": "9541b982fb7b63f88baa21c69229ba303fc636e6",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "lucasmazzetto-gazebo-autonomous-driving",
     "url": "https://github.com/lucasmazzetto/gazebo_autonomous_driving",
     "sha": "b12eda4a91e2ac2b6570da4780ff0e5c69a0d4e5",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "mysteriesofimmortalpuppetmaster-mysteriesofimmortalpuppetmaster-github-io",
     "url": "https://github.com/MysteriesOfImmortalPuppetMaster/MysteriesOfImmortalPuppetMaster.github.io",
     "sha": "eb44d1db37a3ca40609fa8d1bdb6ff8344e18717",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "kuxiaowo-aipet-murasame",
     "url": "https://github.com/kuxiaowo/AIpet-Murasame",
     "sha": "74599a3def49cf0d57a29f511dae8d063d695612",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "sborrazas-shen-erl",
     "url": "https://github.com/sborrazas/shen-erl",
     "sha": "14a64c4c52a45734cc1c34656ae97a7fe169582c",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "willynikes2-agent-orchestrator",
     "url": "https://github.com/willynikes2/agent-orchestrator",
     "sha": "abbd5530ece65139002d499a7ecf37479a5d548b",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "reticenteclectic-checkbox-style-menu",
     "url": "https://github.com/ReticentEclectic/checkbox-style-menu",
     "sha": "a145fdf10b38787bb4581861fcb754491c6cb0f1",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "dhis2-integration-examples",
     "url": "https://github.com/dhis2/integration-examples",
     "sha": "f1e9d1efa9adf3e7634f727f3ee1f4c957b0311f",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "dasource-partyman",
     "url": "https://github.com/dasource/partyman",
     "sha": "69bf5d769ede7d6e926daa330a8d782ecf5edcb8",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "howprogrammingworks-inversionofcontrol",
     "url": "https://github.com/HowProgrammingWorks/InversionOfControl",
     "sha": "8056f5d454c5229238e56cd1b827b1bf5e183037",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "galihru-galihru-github-io",
     "url": "https://github.com/galihru/galihru.github.io",
     "sha": "94fe830b7ee181d194615304d5b244f38fccc09d",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "yashinu-yashinu",
     "url": "https://github.com/yashinu/yashinu",
     "sha": "c62aaba320b96cd11a0d85aec52a442a085f0e57",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "lumigo-io-lumigo-kubernetes-operator",
     "url": "https://github.com/lumigo-io/lumigo-kubernetes-operator",
     "sha": "0f277716117bf6a0c42e575b806427363bee87f3",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "materialsproject-pymatgen-analysis-alloys",
     "url": "https://github.com/materialsproject/pymatgen-analysis-alloys",
     "sha": "ebbf430b7dacdcf4317826787f547fb8b28da69e",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "sifiveinc-skl",
     "url": "https://github.com/sifiveinc/skl",
     "sha": "07fdf4b02d4263f5d1ca84a5b94a681b5e5108ae",
-    "layer": "random"
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
   },
   {
     "name": "csakytech-yggdrasilai",
     "url": "https://github.com/csakytech/YggdrasilAI",
     "sha": "5650afa9152c452d7c55dc37fab8be62ee28b02b",
+    "layer": "random",
+    "tracks": [
+      "random"
+    ]
+  },
+  {
+    "name": "tespkg-actions-cache",
+    "url": "https://github.com/tespkg/actions-cache",
+    "sha": "e07e2d4953dc8c020d447363e5064e36d04f3cf9",
+    "layer": "random"
+  },
+  {
+    "name": "distributive-network-bifrost2",
+    "url": "https://github.com/Distributive-Network/bifrost2",
+    "sha": "834e1bac7ec1ecae9395c6b68e8209fbb1baac8a",
+    "layer": "random"
+  },
+  {
+    "name": "diazzzdev-bflow-financial-engine",
+    "url": "https://github.com/DiazzzDev/BFlow-Financial-Engine",
+    "sha": "b5a04f54b5a00f327d3d4979eb011de4e75d7ece",
+    "layer": "random"
+  },
+  {
+    "name": "kaarmu-typst-vim",
+    "url": "https://github.com/kaarmu/typst.vim",
+    "sha": "1d5436c0f55490893892441c0eca55e6cdf4916c",
+    "layer": "random"
+  },
+  {
+    "name": "ashamethedestroyer-engineers-mathematical-guide",
+    "url": "https://github.com/AshameTheDestroyer/Engineers-Mathematical-Guide",
+    "sha": "d8cf0d67690a4a02b452bdae5a26db7cfcbe2efd",
+    "layer": "random"
+  },
+  {
+    "name": "nicebots-xyz-botkit",
+    "url": "https://github.com/nicebots-xyz/botkit",
+    "sha": "9b4e17623986e64df1f3d803e9fb6b577f20123e",
+    "layer": "random"
+  },
+  {
+    "name": "gaoqiangz-pfw",
+    "url": "https://github.com/gaoqiangz/pfw",
+    "sha": "7803036db87c40867ca079dc0d60f1ceea583882",
+    "layer": "random"
+  },
+  {
+    "name": "shoaibahmedsoomro-lovable-pro-extension",
+    "url": "https://github.com/ShoaibAhmedSoomro/lovable-pro-extension",
+    "sha": "b4f01c6cea5f1ef04b3f73be7a7dab73314015bc",
+    "layer": "random"
+  },
+  {
+    "name": "firebase-quickstart-flutter",
+    "url": "https://github.com/firebase/quickstart-flutter",
+    "sha": "2692a69d7bfa7780993044fc81bd3ba76abad067",
+    "layer": "random"
+  },
+  {
+    "name": "cruiseresearchgroup-kdd-cup-2025-meta-crag-mm",
+    "url": "https://github.com/cruiseresearchgroup/KDD-Cup-2025-Meta-CRAG-MM",
+    "sha": "e65febe580f781415ea6db0aa04eeef76950fdf8",
+    "layer": "random"
+  },
+  {
+    "name": "seattle-aquarium-coastal-climate-resilience",
+    "url": "https://github.com/Seattle-Aquarium/Coastal_Climate_Resilience",
+    "sha": "ab0b37db06ac0661efb9576eb65e29978673389d",
+    "layer": "random"
+  },
+  {
+    "name": "muratozturkdev-openai-dall-e-2",
+    "url": "https://github.com/muratozturkdev/OpenAI-Dall-E-2",
+    "sha": "b9b04e0fbfc065d910d9affe886e2d5d54734b5c",
+    "layer": "random"
+  },
+  {
+    "name": "pinqy520-revas",
+    "url": "https://github.com/pinqy520/revas",
+    "sha": "d6375336db26b40500ea1ef4f0d5c065dc5f5bbe",
+    "layer": "random"
+  },
+  {
+    "name": "jpro-one-jpro",
+    "url": "https://github.com/JPro-one/JPro",
+    "sha": "bf26dbe74dd3703b90cc8ce14fc88494d7240b66",
+    "layer": "random"
+  },
+  {
+    "name": "objectkjq-yolov8-train",
+    "url": "https://github.com/ObjectKjq/yolov8-train",
+    "sha": "a4083f42ed1858e410ddd8ce3662de182a0f2ba0",
+    "layer": "random"
+  },
+  {
+    "name": "twidereproject-metatextkit",
+    "url": "https://github.com/TwidereProject/MetaTextKit",
+    "sha": "fc0a2634b395ec778be365ecc80c35af100920e4",
+    "layer": "random"
+  },
+  {
+    "name": "b-data-data-science-devcontainers",
+    "url": "https://github.com/b-data/data-science-devcontainers",
+    "sha": "600c173b11426eb87989293067a8f530a9bdbd1b",
+    "layer": "random"
+  },
+  {
+    "name": "taylanbakircioglu-flowfish",
+    "url": "https://github.com/taylanbakircioglu/flowfish",
+    "sha": "613ed0bf992c2d339fb97de462993844152fc0d7",
+    "layer": "random"
+  },
+  {
+    "name": "junehq-changelog",
+    "url": "https://github.com/juneHQ/changelog",
+    "sha": "74f05dd4fbf0a652d43ac8bc6c8a70e4a66b8629",
+    "layer": "random"
+  },
+  {
+    "name": "mdbergmann-cl-gserver",
+    "url": "https://github.com/mdbergmann/cl-gserver",
+    "sha": "700b382ee46d0ab25edb918191988f103499a543",
+    "layer": "random"
+  },
+  {
+    "name": "fernandohansen666-scaryrf-315-433mhz",
+    "url": "https://github.com/FernandoHansen666/ScaryRF-315-433mhz",
+    "sha": "acf32c77e5e1948f0fc4d2fe5507930c11ce5baa",
+    "layer": "random"
+  },
+  {
+    "name": "vathsalvathsa-diet-workout-recommender",
+    "url": "https://github.com/vathsalvathsa/diet-workout-recommender",
+    "sha": "ef136ca31d634e756638b41e5ebb4b2a302077ad",
+    "layer": "random"
+  },
+  {
+    "name": "patchew-project-patchew",
+    "url": "https://github.com/patchew-project/patchew",
+    "sha": "7e4c6cc739644f07a321e4d456db7d5bdd42f31e",
+    "layer": "random"
+  },
+  {
+    "name": "robotraconteur-robotraconteur",
+    "url": "https://github.com/robotraconteur/robotraconteur",
+    "sha": "86a39fe09746b8464fb55bfeafce4022d77d1aca",
+    "layer": "random"
+  },
+  {
+    "name": "litecoin-project-litecoin-detached-sigs",
+    "url": "https://github.com/litecoin-project/litecoin-detached-sigs",
+    "sha": "0a09d9785584ccaf2593ec4b383b4be6efe7eb3a",
+    "layer": "random"
+  },
+  {
+    "name": "byt3hx-research",
+    "url": "https://github.com/byt3hx/research",
+    "sha": "c68b6d56a4dcbd1f107872a4a953605e91225bae",
+    "layer": "random"
+  },
+  {
+    "name": "langrenlibai-product-manager-workflow",
+    "url": "https://github.com/langrenlibai/product-manager-workflow",
+    "sha": "58024f96faf97977f1c3df3a1ac97e38ffa77630",
+    "layer": "random"
+  },
+  {
+    "name": "test-kitchen-busser-rspec",
+    "url": "https://github.com/test-kitchen/busser-rspec",
+    "sha": "565317f956971610084587bc69450d577b9587c6",
+    "layer": "random"
+  },
+  {
+    "name": "job-sdf-benchmark",
+    "url": "https://github.com/Job-SDF/benchmark",
+    "sha": "00583fc0b0c70b4ed8df6d579e760e89d57ddbb1",
+    "layer": "random"
+  },
+  {
+    "name": "octopusdeploy-octodiff",
+    "url": "https://github.com/OctopusDeploy/Octodiff",
+    "sha": "7b9a6b4f20a87ec9a84b7f16069ebd4afcfae02d",
+    "layer": "random"
+  },
+  {
+    "name": "openthc-data",
+    "url": "https://github.com/openthc/data",
+    "sha": "ae070ed45f0d23f1687bbede86dbc11b53d42f9a",
+    "layer": "random"
+  },
+  {
+    "name": "kubuszok-refined-compat",
+    "url": "https://github.com/kubuszok/refined-compat",
+    "sha": "b241feb043a061f373e5a39815059d6ac2515dca",
+    "layer": "random"
+  },
+  {
+    "name": "paralogictech-textile",
+    "url": "https://github.com/ParaLogicTech/textile",
+    "sha": "cfc57eefce688df73e0fa8c3e24f3605cbeb33db",
+    "layer": "random"
+  },
+  {
+    "name": "jingsongliujing-feishu-cli-web",
+    "url": "https://github.com/jingsongliujing/Feishu-CLI-Web",
+    "sha": "92a4383cf947d25a9b207cf7a24e00424bca9dcf",
+    "layer": "random"
+  },
+  {
+    "name": "robertoecf-openfindata",
+    "url": "https://github.com/robertoecf/OpenFinData",
+    "sha": "0613f5c243e592c9971df5be22f19df80a1cd0f1",
+    "layer": "random"
+  },
+  {
+    "name": "bernhard-42-ocp-tessellate",
+    "url": "https://github.com/bernhard-42/ocp-tessellate",
+    "sha": "08490053313d5b9186999a6298e0bbe736d90885",
+    "layer": "random"
+  },
+  {
+    "name": "ppbrown-vlm-utils",
+    "url": "https://github.com/ppbrown/vlm-utils",
+    "sha": "77552a391aaf387dca09089e21b0c54171bde16e",
+    "layer": "random"
+  },
+  {
+    "name": "codeany-ai-codeany",
+    "url": "https://github.com/codeany-ai/codeany",
+    "sha": "7e614dc436efb0b72f32d6de9e34a6f8a61886d9",
+    "layer": "random"
+  },
+  {
+    "name": "danikf-tik4net",
+    "url": "https://github.com/danikf/tik4net",
+    "sha": "64102cf6e2e35cc9ccc9c10ae2eccb32b0b627e2",
+    "layer": "random"
+  },
+  {
+    "name": "boatbomber-editableimageblur",
+    "url": "https://github.com/boatbomber/EditableImageBlur",
+    "sha": "0ee65943f09c05d4cfd01f4a9bde16dd281493da",
+    "layer": "random"
+  },
+  {
+    "name": "jblanked-flipmap",
+    "url": "https://github.com/jblanked/FlipMap",
+    "sha": "2a35f14a3ad6f4ea6270c06e90d2c6a1fa239dae",
+    "layer": "random"
+  },
+  {
+    "name": "ministryofjustice-intranet",
+    "url": "https://github.com/ministryofjustice/intranet",
+    "sha": "7088072dcc69fcd480adeb95fd789420d0d3a5bc",
+    "layer": "random"
+  },
+  {
+    "name": "harsh98trivedi-links",
+    "url": "https://github.com/harsh98trivedi/links",
+    "sha": "e901ec0dc2fc6595bd1f4eab50d9604e7de36a89",
+    "layer": "random"
+  },
+  {
+    "name": "fsavje-distances",
+    "url": "https://github.com/fsavje/distances",
+    "sha": "e5c6dfc3cb572cba5fa7f068b654087fb02b1d4e",
+    "layer": "random"
+  },
+  {
+    "name": "ohai-ruby-sdl2",
+    "url": "https://github.com/ohai/ruby-sdl2",
+    "sha": "3ef0a714eb75b43a86674b25b8739d1e5626b669",
+    "layer": "random"
+  },
+  {
+    "name": "cqels-cqels4j",
+    "url": "https://github.com/cqels/CQELS4J",
+    "sha": "799378541ac91799a56587310bf274ea5d5c0ac2",
+    "layer": "random"
+  },
+  {
+    "name": "oxylusengine-oxylus",
+    "url": "https://github.com/oxylusengine/Oxylus",
+    "sha": "abe8751d27a9c79f8299a79984c47ec4095c2975",
+    "layer": "random"
+  },
+  {
+    "name": "uniswap-v4-core",
+    "url": "https://github.com/Uniswap/v4-core",
+    "sha": "bea7f6d1c11cd5dc4f0d5151ffa37a1c239feee6",
+    "layer": "random"
+  },
+  {
+    "name": "theandersmadsen-humane-aipin-ghostlock",
+    "url": "https://github.com/TheAndersMadsen/humane-aipin-ghostlock",
+    "sha": "5ae716621168ffada6d96d4fe1f04c3406c7a9ca",
+    "layer": "random"
+  },
+  {
+    "name": "jguadagno-jjgnet-broadcast",
+    "url": "https://github.com/jguadagno/jjgnet-broadcast",
+    "sha": "101c7668175e668678e60dea103a519cd18ede0a",
+    "layer": "random"
+  },
+  {
+    "name": "victorola-coder-vickyjay",
+    "url": "https://github.com/Victorola-coder/VickyJay",
+    "sha": "72c471eb12663f5d9b433d3973982285d76e0d7d",
+    "layer": "random"
+  },
+  {
+    "name": "seunkola-burger-restaurant-app",
+    "url": "https://github.com/Seunkola/burger-restaurant-app",
+    "sha": "9b3825b15d2190ba160fc90b7efd2929888fcd0b",
+    "layer": "random"
+  },
+  {
+    "name": "lfdt-ap3-ap3",
+    "url": "https://github.com/lfdt-ap3/ap3",
+    "sha": "7dbda3df8333e688186250d2c7b388bb581fe2ac",
+    "layer": "random"
+  },
+  {
+    "name": "getstream-nextjs-ai-chat-app",
+    "url": "https://github.com/GetStream/nextjs-ai-chat-app",
+    "sha": "f98ed8aad42c0c78c327cd9fa4d57228f7b00460",
+    "layer": "random"
+  },
+  {
+    "name": "richard-raph-masterpiece-construction",
+    "url": "https://github.com/Richard-Raph/masterpiece-construction",
+    "sha": "7985aac0b989d70088d68fd24aafcdafa94dd33c",
+    "layer": "random"
+  },
+  {
+    "name": "ufaqtech-uht-framework",
+    "url": "https://github.com/UfaqTech/UHT-Framework",
+    "sha": "fbbad173982bbf7febd0d904e5a45019528d5ffa",
+    "layer": "random"
+  },
+  {
+    "name": "takahiroanno2024-anno-ai-avatar",
+    "url": "https://github.com/takahiroanno2024/anno-ai-avatar",
+    "sha": "783c95216ef5dc83935b9971a2372b3e32b0d126",
+    "layer": "random"
+  },
+  {
+    "name": "popgendk-courses",
+    "url": "https://github.com/popgenDK/courses",
+    "sha": "9ba04194372a7cf2ebedc5a4b2e3d6f677e39894",
+    "layer": "random"
+  },
+  {
+    "name": "lewiscowles1986-php-ulid",
+    "url": "https://github.com/Lewiscowles1986/php-ulid",
+    "sha": "ae024112a680d3628721e068268e4e043bfc0f53",
+    "layer": "random"
+  },
+  {
+    "name": "sonoro1234-luajit-imgui",
+    "url": "https://github.com/sonoro1234/LuaJIT-ImGui",
+    "sha": "5726cfa5e6279f1f18c83a4aaf7e28be099a5789",
+    "layer": "random"
+  },
+  {
+    "name": "veegee82-agent-workflow-protocol",
+    "url": "https://github.com/veegee82/agent-workflow-protocol",
+    "sha": "4d1fba4b667dce1bebf33b9edf140706bb73286d",
+    "layer": "random"
+  },
+  {
+    "name": "nhchiu-voronmods",
+    "url": "https://github.com/nhchiu/VoronMods",
+    "sha": "761fee1df1b11ed952c167602fe5424485fde640",
+    "layer": "random"
+  },
+  {
+    "name": "bee-san-python-zero-to-hero",
+    "url": "https://github.com/bee-san/Python-Zero-to-Hero",
+    "sha": "af98822eb29efd65b1ebab76ff28f3c4389a83d1",
+    "layer": "random"
+  },
+  {
+    "name": "gprem09-gprem09",
+    "url": "https://github.com/gprem09/gprem09",
+    "sha": "a900868260f6c6c6289333f2f0138ac6261b10c3",
+    "layer": "random"
+  },
+  {
+    "name": "yuangun-create-fisco-gm-crypto-measure",
+    "url": "https://github.com/Yuangun-create/fisco-gm-crypto-measure",
+    "sha": "e0ec4764fff9c7d060e45b1453aff3460386ce8d",
+    "layer": "random"
+  },
+  {
+    "name": "maxxtang-claude-stick-buddy",
+    "url": "https://github.com/MAXXTANG/claude-stick-buddy",
+    "sha": "306da8f5a2d1d1ed9335bf2d15ff731bd8652915",
+    "layer": "random"
+  },
+  {
+    "name": "composer-metadata-minifier",
+    "url": "https://github.com/composer/metadata-minifier",
+    "sha": "33f2b4ccbf3935da36f0b6842e327529325bbb6a",
+    "layer": "random"
+  },
+  {
+    "name": "lopadova-askmydocs",
+    "url": "https://github.com/lopadova/AskMyDocs",
+    "sha": "3db1573eaabbec3f005e1ee71bc4bc4a728d3466",
+    "layer": "random"
+  },
+  {
+    "name": "irods-contrib-metalnx-web",
+    "url": "https://github.com/irods-contrib/metalnx-web",
+    "sha": "5d7ca0c63100c23422918a19ef69e3ed08b2f37e",
+    "layer": "random"
+  },
+  {
+    "name": "datallmhub-agentflow4j",
+    "url": "https://github.com/datallmhub/agentflow4j",
+    "sha": "f9a7353f43f8a760d4f2d589f8d8eaf7e1c9a506",
+    "layer": "random"
+  },
+  {
+    "name": "ifduyue-xxtea",
+    "url": "https://github.com/ifduyue/xxtea",
+    "sha": "ac1b5908222be0f18fd0f4015ada1d84ae01e63d",
+    "layer": "random"
+  },
+  {
+    "name": "beargruug-skipper-nvim",
+    "url": "https://github.com/Beargruug/skipper.nvim",
+    "sha": "f8780c5e6b74202f83007162f5881ff20be1966e",
+    "layer": "random"
+  },
+  {
+    "name": "thomasorgeval-ngx-better-auth",
+    "url": "https://github.com/thomasorgeval/ngx-better-auth",
+    "sha": "24b14be1f59f6c8e1fdd6dd38035a581dfe8cd31",
+    "layer": "random"
+  },
+  {
+    "name": "mohamadhajjrabee-quran-qcf4",
+    "url": "https://github.com/MohamadHajjRabee/quran-qcf4",
+    "sha": "5130511027e769f0a8f4eeb7f00f46bde3788d60",
+    "layer": "random"
+  },
+  {
+    "name": "doctordooktoor-bamboohr-hr-portal-tool",
+    "url": "https://github.com/doctordooktoor/bamboohr-hr-portal-tool",
+    "sha": "6a0761123d5d88cada734438dffe06f8d58d0930",
+    "layer": "random"
+  },
+  {
+    "name": "auuunya-eventwatcher",
+    "url": "https://github.com/auuunya/eventwatcher",
+    "sha": "cf741ee9cc49f6d14402ebaabf30552f3997fcc4",
+    "layer": "random"
+  },
+  {
+    "name": "mmisty-cypress-allure-adapter",
+    "url": "https://github.com/mmisty/cypress-allure-adapter",
+    "sha": "d68c19c13186141fdb820118461d219ecf80fcd8",
+    "layer": "random"
+  },
+  {
+    "name": "619dev-paperphone-plus",
+    "url": "https://github.com/619dev/Paperphone-plus",
+    "sha": "979cd356691a64ecb7a4837ce530acdbe2195f5f",
+    "layer": "random"
+  },
+  {
+    "name": "quickjs-zh-quickjs",
+    "url": "https://github.com/quickjs-zh/QuickJS",
+    "sha": "f521e7f4a7c7a5414e392aeada61954dbafa2d29",
+    "layer": "random"
+  },
+  {
+    "name": "abdelghanimeliani-gdg-events-app",
+    "url": "https://github.com/abdelghanimeliani/gdg-events-app",
+    "sha": "94d4cd26dcada33d8483acad28f99941119327e5",
+    "layer": "random"
+  },
+  {
+    "name": "akretion-odoo-usability",
+    "url": "https://github.com/akretion/odoo-usability",
+    "sha": "5d1877e3d6d6e919e238e84bc5fc26e2a0cb7451",
+    "layer": "random"
+  },
+  {
+    "name": "christopherkarani-hive",
+    "url": "https://github.com/christopherkarani/Hive",
+    "sha": "b1d0d10a1057701a3c1f4ea82234b441c2907242",
+    "layer": "random"
+  },
+  {
+    "name": "davemollen-dm-graindelay",
+    "url": "https://github.com/davemollen/dm-GrainDelay",
+    "sha": "26255a210e9b16176cb3a2f2ed5cca3be2e950eb",
+    "layer": "random"
+  },
+  {
+    "name": "mailxem-mail",
+    "url": "https://github.com/mailxem/mail",
+    "sha": "f25c0f800b0932c47fc03dc4e9d609750a68df1b",
+    "layer": "random"
+  },
+  {
+    "name": "pulumi-pulumi-postgresql",
+    "url": "https://github.com/pulumi/pulumi-postgresql",
+    "sha": "23fc53abd0f5726217586ce0290bd67bfc3d8eec",
+    "layer": "random"
+  },
+  {
+    "name": "ftuyama-git-light",
+    "url": "https://github.com/ftuyama/git-light",
+    "sha": "7a542737bfba0cae4f36158946dd8788d6a02fbe",
+    "layer": "random"
+  },
+  {
+    "name": "luizgustavo76-linka",
+    "url": "https://github.com/luizgustavo76/Linka",
+    "sha": "020d670f3cc6786ff26a5bb28c83562b3ba33754",
+    "layer": "random"
+  },
+  {
+    "name": "ptt-official-app-ptt-backend",
+    "url": "https://github.com/Ptt-official-app/Ptt-backend",
+    "sha": "4ba0cfe2bd180fa0fdb11510eaf4f4c27b250740",
+    "layer": "random"
+  },
+  {
+    "name": "thisislittlesky-waterpaper",
+    "url": "https://github.com/ThisIsLittleSky/WaterPaper",
+    "sha": "8388ded1cb185ffd6ea2fa02ca7a69b69c765e24",
+    "layer": "random"
+  },
+  {
+    "name": "pnp-sp-site-designs-studio",
+    "url": "https://github.com/pnp/sp-site-designs-studio",
+    "sha": "74dbb1c09ad87f9a513898bd793baff30ae31b55",
+    "layer": "random"
+  },
+  {
+    "name": "bellingcat-ukraine-timemap",
+    "url": "https://github.com/bellingcat/ukraine-timemap",
+    "sha": "c679aab127ba8d55eaa4c385fd62578f9b29689c",
+    "layer": "random"
+  },
+  {
+    "name": "9boom-godot-android-exporter",
+    "url": "https://github.com/9boom/Godot-Android-Exporter",
+    "sha": "fdd40850fd00d11ed04a3e8f5bd698ad4cb70910",
+    "layer": "random"
+  },
+  {
+    "name": "brajesh31-user-management",
+    "url": "https://github.com/Brajesh31/USER_MANAGEMENt",
+    "sha": "4976dbbbda1111c6a690ba8a68afda543610245e",
+    "layer": "random"
+  },
+  {
+    "name": "0merle0-cleo",
+    "url": "https://github.com/0merle0/cleo",
+    "sha": "cf8d02365f44c121f6b87445169b29f86097ce48",
+    "layer": "random"
+  },
+  {
+    "name": "a825167-chili",
+    "url": "https://github.com/a825167/Chili",
+    "sha": "0528924dad63440cce09fce85946a05b6a247a87",
+    "layer": "random"
+  },
+  {
+    "name": "koenkk-zigbee2mqtt",
+    "url": "https://github.com/Koenkk/zigbee2mqtt",
+    "sha": "3c841fdfd66c92239921ef84fde8f039c64e1662",
+    "layer": "random"
+  },
+  {
+    "name": "itext-itext-publications-jumpstart-java",
+    "url": "https://github.com/itext/itext-publications-jumpstart-java",
+    "sha": "551e2a2f4ffa113f006548d0a34684ec48a7fe99",
+    "layer": "random"
+  },
+  {
+    "name": "google-netbsd-gce",
+    "url": "https://github.com/google/netbsd-gce",
+    "sha": "0fd04beff89b47d7861462a605597d0c80053ed1",
+    "layer": "random"
+  },
+  {
+    "name": "motrixlab-adhmr",
+    "url": "https://github.com/MotrixLab/ADHMR",
+    "sha": "a5ae1e9bd9c3e2d150ca7f7c16b0c835d0be0acb",
+    "layer": "random"
+  },
+  {
+    "name": "mfazza-agentic-muscle-memory",
+    "url": "https://github.com/mfazza/agentic_muscle_memory",
+    "sha": "5e3adafc2108ba928bce868c433520213d90cd1c",
+    "layer": "random"
+  },
+  {
+    "name": "whatwg-html",
+    "url": "https://github.com/whatwg/html",
+    "sha": "a0442320781555c99544448e30134662bfc39190",
+    "layer": "random"
+  },
+  {
+    "name": "dlr-ft-a653rs-linux",
+    "url": "https://github.com/DLR-FT/a653rs-linux",
+    "sha": "7185024009d3db313f4978c46f7260f54dd90d5f",
+    "layer": "random"
+  },
+  {
+    "name": "gistya-swift-concurrency-reference",
+    "url": "https://github.com/gistya/swift-concurrency-reference",
+    "sha": "a34aebe92e9f86b7a05692b37f74b066d400307a",
+    "layer": "random"
+  },
+  {
+    "name": "whitzardagent-whitzard",
+    "url": "https://github.com/WhitzardAgent/Whitzard",
+    "sha": "8b123fa90c62490b35f3cf2eb08eb0627c618095",
+    "layer": "random"
+  },
+  {
+    "name": "manymore13-report",
+    "url": "https://github.com/manymore13/report",
+    "sha": "58a3f2fa8e72d1917bf612fc8cf9948f5d993c31",
+    "layer": "random"
+  },
+  {
+    "name": "sky22333-shell",
+    "url": "https://github.com/sky22333/shell",
+    "sha": "6bb38af5152faf4401268d0f5f4d54344aec9dfe",
+    "layer": "random"
+  },
+  {
+    "name": "paulogier-wordpress",
+    "url": "https://github.com/PaulOgier/Wordpress",
+    "sha": "a1676dbb806f383a267c7b4a3088ba76d19d5436",
+    "layer": "random"
+  },
+  {
+    "name": "uphy-obsidian-reminder",
+    "url": "https://github.com/uphy/obsidian-reminder",
+    "sha": "d5bc5ec48ff98a9f393d23c4ea69d24f7b8f0ff9",
+    "layer": "random"
+  },
+  {
+    "name": "emanuele-em-cove",
+    "url": "https://github.com/emanuele-em/cove",
+    "sha": "ecf0e56f962257499dd1452a1bc0fcdc6c08c55c",
+    "layer": "random"
+  },
+  {
+    "name": "claudegel-sinope-zha",
+    "url": "https://github.com/claudegel/sinope-zha",
+    "sha": "5f901c0c65b6996c7cd458ebd688e76eaa072ab9",
+    "layer": "random"
+  },
+  {
+    "name": "easemob-im-flutter-sdk",
+    "url": "https://github.com/easemob/im_flutter_sdk",
+    "sha": "cb2353a8acfecfa022d78d9f2c54c41c28e79a2a",
+    "layer": "random"
+  },
+  {
+    "name": "jiarui-0410-real-time-recommendation-analytics",
+    "url": "https://github.com/Jiarui-0410/real-time-recommendation-analytics",
+    "sha": "8038000e7de9da9790013e424d6b22327f5d2aa0",
+    "layer": "random"
+  },
+  {
+    "name": "qfpl-hedgehog-fn",
+    "url": "https://github.com/qfpl/hedgehog-fn",
+    "sha": "ffeb7eed0b0cc3a693db3e98271e161cc145525b",
+    "layer": "random"
+  },
+  {
+    "name": "0x414c49-azureautonumber",
+    "url": "https://github.com/0x414c49/AzureAutoNumber",
+    "sha": "410809db29b858ffbf764cd5c75b1d91dbbfa643",
+    "layer": "random"
+  },
+  {
+    "name": "digital-bombyx-oyo",
+    "url": "https://github.com/digital-bombyx/OYO",
+    "sha": "6b9f5ed9134a59710cbfa1fb78e45f6793e273c7",
+    "layer": "random"
+  },
+  {
+    "name": "bailey-bailey",
+    "url": "https://github.com/bailey/bailey",
+    "sha": "7892217093789cb48d63969068f34b07e262306c",
+    "layer": "random"
+  },
+  {
+    "name": "armanidrisi-chatgpt-telegram-bot-php",
+    "url": "https://github.com/Armanidrisi/chatgpt-telegram-bot-php",
+    "sha": "9930c5c34f7564b03e183bd2615228905b67314d",
+    "layer": "random"
+  },
+  {
+    "name": "wqq64842-commits-holojarvis",
+    "url": "https://github.com/wqq64842-commits/holojarvis",
+    "sha": "7473f91e755b3683173de025c5ee32032dbdd75a",
+    "layer": "random"
+  },
+  {
+    "name": "axisemunity-axisem3d",
+    "url": "https://github.com/AxiSEMunity/AxiSEM3D",
+    "sha": "bc67bb2d76deb2fb208d14dff7b7b25c57d9f35f",
+    "layer": "random"
+  },
+  {
+    "name": "kyleamathews-linux-config",
+    "url": "https://github.com/KyleAMathews/linux-config",
+    "sha": "e74441f40e88f0234781f5b3438c51dc789aa719",
+    "layer": "random"
+  },
+  {
+    "name": "carvel-dev-carvel",
+    "url": "https://github.com/carvel-dev/carvel",
+    "sha": "fc06e91f5446330f0c505bea0c0b4540adbb7701",
+    "layer": "random"
+  },
+  {
+    "name": "nuxt-modules-web-vitals",
+    "url": "https://github.com/nuxt-modules/web-vitals",
+    "sha": "b3fad522d9c379c75dc4b7b5e52f29eed1beb8f7",
+    "layer": "random"
+  },
+  {
+    "name": "swviewer-tool-swviewer",
+    "url": "https://github.com/SWViewer/tool-swviewer",
+    "sha": "ba5c4c906d05312b6eccc9ae126a3247e6afc44d",
+    "layer": "random"
+  },
+  {
+    "name": "infoslack-awesome-kafka",
+    "url": "https://github.com/infoslack/awesome-kafka",
+    "sha": "bb3711533683e4df974e85299e59bd2e22d093bd",
+    "layer": "random"
+  },
+  {
+    "name": "paipaiio-icloud-distribution",
+    "url": "https://github.com/paipaiio/iCloud_Distribution",
+    "sha": "4a95c51ae78b301a948dadb2db2c4648ef84d20e",
+    "layer": "random"
+  },
+  {
+    "name": "aau-cph-sw5-case-c-operational-restrictions",
+    "url": "https://github.com/aau-cph-sw5/case-c-operational-restrictions",
+    "sha": "7352f2ac449ee70d3d34f34ec6f2219cf80b2e3a",
+    "layer": "random"
+  },
+  {
+    "name": "mastering-genkit-mastering-genkit-go",
+    "url": "https://github.com/mastering-genkit/mastering-genkit-go",
+    "sha": "b62f4360b7916790b33e2bf1e41fc5e425d14a61",
+    "layer": "random"
+  },
+  {
+    "name": "ppy-sdl3-cs",
+    "url": "https://github.com/ppy/SDL3-CS",
+    "sha": "442a5a2346600f574f654e95a12d6bf4305a4732",
+    "layer": "random"
+  },
+  {
+    "name": "mehdieidi-tunelo",
+    "url": "https://github.com/mehdieidi/tunelo",
+    "sha": "f1d73ba3ef5dea2e7979451a01db9e185362add9",
+    "layer": "random"
+  },
+  {
+    "name": "dtmc0945-l-mci-bsc-academic-writing",
+    "url": "https://github.com/dTmC0945/L-MCI-BSc-Academic-Writing",
+    "sha": "e3027938f59beb116049422d637efa847a17bd1a",
+    "layer": "random"
+  },
+  {
+    "name": "nanodlp-ui",
+    "url": "https://github.com/nanodlp/ui",
+    "sha": "d8f8f77eaaedebb4c37ab1b155851d4e7fddbcb5",
+    "layer": "random"
+  },
+  {
+    "name": "vonahisec-pentesting-scripts",
+    "url": "https://github.com/vonahisec/pentesting_scripts",
+    "sha": "c326654c8375a49d994c55dc06afcd42e34eedc7",
+    "layer": "random"
+  },
+  {
+    "name": "milldr-crono",
+    "url": "https://github.com/milldr/crono",
+    "sha": "531a9cbefdbb712ed4f0b408616c64f5b59021e5",
+    "layer": "random"
+  },
+  {
+    "name": "openshift-must-gather-operator",
+    "url": "https://github.com/openshift/must-gather-operator",
+    "sha": "a57b2edfa5cb0c5c79c83113a3a1ce73ba25246c",
+    "layer": "random"
+  },
+  {
+    "name": "jeremywrnr-codepilot",
+    "url": "https://github.com/jeremywrnr/codepilot",
+    "sha": "7454073e24c501b8ec487a5272992d7e5d103514",
+    "layer": "random"
+  },
+  {
+    "name": "juntossomosmais-frontend-challenge",
+    "url": "https://github.com/juntossomosmais/frontend-challenge",
+    "sha": "de42708f1abada0afa3f9a6e73a71cd3603aa92e",
+    "layer": "random"
+  },
+  {
+    "name": "pop-os-plymouth-theme",
+    "url": "https://github.com/pop-os/plymouth-theme",
+    "sha": "5e0e4c2c6e98f1a7677c727346bee3a7310596b3",
+    "layer": "random"
+  },
+  {
+    "name": "gravity-ui-websql-autocomplete",
+    "url": "https://github.com/gravity-ui/websql-autocomplete",
+    "sha": "b38bc433ce50bcee357ef15c8fe5326127054dfa",
+    "layer": "random"
+  },
+  {
+    "name": "yoloytang-mmperspective",
+    "url": "https://github.com/yoloytang/MMPerspective",
+    "sha": "c1e289481b10492d957d03f69f167366f7038e3a",
+    "layer": "random"
+  },
+  {
+    "name": "h3llrais3r-auto-subliminal",
+    "url": "https://github.com/h3llrais3r/Auto-Subliminal",
+    "sha": "e0f572ad6cba2e44f58931c5ef342f10d77f8fdd",
+    "layer": "random"
+  },
+  {
+    "name": "maxdevv-un-locc",
+    "url": "https://github.com/MaxDevv/Un-LOCC",
+    "sha": "6433d4ad95a1daaf3ba27ecb60eecd8f1b2e6d3b",
+    "layer": "random"
+  },
+  {
+    "name": "yandex-research-agentic-hpset",
+    "url": "https://github.com/yandex-research/agentic-hpset",
+    "sha": "bb9803cb3cb4f5b46a92533cad4cd8aa7dd4bb18",
+    "layer": "random"
+  },
+  {
+    "name": "preloading-tubereplacer",
+    "url": "https://github.com/Preloading/TubeReplacer",
+    "sha": "ac273fb4f9ce90ca4871454555883f3b62e0e016",
+    "layer": "random"
+  },
+  {
+    "name": "yuminhui825-omnibreak-skill",
+    "url": "https://github.com/YuMinHui825/omnibreak-skill",
+    "sha": "2f153d5d4ee3c2ae546a7944689073e3c41e3320",
+    "layer": "random"
+  },
+  {
+    "name": "jackwh-laravel-new-relic",
+    "url": "https://github.com/jackwh/laravel-new-relic",
+    "sha": "974bc5b0f61740719c7f9697bd2c2e7d2bead04a",
+    "layer": "random"
+  },
+  {
+    "name": "carrycooldude-edgeaiapp-executorch",
+    "url": "https://github.com/carrycooldude/EdgeAIApp-ExecuTorch",
+    "sha": "131e8eb51eb24d5e6535be13afd30a020b2778f5",
+    "layer": "random"
+  },
+  {
+    "name": "leoleelxh-obsidian-memos-ai-sync",
+    "url": "https://github.com/leoleelxh/obsidian-memos-ai-sync",
+    "sha": "7dbc80f8e2f193f583c56c28853642f34a972013",
+    "layer": "random"
+  },
+  {
+    "name": "dev7shah-contextl",
+    "url": "https://github.com/dev7shah/contextl",
+    "sha": "b9492519122ca617c00daa6fb3ef486d7cbe6c16",
+    "layer": "random"
+  },
+  {
+    "name": "ujuiujumandan-exhentai-igneous-generator",
+    "url": "https://github.com/UjuiUjuMandan/exhentai-igneous-generator",
+    "sha": "a54a5cd490bba24cdbc0fb3cbf158069ccc38df9",
+    "layer": "random"
+  },
+  {
+    "name": "trustcrypto-libraries",
+    "url": "https://github.com/trustcrypto/libraries",
+    "sha": "a014184724e89a9cb0c8fc1d63876dec75f73605",
+    "layer": "random"
+  },
+  {
+    "name": "xo-usql",
+    "url": "https://github.com/xo/usql",
+    "sha": "ca28358d086c9f63302bc6669a66e6c0c3fe22fe",
+    "layer": "random"
+  },
+  {
+    "name": "spamscope-mail-parser",
+    "url": "https://github.com/SpamScope/mail-parser",
+    "sha": "593ddcc6000876cd05be67be266ddd9f9827bf96",
+    "layer": "random"
+  },
+  {
+    "name": "k1lgor-container-diet",
+    "url": "https://github.com/k1lgor/container-diet",
+    "sha": "112791a5778cc148ffa8f7c71dabe513ff5e2cb5",
+    "layer": "random"
+  },
+  {
+    "name": "alanmitchell-bmon",
+    "url": "https://github.com/alanmitchell/bmon",
+    "sha": "da8458d3c74cfafb04c876bdfd5b2753d36ad8d3",
+    "layer": "random"
+  },
+  {
+    "name": "abolfazlrwm-awesome-scripts",
+    "url": "https://github.com/Abolfazlrwm/awesome-scripts",
+    "sha": "4a18e89888a80b1e3294ece7b5876e1e68c1cfdb",
+    "layer": "random"
+  },
+  {
+    "name": "psarando-shire-reckoning",
+    "url": "https://github.com/psarando/shire-reckoning",
+    "sha": "11c783f708c0c5c9fe9ecd2372daadde813ad4b1",
+    "layer": "random"
+  },
+  {
+    "name": "zuimeng-0710-java-audit-lab",
+    "url": "https://github.com/Zuimeng-0710/java-audit-lab",
+    "sha": "e9cf8d8751e2a55b60ae52c0675a94c9c80771e4",
+    "layer": "random"
+  },
+  {
+    "name": "lkk989-deep-agent-real-estate-orchestrator",
+    "url": "https://github.com/lkk989/Deep-Agent-Real-Estate-Orchestrator",
+    "sha": "adb99bdcfc88871ddbd3c7f481437eeb0496e646",
+    "layer": "random"
+  },
+  {
+    "name": "kyrie111-efinet",
+    "url": "https://github.com/kyrie111/EFINet",
+    "sha": "0782da17ae2fa8e5f2f6dca1711216af00d8362f",
+    "layer": "random"
+  },
+  {
+    "name": "linuxserver-docker-vscodium",
+    "url": "https://github.com/linuxserver/docker-vscodium",
+    "sha": "3fba475a1f905ff54cb0c3145941255bf0225f5d",
+    "layer": "random"
+  },
+  {
+    "name": "hiragram-cccsc",
+    "url": "https://github.com/hiragram/cccsc",
+    "sha": "2d5ea420835c84eb6f59029ad481516952bc6b63",
+    "layer": "random"
+  },
+  {
+    "name": "johnvouros-skillmaxxing",
+    "url": "https://github.com/johnvouros/skillmaxxing",
+    "sha": "ae37d84505a10a23b1a7f5b236f32e8fa9beff80",
+    "layer": "random"
+  },
+  {
+    "name": "semtea1-codex-chat-history-exporter",
+    "url": "https://github.com/Semtea1/codex-chat-history-exporter",
+    "sha": "583dbf78dbe75952fafac82e3c1f7d10cea9f382",
+    "layer": "random"
+  },
+  {
+    "name": "brainglobe-brainglobe-workflows",
+    "url": "https://github.com/brainglobe/brainglobe-workflows",
+    "sha": "9b2285b34af6775c5659c11a64be55d13bbcf30c",
+    "layer": "random"
+  },
+  {
+    "name": "cosinus-code-spring-swing",
+    "url": "https://github.com/cosinus-code/spring-swing",
+    "sha": "22e04b74f545136f7eb0cf6df3f86474a6cd2e1a",
+    "layer": "random"
+  },
+  {
+    "name": "iconicwp-wordpress-settings-framework",
+    "url": "https://github.com/iconicwp/WordPress-Settings-Framework",
+    "sha": "b0d45a16310371665577c02c423b0c7d818ac9ac",
+    "layer": "random"
+  },
+  {
+    "name": "raboro-obsidian-birthday-tracker-plugin",
+    "url": "https://github.com/Raboro/Obsidian-Birthday-Tracker-Plugin",
+    "sha": "a27113d11d8bd1abdc71600ac45dd83a940db5a9",
+    "layer": "random"
+  },
+  {
+    "name": "dahan8473-snake-and-commits",
+    "url": "https://github.com/dahan8473/snake-and-commits",
+    "sha": "4ec3eec8531727c9679cd9f8e1c7d60ba1dc7b23",
+    "layer": "random"
+  },
+  {
+    "name": "epiforecasts-socialmixr",
+    "url": "https://github.com/epiforecasts/socialmixr",
+    "sha": "89dd471ce388951ec2514048b0d16656a1ddadac",
+    "layer": "random"
+  },
+  {
+    "name": "jayleaton-localrouter",
+    "url": "https://github.com/jayleaton/localrouter",
+    "sha": "2220677405f72041c03d2d8c6296bc83fed400e8",
+    "layer": "random"
+  },
+  {
+    "name": "fastai-dotfiles",
+    "url": "https://github.com/fastai/dotfiles",
+    "sha": "103fbf830b09c670276ce101cf36a4cc135f0f56",
+    "layer": "random"
+  },
+  {
+    "name": "ma6174-myhttpdns",
+    "url": "https://github.com/ma6174/myhttpdns",
+    "sha": "a4ba53578ce39dda0b9087b8b5dc353d7370604a",
+    "layer": "random"
+  },
+  {
+    "name": "alonefact-rblx-ugc-emotes",
+    "url": "https://github.com/alonefact/RBLX-UGC-Emotes",
+    "sha": "c555fb3b097869ec0a2238b23f9bdb320e6891db",
+    "layer": "random"
+  },
+  {
+    "name": "rishikeshdarandale-serverless-graphql-boilerplate",
+    "url": "https://github.com/RishikeshDarandale/serverless-graphql-boilerplate",
+    "sha": "a0792e3fed5547a0c0364351d6341d8f52b4362e",
+    "layer": "random"
+  },
+  {
+    "name": "zhanyihui06-paperpilot",
+    "url": "https://github.com/ZhanYiHui06/PaperPilot",
+    "sha": "43abb59f9655a18a6705875ba63ac755209e469d",
+    "layer": "random"
+  },
+  {
+    "name": "sachinart-indian-recipe-api",
+    "url": "https://github.com/Sachinart/Indian-Recipe-API",
+    "sha": "f48ac1619db9c7e5d481630a0ccf9744818c3627",
+    "layer": "random"
+  },
+  {
+    "name": "auxidev-svelte-bottom-sheet",
+    "url": "https://github.com/AuxiDev/svelte-bottom-sheet",
+    "sha": "9832bcfcb787035d54eb7a5bc0df17eeba40861a",
+    "layer": "random"
+  },
+  {
+    "name": "abs-tudelft-tydi-chisel",
+    "url": "https://github.com/abs-tudelft/Tydi-Chisel",
+    "sha": "c6bbb3792ce2a250f4996f82b299ac4021bdbf00",
+    "layer": "random"
+  },
+  {
+    "name": "mikeyankeeoscarbeta-ezdoombake",
+    "url": "https://github.com/MikeYankeeOscarBeta/EZDOOMBAKE",
+    "sha": "b506b8af79fce3dfac645d736ec592818867da80",
+    "layer": "random"
+  },
+  {
+    "name": "matthiasbruns-rxandroid2-retrofit2",
+    "url": "https://github.com/matthiasbruns/rxandroid2-retrofit2",
+    "sha": "32240e49c64a95823f72b7979a0eef68ea888073",
+    "layer": "random"
+  },
+  {
+    "name": "bluehalo-ngx-leaflet-d3",
+    "url": "https://github.com/bluehalo/ngx-leaflet-d3",
+    "sha": "88ea36fa989fcb8cfb268001751c9467172fa276",
+    "layer": "random"
+  },
+  {
+    "name": "aisamanra-rrecutils",
+    "url": "https://github.com/aisamanra/rrecutils",
+    "sha": "beb735bcd99b2cdeee0071ceeb6f8590acecc63a",
+    "layer": "random"
+  },
+  {
+    "name": "vercel-microfrontends",
+    "url": "https://github.com/vercel/microfrontends",
+    "sha": "f2a41a5173212570bb69c84c76f6e5058112a3c7",
+    "layer": "random"
+  },
+  {
+    "name": "dgilland-cacheout",
+    "url": "https://github.com/dgilland/cacheout",
+    "sha": "6d7100f2a05c1bc2915c5b4463d8f9b433453298",
+    "layer": "random"
+  },
+  {
+    "name": "hanxinking-nanogpt-zynq-backups",
+    "url": "https://github.com/HanxinKING/nanogpt-zynq-backups",
+    "sha": "dfa651ce3dc69b6dd1c557938c18ca03345af814",
+    "layer": "random"
+  },
+  {
+    "name": "arcaniax-development-builders-utilities",
+    "url": "https://github.com/Arcaniax-Development/Builders-Utilities",
+    "sha": "2f1810e352ab89e55f47c41d1c19b9120d4ab2ef",
+    "layer": "random"
+  },
+  {
+    "name": "ff14-advanced-market-search-azerothauctionassassin",
+    "url": "https://github.com/ff14-advanced-market-search/AzerothAuctionAssassin",
+    "sha": "750153165e998fbedbc0f5f7b952fae8843ab548",
+    "layer": "random"
+  },
+  {
+    "name": "polymerelements-iron-localstorage",
+    "url": "https://github.com/PolymerElements/iron-localstorage",
+    "sha": "479cbf2f1ccd660db51c5179a0b32269bbf15837",
+    "layer": "random"
+  },
+  {
+    "name": "jolespin-kegg-pathway-profiler",
+    "url": "https://github.com/jolespin/kegg_pathway_profiler",
+    "sha": "656145eec04df7f4c72bad80b64867adc5b02ab3",
+    "layer": "random"
+  },
+  {
+    "name": "openwebwork-webwork-open-problem-library",
+    "url": "https://github.com/openwebwork/webwork-open-problem-library",
+    "sha": "e632b510afd1983e70b0d5bbeb5631dbdcb95823",
+    "layer": "random"
+  },
+  {
+    "name": "kyhau-saml2aws-multi",
+    "url": "https://github.com/kyhau/saml2aws-multi",
+    "sha": "e71f1fe236105f8012fd6a92f4d8cdd52da119a6",
+    "layer": "random"
+  },
+  {
+    "name": "brownag-rgeomorphon",
+    "url": "https://github.com/brownag/rgeomorphon",
+    "sha": "706fcc871a9a7def263b11dd71722ea032636379",
+    "layer": "random"
+  },
+  {
+    "name": "alezost-config",
+    "url": "https://github.com/alezost/config",
+    "sha": "a836b8598e006d223b87ddd98dce54b73530386d",
+    "layer": "random"
+  },
+  {
+    "name": "xvalegendary-securebootbypass",
+    "url": "https://github.com/xvalegendary/SecureBootBypass",
+    "sha": "b6cd32aa7fdf499b9b3fda9c4b63fddd5eff07f0",
+    "layer": "random"
+  },
+  {
+    "name": "sidsector9-manimwire",
+    "url": "https://github.com/Sidsector9/ManimWire",
+    "sha": "0b6a2e5cb788e51064bd05d9b40a33c4d8d8ce52",
+    "layer": "random"
+  },
+  {
+    "name": "vastyen-essential",
+    "url": "https://github.com/Vastyen/essential",
+    "sha": "8f8daf225a4643bfa12a0b5874d7852689ce228f",
+    "layer": "random"
+  },
+  {
+    "name": "javlonbek1233-cryptovision",
+    "url": "https://github.com/Javlonbek1233/CryptoVision",
+    "sha": "a68b66b83dc0d4636a444490f0fdba7810cf8ff8",
+    "layer": "random"
+  },
+  {
+    "name": "tmm1-stackprof",
+    "url": "https://github.com/tmm1/stackprof",
+    "sha": "804add8350705e33a1e4a671e0ad9ce5e304d8f3",
+    "layer": "random"
+  },
+  {
+    "name": "m-webster-codedistancepypi",
+    "url": "https://github.com/m-webster/codeDistancePYPI",
+    "sha": "a4afe9c09bbf5790da9ecc05b65c5b62343979ad",
+    "layer": "random"
+  },
+  {
+    "name": "java-chains-chains-plugin-demo",
+    "url": "https://github.com/Java-Chains/chains-plugin-demo",
+    "sha": "d21b162ca553d6c5ae7e4b9f740db6e8d5350b67",
+    "layer": "random"
+  },
+  {
+    "name": "innovator-zero-piper-aio",
+    "url": "https://github.com/innovator-zero/piper-aio",
+    "sha": "8229e3e0fc5b6e190137190e01ab3e9de2d474c6",
+    "layer": "random"
+  },
+  {
+    "name": "devyuji-isave",
+    "url": "https://github.com/devyuji/isave",
+    "sha": "3d419d528ff4a1f0b7136b1fa5c01c7500f06454",
+    "layer": "random"
+  },
+  {
+    "name": "bstillitano-scyther",
+    "url": "https://github.com/bstillitano/scyther",
+    "sha": "7908c60f1ec01a47d89a3c0cb5dac04092783c6c",
+    "layer": "random"
+  },
+  {
+    "name": "withlang-dev-open-jai",
+    "url": "https://github.com/withlang-dev/open-jai",
+    "sha": "264ba53218bf0e55bbc328197b312fe704496224",
+    "layer": "random"
+  },
+  {
+    "name": "vaadin-charts",
+    "url": "https://github.com/vaadin/charts",
+    "sha": "49d2e45997f6911ecdd8cff6a925ed286ec26f11",
+    "layer": "random"
+  },
+  {
+    "name": "hacking-notes-vulnscan",
+    "url": "https://github.com/Hacking-Notes/VulnScan",
+    "sha": "e7778d6abb5dd1716ba6d39cdf24bde9f0905b0b",
+    "layer": "random"
+  },
+  {
+    "name": "90-008-nix-cargo-integration",
+    "url": "https://github.com/90-008/nix-cargo-integration",
+    "sha": "def8f11f27643fa6a3792b3604c6697c6e81b5fc",
+    "layer": "random"
+  },
+  {
+    "name": "junaidify-video-clipper",
+    "url": "https://github.com/junaidify/video_clipper",
+    "sha": "40674e55a9ac51aa33c695b3efeed7522bfc47e5",
+    "layer": "random"
+  },
+  {
+    "name": "mgoellnitz-trackdown",
+    "url": "https://github.com/mgoellnitz/trackdown",
+    "sha": "2d2daa5081ba9b3062c3d624b6771fdcc69a8f40",
+    "layer": "random"
+  },
+  {
+    "name": "aws-samples-aws-saas-factory-hybrid-saas-identity",
+    "url": "https://github.com/aws-samples/aws-saas-factory-hybrid-saas-identity",
+    "sha": "8cf4597a5284d1be5c3494d705cfc2eeb722231f",
+    "layer": "random"
+  },
+  {
+    "name": "shicks-marginfix",
+    "url": "https://github.com/shicks/marginfix",
+    "sha": "7becec247d4bc8acd3876eb24dabf193ea602356",
+    "layer": "random"
+  },
+  {
+    "name": "open-telemetry-opentelemetry-go-build-tools",
+    "url": "https://github.com/open-telemetry/opentelemetry-go-build-tools",
+    "sha": "18bea919227fcc7e476367d6487daec2855cd2bc",
+    "layer": "random"
+  },
+  {
+    "name": "apache-netbeans-website",
+    "url": "https://github.com/apache/netbeans-website",
+    "sha": "9d3863d68e694ac364ecff1c1dbfeba1e7169026",
+    "layer": "random"
+  },
+  {
+    "name": "nbrangerf-thumb-brake-3s",
+    "url": "https://github.com/NBrangerF/thumb-brake-3s",
+    "sha": "db12b8b255e759570d37425d8f27bbb22bc344c8",
+    "layer": "random"
+  },
+  {
+    "name": "piyushverma0-android-agent-skills",
+    "url": "https://github.com/piyushverma0/android-agent-skills",
+    "sha": "bb5b81ed474a40e5aad0d8a1115044af963a0ea9",
+    "layer": "random"
+  },
+  {
+    "name": "duckdb-extension-template",
+    "url": "https://github.com/duckdb/extension-template",
+    "sha": "fd1d3a78f95168640b1354e115b40d8abb5d5931",
+    "layer": "random"
+  },
+  {
+    "name": "divmain-treebeard",
+    "url": "https://github.com/divmain/treebeard",
+    "sha": "7f7018d28ed4892a1036aaad76bbf6807fe8236c",
+    "layer": "random"
+  },
+  {
+    "name": "neruneru0419-yukimi-learning",
+    "url": "https://github.com/neruneru0419/yukimi_learning",
+    "sha": "ea6da994c64513585b4f312c747fe0dc50b430ce",
+    "layer": "random"
+  },
+  {
+    "name": "kicksecure-bootclockrandomization",
+    "url": "https://github.com/Kicksecure/bootclockrandomization",
+    "sha": "8f50765349807c68853290be2fa770148ee0cd89",
+    "layer": "random"
+  },
+  {
+    "name": "commonwealthga-commonwealth-ga-server",
+    "url": "https://github.com/commonwealthga/commonwealth-ga-server",
+    "sha": "18eb1ebe3b8d6b90b544277519aa9104dbb58b6e",
+    "layer": "random"
+  },
+  {
+    "name": "afaanbilal-bookstore",
+    "url": "https://github.com/AfaanBilal/bookstore",
+    "sha": "9f40b17095fabef255f7114d1d34c12038b7213c",
+    "layer": "random"
+  },
+  {
+    "name": "walkman2021-pc-dsdt-patches",
+    "url": "https://github.com/walkman2021/PC-DSDT-Patches",
+    "sha": "6740b9316e91f3debf5adba7c66f3f68ed3f80dd",
+    "layer": "random"
+  },
+  {
+    "name": "fredrikaverpil-neotest-golang",
+    "url": "https://github.com/fredrikaverpil/neotest-golang",
+    "sha": "65b2be63c3de00e6f15c05388ebdc8d603dbd727",
+    "layer": "random"
+  },
+  {
+    "name": "nascab-nascabos",
+    "url": "https://github.com/nascab/NasCabOS",
+    "sha": "ec22d7dd39294436a2b1a194d7547ed96657c556",
+    "layer": "random"
+  },
+  {
+    "name": "dapr-mechanical-markdown",
+    "url": "https://github.com/dapr/mechanical-markdown",
+    "sha": "7a5ea4b70437f1ebcc82d1756976fcbd16e322e1",
+    "layer": "random"
+  },
+  {
+    "name": "coclique-inkclip",
+    "url": "https://github.com/coclique/inkclip",
+    "sha": "e5e7558c5fe2dabfcf5643110f05b7ec460643f3",
+    "layer": "random"
+  },
+  {
+    "name": "ptiede-vida-jl",
+    "url": "https://github.com/ptiede/VIDA.jl",
+    "sha": "430689bac38072aaf218d5cd413d4f7263d0037c",
+    "layer": "random"
+  },
+  {
+    "name": "turbot-steampipe-postgres-fdw",
+    "url": "https://github.com/turbot/steampipe-postgres-fdw",
+    "sha": "4018443520b4aec53a9b47f09742bac784d03b2d",
+    "layer": "random"
+  },
+  {
+    "name": "embassy-rs-ekv",
+    "url": "https://github.com/embassy-rs/ekv",
+    "sha": "41345215549324d6ef171400c221e2871dadc836",
+    "layer": "random"
+  },
+  {
+    "name": "wzab-agwb",
+    "url": "https://github.com/wzab/agwb",
+    "sha": "fc805536cb7d7ab95b5768778e990c997bd0f210",
+    "layer": "random"
+  },
+  {
+    "name": "getsentry-github",
+    "url": "https://github.com/getsentry/.github",
+    "sha": "3bb1a80e521fb97cf299b1c460daf9f61566aa47",
+    "layer": "random"
+  },
+  {
+    "name": "postcss-postcss-selector-parser",
+    "url": "https://github.com/postcss/postcss-selector-parser",
+    "sha": "7591d8d67f42fde79490d5e9c8fac0b8deb43fa2",
+    "layer": "random"
+  },
+  {
+    "name": "mayflower-contextmine",
+    "url": "https://github.com/mayflower/contextmine",
+    "sha": "620282f459ff5a31a8aa6c642ba85d8fc92fd416",
+    "layer": "random"
+  },
+  {
+    "name": "moqui-mantle-edi",
+    "url": "https://github.com/moqui/mantle-edi",
+    "sha": "134acb646fe607c2980473c085fd7fb9d9042678",
+    "layer": "random"
+  },
+  {
+    "name": "rzeldent-esp32-smartdisplay-demo",
+    "url": "https://github.com/rzeldent/esp32-smartdisplay-demo",
+    "sha": "b0ef22ff0dae747b16b4d9bf0423987f589af7d0",
+    "layer": "random"
+  },
+  {
+    "name": "themalwareguardian-awesome-bootkits-rootkits-development",
+    "url": "https://github.com/TheMalwareGuardian/Awesome-Bootkits-Rootkits-Development",
+    "sha": "b31df864a876f827f792ed4f0f28e58f22d203eb",
+    "layer": "random"
+  },
+  {
+    "name": "kyant0-shapes",
+    "url": "https://github.com/Kyant0/Shapes",
+    "sha": "032af02e0ee88bd050d77997f25dd8adc2c49e1d",
+    "layer": "random"
+  },
+  {
+    "name": "khoasuperman-finmori",
+    "url": "https://github.com/KhoaSuperman/Finmori",
+    "sha": "fdf892d4a173b3d492250784cf1329b25017eb21",
+    "layer": "random"
+  },
+  {
+    "name": "linruopu-knowledge-qa-assistant",
+    "url": "https://github.com/Linruopu/KNOWLEDGE_QA_ASSISTANT",
+    "sha": "19c23ddc69ea191234bd3cf8c2f89235198497f4",
+    "layer": "random"
+  },
+  {
+    "name": "tereneckla-mod-profession-experience",
+    "url": "https://github.com/Tereneckla/mod-profession-experience",
+    "sha": "d1bd97085d27bb8de11d13af097d02460556b0f3",
+    "layer": "random"
+  },
+  {
+    "name": "apimartjwjg-api-gateway-pricing-cn",
+    "url": "https://github.com/apimartjwjg/api-gateway-pricing-cn",
+    "sha": "43784cb8e850fe6871acba6ea937a970b821757e",
+    "layer": "random"
+  },
+  {
+    "name": "aikidosec-firewall-php",
+    "url": "https://github.com/AikidoSec/firewall-php",
+    "sha": "e2762825381f5b9e1721ebaf9f82c7b49bb018c0",
+    "layer": "random"
+  },
+  {
+    "name": "zendesk-term-check",
+    "url": "https://github.com/zendesk/term-check",
+    "sha": "3c4459363d0ebb724318a36d9e05fb21e259f964",
+    "layer": "random"
+  },
+  {
+    "name": "sbt-sbt-protobuf",
+    "url": "https://github.com/sbt/sbt-protobuf",
+    "sha": "2fa131f08683a0bd70fa002ce9f957163961b6c3",
+    "layer": "random"
+  },
+  {
+    "name": "michaeltmatthews-jax2d",
+    "url": "https://github.com/MichaelTMatthews/Jax2D",
+    "sha": "3c902a2b8e784577221907b271d3961b79fff378",
+    "layer": "random"
+  },
+  {
+    "name": "hdev505-vuejs-boilerplate",
+    "url": "https://github.com/hdev505/vuejs_boilerplate",
+    "sha": "851e5a85fa1987fe3047fb6ce0e9012b57d0fbbd",
+    "layer": "random"
+  },
+  {
+    "name": "wizard-software-nexum",
+    "url": "https://github.com/Wizard-Software/nexum",
+    "sha": "8139a5b0fd2587d1981138a90b8cb2e41f6c7044",
+    "layer": "random"
+  },
+  {
+    "name": "nom0re-pallypower-improved-3-3-5",
+    "url": "https://github.com/NoM0Re/PallyPower-Improved-3.3.5",
+    "sha": "8a87a53bb16ff680e5a2bff0977385235e7553a2",
+    "layer": "random"
+  },
+  {
+    "name": "fltwr-generative-image-dynamics",
+    "url": "https://github.com/fltwr/generative-image-dynamics",
+    "sha": "06cf3fa84778e85026e2a288dd6b228d6f116d20",
+    "layer": "random"
+  },
+  {
+    "name": "fracpete-python-weka-wrapper3-examples",
+    "url": "https://github.com/fracpete/python-weka-wrapper3-examples",
+    "sha": "8d3c43bbe42fa8ed171f7e80d08de146a63ecc6a",
+    "layer": "random"
+  },
+  {
+    "name": "thijse-arduino-cmdmessenger",
+    "url": "https://github.com/thijse/Arduino-CmdMessenger",
+    "sha": "a9edc4cd6ba43fa508cdea41ec047c3b86ad004d",
+    "layer": "random"
+  },
+  {
+    "name": "xlab-vorbis-go",
+    "url": "https://github.com/xlab/vorbis-go",
+    "sha": "cfbc67241c69b72f281ab3e1303ca90719e66d00",
+    "layer": "random"
+  },
+  {
+    "name": "nosfertm-perchance-character-database",
+    "url": "https://github.com/nosfertm/perchance-character-database",
+    "sha": "4710ee1ae67e46b01c405f6432fba53ec44f77fe",
+    "layer": "random"
+  },
+  {
+    "name": "nlee0212-blend",
+    "url": "https://github.com/nlee0212/BLEnD",
+    "sha": "7b9c131719e7fe5f9bed0f8b855532d613cc9f2b",
+    "layer": "random"
+  },
+  {
+    "name": "octopyid-laravel-impersonate",
+    "url": "https://github.com/octopyid/laravel-impersonate",
+    "sha": "998a12dcb5253da88e8fdf293b7a47fcc3707d1a",
+    "layer": "random"
+  },
+  {
+    "name": "hpdell-typst-starter-journal-article",
+    "url": "https://github.com/HPDell/typst-starter-journal-article",
+    "sha": "2ee6d616bf5baebc7e8177c823a0c8aadd8bf49c",
+    "layer": "random"
+  },
+  {
+    "name": "trivial-garbage-trivial-garbage",
+    "url": "https://github.com/trivial-garbage/trivial-garbage",
+    "sha": "f0663f7b0c900ed78ac19f6db306e7c6cac999fd",
+    "layer": "random"
+  },
+  {
+    "name": "devczero-tanstackstart-convex-clerk-polarsh-starter",
+    "url": "https://github.com/devczero/tanstackstart-convex-clerk-polarsh-starter",
+    "sha": "8ac113e194547520944f0a69c1a5ac9717e78af2",
+    "layer": "random"
+  },
+  {
+    "name": "drittich-dnstube",
+    "url": "https://github.com/drittich/DnsTube",
+    "sha": "37a37c8131e6d36290cc4ff51d4ebdfeb4e3bc1c",
+    "layer": "random"
+  },
+  {
+    "name": "cyber-hive-security-ion-drift",
+    "url": "https://github.com/Cyber-Hive-Security/ion-drift",
+    "sha": "913f2fe7070eb4c8cc4ca8a54542b4a08d697817",
+    "layer": "random"
+  },
+  {
+    "name": "senshi-x-comdirectpostboxdownloader",
+    "url": "https://github.com/senshi-x/ComdirectPostboxDownloader",
+    "sha": "49174167ea37df430979a77df4db04e1256f9a9e",
+    "layer": "random"
+  },
+  {
+    "name": "drozdowsky-django-tracking-model",
+    "url": "https://github.com/drozdowsky/django-tracking-model",
+    "sha": "51274ea5c08b4d1fa52150172487d5036648c6ed",
+    "layer": "random"
+  },
+  {
+    "name": "mlcil-scikit-fingerprints",
+    "url": "https://github.com/MLCIL/scikit-fingerprints",
+    "sha": "db5504ac80bc820b288ddc7483139875b3279a3f",
+    "layer": "random"
+  },
+  {
+    "name": "hari2k7-portfolio",
+    "url": "https://github.com/hari2k7/portfolio",
+    "sha": "1043feb8f7612503ec9b0103bfe3c0fd36f3b1a0",
+    "layer": "random"
+  },
+  {
+    "name": "cbaggers-cepl",
+    "url": "https://github.com/cbaggers/cepl",
+    "sha": "88e9d005e86c54d681b640bbd14f0ef25fb449d4",
+    "layer": "random"
+  },
+  {
+    "name": "shawn220528-ozon-erp",
+    "url": "https://github.com/Shawn220528/ozon-erp",
+    "sha": "79ab4dd71c0d4330e57b831ef1a0c691f384f0e7",
+    "layer": "random"
+  },
+  {
+    "name": "redscientistlabs-rtcv",
+    "url": "https://github.com/redscientistlabs/RTCV",
+    "sha": "a2cf17ea3fc7193100a8122a39913e7445109129",
+    "layer": "random"
+  },
+  {
+    "name": "gkaramanis-30daychartchallenge",
+    "url": "https://github.com/gkaramanis/30DayChartChallenge",
+    "sha": "58ac908a7f762f9893431ed08657b894a7f261e4",
+    "layer": "random"
+  },
+  {
+    "name": "patchself-codexmacro",
+    "url": "https://github.com/Patchself/CodexMacro",
+    "sha": "18b9b2de7c6541a74d305d5af63f10bf9117a1a8",
+    "layer": "random"
+  },
+  {
+    "name": "zsymax-opcnetapi",
+    "url": "https://github.com/ZSYMAX/OpcNetApi",
+    "sha": "8d94872df4291e96c4873141842e512380bd1aef",
+    "layer": "random"
+  },
+  {
+    "name": "berkleytechnologyservices-restdocs-spec-example",
+    "url": "https://github.com/BerkleyTechnologyServices/restdocs-spec-example",
+    "sha": "ff46045aeed6d61a4b9205cfc5f9f39756f6a7c3",
+    "layer": "random"
+  },
+  {
+    "name": "nielsfaber-alarmo-card",
+    "url": "https://github.com/nielsfaber/alarmo-card",
+    "sha": "fa2bbdc3f7c9e7597fc8e53eb9116420b0bb5399",
+    "layer": "random"
+  },
+  {
+    "name": "bobbydigitales-move-anything",
+    "url": "https://github.com/bobbydigitales/move-anything",
+    "sha": "15b212ef31cff818ac98560fa2bef64228df62cf",
+    "layer": "random"
+  },
+  {
+    "name": "coolbat-anidiagram",
+    "url": "https://github.com/coolbat/anidiagram",
+    "sha": "283a40c37efcb5ab05b7fd605fa337721aa7b7de",
+    "layer": "random"
+  },
+  {
+    "name": "reactplay-react-play",
+    "url": "https://github.com/reactplay/react-play",
+    "sha": "a26e419d00d54c4ce1735916129e6f4d3c706889",
+    "layer": "random"
+  },
+  {
+    "name": "azeemqureshi-max-petal",
+    "url": "https://github.com/Azeemqureshi-max/PETAL",
+    "sha": "8a7cf751e5b5f8303026e7f0d1078f001063e9e5",
+    "layer": "random"
+  },
+  {
+    "name": "yabeda-rb-yabeda-rails",
+    "url": "https://github.com/yabeda-rb/yabeda-rails",
+    "sha": "9fbdca63efe2f00b48a9810e70d05acf47b545b1",
+    "layer": "random"
+  },
+  {
+    "name": "ttscoff-bunch",
+    "url": "https://github.com/ttscoff/bunch",
+    "sha": "d68595cd23dbf5840a7e8841cbbd941779341937",
+    "layer": "random"
+  },
+  {
+    "name": "pcapriotti-optparse-applicative",
+    "url": "https://github.com/pcapriotti/optparse-applicative",
+    "sha": "a6ca1a25bfad06f660cd67df75349cfcda567a8f",
+    "layer": "random"
+  },
+  {
+    "name": "signalfi-moltaudit",
+    "url": "https://github.com/signalfi/MoltAudit",
+    "sha": "bada34eccaf56f7ace1d968ad9c27ef4be213ed2",
+    "layer": "random"
+  },
+  {
+    "name": "vladutilie-euplatesc",
+    "url": "https://github.com/vladutilie/euplatesc",
+    "sha": "f2599a52c1982fa47d0010edd6de8b6693e2cd4a",
+    "layer": "random"
+  },
+  {
+    "name": "aestheticsuraj234-fullstack-chat-app-new-yt",
+    "url": "https://github.com/Aestheticsuraj234/fullstack-chat-app-new-yt",
+    "sha": "97b408ddfeeddef6d7435dc1e138c6aeddfab91b",
+    "layer": "random"
+  },
+  {
+    "name": "hupo-psi-mzml",
+    "url": "https://github.com/HUPO-PSI/mzML",
+    "sha": "47c499dad822c63e86c0c2d030ccfffa9f6c28f5",
+    "layer": "random"
+  },
+  {
+    "name": "opcfoundation-ua-lds",
+    "url": "https://github.com/OPCFoundation/UA-LDS",
+    "sha": "5a217bec997ff4af0bbcfc83ebc7e9d878b1d44a",
+    "layer": "random"
+  },
+  {
+    "name": "vntechies-aws-saa-c03",
+    "url": "https://github.com/vntechies/aws-saa-c03",
+    "sha": "7a34fba607ced8b279535da2e2982e8bcb80766c",
+    "layer": "random"
+  },
+  {
+    "name": "sammy183-uavdex",
+    "url": "https://github.com/sammy183/UAVDEX",
+    "sha": "36269e26b3f9f8d7e44bcd78a2f98302f85a82d0",
+    "layer": "random"
+  },
+  {
+    "name": "caligo-mentis-smart-bus",
+    "url": "https://github.com/caligo-mentis/smart-bus",
+    "sha": "97d1ad4ddd9d4fdc0911b76a371afd656fbfd938",
+    "layer": "random"
+  },
+  {
+    "name": "ieedan-errf",
+    "url": "https://github.com/ieedan/errf",
+    "sha": "7117bc40dbb1bf9dbb71135ddeabbe9d2ff73de8",
+    "layer": "random"
+  },
+  {
+    "name": "lienjack-learn-agent",
+    "url": "https://github.com/LienJack/learn-agent",
+    "sha": "7b7c3e195ed1cb5705bc17951e200fd07e59de79",
+    "layer": "random"
+  },
+  {
+    "name": "hugefiver-mystars",
+    "url": "https://github.com/hugefiver/mystars",
+    "sha": "41a3d2b538d11b94a91a9ce20a832051be183d1d",
+    "layer": "random"
+  },
+  {
+    "name": "vortexofrainbows-sots",
+    "url": "https://github.com/VortexOfRainbows/SOTS",
+    "sha": "99e6d4e814756306a74c23bff5fbd8b85b0f4acc",
+    "layer": "random"
+  },
+  {
+    "name": "dandandans-stolemojis",
+    "url": "https://github.com/Dandandans/stolemojis",
+    "sha": "0eba58d27a030a15dacec9fafe4fe8f43c7df4a7",
+    "layer": "random"
+  },
+  {
+    "name": "ralphbarendse-swarmwright",
+    "url": "https://github.com/ralphbarendse/swarmwright",
+    "sha": "760f241de59795c794ab8e608954a662de1fbd90",
+    "layer": "random"
+  },
+  {
+    "name": "pydcs-dcs",
+    "url": "https://github.com/pydcs/dcs",
+    "sha": "5ddcc63a2dcd661e16b14f7aa43219b93044855d",
+    "layer": "random"
+  },
+  {
+    "name": "pipegenie-pipegenie",
+    "url": "https://github.com/PipeGenie/PipeGenie",
+    "sha": "ba65cc061fb23c8a9802c2810755d09e49baae38",
+    "layer": "random"
+  },
+  {
+    "name": "akamai-akamaiopen-edgegrid-c-sharp",
+    "url": "https://github.com/akamai/AkamaiOPEN-edgegrid-C-Sharp",
+    "sha": "97b7d6e471f549c5028e7e54bd6f8f95757ac197",
+    "layer": "random"
+  },
+  {
+    "name": "gdani31-factorio-3d-mod",
+    "url": "https://github.com/GDani31/factorio-3d-mod",
+    "sha": "9da9769c2a9c6eb3f2fba4ebebb6d3d718df0e01",
+    "layer": "random"
+  },
+  {
+    "name": "dominic-pi-sunyer-web-speed-oss",
+    "url": "https://github.com/Dominic-Pi-Sunyer/web-speed-oss",
+    "sha": "794497de08fca475175748a8f88a50abecc7e6ba",
+    "layer": "random"
+  },
+  {
+    "name": "decrn-tilogics",
+    "url": "https://github.com/decrn/tilogics",
+    "sha": "3d76b1c008c3b227bbad6fea6155a012c50c3d91",
+    "layer": "random"
+  },
+  {
+    "name": "ad-si-flatcv",
+    "url": "https://github.com/ad-si/FlatCV",
+    "sha": "448e31d8b0a2f6e1b25600b518d0b240f0326fce",
+    "layer": "random"
+  },
+  {
+    "name": "future-element-pinset",
+    "url": "https://github.com/Future-Element/pinset",
+    "sha": "a0c27bcb706b6392c3e5d4b7ba6d9b4842e0f9ff",
+    "layer": "random"
+  },
+  {
+    "name": "canterbury-air-patrol-search-management-map",
+    "url": "https://github.com/canterbury-air-patrol/search-management-map",
+    "sha": "ce6a76a49c45f379988ab13780193db500e17379",
+    "layer": "random"
+  },
+  {
+    "name": "mojolicious-mojo-js",
+    "url": "https://github.com/mojolicious/mojo.js",
+    "sha": "6e4861f6340be3ae2b0ddca28d488cbc71136004",
+    "layer": "random"
+  },
+  {
+    "name": "toshism-netz",
+    "url": "https://github.com/toshism/netz",
+    "sha": "5d13d471bf43860a3c29b6828b803c50a2dc573c",
+    "layer": "random"
+  },
+  {
+    "name": "spotify-java-locales",
+    "url": "https://github.com/spotify/java-locales",
+    "sha": "8f2e58316356733936c9305f45fafca6aefec333",
+    "layer": "random"
+  },
+  {
+    "name": "rizavelioglu-awesome-virtual-try-off",
+    "url": "https://github.com/rizavelioglu/awesome-virtual-try-off",
+    "sha": "d94c8d3784440361cd6f5731e4dba4265ffa8514",
+    "layer": "random"
+  },
+  {
+    "name": "kzhdev-alpaca-zorro-plugin",
+    "url": "https://github.com/kzhdev/alpaca_zorro_plugin",
+    "sha": "2adf24a9948da8764186185a1b98099243a883c5",
+    "layer": "random"
+  },
+  {
+    "name": "dineshsonachalam-tech-courses-search-engine",
+    "url": "https://github.com/dineshsonachalam/tech-courses-search-engine",
+    "sha": "ba5a6bd6c4791de3102af91450b8542a42a45d19",
+    "layer": "random"
+  },
+  {
+    "name": "umio-yasuno-libdrm-amdgpu-sys-rs",
+    "url": "https://github.com/Umio-Yasuno/libdrm-amdgpu-sys-rs",
+    "sha": "c03a1880c0ddb5fb78adbf8f785e9ebe4e5195a8",
+    "layer": "random"
+  },
+  {
+    "name": "i0ek3-fuckit",
+    "url": "https://github.com/i0Ek3/fuckit",
+    "sha": "0b6aa62642a80396f896596564e7f896f7af41af",
+    "layer": "random"
+  },
+  {
+    "name": "stovoy-codex-notify-chime",
+    "url": "https://github.com/Stovoy/codex-notify-chime",
+    "sha": "ca452f122b43c25d024eded69448f9d428b0651e",
+    "layer": "random"
+  },
+  {
+    "name": "jerszhub-dragon-q6a-android",
+    "url": "https://github.com/JerszHub/dragon-q6a-android",
+    "sha": "5d0a7848bf2eab511f8857264c216a1e8fc0b6b2",
+    "layer": "random"
+  },
+  {
+    "name": "tehryanx-whorl",
+    "url": "https://github.com/tehryanx/whorl",
+    "sha": "6e26b6736d660fffbb8deddb993adbe7392bcca2",
+    "layer": "random"
+  },
+  {
+    "name": "romeov-ksvd-jl",
+    "url": "https://github.com/RomeoV/KSVD.jl",
+    "sha": "8e8aca272ce9b132cb85b2ec99697f6563804ac8",
+    "layer": "random"
+  },
+  {
+    "name": "prismrebalance-prism",
+    "url": "https://github.com/PrismRebalance/Prism",
+    "sha": "9463fcc71b02054fb5b5a0f38fb665dd9bf3371f",
+    "layer": "random"
+  },
+  {
+    "name": "srwither-openspeedrun",
+    "url": "https://github.com/SrWither/OpenSpeedRun",
+    "sha": "e827ae13aede91d6da013dc572f2fb46ef41981e",
+    "layer": "random"
+  },
+  {
+    "name": "li-yachuan-edmb",
+    "url": "https://github.com/Li-yachuan/EDMB",
+    "sha": "6a29077da299fae2040f080100144e4ad11b58d8",
+    "layer": "random"
+  },
+  {
+    "name": "pdb-redo-libcifpp",
+    "url": "https://github.com/PDB-REDO/libcifpp",
+    "sha": "20971e1ee96beefc3a7bf2427cfbb09027b4ecde",
+    "layer": "random"
+  },
+  {
+    "name": "hjerpbakk-openfolderinvscode",
+    "url": "https://github.com/hjerpbakk/OpenFolderInVSCode",
+    "sha": "9601f3809d53abf98bb6b398fcb310a5be2e072f",
+    "layer": "random"
+  },
+  {
+    "name": "generalroboticslab-dukehumanoidv1",
+    "url": "https://github.com/generalroboticslab/DukeHumanoidv1",
+    "sha": "fe60f14c53d342e5bdef90761290aaef34730d8e",
+    "layer": "random"
+  },
+  {
+    "name": "jmagly-aiwg",
+    "url": "https://github.com/jmagly/aiwg",
+    "sha": "ac56f6a215342ed836e51f1945653968b95edd64",
+    "layer": "random"
+  },
+  {
+    "name": "bablilayoub-openhole",
+    "url": "https://github.com/bablilayoub/openhole",
+    "sha": "5bf2545f15fc1141dac7a3d92256302d46d3d00d",
+    "layer": "random"
+  },
+  {
+    "name": "hoxxep-isitworththetime",
+    "url": "https://github.com/hoxxep/isitworththetime",
+    "sha": "4e3cac3d8371eea45a16d8b19c8948c8b20d53d0",
+    "layer": "random"
+  },
+  {
+    "name": "mnfst-startup-info",
+    "url": "https://github.com/mnfst/startup-info",
+    "sha": "740ae20de812be4516494584ad7db451edbb2950",
+    "layer": "random"
+  },
+  {
+    "name": "laolunsi-spring-boot-examples",
+    "url": "https://github.com/laolunsi/spring-boot-examples",
+    "sha": "b266c7db6baa9a4d96fcc1b9a9b54954c138bfbe",
+    "layer": "random"
+  },
+  {
+    "name": "marcuscaisey-please-nvim",
+    "url": "https://github.com/marcuscaisey/please.nvim",
+    "sha": "7fdedc5fef59cc9c5c93415d06e80578b109caf1",
+    "layer": "random"
+  },
+  {
+    "name": "hylarucoder-prompts-for-vibe-coder",
+    "url": "https://github.com/hylarucoder/prompts-for-vibe-coder",
+    "sha": "cc43a2bda2d35367ec24e09cb43bc4f5177847b7",
+    "layer": "random"
+  },
+  {
+    "name": "ethereum-homebrew-ethereum",
+    "url": "https://github.com/ethereum/homebrew-ethereum",
+    "sha": "f72246d60066d65134cae9bf9d7ea410c7b959dc",
+    "layer": "random"
+  },
+  {
+    "name": "tmghd272-bc250-custom-bios-logo",
+    "url": "https://github.com/tmghd272/bc250-custom-bios-logo",
+    "sha": "375750bb15b01d0bc40ca37c73c5884b63ffb2df",
+    "layer": "random"
+  },
+  {
+    "name": "vitejs-ecosystem",
+    "url": "https://github.com/vitejs/ecosystem",
+    "sha": "c4213d87db548d029c2245490d574f6b7b0d300b",
+    "layer": "random"
+  },
+  {
+    "name": "pautown-llizardos",
+    "url": "https://github.com/pautown/llizardOS",
+    "sha": "60bc13e1142612edb5bc9aa27d3355e747ea8fdb",
+    "layer": "random"
+  },
+  {
+    "name": "chainguard-dev-image-comparison",
+    "url": "https://github.com/chainguard-dev/image-comparison",
+    "sha": "fe32f4381943dcfcaa2d24326a3c0a894b7eb666",
+    "layer": "random"
+  },
+  {
+    "name": "zzamong5-gpt-image-2",
+    "url": "https://github.com/zzamong5/gpt-image-2",
+    "sha": "91921db1d21ce2ee8acafc39afd29e5502def5ca",
+    "layer": "random"
+  },
+  {
+    "name": "sunhailin-leo-fastapi-profiler",
+    "url": "https://github.com/sunhailin-Leo/fastapi_profiler",
+    "sha": "16e03057178dae24572f109dfae2b6d4896ec6dd",
+    "layer": "random"
+  },
+  {
+    "name": "royisme-pikabaka",
+    "url": "https://github.com/royisme/pikabaka",
+    "sha": "ae66eb0c795a5653960ad4534a9e115e173af980",
+    "layer": "random"
+  },
+  {
+    "name": "localstack-verdin",
+    "url": "https://github.com/localstack/verdin",
+    "sha": "25f45467d4bf9aa46eff32004405060c10c1c1a4",
+    "layer": "random"
+  },
+  {
+    "name": "brgz3-ps5-log-collector",
+    "url": "https://github.com/BRGZ3/PS5-Log-Collector",
+    "sha": "fc463aef1e7d43c1b0a08c1452b863a932ea2f78",
+    "layer": "random"
+  },
+  {
+    "name": "itsubaki-qasm",
+    "url": "https://github.com/itsubaki/qasm",
+    "sha": "95647027278093a4af205d8cbb78d8f1a6e95c27",
+    "layer": "random"
+  },
+  {
+    "name": "jorgebucaran-awsm-fish",
+    "url": "https://github.com/jorgebucaran/awsm.fish",
+    "sha": "602fdb24b148a399e6bcf53dceefca3760725cb5",
+    "layer": "random"
+  },
+  {
+    "name": "pasarguard-panel",
+    "url": "https://github.com/PasarGuard/panel",
+    "sha": "2b75db15cb0019a00252c59f9d1c34e6082a121f",
+    "layer": "random"
+  },
+  {
+    "name": "hearmeman24-comfygen",
+    "url": "https://github.com/Hearmeman24/ComfyGen",
+    "sha": "54495e86a8952e0613db6afa813768e708c66d2d",
+    "layer": "random"
+  },
+  {
+    "name": "rumbleminze-nes-to-snes-template",
+    "url": "https://github.com/rumbleminze/nes-to-snes-template",
+    "sha": "c07ba16f771ae777e3cdd0d6d13ee26bcc67cc1b",
+    "layer": "random"
+  },
+  {
+    "name": "stupidoodle-hinge-client",
+    "url": "https://github.com/Stupidoodle/hinge-client",
+    "sha": "07f35211c32cbf7c2a172085f376ea3e2192d62f",
+    "layer": "random"
+  },
+  {
+    "name": "protonnoir-snes-decompression-tools",
+    "url": "https://github.com/ProtonNoir/SNES-decompression-tools",
+    "sha": "8149ef6f2bcf121565db63251fe0d3dc429d8b50",
+    "layer": "random"
+  },
+  {
+    "name": "yyt-2378-automat",
+    "url": "https://github.com/yyt-2378/AutoMat",
+    "sha": "cdda3146d2ff383adc17b478390f19bc708f246f",
+    "layer": "random"
+  },
+  {
+    "name": "jnordwick-zmida",
+    "url": "https://github.com/jnordwick/zmida",
+    "sha": "c0a81a933880982c77b4698bef80d3084f5ff1d6",
+    "layer": "random"
+  },
+  {
+    "name": "hoshikurama-ticketmanager",
+    "url": "https://github.com/HoshiKurama/TicketManager",
+    "sha": "596a6fd5ca6d0016f1616dce16606d57e0bcd3c0",
+    "layer": "random"
+  },
+  {
+    "name": "qt-qtbridge-csharp",
+    "url": "https://github.com/qt/qtbridge-csharp",
+    "sha": "a4f484299a93cda2f464a121213bfe3b670e7e68",
+    "layer": "random"
+  },
+  {
+    "name": "notcpuid-pe-packer",
+    "url": "https://github.com/notcpuid/pe-packer",
+    "sha": "ab6b7b5296803a846cb3285a2fbe919dc0f3ac62",
+    "layer": "random"
+  },
+  {
+    "name": "raphaelrpc-dr-claudio",
+    "url": "https://github.com/raphaelRPC/dr-claudio",
+    "sha": "a9294fb9948faa4f10f7140259334b14eca4fd80",
+    "layer": "random"
+  },
+  {
+    "name": "dwslab-melt",
+    "url": "https://github.com/dwslab/melt",
+    "sha": "fce5b6e26e86a54a620c186abe1da1c7f6448291",
+    "layer": "random"
+  },
+  {
+    "name": "talhasiddique7-sys-monitor",
+    "url": "https://github.com/talhasiddique7/sys-monitor",
+    "sha": "afe781df8aff4647ae7f727bc135a11f56a35831",
+    "layer": "random"
+  },
+  {
+    "name": "secdev02-easytokens",
+    "url": "https://github.com/secdev02/EasyTokens",
+    "sha": "f3a48980cf905e078a5f807b21695566ca69ce8f",
+    "layer": "random"
+  },
+  {
+    "name": "zululima-zululima",
+    "url": "https://github.com/zululima/zululima",
+    "sha": "e17ab9cb199ce4c2bba698a2f84edb79444beb8a",
+    "layer": "random"
+  },
+  {
+    "name": "r3xmax-phantomctx",
+    "url": "https://github.com/r3xmax/PhantomCtx",
+    "sha": "449f5fceb07da7c65f5f41f6d631f9eb8079c663",
+    "layer": "random"
+  },
+  {
+    "name": "tiancigao-diffppo",
+    "url": "https://github.com/TianciGao/DiffPPO",
+    "sha": "c004fd43506ee5c5ba27737b816f4d39c669b65c",
+    "layer": "random"
+  },
+  {
+    "name": "ffalt-xlsx-extract",
+    "url": "https://github.com/ffalt/xlsx-extract",
+    "sha": "f45cdefd38003b95fb69660def1703ab2b307453",
+    "layer": "random"
+  },
+  {
+    "name": "lucky-lance-phostream",
+    "url": "https://github.com/Lucky-Lance/PhoStream",
+    "sha": "ed7543d6f580278db795e618c22730ca56a9807b",
+    "layer": "random"
+  },
+  {
+    "name": "it22318466-fashion-website-alfar-company",
+    "url": "https://github.com/it22318466/Fashion_WebSite_ALFAR_Company",
+    "sha": "6b7a26d015f2b70cefc54e1119f8650fd6dbee18",
+    "layer": "random"
+  },
+  {
+    "name": "zukunft-zukunft-com",
+    "url": "https://github.com/zukunft/zukunft.com",
+    "sha": "21830abe03bc84f35d6fb6519ef10dd49e76276d",
+    "layer": "random"
+  },
+  {
+    "name": "gaius-augustus-braker",
+    "url": "https://github.com/Gaius-Augustus/BRAKER",
+    "sha": "8f6a9b862c778f10ca33c27f931032bd7872b545",
+    "layer": "random"
+  },
+  {
+    "name": "sunshangquan-awesome-computer-vision-adverse-weather",
+    "url": "https://github.com/sunshangquan/Awesome-Computer-Vision-Adverse-Weather",
+    "sha": "440f790e7de2a7cd5719a5f9190a395be630a867",
+    "layer": "random"
+  },
+  {
+    "name": "proger-hippogriff",
+    "url": "https://github.com/proger/hippogriff",
+    "sha": "72f6c448b6ce6e4bc742de07390a5914c42163b3",
+    "layer": "random"
+  },
+  {
+    "name": "aryx-syncweb",
+    "url": "https://github.com/aryx/syncweb",
+    "sha": "1dc9c0de0ae3debc3a6d1eebcc1e79215e8ea5e6",
+    "layer": "random"
+  },
+  {
+    "name": "colleenjg-openscope-ca-analysis",
+    "url": "https://github.com/colleenjg/OpenScope_CA_Analysis",
+    "sha": "046e7fef5f452cdc0775fe54040b0f13aeae1e57",
+    "layer": "random"
+  },
+  {
+    "name": "surgitaix-sdclib",
+    "url": "https://github.com/surgitaix/sdclib",
+    "sha": "8c1a81539a61b6a268530250770f54627a784516",
+    "layer": "random"
+  },
+  {
+    "name": "lacymorrow-paperclip-hub",
+    "url": "https://github.com/lacymorrow/paperclip-hub",
+    "sha": "cd8507b1e874932a9f6f76aad9b2b9d71a92a682",
+    "layer": "random"
+  },
+  {
+    "name": "d99kris-spacy-cpp",
+    "url": "https://github.com/d99kris/spacy-cpp",
+    "sha": "8528df7404cb57352c54b9a07f0237a418a96971",
+    "layer": "random"
+  },
+  {
+    "name": "glideapps-quicktype-xcode",
+    "url": "https://github.com/glideapps/quicktype-xcode",
+    "sha": "8e50ca05eec8a58025630b8fd9dcb89688e74f4e",
+    "layer": "random"
+  },
+  {
+    "name": "polystat-odin",
+    "url": "https://github.com/polystat/odin",
+    "sha": "0239a9150baf1c6d80c32f2456f7225687c4623a",
+    "layer": "random"
+  },
+  {
+    "name": "bmqy-bbs-quickreply",
+    "url": "https://github.com/bmqy/bbs_quickreply",
+    "sha": "0b6a8994a630887a9b758fa1bdc6e411148d6f47",
+    "layer": "random"
+  },
+  {
+    "name": "roenbaeck-sisula",
+    "url": "https://github.com/Roenbaeck/sisula",
+    "sha": "ac425f562ec03d3b89378873ae67c375250db9f9",
+    "layer": "random"
+  },
+  {
+    "name": "combit-ll-samples",
+    "url": "https://github.com/combit/ll-samples",
+    "sha": "a78b3d02b1c9d441c455bb4a227e38590201d21d",
+    "layer": "random"
+  },
+  {
+    "name": "gotgenes-getignore",
+    "url": "https://github.com/gotgenes/getignore",
+    "sha": "e7e182aad2e8ebb19c8ca726119899c712625324",
+    "layer": "random"
+  },
+  {
+    "name": "nlct-texparser",
+    "url": "https://github.com/nlct/texparser",
+    "sha": "cf0a8977af1966b4d03845dde3704f2f6ab5456e",
+    "layer": "random"
+  },
+  {
+    "name": "noyitz-flowstory",
+    "url": "https://github.com/noyitz/flowstory",
+    "sha": "9cac6a417f9d1d7b3366e56bf01adf2e5605b965",
+    "layer": "random"
+  },
+  {
+    "name": "wz-cs-hico-gs",
+    "url": "https://github.com/WZ-CS/HiCo-GS",
+    "sha": "a9f30393e977e14a5d9ceda13cea0687ce862271",
+    "layer": "random"
+  },
+  {
+    "name": "egnrse-configs",
+    "url": "https://github.com/egnrse/configs",
+    "sha": "d185b53a826b0662024b7e57a7ce840a8f3db37a",
+    "layer": "random"
+  },
+  {
+    "name": "fien-atone-third-eye",
+    "url": "https://github.com/fien-atone/third-eye",
+    "sha": "04abbb490c55f0f5bdf13575c2bdc7f12885826d",
+    "layer": "random"
+  },
+  {
+    "name": "juliansoto-solid-keep-alive",
+    "url": "https://github.com/JulianSoto/solid-keep-alive",
+    "sha": "1c1f98beb76ee91c9fb4dec70c109528f54b66cd",
+    "layer": "random"
+  },
+  {
+    "name": "symfony-models-dev",
+    "url": "https://github.com/symfony/models-dev",
+    "sha": "bf9106d08923dfd0606893455b3b92b06932e499",
+    "layer": "random"
+  },
+  {
+    "name": "catezi-mapt",
+    "url": "https://github.com/catezi/MAPT",
+    "sha": "0b4ef2712995681febca7631f9a27e1b0dccccbf",
+    "layer": "random"
+  },
+  {
+    "name": "aragas-bannerlord-mboptionscreen",
+    "url": "https://github.com/Aragas/Bannerlord.MBOptionScreen",
+    "sha": "73348041e4208488778b5b3cfd15f39105189d1e",
+    "layer": "random"
+  },
+  {
+    "name": "inconnu-boy-sensei-whatsapp-report",
+    "url": "https://github.com/INCONNU-BOY-SENSEI/WhatsApp-report",
+    "sha": "5f4972308ae347d6d44dcbb03d4417ee62a0584a",
+    "layer": "random"
+  },
+  {
+    "name": "guqing-willow-mde",
+    "url": "https://github.com/guqing/willow-mde",
+    "sha": "dd67ed57b9062f18f4c703994e7c2ed1689bf3be",
+    "layer": "random"
+  },
+  {
+    "name": "mpogoda-dotfiles",
+    "url": "https://github.com/MPogoda/dotfiles",
+    "sha": "63d694218bbd8aa6c626627ae376f75deca25a3a",
+    "layer": "random"
+  },
+  {
+    "name": "vaamonde-ubuntu-2604",
+    "url": "https://github.com/vaamonde/ubuntu-2604",
+    "sha": "7e44d2d28b47395af65e75baebcfa632dc3a8504",
+    "layer": "random"
+  },
+  {
+    "name": "b-m-dev-bilingual-manga-databases",
+    "url": "https://github.com/B-M-dev/Bilingual_Manga_databases",
+    "sha": "f2a09e317cdb9d762c9a48fc43de80da7b970b71",
+    "layer": "random"
+  },
+  {
+    "name": "marcjulianschwarz-obsidian-raycast",
+    "url": "https://github.com/marcjulianschwarz/obsidian-raycast",
+    "sha": "c4e19ba8527a0c19878a76f658c6c6fef8ba9098",
+    "layer": "random"
+  },
+  {
+    "name": "natsuneco-magic-draw",
+    "url": "https://github.com/natsuneco/magic-draw",
+    "sha": "df373af138d2b49fd9ba34aee9808ec4360d0fd3",
+    "layer": "random"
+  },
+  {
+    "name": "aurorateam-auroralauncher",
+    "url": "https://github.com/AuroraTeam/AuroraLauncher",
+    "sha": "a8ef2e68e6b4497800d1a80db3b3d096bb5dcf83",
+    "layer": "random"
+  },
+  {
+    "name": "googleapis-js-genai",
+    "url": "https://github.com/googleapis/js-genai",
+    "sha": "066b3cb8419bce415c8c4ed4c34b73534a96e709",
+    "layer": "random"
+  },
+  {
+    "name": "rose-pine-rose-pine-theme",
+    "url": "https://github.com/rose-pine/rose-pine-theme",
+    "sha": "781bb844aae0bcec2763b23a4c7d3cc6aede780c",
+    "layer": "random"
+  },
+  {
+    "name": "trustdev-eth-trustdev-eth",
+    "url": "https://github.com/Trustdev-eth/Trustdev-eth",
+    "sha": "64469a58a62b67ceaa829354ad78d65ff90f7bfe",
+    "layer": "random"
+  },
+  {
+    "name": "adhocore-docker-phpfpm",
+    "url": "https://github.com/adhocore/docker-phpfpm",
+    "sha": "6c01002948ce228220c2bba0c809062a0e51f9ef",
+    "layer": "random"
+  },
+  {
+    "name": "fortify-skills",
+    "url": "https://github.com/fortify/skills",
+    "sha": "d84c98c8930454949395c55a4853652028fd842b",
+    "layer": "random"
+  },
+  {
+    "name": "gagandeepahuja09-saardb",
+    "url": "https://github.com/gagandeepahuja09/saardb",
+    "sha": "fb2a7bc91f723ff389206cedb38b665f3c3164fd",
+    "layer": "random"
+  },
+  {
+    "name": "setasign-tfpdf",
+    "url": "https://github.com/Setasign/tFPDF",
+    "sha": "69b06444b929e0d54ffbb5efcadfe97ecbad831b",
+    "layer": "random"
+  },
+  {
+    "name": "cofh-cofhcore",
+    "url": "https://github.com/CoFH/CoFHCore",
+    "sha": "dcd7bd6703418ee2e8eb2185957de83925fa89fe",
+    "layer": "random"
+  },
+  {
+    "name": "iamkaant-interactive-mol-grid",
+    "url": "https://github.com/iamkaant/interactive_mol_grid",
+    "sha": "e1e52f12c8b1ea10bb761936605d09132275ea21",
+    "layer": "random"
+  },
+  {
+    "name": "specstoryai-docs",
+    "url": "https://github.com/specstoryai/docs",
+    "sha": "6bbccf13244d6eff1c6c475d334818cc1ea2a3a7",
+    "layer": "random"
+  },
+  {
+    "name": "bhai4you-otpbomber",
+    "url": "https://github.com/Bhai4You/otpbomber",
+    "sha": "d5da0a3596e0ddbbb4b587f0c74b212165ac4957",
+    "layer": "random"
+  },
+  {
+    "name": "thinking-machines-lab-tinker-feedback",
+    "url": "https://github.com/thinking-machines-lab/tinker-feedback",
+    "sha": "762b33c65980b83b67ae010df08ffc26a4dbfd51",
+    "layer": "random"
+  },
+  {
+    "name": "nashaudio-klang",
+    "url": "https://github.com/nashaudio/klang",
+    "sha": "1dd7095b0c221e051efe9af285c9ca825b94a1c3",
+    "layer": "random"
+  },
+  {
+    "name": "cbinyu-bidsphysio",
+    "url": "https://github.com/cbinyu/bidsphysio",
+    "sha": "96433fec332f0e3146d2878c18676c0293ce4536",
+    "layer": "random"
+  },
+  {
+    "name": "halleysfifthinc-avclan-mockingboard",
+    "url": "https://github.com/halleysfifthinc/AVCLAN-Mockingboard",
+    "sha": "6c460aa3a06f0effa2972b91d6a793a5cfbb7fa4",
+    "layer": "random"
+  },
+  {
+    "name": "sobomax-microsippy",
+    "url": "https://github.com/sobomax/microsippy",
+    "sha": "cca55bd177088cd6ab5d7e0a07e9f44e79f5678c",
+    "layer": "random"
+  },
+  {
+    "name": "proudmubai-gofilm",
+    "url": "https://github.com/ProudMuBai/GoFilm",
+    "sha": "7a578dd64287dc767a67b19aefc5a870016e0de1",
+    "layer": "random"
+  },
+  {
+    "name": "manish-850-gentlerain-ai",
+    "url": "https://github.com/manish-850/gentlerain.ai",
+    "sha": "6d0a8848dae3eda784f23595e8e834ffacbaf025",
+    "layer": "random"
+  },
+  {
+    "name": "blackjetrock-pico-rom-emulator",
+    "url": "https://github.com/blackjetrock/pico-rom-emulator",
+    "sha": "e17a8ef1ea1f29502f40cc1b5451f6b7fc417c99",
+    "layer": "random"
+  },
+  {
+    "name": "chaunsin-netease-cloud-music",
+    "url": "https://github.com/chaunsin/netease-cloud-music",
+    "sha": "77f510b48f9f7956f83fcf7fe8bdb348ae6ab92b",
+    "layer": "random"
+  },
+  {
+    "name": "roboparty-i-bfm-code",
+    "url": "https://github.com/Roboparty/I-BFM-Code",
+    "sha": "b4547263e925aedc16ade5427d03e9884f9fa3c2",
+    "layer": "random"
+  },
+  {
+    "name": "python-poetry-poetry-core",
+    "url": "https://github.com/python-poetry/poetry-core",
+    "sha": "d213296b0c3278d1042b0cdbff474ee11eaa9203",
+    "layer": "random"
+  },
+  {
+    "name": "tarang74-qut",
+    "url": "https://github.com/Tarang74/QUT",
+    "sha": "193048ea391e70b706173ab7b40aa34a984aeb6e",
+    "layer": "random"
+  },
+  {
+    "name": "openwallet-foundation-owl-mobile-wallet-test-harness",
+    "url": "https://github.com/openwallet-foundation/owl-mobile-wallet-test-harness",
+    "sha": "14b24a072d89e4a8e2d6e7e7dc5b4f46aa4ea378",
+    "layer": "random"
+  },
+  {
+    "name": "emiee27707-debug-how-to-fish-boost-rod",
+    "url": "https://github.com/emiee27707-debug/how-to-fish-boost-rod",
+    "sha": "f95c17a0d8778268fe5d6dc3466e66e973c41de3",
+    "layer": "random"
+  },
+  {
+    "name": "cojocaru-david-cojocarudavid-me",
+    "url": "https://github.com/cojocaru-david/cojocarudavid.me",
+    "sha": "ac183010e44e70bea9a5b027faab78c86a314e8a",
+    "layer": "random"
+  },
+  {
+    "name": "aplus-framework-framework",
+    "url": "https://github.com/aplus-framework/framework",
+    "sha": "22e6cff5fe3fcf2958e9e6108b3439ec568038dd",
+    "layer": "random"
+  },
+  {
+    "name": "norlaner-reinforcement-learning-course",
+    "url": "https://github.com/Norlaner/reinforcement-learning-course",
+    "sha": "fd6d565f05a01cd76bb5f3868831b954e8ac7dcf",
+    "layer": "random"
+  },
+  {
+    "name": "xedur-www-solar2dplayground-com",
+    "url": "https://github.com/XeduR/www.solar2dplayground.com",
+    "sha": "9657a3562010b5890d4c0d29b299ea73592ec3a0",
+    "layer": "random"
+  },
+  {
+    "name": "gooseworks-ai-gooseworks-skills",
+    "url": "https://github.com/gooseworks-ai/gooseworks-skills",
+    "sha": "203f43b09915e46fff2ac5ebeea5ce45b6436fe2",
+    "layer": "random"
+  },
+  {
+    "name": "unlayer-unlayer-skills",
+    "url": "https://github.com/unlayer/unlayer-skills",
+    "sha": "da87f769bd0bc9535105c3278ea56794ccb51bda",
+    "layer": "random"
+  },
+  {
+    "name": "imjohnbo-issue-bot",
+    "url": "https://github.com/imjohnbo/issue-bot",
+    "sha": "b350cc62e8924da47d75d0e4c9d10cb25982f37d",
+    "layer": "random"
+  },
+  {
+    "name": "freetakteam-reticulum-community-hub",
+    "url": "https://github.com/FreeTAKTeam/Reticulum-Community-Hub",
+    "sha": "184218b09f7aaafec1cb6fdb37b38d745ba02163",
+    "layer": "random"
+  },
+  {
+    "name": "evdenis-spec-utils",
+    "url": "https://github.com/evdenis/spec-utils",
+    "sha": "ce0ba5ace03bf18d03068ebb7a8976ff48894d4a",
+    "layer": "random"
+  },
+  {
+    "name": "camenduru-camenduru",
+    "url": "https://github.com/camenduru/camenduru",
+    "sha": "a04d6f0478f5bad8612c1f89f880192b36bc96c9",
+    "layer": "random"
+  },
+  {
+    "name": "finitelabs-control4-mqtt",
+    "url": "https://github.com/finitelabs/control4-mqtt",
+    "sha": "226f3640ef9f14a0c006b66a6e4bfef4acfd39e2",
     "layer": "random"
   }
 ]
