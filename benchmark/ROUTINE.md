@@ -132,6 +132,41 @@ pnpm test && npx tsc --noEmit -p . && npx eslint . && pnpm run build:packages
 git checkout benchmark/REPORT.md   # unless you mean to commit it
 ```
 
+### 1.7 Bring every result up to date (before opening the PR)
+
+Rerunning only "repos with affected findings" is not enough: a scanner change
+makes that scanner's result stale in **every** repo that has its input files,
+and the next cycle would start from mixed versions. The scan system knows
+exactly what is stale, so let it decide:
+
+```
+pnpm run build:cli && pnpm --filter ./packages/core build
+BENCH_DROP_CLONES=1 node benchmark/resume.mjs   # per-scanner fingerprints; reruns only stale scanners
+node benchmark/osv.mjs                          # online pass (vulnerable-deps, license-risk) for new repos
+```
+
+- Both are resumable: if a run stops (time limit, network), start it again.
+- `resume.mjs` prints its plan first (`partial: <scanner> ×N`); report it.
+- Then redo 1.5 (gate) and 1.6 (refresh, archive) on the complete data.
+- The PR is finished only when `resume.mjs` reports nothing left to scan and
+  `osv.mjs` reports "all repos checked". Say so in the report; do not leave
+  "unaffected results were reused" as an open item.
+- Publish the archive to `bench-data` (fast-forward only) after the source PR
+  merges; a separate `bench-data-<date>` staging branch is fine before that,
+  and is deleted once promoted.
+
+### Random layer draws
+
+`random-layer.mjs draw` uses GitHub search. With `GITHUB_TOKEN` (or
+`GITHUB_SEARCH_TOKEN`, no scopes needed) it runs 3x faster, but Node must go
+through the environment's proxy or the token is rejected (HTTP 401):
+
+```
+NODE_USE_ENV_PROXY=1 NODE_EXTRA_CA_CERTS=/root/.ccr/ca-bundle.crt \
+  node benchmark/random-layer.mjs draw --n <total>
+node benchmark/random-layer.mjs apply
+```
+
 Delete `AGENTS.md` / `CLAUDE.md` at the repo root if `next dev` created them.
 Push the branch, open the PR with the report below as its body.
 
@@ -155,6 +190,7 @@ New: <n> (tp <a>, fp <b>). Unsure: <list of finding ids with one-line reason>.
 - lost TP: <before> → <after>
 - precision by confidence: high <x>% → <y>%, medium …, low …
 - vulnerable apps: <n> checked, high TP before/after <a>/<b> (list any change)
+- up to date: resume plan <partial: …>, now nothing stale; osv: all repos checked
 
 ### Not done / open questions
 <anything skipped and why>
