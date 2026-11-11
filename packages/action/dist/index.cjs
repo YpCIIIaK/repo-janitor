@@ -26863,7 +26863,7 @@ var require_lib4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-ZGGBQ3L3.js
+// ../cli/dist/chunk-H6PA4LOM.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -45594,7 +45594,7 @@ function date4(params) {
 // ../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/external.js
 config(en_default());
 
-// ../cli/dist/chunk-ZGGBQ3L3.js
+// ../cli/dist/chunk-H6PA4LOM.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -70263,7 +70263,7 @@ var RULE_PRECISION = {
   "ci-silenced-failure": { tp: 4, fp: 7 },
   "ci-swallowed": { tp: 3, fp: 2 },
   "ci-tests-not-run": { tp: 0, fp: 10 },
-  "commented-code": { tp: 69, fp: 32 },
+  "commented-code": { tp: 93, fp: 59 },
   "config-conflict": { tp: 19, fp: 1 },
   "dead-export": { tp: 17, fp: 3 },
   "dead-uikit": { tp: 3, fp: 2 },
@@ -70277,7 +70277,7 @@ var RULE_PRECISION = {
   "docs-badge": { tp: 11, fp: 2 },
   "docs-manager": { tp: 1, fp: 5 },
   "docs-script": { tp: 5, fp: 3 },
-  "duplicate": { tp: 39, fp: 11 },
+  "duplicate": { tp: 39, fp: 13 },
   "env-dead": { tp: 2, fp: 8 },
   "env-missing": { tp: 1, fp: 6 },
   "env-no-example": { tp: 1, fp: 11 },
@@ -70303,30 +70303,30 @@ var RULE_PRECISION = {
   "insecure-cpp-tls-validation-disabled": { tp: 2, fp: 0 },
   "insecure-document-write-dynamic": { tp: 0, fp: 3 },
   "insecure-dotnet-deserialization": { tp: 0, fp: 2 },
-  "insecure-eval-dynamic": { tp: 1, fp: 7 },
-  "insecure-exec-interpolated": { tp: 3, fp: 23 },
+  "insecure-eval-dynamic": { tp: 2, fp: 7 },
+  "insecure-exec-interpolated": { tp: 5, fp: 23 },
   "insecure-go-template-html": { tp: 0, fp: 10 },
   "insecure-innerhtml-dynamic": { tp: 0, fp: 13 },
   "insecure-java-deserialization": { tp: 2, fp: 3 },
   "insecure-localstorage-secret": { tp: 2, fp: 9 },
   "insecure-new-function": { tp: 3, fp: 15 },
   "insecure-php-path-traversal": { tp: 4, fp: 0 },
-  "insecure-php-reflected-xss": { tp: 4, fp: 1 },
-  "insecure-php-unserialize": { tp: 1, fp: 7 },
-  "insecure-php-xxe": { tp: 1, fp: 0 },
+  "insecure-php-reflected-xss": { tp: 4, fp: 2 },
+  "insecure-php-unserialize": { tp: 2, fp: 8 },
+  "insecure-php-xxe": { tp: 2, fp: 0 },
   "insecure-py-eval-exec": { tp: 0, fp: 19 },
   "insecure-py-os-system": { tp: 0, fp: 9 },
   "insecure-py-pickle-load": { tp: 2, fp: 19 },
   "insecure-py-shell-true": { tp: 1, fp: 8 },
   "insecure-py-verify-false": { tp: 1, fp: 1 },
-  "insecure-py-yaml-load": { tp: 0, fp: 2 },
+  "insecure-py-yaml-load": { tp: 0, fp: 3 },
   "insecure-random-for-secret": { tp: 1, fp: 7 },
   "insecure-react-dangerous-html": { tp: 2, fp: 16 },
   "insecure-ruby-dynamic-dispatch": { tp: 0, fp: 3 },
   "insecure-ruby-marshal-load": { tp: 0, fp: 5 },
   "insecure-rust-tls-validation-disabled": { tp: 3, fp: 2 },
-  "insecure-sql-interpolated": { tp: 3, fp: 26 },
-  "insecure-ssrf": { tp: 1, fp: 74 },
+  "insecure-sql-interpolated": { tp: 28, fp: 63 },
+  "insecure-ssrf": { tp: 4, fp: 76 },
   "insecure-swift-plaintext-credential-storage": { tp: 1, fp: 0 },
   "insecure-swift-webview-html": { tp: 1, fp: 0 },
   "insecure-tls-verification-off": { tp: 0, fp: 12 },
@@ -70341,7 +70341,7 @@ var RULE_PRECISION = {
   "secret-generic": { tp: 1, fp: 8 },
   "secret-history": { tp: 1, fp: 15 },
   "secret-provider": { tp: 0, fp: 14 },
-  "skipped-test": { tp: 21, fp: 4 },
+  "skipped-test": { tp: 22, fp: 3 },
   "supply-remote-shell": { tp: 1, fp: 0 },
   "todo": { tp: 92, fp: 9 },
   "workflow-action-tag": { tp: 123, fp: 1 },
@@ -74362,7 +74362,7 @@ var MAX_PER_FILE3 = 10;
 var MAX_TOTAL6 = 60;
 var HOSTS = /* @__PURE__ */ new Set(["describe", "it", "test", "context", "suite"]);
 function jsHit(node) {
-  var _a22, _b, _c;
+  var _a22, _b, _c, _d;
   if (node.type !== "CallExpression" && node.type !== "OptionalCallExpression") return null;
   const callee = node.callee;
   if (!callee) return null;
@@ -74385,14 +74385,14 @@ function jsHit(node) {
   }
   if (callee.type === "Identifier") {
     const name = (_c = callee.name) != null ? _c : "";
-    if (/^f(?:it|describe|test)$/.test(name)) return { severity: "warning", label: "focused test (fit/fdescribe)" };
+    if (/^f(?:it|describe|test)$/.test(name) && ((_d = node.arguments) == null ? void 0 : _d.length)) return { severity: "warning", label: "focused test (fit/fdescribe)" };
     if (/^x(?:it|describe|test|context)$/.test(name)) return { severity: "info", label: "skipped test (xit/xdescribe)" };
   }
   return null;
 }
 var JS_RULES = [
   { re: /\b(?:describe|it|test|context|suite)\.only\s*\(/, severity: "warning", label: "focused test (.only)" },
-  { re: /\bf(?:it|describe|test)\s*\(/, severity: "warning", label: "focused test (fit/fdescribe)" },
+  { re: /\bf(?:it|describe|test)\s*\((?!\s*\))/, severity: "warning", label: "focused test (fit/fdescribe)" },
   { re: /\b(?:describe|it|test|context|suite)\.skip\s*\(/, severity: "info", label: "skipped test (.skip)" },
   { re: /\bx(?:it|describe|test|context)\s*\(/, severity: "info", label: "skipped test (xit/xdescribe)" },
   { re: /\b(?:it|test)\.todo\s*\(/, severity: "info", label: "unimplemented test (.todo)" }
@@ -74550,15 +74550,16 @@ function commentParagraph(lines, start, len) {
   });
 }
 function isDocumentationNotation(lines, start, len, file2) {
-  var _a22;
+  var _a22, _b;
   const bodies = lines.slice(start, start + len).map((line) => {
     var _a32;
     return (_a32 = commentBody(line)) != null ? _a32 : "";
   });
+  if (/\.[cm]?[jt]sx?$/.test(file2) && /^Spec:\s+[a-z][a-z-]+(?:\s+[a-z]+)?\s*=\s*<[a-z-]+>\s*\|\|\s*<[a-z-]+>$/i.test((_a22 = bodies[0]) != null ? _a22 : "") && bodies.slice(1).every((body) => /^[a-z]+(?:-[a-z]+)+\s*=\s*[a-z]+(?:\s*\|\s*[a-z]+)+$/i.test(body))) return true;
   if (/\.go$/.test(file2)) {
     if (bodies.every((body) => /^[A-Za-z][\w]*-[\w-]+\s*=\s*.+$/.test(body)) && bodies.some((body) => /%[dx][\da-f]+(?:-[\da-f]+)?/i.test(body))) return true;
     if (bodies.every((body) => /^(?:KEYS|ARGV)\[\d+\]\s*=\s*\S/.test(body))) {
-      const nextSource = (_a22 = lines.slice(start + len).find((line) => line.trim() && commentBody(line) === null)) != null ? _a22 : "";
+      const nextSource = (_b = lines.slice(start + len).find((line) => line.trim() && commentBody(line) === null)) != null ? _b : "";
       if (/\bredis\.NewScript\s*\(/.test(nextSource)) return true;
     }
   }
@@ -74566,12 +74567,48 @@ function isDocumentationNotation(lines, start, len, file2) {
 }
 function introducesExample(lines, start, len, file2) {
   const near22 = commentParagraph(lines, start, len);
+  if (/\.swift$/.test(file2) && lines.slice(start, start + len).every(isDocIndent)) {
+    const before = lines.slice(0, start);
+    if (before.every((line) => !line.trim() || commentBody(line) !== null) && before.some((line) => {
+      var _a22;
+      return /^usage\s*:\s*$/i.test((_a22 = commentBody(line)) != null ? _a22 : "");
+    })) return true;
+  }
   if (near22.some((b3) => /```|\ba la\b|\be\.g\.|\bexamples?\b|^sample\s*:?\s*$|^sample\s+(?:input|output|usage)\s*:|\buse case\b|like this|looks like|\bsyntax\b|\bformat\b|should be uncommented/i.test(b3))) return true;
   if (near22.some((b3) => /^CREATE\s+TABLE\b/i.test(b3))) return true;
   if (/\.(?:java|go|c|cc|cpp|h|hpp|cs|rs|swift|kt)$/.test(file2)) {
     return near22.filter((b3) => /^<\/?[A-Za-z_][\w:.-]*(?:\s|\/?[>])/.test(b3)).length >= 2;
   }
   return false;
+}
+function semanticExampleRows(lines, comments, file2) {
+  var _a22, _b;
+  const rows = /* @__PURE__ */ new Set();
+  if (!/\.[cm]?[jt]sx?$/.test(file2)) return rows;
+  const objectExample = /^\{\s*(?:\[[A-Za-z_$][\w$]*\]\s*:\s*(?:"[^"]*"|'[^']*'|[A-Za-z_$][\w$]*)|[A-Za-z_$][\w$]*(?:\s*:\s*(?:"[^"]*"|'[^']*'|[A-Za-z_$][\w$]*))?)\s*\}$/;
+  const objectRow = /^(?:yes|no|depends):\s*\{/;
+  let pending = [];
+  const flush = () => {
+    const bodies = pending.map((n) => {
+      var _a32;
+      return (_a32 = commentBody(lines[n])) != null ? _a32 : "";
+    });
+    const computedObject = bodies.some((b3) => /^(?:yes|no|depends):\s*\{\s*\[/.test(b3));
+    if (pending.length >= MIN_RUN && bodies.some((b3) => b3.startsWith("yes:")) && bodies.some((b3) => b3.startsWith("no:"))) {
+      for (let i = 0; i < pending.length; i++) {
+        if (!objectRow.test(bodies[i]) || computedObject) rows.add(pending[i]);
+      }
+    }
+    pending = [];
+  };
+  for (let n = 0; n < lines.length; n++) {
+    const body = comments.has(n) ? (_a22 = commentBody(lines[n])) != null ? _a22 : "" : "";
+    const example = (_b = /^(?:yes|no|depends):\s*(.*)$/.exec(body)) == null ? void 0 : _b[1];
+    if (example && (/^(?:class\s*\{|export\b)/.test(example) || objectExample.test(example))) pending.push(n);
+    else flush();
+  }
+  flush();
+  return rows;
 }
 var commentedCodeScanner = {
   id: "commented-code",
@@ -74589,6 +74626,7 @@ var commentedCodeScanner = {
         if (!content || !content.includes("//")) continue;
         const lines = content.split(/\r?\n/);
         const lineComments = lineCommentLines(lines, /\.(?:rs|swift|scala|kt)$/.test(norm));
+        const semanticRows = semanticExampleRows(lines, lineComments, norm);
         let perFile = 0;
         let runStart = -1;
         let runLen = 0;
@@ -74625,7 +74663,7 @@ var commentedCodeScanner = {
         };
         for (let i = 0; i < lines.length; i++) {
           const body = lineComments.has(i) ? commentBody(lines[i]) : null;
-          if (body !== null && looksLikeCode(body)) {
+          if (body !== null && !semanticRows.has(i) && looksLikeCode(body)) {
             if (runStart === -1) runStart = i;
             runLen++;
           } else {
@@ -77935,7 +77973,7 @@ var LARGE_BLOCK = 30;
 var CODE_EXT = /\.(?:[cm]?[jt]sx?|py|go|rs|rb|php|java|kt|kts|swift|scala|cs|c|cc|cpp|h|hpp|m|mm|dart|ex|exs|vue|svelte)$/i;
 var SKIP_PATH = /(^|\/)(?:node_modules|vendor|third_party|thirdparty|dist|build|out|target|generated|__generated__|\.next|\.nuxt|coverage|migrations|__snapshots__|__fixtures__|fixtures?|testdata|examples?(?:[-_][\w.-]+)?|[^/]+\.docset|templates?(?:[-_.][\w.-]*)?|scaffolds?|starters?|playgrounds?|bench(?:mark)?s?|locales?|i18n|translations?)\//i;
 var GENERATED_FILE = /(?:\.min\.[jt]s|\.bundle\.js|\.(?:g|freezed)\.dart|_pb2?\.py|\.pb\.go|\.generated\.[a-z]+|\.d\.ts)$/i;
-var TEST_FILE = /(^|\/)(?:tests?|spec|__tests__|e2e|[^/]+\.Tests?)\/|(^|\/)src\/androidTest\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(^|\/)test_[^/]+\.py$|[^/]+_test\.(?:py|go|rb)$|[^/]+Test\.(?:java|kt|cs)$|_spec\.rb$/i;
+var TEST_FILE = /(^|\/)(?:tests?|spec|__tests__|e2e|[^/]+\.Tests?)\/|(^|\/)src\/androidTest\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(^|\/)test_[^/]+\.py$|[^/]+_test\.(?:py|go|rb|cc|cpp)$|[^/]+Test\.(?:java|kt|cs)$|_spec\.rb$/i;
 var SWIFT_TEST_FILE = /(?:^|\/)[^/]+Tests(?:\/.*)?\.swift$/i;
 var NOISE = /^(?:[{}()[\];,]+|else\s*\{?|\}?\s*else\s*(?:if.*)?\{?|return;?|break;?|continue;?|pass|end|fi|done|<\/?\w+\s*\/?>)$/;
 var IMPORTISH = /^(?:\}\s*from\s|import\b|from\s+\S+\s+import\b|#include\b|using\s+\w|require\s*\(|use\s+\w|package\b|export\s+\*|export\s+\{)/;
@@ -82989,14 +83027,14 @@ function jsHit2(node) {
   }
   if (callee.type === "Identifier") {
     const name = callee.name ?? "";
-    if (/^f(?:it|describe|test)$/.test(name)) return { severity: "warning", label: "focused test (fit/fdescribe)" };
+    if (/^f(?:it|describe|test)$/.test(name) && node.arguments?.length) return { severity: "warning", label: "focused test (fit/fdescribe)" };
     if (/^x(?:it|describe|test|context)$/.test(name)) return { severity: "info", label: "skipped test (xit/xdescribe)" };
   }
   return null;
 }
 var JS_RULES2 = [
   { re: /\b(?:describe|it|test|context|suite)\.only\s*\(/, severity: "warning", label: "focused test (.only)" },
-  { re: /\bf(?:it|describe|test)\s*\(/, severity: "warning", label: "focused test (fit/fdescribe)" },
+  { re: /\bf(?:it|describe|test)\s*\((?!\s*\))/, severity: "warning", label: "focused test (fit/fdescribe)" },
   { re: /\b(?:describe|it|test|context|suite)\.skip\s*\(/, severity: "info", label: "skipped test (.skip)" },
   { re: /\bx(?:it|describe|test|context)\s*\(/, severity: "info", label: "skipped test (xit/xdescribe)" },
   { re: /\b(?:it|test)\.todo\s*\(/, severity: "info", label: "unimplemented test (.todo)" }
@@ -83150,6 +83188,7 @@ function commentParagraph2(lines, start, len) {
 }
 function isDocumentationNotation2(lines, start, len, file2) {
   const bodies = lines.slice(start, start + len).map((line) => commentBody2(line) ?? "");
+  if (/\.[cm]?[jt]sx?$/.test(file2) && /^Spec:\s+[a-z][a-z-]+(?:\s+[a-z]+)?\s*=\s*<[a-z-]+>\s*\|\|\s*<[a-z-]+>$/i.test(bodies[0] ?? "") && bodies.slice(1).every((body) => /^[a-z]+(?:-[a-z]+)+\s*=\s*[a-z]+(?:\s*\|\s*[a-z]+)+$/i.test(body))) return true;
   if (/\.go$/.test(file2)) {
     if (bodies.every((body) => /^[A-Za-z][\w]*-[\w-]+\s*=\s*.+$/.test(body)) && bodies.some((body) => /%[dx][\da-f]+(?:-[\da-f]+)?/i.test(body))) return true;
     if (bodies.every((body) => /^(?:KEYS|ARGV)\[\d+\]\s*=\s*\S/.test(body))) {
@@ -83161,12 +83200,41 @@ function isDocumentationNotation2(lines, start, len, file2) {
 }
 function introducesExample2(lines, start, len, file2) {
   const near3 = commentParagraph2(lines, start, len);
+  if (/\.swift$/.test(file2) && lines.slice(start, start + len).every(isDocIndent2)) {
+    const before = lines.slice(0, start);
+    if (before.every((line) => !line.trim() || commentBody2(line) !== null) && before.some((line) => /^usage\s*:\s*$/i.test(commentBody2(line) ?? ""))) return true;
+  }
   if (near3.some((b3) => /```|\ba la\b|\be\.g\.|\bexamples?\b|^sample\s*:?\s*$|^sample\s+(?:input|output|usage)\s*:|\buse case\b|like this|looks like|\bsyntax\b|\bformat\b|should be uncommented/i.test(b3))) return true;
   if (near3.some((b3) => /^CREATE\s+TABLE\b/i.test(b3))) return true;
   if (/\.(?:java|go|c|cc|cpp|h|hpp|cs|rs|swift|kt)$/.test(file2)) {
     return near3.filter((b3) => /^<\/?[A-Za-z_][\w:.-]*(?:\s|\/?[>])/.test(b3)).length >= 2;
   }
   return false;
+}
+function semanticExampleRows2(lines, comments, file2) {
+  const rows = /* @__PURE__ */ new Set();
+  if (!/\.[cm]?[jt]sx?$/.test(file2)) return rows;
+  const objectExample = /^\{\s*(?:\[[A-Za-z_$][\w$]*\]\s*:\s*(?:"[^"]*"|'[^']*'|[A-Za-z_$][\w$]*)|[A-Za-z_$][\w$]*(?:\s*:\s*(?:"[^"]*"|'[^']*'|[A-Za-z_$][\w$]*))?)\s*\}$/;
+  const objectRow = /^(?:yes|no|depends):\s*\{/;
+  let pending = [];
+  const flush = () => {
+    const bodies = pending.map((n) => commentBody2(lines[n]) ?? "");
+    const computedObject = bodies.some((b3) => /^(?:yes|no|depends):\s*\{\s*\[/.test(b3));
+    if (pending.length >= MIN_RUN2 && bodies.some((b3) => b3.startsWith("yes:")) && bodies.some((b3) => b3.startsWith("no:"))) {
+      for (let i = 0; i < pending.length; i++) {
+        if (!objectRow.test(bodies[i]) || computedObject) rows.add(pending[i]);
+      }
+    }
+    pending = [];
+  };
+  for (let n = 0; n < lines.length; n++) {
+    const body = comments.has(n) ? commentBody2(lines[n]) ?? "" : "";
+    const example = /^(?:yes|no|depends):\s*(.*)$/.exec(body)?.[1];
+    if (example && (/^(?:class\s*\{|export\b)/.test(example) || objectExample.test(example))) pending.push(n);
+    else flush();
+  }
+  flush();
+  return rows;
 }
 var commentedCodeScanner2 = {
   id: "commented-code",
@@ -83183,6 +83251,7 @@ var commentedCodeScanner2 = {
       if (!content || !content.includes("//")) continue;
       const lines = content.split(/\r?\n/);
       const lineComments = lineCommentLines2(lines, /\.(?:rs|swift|scala|kt)$/.test(norm));
+      const semanticRows = semanticExampleRows2(lines, lineComments, norm);
       let perFile = 0;
       let runStart = -1;
       let runLen = 0;
@@ -83218,7 +83287,7 @@ var commentedCodeScanner2 = {
       };
       for (let i = 0; i < lines.length; i++) {
         const body = lineComments.has(i) ? commentBody2(lines[i]) : null;
-        if (body !== null && looksLikeCode2(body)) {
+        if (body !== null && !semanticRows.has(i) && looksLikeCode2(body)) {
           if (runStart === -1) runStart = i;
           runLen++;
         } else {
@@ -86501,7 +86570,7 @@ var LARGE_BLOCK2 = 30;
 var CODE_EXT2 = /\.(?:[cm]?[jt]sx?|py|go|rs|rb|php|java|kt|kts|swift|scala|cs|c|cc|cpp|h|hpp|m|mm|dart|ex|exs|vue|svelte)$/i;
 var SKIP_PATH2 = /(^|\/)(?:node_modules|vendor|third_party|thirdparty|dist|build|out|target|generated|__generated__|\.next|\.nuxt|coverage|migrations|__snapshots__|__fixtures__|fixtures?|testdata|examples?(?:[-_][\w.-]+)?|[^/]+\.docset|templates?(?:[-_.][\w.-]*)?|scaffolds?|starters?|playgrounds?|bench(?:mark)?s?|locales?|i18n|translations?)\//i;
 var GENERATED_FILE2 = /(?:\.min\.[jt]s|\.bundle\.js|\.(?:g|freezed)\.dart|_pb2?\.py|\.pb\.go|\.generated\.[a-z]+|\.d\.ts)$/i;
-var TEST_FILE2 = /(^|\/)(?:tests?|spec|__tests__|e2e|[^/]+\.Tests?)\/|(^|\/)src\/androidTest\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(^|\/)test_[^/]+\.py$|[^/]+_test\.(?:py|go|rb)$|[^/]+Test\.(?:java|kt|cs)$|_spec\.rb$/i;
+var TEST_FILE2 = /(^|\/)(?:tests?|spec|__tests__|e2e|[^/]+\.Tests?)\/|(^|\/)src\/androidTest\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(^|\/)test_[^/]+\.py$|[^/]+_test\.(?:py|go|rb|cc|cpp)$|[^/]+Test\.(?:java|kt|cs)$|_spec\.rb$/i;
 var SWIFT_TEST_FILE2 = /(?:^|\/)[^/]+Tests(?:\/.*)?\.swift$/i;
 var NOISE2 = /^(?:[{}()[\];,]+|else\s*\{?|\}?\s*else\s*(?:if.*)?\{?|return;?|break;?|continue;?|pass|end|fi|done|<\/?\w+\s*\/?>)$/;
 var IMPORTISH2 = /^(?:\}\s*from\s|import\b|from\s+\S+\s+import\b|#include\b|using\s+\w|require\s*\(|use\s+\w|package\b|export\s+\*|export\s+\{)/;
