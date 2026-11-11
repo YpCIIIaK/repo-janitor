@@ -1,0 +1,86 @@
+[
+  {
+    "repo": "aidanazhaksylykova/kegoc-presentation",
+    "sha": "d66cc7fb46ec1cac2550d5f1b06b57242e38ebb3",
+    "report": "aidanazhaksylykova--kegoc-presentation.json",
+    "score": 94,
+    "grade": "A"
+  },
+  {
+    "repo": "BoyarArt/bpmonline_kegoc",
+    "sha": "860e4bc8abc3b1593950106288f91ab0697a1686",
+    "report": "BoyarArt--bpmonline_kegoc.json",
+    "score": 76,
+    "grade": "B"
+  },
+  {
+    "repo": "diwkaKrutywka/kegoc",
+    "sha": "17d5cb5c6b6fcecb39da0f3feb03c50f8a6dfd1a",
+    "report": "diwkaKrutywka--kegoc.json",
+    "score": 94,
+    "grade": "A"
+  },
+  {
+    "repo": "gospan21/kegoc-encor",
+    "sha": "3ad2d0c67a4b367ccc4943992465ee70489bda03",
+    "report": "gospan21--kegoc-encor.json",
+    "score": 94,
+    "grade": "A"
+  },
+  {
+    "repo": "kasymbek42/kegoc-social-support-portal",
+    "sha": "a15e20d9e5c4b7aa7c71e22863f255ae5cfef4e5",
+    "report": "kasymbek42--kegoc-social-support-portal.json",
+    "score": 97,
+    "grade": "A"
+  },
+  {
+    "repo": "kefir4an/Kegoc-Design-System",
+    "sha": "7469a533f485507b380dccd131d5cd6c47eed18c",
+    "report": "kefir4an--Kegoc-Design-System.json",
+    "score": 97,
+    "grade": "A"
+  },
+  {
+    "repo": "nurmukhamedkz-web/kegoc-duchrsto-instructions",
+    "sha": "1238b683558122cf8354cb1d5c5edf8ebbfe4602",
+    "report": "nurmukhamedkz-web--kegoc-duchrsto-instructions.json",
+    "score": 97,
+    "grade": "A"
+  },
+  {
+    "repo": "omirbek42/kegoc-landing",
+    "sha": "ea0bcfad23e417214576923e993651061e78258a",
+    "report": "omirbek42--kegoc-landing.json",
+    "score": 97,
+    "grade": "A"
+  },
+  {
+    "repo": "Sabyr777/kegoc",
+    "sha": "c431b854e37aff4b3caef4248c2c9c5844abaa49",
+    "report": "Sabyr777--kegoc.json",
+    "score": 97,
+    "grade": "A"
+  },
+  {
+    "repo": "timurabdrahmanov/kegoc-monitoring",
+    "sha": "0a9efe7565a0477deffb677b6d4aa7bce3785751",
+    "report": "timurabdrahmanov--kegoc-monitoring.json",
+    "score": 97,
+    "grade": "A"
+  },
+  {
+    "repo": "vzroman/ecall",
+    "sha": "5f49f087e8d8b384949ab3fc2fb90b2031bd2ce1",
+    "report": "vzroman--ecall.json",
+    "score": 93,
+    "grade": "A"
+  },
+  {
+    "repo": "vzroman/elock",
+    "sha": "2e6f22be847ae06adc966a13cc640ce23683b309",
+    "report": "vzroman--elock.json",
+    "score": 93,
+    "grade": "A"
+  }
+]

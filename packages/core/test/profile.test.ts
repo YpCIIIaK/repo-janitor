@@ -1,7 +1,30 @@
 import { describe, it, expect } from "vitest"
-import { extToLanguage, detectTools } from "../src/profile"
+import { extToLanguage, detectTools, detectChecklist } from "../src/profile"
+import { runScan } from "../src/engine"
+import { erlangSecurityScanner } from "../src/scanners/erlang-security"
+import { projectHygieneScanner } from "../src/scanners/project-hygiene"
+import { makeContext } from "./helpers"
 
 describe("extToLanguage", () => {
+  it("counts Erlang modules, headers and escripts as Erlang", () => {
+    for (const file of ["src/server.erl", "include/messages.hrl", "scripts/release.escript", "SRC\\SERVER.ERL"]) expect(extToLanguage(file)).toBe("Erlang")
+    expect(detectTools(["apps/worker/rebar.config", "rebar.lock"])).toContain("Rebar3")
+  })
+
+  it("profiles actual Erlang source and records the new scanner's completion", async () => {
+    const report = await runScan(makeContext({ files: {"src/server.erl":"-module(server).\nf() -> ok.\n", "include/messages.hrl":"-define(READY, ready).\n"} }),[erlangSecurityScanner])
+    expect(report.profile?.languages).toContainEqual({language:'Erlang',files:2,loc:3})
+    expect(report.metrics?.linesOfCode).toBe(3)
+    expect(report.diagnostics?.completedScanners).toContain('erlang-security')
+  })
+
+  it("recognizes standalone Common Test and EUnit modules as real tests", async () => {
+    for (const name of ['server_SUITE.erl','server_tests.erl','server_test.erl']) {
+      expect(detectChecklist([name]).tests).toBe(true)
+      const issues=await projectHygieneScanner.run(makeContext({files:{[name]:'-module(server_tests).'}}))
+      expect(issues.some(x=>x.id==='hygiene-no-tests')).toBe(false)
+    }
+  })
   it("maps common source extensions to display languages", () => {
     expect(extToLanguage("src/app.ts")).toBe("TypeScript")
     expect(extToLanguage("src/App.tsx")).toBe("TypeScript")

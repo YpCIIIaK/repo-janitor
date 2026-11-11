@@ -30,6 +30,7 @@ const TEST_RE = new RegExp(
     String.raw`_test\.(go|py)$`,
     String.raw`(^|/)test_[^/]+\.py$`,
     String.raw`_spec\.rb$`,
+    String.raw`(?:_suite|_tests?)\.erl$`,
     String.raw`Test\.(java|kt|php)$`,
   ].join("|"),
   "i",

@@ -672,16 +672,16 @@ var require_parse = __commonJS({
       let paren = 0;
       let quote = 0;
       let value = "";
-      let escaped = false;
+      let escaped3 = false;
       for (const ch of input) {
-        if (escaped === true) {
+        if (escaped3 === true) {
           value += ch;
-          escaped = false;
+          escaped3 = false;
           continue;
         }
         if (ch === "\\") {
           value += ch;
-          escaped = true;
+          escaped3 = true;
           continue;
         }
         if (ch === '"') {
@@ -712,14 +712,14 @@ var require_parse = __commonJS({
       return parts;
     };
     var isPlainBranch = (branch) => {
-      let escaped = false;
+      let escaped3 = false;
       for (const ch of branch) {
-        if (escaped === true) {
-          escaped = false;
+        if (escaped3 === true) {
+          escaped3 = false;
           continue;
         }
         if (ch === "\\") {
-          escaped = true;
+          escaped3 = true;
           continue;
         }
         if (/[?*+@!()[\]{}]/.test(ch)) {
@@ -767,15 +767,15 @@ var require_parse = __commonJS({
       let bracket = 0;
       let paren = 0;
       let quote = 0;
-      let escaped = false;
+      let escaped3 = false;
       for (let i = 1; i < pattern.length; i++) {
         const ch = pattern[i];
-        if (escaped === true) {
-          escaped = false;
+        if (escaped3 === true) {
+          escaped3 = false;
           continue;
         }
         if (ch === "\\") {
-          escaped = true;
+          escaped3 = true;
           continue;
         }
         if (ch === '"') {
@@ -1250,14 +1250,14 @@ var require_parse = __commonJS({
           if (opts.literalBrackets === false || utils.hasRegexChars(prevValue)) {
             continue;
           }
-          const escaped = utils.escapeRegex(prev.value);
+          const escaped3 = utils.escapeRegex(prev.value);
           state.output = state.output.slice(0, -prev.value.length);
           if (opts.literalBrackets === true) {
-            state.output += escaped;
-            prev.value = escaped;
+            state.output += escaped3;
+            prev.value = escaped3;
             continue;
           }
-          prev.value = `(${capture}${escaped}|${prev.value})`;
+          prev.value = `(${capture}${escaped3}|${prev.value})`;
           state.output += prev.value;
           continue;
         }
@@ -9009,7 +9009,7 @@ var require_lib3 = __commonJS({
       readRegexp() {
         const startLoc = this.state.startLoc;
         const start = this.state.start + 1;
-        let escaped, inClass;
+        let escaped3, inClass;
         let {
           pos
         } = this.state;
@@ -9021,8 +9021,8 @@ var require_lib3 = __commonJS({
           if (isNewLine(ch)) {
             throw this.raise(Errors.UnterminatedRegExp, createPositionWithColumnOffset(startLoc, 1));
           }
-          if (escaped) {
-            escaped = false;
+          if (escaped3) {
+            escaped3 = false;
           } else {
             if (ch === 91) {
               inClass = true;
@@ -9031,7 +9031,7 @@ var require_lib3 = __commonJS({
             } else if (ch === 47 && !inClass) {
               break;
             }
-            escaped = ch === 92;
+            escaped3 = ch === 92;
           }
         }
         const content = this.input.slice(start, pos);
@@ -17383,8 +17383,8 @@ var require_shell3 = __commonJS({
         return { type: `argument`, segments: [].concat(...segments) };
       }, peg$c54 = function(string4) {
         return string4;
-      }, peg$c55 = "$'", peg$c56 = peg$literalExpectation("$'", false), peg$c57 = "'", peg$c58 = peg$literalExpectation("'", false), peg$c59 = function(text2) {
-        return [{ type: `text`, text: text2 }];
+      }, peg$c55 = "$'", peg$c56 = peg$literalExpectation("$'", false), peg$c57 = "'", peg$c58 = peg$literalExpectation("'", false), peg$c59 = function(text4) {
+        return [{ type: `text`, text: text4 }];
       }, peg$c60 = '""', peg$c61 = peg$literalExpectation('""', false), peg$c62 = function() {
         return { type: `text`, text: `` };
       }, peg$c63 = '"', peg$c64 = peg$literalExpectation('"', false), peg$c65 = function(segments) {
@@ -17395,8 +17395,8 @@ var require_shell3 = __commonJS({
         return { type: `shell`, shell, quoted: true };
       }, peg$c68 = function(variable) {
         return { type: `variable`, ...variable, quoted: true };
-      }, peg$c69 = function(text2) {
-        return { type: `text`, text: text2 };
+      }, peg$c69 = function(text4) {
+        return { type: `text`, text: text4 };
       }, peg$c70 = function(arithmetic) {
         return { type: `arithmetic`, arithmetic, quoted: false };
       }, peg$c71 = function(shell) {
@@ -17468,7 +17468,7 @@ var require_shell3 = __commonJS({
       }, peg$c173 = function(pattern) {
         return pattern;
       }, peg$c174 = /^[a-zA-Z0-9_]/, peg$c175 = peg$classExpectation([["a", "z"], ["A", "Z"], ["0", "9"], "_"], false, false), peg$c176 = function() {
-        return text();
+        return text3();
       }, peg$c177 = /^[$@*?#a-zA-Z0-9_\-]/, peg$c178 = peg$classExpectation(["$", "@", "*", "?", "#", ["a", "z"], ["A", "Z"], ["0", "9"], "_", "-"], false, false), peg$c179 = /^[()}<>$|&; \t"']/, peg$c180 = peg$classExpectation(["(", ")", "}", "<", ">", "$", "|", "&", ";", " ", "	", '"', "'"], false, false), peg$c181 = /^[<>&; \t"']/, peg$c182 = peg$classExpectation(["<", ">", "&", ";", " ", "	", '"', "'"], false, false), peg$c183 = /^[ \t]/, peg$c184 = peg$classExpectation([" ", "	"], false, false), peg$currPos = 0, peg$savedPos = 0, peg$posDetailsCache = [{ line: 1, column: 1 }], peg$maxFailPos = 0, peg$maxFailExpected = [], peg$silentFails = 0, peg$result;
       if ("startRule" in options) {
         if (!(options.startRule in peg$startRuleFunctions)) {
@@ -17476,7 +17476,7 @@ var require_shell3 = __commonJS({
         }
         peg$startRuleFunction = peg$startRuleFunctions[options.startRule];
       }
-      function text() {
+      function text3() {
         return input.substring(peg$savedPos, peg$currPos);
       }
       function location() {
@@ -17494,8 +17494,8 @@ var require_shell3 = __commonJS({
         location2 = location2 !== void 0 ? location2 : peg$computeLocation(peg$savedPos, peg$currPos);
         throw peg$buildSimpleError(message, location2);
       }
-      function peg$literalExpectation(text2, ignoreCase) {
-        return { type: "literal", text: text2, ignoreCase };
+      function peg$literalExpectation(text4, ignoreCase) {
+        return { type: "literal", text: text4, ignoreCase };
       }
       function peg$classExpectation(parts, inverted, ignoreCase) {
         return { type: "class", parts, inverted, ignoreCase };
@@ -20936,17 +20936,17 @@ var require_shell4 = __commonJS({
     };
     function stringifyArgumentSegment(argumentSegment) {
       const doubleQuoteIfRequested = (string4, quote) => quote ? `"${string4}"` : string4;
-      const quoteIfNeeded = (text) => {
-        if (text === ``)
+      const quoteIfNeeded = (text3) => {
+        if (text3 === ``)
           return `''`;
-        if (!text.match(/[()}<>$|&;"'\n\t ]/))
-          return text;
-        if (!text.match(/['\t\p{C}]/u))
-          return `'${text}'`;
-        if (!text.match(/'/)) {
-          return `$'${text.replace(/[\t\p{C}]/u, getEscapedControlChar)}'`;
+        if (!text3.match(/[()}<>$|&;"'\n\t ]/))
+          return text3;
+        if (!text3.match(/['\t\p{C}]/u))
+          return `'${text3}'`;
+        if (!text3.match(/'/)) {
+          return `$'${text3.replace(/[\t\p{C}]/u, getEscapedControlChar)}'`;
         } else {
-          return `"${text.replace(/["$\t\p{C}]/u, getEscapedDblChar)}"`;
+          return `"${text3.replace(/["$\t\p{C}]/u, getEscapedDblChar)}"`;
         }
       };
       switch (argumentSegment.type) {
@@ -21100,7 +21100,7 @@ var require_resolution3 = __commonJS({
       }, peg$c7 = function(fullName) {
         return { fullName };
       }, peg$c8 = function() {
-        return text();
+        return text3();
       }, peg$c9 = /^[^\/@]/, peg$c10 = peg$classExpectation(["/", "@"], true, false), peg$c11 = /^[^\/]/, peg$c12 = peg$classExpectation(["/"], true, false), peg$currPos = 0, peg$savedPos = 0, peg$posDetailsCache = [{ line: 1, column: 1 }], peg$maxFailPos = 0, peg$maxFailExpected = [], peg$silentFails = 0, peg$result;
       if ("startRule" in options) {
         if (!(options.startRule in peg$startRuleFunctions)) {
@@ -21108,7 +21108,7 @@ var require_resolution3 = __commonJS({
         }
         peg$startRuleFunction = peg$startRuleFunctions[options.startRule];
       }
-      function text() {
+      function text3() {
         return input.substring(peg$savedPos, peg$currPos);
       }
       function location() {
@@ -21126,8 +21126,8 @@ var require_resolution3 = __commonJS({
         location2 = location2 !== void 0 ? location2 : peg$computeLocation(peg$savedPos, peg$currPos);
         throw peg$buildSimpleError(message, location2);
       }
-      function peg$literalExpectation(text2, ignoreCase) {
-        return { type: "literal", text: text2, ignoreCase };
+      function peg$literalExpectation(text4, ignoreCase) {
+        return { type: "literal", text: text4, ignoreCase };
       }
       function peg$classExpectation(parts, inverted, ignoreCase) {
         return { type: "class", parts, inverted, ignoreCase };
@@ -22667,13 +22667,13 @@ ${exception.mark.snippet}`;
         if (ch === 92) {
           result += input.slice(captureStart, position);
           position++;
-          const escaped = input.charCodeAt(position);
-          if (escaped === 10 || escaped === 13) position = skipFoldedBreaks(input, position, end).position;
-          else if (escaped < 256 && simpleEscapeCheck[escaped]) {
-            result += simpleEscapeMap[escaped];
+          const escaped3 = input.charCodeAt(position);
+          if (escaped3 === 10 || escaped3 === 13) position = skipFoldedBreaks(input, position, end).position;
+          else if (escaped3 < 256 && simpleEscapeCheck[escaped3]) {
+            result += simpleEscapeMap[escaped3];
             position++;
           } else {
-            let hexLength = escapedHexLen$1(escaped);
+            let hexLength = escapedHexLen$1(escaped3);
             let hexResult = 0;
             for (; hexLength > 0; hexLength--) {
               position++;
@@ -23347,11 +23347,11 @@ ${exception.mark.snippet}`;
         }
         if (ch === 92) {
           simple = false;
-          const escaped = state.input.charCodeAt(++state.position);
-          if (isEol(escaped)) readFlowScalarBreak(state, nodeIndent);
-          else if (isSimpleEscape(escaped)) state.position++;
+          const escaped3 = state.input.charCodeAt(++state.position);
+          if (isEol(escaped3)) readFlowScalarBreak(state, nodeIndent);
+          else if (isSimpleEscape(escaped3)) state.position++;
           else {
-            let hexLength = escapedHexLen(escaped);
+            let hexLength = escapedHexLen(escaped3);
             if (hexLength === 0) throwError(state, "unknown escape sequence");
             while (hexLength-- > 0) {
               state.position++;
@@ -24517,7 +24517,7 @@ ${" ".repeat(state.indent * level)}`;
       if ((node.kind === "mapping" || node.kind === "sequence") && !useBlockCollection) state.openEnded = false;
       if (useBlockCollection && compact && level > 0 && state.indent > 2) body = `${" ".repeat(state.indent - 2)}${body}`;
       const noBody = body === "";
-      let text = body;
+      let text3 = body;
       if (shouldPrintTag || hasAnchor) {
         const props = [];
         const tag = shouldPrintTag ? nodeTagShort(node) : null;
@@ -24530,10 +24530,10 @@ ${" ".repeat(state.indent * level)}`;
           if (tag !== null) props.push(tag);
         }
         const sep2 = body === "" || body.charCodeAt(0) === CHAR_LINE_FEED ? "" : " ";
-        text = `${props.join(" ")}${sep2}${body}`;
+        text3 = `${props.join(" ")}${sep2}${body}`;
       }
       return {
-        text,
+        text: text3,
         noBody
       };
     }
@@ -24971,9 +24971,9 @@ var require_syml3 = __commonJS({
         indentLevel--;
         return true;
       }, peg$c25 = function() {
-        return text();
+        return text3();
       }, peg$c26 = peg$otherExpectation("pseudostring"), peg$c27 = /^[^\r\n\t ?:,\][{}#&*!|>'"%@`\-]/, peg$c28 = peg$classExpectation(["\r", "\n", "	", " ", "?", ":", ",", "]", "[", "{", "}", "#", "&", "*", "!", "|", ">", "'", '"', "%", "@", "`", "-"], true, false), peg$c29 = /^[^\r\n\t ,\][{}:#"']/, peg$c30 = peg$classExpectation(["\r", "\n", "	", " ", ",", "]", "[", "{", "}", ":", "#", '"', "'"], true, false), peg$c31 = function() {
-        return text().replace(/^ *| *$/g, "");
+        return text3().replace(/^ *| *$/g, "");
       }, peg$c32 = "--", peg$c33 = peg$literalExpectation("--", false), peg$c34 = /^[a-zA-Z\/0-9]/, peg$c35 = peg$classExpectation([["a", "z"], ["A", "Z"], "/", ["0", "9"]], false, false), peg$c36 = /^[^\r\n\t :,]/, peg$c37 = peg$classExpectation(["\r", "\n", "	", " ", ":", ","], true, false), peg$c38 = "null", peg$c39 = peg$literalExpectation("null", false), peg$c40 = function() {
         return null;
       }, peg$c41 = "true", peg$c42 = peg$literalExpectation("true", false), peg$c43 = function() {
@@ -25012,7 +25012,7 @@ var require_syml3 = __commonJS({
         }
         peg$startRuleFunction = peg$startRuleFunctions[options.startRule];
       }
-      function text() {
+      function text3() {
         return input.substring(peg$savedPos, peg$currPos);
       }
       function location() {
@@ -25030,8 +25030,8 @@ var require_syml3 = __commonJS({
         location2 = location2 !== void 0 ? location2 : peg$computeLocation(peg$savedPos, peg$currPos);
         throw peg$buildSimpleError(message, location2);
       }
-      function peg$literalExpectation(text2, ignoreCase) {
-        return { type: "literal", text: text2, ignoreCase };
+      function peg$literalExpectation(text4, ignoreCase) {
+        return { type: "literal", text: text4, ignoreCase };
       }
       function peg$classExpectation(parts, inverted, ignoreCase) {
         return { type: "class", parts, inverted, ignoreCase };
@@ -26863,7 +26863,7 @@ var require_lib4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-H6PA4LOM.js
+// ../cli/dist/chunk-M3EAUBB6.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -38718,8 +38718,8 @@ function ko_default() {
 }
 
 // ../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/locales/lt.js
-var capitalizeFirstCharacter = (text) => {
-  return text.charAt(0).toUpperCase() + text.slice(1);
+var capitalizeFirstCharacter = (text3) => {
+  return text3.charAt(0).toUpperCase() + text3.slice(1);
 };
 function getUnitTypeFromNumber(number4) {
   const abs = Math.abs(number4);
@@ -45594,7 +45594,7 @@ function date4(params) {
 // ../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/external.js
 config(en_default());
 
-// ../cli/dist/chunk-H6PA4LOM.js
+// ../cli/dist/chunk-M3EAUBB6.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -52011,7 +52011,7 @@ var require_lib = __commonJS2({
       readRegexp() {
         const startLoc = this.state.startLoc;
         const start = this.state.start + 1;
-        let escaped, inClass;
+        let escaped22, inClass;
         let {
           pos
         } = this.state;
@@ -52023,8 +52023,8 @@ var require_lib = __commonJS2({
           if (isNewLine(ch)) {
             throw this.raise(Errors.UnterminatedRegExp, createPositionWithColumnOffset(startLoc, 1));
           }
-          if (escaped) {
-            escaped = false;
+          if (escaped22) {
+            escaped22 = false;
           } else {
             if (ch === 91) {
               inClass = true;
@@ -52033,7 +52033,7 @@ var require_lib = __commonJS2({
             } else if (ch === 47 && !inClass) {
               break;
             }
-            escaped = ch === 92;
+            escaped22 = ch === 92;
           }
         }
         const content = this.input.slice(start, pos);
@@ -60383,8 +60383,8 @@ var require_shell = __commonJS2({
         return { type: `argument`, segments: [].concat(...segments) };
       }, peg$c54 = function(string4) {
         return string4;
-      }, peg$c55 = "$'", peg$c56 = peg$literalExpectation("$'", false), peg$c57 = "'", peg$c58 = peg$literalExpectation("'", false), peg$c59 = function(text2) {
-        return [{ type: `text`, text: text2 }];
+      }, peg$c55 = "$'", peg$c56 = peg$literalExpectation("$'", false), peg$c57 = "'", peg$c58 = peg$literalExpectation("'", false), peg$c59 = function(text3) {
+        return [{ type: `text`, text: text3 }];
       }, peg$c60 = '""', peg$c61 = peg$literalExpectation('""', false), peg$c62 = function() {
         return { type: `text`, text: `` };
       }, peg$c63 = '"', peg$c64 = peg$literalExpectation('"', false), peg$c65 = function(segments) {
@@ -60395,8 +60395,8 @@ var require_shell = __commonJS2({
         return { type: `shell`, shell, quoted: true };
       }, peg$c68 = function(variable) {
         return __spreadProps(__spreadValues({ type: `variable` }, variable), { quoted: true });
-      }, peg$c69 = function(text2) {
-        return { type: `text`, text: text2 };
+      }, peg$c69 = function(text3) {
+        return { type: `text`, text: text3 };
       }, peg$c70 = function(arithmetic) {
         return { type: `arithmetic`, arithmetic, quoted: false };
       }, peg$c71 = function(shell) {
@@ -60468,7 +60468,7 @@ var require_shell = __commonJS2({
       }, peg$c173 = function(pattern) {
         return pattern;
       }, peg$c174 = /^[a-zA-Z0-9_]/, peg$c175 = peg$classExpectation([["a", "z"], ["A", "Z"], ["0", "9"], "_"], false, false), peg$c176 = function() {
-        return text();
+        return text22();
       }, peg$c177 = /^[$@*?#a-zA-Z0-9_\-]/, peg$c178 = peg$classExpectation(["$", "@", "*", "?", "#", ["a", "z"], ["A", "Z"], ["0", "9"], "_", "-"], false, false), peg$c179 = /^[()}<>$|&; \t"']/, peg$c180 = peg$classExpectation(["(", ")", "}", "<", ">", "$", "|", "&", ";", " ", "	", '"', "'"], false, false), peg$c181 = /^[<>&; \t"']/, peg$c182 = peg$classExpectation(["<", ">", "&", ";", " ", "	", '"', "'"], false, false), peg$c183 = /^[ \t]/, peg$c184 = peg$classExpectation([" ", "	"], false, false), peg$currPos = 0, peg$savedPos = 0, peg$posDetailsCache = [{ line: 1, column: 1 }], peg$maxFailPos = 0, peg$maxFailExpected = [], peg$silentFails = 0, peg$result;
       if ("startRule" in options) {
         if (!(options.startRule in peg$startRuleFunctions)) {
@@ -60476,7 +60476,7 @@ var require_shell = __commonJS2({
         }
         peg$startRuleFunction = peg$startRuleFunctions[options.startRule];
       }
-      function text() {
+      function text22() {
         return input.substring(peg$savedPos, peg$currPos);
       }
       function location() {
@@ -60494,8 +60494,8 @@ var require_shell = __commonJS2({
         location2 = location2 !== void 0 ? location2 : peg$computeLocation(peg$savedPos, peg$currPos);
         throw peg$buildSimpleError(message, location2);
       }
-      function peg$literalExpectation(text2, ignoreCase) {
-        return { type: "literal", text: text2, ignoreCase };
+      function peg$literalExpectation(text3, ignoreCase) {
+        return { type: "literal", text: text3, ignoreCase };
       }
       function peg$classExpectation(parts, inverted, ignoreCase) {
         return { type: "class", parts, inverted, ignoreCase };
@@ -63936,17 +63936,17 @@ var require_shell2 = __commonJS2({
     };
     function stringifyArgumentSegment(argumentSegment) {
       const doubleQuoteIfRequested = (string4, quote) => quote ? `"${string4}"` : string4;
-      const quoteIfNeeded = (text) => {
-        if (text === ``)
+      const quoteIfNeeded = (text22) => {
+        if (text22 === ``)
           return `''`;
-        if (!text.match(/[()}<>$|&;"'\n\t ]/))
-          return text;
-        if (!text.match(/['\t\p{C}]/u))
-          return `'${text}'`;
-        if (!text.match(/'/)) {
-          return `$'${text.replace(/[\t\p{C}]/u, getEscapedControlChar)}'`;
+        if (!text22.match(/[()}<>$|&;"'\n\t ]/))
+          return text22;
+        if (!text22.match(/['\t\p{C}]/u))
+          return `'${text22}'`;
+        if (!text22.match(/'/)) {
+          return `$'${text22.replace(/[\t\p{C}]/u, getEscapedControlChar)}'`;
         } else {
-          return `"${text.replace(/["$\t\p{C}]/u, getEscapedDblChar)}"`;
+          return `"${text22.replace(/["$\t\p{C}]/u, getEscapedDblChar)}"`;
         }
       };
       switch (argumentSegment.type) {
@@ -64098,7 +64098,7 @@ var require_resolution = __commonJS2({
       }, peg$c7 = function(fullName) {
         return { fullName };
       }, peg$c8 = function() {
-        return text();
+        return text22();
       }, peg$c9 = /^[^\/@]/, peg$c10 = peg$classExpectation(["/", "@"], true, false), peg$c11 = /^[^\/]/, peg$c12 = peg$classExpectation(["/"], true, false), peg$currPos = 0, peg$savedPos = 0, peg$posDetailsCache = [{ line: 1, column: 1 }], peg$maxFailPos = 0, peg$maxFailExpected = [], peg$silentFails = 0, peg$result;
       if ("startRule" in options) {
         if (!(options.startRule in peg$startRuleFunctions)) {
@@ -64106,7 +64106,7 @@ var require_resolution = __commonJS2({
         }
         peg$startRuleFunction = peg$startRuleFunctions[options.startRule];
       }
-      function text() {
+      function text22() {
         return input.substring(peg$savedPos, peg$currPos);
       }
       function location() {
@@ -64124,8 +64124,8 @@ var require_resolution = __commonJS2({
         location2 = location2 !== void 0 ? location2 : peg$computeLocation(peg$savedPos, peg$currPos);
         throw peg$buildSimpleError(message, location2);
       }
-      function peg$literalExpectation(text2, ignoreCase) {
-        return { type: "literal", text: text2, ignoreCase };
+      function peg$literalExpectation(text3, ignoreCase) {
+        return { type: "literal", text: text3, ignoreCase };
       }
       function peg$classExpectation(parts, inverted, ignoreCase) {
         return { type: "class", parts, inverted, ignoreCase };
@@ -65661,13 +65661,13 @@ ${exception.mark.snippet}`;
         if (ch === 92) {
           result += input.slice(captureStart, position);
           position++;
-          const escaped = input.charCodeAt(position);
-          if (escaped === 10 || escaped === 13) position = skipFoldedBreaks(input, position, end).position;
-          else if (escaped < 256 && simpleEscapeCheck[escaped]) {
-            result += simpleEscapeMap[escaped];
+          const escaped22 = input.charCodeAt(position);
+          if (escaped22 === 10 || escaped22 === 13) position = skipFoldedBreaks(input, position, end).position;
+          else if (escaped22 < 256 && simpleEscapeCheck[escaped22]) {
+            result += simpleEscapeMap[escaped22];
             position++;
           } else {
-            let hexLength = escapedHexLen$1(escaped);
+            let hexLength = escapedHexLen$1(escaped22);
             let hexResult = 0;
             for (; hexLength > 0; hexLength--) {
               position++;
@@ -66341,11 +66341,11 @@ ${exception.mark.snippet}`;
         }
         if (ch === 92) {
           simple = false;
-          const escaped = state.input.charCodeAt(++state.position);
-          if (isEol(escaped)) readFlowScalarBreak(state, nodeIndent);
-          else if (isSimpleEscape(escaped)) state.position++;
+          const escaped22 = state.input.charCodeAt(++state.position);
+          if (isEol(escaped22)) readFlowScalarBreak(state, nodeIndent);
+          else if (isSimpleEscape(escaped22)) state.position++;
           else {
-            let hexLength = escapedHexLen(escaped);
+            let hexLength = escapedHexLen(escaped22);
             if (hexLength === 0) throwError(state, "unknown escape sequence");
             while (hexLength-- > 0) {
               state.position++;
@@ -67511,7 +67511,7 @@ ${" ".repeat(state.indent * level)}`;
       if ((node.kind === "mapping" || node.kind === "sequence") && !useBlockCollection) state.openEnded = false;
       if (useBlockCollection && compact && level > 0 && state.indent > 2) body = `${" ".repeat(state.indent - 2)}${body}`;
       const noBody = body === "";
-      let text = body;
+      let text22 = body;
       if (shouldPrintTag || hasAnchor) {
         const props = [];
         const tag = shouldPrintTag ? nodeTagShort(node) : null;
@@ -67524,10 +67524,10 @@ ${" ".repeat(state.indent * level)}`;
           if (tag !== null) props.push(tag);
         }
         const sep2 = body === "" || body.charCodeAt(0) === CHAR_LINE_FEED ? "" : " ";
-        text = `${props.join(" ")}${sep2}${body}`;
+        text22 = `${props.join(" ")}${sep2}${body}`;
       }
       return {
-        text,
+        text: text22,
         noBody
       };
     }
@@ -67963,9 +67963,9 @@ var require_syml = __commonJS2({
         indentLevel--;
         return true;
       }, peg$c25 = function() {
-        return text();
+        return text22();
       }, peg$c26 = peg$otherExpectation("pseudostring"), peg$c27 = /^[^\r\n\t ?:,\][{}#&*!|>'"%@`\-]/, peg$c28 = peg$classExpectation(["\r", "\n", "	", " ", "?", ":", ",", "]", "[", "{", "}", "#", "&", "*", "!", "|", ">", "'", '"', "%", "@", "`", "-"], true, false), peg$c29 = /^[^\r\n\t ,\][{}:#"']/, peg$c30 = peg$classExpectation(["\r", "\n", "	", " ", ",", "]", "[", "{", "}", ":", "#", '"', "'"], true, false), peg$c31 = function() {
-        return text().replace(/^ *| *$/g, "");
+        return text22().replace(/^ *| *$/g, "");
       }, peg$c32 = "--", peg$c33 = peg$literalExpectation("--", false), peg$c34 = /^[a-zA-Z\/0-9]/, peg$c35 = peg$classExpectation([["a", "z"], ["A", "Z"], "/", ["0", "9"]], false, false), peg$c36 = /^[^\r\n\t :,]/, peg$c37 = peg$classExpectation(["\r", "\n", "	", " ", ":", ","], true, false), peg$c38 = "null", peg$c39 = peg$literalExpectation("null", false), peg$c40 = function() {
         return null;
       }, peg$c41 = "true", peg$c42 = peg$literalExpectation("true", false), peg$c43 = function() {
@@ -68004,7 +68004,7 @@ var require_syml = __commonJS2({
         }
         peg$startRuleFunction = peg$startRuleFunctions[options.startRule];
       }
-      function text() {
+      function text22() {
         return input.substring(peg$savedPos, peg$currPos);
       }
       function location() {
@@ -68022,8 +68022,8 @@ var require_syml = __commonJS2({
         location2 = location2 !== void 0 ? location2 : peg$computeLocation(peg$savedPos, peg$currPos);
         throw peg$buildSimpleError(message, location2);
       }
-      function peg$literalExpectation(text2, ignoreCase) {
-        return { type: "literal", text: text2, ignoreCase };
+      function peg$literalExpectation(text3, ignoreCase) {
+        return { type: "literal", text: text3, ignoreCase };
       }
       function peg$classExpectation(parts, inverted, ignoreCase) {
         return { type: "class", parts, inverted, ignoreCase };
@@ -70020,7 +70020,10 @@ var EXTENSION_LANGUAGE = {
   swift: "Swift",
   scala: "Scala",
   vue: "Vue",
-  svelte: "Svelte"
+  svelte: "Svelte",
+  erl: "Erlang",
+  hrl: "Erlang",
+  escript: "Erlang"
 };
 function extToLanguage(path) {
   var _a22;
@@ -70049,6 +70052,7 @@ var TOOL_RULES = [
   { tool: "Maven", test: /(^|\/)pom\.xml$/ },
   { tool: "Gradle", test: /(^|\/)build\.gradle(\.kts)?$/ },
   { tool: "Make", test: /(^|\/)makefile$/ },
+  { tool: "Rebar3", test: /(^|\/)rebar\.(?:config|lock)$/ },
   { tool: "Vitest", test: /(^|\/)vitest\.config\.[mc]?[jt]s$/ },
   { tool: "Jest", test: /(^|\/)jest\.config\.[mc]?[jt]s$/ },
   { tool: "ESLint", test: /(^|\/)(\.eslintrc[^/]*|eslint\.config\.[mc]?[jt]s)$/ }
@@ -70080,7 +70084,7 @@ var CHECKLIST_RULES = {
   codeOfConduct: /^(\.github\/|docs\/)?code_of_conduct(\.[a-z]+)?$/,
   changelog: /^(changelog|changes|history)(\.[a-z]+)?$/,
   ci: /^(\.github\/workflows\/[^/]+\.ya?ml|\.gitlab-ci\.ya?ml|\.circleci\/config\.ya?ml|azure-pipelines\.ya?ml|jenkinsfile|\.travis\.ya?ml)$/,
-  tests: /(^|\/)(tests?|__tests__|spec)\/|\.(test|spec)\.[a-z]+$|(^|\/)test_[^/]+\.py$|_test\.go$/,
+  tests: /(^|\/)(tests?|__tests__|spec)\/|\.(test|spec)\.[a-z]+$|(^|\/)test_[^/]+\.py$|_test\.go$|(?:_suite|_tests?)\.erl$/,
   gitignore: /^\.gitignore$/
 };
 function detectChecklist(files) {
@@ -70176,6 +70180,20 @@ var WORKFLOW = {
   "no-permissions": "Workflow token permissions not restricted"
 };
 var DEFS = [
+  ...Object.entries({
+    "unsafe-term": "Erlang external term decoding without safe",
+    "dynamic-atom": "Erlang runtime atom creation",
+    shell: "Erlang dynamic shell command",
+    eval: "Erlang runtime expression evaluation",
+    "code-load": "Erlang runtime BEAM loading",
+    "tainted-dispatch": "Erlang external data selects executable code",
+    "external-executable": "Erlang external data selects a host executable",
+    "tls-verify-none": "Erlang TLS client verification disabled",
+    "tls-accept-bad-cert": "Erlang TLS callback accepts certificate errors",
+    "plugin-unversioned": "Rebar build plugin version unconstrained",
+    "dep-cleartext": "Rebar Git dependency uses cleartext transport",
+    "dep-floating": "Rebar Git dependency lacks an immutable pin"
+  }).map(([id, label]) => ({ rule: `erlang-${id}`, label, test: new RegExp(`^erlang-${id}-`) })),
   { rule: "secret-history", label: "Secret still in git history", test: /^secret-history-/ },
   { rule: "secret-generic", label: "High-entropy secret assignment", test: /^secret-entropy-/ },
   { rule: "secret-provider", label: "Provider credential (AWS, Stripe, GitHub\u2026)", test: /^secret-/ },
@@ -70836,8 +70854,8 @@ var staleBranchScanner = {
 var SOURCE_RE = /\.(ts|tsx|js|jsx|mjs|mts|cts|py|go|rs|java|rb|php|c|cc|cpp|h|hpp|cs|kt|swift|scala)$/;
 var MARKER_RE = /^[\s*>!-]*(TODO|FIXME|HACK|XXX)\b:?\s*(.*)$/;
 var STALE_DAYS2 = 365;
-function findMarker(text) {
-  const m2 = text.trimEnd().match(MARKER_RE);
+function findMarker(text22) {
+  const m2 = text22.trimEnd().match(MARKER_RE);
   if (!m2) return null;
   return { marker: m2[1], rest: m2[2].trim() };
 }
@@ -71128,14 +71146,14 @@ var FRAMEWORK_IMPLICIT = /* @__PURE__ */ new Set(["react-dom"]);
 var CONFIG_FILE_RE = /(^|\/)(next|postcss|tailwind|vite|vitest|rollup|webpack|babel|jest|eslint|prettier|stylelint|playwright|cypress|tsup|drizzle|svelte|astro|nuxt)\.config\.[cm]?[jt]s$|(^|\/)\.(babelrc|eslintrc|prettierrc|stylelintrc)[\w.]*$/i;
 function collectToolingText(ctx, scripts) {
   return __async(this, null, function* () {
-    let text = Object.values(scripts != null ? scripts : {}).join("\n");
+    let text22 = Object.values(scripts != null ? scripts : {}).join("\n");
     for (const file2 of ctx.files) {
       if (!CONFIG_FILE_RE.test(file2)) continue;
       const content = yield ctx.readFile(file2);
-      if (content) text += `
+      if (content) text22 += `
 ${content}`;
     }
-    return text;
+    return text22;
   });
 }
 var IMPORT_TEXT_RE = /(?:\bfrom\s*|\bimport\s*\(?\s*|\brequire\s*\(\s*)["']([^"'\s]+)["']|\bimport\s+["']([^"'\s]+)["']/g;
@@ -71659,13 +71677,13 @@ function computeNpmPackageInstances(ctx, fileSet) {
             add(actualName, value.version, value.dev !== true, nodeModulesCount === 1, path);
           }
         }
-        const walk22 = (deps) => {
+        const walk32 = (deps) => {
           for (const [name, value] of Object.entries(deps != null ? deps : {})) {
             if (typeof value.version === "string") add(name, value.version, value.dev !== true, false, name);
-            walk22(value.dependencies);
+            walk32(value.dependencies);
           }
         };
-        walk22(json2.dependencies);
+        walk32(json2.dependencies);
         if (found.size) return [...found.values()];
       } catch (e) {
       }
@@ -71890,14 +71908,14 @@ function parseNpmLock(txt) {
       saw = true;
       if ((val == null ? void 0 : val.dev) !== true) prod.add(m2[1]);
     }
-    const walk22 = (deps) => {
+    const walk32 = (deps) => {
       for (const [name, val] of Object.entries(deps != null ? deps : {})) {
         saw = true;
         if ((val == null ? void 0 : val.dev) !== true) prod.add(name);
-        walk22(val == null ? void 0 : val.dependencies);
+        walk32(val == null ? void 0 : val.dependencies);
       }
     };
-    walk22(json2.dependencies);
+    walk32(json2.dependencies);
     return saw ? prod : null;
   } catch (e) {
     return null;
@@ -71983,7 +72001,7 @@ function finalizeDependencyResearch(manager, lockfile, nodeMap, edges, options, 
   const paths = [];
   const maxPaths = Math.max(1, (_d = options.maxPaths) != null ? _d : 100);
   let truncated = false;
-  const walk22 = (start, mode) => {
+  const walk32 = (start, mode) => {
     var _a32;
     const stack = [{ id: start, path: [], devStarted: false }];
     let walkSteps = 0;
@@ -72010,8 +72028,8 @@ function finalizeDependencyResearch(manager, lockfile, nodeMap, edges, options, 
     if (stack.length && (walkSteps >= 2e4 || paths.length >= maxPaths)) truncated = true;
   };
   if (options.target) for (const root of roots) {
-    walk22(root.id, "production");
-    walk22(root.id, "development");
+    walk32(root.id, "production");
+    walk32(root.id, "development");
   }
   if (truncated) warnings.push("Dependency path search reached its safety limit; the path list may be incomplete.");
   const nodes = [...nodeMap.values()].map((_e2) => {
@@ -72053,11 +72071,11 @@ function dependencyEntries(value) {
   const record2 = asRecord(value);
   return record2 ? Object.entries(record2).filter((entry) => typeof entry[1] === "string") : [];
 }
-function parseYarnDependencyResearch(text, manifests, options = {}) {
+function parseYarnDependencyResearch(text22, manifests, options = {}) {
   var _a22, _b, _c, _d, _e2, _f;
   let parsed;
   try {
-    parsed = (0, import_parsers.parseSyml)(text);
+    parsed = (0, import_parsers.parseSyml)(text22);
   } catch (e) {
     return null;
   }
@@ -72365,13 +72383,13 @@ function enumerateNpmInstalled(ctx, fileSet) {
           const m2 = key.match(/(?:^|\/)node_modules\/((?:@[^/]+\/)?[^/]+)$/);
           if (m2 && typeof (val == null ? void 0 : val.version) === "string") add(m2[1], val.version, val.dev === true);
         }
-        const walk22 = (deps) => {
+        const walk32 = (deps) => {
           for (const [name, val] of Object.entries(deps != null ? deps : {})) {
             if (typeof (val == null ? void 0 : val.version) === "string") add(name, val.version, val.dev === true);
-            walk22(val == null ? void 0 : val.dependencies);
+            walk32(val == null ? void 0 : val.dependencies);
           }
         };
-        walk22(json2.dependencies);
+        walk32(json2.dependencies);
       } catch (e) {
       }
     }
@@ -72400,8 +72418,8 @@ function enumerateYarnInstalled(ctx, fileSet) {
   return __async(this, null, function* () {
     var _a22;
     if (!fileSet.has("yarn.lock")) return null;
-    const text = yield ctx.readFile("yarn.lock");
-    if (!text) return null;
+    const text22 = yield ctx.readFile("yarn.lock");
+    if (!text22) return null;
     const manifests = /* @__PURE__ */ new Map();
     for (const file2 of fileSet) if (file2 === "package.json" || file2.endsWith("/package.json")) {
       const body = yield ctx.readFile(file2);
@@ -72409,7 +72427,7 @@ function enumerateYarnInstalled(ctx, fileSet) {
     }
     let graph;
     try {
-      graph = parseYarnDependencyResearch(text, manifests, { maxNodes: MAX_QUERIES, maxEdges: MAX_QUERIES * 3 });
+      graph = parseYarnDependencyResearch(text22, manifests, { maxNodes: MAX_QUERIES, maxEdges: MAX_QUERIES * 3 });
     } catch (e) {
       return null;
     }
@@ -72896,6 +72914,7 @@ var TEST_RE = new RegExp(
     String.raw`_test\.(go|py)$`,
     String.raw`(^|/)test_[^/]+\.py$`,
     String.raw`_spec\.rb$`,
+    String.raw`(?:_suite|_tests?)\.erl$`,
     String.raw`Test\.(java|kt|php)$`
   ].join("|"),
   "i"
@@ -73249,9 +73268,9 @@ function resolveRel(baseDir, target) {
 function stripCode(src) {
   return src.replace(/```[\s\S]*?```/g, (m2) => m2.replace(/[^\n]/g, " ")).replace(/~~~[\s\S]*?~~~/g, (m2) => m2.replace(/[^\n]/g, " ")).replace(/`[^`\n]*`/g, (m2) => " ".repeat(m2.length));
 }
-function lineAt2(text, index) {
+function lineAt2(text22, index) {
   let line = 1;
-  for (let i = 0; i < index && i < text.length; i++) if (text[i] === "\n") line++;
+  for (let i = 0; i < index && i < text22.length; i++) if (text22[i] === "\n") line++;
   return line;
 }
 var NOT_LINKED_DOC_RE = /(^|\/)(?:CHANGELOG|CHANGES|HISTORY|NEWS|RELEASES?)[^/]*\.\w+$|(^|\/)(?:test|tests|spec|specs|deps|vendor|website|docs_src|blog)\/|(^|\/)README[-.][a-z]{2}(?:[-_][A-Za-z]{2,4})?\.\w+$/i;
@@ -73306,11 +73325,11 @@ var brokenDocLinksScanner = {
         if (NOT_LINKED_DOC_RE.test(norm)) continue;
         const raw = yield ctx.readFile(file2);
         if (!raw || !raw.includes("](")) continue;
-        const text = stripCode(raw);
+        const text22 = stripCode(raw);
         const baseDir = dirOf(norm);
         LINK_RE.lastIndex = 0;
         let m2;
-        while ((m2 = LINK_RE.exec(text)) !== null) {
+        while ((m2 = LINK_RE.exec(text22)) !== null) {
           if (issues.length >= MAX_TOTAL2) break;
           let target = m2[1].trim().split(/\s+/)[0].replace(/^<|>$/g, "");
           target = target.split("#")[0].split("?")[0];
@@ -73330,7 +73349,7 @@ var brokenDocLinksScanner = {
             if (asDir && (fileSet.has(`${asDir}.md`) || fileSet.has(`${asDir}/index.md`) || fileSet.has(asDir))) continue;
             if (fileSet.has(`${resolved}.md`)) continue;
           }
-          const line = lineAt2(text, m2.index);
+          const line = lineAt2(text22, m2.index);
           issues.push({
             id: `doclink-${norm}:${line}:${target}`,
             category: "hygiene",
@@ -74282,9 +74301,9 @@ var DOCKER_API_IMAGE = /^\s*image:\s*["']?(?:[\w.-]+\/)*(?:traefik|watchtower|po
 var HOST_AGENT_IMAGE = /^\s*image:\s*["']?(?:[\w.-]+\/)*(?:node-exporter|cadvisor|netdata|telegraf|promtail|grafana-agent|alloy|docker(?=:[^\s"']*dind))\b/;
 function containerHits(lines, compose) {
   const hits = [];
-  const text = lines.join("\n");
-  const nodeAgent = /^\s*kind:\s*DaemonSet\b/m.test(text);
-  if (/^\s*kind:\s*(?:PodSecurityPolicy|SecurityContextConstraints|ClusterPolicy|Policy|ValidatingAdmissionPolicy)\b/m.test(text)) return hits;
+  const text22 = lines.join("\n");
+  const nodeAgent = /^\s*kind:\s*DaemonSet\b/m.test(text22);
+  if (/^\s*kind:\s*(?:PodSecurityPolicy|SecurityContextConstraints|ClusterPolicy|Policy|ValidatingAdmissionPolicy)\b/m.test(text22)) return hits;
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     const t2 = line.trim();
@@ -75153,7 +75172,7 @@ function scanPhpSecurity(content) {
 var INPUT = /\b(?:\w*(?:[Tt]extField|[Tt]extView|[Ss]earchBar)|textField|textView|searchBar)\s*\.\s*text\b|\b(?:req|request)\s*\.\s*(?:query\s*\[|content\s*\.\s*get\s*\()/;
 var SQL2 = /\b(?:SELECT\b.*\bFROM|INSERT\s+INTO|UPDATE\b.*\bSET|DELETE\s+FROM)\b/i;
 function uncomment2(content) {
-  let out = "", depth = 0, quoted = false, escaped = false;
+  let out = "", depth = 0, quoted = false, escaped22 = false;
   for (let i = 0; i < content.length; i++) {
     const c3 = content[i], next = content[i + 1];
     if (depth) {
@@ -75178,18 +75197,18 @@ function uncomment2(content) {
       if (i < content.length) out += "\n";
     } else {
       out += c3;
-      if (c3 === '"' && !escaped) quoted = !quoted;
-      escaped = c3 === "\\" && !escaped;
+      if (c3 === '"' && !escaped22) quoted = !quoted;
+      escaped22 = c3 === "\\" && !escaped22;
     }
   }
   return out;
 }
 function argumentsOf(value) {
   const args = [];
-  let start = 0, depth = 0, quoted = false, escaped = false;
+  let start = 0, depth = 0, quoted = false, escaped22 = false;
   for (let i = 0; i < value.length; i++) {
     const c3 = value[i];
-    if (c3 === '"' && !escaped) quoted = !quoted;
+    if (c3 === '"' && !escaped22) quoted = !quoted;
     if (!quoted) {
       if (c3 === "(" || c3 === "[") depth++;
       if (c3 === ")" && depth === 0) {
@@ -75202,7 +75221,7 @@ function argumentsOf(value) {
         start = i + 1;
       }
     }
-    escaped = c3 === "\\" && !escaped;
+    escaped22 = c3 === "\\" && !escaped22;
   }
   args.push(value.slice(start));
   return args;
@@ -75870,7 +75889,7 @@ function scanSource(content, lang) {
       const line = lineAt3(content, idx);
       const lineEnd = content.indexOf("\n", idx);
       const rawLine = content.slice(lineStart, lineEnd === -1 ? void 0 : lineEnd);
-      const text = rawLine.trim();
+      const text22 = rawLine.trim();
       if (lang === "js") {
         const col = idx - lineStart;
         if (literalRanges(rawLine).some(([a, b3]) => col > a && col < b3)) continue;
@@ -75890,7 +75909,7 @@ function scanSource(content, lang) {
       if (lang === "php" && rule.id === "exec-interpolated" && /\bproc_open\s*\(\s*\[/.test(rawLine)) continue;
       if ((rule.id === "php-include-user-input" || rule.id === "php-reflected-xss") && !/\$_(?:GET|POST|REQUEST|COOKIE)\b/.test(m2[0]) && !phpLocalRequestValue(content, idx, m2[0])) continue;
       const tainted = !INJECTION_RULES.has(rule.id) ? void 0 : rule.id === "ssrf" ? SSRF_TAINT.test(around(content, lineStart, 2, 0)) : TAINT_RE[lang].test(around(content, lineStart, TAINT_WINDOW, 2));
-      byLine.set(line, { rule, line, evidence: text.slice(0, 160), tainted });
+      byLine.set(line, { rule, line, evidence: text22.slice(0, 160), tainted });
     }
   }
   if (lang === "php") for (const hit of scanPhpSecurity(content)) {
@@ -76011,8 +76030,8 @@ var CROSS_FILE_KIND = [
   [/^insecure-(?:exec-interpolated|py-os-system|py-shell-true|eval-dynamic|py-eval-exec|new-function)-/, "exec"]
 ];
 var VENDORED_SINK_RE = /(^|\/)(?:vendor|third_party|node_modules|lib\/(?:mako|cherrypy|jinja2|six|requests|urllib3))\//;
-function paramReaches(kind, n, text) {
-  if (kind === "exec") return new RegExp(`\\b${n}\\b`).test(text);
+function paramReaches(kind, n, text22) {
+  if (kind === "exec") return new RegExp(`\\b${n}\\b`).test(text22);
   return new RegExp(
     [
       `\\{\\s*${n}\\b`,
@@ -76032,7 +76051,7 @@ function paramReaches(kind, n, text) {
       `%[sv][^\\n]*,\\s*${n}\\b`
       // Sprintf("…%s", n)
     ].join("|")
-  ).test(text);
+  ).test(text22);
 }
 var GENERIC_FN = /* @__PURE__ */ new Set([
   "get",
@@ -76274,17 +76293,17 @@ function isCheckable(raw) {
   if (PLACEHOLDER_RE2.test(raw)) return false;
   return true;
 }
-function extractUrls(text) {
-  return extractUrlsWithLines(text).map((u2) => u2.url);
+function extractUrls(text22) {
+  return extractUrlsWithLines(text22).map((u2) => u2.url);
 }
-function extractUrlsWithLines(text) {
+function extractUrlsWithLines(text22) {
   var _a22;
   const out = [];
-  for (const m2 of text.matchAll(URL_RE)) {
+  for (const m2 of text22.matchAll(URL_RE)) {
     const at2 = (_a22 = m2.index) != null ? _a22 : 0;
-    if (text[at2 + m2[0].length] === "<") continue;
+    if (text22[at2 + m2[0].length] === "<") continue;
     const cleaned = stripTrailingPunctuation(m2[0]);
-    if (cleaned) out.push({ url: cleaned, line: lineAt4(text, at2) });
+    if (cleaned) out.push({ url: cleaned, line: lineAt4(text22, at2) });
   }
   return out;
 }
@@ -76323,8 +76342,8 @@ function manifestUrls(json2) {
   push(j3.funding);
   return out;
 }
-function lineAt4(text, index) {
-  return text.slice(0, index).split("\n").length;
+function lineAt4(text22, index) {
+  return text22.slice(0, index).split("\n").length;
 }
 function mapPool(items, limit, worker) {
   return __async(this, null, function* () {
@@ -76356,23 +76375,23 @@ var deadLinksScanner = {
         const isCode = CODE_RE.test(norm);
         const isManifest = norm === "package.json" || norm.endsWith("/package.json");
         if (!isMd && !isCode && !isManifest) continue;
-        const text = yield ctx.readFile(file2);
-        if (!text || !text.includes("http")) continue;
+        const text22 = yield ctx.readFile(file2);
+        if (!text22 || !text22.includes("http")) continue;
         if (isManifest) {
           let json2;
           try {
-            json2 = JSON.parse(text);
+            json2 = JSON.parse(text22);
           } catch (e) {
             continue;
           }
           for (const url2 of manifestUrls(json2)) {
             if (!isCheckable(url2) || seen.has(url2)) continue;
-            const idx = text.indexOf(url2);
-            seen.set(url2, { file: norm, line: idx === -1 ? 1 : lineAt4(text, idx) });
+            const idx = text22.indexOf(url2);
+            seen.set(url2, { file: norm, line: idx === -1 ? 1 : lineAt4(text22, idx) });
           }
           continue;
         }
-        const found = isMd ? extractUrlsWithLines(text) : commentUrls(text);
+        const found = isMd ? extractUrlsWithLines(text22) : commentUrls(text22);
         for (const { url: url2, line } of found) {
           if (!isCheckable(url2) || seen.has(url2)) continue;
           seen.set(url2, { file: norm, line });
@@ -76742,7 +76761,7 @@ function scanFileForEol(file2, content) {
   const norm = file2.replace(/\\/g, "/");
   const lines = content.split(/\r?\n/);
   const out = [];
-  const push = (kind, version2, table, key, pinned, line, evidence) => {
+  const push = (kind, version2, table, key, pinned22, line, evidence) => {
     if (!key) return;
     const eol = table[key];
     if (!eol) return;
@@ -76751,7 +76770,7 @@ function scanFileForEol(file2, content) {
       version: version2,
       release: key,
       eol,
-      pinned,
+      pinned: pinned22,
       file: norm,
       line,
       evidence: evidence.trim().slice(0, 200)
@@ -77616,8 +77635,8 @@ function pickVersion(range, versions) {
   const hits = published.filter(([, v2]) => ok(v2)).sort((a, b3) => a[1][0] - b3[1][0] || a[1][1] - b3[1][1] || a[1][2] - b3[1][2]);
   return hits.length ? hits[hits.length - 1][0] : null;
 }
-function licenseFromText(text) {
-  const head = text.slice(0, 4e3);
+function licenseFromText(text22) {
+  const head = text22.slice(0, 4e3);
   const patterns = [
     [/GNU AFFERO GENERAL PUBLIC LICENSE/i, "AGPL-3.0"],
     [/Server Side Public License/i, "SSPL-1.0"],
@@ -77655,8 +77674,8 @@ var licenseRiskScanner = {
       if (!projectLicense) {
         const lic = rootLicenseFile(ctx.files);
         if (lic) {
-          const text = yield ctx.readFile(lic);
-          if (text) projectLicense = licenseFromText(text);
+          const text22 = yield ctx.readFile(lic);
+          if (text22) projectLicense = licenseFromText(text22);
         }
       }
       const projectClass = classifyLicense(projectLicense);
@@ -77984,29 +78003,29 @@ function significantLines(content) {
   let inBlockComment = false;
   let inDocstring = null;
   for (let i = 0; i < lines.length; i++) {
-    let text = lines[i].trim();
+    let text22 = lines[i].trim();
     if (inDocstring) {
-      if (text.includes(inDocstring)) inDocstring = null;
+      if (text22.includes(inDocstring)) inDocstring = null;
       continue;
     }
-    const doc = text.match(/^[rRuUbB]?("""|''')/);
+    const doc = text22.match(/^[rRuUbB]?("""|''')/);
     if (doc) {
-      const rest = text.slice(text.indexOf(doc[1]) + 3);
+      const rest = text22.slice(text22.indexOf(doc[1]) + 3);
       if (!rest.includes(doc[1])) inDocstring = doc[1];
       continue;
     }
     if (inBlockComment) {
-      if (text.includes("*/")) inBlockComment = false;
+      if (text22.includes("*/")) inBlockComment = false;
       continue;
     }
-    if (text.startsWith("/*")) {
-      if (!text.includes("*/")) inBlockComment = true;
+    if (text22.startsWith("/*")) {
+      if (!text22.includes("*/")) inBlockComment = true;
       continue;
     }
-    if (!text || COMMENT.test(text)) continue;
-    text = text.replace(/\s+/g, " ");
-    if (NOISE.test(text) || IMPORTISH.test(text)) continue;
-    out.push({ text, line: i + 1 });
+    if (!text22 || COMMENT.test(text22)) continue;
+    text22 = text22.replace(/\s+/g, " ");
+    if (NOISE.test(text22) || IMPORTISH.test(text22)) continue;
+    out.push({ text: text22, line: i + 1 });
   }
   return out;
 }
@@ -78027,8 +78046,8 @@ var DECLARATIVE = [
   // The frame of a signature: `def send(`, `self,`, `) -> Response:`, `@overload`
   /^(?:async\s+)?def\s+\w+\($|^(?:self|cls|\*),?$|^\)\s*->.*:$|^@(?:t\.|typing\.)?overload$/
 ];
-function isDeclarative(text) {
-  return DECLARATIVE.some((re2) => re2.test(text));
+function isDeclarative(text22) {
+  return DECLARATIVE.some((re2) => re2.test(text22));
 }
 var DECLARATIVE_SHARE = 0.7;
 var SVG_TAG = /^<\/?(?:svg|g|defs|path|filter|fe[A-Z]\w*|clipPath|mask|stop|linearGradient|radialGradient|circle|rect|ellipse|polygon|polyline|line|use|symbol)\b/i;
@@ -78105,8 +78124,8 @@ function findDuplicates(files) {
         };
       };
       const block = lines.slice(i, i + length);
-      const text = block.map((l3) => l3.text).join("\n");
-      if (text.length < MIN_CHARS) continue;
+      const text22 = block.map((l3) => l3.text).join("\n");
+      if (text22.length < MIN_CHARS) continue;
       if (block.filter((l3) => isDeclarative(l3.text)).length / block.length >= DECLARATIVE_SHARE) {
         continue;
       }
@@ -78281,6 +78300,803 @@ var supplyChainScanner = {
     });
   }
 };
+var BLOCKS = /* @__PURE__ */ new Set(["case", "if", "receive", "try", "begin", "maybe"]);
+var KEYWORDS = /* @__PURE__ */ new Set([...BLOCKS, "fun", "end", "of", "catch", "after", "when", "else", "andalso", "orelse", "and", "or", "xor", "not", "div", "rem", "band", "bor", "bxor", "bsl", "bsr"]);
+var OPEN = { "(": ")", "[": "]", "{": "}", "<<": ">>" };
+function escaped(source, start) {
+  var _a22;
+  const c3 = source[start];
+  const named = { n: "\n", r: "\r", t: "	", b: "\b", f: "\f", v: "\v", e: "\x1B", s: " ", d: "\x7F" };
+  if (named[c3] !== void 0) return { value: named[c3], next: start + 1 };
+  if (c3 === "^") return { value: String.fromCharCode((source.charCodeAt(start + 1) || 64) & 31), next: start + 2 };
+  const hex3 = c3 === "x" ? /^(?:x\{([\da-f]+)\}|x([\da-f]{2}))/i.exec(source.slice(start)) : null;
+  if (hex3) {
+    const code = parseInt((_a22 = hex3[1]) != null ? _a22 : hex3[2], 16);
+    return { value: code <= 1114111 ? String.fromCodePoint(code) : "\uFFFD", next: start + hex3[0].length };
+  }
+  const oct = /^[0-7]{1,3}/.exec(source.slice(start));
+  if (oct) return { value: String.fromCharCode(parseInt(oct[0], 8)), next: start + oct[0].length };
+  return { value: c3 != null ? c3 : "", next: Math.min(start + 1, source.length) };
+}
+function erlangTokens(source) {
+  var _a22, _b, _c, _d, _e2;
+  const out = [];
+  let i = source.startsWith("#!") ? source.indexOf("\n") : 0;
+  if (i < 0) return out;
+  const add = (start, kind, value = source.slice(start, i)) => out.push({ start, end: i, kind, value });
+  while (i < source.length) {
+    const start = i, c3 = source[i];
+    if (/\s/.test(c3)) {
+      i++;
+      continue;
+    }
+    if (c3 === "%") {
+      while (i < source.length && source[i] !== "\n") i++;
+      continue;
+    }
+    if (c3 === "$") {
+      i++;
+      if (source[i] === "\\") {
+        i++;
+        if (source.slice(i, i + 2) === "x{") {
+          const end = source.indexOf("}", i + 2);
+          i = end < 0 ? source.length : end + 1;
+        } else if (source[i] === "^") i += 2;
+        else if (/[0-7]/.test((_a22 = source[i]) != null ? _a22 : "")) {
+          let n = 0;
+          while (n++ < 3 && /[0-7]/.test((_b = source[i]) != null ? _b : "")) i++;
+        } else if (source[i] === "x") i += 3;
+        else i++;
+      } else i += ((_c = source.codePointAt(i)) != null ? _c : 0) > 65535 ? 2 : 1;
+      i = Math.min(i, source.length);
+      add(start, "number");
+      continue;
+    }
+    if (c3 === '"' || c3 === "'") {
+      const triple = c3 === '"' && source.startsWith('"""', i);
+      const quote = triple ? '"""' : c3;
+      i += quote.length;
+      let value = "", closed = false;
+      while (i < source.length) {
+        if (source.startsWith(quote, i)) {
+          i += quote.length;
+          closed = true;
+          break;
+        }
+        if (source[i] === "\\" && i + 1 < source.length) {
+          const escape = escaped(source, i + 1);
+          value += escape.value;
+          i = escape.next;
+        } else value += source[i++];
+      }
+      add(start, c3 === "'" && closed ? "atom" : "string", value);
+      continue;
+    }
+    if (/[A-Za-z_]/.test(c3)) {
+      i++;
+      while (i < source.length && /[A-Za-z0-9_@]/.test(source[i])) i++;
+      const value = source.slice(start, i);
+      add(start, /[A-Z_]/.test(c3) ? "variable" : KEYWORDS.has(value) ? "keyword" : "atom");
+      continue;
+    }
+    if (/\d/.test(c3)) {
+      const m2 = /^(?:\d+#[A-Za-z0-9_]+|\d[\d_]*(?:\.\d[\d_]*)?(?:[eE][+-]?\d+)?)/.exec(source.slice(i));
+      i += (_d = m2 == null ? void 0 : m2[0].length) != null ? _d : 1;
+      add(start, "number");
+      continue;
+    }
+    const multi = ["<:-", "<:=", "=:=", "=/=", "->", "<-", "=>", ":=", "::", "<<", ">>", "++", "--", "==", "/=", "=<", ">=", "||", "&&", "<=", "?="].find((x3) => source.startsWith(x3, i));
+    i += (_e2 = multi == null ? void 0 : multi.length) != null ? _e2 : 1;
+    add(start, "symbol");
+  }
+  return out;
+}
+function isErlangBlock(tokens, i) {
+  var _a22, _b, _c;
+  const t2 = tokens[i];
+  if ((t2 == null ? void 0 : t2.kind) !== "keyword") return false;
+  if (BLOCKS.has(t2.value)) return true;
+  if (t2.value !== "fun") return false;
+  return ((_a22 = tokens[i + 1]) == null ? void 0 : _a22.value) === "(" || ((_b = tokens[i + 1]) == null ? void 0 : _b.kind) === "variable" && ((_c = tokens[i + 2]) == null ? void 0 : _c.value) === "(";
+}
+function erlangPairs(tokens) {
+  const pairs = /* @__PURE__ */ new Map(), stack = [];
+  for (let i = 0; i < tokens.length; i++) {
+    const t2 = tokens[i];
+    if (t2.kind === "symbol" && OPEN[t2.value]) stack.push({ i, close: OPEN[t2.value] });
+    else if (isErlangBlock(tokens, i)) stack.push({ i, close: "end" });
+    else if (t2.kind === "symbol" && [")", "]", "}", ">>"].includes(t2.value) || t2.kind === "keyword" && t2.value === "end") {
+      const top = stack.at(-1);
+      if ((top == null ? void 0 : top.close) === t2.value) {
+        stack.pop();
+        pairs.set(top.i, i);
+        pairs.set(i, top.i);
+      }
+    }
+  }
+  return pairs;
+}
+function erlangSplit(tokens, separator, pairs = erlangPairs(tokens)) {
+  const parts = [];
+  let start = 0;
+  for (let i = 0; i < tokens.length; i++) {
+    const close = pairs.get(i);
+    if (close !== void 0 && close > i) {
+      i = close;
+      continue;
+    }
+    if (["symbol", "keyword"].includes(tokens[i].kind) && tokens[i].value === separator) {
+      parts.push(tokens.slice(start, i));
+      start = i + 1;
+    }
+  }
+  parts.push(tokens.slice(start));
+  return parts;
+}
+function erlangForms(tokens) {
+  var _a22, _b;
+  const pairs = erlangPairs(tokens), out = [];
+  let start = 0;
+  for (let i = 0; i < tokens.length; i++) {
+    const close = pairs.get(i);
+    if (close !== void 0 && close > i) {
+      i = close;
+      continue;
+    }
+    const recordAccess = ((_a22 = tokens[i - 2]) == null ? void 0 : _a22.value) === "#" && ((_b = tokens[i - 1]) == null ? void 0 : _b.kind) === "atom";
+    if (tokens[i].value === "." && !recordAccess) {
+      out.push(tokens.slice(start, i));
+      start = i + 1;
+    }
+  }
+  return out;
+}
+function erlangClauses(tokens) {
+  const pairs = erlangPairs(tokens), out = [];
+  let start = 0, body = false;
+  for (let i = 0; i < tokens.length; i++) {
+    const close = pairs.get(i);
+    if (close !== void 0 && close > i) {
+      i = close;
+      continue;
+    }
+    if (tokens[i].value === "->") body = true;
+    if (tokens[i].value === ";" && body) {
+      out.push(tokens.slice(start, i));
+      start = i + 1;
+      body = false;
+    }
+  }
+  out.push(tokens.slice(start));
+  return out;
+}
+function erlangCall(tokens, i, pairs = erlangPairs(tokens)) {
+  var _a22, _b, _c, _d, _e2, _f;
+  if (((_a22 = tokens[i]) == null ? void 0 : _a22.kind) !== "atom") return null;
+  let name = tokens[i].value, module2, open = i + 1;
+  if (((_b = tokens[i + 1]) == null ? void 0 : _b.value) === ":" && ((_c = tokens[i + 2]) == null ? void 0 : _c.kind) === "atom") {
+    module2 = name;
+    name = tokens[i + 2].value;
+    open = i + 3;
+  } else if ([":", "?", "#"].includes((_e2 = (_d = tokens[i - 1]) == null ? void 0 : _d.value) != null ? _e2 : "")) return null;
+  if (((_f = tokens[open]) == null ? void 0 : _f.value) !== "(") return null;
+  const close = pairs.get(open);
+  if (close === void 0 || close < open) return null;
+  const args = close === open + 1 ? [] : erlangSplit(tokens.slice(open + 1, close), ",");
+  return { module: module2, name, args, start: tokens[i].start, end: tokens[close].end, next: close + 1 };
+}
+function erlangContainer(tokens, open) {
+  var _a22;
+  const pairs = erlangPairs(tokens);
+  if (((_a22 = tokens[0]) == null ? void 0 : _a22.value) !== open || pairs.get(0) !== tokens.length - 1) return null;
+  return tokens.length === 2 ? [] : erlangSplit(tokens.slice(1, -1), ",");
+}
+function erlangAtom(tokens) {
+  return tokens.length === 1 && tokens[0].kind === "atom" ? tokens[0].value : null;
+}
+function erlangLine(source, offset) {
+  let line = 1;
+  for (let i = 0; i < offset; i++) if (source[i] === "\n") line++;
+  return line;
+}
+function erlangNonProductPath(file2) {
+  return /(^|\/)(?:_build|deps|vendor|third_party|node_modules|tests?|fixtures?|examples?|samples?|docs?)\//i.test(file2) || /(?:_SUITE|_tests?)\.erl$/i.test(file2);
+}
+var UNKNOWN = {};
+var CONST = { constant: true };
+var BIFS = /* @__PURE__ */ new Set(["binary_to_term", "list_to_atom", "binary_to_atom", "binary_to_existing_atom", "list_to_existing_atom", "open_port", "apply", "spawn", "spawn_link", "spawn_monitor"]);
+var TRANSFORMS = /* @__PURE__ */ new Set([
+  "erlang:binary_to_list",
+  "erlang:list_to_binary",
+  "erlang:iolist_to_binary",
+  "erlang:binary_to_term",
+  "unicode:characters_to_binary",
+  "unicode:characters_to_list",
+  "lists:flatten",
+  "lists:concat",
+  "jsx:decode",
+  "jiffy:decode",
+  "json:decode",
+  "io_lib:format",
+  "erlang:atom_to_list",
+  "erlang:atom_to_binary",
+  "os:find_executable"
+]);
+function fieldKey(tokens) {
+  if (tokens.length === 1 && ["atom", "string", "number"].includes(tokens[0].kind)) return `${tokens[0].kind}:${tokens[0].value}`;
+  const binary = erlangContainer(tokens, "<<");
+  return (binary == null ? void 0 : binary.length) === 1 && binary[0].length === 1 && binary[0][0].kind === "string" ? `binary:${binary[0][0].value}` : null;
+}
+function moduleOf(call, scope) {
+  var _a22;
+  if (call.module) return call.module;
+  const key = `${call.name}/${call.args.length}`;
+  if (scope.shadowed.has(key)) return void 0;
+  return (_a22 = scope.imported.get(key)) != null ? _a22 : BIFS.has(call.name) || ["binary_to_list", "list_to_binary", "iolist_to_binary", "term_to_binary"].includes(call.name) ? "erlang" : void 0;
+}
+function expand(tokens, env, scope, depth = 0) {
+  var _a22, _b;
+  if (depth > 8) return tokens;
+  if (tokens.length === 1 && tokens[0].kind === "variable") {
+    const value = (_a22 = env.get(tokens[0].value)) == null ? void 0 : _a22.tokens;
+    if (value && value !== tokens) return expand(value, env, scope, depth + 1);
+  }
+  if (tokens.length === 2 && tokens[0].value === "?") {
+    const value = scope.macros.get(tokens[1].value);
+    if (value && ((_b = value[0]) == null ? void 0 : _b.start) < tokens[0].start) return expand(value, env, scope, depth + 1);
+  }
+  return tokens;
+}
+function evaluate(tokens, env, scope, depth = 0) {
+  var _a22, _b, _c, _d, _e2, _f, _g, _h, _i, _j, _k, _l, _m, _n2, _o, _p, _q, _r2, _s2, _t2;
+  if (!tokens.length || depth > 16) return UNKNOWN;
+  if (tokens.length === 1 && tokens[0].kind === "variable") return (_a22 = env.get(tokens[0].value)) != null ? _a22 : UNKNOWN;
+  if (tokens.length === 1 && ["string", "number", "atom"].includes(tokens[0].kind)) return { constant: true, tokens, shape: tokens[0].kind === "string" ? "string" : tokens[0].kind };
+  const expanded = expand(tokens, env, scope);
+  if (expanded !== tokens) return evaluate(expanded, env, scope, depth + 1);
+  const pairs = erlangPairs(tokens);
+  if (tokens[0].value === "(" && pairs.get(0) === tokens.length - 1) return evaluate(tokens.slice(1, -1), env, scope, depth + 1);
+  if (tokens[0].kind === "keyword" && tokens[0].value === "fun") return { shape: "function", tokens };
+  if (["=:=", "=/=", "==", "/=", "=<", ">=", "<", ">", "andalso", "orelse"].some((op) => erlangSplit(tokens, op, pairs).length > 1)) return { constant: true, shape: "atom" };
+  const call = erlangCall(tokens, 0, pairs);
+  if (call && call.next === tokens.length) {
+    const module2 = moduleOf(call, scope), key = `${module2}:${call.name}`;
+    const from = `${key} (source offset ${call.start})`;
+    if (module2 === "cowboy_req") {
+      if (["read_body", "read_urlencoded_body"].includes(call.name) && [1, 2].includes(call.args.length)) return { shape: "tuple", items: [CONST, { source: from, shape: call.name === "read_body" ? "binary" : "pairs" }, UNKNOWN] };
+      if (["qs", "parse_qs", "headers", "parse_cookies"].includes(call.name) && call.args.length === 1 || ["binding", "header", "cookie"].includes(call.name) && [2, 3].includes(call.args.length)) return { source: from, shape: call.name === "headers" ? "map" : ["parse_qs", "parse_cookies"].includes(call.name) ? "pairs" : "binary" };
+    }
+    if ((module2 === "gen_tcp" || module2 === "ssl") && call.name === "recv" && [2, 3].includes(call.args.length)) return { shape: "tuple", items: [CONST, { source: from }] };
+    const values = call.args.map((arg) => evaluate(arg, env, scope, depth + 1));
+    if ((key === "maps:get" || key === "proplists:get_value") && [2, 3].includes(call.args.length)) {
+      const container = (_b = values[1]) != null ? _b : UNKNOWN, fallback = (_c = values[2]) != null ? _c : CONST, selector = fieldKey(call.args[0]);
+      if (selector && ((_d = container.fields) == null ? void 0 : _d.has(selector))) return container.fields.get(selector);
+      if (container.fieldsComplete) {
+        if (selector) return fallback;
+        const possible = [...(_f = (_e2 = container.fields) == null ? void 0 : _e2.values()) != null ? _f : [], fallback];
+        return { source: (_g = possible.find((x3) => x3.source)) == null ? void 0 : _g.source, constant: possible.every((x3) => x3.constant) };
+      }
+      return { source: (_h = container.source) != null ? _h : fallback.source, constant: !!container.constant && !!fallback.constant };
+    }
+    if (module2 === "erlang" && call.name === "term_to_binary") return { localEncoding: true, shape: "binary", tokens };
+    if (module2 === "erlang" && ["binary_to_existing_atom", "list_to_existing_atom", "binary_to_atom", "list_to_atom"].includes(call.name)) return { source: (_i = values[0]) == null ? void 0 : _i.source, constant: (_j = values[0]) == null ? void 0 : _j.constant, shape: "atom", tokens };
+    if (module2 === "gen_udp" && call.name === "recv" && [2, 3].includes(call.args.length)) return { shape: "tuple", items: [CONST, { shape: "tuple", items: [UNKNOWN, UNKNOWN, { source: from }] }] };
+    if (key === "erl_scan:string") return { shape: "tuple", items: [CONST, { source: (_k = values[0]) == null ? void 0 : _k.source, shape: "list" }, CONST] };
+    if (key === "erl_parse:parse_exprs") return { shape: "tuple", items: [CONST, { source: (_l = values[0]) == null ? void 0 : _l.source, shape: "list" }] };
+    if (TRANSFORMS.has(key)) {
+      const source2 = (_m = values.find((v2) => v2.source)) == null ? void 0 : _m.source;
+      const shape = /(?:list_to_binary|iolist_to_binary|characters_to_binary|atom_to_binary)$/.test(key) ? "binary" : /(?:binary_to_list|characters_to_list|atom_to_list|flatten|concat|format|find_executable)$/.test(key) ? "string" : void 0;
+      return { source: source2, shape, constant: values.every((v2) => v2.constant), tokens };
+    }
+    return UNKNOWN;
+  }
+  const tuple2 = erlangContainer(tokens, "{");
+  if (tuple2) {
+    const items = tuple2.map((x3) => evaluate(x3, env, scope, depth + 1));
+    return { items, shape: "tuple", constant: items.every((v2) => v2.constant), tokens };
+  }
+  if (tokens[0].value === "#" && ((_n2 = tokens[1]) == null ? void 0 : _n2.value) === "{" && pairs.get(1) === tokens.length - 1) {
+    const fields = /* @__PURE__ */ new Map();
+    let source2, constant2 = true, fieldsComplete = true;
+    for (const entry of erlangSplit(tokens.slice(2, -1), ",")) {
+      const parts = erlangSplit(entry, "=>");
+      if (parts.length !== 2) return UNKNOWN;
+      const key = fieldKey(parts[0]), value = evaluate(parts[1], env, scope, depth + 1);
+      if (!key) {
+        constant2 = false;
+        fieldsComplete = false;
+        fields.clear();
+      } else fields.set(key, value);
+      source2 != null ? source2 : source2 = value.source;
+      constant2 && (constant2 = !!value.constant);
+    }
+    return { shape: "map", fields, fieldsComplete, source: source2, constant: constant2, tokens };
+  }
+  const list = (_o = erlangContainer(tokens, "[")) != null ? _o : erlangContainer(tokens, "<<");
+  if (list) {
+    if (erlangSplit(tokens.slice(1, -1), "||").length > 1) return UNKNOWN;
+    const items = list.map((x3) => evaluate(x3, env, scope, depth + 1));
+    const fields = /* @__PURE__ */ new Map();
+    let fieldsComplete = true;
+    list.forEach((part, i) => {
+      var _a32, _b2;
+      const tuple22 = erlangContainer(part, "{"), key = (tuple22 == null ? void 0 : tuple22.length) === 2 ? fieldKey(tuple22[0]) : null;
+      if (key && !fields.has(key)) fields.set(key, (_b2 = (_a32 = items[i].items) == null ? void 0 : _a32[1]) != null ? _b2 : UNKNOWN);
+      if (!key) fieldsComplete = false;
+    });
+    return {
+      source: (_r2 = (_p = items.find((v2) => v2.source)) == null ? void 0 : _p.source) != null ? _r2 : (_q = items.flatMap((v2) => {
+        var _a32;
+        return (_a32 = v2.items) != null ? _a32 : [];
+      }).find((v2) => v2.source)) == null ? void 0 : _q.source,
+      fields,
+      fieldsComplete: tokens[0].value === "[" && fieldsComplete,
+      shape: tokens[0].value === "<<" ? "binary" : list.length > 0 && list.every((x3) => erlangContainer(x3, "{") !== null) ? "pairs" : "list",
+      constant: items.every((v2) => v2.constant),
+      tokens
+    };
+  }
+  let source;
+  let constant = true;
+  for (let i = 0; i < tokens.length; i++) {
+    const t2 = tokens[i];
+    if (t2.kind === "variable" && ((_s2 = tokens[i + 1]) == null ? void 0 : _s2.value) === "(") return UNKNOWN;
+    const inner = erlangCall(tokens, i, pairs);
+    if (inner) {
+      const value = evaluate(tokens.slice(i, inner.next), env, scope, depth + 1);
+      source != null ? source : source = value.source;
+      constant && (constant = !!value.constant);
+      i = inner.next - 1;
+    } else if (t2.kind === "variable") {
+      const value = (_t2 = env.get(t2.value)) != null ? _t2 : UNKNOWN;
+      source != null ? source : source = value.source;
+      constant && (constant = !!value.constant);
+    } else if (t2.value === "?" || t2.kind === "keyword") constant = false;
+  }
+  return { source, constant, tokens };
+}
+function bind(pattern, value, env) {
+  if (pattern.length === 1 && pattern[0].kind === "variable") {
+    const name = pattern[0].value;
+    if (name !== "_" && (!env.has(name) || value.constant)) env.set(name, value);
+    return;
+  }
+  const tuple2 = erlangContainer(pattern, "{");
+  if (tuple2 && value.items) tuple2.forEach((part, i) => {
+    var _a22, _b;
+    return bind(part, (_b = (_a22 = value.items) == null ? void 0 : _a22[i]) != null ? _b : UNKNOWN, env);
+  });
+}
+function scopeInfo(forms) {
+  var _a22, _b, _c, _d, _e2, _f, _g, _h, _i, _j, _k;
+  const scope = { shadowed: /* @__PURE__ */ new Set(), imported: /* @__PURE__ */ new Map(), macros: /* @__PURE__ */ new Map() };
+  const ambiguousMacros = /* @__PURE__ */ new Set();
+  for (const form of forms) {
+    if (((_a22 = form[0]) == null ? void 0 : _a22.value) !== "-") {
+      for (const clause of erlangClauses(form)) {
+        const head = erlangCall(clause, 0);
+        if (head && clause.slice(head.next).some((t2) => t2.value === "->")) scope.shadowed.add(`${head.name}/${head.args.length}`);
+      }
+      continue;
+    }
+    if (((_b = form[1]) == null ? void 0 : _b.value) === "define") {
+      const args = (_c = erlangCall(form, 1)) == null ? void 0 : _c.args;
+      if ((args == null ? void 0 : args.length) === 2 && args[0].length === 1) {
+        const name = args[0][0].value;
+        if (scope.macros.has(name)) ambiguousMacros.add(name);
+        scope.macros.set(name, args[1]);
+      }
+    }
+    if (((_d = form[1]) == null ? void 0 : _d.value) === "undef") {
+      const name = (_g = (_f = (_e2 = erlangCall(form, 1)) == null ? void 0 : _e2.args[0]) == null ? void 0 : _f[0]) == null ? void 0 : _g.value;
+      if (name) ambiguousMacros.add(name);
+    }
+    if (((_h = form[1]) == null ? void 0 : _h.value) === "compile" && form.some((x3) => x3.value === "no_auto_import")) {
+      let specific = false;
+      for (let i = 0; i < form.length - 2; i++) if (form[i].kind === "atom" && form[i + 1].value === "/" && form[i + 2].kind === "number") {
+        scope.shadowed.add(`${form[i].value}/${form[i + 2].value}`);
+        specific = true;
+      }
+      if (!specific) for (const name of BIFS) for (const arity of [1, 2, 3]) scope.shadowed.add(`${name}/${arity}`);
+    }
+    if (((_i = form[1]) == null ? void 0 : _i.value) === "import") {
+      const args = (_j = erlangCall(form, 1)) == null ? void 0 : _j.args, module2 = args && erlangAtom(args[0]);
+      if (!args || !module2) continue;
+      for (const entry of (_k = erlangContainer(args[1], "[")) != null ? _k : []) {
+        if (entry.length === 3 && entry[0].kind === "atom" && entry[1].value === "/" && entry[2].kind === "number") scope.imported.set(`${entry[0].value}/${entry[2].value}`, module2);
+      }
+    }
+  }
+  for (const name of ambiguousMacros) scope.macros.delete(name);
+  return scope;
+}
+function acceptsBadCertificate(tokens) {
+  var _a22, _b, _c, _d;
+  const tuple2 = erlangContainer(tokens, "{");
+  if ((tuple2 == null ? void 0 : tuple2.length) !== 2) return false;
+  const fn2 = tuple2[0], pairs = erlangPairs(fn2);
+  if (((_a22 = fn2[0]) == null ? void 0 : _a22.value) !== "fun" || pairs.get(0) !== fn2.length - 1) return false;
+  for (const clause of erlangSplit(fn2.slice(1, -1), ";")) {
+    const cp = erlangPairs(clause), open = ((_b = clause[0]) == null ? void 0 : _b.value) === "(" ? 0 : 1, close = cp.get(open);
+    if (close === void 0 || ((_c = clause[close + 1]) == null ? void 0 : _c.value) !== "->") return false;
+    const args = erlangSplit(clause.slice(open + 1, close), ",");
+    if (args.length !== 3 || args[0].length !== 1 || args[0][0].kind !== "variable") return false;
+    const event = args[1], badCert = erlangContainer(event, "{");
+    const anyEvent = event.length === 1 && event[0].kind === "variable";
+    if (!anyEvent && !((badCert == null ? void 0 : badCert.length) === 2 && erlangAtom(badCert[0]) === "bad_cert")) continue;
+    const result = erlangContainer(clause.slice(close + 2), "{");
+    return !!result && result.length === 2 && ["valid", "valid_peer"].includes((_d = erlangAtom(result[0])) != null ? _d : "");
+  }
+  return false;
+}
+function tlsOptions(tokens, env, scope) {
+  var _a22;
+  const entries = erlangContainer(expand(tokens, env, scope), "[");
+  if (!entries) return null;
+  const options = entries.map((x3) => erlangContainer(x3, "{"));
+  const callbacks = options.filter((x3) => (x3 == null ? void 0 : x3.length) === 2 && erlangAtom(x3[0]) === "verify_fun");
+  if (callbacks.length === 1 && acceptsBadCertificate(expand(callbacks[0][1], env, scope))) return "callback";
+  if (callbacks.length) return null;
+  const verify = options.filter((x3) => x3 && erlangAtom(x3[0]) === "verify");
+  return verify.length === 1 && ((_a22 = verify[0]) == null ? void 0 : _a22.length) === 2 && erlangAtom(verify[0][1]) === "verify_none" ? "none" : null;
+}
+function scanErlangSecurity(source, file2) {
+  var _a22, _b, _c, _d, _e2, _f, _g, _h, _i, _j, _k, _l, _m, _n2, _o, _p;
+  const forms = erlangForms(erlangTokens(source)), scope = scopeInfo(forms), issues = [];
+  const seen = /* @__PURE__ */ new Set();
+  const emit = (call, rule, title, detail, value, definite = false) => {
+    const line = erlangLine(source, call.start), id = `erlang-${rule}-${file2}:${line}`;
+    if (seen.has(id)) return;
+    seen.add(id);
+    issues.push({
+      id,
+      category: "security",
+      severity: (value == null ? void 0 : value.source) && ["shell", "eval", "code-load", "tainted-dispatch", "external-executable"].includes(rule) ? "critical" : "warning",
+      confidence: (value == null ? void 0 : value.source) ? "high" : definite ? "medium" : "low",
+      title,
+      location: `${file2}:${line}`,
+      ageDays: 0,
+      detail: detail + ((value == null ? void 0 : value.source) ? ` Input provenance: ${value.source}.` : ""),
+      evidence: source.slice(call.start, call.end).replace(/\s+/g, " ").slice(0, 180)
+    });
+  };
+  for (const form of forms) {
+    const attribute = ((_a22 = form[0]) == null ? void 0 : _a22.value) === "-";
+    if (attribute && ((_b = form[1]) == null ? void 0 : _b.value) !== "define") continue;
+    for (const clause of attribute ? [form] : erlangClauses(form)) {
+      const pairs = erlangPairs(clause), env = /* @__PURE__ */ new Map();
+      let body = 0;
+      if (!attribute) {
+        const head = erlangCall(clause, 0, pairs);
+        if (!head) continue;
+        body = clause.findIndex((t2, i) => i >= head.next && t2.value === "->") + 1;
+        if (!body) continue;
+        for (const arg of head.args) for (const t2 of arg) if (t2.kind === "variable" && t2.value !== "_") env.set(t2.value, UNKNOWN);
+        if (head.name === "handle_info" && head.args.length === 2) {
+          const message = erlangContainer(head.args[0], "{");
+          if ((message == null ? void 0 : message.length) === 3 && ["tcp", "ssl"].includes((_c = erlangAtom(message[0])) != null ? _c : "") && message[2].length === 1 && message[2][0].kind === "variable") env.set(message[2][0].value, { source: "handle_info socket payload" });
+          if ((message == null ? void 0 : message.length) === 5 && erlangAtom(message[0]) === "udp" && message[4].length === 1 && message[4][0].kind === "variable") env.set(message[4][0].value, { source: "handle_info UDP payload" });
+        }
+        if (head.name === "websocket_handle" && head.args.length === 2) {
+          const frame = erlangContainer(head.args[0], "{");
+          if ((frame == null ? void 0 : frame.length) === 2 && ["text", "binary"].includes((_d = erlangAtom(frame[0])) != null ? _d : "") && frame[1].length === 1 && frame[1][0].kind === "variable") env.set(frame[1][0].value, { source: "websocket_handle client frame", shape: "binary" });
+        }
+      }
+      let current = env;
+      const branches = [];
+      for (let i = body; i < clause.length; i++) {
+        const t2 = clause[i];
+        if (((_e2 = branches.at(-1)) == null ? void 0 : _e2.kind) === "comprehension" && ((_f = branches.at(-1)) == null ? void 0 : _f.close) === i) current = branches.pop().parent;
+        if (["[", "<<", "{"].includes(t2.value)) {
+          const end = pairs.get(i);
+          const parts = end !== void 0 && end > i ? erlangSplit(clause.slice(i + 1, end), "||") : [];
+          if (parts.length === 2) {
+            const base = new Map(current);
+            for (const group of erlangSplit(parts[1], ",")) for (const qualifier of erlangSplit(group, "&&")) {
+              for (const arrow of ["<-", "<=", "<:-", "<:="]) {
+                const generator = erlangSplit(qualifier, arrow);
+                if (generator.length === 2) {
+                  const collection = evaluate(generator[1], base, scope);
+                  const element = collection.constant ? CONST : UNKNOWN;
+                  for (const name of generator[0]) if (name.kind === "variable" && name.value !== "_") base.set(name.value, element);
+                }
+              }
+            }
+            branches.push({ parent: current, base, kind: "comprehension", patternStart: -1, close: end });
+            current = new Map(base);
+          }
+        }
+        if (isErlangBlock(clause, i)) {
+          let subject, subjectVariable;
+          if (t2.value === "case") {
+            let end = i + 1;
+            while (end < clause.length && clause[end].value !== "of") {
+              const close = pairs.get(end);
+              end = close !== void 0 && close > end ? close + 1 : end + 1;
+            }
+            const expression = clause.slice(i + 1, end);
+            subject = evaluate(expression, current, scope);
+            if (expression.length === 1 && expression[0].kind === "variable") subjectVariable = expression[0].value;
+          }
+          const base = new Map(current);
+          if (t2.value === "fun" && ((_g = clause[i + 1]) == null ? void 0 : _g.kind) === "variable") base.set(clause[i + 1].value, UNKNOWN);
+          branches.push({ parent: current, base, kind: t2.value, subject, subjectVariable, patternStart: t2.value === "receive" ? i + 1 : -1 });
+          current = new Map(base);
+          if (t2.value === "fun") {
+            const open = ((_h = clause[i + 1]) == null ? void 0 : _h.value) === "(" ? i + 1 : i + 2;
+            const close = pairs.get(open);
+            if (close !== void 0) {
+              for (const param of clause.slice(open + 1, close)) if (param.kind === "variable" && param.value !== "_") current.set(param.value, UNKNOWN);
+            }
+          }
+        } else if (t2.kind === "keyword" && t2.value === "end" && branches.length) current = branches.pop().parent;
+        else if (t2.value === ";" && branches.length) {
+          const branch = branches.at(-1);
+          current = new Map(branch.base);
+          branch.patternStart = i + 1;
+        } else if (t2.kind === "keyword" && t2.value === "of" && branches.length) branches.at(-1).patternStart = i + 1;
+        else if (t2.kind === "keyword" && ["catch", "after", "else"].includes(t2.value) && branches.length) {
+          const branch = branches.at(-1);
+          current = new Map(branch.base);
+          branch.patternStart = -1;
+          branch.subject = void 0;
+        }
+        if (t2.value === "->" && branches.length) {
+          const branch = branches.at(-1);
+          if (branch.patternStart >= 0) {
+            const raw = clause.slice(branch.patternStart, i), when = raw.findIndex((x3) => x3.value === "when");
+            const pattern = when < 0 ? raw : raw.slice(0, when);
+            if (branch.subject) {
+              bind(pattern, branch.subject, current);
+              const literal2 = evaluate(pattern, /* @__PURE__ */ new Map(), scope);
+              if (branch.subjectVariable && literal2.constant) current.set(branch.subjectVariable, literal2);
+            }
+            if (branch.kind === "fun") {
+              const open = ((_i = pattern[0]) == null ? void 0 : _i.value) === "(" ? 0 : 1;
+              const close = erlangPairs(pattern).get(open);
+              if (close !== void 0) {
+                for (const param of pattern.slice(open + 1, close)) if (param.kind === "variable" && param.value !== "_") current.set(param.value, UNKNOWN);
+              }
+            }
+            const message = erlangContainer(pattern, "{");
+            if (branch.kind === "receive" && (message == null ? void 0 : message.length) === 3 && ["tcp", "ssl"].includes((_j = erlangAtom(message[0])) != null ? _j : "") && message[2].length === 1 && message[2][0].kind === "variable") current.set(message[2][0].value, { source: "receive socket payload" });
+            branch.patternStart = -1;
+          }
+        }
+        if (t2.value === "=") {
+          let start = i - 1;
+          if (((_k = clause[start]) == null ? void 0 : _k.value) === "}") start = (_l = pairs.get(start)) != null ? _l : start;
+          const tail = erlangSplit(clause.slice(i + 1), ",")[0];
+          const rhs = erlangSplit(tail, ";")[0];
+          bind(clause.slice(start, i), evaluate(rhs, current, scope), current);
+        }
+        const call = erlangCall(clause, i, pairs);
+        if (!call) continue;
+        const module2 = moduleOf(call, scope), arity = call.args.length;
+        const value = evaluate((_m = call.args[0]) != null ? _m : [], current, scope);
+        const accepts = (v2, shapes) => !v2.shape || shapes.includes(v2.shape);
+        if (module2 === "erlang" && call.name === "binary_to_term" && [1, 2].includes(arity) && accepts(value, ["binary"]) && !value.constant && !value.localEncoding) {
+          const opts = arity === 2 ? erlangContainer(expand(call.args[1], current, scope), "[") : [];
+          if (opts && opts.every((x3) => {
+            var _a32;
+            return ["safe", "used"].includes((_a32 = erlangAtom(x3)) != null ? _a32 : "");
+          }) && !opts.some((x3) => erlangAtom(x3) === "safe")) emit(call, "unsafe-term", "External term decoding without safe", "binary_to_term without [safe] can allocate attacker-selected atoms. If input is untrusted, enforce size limits, use [safe], and validate the decoded schema; [safe] is not an application sandbox.", value);
+        }
+        if (module2 === "erlang" && (call.name === "list_to_atom" && arity === 1 && accepts(value, ["string", "list"]) || call.name === "binary_to_atom" && [1, 2].includes(arity) && accepts(value, ["binary"])) && !value.constant) emit(call, "dynamic-atom", "Runtime data converted to a new atom", "Atoms are not garbage-collected. Unbounded external names can exhaust the VM atom table. Prefer a finite lookup table or an existing-atom conversion with an allowlist. Trusted bounded startup names need manual review.", value);
+        if (module2 === "os" && call.name === "cmd" && [1, 2].includes(arity) && accepts(value, ["string", "list", "atom"]) && !value.constant) emit(call, "shell", "Dynamic value passed to the operating-system shell", "os:cmd interprets shell syntax. If this command contains external input, use spawn_executable with separate arguments and validate executable/options.", value);
+        if (module2 === "erlang" && call.name === "open_port" && arity === 2) {
+          const port = erlangContainer(expand(call.args[0], current, scope), "{");
+          if ((port == null ? void 0 : port.length) === 2 && erlangAtom(port[0]) === "spawn") {
+            const command = evaluate(port[1], current, scope);
+            if (!command.constant) emit(call, "shell", "Dynamic shell command in open_port", "The {spawn, Command} port form uses a shell. Prefer {spawn_executable, Path} with a separate {args, Args} vector for external values.", command);
+          }
+          if ((port == null ? void 0 : port.length) === 2 && erlangAtom(port[0]) === "spawn_executable") {
+            const selected = evaluate(port[1], current, scope);
+            if (selected.source && accepts(selected, ["string", "list", "binary"])) emit(call, "external-executable", "External input selects the host executable", "Separate argument vectors prevent shell parsing but do not authorize the executable itself. Keep the executable fixed or map operation names through an explicit allowlist; PATH lookup alone is not an allowlist.", selected);
+            let executable = expand(port[1], current, scope);
+            const find = erlangCall(executable, 0);
+            if ((find == null ? void 0 : find.module) === "os" && find.name === "find_executable" && find.args.length === 1) executable = find.args[0];
+            const shell = executable.length === 1 && executable[0].kind === "string" ? (_n2 = executable[0].value.split(/[\\/]/).at(-1)) == null ? void 0 : _n2.toLowerCase() : "";
+            if (shell && /^(?:ba|da|z|k)?sh$|^(?:cmd(?:\.exe)?|powershell(?:\.exe)?|pwsh(?:\.exe)?)$/.test(shell)) {
+              for (const option of (_o = erlangContainer(expand(call.args[1], current, scope), "[")) != null ? _o : []) {
+                const tuple2 = erlangContainer(option, "{");
+                if ((tuple2 == null ? void 0 : tuple2.length) !== 2 || erlangAtom(tuple2[0]) !== "args") continue;
+                const args = erlangContainer(expand(tuple2[1], current, scope), "[");
+                if (args && args.length >= 2 && args[0].length === 1 && args[0][0].kind === "string" && /^(?:-[a-z]*c|\/c|-command|-encodedcommand|-enc)$/i.test(args[0][0].value)) {
+                  const command = evaluate(args[1], current, scope);
+                  if (!command.constant) emit(call, "shell", "Shell interpreter receives a dynamic command string", "spawn_executable avoids shell parsing only when the executable is not itself a shell interpreting -c, /c or -Command. Pass external values as arguments to a fixed executable instead.", command);
+                }
+              }
+            }
+          }
+        }
+        if (module2 === "erl_eval" && ["expr", "exprs"].includes(call.name) && arity >= 2 && accepts(value, call.name === "expr" ? ["tuple"] : ["list"]) && !value.constant) emit(call, "eval", "Runtime Erlang expression evaluation", "erl_eval executes expressions with runtime privileges. Do not evaluate externally supplied expressions; use a restricted data format and explicit operations instead.", value);
+        if (module2 === "code" && call.name === "load_binary" && arity === 3) {
+          const beam = evaluate(call.args[2], current, scope);
+          if (accepts(beam, ["binary"]) && !beam.constant) emit(call, "code-load", "Runtime BEAM code loading", "Loaded BEAM code is fully trusted and can access the host. Accept code only from an authenticated, integrity-checked release process, never directly from request data.", beam);
+        }
+        if (module2 === "erlang" && ["apply", "spawn", "spawn_link", "spawn_monitor"].includes(call.name)) {
+          if (arity === 3) {
+            const targets = call.args.slice(0, 2).map((x3) => evaluate(x3, current, scope));
+            const external = targets.find((x3) => x3.source && accepts(x3, ["atom"]));
+            if (external) emit(call, "tainted-dispatch", "External input selects the Erlang module or function", "Existing-atom conversion prevents atom allocation but does not authorize which loaded function may run. Map external operation names to an explicit finite set of approved module/function pairs. Ordinary trusted-cluster RPC and untrusted arguments to a fixed target are not this finding.", external);
+          } else if (call.name === "apply" && arity === 2 && value.source && accepts(value, ["function"])) emit(call, "tainted-dispatch", "Externally supplied function object is invoked", "Do not invoke functions decoded from untrusted external terms. binary_to_term [safe] does not make a received function safe to execute. Choose approved operations explicitly.", value);
+        }
+        if (module2 === "ssl" && call.name === "connect" && [2, 3, 4].includes(arity)) {
+          const candidates = arity === 2 ? [call.args[1]] : arity === 4 ? [call.args[2]] : [call.args[1], call.args[2]];
+          const tls = candidates.map((x3) => tlsOptions(x3, current, scope)).find(Boolean);
+          if (tls === "none") emit(call, "tls-verify-none", "TLS client certificate verification explicitly disabled", "ssl:connect with {verify, verify_none} does not authenticate the server certificate. Use verify_peer and appropriate CA/hostname verification. Server-side ssl:listen is not this rule.", void 0, true);
+          if (tls === "callback") emit(call, "tls-accept-bad-cert", "TLS client callback unconditionally accepts certificate errors", "The literal verify_fun accepts bad_cert events without a certificate pattern, guard or validation call. Keep verification failures fatal; use an explicit authenticated pinning/trust policy for legitimate exceptions.", void 0, true);
+        }
+        if (module2 === "httpc" && call.name === "request" && [4, 5].includes(arity)) {
+          const request = erlangContainer(expand(call.args[1], current, scope), "{");
+          const url2 = request == null ? void 0 : request[0];
+          const plainHttp = (url2 == null ? void 0 : url2.length) === 1 && url2[0].kind === "string" && /^http:\/\//i.test(url2[0].value);
+          if (!plainHttp) for (const option of (_p = erlangContainer(expand(call.args[2], current, scope), "[")) != null ? _p : []) {
+            const pair = erlangContainer(option, "{");
+            if ((pair == null ? void 0 : pair.length) !== 2 || erlangAtom(pair[0]) !== "ssl") continue;
+            const tls = tlsOptions(pair[1], current, scope);
+            if (tls === "none") emit(call, "tls-verify-none", "HTTP client TLS certificate verification explicitly disabled", "httpc request SSL options disable server certificate verification. Use verify_peer and suitable trust/hostname validation. Literal plain-HTTP requests and server listen options are not classified as TLS bypasses.", void 0, true);
+            if (tls === "callback") emit(call, "tls-accept-bad-cert", "HTTP client TLS callback accepts certificate errors", "The literal HTTP client verification callback accepts bad_cert events without certificate validation. Keep those errors fatal or implement an explicit authenticated trust policy.", void 0, true);
+          }
+        }
+      }
+    }
+  }
+  return issues.sort((a, b3) => priority(b3) - priority(a)).slice(0, 60);
+}
+function priority(issue2) {
+  var _a22;
+  return { high: 3, medium: 2, low: 1 }[(_a22 = issue2.confidence) != null ? _a22 : "medium"] * 10 + { critical: 3, warning: 2, info: 1 }[issue2.severity];
+}
+var erlangSecurityScanner = {
+  id: "erlang-security",
+  category: "security",
+  run(ctx) {
+    return __async(this, null, function* () {
+      const issues = [];
+      for (const file2 of ctx.files) {
+        const norm = file2.replace(/\\/g, "/");
+        if (!/\.(?:erl|hrl|escript)$/i.test(norm) || erlangNonProductPath(norm)) continue;
+        const source = yield ctx.readFile(file2);
+        if (source) issues.push(...scanErlangSecurity(source, norm).map((x3) => __spreadProps(__spreadValues({}, x3), { scanner: "erlang-security" })));
+      }
+      return issues.sort((a, b3) => priority(b3) - priority(a)).slice(0, 80);
+    });
+  }
+};
+var immutable = (ref) => /^(?:[a-f\d]{40}|[a-f\d]{64})$/i.test(ref);
+var pinned = (dep) => ["ref", "legacy"].includes(dep.refKind) && immutable(dep.ref);
+var cleartext = (url2) => /^(?:git\+)?http:\/\/|^git:\/\//i.test(url2);
+function text(tokens) {
+  if (tokens.length === 1 && ["atom", "string"].includes(tokens[0].kind)) return tokens[0].value;
+  const binary = erlangContainer(tokens, "<<");
+  return (binary == null ? void 0 : binary.length) === 1 && binary[0].length === 1 && binary[0][0].kind === "string" ? binary[0][0].value : null;
+}
+function dependency(tokens) {
+  var _a22, _b;
+  const parts = erlangContainer(tokens, "{");
+  if (!parts || parts.length < 2) return null;
+  const name = text(parts[0]);
+  if (!name) return null;
+  for (const part of parts.slice(1)) {
+    const source = erlangContainer(part, "{");
+    if (!source || source.length < 2 || !["git", "git_subdir"].includes((_a22 = erlangAtom(source[0])) != null ? _a22 : "")) continue;
+    const url2 = text(source[1]);
+    if (!url2) continue;
+    const refTuple = source[2] && erlangContainer(source[2], "{");
+    const ref = (refTuple == null ? void 0 : refTuple.length) === 2 ? text(refTuple[1]) : source[2] ? text(source[2]) : null;
+    return { name, url: url2, ref: ref != null ? ref : "HEAD", refKind: refTuple ? (_b = erlangAtom(refTuple[0])) != null ? _b : "unknown" : source[2] ? "legacy" : "default", offset: tokens[0].start };
+  }
+  return null;
+}
+function walk2(tokens, visit, depth = 0) {
+  if (depth > 30) return;
+  const tuple2 = erlangContainer(tokens, "{");
+  if (tuple2) {
+    visit(tuple2, tokens, depth);
+    for (const part of tuple2) walk2(part, visit, depth + 1);
+    return;
+  }
+  const list = erlangContainer(tokens, "[");
+  if (list) for (const part of list) walk2(part, visit, depth + 1);
+}
+var erlangBuildScanner = {
+  id: "erlang-build",
+  category: "security",
+  run(ctx) {
+    return __async(this, null, function* () {
+      var _a22, _b;
+      const issues = [], seen = /* @__PURE__ */ new Set();
+      for (const file2 of ctx.files) {
+        const norm = file2.replace(/\\/g, "/");
+        if (!/(^|\/)rebar\.config$/.test(norm) || erlangNonProductPath(norm)) continue;
+        const source = yield ctx.readFile(file2);
+        if (!source) continue;
+        const lockPath = norm.replace(/rebar\.config$/, "rebar.lock"), lockSource = yield ctx.readFile(lockPath);
+        const locks = /* @__PURE__ */ new Map();
+        if (lockSource) for (const form of erlangForms(erlangTokens(lockSource))) walk2(form, (_tuple2, tokens) => {
+          const dep = dependency(tokens);
+          if (dep && pinned(dep)) locks.set(dep.name, dep);
+        });
+        const emit = (rule, name, title, detail, at2, path = norm, contents = source) => {
+          if (issues.length >= 80) return;
+          const line = erlangLine(contents, at2), id = `erlang-${rule}-${path}:${line}-${name}`;
+          if (seen.has(id)) return;
+          seen.add(id);
+          issues.push({
+            id,
+            scanner: "erlang-build",
+            category: "security",
+            severity: rule === "plugin-unversioned" ? "info" : "warning",
+            confidence: "medium",
+            title,
+            detail,
+            location: `${path}:${line}`,
+            ageDays: 0,
+            evidence: name
+          });
+        };
+        const inspect = (tuple2, tokens, depth) => {
+          var _a32, _b2, _c;
+          const key = erlangAtom((_a32 = tuple2[0]) != null ? _a32 : []);
+          if (!key || !["deps", "plugins", "project_plugins"].includes(key) || tuple2.length !== 2) return;
+          const entries = erlangContainer(tuple2[1], "[");
+          if (!entries) return;
+          const plugin = key !== "deps";
+          for (const entry of entries) {
+            if (plugin && entry.length === 1 && entry[0].kind === "atom") {
+              const name = entry[0].value;
+              emit(
+                "plugin-unversioned",
+                name,
+                `Rebar build plugin has no version constraint: ${name}`,
+                "Rebar plugins execute during builds and are not locked by the normal rebar.lock dependency entries. Specify a tested plugin version. This is a build reproducibility/hardening finding, not a demonstrated compromise.",
+                entry[0].start
+              );
+            }
+            const declared = dependency(entry);
+            if (!declared) continue;
+            const locked = !plugin && depth === 0 ? locks.get(declared.name) : void 0;
+            const effective = locked != null ? locked : declared;
+            if (cleartext(effective.url)) emit(
+              "dep-cleartext",
+              declared.name,
+              `Rebar dependency fetched over cleartext transport: ${declared.name}`,
+              "The effective Git dependency URL uses HTTP or unauthenticated git:// transport. Use HTTPS or authenticated SSH; retain immutable refs and the lock file.",
+              effective.offset,
+              locked ? lockPath : norm,
+              locked ? lockSource : source
+            );
+            if (!pinned(effective)) emit(
+              "dep-floating",
+              declared.name,
+              `Rebar Git dependency has no effective immutable pin: ${declared.name}`,
+              plugin ? "Build plugins are not protected by the normal dependency lock. Use a full Git commit SHA or a tested immutable package release instead of a moving branch/tag." : "This Git dependency resolves from a branch/tag/HEAD without an applicable immutable rebar.lock entry. Commit the default-profile lock file or pin a full Git SHA; non-default profile dependencies are not locked by the default lock.",
+              (_c = (_b2 = entry[0]) == null ? void 0 : _b2.start) != null ? _c : tokens[0].start
+            );
+          }
+        };
+        for (const form of erlangForms(erlangTokens(source))) {
+          const tuple2 = erlangContainer(form, "{");
+          if (!tuple2) continue;
+          inspect(tuple2, form, 0);
+          if (tuple2.length === 2 && erlangAtom(tuple2[0]) === "profiles") {
+            for (const profile of (_a22 = erlangContainer(tuple2[1], "[")) != null ? _a22 : []) {
+              const parts = erlangContainer(profile, "{");
+              if ((parts == null ? void 0 : parts.length) !== 2) continue;
+              for (const option of (_b = erlangContainer(parts[1], "[")) != null ? _b : []) {
+                const optionTuple = erlangContainer(option, "{");
+                if (optionTuple) inspect(optionTuple, option, 1);
+              }
+            }
+          }
+        }
+      }
+      return issues;
+    });
+  }
+};
 var defaultScanners = [
   envLifecycleScanner,
   staleBranchScanner,
@@ -78309,7 +79125,9 @@ var defaultScanners = [
   licenseRiskScanner,
   ciHealthScanner,
   duplicateCodeScanner,
-  supplyChainScanner
+  supplyChainScanner,
+  erlangSecurityScanner,
+  erlangBuildScanner
 ];
 var SEVERITY_CURVE = {
   critical: { full: 2, alpha: 0.7 },
@@ -78814,9 +79632,9 @@ function buildScanContext(root) {
                   return true;
                 }
                 if (line.startsWith("+") && !line.startsWith("+++") && file2 && commit) {
-                  const text = line.slice(1);
-                  if (text.length <= MAX_LINE_LEN) {
-                    additions.push({ commit, date: date5, file: file2, text });
+                  const text22 = line.slice(1);
+                  if (text22.length <= MAX_LINE_LEN) {
+                    additions.push({ commit, date: date5, file: file2, text: text22 });
                     if (additions.length >= MAX_LINES) return false;
                   }
                 }
@@ -79128,6 +79946,20 @@ var WORKFLOW2 = {
   "no-permissions": "Workflow token permissions not restricted"
 };
 var DEFS2 = [
+  ...Object.entries({
+    "unsafe-term": "Erlang external term decoding without safe",
+    "dynamic-atom": "Erlang runtime atom creation",
+    shell: "Erlang dynamic shell command",
+    eval: "Erlang runtime expression evaluation",
+    "code-load": "Erlang runtime BEAM loading",
+    "tainted-dispatch": "Erlang external data selects executable code",
+    "external-executable": "Erlang external data selects a host executable",
+    "tls-verify-none": "Erlang TLS client verification disabled",
+    "tls-accept-bad-cert": "Erlang TLS callback accepts certificate errors",
+    "plugin-unversioned": "Rebar build plugin version unconstrained",
+    "dep-cleartext": "Rebar Git dependency uses cleartext transport",
+    "dep-floating": "Rebar Git dependency lacks an immutable pin"
+  }).map(([id, label]) => ({ rule: `erlang-${id}`, label, test: new RegExp(`^erlang-${id}-`) })),
   { rule: "secret-history", label: "Secret still in git history", test: /^secret-history-/ },
   { rule: "secret-generic", label: "High-entropy secret assignment", test: /^secret-entropy-/ },
   { rule: "secret-provider", label: "Provider credential (AWS, Stripe, GitHub\u2026)", test: /^secret-/ },
@@ -79270,10 +80102,10 @@ function parseFile2(content, file2, opts = {}) {
     return null;
   }
 }
-function walk2(node, visit) {
+function walk3(node, visit) {
   if (!node || typeof node !== "object") return;
   if (Array.isArray(node)) {
-    for (const child of node) walk2(child, visit);
+    for (const child of node) walk3(child, visit);
     return;
   }
   const n = node;
@@ -79281,7 +80113,7 @@ function walk2(node, visit) {
   for (const key in n) {
     if (SKIP_KEYS2.has(key)) continue;
     const val = n[key];
-    if (val && typeof val === "object") walk2(val, visit);
+    if (val && typeof val === "object") walk3(val, visit);
   }
 }
 
@@ -79414,7 +80246,7 @@ function envVarName2(n) {
 function analyzeWithAst2(content, file2, acc) {
   const ast = parseFile2(content, file2);
   if (!ast) return false;
-  walk2(ast, (node) => {
+  walk3(ast, (node) => {
     if ((node.type === "MemberExpression" || node.type === "OptionalMemberExpression") && isProcessEnv2(node.object)) {
       const prop = node.property;
       if (!node.computed && prop?.type === "Identifier") {
@@ -79606,8 +80438,8 @@ var staleBranchScanner2 = {
 var SOURCE_RE8 = /\.(ts|tsx|js|jsx|mjs|mts|cts|py|go|rs|java|rb|php|c|cc|cpp|h|hpp|cs|kt|swift|scala)$/;
 var MARKER_RE2 = /^[\s*>!-]*(TODO|FIXME|HACK|XXX)\b:?\s*(.*)$/;
 var STALE_DAYS5 = 365;
-function findMarker2(text) {
-  const m2 = text.trimEnd().match(MARKER_RE2);
+function findMarker2(text3) {
+  const m2 = text3.trimEnd().match(MARKER_RE2);
   if (!m2) return null;
   return { marker: m2[1], rest: m2[2].trim() };
 }
@@ -79894,14 +80726,14 @@ function packageOf2(spec) {
 var FRAMEWORK_IMPLICIT2 = /* @__PURE__ */ new Set(["react-dom"]);
 var CONFIG_FILE_RE2 = /(^|\/)(next|postcss|tailwind|vite|vitest|rollup|webpack|babel|jest|eslint|prettier|stylelint|playwright|cypress|tsup|drizzle|svelte|astro|nuxt)\.config\.[cm]?[jt]s$|(^|\/)\.(babelrc|eslintrc|prettierrc|stylelintrc)[\w.]*$/i;
 async function collectToolingText2(ctx, scripts) {
-  let text = Object.values(scripts ?? {}).join("\n");
+  let text3 = Object.values(scripts ?? {}).join("\n");
   for (const file2 of ctx.files) {
     if (!CONFIG_FILE_RE2.test(file2)) continue;
     const content = await ctx.readFile(file2);
-    if (content) text += `
+    if (content) text3 += `
 ${content}`;
   }
-  return text;
+  return text3;
 }
 var IMPORT_TEXT_RE2 = /(?:\bfrom\s*|\bimport\s*\(?\s*|\brequire\s*\(\s*)["']([^"'\s]+)["']|\bimport\s+["']([^"'\s]+)["']/g;
 async function collectImports2(ctx) {
@@ -79916,7 +80748,7 @@ async function collectImports2(ctx) {
     }
     const ast = /\.(vue|svelte|astro)$/.test(file2) ? null : parseFile2(content, file2);
     if (!ast) continue;
-    walk2(ast, (node) => {
+    walk3(ast, (node) => {
       let spec = null;
       if ((node.type === "ImportDeclaration" || node.type === "ExportNamedDeclaration" || node.type === "ExportAllDeclaration") && node.source) {
         spec = node.source.value ?? null;
@@ -80397,13 +81229,13 @@ async function computeNpmPackageInstances2(ctx, fileSet) {
           add(actualName, value.version, value.dev !== true, nodeModulesCount === 1, path);
         }
       }
-      const walk3 = (deps) => {
+      const walk5 = (deps) => {
         for (const [name, value] of Object.entries(deps ?? {})) {
           if (typeof value.version === "string") add(name, value.version, value.dev !== true, false, name);
-          walk3(value.dependencies);
+          walk5(value.dependencies);
         }
       };
-      walk3(json2.dependencies);
+      walk5(json2.dependencies);
       if (found.size) return [...found.values()];
     } catch {
     }
@@ -80620,14 +81452,14 @@ function parseNpmLock2(txt) {
       saw = true;
       if (val?.dev !== true) prod.add(m2[1]);
     }
-    const walk3 = (deps) => {
+    const walk5 = (deps) => {
       for (const [name, val] of Object.entries(deps ?? {})) {
         saw = true;
         if (val?.dev !== true) prod.add(name);
-        walk3(val?.dependencies);
+        walk5(val?.dependencies);
       }
     };
-    walk3(json2.dependencies);
+    walk5(json2.dependencies);
     return saw ? prod : null;
   } catch {
     return null;
@@ -80712,7 +81544,7 @@ function finalizeDependencyResearch2(manager, lockfile, nodeMap, edges, options,
   const paths = [];
   const maxPaths = Math.max(1, options.maxPaths ?? 100);
   let truncated = false;
-  const walk3 = (start, mode) => {
+  const walk5 = (start, mode) => {
     const stack = [{ id: start, path: [], devStarted: false }];
     let walkSteps = 0;
     while (stack.length && paths.length < maxPaths && walkSteps < 2e4) {
@@ -80738,8 +81570,8 @@ function finalizeDependencyResearch2(manager, lockfile, nodeMap, edges, options,
     if (stack.length && (walkSteps >= 2e4 || paths.length >= maxPaths)) truncated = true;
   };
   if (options.target) for (const root of roots) {
-    walk3(root.id, "production");
-    walk3(root.id, "development");
+    walk5(root.id, "production");
+    walk5(root.id, "development");
   }
   if (truncated) warnings.push("Dependency path search reached its safety limit; the path list may be incomplete.");
   const nodes = [...nodeMap.values()].map(({ prod: _prod, dev: _dev, ...node }) => node);
@@ -80780,10 +81612,10 @@ function dependencyEntries2(value) {
   const record2 = asRecord2(value);
   return record2 ? Object.entries(record2).filter((entry) => typeof entry[1] === "string") : [];
 }
-function parseYarnDependencyResearch2(text, manifests, options = {}) {
+function parseYarnDependencyResearch2(text3, manifests, options = {}) {
   let parsed;
   try {
-    parsed = (0, import_parsers2.parseSyml)(text);
+    parsed = (0, import_parsers2.parseSyml)(text3);
   } catch {
     return null;
   }
@@ -81077,13 +81909,13 @@ async function enumerateNpmInstalled2(ctx, fileSet) {
         const m2 = key.match(/(?:^|\/)node_modules\/((?:@[^/]+\/)?[^/]+)$/);
         if (m2 && typeof val?.version === "string") add(m2[1], val.version, val.dev === true);
       }
-      const walk3 = (deps) => {
+      const walk5 = (deps) => {
         for (const [name, val] of Object.entries(deps ?? {})) {
           if (typeof val?.version === "string") add(name, val.version, val.dev === true);
-          walk3(val?.dependencies);
+          walk5(val?.dependencies);
         }
       };
-      walk3(json2.dependencies);
+      walk5(json2.dependencies);
     } catch {
     }
   }
@@ -81109,8 +81941,8 @@ async function enumerateNpmInstalled2(ctx, fileSet) {
 }
 async function enumerateYarnInstalled2(ctx, fileSet) {
   if (!fileSet.has("yarn.lock")) return null;
-  const text = await ctx.readFile("yarn.lock");
-  if (!text) return null;
+  const text3 = await ctx.readFile("yarn.lock");
+  if (!text3) return null;
   const manifests = /* @__PURE__ */ new Map();
   for (const file2 of fileSet) if (file2 === "package.json" || file2.endsWith("/package.json")) {
     const body = await ctx.readFile(file2);
@@ -81118,7 +81950,7 @@ async function enumerateYarnInstalled2(ctx, fileSet) {
   }
   let graph;
   try {
-    graph = parseYarnDependencyResearch2(text, manifests, { maxNodes: MAX_QUERIES2, maxEdges: MAX_QUERIES2 * 3 });
+    graph = parseYarnDependencyResearch2(text3, manifests, { maxNodes: MAX_QUERIES2, maxEdges: MAX_QUERIES2 * 3 });
   } catch {
     return null;
   }
@@ -81574,6 +82406,7 @@ var TEST_RE5 = new RegExp(
     String.raw`_test\.(go|py)$`,
     String.raw`(^|/)test_[^/]+\.py$`,
     String.raw`_spec\.rb$`,
+    String.raw`(?:_suite|_tests?)\.erl$`,
     String.raw`Test\.(java|kt|php)$`
   ].join("|"),
   "i"
@@ -81850,7 +82683,7 @@ var leftoverDebugScanner2 = {
         const srcLines = content.split("\n");
         let perFile = 0;
         const found = [];
-        walk2(ast, (n) => {
+        walk3(ast, (n) => {
           if (perFile >= MAX_PER_FILE6) return;
           const label = debugLabel2(n);
           if (!label) return;
@@ -81915,9 +82748,9 @@ function resolveRel2(baseDir, target) {
 function stripCode2(src) {
   return src.replace(/```[\s\S]*?```/g, (m2) => m2.replace(/[^\n]/g, " ")).replace(/~~~[\s\S]*?~~~/g, (m2) => m2.replace(/[^\n]/g, " ")).replace(/`[^`\n]*`/g, (m2) => " ".repeat(m2.length));
 }
-function lineAt6(text, index) {
+function lineAt6(text3, index) {
   let line = 1;
-  for (let i = 0; i < index && i < text.length; i++) if (text[i] === "\n") line++;
+  for (let i = 0; i < index && i < text3.length; i++) if (text3[i] === "\n") line++;
   return line;
 }
 var NOT_LINKED_DOC_RE2 = /(^|\/)(?:CHANGELOG|CHANGES|HISTORY|NEWS|RELEASES?)[^/]*\.\w+$|(^|\/)(?:test|tests|spec|specs|deps|vendor|website|docs_src|blog)\/|(^|\/)README[-.][a-z]{2}(?:[-_][A-Za-z]{2,4})?\.\w+$/i;
@@ -81970,11 +82803,11 @@ var brokenDocLinksScanner2 = {
       if (NOT_LINKED_DOC_RE2.test(norm)) continue;
       const raw = await ctx.readFile(file2);
       if (!raw || !raw.includes("](")) continue;
-      const text = stripCode2(raw);
+      const text3 = stripCode2(raw);
       const baseDir = dirOf3(norm);
       LINK_RE2.lastIndex = 0;
       let m2;
-      while ((m2 = LINK_RE2.exec(text)) !== null) {
+      while ((m2 = LINK_RE2.exec(text3)) !== null) {
         if (issues.length >= MAX_TOTAL10) break;
         let target = m2[1].trim().split(/\s+/)[0].replace(/^<|>$/g, "");
         target = target.split("#")[0].split("?")[0];
@@ -81994,7 +82827,7 @@ var brokenDocLinksScanner2 = {
           if (asDir && (fileSet.has(`${asDir}.md`) || fileSet.has(`${asDir}/index.md`) || fileSet.has(asDir))) continue;
           if (fileSet.has(`${resolved}.md`)) continue;
         }
-        const line = lineAt6(text, m2.index);
+        const line = lineAt6(text3, m2.index);
         issues.push({
           id: `doclink-${norm}:${line}:${target}`,
           category: "hygiene",
@@ -82244,7 +83077,7 @@ async function scanJsTsExports2(ctx, sources) {
       return out.trim() || void 0;
     };
     const idCounts = /* @__PURE__ */ new Map();
-    walk2(ast, (node) => {
+    walk3(ast, (node) => {
       if (node.type === "TSModuleDeclaration") {
         const loc = node.loc;
         if (loc?.start?.line && loc.end?.line) namespaceRanges.push([file2, loc.start.line, loc.end.line]);
@@ -82925,9 +83758,9 @@ var DOCKER_API_IMAGE2 = /^\s*image:\s*["']?(?:[\w.-]+\/)*(?:traefik|watchtower|p
 var HOST_AGENT_IMAGE2 = /^\s*image:\s*["']?(?:[\w.-]+\/)*(?:node-exporter|cadvisor|netdata|telegraf|promtail|grafana-agent|alloy|docker(?=:[^\s"']*dind))\b/;
 function containerHits2(lines, compose) {
   const hits = [];
-  const text = lines.join("\n");
-  const nodeAgent = /^\s*kind:\s*DaemonSet\b/m.test(text);
-  if (/^\s*kind:\s*(?:PodSecurityPolicy|SecurityContextConstraints|ClusterPolicy|Policy|ValidatingAdmissionPolicy)\b/m.test(text)) return hits;
+  const text3 = lines.join("\n");
+  const nodeAgent = /^\s*kind:\s*DaemonSet\b/m.test(text3);
+  if (/^\s*kind:\s*(?:PodSecurityPolicy|SecurityContextConstraints|ClusterPolicy|Policy|ValidatingAdmissionPolicy)\b/m.test(text3)) return hits;
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     const t2 = line.trim();
@@ -83065,7 +83898,7 @@ var skippedTestsScanner2 = {
       if (isJs) {
         const ast = parseFile2(content, file2);
         if (ast) {
-          walk2(ast, (n) => {
+          walk3(ast, (n) => {
             if (byLine.size >= MAX_PER_FILE8) return;
             const hit = jsHit2(n);
             if (!hit) return;
@@ -83778,7 +84611,7 @@ function scanPhpSecurity2(content) {
 var INPUT2 = /\b(?:\w*(?:[Tt]extField|[Tt]extView|[Ss]earchBar)|textField|textView|searchBar)\s*\.\s*text\b|\b(?:req|request)\s*\.\s*(?:query\s*\[|content\s*\.\s*get\s*\()/;
 var SQL4 = /\b(?:SELECT\b.*\bFROM|INSERT\s+INTO|UPDATE\b.*\bSET|DELETE\s+FROM)\b/i;
 function uncomment4(content) {
-  let out = "", depth = 0, quoted = false, escaped = false;
+  let out = "", depth = 0, quoted = false, escaped3 = false;
   for (let i = 0; i < content.length; i++) {
     const c3 = content[i], next = content[i + 1];
     if (depth) {
@@ -83803,18 +84636,18 @@ function uncomment4(content) {
       if (i < content.length) out += "\n";
     } else {
       out += c3;
-      if (c3 === '"' && !escaped) quoted = !quoted;
-      escaped = c3 === "\\" && !escaped;
+      if (c3 === '"' && !escaped3) quoted = !quoted;
+      escaped3 = c3 === "\\" && !escaped3;
     }
   }
   return out;
 }
 function argumentsOf2(value) {
   const args = [];
-  let start = 0, depth = 0, quoted = false, escaped = false;
+  let start = 0, depth = 0, quoted = false, escaped3 = false;
   for (let i = 0; i < value.length; i++) {
     const c3 = value[i];
-    if (c3 === '"' && !escaped) quoted = !quoted;
+    if (c3 === '"' && !escaped3) quoted = !quoted;
     if (!quoted) {
       if (c3 === "(" || c3 === "[") depth++;
       if (c3 === ")" && depth === 0) {
@@ -83827,7 +84660,7 @@ function argumentsOf2(value) {
         start = i + 1;
       }
     }
-    escaped = c3 === "\\" && !escaped;
+    escaped3 = c3 === "\\" && !escaped3;
   }
   args.push(value.slice(start));
   return args;
@@ -84469,7 +85302,7 @@ function scanSource2(content, lang) {
       }
     };
     if (tree) {
-      walk2(tree, (node) => {
+      walk3(tree, (node) => {
         if (["StringLiteral", "RegExpLiteral", "TemplateElement"].includes(node.type ?? "")) record2(node);
         const callee = node.callee;
         if (node.type === "NewExpression" && callee?.type === "Identifier" && callee.name === "Function" && typeof node.start === "number" && Array.isArray(node.arguments) && node.arguments.every((arg) => arg.type === "StringLiteral" || arg.type === "TemplateLiteral" && Array.isArray(arg.expressions) && arg.expressions.length === 0)) {
@@ -84493,7 +85326,7 @@ function scanSource2(content, lang) {
       const line = lineAt7(content, idx);
       const lineEnd = content.indexOf("\n", idx);
       const rawLine = content.slice(lineStart, lineEnd === -1 ? void 0 : lineEnd);
-      const text = rawLine.trim();
+      const text3 = rawLine.trim();
       if (lang === "js") {
         const col = idx - lineStart;
         if (literalRanges2(rawLine).some(([a, b3]) => col > a && col < b3)) continue;
@@ -84513,7 +85346,7 @@ function scanSource2(content, lang) {
       if (lang === "php" && rule.id === "exec-interpolated" && /\bproc_open\s*\(\s*\[/.test(rawLine)) continue;
       if ((rule.id === "php-include-user-input" || rule.id === "php-reflected-xss") && !/\$_(?:GET|POST|REQUEST|COOKIE)\b/.test(m2[0]) && !phpLocalRequestValue2(content, idx, m2[0])) continue;
       const tainted = !INJECTION_RULES2.has(rule.id) ? void 0 : rule.id === "ssrf" ? SSRF_TAINT2.test(around2(content, lineStart, 2, 0)) : TAINT_RE2[lang].test(around2(content, lineStart, TAINT_WINDOW2, 2));
-      byLine.set(line, { rule, line, evidence: text.slice(0, 160), tainted });
+      byLine.set(line, { rule, line, evidence: text3.slice(0, 160), tainted });
     }
   }
   if (lang === "php") for (const hit of scanPhpSecurity2(content)) {
@@ -84633,8 +85466,8 @@ var CROSS_FILE_KIND2 = [
   [/^insecure-(?:exec-interpolated|py-os-system|py-shell-true|eval-dynamic|py-eval-exec|new-function)-/, "exec"]
 ];
 var VENDORED_SINK_RE2 = /(^|\/)(?:vendor|third_party|node_modules|lib\/(?:mako|cherrypy|jinja2|six|requests|urllib3))\//;
-function paramReaches2(kind, n, text) {
-  if (kind === "exec") return new RegExp(`\\b${n}\\b`).test(text);
+function paramReaches2(kind, n, text3) {
+  if (kind === "exec") return new RegExp(`\\b${n}\\b`).test(text3);
   return new RegExp(
     [
       `\\{\\s*${n}\\b`,
@@ -84654,7 +85487,7 @@ function paramReaches2(kind, n, text) {
       `%[sv][^\\n]*,\\s*${n}\\b`
       // Sprintf("…%s", n)
     ].join("|")
-  ).test(text);
+  ).test(text3);
 }
 var GENERIC_FN2 = /* @__PURE__ */ new Set([
   "get",
@@ -84895,16 +85728,16 @@ function isCheckable2(raw) {
   if (PLACEHOLDER_RE4.test(raw)) return false;
   return true;
 }
-function extractUrls2(text) {
-  return extractUrlsWithLines2(text).map((u2) => u2.url);
+function extractUrls2(text3) {
+  return extractUrlsWithLines2(text3).map((u2) => u2.url);
 }
-function extractUrlsWithLines2(text) {
+function extractUrlsWithLines2(text3) {
   const out = [];
-  for (const m2 of text.matchAll(URL_RE2)) {
+  for (const m2 of text3.matchAll(URL_RE2)) {
     const at2 = m2.index ?? 0;
-    if (text[at2 + m2[0].length] === "<") continue;
+    if (text3[at2 + m2[0].length] === "<") continue;
     const cleaned = stripTrailingPunctuation2(m2[0]);
-    if (cleaned) out.push({ url: cleaned, line: lineAt8(text, at2) });
+    if (cleaned) out.push({ url: cleaned, line: lineAt8(text3, at2) });
   }
   return out;
 }
@@ -84943,8 +85776,8 @@ function manifestUrls2(json2) {
   push(j3.funding);
   return out;
 }
-function lineAt8(text, index) {
-  return text.slice(0, index).split("\n").length;
+function lineAt8(text3, index) {
+  return text3.slice(0, index).split("\n").length;
 }
 async function mapPool2(items, limit, worker) {
   const results = new Array(items.length);
@@ -84973,23 +85806,23 @@ var deadLinksScanner2 = {
       const isCode = CODE_RE2.test(norm);
       const isManifest = norm === "package.json" || norm.endsWith("/package.json");
       if (!isMd && !isCode && !isManifest) continue;
-      const text = await ctx.readFile(file2);
-      if (!text || !text.includes("http")) continue;
+      const text3 = await ctx.readFile(file2);
+      if (!text3 || !text3.includes("http")) continue;
       if (isManifest) {
         let json2;
         try {
-          json2 = JSON.parse(text);
+          json2 = JSON.parse(text3);
         } catch {
           continue;
         }
         for (const url2 of manifestUrls2(json2)) {
           if (!isCheckable2(url2) || seen.has(url2)) continue;
-          const idx = text.indexOf(url2);
-          seen.set(url2, { file: norm, line: idx === -1 ? 1 : lineAt8(text, idx) });
+          const idx = text3.indexOf(url2);
+          seen.set(url2, { file: norm, line: idx === -1 ? 1 : lineAt8(text3, idx) });
         }
         continue;
       }
-      const found = isMd ? extractUrlsWithLines2(text) : commentUrls2(text);
+      const found = isMd ? extractUrlsWithLines2(text3) : commentUrls2(text3);
       for (const { url: url2, line } of found) {
         if (!isCheckable2(url2) || seen.has(url2)) continue;
         seen.set(url2, { file: norm, line });
@@ -85359,7 +86192,7 @@ function scanFileForEol2(file2, content) {
   const norm = file2.replace(/\\/g, "/");
   const lines = content.split(/\r?\n/);
   const out = [];
-  const push = (kind, version2, table, key, pinned, line, evidence) => {
+  const push = (kind, version2, table, key, pinned3, line, evidence) => {
     if (!key) return;
     const eol = table[key];
     if (!eol) return;
@@ -85368,7 +86201,7 @@ function scanFileForEol2(file2, content) {
       version: version2,
       release: key,
       eol,
-      pinned,
+      pinned: pinned3,
       file: norm,
       line,
       evidence: evidence.trim().slice(0, 200)
@@ -86225,8 +87058,8 @@ function pickVersion2(range, versions) {
   const hits = published.filter(([, v2]) => ok(v2)).sort((a, b3) => a[1][0] - b3[1][0] || a[1][1] - b3[1][1] || a[1][2] - b3[1][2]);
   return hits.length ? hits[hits.length - 1][0] : null;
 }
-function licenseFromText2(text) {
-  const head = text.slice(0, 4e3);
+function licenseFromText2(text3) {
+  const head = text3.slice(0, 4e3);
   const patterns = [
     [/GNU AFFERO GENERAL PUBLIC LICENSE/i, "AGPL-3.0"],
     [/Server Side Public License/i, "SSPL-1.0"],
@@ -86261,8 +87094,8 @@ var licenseRiskScanner2 = {
     if (!projectLicense) {
       const lic = rootLicenseFile2(ctx.files);
       if (lic) {
-        const text = await ctx.readFile(lic);
-        if (text) projectLicense = licenseFromText2(text);
+        const text3 = await ctx.readFile(lic);
+        if (text3) projectLicense = licenseFromText2(text3);
       }
     }
     const projectClass = classifyLicense2(projectLicense);
@@ -86581,29 +87414,29 @@ function significantLines2(content) {
   let inBlockComment = false;
   let inDocstring = null;
   for (let i = 0; i < lines.length; i++) {
-    let text = lines[i].trim();
+    let text3 = lines[i].trim();
     if (inDocstring) {
-      if (text.includes(inDocstring)) inDocstring = null;
+      if (text3.includes(inDocstring)) inDocstring = null;
       continue;
     }
-    const doc = text.match(/^[rRuUbB]?("""|''')/);
+    const doc = text3.match(/^[rRuUbB]?("""|''')/);
     if (doc) {
-      const rest = text.slice(text.indexOf(doc[1]) + 3);
+      const rest = text3.slice(text3.indexOf(doc[1]) + 3);
       if (!rest.includes(doc[1])) inDocstring = doc[1];
       continue;
     }
     if (inBlockComment) {
-      if (text.includes("*/")) inBlockComment = false;
+      if (text3.includes("*/")) inBlockComment = false;
       continue;
     }
-    if (text.startsWith("/*")) {
-      if (!text.includes("*/")) inBlockComment = true;
+    if (text3.startsWith("/*")) {
+      if (!text3.includes("*/")) inBlockComment = true;
       continue;
     }
-    if (!text || COMMENT2.test(text)) continue;
-    text = text.replace(/\s+/g, " ");
-    if (NOISE2.test(text) || IMPORTISH2.test(text)) continue;
-    out.push({ text, line: i + 1 });
+    if (!text3 || COMMENT2.test(text3)) continue;
+    text3 = text3.replace(/\s+/g, " ");
+    if (NOISE2.test(text3) || IMPORTISH2.test(text3)) continue;
+    out.push({ text: text3, line: i + 1 });
   }
   return out;
 }
@@ -86624,8 +87457,8 @@ var DECLARATIVE2 = [
   // The frame of a signature: `def send(`, `self,`, `) -> Response:`, `@overload`
   /^(?:async\s+)?def\s+\w+\($|^(?:self|cls|\*),?$|^\)\s*->.*:$|^@(?:t\.|typing\.)?overload$/
 ];
-function isDeclarative2(text) {
-  return DECLARATIVE2.some((re2) => re2.test(text));
+function isDeclarative2(text3) {
+  return DECLARATIVE2.some((re2) => re2.test(text3));
 }
 var DECLARATIVE_SHARE2 = 0.7;
 var SVG_TAG2 = /^<\/?(?:svg|g|defs|path|filter|fe[A-Z]\w*|clipPath|mask|stop|linearGradient|radialGradient|circle|rect|ellipse|polygon|polyline|line|use|symbol)\b/i;
@@ -86698,8 +87531,8 @@ function findDuplicates2(files) {
         };
       };
       const block = lines.slice(i, i + length);
-      const text = block.map((l3) => l3.text).join("\n");
-      if (text.length < MIN_CHARS2) continue;
+      const text3 = block.map((l3) => l3.text).join("\n");
+      if (text3.length < MIN_CHARS2) continue;
       if (block.filter((l3) => isDeclarative2(l3.text)).length / block.length >= DECLARATIVE_SHARE2) {
         continue;
       }
@@ -86873,6 +87706,778 @@ var supplyChainScanner2 = {
   }
 };
 
+// ../core/src/erlang.ts
+var BLOCKS2 = /* @__PURE__ */ new Set(["case", "if", "receive", "try", "begin", "maybe"]);
+var KEYWORDS2 = /* @__PURE__ */ new Set([...BLOCKS2, "fun", "end", "of", "catch", "after", "when", "else", "andalso", "orelse", "and", "or", "xor", "not", "div", "rem", "band", "bor", "bxor", "bsl", "bsr"]);
+var OPEN2 = { "(": ")", "[": "]", "{": "}", "<<": ">>" };
+function escaped2(source, start) {
+  const c3 = source[start];
+  const named = { n: "\n", r: "\r", t: "	", b: "\b", f: "\f", v: "\v", e: "\x1B", s: " ", d: "\x7F" };
+  if (named[c3] !== void 0) return { value: named[c3], next: start + 1 };
+  if (c3 === "^") return { value: String.fromCharCode((source.charCodeAt(start + 1) || 64) & 31), next: start + 2 };
+  const hex3 = c3 === "x" ? /^(?:x\{([\da-f]+)\}|x([\da-f]{2}))/i.exec(source.slice(start)) : null;
+  if (hex3) {
+    const code = parseInt(hex3[1] ?? hex3[2], 16);
+    return { value: code <= 1114111 ? String.fromCodePoint(code) : "\uFFFD", next: start + hex3[0].length };
+  }
+  const oct = /^[0-7]{1,3}/.exec(source.slice(start));
+  if (oct) return { value: String.fromCharCode(parseInt(oct[0], 8)), next: start + oct[0].length };
+  return { value: c3 ?? "", next: Math.min(start + 1, source.length) };
+}
+function erlangTokens2(source) {
+  const out = [];
+  let i = source.startsWith("#!") ? source.indexOf("\n") : 0;
+  if (i < 0) return out;
+  const add = (start, kind, value = source.slice(start, i)) => out.push({ start, end: i, kind, value });
+  while (i < source.length) {
+    const start = i, c3 = source[i];
+    if (/\s/.test(c3)) {
+      i++;
+      continue;
+    }
+    if (c3 === "%") {
+      while (i < source.length && source[i] !== "\n") i++;
+      continue;
+    }
+    if (c3 === "$") {
+      i++;
+      if (source[i] === "\\") {
+        i++;
+        if (source.slice(i, i + 2) === "x{") {
+          const end = source.indexOf("}", i + 2);
+          i = end < 0 ? source.length : end + 1;
+        } else if (source[i] === "^") i += 2;
+        else if (/[0-7]/.test(source[i] ?? "")) {
+          let n = 0;
+          while (n++ < 3 && /[0-7]/.test(source[i] ?? "")) i++;
+        } else if (source[i] === "x") i += 3;
+        else i++;
+      } else i += (source.codePointAt(i) ?? 0) > 65535 ? 2 : 1;
+      i = Math.min(i, source.length);
+      add(start, "number");
+      continue;
+    }
+    if (c3 === '"' || c3 === "'") {
+      const triple = c3 === '"' && source.startsWith('"""', i);
+      const quote = triple ? '"""' : c3;
+      i += quote.length;
+      let value = "", closed = false;
+      while (i < source.length) {
+        if (source.startsWith(quote, i)) {
+          i += quote.length;
+          closed = true;
+          break;
+        }
+        if (source[i] === "\\" && i + 1 < source.length) {
+          const escape = escaped2(source, i + 1);
+          value += escape.value;
+          i = escape.next;
+        } else value += source[i++];
+      }
+      add(start, c3 === "'" && closed ? "atom" : "string", value);
+      continue;
+    }
+    if (/[A-Za-z_]/.test(c3)) {
+      i++;
+      while (i < source.length && /[A-Za-z0-9_@]/.test(source[i])) i++;
+      const value = source.slice(start, i);
+      add(start, /[A-Z_]/.test(c3) ? "variable" : KEYWORDS2.has(value) ? "keyword" : "atom");
+      continue;
+    }
+    if (/\d/.test(c3)) {
+      const m2 = /^(?:\d+#[A-Za-z0-9_]+|\d[\d_]*(?:\.\d[\d_]*)?(?:[eE][+-]?\d+)?)/.exec(source.slice(i));
+      i += m2?.[0].length ?? 1;
+      add(start, "number");
+      continue;
+    }
+    const multi = ["<:-", "<:=", "=:=", "=/=", "->", "<-", "=>", ":=", "::", "<<", ">>", "++", "--", "==", "/=", "=<", ">=", "||", "&&", "<=", "?="].find((x3) => source.startsWith(x3, i));
+    i += multi?.length ?? 1;
+    add(start, "symbol");
+  }
+  return out;
+}
+function isErlangBlock2(tokens, i) {
+  const t2 = tokens[i];
+  if (t2?.kind !== "keyword") return false;
+  if (BLOCKS2.has(t2.value)) return true;
+  if (t2.value !== "fun") return false;
+  return tokens[i + 1]?.value === "(" || tokens[i + 1]?.kind === "variable" && tokens[i + 2]?.value === "(";
+}
+function erlangPairs2(tokens) {
+  const pairs = /* @__PURE__ */ new Map(), stack = [];
+  for (let i = 0; i < tokens.length; i++) {
+    const t2 = tokens[i];
+    if (t2.kind === "symbol" && OPEN2[t2.value]) stack.push({ i, close: OPEN2[t2.value] });
+    else if (isErlangBlock2(tokens, i)) stack.push({ i, close: "end" });
+    else if (t2.kind === "symbol" && [")", "]", "}", ">>"].includes(t2.value) || t2.kind === "keyword" && t2.value === "end") {
+      const top = stack.at(-1);
+      if (top?.close === t2.value) {
+        stack.pop();
+        pairs.set(top.i, i);
+        pairs.set(i, top.i);
+      }
+    }
+  }
+  return pairs;
+}
+function erlangSplit2(tokens, separator, pairs = erlangPairs2(tokens)) {
+  const parts = [];
+  let start = 0;
+  for (let i = 0; i < tokens.length; i++) {
+    const close = pairs.get(i);
+    if (close !== void 0 && close > i) {
+      i = close;
+      continue;
+    }
+    if (["symbol", "keyword"].includes(tokens[i].kind) && tokens[i].value === separator) {
+      parts.push(tokens.slice(start, i));
+      start = i + 1;
+    }
+  }
+  parts.push(tokens.slice(start));
+  return parts;
+}
+function erlangForms2(tokens) {
+  const pairs = erlangPairs2(tokens), out = [];
+  let start = 0;
+  for (let i = 0; i < tokens.length; i++) {
+    const close = pairs.get(i);
+    if (close !== void 0 && close > i) {
+      i = close;
+      continue;
+    }
+    const recordAccess = tokens[i - 2]?.value === "#" && tokens[i - 1]?.kind === "atom";
+    if (tokens[i].value === "." && !recordAccess) {
+      out.push(tokens.slice(start, i));
+      start = i + 1;
+    }
+  }
+  return out;
+}
+function erlangClauses2(tokens) {
+  const pairs = erlangPairs2(tokens), out = [];
+  let start = 0, body = false;
+  for (let i = 0; i < tokens.length; i++) {
+    const close = pairs.get(i);
+    if (close !== void 0 && close > i) {
+      i = close;
+      continue;
+    }
+    if (tokens[i].value === "->") body = true;
+    if (tokens[i].value === ";" && body) {
+      out.push(tokens.slice(start, i));
+      start = i + 1;
+      body = false;
+    }
+  }
+  out.push(tokens.slice(start));
+  return out;
+}
+function erlangCall2(tokens, i, pairs = erlangPairs2(tokens)) {
+  if (tokens[i]?.kind !== "atom") return null;
+  let name = tokens[i].value, module2, open = i + 1;
+  if (tokens[i + 1]?.value === ":" && tokens[i + 2]?.kind === "atom") {
+    module2 = name;
+    name = tokens[i + 2].value;
+    open = i + 3;
+  } else if ([":", "?", "#"].includes(tokens[i - 1]?.value ?? "")) return null;
+  if (tokens[open]?.value !== "(") return null;
+  const close = pairs.get(open);
+  if (close === void 0 || close < open) return null;
+  const args = close === open + 1 ? [] : erlangSplit2(tokens.slice(open + 1, close), ",");
+  return { module: module2, name, args, start: tokens[i].start, end: tokens[close].end, next: close + 1 };
+}
+function erlangContainer2(tokens, open) {
+  const pairs = erlangPairs2(tokens);
+  if (tokens[0]?.value !== open || pairs.get(0) !== tokens.length - 1) return null;
+  return tokens.length === 2 ? [] : erlangSplit2(tokens.slice(1, -1), ",");
+}
+function erlangAtom2(tokens) {
+  return tokens.length === 1 && tokens[0].kind === "atom" ? tokens[0].value : null;
+}
+function erlangLine2(source, offset) {
+  let line = 1;
+  for (let i = 0; i < offset; i++) if (source[i] === "\n") line++;
+  return line;
+}
+function erlangNonProductPath2(file2) {
+  return /(^|\/)(?:_build|deps|vendor|third_party|node_modules|tests?|fixtures?|examples?|samples?|docs?)\//i.test(file2) || /(?:_SUITE|_tests?)\.erl$/i.test(file2);
+}
+
+// ../core/src/scanners/erlang-security.ts
+var UNKNOWN2 = {};
+var CONST2 = { constant: true };
+var BIFS2 = /* @__PURE__ */ new Set(["binary_to_term", "list_to_atom", "binary_to_atom", "binary_to_existing_atom", "list_to_existing_atom", "open_port", "apply", "spawn", "spawn_link", "spawn_monitor"]);
+var TRANSFORMS2 = /* @__PURE__ */ new Set([
+  "erlang:binary_to_list",
+  "erlang:list_to_binary",
+  "erlang:iolist_to_binary",
+  "erlang:binary_to_term",
+  "unicode:characters_to_binary",
+  "unicode:characters_to_list",
+  "lists:flatten",
+  "lists:concat",
+  "jsx:decode",
+  "jiffy:decode",
+  "json:decode",
+  "io_lib:format",
+  "erlang:atom_to_list",
+  "erlang:atom_to_binary",
+  "os:find_executable"
+]);
+function fieldKey2(tokens) {
+  if (tokens.length === 1 && ["atom", "string", "number"].includes(tokens[0].kind)) return `${tokens[0].kind}:${tokens[0].value}`;
+  const binary = erlangContainer2(tokens, "<<");
+  return binary?.length === 1 && binary[0].length === 1 && binary[0][0].kind === "string" ? `binary:${binary[0][0].value}` : null;
+}
+function moduleOf2(call, scope) {
+  if (call.module) return call.module;
+  const key = `${call.name}/${call.args.length}`;
+  if (scope.shadowed.has(key)) return void 0;
+  return scope.imported.get(key) ?? (BIFS2.has(call.name) || ["binary_to_list", "list_to_binary", "iolist_to_binary", "term_to_binary"].includes(call.name) ? "erlang" : void 0);
+}
+function expand2(tokens, env, scope, depth = 0) {
+  if (depth > 8) return tokens;
+  if (tokens.length === 1 && tokens[0].kind === "variable") {
+    const value = env.get(tokens[0].value)?.tokens;
+    if (value && value !== tokens) return expand2(value, env, scope, depth + 1);
+  }
+  if (tokens.length === 2 && tokens[0].value === "?") {
+    const value = scope.macros.get(tokens[1].value);
+    if (value && value[0]?.start < tokens[0].start) return expand2(value, env, scope, depth + 1);
+  }
+  return tokens;
+}
+function evaluate2(tokens, env, scope, depth = 0) {
+  if (!tokens.length || depth > 16) return UNKNOWN2;
+  if (tokens.length === 1 && tokens[0].kind === "variable") return env.get(tokens[0].value) ?? UNKNOWN2;
+  if (tokens.length === 1 && ["string", "number", "atom"].includes(tokens[0].kind)) return { constant: true, tokens, shape: tokens[0].kind === "string" ? "string" : tokens[0].kind };
+  const expanded = expand2(tokens, env, scope);
+  if (expanded !== tokens) return evaluate2(expanded, env, scope, depth + 1);
+  const pairs = erlangPairs2(tokens);
+  if (tokens[0].value === "(" && pairs.get(0) === tokens.length - 1) return evaluate2(tokens.slice(1, -1), env, scope, depth + 1);
+  if (tokens[0].kind === "keyword" && tokens[0].value === "fun") return { shape: "function", tokens };
+  if (["=:=", "=/=", "==", "/=", "=<", ">=", "<", ">", "andalso", "orelse"].some((op) => erlangSplit2(tokens, op, pairs).length > 1)) return { constant: true, shape: "atom" };
+  const call = erlangCall2(tokens, 0, pairs);
+  if (call && call.next === tokens.length) {
+    const module2 = moduleOf2(call, scope), key = `${module2}:${call.name}`;
+    const from = `${key} (source offset ${call.start})`;
+    if (module2 === "cowboy_req") {
+      if (["read_body", "read_urlencoded_body"].includes(call.name) && [1, 2].includes(call.args.length)) return { shape: "tuple", items: [CONST2, { source: from, shape: call.name === "read_body" ? "binary" : "pairs" }, UNKNOWN2] };
+      if (["qs", "parse_qs", "headers", "parse_cookies"].includes(call.name) && call.args.length === 1 || ["binding", "header", "cookie"].includes(call.name) && [2, 3].includes(call.args.length)) return { source: from, shape: call.name === "headers" ? "map" : ["parse_qs", "parse_cookies"].includes(call.name) ? "pairs" : "binary" };
+    }
+    if ((module2 === "gen_tcp" || module2 === "ssl") && call.name === "recv" && [2, 3].includes(call.args.length)) return { shape: "tuple", items: [CONST2, { source: from }] };
+    const values = call.args.map((arg) => evaluate2(arg, env, scope, depth + 1));
+    if ((key === "maps:get" || key === "proplists:get_value") && [2, 3].includes(call.args.length)) {
+      const container = values[1] ?? UNKNOWN2, fallback = values[2] ?? CONST2, selector = fieldKey2(call.args[0]);
+      if (selector && container.fields?.has(selector)) return container.fields.get(selector);
+      if (container.fieldsComplete) {
+        if (selector) return fallback;
+        const possible = [...container.fields?.values() ?? [], fallback];
+        return { source: possible.find((x3) => x3.source)?.source, constant: possible.every((x3) => x3.constant) };
+      }
+      return { source: container.source ?? fallback.source, constant: !!container.constant && !!fallback.constant };
+    }
+    if (module2 === "erlang" && call.name === "term_to_binary") return { localEncoding: true, shape: "binary", tokens };
+    if (module2 === "erlang" && ["binary_to_existing_atom", "list_to_existing_atom", "binary_to_atom", "list_to_atom"].includes(call.name)) return { source: values[0]?.source, constant: values[0]?.constant, shape: "atom", tokens };
+    if (module2 === "gen_udp" && call.name === "recv" && [2, 3].includes(call.args.length)) return { shape: "tuple", items: [CONST2, { shape: "tuple", items: [UNKNOWN2, UNKNOWN2, { source: from }] }] };
+    if (key === "erl_scan:string") return { shape: "tuple", items: [CONST2, { source: values[0]?.source, shape: "list" }, CONST2] };
+    if (key === "erl_parse:parse_exprs") return { shape: "tuple", items: [CONST2, { source: values[0]?.source, shape: "list" }] };
+    if (TRANSFORMS2.has(key)) {
+      const source2 = values.find((v2) => v2.source)?.source;
+      const shape = /(?:list_to_binary|iolist_to_binary|characters_to_binary|atom_to_binary)$/.test(key) ? "binary" : /(?:binary_to_list|characters_to_list|atom_to_list|flatten|concat|format|find_executable)$/.test(key) ? "string" : void 0;
+      return { source: source2, shape, constant: values.every((v2) => v2.constant), tokens };
+    }
+    return UNKNOWN2;
+  }
+  const tuple2 = erlangContainer2(tokens, "{");
+  if (tuple2) {
+    const items = tuple2.map((x3) => evaluate2(x3, env, scope, depth + 1));
+    return { items, shape: "tuple", constant: items.every((v2) => v2.constant), tokens };
+  }
+  if (tokens[0].value === "#" && tokens[1]?.value === "{" && pairs.get(1) === tokens.length - 1) {
+    const fields = /* @__PURE__ */ new Map();
+    let source2, constant2 = true, fieldsComplete = true;
+    for (const entry of erlangSplit2(tokens.slice(2, -1), ",")) {
+      const parts = erlangSplit2(entry, "=>");
+      if (parts.length !== 2) return UNKNOWN2;
+      const key = fieldKey2(parts[0]), value = evaluate2(parts[1], env, scope, depth + 1);
+      if (!key) {
+        constant2 = false;
+        fieldsComplete = false;
+        fields.clear();
+      } else fields.set(key, value);
+      source2 ??= value.source;
+      constant2 &&= !!value.constant;
+    }
+    return { shape: "map", fields, fieldsComplete, source: source2, constant: constant2, tokens };
+  }
+  const list = erlangContainer2(tokens, "[") ?? erlangContainer2(tokens, "<<");
+  if (list) {
+    if (erlangSplit2(tokens.slice(1, -1), "||").length > 1) return UNKNOWN2;
+    const items = list.map((x3) => evaluate2(x3, env, scope, depth + 1));
+    const fields = /* @__PURE__ */ new Map();
+    let fieldsComplete = true;
+    list.forEach((part, i) => {
+      const tuple3 = erlangContainer2(part, "{"), key = tuple3?.length === 2 ? fieldKey2(tuple3[0]) : null;
+      if (key && !fields.has(key)) fields.set(key, items[i].items?.[1] ?? UNKNOWN2);
+      if (!key) fieldsComplete = false;
+    });
+    return {
+      source: items.find((v2) => v2.source)?.source ?? items.flatMap((v2) => v2.items ?? []).find((v2) => v2.source)?.source,
+      fields,
+      fieldsComplete: tokens[0].value === "[" && fieldsComplete,
+      shape: tokens[0].value === "<<" ? "binary" : list.length > 0 && list.every((x3) => erlangContainer2(x3, "{") !== null) ? "pairs" : "list",
+      constant: items.every((v2) => v2.constant),
+      tokens
+    };
+  }
+  let source;
+  let constant = true;
+  for (let i = 0; i < tokens.length; i++) {
+    const t2 = tokens[i];
+    if (t2.kind === "variable" && tokens[i + 1]?.value === "(") return UNKNOWN2;
+    const inner = erlangCall2(tokens, i, pairs);
+    if (inner) {
+      const value = evaluate2(tokens.slice(i, inner.next), env, scope, depth + 1);
+      source ??= value.source;
+      constant &&= !!value.constant;
+      i = inner.next - 1;
+    } else if (t2.kind === "variable") {
+      const value = env.get(t2.value) ?? UNKNOWN2;
+      source ??= value.source;
+      constant &&= !!value.constant;
+    } else if (t2.value === "?" || t2.kind === "keyword") constant = false;
+  }
+  return { source, constant, tokens };
+}
+function bind2(pattern, value, env) {
+  if (pattern.length === 1 && pattern[0].kind === "variable") {
+    const name = pattern[0].value;
+    if (name !== "_" && (!env.has(name) || value.constant)) env.set(name, value);
+    return;
+  }
+  const tuple2 = erlangContainer2(pattern, "{");
+  if (tuple2 && value.items) tuple2.forEach((part, i) => bind2(part, value.items?.[i] ?? UNKNOWN2, env));
+}
+function scopeInfo2(forms) {
+  const scope = { shadowed: /* @__PURE__ */ new Set(), imported: /* @__PURE__ */ new Map(), macros: /* @__PURE__ */ new Map() };
+  const ambiguousMacros = /* @__PURE__ */ new Set();
+  for (const form of forms) {
+    if (form[0]?.value !== "-") {
+      for (const clause of erlangClauses2(form)) {
+        const head = erlangCall2(clause, 0);
+        if (head && clause.slice(head.next).some((t2) => t2.value === "->")) scope.shadowed.add(`${head.name}/${head.args.length}`);
+      }
+      continue;
+    }
+    if (form[1]?.value === "define") {
+      const args = erlangCall2(form, 1)?.args;
+      if (args?.length === 2 && args[0].length === 1) {
+        const name = args[0][0].value;
+        if (scope.macros.has(name)) ambiguousMacros.add(name);
+        scope.macros.set(name, args[1]);
+      }
+    }
+    if (form[1]?.value === "undef") {
+      const name = erlangCall2(form, 1)?.args[0]?.[0]?.value;
+      if (name) ambiguousMacros.add(name);
+    }
+    if (form[1]?.value === "compile" && form.some((x3) => x3.value === "no_auto_import")) {
+      let specific = false;
+      for (let i = 0; i < form.length - 2; i++) if (form[i].kind === "atom" && form[i + 1].value === "/" && form[i + 2].kind === "number") {
+        scope.shadowed.add(`${form[i].value}/${form[i + 2].value}`);
+        specific = true;
+      }
+      if (!specific) for (const name of BIFS2) for (const arity of [1, 2, 3]) scope.shadowed.add(`${name}/${arity}`);
+    }
+    if (form[1]?.value === "import") {
+      const args = erlangCall2(form, 1)?.args, module2 = args && erlangAtom2(args[0]);
+      if (!args || !module2) continue;
+      for (const entry of erlangContainer2(args[1], "[") ?? []) {
+        if (entry.length === 3 && entry[0].kind === "atom" && entry[1].value === "/" && entry[2].kind === "number") scope.imported.set(`${entry[0].value}/${entry[2].value}`, module2);
+      }
+    }
+  }
+  for (const name of ambiguousMacros) scope.macros.delete(name);
+  return scope;
+}
+function acceptsBadCertificate2(tokens) {
+  const tuple2 = erlangContainer2(tokens, "{");
+  if (tuple2?.length !== 2) return false;
+  const fn2 = tuple2[0], pairs = erlangPairs2(fn2);
+  if (fn2[0]?.value !== "fun" || pairs.get(0) !== fn2.length - 1) return false;
+  for (const clause of erlangSplit2(fn2.slice(1, -1), ";")) {
+    const cp = erlangPairs2(clause), open = clause[0]?.value === "(" ? 0 : 1, close = cp.get(open);
+    if (close === void 0 || clause[close + 1]?.value !== "->") return false;
+    const args = erlangSplit2(clause.slice(open + 1, close), ",");
+    if (args.length !== 3 || args[0].length !== 1 || args[0][0].kind !== "variable") return false;
+    const event = args[1], badCert = erlangContainer2(event, "{");
+    const anyEvent = event.length === 1 && event[0].kind === "variable";
+    if (!anyEvent && !(badCert?.length === 2 && erlangAtom2(badCert[0]) === "bad_cert")) continue;
+    const result = erlangContainer2(clause.slice(close + 2), "{");
+    return !!result && result.length === 2 && ["valid", "valid_peer"].includes(erlangAtom2(result[0]) ?? "");
+  }
+  return false;
+}
+function tlsOptions2(tokens, env, scope) {
+  const entries = erlangContainer2(expand2(tokens, env, scope), "[");
+  if (!entries) return null;
+  const options = entries.map((x3) => erlangContainer2(x3, "{"));
+  const callbacks = options.filter((x3) => x3?.length === 2 && erlangAtom2(x3[0]) === "verify_fun");
+  if (callbacks.length === 1 && acceptsBadCertificate2(expand2(callbacks[0][1], env, scope))) return "callback";
+  if (callbacks.length) return null;
+  const verify = options.filter((x3) => x3 && erlangAtom2(x3[0]) === "verify");
+  return verify.length === 1 && verify[0]?.length === 2 && erlangAtom2(verify[0][1]) === "verify_none" ? "none" : null;
+}
+function scanErlangSecurity2(source, file2) {
+  const forms = erlangForms2(erlangTokens2(source)), scope = scopeInfo2(forms), issues = [];
+  const seen = /* @__PURE__ */ new Set();
+  const emit = (call, rule, title, detail, value, definite = false) => {
+    const line = erlangLine2(source, call.start), id = `erlang-${rule}-${file2}:${line}`;
+    if (seen.has(id)) return;
+    seen.add(id);
+    issues.push({
+      id,
+      category: "security",
+      severity: value?.source && ["shell", "eval", "code-load", "tainted-dispatch", "external-executable"].includes(rule) ? "critical" : "warning",
+      confidence: value?.source ? "high" : definite ? "medium" : "low",
+      title,
+      location: `${file2}:${line}`,
+      ageDays: 0,
+      detail: detail + (value?.source ? ` Input provenance: ${value.source}.` : ""),
+      evidence: source.slice(call.start, call.end).replace(/\s+/g, " ").slice(0, 180)
+    });
+  };
+  for (const form of forms) {
+    const attribute = form[0]?.value === "-";
+    if (attribute && form[1]?.value !== "define") continue;
+    for (const clause of attribute ? [form] : erlangClauses2(form)) {
+      const pairs = erlangPairs2(clause), env = /* @__PURE__ */ new Map();
+      let body = 0;
+      if (!attribute) {
+        const head = erlangCall2(clause, 0, pairs);
+        if (!head) continue;
+        body = clause.findIndex((t2, i) => i >= head.next && t2.value === "->") + 1;
+        if (!body) continue;
+        for (const arg of head.args) for (const t2 of arg) if (t2.kind === "variable" && t2.value !== "_") env.set(t2.value, UNKNOWN2);
+        if (head.name === "handle_info" && head.args.length === 2) {
+          const message = erlangContainer2(head.args[0], "{");
+          if (message?.length === 3 && ["tcp", "ssl"].includes(erlangAtom2(message[0]) ?? "") && message[2].length === 1 && message[2][0].kind === "variable") env.set(message[2][0].value, { source: "handle_info socket payload" });
+          if (message?.length === 5 && erlangAtom2(message[0]) === "udp" && message[4].length === 1 && message[4][0].kind === "variable") env.set(message[4][0].value, { source: "handle_info UDP payload" });
+        }
+        if (head.name === "websocket_handle" && head.args.length === 2) {
+          const frame = erlangContainer2(head.args[0], "{");
+          if (frame?.length === 2 && ["text", "binary"].includes(erlangAtom2(frame[0]) ?? "") && frame[1].length === 1 && frame[1][0].kind === "variable") env.set(frame[1][0].value, { source: "websocket_handle client frame", shape: "binary" });
+        }
+      }
+      let current = env;
+      const branches = [];
+      for (let i = body; i < clause.length; i++) {
+        const t2 = clause[i];
+        if (branches.at(-1)?.kind === "comprehension" && branches.at(-1)?.close === i) current = branches.pop().parent;
+        if (["[", "<<", "{"].includes(t2.value)) {
+          const end = pairs.get(i);
+          const parts = end !== void 0 && end > i ? erlangSplit2(clause.slice(i + 1, end), "||") : [];
+          if (parts.length === 2) {
+            const base = new Map(current);
+            for (const group of erlangSplit2(parts[1], ",")) for (const qualifier of erlangSplit2(group, "&&")) {
+              for (const arrow of ["<-", "<=", "<:-", "<:="]) {
+                const generator = erlangSplit2(qualifier, arrow);
+                if (generator.length === 2) {
+                  const collection = evaluate2(generator[1], base, scope);
+                  const element = collection.constant ? CONST2 : UNKNOWN2;
+                  for (const name of generator[0]) if (name.kind === "variable" && name.value !== "_") base.set(name.value, element);
+                }
+              }
+            }
+            branches.push({ parent: current, base, kind: "comprehension", patternStart: -1, close: end });
+            current = new Map(base);
+          }
+        }
+        if (isErlangBlock2(clause, i)) {
+          let subject, subjectVariable;
+          if (t2.value === "case") {
+            let end = i + 1;
+            while (end < clause.length && clause[end].value !== "of") {
+              const close = pairs.get(end);
+              end = close !== void 0 && close > end ? close + 1 : end + 1;
+            }
+            const expression = clause.slice(i + 1, end);
+            subject = evaluate2(expression, current, scope);
+            if (expression.length === 1 && expression[0].kind === "variable") subjectVariable = expression[0].value;
+          }
+          const base = new Map(current);
+          if (t2.value === "fun" && clause[i + 1]?.kind === "variable") base.set(clause[i + 1].value, UNKNOWN2);
+          branches.push({ parent: current, base, kind: t2.value, subject, subjectVariable, patternStart: t2.value === "receive" ? i + 1 : -1 });
+          current = new Map(base);
+          if (t2.value === "fun") {
+            const open = clause[i + 1]?.value === "(" ? i + 1 : i + 2;
+            const close = pairs.get(open);
+            if (close !== void 0) {
+              for (const param of clause.slice(open + 1, close)) if (param.kind === "variable" && param.value !== "_") current.set(param.value, UNKNOWN2);
+            }
+          }
+        } else if (t2.kind === "keyword" && t2.value === "end" && branches.length) current = branches.pop().parent;
+        else if (t2.value === ";" && branches.length) {
+          const branch = branches.at(-1);
+          current = new Map(branch.base);
+          branch.patternStart = i + 1;
+        } else if (t2.kind === "keyword" && t2.value === "of" && branches.length) branches.at(-1).patternStart = i + 1;
+        else if (t2.kind === "keyword" && ["catch", "after", "else"].includes(t2.value) && branches.length) {
+          const branch = branches.at(-1);
+          current = new Map(branch.base);
+          branch.patternStart = -1;
+          branch.subject = void 0;
+        }
+        if (t2.value === "->" && branches.length) {
+          const branch = branches.at(-1);
+          if (branch.patternStart >= 0) {
+            const raw = clause.slice(branch.patternStart, i), when = raw.findIndex((x3) => x3.value === "when");
+            const pattern = when < 0 ? raw : raw.slice(0, when);
+            if (branch.subject) {
+              bind2(pattern, branch.subject, current);
+              const literal2 = evaluate2(pattern, /* @__PURE__ */ new Map(), scope);
+              if (branch.subjectVariable && literal2.constant) current.set(branch.subjectVariable, literal2);
+            }
+            if (branch.kind === "fun") {
+              const open = pattern[0]?.value === "(" ? 0 : 1;
+              const close = erlangPairs2(pattern).get(open);
+              if (close !== void 0) {
+                for (const param of pattern.slice(open + 1, close)) if (param.kind === "variable" && param.value !== "_") current.set(param.value, UNKNOWN2);
+              }
+            }
+            const message = erlangContainer2(pattern, "{");
+            if (branch.kind === "receive" && message?.length === 3 && ["tcp", "ssl"].includes(erlangAtom2(message[0]) ?? "") && message[2].length === 1 && message[2][0].kind === "variable") current.set(message[2][0].value, { source: "receive socket payload" });
+            branch.patternStart = -1;
+          }
+        }
+        if (t2.value === "=") {
+          let start = i - 1;
+          if (clause[start]?.value === "}") start = pairs.get(start) ?? start;
+          const tail = erlangSplit2(clause.slice(i + 1), ",")[0];
+          const rhs = erlangSplit2(tail, ";")[0];
+          bind2(clause.slice(start, i), evaluate2(rhs, current, scope), current);
+        }
+        const call = erlangCall2(clause, i, pairs);
+        if (!call) continue;
+        const module2 = moduleOf2(call, scope), arity = call.args.length;
+        const value = evaluate2(call.args[0] ?? [], current, scope);
+        const accepts = (v2, shapes) => !v2.shape || shapes.includes(v2.shape);
+        if (module2 === "erlang" && call.name === "binary_to_term" && [1, 2].includes(arity) && accepts(value, ["binary"]) && !value.constant && !value.localEncoding) {
+          const opts = arity === 2 ? erlangContainer2(expand2(call.args[1], current, scope), "[") : [];
+          if (opts && opts.every((x3) => ["safe", "used"].includes(erlangAtom2(x3) ?? "")) && !opts.some((x3) => erlangAtom2(x3) === "safe")) emit(call, "unsafe-term", "External term decoding without safe", "binary_to_term without [safe] can allocate attacker-selected atoms. If input is untrusted, enforce size limits, use [safe], and validate the decoded schema; [safe] is not an application sandbox.", value);
+        }
+        if (module2 === "erlang" && (call.name === "list_to_atom" && arity === 1 && accepts(value, ["string", "list"]) || call.name === "binary_to_atom" && [1, 2].includes(arity) && accepts(value, ["binary"])) && !value.constant) emit(call, "dynamic-atom", "Runtime data converted to a new atom", "Atoms are not garbage-collected. Unbounded external names can exhaust the VM atom table. Prefer a finite lookup table or an existing-atom conversion with an allowlist. Trusted bounded startup names need manual review.", value);
+        if (module2 === "os" && call.name === "cmd" && [1, 2].includes(arity) && accepts(value, ["string", "list", "atom"]) && !value.constant) emit(call, "shell", "Dynamic value passed to the operating-system shell", "os:cmd interprets shell syntax. If this command contains external input, use spawn_executable with separate arguments and validate executable/options.", value);
+        if (module2 === "erlang" && call.name === "open_port" && arity === 2) {
+          const port = erlangContainer2(expand2(call.args[0], current, scope), "{");
+          if (port?.length === 2 && erlangAtom2(port[0]) === "spawn") {
+            const command = evaluate2(port[1], current, scope);
+            if (!command.constant) emit(call, "shell", "Dynamic shell command in open_port", "The {spawn, Command} port form uses a shell. Prefer {spawn_executable, Path} with a separate {args, Args} vector for external values.", command);
+          }
+          if (port?.length === 2 && erlangAtom2(port[0]) === "spawn_executable") {
+            const selected = evaluate2(port[1], current, scope);
+            if (selected.source && accepts(selected, ["string", "list", "binary"])) emit(call, "external-executable", "External input selects the host executable", "Separate argument vectors prevent shell parsing but do not authorize the executable itself. Keep the executable fixed or map operation names through an explicit allowlist; PATH lookup alone is not an allowlist.", selected);
+            let executable = expand2(port[1], current, scope);
+            const find = erlangCall2(executable, 0);
+            if (find?.module === "os" && find.name === "find_executable" && find.args.length === 1) executable = find.args[0];
+            const shell = executable.length === 1 && executable[0].kind === "string" ? executable[0].value.split(/[\\/]/).at(-1)?.toLowerCase() : "";
+            if (shell && /^(?:ba|da|z|k)?sh$|^(?:cmd(?:\.exe)?|powershell(?:\.exe)?|pwsh(?:\.exe)?)$/.test(shell)) {
+              for (const option of erlangContainer2(expand2(call.args[1], current, scope), "[") ?? []) {
+                const tuple2 = erlangContainer2(option, "{");
+                if (tuple2?.length !== 2 || erlangAtom2(tuple2[0]) !== "args") continue;
+                const args = erlangContainer2(expand2(tuple2[1], current, scope), "[");
+                if (args && args.length >= 2 && args[0].length === 1 && args[0][0].kind === "string" && /^(?:-[a-z]*c|\/c|-command|-encodedcommand|-enc)$/i.test(args[0][0].value)) {
+                  const command = evaluate2(args[1], current, scope);
+                  if (!command.constant) emit(call, "shell", "Shell interpreter receives a dynamic command string", "spawn_executable avoids shell parsing only when the executable is not itself a shell interpreting -c, /c or -Command. Pass external values as arguments to a fixed executable instead.", command);
+                }
+              }
+            }
+          }
+        }
+        if (module2 === "erl_eval" && ["expr", "exprs"].includes(call.name) && arity >= 2 && accepts(value, call.name === "expr" ? ["tuple"] : ["list"]) && !value.constant) emit(call, "eval", "Runtime Erlang expression evaluation", "erl_eval executes expressions with runtime privileges. Do not evaluate externally supplied expressions; use a restricted data format and explicit operations instead.", value);
+        if (module2 === "code" && call.name === "load_binary" && arity === 3) {
+          const beam = evaluate2(call.args[2], current, scope);
+          if (accepts(beam, ["binary"]) && !beam.constant) emit(call, "code-load", "Runtime BEAM code loading", "Loaded BEAM code is fully trusted and can access the host. Accept code only from an authenticated, integrity-checked release process, never directly from request data.", beam);
+        }
+        if (module2 === "erlang" && ["apply", "spawn", "spawn_link", "spawn_monitor"].includes(call.name)) {
+          if (arity === 3) {
+            const targets = call.args.slice(0, 2).map((x3) => evaluate2(x3, current, scope));
+            const external = targets.find((x3) => x3.source && accepts(x3, ["atom"]));
+            if (external) emit(call, "tainted-dispatch", "External input selects the Erlang module or function", "Existing-atom conversion prevents atom allocation but does not authorize which loaded function may run. Map external operation names to an explicit finite set of approved module/function pairs. Ordinary trusted-cluster RPC and untrusted arguments to a fixed target are not this finding.", external);
+          } else if (call.name === "apply" && arity === 2 && value.source && accepts(value, ["function"])) emit(call, "tainted-dispatch", "Externally supplied function object is invoked", "Do not invoke functions decoded from untrusted external terms. binary_to_term [safe] does not make a received function safe to execute. Choose approved operations explicitly.", value);
+        }
+        if (module2 === "ssl" && call.name === "connect" && [2, 3, 4].includes(arity)) {
+          const candidates = arity === 2 ? [call.args[1]] : arity === 4 ? [call.args[2]] : [call.args[1], call.args[2]];
+          const tls = candidates.map((x3) => tlsOptions2(x3, current, scope)).find(Boolean);
+          if (tls === "none") emit(call, "tls-verify-none", "TLS client certificate verification explicitly disabled", "ssl:connect with {verify, verify_none} does not authenticate the server certificate. Use verify_peer and appropriate CA/hostname verification. Server-side ssl:listen is not this rule.", void 0, true);
+          if (tls === "callback") emit(call, "tls-accept-bad-cert", "TLS client callback unconditionally accepts certificate errors", "The literal verify_fun accepts bad_cert events without a certificate pattern, guard or validation call. Keep verification failures fatal; use an explicit authenticated pinning/trust policy for legitimate exceptions.", void 0, true);
+        }
+        if (module2 === "httpc" && call.name === "request" && [4, 5].includes(arity)) {
+          const request = erlangContainer2(expand2(call.args[1], current, scope), "{");
+          const url2 = request?.[0];
+          const plainHttp = url2?.length === 1 && url2[0].kind === "string" && /^http:\/\//i.test(url2[0].value);
+          if (!plainHttp) for (const option of erlangContainer2(expand2(call.args[2], current, scope), "[") ?? []) {
+            const pair = erlangContainer2(option, "{");
+            if (pair?.length !== 2 || erlangAtom2(pair[0]) !== "ssl") continue;
+            const tls = tlsOptions2(pair[1], current, scope);
+            if (tls === "none") emit(call, "tls-verify-none", "HTTP client TLS certificate verification explicitly disabled", "httpc request SSL options disable server certificate verification. Use verify_peer and suitable trust/hostname validation. Literal plain-HTTP requests and server listen options are not classified as TLS bypasses.", void 0, true);
+            if (tls === "callback") emit(call, "tls-accept-bad-cert", "HTTP client TLS callback accepts certificate errors", "The literal HTTP client verification callback accepts bad_cert events without certificate validation. Keep those errors fatal or implement an explicit authenticated trust policy.", void 0, true);
+          }
+        }
+      }
+    }
+  }
+  return issues.sort((a, b3) => priority2(b3) - priority2(a)).slice(0, 60);
+}
+function priority2(issue2) {
+  return { high: 3, medium: 2, low: 1 }[issue2.confidence ?? "medium"] * 10 + { critical: 3, warning: 2, info: 1 }[issue2.severity];
+}
+var erlangSecurityScanner2 = {
+  id: "erlang-security",
+  category: "security",
+  async run(ctx) {
+    const issues = [];
+    for (const file2 of ctx.files) {
+      const norm = file2.replace(/\\/g, "/");
+      if (!/\.(?:erl|hrl|escript)$/i.test(norm) || erlangNonProductPath2(norm)) continue;
+      const source = await ctx.readFile(file2);
+      if (source) issues.push(...scanErlangSecurity2(source, norm).map((x3) => ({ ...x3, scanner: "erlang-security" })));
+    }
+    return issues.sort((a, b3) => priority2(b3) - priority2(a)).slice(0, 80);
+  }
+};
+
+// ../core/src/scanners/erlang-build.ts
+var immutable2 = (ref) => /^(?:[a-f\d]{40}|[a-f\d]{64})$/i.test(ref);
+var pinned2 = (dep) => ["ref", "legacy"].includes(dep.refKind) && immutable2(dep.ref);
+var cleartext2 = (url2) => /^(?:git\+)?http:\/\/|^git:\/\//i.test(url2);
+function text2(tokens) {
+  if (tokens.length === 1 && ["atom", "string"].includes(tokens[0].kind)) return tokens[0].value;
+  const binary = erlangContainer2(tokens, "<<");
+  return binary?.length === 1 && binary[0].length === 1 && binary[0][0].kind === "string" ? binary[0][0].value : null;
+}
+function dependency2(tokens) {
+  const parts = erlangContainer2(tokens, "{");
+  if (!parts || parts.length < 2) return null;
+  const name = text2(parts[0]);
+  if (!name) return null;
+  for (const part of parts.slice(1)) {
+    const source = erlangContainer2(part, "{");
+    if (!source || source.length < 2 || !["git", "git_subdir"].includes(erlangAtom2(source[0]) ?? "")) continue;
+    const url2 = text2(source[1]);
+    if (!url2) continue;
+    const refTuple = source[2] && erlangContainer2(source[2], "{");
+    const ref = refTuple?.length === 2 ? text2(refTuple[1]) : source[2] ? text2(source[2]) : null;
+    return { name, url: url2, ref: ref ?? "HEAD", refKind: refTuple ? erlangAtom2(refTuple[0]) ?? "unknown" : source[2] ? "legacy" : "default", offset: tokens[0].start };
+  }
+  return null;
+}
+function walk4(tokens, visit, depth = 0) {
+  if (depth > 30) return;
+  const tuple2 = erlangContainer2(tokens, "{");
+  if (tuple2) {
+    visit(tuple2, tokens, depth);
+    for (const part of tuple2) walk4(part, visit, depth + 1);
+    return;
+  }
+  const list = erlangContainer2(tokens, "[");
+  if (list) for (const part of list) walk4(part, visit, depth + 1);
+}
+var erlangBuildScanner2 = {
+  id: "erlang-build",
+  category: "security",
+  async run(ctx) {
+    const issues = [], seen = /* @__PURE__ */ new Set();
+    for (const file2 of ctx.files) {
+      const norm = file2.replace(/\\/g, "/");
+      if (!/(^|\/)rebar\.config$/.test(norm) || erlangNonProductPath2(norm)) continue;
+      const source = await ctx.readFile(file2);
+      if (!source) continue;
+      const lockPath = norm.replace(/rebar\.config$/, "rebar.lock"), lockSource = await ctx.readFile(lockPath);
+      const locks = /* @__PURE__ */ new Map();
+      if (lockSource) for (const form of erlangForms2(erlangTokens2(lockSource))) walk4(form, (_tuple2, tokens) => {
+        const dep = dependency2(tokens);
+        if (dep && pinned2(dep)) locks.set(dep.name, dep);
+      });
+      const emit = (rule, name, title, detail, at2, path = norm, contents = source) => {
+        if (issues.length >= 80) return;
+        const line = erlangLine2(contents, at2), id = `erlang-${rule}-${path}:${line}-${name}`;
+        if (seen.has(id)) return;
+        seen.add(id);
+        issues.push({
+          id,
+          scanner: "erlang-build",
+          category: "security",
+          severity: rule === "plugin-unversioned" ? "info" : "warning",
+          confidence: "medium",
+          title,
+          detail,
+          location: `${path}:${line}`,
+          ageDays: 0,
+          evidence: name
+        });
+      };
+      const inspect = (tuple2, tokens, depth) => {
+        const key = erlangAtom2(tuple2[0] ?? []);
+        if (!key || !["deps", "plugins", "project_plugins"].includes(key) || tuple2.length !== 2) return;
+        const entries = erlangContainer2(tuple2[1], "[");
+        if (!entries) return;
+        const plugin = key !== "deps";
+        for (const entry of entries) {
+          if (plugin && entry.length === 1 && entry[0].kind === "atom") {
+            const name = entry[0].value;
+            emit(
+              "plugin-unversioned",
+              name,
+              `Rebar build plugin has no version constraint: ${name}`,
+              "Rebar plugins execute during builds and are not locked by the normal rebar.lock dependency entries. Specify a tested plugin version. This is a build reproducibility/hardening finding, not a demonstrated compromise.",
+              entry[0].start
+            );
+          }
+          const declared = dependency2(entry);
+          if (!declared) continue;
+          const locked = !plugin && depth === 0 ? locks.get(declared.name) : void 0;
+          const effective = locked ?? declared;
+          if (cleartext2(effective.url)) emit(
+            "dep-cleartext",
+            declared.name,
+            `Rebar dependency fetched over cleartext transport: ${declared.name}`,
+            "The effective Git dependency URL uses HTTP or unauthenticated git:// transport. Use HTTPS or authenticated SSH; retain immutable refs and the lock file.",
+            effective.offset,
+            locked ? lockPath : norm,
+            locked ? lockSource : source
+          );
+          if (!pinned2(effective)) emit(
+            "dep-floating",
+            declared.name,
+            `Rebar Git dependency has no effective immutable pin: ${declared.name}`,
+            plugin ? "Build plugins are not protected by the normal dependency lock. Use a full Git commit SHA or a tested immutable package release instead of a moving branch/tag." : "This Git dependency resolves from a branch/tag/HEAD without an applicable immutable rebar.lock entry. Commit the default-profile lock file or pin a full Git SHA; non-default profile dependencies are not locked by the default lock.",
+            entry[0]?.start ?? tokens[0].start
+          );
+        }
+      };
+      for (const form of erlangForms2(erlangTokens2(source))) {
+        const tuple2 = erlangContainer2(form, "{");
+        if (!tuple2) continue;
+        inspect(tuple2, form, 0);
+        if (tuple2.length === 2 && erlangAtom2(tuple2[0]) === "profiles") {
+          for (const profile of erlangContainer2(tuple2[1], "[") ?? []) {
+            const parts = erlangContainer2(profile, "{");
+            if (parts?.length !== 2) continue;
+            for (const option of erlangContainer2(parts[1], "[") ?? []) {
+              const optionTuple = erlangContainer2(option, "{");
+              if (optionTuple) inspect(optionTuple, option, 1);
+            }
+          }
+        }
+      }
+    }
+    return issues;
+  }
+};
+
 // ../core/src/engine.ts
 var defaultScanners2 = [
   envLifecycleScanner2,
@@ -86902,7 +88507,9 @@ var defaultScanners2 = [
   licenseRiskScanner2,
   ciHealthScanner2,
   duplicateCodeScanner2,
-  supplyChainScanner2
+  supplyChainScanner2,
+  erlangSecurityScanner2,
+  erlangBuildScanner2
 ];
 
 // ../core/src/select-scanners.ts
@@ -87060,11 +88667,11 @@ function fileLocation(issue2) {
 }
 function messageText(issue2) {
   const parts = [issue2.title.trim(), issue2.detail.trim()].filter(Boolean);
-  let text = parts.join("\n\n");
-  if (issue2.evidence) text += `
+  let text3 = parts.join("\n\n");
+  if (issue2.evidence) text3 += `
 
 ${issue2.evidence.trim()}`;
-  return text;
+  return text3;
 }
 function renderSarif(report2) {
   const issues = sortIssues(report2.issues);
