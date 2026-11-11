@@ -138,6 +138,10 @@ function commentParagraph(lines: string[], start: number, len: number): string[]
  */
 function isDocumentationNotation(lines: string[], start: number, len: number, file: string): boolean {
   const bodies = lines.slice(start, start + len).map(line => commentBody(line) ?? "")
+  // CSS value-definition grammar is not executable JavaScript/TypeScript.
+  if (/\.[cm]?[jt]sx?$/.test(file) &&
+      /^Spec:\s+[a-z][a-z-]+(?:\s+[a-z]+)?\s*=\s*<[a-z-]+>\s*\|\|\s*<[a-z-]+>$/i.test(bodies[0] ?? "") &&
+      bodies.slice(1).every(body => /^[a-z]+(?:-[a-z]+)+\s*=\s*[a-z]+(?:\s*\|\s*[a-z]+)+$/i.test(body))) return true
   if (/\.go$/.test(file)) {
     // ABNF rule names contain hyphens; %d/%x terminals and repetition are not Go.
     if (bodies.every(body => /^[A-Za-z][\w]*-[\w-]+\s*=\s*.+$/.test(body)) &&
@@ -155,6 +159,13 @@ function isDocumentationNotation(lines: string[], start: number, len: number, fi
 /** Does the surrounding comment present the block as an example or input schema? */
 function introducesExample(lines: string[], start: number, len: number, file: string): boolean {
   const near = commentParagraph(lines, start, len)
+  // Swift source headers present public initializer snippets under Usage.
+  // Require the heading before this indented run, and never cross real source.
+  if (/\.swift$/.test(file) && lines.slice(start, start + len).every(isDocIndent)) {
+    const before = lines.slice(0, start)
+    if (before.every(line => !line.trim() || commentBody(line) !== null) &&
+        before.some(line => /^usage\s*:\s*$/i.test(commentBody(line) ?? ""))) return true
+  }
   if (near.some(b => /```|\ba la\b|\be\.g\.|\bexamples?\b|^sample\s*:?\s*$|^sample\s+(?:input|output|usage)\s*:|\buse case\b|like this|looks like|\bsyntax\b|\bformat\b|should be uncommented/i.test(b))) return true
   // SQL DDL in a Go/Java/etc comment describes the schema consumed by the
   // implementation or its fixtures; it is not commented host-language code.
@@ -165,6 +176,37 @@ function introducesExample(lines: string[], start: number, len: number, file: st
     return near.filter(b => /^<\/?[A-Za-z_][\w:.-]*(?:\s|\/?[>])/.test(b)).length >= 2
   }
   return false
+}
+
+/** Labelled AST examples are documentation, not disabled statements.
+ * Anonymous classes and exports cannot be JavaScript labelled statements.
+ * Object rows additionally need a computed property: ordinary labelled blocks
+ * and bare expression blocks remain eligible for the dead-code check.
+ */
+function semanticExampleRows(lines: string[], comments: Set<number>, file: string): Set<number> {
+  const rows = new Set<number>()
+  if (!/\.[cm]?[jt]sx?$/.test(file)) return rows
+  const objectExample = /^\{\s*(?:\[[A-Za-z_$][\w$]*\]\s*:\s*(?:"[^"]*"|'[^']*'|[A-Za-z_$][\w$]*)|[A-Za-z_$][\w$]*(?:\s*:\s*(?:"[^"]*"|'[^']*'|[A-Za-z_$][\w$]*))?)\s*\}$/
+  const objectRow = /^(?:yes|no|depends):\s*\{/
+  let pending: number[] = []
+  const flush = () => {
+    const bodies = pending.map(n => commentBody(lines[n]) ?? "")
+    const computedObject = bodies.some(b => /^(?:yes|no|depends):\s*\{\s*\[/.test(b))
+    if (pending.length >= MIN_RUN && bodies.some(b => b.startsWith("yes:")) && bodies.some(b => b.startsWith("no:"))) {
+      for (let i = 0; i < pending.length; i++) {
+        if (!objectRow.test(bodies[i]) || computedObject) rows.add(pending[i])
+      }
+    }
+    pending = []
+  }
+  for (let n = 0; n < lines.length; n++) {
+    const body = comments.has(n) ? commentBody(lines[n]) ?? "" : ""
+    const example = /^(?:yes|no|depends):\s*(.*)$/.exec(body)?.[1]
+    if (example && (/^(?:class\s*\{|export\b)/.test(example) || objectExample.test(example))) pending.push(n)
+    else flush()
+  }
+  flush()
+  return rows
 }
 
 export const commentedCodeScanner: Scanner = {
@@ -189,6 +231,7 @@ export const commentedCodeScanner: Scanner = {
 
       const lines = content.split(/\r?\n/)
       const lineComments = lineCommentLines(lines, /\.(?:rs|swift|scala|kt)$/.test(norm))
+      const semanticRows = semanticExampleRows(lines, lineComments, norm)
       let perFile = 0
       let runStart = -1
       let runLen = 0
@@ -229,7 +272,7 @@ export const commentedCodeScanner: Scanner = {
 
       for (let i = 0; i < lines.length; i++) {
         const body = lineComments.has(i) ? commentBody(lines[i]) : null
-        if (body !== null && looksLikeCode(body)) {
+        if (body !== null && !semanticRows.has(i) && looksLikeCode(body)) {
           if (runStart === -1) runStart = i
           runLen++
         } else {
