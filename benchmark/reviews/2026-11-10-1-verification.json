@@ -524,5 +524,35 @@
     },
     "missingArtifacts": [],
     "errors": []
+  },
+  "confidenceMeasurement": {
+    "before": {
+      "low": {
+        "tp": 73,
+        "fp": 549
+      },
+      "medium": {
+        "tp": 237,
+        "fp": 111
+      },
+      "high": {
+        "tp": 684,
+        "fp": 63
+      }
+    },
+    "after": {
+      "low": {
+        "tp": 73,
+        "fp": 549
+      },
+      "medium": {
+        "tp": 261,
+        "fp": 140
+      },
+      "high": {
+        "tp": 718,
+        "fp": 104
+      }
+    }
   }
 }
