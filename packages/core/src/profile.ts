@@ -36,6 +36,9 @@ const EXTENSION_LANGUAGE: Record<string, string> = {
   scala: "Scala",
   vue: "Vue",
   svelte: "Svelte",
+  erl: "Erlang",
+  hrl: "Erlang",
+  escript: "Erlang",
 }
 
 /** Display language for a path's extension, or null if it isn't a counted source file. */
@@ -74,6 +77,7 @@ const TOOL_RULES: ToolRule[] = [
   { tool: "Maven", test: /(^|\/)pom\.xml$/ },
   { tool: "Gradle", test: /(^|\/)build\.gradle(\.kts)?$/ },
   { tool: "Make", test: /(^|\/)makefile$/ },
+  { tool: "Rebar3", test: /(^|\/)rebar\.(?:config|lock)$/ },
   { tool: "Vitest", test: /(^|\/)vitest\.config\.[mc]?[jt]s$/ },
   { tool: "Jest", test: /(^|\/)jest\.config\.[mc]?[jt]s$/ },
   { tool: "ESLint", test: /(^|\/)(\.eslintrc[^/]*|eslint\.config\.[mc]?[jt]s)$/ },
@@ -114,7 +118,7 @@ const CHECKLIST_RULES: Record<ChecklistItem, RegExp> = {
   codeOfConduct: /^(\.github\/|docs\/)?code_of_conduct(\.[a-z]+)?$/,
   changelog: /^(changelog|changes|history)(\.[a-z]+)?$/,
   ci: /^(\.github\/workflows\/[^/]+\.ya?ml|\.gitlab-ci\.ya?ml|\.circleci\/config\.ya?ml|azure-pipelines\.ya?ml|jenkinsfile|\.travis\.ya?ml)$/,
-  tests: /(^|\/)(tests?|__tests__|spec)\/|\.(test|spec)\.[a-z]+$|(^|\/)test_[^/]+\.py$|_test\.go$/,
+  tests: /(^|\/)(tests?|__tests__|spec)\/|\.(test|spec)\.[a-z]+$|(^|\/)test_[^/]+\.py$|_test\.go$|(?:_suite|_tests?)\.erl$/,
   gitignore: /^\.gitignore$/,
 }
 

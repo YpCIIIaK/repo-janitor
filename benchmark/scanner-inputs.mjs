@@ -17,6 +17,7 @@ const MD = ["md", "mdx", "markdown"]
 const MANIFESTS = /^(package\.json|package-lock\.json|npm-shrinkwrap\.json|pnpm-lock\.yaml|pnpm-workspace\.yaml|yarn\.lock|bun\.lockb?|pyproject\.toml|poetry\.lock|uv\.lock|pipfile(\.lock)?|requirements.*\.txt|go\.(mod|sum)|cargo\.(toml|lock)|gemfile(\.lock)?|composer\.(json|lock))$/
 
 export const INPUTS = {
+  "erlang-security": { exts: ["erl", "hrl", "escript"] },
   "insecure-code": { exts: [...SRC_ALL, "phtml", "inc", "cshtml", "erb"] },
   "todo-debt": { exts: SRC_ALL },
   "commented-code": { exts: ["ts", "tsx", "js", "jsx", "mjs", "mts", "cts", "java", "c", "cc", "cpp", "h", "hpp", "cs", "go", "rs", "swift", "kt", "scala", "php"] },

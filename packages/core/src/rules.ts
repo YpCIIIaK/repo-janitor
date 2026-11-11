@@ -63,6 +63,17 @@ const WORKFLOW: Record<string, string> = {
 }
 
 const DEFS: RuleDef[] = [
+  ...Object.entries({
+    "unsafe-term": "Erlang external term decoding without safe",
+    "dynamic-atom": "Erlang runtime atom creation",
+    shell: "Erlang dynamic shell command",
+    eval: "Erlang runtime expression evaluation",
+    "code-load": "Erlang runtime BEAM loading",
+    "tainted-dispatch": "Erlang external data selects executable code",
+    "external-executable": "Erlang external data selects a host executable",
+    "tls-verify-none": "Erlang TLS client verification disabled",
+    "tls-accept-bad-cert": "Erlang TLS callback accepts certificate errors",
+  }).map(([id, label]) => ({ rule: `erlang-${id}`, label, test: new RegExp(`^erlang-${id}-`) })),
   { rule: "secret-history", label: "Secret still in git history", test: /^secret-history-/ },
   { rule: "secret-generic", label: "High-entropy secret assignment", test: /^secret-entropy-/ },
   { rule: "secret-provider", label: "Provider credential (AWS, Stripe, GitHub…)", test: /^secret-/ },
