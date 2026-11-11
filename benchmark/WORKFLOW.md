@@ -3,6 +3,10 @@
 This file is everything needed to continue improving repo-janitor's scanners with
 the benchmark, without the conversation that built it. Read it top to bottom once.
 
+Latest completed handoff: [cycle 2026-11-10-1](CYCLE-2026-11-10-1.md) —
+6000 distinct GitHub projects in 6007 pinned records. Read its data-restoration
+section and `ROUTINE.md` before choosing new repositories.
+
 ## 1. What the project is
 
 repo-janitor scans a git repository and reports maintenance and security problems
