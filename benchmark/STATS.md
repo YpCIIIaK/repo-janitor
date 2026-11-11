@@ -8,11 +8,11 @@ Identity audit: **6000 distinct GitHub repositories** in 6007 pinned records; 7 
 
 | grade | repos | share |
 |---|---:|---:|
-| A | 1888 | 31% |
-| B | 1435 | 24% |
-| C | 1685 | 28% |
-| D | 866 | 14% |
-| F | 133 | 2% |
+| A | 1885 | 31% |
+| B | 1436 | 24% |
+| C | 1689 | 28% |
+| D | 865 | 14% |
+| F | 132 | 2% |
 
 Median score **79**.
 
@@ -20,17 +20,17 @@ Median score **79**.
 
 | language | repos | median score | findings / 1k lines |
 |---|---:|---:|---:|
-| Python | 928 | 83 | 2.0 |
-| TypeScript | 688 | 76 | 1.8 |
-| JavaScript | 597 | 82 | 2.0 |
-| Go | 525 | 75 | 1.5 |
-| other | 480 | 97 | 0.0 |
+| Python | 924 | 83 | 2.0 |
+| TypeScript | 692 | 76 | 1.8 |
+| JavaScript | 601 | 82 | 2.0 |
+| Go | 526 | 75 | 1.5 |
+| other | 470 | 97 | 0.0 |
 | Java | 356 | 78 | 2.2 |
-| Rust | 331 | 65 | 1.8 |
+| Rust | 334 | 64 | 1.8 |
 | PHP | 315 | 80 | 1.8 |
-| Swift | 314 | 85 | 2.1 |
-| C++ | 294 | 64 | 2.0 |
-| Kotlin | 294 | 74 | 2.1 |
+| Swift | 314 | 84 | 2.2 |
+| Kotlin | 299 | 73 | 2.1 |
+| C++ | 291 | 64 | 2.1 |
 | C# | 270 | 74 | 1.6 |
 | Ruby | 259 | 82 | 2.1 |
 | C | 216 | 71 | 1.3 |
@@ -44,7 +44,7 @@ Share of repos with at least one finding of the rule.
 
 | rule | repos | share |
 |---|---:|---:|
-| duplicate | 4098 | 68% |
+| duplicate | 4099 | 68% |
 | bus-factor | 4000 | 67% |
 | workflow-action-tag-first-party | 3353 | 56% |
 | todo | 3111 | 52% |
@@ -58,7 +58,7 @@ Share of repos with at least one finding of the rule.
 | eol-node | 818 | 14% |
 | hygiene-no-license | 627 | 10% |
 | eol-python | 519 | 9% |
-| skipped-test | 428 | 7% |
+| skipped-test | 450 | 7% |
 | config-conflict | 334 | 6% |
 | lockfile-missing | 229 | 4% |
 | ci-no-pr-trigger | 207 | 3% |
@@ -80,7 +80,7 @@ Share of repos with at least one finding of the rule.
 ## End-of-life runtimes
 
 - **39%** of 1950 Node.js projects still declare or test on an end-of-life Node version.
-- **36%** of 928 Python projects still support an end-of-life Python.
+- **36%** of 924 Python projects still support an end-of-life Python.
 - **1%** of all repos run CI on a retired runner image.
 
 ## Project hygiene
@@ -89,12 +89,12 @@ Share of repos with at least one finding of the rule.
 |---|---:|
 | readme | 99% |
 | license | 87% |
-| contributing | 40% |
+| contributing | 41% |
 | security | 20% |
 | codeOfConduct | 19% |
 | changelog | 31% |
 | ci | 76% |
-| tests | 71% |
+| tests | 72% |
 
 ## How old the debt is
 
@@ -111,18 +111,18 @@ Oldest TODOs in the corpus:
 
 ## Does activity mean health?
 
-- Active repos (≥ 50 commits last year, 2622): median score **69**.
-- Quiet repos (< 10 commits, 2144): median score **87**.
-- Mean findings per repo: active 93, quiet 36.
+- Active repos (≥ 50 commits last year, 2628): median score **69**.
+- Quiet repos (< 10 commits, 2137): median score **87**.
+- Mean findings per repo: active 92, quiet 37.
 
 ## Size vs score
 
 | size | repos | median score |
 |---|---:|---:|
-| < 5k lines | 2282 | 91 |
-| 5k–50k | 2188 | 70 |
-| 50k–200k | 1043 | 64 |
-| > 200k | 494 | 64 |
+| < 5k lines | 2276 | 91 |
+| 5k–50k | 2199 | 70 |
+| 50k–200k | 1039 | 64 |
+| > 200k | 493 | 64 |
 
 ## Cleanest repos
 
@@ -157,21 +157,21 @@ Median gap between repos with and without a practice. *Raw* compares everyone; *
 | practice | repos | score gap, raw | score gap, same size | findings/1k gap, same size |
 |---|---:|---:|---:|---:|
 | OpenSSF Scorecard | 92 | +1 | +5.7 | -1.00 |
-| ESLint flat config | 366 | -5 | +2.5 | -0.22 |
-| TypeScript | 646 | -2 | +1.2 | -0.06 |
-| SECURITY.md | 1168 | -11 | +0.4 | -0.41 |
+| ESLint flat config | 366 | -5 | +2.2 | -0.22 |
+| TypeScript | 646 | -2 | +1.3 | -0.06 |
+| SECURITY.md | 1168 | -11 | +0.0 | -0.39 |
 | Prettier | 377 | -8 | -0.6 | +0.04 |
-| Renovate | 292 | -8 | -2.3 | +0.22 |
-| CodeQL | 447 | -13 | -2.3 | +0.05 |
-| .editorconfig | 1234 | -12 | -2.6 | -0.16 |
-| CODEOWNERS | 666 | -12 | -2.6 | +0.13 |
-| PR template | 1375 | -15 | -3.5 | +0.01 |
-| Dev container | 303 | -14 | -3.5 | -0.18 |
-| Changesets | 83 | -14 | -4.2 | +0.09 |
-| CONTRIBUTING | 2252 | -15 | -4.4 | -0.15 |
-| Dependabot | 1487 | -13 | -4.6 | +0.02 |
-| Issue templates | 2206 | -18 | -5.7 | +0.29 |
-| pre-commit | 358 | -12 | -6.2 | -0.43 |
+| Renovate | 292 | -8 | -1.7 | +0.21 |
+| CodeQL | 447 | -13 | -2.5 | +0.05 |
+| .editorconfig | 1234 | -12 | -2.6 | -0.17 |
+| CODEOWNERS | 666 | -12 | -2.6 | +0.12 |
+| Changesets | 83 | -14 | -3.6 | +0.08 |
+| PR template | 1375 | -15 | -3.7 | +0.04 |
+| Dev container | 303 | -14 | -3.7 | -0.18 |
+| Dependabot | 1487 | -13 | -4.5 | +0.05 |
+| CONTRIBUTING | 2252 | -15 | -4.5 | -0.13 |
+| Issue templates | 2206 | -18 | -5.9 | +0.30 |
+| pre-commit | 358 | -12 | -6.2 | -0.44 |
 
 Correlation, not causation: projects that add Dependabot are also the ones that care in other ways.
 

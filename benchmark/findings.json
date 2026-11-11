@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-10T17:20:42.609Z",
+  "generatedAt": "2026-11-11T11:45:57.782Z",
   "repos": 6007,
   "rules": [
     {
@@ -42,15 +42,15 @@
     },
     {
       "rule": "duplicate",
-      "count": 41227,
+      "count": 41255,
       "hidden": 0,
       "repoShare": 0.682,
       "medianPerRepo": 15,
       "severity": "info",
       "where": {
-        "source": 0.971,
+        "source": 0.97,
         "docs": 0.025,
-        "tests": 0.003,
+        "tests": 0.004,
         "ci": 0.001
       },
       "labelled": {
@@ -229,6 +229,24 @@
       }
     },
     {
+      "rule": "skipped-test",
+      "count": 3352,
+      "hidden": 0,
+      "repoShare": 0.075,
+      "medianPerRepo": 3,
+      "severity": "info",
+      "where": {
+        "tests": 0.885,
+        "docs": 0.009,
+        "source": 0.104,
+        "vendored": 0.002
+      },
+      "labelled": {
+        "tp": 22,
+        "fp": 3
+      }
+    },
+    {
       "rule": "secret-provider",
       "count": 0,
       "hidden": 3309,
@@ -239,24 +257,6 @@
       "labelled": {
         "tp": 0,
         "fp": 14
-      }
-    },
-    {
-      "rule": "skipped-test",
-      "count": 3273,
-      "hidden": 0,
-      "repoShare": 0.071,
-      "medianPerRepo": 3,
-      "severity": "info",
-      "where": {
-        "tests": 0.901,
-        "docs": 0.007,
-        "source": 0.091,
-        "vendored": 0.001
-      },
-      "labelled": {
-        "tp": 22,
-        "fp": 3
       }
     },
     {
