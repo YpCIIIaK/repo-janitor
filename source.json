@@ -1,0 +1,8 @@
+{
+  "sourceCommit": "aa0878458d790cde999bd7a7eceb581441d08385",
+  "sourceBranch": "bench/2026-11-10-1",
+  "baseDataCommit": "bf2e533bf913b918b24f7ee5af66870e24158577",
+  "records": 6007,
+  "uniqueGitHubRepositories": 6000,
+  "newRepositories": 991
+}
