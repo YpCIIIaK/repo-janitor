@@ -39,7 +39,7 @@ export const CHECK_FAMILIES: CheckFamily[] = [
     id: "security",
     title: "landing.cat.security.title",
     body: "landing.cat.security.body",
-    scanners: ["secrets", "vulnerable-deps", "insecure-code", "erlang-security", "iac-security", "workflow-security", "supply-chain"],
+    scanners: ["secrets", "vulnerable-deps", "insecure-code", "erlang-security", "erlang-build", "iac-security", "workflow-security", "supply-chain"],
   },
   {
     id: "deps",

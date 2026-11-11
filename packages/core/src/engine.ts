@@ -33,6 +33,7 @@ import { ciHealthScanner } from "./scanners/ci-health"
 import { duplicateCodeScanner } from "./scanners/duplicate-code"
 import { supplyChainScanner } from "./scanners/supply-chain"
 import { erlangSecurityScanner } from "./scanners/erlang-security"
+import { erlangBuildScanner } from "./scanners/erlang-build"
 
 /** Default scanner registry. Add new scanners here as they are implemented. */
 export const defaultScanners: Scanner[] = [
@@ -65,6 +66,7 @@ export const defaultScanners: Scanner[] = [
   duplicateCodeScanner,
   supplyChainScanner,
   erlangSecurityScanner,
+  erlangBuildScanner,
 ]
 
 /** Severity penalties per finding, before the per-tier discount in

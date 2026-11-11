@@ -33,6 +33,7 @@ export { insecureCodeScanner, scanSource, literalRanges } from "./scanners/insec
 export { deadLinksScanner, isCheckable, extractUrls, commentUrls } from "./scanners/dead-links"
 export { supplyChainScanner } from "./scanners/supply-chain"
 export { erlangSecurityScanner } from "./scanners/erlang-security"
+export { erlangBuildScanner } from "./scanners/erlang-build"
 export * from "./reporters"
 export { quickWins, formatQuickWinsTerminal, type QuickWin } from "./quick-wins"
 export * from "./regression-story"
