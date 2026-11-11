@@ -1,0 +1,6 @@
+{
+ "commented-src/ExpressionDebugger.Tests/DebugInfoInjectorTest.cs:164": "tp",
+ "commented-src/ExpressionDebugger.Tests/DebugInfoInjectorTest.cs:172": "tp",
+ "commented-src/ExpressionDebugger.Tests/DebugInfoInjectorTest.cs:178": "tp",
+ "commented-src/Mapster/Adapters/CollectionAdapter.cs:194": "fp"
+}

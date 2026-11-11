@@ -76,7 +76,7 @@ const GENERATED_FILE =
 
 /** Test files: repetition there is a feature. */
 const TEST_FILE =
-  /(^|\/)(?:tests?|spec|__tests__|e2e|[^/]+\.Tests?)\/|(^|\/)src\/androidTest\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(^|\/)test_[^/]+\.py$|[^/]+_test\.(?:py|go|rb)$|[^/]+Test\.(?:java|kt|cs)$|_spec\.rb$/i
+  /(^|\/)(?:tests?|spec|__tests__|e2e|[^/]+\.Tests?)\/|(^|\/)src\/androidTest\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(^|\/)test_[^/]+\.py$|[^/]+_test\.(?:py|go|rb|cc|cpp)$|[^/]+Test\.(?:java|kt|cs)$|_spec\.rb$/i
 
 /** Swift XCTest and Swift Testing target/file conventions. */
 const SWIFT_TEST_FILE = /(?:^|\/)[^/]+Tests(?:\/.*)?\.swift$/i

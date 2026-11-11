@@ -3,6 +3,10 @@
 This file is everything needed to continue improving repo-janitor's scanners with
 the benchmark, without the conversation that built it. Read it top to bottom once.
 
+Latest completed handoff: [cycle 2026-11-10-1](CYCLE-2026-11-10-1.md) —
+6000 distinct GitHub projects in 6007 pinned records. Read its data-restoration
+section and `ROUTINE.md` before choosing new repositories.
+
 ## 1. What the project is
 
 repo-janitor scans a git repository and reports maintenance and security problems
@@ -19,9 +23,10 @@ with a 0–100 health score.
   `benchmark/stats.json` and `benchmark/history.json`.
 - `benchmark/` — the corpus, runner, labels and stats (this file lives here).
 
-Branching: work on the session branch, then merge into `main` and push `main`
-(the owner wants changes on main). Never force-push. Commit messages: no
-backticks inside `-m` (the shell expands them).
+Branching: recurring cycles follow `ROUTINE.md`: work on `bench/<date>-<n>`,
+push that branch and open one ready pull request. The owner or reviewer merges
+it; do not merge a new cycle without an explicit request. Never force-push.
+Commit messages: no backticks inside `-m` (the shell expands them).
 
 ## 2. The benchmark in one picture
 
@@ -35,7 +40,9 @@ history.mjs ─ aggregate ─────────────▶ history.jso
 archive.mjs ─ pack/push/pull ────────▶ orphan branch `bench-data` (compressed results/history)
 ```
 
-- `corpus.json`: ~1,270 public repos, each pinned to a commit SHA.
+- `corpus.json`: public repositories pinned to commit SHAs. See `STATS.md` for
+  current counts and `identities.json` for distinct GitHub project IDs; retained
+  historical rename aliases mean the record count can exceed the project count.
 - `.cache/`, `.results/`, `.history/`, `.archive/` are gitignored. Results are
   restored with `node benchmark/archive.mjs pull` (all) or `pull <repo…>`.
 
@@ -78,7 +85,9 @@ archive.mjs ─ pack/push/pull ────────▶ orphan branch `bench-
    deliberately vulnerable apps (recall must not drop), check `score.mjs`
    (precision up, "lost TP" not up).
 6. **Refresh**: `score.mjs --update`, core build + `rescore.mjs`, `history.mjs`, `stats.mjs`, full checks,
-   `archive.mjs pack && push`, commit, merge to main, push.
+   `archive.mjs pack`, stage/push the matching data snapshot, commit and push
+   the code branch, then open a ready PR. Promote staged data by normal
+   fast-forward after source merge; preserve newer canonical data if it advanced.
 
 ### Labelling criterion
 

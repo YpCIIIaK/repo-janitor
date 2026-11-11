@@ -1,15 +1,15 @@
 {
- "overall": 0.579,
+ "overall": 0.57,
  "scanners": {
   "eol-runtime": 0.944,
   "todo-debt": 0.911,
   "broken-doc-links": 0.66,
   "bus-factor": 0.848,
-  "commented-code": 0.683,
+  "commented-code": 0.612,
   "workflow-security": 0.954,
-  "duplicate-code": 0.78,
-  "skipped-tests": 0.84,
-  "insecure-code": 0.119,
+  "duplicate-code": 0.75,
+  "skipped-tests": 0.88,
+  "insecure-code": 0.176,
   "docs-drift": 0.63,
   "lockfile-drift": 0.905,
   "dead-code": 0.8,
@@ -3076,12 +3076,206 @@
    "insecure-exec-interpolated-monitor/frontend/e2e/proxy_app.e2e.ts:66",
    "insecure-localstorage-secret-monitor/frontend/src/tests/servers.test.ts:107",
    "insecure-random-for-secret-monitor/frontend/e2e/sharing.e2e.ts:84",
-   "secret-slack-webhook-monitor/src/api/push.rs:1033",
-   "skiptest-monitor/frontend/src/desk/agent/autosize.ts:54"
+   "secret-slack-webhook-monitor/src/api/push.rs:1033"
   ],
   "mylxsw-aidea": [
    "commented-scripts/main.go:20",
    "debug-web/sqflite_sw.js:4575"
+  ],
+  "dyang886-game-cheats-manager": [
+   "duplicate-Game Trainers/common/include/nlohmann/detail/input/binary_reader.hpp-1300"
+  ],
+  "microsoft-stl": [
+   "commented-tests/tr1/tests/regex3/test.cpp:398"
+  ],
+  "cemu-project-cemu": [
+   "commented-dependencies/ih264d/decoder/ih264d_mb_utils.c:951"
+  ],
+  "albertlauncher-albert": [
+   "commented-include/albert/rankitem.h:33"
+  ],
+  "moudey-shell": [
+   "commented-src/3rdparty/plutosvg/plutosvg/source/stb_truetype.h:3079"
+  ],
+  "aspnetboilerplate-aspnetboilerplate": [
+   "commented-test/Abp.BlobStoring.FileSystem.Tests/Abp/BlobStoring/FileSystem/AbpBlobStoringFileSystemTestModule.cs:33"
+  ],
+  "ysgstudyhards-dotnetguide": [
+   "commented-DotNetGuidePractice/HelloDotNetGuide/CSharp语法/CSharp12GrammarExercise.cs:13",
+   "commented-DotNetGuidePractice/HelloDotNetGuide/Program.cs:24",
+   "commented-DotNetGuidePractice/HelloDotNetGuide/Program.cs:68"
+  ],
+  "litedb-org-litedb": [
+   "commented-LiteDB.Tests/Database/DbRef_Interface_Tests.cs:1",
+   "commented-LiteDB.Tests/Internals/FreePage_Tests.cs:15"
+  ],
+  "dotnet-wpf": [
+   "commented-src/Microsoft.DotNet.Wpf/src/DirectWriteForwarder/CPP/DWriteWrapper/DWriteTypeConverter.cpp:338",
+   "commented-src/Microsoft.DotNet.Wpf/src/PresentationCore/MS/Win32/UnsafeNativeMethodsTablet.cs:152",
+   "commented-src/Microsoft.DotNet.Wpf/src/PresentationCore/MS/Win32/UnsafeNativeMethodsTablet.cs:169",
+   "commented-src/Microsoft.DotNet.Wpf/src/PresentationCore/MS/internal/Media3D/M3DUtil.cs:431",
+   "duplicate-src/Microsoft.DotNet.Wpf/cycle-breakers/PresentationFramework/PresentationFramework.cs-10707"
+  ],
+  "mob-sakai-uieffect": [
+   "commented-Packages/src/Samples~/v4 Compatible Components/Runtime/Enums/Converter.cs:133",
+   "commented-Packages/src/Samples~/v4 Compatible Components/Runtime/Enums/Converter.cs:146"
+  ],
+  "diorser-litemonitor": [
+   "commented-src/Core/MetricUtils.cs:217",
+   "commented-src/System/HardwareServices/HardwareRules.cs:74"
+  ],
+  "1remote-1remote": [
+   "commented-Ui/Controls/GridWith4Columns.cs:15",
+   "commented-Ui/Controls/LogoSelector.xaml.cs:103",
+   "commented-Ui/Service/DataSource/DAO/Dapper/DapperDataBaseFree.cs:197"
+  ],
+  "mapstermapper-mapster": [
+   "commented-src/ExpressionDebugger.Tests/DebugInfoInjectorTest.cs:164",
+   "commented-src/ExpressionDebugger.Tests/DebugInfoInjectorTest.cs:172",
+   "commented-src/ExpressionDebugger.Tests/DebugInfoInjectorTest.cs:178",
+   "commented-src/Mapster/Adapters/CollectionAdapter.cs:194"
+  ],
+  "dotnet-mqttnet": [
+   "commented-Source/MQTTnet.Tests/ASP/MqttConnectionContextTest.cs:49"
+  ],
+  "thejoefin-text-grab": [
+   "commented-Text-Grab.Core/Utilities/StringMethods.cs:495",
+   "commented-Text-Grab.Core/Utilities/StringMethods.cs:707"
+  ],
+  "indiff-qttabbar": [
+   "commented-QTTabBar/Config.cs:680"
+  ],
+  "protobuf-net-protobuf-net": [
+   "commented-assorted/BasicHttp/HttpClient/DcsExample.cs:1",
+   "commented-assorted/FX11/Program.cs:201",
+   "commented-assorted/FX11/Program.cs:208"
+  ],
+  "bililiverecorder-bililiverecorder": [
+   "commented-BililiveRecorder.Core/Recorder.cs:106",
+   "commented-BililiveRecorder.Core/RecyclableMemoryStreamProvider.cs:23",
+   "commented-BililiveRecorder.ToolBox/RecyclableMemoryStreamProvider.cs:23"
+  ],
+  "emoacht-monitorian": [
+   "commented-Source/Monitorian.Core/Models/Monitor/DeviceContext.cs:256"
+  ],
+  "focus-creative-games-luban": [
+   "commented-src/Luban.DataLoader.Builtin/Utils/LoadDataUtil.cs:80"
+  ],
+  "kalcaddle-kodexplorer": [
+   "commented-static/js/lib/util.js:1744"
+  ],
+  "fecshop-yii2-fecshop": [
+   "commented-app/appfront/modules/Catalogsearch/block/index/Index.php:385"
+  ],
+  "zhuifengshaonianhanlu-pikachu": [
+   "insecure-eval-dynamic-vul/rce/rce_eval.php:19",
+   "insecure-exec-interpolated-vul/rce/rce_ping.php:26",
+   "insecure-exec-interpolated-vul/rce/rce_ping.php:28",
+   "insecure-php-unserialize-vul/unserilization/unser.php:30",
+   "insecure-php-unserialize-vul/unserilization/unserilization.php:87",
+   "insecure-php-xxe-vul/xxe/xxe_1.php:49",
+   "insecure-sql-interpolated-inc/function.php:102",
+   "insecure-sql-interpolated-inc/function.php:118",
+   "insecure-sql-interpolated-inc/function.php:141",
+   "insecure-sql-interpolated-inc/function.php:163",
+   "insecure-sql-interpolated-inc/function.php:178",
+   "insecure-sql-interpolated-inc/function.php:193",
+   "insecure-sql-interpolated-pkxss/pkxss_login.php:15",
+   "insecure-sql-interpolated-pkxss/rkeypress/pkxss_keypress_result.php:15",
+   "insecure-sql-interpolated-pkxss/xcookie/pkxss_cookie_result.php:15",
+   "insecure-sql-interpolated-pkxss/xfish/pkxss_fish_result.php:16",
+   "insecure-sql-interpolated-vul/csrf/csrfget/csrf_get_login.php:36",
+   "insecure-sql-interpolated-vul/csrf/csrfpost/csrf_post_login.php:36",
+   "insecure-sql-interpolated-vul/csrf/csrftoken/token_get_login.php:38",
+   "insecure-sql-interpolated-vul/infoleak/findabc.php:30",
+   "insecure-sql-interpolated-vul/infoleak/findabc.php:39",
+   "insecure-sql-interpolated-vul/overpermission/op1/op1_login.php:32",
+   "insecure-sql-interpolated-vul/overpermission/op1/op1_mem.php:28",
+   "insecure-sql-interpolated-vul/overpermission/op2/op2_admin.php:31",
+   "insecure-sql-interpolated-vul/overpermission/op2/op2_login.php:28",
+   "insecure-sql-interpolated-vul/sqli/sqli_blind_b.php:27",
+   "insecure-sql-interpolated-vul/sqli/sqli_blind_t.php:28",
+   "insecure-sql-interpolated-vul/sqli/sqli_del.php:27",
+   "insecure-sql-interpolated-vul/sqli/sqli_del.php:38",
+   "insecure-sql-interpolated-vul/sqli/sqli_header/sqli_header_login.php:32",
+   "insecure-sql-interpolated-vul/sqli/sqli_id.php:27",
+   "insecure-sql-interpolated-vul/sqli/sqli_iu/sqli_login.php:34",
+   "insecure-sql-interpolated-vul/sqli/sqli_iu/sqli_reg.php:31",
+   "insecure-sql-interpolated-vul/sqli/sqli_search.php:30",
+   "insecure-sql-interpolated-vul/sqli/sqli_str.php:28",
+   "insecure-sql-interpolated-vul/sqli/sqli_widebyte.php:29",
+   "insecure-sql-interpolated-vul/sqli/sqli_x.php:28",
+   "insecure-sql-interpolated-vul/xss/xss_stored.php:25",
+   "insecure-sql-interpolated-vul/xss/xss_stored.php:36",
+   "insecure-sql-interpolated-vul/xss/xssblind/admin.php:34",
+   "insecure-sql-interpolated-vul/xss/xssblind/admin_login.php:35",
+   "insecure-sql-interpolated-vul/xss/xssblind/xss_blind.php:29",
+   "insecure-sql-interpolated-vul/xss/xsspost/post_login.php:35",
+   "insecure-ssrf-vul/ssrf/ssrf_curl.php:31",
+   "insecure-ssrf-vul/ssrf/ssrf_fgc.php:27"
+  ],
+  "binary-husky-gpt-academic": [
+   "commented-themes/common.js:173"
+  ],
+  "vuejs-core": [
+   "commented-packages/compiler-core/src/ast.ts:537",
+   "commented-packages/compiler-core/src/babelUtils.ts:397",
+   "commented-packages/runtime-core/src/errorHandling.ts:17",
+   "commented-packages/runtime-core/src/renderer.ts:1925",
+   "commented-packages/runtime-core/src/renderer.ts:1954"
+  ],
+  "styled-components-styled-components": [
+   "commented-packages/styled-components/src/native/transform/polyfills/test/polyfills.test.ts:3773"
+  ],
+  "firecrawl-open-lovable": [
+   "commented-app/generation/page.tsx:1189"
+  ],
+  "jedwatson-react-select": [
+   "skiptest-cypress/integration/single-select.spec.ts:37"
+  ],
+  "leonardomso-33-js-concepts": [
+   "commented-tests/advanced-topics/es-modules/es-modules.test.js:693"
+  ],
+  "greensock-gsap": [
+   "commented-src/gsap-core.js:2684"
+  ],
+  "dimsemenov-photoswipe": [
+   "commented-src/js/util/animations.js:104"
+  ],
+  "projectdiscovery-katana": [
+   "commented-pkg/engine/parser/parser_test.go:342"
+  ],
+  "nua-org-nua-bench": [
+   "insecure-php-reflected-xss-nua-lab-03/phpliteadmin.php:927",
+   "insecure-py-yaml-load-nua-lab-03/app.py:704",
+   "insecure-sql-interpolated-nua-lab-02/dexmovies/app.py:150",
+   "insecure-sql-interpolated-nua-lab-02/dexmovies/app.py:605",
+   "insecure-sql-interpolated-nua-lab-02/dexmovies/app.py:913",
+   "insecure-sql-interpolated-nua-lab-02/dexmovies/app.py:953",
+   "insecure-sql-interpolated-nua-lab-03/app.py:170",
+   "insecure-sql-interpolated-nua-lab-03/phpliteadmin.php:1173",
+   "insecure-sql-interpolated-nua-lab-03/phpliteadmin.php:1290",
+   "insecure-sql-interpolated-nua-lab-04/public/export_products.php:58",
+   "insecure-sql-interpolated-nua-lab-04/public/external_link.php:13",
+   "insecure-sql-interpolated-nua-lab-04/public/index.php:10",
+   "insecure-sql-interpolated-nua-lab-04/public/order_tracking.php:10",
+   "insecure-sql-interpolated-nua-lab-04/public/order_tracking.php:15",
+   "insecure-sql-interpolated-nua-lab-04/public/price_compare.php:19",
+   "insecure-sql-interpolated-nua-lab-04/public/product.php:9",
+   "insecure-sql-interpolated-nua-lab-04/public/product_qa.php:12",
+   "insecure-sql-interpolated-nua-lab-04/public/promo.php:11",
+   "insecure-sql-interpolated-nua-lab-04/public/submit_review.php:11",
+   "insecure-sql-interpolated-nua-lab-04/public/submit_review.php:25",
+   "insecure-sql-interpolated-nua-lab-04/public/wishlist.php:14",
+   "insecure-sql-interpolated-nua-lab-04/public/wishlist.php:24",
+   "insecure-sql-interpolated-nua-lab-04/public/wishlist.php:33",
+   "insecure-sql-interpolated-nua-lab-04/public/wishlist.php:40",
+   "insecure-sql-interpolated-nua-lab-05/activity.php:41",
+   "insecure-sql-interpolated-nua-lab-05/dashboard.php:89",
+   "insecure-sql-interpolated-nua-lab-05/dashboard.php:95",
+   "insecure-ssrf-nua-lab-03/app.py:570",
+   "insecure-ssrf-nua-lab-03/phpliteadmin.php:893",
+   "insecure-ssrf-nua-lab-03/phpliteadmin.php:913"
   ]
  }
 }

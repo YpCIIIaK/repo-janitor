@@ -336,6 +336,16 @@ describe("duplicateCodeScanner", () => {
     }))).toHaveLength(1)
   })
 
+  it("excludes conventional C++ test sources while retaining production clones", async () => {
+    for (const file of ["src/parser_test.cc", "plugins/example_plugin_test.cpp"]) {
+      expect(await duplicateCodeScanner.run(ctx({ "src/production.cc": CLONE, [file]: CLONE }))).toEqual([])
+    }
+    expect(await duplicateCodeScanner.run(ctx({
+      "src/contest.cc": CLONE,
+      "src/test_helpers.cpp": CLONE,
+    }))).toHaveLength(1)
+  })
+
   it("ignores duplication between test files", async () => {
     const issues = await duplicateCodeScanner.run(
       ctx({ "src/a.test.ts": CLONE, "src/b.test.ts": CLONE }),

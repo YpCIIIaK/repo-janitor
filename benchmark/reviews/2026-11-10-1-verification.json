@@ -1,0 +1,558 @@
+{
+  "sourceCommit": "aa0878458d790cde999bd7a7eceb581441d08385",
+  "archiveCommit": "7c3753d20bfd893f63a3a4776e9cc067f57ddf4b",
+  "primary": {
+    "newRepositories": 991,
+    "immutableBuildHashes": [
+      "98fe634ce20d92d7ec0bc4fe7e7cd4aa9c2963c70765948d4c852cc439d29634  packages/core/dist/index.js",
+      "09f73063eae2b97e4bdea33c377b594bc3c91cfe059afa0918f281bd69e25815  packages/cli/dist/index.js"
+    ],
+    "batches": 10,
+    "failures": 0
+  },
+  "rerun": {
+    "repositories": 303,
+    "reasons": {
+      "semantic-comment": 2,
+      "focused-alias": 78,
+      "cpp-test-tree": 101,
+      "vulnerable": 53,
+      "swift-comment": 75
+    },
+    "commentSourceAudit": {
+      "files": 2693,
+      "repositories": 612,
+      "candidates": [
+        "styled-components-styled-components",
+        "vuejs-core"
+      ]
+    },
+    "labelledFpRemoved": {
+      "skipped-tests": 3,
+      "duplicate-code": 3,
+      "commented-code": 27
+    },
+    "newLabelledFpRemoved": {
+      "duplicate-code": 3,
+      "skipped-tests": 2,
+      "commented-code": 27
+    },
+    "newLostTP": []
+  },
+  "vulnerableApps": [
+    {
+      "repo": "0c34-govwa",
+      "before": 4,
+      "after": 4,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "adeyosemanputra-pygoat",
+      "before": 6,
+      "after": 6,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "anxolerd-dvpwa",
+      "before": 0,
+      "after": 0,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "appsecco-dvna",
+      "before": 1,
+      "after": 1,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "bridgecrewio-cfngoat",
+      "before": 0,
+      "after": 0,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "bridgecrewio-kustomizegoat",
+      "before": 0,
+      "after": 0,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "bridgecrewio-terragoat",
+      "before": 0,
+      "after": 0,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "contrast-security-oss-vulnerable-spring-boot-application",
+      "before": 1,
+      "after": 1,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "cr0hn-vulnerable-node",
+      "before": 6,
+      "after": 6,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "cspf-founder-javavulnerablelab",
+      "before": 5,
+      "after": 5,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "cyllective-oauth-labs",
+      "before": 0,
+      "after": 0,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "damnvulnerablecryptoapp-damnvulnerablecryptoapp",
+      "before": 0,
+      "after": 0,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "digininja-dvwa",
+      "before": 42,
+      "after": 42,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "dolevf-damn-vulnerable-graphql-application",
+      "before": 1,
+      "after": 1,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "eoftedal-deserialize",
+      "before": 0,
+      "after": 0,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "erev0s-vampi",
+      "before": 1,
+      "after": 1,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "forgo7ten-vulnerableapp",
+      "before": 0,
+      "after": 0,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "fportantier-vulpy",
+      "before": 2,
+      "after": 2,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "incredibleindishell-ssrf-vulnerable-lab",
+      "before": 1,
+      "after": 1,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "ine-labs-awsgoat",
+      "before": 45,
+      "after": 45,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "jerryhoff-webgoat-net",
+      "before": 10,
+      "after": 10,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "juice-shop-juice-shop",
+      "before": 2,
+      "after": 2,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "jzheaux-spel-injection",
+      "before": 0,
+      "after": 0,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "madhuakula-kubernetes-goat",
+      "before": 1,
+      "after": 1,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "mochiruntime-android-ctf",
+      "before": 0,
+      "after": 0,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "nua-org-nua-bench",
+      "before": 30,
+      "after": 30,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "owasp-benchmark-benchmarkjava",
+      "before": 31,
+      "after": 31,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "owasp-crapi",
+      "before": 1,
+      "after": 1,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "owasp-dvsa",
+      "before": 0,
+      "after": 0,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "owasp-igoat-swift",
+      "before": 2,
+      "after": 2,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "owasp-nodegoat",
+      "before": 3,
+      "after": 3,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "owasp-owaspwebgoatphp",
+      "before": 11,
+      "after": 11,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "owasp-railsgoat",
+      "before": 3,
+      "after": 3,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "owasp-serverless-goat",
+      "before": 0,
+      "after": 0,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "owasp-vulnerable-web-application",
+      "before": 12,
+      "after": 12,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "presidentbeef-inject-some-sql",
+      "before": 15,
+      "after": 15,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "rhinosecuritylabs-cloudgoat",
+      "before": 4,
+      "after": 4,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "sasanlabs-vulnerableapp",
+      "before": 10,
+      "after": 10,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "snoopysecurity-dvws",
+      "before": 7,
+      "after": 7,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "snoopysecurity-dvws-node",
+      "before": 2,
+      "after": 2,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "snyk-labs-goof-kubernetes",
+      "before": 1,
+      "after": 1,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "snyk-labs-java-goof",
+      "before": 0,
+      "after": 0,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "snyk-labs-nodejs-goof",
+      "before": 1,
+      "after": 1,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "soham7-dev-aspgoat",
+      "before": 1,
+      "after": 1,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "stamparm-dsvw",
+      "before": 5,
+      "after": 5,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "terracotta-bank-terracotta-bank",
+      "before": 9,
+      "after": 9,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "theowni-damn-vulnerable-restaurant-api-game",
+      "before": 0,
+      "after": 0,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "veracode-research-actuator-testbed",
+      "before": 0,
+      "after": 0,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "we45-dvfaas-damn-vulnerable-functions-as-a-service",
+      "before": 0,
+      "after": 0,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "we45-vulnerable-flask-app",
+      "before": 2,
+      "after": 2,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "webgoat-webgoat",
+      "before": 11,
+      "after": 11,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "webgoat-webgoat-legacy",
+      "before": 5,
+      "after": 5,
+      "lost": [],
+      "new": []
+    },
+    {
+      "repo": "zhuifengshaonianhanlu-pikachu",
+      "before": 45,
+      "after": 45,
+      "lost": [],
+      "new": []
+    }
+  ],
+  "validation": {
+    "benchmarkHelpers": 27,
+    "core": 884,
+    "cli": 41,
+    "action": 21,
+    "dashboardPassed": 932,
+    "dashboardPreexistingSkipped": 1,
+    "typecheck": "pass",
+    "eslint": "pass",
+    "packageBuild": "pass",
+    "frozenBaselineGate": "pass",
+    "calibratedGate": "pass"
+  },
+  "newLabels": {
+    "tp": 58,
+    "fp": 103,
+    "unsure": 7
+  },
+  "startingAbove90PercentLabels": 1,
+  "identityAndPinAudit": {
+    "generatedAt": "2026-11-10T17:21:02.633262+00:00",
+    "baseCommit": "e938bde64445e54d70348c9061297fb23fbebea2",
+    "complete": true,
+    "ok": true,
+    "allowIncomplete": false,
+    "corpus": {
+      "oldRecords": 5016,
+      "records": 6007,
+      "distinctGitHubIds": 6000,
+      "newRecords": 991,
+      "newDistinctGitHubIds": 991,
+      "newIdsOverlappingOld": 0,
+      "historicalAliases": {
+        "230595891": [
+          "launchbadge-sqlx",
+          "transact-rs-sqlx"
+        ],
+        "399495186": [
+          "tiangolo-sqlmodel",
+          "fastapi-sqlmodel"
+        ],
+        "5152285": [
+          "square-okhttp",
+          "lysine-dev-okhttp"
+        ],
+        "92313258": [
+          "cert-manager-cert-manager",
+          "jetstack-cert-manager"
+        ],
+        "54435102": [
+          "benthosdev-benthos",
+          "redpanda-data-connect"
+        ],
+        "157846876": [
+          "framer-motion",
+          "motiondivision-motion"
+        ],
+        "165548191": [
+          "carlospolop-peass-ng",
+          "peass-ng-peass-ng"
+        ]
+      }
+    },
+    "oldPins": {
+      "checked": 5016,
+      "unchanged": 5016
+    },
+    "oldIdentities": {
+      "currentOldRecords": 5016,
+      "knownSnapshotChecked": 5016,
+      "baseSnapshotChecked": 3400
+    },
+    "randomLayer": {
+      "bytesUnchanged": true,
+      "contentUnchanged": true
+    },
+    "labels": {
+      "oldFiles": 801,
+      "oldEntries": 2645,
+      "untouchedOldEntries": 2645,
+      "new": {
+        "tp": 58,
+        "fp": 103
+      },
+      "newTP": 58,
+      "newFP": 103
+    },
+    "artifacts": {
+      "results": {
+        "matching": 6007
+      },
+      "inventory": {
+        "matching": 6007
+      },
+      "gitlog": {
+        "matching": 6007
+      },
+      "histories": {
+        "matching": 6007
+      },
+      "reports": {
+        "matching": 6007
+      }
+    },
+    "vulnerableRecall": {
+      "repos": 49,
+      "beforeHighInsecureCodeIds": 263,
+      "retainedIds": 263,
+      "lostIds": []
+    },
+    "missingArtifacts": [],
+    "errors": []
+  },
+  "confidenceMeasurement": {
+    "before": {
+      "low": {
+        "tp": 73,
+        "fp": 549
+      },
+      "medium": {
+        "tp": 237,
+        "fp": 111
+      },
+      "high": {
+        "tp": 684,
+        "fp": 63
+      }
+    },
+    "after": {
+      "low": {
+        "tp": 73,
+        "fp": 549
+      },
+      "medium": {
+        "tp": 261,
+        "fp": 140
+      },
+      "high": {
+        "tp": 718,
+        "fp": 104
+      }
+    }
+  }
+}
