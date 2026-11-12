@@ -1,0 +1,12 @@
+# Browser trust-boundary review
+
+The default `browser-security` scanner adds two structural review rules for JavaScript/TypeScript, including JSX/TSX and module variants:
+
+- `browser-dynamic-html`: locally traced URL or browser-storage values assigned to `innerHTML`/`outerHTML` or passed to `insertAdjacentHTML`. Unknown variables alone, literal markup and text-only DOM APIs are excluded. Tracks localStorage/sessionStorage reads and extension storage callbacks through local collection callbacks. Calls and aliases of call results are not interpreted as unsafe: a helper may sanitize HTML or create a TrustedHTML value.
+- `browser-query-origin`: locally URL-derived values used in origin comparisons or as browser-window `postMessage` targets. Tracks location fields, URLSearchParams, local aliases and composition. Function parameters, lexical declarations, imports and catch bindings shadow outer values. Recognizes simple literal exact-origin Set allowlists in positive branches and early-return/throw guards; arbitrary validators are not interpreted.
+
+Both rules produce **low-confidence warnings**. They identify trust boundaries for review, not demonstrated XSS, authentication bypass, data leaks or remotely exploitable applications. An allowlist or embedding contract elsewhere can make the operation intentional and safe; the scanner does not prove its absence. CSP may prevent scripts without preventing HTML injection. An exact origin comparison authenticates only the origin it is bound to; review where that expected value originates.
+
+Analysis is local and conservative: unknown helper contracts, arbitrary return values, full control-flow effects and interprocedural propagation are not resolved. Vue/Svelte templates, inline HTML scripts, compiled SDK binaries and deployment CSP are outside this scanner's coverage. Generated, vendor, test, fixture, example and documentation paths are excluded. Files without relevant sink/origin tokens do not enter the AST parser. Output is capped at 60 findings per file and 120 per scan. New rule precision is not yet calibrated on a labelled corpus. Existing score weights and confidence calibration are unchanged.
+
+For review, trace source → storage/transform → sink, identify who controls the source, then test with benign local markers. Check text versus HTML versus attribute contexts, origin allowlists, `event.source`, sandbox/frame policies and application authorization separately. A reproducible library behavior does not establish production exposure.

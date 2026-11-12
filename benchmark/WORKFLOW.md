@@ -7,6 +7,8 @@ Latest completed handoff: [cycle 2026-11-10-1](CYCLE-2026-11-10-1.md) —
 6000 distinct GitHub projects in 6007 pinned records. Read its data-restoration
 section and `ROUTINE.md` before choosing new repositories.
 
+Educational companion requirement: read [LEARNING-REPORTS.md](LEARNING-REPORTS.md). For each approximately 100 new distinct repositories, also deliver 2–3 junior-friendly case studies, even if no vulnerability is confirmed. Keep observed behavior, conditional risks and invented examples separate.
+
 ## 1. What the project is
 
 repo-janitor scans a git repository and reports maintenance and security problems

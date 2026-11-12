@@ -1,3 +1,4 @@
+import { browserSecurityScanner } from "./scanners/browser-security"
 import type { Scanner, ScanContext } from "./scanner"
 import { scanReportSchema, SCHEMA_VERSION, type Grade, type Issue, type RepoProfile, type ScanReport } from "./schema"
 import { extToLanguage, detectTools, detectChecklist, summarizeActivity } from "./profile"
@@ -37,6 +38,7 @@ import { erlangBuildScanner } from "./scanners/erlang-build"
 
 /** Default scanner registry. Add new scanners here as they are implemented. */
 export const defaultScanners: Scanner[] = [
+  browserSecurityScanner,
   envLifecycleScanner,
   staleBranchScanner,
   todoDebtScanner,
