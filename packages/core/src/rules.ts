@@ -63,6 +63,8 @@ const WORKFLOW: Record<string, string> = {
 }
 
 const DEFS: RuleDef[] = [
+  { rule: "browser-dynamic-html", label: "Dynamic browser HTML insertion", test: /^browser-dynamic-html-/ },
+  { rule: "browser-query-origin", label: "URL-derived messaging trust origin", test: /^browser-query-origin-/ },
   ...Object.entries({
     "unsafe-term": "Erlang external term decoding without safe",
     "dynamic-atom": "Erlang runtime atom creation",

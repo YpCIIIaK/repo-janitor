@@ -1,3 +1,4 @@
+export { browserSecurityScanner } from "./scanners/browser-security"
 export * from "./schema"
 export * from "./scanner"
 export * from "./engine"
