@@ -1,0 +1,23 @@
+[
+  {
+    "repo": "assistant-chat-kz/assistant-back-end",
+    "rule": "insecure-tls-verification-off",
+    "location": "src/gigachat/gigachat.service.ts:7",
+    "verdict": "confirmed-code-configuration; exploitation-and-deployment-unverified",
+    "explanation": "https.Agent disables certificate verification. Agent is used for OAuth at line 104 and the GigaChat branch at line 155. A network attacker in the appropriate position could impersonate the remote service; this is not proof of an exposed production deployment."
+  },
+  {
+    "repo": "assistant-chat-kz/assistant-back-end",
+    "rule": "insecure-ssrf",
+    "location": "src/gigachat/gigachat.service.ts:134",
+    "verdict": "false-positive-for-request-controlled-SSRF",
+    "explanation": "targetUrl is chosen from CLOUD_RU_API_URL/GIGACHAT_API_URL configuration or fixed defaults (lines 44–56, 127). No request-controlled destination was found in this flow."
+  },
+  {
+    "repo": "daniyacx/IZBASAR-BOT",
+    "rule": "secret-history",
+    "location": "main.py @ d944212",
+    "verdict": "unverified-secret-candidate",
+    "explanation": "Automatic low-confidence history match. No token values included in exports. No credential validation or service requests performed."
+  }
+]

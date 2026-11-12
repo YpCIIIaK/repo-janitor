@@ -1,0 +1,2650 @@
+[
+  {
+    "extracted": "project_1_Akhymbek_Ali.ipynb.cell-1.py",
+    "original": "project_1_Akhymbek_Ali.ipynb",
+    "cell": 1,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_1_Akhymbek_Ali.ipynb.cell-2.py",
+    "original": "project_1_Akhymbek_Ali.ipynb",
+    "cell": 2,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_1_Akhymbek_Ali.ipynb.cell-4.py",
+    "original": "project_1_Akhymbek_Ali.ipynb",
+    "cell": 4,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_1_Akhymbek_Ali.ipynb.cell-5.py",
+    "original": "project_1_Akhymbek_Ali.ipynb",
+    "cell": 5,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_1_Akhymbek_Ali.ipynb.cell-6.py",
+    "original": "project_1_Akhymbek_Ali.ipynb",
+    "cell": 6,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_1_Akhymbek_Ali.ipynb.cell-7.py",
+    "original": "project_1_Akhymbek_Ali.ipynb",
+    "cell": 7,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_1_Akhymbek_Ali.ipynb.cell-8.py",
+    "original": "project_1_Akhymbek_Ali.ipynb",
+    "cell": 8,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_1_Akhymbek_Ali.ipynb.cell-10.py",
+    "original": "project_1_Akhymbek_Ali.ipynb",
+    "cell": 10,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_1_Akhymbek_Ali.ipynb.cell-11.py",
+    "original": "project_1_Akhymbek_Ali.ipynb",
+    "cell": 11,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_1_Akhymbek_Ali.ipynb.cell-12.py",
+    "original": "project_1_Akhymbek_Ali.ipynb",
+    "cell": 12,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_1_Akhymbek_Ali.ipynb.cell-13.py",
+    "original": "project_1_Akhymbek_Ali.ipynb",
+    "cell": 13,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_1_Akhymbek_Ali.ipynb.cell-14.py",
+    "original": "project_1_Akhymbek_Ali.ipynb",
+    "cell": 14,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_1_Akhymbek_Ali.ipynb.cell-15.py",
+    "original": "project_1_Akhymbek_Ali.ipynb",
+    "cell": 15,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_1_Akhymbek_Ali.ipynb.cell-16.py",
+    "original": "project_1_Akhymbek_Ali.ipynb",
+    "cell": 16,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_1_Akhymbek_Ali.ipynb.cell-17.py",
+    "original": "project_1_Akhymbek_Ali.ipynb",
+    "cell": 17,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_1_Akhymbek_Ali.ipynb.cell-18.py",
+    "original": "project_1_Akhymbek_Ali.ipynb",
+    "cell": 18,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_1_Akhymbek_Ali.ipynb.cell-19.py",
+    "original": "project_1_Akhymbek_Ali.ipynb",
+    "cell": 19,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_1_Akhymbek_Ali.ipynb.cell-20.py",
+    "original": "project_1_Akhymbek_Ali.ipynb",
+    "cell": 20,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_1_Akhymbek_Ali.ipynb.cell-21.py",
+    "original": "project_1_Akhymbek_Ali.ipynb",
+    "cell": 21,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_1_Akhymbek_Ali.ipynb.cell-22.py",
+    "original": "project_1_Akhymbek_Ali.ipynb",
+    "cell": 22,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_2_Akhymbek_Ali.ipynb.cell-1.py",
+    "original": "project_2_Akhymbek_Ali.ipynb",
+    "cell": 1,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_2_Akhymbek_Ali.ipynb.cell-2.py",
+    "original": "project_2_Akhymbek_Ali.ipynb",
+    "cell": 2,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_2_Akhymbek_Ali.ipynb.cell-3.py",
+    "original": "project_2_Akhymbek_Ali.ipynb",
+    "cell": 3,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_2_Akhymbek_Ali.ipynb.cell-4.py",
+    "original": "project_2_Akhymbek_Ali.ipynb",
+    "cell": 4,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_2_Akhymbek_Ali.ipynb.cell-5.py",
+    "original": "project_2_Akhymbek_Ali.ipynb",
+    "cell": 5,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_2_Akhymbek_Ali.ipynb.cell-6.py",
+    "original": "project_2_Akhymbek_Ali.ipynb",
+    "cell": 6,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_2_Akhymbek_Ali.ipynb.cell-7.py",
+    "original": "project_2_Akhymbek_Ali.ipynb",
+    "cell": 7,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_2_Akhymbek_Ali.ipynb.cell-8.py",
+    "original": "project_2_Akhymbek_Ali.ipynb",
+    "cell": 8,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_2_Akhymbek_Ali.ipynb.cell-9.py",
+    "original": "project_2_Akhymbek_Ali.ipynb",
+    "cell": 9,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_2_Akhymbek_Ali.ipynb.cell-10.py",
+    "original": "project_2_Akhymbek_Ali.ipynb",
+    "cell": 10,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_2_Akhymbek_Ali.ipynb.cell-11.py",
+    "original": "project_2_Akhymbek_Ali.ipynb",
+    "cell": 11,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_2_Akhymbek_Ali.ipynb.cell-12.py",
+    "original": "project_2_Akhymbek_Ali.ipynb",
+    "cell": 12,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_2_Akhymbek_Ali.ipynb.cell-13.py",
+    "original": "project_2_Akhymbek_Ali.ipynb",
+    "cell": 13,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_2_Akhymbek_Ali.ipynb.cell-14.py",
+    "original": "project_2_Akhymbek_Ali.ipynb",
+    "cell": 14,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_2_Akhymbek_Ali.ipynb.cell-15.py",
+    "original": "project_2_Akhymbek_Ali.ipynb",
+    "cell": 15,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_2_Akhymbek_Ali.ipynb.cell-16.py",
+    "original": "project_2_Akhymbek_Ali.ipynb",
+    "cell": 16,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_2_Akhymbek_Ali.ipynb.cell-17.py",
+    "original": "project_2_Akhymbek_Ali.ipynb",
+    "cell": 17,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_2_Akhymbek_Ali.ipynb.cell-18.py",
+    "original": "project_2_Akhymbek_Ali.ipynb",
+    "cell": 18,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_2_Akhymbek_Ali.ipynb.cell-19.py",
+    "original": "project_2_Akhymbek_Ali.ipynb",
+    "cell": 19,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_2_Akhymbek_Ali.ipynb.cell-20.py",
+    "original": "project_2_Akhymbek_Ali.ipynb",
+    "cell": 20,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_2_Akhymbek_Ali.ipynb.cell-21.py",
+    "original": "project_2_Akhymbek_Ali.ipynb",
+    "cell": 21,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_2_Akhymbek_Ali.ipynb.cell-22.py",
+    "original": "project_2_Akhymbek_Ali.ipynb",
+    "cell": 22,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_2_Akhymbek_Ali.ipynb.cell-23.py",
+    "original": "project_2_Akhymbek_Ali.ipynb",
+    "cell": 23,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_2_Akhymbek_Ali.ipynb.cell-24.py",
+    "original": "project_2_Akhymbek_Ali.ipynb",
+    "cell": 24,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_2_Akhymbek_Ali.ipynb.cell-25.py",
+    "original": "project_2_Akhymbek_Ali.ipynb",
+    "cell": 25,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_2_Akhymbek_Ali.ipynb.cell-26.py",
+    "original": "project_2_Akhymbek_Ali.ipynb",
+    "cell": 26,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_2_Akhymbek_Ali.ipynb.cell-27.py",
+    "original": "project_2_Akhymbek_Ali.ipynb",
+    "cell": 27,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_2_Akhymbek_Ali.ipynb.cell-28.py",
+    "original": "project_2_Akhymbek_Ali.ipynb",
+    "cell": 28,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_2_Akhymbek_Ali.ipynb.cell-29.py",
+    "original": "project_2_Akhymbek_Ali.ipynb",
+    "cell": 29,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_2_Akhymbek_Ali.ipynb.cell-30.py",
+    "original": "project_2_Akhymbek_Ali.ipynb",
+    "cell": 30,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_2_Akhymbek_Ali.ipynb.cell-31.py",
+    "original": "project_2_Akhymbek_Ali.ipynb",
+    "cell": 31,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_2_Akhymbek_Ali.ipynb.cell-32.py",
+    "original": "project_2_Akhymbek_Ali.ipynb",
+    "cell": 32,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_2_Akhymbek_Ali.ipynb.cell-33.py",
+    "original": "project_2_Akhymbek_Ali.ipynb",
+    "cell": 33,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_2_Akhymbek_Ali.ipynb.cell-34.py",
+    "original": "project_2_Akhymbek_Ali.ipynb",
+    "cell": 34,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "project_2_Akhymbek_Ali.ipynb.cell-35.py",
+    "original": "project_2_Akhymbek_Ali.ipynb",
+    "cell": 35,
+    "sha": "f102b27d963da3a29954a16b412ad3a3684482b8",
+    "repo": "akhymbekalli/Internship_KT",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "10/Unsupervised.ipynb.cell-2.py",
+    "original": "10/Unsupervised.ipynb",
+    "cell": 2,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "10/Unsupervised.ipynb.cell-3.py",
+    "original": "10/Unsupervised.ipynb",
+    "cell": 3,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "10/Unsupervised.ipynb.cell-4.py",
+    "original": "10/Unsupervised.ipynb",
+    "cell": 4,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "10/Unsupervised.ipynb.cell-5.py",
+    "original": "10/Unsupervised.ipynb",
+    "cell": 5,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "10/Unsupervised.ipynb.cell-7.py",
+    "original": "10/Unsupervised.ipynb",
+    "cell": 7,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "10/Unsupervised.ipynb.cell-8.py",
+    "original": "10/Unsupervised.ipynb",
+    "cell": 8,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "10/Unsupervised.ipynb.cell-9.py",
+    "original": "10/Unsupervised.ipynb",
+    "cell": 9,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "10/Unsupervised.ipynb.cell-10.py",
+    "original": "10/Unsupervised.ipynb",
+    "cell": 10,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "10/Unsupervised.ipynb.cell-11.py",
+    "original": "10/Unsupervised.ipynb",
+    "cell": 11,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "10/Unsupervised.ipynb.cell-12.py",
+    "original": "10/Unsupervised.ipynb",
+    "cell": 12,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "10/Unsupervised.ipynb.cell-14.py",
+    "original": "10/Unsupervised.ipynb",
+    "cell": 14,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "10/Unsupervised.ipynb.cell-15.py",
+    "original": "10/Unsupervised.ipynb",
+    "cell": 15,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "10/Unsupervised.ipynb.cell-16.py",
+    "original": "10/Unsupervised.ipynb",
+    "cell": 16,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "10/Unsupervised.ipynb.cell-17.py",
+    "original": "10/Unsupervised.ipynb",
+    "cell": 17,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "10/Unsupervised.ipynb.cell-18.py",
+    "original": "10/Unsupervised.ipynb",
+    "cell": 18,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "10/Unsupervised.ipynb.cell-19.py",
+    "original": "10/Unsupervised.ipynb",
+    "cell": 19,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "10/Unsupervised.ipynb.cell-20.py",
+    "original": "10/Unsupervised.ipynb",
+    "cell": 20,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "10/Unsupervised.ipynb.cell-22.py",
+    "original": "10/Unsupervised.ipynb",
+    "cell": 22,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "10/Unsupervised.ipynb.cell-23.py",
+    "original": "10/Unsupervised.ipynb",
+    "cell": 23,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "10/Unsupervised.ipynb.cell-24.py",
+    "original": "10/Unsupervised.ipynb",
+    "cell": 24,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "10/Unsupervised.ipynb.cell-25.py",
+    "original": "10/Unsupervised.ipynb",
+    "cell": 25,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "10/Unsupervised.ipynb.cell-26.py",
+    "original": "10/Unsupervised.ipynb",
+    "cell": 26,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "10/Unsupervised.ipynb.cell-28.py",
+    "original": "10/Unsupervised.ipynb",
+    "cell": 28,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "10/Unsupervised.ipynb.cell-29.py",
+    "original": "10/Unsupervised.ipynb",
+    "cell": 29,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "10/Unsupervised.ipynb.cell-30.py",
+    "original": "10/Unsupervised.ipynb",
+    "cell": 30,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "10/Unsupervised.ipynb.cell-31.py",
+    "original": "10/Unsupervised.ipynb",
+    "cell": 31,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "10/Untitled.ipynb.cell-1.py",
+    "original": "10/Untitled.ipynb",
+    "cell": 1,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "10/Untitled1.ipynb.cell-1.py",
+    "original": "10/Untitled1.ipynb",
+    "cell": 1,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "10/dz10.ipynb.cell-1.py",
+    "original": "10/dz10.ipynb",
+    "cell": 1,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "10/dz10.ipynb.cell-2.py",
+    "original": "10/dz10.ipynb",
+    "cell": 2,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "10/dz10.ipynb.cell-3.py",
+    "original": "10/dz10.ipynb",
+    "cell": 3,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "10/dz10.ipynb.cell-4.py",
+    "original": "10/dz10.ipynb",
+    "cell": 4,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "10/dz10.ipynb.cell-5.py",
+    "original": "10/dz10.ipynb",
+    "cell": 5,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "10/dz10.ipynb.cell-6.py",
+    "original": "10/dz10.ipynb",
+    "cell": 6,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "10/dz10.ipynb.cell-7.py",
+    "original": "10/dz10.ipynb",
+    "cell": 7,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "10/dz10.ipynb.cell-8.py",
+    "original": "10/dz10.ipynb",
+    "cell": 8,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "10/dz10.ipynb.cell-9.py",
+    "original": "10/dz10.ipynb",
+    "cell": 9,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "10/dz10.ipynb.cell-10.py",
+    "original": "10/dz10.ipynb",
+    "cell": 10,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "10/dz10.ipynb.cell-11.py",
+    "original": "10/dz10.ipynb",
+    "cell": 11,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "10/dz10.ipynb.cell-12.py",
+    "original": "10/dz10.ipynb",
+    "cell": 12,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "10/dz10.ipynb.cell-13.py",
+    "original": "10/dz10.ipynb",
+    "cell": 13,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "8/HW5_Sabina.ipynb.cell-1.py",
+    "original": "8/HW5_Sabina.ipynb",
+    "cell": 1,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "8/HW5_Sabina.ipynb.cell-2.py",
+    "original": "8/HW5_Sabina.ipynb",
+    "cell": 2,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "8/HW5_Sabina.ipynb.cell-3.py",
+    "original": "8/HW5_Sabina.ipynb",
+    "cell": 3,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "8/HW5_Sabina.ipynb.cell-4.py",
+    "original": "8/HW5_Sabina.ipynb",
+    "cell": 4,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "8/HW5_Sabina.ipynb.cell-5.py",
+    "original": "8/HW5_Sabina.ipynb",
+    "cell": 5,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "8/HW5_Sabina.ipynb.cell-6.py",
+    "original": "8/HW5_Sabina.ipynb",
+    "cell": 6,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "8/HW5_Sabina.ipynb.cell-7.py",
+    "original": "8/HW5_Sabina.ipynb",
+    "cell": 7,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "8/HW5_Sabina.ipynb.cell-8.py",
+    "original": "8/HW5_Sabina.ipynb",
+    "cell": 8,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "8/HW5_Sabina.ipynb.cell-9.py",
+    "original": "8/HW5_Sabina.ipynb",
+    "cell": 9,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "8/HW5_Sabina.ipynb.cell-10.py",
+    "original": "8/HW5_Sabina.ipynb",
+    "cell": 10,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "8/HW5_Sabina.ipynb.cell-11.py",
+    "original": "8/HW5_Sabina.ipynb",
+    "cell": 11,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "8/HW5_Sabina.ipynb.cell-12.py",
+    "original": "8/HW5_Sabina.ipynb",
+    "cell": 12,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "8/HW5_Sabina.ipynb.cell-13.py",
+    "original": "8/HW5_Sabina.ipynb",
+    "cell": 13,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "8/HW5_Sabina.ipynb.cell-14.py",
+    "original": "8/HW5_Sabina.ipynb",
+    "cell": 14,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "8/HW5_Sabina.ipynb.cell-15.py",
+    "original": "8/HW5_Sabina.ipynb",
+    "cell": 15,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "8/HW5_Sabina.ipynb.cell-16.py",
+    "original": "8/HW5_Sabina.ipynb",
+    "cell": 16,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "8/HW5_Sabina.ipynb.cell-18.py",
+    "original": "8/HW5_Sabina.ipynb",
+    "cell": 18,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "8/HW5_Sabina.ipynb.cell-19.py",
+    "original": "8/HW5_Sabina.ipynb",
+    "cell": 19,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "8/HW5_Sabina.ipynb.cell-20.py",
+    "original": "8/HW5_Sabina.ipynb",
+    "cell": 20,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "8/HW5_Sabina.ipynb.cell-21.py",
+    "original": "8/HW5_Sabina.ipynb",
+    "cell": 21,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "8/HW5_Sabina.ipynb.cell-22.py",
+    "original": "8/HW5_Sabina.ipynb",
+    "cell": 22,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "8/HW5_Sabina.ipynb.cell-23.py",
+    "original": "8/HW5_Sabina.ipynb",
+    "cell": 23,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "8/HW5_Sabina.ipynb.cell-24.py",
+    "original": "8/HW5_Sabina.ipynb",
+    "cell": 24,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "8/HW5_Sabina.ipynb.cell-25.py",
+    "original": "8/HW5_Sabina.ipynb",
+    "cell": 25,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "8/HW5_Sabina.ipynb.cell-26.py",
+    "original": "8/HW5_Sabina.ipynb",
+    "cell": 26,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "8/HW5_Sabina.ipynb.cell-28.py",
+    "original": "8/HW5_Sabina.ipynb",
+    "cell": 28,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "8/HW5_Sabina.ipynb.cell-29.py",
+    "original": "8/HW5_Sabina.ipynb",
+    "cell": 29,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "8/HW5_Sabina.ipynb.cell-30.py",
+    "original": "8/HW5_Sabina.ipynb",
+    "cell": 30,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "8/HW5_Sabina.ipynb.cell-31.py",
+    "original": "8/HW5_Sabina.ipynb",
+    "cell": 31,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "8/HW5_Sabina.ipynb.cell-32.py",
+    "original": "8/HW5_Sabina.ipynb",
+    "cell": 32,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "8/HW5_Sabina.ipynb.cell-33.py",
+    "original": "8/HW5_Sabina.ipynb",
+    "cell": 33,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "8/HW5_Sabina.ipynb.cell-34.py",
+    "original": "8/HW5_Sabina.ipynb",
+    "cell": 34,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "8/HW5_Sabina.ipynb.cell-35.py",
+    "original": "8/HW5_Sabina.ipynb",
+    "cell": 35,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "8/HW5_Sabina.ipynb.cell-36.py",
+    "original": "8/HW5_Sabina.ipynb",
+    "cell": 36,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "8/HW5_Sabina.ipynb.cell-37.py",
+    "original": "8/HW5_Sabina.ipynb",
+    "cell": 37,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "8/HW5_Sabina.ipynb.cell-39.py",
+    "original": "8/HW5_Sabina.ipynb",
+    "cell": 39,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "8/HW5_Sabina.ipynb.cell-40.py",
+    "original": "8/HW5_Sabina.ipynb",
+    "cell": 40,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "8/HW5_Sabina.ipynb.cell-41.py",
+    "original": "8/HW5_Sabina.ipynb",
+    "cell": 41,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "8/HW5_Sabina.ipynb.cell-42.py",
+    "original": "8/HW5_Sabina.ipynb",
+    "cell": 42,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "8/HW5_Sabina.ipynb.cell-44.py",
+    "original": "8/HW5_Sabina.ipynb",
+    "cell": 44,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "8/HW5_Sabina.ipynb.cell-45.py",
+    "original": "8/HW5_Sabina.ipynb",
+    "cell": 45,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "9/Classsifier.ipynb.cell-1.py",
+    "original": "9/Classsifier.ipynb",
+    "cell": 1,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "9/Classsifier.ipynb.cell-2.py",
+    "original": "9/Classsifier.ipynb",
+    "cell": 2,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "9/Classsifier.ipynb.cell-3.py",
+    "original": "9/Classsifier.ipynb",
+    "cell": 3,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "9/Classsifier.ipynb.cell-4.py",
+    "original": "9/Classsifier.ipynb",
+    "cell": 4,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "9/Classsifier.ipynb.cell-5.py",
+    "original": "9/Classsifier.ipynb",
+    "cell": 5,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "9/Classsifier.ipynb.cell-6.py",
+    "original": "9/Classsifier.ipynb",
+    "cell": 6,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "9/Classsifier.ipynb.cell-7.py",
+    "original": "9/Classsifier.ipynb",
+    "cell": 7,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "9/Classsifier.ipynb.cell-8.py",
+    "original": "9/Classsifier.ipynb",
+    "cell": 8,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "9/Classsifier.ipynb.cell-9.py",
+    "original": "9/Classsifier.ipynb",
+    "cell": 9,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "9/Classsifier.ipynb.cell-10.py",
+    "original": "9/Classsifier.ipynb",
+    "cell": 10,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "9/Classsifier.ipynb.cell-11.py",
+    "original": "9/Classsifier.ipynb",
+    "cell": 11,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "9/Classsifier.ipynb.cell-12.py",
+    "original": "9/Classsifier.ipynb",
+    "cell": 12,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "9/Classsifier.ipynb.cell-13.py",
+    "original": "9/Classsifier.ipynb",
+    "cell": 13,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "9/Classsifier.ipynb.cell-14.py",
+    "original": "9/Classsifier.ipynb",
+    "cell": 14,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "9/Classsifier.ipynb.cell-15.py",
+    "original": "9/Classsifier.ipynb",
+    "cell": 15,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "9/Classsifier.ipynb.cell-16.py",
+    "original": "9/Classsifier.ipynb",
+    "cell": 16,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "9/Classsifier.ipynb.cell-17.py",
+    "original": "9/Classsifier.ipynb",
+    "cell": 17,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "9/Classsifier.ipynb.cell-18.py",
+    "original": "9/Classsifier.ipynb",
+    "cell": 18,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "9/Classsifier.ipynb.cell-19.py",
+    "original": "9/Classsifier.ipynb",
+    "cell": 19,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "9/Classsifier.ipynb.cell-20.py",
+    "original": "9/Classsifier.ipynb",
+    "cell": 20,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "9/Classsifier.ipynb.cell-21.py",
+    "original": "9/Classsifier.ipynb",
+    "cell": 21,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "9/Classsifier.ipynb.cell-22.py",
+    "original": "9/Classsifier.ipynb",
+    "cell": 22,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "9/Classsifier.ipynb.cell-23.py",
+    "original": "9/Classsifier.ipynb",
+    "cell": 23,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "9/Classsifier.ipynb.cell-24.py",
+    "original": "9/Classsifier.ipynb",
+    "cell": 24,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "9/Classsifier.ipynb.cell-25.py",
+    "original": "9/Classsifier.ipynb",
+    "cell": 25,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "9/Classsifier.ipynb.cell-26.py",
+    "original": "9/Classsifier.ipynb",
+    "cell": 26,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "9/Classsifier.ipynb.cell-27.py",
+    "original": "9/Classsifier.ipynb",
+    "cell": 27,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "DataFactoryDay5.ipynb.cell-1.py",
+    "original": "DataFactoryDay5.ipynb",
+    "cell": 1,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "DataFactoryDay5.ipynb.cell-2.py",
+    "original": "DataFactoryDay5.ipynb",
+    "cell": 2,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "DataFactoryDay5.ipynb.cell-3.py",
+    "original": "DataFactoryDay5.ipynb",
+    "cell": 3,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "DataFactoryDay5.ipynb.cell-4.py",
+    "original": "DataFactoryDay5.ipynb",
+    "cell": 4,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "HW3.ipynb.cell-1.py",
+    "original": "HW3.ipynb",
+    "cell": 1,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "HW3.ipynb.cell-2.py",
+    "original": "HW3.ipynb",
+    "cell": 2,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "HW3.ipynb.cell-3.py",
+    "original": "HW3.ipynb",
+    "cell": 3,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "HW3.ipynb.cell-4.py",
+    "original": "HW3.ipynb",
+    "cell": 4,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "HW3.ipynb.cell-5.py",
+    "original": "HW3.ipynb",
+    "cell": 5,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "HW3.ipynb.cell-6.py",
+    "original": "HW3.ipynb",
+    "cell": 6,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "HW3.ipynb.cell-7.py",
+    "original": "HW3.ipynb",
+    "cell": 7,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "HW3.ipynb.cell-8.py",
+    "original": "HW3.ipynb",
+    "cell": 8,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "HW3.ipynb.cell-9.py",
+    "original": "HW3.ipynb",
+    "cell": 9,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "HW3.ipynb.cell-10.py",
+    "original": "HW3.ipynb",
+    "cell": 10,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "HW3.ipynb.cell-11.py",
+    "original": "HW3.ipynb",
+    "cell": 11,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "HW_part1_lecture.ipynb.cell-1.py",
+    "original": "HW_part1_lecture.ipynb",
+    "cell": 1,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "HW_part1_lecture.ipynb.cell-3.py",
+    "original": "HW_part1_lecture.ipynb",
+    "cell": 3,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "HW_part1_lecture.ipynb.cell-4.py",
+    "original": "HW_part1_lecture.ipynb",
+    "cell": 4,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "HW_part1_lecture.ipynb.cell-5.py",
+    "original": "HW_part1_lecture.ipynb",
+    "cell": 5,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "HW_part1_lecture.ipynb.cell-6.py",
+    "original": "HW_part1_lecture.ipynb",
+    "cell": 6,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "HW_part1_lecture.ipynb.cell-7.py",
+    "original": "HW_part1_lecture.ipynb",
+    "cell": 7,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "HW_part1_lecture.ipynb.cell-8.py",
+    "original": "HW_part1_lecture.ipynb",
+    "cell": 8,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "HW_part1_lecture.ipynb.cell-9.py",
+    "original": "HW_part1_lecture.ipynb",
+    "cell": 9,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "HW_part1_lecture.ipynb.cell-10.py",
+    "original": "HW_part1_lecture.ipynb",
+    "cell": 10,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "HW_part1_lecture.ipynb.cell-12.py",
+    "original": "HW_part1_lecture.ipynb",
+    "cell": 12,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-1.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 1,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-2.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 2,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-3.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 3,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-4.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 4,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-5.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 5,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-6.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 6,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-7.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 7,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-8.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 8,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-9.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 9,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-10.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 10,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-11.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 11,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-12.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 12,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-13.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 13,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-14.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 14,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-15.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 15,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-16.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 16,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-17.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 17,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-18.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 18,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-19.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 19,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-20.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 20,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-21.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 21,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-22.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 22,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-23.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 23,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-24.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 24,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-25.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 25,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-26.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 26,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-27.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 27,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-28.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 28,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-29.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 29,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-30.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 30,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-31.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 31,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-32.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 32,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-33.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 33,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-34.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 34,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-35.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 35,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-36.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 36,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-37.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 37,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-38.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 38,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-39.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 39,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-40.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 40,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-41.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 41,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-42.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 42,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-43.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 43,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-44.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 44,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-45.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 45,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-46.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 46,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-47.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 47,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-49.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 49,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-50.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 50,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-51.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 51,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-52.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 52,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-53.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 53,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-54.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 54,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-55.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 55,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-56.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 56,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-57.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 57,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-58.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 58,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-59.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 59,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-60.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 60,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-61.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 61,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-62.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 62,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-63.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 63,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-64.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 64,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-65.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 65,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-66.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 66,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-67.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 67,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-68.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 68,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-69.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 69,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-70.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 70,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-71.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 71,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-72.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 72,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-73.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 73,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-74.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 74,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-75.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 75,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-76.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 76,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-77.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 77,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-78.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 78,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-79.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 79,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-80.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 80,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-81.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 81,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-82.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 82,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-83.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 83,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-84.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 84,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-85.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 85,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-86.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 86,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-87.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 87,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-88.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 88,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-89.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 89,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-90.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 90,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-91.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 91,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-92.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 92,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-93.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 93,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-94.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 94,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-95.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 95,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-96.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 96,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-97.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 97,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-98.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 98,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-99.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 99,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-100.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 100,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-101.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 101,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-102.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 102,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Numpy_Pandas Telecom Factory.ipynb.cell-103.py",
+    "original": "Numpy_Pandas Telecom Factory.ipynb",
+    "cell": 103,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Preprocessing.ipynb.cell-1.py",
+    "original": "Preprocessing.ipynb",
+    "cell": 1,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Preprocessing.ipynb.cell-2.py",
+    "original": "Preprocessing.ipynb",
+    "cell": 2,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Preprocessing.ipynb.cell-3.py",
+    "original": "Preprocessing.ipynb",
+    "cell": 3,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Preprocessing.ipynb.cell-4.py",
+    "original": "Preprocessing.ipynb",
+    "cell": 4,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Preprocessing.ipynb.cell-5.py",
+    "original": "Preprocessing.ipynb",
+    "cell": 5,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Preprocessing.ipynb.cell-6.py",
+    "original": "Preprocessing.ipynb",
+    "cell": 6,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Preprocessing.ipynb.cell-7.py",
+    "original": "Preprocessing.ipynb",
+    "cell": 7,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Preprocessing.ipynb.cell-8.py",
+    "original": "Preprocessing.ipynb",
+    "cell": 8,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Preprocessing.ipynb.cell-9.py",
+    "original": "Preprocessing.ipynb",
+    "cell": 9,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Preprocessing.ipynb.cell-10.py",
+    "original": "Preprocessing.ipynb",
+    "cell": 10,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Preprocessing.ipynb.cell-11.py",
+    "original": "Preprocessing.ipynb",
+    "cell": 11,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Preprocessing.ipynb.cell-14.py",
+    "original": "Preprocessing.ipynb",
+    "cell": 14,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Preprocessing.ipynb.cell-15.py",
+    "original": "Preprocessing.ipynb",
+    "cell": 15,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Preprocessing.ipynb.cell-16.py",
+    "original": "Preprocessing.ipynb",
+    "cell": 16,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Preprocessing.ipynb.cell-17.py",
+    "original": "Preprocessing.ipynb",
+    "cell": 17,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Preprocessing.ipynb.cell-18.py",
+    "original": "Preprocessing.ipynb",
+    "cell": 18,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Preprocessing.ipynb.cell-19.py",
+    "original": "Preprocessing.ipynb",
+    "cell": 19,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Preprocessing.ipynb.cell-20.py",
+    "original": "Preprocessing.ipynb",
+    "cell": 20,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Preprocessing.ipynb.cell-21.py",
+    "original": "Preprocessing.ipynb",
+    "cell": 21,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Preprocessing.ipynb.cell-22.py",
+    "original": "Preprocessing.ipynb",
+    "cell": 22,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Preprocessing.ipynb.cell-23.py",
+    "original": "Preprocessing.ipynb",
+    "cell": 23,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Preprocessing.ipynb.cell-24.py",
+    "original": "Preprocessing.ipynb",
+    "cell": 24,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Untitled.ipynb.cell-1.py",
+    "original": "Untitled.ipynb",
+    "cell": 1,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Untitled.ipynb.cell-2.py",
+    "original": "Untitled.ipynb",
+    "cell": 2,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Untitled.ipynb.cell-3.py",
+    "original": "Untitled.ipynb",
+    "cell": 3,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "Untitled.ipynb.cell-4.py",
+    "original": "Untitled.ipynb",
+    "cell": 4,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "hw4.ipynb.cell-1.py",
+    "original": "hw4.ipynb",
+    "cell": 1,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "hw4.ipynb.cell-2.py",
+    "original": "hw4.ipynb",
+    "cell": 2,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "hw4.ipynb.cell-3.py",
+    "original": "hw4.ipynb",
+    "cell": 3,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "hw4.ipynb.cell-4.py",
+    "original": "hw4.ipynb",
+    "cell": 4,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "hw4.ipynb.cell-5.py",
+    "original": "hw4.ipynb",
+    "cell": 5,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "hw4.ipynb.cell-6.py",
+    "original": "hw4.ipynb",
+    "cell": 6,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "hw4.ipynb.cell-7.py",
+    "original": "hw4.ipynb",
+    "cell": 7,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "hw4.ipynb.cell-8.py",
+    "original": "hw4.ipynb",
+    "cell": 8,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "hw4.ipynb.cell-9.py",
+    "original": "hw4.ipynb",
+    "cell": 9,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "hw4.ipynb.cell-10.py",
+    "original": "hw4.ipynb",
+    "cell": 10,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "hw4.ipynb.cell-11.py",
+    "original": "hw4.ipynb",
+    "cell": 11,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "hw4.ipynb.cell-12.py",
+    "original": "hw4.ipynb",
+    "cell": 12,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "hw4.ipynb.cell-13.py",
+    "original": "hw4.ipynb",
+    "cell": 13,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  },
+  {
+    "extracted": "hw4.ipynb.cell-14.py",
+    "original": "hw4.ipynb",
+    "cell": 14,
+    "sha": "9b6e52a8866831d6f4f285c4f7ef8b34447282bb",
+    "repo": "Coobeliues/TelecomDataFactory2023",
+    "method": "code-cell text only; no outputs or execution"
+  }
+]

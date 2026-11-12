@@ -1,0 +1,275 @@
+{
+  "large-003": {
+    "value": "51-200",
+    "metric": "self-reported employee bracket",
+    "scope": "global-group",
+    "source": "https://www.linkedin.com/company/byteminds",
+    "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+  },
+  "large-004": {
+    "value": "501-1,000",
+    "metric": "self-reported employee bracket",
+    "scope": "global-group",
+    "source": "https://www.linkedin.com/company/softclub",
+    "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+  },
+  "large-005": {
+    "value": "51-200",
+    "metric": "self-reported employee bracket",
+    "scope": "global-group",
+    "source": "https://www.linkedin.com/company/plavno",
+    "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+  },
+  "large-009": {
+    "value": "11-50",
+    "metric": "self-reported employee bracket",
+    "scope": "Kazakhstan-brand-profile",
+    "source": "https://kz.linkedin.com/company/brand-analytics-ca",
+    "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+  },
+  "large-010": {
+    "value": "51-200",
+    "metric": "self-reported employee bracket",
+    "scope": "global-group",
+    "source": "https://kz.linkedin.com/company/almexoft",
+    "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+  },
+  "large-011": {
+    "value": "51-200",
+    "metric": "self-reported employee bracket",
+    "scope": "Kazakhstan-brand-profile",
+    "source": "https://kz.linkedin.com/company/g1-software-kazakhstan",
+    "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+  },
+  "large-016": {
+    "value": "51-200",
+    "metric": "self-reported employee bracket",
+    "scope": "Kazakhstan-brand-profile",
+    "source": "https://kz.linkedin.com/company/solva-technology",
+    "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+  },
+  "large-017": {
+    "value": "11-50",
+    "metric": "self-reported employee bracket",
+    "scope": "Kazakhstan-brand-profile",
+    "source": "https://kz.linkedin.com/company/tiptoppay-kz",
+    "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+  },
+  "large-018": {
+    "value": "11-50",
+    "metric": "self-reported employee bracket",
+    "scope": "global-group",
+    "source": "https://www.linkedin.com/company/ecomcharge",
+    "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+  },
+  "large-019": {
+    "value": "2-10",
+    "metric": "self-reported employee bracket",
+    "scope": "Kazakhstan-brand-profile",
+    "source": "https://kz.linkedin.com/company/fintechsoft-kz",
+    "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+  },
+  "large-026": {
+    "value": "2-10",
+    "metric": "self-reported employee bracket",
+    "scope": "Kazakhstan-brand-profile",
+    "source": "https://www.linkedin.com/company/investroom-ltd",
+    "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+  },
+  "large-027": {
+    "value": "11-50",
+    "metric": "self-reported employee bracket",
+    "scope": "Kazakhstan-brand-profile",
+    "source": "https://kz.linkedin.com/company/ikapitalist",
+    "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+  },
+  "large-029": {
+    "value": "100+",
+    "metric": "employees",
+    "scope": "brand-group",
+    "source": "https://umag.kz/o-kompanii",
+    "caveat": "Company website self-report; exact legal entity headcount unverified."
+  },
+  "large-030": {
+    "value": "51-200",
+    "metric": "self-reported employee bracket",
+    "scope": "Kazakhstan-brand-profile",
+    "source": "https://kz.linkedin.com/company/platonus",
+    "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+  },
+  "large-031": {
+    "value": "201-500",
+    "metric": "self-reported employee bracket",
+    "scope": "Kazakhstan-brand-profile",
+    "source": "https://kz.linkedin.com/company/daryn-online",
+    "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+  },
+  "large-034": {
+    "value": "51-200",
+    "metric": "self-reported employee bracket",
+    "scope": "global-group",
+    "source": "https://www.linkedin.com/company/homsters.com",
+    "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+  },
+  "large-040": {
+    "value": "11-50",
+    "metric": "self-reported employee bracket",
+    "scope": "global-group",
+    "source": "https://kz.linkedin.com/company/sobaka-studio",
+    "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+  },
+  "large-043": {
+    "value": "2-10",
+    "metric": "self-reported employee bracket",
+    "scope": "Kazakhstan-brand-profile",
+    "source": "https://kz.linkedin.com/company/idosgames",
+    "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+  },
+  "large-048": {
+    "value": "11-50",
+    "metric": "self-reported employee bracket",
+    "scope": "global-group",
+    "source": "https://www.linkedin.com/company/not-friendly-games",
+    "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+  },
+  "large-049": {
+    "value": "51-200",
+    "metric": "self-reported employee bracket",
+    "scope": "Kazakhstan-brand-profile",
+    "source": "https://kz.linkedin.com/company/pscloudservices",
+    "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+  },
+  "large-052": {
+    "value": "11-50",
+    "metric": "self-reported employee bracket",
+    "scope": "Kazakhstan-brand-profile",
+    "source": "https://kz.linkedin.com/company/cloud24kz",
+    "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+  },
+  "large-055": {
+    "value": "51-200",
+    "metric": "self-reported employee bracket",
+    "scope": "Kazakhstan-brand-profile",
+    "source": "https://kz.linkedin.com/company/cybernet-ai",
+    "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+  },
+  "large-057": {
+    "value": "11-50",
+    "metric": "self-reported employee bracket",
+    "scope": "Kazakhstan-brand-profile",
+    "source": "https://kz.linkedin.com/company/cloudmaker-llp",
+    "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+  },
+  "large-058": {
+    "value": "11-50",
+    "metric": "self-reported employee bracket",
+    "scope": "Kazakhstan-brand-profile",
+    "source": "https://kz.linkedin.com/company/novacloudkz",
+    "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+  },
+  "large-059": {
+    "value": "11-50",
+    "metric": "self-reported employee bracket",
+    "scope": "brand-group",
+    "source": "https://www.linkedin.com/company/qcloudy",
+    "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+  },
+  "large-065": {
+    "value": "11-50",
+    "metric": "self-reported employee bracket",
+    "scope": "Kazakhstan-brand-profile",
+    "source": "https://kz.linkedin.com/company/maxinumco",
+    "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+  },
+  "large-069": {
+    "value": "11-50",
+    "metric": "self-reported employee bracket",
+    "scope": "Kazakhstan-brand-profile",
+    "source": "https://www.linkedin.com/company/faceplate-industial-ai",
+    "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+  },
+  "large-072": {
+    "value": "11-50",
+    "metric": "self-reported employee bracket",
+    "scope": "Kazakhstan-brand-profile",
+    "source": "https://www.linkedin.com/company/infoland-kz",
+    "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+  },
+  "large-080": {
+    "value": "11-50",
+    "metric": "self-reported employee bracket",
+    "scope": "Kazakhstan-brand-profile",
+    "source": "https://kz.linkedin.com/company/agrostream-llp",
+    "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+  },
+  "large-082": {
+    "value": "11-50",
+    "metric": "self-reported employee bracket",
+    "scope": "Kazakhstan-brand-profile",
+    "source": "https://kz.linkedin.com/company/medelement",
+    "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+  },
+  "large-086": {
+    "value": "11-50",
+    "metric": "self-reported employee bracket",
+    "scope": "global-group",
+    "source": "https://www.linkedin.com/company/eduson-tv",
+    "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+  },
+  "large-088": {
+    "value": "11-50",
+    "metric": "self-reported employee bracket",
+    "scope": "Kazakhstan-brand-profile",
+    "source": "https://kz.linkedin.com/company/zeroeducation",
+    "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+  },
+  "large-089": {
+    "value": "11-50",
+    "metric": "self-reported employee bracket",
+    "scope": "Kazakhstan-brand-profile",
+    "source": "https://kz.linkedin.com/company/bitlab-academy",
+    "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+  },
+  "large-093": {
+    "value": "2-10",
+    "metric": "self-reported employee bracket",
+    "scope": "Kazakhstan-brand-profile",
+    "source": "https://www.linkedin.com/company/farfaceskz",
+    "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+  },
+  "large-096": {
+    "value": "11-50",
+    "metric": "self-reported employee bracket",
+    "scope": "Kazakhstan-brand-profile",
+    "source": "https://kz.linkedin.com/company/sapa-technologies",
+    "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+  },
+  "large-098": {
+    "value": "51-200",
+    "metric": "self-reported employee bracket",
+    "scope": "Kazakhstan-brand-profile",
+    "source": "https://kz.linkedin.com/company/dogovor24",
+    "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+  },
+  "large-001": {
+    "value": "5,257+",
+    "metric": "professionals at end of 2024",
+    "scope": "global-group",
+    "source": "https://static.dataart.com/media/3zvbrcww/dataart-group-sustainability-report-2024.pdf",
+    "caveat": "2024 group sustainability report, not Kazakhstan subsidiary staff."
+  },
+  "large-008": {
+    "value": "500+",
+    "metric": "employees",
+    "scope": "global-group",
+    "source": "https://proximaresearch.com/kz/en/about-2/",
+    "caveat": "Company self-report across countries; not Kazakhstan staff."
+  },
+  "large-032": {
+    "value": "2,500",
+    "metric": "staff reported in founder interview",
+    "scope": "JUZ40 brand/group",
+    "source": "https://digitalbusiness.kz/2026-04-29/kazahstanka-pomogala-shkolnikam-sosdachey-ent-ipostroila-naetom-biznes-soborotom-13mlrd-tenge/",
+    "caveat": "Interview reports group turnover KZT 13bn and staff 2,500; not audited and not exact JUZ40 ONLINE legal entity. Registry aggregator shows 251–500 for that entity, so do not combine."
+  }
+}

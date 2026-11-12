@@ -1,0 +1,1400 @@
+[
+  {
+    "name": "ТОО SINGULARIS PROGRAMMING (СИНГУЛЯРИС ПРОГРАММИНГ)",
+    "sourceLine": 4576,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-007",
+    "inputRecord": 631,
+    "company": "SINGULARIS PROGRAMMING (СИНГУЛЯРИС ПРОГРАММИНГ)",
+    "description": "AI-решения для бизнеса и промышленности",
+    "cohorts": [
+      "selected-100",
+      "previous-80"
+    ],
+    "selectionOrder": 7,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "singularisprogrammingсингуляриспрограмминг",
+    "directoryId": "328",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Solva Technology Ltd",
+    "sourceLine": 3976,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-016",
+    "inputRecord": 548,
+    "company": "Solva Technology Ltd",
+    "description": "Технологии, которые двигают финансовый рынок вперед",
+    "cohorts": [
+      "selected-100",
+      "previous-80"
+    ],
+    "selectionOrder": 16,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "solvatechnology",
+    "directoryId": "137",
+    "sizeEvidence": {
+      "value": "51-200",
+      "metric": "self-reported employee bracket",
+      "scope": "Kazakhstan-brand-profile",
+      "source": "https://kz.linkedin.com/company/solva-technology",
+      "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+    },
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ЧАСТНАЯ КОМПАНИЯ INVESTBANQ TECH LAB LIMITED",
+    "sourceLine": 94,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-025",
+    "inputRecord": 13,
+    "company": "INVESTBANQ TECH LAB LIMITED",
+    "description": "Технологическая компания",
+    "cohorts": [
+      "selected-100",
+      "previous-80"
+    ],
+    "selectionOrder": 25,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "investbanqtechlab",
+    "directoryId": "2010",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Platonus",
+    "sourceLine": 4044,
+    "labels": "IT-company; TS member; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-030",
+    "inputRecord": 557,
+    "company": "Platonus",
+    "description": "Platonus. Учиться. Развиваться. Достигать.",
+    "cohorts": [
+      "selected-100",
+      "previous-80"
+    ],
+    "selectionOrder": 30,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "platonus",
+    "directoryId": "843",
+    "sizeEvidence": {
+      "value": "51-200",
+      "metric": "self-reported employee bracket",
+      "scope": "Kazakhstan-brand-profile",
+      "source": "https://kz.linkedin.com/company/platonus",
+      "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+    },
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО «B-APPS»",
+    "sourceLine": 55,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-063",
+    "inputRecord": 8,
+    "company": "B-APPS",
+    "description": "Автоматизируем бизнес-процессы и СЭД на базе платформы DamuBPM для крупного бизнеса, банков и госсектора.",
+    "cohorts": [
+      "selected-100",
+      "previous-80"
+    ],
+    "selectionOrder": 63,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "bapps",
+    "directoryId": "2224",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью QAP Solutions",
+    "sourceLine": 2838,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-064",
+    "inputRecord": 389,
+    "company": "QAP Solutions",
+    "description": "A-Pro Solutions",
+    "cohorts": [
+      "selected-100",
+      "previous-80"
+    ],
+    "selectionOrder": 64,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "qapsolutions",
+    "directoryId": "2149",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО \"Uco\"",
+    "sourceLine": 2536,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-067",
+    "inputRecord": 348,
+    "company": "Uco",
+    "description": "Автоматизируйте свои процессы быстро, эффективно и без лишних трат",
+    "cohorts": [
+      "selected-100",
+      "previous-80"
+    ],
+    "selectionOrder": 67,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "uco",
+    "directoryId": "72",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО Контроль Техники",
+    "sourceLine": 819,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-077",
+    "inputRecord": 111,
+    "company": "Контроль Техники",
+    "description": "Разрабатываем и внедряем цифровые решения для GPS-мониторинга, контроля расхода топлива и аналитики данных, помогая бизнесу автоматизировать управление автопарками и спецтехникой.",
+    "cohorts": [
+      "selected-100",
+      "previous-80"
+    ],
+    "selectionOrder": 77,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "контрольтехники",
+    "directoryId": "167",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Yoko.io",
+    "sourceLine": 6302,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-091",
+    "inputRecord": 872,
+    "company": "Yoko.io",
+    "description": "Product Development & Discovery company",
+    "cohorts": [
+      "selected-100",
+      "previous-80"
+    ],
+    "selectionOrder": 91,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "yokoio",
+    "directoryId": "2064",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Farfaces Kazakhstan",
+    "sourceLine": 118,
+    "labels": "Startup; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-093",
+    "inputRecord": 16,
+    "company": "Farfaces Kazakhstan",
+    "description": "Mobile facial recognition technology. The only solution in the world offering an effective and long distance biometric solution for time management,events and security by using a mobile device only.",
+    "cohorts": [
+      "selected-100",
+      "previous-80"
+    ],
+    "selectionOrder": 93,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "farfaceskazakhstan",
+    "directoryId": "2039",
+    "sizeEvidence": {
+      "value": "2-10",
+      "metric": "self-reported employee bracket",
+      "scope": "Kazakhstan-brand-profile",
+      "source": "https://www.linkedin.com/company/farfaceskz",
+      "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+    },
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО STST CONSULTING (СТСТ КОНСАЛТИНГ)",
+    "sourceLine": 3915,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-094",
+    "inputRecord": 540,
+    "company": "STST CONSULTING (СТСТ КОНСАЛТИНГ)",
+    "description": "",
+    "cohorts": [
+      "selected-100",
+      "previous-80"
+    ],
+    "selectionOrder": 94,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "ststconsultingстстконсалтинг",
+    "directoryId": "2023",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью ЦОБ Бизнес РОСТ",
+    "directoryId": "1935",
+    "id": "previous-001",
+    "company": "ЦОБ Бизнес РОСТ",
+    "normalizedName": "цоббизнесрост",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью iq4u",
+    "directoryId": "2518",
+    "id": "previous-002",
+    "company": "iq4u",
+    "normalizedName": "iq4u",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО Meta Data System",
+    "directoryId": "2511",
+    "id": "previous-003",
+    "company": "Meta Data System",
+    "normalizedName": "metadatasystem",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО PETREL AI",
+    "directoryId": "2096",
+    "id": "previous-006",
+    "company": "PETREL AI",
+    "normalizedName": "petrelai",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ЧАСТНАЯ КОМПАНИЯ INTEXSOFT LTD.",
+    "directoryId": "2094",
+    "id": "previous-007",
+    "company": "INTEXSOFT LTD.",
+    "normalizedName": "intexsoft",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "brand-link-supported",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [
+      "IntexSoft/ActionBarSherlock",
+      "IntexSoft/android-plist-parser",
+      "IntexSoft/Android-ViewPagerIndicator",
+      "IntexSoft/GMGridView",
+      "IntexSoft/handsontable",
+      "IntexSoft/SlidingMenu"
+    ],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "TOO \"T3 Solutions\"",
+    "directoryId": "2093",
+    "id": "previous-008",
+    "company": "T3 Solutions",
+    "normalizedName": "t3solutions",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО BRUSSELS CAPITAL (БРЮСЕЛЬС КАПИТАЛ)",
+    "directoryId": "2079",
+    "id": "previous-009",
+    "company": "BRUSSELS CAPITAL (БРЮСЕЛЬС КАПИТАЛ)",
+    "normalizedName": "brusselscapitalбрюсельскапитал",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Atomazing CA",
+    "directoryId": "2058",
+    "id": "previous-011",
+    "company": "Atomazing CA",
+    "normalizedName": "atomazingca",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью ORTA1OO",
+    "directoryId": "2018",
+    "id": "previous-014",
+    "company": "ORTA1OO",
+    "normalizedName": "orta1oo",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОВАРИЩЕСТВО С ОГРАНИЧЕННОЙ ОТВЕТСТВЕННОСТЬЮ \"CHATAPP (ЧАТАПП)\"",
+    "directoryId": "2007",
+    "id": "previous-016",
+    "company": "CHATAPP (ЧАТАПП)",
+    "normalizedName": "chatappчатапп",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО \"X2 Retail\"",
+    "directoryId": "2001",
+    "id": "previous-017",
+    "company": "X2 Retail",
+    "normalizedName": "x2retail",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО Shpavda (Шпавда)",
+    "directoryId": "1983",
+    "id": "previous-018",
+    "company": "Shpavda (Шпавда)",
+    "normalizedName": "shpavdaшпавда",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО Mango Development",
+    "directoryId": "1972",
+    "id": "previous-019",
+    "company": "Mango Development",
+    "normalizedName": "mangodevelopment",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью Protector AI",
+    "directoryId": "1969",
+    "id": "previous-020",
+    "company": "Protector AI",
+    "normalizedName": "protectorai",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "UPITER Global Systems",
+    "directoryId": "145",
+    "id": "previous-021",
+    "company": "UPITER Global Systems",
+    "normalizedName": "upiterglobalsystems",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО \"Sunsoft\"",
+    "directoryId": "144",
+    "id": "previous-022",
+    "company": "Sunsoft",
+    "normalizedName": "sunsoft",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "TOO Tizimapp",
+    "directoryId": "134",
+    "id": "previous-024",
+    "company": "Tizimapp",
+    "normalizedName": "tizimapp",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО MAINT",
+    "directoryId": "133",
+    "id": "previous-025",
+    "company": "MAINT",
+    "normalizedName": "maint",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "CODESMITH",
+    "directoryId": "123",
+    "id": "previous-026",
+    "company": "CODESMITH",
+    "normalizedName": "codesmith",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "TREDO",
+    "directoryId": "119",
+    "id": "previous-027",
+    "company": "TREDO",
+    "normalizedName": "tredo",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью \"Jet Technologies\"",
+    "directoryId": "115",
+    "id": "previous-028",
+    "company": "Jet Technologies",
+    "normalizedName": "jettechnologies",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "PS BRANCH Three",
+    "directoryId": "112",
+    "id": "previous-029",
+    "company": "PS BRANCH Three",
+    "normalizedName": "psbranchthree",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО ProNovation Solutions",
+    "directoryId": "110",
+    "id": "previous-030",
+    "company": "ProNovation Solutions",
+    "normalizedName": "pronovationsolutions",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью Finup.kz",
+    "directoryId": "106",
+    "id": "previous-031",
+    "company": "Finup.kz",
+    "normalizedName": "finupkz",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО Тайм Трекер",
+    "directoryId": "105",
+    "id": "previous-032",
+    "company": "Тайм Трекер",
+    "normalizedName": "таймтрекер",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью Streamix",
+    "directoryId": "104",
+    "id": "previous-033",
+    "company": "Streamix",
+    "normalizedName": "streamix",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО Quantum Technology",
+    "directoryId": "101",
+    "id": "previous-034",
+    "company": "Quantum Technology",
+    "normalizedName": "quantumtechnology",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО CONNECTIVITY SOLUTIONS (КОННЕКТИВИТИ СОЛЮШНЗ)",
+    "directoryId": "92",
+    "id": "previous-035",
+    "company": "CONNECTIVITY SOLUTIONS (КОННЕКТИВИТИ СОЛЮШНЗ)",
+    "normalizedName": "connectivitysolutionsконнективитисолюшнз",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "OPENSERVICE.KZ (ОПЕНСЕРВИС.КЗ) жауапкершілігі шектеулі серіктестігі",
+    "directoryId": "90",
+    "id": "previous-036",
+    "company": "OPENSERVICE.KZ (ОПЕНСЕРВИС.КЗ) жауапкершілігі шектеулі серіктестігі",
+    "normalizedName": "openservicekzопенсервискзжауапкершілігішектеулісеріктестігі",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО «Кодпеллер»",
+    "directoryId": "87",
+    "id": "previous-037",
+    "company": "Кодпеллер",
+    "normalizedName": "кодпеллер",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО Фикском.кз",
+    "directoryId": "85",
+    "id": "previous-038",
+    "company": "Фикском.кз",
+    "normalizedName": "фикскомкз",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО Айкод",
+    "directoryId": "84",
+    "id": "previous-039",
+    "company": "Айкод",
+    "normalizedName": "айкод",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО \"Проптехсервис Казахстан\"",
+    "directoryId": "80",
+    "id": "previous-040",
+    "company": "Проптехсервис Казахстан",
+    "normalizedName": "проптехсервисказахстан",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО ARMADOC.KZ",
+    "directoryId": "76",
+    "id": "previous-041",
+    "company": "ARMADOC.KZ",
+    "normalizedName": "armadockz",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО A1 CAPITAL",
+    "directoryId": "63",
+    "id": "previous-043",
+    "company": "A1 CAPITAL",
+    "normalizedName": "a1capital",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО MAXICO",
+    "directoryId": "55",
+    "id": "previous-044",
+    "company": "MAXICO",
+    "normalizedName": "maxico",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "SERVICES ONLINE",
+    "directoryId": "49",
+    "id": "previous-045",
+    "company": "SERVICES ONLINE",
+    "normalizedName": "servicesonline",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО Клокстер",
+    "directoryId": "47",
+    "id": "previous-046",
+    "company": "Клокстер",
+    "normalizedName": "клокстер",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "brand-link-supported",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [
+      "clockster/sdk-go",
+      "clockster/sdk-php",
+      "clockster/sdk-python",
+      "clockster/sdk-typescript"
+    ],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО «СТУДИЯ WEBDREAM»",
+    "directoryId": "43",
+    "id": "previous-047",
+    "company": "СТУДИЯ WEBDREAM",
+    "normalizedName": "студияwebdream",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО ITERA GROUP (ИТЕРА ГРУПП)",
+    "directoryId": "40",
+    "id": "previous-048",
+    "company": "ITERA GROUP (ИТЕРА ГРУПП)",
+    "normalizedName": "iteragroupитерагрупп",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью VVT Group",
+    "directoryId": "31",
+    "id": "previous-049",
+    "company": "VVT Group",
+    "normalizedName": "vvtgroup",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "АйТиЭс.Бизнес [ ITS.bz LLC ]",
+    "directoryId": "27",
+    "id": "previous-050",
+    "company": "АйТиЭс.Бизнес [ ITS.bz LLC ]",
+    "normalizedName": "айтиэсбизнесitsbz",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Concordia Group Ltd",
+    "directoryId": "10",
+    "id": "previous-051",
+    "company": "Concordia Group Ltd",
+    "normalizedName": "concordiagroup",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ZIZ INC. LLP",
+    "directoryId": "3",
+    "id": "previous-052",
+    "company": "ZIZ INC. LLP",
+    "normalizedName": "zizinc",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО \"DIC\"",
+    "directoryId": "2517",
+    "id": "previous-053",
+    "company": "DIC",
+    "normalizedName": "dic",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Mirga",
+    "directoryId": "2514",
+    "id": "previous-054",
+    "company": "Mirga",
+    "normalizedName": "mirga",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО \"GAX\"",
+    "directoryId": "2492",
+    "id": "previous-055",
+    "company": "GAX",
+    "normalizedName": "gax",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО All Business Turbine",
+    "directoryId": "2452",
+    "id": "previous-056",
+    "company": "All Business Turbine",
+    "normalizedName": "allbusinessturbine",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью E-system (Е-систэм)",
+    "directoryId": "2442",
+    "id": "previous-057",
+    "company": "E-system (Е-систэм)",
+    "normalizedName": "esystemесистэм",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью NOIA",
+    "directoryId": "2370",
+    "id": "previous-058",
+    "company": "NOIA",
+    "normalizedName": "noia",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО \"Интернет Платформа\"",
+    "directoryId": "2226",
+    "id": "previous-059",
+    "company": "Интернет Платформа",
+    "normalizedName": "интернетплатформа",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО \"FlyTap\"",
+    "directoryId": "2190",
+    "id": "previous-060",
+    "company": "FlyTap",
+    "normalizedName": "flytap",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО WIZICO Technologies",
+    "directoryId": "2181",
+    "id": "previous-061",
+    "company": "WIZICO Technologies",
+    "normalizedName": "wizicotechnologies",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью \"Толем Сompany\"",
+    "directoryId": "2147",
+    "id": "previous-062",
+    "company": "Толем Сompany",
+    "normalizedName": "толемсompany",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью Agro Connect Company",
+    "directoryId": "2068",
+    "id": "previous-063",
+    "company": "Agro Connect Company",
+    "normalizedName": "agroconnectcompany",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО \"КейСофт\"",
+    "directoryId": "1956",
+    "id": "previous-064",
+    "company": "КейСофт",
+    "normalizedName": "кейсофт",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО «IT by Design»",
+    "directoryId": "1856",
+    "id": "previous-065",
+    "company": "IT by Design",
+    "normalizedName": "itbydesign",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью Аксиома А",
+    "directoryId": "1676",
+    "id": "previous-066",
+    "company": "Аксиома А",
+    "normalizedName": "аксиомаа",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО \"AppStream\"",
+    "directoryId": "1289",
+    "id": "previous-067",
+    "company": "AppStream",
+    "normalizedName": "appstream",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью Пейнхантинг",
+    "directoryId": "1129",
+    "id": "previous-068",
+    "company": "Пейнхантинг",
+    "normalizedName": "пейнхантинг",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОМЕК",
+    "directoryId": "852",
+    "id": "previous-069",
+    "company": "ТОМЕК",
+    "normalizedName": "томек",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО JSoft",
+    "directoryId": "714",
+    "id": "previous-071",
+    "company": "JSoft",
+    "normalizedName": "jsoft",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью SUPERVISOR ROK",
+    "directoryId": "552",
+    "id": "previous-072",
+    "company": "SUPERVISOR ROK",
+    "normalizedName": "supervisorrok",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "TOO \"Velox Solutions\"",
+    "directoryId": "489",
+    "id": "previous-073",
+    "company": "Velox Solutions",
+    "normalizedName": "veloxsolutions",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО \"DLS-GLOBAL KZ\"",
+    "directoryId": "384",
+    "id": "previous-074",
+    "company": "DLS-GLOBAL KZ",
+    "normalizedName": "dlsglobalkz",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО\"Про Софтвейр ЛЛП\"",
+    "directoryId": "299",
+    "id": "previous-076",
+    "company": "Про Софтвейр ЛЛП",
+    "normalizedName": "прософтвейрллп",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО HR-Bot",
+    "directoryId": "109",
+    "id": "previous-078",
+    "company": "HR-Bot",
+    "normalizedName": "hrbot",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО \"Просто Бэк офис\"",
+    "directoryId": "69",
+    "id": "previous-079",
+    "company": "Просто Бэк офис",
+    "normalizedName": "простобэкофис",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО Компания APPS.kz",
+    "directoryId": "59",
+    "id": "previous-080",
+    "company": "Компания APPS.kz",
+    "normalizedName": "компанияappskz",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  }
+]

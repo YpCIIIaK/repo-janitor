@@ -1,0 +1,18 @@
+{
+  "uniqueRepositories": 635,
+  "processedRepositories": 635,
+  "pendingRepositories": 0,
+  "emptyRepositoriesInLatestBatch": 4,
+  "automaticFindings": 13867,
+  "visibility": {
+    "issues": 11663,
+    "lowConfidence": 2204
+  },
+  "note": "Historic reports remain pinned to their own versions; automatic findings are not confirmed vulnerabilities. No target execution, credential validation or live infrastructure testing.",
+  "snapshotDate": "2026-11-12",
+  "forks": 63,
+  "githubArchivedRepositories": 5,
+  "emptyRepositories": 4,
+  "source": "Public GitHub discovery and offline static scans; manual affiliation checks are incomplete.",
+  "companySelection": "100-company preliminary shortlist plus all previous 80; 11 name overlaps; 169 unique normalized names. Not a proven largest-100 ranking."
+}

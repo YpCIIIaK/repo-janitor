@@ -1,0 +1,3804 @@
+[
+  {
+    "name": "ЧК DataArt Kazakhstan Ltd.",
+    "sourceLine": 2729,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-001",
+    "inputRecord": 374,
+    "company": "DataArt Kazakhstan Ltd.",
+    "description": "Partners for Progress in Data and AI",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 1,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "dataartkazakhstan",
+    "sizeEvidence": {
+      "value": "5,257+",
+      "metric": "professionals at end of 2024",
+      "scope": "global-group",
+      "source": "https://static.dataart.com/media/3zvbrcww/dataart-group-sustainability-report-2024.pdf",
+      "caveat": "2024 group sustainability report, not Kazakhstan subsidiary staff."
+    },
+    "repositorySearchStatus": "brand-link-supported",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [
+      "DataArt/6feet",
+      "DataArt/ai-bootcamp-india-rag-homework",
+      "DataArt/artisyn-implementation-harness",
+      "DataArt/artisyn-log-hub",
+      "DataArt/Atlas",
+      "DataArt/blueprint",
+      "DataArt/bootstrap-vue",
+      "DataArt/CalculationEngine",
+      "DataArt/chip-in-calculator",
+      "DataArt/dataart-icon-font",
+      "DataArt/DataArtWatchface",
+      "DataArt/downshift",
+      "DataArt/fork_angular2--datepicker",
+      "DataArt/formik",
+      "DataArt/it-planet.dataart.2021",
+      "DataArt/kiddo",
+      "DataArt/kiddo-academy",
+      "DataArt/kiddo-tasks",
+      "DataArt/Leyka",
+      "DataArt/material-ui",
+      "DataArt/meetup-azure-monolith-migration",
+      "DataArt/microvengers",
+      "DataArt/moment",
+      "DataArt/OPC_UA_umati_energy_meter",
+      "DataArt/SmartSlides",
+      "DataArt/vue-cli",
+      "DataArt/vuetify"
+    ],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО IBA ASTANA DEV (АЙБИЭЙ АСТАНА Дев)",
+    "sourceLine": 5668,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-002",
+    "inputRecord": 786,
+    "company": "IBA ASTANA DEV (АЙБИЭЙ АСТАНА Дев)",
+    "description": "IBA Group – международный холдинг с офисами в Европе, США, Азии и Африке. Компания обладает всеми необходимыми юридическими и организационными возможностями для отправки своих экспертов в зарубежные офисы или найма местн",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 2,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "ibaastanadevайбиэйастанадев",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "brand-link-supported",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [
+      "IBA-Group-IT/IoT-data-simulator",
+      "IBA-Group-IT/wf-intelia-core",
+      "IBA-Group-IT/wf-intelia-core-adaptations",
+      "IBA-Group-IT/wf-mcb-invoiceplane-demo",
+      "IBA-Group-IT/wf-systems-google-search",
+      "IBA-Group-IT/wf-systems-invoiceplane",
+      "IBA-Group-IT/wf-systems-skype",
+      "ibagroup-eu/app-modernization-examples",
+      "ibagroup-eu/Visual-Flow",
+      "ibagroup-eu/Visual-Flow-backend",
+      "ibagroup-eu/Visual-Flow-backend-db-service",
+      "ibagroup-eu/Visual-Flow-backend-history-service",
+      "ibagroup-eu/Visual-Flow-backend-job-storage-service",
+      "ibagroup-eu/Visual-Flow-databricks",
+      "ibagroup-eu/Visual-Flow-databricks-frontend",
+      "ibagroup-eu/Visual-Flow-databricks-history-service",
+      "ibagroup-eu/Visual-Flow-databricks-jobs",
+      "ibagroup-eu/Visual-Flow-deploy",
+      "ibagroup-eu/Visual-Flow-for-Databricks",
+      "ibagroup-eu/Visual-Flow-frontend",
+      "ibagroup-eu/Visual-Flow-jobs",
+      "ibagroup-eu/Visual-Flow-Knowledge-Base"
+    ],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО БАЙТМАЙНДЗ КАЗАХСТАН",
+    "sourceLine": 289,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-003",
+    "inputRecord": 39,
+    "company": "БАЙТМАЙНДЗ КАЗАХСТАН",
+    "description": "Цифровые и AI решения для бизнеса",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 3,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "байтмайндзказахстан",
+    "sizeEvidence": {
+      "value": "51-200",
+      "metric": "self-reported employee bracket",
+      "scope": "global-group",
+      "source": "https://www.linkedin.com/company/byteminds",
+      "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+    },
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО СОФТКЛУБ",
+    "sourceLine": 4108,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-004",
+    "inputRecord": 565,
+    "company": "СОФТКЛУБ",
+    "description": "Вперед и только вперед !!!",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 4,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "софтклуб",
+    "sizeEvidence": {
+      "value": "501-1,000",
+      "metric": "self-reported employee bracket",
+      "scope": "global-group",
+      "source": "https://www.linkedin.com/company/softclub",
+      "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+    },
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО PLAVNO (ПЛАВНО)",
+    "sourceLine": 841,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-005",
+    "inputRecord": 114,
+    "company": "PLAVNO (ПЛАВНО)",
+    "description": "Researching GenAI Integration in Software Engineering · Turning peer-reviewed research into engineering practice",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 5,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "plavnoплавно",
+    "sizeEvidence": {
+      "value": "51-200",
+      "metric": "self-reported employee bracket",
+      "scope": "global-group",
+      "source": "https://www.linkedin.com/company/plavno",
+      "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+    },
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО СпурАйТи",
+    "sourceLine": 6294,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-006",
+    "inputRecord": 871,
+    "company": "СпурАйТи",
+    "description": "Ecommerce dev company",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 6,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "спурайти",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "brand-link-supported",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [
+      "SpurIT/PhpSpreadsheet",
+      "SpurIT/react-example",
+      "SpurIT/SpurIT"
+    ],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО SINGULARIS PROGRAMMING (СИНГУЛЯРИС ПРОГРАММИНГ)",
+    "sourceLine": 4576,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-007",
+    "inputRecord": 631,
+    "company": "SINGULARIS PROGRAMMING (СИНГУЛЯРИС ПРОГРАММИНГ)",
+    "description": "AI-решения для бизнеса и промышленности",
+    "cohorts": [
+      "selected-100",
+      "previous-80"
+    ],
+    "selectionOrder": 7,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "singularisprogrammingсингуляриспрограмминг",
+    "directoryId": "328",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Proxima Research",
+    "sourceLine": 5838,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-008",
+    "inputRecord": 808,
+    "company": "Proxima Research",
+    "description": "Международный провайдер данных, технологий и сервисов для сектора здравоохранения. Уже более 30 лет предоставляет своим клиентам инновационные и экспертные решения для фармацевтического бизнеса.",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 8,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "proximaresearch",
+    "sizeEvidence": {
+      "value": "500+",
+      "metric": "employees",
+      "scope": "global-group",
+      "source": "https://proximaresearch.com/kz/en/about-2/",
+      "caveat": "Company self-report across countries; not Kazakhstan staff."
+    },
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью Brand Analytics (Бренд Аналитикс)",
+    "sourceLine": 2147,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-009",
+    "inputRecord": 295,
+    "company": "Brand Analytics (Бренд Аналитикс)",
+    "description": "Инновационная ИТ-компания, разработчик системы мониторинга и анализа социальных медиа и СМИ Brand Analytics в Казахстане",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 9,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "brandanalyticsбренданалитикс",
+    "sizeEvidence": {
+      "value": "11-50",
+      "metric": "self-reported employee bracket",
+      "scope": "Kazakhstan-brand-profile",
+      "source": "https://kz.linkedin.com/company/brand-analytics-ca",
+      "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+    },
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО Almexoft Kazakhstan",
+    "sourceLine": 79,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-010",
+    "inputRecord": 11,
+    "company": "Almexoft Kazakhstan",
+    "description": "Автоматизируй просто. Расти быстро.",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 10,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "almexoftkazakhstan",
+    "sizeEvidence": {
+      "value": "51-200",
+      "metric": "self-reported employee bracket",
+      "scope": "global-group",
+      "source": "https://kz.linkedin.com/company/almexoft",
+      "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+    },
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО «G1 Software Kazakhstan»",
+    "sourceLine": 1931,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-011",
+    "inputRecord": 266,
+    "company": "G1 Software Kazakhstan",
+    "description": "Цифровая платформа для работы с данными гостей от сканирования документов до отправки данных в ведомство",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 11,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "g1softwarekazakhstan",
+    "sizeEvidence": {
+      "value": "51-200",
+      "metric": "self-reported employee bracket",
+      "scope": "Kazakhstan-brand-profile",
+      "source": "https://kz.linkedin.com/company/g1-software-kazakhstan",
+      "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+    },
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью Системная интеграция ИТ",
+    "sourceLine": 548,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-012",
+    "inputRecord": 74,
+    "company": "Системная интеграция ИТ",
+    "description": "Custom software development and business digital transformation: ML & data analytics, intelligent process automation (RPA), cloud and hybrid infrastructure.",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 12,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "системнаяинтеграцияит",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью Freedom Processing",
+    "sourceLine": 608,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-013",
+    "inputRecord": 82,
+    "company": "Freedom Processing",
+    "description": "Freedom Processing — поставщик решений и сервисов для развития платёжного бизнеса",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 13,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "freedomprocessing",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Freedom Tech ltd.",
+    "sourceLine": 4960,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-014",
+    "inputRecord": 685,
+    "company": "Freedom Tech ltd.",
+    "description": "Инвестируйте в акции и ETF.Торгуйте на крупнейших мировых биржах.",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 14,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "freedomtech",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с Ограниченной Ответственностью “Халык Lab”",
+    "sourceLine": 4428,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-015",
+    "inputRecord": 610,
+    "company": "Халык Lab",
+    "description": "Спроектируем. Построим. Защитим",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 15,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "халыкlab",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Solva Technology Ltd",
+    "sourceLine": 3976,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-016",
+    "inputRecord": 548,
+    "company": "Solva Technology Ltd",
+    "description": "Технологии, которые двигают финансовый рынок вперед",
+    "cohorts": [
+      "selected-100",
+      "previous-80"
+    ],
+    "selectionOrder": 16,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "solvatechnology",
+    "directoryId": "137",
+    "sizeEvidence": {
+      "value": "51-200",
+      "metric": "self-reported employee bracket",
+      "scope": "Kazakhstan-brand-profile",
+      "source": "https://kz.linkedin.com/company/solva-technology",
+      "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+    },
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО TipTop Pay Kazakhstan",
+    "sourceLine": 6239,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-017",
+    "inputRecord": 864,
+    "company": "TipTop Pay Kazakhstan",
+    "description": "Безупречный интернет-эквайринг",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 17,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "tiptoppaykazakhstan",
+    "sizeEvidence": {
+      "value": "11-50",
+      "metric": "self-reported employee bracket",
+      "scope": "Kazakhstan-brand-profile",
+      "source": "https://kz.linkedin.com/company/tiptoppay-kz",
+      "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+    },
+    "repositorySearchStatus": "brand-link-supported",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [
+      "tiptoppaymobile/TipTopPay-SDK-Android",
+      "tiptoppaymobile/TipTopPay-SDK-Flutter",
+      "tiptoppaymobile/TipTopPay-SDK-iOS"
+    ],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО eComCharge",
+    "sourceLine": 6361,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-018",
+    "inputRecord": 880,
+    "company": "eComCharge",
+    "description": "Платежный шлюз и процессинговая система под вашим брендом с полной технической поддержкой и командой разработчиков.",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 18,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "ecomcharge",
+    "sizeEvidence": {
+      "value": "11-50",
+      "metric": "self-reported employee bracket",
+      "scope": "global-group",
+      "source": "https://www.linkedin.com/company/ecomcharge",
+      "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+    },
+    "repositorySearchStatus": "brand-link-supported",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [
+      "begateway/all_banks_ips",
+      "begateway/attr_encrypted",
+      "begateway/basic_auth",
+      "begateway/be_gateway",
+      "begateway/be_protected_client",
+      "begateway/beer_client",
+      "begateway/begateway-android-sdk",
+      "begateway/begateway-api-dotnet",
+      "begateway/begateway-api-php",
+      "begateway/begateway-flutter-sdk",
+      "begateway/begateway-ios-sdk",
+      "begateway/begateway-js",
+      "begateway/bepaid_ex",
+      "begateway/beredis",
+      "begateway/beyag-client",
+      "begateway/billmanager",
+      "begateway/bitrix-erip-payment-module",
+      "begateway/bitrix-payment-module",
+      "begateway/boapi_client_rb",
+      "begateway/capistrano-slack",
+      "begateway/capistrano-teams",
+      "begateway/charitable-begateway-payment-gateway",
+      "begateway/chef-deps",
+      "begateway/chef-ipaddress",
+      "begateway/chkrootkit-cookbook",
+      "begateway/claudebox",
+      "begateway/client_ruby",
+      "begateway/credit_card_validations",
+      "begateway/cs-cart-4.2.x-payment-module",
+      "begateway/cs-cart-payment-module",
+      "begateway/diafan.cms-payment-module",
+      "begateway/docker-setup",
+      "begateway/docker-whmcs",
+      "begateway/drupal-commerce-payment-module",
+      "begateway/drupal-ubercart-payment-module",
+      "begateway/edd-begateway-gateway",
+      "begateway/elixir-clickhouse-perf-test-agent",
+      "begateway/erlang",
+      "begateway/etest_http",
+      "begateway/ex_oauth2_provider",
+      "begateway/fox",
+      "begateway/gala",
+      "begateway/hikashop-payment-module",
+      "begateway/hostcms-payment-module",
+      "begateway/hsm-emulator",
+      "begateway/integration-examples",
+      "begateway/integration-libraries",
+      "begateway/Intune",
+      "begateway/j2store-payment-plugin",
+      "begateway/jira-telegram-integration",
+      "begateway/joomshopping-erip-payment-plugin",
+      "begateway/joomshopping-payment-module",
+      "begateway/Mad-Pay-Flutter",
+      "begateway/magento-ce-payment-plugin",
+      "begateway/magento2-payment-module",
+      "begateway/maxmind",
+      "begateway/moguta.cms-6.9.5-payment-module",
+      "begateway/moodle-payment-plugin",
+      "begateway/mpi_client",
+      "begateway/nbrb-api",
+      "begateway/node-bepaid",
+      "begateway/okaycms-payment-module",
+      "begateway/opencart-1.5-payment-module",
+      "begateway/opencart-2-erip-payment-module",
+      "begateway/opencart-2.0-payment-module",
+      "begateway/opencart-2.1-payment-module",
+      "begateway/opencart-2.2-payment-module",
+      "begateway/opencart-2.3-payment-module",
+      "begateway/opencart-3-payment-module",
+      "begateway/opencart-4-payment-extension",
+      "begateway/opencart-erip-payment-module",
+      "begateway/owncloud-cookbook",
+      "begateway/payment-logos",
+      "begateway/perl-crypt-openssl-pkcs12",
+      "begateway/phoenix_oauth2_provider",
+      "begateway/pillar",
+      "begateway/prestashop-1.6-payment-module",
+      "begateway/prestashop-1.7-payment-module",
+      "begateway/prestashop-erip-payment-module",
+      "begateway/prestashop-payment-module",
+      "begateway/prometheus.ex",
+      "begateway/proxied_ftp",
+      "begateway/r2d2",
+      "begateway/readyscript-payment-module",
+      "begateway/rtl8192eu-linux-driver",
+      "begateway/rtw89",
+      "begateway/ru_propisju",
+      "begateway/rubyqrpay",
+      "begateway/shop-script-payment-module",
+      "begateway/shopkeeper-payment-module",
+      "begateway/sidekiq-cluster",
+      "begateway/sidekiq-sync",
+      "begateway/simpla-payment-module",
+      "begateway/site.pro-payment-module",
+      "begateway/sitebill-payment-module",
+      "begateway/smart_check_client",
+      "begateway/smart_routing_rb",
+      "begateway/status_code",
+      "begateway/SwiftyRSA",
+      "begateway/tarams",
+      "begateway/unistring",
+      "begateway/validates_airline_addendum",
+      "begateway/validates_url_format_of",
+      "begateway/vamshop-payment-module",
+      "begateway/virtuemart-1.1.9-payment-module",
+      "begateway/virtuemart-payment-module",
+      "begateway/wddx",
+      "begateway/whmcs-payment-module",
+      "begateway/woocommerce-2.x-payment-module",
+      "begateway/woocommerce-erip-payment-module",
+      "begateway/woocommerce-payment-module",
+      "begateway/wordpress-payment-plugin"
+    ],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью FintechSoft (ФинтехСофт)",
+    "sourceLine": 4408,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-019",
+    "inputRecord": 607,
+    "company": "FintechSoft (ФинтехСофт)",
+    "description": "AI-native infrastructure for regulated financial, digital asset, and operational workflows.",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 19,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "fintechsoftфинтехсофт",
+    "sizeEvidence": {
+      "value": "2-10",
+      "metric": "self-reported employee bracket",
+      "scope": "Kazakhstan-brand-profile",
+      "source": "https://kz.linkedin.com/company/fintechsoft-kz",
+      "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+    },
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО ФинСервисы",
+    "sourceLine": 2050,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-020",
+    "inputRecord": 282,
+    "company": "ФинСервисы",
+    "description": "Сервис по приёму онлайн-платежей для сайтов и приложений Robokassa в Казахстане",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 20,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "финсервисы",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "brand-link-supported",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [
+      "robokassa/1C",
+      "robokassa/cms-bitrix",
+      "robokassa/cms-drupal",
+      "robokassa/cms-joomla",
+      "robokassa/cms-magento",
+      "robokassa/cms-modx",
+      "robokassa/cms-october",
+      "robokassa/cms-opencart",
+      "robokassa/cms-prestashop",
+      "robokassa/cms-wordpress",
+      "robokassa/credit-styles",
+      "robokassa/cs-cart",
+      "robokassa/sdk-android",
+      "robokassa/sdk-dotnet",
+      "robokassa/sdk-go-main",
+      "robokassa/sdk-ios",
+      "robokassa/sdk-node",
+      "robokassa/sdk-php"
+    ],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью PrimePay",
+    "sourceLine": 2298,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-021",
+    "inputRecord": 315,
+    "company": "PrimePay",
+    "description": "PrimePay — технологичная платежная платформа и современные финансовые решения для цифрового бизнеса",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 21,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "primepay",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО PROSPERPAY",
+    "sourceLine": 2036,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-022",
+    "inputRecord": 280,
+    "company": "PROSPERPAY",
+    "description": "B2B‑инфраструктура для управления финансовым и человеческим капиталом",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 22,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "prosperpay",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "BI Fintech ТОО",
+    "sourceLine": 2283,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-023",
+    "inputRecord": 313,
+    "company": "BI Fintech ТОО",
+    "description": "Делаем ипотеку цифровой: одна заявка — лучшие предложения банков.",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 23,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "bifintechтоо",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Verum Payments Limited",
+    "sourceLine": 5080,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-024",
+    "inputRecord": 703,
+    "company": "Verum Payments Limited",
+    "description": "",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 24,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "verumpayments",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ЧАСТНАЯ КОМПАНИЯ INVESTBANQ TECH LAB LIMITED",
+    "sourceLine": 94,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-025",
+    "inputRecord": 13,
+    "company": "INVESTBANQ TECH LAB LIMITED",
+    "description": "Технологическая компания",
+    "cohorts": [
+      "selected-100",
+      "previous-80"
+    ],
+    "selectionOrder": 25,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "investbanqtechlab",
+    "directoryId": "2010",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ЧАСТНАЯ КОМПАНИЯ INVESTROOM LTD.",
+    "sourceLine": 6254,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-026",
+    "inputRecord": 866,
+    "company": "INVESTROOM LTD.",
+    "description": "Частная компания InvestRoom Ltd - это лицензированная инвестиционная компания, и мы созданы в финтех лаборатории МФЦА (финансовый центр)",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 26,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "investroom",
+    "sizeEvidence": {
+      "value": "2-10",
+      "metric": "self-reported employee bracket",
+      "scope": "Kazakhstan-brand-profile",
+      "source": "https://www.linkedin.com/company/investroom-ltd",
+      "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+    },
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Частная компания iKapitalist Ltd",
+    "sourceLine": 230,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-027",
+    "inputRecord": 31,
+    "company": "iKapitalist Ltd",
+    "description": "Лицензированная инвестиционная и заёмная краудфандинговая платформа, лицензия №AFSA-A-LA-2023-0005",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 27,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "ikapitalist",
+    "sizeEvidence": {
+      "value": "11-50",
+      "metric": "self-reported employee bracket",
+      "scope": "Kazakhstan-brand-profile",
+      "source": "https://kz.linkedin.com/company/ikapitalist",
+      "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+    },
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Частная компания OV Tech Limited",
+    "sourceLine": 1838,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-028",
+    "inputRecord": 253,
+    "company": "OV Tech Limited",
+    "description": "Разработка и внедрение финтех-платформ для онлайн-платежей: PCI DSS, SaaS, Cloud, Analytics.",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 28,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "ovtech",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО UMAG",
+    "sourceLine": 1982,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-029",
+    "inputRecord": 273,
+    "company": "UMAG",
+    "description": "UMAG – №1 по автоматизации торговли в Казахстане Umag – это простая и понятная программа учёта товаров и продаж",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 29,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "umag",
+    "sizeEvidence": {
+      "value": "100+",
+      "metric": "employees",
+      "scope": "brand-group",
+      "source": "https://umag.kz/o-kompanii",
+      "caveat": "Company website self-report; exact legal entity headcount unverified."
+    },
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Platonus",
+    "sourceLine": 4044,
+    "labels": "IT-company; TS member; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-030",
+    "inputRecord": 557,
+    "company": "Platonus",
+    "description": "Platonus. Учиться. Развиваться. Достигать.",
+    "cohorts": [
+      "selected-100",
+      "previous-80"
+    ],
+    "selectionOrder": 30,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "platonus",
+    "directoryId": "843",
+    "sizeEvidence": {
+      "value": "51-200",
+      "metric": "self-reported employee bracket",
+      "scope": "Kazakhstan-brand-profile",
+      "source": "https://kz.linkedin.com/company/platonus",
+      "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+    },
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО Daryn.online",
+    "sourceLine": 488,
+    "labels": "Startup; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-031",
+    "inputRecord": 66,
+    "company": "Daryn.online",
+    "description": "Образовательная онлайн-платформа, специализирующаяся на подготовке школьников к экзаменам, поступлению в специализированные учебные заведения",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 31,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "darynonline",
+    "sizeEvidence": {
+      "value": "201-500",
+      "metric": "self-reported employee bracket",
+      "scope": "Kazakhstan-brand-profile",
+      "source": "https://kz.linkedin.com/company/daryn-online",
+      "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+    },
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью JUZ40 ONLINE",
+    "sourceLine": 2854,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-032",
+    "inputRecord": 391,
+    "company": "JUZ40 ONLINE",
+    "description": "ТОО \"JUZ40 ONLINE\"",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 32,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "juz40online",
+    "sizeEvidence": {
+      "value": "2,500",
+      "metric": "staff reported in founder interview",
+      "scope": "JUZ40 brand/group",
+      "source": "https://digitalbusiness.kz/2026-04-29/kazahstanka-pomogala-shkolnikam-sosdachey-ent-ipostroila-naetom-biznes-soborotom-13mlrd-tenge/",
+      "caveat": "Interview reports group turnover KZT 13bn and staff 2,500; not audited and not exact JUZ40 ONLINE legal entity. Registry aggregator shows 251–500 for that entity, so do not combine."
+    },
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО Naimi.kz",
+    "sourceLine": 5376,
+    "labels": "Startup; IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-033",
+    "inputRecord": 743,
+    "company": "Naimi.kz",
+    "description": "Маркетплейс бытовых услуг",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 33,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "naimikz",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью HOMSTERS.KZ",
+    "sourceLine": 1358,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-034",
+    "inputRecord": 186,
+    "company": "HOMSTERS.KZ",
+    "description": "Homsters - цифровая платформа для покупки, продажи и аренды недвижимости",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 34,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "homsterskz",
+    "sizeEvidence": {
+      "value": "51-200",
+      "metric": "self-reported employee bracket",
+      "scope": "global-group",
+      "source": "https://www.linkedin.com/company/homsters.com",
+      "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+    },
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО “МYTONA KZ”",
+    "sourceLine": 3253,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-035",
+    "inputRecord": 447,
+    "company": "МYTONA KZ",
+    "description": "WOW AND FUN FOR EVERYONE",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 35,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "мytonakz",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью Euphoria Games (Эйфория Геймс)",
+    "sourceLine": 6377,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-036",
+    "inputRecord": 882,
+    "company": "Euphoria Games (Эйфория Геймс)",
+    "description": "Разрабатываем мобильные игры в жанре хоррор.",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 36,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "euphoriagamesэйфориягеймс",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью Renderise Games (Рендерайз Геймс)",
+    "sourceLine": 4149,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-037",
+    "inputRecord": 571,
+    "company": "Renderise Games (Рендерайз Геймс)",
+    "description": "Серия кооперативных компьютерных игр",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 37,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "renderisegamesрендерайзгеймс",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО СИБЕАР ГЕЙМС",
+    "sourceLine": 4765,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-038",
+    "inputRecord": 657,
+    "company": "СИБЕАР ГЕЙМС",
+    "description": "",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 38,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "сибеаргеймс",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО РЕЛАКСГЕЙМС",
+    "sourceLine": 4758,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-039",
+    "inputRecord": 656,
+    "company": "РЕЛАКСГЕЙМС",
+    "description": "Ключевое направление – собственная разработка кроссплатформенных игр в жанре hidden object.",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 39,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "релаксгеймс",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью Собака Студио",
+    "sourceLine": 1431,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-040",
+    "inputRecord": 196,
+    "company": "Собака Студио",
+    "description": "Собака Студио",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 40,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "собакастудио",
+    "sizeEvidence": {
+      "value": "11-50",
+      "metric": "self-reported employee bracket",
+      "scope": "global-group",
+      "source": "https://kz.linkedin.com/company/sobaka-studio",
+      "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+    },
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО TLT GAMES (ТЛТ ГЕЙМС)",
+    "sourceLine": 3460,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-041",
+    "inputRecord": 475,
+    "company": "TLT GAMES (ТЛТ ГЕЙМС)",
+    "description": "LLP TLT GAMES",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 41,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "tltgamesтлтгеймс",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО GOODWIN GAMES (ГУДВИН ГЕЙМЗ)",
+    "sourceLine": 746,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-042",
+    "inputRecord": 101,
+    "company": "GOODWIN GAMES (ГУДВИН ГЕЙМЗ)",
+    "description": "Creating Emotional Experience",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 42,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "goodwingamesгудвингеймз",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО iDos Games",
+    "sourceLine": 5344,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-043",
+    "inputRecord": 739,
+    "company": "iDos Games",
+    "description": "ИИ Платформа Web3 игр и приложений",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 43,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "idosgames",
+    "sizeEvidence": {
+      "value": "2-10",
+      "metric": "self-reported employee bracket",
+      "scope": "Kazakhstan-brand-profile",
+      "source": "https://kz.linkedin.com/company/idosgames",
+      "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+    },
+    "repositorySearchStatus": "brand-link-supported",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [
+      "iDos-Games/AI_Chat",
+      "iDos-Games/Cuber2048",
+      "iDos-Games/iDos-Games-Engine-Unity-SDK",
+      "iDos-Games/idosgames-mcp"
+    ],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью Playnera",
+    "sourceLine": 4967,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-044",
+    "inputRecord": 686,
+    "company": "Playnera",
+    "description": "Разработка мобильных игр",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 44,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "playnera",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО 17Studio(Студия17)",
+    "sourceLine": 1561,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-045",
+    "inputRecord": 214,
+    "company": "17Studio(Студия17)",
+    "description": "Делаем только хорошие игры",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 45,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "17studioстудия17",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Endgame Studio Ltd. Жеке компаниясы",
+    "sourceLine": 5300,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-046",
+    "inputRecord": 733,
+    "company": "Endgame Studio Ltd. Жеке компаниясы",
+    "description": "Endgame Studio Ltd.",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 46,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "endgamestudioжекекомпаниясы",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО DYNAMIC TECHNOLOGIES",
+    "sourceLine": 518,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-047",
+    "inputRecord": 70,
+    "company": "DYNAMIC TECHNOLOGIES",
+    "description": "Технологичная компания Grand Games - разработка мобильных игр и других IT & AI-решений",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 47,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "dynamictechnologies",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью Студия разработки видеоигр Not Friendly Games",
+    "sourceLine": 924,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-048",
+    "inputRecord": 125,
+    "company": "Студия разработки видеоигр Not Friendly Games",
+    "description": "Игры от игроков для игроков",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 48,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "студияразработкивидеоигрnotfriendlygames",
+    "sizeEvidence": {
+      "value": "11-50",
+      "metric": "self-reported employee bracket",
+      "scope": "global-group",
+      "source": "https://www.linkedin.com/company/not-friendly-games",
+      "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+    },
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "PS Cloud Services",
+    "sourceLine": 4879,
+    "labels": "IT-company",
+    "participantLabelPresent": false,
+    "researchLabelPresent": false,
+    "id": "large-049",
+    "inputRecord": 674,
+    "company": "PS Cloud Services",
+    "description": "Независимый казахстанский облачный провайдер",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 49,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "pscloudservices",
+    "sizeEvidence": {
+      "value": "51-200",
+      "metric": "self-reported employee bracket",
+      "scope": "Kazakhstan-brand-profile",
+      "source": "https://kz.linkedin.com/company/pscloudservices",
+      "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+    },
+    "repositorySearchStatus": "brand-link-supported",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [
+      "pskzcompany/graylog",
+      "pskzcompany/sms-sender",
+      "pskzcompany/VPS-Setup-Playbooks",
+      "pskzcompany/winston-graylog"
+    ],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО \"NLS Cloud\"",
+    "sourceLine": 1350,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-050",
+    "inputRecord": 185,
+    "company": "NLS Cloud",
+    "description": "Всё, что нужно бизнесу: от виртуальных машин и объектного хранилища до аренды стойки в собственном ЦОД Tier III.",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 50,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "nlscloud",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ЧАСТНАЯ КОМПАНИЯ ASTANA CLOUD LTD.",
+    "sourceLine": 1200,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-051",
+    "inputRecord": 164,
+    "company": "ASTANA CLOUD LTD.",
+    "description": "",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 51,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "astanacloud",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО Cloud24.kz",
+    "sourceLine": 1945,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-052",
+    "inputRecord": 268,
+    "company": "Cloud24.kz",
+    "description": "ТОО Cloud24.kz",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 52,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "cloud24kz",
+    "sizeEvidence": {
+      "value": "11-50",
+      "metric": "self-reported employee bracket",
+      "scope": "Kazakhstan-brand-profile",
+      "source": "https://kz.linkedin.com/company/cloud24kz",
+      "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+    },
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Частная компания DAC Ltd.",
+    "sourceLine": 149,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-053",
+    "inputRecord": 20,
+    "company": "DAC Ltd.",
+    "description": "DAC Ltd. предоставляет бизнесу, банкам и IT-компаниям облачные сервисы, CDN, IT-инфраструктуру и кибербезопасность, обеспечивая высокую производительность, надёжность и масштабируемость.",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 53,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "dac",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО NTL KAZAKHSTAN",
+    "sourceLine": 47,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-054",
+    "inputRecord": 7,
+    "company": "NTL KAZAKHSTAN",
+    "description": "gohost.kz",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 54,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "ntlkazakhstan",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО CYBERNET (КИБЕРНЕТ)",
+    "sourceLine": 282,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-055",
+    "inputRecord": 38,
+    "company": "CYBERNET (КИБЕРНЕТ)",
+    "description": "Мы создаем технологии мирового уровня, которые помогают клиентам стремительно расти.",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 55,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "cybernetкибернет",
+    "sizeEvidence": {
+      "value": "51-200",
+      "metric": "self-reported employee bracket",
+      "scope": "Kazakhstan-brand-profile",
+      "source": "https://kz.linkedin.com/company/cybernet-ai",
+      "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+    },
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО Орион Телеком",
+    "sourceLine": 805,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-056",
+    "inputRecord": 109,
+    "company": "Орион Телеком",
+    "description": "Разработка ПО для IoT: прошивки радиомодемов LoRaWAN ORIONMETER, дистанционный сбор показаний приборов учёта и диспетчеризация инженерного оборудования зданий",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 56,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "орионтелеком",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Cloudmaker",
+    "sourceLine": 3637,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-057",
+    "inputRecord": 500,
+    "company": "Cloudmaker",
+    "description": "Мы создаем облачное HR-решение на стыке лучших практик в HR и IT.",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 57,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "cloudmaker",
+    "sizeEvidence": {
+      "value": "11-50",
+      "metric": "self-reported employee bracket",
+      "scope": "Kazakhstan-brand-profile",
+      "source": "https://kz.linkedin.com/company/cloudmaker-llp",
+      "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+    },
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью Nova Cloud",
+    "sourceLine": 3846,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-058",
+    "inputRecord": 530,
+    "company": "Nova Cloud",
+    "description": "B2B-облако из Алматы: IaaS, GPU для AI/ML и colocation на собственной инфраструктуре.",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 58,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "novacloud",
+    "sizeEvidence": {
+      "value": "11-50",
+      "metric": "self-reported employee bracket",
+      "scope": "Kazakhstan-brand-profile",
+      "source": "https://kz.linkedin.com/company/novacloudkz",
+      "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+    },
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "qCloudy",
+    "sourceLine": 728,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-059",
+    "inputRecord": 99,
+    "company": "qCloudy",
+    "description": "Создаем инновационные решения на платформе AWS, которые ускоряют развитие компании и повышают ее операционную эффективность",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 59,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "qcloudy",
+    "sizeEvidence": {
+      "value": "11-50",
+      "metric": "self-reported employee bracket",
+      "scope": "brand-group",
+      "source": "https://www.linkedin.com/company/qcloudy",
+      "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+    },
+    "repositorySearchStatus": "brand-link-supported",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [
+      "qcloudy/ansible-role-docker-app",
+      "qcloudy/ansible-role-elasticsearch-exporter",
+      "qcloudy/ansible-role-glusterfs",
+      "qcloudy/ansible-role-heketi",
+      "qcloudy/ansible-role-keepalived-exporter",
+      "qcloudy/ansible-role-linstor",
+      "qcloudy/ansible-role-patroni",
+      "qcloudy/ansible-role-postgres-exporter",
+      "qcloudy/ansible-role-users",
+      "qcloudy/ceph-ansible",
+      "qcloudy/common-app-chart",
+      "qcloudy/eks-helm-deploy-action",
+      "qcloudy/terraform-provider-huaweicloudstack",
+      "qcloudy/vmagent"
+    ],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью CloudTek",
+    "sourceLine": 563,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-060",
+    "inputRecord": 76,
+    "company": "CloudTek",
+    "description": "Облачная инфраструктура «под ключ»",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 60,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "cloudtek",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Cloud Agnostic",
+    "sourceLine": 6088,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-061",
+    "inputRecord": 843,
+    "company": "Cloud Agnostic",
+    "description": "Focus on your product, and we'll take care of DevOps.",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 61,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "cloudagnostic",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "TOO E-CLOUD",
+    "sourceLine": 5385,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-062",
+    "inputRecord": 744,
+    "company": "E-CLOUD",
+    "description": "Компания «E-CLOUD» является отечественным разработчиком высокотехнологичных программных продуктов и предоставляет услуги по автоматизации бизнес – процессов.",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 62,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "ecloud",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО «B-APPS»",
+    "sourceLine": 55,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-063",
+    "inputRecord": 8,
+    "company": "B-APPS",
+    "description": "Автоматизируем бизнес-процессы и СЭД на базе платформы DamuBPM для крупного бизнеса, банков и госсектора.",
+    "cohorts": [
+      "selected-100",
+      "previous-80"
+    ],
+    "selectionOrder": 63,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "bapps",
+    "directoryId": "2224",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью QAP Solutions",
+    "sourceLine": 2838,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-064",
+    "inputRecord": 389,
+    "company": "QAP Solutions",
+    "description": "A-Pro Solutions",
+    "cohorts": [
+      "selected-100",
+      "previous-80"
+    ],
+    "selectionOrder": 64,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "qapsolutions",
+    "directoryId": "2149",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО MAXINUM CONSULTING LTD",
+    "sourceLine": 1526,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-065",
+    "inputRecord": 209,
+    "company": "MAXINUM CONSULTING LTD",
+    "description": "Software Development Company",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 65,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "maxinumconsulting",
+    "sizeEvidence": {
+      "value": "11-50",
+      "metric": "self-reported employee bracket",
+      "scope": "Kazakhstan-brand-profile",
+      "source": "https://kz.linkedin.com/company/maxinumco",
+      "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+    },
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью \"INFOPRO KZ (ИНФОПРО КЗ)\"",
+    "sourceLine": 1547,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-066",
+    "inputRecord": 212,
+    "company": "INFOPRO KZ (ИНФОПРО КЗ)",
+    "description": "ТОО \"INFOPRO KZ (ИНФОПРО: КЗ)\" — казахстанская IT-компания, системный интегратор в области цифровизации предприятий энергетики, энергоемкой промышленности и коммунального хозяйства на базе современных технологий.",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 66,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "infoprokzинфопрокз",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО \"Uco\"",
+    "sourceLine": 2536,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-067",
+    "inputRecord": 348,
+    "company": "Uco",
+    "description": "Автоматизируйте свои процессы быстро, эффективно и без лишних трат",
+    "cohorts": [
+      "selected-100",
+      "previous-80"
+    ],
+    "selectionOrder": 67,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "uco",
+    "directoryId": "72",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО Азия-Софт Консалтинг",
+    "sourceLine": 4737,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-068",
+    "inputRecord": 653,
+    "company": "Азия-Софт Консалтинг",
+    "description": "ТОО Азия-Софт Консалтинг",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 68,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "азиясофтконсалтинг",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО Faceplate",
+    "sourceLine": 4731,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-069",
+    "inputRecord": 652,
+    "company": "Faceplate",
+    "description": "",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 69,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "faceplate",
+    "sizeEvidence": {
+      "value": "11-50",
+      "metric": "self-reported employee bracket",
+      "scope": "Kazakhstan-brand-profile",
+      "source": "https://www.linkedin.com/company/faceplate-industial-ai",
+      "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+    },
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО «IDS CyberTech»",
+    "sourceLine": 2078,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-070",
+    "inputRecord": 286,
+    "company": "IDS CyberTech",
+    "description": "Центр автоматизации и информационной безопасности",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 70,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "idscybertech",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью Позитив Казахстан",
+    "sourceLine": 4791,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-071",
+    "inputRecord": 661,
+    "company": "Позитив Казахстан",
+    "description": "Power Up",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 71,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "позитивказахстан",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО Infoland",
+    "sourceLine": 3952,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-072",
+    "inputRecord": 545,
+    "company": "Infoland",
+    "description": "Always One Step AheadWe solve complex software development challenges.",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 72,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "infoland",
+    "sizeEvidence": {
+      "value": "11-50",
+      "metric": "self-reported employee bracket",
+      "scope": "Kazakhstan-brand-profile",
+      "source": "https://www.linkedin.com/company/infoland-kz",
+      "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+    },
+    "repositorySearchStatus": "brand-link-supported",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [
+      "Infoland-kz/alatau-city-authority-website",
+      "Infoland-kz/frontend-coding-standards",
+      "Infoland-kz/next-boilerplate",
+      "Infoland-kz/pay2print"
+    ],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "TOO 10Tech",
+    "sourceLine": 5353,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-073",
+    "inputRecord": 740,
+    "company": "10Tech",
+    "description": "Нет ничего невозможного, только надо работать...",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 73,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "10tech",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО IDOCSKZ",
+    "sourceLine": 5399,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-074",
+    "inputRecord": 746,
+    "company": "IDOCSKZ",
+    "description": "Новый уровень автоматизации бизнес процессов",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 74,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "idocskz",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО КАС Консалтинг софт",
+    "sourceLine": 5661,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-075",
+    "inputRecord": 785,
+    "company": "КАС Консалтинг софт",
+    "description": "Помогаем клиентам успешно развивать свой бизнес при помощи IT - технологий",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 75,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "касконсалтингсофт",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью \"Казахстанские мобильные бизнес системы\"",
+    "sourceLine": 2528,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-076",
+    "inputRecord": 347,
+    "company": "Казахстанские мобильные бизнес системы",
+    "description": "Внеси свой вклад в своё будущее. Обучаем востребованным ИТ-профессиям, развиваем цифровые компетенции и готовим специалистов, способных успешно работать в современной цифровой экономике.",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 76,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "казахстанскиемобильныебизнессистемы",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО Контроль Техники",
+    "sourceLine": 819,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-077",
+    "inputRecord": 111,
+    "company": "Контроль Техники",
+    "description": "Разрабатываем и внедряем цифровые решения для GPS-мониторинга, контроля расхода топлива и аналитики данных, помогая бизнесу автоматизировать управление автопарками и спецтехникой.",
+    "cohorts": [
+      "selected-100",
+      "previous-80"
+    ],
+    "selectionOrder": 77,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "контрольтехники",
+    "directoryId": "167",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью AutoTrack",
+    "sourceLine": 1733,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-078",
+    "inputRecord": 238,
+    "company": "AutoTrack",
+    "description": "Разработка ПО, услуги",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 78,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "autotrack",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью BePRO",
+    "sourceLine": 3550,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-079",
+    "inputRecord": 487,
+    "company": "BePRO",
+    "description": "BePRO — разработчик цифровых решений для автоматизации бизнес-процессов. propolis — комплексная платформа для управления персоналом, контроля рабочего времени, ведения документации, организации рабочих процессов, оценки",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 79,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "bepro",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО \"Agrostream\"",
+    "sourceLine": 2637,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-080",
+    "inputRecord": 362,
+    "company": "Agrostream",
+    "description": "Увеличиваем прибыль с каждого гектара",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 80,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "agrostream",
+    "sizeEvidence": {
+      "value": "11-50",
+      "metric": "self-reported employee bracket",
+      "scope": "Kazakhstan-brand-profile",
+      "source": "https://kz.linkedin.com/company/agrostream-llp",
+      "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+    },
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью Pharmhub kz (Фармхаб кз)",
+    "sourceLine": 1542,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-081",
+    "inputRecord": 211,
+    "company": "Pharmhub kz (Фармхаб кз)",
+    "description": "",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 81,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "pharmhubkzфармхабкз",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО MEDELEMENT",
+    "sourceLine": 1221,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-082",
+    "inputRecord": 167,
+    "company": "MEDELEMENT",
+    "description": "Медицинская платформа для врачей \"МедЭлемент\" (Medelement.com) - это \"облачные\" сервисы и справочные системы, которые помогают врачам повышать квалификацию и вести ежедневную практику.",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 82,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "medelement",
+    "sizeEvidence": {
+      "value": "11-50",
+      "metric": "self-reported employee bracket",
+      "scope": "Kazakhstan-brand-profile",
+      "source": "https://kz.linkedin.com/company/medelement",
+      "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+    },
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Med365",
+    "sourceLine": 4722,
+    "labels": "Startup; IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-083",
+    "inputRecord": 651,
+    "company": "Med365",
+    "description": "Медицинский осмотр за 1 минуту",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 83,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "med365",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО CUSHPEN INNOVATIONS",
+    "sourceLine": 87,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-084",
+    "inputRecord": 12,
+    "company": "CUSHPEN INNOVATIONS",
+    "description": "Медицинская IT-компания из Астаны — разработчик МИС Avicenna",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 84,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "cushpeninnovations",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО КОМПЬЮТЕРНАЯ АКАДЕМИЯ ШАГ",
+    "sourceLine": 834,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-085",
+    "inputRecord": 113,
+    "company": "КОМПЬЮТЕРНАЯ АКАДЕМИЯ ШАГ",
+    "description": "IT-академия в Атырау: программирование, дизайн, робототехника и кибербезопасность для детей, подростков и взрослых",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 85,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "компьютернаяакадемияшаг",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО «Эдюсон»",
+    "sourceLine": 1825,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-086",
+    "inputRecord": 251,
+    "company": "Эдюсон",
+    "description": "",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 86,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "эдюсон",
+    "sizeEvidence": {
+      "value": "11-50",
+      "metric": "self-reported employee bracket",
+      "scope": "global-group",
+      "source": "https://www.linkedin.com/company/eduson-tv",
+      "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+    },
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ULTIMATE EDUCATION KZ LTD. ЧАСТНАЯ КОМПАНИЯ",
+    "sourceLine": 4744,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-087",
+    "inputRecord": 654,
+    "company": "ULTIMATE EDUCATION KZ LTD. ЧАСТНАЯ КОМПАНИЯ",
+    "description": "Ed-tech платформа, где лучшие онлайн школы обучают лучших! 7 востребованных направлений. 250+ курсов. 1000+ экспертов и преподавателей. Личный куратор каждому студенту + геймификация образовательных процессов.",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 87,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "ultimateeducationkzчастнаякомпания",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью Zero Education",
+    "sourceLine": 939,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-088",
+    "inputRecord": 127,
+    "company": "Zero Education",
+    "description": "ZERO представляет собой облачную B2B SaaS-платформу для комплексной автоматизации управления образовательными организациями, включая частные школы, детские сады, образовательные центры, спортивные секции и колледжи",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 88,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "zeroeducation",
+    "sizeEvidence": {
+      "value": "11-50",
+      "metric": "self-reported employee bracket",
+      "scope": "Kazakhstan-brand-profile",
+      "source": "https://kz.linkedin.com/company/zeroeducation",
+      "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+    },
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "TOO BITLAB",
+    "sourceLine": 720,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-089",
+    "inputRecord": 98,
+    "company": "BITLAB",
+    "description": "Освой востребованную IT-профессию вместе с BITLAB Academy",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 89,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "bitlab",
+    "sizeEvidence": {
+      "value": "11-50",
+      "metric": "self-reported employee bracket",
+      "scope": "Kazakhstan-brand-profile",
+      "source": "https://kz.linkedin.com/company/bitlab-academy",
+      "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+    },
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью \"MY SKILLS\"",
+    "sourceLine": 1554,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-090",
+    "inputRecord": 213,
+    "company": "MY SKILLS",
+    "description": "MYSKILLS — Образовательная платформа нового уровня.",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 90,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "myskills",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Yoko.io",
+    "sourceLine": 6302,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-091",
+    "inputRecord": 872,
+    "company": "Yoko.io",
+    "description": "Product Development & Discovery company",
+    "cohorts": [
+      "selected-100",
+      "previous-80"
+    ],
+    "selectionOrder": 91,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "yokoio",
+    "directoryId": "2064",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО STRONG te.am",
+    "sourceLine": 40,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-092",
+    "inputRecord": 6,
+    "company": "STRONG te.am",
+    "description": "ТОО STRONG te.am_ мобильное приложение для банков -Команда из Казахстана с 8-летним опытом, специализирующаяся на создании сложных финтех и банковских продуктов enterprise-уровня",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 92,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "strongteam",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Farfaces Kazakhstan",
+    "sourceLine": 118,
+    "labels": "Startup; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-093",
+    "inputRecord": 16,
+    "company": "Farfaces Kazakhstan",
+    "description": "Mobile facial recognition technology. The only solution in the world offering an effective and long distance biometric solution for time management,events and security by using a mobile device only.",
+    "cohorts": [
+      "selected-100",
+      "previous-80"
+    ],
+    "selectionOrder": 93,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "farfaceskazakhstan",
+    "directoryId": "2039",
+    "sizeEvidence": {
+      "value": "2-10",
+      "metric": "self-reported employee bracket",
+      "scope": "Kazakhstan-brand-profile",
+      "source": "https://www.linkedin.com/company/farfaceskz",
+      "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+    },
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО STST CONSULTING (СТСТ КОНСАЛТИНГ)",
+    "sourceLine": 3915,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-094",
+    "inputRecord": 540,
+    "company": "STST CONSULTING (СТСТ КОНСАЛТИНГ)",
+    "description": "",
+    "cohorts": [
+      "selected-100",
+      "previous-80"
+    ],
+    "selectionOrder": 94,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "ststconsultingстстконсалтинг",
+    "directoryId": "2023",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "СиЭй Консалтинг Групп",
+    "sourceLine": 260,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-095",
+    "inputRecord": 35,
+    "company": "СиЭй Консалтинг Групп",
+    "description": "Казахстанский разработчик VR/AR-тренажёров и eLearning-курсов по охране труда и промбезопасности. 100+ онлайн-курсов, 300 000+ обученных сотрудников нефтегаза, горнодобычи и энергетики.",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 95,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "сиэйконсалтинггрупп",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОВАРИЩЕСТВО С ОГРАНИЧЕННОЙ ОТВЕТСТВЕННОСТЬЮ \"SAPA TECHNOLOGIES\"",
+    "sourceLine": 1243,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-096",
+    "inputRecord": 170,
+    "company": "SAPA TECHNOLOGIES",
+    "description": "Мы помогаем бизнесу достичь эффективных результатов за счет инновационных, простых и удобных цифровых решений",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 96,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "sapatechnologies",
+    "sizeEvidence": {
+      "value": "11-50",
+      "metric": "self-reported employee bracket",
+      "scope": "Kazakhstan-brand-profile",
+      "source": "https://kz.linkedin.com/company/sapa-technologies",
+      "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+    },
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Doodocs HR",
+    "sourceLine": 2752,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-097",
+    "inputRecord": 377,
+    "company": "Doodocs HR",
+    "description": "Казахстанский сервис электронного документооборота: КЭДО с сотрудниками и ЭДО с контрагентами. Подписание через eGov Mobile, интеграции с 1С, SAP, ЕСУТД. 100+ компаний и 50 000+ сотрудников уже работают в Doodocs.",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 97,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "doodocshr",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "brand-link-supported",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [
+      "doodocs/actions",
+      "doodocs/doodocs-1c-changelog",
+      "doodocs/doodocs-assets",
+      "doodocs/doodocs-days",
+      "doodocs/doodocs-html-assets",
+      "doodocs/gofpdf",
+      "doodocs/gofpdi",
+      "doodocs/helm-charts"
+    ],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО Договор24",
+    "sourceLine": 5137,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-098",
+    "inputRecord": 711,
+    "company": "Договор24",
+    "description": "Юридический онлайн сервис и ЭДО для бизнеса в Казахстане",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 98,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "договор24",
+    "sizeEvidence": {
+      "value": "51-200",
+      "metric": "self-reported employee bracket",
+      "scope": "Kazakhstan-brand-profile",
+      "source": "https://kz.linkedin.com/company/dogovor24",
+      "caveat": "Public profile range; not audited; not proof of exact Kazakh legal entity headcount."
+    },
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью Halyk TransLink",
+    "sourceLine": 2877,
+    "labels": "IT-company; Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-099",
+    "inputRecord": 394,
+    "company": "Halyk TransLink",
+    "description": "Выступает юридическим и операционным лицом, под эгидой которого ведется разработка, развитие и коммерциализация аналитической B2B-платформы TenderApp.",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 99,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "halyktranslink",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ЧК «ARTA Limited»",
+    "sourceLine": 2398,
+    "labels": "Astana Hub participant",
+    "participantLabelPresent": true,
+    "researchLabelPresent": false,
+    "id": "large-100",
+    "inputRecord": 329,
+    "company": "ARTA Limited",
+    "description": "Конструктор приложений для бизнеса, без программирования.",
+    "cohorts": [
+      "selected-100"
+    ],
+    "selectionOrder": 100,
+    "selectionStatus": "preliminary-scale-and-maturity-shortlist-not-proven-top100-by-revenue",
+    "normalizedName": "arta",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью ЦОБ Бизнес РОСТ",
+    "directoryId": "1935",
+    "id": "previous-001",
+    "company": "ЦОБ Бизнес РОСТ",
+    "normalizedName": "цоббизнесрост",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью iq4u",
+    "directoryId": "2518",
+    "id": "previous-002",
+    "company": "iq4u",
+    "normalizedName": "iq4u",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО Meta Data System",
+    "directoryId": "2511",
+    "id": "previous-003",
+    "company": "Meta Data System",
+    "normalizedName": "metadatasystem",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО PETREL AI",
+    "directoryId": "2096",
+    "id": "previous-006",
+    "company": "PETREL AI",
+    "normalizedName": "petrelai",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ЧАСТНАЯ КОМПАНИЯ INTEXSOFT LTD.",
+    "directoryId": "2094",
+    "id": "previous-007",
+    "company": "INTEXSOFT LTD.",
+    "normalizedName": "intexsoft",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "brand-link-supported",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [
+      "IntexSoft/ActionBarSherlock",
+      "IntexSoft/android-plist-parser",
+      "IntexSoft/Android-ViewPagerIndicator",
+      "IntexSoft/GMGridView",
+      "IntexSoft/handsontable",
+      "IntexSoft/SlidingMenu"
+    ],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "TOO \"T3 Solutions\"",
+    "directoryId": "2093",
+    "id": "previous-008",
+    "company": "T3 Solutions",
+    "normalizedName": "t3solutions",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО BRUSSELS CAPITAL (БРЮСЕЛЬС КАПИТАЛ)",
+    "directoryId": "2079",
+    "id": "previous-009",
+    "company": "BRUSSELS CAPITAL (БРЮСЕЛЬС КАПИТАЛ)",
+    "normalizedName": "brusselscapitalбрюсельскапитал",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Atomazing CA",
+    "directoryId": "2058",
+    "id": "previous-011",
+    "company": "Atomazing CA",
+    "normalizedName": "atomazingca",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью ORTA1OO",
+    "directoryId": "2018",
+    "id": "previous-014",
+    "company": "ORTA1OO",
+    "normalizedName": "orta1oo",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОВАРИЩЕСТВО С ОГРАНИЧЕННОЙ ОТВЕТСТВЕННОСТЬЮ \"CHATAPP (ЧАТАПП)\"",
+    "directoryId": "2007",
+    "id": "previous-016",
+    "company": "CHATAPP (ЧАТАПП)",
+    "normalizedName": "chatappчатапп",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО \"X2 Retail\"",
+    "directoryId": "2001",
+    "id": "previous-017",
+    "company": "X2 Retail",
+    "normalizedName": "x2retail",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО Shpavda (Шпавда)",
+    "directoryId": "1983",
+    "id": "previous-018",
+    "company": "Shpavda (Шпавда)",
+    "normalizedName": "shpavdaшпавда",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО Mango Development",
+    "directoryId": "1972",
+    "id": "previous-019",
+    "company": "Mango Development",
+    "normalizedName": "mangodevelopment",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью Protector AI",
+    "directoryId": "1969",
+    "id": "previous-020",
+    "company": "Protector AI",
+    "normalizedName": "protectorai",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "UPITER Global Systems",
+    "directoryId": "145",
+    "id": "previous-021",
+    "company": "UPITER Global Systems",
+    "normalizedName": "upiterglobalsystems",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО \"Sunsoft\"",
+    "directoryId": "144",
+    "id": "previous-022",
+    "company": "Sunsoft",
+    "normalizedName": "sunsoft",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "TOO Tizimapp",
+    "directoryId": "134",
+    "id": "previous-024",
+    "company": "Tizimapp",
+    "normalizedName": "tizimapp",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО MAINT",
+    "directoryId": "133",
+    "id": "previous-025",
+    "company": "MAINT",
+    "normalizedName": "maint",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "CODESMITH",
+    "directoryId": "123",
+    "id": "previous-026",
+    "company": "CODESMITH",
+    "normalizedName": "codesmith",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "TREDO",
+    "directoryId": "119",
+    "id": "previous-027",
+    "company": "TREDO",
+    "normalizedName": "tredo",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью \"Jet Technologies\"",
+    "directoryId": "115",
+    "id": "previous-028",
+    "company": "Jet Technologies",
+    "normalizedName": "jettechnologies",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "PS BRANCH Three",
+    "directoryId": "112",
+    "id": "previous-029",
+    "company": "PS BRANCH Three",
+    "normalizedName": "psbranchthree",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО ProNovation Solutions",
+    "directoryId": "110",
+    "id": "previous-030",
+    "company": "ProNovation Solutions",
+    "normalizedName": "pronovationsolutions",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью Finup.kz",
+    "directoryId": "106",
+    "id": "previous-031",
+    "company": "Finup.kz",
+    "normalizedName": "finupkz",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО Тайм Трекер",
+    "directoryId": "105",
+    "id": "previous-032",
+    "company": "Тайм Трекер",
+    "normalizedName": "таймтрекер",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью Streamix",
+    "directoryId": "104",
+    "id": "previous-033",
+    "company": "Streamix",
+    "normalizedName": "streamix",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО Quantum Technology",
+    "directoryId": "101",
+    "id": "previous-034",
+    "company": "Quantum Technology",
+    "normalizedName": "quantumtechnology",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО CONNECTIVITY SOLUTIONS (КОННЕКТИВИТИ СОЛЮШНЗ)",
+    "directoryId": "92",
+    "id": "previous-035",
+    "company": "CONNECTIVITY SOLUTIONS (КОННЕКТИВИТИ СОЛЮШНЗ)",
+    "normalizedName": "connectivitysolutionsконнективитисолюшнз",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "OPENSERVICE.KZ (ОПЕНСЕРВИС.КЗ) жауапкершілігі шектеулі серіктестігі",
+    "directoryId": "90",
+    "id": "previous-036",
+    "company": "OPENSERVICE.KZ (ОПЕНСЕРВИС.КЗ) жауапкершілігі шектеулі серіктестігі",
+    "normalizedName": "openservicekzопенсервискзжауапкершілігішектеулісеріктестігі",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО «Кодпеллер»",
+    "directoryId": "87",
+    "id": "previous-037",
+    "company": "Кодпеллер",
+    "normalizedName": "кодпеллер",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО Фикском.кз",
+    "directoryId": "85",
+    "id": "previous-038",
+    "company": "Фикском.кз",
+    "normalizedName": "фикскомкз",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО Айкод",
+    "directoryId": "84",
+    "id": "previous-039",
+    "company": "Айкод",
+    "normalizedName": "айкод",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО \"Проптехсервис Казахстан\"",
+    "directoryId": "80",
+    "id": "previous-040",
+    "company": "Проптехсервис Казахстан",
+    "normalizedName": "проптехсервисказахстан",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО ARMADOC.KZ",
+    "directoryId": "76",
+    "id": "previous-041",
+    "company": "ARMADOC.KZ",
+    "normalizedName": "armadockz",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО A1 CAPITAL",
+    "directoryId": "63",
+    "id": "previous-043",
+    "company": "A1 CAPITAL",
+    "normalizedName": "a1capital",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО MAXICO",
+    "directoryId": "55",
+    "id": "previous-044",
+    "company": "MAXICO",
+    "normalizedName": "maxico",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "SERVICES ONLINE",
+    "directoryId": "49",
+    "id": "previous-045",
+    "company": "SERVICES ONLINE",
+    "normalizedName": "servicesonline",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО Клокстер",
+    "directoryId": "47",
+    "id": "previous-046",
+    "company": "Клокстер",
+    "normalizedName": "клокстер",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "brand-link-supported",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [
+      "clockster/sdk-go",
+      "clockster/sdk-php",
+      "clockster/sdk-python",
+      "clockster/sdk-typescript"
+    ],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО «СТУДИЯ WEBDREAM»",
+    "directoryId": "43",
+    "id": "previous-047",
+    "company": "СТУДИЯ WEBDREAM",
+    "normalizedName": "студияwebdream",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО ITERA GROUP (ИТЕРА ГРУПП)",
+    "directoryId": "40",
+    "id": "previous-048",
+    "company": "ITERA GROUP (ИТЕРА ГРУПП)",
+    "normalizedName": "iteragroupитерагрупп",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью VVT Group",
+    "directoryId": "31",
+    "id": "previous-049",
+    "company": "VVT Group",
+    "normalizedName": "vvtgroup",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "АйТиЭс.Бизнес [ ITS.bz LLC ]",
+    "directoryId": "27",
+    "id": "previous-050",
+    "company": "АйТиЭс.Бизнес [ ITS.bz LLC ]",
+    "normalizedName": "айтиэсбизнесitsbz",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Concordia Group Ltd",
+    "directoryId": "10",
+    "id": "previous-051",
+    "company": "Concordia Group Ltd",
+    "normalizedName": "concordiagroup",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ZIZ INC. LLP",
+    "directoryId": "3",
+    "id": "previous-052",
+    "company": "ZIZ INC. LLP",
+    "normalizedName": "zizinc",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО \"DIC\"",
+    "directoryId": "2517",
+    "id": "previous-053",
+    "company": "DIC",
+    "normalizedName": "dic",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Mirga",
+    "directoryId": "2514",
+    "id": "previous-054",
+    "company": "Mirga",
+    "normalizedName": "mirga",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО \"GAX\"",
+    "directoryId": "2492",
+    "id": "previous-055",
+    "company": "GAX",
+    "normalizedName": "gax",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО All Business Turbine",
+    "directoryId": "2452",
+    "id": "previous-056",
+    "company": "All Business Turbine",
+    "normalizedName": "allbusinessturbine",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью E-system (Е-систэм)",
+    "directoryId": "2442",
+    "id": "previous-057",
+    "company": "E-system (Е-систэм)",
+    "normalizedName": "esystemесистэм",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью NOIA",
+    "directoryId": "2370",
+    "id": "previous-058",
+    "company": "NOIA",
+    "normalizedName": "noia",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО \"Интернет Платформа\"",
+    "directoryId": "2226",
+    "id": "previous-059",
+    "company": "Интернет Платформа",
+    "normalizedName": "интернетплатформа",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО \"FlyTap\"",
+    "directoryId": "2190",
+    "id": "previous-060",
+    "company": "FlyTap",
+    "normalizedName": "flytap",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО WIZICO Technologies",
+    "directoryId": "2181",
+    "id": "previous-061",
+    "company": "WIZICO Technologies",
+    "normalizedName": "wizicotechnologies",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью \"Толем Сompany\"",
+    "directoryId": "2147",
+    "id": "previous-062",
+    "company": "Толем Сompany",
+    "normalizedName": "толемсompany",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью Agro Connect Company",
+    "directoryId": "2068",
+    "id": "previous-063",
+    "company": "Agro Connect Company",
+    "normalizedName": "agroconnectcompany",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО \"КейСофт\"",
+    "directoryId": "1956",
+    "id": "previous-064",
+    "company": "КейСофт",
+    "normalizedName": "кейсофт",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО «IT by Design»",
+    "directoryId": "1856",
+    "id": "previous-065",
+    "company": "IT by Design",
+    "normalizedName": "itbydesign",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью Аксиома А",
+    "directoryId": "1676",
+    "id": "previous-066",
+    "company": "Аксиома А",
+    "normalizedName": "аксиомаа",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО \"AppStream\"",
+    "directoryId": "1289",
+    "id": "previous-067",
+    "company": "AppStream",
+    "normalizedName": "appstream",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью Пейнхантинг",
+    "directoryId": "1129",
+    "id": "previous-068",
+    "company": "Пейнхантинг",
+    "normalizedName": "пейнхантинг",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОМЕК",
+    "directoryId": "852",
+    "id": "previous-069",
+    "company": "ТОМЕК",
+    "normalizedName": "томек",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО JSoft",
+    "directoryId": "714",
+    "id": "previous-071",
+    "company": "JSoft",
+    "normalizedName": "jsoft",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "Товарищество с ограниченной ответственностью SUPERVISOR ROK",
+    "directoryId": "552",
+    "id": "previous-072",
+    "company": "SUPERVISOR ROK",
+    "normalizedName": "supervisorrok",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "TOO \"Velox Solutions\"",
+    "directoryId": "489",
+    "id": "previous-073",
+    "company": "Velox Solutions",
+    "normalizedName": "veloxsolutions",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО \"DLS-GLOBAL KZ\"",
+    "directoryId": "384",
+    "id": "previous-074",
+    "company": "DLS-GLOBAL KZ",
+    "normalizedName": "dlsglobalkz",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО\"Про Софтвейр ЛЛП\"",
+    "directoryId": "299",
+    "id": "previous-076",
+    "company": "Про Софтвейр ЛЛП",
+    "normalizedName": "прософтвейрллп",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО HR-Bot",
+    "directoryId": "109",
+    "id": "previous-078",
+    "company": "HR-Bot",
+    "normalizedName": "hrbot",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО \"Просто Бэк офис\"",
+    "directoryId": "69",
+    "id": "previous-079",
+    "company": "Просто Бэк офис",
+    "normalizedName": "простобэкофис",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  },
+  {
+    "name": "ТОО Компания APPS.kz",
+    "directoryId": "59",
+    "id": "previous-080",
+    "company": "Компания APPS.kz",
+    "normalizedName": "компанияappskz",
+    "cohorts": [
+      "previous-80"
+    ],
+    "description": "From previous user-provided HTML; company scale not evaluated in that sample.",
+    "sizeEvidence": null,
+    "repositorySearchStatus": "no-affiliated-repository-confirmed-in-this-pass",
+    "githubQueryStatus": "completed-first-20-hits",
+    "confirmedRepositories": [],
+    "researchDate": "2026-11-12"
+  }
+]

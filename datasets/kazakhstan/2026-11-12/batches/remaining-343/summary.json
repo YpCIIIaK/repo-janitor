@@ -1,0 +1,22 @@
+{
+  "targets": 343,
+  "completed": 343,
+  "emptyRepositories": 4,
+  "failed": 0,
+  "normalFindings": 6168,
+  "lowConfidenceFindings": 1065,
+  "normalSeverity": {
+    "info": 4220,
+    "warning": 1932,
+    "critical": 16
+  },
+  "lowConfidenceSeverity": {
+    "warning": 339,
+    "critical": 381,
+    "info": 345
+  },
+  "securityCandidates": 784,
+  "offline": true,
+  "productionUse": "not-established",
+  "exploitationTesting": false
+}

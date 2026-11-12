@@ -1,0 +1,224 @@
+[
+  {
+    "technology": "PHP",
+    "repositories": 152,
+    "scanned": 152,
+    "notScanned": 0
+  },
+  {
+    "technology": "Python",
+    "repositories": 100,
+    "scanned": 100,
+    "notScanned": 0
+  },
+  {
+    "technology": "Не определён",
+    "repositories": 67,
+    "scanned": 67,
+    "notScanned": 0
+  },
+  {
+    "technology": "Ruby",
+    "repositories": 30,
+    "scanned": 30,
+    "notScanned": 0
+  },
+  {
+    "technology": "JavaScript",
+    "repositories": 30,
+    "scanned": 30,
+    "notScanned": 0
+  },
+  {
+    "technology": "Rust",
+    "repositories": 30,
+    "scanned": 30,
+    "notScanned": 0
+  },
+  {
+    "technology": "TypeScript",
+    "repositories": 29,
+    "scanned": 29,
+    "notScanned": 0
+  },
+  {
+    "technology": "Java",
+    "repositories": 27,
+    "scanned": 27,
+    "notScanned": 0
+  },
+  {
+    "technology": "Go",
+    "repositories": 23,
+    "scanned": 23,
+    "notScanned": 0
+  },
+  {
+    "technology": "HTML",
+    "repositories": 20,
+    "scanned": 20,
+    "notScanned": 0
+  },
+  {
+    "technology": "Kotlin",
+    "repositories": 20,
+    "scanned": 20,
+    "notScanned": 0
+  },
+  {
+    "technology": "Jupyter Notebook",
+    "repositories": 17,
+    "scanned": 17,
+    "notScanned": 0
+  },
+  {
+    "technology": "Shell",
+    "repositories": 14,
+    "scanned": 14,
+    "notScanned": 0
+  },
+  {
+    "technology": "Swift",
+    "repositories": 12,
+    "scanned": 12,
+    "notScanned": 0
+  },
+  {
+    "technology": "Jinja",
+    "repositories": 8,
+    "scanned": 8,
+    "notScanned": 0
+  },
+  {
+    "technology": "Elixir",
+    "repositories": 7,
+    "scanned": 7,
+    "notScanned": 0
+  },
+  {
+    "technology": "C#",
+    "repositories": 7,
+    "scanned": 7,
+    "notScanned": 0
+  },
+  {
+    "technology": "Objective-C",
+    "repositories": 6,
+    "scanned": 6,
+    "notScanned": 0
+  },
+  {
+    "technology": "Vue",
+    "repositories": 6,
+    "scanned": 6,
+    "notScanned": 0
+  },
+  {
+    "technology": "Erlang",
+    "repositories": 5,
+    "scanned": 5,
+    "notScanned": 0
+  },
+  {
+    "technology": "Dart",
+    "repositories": 3,
+    "scanned": 3,
+    "notScanned": 0
+  },
+  {
+    "technology": "Smarty",
+    "repositories": 3,
+    "scanned": 3,
+    "notScanned": 0
+  },
+  {
+    "technology": "Blade",
+    "repositories": 3,
+    "scanned": 3,
+    "notScanned": 0
+  },
+  {
+    "technology": "C",
+    "repositories": 2,
+    "scanned": 2,
+    "notScanned": 0
+  },
+  {
+    "technology": "Scala",
+    "repositories": 2,
+    "scanned": 2,
+    "notScanned": 0
+  },
+  {
+    "technology": "Makefile",
+    "repositories": 1,
+    "scanned": 1,
+    "notScanned": 0
+  },
+  {
+    "technology": "XS",
+    "repositories": 1,
+    "scanned": 1,
+    "notScanned": 0
+  },
+  {
+    "technology": "CSS",
+    "repositories": 1,
+    "scanned": 1,
+    "notScanned": 0
+  },
+  {
+    "technology": "Svelte",
+    "repositories": 1,
+    "scanned": 1,
+    "notScanned": 0
+  },
+  {
+    "technology": "QML",
+    "repositories": 1,
+    "scanned": 1,
+    "notScanned": 0
+  },
+  {
+    "technology": "MATLAB",
+    "repositories": 1,
+    "scanned": 1,
+    "notScanned": 0
+  },
+  {
+    "technology": "Dockerfile",
+    "repositories": 1,
+    "scanned": 1,
+    "notScanned": 0
+  },
+  {
+    "technology": "Perl",
+    "repositories": 1,
+    "scanned": 1,
+    "notScanned": 0
+  },
+  {
+    "technology": "Lua",
+    "repositories": 1,
+    "scanned": 1,
+    "notScanned": 0
+  },
+  {
+    "technology": "HCL",
+    "repositories": 1,
+    "scanned": 1,
+    "notScanned": 0
+  },
+  {
+    "technology": "Mustache",
+    "repositories": 1,
+    "scanned": 1,
+    "notScanned": 0
+  },
+  {
+    "technology": "Go Template",
+    "repositories": 1,
+    "scanned": 1,
+    "notScanned": 0
+  }
+]

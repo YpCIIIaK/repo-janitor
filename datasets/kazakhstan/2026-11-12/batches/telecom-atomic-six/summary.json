@@ -1,0 +1,18 @@
+{
+  "repositories": 6,
+  "normalFindings": 63,
+  "lowConfidenceFindings": 20,
+  "normalSeverity": {
+    "info": 55,
+    "warning": 8
+  },
+  "lowConfidenceSeverity": {
+    "warning": 6,
+    "info": 11,
+    "critical": 3
+  },
+  "supplementExtractedCells": 331,
+  "supplementFindings": 0,
+  "remoteExploitationConfirmed": 0,
+  "offline": true
+}

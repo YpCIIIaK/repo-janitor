@@ -1,0 +1,8 @@
+{
+  "scannerCommit": "a45bdbe30d8b3f4e7445debdf2e061b313aecdd0",
+  "cliSha256": "2e9d3ee916f44427954aac985750b315f5472e89a517be99a8ad263f212c39df",
+  "offline": true,
+  "startedUTC": "2026-11-12T11:59:29Z",
+  "history": "full clone; bounded source evidence retained; clones removed after successful scan",
+  "targetCount": 343
+}
