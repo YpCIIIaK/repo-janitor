@@ -1,4 +1,5 @@
 {
+ "insecure-ssrf-@types/index.d.ts:219": "fp",
  "insecure-ssrf-@types/index.test-d.ts:53": "fp",
  "insecure-ssrf-src/index.js:236": "fp"
 }

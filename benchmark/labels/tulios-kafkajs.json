@@ -1,3 +1,4 @@
 {
- "iac-docker-socket-docker-compose.1_1.yml:57": "fp"
+ "iac-docker-socket-docker-compose.1_1.yml:57": "fp",
+ "insecure-ssrf-types/index.d.ts:673": "fp"
 }

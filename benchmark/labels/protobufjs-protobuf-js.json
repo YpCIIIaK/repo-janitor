@@ -7,6 +7,13 @@
  "dead-export-ext/descriptor.generated.d.ts:UninterpretedOption": "fp",
  "duplicate-cli/lib/catharsis/lib/parser.js-1697": "tp",
  "eol-node-package.json-10": "tp",
+ "insecure-ssrf-index.d.ts:1546": "fp",
+ "insecure-ssrf-index.d.ts:2345": "fp",
+ "insecure-ssrf-index.d.ts:2352": "fp",
+ "insecure-ssrf-index.d.ts:2360": "fp",
+ "insecure-ssrf-src/util/fetch.d.ts:34": "fp",
+ "insecure-ssrf-src/util/fetch.d.ts:45": "fp",
+ "insecure-ssrf-src/util/fetch.d.ts:56": "fp",
  "no-permissions-.github/workflows/test.yml-1": "tp",
  "todo-tests/api_writer-reader.js:126": "tp"
 }

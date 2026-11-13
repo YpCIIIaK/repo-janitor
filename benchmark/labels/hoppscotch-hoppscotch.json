@@ -1,0 +1,6 @@
+{
+ "insecure-ssrf-packages/hoppscotch-common/src/types/post-request.d.ts:620": "fp",
+ "insecure-ssrf-packages/hoppscotch-common/src/types/post-request.d.ts:633": "fp",
+ "insecure-ssrf-packages/hoppscotch-common/src/types/pre-request.d.ts:355": "fp",
+ "insecure-ssrf-packages/hoppscotch-common/src/types/pre-request.d.ts:368": "fp"
+}

@@ -1,0 +1,10 @@
+{
+ "insecure-ssrf-generator-prisma-client/react-router-starter-cloudflare-workerd/worker-configuration.d.ts:1459": "fp",
+ "insecure-ssrf-generator-prisma-client/react-router-starter-cloudflare-workerd/worker-configuration.d.ts:221": "fp",
+ "insecure-ssrf-generator-prisma-client/react-router-starter-cloudflare-workerd/worker-configuration.d.ts:317": "fp",
+ "insecure-ssrf-generator-prisma-client/react-router-starter-cloudflare-workerd/worker-configuration.d.ts:404": "fp",
+ "insecure-ssrf-orm/cloudflare-workers/worker-configuration.d.ts:1798": "fp",
+ "insecure-ssrf-orm/cloudflare-workers/worker-configuration.d.ts:309": "fp",
+ "insecure-ssrf-orm/cloudflare-workers/worker-configuration.d.ts:407": "fp",
+ "insecure-ssrf-orm/cloudflare-workers/worker-configuration.d.ts:478": "fp"
+}

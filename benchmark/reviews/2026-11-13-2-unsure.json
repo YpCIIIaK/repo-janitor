@@ -1,0 +1,20 @@
+[
+  {
+    "repo": "desinc-sallybot",
+    "id": "commented-Functions.cs:325",
+    "sha": "7fdb8974b5f5780ead822c4287bec3cee50ad393",
+    "reason": "Optional payload schema fields may be intentional reference; ownership intent unclear."
+  },
+  {
+    "repo": "great-whu-roadlib",
+    "id": "commented-camodocal/camera_models/ScaramuzzaCamera.cc:531",
+    "sha": "40d3d4f4e612ca5134c4fa23d4ecf5e606399278",
+    "reason": "Camera calibration constants may be retained reference values; third-party provenance unclear."
+  },
+  {
+    "repo": "laravel-backpack-settings",
+    "id": "commented-src/app/Http/Requests/SettingRequest.php:28",
+    "sha": "bbdec210c48baec6bab14ba7be8c59361cccbadb",
+    "reason": "Validation configuration may be an intentional package extension template."
+  }
+]

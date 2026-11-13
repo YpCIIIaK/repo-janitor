@@ -1,4 +1,6 @@
 {
+ "insecure-ssrf-src/@types/vscode.git.d.ts:269": "fp",
+ "insecure-ssrf-src/@types/vscode.git.d.ts:270": "fp",
  "insecure-tls-verification-off-src/env/node/fetch.ts:14": "fp",
  "license-proprietary-@gitkraken/compose-tools": "fp",
  "license-proprietary-@gitkraken/conflict-tools": "fp",

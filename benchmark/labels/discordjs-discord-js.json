@@ -1,0 +1,8 @@
+{
+ "insecure-ssrf-packages/discord.js/typings/index.d.ts:1328": "fp",
+ "insecure-ssrf-packages/discord.js/typings/index.d.ts:1379": "fp",
+ "insecure-ssrf-packages/discord.js/typings/index.d.ts:1380": "fp",
+ "insecure-ssrf-packages/discord.js/typings/index.d.ts:1598": "fp",
+ "insecure-ssrf-packages/discord.js/typings/index.d.ts:1702": "fp",
+ "insecure-ssrf-packages/discord.js/typings/index.d.ts:911": "fp"
+}
