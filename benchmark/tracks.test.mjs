@@ -19,3 +19,10 @@ test("every track declares a population, a purpose and a target", () => {
   for (const [id, t] of Object.entries(TRACKS)) assert.ok(t.population && t.purpose && t.labelsPerRule > 0, id)
   assert.throws(() => inTrack([], "nope"), /unknown track/)
 })
+
+test("reviewed DVAP and evilcorp iOS controls belong to security", () => {
+  for (const name of ["sonuoffsec-dvap", "jankesec-evilcorp-ios"]) {
+    assert.ok(tracksOf({ name, url: "u", sha: "s" }).includes("security"))
+  }
+  assert.ok(!tracksOf({ name: "unrelated-evilcorp-theme", url: "u", sha: "s" }).includes("security"))
+})
