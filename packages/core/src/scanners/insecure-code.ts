@@ -1073,6 +1073,8 @@ export const insecureCodeScanner: Scanner = {
     for (const file of ctx.files) {
       if (issues.length >= MAX_TOTAL) break
       const norm = file.replace(/\\/g, "/")
+      // Declaration signatures are erased by TypeScript; they cannot execute sinks.
+      if (/\.d\.(?:ts|mts|cts)$/i.test(norm)) continue
       // In PHP apps `www/` (or `public/`) is the web root itself, not a docs site.
       const webRoot = /\.php$/i.test(norm) && /(^|\/)(?:www|public|htdocs)\//.test(norm)
       // Java/Kotlin package names are namespaces, not directory purposes:

@@ -9,6 +9,20 @@ import { makeContext } from "../helpers"
  * tell a description of code from code flags every one of them.
  */
 describe("literal handling", () => {
+  it("ignores TypeScript declaration files while retaining runtime type-directory calls", async () => {
+    const issues = await insecureCodeScanner.run(makeContext({ files: {
+      "src/api.d.ts": "declare function fetch(url: string): Promise<Response>;",
+      "src/api.d.mts": "interface Client { fetch(url: string): Promise<Response> }",
+      "src/api.d.cts": "interface Client { eval(source: string): unknown }",
+      "src/types/runtime.ts": "eval(payload);",
+      "src/types/runtime.mts": "eval(payload);",
+      "src/types/runtime.cts": "eval(payload);",
+    } }))
+    expect(issues.map(issue => issue.location).sort()).toEqual([
+      "src/types/runtime.cts:1", "src/types/runtime.mts:1", "src/types/runtime.ts:1",
+    ])
+  })
+
   it("ignores literal Function feature probes but preserves dynamic bodies", async () => {
     const issues = await insecureCodeScanner.run(makeContext({ files: {
       "src/probe.ts": 'new Function("return true");\nnew Function("value", body);',
