@@ -21,7 +21,7 @@ export const INPUTS = {
   "todo-debt": { exts: SRC_ALL },
   "commented-code": { exts: ["ts", "tsx", "js", "jsx", "mjs", "mts", "cts", "java", "c", "cc", "cpp", "h", "hpp", "cs", "go", "rs", "swift", "kt", "scala", "php"] },
   "dead-code": { exts: [...JS, "py", "go"] },
-  "leftover-debug": { exts: [...JS, "py", "php", "rs"] },
+  "leftover-debug": { exts: [...JS, "py", "php", "rs", "rb"] },
   "skipped-tests": { exts: [...JS, "py"] },
   "dependency-funeral": { names: /^package\.json$/ },
   "supply-chain": { names: /^package\.json$/ },

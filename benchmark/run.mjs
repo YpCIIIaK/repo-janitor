@@ -14,7 +14,7 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, rmSync, s
 import { dirname, join } from "node:path"
 import { fileURLToPath, pathToFileURL } from "node:url"
 import { newestSource, scanFingerprint, scannerFingerprints, staleScanners } from "./fingerprint.mjs"
-import { readInventory, writeInventory } from "./inventory.mjs"
+import { readInventory, writeInventory, treePaths } from "./inventory.mjs"
 import { mayProduce, sparseGlobs } from "./scanner-inputs.mjs"
 
 const here = dirname(fileURLToPath(import.meta.url))
@@ -145,8 +145,7 @@ async function runOne(repo) {
 /** Scan a checked-out tree, merge a partial scan with the cached result, store. */
 async function scanAndStore(repo, dir, only, prevResult, prevReport, inv, sparse) {
   if (!inv && !sparse) {
-    const ls = await sh2("git", ["-C", dir, "ls-tree", "-r", "--name-only", repo.sha])
-    if (ls.status === 0) writeInventory(repo.name, ls.stdout.split("\n"), repo.sha)
+    writeInventory(repo.name, await treePaths(dir, repo.sha), repo.sha)
   }
   const reportPath = join(outDir, `${repo.name}.report.json`)
   const pendingReport = `${reportPath}.pending`

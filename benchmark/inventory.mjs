@@ -69,6 +69,13 @@ function sh(cmd, args) {
   })
 }
 
+/** NUL-delimited Git paths preserve Unicode, quotes and embedded newlines. */
+export async function treePaths(dir, sha) {
+  const ls = await sh("git", ["-C", dir, "ls-tree", "-r", "-z", "--name-only", sha])
+  if (ls.status !== 0) throw new Error(`Cannot read pinned tree: ${ls.err}`)
+  return ls.out.split("\0").filter(Boolean)
+}
+
 async function fetchOne(repo) {
   const dir = join(work, repo.name)
   rmSync(dir, { recursive: true, force: true })
@@ -81,13 +88,13 @@ async function fetchOne(repo) {
       await new Promise((r) => setTimeout(r, 5000 * 2 ** attempt))
     }
     if (c.status !== 0) throw new Error(`clone failed: ${c.err.trim().split("\n").pop()}`)
-    let ls = await sh("git", ["-C", dir, "ls-tree", "-r", "--name-only", repo.sha])
-    if (ls.status !== 0) {
+    let paths
+    try { paths = await treePaths(dir, repo.sha) }
+    catch {
       await sh("git", ["-C", dir, "fetch", "--quiet", "--filter=blob:none", "origin", repo.sha])
-      ls = await sh("git", ["-C", dir, "ls-tree", "-r", "--name-only", repo.sha])
-      if (ls.status !== 0) throw new Error("pinned commit not found")
+      paths = await treePaths(dir, repo.sha)
     }
-    writeInventory(repo.name, ls.out.split("\n"), repo.sha)
+    writeInventory(repo.name, paths, repo.sha)
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
