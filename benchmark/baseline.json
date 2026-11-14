@@ -1,14 +1,14 @@
 {
- "overall": 0.57,
+ "overall": 0.567,
  "scanners": {
   "eol-runtime": 0.944,
   "todo-debt": 0.911,
   "broken-doc-links": 0.66,
   "bus-factor": 0.848,
   "workflow-security": 0.954,
-  "commented-code": 0.612,
-  "duplicate-code": 0.75,
-  "skipped-tests": 0.88,
+  "commented-code": 0.587,
+  "duplicate-code": 0.722,
+  "skipped-tests": 0.815,
   "insecure-code": 0.176,
   "docs-drift": 0.63,
   "lockfile-drift": 0.905,
@@ -1796,7 +1796,8 @@
    "todo-packages/tlschema/src/misc/TLHandle.ts:95"
   ],
   "siyuan-note-siyuan": [
-   "ci-silenced-failure-.github/workflows/cd.yml-32"
+   "ci-silenced-failure-.github/workflows/cd.yml-32",
+   "skiptest-app/src/protyle/render/av/columnWidth.test.ts:55"
   ],
   "photoprism-photoprism": [
    "iac-privileged-compose.nvidia.yaml:16",
@@ -2482,6 +2483,7 @@
   ],
   "google-leveldb": [
    "action-tag-first-party-.github/workflows/build.yml-63",
+   "duplicate-util/env_posix_test.cc-199",
    "todo-db/c.cc:154",
    "todo-db/db_impl.cc:593"
   ],
@@ -2754,6 +2756,9 @@
   ],
   "lucasg-dependencies": [
    "commented-DependenciesGui/MainWindow.xaml.cs:212"
+  ],
+  "ninja-build-ninja": [
+   "duplicate-src/clean_test.cc-512"
   ],
   "reswift-reswift": [
    "action-tag-.github/workflows/test.yml-21",
@@ -3076,7 +3081,8 @@
    "insecure-exec-interpolated-monitor/frontend/e2e/proxy_app.e2e.ts:66",
    "insecure-localstorage-secret-monitor/frontend/src/tests/servers.test.ts:107",
    "insecure-random-for-secret-monitor/frontend/e2e/sharing.e2e.ts:84",
-   "secret-slack-webhook-monitor/src/api/push.rs:1033"
+   "secret-slack-webhook-monitor/src/api/push.rs:1033",
+   "skiptest-monitor/frontend/src/desk/agent/autosize.ts:54"
   ],
   "mylxsw-aidea": [
    "commented-scripts/main.go:20",
@@ -3276,6 +3282,87 @@
    "insecure-ssrf-nua-lab-03/app.py:570",
    "insecure-ssrf-nua-lab-03/phpliteadmin.php:893",
    "insecure-ssrf-nua-lab-03/phpliteadmin.php:913"
+  ],
+  "mycoria-mycoria": [
+   "commented-frame/frame_v1_test.go:233"
+  ],
+  "ftdlyc-libcbdetect": [
+   "commented-src/libcbdetect/grow_board.cc:46"
+  ],
+  "dolicloud-sellyoursaas": [
+   "commented-blacklistcontent_card.php:148"
+  ],
+  "damontecres-stashappandroidtv": [
+   "commented-app/src/main/java/com/github/damontecres/stashapp/StashExoPlayer.kt:187"
+  ],
+  "evanpurkhiser-prolink-tools": [
+   "commented-src/renderer/views/apiConfig/components/ConnectionStatus.tsx:21"
+  ],
+  "adobe-lagrange": [
+   "commented-modules/bvh/tests/test_compute_intersecting_pairs.cpp:185"
+  ],
+  "mizosoft-methanol": [
+   "commented-methanol/src/main/java/com/github/mizosoft/methanol/MediaType.java:388"
+  ],
+  "kobylynskyi-graphql-java-codegen": [
+   "commented-src/main/java/com/kobylynskyi/graphql/codegen/kotlin/KotlinGraphQLTypeMapper.java:68"
+  ],
+  "julyfun-rm-cv-fans": [
+   "commented-aimer/auto_aim/detector_cuda/entry.cpp:44"
+  ],
+  "appliscale-xprof": [
+   "commented-apps/xprof_gui/priv/src/constants/GraphConstants.js:31"
+  ],
+  "nvidia-numba-cuda": [
+   "commented-numba_cuda/numba/cuda/include/12/cuda_bf16.hpp:3783"
+  ],
+  "mailez-hq-mailez": [
+   "commented-backend/internal/core/db.go:34"
+  ],
+  "gagliardetto-anchor-go": [
+   "commented-generator/instructions.go:117"
+  ],
+  "c2sagent-c2sagent": [
+   "commented-vue-frontend/src/api/agent.ts:100"
+  ],
+  "evanmulawski-fancontrol-corsairlink": [
+   "commented-src/devices/commander_core/CommanderCoreDataWriter.cs:37"
+  ],
+  "naaammme-bbspace": [
+   "commented-feature/auth/src/main/java/com/naaammme/bbspace/feature/auth/account/AccountScreen.kt:213"
+  ],
+  "itzender5820-mousiki": [
+   "commented-src/fft_visualizer.cpp:33"
+  ],
+  "17fun-17fei": [
+   "commented-static/fxq/uni_modules/aki-particles/static/aki-particles/particles.js:1034"
+  ],
+  "itfoxtec-itfoxtec-identity-saml2": [
+   "commented-test/TestIdPCore/Controllers/AuthController.cs:174"
+  ],
+  "devnawjesh-hr-payroll": [
+   "commented-config/auth.php:70"
+  ],
+  "helele90-appanalyze": [
+   "commented-APPAnalyze/APPAnalyzeCore/Rules/Experiment/AntiPatternDependenciesRule.swift:29"
+  ],
+  "grokimagecompression-grok": [
+   "commented-src/lib/core/fileformat/compress/FileFormatMJ2Compress.cpp:262"
+  ],
+  "nettopologysuite-projnet4geoapi": [
+   "commented-src/ProjNet/CoordinateSystemServices.cs:172"
+  ],
+  "apache-commons-net": [
+   "commented-src/test/java/org/apache/commons/net/ntp/TestTimeInfo.java:63"
+  ],
+  "openshot-libopenshot-audio": [
+   "commented-JuceLibraryCode/modules/juce_audio_basics/native/juce_CoreAudioLayouts_mac.h:44"
+  ],
+  "cultivatelabs-raif": [
+   "commented-spec/dummy/app/views/pwa/service-worker.js:11"
+  ],
+  "microsoftdocs-wdac-toolkit": [
+   "commented-WDAC-Policy-Wizard/app/src/CustomRuleConditionsPanel.cs:1743"
   ]
  }
 }

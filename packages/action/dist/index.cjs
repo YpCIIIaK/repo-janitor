@@ -26863,7 +26863,7 @@ var require_lib4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-H6PA4LOM.js
+// ../cli/dist/chunk-4IYWVJN5.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -45594,7 +45594,7 @@ function date4(params) {
 // ../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/external.js
 config(en_default());
 
-// ../cli/dist/chunk-H6PA4LOM.js
+// ../cli/dist/chunk-4IYWVJN5.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -70263,7 +70263,7 @@ var RULE_PRECISION = {
   "ci-silenced-failure": { tp: 4, fp: 7 },
   "ci-swallowed": { tp: 3, fp: 2 },
   "ci-tests-not-run": { tp: 0, fp: 10 },
-  "commented-code": { tp: 93, fp: 59 },
+  "commented-code": { tp: 105, fp: 74 },
   "config-conflict": { tp: 19, fp: 1 },
   "dead-export": { tp: 17, fp: 3 },
   "dead-uikit": { tp: 3, fp: 2 },
@@ -70277,7 +70277,7 @@ var RULE_PRECISION = {
   "docs-badge": { tp: 11, fp: 2 },
   "docs-manager": { tp: 1, fp: 5 },
   "docs-script": { tp: 5, fp: 3 },
-  "duplicate": { tp: 39, fp: 13 },
+  "duplicate": { tp: 39, fp: 15 },
   "env-dead": { tp: 2, fp: 8 },
   "env-missing": { tp: 1, fp: 6 },
   "env-no-example": { tp: 1, fp: 11 },
@@ -70341,7 +70341,7 @@ var RULE_PRECISION = {
   "secret-generic": { tp: 1, fp: 8 },
   "secret-history": { tp: 1, fp: 15 },
   "secret-provider": { tp: 0, fp: 14 },
-  "skipped-test": { tp: 22, fp: 3 },
+  "skipped-test": { tp: 22, fp: 5 },
   "supply-remote-shell": { tp: 1, fp: 0 },
   "todo": { tp: 92, fp: 9 },
   "workflow-action-tag": { tp: 123, fp: 1 },
@@ -76126,6 +76126,7 @@ var insecureCodeScanner = {
       for (const file2 of ctx.files) {
         if (issues.length >= MAX_TOTAL8) break;
         const norm = file2.replace(/\\/g, "/");
+        if (/\.d\.(?:ts|mts|cts)$/i.test(norm)) continue;
         const webRoot = /\.php$/i.test(norm) && /(^|\/)(?:www|public|htdocs)\//.test(norm);
         const productionRoot = JAVA_RE.test(norm) || /\.scala$/i.test(norm) ? /(?:^|\/)src\/main\/(?:java|kotlin|scala)\//.exec(norm) : null;
         const purposePath = productionRoot ? norm.slice(0, productionRoot.index + productionRoot[0].length) : norm;
@@ -84744,6 +84745,7 @@ var insecureCodeScanner2 = {
     for (const file2 of ctx.files) {
       if (issues.length >= MAX_TOTAL16) break;
       const norm = file2.replace(/\\/g, "/");
+      if (/\.d\.(?:ts|mts|cts)$/i.test(norm)) continue;
       const webRoot = /\.php$/i.test(norm) && /(^|\/)(?:www|public|htdocs)\//.test(norm);
       const productionRoot = JAVA_RE2.test(norm) || /\.scala$/i.test(norm) ? /(?:^|\/)src\/main\/(?:java|kotlin|scala)\//.exec(norm) : null;
       const purposePath = productionRoot ? norm.slice(0, productionRoot.index + productionRoot[0].length) : norm;
