@@ -951,5 +951,7 @@
     "benchmark": 31,
     "existingConditionalLiveAISkip": 1
   },
-  "scope": "Static source scans; no target application execution, dependency installation, credential validation, or exploitation."
+  "scope": "Static source scans; no target application execution, dependency installation, credential validation, or exploitation.",
+  "stagedDataCommit": "5920e8843b1dd9764846c3c7b37ee70c284d79bf",
+  "earlierExploratoryBuild": "a45bdbe30d8b3f4e7445debdf2e061b313aecdd0"
 }
