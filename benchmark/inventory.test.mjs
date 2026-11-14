@@ -35,7 +35,7 @@ test("broad and unknown scanners always run, and so does a missing inventory", (
 
 
 test("tree inventory preserves Unicode, quotes and newlines in Git filenames", async () => {
-  const { mkdtempSync, writeFileSync, rmSync } = await import("node:fs")
+  const { mkdtempSync, rmSync } = await import("node:fs")
   const { tmpdir } = await import("node:os")
   const { join } = await import("node:path")
   const { execFileSync } = await import("node:child_process")
@@ -43,10 +43,13 @@ test("tree inventory preserves Unicode, quotes and newlines in Git filenames", a
   const git = (...args) => execFileSync("git", ["-C", dir, ...args], { encoding: "utf8" })
   try {
     git("init", "--quiet")
-    for (const name of ['▶ пример.d.ts', 'quoted"name.js', 'line\nbreak.md']) writeFileSync(join(dir, name), "fixture")
-    git("add", ".")
-    git("-c", "user.name=Benchmark Test", "-c", "user.email=benchmark@example.invalid", "commit", "--quiet", "-m", "fixture")
-    const paths = await treePaths(dir, "HEAD")
+    // Store paths in Git objects: quotes/newlines are valid Git paths even on
+    // systems whose working-tree filesystem cannot create those filenames.
+    const blob = execFileSync("git", ["-C", dir, "hash-object", "-w", "--stdin"], { input: "fixture", encoding: "utf8" }).trim()
+    const entries = ['▶ пример.d.ts', 'quoted"name.js', 'line\nbreak.md']
+      .map(name => `100644 blob ${blob}\t${name}\0`).join("")
+    const tree = execFileSync("git", ["-C", dir, "mktree", "-z"], { input: entries, encoding: "utf8" }).trim()
+    const paths = await treePaths(dir, tree)
     const inv = inventoryOf(paths, "s")
     assert.equal(paths.length, 3)
     assert.equal(inv.exts.ts, 1)
