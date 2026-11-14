@@ -7,6 +7,8 @@ Latest completed handoff: [cycle 2026-11-10-1](CYCLE-2026-11-10-1.md) —
 6000 distinct GitHub projects in 6007 pinned records. Read its data-restoration
 section and `ROUTINE.md` before choosing new repositories.
 
+Latest prepared cycle: [cycle 2026-11-13-3](CYCLE-2026-11-13-3.md) — 6503 distinct projects in 6510 records. Its staged data must be restored until it is promoted to `bench-data`; see that cycle's data-restoration section.
+
 ## 1. What the project is
 
 repo-janitor scans a git repository and reports maintenance and security problems
