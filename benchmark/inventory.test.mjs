@@ -1,7 +1,7 @@
 import { test } from "node:test"
 import assert from "node:assert/strict"
 import { inventoryOf, treePaths } from "./inventory.mjs"
-import { INPUTS, mayProduce } from "./scanner-inputs.mjs"
+import { INPUTS, mayProduce, sparseGlobs } from "./scanner-inputs.mjs"
 
 const inv = inventoryOf(["src/main.go", "go.mod", "Dockerfile", ".github/workflows/ci.yml", "docs/README.md", "ios/App.swift"], "s")
 
@@ -59,4 +59,34 @@ test("tree inventory preserves Unicode, quotes and newlines in Git filenames", a
 
 test("Ruby debugger findings stay eligible for partial rescans", () => {
   assert.ok(mayProduce("leftover-debug", inventoryOf(["lib/plugin.rb"], "s")))
+})
+
+
+test("partial insecure-code checkout retains Rake and alternate C++ source files", async () => {
+  const { mkdtempSync, mkdirSync, writeFileSync, existsSync, rmSync } = await import("node:fs")
+  const { tmpdir } = await import("node:os")
+  const { join, dirname } = await import("node:path")
+  const { execFileSync } = await import("node:child_process")
+  const root = mkdtempSync(join(tmpdir(), "janitor-sparse-"))
+  const repo = join(root, "source"), checkout = join(root, "checkout")
+  const git = (dir, ...args) => execFileSync("git", ["-C", dir, ...args], { encoding: "utf8" })
+  const paths = ["rakelib/lint.rake", "native/verify.cxx", "include/verify.hxx"]
+  try {
+    mkdirSync(repo)
+    git(repo, "init", "--quiet")
+    for (const path of [...paths, "docs/unrelated.txt"]) {
+      mkdirSync(dirname(join(repo, path)), { recursive: true })
+      writeFileSync(join(repo, path), "fixture\n")
+    }
+    git(repo, "add", ".")
+    git(repo, "-c", "user.name=Benchmark Test", "-c", "user.email=benchmark@example.invalid", "-c", "commit.gpgsign=false", "commit", "--quiet", "-m", "fixture")
+    execFileSync("git", ["clone", "--quiet", "--no-checkout", repo, checkout])
+    git(checkout, "sparse-checkout", "set", "--no-cone", ...sparseGlobs(["insecure-code"]))
+    git(checkout, "checkout", "--quiet", "HEAD")
+    for (const path of paths) {
+      assert.ok(existsSync(join(checkout, path)), `missing source: ${path}`)
+      assert.ok(mayProduce("insecure-code", inventoryOf([path], "s")), path)
+    }
+    assert.ok(!existsSync(join(checkout, "docs/unrelated.txt")))
+  } finally { rmSync(root, { recursive: true, force: true }) }
 })
