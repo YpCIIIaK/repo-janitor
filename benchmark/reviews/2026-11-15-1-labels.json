@@ -799,5 +799,96 @@
       "diagram": "flowchart LR\n  M[\"Список имён методов\"] --> F[\"Удаление трёх символов для JRuby\"] --> A[\"Создание alias для остальных\"]",
       "level": 2
     }
+  },
+  {
+    "repo": "SergiioB/intel-arc-pro-b70-inference-cookbook",
+    "name": "sergiiob-intel-arc-pro-b70-inference-cookbook",
+    "sha": "21cd5a06908047641a0788e818d2401cd639814a",
+    "batch": 30,
+    "id": "commented-research/b70-docs/research/references/quant-avail-20261009/master-sycl.cpp:3477",
+    "rule": "commented-code",
+    "location": "research/b70-docs/research/references/quant-avail-20261009/master-sycl.cpp:3477",
+    "sourceUrl": "https://github.com/SergiioB/intel-arc-pro-b70-inference-cookbook/blob/21cd5a06908047641a0788e818d2401cd639814a/research/b70-docs/research/references/quant-avail-20261009/master-sycl.cpp#L3477",
+    "verdict": "fp",
+    "reason": "This is a saved third-party SYCL source reference under a dated research/references tree, with Intel/LLVM copyright headers. Commented peer-access code in that reference is excluded by the routine reference/vendor criterion.",
+    "confidenceAtReview": "medium",
+    "lesson": {
+      "title": "Копия стороннего исходника в исследовательских материалах",
+      "chain": "Сканер увидел выключенный блок peer-access в master-sycl.cpp. Путь хранит датированную копию reference-кода; заголовок указывает Intel и LLVM.",
+      "conditions": "FP по критерию рутины: исследовательская копия стороннего исходника не является местом для автоматической очистки рабочего кода этого проекта. Наличие выключенных инструкций само по себе верно.",
+      "impact": "Проверено конкретное утверждение правила по закреплённому исходнику.",
+      "fix": "Сначала установить владельца и назначение файла. Не подавлять весь каталог research без проверки: там может находиться и собственный исполняемый код.",
+      "diagram": "flowchart LR\n  U[\"Сторонний SYCL-исходник\"] --> R[\"Датированная reference-копия\"] --> S[\"Сигнал commented-code\"]",
+      "level": 2
+    },
+    "additionalSources": [
+      "https://github.com/SergiioB/intel-arc-pro-b70-inference-cookbook/blob/21cd5a06908047641a0788e818d2401cd639814a/research/b70-docs/research/references/quant-avail-20261009/master-sycl.cpp#L1"
+    ]
+  },
+  {
+    "repo": "toss/apps-in-toss-harness",
+    "name": "toss-apps-in-toss-harness",
+    "sha": "5972a1c044f720132709c702c77426dd02beb31f",
+    "batch": 30,
+    "id": "commented-packages/debugger/src/mcp/__tests__/devtools-opener.test.ts:164",
+    "rule": "commented-code",
+    "location": "packages/debugger/src/mcp/__tests__/devtools-opener.test.ts:164",
+    "sourceUrl": "https://github.com/toss/apps-in-toss-harness/blob/5972a1c044f720132709c702c77426dd02beb31f/packages/debugger/src/mcp/__tests__/devtools-opener.test.ts#L164",
+    "verdict": "fp",
+    "reason": "The block is Korean documentation listing environment-variable values and expected boolean outcomes; it is not disabled TypeScript code.",
+    "confidenceAtReview": "medium",
+    "lesson": {
+      "title": "Таблица настроек в комментарии",
+      "chain": "Комментарий перед describe объясняет opt-in включение DevTools: только значение 1 разрешает автоматическое открытие окна; остальные варианты оставляют его выключенным.",
+      "conditions": "FP commented-code: строки вида AIT_AUTO_DEVTOOLS=1 описывают входные значения теста и ожидаемый disabled, а не содержат выключенную реализацию.",
+      "impact": "Проверено конкретное утверждение правила по закреплённому исходнику.",
+      "fix": "Не путать пары настройка/результат с инструкциями языка. Сохранять пояснение, которое помогает понять тесты.",
+      "diagram": "flowchart LR\n  E[\"Значение переменной среды\"] --> D[\"Ожидаемый disabled\"] --> T[\"Активные тесты\"]",
+      "level": 1
+    }
+  },
+  {
+    "repo": "blendogames/SkinDeep",
+    "name": "blendogames-skindeep",
+    "sha": "04840ea158128d2e33f4bc95af825604d4a53c59",
+    "batch": 19,
+    "id": "commented-cm/CollisionModel_rotate.cpp:71",
+    "rule": "commented-code",
+    "location": "cm/CollisionModel_rotate.cpp:71",
+    "sourceUrl": "https://github.com/blendogames/SkinDeep/blob/04840ea158128d2e33f4bc95af825604d4a53c59/cm/CollisionModel_rotate.cpp#L71",
+    "verdict": "fp",
+    "reason": "The three comments state tangent half-angle identities used by the following active rotation computation; they are mathematical documentation, not disabled valid C++ assignments.",
+    "confidenceAtReview": "medium",
+    "lesson": {
+      "title": "Формулы поворота рядом с реализацией",
+      "chain": "CM_RotatePoint получает tanHalfAngle. Комментарий напоминает формулы синуса и косинуса, а активные строки ниже вычисляют s и c по этим формулам.",
+      "conditions": "FP commented-code. Запись sin(a) = ... является математическим равенством; это не старая C++-инструкция, которую нужно удалить.",
+      "impact": "Проверено конкретное утверждение правила по закреплённому исходнику.",
+      "fix": "Сохранять пояснения алгоритма. Для правила нужны синтаксические признаки инструкций с учётом языка и контекста.",
+      "diagram": "flowchart LR\n  A[\"Тангенс половины угла\"] --> F[\"Формулы sin и cos\"] --> R[\"Активное вращение точки\"]",
+      "level": 2
+    }
+  },
+  {
+    "repo": "peeriot/myrmic",
+    "name": "peeriot-myrmic",
+    "sha": "452b40a0ed0221db78e2d45c690bd995d561e092",
+    "batch": 19,
+    "id": "commented-swarm/sorg-common/src/serde.rs:55",
+    "rule": "commented-code",
+    "location": "swarm/sorg-common/src/serde.rs:55",
+    "sourceUrl": "https://github.com/peeriot/myrmic/blob/452b40a0ed0221db78e2d45c690bd995d561e092/swarm/sorg-common/src/serde.rs#L55",
+    "verdict": "fp",
+    "reason": "The disabled Rust test is explicitly tied to a FIXME issue and a condition for re-enabling after a serde-trait change. It is documented test-fixture material excluded by routine criteria.",
+    "confidenceAtReview": "medium",
+    "lesson": {
+      "title": "Выключенный тест с причиной и задачей",
+      "chain": "В cfg(test) оставлен тест проверки типов десериализации. FIXME ссылается на задачу и прямо говорит включить тест после выделения отдельного serde trait.",
+      "conditions": "FP по критерию рутины: тестовая заготовка с явной причиной не считается автоматически полезной находкой очистки. Проблема проверки типов этим сканом не подтверждается.",
+      "impact": "Проверено конкретное утверждение правила по закреплённому исходнику.",
+      "fix": "Следить за связанной задачей и возвращать проверку при выполнении её условий. Не удалять объяснение только ради уменьшения числа комментариев.",
+      "diagram": "flowchart LR\n  I[\"Задача: отдельный serde trait\"] --> T[\"Условие возвращения теста\"] --> C[\"Заготовка в cfg test\"]",
+      "level": 2
+    }
   }
 ]

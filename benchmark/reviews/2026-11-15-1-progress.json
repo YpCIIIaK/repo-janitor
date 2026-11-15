@@ -1,17 +1,17 @@
 {
   "status": "in-progress",
-  "checkedAt": "2026-11-15T15:13:34.348Z",
+  "checkedAt": "2026-11-15T15:24:00.629Z",
   "pinnedRecords": 10007,
   "newTargets": 2997,
-  "offlineCurrent": 8762,
-  "newOfflineCurrent": 1752,
-  "onlineCached": 8451,
-  "onlineAudited": 158,
+  "offlineCurrent": 8858,
+  "newOfflineCurrent": 1848,
+  "onlineCached": 8475,
+  "onlineAudited": 182,
   "onlineAuditedPolicyLimited": 17,
-  "allSixArtifacts": 8449,
-  "newLabels": 36,
+  "allSixArtifacts": 8474,
+  "newLabels": 40,
   "tp": 5,
-  "fp": 31,
+  "fp": 35,
   "sourceFingerprint": "d99a356eb71009c2",
   "preservation": {
     "oldLabelsPreserved": 2871,
@@ -20,12 +20,11 @@
     "labelledHighTPIDsRetained": 45
   },
   "pendingCounts": {
-    "offline": 1245,
-    "online": 1556,
-    "artifacts": 1558
+    "offline": 1149,
+    "online": 1532,
+    "artifacts": 1533
   },
   "distinctProjectsTarget": 10000,
-  "distinctProjectsOfflineCurrent": 8755,
-  "networkBlocker": "Global outgoing HTTP 503 from GitHub, api.github.com, api.osv.dev and registry.npmjs.org; never interpreted as a clean result.",
+  "distinctProjectsOfflineCurrent": 8851,
   "scannerFeaturesDeferred": true
 }

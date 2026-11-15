@@ -9,6 +9,8 @@ section and `ROUTINE.md` before choosing new repositories.
 
 Latest prepared cycle: [cycle 2026-11-13-3](CYCLE-2026-11-13-3.md) — 6503 distinct projects in 6510 records. Its staged data must be restored until it is promoted to `bench-data`; see that cycle's data-restoration section.
 
+Current in-progress handoff: [cycle 2026-11-15-1](CYCLE-2026-11-15-1.md). Its 10,000-project target is not yet a completed benchmark; inspect its progress counters and running queues before resuming.
+
 ## 1. What the project is
 
 repo-janitor scans a git repository and reports maintenance and security problems
