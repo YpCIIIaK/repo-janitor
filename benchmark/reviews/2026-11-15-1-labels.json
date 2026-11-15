@@ -306,5 +306,454 @@
     "additionalSources": [
       "https://github.com/lxcshine/zilan/blob/3b36977a2b24ae4cb03843cfe76350055c71cc53/Formula/weknora-lite.rb#L37"
     ]
+  },
+  {
+    "repo": "tokencanopy/e2a",
+    "name": "tokencanopy-e2a",
+    "sha": "fd8126e63eef0c27f211be47bc71b352f6b145ea",
+    "batch": 8,
+    "id": "commented-internal/hitlworker/loopback_screening_test.go:13",
+    "rule": "commented-code",
+    "location": "internal/hitlworker/loopback_screening_test.go:13",
+    "sourceUrl": "https://github.com/tokencanopy/e2a/blob/fd8126e63eef0c27f211be47bc71b352f6b145ea/internal/hitlworker/loopback_screening_test.go#L13",
+    "verdict": "fp",
+    "reason": "The block describes a Go integration test scenario and expected review events in prose; it is not disabled executable code.",
+    "confidenceAtReview": "medium",
+    "lesson": {
+      "title": "Описание сценария теста — не выключенный код",
+      "chain": "Комментарий объясняет две проверки письма: исходящую и входящую. Ниже работает сам тест с настройкой allowlist.",
+      "conditions": "Слова gate=allowlist и pending_review являются обозначениями настроек в пояснении. Удаление комментария потеряет описание ожидаемого поведения.",
+      "impact": "Проверено конкретное утверждение правила по закреплённому исходнику.",
+      "fix": "Для commented-code нужны признаки синтаксически завершённых инструкций, а не только знаки равенства и имена событий.",
+      "diagram": "flowchart LR\n  A[\"Комментарий: ожидаемое поведение\"] --> B[\"Активный Go-тест\"]",
+      "level": 1
+    }
+  },
+  {
+    "repo": "beyarkay/eskom-calendar",
+    "name": "beyarkay-eskom-calendar",
+    "sha": "9087a2908d6fb10b0e366be1eb42e921f0d18cdd",
+    "batch": 8,
+    "id": "insecure-py-yaml-load-dataset/build.py:119",
+    "rule": "insecure-py-yaml-load",
+    "location": "dataset/build.py:119",
+    "sourceUrl": "https://github.com/beyarkay/eskom-calendar/blob/9087a2908d6fb10b0e366be1eb42e921f0d18cdd/dataset/build.py#L119",
+    "verdict": "fp",
+    "reason": "yaml.load explicitly uses yaml.BaseLoader, which constructs basic strings/collections rather than arbitrary Python objects. The input is a YAML file read from Git history.",
+    "confidenceAtReview": "low",
+    "lesson": {
+      "title": "yaml.load: важен выбранный Loader",
+      "chain": "Скрипт получает YAML из истории Git и разбирает его через BaseLoader. Затем отдельно проверяет и преобразует записи.",
+      "conditions": "FP именно выполнения Python-объектов через небезопасный YAML-loader. BaseLoader не включает конструкторы произвольных Python-объектов. Ограничение размера входа — отдельный вопрос.",
+      "impact": "Проверено конкретное утверждение правила по закреплённому исходнику.",
+      "fix": "Различать Loader, UnsafeLoader, SafeLoader и BaseLoader. Нельзя оценивать безопасность только по имени yaml.load.",
+      "diagram": "flowchart LR\n  G[\"YAML из Git\"] --> L[\"BaseLoader\"] --> D[\"Строки и коллекции\"] --> V[\"Проверка полей\"]",
+      "level": 3
+    }
+  },
+  {
+    "repo": "llnl/axom",
+    "name": "llnl-axom",
+    "sha": "bf9c43186c077730da7b4cba7116a12119394579",
+    "batch": 9,
+    "id": "commented-src/axom/inlet/tests/inlet_Reader.cpp:180",
+    "rule": "commented-code",
+    "location": "src/axom/inlet/tests/inlet_Reader.cpp:180",
+    "sourceUrl": "https://github.com/llnl/axom/blob/bf9c43186c077730da7b4cba7116a12119394579/src/axom/inlet/tests/inlet_Reader.cpp#L180",
+    "verdict": "tp",
+    "reason": "The test contains a commented unordered_map declaration and EXPECT_EQ assertion; they are disabled executable test code.",
+    "confidenceAtReview": "medium",
+    "lesson": {
+      "title": "Закомментированная проверка теста",
+      "chain": "Тест читает строковые значения из Lua/YAML. Декларация ожидаемого словаря и EXPECT_EQ оставлены в комментариях.",
+      "conditions": "Подтверждён сигнал сопровождения кода. Это не доказательство уязвимости: комментарий выше объясняет различие парсеров, но сама проверка сейчас не выполняется.",
+      "impact": "Проверено конкретное утверждение правила по закреплённому исходнику.",
+      "fix": "Явно оформить ожидаемые различия парсеров в тесте либо убрать устаревший вариант в пользу истории Git.",
+      "diagram": "flowchart LR\n  R[\"Чтение строк\"] --> T[\"Активная проверка статуса\"]\n  C[\"EXPECT_EQ в комментарии\"] --> N[\"Не выполняется\"]",
+      "level": 1
+    }
+  },
+  {
+    "repo": "yuhengqin/Quotern",
+    "name": "yuhengqin-quotern",
+    "sha": "b6c681872df0caaf9988ff3466e91ca4f8291c38",
+    "batch": 9,
+    "id": "insecure-localstorage-secret-apps/desktop/src/renderer/lib/utils.ts:61",
+    "rule": "insecure-localstorage-secret",
+    "location": "apps/desktop/src/renderer/lib/utils.ts:61",
+    "sourceUrl": "https://github.com/yuhengqin/Quotern/blob/b6c681872df0caaf9988ff3466e91ca4f8291c38/apps/desktop/src/renderer/lib/utils.ts#L61",
+    "verdict": "fp",
+    "reason": "The stored value is the token-count display preference (international/localized), not an authentication token. getTokenUnitMode reads those modes back.",
+    "confidenceAtReview": "low",
+    "lesson": {
+      "title": "Token может означать единицу подсчёта текста",
+      "chain": "setTokenUnitMode сохраняет способ отображать количество LLM-токенов. Чтение возвращает international или localized.",
+      "conditions": "FP хранения секрета. Эти значения выбирают подписи чисел в интерфейсе и не подтверждают личность пользователя.",
+      "impact": "Проверено конкретное утверждение правила по закреплённому исходнику.",
+      "fix": "Проверять семантику значения: настройки интерфейса можно хранить в localStorage. Сессионные секреты требуют отдельной оценки.",
+      "diagram": "flowchart LR\n  U[\"Настройка единиц\"] --> S[\"localStorage: режим\"] --> F[\"Формат числа\"]",
+      "level": 1
+    }
+  },
+  {
+    "repo": "transferia/transferia",
+    "name": "transferia-transferia",
+    "sha": "108b28638e9417ecee6f8e41c48a5f37a4d5126e",
+    "batch": 10,
+    "id": "commented-pkg/abstract/storage.go:366",
+    "rule": "commented-code",
+    "location": "pkg/abstract/storage.go:366",
+    "sourceUrl": "https://github.com/transferia/transferia/blob/108b28638e9417ecee6f8e41c48a5f37a4d5126e/pkg/abstract/storage.go#L366",
+    "verdict": "fp",
+    "reason": "The comment documents the ShardingContext interface method and its return type; no disabled statement is present.",
+    "confidenceAtReview": "medium",
+    "lesson": {
+      "title": "Документация интерфейса Go",
+      "chain": "Комментарий объясняет, какой worker использует ShardingContext и какое поле заполняет метод. Сразу за ним находится активная сигнатура.",
+      "conditions": "FP commented-code: это описание контракта, а не старая реализация. Точки с запятой в прозе не превращают её в программу.",
+      "impact": "Проверено конкретное утверждение правила по закреплённому исходнику.",
+      "fix": "Сохранять документацию; для правила учитывать синтаксис языка и завершённость инструкций.",
+      "diagram": "flowchart LR\n  D[\"Описание контракта\"] --> I[\"Сигнатура интерфейса\"]",
+      "level": 1
+    }
+  },
+  {
+    "repo": "dry-rb/dry-logic",
+    "name": "dry-rb-dry-logic",
+    "sha": "b83ba7131132cbcf12007cb6ea4c0c083526395c",
+    "batch": 10,
+    "id": "insecure-eval-dynamic-lib/dry/logic/operations/key.rb:16",
+    "rule": "insecure-eval-dynamic",
+    "location": "lib/dry/logic/operations/key.rb:16",
+    "sourceUrl": "https://github.com/dry-rb/dry-logic/blob/b83ba7131132cbcf12007cb6ea4c0c083526395c/lib/dry/logic/operations/key.rb#L16",
+    "verdict": "fp",
+    "reason": "eval is a local Ruby variable assigned an evaluator object and passed as a keyword argument; Kernel.eval is not called at the flagged line.",
+    "confidenceAtReview": "low",
+    "lesson": {
+      "title": "Переменная eval не вызывает eval",
+      "chain": "Метод создаёт Evaluator::Key, присваивает объект локальной переменной eval и передаёт его конструктору.",
+      "conditions": "FP выполнения строки как Ruby-кода: в этой строке есть присваивание, а не вызов Kernel.eval.",
+      "impact": "Проверено конкретное утверждение правила по закреплённому исходнику.",
+      "fix": "Различать идентификатор и вызов функции. Для понятности переменную можно назвать key_evaluator; это не исправление подтверждённой RCE.",
+      "diagram": "flowchart LR\n  K[\"Evaluator::Key\"] --> V[\"Локальная переменная eval\"] --> S[\"Аргумент конструктора\"]",
+      "level": 2
+    }
+  },
+  {
+    "repo": "mck89/peast",
+    "name": "mck89-peast",
+    "sha": "e6c41a0632434fe9f63122cac5a79effc17137aa",
+    "batch": 11,
+    "id": "insecure-exec-interpolated-lib/Peast/Query.php:62",
+    "rule": "insecure-exec-interpolated",
+    "location": "lib/Peast/Query.php:62",
+    "sourceUrl": "https://github.com/mck89/peast/blob/e6c41a0632434fe9f63122cac5a79effc17137aa/lib/Peast/Query.php#L62",
+    "verdict": "fp",
+    "reason": "exec is an instance method on a parsed AST selector, not PHP shell exec. It receives Selector\\Matches.",
+    "confidenceAtReview": "low",
+    "lesson": {
+      "title": "Метод exec у селектора AST",
+      "chain": "Parser разбирает селектор, затем его объект вызывает метод exec для набора найденных узлов.",
+      "conditions": "FP командной инъекции в указанном вызове: получатель — объект селектора, а аргумент — набор AST-узлов. Это не глобальная PHP-функция exec.",
+      "impact": "Проверено конкретное утверждение правила по закреплённому исходнику.",
+      "fix": "Правило должно различать глобальную функцию и метод объекта. При сомнении проследить тип получателя и реализацию метода.",
+      "diagram": "flowchart LR\n  P[\"Parser селектора\"] --> S[\"Объект селектора\"] --> M[\"exec над Matches\"]",
+      "level": 2
+    }
+  },
+  {
+    "repo": "vesoft-inc/nebula-java",
+    "name": "vesoft-inc-nebula-java",
+    "sha": "cb5c6ac033a195982cea172d8703196ff4b05a0d",
+    "batch": 11,
+    "id": "insecure-sql-interpolated-client/src/main/fbthrift/com/facebook/thrift/server/TNonblockingServer.java:454",
+    "rule": "insecure-sql-interpolated",
+    "location": "client/src/main/fbthrift/com/facebook/thrift/server/TNonblockingServer.java:454",
+    "sourceUrl": "https://github.com/vesoft-inc/nebula-java/blob/cb5c6ac033a195982cea172d8703196ff4b05a0d/client/src/main/fbthrift/com/facebook/thrift/server/TNonblockingServer.java#L454",
+    "verdict": "fp",
+    "reason": "The select text is a LOGGER.warn message in a Java NIO selection loop, not an SQL query.",
+    "confidenceAtReview": "low",
+    "lesson": {
+      "title": "select в сетевом цикле — не SELECT базы",
+      "chain": "Сервер проверяет, готов ли сетевой канал к чтению или записи. Для неожиданного состояния пишет LOGGER.warn.",
+      "conditions": "FP SQL-инъекции: строка описывает состояние сетевого selector, не отправляет запрос в СУБД.",
+      "impact": "Проверено конкретное утверждение правила по закреплённому исходнику.",
+      "fix": "Прежде чем искать SQLi, установить реальный API-приёмник строки. Слово select встречается в разных предметных областях.",
+      "diagram": "flowchart LR\n  C[\"Состояние канала NIO\"] --> W[\"LOGGER.warn\"] --> L[\"Лог\"]",
+      "level": 1
+    }
+  },
+  {
+    "repo": "higress-group/higress-console",
+    "name": "higress-group-higress-console",
+    "sha": "b3e541b3b22e6d44817fc33e66fd5a2953960304",
+    "batch": 12,
+    "id": "commented-backend/sdk/src/main/java/com/alibaba/higress/sdk/service/DomainServiceImpl.java:160",
+    "rule": "commented-code",
+    "location": "backend/sdk/src/main/java/com/alibaba/higress/sdk/service/DomainServiceImpl.java:160",
+    "sourceUrl": "https://github.com/higress-group/higress-console/blob/b3e541b3b22e6d44817fc33e66fd5a2953960304/backend/sdk/src/main/java/com/alibaba/higress/sdk/service/DomainServiceImpl.java#L160",
+    "verdict": "tp",
+    "reason": "A disabled RoutePageQuery construction and route selection block remains under a migration TODO next to the active alternative implementation.",
+    "confidenceAtReview": "medium",
+    "lesson": {
+      "title": "Старый вариант выбора маршрутов оставлен рядом с новым",
+      "chain": "Метод активно выбирает маршруты для домена. Ниже сохранён закомментированный альтернативный блок под TODO переключения логики.",
+      "conditions": "TP сопровождения кода: это полноценные выключенные инструкции. Разбор не устанавливает ошибку авторизации или маршрутизации.",
+      "impact": "Проверено конкретное утверждение правила по закреплённому исходнику.",
+      "fix": "Завершить миграцию либо оформить отдельную задачу и убрать неисполняемый вариант из основного метода.",
+      "diagram": "flowchart LR\n  A[\"Работающий выбор маршрутов\"] --> U[\"Обновление маршрутов\"]\n  C[\"Старый блок в комментарии\"] --> N[\"Не выполняется\"]",
+      "level": 2
+    }
+  },
+  {
+    "repo": "higress-group/higress-console",
+    "name": "higress-group-higress-console",
+    "sha": "b3e541b3b22e6d44817fc33e66fd5a2953960304",
+    "batch": 12,
+    "id": "insecure-sql-interpolated-backend/console/src/main/java/com/alibaba/higress/console/service/KubernetesLoginAttemptStore.java:112",
+    "rule": "insecure-sql-interpolated",
+    "location": "backend/console/src/main/java/com/alibaba/higress/console/service/KubernetesLoginAttemptStore.java:112",
+    "sourceUrl": "https://github.com/higress-group/higress-console/blob/b3e541b3b22e6d44817fc33e66fd5a2953960304/backend/console/src/main/java/com/alibaba/higress/console/service/KubernetesLoginAttemptStore.java#L112",
+    "verdict": "fp",
+    "reason": "The interpolated update text constructs a BusinessException after Kubernetes ConfigMap API failure, not SQL.",
+    "confidenceAtReview": "low",
+    "lesson": {
+      "title": "update ConfigMap и SQL UPDATE — разные операции",
+      "chain": "Код вызывает Kubernetes API для ConfigMap. При ошибке создаёт BusinessException с названием ресурса в сообщении.",
+      "conditions": "FP SQLi в этом месте: интерполяция попадает в текст исключения. Доступ к Kubernetes API — отдельная граница доверия.",
+      "impact": "Проверено конкретное утверждение правила по закреплённому исходнику.",
+      "fix": "Учитывать вызываемый API и назначение аргумента. Не считать любую строку со словом update SQL-запросом.",
+      "diagram": "flowchart LR\n  K[\"Kubernetes API\"] --> E[\"ApiException\"] --> M[\"Сообщение BusinessException\"]",
+      "level": 1
+    }
+  },
+  {
+    "repo": "arkworks-rs/r1cs-std",
+    "name": "arkworks-rs-r1cs-std",
+    "sha": "45e4e2697626a9f9481fe57e70ed29c687194102",
+    "batch": 13,
+    "id": "commented-src/boolean/allocated.rs:82",
+    "rule": "commented-code",
+    "location": "src/boolean/allocated.rs:82",
+    "sourceUrl": "https://github.com/arkworks-rs/r1cs-std/blob/45e4e2697626a9f9481fe57e70ed29c687194102/src/boolean/allocated.rs#L82",
+    "verdict": "fp",
+    "reason": "The commented equations derive an XOR R1CS constraint and are followed by the active constraint implementation; they are mathematical documentation.",
+    "confidenceAtReview": "medium",
+    "lesson": {
+      "title": "Формулы в криптографическом коде",
+      "chain": "Комментарий шаг за шагом преобразует логическое XOR в алгебраическое ограничение. Ниже вызывается enforce_r1cs_constraint.",
+      "conditions": "FP commented-code: математическое объяснение поддерживает проверку реализации и не является отключённой Rust-программой.",
+      "impact": "Проверено конкретное утверждение правила по закреплённому исходнику.",
+      "fix": "Сохранять вывод формулы. Учитывать математическую запись и соседний активный код вместо удаления по операторам.",
+      "diagram": "flowchart LR\n  X[\"Логический XOR\"] --> M[\"Вывод формулы в комментарии\"] --> R[\"Активное ограничение R1CS\"]",
+      "level": 3
+    }
+  },
+  {
+    "repo": "objecthub/swift-dynamicjson",
+    "name": "objecthub-swift-dynamicjson",
+    "sha": "2a850f5b33d847e5244c2eeb180de91d8fafe100",
+    "batch": 13,
+    "id": "commented-Sources/DynamicJSON/JSONSchema/JSONSchemaDraft2020.swift:252",
+    "rule": "commented-code",
+    "location": "Sources/DynamicJSON/JSONSchema/JSONSchemaDraft2020.swift:252",
+    "sourceUrl": "https://github.com/objecthub/swift-dynamicjson/blob/2a850f5b33d847e5244c2eeb180de91d8fafe100/Sources/DynamicJSON/JSONSchema/JSONSchemaDraft2020.swift#L252",
+    "verdict": "tp",
+    "reason": "Three commented Swift if-let statements remain directly before active schema-reference validation.",
+    "confidenceAtReview": "medium",
+    "lesson": {
+      "title": "Swift: выключенные ветки if let",
+      "chain": "В validateCore три if let оставлены комментариями, после них выполняется рабочая проверка descriptor.ref.",
+      "conditions": "TP выключенного кода. Пустые тела не доказывают дефект JSON Schema-валидации: нужны требования к vocabulary и тесты, которых этот сигнал не устанавливает.",
+      "impact": "Проверено конкретное утверждение правила по закреплённому исходнику.",
+      "fix": "Убрать черновые ветки либо реализовать требуемое поведение с тестами на конкретные ключевые слова схемы.",
+      "diagram": "flowchart LR\n  C[\"Три if let в комментариях\"] --> N[\"Не выполняются\"]\n  R[\"Активная ветка ref\"] --> V[\"Валидация ссылки\"]",
+      "level": 2
+    }
+  },
+  {
+    "repo": "centrifugal/phpcent",
+    "name": "centrifugal-phpcent",
+    "sha": "a0e9172ec33d3b679488c7bc68fecb22a92f82a6",
+    "batch": 14,
+    "id": "insecure-ssrf-gen/api_docs.php:292",
+    "rule": "insecure-ssrf",
+    "location": "gen/api_docs.php:292",
+    "sourceUrl": "https://github.com/centrifugal/phpcent/blob/a0e9172ec33d3b679488c7bc68fecb22a92f82a6/gen/api_docs.php#L292",
+    "verdict": "fp",
+    "reason": "The path is ROOT plus the literal /API.md, with ROOT defined as __DIR__/..; file_get_contents reads a local generated-documentation file, not a user-supplied URL.",
+    "confidenceAtReview": "low",
+    "lesson": {
+      "title": "file_get_contents читает документацию",
+      "chain": "Генератор документации сравнивает новый текст с локальным API.md в режиме --check. ROOT задан через каталог самого скрипта.",
+      "conditions": "FP SSRF: у пути в этой строке нет источника внешнего URL. Подмена локального checkout относится к другой модели доверия.",
+      "impact": "Проверено конкретное утверждение правила по закреплённому исходнику.",
+      "fix": "Проследить происхождение пути и режим работы скрипта. Имя функции допускает URL, но это ещё не означает серверный запрос по пользовательскому адресу.",
+      "diagram": "flowchart LR\n  R[\"Каталог скрипта\"] --> P[\"Локальный API.md\"] --> C[\"Сравнение документации\"]",
+      "level": 2
+    },
+    "additionalSources": [
+      "https://github.com/centrifugal/phpcent/blob/a0e9172ec33d3b679488c7bc68fecb22a92f82a6/gen/api_docs.php#L20"
+    ]
+  },
+  {
+    "repo": "unitsofmeasurement/unit-api",
+    "name": "unitsofmeasurement-unit-api",
+    "sha": "738b56aac94879d6b6665396eb445af2f823459a",
+    "batch": 14,
+    "id": "commented-src/test/java/javax/measure/test/TestUnit.java:83",
+    "rule": "commented-code",
+    "location": "src/test/java/javax/measure/test/TestUnit.java:83",
+    "sourceUrl": "https://github.com/unitsofmeasurement/unit-api/blob/738b56aac94879d6b6665396eb445af2f823459a/src/test/java/javax/measure/test/TestUnit.java#L83",
+    "verdict": "tp",
+    "reason": "The test helper asType method keeps a multi-line disabled implementation before returning null.",
+    "confidenceAtReview": "medium",
+    "lesson": {
+      "title": "Тестовый helper хранит выключенную реализацию",
+      "chain": "В asType закомментированы поиск единицы измерения, проверка совместимости и исключение. Активный метод возвращает null.",
+      "conditions": "TP commented-code, но не установленный дефект рабочего продукта: файл является тестовым helper.",
+      "impact": "Проверено конкретное утверждение правила по закреплённому исходнику.",
+      "fix": "Если helper намеренно минимален, удалить старую реализацию. Если поведение требуется тестам, вернуть его явно и проверить результат.",
+      "diagram": "flowchart LR\n  C[\"Старая реализация asType\"] --> N[\"Комментарий\"]\n  A[\"Активный метод\"] --> Z[\"Возвращает null\"]",
+      "level": 1
+    }
+  },
+  {
+    "repo": "WorldWindEarth/WorldWindKotlin",
+    "name": "worldwindearth-worldwindkotlin",
+    "sha": "720ad2aebcd46dca2b2f7724b944b72e1d59c5db",
+    "batch": 15,
+    "id": "insecure-sql-interpolated-worldwind-examples-android/src/main/kotlin/earth/worldwind/examples/PlacemarksSelectDragActivity.kt:121",
+    "rule": "insecure-sql-interpolated",
+    "location": "worldwind-examples-android/src/main/kotlin/earth/worldwind/examples/PlacemarksSelectDragActivity.kt:121",
+    "sourceUrl": "https://github.com/WorldWindEarth/WorldWindKotlin/blob/720ad2aebcd46dca2b2f7724b944b72e1d59c5db/worldwind-examples-android/src/main/kotlin/earth/worldwind/examples/PlacemarksSelectDragActivity.kt#L121",
+    "verdict": "fp",
+    "reason": "The Select text is placed into an Android Bundle title for a dialog, not passed to a database execution API.",
+    "confidenceAtReview": "low",
+    "lesson": {
+      "title": "Select в заголовке Android-диалога",
+      "chain": "Приложение строит заголовок выбора типа объекта, кладёт его в Bundle и передаёт VehicleTypeDialog.",
+      "conditions": "FP SQL-инъекции в этой строке: строка используется интерфейсом. Само слово Select не является SQL-приёмником.",
+      "impact": "Проверено конкретное утверждение правила по закреплённому исходнику.",
+      "fix": "Сначала установить назначение строки. Для SQLi необходим путь данных к выполнению запроса в базе.",
+      "diagram": "flowchart LR\n  O[\"Имя объекта\"] --> B[\"Bundle: title\"] --> D[\"Диалог выбора\"]",
+      "level": 1
+    }
+  },
+  {
+    "repo": "apache/flink-connector-kafka",
+    "name": "apache-flink-connector-kafka",
+    "sha": "634f2f49fcb0d520f6d1b94b21387cc7a9439abf",
+    "batch": 15,
+    "id": "insecure-py-eval-exec-flink-python/setup.py:60",
+    "rule": "insecure-py-eval-exec",
+    "location": "flink-python/setup.py:60",
+    "sourceUrl": "https://github.com/apache/flink-connector-kafka/blob/634f2f49fcb0d520f6d1b94b21387cc7a9439abf/flink-python/setup.py#L60",
+    "verdict": "fp",
+    "reason": "setup.py executes a package-local generated version file; VERSION_FILE is derived from __file__, not remote request input. This is trusted build-time code loading.",
+    "confidenceAtReview": "low",
+    "lesson": {
+      "title": "exec при сборке пакета: граница доверия исходникам",
+      "chain": "setup.py читает kafka_connector_version.py из фиксированного подкаталога пакета. Тот же скрипт генерирует этот файл из pom.xml для сборки.",
+      "conditions": "FP заявленной инъекции из пользовательского ввода в этом месте. exec действительно выполняет Python, но вход — локальный код сборки; компрометация исходников пакета является отдельным сценарием.",
+      "impact": "Проверено конкретное утверждение правила по закреплённому исходнику.",
+      "fix": "Можно хранить версию как данные вместо exec. При проверке различать доверенные исходники сборки и значения из сетевого запроса.",
+      "diagram": "flowchart LR\n  P[\"Локальный pom.xml\"] --> V[\"Файл версии пакета\"] --> E[\"setup.py: exec при сборке\"]",
+      "level": 3
+    },
+    "additionalSources": [
+      "https://github.com/apache/flink-connector-kafka/blob/634f2f49fcb0d520f6d1b94b21387cc7a9439abf/flink-python/setup.py#L31"
+    ]
+  },
+  {
+    "repo": "ImperialCollegeLondon/sharpy",
+    "name": "imperialcollegelondon-sharpy",
+    "sha": "7c9883e3719ff8f6905396a0ae1da765ce96b899",
+    "batch": 16,
+    "id": "insecure-py-os-system-sharpy/cases/templates/Ttail.py:709",
+    "rule": "insecure-py-os-system",
+    "location": "sharpy/cases/templates/Ttail.py:709",
+    "sourceUrl": "https://github.com/ImperialCollegeLondon/sharpy/blob/7c9883e3719ff8f6905396a0ae1da765ce96b899/sharpy/cases/templates/Ttail.py#L709",
+    "verdict": "fp",
+    "reason": "The shell command interpolates the fixed literal ./test under __main__; no external value controls the command.",
+    "confidenceAtReview": "low",
+    "lesson": {
+      "title": "Форматирование строки с константой",
+      "chain": "Пример научного расчёта создаёт каталог ./test через os.system. Подставляемое значение — строковый литерал, а не аргумент пользователя.",
+      "conditions": "FP командной инъекции для этого выражения. Shell используется, но изменение команды внешними данными не показано.",
+      "impact": "Проверено конкретное утверждение правила по закреплённому исходнику.",
+      "fix": "os.makedirs(\"./test\", exist_ok=True) выражает цель без shell. Отдельно оценивать динамические пути в других местах.",
+      "diagram": "flowchart LR\n  L[\"Литерал ./test\"] --> F[\"Фиксированная mkdir-команда\"] --> D[\"Каталог примера\"]",
+      "level": 1
+    }
+  },
+  {
+    "repo": "WeBankFinTech/DeFiBus",
+    "name": "webankfintech-defibus",
+    "sha": "b4b5f79deb77eb38aeea6fc30ed356d5075b9507",
+    "batch": 16,
+    "id": "insecure-sql-interpolated-defibus-broker/src/main/java/com/webank/defibus/broker/consumequeue/ConsumeQueueManager.java:155",
+    "rule": "insecure-sql-interpolated",
+    "location": "defibus-broker/src/main/java/com/webank/defibus/broker/consumequeue/ConsumeQueueManager.java:155",
+    "sourceUrl": "https://github.com/WeBankFinTech/DeFiBus/blob/b4b5f79deb77eb38aeea6fc30ed356d5075b9507/defibus-broker/src/main/java/com/webank/defibus/broker/consumequeue/ConsumeQueueManager.java#L155",
+    "verdict": "fp",
+    "reason": "The update phrase belongs to a LOG.error call in an exception handler; this location does not execute SQL.",
+    "confidenceAtReview": "low",
+    "lesson": {
+      "title": "update в диагностике очереди сообщений",
+      "chain": "При ошибке обновления watermark очереди обработчик пишет объект topic/queue в LOG.error.",
+      "conditions": "FP SQLi: строка предназначена журналу. Другая логика работы очереди данным вердиктом не оценивается.",
+      "impact": "Проверено конкретное утверждение правила по закреплённому исходнику.",
+      "fix": "Искать реальные SQL-приёмники и путь внешнего ввода к структуре запроса, а не только ключевое слово.",
+      "diagram": "flowchart LR\n  Q[\"Расчёт watermark\"] --> E[\"Исключение\"] --> L[\"LOG.error\"]",
+      "level": 1
+    }
+  },
+  {
+    "repo": "koedame/rails-mermaid_erd",
+    "name": "koedame-rails-mermaid-erd",
+    "sha": "1cc8fdd996e5587e952242538536e44465df79e3",
+    "batch": 17,
+    "id": "insecure-eval-dynamic-lib/templates/index.html.erb:1659",
+    "rule": "insecure-eval-dynamic",
+    "location": "lib/templates/index.html.erb:1659",
+    "sourceUrl": "https://github.com/koedame/rails-mermaid_erd/blob/1cc8fdd996e5587e952242538536e44465df79e3/lib/templates/index.html.erb#L1659",
+    "verdict": "fp",
+    "reason": "The flagged eval phrase is inside a JavaScript comment explaining Mermaid security settings; it is not an eval invocation.",
+    "confidenceAtReview": "low",
+    "lesson": {
+      "title": "Комментарий о небезопасном режиме не включает его",
+      "chain": "Комментарий объясняет причину strict-настройки Mermaid. Активный initialize задаёт securityLevel strict и выключает HTML labels.",
+      "conditions": "FP eval: указанная строка не исполняется. Наличие защитных настроек не доказывает безопасность всего шаблона и всех версий Mermaid.",
+      "impact": "Проверено конкретное утверждение правила по закреплённому исходнику.",
+      "fix": "Игнорировать текст комментариев при поиске вызова eval. Затем отдельно оценивать фактически включённые режимы рендеринга.",
+      "diagram": "flowchart LR\n  C[\"Объяснение риска в комментарии\"] --> S[\"Активный strict config\"] --> R[\"Рендер диаграммы\"]",
+      "level": 2
+    }
+  },
+  {
+    "repo": "miskin-lee/EdgeTerm",
+    "name": "miskin-lee-edgeterm",
+    "sha": "83fd05929fdcb9c1fb2e29c9beb82af47f4f6e4b",
+    "batch": 17,
+    "id": "insecure-react-dangerous-html-src/components/icons.tsx:123",
+    "rule": "insecure-react-dangerous-html",
+    "location": "src/components/icons.tsx:123",
+    "sourceUrl": "https://github.com/miskin-lee/EdgeTerm/blob/83fd05929fdcb9c1fb2e29c9beb82af47f4f6e4b/src/components/icons.tsx#L123",
+    "verdict": "fp",
+    "reason": "The HTML sink selects a static SVG string from imports bundled with @vscode/codicons. The component does not interpolate an arbitrary caller-supplied HTML value.",
+    "confidenceAtReview": "low",
+    "lesson": {
+      "title": "dangerouslySetInnerHTML со статической иконкой",
+      "chain": "Icon выбирает SVG по ключу из локального SVGS. Все значения словаря импортированы из файлов пакета codicons на этапе сборки.",
+      "conditions": "FP XSS по указанному пути. Выбор имени меняет иконку, но не формирует произвольный HTML. Доверие к зависимостям остаётся отдельным вопросом.",
+      "impact": "Проверено конкретное утверждение правила по закреплённому исходнику.",
+      "fix": "Для HTML-приёмника проверять происхождение самой строки. Пользовательский HTML нуждается в очистке; фиксированные ресурсы сборки имеют другую границу доверия.",
+      "diagram": "flowchart LR\n  P[\"SVG-файлы зависимости\"] --> B[\"Статический SVGS\"] --> K[\"Выбор ключа\"] --> H[\"Иконка в DOM\"]",
+      "level": 3
+    },
+    "additionalSources": [
+      "https://github.com/miskin-lee/EdgeTerm/blob/83fd05929fdcb9c1fb2e29c9beb82af47f4f6e4b/src/components/icons.tsx#L7"
+    ]
   }
 ]

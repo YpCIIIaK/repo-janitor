@@ -1,0 +1,4 @@
+{
+ "commented-backend/sdk/src/main/java/com/alibaba/higress/sdk/service/DomainServiceImpl.java:160": "tp",
+ "insecure-sql-interpolated-backend/console/src/main/java/com/alibaba/higress/console/service/KubernetesLoginAttemptStore.java:112": "fp"
+}
