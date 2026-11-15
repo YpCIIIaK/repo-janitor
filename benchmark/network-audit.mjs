@@ -8,9 +8,9 @@ import { writeFileSync } from "node:fs"
 const auditPath = process.env.BENCH_NETWORK_AUDIT_FILE
 if (auditPath) {
   const state = {
-    version: 1, requests: 0, responses: 0, failedRequests: 0, dnsFailures: 0,
+    version: 2, requests: 0, responses: 0, failedRequests: 0, dnsFailures: 0,
     queryBatches: 0, queriedPackages: 0, policyLimitedResponses: 0,
-    statuses: {}, hosts: {}, dnsHosts: {}, unstartedRequests: 0, failureSamples: [],
+    statuses: {}, hosts: {}, dnsHosts: {}, policyLimitedHosts: {}, unstartedRequests: 0, failureSamples: [],
   }
   const publicHost = (host) => ["api.osv.dev", "registry.npmjs.org"].includes(host) ? host : "other"
   const requests = []
@@ -29,7 +29,7 @@ if (auditPath) {
   for (const transport of [http, https]) {
     const request = transport.request
     transport.request = function (...args) {
-      const record = { host: "other", httpFailure: null, transportFailure: null, policyLimited: false }
+      const record = { host: "other", httpFailure: null, transportFailure: null, policyLimited: false, allowedPolicyLimit: false }
       requests.push(record)
       state.requests++
       let req
@@ -47,8 +47,15 @@ if (auditPath) {
       }
       const policyLimit = (error) => {
         if (error?.message !== "Response too large") return false
-        if (!record.policyLimited) state.policyLimitedResponses++
+        if (!record.policyLimited) {
+          state.policyLimitedResponses++
+          state.policyLimitedHosts[record.host] = (state.policyLimitedHosts[record.host] ?? 0) + 1
+        }
         record.policyLimited = true
+        // A bounded npm license lookup may be unknown. Truncating OSV queries
+        // or advisory details must never turn into an apparently clean check.
+        record.allowedPolicyLimit = record.host === "registry.npmjs.org"
+        if (!record.allowedPolicyLimit) fail("policy", { code: "RESPONSE_TOO_LARGE" })
         return true
       }
       req.on("error", (error) => { if (!policyLimit(error)) fail("request", { code: error?.code ?? "UNKNOWN" }) })
@@ -81,7 +88,7 @@ if (auditPath) {
   }
   syncBuiltinESMExports()
   process.on("exit", () => {
-    const failed = requests.filter((r) => r.httpFailure || (!r.policyLimited && r.transportFailure))
+    const failed = requests.filter((r) => r.httpFailure || (!r.allowedPolicyLimit && r.transportFailure))
     state.failedRequests = failed.length
     for (const r of failed) sample(r.httpFailure
       ? { kind: "http", host: r.host, status: r.httpFailure }
