@@ -784,7 +784,7 @@ export function scanSource(content: string, lang: Lang): CodeHit[] {
       const existing = byLine.get(line)
       // Keep the most severe rule when several match the same line.
       if (existing && rank(existing.rule.severity) >= rank(rule.severity)) continue
-      if (!sinkAllows(rule.id, rawLine, idx - lineStart)) continue
+      if (!sinkAllows(rule.id, rawLine, idx - lineStart, lang)) continue
       if (lang === "php" && rule.id === "exec-interpolated" &&
         /\bproc_open\s*\(\s*\[/.test(rawLine)) continue
       // Variable-only PHP includes and HTML output need a local request-to-sink flow.
@@ -844,7 +844,15 @@ const PHP_ESCAPED =
  *  - Ruby backticks inside a double-quoted string are text, not a command.
  *  - SQL handed to a prepare() call is parameterised by that call.
  */
-function sinkAllows(ruleId: string, line: string, col: number): boolean {
+function sinkAllows(ruleId: string, line: string, col: number, lang: Lang): boolean {
+  // A string passed directly to a diagnostic API is not a query. Anchor at
+  // this literal's argument position: a nested database call, or another call
+  // later on the same line, must remain visible.
+  if (ruleId === "sql-interpolated" && lang === "java") {
+    const prefix = line.slice(0, col)
+    if (/\b(?:log|logger)\s*\.\s*(?:trace|debug|info|warn|error|fatal)\s*\(\s*$/i.test(prefix) ||
+      /\bthrow\s+new\s+(?:[\w$]+\.)*[\w$]*(?:Exception|Error)\s*\(\s*$/.test(prefix)) return false
+  }
   // A request value passed into a function call is that function's output, not the raw input.
   if (ruleId === "php-reflected-xss") return !PHP_ESCAPED.test(line) && !/\b(?:echo|print)\b[^;$]*\w\s*\([^;]*\$_(?:GET|POST|REQUEST|COOKIE)/.test(line)
   if (ruleId === "exec-interpolated" && line[col] === "`") {
