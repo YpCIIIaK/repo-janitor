@@ -402,3 +402,20 @@ it("retains real labelled JavaScript blocks, including bare expression blocks", 
     expect(issues[0].location).toBe("src/worker.js:1")
   }
 })
+
+describe("documented prose and algebra", () => {
+  it("keeps semicolon-ended interface documentation and mathematical derivations", async () => {
+    const issues = await commentedCodeScanner.run(makeContext({ files: {
+      "src/storage.go": [
+        '// ShardingContext Return shared data, used on *MAIN* worker;',
+        '// Take care, method return OperationState_ShardedUploadState, but only fill field Context;',
+        '// Because type of Context is private, this is protoc thing;',
+      ].join('\n'),
+      "src/rotation.cpp": '// r = tan( a / 2 );\n// sin(a) = 2*r/(1+r*r);\n// cos(a) = (1-r*r)/(1+r*r);',
+      "src/constraint.rs": '// (1 - (a * b)) * (1 - ((1 - a) * (1 - b))) = c\n// (1 - ab) * (1 - (1 - a - b + ab)) = c\n// (1 - ab) * (a + b - ab) = c',
+      "src/disabled.ts": '// const message = "Because this has four plain words";\n// send(message);\n// return message;',
+      "src/pointer.cpp": '// int *pointer = address;\n// *pointer = value;\n// consume(pointer);',
+    } }))
+    expect(issues.map(issue => issue.location).sort()).toEqual(['src/disabled.ts:1', 'src/pointer.cpp:1'])
+  })
+})

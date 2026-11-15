@@ -58,6 +58,12 @@ function commentBody(line: string): string | null {
  * Ordinary assignments, expression arrows and container initializers stay eligible.
  */
 function isDocumentationRow(body: string): boolean {
+  // Trigonometric identities assign to a mathematical function, not a
+  // source-language variable. Polynomial derivations also put arithmetic
+  // expressions on the left of an equality. Keep pointer writes and ordinary
+  // assignments eligible; do not treat every occurrence of '=' as a formula.
+  if (/^(?:sin|cos|tan)\s*\([^;=]*\)\s*=(?!=)/.test(body)) return true
+  if (/^\([^;=]*[+*-][^;=]*\)\s*=(?!=)/.test(body)) return true
   // Chained numeric equalities, e.g. day = 1 = 0b00001, are equations, not assignments.
   if (/^[\w*+ /-]+\s*=\s*(?:0x[\da-f]+|0b[01]+|\d+)\s*=\s*(?:0x[\da-f]+|0b[01]+|\d+)\s*$/i.test(body)) return true
   // Go range type placeholders cannot be identifiers on the assignment's left.
@@ -84,6 +90,10 @@ function looksLikeCode(body: string): boolean {
   if (body.includes("`")) return false
   // A sentence that happens to end in ")" — "added trailing CRLF to FormData (backported from 7.1.0)".
   if (PROSE_RUN.test(body) && !/[;={}]/.test(body)) return false
+  // Contract descriptions often end with a semicolon. Actual declarations,
+  // calls and assignments carry additional syntax; quoted prose inside a
+  // disabled statement must not make that statement disappear.
+  if (PROSE_RUN.test(body) && !/[=(){}\[\]"'`]/.test(body)) return false
   return CODE_SIGNAL.test(body)
 }
 
