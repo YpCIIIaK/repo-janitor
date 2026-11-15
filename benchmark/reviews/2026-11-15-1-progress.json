@@ -1,17 +1,17 @@
 {
   "status": "in-progress",
-  "checkedAt": "2026-11-15T15:24:00.629Z",
+  "checkedAt": "2026-11-15T15:39:02.646Z",
   "pinnedRecords": 10007,
   "newTargets": 2997,
-  "offlineCurrent": 8858,
-  "newOfflineCurrent": 1848,
+  "offlineCurrent": 9294,
+  "newOfflineCurrent": 2284,
   "onlineCached": 8475,
   "onlineAudited": 182,
   "onlineAuditedPolicyLimited": 17,
-  "allSixArtifacts": 8474,
-  "newLabels": 40,
-  "tp": 5,
-  "fp": 35,
+  "allSixArtifacts": 8475,
+  "newLabels": 46,
+  "tp": 8,
+  "fp": 38,
   "sourceFingerprint": "d99a356eb71009c2",
   "preservation": {
     "oldLabelsPreserved": 2871,
@@ -20,11 +20,11 @@
     "labelledHighTPIDsRetained": 45
   },
   "pendingCounts": {
-    "offline": 1149,
+    "offline": 713,
     "online": 1532,
-    "artifacts": 1533
+    "artifacts": 1532
   },
   "distinctProjectsTarget": 10000,
-  "distinctProjectsOfflineCurrent": 8851,
+  "distinctProjectsOfflineCurrent": 9287,
   "scannerFeaturesDeferred": true
 }

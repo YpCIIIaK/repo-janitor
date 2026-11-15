@@ -890,5 +890,141 @@
       "diagram": "flowchart LR\n  I[\"Задача: отдельный serde trait\"] --> T[\"Условие возвращения теста\"] --> C[\"Заготовка в cfg test\"]",
       "level": 2
     }
+  },
+  {
+    "repo": "pluginsGLPI/formcreator",
+    "name": "pluginsglpi-formcreator",
+    "sha": "bc1061a176b8260c766447440591da7f78ee54b6",
+    "batch": 20,
+    "id": "commented-RoboFile.php:642",
+    "rule": "commented-code",
+    "location": "RoboFile.php:642",
+    "sourceUrl": "https://github.com/pluginsGLPI/formcreator/blob/bc1061a176b8260c766447440591da7f78ee54b6/RoboFile.php#L642",
+    "verdict": "fp",
+    "reason": "The comments document positional columns of git remote -v output (name, URL, fetch/push), not disabled PHP statements.",
+    "confidenceAtReview": "medium",
+    "lesson": {
+      "title": "Номера колонок — пояснение формата данных",
+      "chain": "getRemotes разбирает строку git remote -v. Комментарий перечисляет смысл элементов массива: имя, URL и тип fetch/push.",
+      "conditions": "FP commented-code: 0 = name является условным описанием позиции поля, не PHP-присваиванием. Другие exec в сборочном скрипте этим вердиктом не оцениваются.",
+      "impact": "Проверено конкретное утверждение правила по закреплённому исходнику.",
+      "fix": "Сохранить пояснение формата. Правило должно отличать таблицу полей от синтаксиса выключенной программы.",
+      "diagram": "flowchart LR\n  G[\"Строка git remote -v\"] --> P[\"Разбор колонок\"] --> M[\"Словарь remotes\"]",
+      "level": 1
+    }
+  },
+  {
+    "repo": "Raccoon254/Aviator-Automated-Betika-Bot",
+    "name": "raccoon254-aviator-automated-betika-bot",
+    "sha": "a50e79407a1f7eda1b7df4ec61083c60b5d7f210",
+    "batch": 20,
+    "id": "insecure-innerhtml-dynamic-public/script.js:139",
+    "rule": "insecure-innerhtml-dynamic",
+    "location": "public/script.js:139",
+    "sourceUrl": "https://github.com/Raccoon254/Aviator-Automated-Betika-Bot/blob/a50e79407a1f7eda1b7df4ec61083c60b5d7f210/public/script.js#L139",
+    "verdict": "fp",
+    "reason": "The HTML interpolation is the result of numeric toFixed(2), not a raw text field from the socket message. A string payload would fail toFixed rather than become HTML at this line.",
+    "confidenceAtReview": "low",
+    "lesson": {
+      "title": "В HTML подставляется результат форматирования числа",
+      "chain": "Обработчик сообщения socket берёт predictedValue и вызывает toFixed(2), затем добавляет результат к фиксированной подписи.",
+      "conditions": "FP XSS для этой подстановки: числовое форматирование не выпускает произвольные HTML-теги. Некорректный тип может вызвать ошибку — это отдельный вопрос обработки данных. Другие места вывода таблицы требуют самостоятельной проверки.",
+      "impact": "Проверено конкретное утверждение правила по закреплённому исходнику.",
+      "fix": "Для текстовой подписи использовать textContent и валидировать тип числа. При анализе XSS проверять преобразование непосредственно перед HTML-приёмником.",
+      "diagram": "flowchart LR\n  S[\"Сообщение socket\"] --> N[\"predictedValue.toFixed 2\"] --> T[\"Числовой текст\"] --> H[\"Подпись в DOM\"]",
+      "level": 2
+    }
+  },
+  {
+    "repo": "zhensherlock/webrtc-streamer-helper",
+    "name": "zhensherlock-webrtc-streamer-helper",
+    "sha": "bab9804d83fc5ced727890fa3b54d354b9eedd7b",
+    "batch": 29,
+    "id": "commented-src/core/webRTCStreamer.ts:246",
+    "rule": "commented-code",
+    "location": "src/core/webRTCStreamer.ts:246",
+    "sourceUrl": "https://github.com/zhensherlock/webrtc-streamer-helper/blob/bab9804d83fc5ced727890fa3b54d354b9eedd7b/src/core/webRTCStreamer.ts#L246",
+    "verdict": "tp",
+    "reason": "A disabled ICE-gathering handler only logs receiver codec parameters and remains beside the active data-channel handlers. It is leftover executable debug code, not prose or a configuration example.",
+    "confidenceAtReview": "medium",
+    "lesson": {
+      "title": "Выключенный обработчик диагностики WebRTC",
+      "chain": "После установки работающих обработчиков datachannel оставлен закомментированный onicegatheringstatechange. Внутри он перебирает receivers и печатает codecs в консоль.",
+      "conditions": "TP сопровождения кода: выключенная диагностическая реализация засоряет основной метод. Это не подтверждённая уязвимость WebRTC и не доказательство утечки через активный обработчик.",
+      "impact": "Проверено конкретное утверждение правила по закреплённому исходнику.",
+      "fix": "Удалить старую диагностику либо оформить её как управляемое средство отладки с понятным назначением. История Git сохраняет предыдущий вариант.",
+      "diagram": "flowchart LR\n  A[\"Рабочие обработчики WebRTC\"] --> D[\"Data channel\"]\n  C[\"Старый обработчик codec-логов\"] --> N[\"Остаётся комментарием\"]",
+      "level": 2
+    }
+  },
+  {
+    "repo": "kubeflow/hub",
+    "name": "kubeflow-hub",
+    "sha": "bc94c73536132db7d4d14e5cde5af57687b2ff81",
+    "batch": 29,
+    "id": "commented-clients/ui/bff/internal/api/model_registry_settings_handler.go:219",
+    "rule": "commented-code",
+    "location": "clients/ui/bff/internal/api/model_registry_settings_handler.go:219",
+    "sourceUrl": "https://github.com/kubeflow/hub/blob/bc94c73536132db7d4d14e5cde5af57687b2ff81/clients/ui/bff/internal/api/model_registry_settings_handler.go#L219",
+    "verdict": "fp",
+    "reason": "The PasswordSecret structure is explicitly marked intentionally not set inside the registry configuration object. It documents an omitted optional configuration, rather than abandoned executable control flow.",
+    "confidenceAtReview": "medium",
+    "lesson": {
+      "title": "Отсутствующее поле конфигурации показано намеренно",
+      "chain": "При построении конфигурации registry комментарий intentionally not set поясняет, почему блок PasswordSecret не включён в объект. Остальные поля заполняются активно.",
+      "conditions": "FP автоматического предложения удалить этот блок: он служит пояснением намеренно опущенной настройки. Комментарий не доказывает ни утечку пароля, ни успешный вход в базу без пароля.",
+      "impact": "Проверено конкретное утверждение правила по закреплённому исходнику.",
+      "fix": "Для оценки доступа к базе отдельно проследить итоговую конфигурацию, секреты, оператор и настройки сервера. Не выводить уязвимость только из закомментированного имени PasswordSecret.",
+      "diagram": "flowchart LR\n  B[\"Построение конфигурации\"] --> O[\"PasswordSecret намеренно опущен\"] --> R[\"Объект registry\"]",
+      "level": 3
+    }
+  },
+  {
+    "repo": "itsBuggingMe/Frent",
+    "name": "itsbuggingme-frent",
+    "sha": "88e388ad3de7b2d7f5add30d97136d7db94b5732",
+    "batch": 21,
+    "id": "commented-Frent/Collections/ArchetypeNeighborCache.cs:21",
+    "rule": "commented-code",
+    "location": "Frent/Collections/ArchetypeNeighborCache.cs:21",
+    "sourceUrl": "https://github.com/itsBuggingMe/Frent/blob/88e388ad3de7b2d7f5add30d97136d7db94b5732/Frent/Collections/ArchetypeNeighborCache.cs#L21",
+    "verdict": "tp",
+    "reason": "The traversal method retains a disabled SIMD implementation explicitly described as poor, beside the active scalar comparisons. This is obsolete executable implementation, not explanatory prose.",
+    "confidenceAtReview": "medium",
+    "lesson": {
+      "title": "Старая SIMD-реализация рядом с рабочей",
+      "chain": "Traverse сравнивает значение с несколькими полями обычными if. Над ним сохранён выключенный Vector256-вариант с отрицательной авторской оценкой и TODO улучшения.",
+      "conditions": "TP сопровождения кода. Этот сигнал не устанавливает ошибку индекса, память-порчу или уязвимость текущего алгоритма.",
+      "impact": "Проверено конкретное утверждение правила по закреплённому исходнику.",
+      "fix": "Удалить прежний прототип из рабочего метода; дальнейшую оптимизацию проверять отдельными тестами и измерениями. Старый вариант доступен в Git.",
+      "diagram": "flowchart LR\n  V[\"Входное ushort-значение\"] --> S[\"Активные scalar-сравнения\"] --> I[\"Индекс\"]\n  C[\"Старый Vector256-код\"] --> N[\"Не выполняется\"]",
+      "level": 2
+    }
+  },
+  {
+    "repo": "material-esm/material",
+    "name": "material-esm-material",
+    "sha": "81145b08490429ad6070c0ad4179e8e39e5f9576",
+    "batch": 21,
+    "id": "commented-buttons/fab.js:831",
+    "rule": "commented-code",
+    "location": "buttons/fab.js:831",
+    "sourceUrl": "https://github.com/material-esm/material/blob/81145b08490429ad6070c0ad4179e8e39e5f9576/buttons/fab.js#L831",
+    "verdict": "tp",
+    "reason": "The component keeps a commented IIFE for requestUpdateOnAriaChange(SharedFab). The full pinned file defines Fab and has no SharedFab or helper definition/import outside those comments, indicating leftover implementation rather than a runnable configuration example.",
+    "confidenceAtReview": "medium",
+    "lesson": {
+      "title": "Старый setup-блок после реализации компонента",
+      "chain": "Файл определяет Fab и регистрирует md-fab. Между ними остался закомментированный IIFE с SharedFab и requestUpdateOnAriaChange; этих имён в активных определениях и импортах файла нет.",
+      "conditions": "TP выключенного кода сопровождения. Само отсутствие активного helper не доказывает проблему доступности компонента: для этого нужны требования и отдельные UI-тесты.",
+      "impact": "Проверено конкретное утверждение правила по закреплённому исходнику.",
+      "fix": "Убрать остаток старой реализации. Если требуется поведение ARIA, реализовать и проверить его для текущего Fab, а не просто раскомментировать старый блок.",
+      "diagram": "flowchart LR\n  F[\"Текущий класс Fab\"] --> D[\"Регистрация md-fab\"]\n  O[\"Комментарий со старым SharedFab\"] --> N[\"Не выполняется\"]",
+      "level": 2
+    },
+    "additionalSources": [
+      "https://github.com/material-esm/material/blob/81145b08490429ad6070c0ad4179e8e39e5f9576/buttons/fab.js#L1",
+      "https://github.com/material-esm/material/blob/81145b08490429ad6070c0ad4179e8e39e5f9576/buttons/fab.js#L36"
+    ]
   }
 ]

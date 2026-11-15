@@ -1,0 +1,26 @@
+[
+  {
+    "repo": "newtextdoc1111/ComfyUI-Autocomplete-Plus",
+    "name": "newtextdoc1111-comfyui-autocomplete-plus",
+    "sha": "9cfd2aceb0205132942b6dc1e237a2377de92018",
+    "id": "commented-web/js/main.js:229",
+    "sourceUrl": "https://github.com/newtextdoc1111/ComfyUI-Autocomplete-Plus/blob/9cfd2aceb0205132942b6dc1e237a2377de92018/web/js/main.js#L229",
+    "reason": "The UI settings block is intentionally disabled pending remote-file change detection. Whether the maintainer should remove it is uncertain; no label assigned."
+  },
+  {
+    "repo": "nextcloud/nextcloud-docker-dev",
+    "name": "nextcloud-nextcloud-docker-dev",
+    "sha": "1afb02e5b9559ed48851268fe7e5ebc0f558e04e",
+    "id": "iac-docker-socket-docker-compose.yml:1328",
+    "sourceUrl": "https://github.com/nextcloud/nextcloud-docker-dev/blob/1afb02e5b9559ed48851268fe7e5ebc0f558e04e/docker-compose.yml#L1328",
+    "reason": "A Docker socket is mounted into the appapi deployment socket proxy in a development composition. The capability is real; whether the intended development boundary makes this actionable requires additional deployment-purpose context."
+  },
+  {
+    "repo": "microsoft/vscode-cosmosdb",
+    "name": "microsoft-vscode-cosmosdb",
+    "sha": "31d3f949fc39f2fefecd2a49f70953d76ba91781",
+    "id": "insecure-tls-verification-off-src/cosmosdb/getCosmosClient.ts:78",
+    "sourceUrl": "https://github.com/microsoft/vscode-cosmosdb/blob/31d3f949fc39f2fefecd2a49f70953d76ba91781/src/cosmosdb/getCosmosClient.ts#L78",
+    "reason": "Certificate verification is disabled only for the isEmulator HTTPS branch unless a caller supplies an agent. Actionability depends on how emulator endpoints are selected and trusted; that path was not fully reviewed."
+  }
+]
