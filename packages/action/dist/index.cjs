@@ -26863,7 +26863,7 @@ var require_lib4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-6X3S4QK6.js
+// ../cli/dist/chunk-YXG4M4ZE.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -45594,7 +45594,7 @@ function date4(params) {
 // ../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/external.js
 config(en_default());
 
-// ../cli/dist/chunk-6X3S4QK6.js
+// ../cli/dist/chunk-YXG4M4ZE.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -74187,7 +74187,7 @@ var RULES = {
     id: "docker-socket",
     severity: "warning",
     title: "Docker socket mounted into a container",
-    detail: "Access to /var/run/docker.sock is root on the host: the container can start a privileged container of its own. Mount it only into trusted infrastructure (a reverse proxy reading labels, a CI runner) and read-only."
+    detail: "Access to /var/run/docker.sock can grant control of the Docker host, including starting privileged containers. A read-only socket mount does not prevent mutating Docker API requests. Remove the mount from application containers, or use an authenticated API proxy with an explicit allowlist of permitted operations."
   },
   "privilege-escalation": {
     id: "privilege-escalation",
@@ -74297,7 +74297,7 @@ function containerHits(lines, compose) {
       if (!nodeAgent && !inInit && !hostAgent) push("privileged");
     } else if (/^\s*host(?:Network|PID|IPC):\s*true\b/.test(line) || compose && /^\s*(?:network_mode|pid|ipc):\s*["']?host\b/.test(line)) {
       if (!nodeAgent && !hostAgent) push("host-namespace");
-    } else if (/\/var\/run\/docker\.sock/.test(line) && !nodeAgent && !/[:,]ro\b|readOnly:\s*true/.test(near(lines, i, 0, 3)) && !DOCKER_API_IMAGE.test(nearestImage(lines, i))) push("docker-socket");
+    } else if (/\/var\/run\/docker\.sock/.test(line) && !nodeAgent && !DOCKER_API_IMAGE.test(nearestImage(lines, i))) push("docker-socket");
     else if (/^\s*allowPrivilegeEscalation:\s*true\b/.test(line) && !nodeAgent && !inInit) push("privilege-escalation");
     else if (/^\s*(?:-\s*)?["']?(?:SYS_ADMIN|SYS_PTRACE|SYS_MODULE|ALL)["']?\s*$/.test(line) && /\badd:|cap_add:/.test(near(lines, i, 4, 0)) && !/\bdrop:/.test(near(lines, i, 1, 0)) && !nodeAgent) push("dangerous-capability");
     else if (!compose && !nodeAgent && !inInit && /^\s*runAsUser:\s*0\b|^\s*runAsNonRoot:\s*false\b/.test(line)) push("run-as-root");
@@ -74484,6 +74484,8 @@ function commentBody(line) {
   return m2 ? m2[1].trim() : null;
 }
 function isDocumentationRow(body) {
+  if (/^(?:sin|cos|tan)\s*\([^;=]*\)\s*=(?!=)/.test(body)) return true;
+  if (/^\([^;=]*[+*-][^;=]*\)\s*=(?!=)/.test(body)) return true;
   if (/^[\w*+ /-]+\s*=\s*(?:0x[\da-f]+|0b[01]+|\d+)\s*=\s*(?:0x[\da-f]+|0b[01]+|\d+)\s*$/i.test(body)) return true;
   if (/^\[[^\]]+\](?:,\s*\[[^\]]+\])?\s*:=\s*range\s*\[[^\]]+\]$/.test(body)) return true;
   if (/^Index\s+\d+\s*->\s+\S/.test(body)) return true;
@@ -74498,6 +74500,7 @@ function looksLikeCode(body) {
   if (PROSE_TAIL.test(body)) return false;
   if (body.includes("`")) return false;
   if (PROSE_RUN.test(body) && !/[;={}]/.test(body)) return false;
+  if (PROSE_RUN.test(body) && !/[=(){}[\]"'`]/.test(body)) return false;
   return CODE_SIGNAL.test(body);
 }
 var NOT_PRODUCT_RE = /(^|\/)(?:flow-typed|_?examples?|samples?|bench(?:mark)?s?|website|www|docs?|lang(?:uage)?s?|locales?|i18n|assets|legacy)\/|\.config\.[cm]?[jt]s$|\.d\.[cm]?ts$|\.(?:stories|story)\.[cm]?[jt]sx?$|(^|\/)example_[^/]*_test\.go$/i;
@@ -75099,8 +75102,8 @@ function scanPhpSecurity(content) {
       } else if (c3 === "#" || c3 === "/" && next === "/") break;
       else code += c3;
     }
-    if (/\b(?:function|if|else|switch|for|foreach|while|try|catch)\b|^\s*}/.test(code)) tainted.clear();
     const executable = code.replace(/'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*"/g, (s) => " ".repeat(s.length));
+    if (/\b(?:function|if|else|switch|for|foreach|while|try|catch)\b|^\s*}/.test(executable)) tainted.clear();
     const carries = (expr) => {
       const value = expr.replace(/\\\$/g, "").replace(/'(?:\\.|[^'\\])*'/g, "");
       return REQUEST.test(value) || /\bfile_get_contents\s*\(\s*['"]php:\/\/input['"]/.test(expr) || [...value.matchAll(/\$[A-Za-z_]\w*/g)].some((m2) => tainted.has(m2[0]));
@@ -75886,7 +75889,7 @@ function scanSource(content, lang) {
       if (!contextAllows(rule.id, content, lineStart)) continue;
       const existing = byLine.get(line);
       if (existing && rank(existing.rule.severity) >= rank(rule.severity)) continue;
-      if (!sinkAllows(rule.id, rawLine, idx - lineStart)) continue;
+      if (!sinkAllows(rule.id, rawLine, idx - lineStart, lang)) continue;
       if (lang === "php" && rule.id === "exec-interpolated" && /\bproc_open\s*\(\s*\[/.test(rawLine)) continue;
       if ((rule.id === "php-include-user-input" || rule.id === "php-reflected-xss") && !/\$_(?:GET|POST|REQUEST|COOKIE)\b/.test(m2[0]) && !phpLocalRequestValue(content, idx, m2[0])) continue;
       const tainted = !INJECTION_RULES.has(rule.id) ? void 0 : rule.id === "ssrf" ? SSRF_TAINT.test(around(content, lineStart, 2, 0)) : TAINT_RE[lang].test(around(content, lineStart, TAINT_WINDOW, 2));
@@ -75915,8 +75918,12 @@ function phpLocalRequestValue(content, sinkOffset, sink) {
   return [...sink.matchAll(/\$[A-Za-z_]\w*/g)].some(([name]) => tainted.has(name));
 }
 var PHP_ESCAPED = /\b(?:htmlspecialchars|htmlentities|esc_(?:attr|html|url|js|textarea)|sanitize_\w+|wp_kses\w*|strip_tags|intval|floatval|urlencode|rawurlencode|json_encode|scrub_out|e)\s*\(|\(int\)|\(float\)/;
-function sinkAllows(ruleId, line, col) {
+function sinkAllows(ruleId, line, col, lang) {
   var _a22, _b;
+  if (ruleId === "sql-interpolated" && lang === "java") {
+    const prefix = line.slice(0, col);
+    if (/\b(?:log|logger)\s*\.\s*(?:trace|debug|info|warn|error|fatal)\s*\(\s*$/i.test(prefix) || /\bthrow\s+new\s+(?:[\w$]+\.)*[\w$]*(?:Exception|Error)\s*\(\s*$/.test(prefix)) return false;
+  }
   if (ruleId === "php-reflected-xss") return !PHP_ESCAPED.test(line) && !/\b(?:echo|print)\b[^;$]*\w\s*\([^;]*\$_(?:GET|POST|REQUEST|COOKIE)/.test(line);
   if (ruleId === "exec-interpolated" && line[col] === "`") {
     return ((_b = (_a22 = line.slice(0, col).match(/"/g)) == null ? void 0 : _a22.length) != null ? _b : 0) % 2 === 0;
@@ -82831,7 +82838,7 @@ var RULES4 = {
     id: "docker-socket",
     severity: "warning",
     title: "Docker socket mounted into a container",
-    detail: "Access to /var/run/docker.sock is root on the host: the container can start a privileged container of its own. Mount it only into trusted infrastructure (a reverse proxy reading labels, a CI runner) and read-only."
+    detail: "Access to /var/run/docker.sock can grant control of the Docker host, including starting privileged containers. A read-only socket mount does not prevent mutating Docker API requests. Remove the mount from application containers, or use an authenticated API proxy with an explicit allowlist of permitted operations."
   },
   "privilege-escalation": {
     id: "privilege-escalation",
@@ -82941,7 +82948,7 @@ function containerHits2(lines, compose) {
       if (!nodeAgent && !inInit && !hostAgent) push("privileged");
     } else if (/^\s*host(?:Network|PID|IPC):\s*true\b/.test(line) || compose && /^\s*(?:network_mode|pid|ipc):\s*["']?host\b/.test(line)) {
       if (!nodeAgent && !hostAgent) push("host-namespace");
-    } else if (/\/var\/run\/docker\.sock/.test(line) && !nodeAgent && !/[:,]ro\b|readOnly:\s*true/.test(near2(lines, i, 0, 3)) && !DOCKER_API_IMAGE2.test(nearestImage2(lines, i))) push("docker-socket");
+    } else if (/\/var\/run\/docker\.sock/.test(line) && !nodeAgent && !DOCKER_API_IMAGE2.test(nearestImage2(lines, i))) push("docker-socket");
     else if (/^\s*allowPrivilegeEscalation:\s*true\b/.test(line) && !nodeAgent && !inInit) push("privilege-escalation");
     else if (/^\s*(?:-\s*)?["']?(?:SYS_ADMIN|SYS_PTRACE|SYS_MODULE|ALL)["']?\s*$/.test(line) && /\badd:|cap_add:/.test(near2(lines, i, 4, 0)) && !/\bdrop:/.test(near2(lines, i, 1, 0)) && !nodeAgent) push("dangerous-capability");
     else if (!compose && !nodeAgent && !inInit && /^\s*runAsUser:\s*0\b|^\s*runAsNonRoot:\s*false\b/.test(line)) push("run-as-root");
@@ -83125,6 +83132,8 @@ function commentBody2(line) {
   return m2 ? m2[1].trim() : null;
 }
 function isDocumentationRow2(body) {
+  if (/^(?:sin|cos|tan)\s*\([^;=]*\)\s*=(?!=)/.test(body)) return true;
+  if (/^\([^;=]*[+*-][^;=]*\)\s*=(?!=)/.test(body)) return true;
   if (/^[\w*+ /-]+\s*=\s*(?:0x[\da-f]+|0b[01]+|\d+)\s*=\s*(?:0x[\da-f]+|0b[01]+|\d+)\s*$/i.test(body)) return true;
   if (/^\[[^\]]+\](?:,\s*\[[^\]]+\])?\s*:=\s*range\s*\[[^\]]+\]$/.test(body)) return true;
   if (/^Index\s+\d+\s*->\s+\S/.test(body)) return true;
@@ -83139,6 +83148,7 @@ function looksLikeCode2(body) {
   if (PROSE_TAIL2.test(body)) return false;
   if (body.includes("`")) return false;
   if (PROSE_RUN2.test(body) && !/[;={}]/.test(body)) return false;
+  if (PROSE_RUN2.test(body) && !/[=(){}[\]"'`]/.test(body)) return false;
   return CODE_SIGNAL2.test(body);
 }
 var NOT_PRODUCT_RE2 = /(^|\/)(?:flow-typed|_?examples?|samples?|bench(?:mark)?s?|website|www|docs?|lang(?:uage)?s?|locales?|i18n|assets|legacy)\/|\.config\.[cm]?[jt]s$|\.d\.[cm]?ts$|\.(?:stories|story)\.[cm]?[jt]sx?$|(^|\/)example_[^/]*_test\.go$/i;
@@ -83723,8 +83733,8 @@ function scanPhpSecurity2(content) {
       } else if (c3 === "#" || c3 === "/" && next === "/") break;
       else code += c3;
     }
-    if (/\b(?:function|if|else|switch|for|foreach|while|try|catch)\b|^\s*}/.test(code)) tainted.clear();
     const executable = code.replace(/'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*"/g, (s) => " ".repeat(s.length));
+    if (/\b(?:function|if|else|switch|for|foreach|while|try|catch)\b|^\s*}/.test(executable)) tainted.clear();
     const carries = (expr) => {
       const value = expr.replace(/\\\$/g, "").replace(/'(?:\\.|[^'\\])*'/g, "");
       return REQUEST2.test(value) || /\bfile_get_contents\s*\(\s*['"]php:\/\/input['"]/.test(expr) || [...value.matchAll(/\$[A-Za-z_]\w*/g)].some((m2) => tainted.has(m2[0]));
@@ -84510,7 +84520,7 @@ function scanSource2(content, lang) {
       if (!contextAllows2(rule.id, content, lineStart)) continue;
       const existing = byLine.get(line);
       if (existing && rank2(existing.rule.severity) >= rank2(rule.severity)) continue;
-      if (!sinkAllows2(rule.id, rawLine, idx - lineStart)) continue;
+      if (!sinkAllows2(rule.id, rawLine, idx - lineStart, lang)) continue;
       if (lang === "php" && rule.id === "exec-interpolated" && /\bproc_open\s*\(\s*\[/.test(rawLine)) continue;
       if ((rule.id === "php-include-user-input" || rule.id === "php-reflected-xss") && !/\$_(?:GET|POST|REQUEST|COOKIE)\b/.test(m2[0]) && !phpLocalRequestValue2(content, idx, m2[0])) continue;
       const tainted = !INJECTION_RULES2.has(rule.id) ? void 0 : rule.id === "ssrf" ? SSRF_TAINT2.test(around2(content, lineStart, 2, 0)) : TAINT_RE2[lang].test(around2(content, lineStart, TAINT_WINDOW2, 2));
@@ -84539,7 +84549,11 @@ function phpLocalRequestValue2(content, sinkOffset, sink) {
   return [...sink.matchAll(/\$[A-Za-z_]\w*/g)].some(([name]) => tainted.has(name));
 }
 var PHP_ESCAPED2 = /\b(?:htmlspecialchars|htmlentities|esc_(?:attr|html|url|js|textarea)|sanitize_\w+|wp_kses\w*|strip_tags|intval|floatval|urlencode|rawurlencode|json_encode|scrub_out|e)\s*\(|\(int\)|\(float\)/;
-function sinkAllows2(ruleId, line, col) {
+function sinkAllows2(ruleId, line, col, lang) {
+  if (ruleId === "sql-interpolated" && lang === "java") {
+    const prefix = line.slice(0, col);
+    if (/\b(?:log|logger)\s*\.\s*(?:trace|debug|info|warn|error|fatal)\s*\(\s*$/i.test(prefix) || /\bthrow\s+new\s+(?:[\w$]+\.)*[\w$]*(?:Exception|Error)\s*\(\s*$/.test(prefix)) return false;
+  }
   if (ruleId === "php-reflected-xss") return !PHP_ESCAPED2.test(line) && !/\b(?:echo|print)\b[^;$]*\w\s*\([^;]*\$_(?:GET|POST|REQUEST|COOKIE)/.test(line);
   if (ruleId === "exec-interpolated" && line[col] === "`") {
     return (line.slice(0, col).match(/"/g)?.length ?? 0) % 2 === 0;

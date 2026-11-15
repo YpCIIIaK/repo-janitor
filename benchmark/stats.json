@@ -1821,5 +1821,117 @@
       "tp": 70,
       "fp": 547
     }
+  },
+  "dataCoverage": {
+    "records": 10007,
+    "inventories": 10007,
+    "metadataSnapshots": 10007,
+    "auditedMetadataSnapshots": 1714,
+    "legacyMetadataSnapshots": 8293,
+    "policyLimitedMetadataSnapshots": 339,
+    "metadataOldestDay": "2026-11-09",
+    "metadataNewestDay": "2026-11-15",
+    "formats": [
+      {
+        "name": "JavaScript",
+        "records": 4030,
+        "files": 354611
+      },
+      {
+        "name": "Python",
+        "records": 3117,
+        "files": 359017
+      },
+      {
+        "name": "TypeScript",
+        "records": 2255,
+        "files": 613029
+      },
+      {
+        "name": "C / C++",
+        "records": 1861,
+        "files": 335724
+      },
+      {
+        "name": "Java",
+        "records": 1213,
+        "files": 414905
+      },
+      {
+        "name": "Go",
+        "records": 1187,
+        "files": 362442
+      },
+      {
+        "name": "Kotlin",
+        "records": 904,
+        "files": 177466
+      },
+      {
+        "name": "Rust",
+        "records": 880,
+        "files": 139221
+      },
+      {
+        "name": "Swift",
+        "records": 874,
+        "files": 81363
+      },
+      {
+        "name": "PHP",
+        "records": 751,
+        "files": 222972
+      },
+      {
+        "name": "Ruby",
+        "records": 684,
+        "files": 115212
+      },
+      {
+        "name": "C#",
+        "records": 653,
+        "files": 296001
+      },
+      {
+        "name": "Vue",
+        "records": 368,
+        "files": 30497
+      },
+      {
+        "name": "Dart",
+        "records": 359,
+        "files": 80194
+      },
+      {
+        "name": "Terraform",
+        "records": 291,
+        "files": 39504
+      },
+      {
+        "name": "Scala",
+        "records": 237,
+        "files": 57901
+      },
+      {
+        "name": "Elixir",
+        "records": 152,
+        "files": 15305
+      },
+      {
+        "name": "Svelte",
+        "records": 109,
+        "files": 14123
+      },
+      {
+        "name": "Erlang",
+        "records": 90,
+        "files": 4628
+      },
+      {
+        "name": "Solidity",
+        "records": 37,
+        "files": 2037
+      }
+    ]
   }
 }
