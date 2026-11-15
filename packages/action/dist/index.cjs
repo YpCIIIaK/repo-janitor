@@ -26863,7 +26863,7 @@ var require_lib4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-4IYWVJN5.js
+// ../cli/dist/chunk-6X3S4QK6.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -45594,7 +45594,7 @@ function date4(params) {
 // ../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/external.js
 config(en_default());
 
-// ../cli/dist/chunk-4IYWVJN5.js
+// ../cli/dist/chunk-6X3S4QK6.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -70263,7 +70263,7 @@ var RULE_PRECISION = {
   "ci-silenced-failure": { tp: 4, fp: 7 },
   "ci-swallowed": { tp: 3, fp: 2 },
   "ci-tests-not-run": { tp: 0, fp: 10 },
-  "commented-code": { tp: 105, fp: 74 },
+  "commented-code": { tp: 113, fp: 98 },
   "config-conflict": { tp: 19, fp: 1 },
   "dead-export": { tp: 17, fp: 3 },
   "dead-uikit": { tp: 3, fp: 2 },
@@ -70289,7 +70289,7 @@ var RULE_PRECISION = {
   "hygiene-no-readme": { tp: 2, fp: 0 },
   "hygiene-no-tests": { tp: 6, fp: 5 },
   "iac-dangerous-capability": { tp: 1, fp: 5 },
-  "iac-docker-socket": { tp: 9, fp: 3 },
+  "iac-docker-socket": { tp: 9, fp: 4 },
   "iac-hardcoded-password": { tp: 2, fp: 0 },
   "iac-host-namespace": { tp: 5, fp: 39 },
   "iac-iam-wildcard": { tp: 3, fp: 0 },
@@ -70303,30 +70303,30 @@ var RULE_PRECISION = {
   "insecure-cpp-tls-validation-disabled": { tp: 2, fp: 0 },
   "insecure-document-write-dynamic": { tp: 0, fp: 3 },
   "insecure-dotnet-deserialization": { tp: 0, fp: 2 },
-  "insecure-eval-dynamic": { tp: 2, fp: 7 },
-  "insecure-exec-interpolated": { tp: 5, fp: 23 },
+  "insecure-eval-dynamic": { tp: 2, fp: 10 },
+  "insecure-exec-interpolated": { tp: 5, fp: 26 },
   "insecure-go-template-html": { tp: 0, fp: 10 },
-  "insecure-innerhtml-dynamic": { tp: 0, fp: 13 },
-  "insecure-java-deserialization": { tp: 2, fp: 3 },
-  "insecure-localstorage-secret": { tp: 2, fp: 9 },
+  "insecure-innerhtml-dynamic": { tp: 0, fp: 16 },
+  "insecure-java-deserialization": { tp: 2, fp: 4 },
+  "insecure-localstorage-secret": { tp: 2, fp: 10 },
   "insecure-new-function": { tp: 3, fp: 15 },
   "insecure-php-path-traversal": { tp: 4, fp: 0 },
   "insecure-php-reflected-xss": { tp: 4, fp: 2 },
   "insecure-php-unserialize": { tp: 2, fp: 8 },
   "insecure-php-xxe": { tp: 2, fp: 0 },
-  "insecure-py-eval-exec": { tp: 0, fp: 19 },
-  "insecure-py-os-system": { tp: 0, fp: 9 },
+  "insecure-py-eval-exec": { tp: 0, fp: 20 },
+  "insecure-py-os-system": { tp: 0, fp: 10 },
   "insecure-py-pickle-load": { tp: 2, fp: 19 },
   "insecure-py-shell-true": { tp: 1, fp: 8 },
   "insecure-py-verify-false": { tp: 1, fp: 1 },
-  "insecure-py-yaml-load": { tp: 0, fp: 3 },
-  "insecure-random-for-secret": { tp: 1, fp: 7 },
-  "insecure-react-dangerous-html": { tp: 2, fp: 16 },
+  "insecure-py-yaml-load": { tp: 0, fp: 4 },
+  "insecure-random-for-secret": { tp: 1, fp: 8 },
+  "insecure-react-dangerous-html": { tp: 2, fp: 17 },
   "insecure-ruby-dynamic-dispatch": { tp: 0, fp: 3 },
   "insecure-ruby-marshal-load": { tp: 0, fp: 5 },
   "insecure-rust-tls-validation-disabled": { tp: 3, fp: 2 },
-  "insecure-sql-interpolated": { tp: 28, fp: 63 },
-  "insecure-ssrf": { tp: 4, fp: 76 },
+  "insecure-sql-interpolated": { tp: 28, fp: 71 },
+  "insecure-ssrf": { tp: 5, fp: 78 },
   "insecure-swift-plaintext-credential-storage": { tp: 1, fp: 0 },
   "insecure-swift-webview-html": { tp: 1, fp: 0 },
   "insecure-tls-verification-off": { tp: 0, fp: 12 },

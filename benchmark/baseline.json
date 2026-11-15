@@ -1,15 +1,15 @@
 {
- "overall": 0.567,
+ "overall": 0.554,
  "scanners": {
   "eol-runtime": 0.944,
   "todo-debt": 0.911,
   "broken-doc-links": 0.66,
   "bus-factor": 0.848,
   "workflow-security": 0.954,
-  "commented-code": 0.587,
+  "commented-code": 0.536,
   "duplicate-code": 0.722,
   "skipped-tests": 0.815,
-  "insecure-code": 0.176,
+  "insecure-code": 0.168,
   "docs-drift": 0.63,
   "lockfile-drift": 0.905,
   "dead-code": 0.8,
@@ -22,7 +22,7 @@
   "repo-bloat": 0.471,
   "project-hygiene": 0.692,
   "license-risk": 0.152,
-  "iac-security": 0.416,
+  "iac-security": 0.414,
   "dependency-funeral": 0.077,
   "supply-chain": 1
  },
@@ -3363,6 +3363,184 @@
   ],
   "microsoftdocs-wdac-toolkit": [
    "commented-WDAC-Policy-Wizard/app/src/CustomRuleConditionsPanel.cs:1743"
+  ],
+  "peachycloudsecurity-very-vulnerable-serverless": [
+   "insecure-ssrf-app.py:46"
+  ],
+  "paynezhuang-panis-admin": [
+   "commented-src/router/guard/route.ts:55"
+  ],
+  "lingframe-lingframe": [
+   "insecure-sql-interpolated-lingframe-examples/lingframe-example-ling-user-canary/src/main/java/com/lingframe/example/user/canary/service/impl/UserServiceImpl.java:146"
+  ],
+  "creativemd-littletiles": [
+   "insecure-sql-interpolated-src/main/java/team/creative/littletiles/client/player/LittleClientPlayerHandler.java:1089"
+  ],
+  "ilovepdf-ilovepdf-php": [
+   "insecure-ssrf-src/Task.php:477"
+  ],
+  "seborama-govcr": [
+   "iac-docker-socket-docker-compose.yaml:19"
+  ],
+  "voxpupuli-puppet-python": [
+   "insecure-sql-interpolated-lib/facter/pip_version.rb:7"
+  ],
+  "yohasebe-wp2txt": [
+   "insecure-exec-interpolated-lib/wp2txt/sql_dump_reader.rb:24"
+  ],
+  "chayanforyou-quickball": [
+   "commented-app/src/main/java/io/github/chayanforyou/quickball/ui/screens/shortcut/ShortcutMenuScreen.kt:143"
+  ],
+  "snipmedev-highlights": [
+   "insecure-java-deserialization-src/commonTest/kotlin/dev/snipme/highlights/internal/CodeSamples.kt:510"
+  ],
+  "expertiza-expertiza": [
+   "insecure-innerhtml-dynamic-app/assets/javascripts/answer_tags.js:26"
+  ],
+  "ifreeovo-i18n-cli": [
+   "insecure-random-for-secret-packages/translate-utils/src/baidu.ts:19"
+  ],
+  "aiven-open-klaw": [
+   "insecure-sql-interpolated-core/src/main/java/io/aiven/klaw/listeners/MetadataListener.java:47"
+  ],
+  "lxcshine-zilan": [
+   "insecure-exec-interpolated-Formula/weknora-lite.rb:72"
+  ],
+  "tokencanopy-e2a": [
+   "commented-internal/hitlworker/loopback_screening_test.go:13"
+  ],
+  "beyarkay-eskom-calendar": [
+   "insecure-py-yaml-load-dataset/build.py:119"
+  ],
+  "llnl-axom": [
+   "commented-src/axom/inlet/tests/inlet_Reader.cpp:180"
+  ],
+  "yuhengqin-quotern": [
+   "insecure-localstorage-secret-apps/desktop/src/renderer/lib/utils.ts:61"
+  ],
+  "transferia-transferia": [
+   "commented-pkg/abstract/storage.go:366"
+  ],
+  "dry-rb-dry-logic": [
+   "insecure-eval-dynamic-lib/dry/logic/operations/key.rb:16"
+  ],
+  "mck89-peast": [
+   "insecure-exec-interpolated-lib/Peast/Query.php:62"
+  ],
+  "vesoft-inc-nebula-java": [
+   "insecure-sql-interpolated-client/src/main/fbthrift/com/facebook/thrift/server/TNonblockingServer.java:454"
+  ],
+  "higress-group-higress-console": [
+   "commented-backend/sdk/src/main/java/com/alibaba/higress/sdk/service/DomainServiceImpl.java:160",
+   "insecure-sql-interpolated-backend/console/src/main/java/com/alibaba/higress/console/service/KubernetesLoginAttemptStore.java:112"
+  ],
+  "arkworks-rs-r1cs-std": [
+   "commented-src/boolean/allocated.rs:82"
+  ],
+  "objecthub-swift-dynamicjson": [
+   "commented-Sources/DynamicJSON/JSONSchema/JSONSchemaDraft2020.swift:252"
+  ],
+  "unitsofmeasurement-unit-api": [
+   "commented-src/test/java/javax/measure/test/TestUnit.java:83"
+  ],
+  "centrifugal-phpcent": [
+   "insecure-ssrf-gen/api_docs.php:292"
+  ],
+  "worldwindearth-worldwindkotlin": [
+   "insecure-sql-interpolated-worldwind-examples-android/src/main/kotlin/earth/worldwind/examples/PlacemarksSelectDragActivity.kt:121"
+  ],
+  "apache-flink-connector-kafka": [
+   "insecure-py-eval-exec-flink-python/setup.py:60"
+  ],
+  "imperialcollegelondon-sharpy": [
+   "insecure-py-os-system-sharpy/cases/templates/Ttail.py:709"
+  ],
+  "webankfintech-defibus": [
+   "insecure-sql-interpolated-defibus-broker/src/main/java/com/webank/defibus/broker/consumequeue/ConsumeQueueManager.java:155"
+  ],
+  "koedame-rails-mermaid-erd": [
+   "insecure-eval-dynamic-lib/templates/index.html.erb:1659"
+  ],
+  "miskin-lee-edgeterm": [
+   "insecure-react-dangerous-html-src/components/icons.tsx:123"
+  ],
+  "daniilsokolyuk-video2dlssnr": [
+   "commented-src/gpu.h:94"
+  ],
+  "ruby-ostruct": [
+   "insecure-eval-dynamic-lib/ostruct.rb:476"
+  ],
+  "blendogames-skindeep": [
+   "commented-cm/CollisionModel_rotate.cpp:71"
+  ],
+  "peeriot-myrmic": [
+   "commented-swarm/sorg-common/src/serde.rs:55"
+  ],
+  "pluginsglpi-formcreator": [
+   "commented-RoboFile.php:642"
+  ],
+  "raccoon254-aviator-automated-betika-bot": [
+   "insecure-innerhtml-dynamic-public/script.js:139"
+  ],
+  "itsbuggingme-frent": [
+   "commented-Frent/Collections/ArchetypeNeighborCache.cs:21"
+  ],
+  "material-esm-material": [
+   "commented-buttons/fab.js:831"
+  ],
+  "mubaidr-javascript-barcode-reader": [
+   "commented-test/index.test.js:205"
+  ],
+  "multipaper-shreddedpaper": [
+   "commented-shreddedpaper-server/src/main/java/io/multipaper/shreddedpaper/region/RegionPos.java:24"
+  ],
+  "stakater-gitwebhookproxy": [
+   "commented-pkg/providers/github_test.go:103"
+  ],
+  "calendar0917-deepseekweb-enhance": [
+   "insecure-innerhtml-dynamic-ds-enhance.user.js:950"
+  ],
+  "hdrhistogram-hdrhistogram-net": [
+   "commented-HdrHistogram/IntConcurrentHistogram.cs:138"
+  ],
+  "spatie-laravel-model-info": [
+   "commented-src/Attributes/AttributeFinder.php:121"
+  ],
+  "mozillazg-hello-libbpfgo": [
+   "commented-22-tail-calls/main.bpf.c:33"
+  ],
+  "hkh1012-langboot": [
+   "commented-src/main/java/com/hkh/ai/chain/vectorizer/baidu/BaiduQianFanVectorizationResult.java:31"
+  ],
+  "frikishaan-tiny-crm": [
+   "commented-app/Http/Middleware/ValidateSignature.php:15"
+  ],
+  "cat-kun-qinglong-scripts": [
+   "commented-csair_checkin.js:118"
+  ],
+  "uniswap-routing-api": [
+   "commented-test/mocha/integ/graphql/graphql-token-fee-fetcher.test.ts:75"
+  ],
+  "stephenjude-filament-jetstream": [
+   "commented-stubs/app/Models/User.php:14"
+  ],
+  "sleipnirgroup-choreo": [
+   "commented-choreolib/src/test/java/choreo/auto/DoneTest.java:86"
+  ],
+  "patchorbit-domscribe": [
+   "commented-packages/domscribe-test-fixtures/fixtures/_registry/vue/3/expectations.ts:198"
+  ],
+  "zhensherlock-webrtc-streamer-helper": [
+   "commented-src/core/webRTCStreamer.ts:246"
+  ],
+  "kubeflow-hub": [
+   "commented-clients/ui/bff/internal/api/model_registry_settings_handler.go:219"
+  ],
+  "sergiiob-intel-arc-pro-b70-inference-cookbook": [
+   "commented-research/b70-docs/research/references/quant-avail-20261009/master-sycl.cpp:3477"
+  ],
+  "toss-apps-in-toss-harness": [
+   "commented-packages/debugger/src/mcp/__tests__/devtools-opener.test.ts:164"
   ]
  }
 }

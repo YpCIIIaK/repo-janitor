@@ -1,6 +1,6 @@
 {
-  "status": "offline-complete-online-pending",
-  "checkedAt": "2026-11-15T16:06:37.004031+00:00",
+  "status": "offline-complete-before-calibration",
+  "checkedAt": "2026-11-15T18:22:07.331794+00:00",
   "pinnedRecords": 10007,
   "distinctProjects": 10000,
   "historicalAliasRecords": 7,

@@ -1,0 +1,68 @@
+[
+  {
+    "replacedAt": "2026-11-15T18:18:32.439635+00:00",
+    "reason": "Previously public target became unavailable to anonymous cloning during metadata completion; four further retries failed. Replace with a public eligible Python project; do not bypass access controls.",
+    "old": {
+      "githubId": 1333673389,
+      "repo": "smashguidetram/telegram-gifts-mrkt-sniper-bot",
+      "name": "smashguidetram-telegram-gifts-mrkt-sniper-bot",
+      "url": "https://github.com/smashguidetram/telegram-gifts-mrkt-sniper-bot",
+      "sha": "6ab5ba1f07c55235fb495a0049e586a2ba1a2a80",
+      "language": "Python",
+      "description": "MRKT marketplace gifts sniper: Telegram Mini App auth, price rules by collection/model, 2s polling, guarded autobuy with practice mode",
+      "stars": 197,
+      "sizeKiB": 861,
+      "pushedAt": "2026-10-29T17:23:58Z",
+      "defaultBranch": "main",
+      "license": "MIT",
+      "topics": [
+        "autobuy",
+        "gifts",
+        "marketplace",
+        "mrkt",
+        "python",
+        "sniper",
+        "telegram",
+        "telegram-bot",
+        "ton",
+        "trading-bot"
+      ],
+      "kind": "project",
+      "searchQuery": "language:\"Python\" fork:false archived:false stars:20..200 pushed:>=2025-11-15 size:10..80000",
+      "tracks": [
+        "general"
+      ],
+      "selectionIndex": 2864,
+      "batch": 29
+    },
+    "new": {
+      "githubId": 16114128,
+      "repo": "ip-tools/python-epo-ops-client",
+      "name": "ip-tools-python-epo-ops-client",
+      "url": "https://github.com/ip-tools/python-epo-ops-client",
+      "sha": "98d5e4f3b79bca52e15709ce03946599b41df7ee",
+      "language": "Python",
+      "description": "Python client for EPO OPS, the European Patent Office's Open Patent Services API.",
+      "stars": 196,
+      "sizeKiB": 420,
+      "pushedAt": "2026-11-14T00:57:44Z",
+      "defaultBranch": "main",
+      "license": "Apache-2.0",
+      "topics": [
+        "epo",
+        "epo-ops",
+        "ops",
+        "patent-data",
+        "patent-data-api",
+        "patent-office"
+      ],
+      "kind": "project",
+      "searchQuery": "language:\"Python\" fork:false archived:false stars:20..200 pushed:>=2025-11-15 size:10..80000",
+      "tracks": [
+        "general"
+      ],
+      "selectionIndex": 2864,
+      "batch": 29
+    }
+  }
+]

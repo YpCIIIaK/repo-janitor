@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-15T13:20:32.595861+00:00",
+ "generatedAt": "2026-11-15T18:18:32.415571+00:00",
  "repositories": {
   "045200-ad-filter": {"id": 1037896824, "canonical": "045200/ad-filter"},
   "0c34-govwa": {"id": 105642538, "canonical": "0c34/govwa"},
@@ -3998,6 +3998,7 @@
   "ionic-team-ionic-framework": {"id": 12256376, "canonical": "ionic-team/ionic-framework"},
   "ionicfirebaseapp-getwidget": {"id": 227270948, "canonical": "ionicfirebaseapp/getwidget"},
   "iovisor-kubectl-trace": {"id": 158594821, "canonical": "iovisor/kubectl-trace"},
+  "ip-tools-python-epo-ops-client": {"id": 16114128, "canonical": "ip-tools/python-epo-ops-client"},
   "ipfs-kubo": {"id": 21233191, "canonical": "ipfs/kubo"},
   "ipfs-rainbow": {"id": 419460912, "canonical": "ipfs/rainbow"},
   "iphoenix227-flow-state-bjj-attack-decision-map": {"id": 1237152279, "canonical": "iphoenix227/Flow-State---BJJ-Attack-Decision-Map"},
@@ -8059,7 +8060,6 @@
   "smaranchand-bucky": {"id": 284842005, "canonical": "smaranchand/bucky"},
   "smartarduino-doit-ai": {"id": 937981463, "canonical": "SmartArduino/DOIT_AI"},
   "smartfastlabs-equals": {"id": 25288088, "canonical": "smartfastlabs/equals"},
-  "smashguidetram-telegram-gifts-mrkt-sniper-bot": {"id": 1333673389, "canonical": "smashguidetram/telegram-gifts-mrkt-sniper-bot"},
   "smfsw-queue": {"id": 85872102, "canonical": "SMFSW/Queue"},
   "smgdkngt-dobase": {"id": 1180626210, "canonical": "smgdkngt/dobase"},
   "smimram-monadic-synth": {"id": 10224637, "canonical": "smimram/monadic-synth"},

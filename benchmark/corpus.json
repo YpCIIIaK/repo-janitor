@@ -67060,9 +67060,9 @@
     ]
   },
   {
-    "name": "smashguidetram-telegram-gifts-mrkt-sniper-bot",
-    "url": "https://github.com/smashguidetram/telegram-gifts-mrkt-sniper-bot",
-    "sha": "6ab5ba1f07c55235fb495a0049e586a2ba1a2a80",
+    "name": "ip-tools-python-epo-ops-client",
+    "url": "https://github.com/ip-tools/python-epo-ops-client",
+    "sha": "98d5e4f3b79bca52e15709ce03946599b41df7ee",
     "tracks": [
       "general"
     ]

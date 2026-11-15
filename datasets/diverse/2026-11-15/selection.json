@@ -1,5 +1,5 @@
 {
-  "status": "offline-complete-online-pending",
+  "status": "complete",
   "addedNewProjects": 2997,
   "importedPreviouslyScanned": 500,
   "targetDistinctProjects": 10000,
@@ -39,5 +39,10 @@
   "previousKnownIDsExcluded": 7638,
   "previousKnownSnapshotSha256": "fb9630c23338940f44e43a4239fa95c145f4cb6a2403361141e664535a150248",
   "scanPolicy": "Static benchmark CLI and OSV only; no target application/dependency execution.",
-  "progressFile": "../../../benchmark/reviews/2026-11-15-1-progress.json"
+  "progressFile": "../../../benchmark/reviews/2026-11-15-1-progress.json",
+  "replacementRecords": "../../../benchmark/reviews/2026-11-15-1-replacements.json",
+  "retiredGithubIds": [
+    1333673389
+  ],
+  "verificationFile": "../../../benchmark/reviews/2026-11-15-1-verification.json"
 }
