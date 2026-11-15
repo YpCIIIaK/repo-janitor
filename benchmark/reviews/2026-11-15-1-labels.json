@@ -360,13 +360,13 @@
     "rule": "commented-code",
     "location": "src/axom/inlet/tests/inlet_Reader.cpp:180",
     "sourceUrl": "https://github.com/llnl/axom/blob/bf9c43186c077730da7b4cba7116a12119394579/src/axom/inlet/tests/inlet_Reader.cpp#L180",
-    "verdict": "tp",
-    "reason": "The test contains a commented unordered_map declaration and EXPECT_EQ assertion; they are disabled executable test code.",
+    "verdict": "fp",
+    "reason": "The block is disabled test expectations in a parser test fixture, with an adjacent explanation of YAML boolean/string differences. Routine excludes test-fixture findings from actionable code-cleanup TP.",
     "confidenceAtReview": "medium",
     "lesson": {
       "title": "Закомментированная проверка теста",
       "chain": "Тест читает строковые значения из Lua/YAML. Декларация ожидаемого словаря и EXPECT_EQ оставлены в комментариях.",
-      "conditions": "Подтверждён сигнал сопровождения кода. Это не доказательство уязвимости: комментарий выше объясняет различие парсеров, но сама проверка сейчас не выполняется.",
+      "conditions": "FP по критерию рутины: это тестовый сценарий с пояснением различий Lua/YAML. Наличие выключенной проверки само по себе не подтверждает проблему рабочего приложения.",
       "impact": "Проверено конкретное утверждение правила по закреплённому исходнику.",
       "fix": "Явно оформить ожидаемые различия парсеров в тесте либо убрать устаревший вариант в пользу истории Git.",
       "diagram": "flowchart LR\n  R[\"Чтение строк\"] --> T[\"Активная проверка статуса\"]\n  C[\"EXPECT_EQ в комментарии\"] --> N[\"Не выполняется\"]",
@@ -605,13 +605,13 @@
     "rule": "commented-code",
     "location": "src/test/java/javax/measure/test/TestUnit.java:83",
     "sourceUrl": "https://github.com/unitsofmeasurement/unit-api/blob/738b56aac94879d6b6665396eb445af2f823459a/src/test/java/javax/measure/test/TestUnit.java#L83",
-    "verdict": "tp",
-    "reason": "The test helper asType method keeps a multi-line disabled implementation before returning null.",
+    "verdict": "fp",
+    "reason": "The disabled implementation is inside TestUnit, a deliberately minimal test helper. Routine excludes test-fixture findings from actionable code-cleanup TP.",
     "confidenceAtReview": "medium",
     "lesson": {
       "title": "Тестовый helper хранит выключенную реализацию",
       "chain": "В asType закомментированы поиск единицы измерения, проверка совместимости и исключение. Активный метод возвращает null.",
-      "conditions": "TP commented-code, но не установленный дефект рабочего продукта: файл является тестовым helper.",
+      "conditions": "FP по критерию рутины: TestUnit является тестовой заглушкой, а не реализацией рабочего продукта. Закомментированный вариант не устанавливает полезную находку для этого скана.",
       "impact": "Проверено конкретное утверждение правила по закреплённому исходнику.",
       "fix": "Если helper намеренно минимален, удалить старую реализацию. Если поведение требуется тестам, вернуть его явно и проверить результат.",
       "diagram": "flowchart LR\n  C[\"Старая реализация asType\"] --> N[\"Комментарий\"]\n  A[\"Активный метод\"] --> Z[\"Возвращает null\"]",
@@ -755,5 +755,49 @@
     "additionalSources": [
       "https://github.com/miskin-lee/EdgeTerm/blob/83fd05929fdcb9c1fb2e29c9beb82af47f4f6e4b/src/components/icons.tsx#L7"
     ]
+  },
+  {
+    "repo": "DaniilSokolyuk/video2dlssnr",
+    "name": "daniilsokolyuk-video2dlssnr",
+    "sha": "9e1bbfa5a700d0cd63b224ab6d95581bfe7ec959",
+    "batch": 18,
+    "id": "commented-src/gpu.h:94",
+    "rule": "commented-code",
+    "location": "src/gpu.h:94",
+    "sourceUrl": "https://github.com/DaniilSokolyuk/video2dlssnr/blob/9e1bbfa5a700d0cd63b224ab6d95581bfe7ec959/src/gpu.h#L94",
+    "verdict": "fp",
+    "reason": "The comment documents the HDR colour-transform contract, its algebra and units; it is not disabled C++ statements.",
+    "confidenceAtReview": "medium",
+    "lesson": {
+      "title": "Формула обработки HDR — часть контракта",
+      "chain": "Комментарий объясняет, как линейный HDR-кадр переводится в proxy для модели и как результат возвращается к исходному кадру. Ниже объявлены рабочие методы encode/composite.",
+      "conditions": "FP commented-code: математические формулы описывают алгоритм и единицы измерения. Удаление этого пояснения ухудшит понимание реализации.",
+      "impact": "Проверено конкретное утверждение правила по закреплённому исходнику.",
+      "fix": "Различать формулы и выключенные инструкции C++. Знак присваивания внутри объяснения алгоритма сам по себе недостаточен.",
+      "diagram": "flowchart LR\n  H[\"Линейный HDR-кадр\"] --> P[\"Proxy для модели\"] --> C[\"Композиция с исходником\"]",
+      "level": 3
+    }
+  },
+  {
+    "repo": "ruby/ostruct",
+    "name": "ruby-ostruct",
+    "sha": "476379564ad6f752e2e4d1d9cd7ab5bff5d55fb4",
+    "batch": 18,
+    "id": "insecure-eval-dynamic-lib/ostruct.rb:476",
+    "rule": "insecure-eval-dynamic",
+    "location": "lib/ostruct.rb:476",
+    "sourceUrl": "https://github.com/ruby/ostruct/blob/476379564ad6f752e2e4d1d9cd7ab5bff5d55fb4/lib/ostruct.rb#L476",
+    "verdict": "fp",
+    "reason": "eval occurs inside a Ruby %i symbol array used to remove method names from an alias list; no eval invocation exists at the flagged location.",
+    "confidenceAtReview": "low",
+    "lesson": {
+      "title": "eval внутри массива имён методов",
+      "chain": "OpenStruct собирает имена методов, которым будет создан alias с восклицательным знаком. Для JRuby из списка исключаются символы instance_exec, instance_eval и eval.",
+      "conditions": "FP выполнения кода: %i создаёт массив символов, а операция -= удаляет элементы. Никакая строка программы в этой строке не исполняется.",
+      "impact": "Проверено конкретное утверждение правила по закреплённому исходнику.",
+      "fix": "Лексически различать символы, строки, комментарии и реальные вызовы. Даже точное имя опасной функции не доказывает её вызов.",
+      "diagram": "flowchart LR\n  M[\"Список имён методов\"] --> F[\"Удаление трёх символов для JRuby\"] --> A[\"Создание alias для остальных\"]",
+      "level": 2
+    }
   }
 ]

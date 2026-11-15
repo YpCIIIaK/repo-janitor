@@ -1,0 +1,31 @@
+{
+  "status": "in-progress",
+  "checkedAt": "2026-11-15T15:13:34.348Z",
+  "pinnedRecords": 10007,
+  "newTargets": 2997,
+  "offlineCurrent": 8762,
+  "newOfflineCurrent": 1752,
+  "onlineCached": 8451,
+  "onlineAudited": 158,
+  "onlineAuditedPolicyLimited": 17,
+  "allSixArtifacts": 8449,
+  "newLabels": 36,
+  "tp": 5,
+  "fp": 31,
+  "sourceFingerprint": "d99a356eb71009c2",
+  "preservation": {
+    "oldLabelsPreserved": 2871,
+    "controlApps": 56,
+    "highSecurityIDsRetained": 343,
+    "labelledHighTPIDsRetained": 45
+  },
+  "pendingCounts": {
+    "offline": 1245,
+    "online": 1556,
+    "artifacts": 1558
+  },
+  "distinctProjectsTarget": 10000,
+  "distinctProjectsOfflineCurrent": 8755,
+  "networkBlocker": "Global outgoing HTTP 503 from GitHub, api.github.com, api.osv.dev and registry.npmjs.org; never interpreted as a clean result.",
+  "scannerFeaturesDeferred": true
+}

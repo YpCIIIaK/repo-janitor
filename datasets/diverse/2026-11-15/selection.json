@@ -1,5 +1,5 @@
 {
-  "status": "pinned-awaiting-scan",
+  "status": "scan-in-progress",
   "addedNewProjects": 2997,
   "importedPreviouslyScanned": 500,
   "targetDistinctProjects": 10000,
@@ -38,5 +38,6 @@
   },
   "previousKnownIDsExcluded": 7638,
   "previousKnownSnapshotSha256": "fb9630c23338940f44e43a4239fa95c145f4cb6a2403361141e664535a150248",
-  "scanPolicy": "Static benchmark CLI and OSV only; no target application/dependency execution."
+  "scanPolicy": "Static benchmark CLI and OSV only; no target application/dependency execution.",
+  "progressFile": "../../../benchmark/reviews/2026-11-15-1-progress.json"
 }
