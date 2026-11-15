@@ -11,6 +11,7 @@
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
+import { STATS_CONTROL_NAME_RE as VULNERABLE_RE } from "./control-names.mjs"
 
 const here = dirname(fileURLToPath(import.meta.url))
 const resultsDir = join(here, ".results")
@@ -40,7 +41,6 @@ for (const r of corpus) {
   })
 }
 
-const VULNERABLE_RE = /zhuifengshaonianhanlu-pikachu|nua-org-nua-bench|cyllective-oauth-labs|mochiruntime-android-ctf|jzheaux-spel-injection|eoftedal-deserialize|veracode-research-actuator-testbed|terracotta-bank-terracotta-bank|owasp-benchmark-benchmarkjava|goat|dvwa|dvna|dvws|juice-shop$|juice-shop-juice-shop|vampi|dsvw|vulnerable|crapi|govwa|pygoat|vulpy|dvpwa|goof|inject-some-sql|vulnado|javavulnerablelab|dvsa|^sonuoffsec-dvap$|^jankesec-evilcorp-ios$/i
 const urlByName = new Map(corpus.map((r) => [r.name, r.url.replace("https://github.com/", "")]))
 const urlOf = (name) => urlByName.get(name) ?? name
 
