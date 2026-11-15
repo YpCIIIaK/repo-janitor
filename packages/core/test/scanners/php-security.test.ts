@@ -46,3 +46,19 @@ describe("PHP command and deserialization request aliases", () => {
     }
   })
 })
+
+describe("PHP flow boundaries use executable tokens", () => {
+  it("does not kill request provenance for control-flow words in string values", () => {
+    for (const word of ["if", "else", "function", "for", "try", "catch", "while"]) {
+      expect(rules(`$path = $_GET['file'];\n$message = '${word}';\nreadfile($path);`)).toContain("php-path-traversal")
+      expect(rules(`$xml = $_POST['xml'];\n$message = '${word}';\n$doc->loadXML($xml, LIBXML_NOENT);`)).toContain("php-xxe")
+      expect(rules(`$twig = new Twig\\Environment($loader);\n$template = $_GET['template'];\n$message = '${word}';\n$twig->createTemplate($template);`)).toContain("php-ssti")
+    }
+  })
+
+  it("still stops inference across actual function and conditional boundaries", () => {
+    for (const boundary of ["function unrelated() {", "if ($allowed) {", "} else {"]) {
+      expect(rules(`$path = $_GET['file'];\n${boundary}\nreadfile($path);`)).not.toContain("php-path-traversal")
+    }
+  })
+})

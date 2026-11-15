@@ -31,9 +31,9 @@ export function scanPhpSecurity(content: string): CodeHit[] {
       else if (c === "#" || c === "/" && next === "/") break
       else code += c
     }
-    if (/\b(?:function|if|else|switch|for|foreach|while|try|catch)\b|^\s*}/.test(code)) tainted.clear()
     // Quoted documentation cannot introduce executable sinks or variable reads.
     const executable = code.replace(/'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*"/g, s => " ".repeat(s.length))
+    if (/\b(?:function|if|else|switch|for|foreach|while|try|catch)\b|^\s*}/.test(executable)) tainted.clear()
     const carries = (expr: string) => {
       const value = expr.replace(/\\\$/g, "").replace(/'(?:\\.|[^'\\])*'/g, "")
       return REQUEST.test(value) || /\bfile_get_contents\s*\(\s*['"]php:\/\/input['"]/.test(expr) ||
