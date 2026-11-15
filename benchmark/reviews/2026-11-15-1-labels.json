@@ -1,0 +1,206 @@
+[
+  {
+    "repo": "peachycloudsecurity/very-vulnerable-serverless",
+    "name": "peachycloudsecurity-very-vulnerable-serverless",
+    "sha": "cb0d864ab007632f20f41736b1cddbba2a1d4bdc",
+    "batch": 1,
+    "id": "insecure-ssrf-app.py:46",
+    "rule": "insecure-ssrf",
+    "location": "app.py:46",
+    "sourceUrl": "https://github.com/peachycloudsecurity/very-vulnerable-serverless/blob/cb0d864ab007632f20f41736b1cddbba2a1d4bdc/app.py#L46",
+    "verdict": "tp",
+    "reason": "Deliberately vulnerable Flask training route directly passes request.args[url] into urllib.request.urlopen and returns the fetched content; pinned route has no destination validation. This confirms the static SSRF claim, without a network test.",
+    "lesson": {
+      "title": "SSRF: браузер выбирает адрес, а запрос выполняет сервер",
+      "chain": "Браузер передаёт url → Flask читает request.args → urlopen(site) выполняет запрос от имени сервера → ответ возвращается клиенту. Эта цепочка видна в исходнике учебного приложения.",
+      "conditions": "Обработчик должен быть доступен клиенту; результат зависит от сетевых разрешений среды. Код не доказывает доступ к конкретному внутреннему сервису или облачным секретам.",
+      "impact": "Клиент может заставить сервер обращаться к выбранному адресу. Это важно, потому что у браузера и сервера могут быть разные сетевые права.",
+      "fix": "Для рабочей системы задают разрешённые назначения, проверяют схему и адрес, учитывают перенаправления и ограничения исходящей сети. Учебное приложение намеренно оставляет эту ошибку.",
+      "diagram": "flowchart LR\n  B[\"Браузер: параметр url\"] --> R[\"Flask: request.args\"]\n  R --> F[\"Сервер: urlopen(site)\"]\n  F --> N[\"Сетевой адрес\"]\n  N --> R\n  R --> B"
+    }
+  },
+  {
+    "repo": "paynezhuang/panis-admin",
+    "name": "paynezhuang-panis-admin",
+    "sha": "948ba56578827c76d0b6ae731d98e1225e4c642e",
+    "batch": 1,
+    "id": "commented-src/router/guard/route.ts:55",
+    "rule": "commented-code",
+    "location": "src/router/guard/route.ts:55",
+    "sourceUrl": "https://github.com/paynezhuang/panis-admin/blob/948ba56578827c76d0b6ae731d98e1225e4c642e/src/router/guard/route.ts#L55",
+    "verdict": "tp",
+    "reason": "An entire disabled permission-routing branch remains commented beside active login and navigation logic. Actionable commented-out code; this does not establish a server-side authorization vulnerability.",
+    "lesson": {
+      "title": "Закомментированный guard: фронтенд и права на API — разные проверки",
+      "chain": "В Vue guard видны рабочие проверки входа, затем отключённый блок перехода на 403 при отсутствии разрешения. Сканер верно нашёл оставленный комментариями код.",
+      "conditions": "Подтверждён только дефект сопровождения. По этому файлу нельзя установить, что сервер разрешает запрещённые запросы.",
+      "impact": "Разработчику трудно понять, намеренно ли убрана проверка и где теперь проверяются права. Даже работающий guard в браузере не заменяет серверную проверку роли.",
+      "fix": "Уточнить требуемое поведение маршрутов и удалить устаревший блок либо восстановить нужную логику. Отдельно проверять авторизацию каждого защищённого API на сервере.",
+      "diagram": "flowchart LR\n  B[\"Браузер\"] --> G[\"Vue guard\"]\n  G --> P[\"Страница\"]\n  B --> A[\"Запрос к API\"]\n  A --> S[\"Проверка роли на сервере\"]\n  S --> D[\"Ответ или 403\"]"
+    }
+  },
+  {
+    "repo": "CreativeMD/LittleTiles",
+    "name": "creativemd-littletiles",
+    "sha": "bba2a1fa03985314e8d18fcdd7eb02f4ca13569a",
+    "batch": 2,
+    "id": "insecure-sql-interpolated-src/main/java/team/creative/littletiles/client/player/LittleClientPlayerHandler.java:1089",
+    "rule": "insecure-sql-interpolated",
+    "location": "src/main/java/team/creative/littletiles/client/player/LittleClientPlayerHandler.java:1089",
+    "sourceUrl": "https://github.com/CreativeMD/LittleTiles/blob/bba2a1fa03985314e8d18fcdd7eb02f4ca13569a/src/main/java/team/creative/littletiles/client/player/LittleClientPlayerHandler.java#L1089",
+    "verdict": "fp",
+    "reason": "The flagged text is an IllegalStateException message about updating Minecraft entity attributes, not a SQL statement or SQL execution sink.",
+    "lesson": {
+      "title": "Обычная строка ошибки похожа на SQL только для регулярного выражения",
+      "chain": "Сетевой пакет обновляет свойства игрового объекта. При неподходящем типе объекта код создаёт текст исключения со словом update. Запроса к базе в этой строке нет.",
+      "conditions": "Это FP по классу SQL-инъекции. Наличие слова update и конкатенации не доказывает выполнение SQL; оценка других свойств обработчика здесь не проводилась.",
+      "impact": "Этот разбор показывает, какое утверждение сканера проверено и какие выводы требуют дополнительного кода и контекста.",
+      "fix": "Сначала ищем реальный вызов драйвера БД, затем прослеживаем, какие части запроса зависят от входных данных. Для этой строки SQL-исправление не требуется.",
+      "diagram": "flowchart LR\n  P[\"Пакет с атрибутами\"] --> H[\"Проверка типа объекта\"]\n  H --> E[\"Строка исключения\"]\n  E --> L[\"Обработка ошибки\"]"
+    }
+  },
+  {
+    "repo": "LingFrame/LingFrame",
+    "name": "lingframe-lingframe",
+    "sha": "f8df67fe3a86897620e56d15946cbf6e9bcdd655",
+    "batch": 2,
+    "id": "insecure-sql-interpolated-lingframe-examples/lingframe-example-ling-user-canary/src/main/java/com/lingframe/example/user/canary/service/impl/UserServiceImpl.java:146",
+    "rule": "insecure-sql-interpolated",
+    "location": "lingframe-examples/lingframe-example-ling-user-canary/src/main/java/com/lingframe/example/user/canary/service/impl/UserServiceImpl.java:146",
+    "sourceUrl": "https://github.com/LingFrame/LingFrame/blob/f8df67fe3a86897620e56d15946cbf6e9bcdd655/lingframe-examples/lingframe-example-ling-user-canary/src/main/java/com/lingframe/example/user/canary/service/impl/UserServiceImpl.java#L146",
+    "verdict": "fp",
+    "reason": "Only literal question-mark placeholders are concatenated into SQL. userIds are separately passed to JdbcTemplate.query as bound arguments, so the flagged construction is parameterized.",
+    "lesson": {
+      "title": "Конкатенация SQL бывает безопасной: плейсхолдеры и связанные параметры",
+      "chain": "Цикл строит только строку из вопросительных знаков и запятых. Список userIds передаётся третьим аргументом jdbcTemplate.query, отдельно от SQL-шаблона.",
+      "conditions": "По этому месту SQL-инъекция не подтверждается: пользовательские значения не становятся текстом SQL. Права на получение конкретных пользователей требуют отдельной проверки.",
+      "impact": "Этот разбор показывает, какое утверждение сканера проверено и какие выводы требуют дополнительного кода и контекста.",
+      "fix": "Так и строят список IN (?, ?): шаблон отдельно, значения отдельно. Если переменными становятся имена таблиц или столбцов, для них нужны отдельные ограничения.",
+      "diagram": "flowchart LR\n  C[\"Количество ID\"] --> T[\"SQL: IN (?, ?)\"]\n  V[\"Значения ID\"] --> B[\"Связанные параметры JDBC\"]\n  T --> D[\"База данных\"]\n  B --> D"
+    }
+  },
+  {
+    "repo": "seborama/govcr",
+    "name": "seborama-govcr",
+    "sha": "bb8afa156df5e82e4dbb1e8a0bf253550658b678",
+    "batch": 3,
+    "id": "iac-docker-socket-docker-compose.yaml:19",
+    "rule": "iac-docker-socket",
+    "location": "docker-compose.yaml:19",
+    "sourceUrl": "https://github.com/seborama/govcr/blob/bb8afa156df5e82e4dbb1e8a0bf253550658b678/docker-compose.yaml#L19",
+    "verdict": "fp",
+    "reason": "Compose explicitly starts development-only local AWS-compatible services. The loopback-published Ministack emulator intentionally receives Docker access; the generic mount warning is not an actionable production defect in this project.",
+    "lesson": {
+      "title": "Docker socket у локального AWS-эмулятора: проверяем назначение сервиса",
+      "chain": "Compose объявляет локальные сервисы для разработки. Ministack опубликован на 127.0.0.1 и получает Docker socket как часть своей работы.",
+      "conditions": "Сокет даёт сильные полномочия по управлению контейнерами. Здесь он ожидаем для инструмента; эксплуатация через недоверенный вход этим файлом не доказана. Последствия зависят и от конфигурации Docker daemon.",
+      "impact": "Этот разбор показывает, какое утверждение сканера проверено и какие выводы требуют дополнительного кода и контекста.",
+      "fix": "Разработчик должен понимать границы доверия локального эмулятора. Для публичного сервиса пришлось бы отдельно обосновать допустимые операции, доступ к API и изоляцию.",
+      "diagram": "flowchart LR\n  C[\"Локальный клиент\"] --> M[\"Ministack на loopback\"]\n  M --> S[\"Docker socket\"]\n  S --> D[\"Docker daemon\"]\n  D --> K[\"Управление контейнерами\"]"
+    }
+  },
+  {
+    "repo": "ilovepdf/ilovepdf-php",
+    "name": "ilovepdf-ilovepdf-php",
+    "sha": "bb23c6095d9327288c2982e36657db9bcfe1ca84",
+    "batch": 3,
+    "id": "insecure-ssrf-src/Task.php:477",
+    "rule": "insecure-ssrf",
+    "location": "src/Task.php:477",
+    "sourceUrl": "https://github.com/ilovepdf/ilovepdf-php/blob/bb23c6095d9327288c2982e36657db9bcfe1ca84/src/Task.php#L477",
+    "verdict": "fp",
+    "reason": "The SDK download method creates its output destination with fopen(..., w+) and writes the downloaded buffer. This file-output operation does not substantiate the reported HTTP-request/SSRF claim at this location. Caller-supplied path and stream-wrapper safety are separate integration concerns.",
+    "lesson": {
+      "title": "Локальная запись файла и HTTP-запрос — разные действия",
+      "chain": "Метод SDK получает результат задачи, строит имя выходного файла и открывает его в режиме w+, после чего записывает буфер через fputs.",
+      "conditions": "Эта строка относится к выводу файла. Здесь не установлено, что удалённый пользователь заставляет сервер выполнять запрос к выбранному HTTP-адресу. Безопасность всего SDK этим выводом не подтверждается.",
+      "impact": "Этот разбор показывает, какое утверждение сканера проверено и какие выводы требуют дополнительного кода и контекста.",
+      "fix": "В приложении, принимающем путь из запроса, отдельно ограничивают допустимый каталог и протоколы потоковых обёрток. Одна is_dir не заменяет такую проверку.",
+      "diagram": "flowchart LR\n  A[\"Вызывающий код\"] --> S[\"SDK download\"]\n  S --> B[\"Буфер результата\"]\n  S --> F[\"fopen: выходной файл\"]\n  B --> W[\"fputs\"]\n  F --> W"
+    }
+  },
+  {
+    "repo": "yohasebe/wp2txt",
+    "name": "yohasebe-wp2txt",
+    "sha": "2ebc5f159301f9b62537523ba51f3160a5c11224",
+    "batch": 4,
+    "id": "insecure-exec-interpolated-lib/wp2txt/sql_dump_reader.rb:24",
+    "rule": "insecure-exec-interpolated",
+    "location": "lib/wp2txt/sql_dump_reader.rb:24",
+    "sourceUrl": "https://github.com/yohasebe/wp2txt/blob/2ebc5f159301f9b62537523ba51f3160a5c11224/lib/wp2txt/sql_dump_reader.rb#L24",
+    "verdict": "fp",
+    "reason": "Backticks occur inside a Ruby regexp literal used to match SQL dump headers. Regexp.escape(table) escapes a regex fragment; no shell command is executed at the flagged location.",
+    "lesson": {
+      "title": "Ruby: обратные кавычки внутри регулярного выражения",
+      "level": 1,
+      "chain": "Метод читает строки SQL-дампа и сравнивает их с header.match?. Обратные кавычки в header обозначают символы имени таблицы в данных, а не запуск команды.",
+      "conditions": "Подтверждён FP командной инъекции. В Ruby роль символа зависит от окружающего синтаксиса; поиск одних кавычек теряет этот контекст.",
+      "impact": "Разбор отделяет подтверждённый факт в исходнике от предположений о поведении приложения.",
+      "fix": "Проверять, доходит ли значение до настоящего запуска процесса. При улучшении анализатора важно отдельно разбирать выражения интерполяции, а не просто исключать все регулярные выражения.",
+      "diagram": "flowchart LR\n  F[\"Файл SQL-дампа\"] --> L[\"Строка файла\"]\n  R[\"Регулярное выражение header\"] --> M[\"match?\"]\n  L --> M\n  M --> Y[\"Подходящие строки\"]"
+    }
+  },
+  {
+    "repo": "voxpupuli/puppet-python",
+    "name": "voxpupuli-puppet-python",
+    "sha": "b8a263ad87c8cb437f67904434aa931834e99020",
+    "batch": 4,
+    "id": "insecure-sql-interpolated-lib/facter/pip_version.rb:7",
+    "rule": "insecure-sql-interpolated",
+    "location": "lib/facter/pip_version.rb:7",
+    "sourceUrl": "https://github.com/voxpupuli/puppet-python/blob/b8a263ad87c8cb437f67904434aa931834e99020/lib/facter/pip_version.rb#L7",
+    "verdict": "fp",
+    "reason": "Facter::Core::Execution.execute runs a pip version command and matches its output. It is not a database execute API, and there is no SQL statement or database query at this location.",
+    "lesson": {
+      "title": "Метод execute может запускать команду, а не SQL",
+      "level": 1,
+      "chain": "Facter вызывает pip с аргументом --version и извлекает номер версии регулярным выражением. В показанных вызовах передаются имена pip, pip2 и pip3.",
+      "conditions": "Это FP по SQL-инъекции. Оценка запуска внешних программ — отдельный вопрос; одинаковое имя execute не делает API интерфейсом базы данных.",
+      "impact": "Разбор отделяет подтверждённый факт в исходнике от предположений о поведении приложения.",
+      "fix": "При проверке прослеживать тип объекта и назначение вызываемой библиотеки. Для SQL сначала нужен реальный путь к драйверу БД.",
+      "diagram": "flowchart LR\n  P[\"Имя pip\"] --> E[\"Facter Execution\"]\n  E --> C[\"Команда версии\"]\n  C --> O[\"Текст вывода\"]\n  O --> V[\"Регулярное выражение версии\"]"
+    }
+  },
+  {
+    "repo": "SnipMeDev/Highlights",
+    "name": "snipmedev-highlights",
+    "sha": "600927f48737ac4f1504c31ad59fa9b88eee6947",
+    "batch": 5,
+    "id": "insecure-java-deserialization-src/commonTest/kotlin/dev/snipme/highlights/internal/CodeSamples.kt:510",
+    "rule": "insecure-java-deserialization",
+    "location": "src/commonTest/kotlin/dev/snipme/highlights/internal/CodeSamples.kt:510",
+    "sourceUrl": "https://github.com/SnipMeDev/Highlights/blob/600927f48737ac4f1504c31ad59fa9b88eee6947/src/commonTest/kotlin/dev/snipme/highlights/internal/CodeSamples.kt#L510",
+    "verdict": "fp",
+    "reason": "The readObject text is inside val longJavaCode, a Kotlin triple-quoted string spanning lines 3–1314 in commonTest CodeSamples.kt. It is syntax-highlighting fixture data, not Java deserialization executed by this module.",
+    "lesson": {
+      "title": "Пример кода в строке не выполняется как Java",
+      "level": 1,
+      "chain": "Слово readObject находится в тестовых данных подсветчика синтаксиса. Весь Java-пример хранится в Kotlin-переменной longJavaCode между тройными кавычками на строках 3 и 1314.",
+      "conditions": "Подтверждён FP десериализации. Чтобы строковый образец начал исполняться, нужен отдельный интерпретатор или компилятор; такого перехода эта находка не показывает.",
+      "impact": "Разбор отделяет подтверждённый факт в исходнике от предположений о поведении приложения.",
+      "fix": "Различать язык файла, строки с образцами и реально выполняемые вызовы. Это особенно важно для редакторов, документации и security-инструментов.",
+      "diagram": "flowchart LR\n  T[\"Kotlin: longJavaCode\"] --> S[\"Строковые данные\"]\n  S --> H[\"Подсветчик синтаксиса\"]\n  H --> V[\"Цветные токены\"]"
+    }
+  },
+  {
+    "repo": "chayanforyou/QuickBall",
+    "name": "chayanforyou-quickball",
+    "sha": "97b59520b54ad9dceedd9386ee3019c658df03d9",
+    "batch": 5,
+    "id": "commented-app/src/main/java/io/github/chayanforyou/quickball/ui/screens/shortcut/ShortcutMenuScreen.kt:143",
+    "rule": "commented-code",
+    "location": "app/src/main/java/io/github/chayanforyou/quickball/ui/screens/shortcut/ShortcutMenuScreen.kt:143",
+    "sourceUrl": "https://github.com/chayanforyou/QuickBall/blob/97b59520b54ad9dceedd9386ee3019c658df03d9/app/src/main/java/io/github/chayanforyou/quickball/ui/screens/shortcut/ShortcutMenuScreen.kt#L143",
+    "verdict": "tp",
+    "reason": "An entire Compose Card/MenuPreview block remains commented between active screen layout and the working shortcuts card. This is actionable stale UI code, not an execution or authorization vulnerability.",
+    "lesson": {
+      "title": "Закомментированный экран: что действительно нашёл сканер",
+      "level": 1,
+      "chain": "Внутри рабочего Compose-экрана оставлен отключённый блок Card с MenuPreview. После него расположен действующий блок карточки ярлыков.",
+      "conditions": "Подтверждён оставленный комментариями код. Исполняться этот блок не может; из него не следует нарушение безопасности.",
+      "impact": "Разбор отделяет подтверждённый факт в исходнике от предположений о поведении приложения.",
+      "fix": "Удалить устаревший вариант или вынести задумку в задачу с описанием требуемого поведения. История Git сохранит предыдущую реализацию.",
+      "diagram": "flowchart LR\n  S[\"Compose-экран\"] --> A[\"Действующие компоненты\"]\n  C[\"Комментированный MenuPreview\"] -.-> G[\"История и план изменений\"]"
+    }
+  }
+]
