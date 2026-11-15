@@ -3,13 +3,13 @@
 This file is everything needed to continue improving repo-janitor's scanners with
 the benchmark, without the conversation that built it. Read it top to bottom once.
 
-Latest completed handoff: [cycle 2026-11-10-1](CYCLE-2026-11-10-1.md) —
-6000 distinct GitHub projects in 6007 pinned records. Read its data-restoration
-section and `ROUTINE.md` before choosing new repositories.
-
-Latest prepared cycle: [cycle 2026-11-13-3](CYCLE-2026-11-13-3.md) — 6503 distinct projects in 6510 records. Its staged data must be restored until it is promoted to `bench-data`; see that cycle's data-restoration section.
-
-Current in-progress handoff: [cycle 2026-11-15-1](CYCLE-2026-11-15-1.md). Its 10,000 distinct static scans are complete; online metadata and final routine gates are still pending. Inspect its progress counters and running queues before resuming.
+Latest completed handoff: [cycle 2026-11-15-1](CYCLE-2026-11-15-1.md) —
+10,000 distinct GitHub projects in 10,007 pinned records. Its complete staged data
+must be restored until promoted to `bench-data`; follow that cycle's restoration
+instructions. Source PR #19 is stacked on #18; promote data only after the source
+changes reach main. Read `ROUTINE.md` and the cycle's post-10k priorities before
+changing scanners or choosing more repositories, including its retired-target
+record when deduplicating new IDs.
 
 ## 1. What the project is
 
