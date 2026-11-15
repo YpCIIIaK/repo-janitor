@@ -1,0 +1,44 @@
+{
+  "status": "in-progress",
+  "fullCorpusCurrent": false,
+  "sourceBase": "8ff45f7289970c0cfe196801ce26de45f0f53e20",
+  "projectTestsPassed": 1884,
+  "existingLiveAITestSkipped": 1,
+  "benchmarkHelperTestsPassed": 50,
+  "lintErrors": 0,
+  "existingLintWarnings": 8,
+  "coreTypecheck": "pass",
+  "dashboardTypecheck": "pass",
+  "packageBuilds": "pass",
+  "productionBuild": "pass",
+  "statsRouteSmoke": {
+    "statsRedirectsToState": true,
+    "coverageRendered": true,
+    "secondaryLanguagesRendered": true,
+    "snapshotLimitsRendered": true,
+    "uniqueCountRendered": true,
+    "recordsCountRendered": true
+  },
+  "frozenControls": 59,
+  "frozenHighSecurityIDs": 650,
+  "lostHighSecurityIDsOnInitialControlRescan": 0,
+  "reviewReplayCases": 41,
+  "reviewReplayTPPreserved": 8,
+  "reviewReplayFPRemoved": 7,
+  "originalBaselineGateOnPartialResults": "pass",
+  "fullCorpusGate": "pending",
+  "rescanPlan": {
+    "records": 10007,
+    "initialStale": 9804,
+    "commented-code": 8128,
+    "iac-security": 9087,
+    "insecure-code": 9259
+  },
+  "pendingSizeRetry": [
+    "pulumi-pulumi-aws"
+  ],
+  "newLabels": 0,
+  "oldLabelsFrozen": 2931,
+  "dataPublished": false,
+  "calibrationUpdated": false
+}

@@ -1,0 +1,1047 @@
+{
+  "ine-labs-awsgoat": {
+    "sha": "0ca9678211403d94bf42b53c6d575f2c59c89270",
+    "highSecurityIDs": [
+      "action-tag-.github/workflows/tf-apply-main.yml-36",
+      "action-tag-.github/workflows/tf-destroy-main.yml-36",
+      "action-tag-first-party-.github/workflows/tf-apply-main.yml-33",
+      "action-tag-first-party-.github/workflows/tf-apply-main.yml-65",
+      "action-tag-first-party-.github/workflows/tf-destroy-main.yml-33",
+      "insecure-php-reflected-xss-modules/module-2/src/src/login.php:80",
+      "insecure-sql-interpolated-modules/module-2/src/src/admin/admin-complaint.php:17",
+      "insecure-sql-interpolated-modules/module-2/src/src/admin/admin-complaint.php:8",
+      "insecure-sql-interpolated-modules/module-2/src/src/admin/admin-index.php:31",
+      "insecure-sql-interpolated-modules/module-2/src/src/admin/admin-index.php:32",
+      "insecure-sql-interpolated-modules/module-2/src/src/admin/admin-index.php:39",
+      "insecure-sql-interpolated-modules/module-2/src/src/admin/admin-index.php:63",
+      "insecure-sql-interpolated-modules/module-2/src/src/admin/admin-index.php:91",
+      "insecure-sql-interpolated-modules/module-2/src/src/admin/complaints.php:31",
+      "insecure-sql-interpolated-modules/module-2/src/src/admin/complaints.php:32",
+      "insecure-sql-interpolated-modules/module-2/src/src/admin/complaints.php:39",
+      "insecure-sql-interpolated-modules/module-2/src/src/admin/complaints.php:63",
+      "insecure-sql-interpolated-modules/module-2/src/src/admin/complaints.php:91",
+      "insecure-sql-interpolated-modules/module-2/src/src/admin/leave-application.php:31",
+      "insecure-sql-interpolated-modules/module-2/src/src/admin/leave-application.php:32",
+      "insecure-sql-interpolated-modules/module-2/src/src/admin/leave-application.php:39",
+      "insecure-sql-interpolated-modules/module-2/src/src/admin/leave-application.php:65",
+      "insecure-sql-interpolated-modules/module-2/src/src/admin/leave-application.php:93",
+      "insecure-sql-interpolated-modules/module-2/src/src/admin/leave-approve.php:14",
+      "insecure-sql-interpolated-modules/module-2/src/src/admin/leave-approve.php:8",
+      "insecure-sql-interpolated-modules/module-2/src/src/admin/payslips.php:31",
+      "insecure-sql-interpolated-modules/module-2/src/src/admin/payslips.php:32",
+      "insecure-sql-interpolated-modules/module-2/src/src/admin/payslips.php:39",
+      "insecure-sql-interpolated-modules/module-2/src/src/admin/payslips.php:63",
+      "insecure-sql-interpolated-modules/module-2/src/src/admin/payslips.php:95",
+      "insecure-sql-interpolated-modules/module-2/src/src/admin/reimbursment-approve.php:14",
+      "insecure-sql-interpolated-modules/module-2/src/src/admin/reimbursment-approve.php:8",
+      "insecure-sql-interpolated-modules/module-2/src/src/admin/reimbursment.php:33",
+      "insecure-sql-interpolated-modules/module-2/src/src/admin/reimbursment.php:34",
+      "insecure-sql-interpolated-modules/module-2/src/src/admin/reimbursment.php:41",
+      "insecure-sql-interpolated-modules/module-2/src/src/admin/reimbursment.php:65",
+      "insecure-sql-interpolated-modules/module-2/src/src/admin/reimbursment.php:98",
+      "insecure-sql-interpolated-modules/module-2/src/src/login.php:10",
+      "insecure-sql-interpolated-modules/module-2/src/src/login.php:21",
+      "insecure-sql-interpolated-modules/module-2/src/src/superadmin/adduser.php:27",
+      "insecure-sql-interpolated-modules/module-2/src/src/superadmin/deleteuser.php:7",
+      "insecure-sql-interpolated-modules/module-2/src/src/superadmin/deleteuser.php:8",
+      "insecure-sql-interpolated-modules/module-2/src/src/superadmin/leave-application.php:32",
+      "insecure-sql-interpolated-modules/module-2/src/src/superadmin/leave-application.php:33",
+      "insecure-sql-interpolated-modules/module-2/src/src/superadmin/leave-application.php:40",
+      "insecure-sql-interpolated-modules/module-2/src/src/superadmin/leave-approve-super.php:14",
+      "insecure-sql-interpolated-modules/module-2/src/src/superadmin/leave-approve-super.php:8",
+      "insecure-sql-interpolated-modules/module-2/src/src/superadmin/payslips.php:32",
+      "insecure-sql-interpolated-modules/module-2/src/src/superadmin/payslips.php:33",
+      "insecure-sql-interpolated-modules/module-2/src/src/superadmin/payslips.php:40"
+    ],
+    "labelledHighTPIDs": []
+  },
+  "zhuifengshaonianhanlu-pikachu": {
+    "sha": "5e1e8d9d14a3ba61d62f28cf35531c4df4dd24fc",
+    "highSecurityIDs": [
+      "insecure-eval-dynamic-vul/rce/rce_eval.php:19",
+      "insecure-exec-interpolated-vul/rce/rce_ping.php:26",
+      "insecure-exec-interpolated-vul/rce/rce_ping.php:28",
+      "insecure-php-unserialize-vul/unserilization/unser.php:30",
+      "insecure-php-unserialize-vul/unserilization/unserilization.php:87",
+      "insecure-php-xxe-vul/xxe/xxe_1.php:49",
+      "insecure-sql-interpolated-inc/function.php:102",
+      "insecure-sql-interpolated-inc/function.php:118",
+      "insecure-sql-interpolated-inc/function.php:141",
+      "insecure-sql-interpolated-inc/function.php:163",
+      "insecure-sql-interpolated-inc/function.php:178",
+      "insecure-sql-interpolated-inc/function.php:193",
+      "insecure-sql-interpolated-pkxss/pkxss_login.php:15",
+      "insecure-sql-interpolated-pkxss/rkeypress/pkxss_keypress_result.php:15",
+      "insecure-sql-interpolated-pkxss/xcookie/pkxss_cookie_result.php:15",
+      "insecure-sql-interpolated-pkxss/xfish/pkxss_fish_result.php:16",
+      "insecure-sql-interpolated-vul/csrf/csrfget/csrf_get_login.php:36",
+      "insecure-sql-interpolated-vul/csrf/csrfpost/csrf_post_login.php:36",
+      "insecure-sql-interpolated-vul/csrf/csrftoken/token_get_login.php:38",
+      "insecure-sql-interpolated-vul/infoleak/findabc.php:30",
+      "insecure-sql-interpolated-vul/infoleak/findabc.php:39",
+      "insecure-sql-interpolated-vul/overpermission/op1/op1_login.php:32",
+      "insecure-sql-interpolated-vul/overpermission/op1/op1_mem.php:28",
+      "insecure-sql-interpolated-vul/overpermission/op2/op2_admin.php:31",
+      "insecure-sql-interpolated-vul/overpermission/op2/op2_login.php:28",
+      "insecure-sql-interpolated-vul/sqli/sqli_blind_b.php:27",
+      "insecure-sql-interpolated-vul/sqli/sqli_blind_t.php:28",
+      "insecure-sql-interpolated-vul/sqli/sqli_del.php:27",
+      "insecure-sql-interpolated-vul/sqli/sqli_del.php:38",
+      "insecure-sql-interpolated-vul/sqli/sqli_header/sqli_header_login.php:32",
+      "insecure-sql-interpolated-vul/sqli/sqli_id.php:27",
+      "insecure-sql-interpolated-vul/sqli/sqli_iu/sqli_login.php:34",
+      "insecure-sql-interpolated-vul/sqli/sqli_iu/sqli_reg.php:31",
+      "insecure-sql-interpolated-vul/sqli/sqli_search.php:30",
+      "insecure-sql-interpolated-vul/sqli/sqli_str.php:28",
+      "insecure-sql-interpolated-vul/sqli/sqli_widebyte.php:29",
+      "insecure-sql-interpolated-vul/sqli/sqli_x.php:28",
+      "insecure-sql-interpolated-vul/xss/xss_stored.php:25",
+      "insecure-sql-interpolated-vul/xss/xss_stored.php:36",
+      "insecure-sql-interpolated-vul/xss/xssblind/admin.php:34",
+      "insecure-sql-interpolated-vul/xss/xssblind/admin_login.php:35",
+      "insecure-sql-interpolated-vul/xss/xssblind/xss_blind.php:29",
+      "insecure-sql-interpolated-vul/xss/xsspost/post_login.php:35",
+      "insecure-ssrf-vul/ssrf/ssrf_curl.php:31",
+      "insecure-ssrf-vul/ssrf/ssrf_fgc.php:27"
+    ],
+    "labelledHighTPIDs": [
+      "insecure-eval-dynamic-vul/rce/rce_eval.php:19",
+      "insecure-exec-interpolated-vul/rce/rce_ping.php:26",
+      "insecure-exec-interpolated-vul/rce/rce_ping.php:28",
+      "insecure-php-unserialize-vul/unserilization/unser.php:30",
+      "insecure-php-xxe-vul/xxe/xxe_1.php:49",
+      "insecure-sql-interpolated-inc/function.php:141",
+      "insecure-sql-interpolated-vul/overpermission/op2/op2_admin.php:31",
+      "insecure-sql-interpolated-vul/sqli/sqli_blind_b.php:27",
+      "insecure-sql-interpolated-vul/sqli/sqli_blind_t.php:28",
+      "insecure-sql-interpolated-vul/sqli/sqli_del.php:38",
+      "insecure-sql-interpolated-vul/sqli/sqli_id.php:27",
+      "insecure-sql-interpolated-vul/sqli/sqli_iu/sqli_reg.php:31",
+      "insecure-sql-interpolated-vul/sqli/sqli_search.php:30",
+      "insecure-sql-interpolated-vul/sqli/sqli_str.php:28",
+      "insecure-sql-interpolated-vul/sqli/sqli_widebyte.php:29",
+      "insecure-sql-interpolated-vul/sqli/sqli_x.php:28",
+      "insecure-ssrf-vul/ssrf/ssrf_curl.php:31",
+      "insecure-ssrf-vul/ssrf/ssrf_fgc.php:27"
+    ]
+  },
+  "digininja-dvwa": {
+    "sha": "a1978a2fed195acd093010af6395f86a281537ca",
+    "highSecurityIDs": [
+      "action-tag-.github/workflows/shiftleft-analysis.yml-24",
+      "action-tag-first-party-.github/workflows/codeql-analysis.yml-37",
+      "action-tag-first-party-.github/workflows/codeql-analysis.yml-45",
+      "action-tag-first-party-.github/workflows/codeql-analysis.yml-56",
+      "action-tag-first-party-.github/workflows/codeql-analysis.yml-70",
+      "action-tag-first-party-.github/workflows/docker-image.yml-13",
+      "action-tag-first-party-.github/workflows/docker-image.yml-16",
+      "action-tag-first-party-.github/workflows/docker-image.yml-19",
+      "action-tag-first-party-.github/workflows/docker-image.yml-22",
+      "action-tag-first-party-.github/workflows/pytest.yml-19",
+      "action-tag-first-party-.github/workflows/shiftleft-analysis.yml-19",
+      "action-tag-first-party-.github/workflows/shiftleft-analysis.yml-33",
+      "action-tag-first-party-.github/workflows/vulnerable.yml-30",
+      "insecure-exec-interpolated-vulnerabilities/api/src/HealthController.php:88",
+      "insecure-exec-interpolated-vulnerabilities/exec/source/high.php:26",
+      "insecure-exec-interpolated-vulnerabilities/exec/source/high.php:30",
+      "insecure-exec-interpolated-vulnerabilities/exec/source/impossible.php:22",
+      "insecure-exec-interpolated-vulnerabilities/exec/source/impossible.php:26",
+      "insecure-exec-interpolated-vulnerabilities/exec/source/low.php:10",
+      "insecure-exec-interpolated-vulnerabilities/exec/source/low.php:14",
+      "insecure-exec-interpolated-vulnerabilities/exec/source/medium.php:19",
+      "insecure-exec-interpolated-vulnerabilities/exec/source/medium.php:23",
+      "insecure-php-include-user-input-vulnerabilities/csp/source/high.php:8",
+      "insecure-php-include-user-input-vulnerabilities/csp/source/impossible.php:9",
+      "insecure-php-include-user-input-vulnerabilities/csp/source/low.php:13",
+      "insecure-php-include-user-input-vulnerabilities/csp/source/medium.php:14",
+      "insecure-php-path-traversal-vulnerabilities/view_source_all.php:14",
+      "insecure-php-path-traversal-vulnerabilities/view_source_all.php:18",
+      "insecure-php-path-traversal-vulnerabilities/view_source_all.php:22",
+      "insecure-php-path-traversal-vulnerabilities/view_source_all.php:26",
+      "insecure-sql-interpolated-login.php:46",
+      "insecure-sql-interpolated-vulnerabilities/authbypass/change_user_details.php:47",
+      "insecure-sql-interpolated-vulnerabilities/bac/source/low.php:22",
+      "insecure-sql-interpolated-vulnerabilities/bac/source/low.php:35",
+      "insecure-sql-interpolated-vulnerabilities/bac/source/medium.php:21",
+      "insecure-sql-interpolated-vulnerabilities/bac/source/medium.php:28",
+      "insecure-sql-interpolated-vulnerabilities/brute/source/high.php:19",
+      "insecure-sql-interpolated-vulnerabilities/brute/source/low.php:12",
+      "insecure-sql-interpolated-vulnerabilities/brute/source/medium.php:14",
+      "insecure-sql-interpolated-vulnerabilities/captcha/source/high.php:30",
+      "insecure-sql-interpolated-vulnerabilities/captcha/source/low.php:60",
+      "insecure-sql-interpolated-vulnerabilities/captcha/source/medium.php:68",
+      "insecure-sql-interpolated-vulnerabilities/csrf/source/high.php:43",
+      "insecure-sql-interpolated-vulnerabilities/csrf/source/low.php:16",
+      "insecure-sql-interpolated-vulnerabilities/csrf/source/medium.php:18",
+      "insecure-sql-interpolated-vulnerabilities/csrf/test_credentials.php:21",
+      "insecure-sql-interpolated-vulnerabilities/sqli/source/low.php:10",
+      "insecure-sql-interpolated-vulnerabilities/sqli/source/medium.php:11",
+      "insecure-sql-interpolated-vulnerabilities/sqli/source/medium.php:27",
+      "insecure-sql-interpolated-vulnerabilities/sqli_blind/source/high.php:11",
+      "insecure-sql-interpolated-vulnerabilities/sqli_blind/source/low.php:11",
+      "insecure-sql-interpolated-vulnerabilities/sqli_blind/source/medium.php:13",
+      "insecure-sql-interpolated-vulnerabilities/xss_s/source/high.php:18",
+      "insecure-sql-interpolated-vulnerabilities/xss_s/source/low.php:16",
+      "insecure-sql-interpolated-vulnerabilities/xss_s/source/medium.php:18",
+      "no-permissions-.github/workflows/codeql-analysis.yml-1",
+      "no-permissions-.github/workflows/docker-image.yml-1",
+      "no-permissions-.github/workflows/pytest.yml-1",
+      "no-permissions-.github/workflows/shiftleft-analysis.yml-1",
+      "no-permissions-.github/workflows/vulnerable.yml-1"
+    ],
+    "labelledHighTPIDs": [
+      "insecure-php-path-traversal-vulnerabilities/view_source_all.php:14",
+      "insecure-php-path-traversal-vulnerabilities/view_source_all.php:18",
+      "insecure-php-path-traversal-vulnerabilities/view_source_all.php:22",
+      "insecure-php-path-traversal-vulnerabilities/view_source_all.php:26"
+    ]
+  },
+  "owasp-benchmark-benchmarkjava": {
+    "sha": "d4f6f3a53be73c3c8a24dafc7f4e486d82e6744a",
+    "highSecurityIDs": [
+      "action-tag-first-party-.github/workflows/codeql-analysis.yml-30",
+      "action-tag-first-party-.github/workflows/codeql-analysis.yml-37",
+      "action-tag-first-party-.github/workflows/codeql-analysis.yml-46",
+      "action-tag-first-party-.github/workflows/codeql-analysis.yml-49",
+      "action-tag-first-party-.github/workflows/maven.yaml-11",
+      "action-tag-first-party-.github/workflows/maven.yaml-15",
+      "insecure-exec-interpolated-src/main/java/org/owasp/benchmark/testcode/BenchmarkTest00158.java:70",
+      "insecure-exec-interpolated-src/main/java/org/owasp/benchmark/testcode/BenchmarkTest00159.java:67",
+      "insecure-sql-interpolated-src/main/java/org/owasp/benchmark/helpers/DatabaseHelper.java:192",
+      "insecure-sql-interpolated-src/main/java/org/owasp/benchmark/testcode/BenchmarkTest00024.java:47",
+      "insecure-sql-interpolated-src/main/java/org/owasp/benchmark/testcode/BenchmarkTest00025.java:47",
+      "insecure-sql-interpolated-src/main/java/org/owasp/benchmark/testcode/BenchmarkTest00026.java:47",
+      "insecure-sql-interpolated-src/main/java/org/owasp/benchmark/testcode/BenchmarkTest00027.java:47",
+      "insecure-sql-interpolated-src/main/java/org/owasp/benchmark/testcode/BenchmarkTest00100.java:73",
+      "insecure-sql-interpolated-src/main/java/org/owasp/benchmark/testcode/BenchmarkTest00101.java:78",
+      "insecure-sql-interpolated-src/main/java/org/owasp/benchmark/testcode/BenchmarkTest00102.java:71",
+      "insecure-sql-interpolated-src/main/java/org/owasp/benchmark/testcode/BenchmarkTest00103.java:74",
+      "insecure-sql-interpolated-src/main/java/org/owasp/benchmark/testcode/BenchmarkTest00104.java:74",
+      "insecure-sql-interpolated-src/main/java/org/owasp/benchmark/testcode/BenchmarkTest00105.java:73",
+      "insecure-sql-interpolated-src/main/java/org/owasp/benchmark/testcode/BenchmarkTest00106.java:78",
+      "insecure-sql-interpolated-src/main/java/org/owasp/benchmark/testcode/BenchmarkTest00109.java:75",
+      "insecure-sql-interpolated-src/main/java/org/owasp/benchmark/testcode/BenchmarkTest00111.java:78",
+      "insecure-sql-interpolated-src/main/java/org/owasp/benchmark/testcode/BenchmarkTest00112.java:70",
+      "insecure-sql-interpolated-src/main/java/org/owasp/benchmark/testcode/BenchmarkTest00113.java:74",
+      "insecure-sql-interpolated-src/main/java/org/owasp/benchmark/testcode/BenchmarkTest00114.java:73",
+      "insecure-sql-interpolated-src/main/java/org/owasp/benchmark/testcode/BenchmarkTest00115.java:73",
+      "insecure-sql-interpolated-src/main/java/org/owasp/benchmark/testcode/BenchmarkTest00193.java:58",
+      "insecure-sql-interpolated-src/main/java/org/owasp/benchmark/testcode/BenchmarkTest00194.java:61",
+      "insecure-sql-interpolated-src/main/java/org/owasp/benchmark/testcode/BenchmarkTest00195.java:59",
+      "insecure-sql-interpolated-src/main/java/org/owasp/benchmark/testcode/BenchmarkTest00196.java:59",
+      "insecure-sql-interpolated-src/main/java/org/owasp/benchmark/testcode/BenchmarkTest00197.java:63",
+      "insecure-sql-interpolated-src/main/java/org/owasp/benchmark/testcode/BenchmarkTest00198.java:55",
+      "insecure-sql-interpolated-src/main/java/org/owasp/benchmark/testcode/BenchmarkTest00199.java:58",
+      "insecure-sql-interpolated-src/main/java/org/owasp/benchmark/testcode/BenchmarkTest00200.java:64",
+      "insecure-sql-interpolated-src/main/java/org/owasp/benchmark/testcode/BenchmarkTest00203.java:58",
+      "insecure-sql-interpolated-src/main/java/org/owasp/benchmark/testcode/BenchmarkTest00204.java:55",
+      "insecure-sql-interpolated-src/main/java/org/owasp/benchmark/testcode/BenchmarkTest00205.java:63",
+      "no-permissions-.github/workflows/maven.yaml-1"
+    ],
+    "labelledHighTPIDs": []
+  },
+  "nua-org-nua-bench": {
+    "sha": "efeb67a3781e1cc617487503c8066405ee462770",
+    "highSecurityIDs": [
+      "insecure-php-reflected-xss-nua-lab-03/phpliteadmin.php:927",
+      "insecure-py-yaml-load-nua-lab-03/app.py:704",
+      "insecure-sql-interpolated-nua-lab-02/dexmovies/app.py:150",
+      "insecure-sql-interpolated-nua-lab-02/dexmovies/app.py:605",
+      "insecure-sql-interpolated-nua-lab-02/dexmovies/app.py:913",
+      "insecure-sql-interpolated-nua-lab-02/dexmovies/app.py:953",
+      "insecure-sql-interpolated-nua-lab-03/app.py:170",
+      "insecure-sql-interpolated-nua-lab-03/phpliteadmin.php:1173",
+      "insecure-sql-interpolated-nua-lab-03/phpliteadmin.php:1290",
+      "insecure-sql-interpolated-nua-lab-04/public/export_products.php:58",
+      "insecure-sql-interpolated-nua-lab-04/public/external_link.php:13",
+      "insecure-sql-interpolated-nua-lab-04/public/index.php:10",
+      "insecure-sql-interpolated-nua-lab-04/public/order_tracking.php:10",
+      "insecure-sql-interpolated-nua-lab-04/public/order_tracking.php:15",
+      "insecure-sql-interpolated-nua-lab-04/public/price_compare.php:19",
+      "insecure-sql-interpolated-nua-lab-04/public/product.php:9",
+      "insecure-sql-interpolated-nua-lab-04/public/product_qa.php:12",
+      "insecure-sql-interpolated-nua-lab-04/public/promo.php:11",
+      "insecure-sql-interpolated-nua-lab-04/public/submit_review.php:11",
+      "insecure-sql-interpolated-nua-lab-04/public/submit_review.php:25",
+      "insecure-sql-interpolated-nua-lab-04/public/wishlist.php:14",
+      "insecure-sql-interpolated-nua-lab-04/public/wishlist.php:24",
+      "insecure-sql-interpolated-nua-lab-04/public/wishlist.php:33",
+      "insecure-sql-interpolated-nua-lab-04/public/wishlist.php:40",
+      "insecure-sql-interpolated-nua-lab-05/activity.php:41",
+      "insecure-sql-interpolated-nua-lab-05/dashboard.php:89",
+      "insecure-sql-interpolated-nua-lab-05/dashboard.php:95",
+      "insecure-ssrf-nua-lab-03/app.py:570",
+      "insecure-ssrf-nua-lab-03/phpliteadmin.php:893",
+      "insecure-ssrf-nua-lab-03/phpliteadmin.php:913"
+    ],
+    "labelledHighTPIDs": [
+      "insecure-sql-interpolated-nua-lab-02/dexmovies/app.py:150",
+      "insecure-sql-interpolated-nua-lab-02/dexmovies/app.py:605",
+      "insecure-sql-interpolated-nua-lab-02/dexmovies/app.py:913",
+      "insecure-sql-interpolated-nua-lab-02/dexmovies/app.py:953",
+      "insecure-sql-interpolated-nua-lab-03/app.py:170",
+      "insecure-sql-interpolated-nua-lab-04/public/order_tracking.php:10",
+      "insecure-sql-interpolated-nua-lab-04/public/order_tracking.php:15",
+      "insecure-sql-interpolated-nua-lab-04/public/product_qa.php:12",
+      "insecure-sql-interpolated-nua-lab-04/public/promo.php:11",
+      "insecure-sql-interpolated-nua-lab-04/public/wishlist.php:24",
+      "insecure-sql-interpolated-nua-lab-04/public/wishlist.php:40",
+      "insecure-sql-interpolated-nua-lab-05/activity.php:41",
+      "insecure-sql-interpolated-nua-lab-05/dashboard.php:89",
+      "insecure-sql-interpolated-nua-lab-05/dashboard.php:95",
+      "insecure-ssrf-nua-lab-03/app.py:570"
+    ]
+  },
+  "presidentbeef-inject-some-sql": {
+    "sha": "f20166437cb27fbe765f463038a5bda9af0534cb",
+    "highSecurityIDs": [
+      "action-tag-first-party-.github/workflows/main.yml-13",
+      "action-tag-first-party-.github/workflows/main.yml-15",
+      "insecure-eval-dynamic-rails3/app/controllers/query_controller.rb:15",
+      "insecure-eval-dynamic-rails4/app/controllers/query_controller.rb:15",
+      "insecure-eval-dynamic-rails5/app/controllers/query_controller.rb:15",
+      "insecure-eval-dynamic-rails6/app/controllers/query_controller.rb:15",
+      "insecure-sql-interpolated-rails3/app/models/queries.rb:164",
+      "insecure-sql-interpolated-rails3/app/models/queries.rb:206",
+      "insecure-sql-interpolated-rails3/app/models/queries.rb:260",
+      "insecure-sql-interpolated-rails4/app/models/queries.rb:144",
+      "insecure-sql-interpolated-rails4/app/models/queries.rb:177",
+      "insecure-sql-interpolated-rails4/app/models/queries.rb:221",
+      "insecure-sql-interpolated-rails5/app/models/queries.rb:144",
+      "insecure-sql-interpolated-rails5/app/models/queries.rb:189",
+      "insecure-sql-interpolated-rails5/app/models/queries.rb:233",
+      "insecure-sql-interpolated-rails6/app/models/queries.rb:139",
+      "insecure-sql-interpolated-rails6/app/models/queries.rb:204",
+      "no-permissions-.github/workflows/main.yml-1"
+    ],
+    "labelledHighTPIDs": []
+  },
+  "owasp-vulnerable-web-application": {
+    "sha": "c0f2689f4adc3dab4e310a4c709bbee9386c6b02",
+    "highSecurityIDs": [
+      "insecure-exec-interpolated-CommandExecution/CommandExec-1.php:25",
+      "insecure-exec-interpolated-CommandExecution/CommandExec-2.php:25",
+      "insecure-exec-interpolated-CommandExecution/CommandExec-3.php:39",
+      "insecure-exec-interpolated-CommandExecution/CommandExec-4.php:44",
+      "insecure-php-include-user-input-FileInclusion/pages/lvl1.php:25",
+      "insecure-php-reflected-xss-FileInclusion/pages/lvl1.php:26",
+      "insecure-php-reflected-xss-XSS/XSS_level1.php:22",
+      "insecure-sql-interpolated-SQL/sql1.php:40",
+      "insecure-sql-interpolated-SQL/sql2.php:38",
+      "insecure-sql-interpolated-SQL/sql3.php:39",
+      "insecure-sql-interpolated-SQL/sql4.php:52",
+      "insecure-sql-interpolated-SQL/sql6.php:36"
+    ],
+    "labelledHighTPIDs": []
+  },
+  "webgoat-webgoat": {
+    "sha": "be2c186b94201bcbdfa46c3a6f5f53dd83262d6a",
+    "highSecurityIDs": [
+      "action-tag-.github/workflows/build.yml-29",
+      "action-tag-.github/workflows/build.yml-31",
+      "action-tag-.github/workflows/release.yml-113",
+      "action-tag-.github/workflows/release.yml-121",
+      "action-tag-.github/workflows/release.yml-37",
+      "action-tag-first-party-.github/workflows/build.yml-19",
+      "action-tag-first-party-.github/workflows/build.yml-21",
+      "action-tag-first-party-.github/workflows/build.yml-41",
+      "action-tag-first-party-.github/workflows/lesson-vulnerability-triage.yml-17",
+      "action-tag-first-party-.github/workflows/release.yml-16",
+      "action-tag-first-party-.github/workflows/release.yml-47",
+      "action-tag-first-party-.github/workflows/release.yml-52",
+      "action-tag-first-party-.github/workflows/release.yml-55",
+      "action-tag-first-party-.github/workflows/release.yml-61",
+      "action-tag-first-party-.github/workflows/release.yml-74",
+      "action-tag-first-party-.github/workflows/release.yml-96",
+      "action-tag-first-party-.github/workflows/welcome.yml-13",
+      "insecure-java-deserialization-src/main/java/org/owasp/webgoat/lessons/deserialization/InsecureDeserializationTask.java:43",
+      "insecure-java-deserialization-src/main/java/org/owasp/webgoat/lessons/deserialization/InsecureDeserializationTask.java:45",
+      "insecure-sql-interpolated-src/main/java/org/owasp/webgoat/lessons/challenges/challenge5/Assignment5.java:45",
+      "insecure-sql-interpolated-src/main/java/org/owasp/webgoat/lessons/jwt/claimmisuse/JWTHeaderKIDEndpoint.java:76",
+      "insecure-sql-interpolated-src/main/java/org/owasp/webgoat/lessons/sqlinjection/advanced/SqlInjectionChallenge.java:59",
+      "insecure-sql-interpolated-src/main/java/org/owasp/webgoat/lessons/sqlinjection/advanced/SqlInjectionLesson6a.java:54",
+      "insecure-sql-interpolated-src/main/java/org/owasp/webgoat/lessons/sqlinjection/introduction/SqlInjectionLesson10.java:49",
+      "insecure-sql-interpolated-src/main/java/org/owasp/webgoat/lessons/sqlinjection/introduction/SqlInjectionLesson5a.java:48",
+      "insecure-sql-interpolated-src/main/java/org/owasp/webgoat/lessons/sqlinjection/introduction/SqlInjectionLesson5b.java:45",
+      "insecure-sql-interpolated-src/main/java/org/owasp/webgoat/lessons/sqlinjection/introduction/SqlInjectionLesson8.java:50",
+      "insecure-sql-interpolated-src/main/java/org/owasp/webgoat/lessons/sqlinjection/introduction/SqlInjectionLesson9.java:51",
+      "no-permissions-.github/workflows/build.yml-1",
+      "no-permissions-.github/workflows/welcome.yml-1"
+    ],
+    "labelledHighTPIDs": []
+  },
+  "owasp-owaspwebgoatphp": {
+    "sha": "b54f87daf476d4d80493e9d1d55cf48d119c09b3",
+    "highSecurityIDs": [
+      "insecure-php-reflected-xss-_japp/view/default/modules/add.php:34",
+      "insecure-php-reflected-xss-_japp/view/default/modules/add.php:35",
+      "insecure-php-reflected-xss-_japp/view/default/rbac/addpermission.php:10",
+      "insecure-php-reflected-xss-_japp/view/default/rbac/addrole.php:7",
+      "insecure-php-reflected-xss-_japp/view/default/rbac/deletepermission.php:5",
+      "insecure-php-reflected-xss-_japp/view/default/rbac/deleterole.php:5",
+      "insecure-php-reflected-xss-_japp/view/default/rbac/editpermission.php:7",
+      "insecure-php-reflected-xss-_japp/view/default/rbac/editrole.php:7",
+      "insecure-php-reflected-xss-_japp/view/default/rbac/unassign.php:76",
+      "insecure-php-reflected-xss-_japp/view/default/users/assign.php:6",
+      "insecure-php-reflected-xss-_japp/view/default/users/unassign.php:75"
+    ],
+    "labelledHighTPIDs": []
+  },
+  "jerryhoff-webgoat-net": {
+    "sha": "1c6cab19f9029673cd98ba8624bf9cc91d04bae9",
+    "highSecurityIDs": [
+      "insecure-sql-interpolated-WebGoat/App_Code/DB/MySqlDbProvider.cs:118",
+      "insecure-sql-interpolated-WebGoat/App_Code/DB/MySqlDbProvider.cs:203",
+      "insecure-sql-interpolated-WebGoat/App_Code/DB/MySqlDbProvider.cs:273",
+      "insecure-sql-interpolated-WebGoat/App_Code/DB/MySqlDbProvider.cs:297",
+      "insecure-sql-interpolated-WebGoat/App_Code/DB/MySqlDbProvider.cs:354",
+      "insecure-sql-interpolated-WebGoat/App_Code/DB/SqliteDbProvider.cs:190",
+      "insecure-sql-interpolated-WebGoat/App_Code/DB/SqliteDbProvider.cs:265",
+      "insecure-sql-interpolated-WebGoat/App_Code/DB/SqliteDbProvider.cs:289",
+      "insecure-sql-interpolated-WebGoat/App_Code/DB/SqliteDbProvider.cs:352",
+      "insecure-sql-interpolated-WebGoat/App_Code/DB/SqliteDbProvider.cs:79"
+    ],
+    "labelledHighTPIDs": []
+  },
+  "sasanlabs-vulnerableapp": {
+    "sha": "acec5c5cbb17796016041086a604e854966ddbc6",
+    "highSecurityIDs": [
+      "action-tag-.github/workflows/create-release.yml-35",
+      "action-tag-.github/workflows/docker.yml-44",
+      "action-tag-.github/workflows/docker.yml-50",
+      "action-tag-.github/workflows/docker.yml-53",
+      "action-tag-.github/workflows/gradle.yml-31",
+      "action-tag-first-party-.github/workflows/codeql-benchmark.yml-266",
+      "action-tag-first-party-.github/workflows/create-release.yml-18",
+      "action-tag-first-party-.github/workflows/create-release.yml-29",
+      "action-tag-first-party-.github/workflows/docker.yml-20",
+      "action-tag-first-party-.github/workflows/docker.yml-25",
+      "action-tag-first-party-.github/workflows/docker.yml-32",
+      "action-tag-first-party-.github/workflows/docker.yml-38",
+      "action-tag-first-party-.github/workflows/docker.yml-41",
+      "action-tag-first-party-.github/workflows/docker.yml-62",
+      "action-tag-first-party-.github/workflows/gradle.yml-15",
+      "action-tag-first-party-.github/workflows/gradle.yml-18",
+      "action-tag-first-party-.github/workflows/onboard_sasanlabs.yml-19",
+      "action-tag-first-party-.github/workflows/onboard_sasanlabs.yml-51",
+      "action-tag-first-party-.github/workflows/onboard_sasanlabs.yml-83",
+      "action-tag-first-party-.github/workflows/onboard_sasanlabs.yml-96",
+      "action-tag-first-party-.github/workflows/pr-startup-gate.yml-14",
+      "action-tag-first-party-.github/workflows/pr-startup-gate.yml-17",
+      "action-tag-first-party-.github/workflows/semgrep-benchmark.yml-170",
+      "action-tag-first-party-.github/workflows/semgrep-benchmark.yml-27",
+      "action-tag-first-party-.github/workflows/semgrep-benchmark.yml-33",
+      "action-tag-first-party-.github/workflows/semgrep-benchmark.yml-40",
+      "action-tag-first-party-.github/workflows/stale.yml-17",
+      "action-tag-first-party-.github/workflows/stats.yml-16",
+      "action-tag-first-party-.github/workflows/w3af-benchmark.yml-199",
+      "action-tag-first-party-.github/workflows/w3af-benchmark.yml-24",
+      "action-tag-first-party-.github/workflows/wapiti-benchmark.yml-141",
+      "action-tag-first-party-.github/workflows/wapiti-benchmark.yml-19",
+      "action-tag-first-party-.github/workflows/wapiti-benchmark.yml-25",
+      "action-tag-first-party-.github/workflows/zap-benchmark.yml-278",
+      "action-tag-first-party-.github/workflows/zap-benchmark.yml-87",
+      "insecure-sql-interpolated-src/main/java/org/sasanlabs/service/vulnerability/sqlInjection/BlindSQLInjectionVulnerability.java:135",
+      "insecure-sql-interpolated-src/main/java/org/sasanlabs/service/vulnerability/sqlInjection/BlindSQLInjectionVulnerability.java:185",
+      "insecure-sql-interpolated-src/main/java/org/sasanlabs/service/vulnerability/sqlInjection/BlindSQLInjectionVulnerability.java:93",
+      "insecure-sql-interpolated-src/main/java/org/sasanlabs/service/vulnerability/sqlInjection/ErrorBasedSQLInjectionVulnerability.java:143",
+      "insecure-sql-interpolated-src/main/java/org/sasanlabs/service/vulnerability/sqlInjection/ErrorBasedSQLInjectionVulnerability.java:206",
+      "insecure-sql-interpolated-src/main/java/org/sasanlabs/service/vulnerability/sqlInjection/ErrorBasedSQLInjectionVulnerability.java:272",
+      "insecure-sql-interpolated-src/main/java/org/sasanlabs/service/vulnerability/sqlInjection/ErrorBasedSQLInjectionVulnerability.java:83",
+      "insecure-sql-interpolated-src/main/java/org/sasanlabs/service/vulnerability/sqlInjection/UnionBasedSQLInjectionVulnerability.java:115",
+      "insecure-sql-interpolated-src/main/java/org/sasanlabs/service/vulnerability/sqlInjection/UnionBasedSQLInjectionVulnerability.java:130",
+      "insecure-sql-interpolated-src/main/java/org/sasanlabs/service/vulnerability/sqlInjection/UnionBasedSQLInjectionVulnerability.java:85",
+      "no-permissions-.github/workflows/create-release.yml-1",
+      "no-permissions-.github/workflows/docker.yml-1",
+      "no-permissions-.github/workflows/gradle.yml-1",
+      "no-permissions-.github/workflows/pr-startup-gate.yml-1"
+    ],
+    "labelledHighTPIDs": []
+  },
+  "terracotta-bank-terracotta-bank": {
+    "sha": "2039956dcaa67e3f9131c1ee71c1b9147ad194d5",
+    "highSecurityIDs": [
+      "action-tag-first-party-.github/workflows/codeql-analysis.yml-33",
+      "action-tag-first-party-.github/workflows/codeql-analysis.yml-37",
+      "action-tag-first-party-.github/workflows/codeql-analysis.yml-48",
+      "action-tag-first-party-.github/workflows/codeql-analysis.yml-52",
+      "action-tag-first-party-.github/workflows/codeql-analysis.yml-71",
+      "insecure-java-deserialization-terracotta-bank-servlet/src/main/java/com/joshcummings/codeplay/terracotta/app/ContentParsingFilter.java:133",
+      "insecure-java-deserialization-terracotta-bank-servlet/src/main/java/com/joshcummings/codeplay/terracotta/app/ContentParsingFilter.java:134",
+      "insecure-sql-interpolated-terracotta-bank-servlet/src/main/java/com/joshcummings/codeplay/terracotta/service/AccountService.java:44",
+      "insecure-sql-interpolated-terracotta-bank-servlet/src/main/java/com/joshcummings/codeplay/terracotta/service/AccountService.java:51",
+      "insecure-sql-interpolated-terracotta-bank-servlet/src/main/java/com/joshcummings/codeplay/terracotta/service/AccountService.java:90",
+      "insecure-sql-interpolated-terracotta-bank-servlet/src/main/java/com/joshcummings/codeplay/terracotta/service/AccountService.java:95",
+      "insecure-sql-interpolated-terracotta-bank-servlet/src/main/java/com/joshcummings/codeplay/terracotta/service/UserService.java:40",
+      "insecure-sql-interpolated-terracotta-bank-servlet/src/main/java/com/joshcummings/codeplay/terracotta/service/UserService.java:47",
+      "insecure-sql-interpolated-terracotta-bank-servlet/src/main/java/com/joshcummings/codeplay/terracotta/service/UserService.java:63",
+      "no-permissions-.github/workflows/codeql-analysis.yml-1"
+    ],
+    "labelledHighTPIDs": [
+      "insecure-java-deserialization-terracotta-bank-servlet/src/main/java/com/joshcummings/codeplay/terracotta/app/ContentParsingFilter.java:133",
+      "insecure-java-deserialization-terracotta-bank-servlet/src/main/java/com/joshcummings/codeplay/terracotta/app/ContentParsingFilter.java:134"
+    ]
+  },
+  "snoopysecurity-dvws": {
+    "sha": "25a5a03aa1b13d8e647da66784c3e8445726e578",
+    "highSecurityIDs": [
+      "insecure-exec-interpolated-vulnerabilities/cmdi/process.php:38",
+      "insecure-exec-interpolated-vulnerabilities/cmdi/process.php:43",
+      "insecure-php-reflected-xss-vulnerabilities/cmdi/client.php:73",
+      "insecure-php-reflected-xss-vulnerabilities/wsdlenum/index.php:69",
+      "insecure-php-xxe-vulnerabilities/xxe2/server.php:6",
+      "insecure-sql-interpolated-vulnerabilities/sqli/api.php:30",
+      "insecure-sql-interpolated-vulnerabilities/sqli/api.php:32"
+    ],
+    "labelledHighTPIDs": [
+      "insecure-php-xxe-vulnerabilities/xxe2/server.php:6"
+    ]
+  },
+  "adeyosemanputra-pygoat": {
+    "sha": "2aa4cc14f251e4a780e94e200aed6b36a5b15c21",
+    "highSecurityIDs": [
+      "action-tag-.github/workflows/hadolint.yml-35",
+      "action-tag-first-party-.github/workflows/flake8.yml-22",
+      "action-tag-first-party-.github/workflows/flake8.yml-25",
+      "action-tag-first-party-.github/workflows/hadolint.yml-32",
+      "action-tag-first-party-.github/workflows/tests.yml-18",
+      "action-tag-first-party-.github/workflows/tests.yml-21",
+      "insecure-py-eval-exec-dockerized_labs/command_injection_lab/app.py:49",
+      "insecure-py-pickle-load-dockerized_labs/insec_des_lab/main.py:40",
+      "insecure-py-pickle-load-dockerized_labs/software_integrity_lab/app.py:44",
+      "insecure-py-shell-true-dockerized_labs/command_injection_lab/app.py:29",
+      "insecure-sql-interpolated-dockerized_labs/sql_injection_lab/app.py:51",
+      "insecure-ssrf-dockerized_labs/ssrf_lab/app.py:37",
+      "no-permissions-.github/workflows/flake8.yml-1"
+    ],
+    "labelledHighTPIDs": []
+  },
+  "cr0hn-vulnerable-node": {
+    "sha": "d68f2a3c9277ece2c2feb9976052033bdecd7fbe",
+    "highSecurityIDs": [
+      "action-tag-first-party-.github/workflows/ci.yml-28",
+      "action-tag-first-party-.github/workflows/ci.yml-33",
+      "insecure-exec-interpolated-routes/extras.js:33",
+      "insecure-exec-interpolated-sast/seeds/deserialization.js:21",
+      "insecure-new-function-sast/seeds/eval-code.js:16",
+      "insecure-sql-interpolated-model/db.js:101",
+      "insecure-sql-interpolated-model/db.js:114",
+      "insecure-ssrf-routes/tools.js:21",
+      "no-permissions-.github/workflows/ci.yml-1"
+    ],
+    "labelledHighTPIDs": []
+  },
+  "stamparm-dsvw": {
+    "sha": "9ca3c9acf3defa0a6148d40e5f5cebeb5dcbb908",
+    "highSecurityIDs": [
+      "action-tag-first-party-.github/workflows/tests.yml-17",
+      "action-tag-first-party-.github/workflows/tests.yml-19",
+      "action-tag-first-party-.github/workflows/tests.yml-35",
+      "action-tag-first-party-.github/workflows/tests.yml-37",
+      "insecure-py-eval-exec-dsvw.py:49",
+      "insecure-py-pickle-load-dsvw.py:27",
+      "insecure-py-shell-true-dsvw.py:31",
+      "insecure-sql-interpolated-dsvw.py:22",
+      "insecure-sql-interpolated-dsvw.py:42",
+      "no-permissions-.github/workflows/tests.yml-1"
+    ],
+    "labelledHighTPIDs": []
+  },
+  "cspf-founder-javavulnerablelab": {
+    "sha": "626a106a49777507beb51955d19ef9d271a9d4a5",
+    "highSecurityIDs": [
+      "insecure-sql-interpolated-src/main/java/org/cysecurity/cspf/jvl/controller/EmailCheck.java:48",
+      "insecure-sql-interpolated-src/main/java/org/cysecurity/cspf/jvl/controller/LoginValidator.java:52",
+      "insecure-sql-interpolated-src/main/java/org/cysecurity/cspf/jvl/controller/Register.java:58",
+      "insecure-sql-interpolated-src/main/java/org/cysecurity/cspf/jvl/controller/Register.java:59",
+      "insecure-sql-interpolated-src/main/java/org/cysecurity/cspf/jvl/controller/UsernameCheck.java:48"
+    ],
+    "labelledHighTPIDs": []
+  },
+  "webgoat-webgoat-legacy": {
+    "sha": "1e7e110069286fdc5ea1b6a0fd04891b7b6813f5",
+    "highSecurityIDs": [
+      "insecure-sql-interpolated-src/main/java/org/owasp/webgoat/lessons/DOS_Login.java:125",
+      "insecure-sql-interpolated-src/main/java/org/owasp/webgoat/lessons/DOS_Login.java:132",
+      "insecure-sql-interpolated-src/main/java/org/owasp/webgoat/lessons/DOS_Login.java:145",
+      "insecure-sql-interpolated-src/main/java/org/owasp/webgoat/lessons/GoatHillsFinancial/Login.java:121",
+      "insecure-sql-interpolated-src/main/java/org/owasp/webgoat/lessons/SQLInjection/Login.java:125"
+    ],
+    "labelledHighTPIDs": []
+  },
+  "0c34-govwa": {
+    "sha": "4058f79f31eeb4a36d8f1e64bba1f0c899646e6f",
+    "highSecurityIDs": [
+      "action-tag-first-party-.github/workflows/sast.yml-12",
+      "action-tag-first-party-.github/workflows/sast.yml-9",
+      "insecure-go-template-html-vulnerability/xss/xss.go:58",
+      "insecure-go-template-html-vulnerability/xss/xss.go:59",
+      "insecure-go-template-html-vulnerability/xss/xss.go:62",
+      "insecure-go-template-html-vulnerability/xss/xss.go:63",
+      "no-permissions-.github/workflows/sast.yml-1"
+    ],
+    "labelledHighTPIDs": []
+  },
+  "rhinosecuritylabs-cloudgoat": {
+    "sha": "63c65bd26edc6919499adfa20b176c450e35c33c",
+    "highSecurityIDs": [
+      "action-tag-.github/workflows/docker-terraform-compatibility.yaml-59",
+      "action-tag-.github/workflows/finish-release.yml-56",
+      "action-tag-.github/workflows/finish-release.yml-68",
+      "action-tag-.github/workflows/scenario-terraform-compatibility.yaml-54",
+      "action-tag-first-party-.github/workflows/docker-image.yml-16",
+      "action-tag-first-party-.github/workflows/docker-image.yml-20",
+      "action-tag-first-party-.github/workflows/docker-image.yml-24",
+      "action-tag-first-party-.github/workflows/docker-terraform-compatibility.yaml-126",
+      "action-tag-first-party-.github/workflows/docker-terraform-compatibility.yaml-130",
+      "action-tag-first-party-.github/workflows/docker-terraform-compatibility.yaml-19",
+      "action-tag-first-party-.github/workflows/docker-terraform-compatibility.yaml-34",
+      "action-tag-first-party-.github/workflows/docker-terraform-compatibility.yaml-54",
+      "action-tag-first-party-.github/workflows/finish-release.yml-26",
+      "action-tag-first-party-.github/workflows/finish-release.yml-31",
+      "action-tag-first-party-.github/workflows/finish-release.yml-72",
+      "action-tag-first-party-.github/workflows/finish-release.yml-76",
+      "action-tag-first-party-.github/workflows/release.yml-29",
+      "action-tag-first-party-.github/workflows/release.yml-34",
+      "action-tag-first-party-.github/workflows/scenario-terraform-compatibility.yaml-16",
+      "action-tag-first-party-.github/workflows/scenario-terraform-compatibility.yaml-51",
+      "action-tag-first-party-.github/workflows/test.yaml-58",
+      "action-tag-first-party-.github/workflows/test.yaml-62",
+      "insecure-exec-interpolated-cloudgoat/scenarios/aws/ecs_privesc_evade_protection/assets/ssrf-web/index.php:29",
+      "insecure-sql-interpolated-cloudgoat/scenarios/aws/glue_privesc/terraform/source/flask/app.py:116",
+      "insecure-sql-interpolated-cloudgoat/scenarios/aws/sqs_flag_shop/terraform/source/flask/app.py:30",
+      "insecure-sql-interpolated-cloudgoat/scenarios/aws/sqs_flag_shop/terraform/source/flask/app.py:45",
+      "no-permissions-.github/workflows/docker-image.yml-1",
+      "no-permissions-.github/workflows/docker-terraform-compatibility.yaml-1",
+      "no-permissions-.github/workflows/release.yml-1",
+      "no-permissions-.github/workflows/scenario-terraform-compatibility.yaml-1",
+      "no-permissions-.github/workflows/test.yaml-1"
+    ],
+    "labelledHighTPIDs": [
+      "insecure-exec-interpolated-cloudgoat/scenarios/aws/ecs_privesc_evade_protection/assets/ssrf-web/index.php:29"
+    ]
+  },
+  "owasp-nodegoat": {
+    "sha": "c5cb68a7084e4ae7dcc60e6a98768720a81841e8",
+    "highSecurityIDs": [
+      "action-tag-first-party-.github/workflows/e2e-test.yml-16",
+      "action-tag-first-party-.github/workflows/e2e-test.yml-21",
+      "action-tag-first-party-.github/workflows/e2e-test.yml-26",
+      "action-tag-first-party-.github/workflows/e2e-test.yml-58",
+      "action-tag-first-party-.github/workflows/lint.yml-16",
+      "action-tag-first-party-.github/workflows/lint.yml-21",
+      "insecure-eval-dynamic-app/routes/contributions.js:32",
+      "insecure-eval-dynamic-app/routes/contributions.js:33",
+      "insecure-eval-dynamic-app/routes/contributions.js:34",
+      "no-permissions-.github/workflows/e2e-test.yml-1",
+      "no-permissions-.github/workflows/lint.yml-1"
+    ],
+    "labelledHighTPIDs": []
+  },
+  "owasp-railsgoat": {
+    "sha": "f5951f13089d85c979de09e7da3c8c0fb982f94a",
+    "highSecurityIDs": [
+      "action-tag-.github/workflows/ci.yml-21",
+      "action-tag-first-party-.github/workflows/ci.yml-18",
+      "insecure-ruby-dynamic-dispatch-app/controllers/benefit_forms_controller.rb:12",
+      "insecure-ruby-marshal-load-app/controllers/password_resets_controller.rb:6",
+      "insecure-sql-interpolated-app/controllers/users_controller.rb:29",
+      "no-permissions-.github/workflows/ci.yml-1"
+    ],
+    "labelledHighTPIDs": []
+  },
+  "snoopysecurity-dvws-node": {
+    "sha": "e83689c406f4277c8a9a1eeefefe5f498d9526c2",
+    "highSecurityIDs": [
+      "action-tag-first-party-.github/workflows/ci.yml-32",
+      "action-tag-first-party-.github/workflows/ci.yml-40",
+      "action-tag-first-party-.github/workflows/ci.yml-45",
+      "insecure-new-function-src/routes/notes.js:25",
+      "insecure-sql-interpolated-src/controllers/passphrase.js:58",
+      "no-permissions-.github/workflows/ci.yml-1"
+    ],
+    "labelledHighTPIDs": []
+  },
+  "juice-shop-juice-shop": {
+    "sha": "717f5efa886b0417eeecb52378b03cf10567b7e2",
+    "highSecurityIDs": [
+      "action-tag-.github/workflows/ci.yml-198",
+      "action-tag-.github/workflows/image_actions.yml-33",
+      "action-tag-.github/workflows/image_actions.yml-42",
+      "action-tag-first-party-.github/workflows/codeql-analysis.yml-23",
+      "action-tag-first-party-.github/workflows/codeql-analysis.yml-34",
+      "action-tag-first-party-.github/workflows/codeql-analysis.yml-36",
+      "action-tag-first-party-.github/workflows/image_actions.yml-30",
+      "insecure-sql-interpolated-routes/login.ts:34",
+      "insecure-sql-interpolated-routes/search.ts:23",
+      "no-permissions-.github/workflows/ci.yml-1",
+      "no-permissions-.github/workflows/frontend-bundle-analysis.yml-1",
+      "no-permissions-.github/workflows/image_actions.yml-1",
+      "no-permissions-.github/workflows/lint-fixer.yml-1",
+      "no-permissions-.github/workflows/rebase.yml-1",
+      "no-permissions-.github/workflows/release.yml-1",
+      "no-permissions-.github/workflows/stale.yml-1",
+      "no-permissions-.github/workflows/update-challenges-ebook.yml-1",
+      "no-permissions-.github/workflows/update-challenges-www-legacy.yml-1",
+      "no-permissions-.github/workflows/update-challenges-www.yml-1",
+      "no-permissions-.github/workflows/update-news-www-legacy.yml-1",
+      "no-permissions-.github/workflows/update-news-www.yml-1"
+    ],
+    "labelledHighTPIDs": []
+  },
+  "owasp-igoat-swift": {
+    "sha": "8c8a8ed6051279f06098f72d6d5aeeb65f8905f2",
+    "highSecurityIDs": [
+      "insecure-sql-interpolated-iGoat-Swift/iGoat-Swift/Source/Exercises/Injection Flaws/SQL Injection/SQLInjectionExerciseVC.swift:22",
+      "insecure-swift-webview-html-iGoat-Swift/iGoat-Swift/Source/Exercises/Injection Flaws/XSS/CrossSiteScriptingExerciseVC.swift:9"
+    ],
+    "labelledHighTPIDs": [
+      "insecure-sql-interpolated-iGoat-Swift/iGoat-Swift/Source/Exercises/Injection Flaws/SQL Injection/SQLInjectionExerciseVC.swift:22",
+      "insecure-swift-webview-html-iGoat-Swift/iGoat-Swift/Source/Exercises/Injection Flaws/XSS/CrossSiteScriptingExerciseVC.swift:9"
+    ]
+  },
+  "bridgecrewio-cfngoat": {
+    "sha": "0c09b69cfc3dbc6cb3ef01883415c35c588ced48",
+    "highSecurityIDs": [
+      "action-tag-.github/workflows/checkov.yaml-17",
+      "action-tag-.github/workflows/main.yaml-21",
+      "action-tag-first-party-.github/workflows/checkov.yaml-13",
+      "action-tag-first-party-.github/workflows/checkov.yaml-19",
+      "action-tag-first-party-.github/workflows/main.yaml-19",
+      "iac-open-admin-port-cfngoat.yaml:126",
+      "iac-open-admin-port-cfngoat.yaml:130",
+      "no-permissions-.github/workflows/checkov.yaml-1",
+      "no-permissions-.github/workflows/main.yaml-1"
+    ],
+    "labelledHighTPIDs": []
+  },
+  "bridgecrewio-terragoat": {
+    "sha": "729f8da62c6a85ce4af5ad3d123de97776d954c4",
+    "highSecurityIDs": [
+      "action-tag-.github/workflows/build.yaml-15",
+      "action-tag-.github/workflows/pull_request.yaml-14",
+      "action-tag-.github/workflows/semgrep.yml-14",
+      "action-tag-first-party-.github/workflows/build.yaml-10",
+      "action-tag-first-party-.github/workflows/build.yaml-17",
+      "action-tag-first-party-.github/workflows/pull_request.yaml-10",
+      "action-tag-first-party-.github/workflows/semgrep.yml-13",
+      "iac-open-admin-port-terraform/aws/ec2.tf:95",
+      "iac-public-database-terraform/aws/db-app.tf:22",
+      "no-permissions-.github/workflows/build.yaml-1",
+      "no-permissions-.github/workflows/pull_request.yaml-1",
+      "no-permissions-.github/workflows/semgrep.yml-1"
+    ],
+    "labelledHighTPIDs": [
+      "iac-open-admin-port-terraform/aws/ec2.tf:95",
+      "iac-public-database-terraform/aws/db-app.tf:22"
+    ]
+  },
+  "fportantier-vulpy": {
+    "sha": "5249cc8b05a1c37f6b2f757b1cf16a509c327122",
+    "highSecurityIDs": [
+      "insecure-sql-interpolated-bad/libuser.py:12",
+      "insecure-sql-interpolated-bad/libuser.py:53"
+    ],
+    "labelledHighTPIDs": []
+  },
+  "we45-vulnerable-flask-app": {
+    "sha": "b6a4f97afd466e83e1f60781494252dec1c37039",
+    "highSecurityIDs": [
+      "action-tag-.github/workflows/zap_test.yml-49",
+      "action-tag-first-party-.github/workflows/zap_test.yml-11",
+      "action-tag-first-party-.github/workflows/zap_test.yml-13",
+      "action-tag-first-party-.github/workflows/zap_test.yml-57",
+      "insecure-py-yaml-load-app/app.py:329",
+      "insecure-sql-interpolated-app/app.py:261",
+      "no-permissions-.github/workflows/zap_test.yml-1"
+    ],
+    "labelledHighTPIDs": []
+  },
+  "appsecco-dvna": {
+    "sha": "9ba473add536f66ac9007966acb2a775dd31277a",
+    "highSecurityIDs": [
+      "insecure-exec-interpolated-core/appHandler.js:39"
+    ],
+    "labelledHighTPIDs": []
+  },
+  "owasp-crapi": {
+    "sha": "b5fc307f3e5f875809b095b771108ef342a33724",
+    "highSecurityIDs": [
+      "action-tag-.github/workflows/pr-build.yml-185",
+      "action-tag-.github/workflows/pr-build.yml-235",
+      "action-tag-.github/workflows/pr-build.yml-264",
+      "action-tag-.github/workflows/pr-build.yml-281",
+      "action-tag-.github/workflows/pr-build.yml-37",
+      "action-tag-.github/workflows/publish.yml-39",
+      "action-tag-.github/workflows/workflow-multiarch.yml-33",
+      "action-tag-first-party-.github/workflows/pr-build.yml-102",
+      "action-tag-first-party-.github/workflows/pr-build.yml-113",
+      "action-tag-first-party-.github/workflows/pr-build.yml-124",
+      "action-tag-first-party-.github/workflows/pr-build.yml-135",
+      "action-tag-first-party-.github/workflows/pr-build.yml-146",
+      "action-tag-first-party-.github/workflows/pr-build.yml-173",
+      "action-tag-first-party-.github/workflows/pr-build.yml-201",
+      "action-tag-first-party-.github/workflows/pr-build.yml-204",
+      "action-tag-first-party-.github/workflows/pr-build.yml-209",
+      "action-tag-first-party-.github/workflows/pr-build.yml-215",
+      "action-tag-first-party-.github/workflows/pr-build.yml-30",
+      "action-tag-first-party-.github/workflows/pr-build.yml-74",
+      "action-tag-first-party-.github/workflows/pr-build.yml-77",
+      "action-tag-first-party-.github/workflows/pr-build.yml-80",
+      "action-tag-first-party-.github/workflows/pr-build.yml-91",
+      "action-tag-first-party-.github/workflows/publish.yml-108",
+      "action-tag-first-party-.github/workflows/publish.yml-118",
+      "action-tag-first-party-.github/workflows/publish.yml-128",
+      "action-tag-first-party-.github/workflows/publish.yml-138",
+      "action-tag-first-party-.github/workflows/publish.yml-148",
+      "action-tag-first-party-.github/workflows/publish.yml-32",
+      "action-tag-first-party-.github/workflows/publish.yml-76",
+      "action-tag-first-party-.github/workflows/publish.yml-79",
+      "action-tag-first-party-.github/workflows/publish.yml-82",
+      "action-tag-first-party-.github/workflows/publish.yml-88",
+      "action-tag-first-party-.github/workflows/publish.yml-98",
+      "action-tag-first-party-.github/workflows/workflow-multiarch.yml-26",
+      "action-tag-first-party-.github/workflows/workflow-multiarch.yml-50",
+      "action-tag-first-party-.github/workflows/workflow-multiarch.yml-58",
+      "action-tag-first-party-.github/workflows/workflow-multiarch.yml-61",
+      "action-tag-first-party-.github/workflows/workflow-multiarch.yml-64",
+      "insecure-sql-interpolated-services/workshop/crapi/shop/views.py:389",
+      "no-permissions-.github/workflows/pr-build.yml-1",
+      "no-permissions-.github/workflows/publish.yml-1"
+    ],
+    "labelledHighTPIDs": []
+  },
+  "dolevf-damn-vulnerable-graphql-application": {
+    "sha": "a961308c02d1fb462b192681c336b0739e432da7",
+    "highSecurityIDs": [
+      "action-tag-first-party-.github/workflows/test.yaml-33",
+      "action-tag-first-party-.github/workflows/test.yaml-34",
+      "insecure-py-os-system-core/helpers.py:9",
+      "no-permissions-.github/workflows/test.yaml-1"
+    ],
+    "labelledHighTPIDs": []
+  },
+  "erev0s-vampi": {
+    "sha": "f16052dce83f05847133ec98f01c5193a41de7d8",
+    "highSecurityIDs": [
+      "action-tag-first-party-.github/workflows/docker-image.yml-16",
+      "action-tag-first-party-.github/workflows/docker-image.yml-19",
+      "action-tag-first-party-.github/workflows/docker-image.yml-22",
+      "action-tag-first-party-.github/workflows/docker-image.yml-28",
+      "insecure-sql-interpolated-models/user_model.py:72",
+      "no-permissions-.github/workflows/docker-image.yml-1"
+    ],
+    "labelledHighTPIDs": []
+  },
+  "incredibleindishell-ssrf-vulnerable-lab": {
+    "sha": "7b9a3a1caf7fab5904232478dd41c62a166376a3",
+    "highSecurityIDs": [
+      "insecure-ssrf-www/file_get_content.php:45"
+    ],
+    "labelledHighTPIDs": []
+  },
+  "contrast-security-oss-vulnerable-spring-boot-application": {
+    "sha": "c36de809fa3cac37a4f54b73811fd06094b5300a",
+    "highSecurityIDs": [
+      "insecure-sql-interpolated-src/main/java/com/contrastsecurity/demo/providersearch/ProviderSearchDAO.java:17"
+    ],
+    "labelledHighTPIDs": []
+  },
+  "madhuakula-kubernetes-goat": {
+    "sha": "723a0db478f050d173d23b4ce5044b65bce0bdd0",
+    "highSecurityIDs": [
+      "insecure-exec-interpolated-infrastructure/health-check/main.go:29"
+    ],
+    "labelledHighTPIDs": []
+  },
+  "snyk-labs-goof-kubernetes": {
+    "sha": "961fb66731d7193a558e244638dc885438df449c",
+    "highSecurityIDs": [
+      "insecure-py-shell-true-images/rce_image/app.py:20"
+    ],
+    "labelledHighTPIDs": []
+  },
+  "snyk-labs-nodejs-goof": {
+    "sha": "add14ba59e98240d9e00a235dd7d42cd61ae9912",
+    "highSecurityIDs": [
+      "action-tag-.github/workflows/snyk-code.yml-8",
+      "action-tag-.github/workflows/snyk-test-sarif.yml-8",
+      "action-tag-first-party-.github/workflows/codeql-analysis.yml-42",
+      "action-tag-first-party-.github/workflows/codeql-analysis.yml-46",
+      "action-tag-first-party-.github/workflows/codeql-analysis.yml-57",
+      "action-tag-first-party-.github/workflows/codeql-analysis.yml-71",
+      "action-tag-first-party-.github/workflows/snyk-code-manual.yml-11",
+      "action-tag-first-party-.github/workflows/snyk-code-manual.yml-13",
+      "action-tag-first-party-.github/workflows/snyk-code.yml-15",
+      "action-tag-first-party-.github/workflows/snyk-code.yml-7",
+      "action-tag-first-party-.github/workflows/snyk-test-sarif.yml-15",
+      "action-tag-first-party-.github/workflows/snyk-test-sarif.yml-7",
+      "insecure-exec-interpolated-routes/index.js:174",
+      "no-permissions-.github/workflows/snyk-code.yml-1",
+      "no-permissions-.github/workflows/snyk-test-sarif.yml-1"
+    ],
+    "labelledHighTPIDs": []
+  },
+  "soham7-dev-aspgoat": {
+    "sha": "db3153f5dae036a9d67e12be22548299855c6b40",
+    "highSecurityIDs": [
+      "action-tag-first-party-.github/workflows/dotnet.yml-15",
+      "action-tag-first-party-.github/workflows/dotnet.yml-18",
+      "action-tag-first-party-.github/workflows/dotnet.yml-23",
+      "action-tag-first-party-.github/workflows/dotnet.yml-52",
+      "action-tag-first-party-.github/workflows/dotnet.yml-55",
+      "action-tag-first-party-.github/workflows/dotnet.yml-58",
+      "action-tag-first-party-.github/workflows/dotnet.yml-65",
+      "action-tag-first-party-.github/workflows/dotnet.yml-74",
+      "insecure-dotnet-deserialization-Controllers/HomeController.cs:323",
+      "no-permissions-.github/workflows/dotnet.yml-1"
+    ],
+    "labelledHighTPIDs": []
+  },
+  "damnvulnerablecryptoapp-damnvulnerablecryptoapp": {
+    "sha": "ff203d70d7d3e6f5af232b5e69580ebcf637b4ea",
+    "highSecurityIDs": [
+      "action-tag-first-party-.github/workflows/build_and_tests.yml-19",
+      "action-tag-first-party-.github/workflows/build_and_tests.yml-21",
+      "action-tag-first-party-.github/workflows/new_release.yml-23",
+      "action-tag-first-party-.github/workflows/new_release.yml-25",
+      "action-tag-first-party-.github/workflows/new_release.yml-43",
+      "action-tag-first-party-.github/workflows/wiki.yml-13",
+      "no-permissions-.github/workflows/build_and_tests.yml-1",
+      "no-permissions-.github/workflows/new_release.yml-1",
+      "no-permissions-.github/workflows/wiki.yml-1"
+    ],
+    "labelledHighTPIDs": []
+  },
+  "owasp-dvsa": {
+    "sha": "c04e0a536ac54db8f732144be92b5f208169f8c4",
+    "highSecurityIDs": [],
+    "labelledHighTPIDs": []
+  },
+  "anxolerd-dvpwa": {
+    "sha": "a1d8f89fac2e57093189853c6527c2b01fc1d9c1",
+    "highSecurityIDs": [],
+    "labelledHighTPIDs": []
+  },
+  "bridgecrewio-kustomizegoat": {
+    "sha": "ef912fdcddb182f292191552fb70f85b07422467",
+    "highSecurityIDs": [],
+    "labelledHighTPIDs": []
+  },
+  "snyk-labs-java-goof": {
+    "sha": "f5719ae0f757a7482e54d1ebda945dd304cf2529",
+    "highSecurityIDs": [
+      "action-tag-.github/workflows/log4shell-goof-server-docker-image.yaml-50",
+      "action-tag-.github/workflows/todolist-goof-docker-image.yaml-47",
+      "action-tag-first-party-.github/workflows/log4shell-goof-server-docker-image.yaml-24",
+      "action-tag-first-party-.github/workflows/log4shell-goof-server-docker-image.yaml-27",
+      "action-tag-first-party-.github/workflows/log4shell-goof-server-docker-image.yaml-30",
+      "action-tag-first-party-.github/workflows/todolist-goof-docker-image.yaml-24",
+      "action-tag-first-party-.github/workflows/todolist-goof-docker-image.yaml-27",
+      "action-tag-first-party-.github/workflows/todolist-goof-docker-image.yaml-30",
+      "no-permissions-.github/workflows/log4shell-goof-server-docker-image.yaml-1",
+      "no-permissions-.github/workflows/todolist-goof-docker-image.yaml-1"
+    ],
+    "labelledHighTPIDs": []
+  },
+  "we45-dvfaas-damn-vulnerable-functions-as-a-service": {
+    "sha": "061116ea3e92ca6131e7f6ad456724de6c835206",
+    "highSecurityIDs": [],
+    "labelledHighTPIDs": []
+  },
+  "owasp-serverless-goat": {
+    "sha": "39410bc3df8963d6544f98b50e8738ce3de1a188",
+    "highSecurityIDs": [],
+    "labelledHighTPIDs": []
+  },
+  "theowni-damn-vulnerable-restaurant-api-game": {
+    "sha": "d32d09972aec7830f5f1d4a5d274cac7aae7eb82",
+    "highSecurityIDs": [
+      "action-tag-.github/workflows/test.yml-23",
+      "action-tag-.github/workflows/test.yml-33",
+      "action-tag-first-party-.github/workflows/test.yml-17",
+      "action-tag-first-party-.github/workflows/test.yml-18",
+      "action-tag-first-party-.github/workflows/test.yml-39"
+    ],
+    "labelledHighTPIDs": []
+  },
+  "veracode-research-actuator-testbed": {
+    "sha": "708d2a2bc19ea1f73bbeee3349a167b177c7516a",
+    "highSecurityIDs": [],
+    "labelledHighTPIDs": []
+  },
+  "jzheaux-spel-injection": {
+    "sha": "057049647e22b94e51e036bbca9cb449db9239a8",
+    "highSecurityIDs": [],
+    "labelledHighTPIDs": []
+  },
+  "eoftedal-deserialize": {
+    "sha": "42d6c234864cc8b649f3f1560843d52218bec6b3",
+    "highSecurityIDs": [],
+    "labelledHighTPIDs": []
+  },
+  "forgo7ten-vulnerableapp": {
+    "sha": "8a46101670549c3ccf3e0d9f5e4df88845fb15dd",
+    "highSecurityIDs": [],
+    "labelledHighTPIDs": []
+  },
+  "mochiruntime-android-ctf": {
+    "sha": "680a2fe27b9ec00a9d1a3913b4ba5d18c99fc9b8",
+    "highSecurityIDs": [],
+    "labelledHighTPIDs": []
+  },
+  "cyllective-oauth-labs": {
+    "sha": "5c97e34c8f18ee64a85306037641b12c53b8137a",
+    "highSecurityIDs": [],
+    "labelledHighTPIDs": []
+  },
+  "cxprofessionalservices-vulnerableapp": {
+    "sha": "5f02673c5db688e80a886c8c24778a39ebc90e78",
+    "highSecurityIDs": [
+      "action-tag-.github/workflows/main.yml-15",
+      "action-tag-first-party-.github/workflows/main.yml-13",
+      "no-permissions-.github/workflows/main.yml-1"
+    ],
+    "labelledHighTPIDs": []
+  },
+  "sonuoffsec-dvap": {
+    "sha": "980305ef3b9561acc090970596f33015bc9e0be8",
+    "highSecurityIDs": [],
+    "labelledHighTPIDs": []
+  },
+  "jankesec-evilcorp-ios": {
+    "sha": "c5e539f80367b79c2cab7e071f62d97e8d32a460",
+    "highSecurityIDs": [],
+    "labelledHighTPIDs": []
+  },
+  "peachycloudsecurity-very-vulnerable-serverless": {
+    "sha": "cb0d864ab007632f20f41736b1cddbba2a1d4bdc",
+    "highSecurityIDs": [
+      "insecure-py-pickle-load-app.py:123",
+      "insecure-py-shell-true-app.py:61",
+      "insecure-ssrf-app.py:46"
+    ],
+    "labelledHighTPIDs": [
+      "insecure-ssrf-app.py:46"
+    ]
+  },
+  "appelsiini-vulnerable-laravel-app": {
+    "sha": "12b6444cb896da01d28f42e4a816779ada9bf704",
+    "highSecurityIDs": [],
+    "labelledHighTPIDs": []
+  },
+  "sasanlabs-vulnerableapp-php": {
+    "sha": "5de0b62023be8acc851a5fa009a095a31b92d5c9",
+    "highSecurityIDs": [
+      "action-tag-first-party-.github/workflows/docker.yml-17",
+      "action-tag-first-party-.github/workflows/docker.yml-19",
+      "action-tag-first-party-.github/workflows/docker.yml-21",
+      "action-tag-first-party-.github/workflows/docker.yml-23",
+      "action-tag-first-party-.github/workflows/docker.yml-28",
+      "action-tag-first-party-.github/workflows/php.yml-13",
+      "no-permissions-.github/workflows/docker.yml-1",
+      "no-permissions-.github/workflows/php.yml-1"
+    ],
+    "labelledHighTPIDs": []
+  }
+}
