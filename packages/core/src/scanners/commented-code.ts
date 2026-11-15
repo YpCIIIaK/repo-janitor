@@ -93,7 +93,7 @@ function looksLikeCode(body: string): boolean {
   // Contract descriptions often end with a semicolon. Actual declarations,
   // calls and assignments carry additional syntax; quoted prose inside a
   // disabled statement must not make that statement disappear.
-  if (PROSE_RUN.test(body) && !/[=(){}\[\]"'`]/.test(body)) return false
+  if (PROSE_RUN.test(body) && !/[=(){}[\]"'`]/.test(body)) return false
   return CODE_SIGNAL.test(body)
 }
 
