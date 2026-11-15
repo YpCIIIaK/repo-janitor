@@ -102,13 +102,13 @@ test("OSV package-query counts are recorded without retaining package names or r
   } finally { server.close(); rmSync(dir, { recursive: true, force: true }) }
 })
 
-test("the existing response-size policy is disclosed separately from transport failures", async () => {
+test("an npm license response-size limit is disclosed separately from transport failures", async () => {
   const dir = mkdtempSync(join(tmpdir(), "bench-network-")), audit = join(dir, "audit.json")
   const { server, url } = await serverFor(200)
   try {
     const code = `
       import http from 'node:http';
-      const req = http.request(process.env.TEST_URL, {agent:false}, res => {
+      const req = http.request(process.env.TEST_URL, {agent:false, headers:{host:'registry.npmjs.org'}}, res => {
         res.on('data', () => res.destroy(new Error('Response too large')));
         res.on('error', () => setImmediate(() => process.exit(0)));
       }); req.end();
@@ -120,6 +120,30 @@ test("the existing response-size policy is disclosed separately from transport f
     assert.equal(data.transportOK, true)
   } finally { server.close(); rmSync(dir, { recursive: true, force: true }) }
 })
+
+for (const [method, path] of [["POST", "/v1/querybatch"], ["GET", "/v1/vulns/fixture"]]) {
+  test(`a swallowed oversized OSV ${method} response cannot become a clean check`, async () => {
+    const dir = mkdtempSync(join(tmpdir(), "bench-network-")), audit = join(dir, "audit.json")
+    const { server, url } = await serverFor(200)
+    try {
+      const code = `
+        import http from 'node:http';
+        const req = http.request(process.env.TEST_URL + ${JSON.stringify(path)},
+          {method:${JSON.stringify(method)}, agent:false, headers:{host:'api.osv.dev'}}, res => {
+            res.on('data', () => res.destroy(new Error('Response too large')));
+            res.on('error', () => setImmediate(() => process.exit(0)));
+          }); req.end();
+      `
+      const result = await run(["--import", preload, "--input-type=module", "-e", code], { TEST_URL: url, BENCH_NETWORK_AUDIT_FILE: audit })
+      assert.equal(result.code, 70, result.stderr)
+      const data = JSON.parse(readFileSync(audit, "utf8"))
+      assert.equal(data.transportOK, false)
+      assert.equal(data.policyLimitedResponses, 1)
+      assert.equal(data.policyLimitedHosts["api.osv.dev"], 1)
+      assert.equal(data.failedRequests, 1)
+    } finally { server.close(); rmSync(dir, { recursive: true, force: true }) }
+  })
+}
 
 test("a caught DNS failure is not recorded as a successful check", async () => {
   const dir = mkdtempSync(join(tmpdir(), "bench-network-")), audit = join(dir, "audit.json"), stub = join(dir, "dns.cjs")
@@ -145,7 +169,7 @@ test("a metadata preflight that resolves a host but never starts its request is 
   } finally { rmSync(dir, { recursive: true, force: true }) }
 })
 
-test("the OSV runner refuses to cache an empty report after HTTP 503", async () => {
+for (const legacyPolicyCache of [false, true]) test(`the OSV runner rejects HTTP 503${legacyPolicyCache ? " when restoring a v1 policy-limited cache" : " without caching a clean report"}`, async () => {
   const root = mkdtempSync(join(tmpdir(), "bench-osv-")), bench = join(root, "benchmark"), repo = join(root, "fixture")
   const { server, url } = await serverFor(503)
   try {
@@ -160,6 +184,10 @@ test("the OSV runner refuses to cache an empty report after HTTP 503", async () 
     git("-c", "user.name=Test", "-c", "user.email=test@example.invalid", "-c", "commit.gpgsign=false", "commit", "--quiet", "-m", "fixture")
     const sha = git("rev-parse", "HEAD").trim()
     writeFileSync(join(bench, "corpus.json"), JSON.stringify([{ name: "fixture", url: repo, sha }]))
+    if (legacyPolicyCache) writeFileSync(join(bench, ".results/fixture.osv.json"), JSON.stringify({
+      sha, scanners: ["vulnerable-deps", "license-risk"], findings: [],
+      networkAudit: { version: 1, transportOK: true, policyLimitedResponses: 1 },
+    }))
     for (const f of ["osv.mjs", "network-audit.mjs"]) copyFileSync(new URL(`./${f}`, import.meta.url), join(bench, f))
     writeFileSync(join(root, "packages/cli/dist/index.js"), `
       const fs = require('node:fs'), http = require('node:http');
@@ -172,7 +200,8 @@ test("the OSV runner refuses to cache an empty report after HTTP 503", async () 
       }); req.end();
     `)
     const result = await run([join(bench, "osv.mjs")], { TEST_URL: url, BENCH_NETWORK_RETRIES: "0", BENCH_JOBS: "1" })
-    assert.ok(!existsSync(join(bench, ".results/fixture.osv.json")), "HTTP errors must not produce cached clean reports")
+    if (legacyPolicyCache) assert.equal(JSON.parse(readFileSync(join(bench, ".results/fixture.osv.json"))).networkAudit.version, 1)
+    else assert.ok(!existsSync(join(bench, ".results/fixture.osv.json")), "HTTP errors must not produce cached clean reports")
     assert.equal(result.code, 1, result.stderr)
     assert.match(result.stderr, /network incomplete/)
     assert.doesNotMatch(result.stdout, /all repos checked/)

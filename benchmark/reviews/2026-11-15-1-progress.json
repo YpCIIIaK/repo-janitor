@@ -1,14 +1,14 @@
 {
   "status": "offline-complete-online-pending",
-  "checkedAt": "2026-11-15T16:08:21.061Z",
+  "checkedAt": "2026-11-15T17:29:36.942Z",
   "pinnedRecords": 10007,
   "newTargets": 2997,
   "offlineCurrent": 10007,
   "newOfflineCurrent": 2997,
-  "onlineCached": 8626,
-  "onlineAudited": 333,
-  "onlineAuditedPolicyLimited": 36,
-  "allSixArtifacts": 8626,
+  "onlineCached": 9196,
+  "onlineAudited": 903,
+  "onlineAuditedPolicyLimited": 57,
+  "allSixArtifacts": 9196,
   "newLabels": 60,
   "tp": 9,
   "fp": 51,
@@ -21,8 +21,8 @@
   },
   "pendingCounts": {
     "offline": 0,
-    "online": 1381,
-    "artifacts": 1381
+    "online": 811,
+    "artifacts": 811
   },
   "distinctProjectsTarget": 10000,
   "distinctProjectsOfflineCurrent": 10000,

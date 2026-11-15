@@ -54,7 +54,12 @@ async function one(repo) {
   const outPath = join(outDir, `${repo.name}.osv.json`)
   if (existsSync(outPath)) {
     const prev = JSON.parse(readFileSync(outPath, "utf8"))
-    if (prev.sha === repo.sha && ONLINE.every((s) => prev.scanners?.includes(s) || (s === "vulnerable-deps" && !prev.scanners))) return "cached"
+    const audit = prev.networkAudit
+    // Version 1 did not say which service hit a response limit. Recheck those
+    // snapshots rather than trusting a possibly truncated OSV response.
+    const reusableAudit = !audit || (audit.transportOK === true && [1, 2].includes(audit.version)
+      && (audit.version !== 1 || !audit.policyLimitedResponses))
+    if (reusableAudit && prev.sha === repo.sha && ONLINE.every((s) => prev.scanners?.includes(s) || (s === "vulnerable-deps" && !prev.scanners))) return "cached"
   }
   const dir = join(work, repo.name)
   rmSync(dir, { recursive: true, force: true })
@@ -84,7 +89,7 @@ async function one(repo) {
       rmSync(auditPath, { force: true })
       const scan = await sh("node", ["--import", auditModule, cli, "scan", dir, "--only", ONLINE.join(","), "--format", "json", "--output", tmp], { env })
       try { networkAudit = JSON.parse(readFileSync(auditPath, "utf8")) } catch { networkAudit = null }
-      if ((scan.status === 0 || scan.status === 2) && networkAudit?.version === 1 && networkAudit.transportOK) break
+      if ((scan.status === 0 || scan.status === 2) && networkAudit?.version === 2 && networkAudit.transportOK) break
       if (networkAudit?.transportOK === false && attempt < networkRetries) {
         await new Promise((resolve) => setTimeout(resolve, Math.min(45000, 15000 * (attempt + 1))))
         continue
