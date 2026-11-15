@@ -5,6 +5,7 @@ import history from "@/benchmark/history.json"
 import { useLocale } from "@/components/i18n/locale-provider"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
+import { BenchmarkCoverage } from "./benchmark-coverage"
 
 /**
  * "State of open source": what the benchmark corpus says about public repos.
@@ -490,7 +491,7 @@ export function StateOfOpenSource() {
   return (
     <main className="mx-auto grid max-w-4xl gap-6 px-4 py-10 [&>*]:min-w-0">
       <header className="space-y-3">
-        <h1 className="text-3xl font-semibold tracking-tight text-balance sm:text-4xl">{t.title(stats.repos)}</h1>
+        <h1 className="text-3xl font-semibold tracking-tight text-balance sm:text-4xl">{t.title(stats.uniqueRepositories)}</h1>
         <p className="max-w-prose text-muted-foreground">{t.lede}</p>
         <p className="text-xs text-muted-foreground">{t.updated} {date}</p>
         <a href="/state/findings" className="inline-block text-sm font-medium text-primary hover:underline">{t.findingsLink}</a>
@@ -498,7 +499,7 @@ export function StateOfOpenSource() {
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {[
-          [stats.repos.toLocaleString(l), t.tiles.repos],
+          [stats.uniqueRepositories.toLocaleString(l), t.tiles.repos],
           [String(stats.medianScore), t.tiles.median],
           [stats.todo.dated.toLocaleString(l), t.tiles.todos],
           [t.years(stats.todo.medianDays / 365), t.tiles.todoAge],
@@ -522,6 +523,8 @@ export function StateOfOpenSource() {
           </p>
         ))}
       </div>
+
+      <BenchmarkCoverage coverage={stats.dataCoverage} unique={stats.uniqueRepositories} aliases={stats.aliasRecords} locale={l} />
 
       <Section title={t.facts}>
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">

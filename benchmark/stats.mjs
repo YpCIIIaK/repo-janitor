@@ -12,6 +12,7 @@ import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
 import { STATS_CONTROL_NAME_RE as VULNERABLE_RE } from "./control-names.mjs"
+import { publicCoverage } from "./public-coverage.mjs"
 
 const here = dirname(fileURLToPath(import.meta.url))
 const resultsDir = join(here, ".results")
@@ -73,6 +74,11 @@ const count = (r, rule) => r.issues.filter((i) => i.rule === rule).length
 const n = repos.length
 const out = []
 const json = { repos: n, generatedAt: new Date().toISOString() }
+json.dataCoverage = publicCoverage(corpus, (kind, name) => {
+  const path = kind === "inventory" ? join(here, ".inventory", `${name}.json`) : join(resultsDir, `${name}.osv.json`)
+  if (!existsSync(path)) return null
+  return JSON.parse(readFileSync(path, "utf8"))
+})
 
 out.push(`# What ${n} open-source repos look like`, "")
 out.push(
