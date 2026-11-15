@@ -10,11 +10,11 @@
 import { existsSync, readFileSync } from "node:fs"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
+import { SECURITY_CONTROL_NAME_RE as VULNERABLE_RE } from "./control-names.mjs"
 
 const here = dirname(fileURLToPath(import.meta.url))
 
-export const VULNERABLE_RE =
-  /goat|dvwa|dvna|dvws|vulnerab|juice-shop|vampi|dvga|pygoat|vulpy|govwa|crapi|xvwa|hackademic|vulnlab|vulnado|wrongsecrets|serverless-goat|sadcloud|cloudgoat|dvia|dsvw|inject-some-sql|testbed|terracotta|restaurant|awsgoat|webgoatphp|benchmarkjava|^sonuoffsec-dvap$|^jankesec-evilcorp-ios$/i
+export { VULNERABLE_RE }
 
 const SERVER_LANGS = new Set(["PHP", "Ruby", "Java", "C#", "Python", "Go"])
 const MOBILE_LANGS = new Set(["Swift", "Kotlin", "Dart"])
