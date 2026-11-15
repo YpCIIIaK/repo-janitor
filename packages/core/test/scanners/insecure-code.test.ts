@@ -506,3 +506,25 @@ describe("ssrf with a fixed host (benchmark cycle 2026-11-08-2)", () => {
     expect(ids.some((i) => i.startsWith("insecure-ssrf-"))).toBe(true)
   })
 })
+
+describe("SQL diagnostics versus executable query construction", () => {
+  it("ignores Java log and exception messages but retains query construction beside them", async () => {
+    const issues = await insecureCodeScanner.run(makeContext({ files: {
+      "src/main/java/app/Service.java": [
+        'LOGGER.warn("Unexpected state in select! " + key);',
+        'log.info("Unable to update metadata " + entity);',
+        'LOG.error("error when update queue for " + queue, e);',
+        'throw new BusinessException("Unable to update ConfigMap " + name, e);',
+        'throw new IllegalStateException("Server tried to update attributes " + entity);',
+        'String sql = "SELECT * FROM users WHERE name = " + input;',
+        'LOGGER.info(db.query("SELECT * FROM users WHERE name = " + input));',
+        'log.info("update failed " + id); db.execute("UPDATE users SET name = " + input);',
+      ].join("\n"),
+    } }))
+    expect(issues.filter(issue => issue.id.startsWith("insecure-sql-interpolated-")).map(issue => issue.location)).toEqual([
+      "src/main/java/app/Service.java:6",
+      "src/main/java/app/Service.java:7",
+      "src/main/java/app/Service.java:8",
+    ])
+  })
+})
