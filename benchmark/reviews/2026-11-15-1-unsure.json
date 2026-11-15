@@ -22,5 +22,13 @@
     "id": "insecure-tls-verification-off-src/cosmosdb/getCosmosClient.ts:78",
     "sourceUrl": "https://github.com/microsoft/vscode-cosmosdb/blob/31d3f949fc39f2fefecd2a49f70953d76ba91781/src/cosmosdb/getCosmosClient.ts#L78",
     "reason": "Certificate verification is disabled only for the isEmulator HTTPS branch unless a caller supplies an agent. Actionability depends on how emulator endpoints are selected and trusted; that path was not fully reviewed."
+  },
+  {
+    "repo": "jurerotar/Pillage-First-Ask-Questions-Later",
+    "name": "jurerotar-pillage-first-ask-questions-later",
+    "sha": "73aa4f2407f673b18cb9b1cea997b64a41531e61",
+    "id": "commented-apps/web/app/(game)/(village-slug)/(hero)/components/auctions-buy-item.tsx:37",
+    "sourceUrl": "https://github.com/jurerotar/Pillage-First-Ask-Questions-Later/blob/73aa4f2407f673b18cb9b1cea997b64a41531e61/apps/web/app/%28game%29/%28village-slug%29/%28hero%29/components/auctions-buy-item.tsx#L37",
+    "reason": "The commented t() calls may serve translation-key extraction or may be leftover code. Extraction configuration was not verified; no label assigned."
   }
 ]

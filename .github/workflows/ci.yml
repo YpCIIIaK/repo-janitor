@@ -75,6 +75,12 @@ jobs:
       - name: Test (all packages + dashboard)
         run: pnpm test
 
+      # Collector regressions include POSIX filename fixtures and a swallowed
+      # HTTP 503: neither a missing input nor an outage may look like a clean scan.
+      - name: Test benchmark collectors
+        if: matrix.os == 'ubuntu-latest'
+        run: node --test benchmark/*.test.mjs
+
       - name: Build dashboard
         run: pnpm build
 

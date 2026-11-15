@@ -1,17 +1,17 @@
 {
-  "status": "in-progress",
-  "checkedAt": "2026-11-15T15:39:02.646Z",
+  "status": "offline-complete-online-pending",
+  "checkedAt": "2026-11-15T16:08:21.061Z",
   "pinnedRecords": 10007,
   "newTargets": 2997,
-  "offlineCurrent": 9294,
-  "newOfflineCurrent": 2284,
-  "onlineCached": 8475,
-  "onlineAudited": 182,
-  "onlineAuditedPolicyLimited": 17,
-  "allSixArtifacts": 8475,
-  "newLabels": 46,
-  "tp": 8,
-  "fp": 38,
+  "offlineCurrent": 10007,
+  "newOfflineCurrent": 2997,
+  "onlineCached": 8626,
+  "onlineAudited": 333,
+  "onlineAuditedPolicyLimited": 36,
+  "allSixArtifacts": 8626,
+  "newLabels": 60,
+  "tp": 9,
+  "fp": 51,
   "sourceFingerprint": "d99a356eb71009c2",
   "preservation": {
     "oldLabelsPreserved": 2871,
@@ -20,11 +20,11 @@
     "labelledHighTPIDsRetained": 45
   },
   "pendingCounts": {
-    "offline": 713,
-    "online": 1532,
-    "artifacts": 1532
+    "offline": 0,
+    "online": 1381,
+    "artifacts": 1381
   },
   "distinctProjectsTarget": 10000,
-  "distinctProjectsOfflineCurrent": 9287,
+  "distinctProjectsOfflineCurrent": 10000,
   "scannerFeaturesDeferred": true
 }

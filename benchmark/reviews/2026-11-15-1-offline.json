@@ -1,0 +1,30 @@
+{
+  "status": "offline-complete-online-pending",
+  "checkedAt": "2026-11-15T16:06:37.004031+00:00",
+  "pinnedRecords": 10007,
+  "distinctProjects": 10000,
+  "historicalAliasRecords": 7,
+  "offlineResume": "0 of 10007 repos need a scan",
+  "originalLabelsPreserved": 2871,
+  "frozenControlApps": 56,
+  "frozenHighSecurityIDsRetained": 343,
+  "frozenLabelledHighTPIDsRetained": 45,
+  "newLabels": 60,
+  "tp": 9,
+  "fp": 51,
+  "unlabelledUnsure": 4,
+  "learningDocuments": 30,
+  "missingOfflineArtifacts": {
+    ".results.json": 0,
+    ".results.report.json": 0,
+    ".inventory.json": 0,
+    ".history.json": 0,
+    ".gitlog.json.gz": 0
+  },
+  "scanCLISHA256": "7a41da69c0ddbfb79702ac0f8dd5f75ea6b76cad5b1b21c5071df0694c5ef7a6",
+  "sourceFingerprint": "d99a356eb71009c2",
+  "scannerFeatureSource": "2839070951b704b80ee9bbd31dedd55cfc0b0f38",
+  "detectorSourcesUnchanged": true,
+  "baselineUnchanged": true,
+  "originalBaselineGate": "pass; metadata completion/calibration gate still pending"
+}
