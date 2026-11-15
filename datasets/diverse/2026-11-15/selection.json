@@ -1,0 +1,42 @@
+{
+  "status": "pinned-awaiting-scan",
+  "addedNewProjects": 2997,
+  "importedPreviouslyScanned": 500,
+  "targetDistinctProjects": 10000,
+  "targetPinnedRecords": 10007,
+  "baseSourceCommit": "2839070951b704b80ee9bbd31dedd55cfc0b0f38",
+  "inheritedSourcePR": 18,
+  "importedSourceCommit": "dc2bdb0fd588aa845f837249423d3d2f779ba65d",
+  "importedDataCommit": "fa3ec64e0cd07e5a29d43264a030b0e7eefe9fe8",
+  "quotas": {
+    "Python": 350,
+    "TypeScript": 350,
+    "JavaScript": 250,
+    "Go": 300,
+    "Rust": 220,
+    "Java": 220,
+    "C#": 180,
+    "C++": 180,
+    "PHP": 240,
+    "Ruby": 130,
+    "Swift": 100,
+    "Kotlin": 100,
+    "Dart": 80,
+    "Elixir": 70,
+    "Erlang": 50,
+    "Scala": 70,
+    "HCL": 104
+  },
+  "trainingControls": 3,
+  "searchFilters": {
+    "fork": false,
+    "archived": false,
+    "disabled": false,
+    "pushedSince": "2025-11-15",
+    "sizeKiB": "10..80000",
+    "stars": "20..200, with fallback bands if needed"
+  },
+  "previousKnownIDsExcluded": 7638,
+  "previousKnownSnapshotSha256": "fb9630c23338940f44e43a4239fa95c145f4cb6a2403361141e664535a150248",
+  "scanPolicy": "Static benchmark CLI and OSV only; no target application/dependency execution."
+}
