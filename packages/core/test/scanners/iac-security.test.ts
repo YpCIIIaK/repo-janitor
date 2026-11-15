@@ -121,3 +121,20 @@ describe("OCI security-list traffic direction", () => {
     expect(out.filter(i => i.startsWith("iac-open-admin-port"))).toEqual(["iac-open-admin-port-network.tf:8"])
   })
 })
+
+describe("Docker API access through read-only socket mounts", () => {
+  it("retains the warning for arbitrary application images with ro or readOnly mounts", async () => {
+    for (const volume of [
+      '      - /var/run/docker.sock:/var/run/docker.sock:ro',
+      '      - type: bind\n        source: /var/run/docker.sock\n        target: /var/run/docker.sock\n        readOnly: true',
+    ]) {
+      const issues = await iacSecurityScanner.run(makeContext({ files: {
+        "compose.yaml": 'services:\n  app:\n    image: company/web:1\n    volumes:\n' + volume + '\n',
+      } }))
+      const socket = issues.find(issue => issue.id.startsWith("iac-docker-socket-"))
+      expect(socket).toBeDefined()
+      expect(socket?.detail).toContain("read-only")
+      expect(socket?.detail).toContain("Docker API")
+    }
+  })
+})

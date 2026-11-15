@@ -117,8 +117,9 @@ const RULES: Record<string, IacRule> = {
     severity: "warning",
     title: "Docker socket mounted into a container",
     detail:
-      "Access to /var/run/docker.sock is root on the host: the container can start a privileged container of its " +
-      "own. Mount it only into trusted infrastructure (a reverse proxy reading labels, a CI runner) and read-only.",
+      "Access to /var/run/docker.sock can grant control of the Docker host, including starting privileged containers. " +
+      "A read-only socket mount does not prevent mutating Docker API requests. Remove the mount from application " +
+      "containers, or use an authenticated API proxy with an explicit allowlist of permitted operations.",
   },
   "privilege-escalation": {
     id: "privilege-escalation",
@@ -278,7 +279,7 @@ function containerHits(lines: string[], compose: boolean): Hit[] {
     } else if (/^\s*host(?:Network|PID|IPC):\s*true\b/.test(line) || (compose && /^\s*(?:network_mode|pid|ipc):\s*["']?host\b/.test(line))) {
       if (!nodeAgent && !hostAgent) push("host-namespace")
     }
-    else if (/\/var\/run\/docker\.sock/.test(line) && !nodeAgent && !/[:,]ro\b|readOnly:\s*true/.test(near(lines, i, 0, 3)) && !DOCKER_API_IMAGE.test(nearestImage(lines, i))) push("docker-socket")
+    else if (/\/var\/run\/docker\.sock/.test(line) && !nodeAgent && !DOCKER_API_IMAGE.test(nearestImage(lines, i))) push("docker-socket")
     else if (/^\s*allowPrivilegeEscalation:\s*true\b/.test(line) && !nodeAgent && !inInit) push("privilege-escalation")
     else if (/^\s*(?:-\s*)?["']?(?:SYS_ADMIN|SYS_PTRACE|SYS_MODULE|ALL)["']?\s*$/.test(line) && /\badd:|cap_add:/.test(near(lines, i, 4, 0)) && !/\bdrop:/.test(near(lines, i, 1, 0)) && !nodeAgent) push("dangerous-capability")
     else if (!compose && !nodeAgent && !inInit && /^\s*runAsUser:\s*0\b|^\s*runAsNonRoot:\s*false\b/.test(line)) push("run-as-root")
