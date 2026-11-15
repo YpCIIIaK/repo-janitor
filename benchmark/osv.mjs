@@ -12,9 +12,9 @@
  *   BENCH_JOBS=6                       parallel repos
  */
 import { spawn } from "node:child_process"
-import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs"
+import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs"
 import { dirname, join } from "node:path"
-import { fileURLToPath } from "node:url"
+import { fileURLToPath, pathToFileURL } from "node:url"
 
 const here = dirname(fileURLToPath(import.meta.url))
 const root = join(here, "..")
@@ -22,10 +22,14 @@ const cli = join(root, "packages", "cli", "dist", "index.js")
 const work = join(here, ".osvcache")
 const outDir = join(here, ".results")
 mkdirSync(work, { recursive: true })
+mkdirSync(outDir, { recursive: true })
 const corpus = JSON.parse(readFileSync(join(here, "corpus.json"), "utf8"))
 const only = process.argv.slice(2)
 /** Scanners that need the network and are left out of the offline benchmark. */
 const ONLINE = ["vulnerable-deps", "license-risk"]
+const auditModule = pathToFileURL(join(here, "network-audit.mjs")).href
+const networkRetries = Number(process.env.BENCH_NETWORK_RETRIES ?? 2)
+if (!Number.isInteger(networkRetries) || networkRetries < 0 || networkRetries > 5) throw new Error("BENCH_NETWORK_RETRIES must be 0..5")
 
 /** Every file name the vulnerable-deps scanner reads, at any depth. */
 const SPARSE = [
@@ -71,18 +75,33 @@ async function one(repo) {
       if (co.status !== 0) throw new Error(`checkout failed: ${co.err.trim().split("\n").pop()}`)
     }
     const tmp = `${outPath}.pending`
+    const auditPath = `${outPath}.network.pending`
     const env = { ...process.env }
     delete env.REPO_ANTI_ROT_OFFLINE
-    const scan = await sh("node", [cli, "scan", dir, "--only", ONLINE.join(","), "--format", "json", "--output", tmp], { env })
-    if (scan.status !== 0 && scan.status !== 2) throw new Error(`scan failed: ${scan.err.trim().split("\n").pop()}`)
+    env.BENCH_NETWORK_AUDIT_FILE = auditPath
+    let networkAudit
+    for (let attempt = 0; attempt <= networkRetries; attempt++) {
+      rmSync(auditPath, { force: true })
+      const scan = await sh("node", ["--import", auditModule, cli, "scan", dir, "--only", ONLINE.join(","), "--format", "json", "--output", tmp], { env })
+      try { networkAudit = JSON.parse(readFileSync(auditPath, "utf8")) } catch { networkAudit = null }
+      if ((scan.status === 0 || scan.status === 2) && networkAudit?.version === 1 && networkAudit.transportOK) break
+      if (networkAudit?.transportOK === false && attempt < networkRetries) {
+        await new Promise((resolve) => setTimeout(resolve, Math.min(45000, 15000 * (attempt + 1))))
+        continue
+      }
+      throw new Error(`scan failed: ${scan.err.trim().split("\n").pop() || "missing network audit"}`)
+    }
     const report = JSON.parse(readFileSync(tmp, "utf8"))
     const failed = report.diagnostics?.failedScanners ?? []
     if (failed.length) throw new Error(`vulnerable-deps failed: ${JSON.stringify(failed)}`)
     const findings = [...(report.issues ?? []), ...(report.lowConfidence ?? [])]
       .filter((i) => ONLINE.includes(i.scanner))
       .map((i) => ({ id: i.id, scanner: i.scanner, severity: i.severity, title: i.title, location: i.location, confidence: i.confidence }))
-    writeFileSync(outPath, JSON.stringify({ repo: repo.name, sha: repo.sha, scanners: ONLINE, checkedAt: new Date().toISOString(), findings }))
+    const ready = `${outPath}.ready`
+    writeFileSync(ready, JSON.stringify({ repo: repo.name, sha: repo.sha, scanners: ONLINE, checkedAt: new Date().toISOString(), networkAudit, findings }))
+    renameSync(ready, outPath)
     rmSync(tmp, { force: true })
+    rmSync(auditPath, { force: true })
     return `${findings.length} vulnerable`
   } finally {
     rmSync(dir, { recursive: true, force: true })
@@ -107,3 +126,4 @@ await Promise.all(
   }),
 )
 console.log(failures ? `${failures} repos failed; rerun to retry them.` : "all repos checked")
+if (failures) process.exitCode = 1
