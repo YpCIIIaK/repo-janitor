@@ -37,6 +37,7 @@
   ],
   "exclude": [
     "node_modules",
-    "packages/audit-engine"
+    "packages/audit-engine",
+    "benchmark/.local-rescans"
   ]
 }

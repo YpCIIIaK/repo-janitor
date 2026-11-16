@@ -43,6 +43,7 @@ export default tseslint.config(
       "next-env.d.ts",
       "benchmark/.cache/**",
       "benchmark/.results/**",
+      "benchmark/.local-rescans/**",
     ],
   },
   js.configs.recommended,
