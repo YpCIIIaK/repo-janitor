@@ -27,6 +27,7 @@ export function contentSecurityPolicy(frameAncestors = "'self'") {
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   poweredByHeader: false,
+  outputFileTracingExcludes: { "/*": ["./benchmark/.local-rescans/**/*"] },
   typescript: {
     ignoreBuildErrors: false,
   },

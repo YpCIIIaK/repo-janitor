@@ -1,26 +1,8 @@
-"use client"
+import { headers } from "next/headers"
+import StatePage from "@/components/repo-anti-rot/state-page"
+import { localRescanEnabled } from "@/lib/local-rescan-access"
 
-import { useRouter } from "next/navigation"
-import { TopBar } from "@/components/repo-anti-rot/top-bar"
-import { StateOfOpenSource } from "@/components/repo-anti-rot/state-of-oss"
-import { LanguageSwitcher } from "@/components/i18n/language-switcher"
-import { ThemeSwitcher } from "@/components/theme-switcher"
-
-/** Public page: what the benchmark corpus says about open-source repositories. */
-export default function StatePage() {
-  const router = useRouter()
-  return (
-    <div className="min-h-screen">
-      <TopBar
-        onHome={() => router.push("/")}
-        extras={
-          <>
-            <ThemeSwitcher />
-            <LanguageSwitcher />
-          </>
-        }
-      />
-      <StateOfOpenSource />
-    </div>
-  )
+/** Local controls are advertised only by the loopback launcher. */
+export default async function Page() {
+  return <StatePage localRescan={localRescanEnabled(await headers())} />
 }
