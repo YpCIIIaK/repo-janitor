@@ -65,7 +65,7 @@ baseline другого коммита не заменяется автомат�
 [
   {
     "name": "owner-project",
-    "url": "https://github.com/owner/project",
+    "url": "https://github.com/<owner>/<project>",
     "sha": "0123456789abcdef0123456789abcdef01234567"
   }
 ]

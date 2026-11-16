@@ -71,7 +71,7 @@
     "commander": "^12.1.0",
     "simple-git": "^4.0.2",
     "tinyglobby": "0.2.17",
-    "zod": "^4.0.0"
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@repo-anti-rot/core": "workspace:*",
@@ -79,6 +79,6 @@
     "tsup": "^8.0.0",
     "tsx": "^4.0.0",
     "typescript": "^5.4.0",
-    "vitest": "^4.1.11"
+    "vitest": "^4.1.12"
   }
 }
