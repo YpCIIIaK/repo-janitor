@@ -89,6 +89,7 @@ const T = {
     vdepsNote: (n: number, d: string) => `${n.toLocaleString("en-US")} repos checked against OSV (osv.dev) on ${d}, at their pinned commits. Versions come from lockfiles; without one, from the lowest version a manifest allows, which can overstate. Dev, test and docs dependencies count only in the first number.`,
     vdepsL: { any: "have at least one known vulnerability", shipped: "in dependencies that ship (not dev, test or docs)", critical: "have a critical one" },
     vdepsMedian: (m: number) => `An affected project typically carries ${m} of them.`,
+    vdepsEco: "By ecosystem: share of projects using it that ship at least one known-vulnerable package from it",
     vdepsTop: "Packages most often behind them, share of all repos",
     habits: "Tools and habits",
     wars: "Tool wars",
@@ -246,6 +247,7 @@ const T = {
     vdepsNote: (n: number, d: string) => `${n.toLocaleString("ru-RU")} репозиториев проверены по базе OSV (osv.dev) ${d}, на закреплённых коммитах. Версии берутся из lock-файлов, а без них — по нижней границе диапазона в манифесте, что может завышать. Зависимости для разработки, тестов и документации учитываются только в первой цифре.`,
     vdepsL: { any: "имеют хотя бы одну известную уязвимость", shipped: "в зависимостях, которые попадают в продукт", critical: "имеют критичную" },
     vdepsMedian: (m: number) => `У затронутого проекта их обычно ${m}.`,
+    vdepsEco: "По экосистемам: доля проектов на ней, где в поставке есть хотя бы один пакет с известной уязвимостью",
     vdepsTop: "Пакеты, которые чаще всего за этим стоят, доля всех репозиториев",
     habits: "Инструменты и привычки",
     wars: "Войны инструментов",
@@ -606,6 +608,14 @@ export function StateOfOpenSource() {
             ))}
           </div>
           <p className="text-sm text-muted-foreground">{t.vdepsMedian(stats.vulnerableDeps.medianAffected)}</p>
+          {(stats.vulnerableDeps as { byEcosystem?: { ecosystem: string; repos: number; share: number }[] }).byEcosystem?.length ? (
+            <>
+              <p className="pt-2 text-xs text-muted-foreground">{t.vdepsEco}</p>
+              {(stats.vulnerableDeps as unknown as { byEcosystem: { ecosystem: string; repos: number; share: number }[] }).byEcosystem.map((e) => (
+                <Bar key={e.ecosystem} label={`${e.ecosystem} · ${e.repos.toLocaleString()}`} value={e.share} max={1} display={pct(e.share)} tone="warning" />
+              ))}
+            </>
+          ) : null}
           <p className="pt-2 text-xs text-muted-foreground">{t.vdepsTop}</p>
           {stats.vulnerableDeps.topPackages.map((x) => (
             <Bar key={x.name} label={x.name} value={x.share} max={stats.vulnerableDeps.topPackages[0].share} display={pct(x.share)} tone="destructive" />
