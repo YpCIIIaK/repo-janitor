@@ -301,12 +301,14 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const engines = arg("engine", "fast").split(",")
   for (const e of engines) if (!ENGINES[e]) throw new Error(`unknown engine "${e}" (have: ${Object.keys(ENGINES).join(", ")})`)
   const sets = arg("sets", "").split(",").filter(Boolean)
-  const cases = inShard(loadCases(resolve(arg("cases", join(here, "recall", "cases")))).filter((c) => !sets.length || sets.includes(c._set)).map((c) => ({ ...c, name: c.id })))
+  let cases = loadCases(resolve(arg("cases", join(here, "recall", "cases")))).filter((c) => !sets.length || sets.includes(c._set))
+  // --per caps cases per set × language × class; it applies before sharding so shards split one sample.
   const per = Number(arg("per", 0))
   if (per) {
     const seen = new Map()
-    cases.splice(0, cases.length, ...cases.filter((c) => { const k = `${c._set}|${c.language}|${c.class}`; seen.set(k, (seen.get(k) ?? 0) + 1); return seen.get(k) <= per }))
+    cases = cases.filter((c) => { const k = `${c._set}|${c.language}|${c.class}`; seen.set(k, (seen.get(k) ?? 0) + 1); return seen.get(k) <= per })
   }
+  cases = inShard(cases.map((c) => ({ ...c, name: c.id })))
   if (!cases.length) {
     console.log("no recall cases found (private data: node benchmark/private.mjs pull)")
     process.exit(0)
