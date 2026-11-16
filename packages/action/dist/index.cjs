@@ -26875,7 +26875,7 @@ var require_lib4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-CPU6ITVT.js
+// ../cli/dist/chunk-IPDG22JQ.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -50809,7 +50809,7 @@ function date4(params) {
   return _coercedDate(ZodDate, params);
 }
 
-// ../cli/dist/chunk-CPU6ITVT.js
+// ../cli/dist/chunk-IPDG22JQ.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -81484,7 +81484,7 @@ var MAX_ISSUES = 40;
 var CONCURRENCY2 = 4;
 var URL_RE = /https?:\/\/[^\s<>"'`\]}\\]+/g;
 var SKIP_HOST_RE = /^(?:localhost|127\.|0\.0\.0\.0|\[?::1\]?|10\.|192\.168\.|172\.(?:1[6-9]|2\d|3[01])\.|169\.254\.|[^.]*\.local$|[^.]*\.internal$|[^.]*\.test$|[^.]*\.invalid$|[^.]*\.example$|example\.(?:com|org|net)$|.*\.example\.(?:com|org|net)$)/i;
-var PLACEHOLDER_RE2 = /\{\{|\}\}|\$\{|%[sdv]\b|<[a-z-]+>|\bYOUR[_-]|\bowner\/repo\b|\byour-/i;
+var PLACEHOLDER_RE2 = /\{\{|\}\}|\$\{|\{[a-z_][\w-]*(?:\}|$)|%[sdv]\b|<[a-z-]+>|\bYOUR[_-]|\bowner\/repo\b|\byour-/i;
 function stripTrailingPunctuation(url2) {
   let depth = 0;
   for (let i = 0; i < url2.length; i++) {
@@ -81537,7 +81537,8 @@ function commentUrls(content) {
       if (idx !== -1) commentPart = line.slice(idx);
     }
     if (!commentPart) continue;
-    for (const url2 of extractUrls(commentPart)) out.push({ url: url2, line: i + 1 });
+    const prose = commentPart.replace(/`[^`]*`/g, "");
+    for (const url2 of extractUrls(prose)) out.push({ url: url2, line: i + 1 });
   }
   return out;
 }
@@ -90113,7 +90114,7 @@ var MAX_ISSUES10 = 40;
 var CONCURRENCY4 = 4;
 var URL_RE2 = /https?:\/\/[^\s<>"'`\]}\\]+/g;
 var SKIP_HOST_RE2 = /^(?:localhost|127\.|0\.0\.0\.0|\[?::1\]?|10\.|192\.168\.|172\.(?:1[6-9]|2\d|3[01])\.|169\.254\.|[^.]*\.local$|[^.]*\.internal$|[^.]*\.test$|[^.]*\.invalid$|[^.]*\.example$|example\.(?:com|org|net)$|.*\.example\.(?:com|org|net)$)/i;
-var PLACEHOLDER_RE4 = /\{\{|\}\}|\$\{|%[sdv]\b|<[a-z-]+>|\bYOUR[_-]|\bowner\/repo\b|\byour-/i;
+var PLACEHOLDER_RE4 = /\{\{|\}\}|\$\{|\{[a-z_][\w-]*(?:\}|$)|%[sdv]\b|<[a-z-]+>|\bYOUR[_-]|\bowner\/repo\b|\byour-/i;
 function stripTrailingPunctuation2(url2) {
   let depth = 0;
   for (let i = 0; i < url2.length; i++) {
@@ -90165,7 +90166,8 @@ function commentUrls2(content) {
       if (idx !== -1) commentPart = line.slice(idx);
     }
     if (!commentPart) continue;
-    for (const url2 of extractUrls2(commentPart)) out.push({ url: url2, line: i + 1 });
+    const prose = commentPart.replace(/`[^`]*`/g, "");
+    for (const url2 of extractUrls2(prose)) out.push({ url: url2, line: i + 1 });
   }
   return out;
 }

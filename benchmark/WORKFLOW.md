@@ -3,16 +3,11 @@
 This file is everything needed to continue improving repo-janitor's scanners with
 the benchmark, without the conversation that built it. Read it top to bottom once.
 
-Paused work to resume: [cycle 2026-11-16-1](CYCLE-2026-11-16-1.md), section
-«Точка продолжения для Claude Code». Its checkpoint has 845 current records and
-9,162 pending; use its explicit data ref, not the old default `bench-data`.
-No mass scan is currently running; restart only when instructed to continue.
-
-Latest completed handoff: [cycle 2026-11-15-1](CYCLE-2026-11-15-1.md) —
-10,000 distinct GitHub projects in 10,007 pinned records. Its complete staged data
-must be restored until promoted to `bench-data`; follow that cycle's restoration
-instructions. Source PR #19 is stacked on #18; promote data only after the source
-changes reach main. Read `ROUTINE.md` and the cycle's post-10k priorities before
+Benchmark data (labels, reviews, corpus, cycle reports, scan archives) lives in the
+private repo `YpCIIIaK/repo-janitor-data`; run `node benchmark/private.mjs pull` first.
+Latest completed cycle: 2026-11-16-1 (full rescan of 10,007 records, promoted to
+`bench-data` in the private repo); its report is `benchmark/CYCLE-2026-11-16-1.md` after the pull.
+Read `ROUTINE.md` and the cycle's post-10k priorities before
 changing scanners or choosing more repositories, including its retired-target
 record when deduplicating new IDs.
 

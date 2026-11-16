@@ -226,3 +226,17 @@ describe("deadLinksScanner", () => {
     expect(await deadLinksScanner.run(ctx)).toHaveLength(0)
   })
 })
+
+describe("dogfood: examples in comments", () => {
+  it("treats {param} path templates as placeholders", async () => {
+    const { isCheckable } = await import("../../src/scanners/dead-links")
+    expect(isCheckable("https://api.x.com/{id")).toBe(false)
+    expect(isCheckable("https://api.example.org/users/{user_id}/posts")).toBe(false)
+    expect(isCheckable("https://api.github.com/repos")).toBe(true)
+  })
+  it("skips URLs inside backtick code in comments", async () => {
+    const { commentUrls } = await import("../../src/scanners/dead-links")
+    const src = "// `ADD https://github.com/x/y.git#v1.2` is pinned\n// see https://docs.docker.com/reference/\n"
+    expect(commentUrls(src).map((u) => u.url)).toEqual(["https://docs.docker.com/reference/"])
+  })
+})

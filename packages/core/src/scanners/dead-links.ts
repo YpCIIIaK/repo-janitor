@@ -70,7 +70,7 @@ const SKIP_HOST_RE =
  * that is guaranteed to 404 and reporting it is guaranteed to be wrong.
  */
 const PLACEHOLDER_RE =
-  /\{\{|\}\}|\$\{|%[sdv]\b|<[a-z-]+>|\bYOUR[_-]|\bowner\/repo\b|\byour-/i
+  /\{\{|\}\}|\$\{|\{[a-z_][\w-]*(?:\}|$)|%[sdv]\b|<[a-z-]+>|\bYOUR[_-]|\bowner\/repo\b|\byour-/i
 
 function stripTrailingPunctuation(url: string): string {
   // Markdown and prose leave punctuation glued to the end: "see https://example.com."
@@ -173,7 +173,10 @@ export function commentUrls(content: string): { url: string; line: number }[] {
     }
 
     if (!commentPart) continue
-    for (const url of extractUrls(commentPart)) out.push({ url, line: i + 1 })
+    // Inline code in a comment (`ADD https://github.com/x/y.git#v1.2`) is an
+    // example of syntax the code handles, not a reference anyone follows.
+    const prose = commentPart.replace(/`[^`]*`/g, "")
+    for (const url of extractUrls(prose)) out.push({ url, line: i + 1 })
   }
 
   return out
