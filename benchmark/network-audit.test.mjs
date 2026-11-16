@@ -188,7 +188,7 @@ for (const legacyPolicyCache of [false, true]) test(`the OSV runner rejects HTTP
       sha, scanners: ["vulnerable-deps", "license-risk"], findings: [],
       networkAudit: { version: 1, transportOK: true, policyLimitedResponses: 1 },
     }))
-    for (const f of ["osv.mjs", "network-audit.mjs"]) copyFileSync(new URL(`./${f}`, import.meta.url), join(bench, f))
+    for (const f of ["osv.mjs", "network-audit.mjs", "shard.mjs"]) copyFileSync(new URL(`./${f}`, import.meta.url), join(bench, f))
     writeFileSync(join(root, "packages/cli/dist/index.js"), `
       const fs = require('node:fs'), http = require('node:http');
       const output = process.argv[process.argv.indexOf('--output') + 1];
