@@ -86,3 +86,6 @@ benchmark/.local-rescans/
 /benchmark/STATS.md
 /benchmark/CYCLE-*.md
 /datasets/
+/benchmark/recall/cases/
+/benchmark/recall-report.json
+/benchmark/.recall-cache/

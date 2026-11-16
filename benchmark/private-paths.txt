@@ -12,3 +12,5 @@ benchmark/REPORT.md
 benchmark/STATS.md
 benchmark/CYCLE-*.md
 datasets/
+benchmark/recall/cases/
+benchmark/recall-report.json

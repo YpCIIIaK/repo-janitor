@@ -1,0 +1,6 @@
+[
+ { "id": "fixture-php-sqli", "language": "php", "class": "sqli", "source": { "type": "dir", "vulnerable": "php-sqli/vulnerable", "fixed": "php-sqli/fixed" } },
+ { "id": "fixture-py-cmdi", "language": "python", "class": "cmdi", "source": { "type": "dir", "vulnerable": "py-cmdi/vulnerable", "fixed": "py-cmdi/fixed" } },
+ { "id": "fixture-js-xss", "language": "javascript", "class": "xss", "source": { "type": "dir", "vulnerable": "js-xss/vulnerable", "fixed": "js-xss/fixed" } },
+ { "id": "fixture-py-ssrf", "language": "python", "class": "ssrf", "source": { "type": "dir", "vulnerable": "py-ssrf-miss/vulnerable", "fixed": "py-ssrf-miss/fixed" } }
+]

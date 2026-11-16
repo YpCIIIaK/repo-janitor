@@ -215,3 +215,13 @@ aggregates the site reads (`stats.json`, `history.json`, `findings.json`,
 - End of a cycle: `node benchmark/private.mjs push "cycle …"` and `node benchmark/archive.mjs push`
   (archives go to the private repo's `bench-data*` branches).
 - Never commit the paths in `benchmark/private-paths.txt` to the public repo; `.gitignore` covers them.
+
+## Recall (missed vulnerabilities)
+
+`node benchmark/recall.mjs [--engine fast] [--cases dir]` scans vulnerable/fixed pairs of
+known vulnerabilities and reports, per engine × language × class, how many the scanner
+finds (`hit`), flags without the fix removing it (`near`) or misses. Case format and
+verdict rules are in the script header; real case sets live in the private
+`benchmark/recall/cases/`, synthetic fixtures in `benchmark/recall/fixtures/`.
+Engines: `fast` = the normal CLI (low-confidence findings included); deep per-language
+analysers register in `ENGINES`.
