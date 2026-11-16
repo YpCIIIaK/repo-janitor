@@ -36,6 +36,7 @@ import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, 
 import { tmpdir } from "node:os"
 import { dirname, join, relative, resolve } from "node:path"
 import { fileURLToPath } from "node:url"
+import { inShard } from "./shard.mjs"
 
 const here = dirname(fileURLToPath(import.meta.url))
 const root = resolve(here, "..")
@@ -64,23 +65,52 @@ export const CLASSES = {
   "data-exposure": /exposure|sensitive-file|debug-endpoint/,
   misconfig: /misconfig|cors|debug-mode/,
   "client-logic": /client-logic/,
+  "prototype-pollution": /prototype-pollution/,
+  redos: /redos|regex-dos/,
+}
+
+/** CWE ids → class, for advisories and for engines that report CWEs (Semgrep, Bandit). */
+export const CWE_CLASS = {
+  89: "sqli", 564: "sqli", 943: "sqli",
+  79: "xss", 80: "xss", 83: "xss", 87: "xss",
+  77: "cmdi", 78: "cmdi", 88: "cmdi",
+  94: "code-injection", 95: "code-injection", 1336: "code-injection", 98: "code-injection",
+  502: "deserialization",
+  918: "ssrf",
+  22: "path-traversal", 23: "path-traversal", 35: "path-traversal", 73: "path-traversal",
+  611: "xxe", 776: "xxe",
+  601: "open-redirect",
+  295: "tls", 297: "tls",
+  327: "crypto", 328: "crypto", 338: "crypto", 916: "crypto", 330: "crypto",
+  798: "secrets", 259: "secrets",
+  352: "csrf",
+  862: "access-control", 863: "access-control", 639: "access-control", 284: "access-control", 285: "access-control",
+  434: "file-upload",
+  287: "auth", 306: "auth", 307: "auth", 384: "auth", 613: "auth",
+  1321: "prototype-pollution", 915: "prototype-pollution",
+  1333: "redos", 400: "redos",
 }
 
 export function classOf(rule) {
+  const cwe = /^cwe-(\d+)$/i.exec(rule)
+  if (cwe) return CWE_CLASS[Number(cwe[1])] ?? null
   return Object.keys(CLASSES).find((c) => CLASSES[c].test(rule)) ?? null
 }
 
 function sh(cmd, args, opts = {}) {
   const r = spawnSync(cmd, args, { encoding: "utf8", maxBuffer: 1 << 28, ...opts })
-  if (r.status !== 0) throw new Error(`${cmd} ${args.join(" ")}: ${(r.stderr || "").slice(0, 400)}`)
+  if (r.status !== 0) throw new Error(`${cmd} ${args.slice(0, 4).join(" ")}…: ${r.error?.code ?? ""} ${(r.stderr || "").slice(0, 300)}`)
   return r.stdout
 }
 
 // --- engines ------------------------------------------------------------------
 
+// Recall is about vulnerabilities; the health scanners (git history, links, deps) only cost time.
+const SECURITY_SCANNERS = "insecure-code,secrets,iac-security,dockerfile,workflow-security,supply-chain"
+
 function fastEngine(dir) {
   const out = join(mkdtempSync(join(tmpdir(), "recall-")), "r.json")
-  spawnSync(process.execPath, [join(root, "packages/cli/dist/index.js"), "scan", dir, "-f", "json", "--all", "-o", out], { stdio: "ignore" })
+  spawnSync(process.execPath, [join(root, "packages/cli/dist/index.js"), "scan", dir, "-f", "json", "--all", "--only", SECURITY_SCANNERS, "-o", out], { stdio: "ignore" })
   if (!existsSync(out)) throw new Error(`fast engine produced no report for ${dir}`)
   const r = JSON.parse(readFileSync(out, "utf8"))
   rmSync(dirname(out), { recursive: true, force: true })
@@ -90,7 +120,39 @@ function fastEngine(dir) {
   })
 }
 
-export const ENGINES = { fast: fastEngine }
+/** Semgrep with its free registry rules; findings carry CWE ids. Scans only the given files. */
+function semgrepEngine(dir, files) {
+  const targets = (files ?? []).filter((f) => existsSync(join(dir, f)))
+  if (!targets.length) return []
+  const r = spawnSync("semgrep", ["scan", "--config", "p/default", "--json", "--quiet", "--metrics", "off", "--timeout", "60", ...targets], { cwd: dir, encoding: "utf8", maxBuffer: 1 << 28, timeout: 600_000 })
+  if (!r.stdout) throw new Error(`semgrep failed: ${(r.stderr || "").slice(0, 300)}`)
+  return JSON.parse(r.stdout).results.flatMap((x) => {
+    const cwes = [].concat(x.extra?.metadata?.cwe ?? []).map((c) => /CWE-(\d+)/.exec(String(c))?.[1]).filter(Boolean)
+    return (cwes.length ? cwes : ["0"]).map((n) => ({ rule: `cwe-${n}`, id: x.check_id, file: x.path, line: x.start?.line ?? 0 }))
+  })
+}
+
+/** Bandit (Python only); findings carry one CWE id. Scans only the given files. */
+function banditEngine(dir, files) {
+  const targets = (files ?? []).filter((f) => f.endsWith(".py") && existsSync(join(dir, f)))
+  if (!targets.length) return []
+  const r = spawnSync("bandit", ["-q", "-f", "json", ...targets], { cwd: dir, encoding: "utf8", maxBuffer: 1 << 26, timeout: 300_000 })
+  if (!r.stdout) throw new Error(`bandit failed: ${(r.stderr || "").slice(0, 300)}`)
+  return JSON.parse(r.stdout).results.map((x) => ({ rule: `cwe-${x.issue_cwe?.id ?? 0}`, id: x.test_id, file: x.filename.replace(/^\.\//, ""), line: x.line_number }))
+}
+
+export const ENGINES = { fast: fastEngine, semgrep: semgrepEngine, bandit: banditEngine }
+
+/** Source files of each language; a fix's tests, docs and lockfiles are not where the vulnerability is. */
+export const LANGUAGE_EXT = {
+  php: /\.(php|phtml|inc)$/, python: /\.py$/, javascript: /\.(m?js|cjs|jsx|ts|tsx|vue|svelte)$/, typescript: /\.(ts|tsx|m?js)$/,
+  go: /\.go$/, java: /\.(java|kt|groovy|jsp)$/, ruby: /\.(rb|erb)$/,
+}
+const TEST_PATH = /(^|\/)(tests?|__tests__|spec|specs|testdata|fixtures?|e2e)(\/|$)|[._-](test|spec)\.[a-z]+$|_test\.go$/i
+export function sourceFiles(files, language) {
+  const ext = LANGUAGE_EXT[language]
+  return files.filter((f) => (!ext || ext.test(f)) && !TEST_PATH.test(f))
+}
 
 // --- cases --------------------------------------------------------------------
 
@@ -102,30 +164,42 @@ function ruleOf(f) {
 }
 
 /** One shallow checkout per (url, sha), shared by every case that uses it. */
+const usedTrees = new Set()
 function gitTree(url, sha) {
   const d = join(cacheDir, `${url.replace(/^https?:\/\//, "").replace(/[^\w.-]/g, "_")}@${sha.slice(0, 12)}`)
   if (!existsSync(join(d, ".git"))) {
     rmSync(d, { recursive: true, force: true })
     mkdirSync(d, { recursive: true })
     sh("git", ["-C", d, "init", "-q"])
-    sh("git", ["-C", d, "fetch", "-q", "--depth", "1", url, sha])
+    // Big monorepos would stall a run; a case that cannot be fetched in 10 minutes is an error.
+    sh("git", ["-C", d, "fetch", "-q", "--depth", "1", url, sha], { timeout: 600_000 })
     sh("git", ["-C", d, "checkout", "-q", "FETCH_HEAD"])
   }
+  usedTrees.add(d)
   return d
 }
 
 function tree(c, side) {
   const s = c.source
   if (s.type === "dir") return resolve(c._base, s[side])
-  if (s.type === "git") return gitTree(s.url, s[side])
+  if (s.type === "git") {
+    if (s[side] === "parent") {
+      // The commit before the fix: fetch the fix with one parent and read it.
+      const fixedDir = gitTree(s.url, s.fixed)
+      if (spawnSync("git", ["-C", fixedDir, "rev-parse", "-q", "--verify", "HEAD^"]).status !== 0) sh("git", ["-C", fixedDir, "fetch", "-q", "--depth", "2", s.url, s.fixed], { timeout: 600_000 })
+      return gitTree(s.url, sh("git", ["-C", fixedDir, "rev-parse", "HEAD^"]).trim())
+    }
+    return gitTree(s.url, s[side])
+  }
   throw new Error(`${c.id}: unknown source type ${s.type}`)
 }
 
 /** Scan each (engine, directory) once per run. */
 const scanned = new Map()
-function scan(engine, dir) {
-  const key = `${engine}|${dir}`
-  if (!scanned.has(key)) scanned.set(key, ENGINES[engine](dir))
+function scan(engine, dir, files) {
+  // The fast engine always scans the whole tree; file-level engines only what they are given.
+  const key = engine === "fast" ? `${engine}|${dir}` : `${engine}|${dir}|${(files ?? []).join(",")}`
+  if (!scanned.has(key)) scanned.set(key, ENGINES[engine](dir, files))
   return scanned.get(key)
 }
 
@@ -197,16 +271,24 @@ export function run(cases, engines) {
       try {
         if (c.expect) {
           if (!c.files?.length) throw new Error("expect cases need files")
-          results.push({ ...base, engine, ...judgeExpected(c, scan(engine, tree(c, "tree"))) })
+          results.push({ ...base, engine, ...judgeExpected(c, scan(engine, tree(c, "tree"), c.files)) })
         } else {
           const v = tree(c, "vulnerable"), x = tree(c, "fixed")
-          const files = c.files ?? changedFiles(v, x)
-          results.push({ ...base, engine, ...judge(c, scan(engine, v), scan(engine, x), files) })
+          const files = c.files ?? sourceFiles(changedFiles(v, x), c.language)
+          if (!files.length) throw new Error("fix touches no source files of the case's language")
+          results.push({ ...base, engine, ...judge(c, scan(engine, v, files), scan(engine, x, files), files) })
         }
       } catch (e) {
         results.push({ ...base, engine, verdict: "error", error: String(e.message).slice(0, 200) })
       }
     }
+    // BENCH_DROP_CLONES=1 keeps disk flat on long runs: a case's checkouts go once it is judged.
+    if (process.env.BENCH_DROP_CLONES === "1" && c.source?.type === "git") {
+      for (const d of usedTrees) rmSync(d, { recursive: true, force: true })
+      for (const k of scanned.keys()) if ([...usedTrees].some((d) => k.includes(d))) scanned.delete(k)
+      usedTrees.clear()
+    }
+    if (process.env.BENCH_PROGRESS === "1") console.error(`${results.length} results · ${c.id} ${results.slice(-engines.length).map((r) => `${r.engine}:${r.verdict}`).join(" ")}`)
   }
   return results
 }
@@ -218,7 +300,13 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   }
   const engines = arg("engine", "fast").split(",")
   for (const e of engines) if (!ENGINES[e]) throw new Error(`unknown engine "${e}" (have: ${Object.keys(ENGINES).join(", ")})`)
-  const cases = loadCases(resolve(arg("cases", join(here, "recall", "cases"))))
+  const sets = arg("sets", "").split(",").filter(Boolean)
+  const cases = inShard(loadCases(resolve(arg("cases", join(here, "recall", "cases")))).filter((c) => !sets.length || sets.includes(c._set)).map((c) => ({ ...c, name: c.id })))
+  const per = Number(arg("per", 0))
+  if (per) {
+    const seen = new Map()
+    cases.splice(0, cases.length, ...cases.filter((c) => { const k = `${c._set}|${c.language}|${c.class}`; seen.set(k, (seen.get(k) ?? 0) + 1); return seen.get(k) <= per }))
+  }
   if (!cases.length) {
     console.log("no recall cases found (private data: node benchmark/private.mjs pull)")
     process.exit(0)

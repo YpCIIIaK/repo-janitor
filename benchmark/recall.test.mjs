@@ -50,3 +50,25 @@ test("expect mode: vulnerable files → hit/miss, clean files → clean/fp", () 
   assert.equal(judgeExpected({ class: "sqli", expect: "clean", files: ["impossible.php"] }, finding).verdict, "clean")
   assert.equal(judgeExpected({ class: "sqli", expect: "clean", files: ["low.php"] }, finding).verdict, "fp")
 })
+
+test("CWE-reporting engines and advisories map through CWE ids", async () => {
+  const { sourceFiles } = await import("./recall.mjs")
+  assert.equal(classOf("cwe-89"), "sqli")
+  assert.equal(classOf("cwe-1321"), "prototype-pollution")
+  assert.equal(classOf("cwe-9999"), null)
+  assert.deepEqual(sourceFiles(["lib/a.js", "test/a.js", "a.test.ts", "README.md", "x_test.go"], "javascript"), ["lib/a.js"])
+})
+
+test("advisories: one fix commit and a mapped CWE make a case; picks are stable and one per commit", async () => {
+  const { caseOf, pick } = await import("./recall-advisories.mjs")
+  const adv = (id, cwe, refs) => ({ id, database_specific: { cwe_ids: [cwe] }, references: refs.map((url) => ({ url })) })
+  const fix = "https://github.com/o/r/commit/" + "a".repeat(40)
+  const c = caseOf(adv("GHSA-1", "CWE-89", [fix]), "PyPI")
+  assert.deepEqual(c.source, { type: "git", url: "https://github.com/o/r", vulnerable: "parent", fixed: "a".repeat(40) })
+  assert.equal(c.language, "python")
+  assert.equal(caseOf(adv("GHSA-2", "CWE-89", [fix, fix.replace(/a+$/, "b".repeat(40))]), "PyPI"), null)
+  assert.equal(caseOf(adv("GHSA-3", "CWE-1", [fix]), "PyPI"), null)
+  const twins = [c, { ...c, id: "GHSA-4" }]
+  assert.equal(pick(twins, 5, "s").length, 1)
+  assert.deepEqual(pick([c], 5, "s"), pick([c], 5, "s"))
+})
