@@ -19,7 +19,7 @@
  *     "id": "CVE-2024-1234",
  *     "language": "php",
  *     "class": "sqli",                         // see CLASSES below
- *     "source": { "type": "git", "url": "https://github.com/o/r", "vulnerable": "<sha>", "fixed": "<sha>" }
+ *     "source": { "type": "git", "url": "https://github.com/<owner>/<repo>", "vulnerable": "<sha>", "fixed": "<sha>" }
  *        |     { "type": "dir", "vulnerable": "rel/path", "fixed": "rel/path" },
  *     "files": ["src/a.php"]                    // optional: overrides the diff
  *   }
