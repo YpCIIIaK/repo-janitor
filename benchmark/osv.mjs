@@ -11,6 +11,7 @@
  *   node benchmark/osv.mjs [repo…]     missing or stale repos (resumable)
  *   BENCH_JOBS=6                       parallel repos
  */
+import { inShard } from "./shard.mjs"
 import { spawn } from "node:child_process"
 import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs"
 import { dirname, join } from "node:path"
@@ -113,7 +114,7 @@ async function one(repo) {
   }
 }
 
-const queue = corpus.filter((r) => !only.length || only.includes(r.name))
+const queue = inShard(corpus).filter((r) => !only.length || only.includes(r.name))
 const jobs = Number(process.env.BENCH_JOBS ?? 6)
 let failures = 0
 await Promise.all(
