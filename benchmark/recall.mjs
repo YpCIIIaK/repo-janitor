@@ -23,6 +23,9 @@
  *        |     { "type": "dir", "vulnerable": "rel/path", "fixed": "rel/path" },
  *     "files": ["src/a.php"]                    // optional: overrides the diff
  *   }
+ * or a single version with a known answer per file (training apps):
+ *   { "id": "dvwa-sqli-low", "language": "php", "class": "sqli", "expect": "vulnerable" | "clean",
+ *     "source": { "type": "git", "url": "…", "tree": "<sha>" }, "files": ["vulnerabilities/sqli/source/low.php"] }
  *
  * Engines map a directory to findings { rule, file, line }. `fast` is the normal
  * repo-janitor CLI with low-confidence findings included; further engines (the
@@ -52,6 +55,15 @@ export const CLASSES = {
   tls: /tls/,
   crypto: /weak-hash|random-for-secret|weak-cipher/,
   secrets: /^secret-/,
+  // No rule targets these yet. They stay in the table so the gap shows as 0%.
+  csrf: /csrf/,
+  "access-control": /idor|access-control|missing-auth|capability/,
+  "file-upload": /upload/,
+  auth: /weak-session|brute|hardcoded-cred|auth-bypass/,
+  "input-validation": /input-validation|mass-assign/,
+  "data-exposure": /exposure|sensitive-file|debug-endpoint/,
+  misconfig: /misconfig|cors|debug-mode/,
+  "client-logic": /client-logic/,
 }
 
 export function classOf(rule) {
@@ -89,23 +101,32 @@ function ruleOf(f) {
   return loc > 0 ? f.id.slice(0, loc) : f.id
 }
 
-function checkout(c) {
-  const s = c.source
-  if (s.type === "dir") return { vulnerable: resolve(c._base, s.vulnerable), fixed: resolve(c._base, s.fixed) }
-  if (s.type !== "git") throw new Error(`${c.id}: unknown source type ${s.type}`)
-  const dirs = {}
-  for (const side of ["vulnerable", "fixed"]) {
-    const d = join(cacheDir, c.id.replace(/[^\w.-]/g, "_"), side)
-    if (!existsSync(join(d, ".git"))) {
-      rmSync(d, { recursive: true, force: true })
-      mkdirSync(d, { recursive: true })
-      sh("git", ["-C", d, "init", "-q"])
-      sh("git", ["-C", d, "fetch", "-q", "--depth", "1", s.url, s[side]])
-      sh("git", ["-C", d, "checkout", "-q", "FETCH_HEAD"])
-    }
-    dirs[side] = d
+/** One shallow checkout per (url, sha), shared by every case that uses it. */
+function gitTree(url, sha) {
+  const d = join(cacheDir, `${url.replace(/^https?:\/\//, "").replace(/[^\w.-]/g, "_")}@${sha.slice(0, 12)}`)
+  if (!existsSync(join(d, ".git"))) {
+    rmSync(d, { recursive: true, force: true })
+    mkdirSync(d, { recursive: true })
+    sh("git", ["-C", d, "init", "-q"])
+    sh("git", ["-C", d, "fetch", "-q", "--depth", "1", url, sha])
+    sh("git", ["-C", d, "checkout", "-q", "FETCH_HEAD"])
   }
-  return dirs
+  return d
+}
+
+function tree(c, side) {
+  const s = c.source
+  if (s.type === "dir") return resolve(c._base, s[side])
+  if (s.type === "git") return gitTree(s.url, s[side])
+  throw new Error(`${c.id}: unknown source type ${s.type}`)
+}
+
+/** Scan each (engine, directory) once per run. */
+const scanned = new Map()
+function scan(engine, dir) {
+  const key = `${engine}|${dir}`
+  if (!scanned.has(key)) scanned.set(key, ENGINES[engine](dir))
+  return scanned.get(key)
 }
 
 /** Files that differ between the two versions (relative paths). */
@@ -131,6 +152,17 @@ export function judge(c, vulnFindings, fixedFindings, files) {
   return { verdict: v.length ? "near" : "miss" }
 }
 
+/**
+ * Single-version case: `expect` says whether the listed files contain the
+ * vulnerability. vulnerable → hit / miss; clean → clean / fp (a false alarm on
+ * code known to be fixed, e.g. DVWA's "impossible" level).
+ */
+export function judgeExpected(c, findings) {
+  const found = findings.find((f) => c.files.includes(f.file) && classOf(ruleOf(f)) === c.class)
+  if (c.expect === "clean") return { verdict: found ? "fp" : "clean", file: found?.file }
+  return found ? { verdict: "hit", file: found.file } : { verdict: "miss" }
+}
+
 export function loadCases(dir) {
   if (!existsSync(dir)) return []
   return readdirSync(dir).filter((f) => f.endsWith(".json")).flatMap((f) =>
@@ -142,13 +174,17 @@ export function summarise(results) {
   const rows = new Map()
   for (const r of results) {
     const key = `${r.engine}|${r.language}|${r.class}`
-    const row = rows.get(key) ?? { engine: r.engine, language: r.language, class: r.class, cases: 0, hit: 0, near: 0, miss: 0, error: 0 }
+    const row = rows.get(key) ?? { engine: r.engine, language: r.language, class: r.class, cases: 0, hit: 0, near: 0, miss: 0, error: 0, clean: 0, fp: 0 }
     row.cases++
     row[r.verdict]++
     rows.set(key, row)
   }
   return [...rows.values()]
-    .map((r) => ({ ...r, recall: r.cases - r.error ? Number((r.hit / (r.cases - r.error)).toFixed(3)) : null }))
+    .map((r) => {
+      // Recall counts only cases that contain the vulnerability; clean controls feed fp.
+      const vulnerable = r.hit + r.near + r.miss
+      return { ...r, recall: vulnerable ? Number((r.hit / vulnerable).toFixed(3)) : null }
+    })
     .sort((a, b) => a.language.localeCompare(b.language) || a.class.localeCompare(b.class) || a.engine.localeCompare(b.engine))
 }
 
@@ -156,20 +192,19 @@ export function run(cases, engines) {
   const results = []
   for (const c of cases) {
     if (!CLASSES[c.class]) throw new Error(`${c.id}: unknown class "${c.class}"`)
-    let dirs, files
-    try {
-      dirs = checkout(c)
-      files = c.files ?? changedFiles(dirs.vulnerable, dirs.fixed)
-    } catch (e) {
-      for (const engine of engines) results.push({ id: c.id, set: c._set, engine, language: c.language, class: c.class, verdict: "error", error: String(e.message).slice(0, 200) })
-      continue
-    }
+    const base = { id: c.id, set: c._set, language: c.language, class: c.class }
     for (const engine of engines) {
       try {
-        const { verdict, file } = judge(c, ENGINES[engine](dirs.vulnerable), ENGINES[engine](dirs.fixed), files)
-        results.push({ id: c.id, set: c._set, engine, language: c.language, class: c.class, verdict, file })
+        if (c.expect) {
+          if (!c.files?.length) throw new Error("expect cases need files")
+          results.push({ ...base, engine, ...judgeExpected(c, scan(engine, tree(c, "tree"))) })
+        } else {
+          const v = tree(c, "vulnerable"), x = tree(c, "fixed")
+          const files = c.files ?? changedFiles(v, x)
+          results.push({ ...base, engine, ...judge(c, scan(engine, v), scan(engine, x), files) })
+        }
       } catch (e) {
-        results.push({ id: c.id, set: c._set, engine, language: c.language, class: c.class, verdict: "error", error: String(e.message).slice(0, 200) })
+        results.push({ ...base, engine, verdict: "error", error: String(e.message).slice(0, 200) })
       }
     }
   }
@@ -192,8 +227,8 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const summary = summarise(results)
   const out = resolve(arg("out", join(here, "recall-report.json")))
   writeFileSync(out, JSON.stringify({ generatedAt: new Date().toISOString(), engines, cases: cases.length, summary, results }, null, 1) + "\n")
-  console.log("| engine | language | class | cases | hit | near | miss | error | recall |\n|---|---|---|---:|---:|---:|---:|---:|---:|")
+  console.log("| engine | language | class | cases | hit | near | miss | recall | clean | fp | error |\n|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|")
   for (const r of summary)
-    console.log(`| ${r.engine} | ${r.language} | ${r.class} | ${r.cases} | ${r.hit} | ${r.near} | ${r.miss} | ${r.error} | ${r.recall == null ? "—" : `${Math.round(r.recall * 100)}%`} |`)
+    console.log(`| ${r.engine} | ${r.language} | ${r.class} | ${r.cases} | ${r.hit} | ${r.near} | ${r.miss} | ${r.recall == null ? "—" : `${Math.round(r.recall * 100)}%`} | ${r.clean} | ${r.fp} | ${r.error} |`)
   console.log(`\n${results.filter((r) => r.verdict === "error").length} errors · report: ${relative(root, out)}`)
 }
