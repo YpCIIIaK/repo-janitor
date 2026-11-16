@@ -72,3 +72,4 @@ benchmark/.gitlog/
 benchmark/.gitlogcache/
 benchmark/.replay/
 benchmark/.replaycache/
+benchmark/.local-rescans/
