@@ -500,6 +500,18 @@ for (const r of repos) for (const i of r.issues) if (i.severity in json.severity
       shipped: shareOf((x) => shipped(x).length > 0),
       critical: shareOf((x) => x.f.some((i) => i.severity === "critical")),
       medianAffected: affected.length ? median(affected.map((x) => shipped(x).length)) : 0,
+      byEcosystem: (() => {
+        // Ecosystem from the manifest a finding points at; denominator = checked repos that ship that manifest.
+        const ECO = { npm: /^package(-lock)?\.json$|^yarn\.lock$|^pnpm-lock\.yaml$/, PyPI: /requirements.*\.txt$|^pyproject\.toml$|^poetry\.lock$|^Pipfile(\.lock)?$|^base\.txt$/, Go: /^go\.(mod|sum)$/, "crates.io": /^Cargo\.(lock|toml)$/, RubyGems: /^Gemfile(\.lock)?$/, Packagist: /^composer\.(json|lock)$/ }
+        const ecoOf = (loc) => { const b = (loc ?? "").split("/").pop(); return Object.keys(ECO).find((e) => new RegExp(ECO[e].source, "i").test(b)) ?? null }
+        const names = (x) => { const p = join(here, ".inventory", `${x.r.name}.json`); return existsSync(p) ? Object.keys(JSON.parse(readFileSync(p, "utf8")).names ?? {}) : [] }
+        const uses = new Map(osv.map((x) => [x.r.name, new Set(names(x).map((n) => ecoOf(n)).filter(Boolean))]))
+        return Object.keys(ECO).map((eco) => {
+          const pool = osv.filter((x) => uses.get(x.r.name)?.has(eco) || x.f.some((i) => ecoOf(i.location) === eco))
+          const hit = pool.filter((x) => shipped(x).some((i) => ecoOf(i.location) === eco))
+          return { ecosystem: eco, repos: pool.length, share: pool.length ? Number((hit.length / pool.length).toFixed(3)) : 0 }
+        }).filter((e) => e.repos >= 30).sort((a, b) => b.share - a.share)
+      })(),
       topPackages: [...counts].sort((a, b) => b[1] - a[1]).slice(0, 10).map(([name, n]) => ({ name, share: Number((n / osv.length).toFixed(3)) })),
     }
   }

@@ -1,6 +1,6 @@
 {
   "repos": 10007,
-  "generatedAt": "2026-11-16T10:29:45.395Z",
+  "generatedAt": "2026-11-16T10:50:21.863Z",
   "dataCoverage": {
     "records": 10007,
     "inventories": 10007,
@@ -1231,6 +1231,38 @@
     "shipped": 0.33,
     "critical": 0.175,
     "medianAffected": 11,
+    "byEcosystem": [
+      {
+        "ecosystem": "Go",
+        "repos": 1089,
+        "share": 0.595
+      },
+      {
+        "ecosystem": "Packagist",
+        "repos": 606,
+        "share": 0.533
+      },
+      {
+        "ecosystem": "crates.io",
+        "repos": 847,
+        "share": 0.511
+      },
+      {
+        "ecosystem": "npm",
+        "repos": 3192,
+        "share": 0.395
+      },
+      {
+        "ecosystem": "RubyGems",
+        "repos": 603,
+        "share": 0.358
+      },
+      {
+        "ecosystem": "PyPI",
+        "repos": 1677,
+        "share": 0.321
+      }
+    ],
     "topPackages": [
       {
         "name": "golang.org/x/net",
