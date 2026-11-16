@@ -26,7 +26,7 @@ import { fileURLToPath } from "node:url"
 const here = dirname(fileURLToPath(import.meta.url))
 const root = join(here, "..")
 const archiveDir = join(here, ".archive")
-const BRANCH = "bench-data"
+const BRANCH = process.env.BENCH_DATA_BRANCH || "bench-data"
 const CHUNK = 100
 
 function sh(cmd, args, opts = {}) {
