@@ -23,6 +23,12 @@ const T = {
     lede:
       "repo-janitor scanned popular libraries, applications, infrastructure and tooling at pinned commits and read their full git history. Only findings a user sees by default (high and medium confidence) are counted.",
     updated: "Data from",
+    download: "Download the public dataset (JSON)",
+    practiceDetails: "Compare score and finding density",
+    practiceColumns: ["practice", "records using it", "score gap, raw", "score gap, similar size", "findings / 1k lines gap"],
+    practiceReading: "Positive score gaps mean a higher score; negative density gaps mean fewer findings per line. Similar-size gaps are weighted comparisons within four size bands, using bands with at least five records in each group. Density excludes records with 500 lines or fewer. These associations do not establish that a tool improves or harms a project.",
+    accuracyColumns: ["confidence", "confirmed findings (TP)", "false alarms (FP)", "precision"],
+    accuracyReading: "Precision = TP / (TP + FP) on reviewed findings still present in this snapshot. Unreviewed findings are excluded. This is a selected review sample, not a measure of vulnerability prevalence or recall.",
     tiles: { repos: "repositories scanned", median: "median health score", todos: "dated TODOs", todoAge: "median TODO age" },
     years: (y: number) => `${y.toFixed(1)} years`,
     dist: "Score distribution",
@@ -174,6 +180,12 @@ const T = {
     lede:
       "repo-janitor просканировал популярные библиотеки, приложения, инфраструктуру и инструменты на зафиксированных коммитах и прочитал их полную историю git. Считаются только находки, которые пользователь видит по умолчанию (высокая и средняя уверенность).",
     updated: "Данные на",
+    download: "Скачать публичные данные (JSON)",
+    practiceDetails: "Сравнить оценку и плотность предупреждений",
+    practiceColumns: ["практика", "записей с практикой", "разница оценки без поправки", "разница при похожем размере", "разница предупреждений / 1 тыс. строк"],
+    practiceReading: "Плюс в оценке означает более высокий балл; минус в плотности — меньше предупреждений на строку. Сравнение по размеру усредняет разницы внутри четырёх групп с весами; в каждой сравниваемой подгруппе должно быть хотя бы пять записей. Плотность не учитывает записи с 500 строками и меньше. Эти связи не доказывают, что инструмент улучшает или ухудшает проект.",
+    accuracyColumns: ["уверенность", "подтверждённые сигналы (TP)", "ложные срабатывания (FP)", "точность"],
+    accuracyReading: "Точность = TP / (TP + FP) среди проверенных сигналов, которые остались в этом снимке. Непроверенные сигналы исключены. Это направленная выборка для ревью, а не оценка распространённости уязвимостей или полноты их обнаружения.",
     tiles: { repos: "репозиториев просканировано", median: "медианная оценка", todos: "TODO с датой", todoAge: "средний возраст TODO" },
     years: (y: number) => `${y.toFixed(1).replace(".", ",")} года`,
     dist: "Распределение оценок",
@@ -494,7 +506,10 @@ export function StateOfOpenSource() {
         <h1 className="text-3xl font-semibold tracking-tight text-balance sm:text-4xl">{t.title(stats.uniqueRepositories)}</h1>
         <p className="max-w-prose text-muted-foreground">{t.lede}</p>
         <p className="text-xs text-muted-foreground">{t.updated} {date}</p>
-        <a href="/state/findings" className="inline-block text-sm font-medium text-primary hover:underline">{t.findingsLink}</a>
+        <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm font-medium text-primary">
+          <a href="/state/findings" className="hover:underline">{t.findingsLink}</a>
+          <a href="/state/data.json" download="repo-janitor-public-stats.json" className="hover:underline">{t.download}</a>
+        </div>
       </header>
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -917,6 +932,21 @@ export function StateOfOpenSource() {
         </div>
       </Section>
 
+      <Section title={t.practiceDetails} note={t.practiceReading}>
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[640px] text-sm">
+            <thead><tr>{t.practiceColumns.map((label, i) => <th key={label} scope="col" className={cn("pb-2 text-xs font-medium text-muted-foreground", i ? "pl-4 text-right" : "text-left")}>{label}</th>)}</tr></thead>
+            <tbody>{stats.practices.map(p => (
+              <tr key={p.key} className="border-t border-border">
+                <th scope="row" className="py-2 text-left font-normal">{p.label}</th>
+                <td className="pl-4 text-right font-mono tabular-nums">{p.repos.toLocaleString(l)}</td>
+                {[p.rawScoreGap, p.scoreGap, p.densityGap].map((value, i) => <td key={i} className="pl-4 text-right font-mono tabular-nums">{value === null ? "—" : `${value > 0 ? "+" : ""}${value.toFixed(i === 2 ? 2 : 1)}`}</td>)}
+              </tr>
+            ))}</tbody>
+          </table>
+        </div>
+      </Section>
+
       <Section title={t.trajectories} note={t.trajectoriesNote}>
         <div className="grid gap-6 md:grid-cols-2">
           <div><p className="mb-1 text-sm font-medium">{t.ci}</p><Lines max={100} series={[{ label: "GitHub Actions", values: series("githubActions"), className: "text-primary" }, { label: "Travis CI", values: series("travis"), className: "text-destructive" }]} /></div>
@@ -954,6 +984,22 @@ export function StateOfOpenSource() {
           const share = p.tp / Math.max(1, p.tp + p.fp)
           return <Bar key={c} label={`${t.conf[c]} · ${p.tp + p.fp}`} value={share} max={1} display={pct(share)} tone={c === "high" ? "success" : c === "medium" ? "warning" : "destructive"} />
         })}
+      </Section>
+
+      <Section title={t.accuracyColumns[3]} note={t.accuracyReading}>
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[420px] text-sm">
+            <thead><tr>{t.accuracyColumns.map((label, i) => <th key={label} scope="col" className={cn("pb-2 text-xs font-medium text-muted-foreground", i ? "pl-4 text-right" : "text-left")}>{label}</th>)}</tr></thead>
+            <tbody>{(["high", "medium", "low"] as const).map(c => (
+              <tr key={c} className="border-t border-border">
+                <th scope="row" className="py-2 text-left font-normal">{t.conf[c]}</th>
+                <td className="pl-4 text-right font-mono tabular-nums">{prec[c].tp.toLocaleString(l)}</td>
+                <td className="pl-4 text-right font-mono tabular-nums">{prec[c].fp.toLocaleString(l)}</td>
+                <td className="pl-4 text-right font-mono tabular-nums">{prec[c].tp + prec[c].fp ? pct(prec[c].tp / (prec[c].tp + prec[c].fp)) : "—"}</td>
+              </tr>
+            ))}</tbody>
+          </table>
+        </div>
       </Section>
 
       <Section title={t.extremes}>
