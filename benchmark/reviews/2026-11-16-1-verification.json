@@ -40,5 +40,18 @@
   "newLabels": 0,
   "oldLabelsFrozen": 2931,
   "dataPublished": false,
-  "calibrationUpdated": false
+  "calibrationUpdated": false,
+  "statePageFollowup": {
+    "productionBuild": "pass",
+    "typecheck": "pass",
+    "changedFilesLint": "pass",
+    "httpSmoke": {
+      "downloadMatchesPublicSnapshotBytes": true,
+      "downloadHeader": true,
+      "downloadLink": true,
+      "practiceDetails": true,
+      "tpFpTable": true,
+      "precisionExplanation": true
+    }
+  }
 }
