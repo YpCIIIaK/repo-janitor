@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server"
+import { localRescanEnabled } from "@/lib/local-rescan-access"
 
 function comparableOrigin(value: string): string {
   try {
@@ -17,7 +18,10 @@ export function proxy(request: NextRequest) {
     if (origin && comparableOrigin(origin) !== comparableOrigin(expected)) {
       return NextResponse.json({ error: "Cross-origin mutation refused" }, { status: 403 })
     }
-    if (Number(request.headers.get("content-length")) > 2 * 1024 * 1024) {
+    // Large pinned corpus imports are allowed only by the loopback launcher.
+    const limit = request.nextUrl.pathname === "/api/local-rescan" && localRescanEnabled(request.headers)
+      ? 10_000_000 : 2 * 1024 * 1024
+    if (Number(request.headers.get("content-length")) > limit) {
       return NextResponse.json({ error: "Request too large" }, { status: 413 })
     }
   }

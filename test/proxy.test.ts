@@ -4,6 +4,7 @@ import { proxy } from "@/proxy"
 beforeEach(() => {
   vi.stubEnv("PUBLIC_ORIGIN", "")
   vi.stubEnv("RENDER_EXTERNAL_URL", "")
+  vi.stubEnv("REPO_JANITOR_LOCAL_RESCAN", "")
 })
 afterEach(() => vi.unstubAllEnvs())
 
@@ -46,4 +47,15 @@ it("does not allow a loopback origin for a configured public deployment", () => 
   expect(proxy(new NextRequest("https://repo-janitor.app/api/scan", {
     method: "POST", headers: { origin: "http://127.0.0.1:3000" },
   })).status).toBe(403)
+})
+
+it("allows corpus imports only on the explicitly enabled local rescan endpoint", () => {
+  const request = (path: string, host = "127.0.0.1:3100") => new NextRequest(`http://${host}${path}`, {
+    method: "POST", headers: { host, origin: `http://${host}`, "content-length": String(3 * 1024 * 1024) },
+  })
+  expect(proxy(request("/api/local-rescan")).status).toBe(413)
+  vi.stubEnv("REPO_JANITOR_LOCAL_RESCAN", "1")
+  expect(proxy(request("/api/local-rescan")).status).toBe(200)
+  expect(proxy(request("/api/scan")).status).toBe(413)
+  expect(proxy(request("/api/local-rescan", "public.example")).status).toBe(413)
 })
