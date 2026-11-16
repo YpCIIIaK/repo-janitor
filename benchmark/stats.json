@@ -1,0 +1,1964 @@
+{
+  "repos": 10007,
+  "generatedAt": "2026-11-16T10:50:21.863Z",
+  "dataCoverage": {
+    "records": 10007,
+    "inventories": 10007,
+    "metadataSnapshots": 10007,
+    "auditedMetadataSnapshots": 1714,
+    "legacyMetadataSnapshots": 8293,
+    "policyLimitedMetadataSnapshots": 339,
+    "metadataOldestDay": "2026-11-09",
+    "metadataNewestDay": "2026-11-15",
+    "formats": [
+      {
+        "name": "JavaScript",
+        "records": 4030,
+        "files": 354611
+      },
+      {
+        "name": "Python",
+        "records": 3117,
+        "files": 359017
+      },
+      {
+        "name": "TypeScript",
+        "records": 2255,
+        "files": 613029
+      },
+      {
+        "name": "C / C++",
+        "records": 1861,
+        "files": 335724
+      },
+      {
+        "name": "Java",
+        "records": 1213,
+        "files": 414905
+      },
+      {
+        "name": "Go",
+        "records": 1187,
+        "files": 362442
+      },
+      {
+        "name": "Kotlin",
+        "records": 904,
+        "files": 177466
+      },
+      {
+        "name": "Rust",
+        "records": 880,
+        "files": 139221
+      },
+      {
+        "name": "Swift",
+        "records": 874,
+        "files": 81363
+      },
+      {
+        "name": "PHP",
+        "records": 751,
+        "files": 222972
+      },
+      {
+        "name": "Ruby",
+        "records": 684,
+        "files": 115212
+      },
+      {
+        "name": "C#",
+        "records": 653,
+        "files": 296001
+      },
+      {
+        "name": "Vue",
+        "records": 368,
+        "files": 30497
+      },
+      {
+        "name": "Dart",
+        "records": 359,
+        "files": 80194
+      },
+      {
+        "name": "Terraform",
+        "records": 291,
+        "files": 39504
+      },
+      {
+        "name": "Scala",
+        "records": 237,
+        "files": 57901
+      },
+      {
+        "name": "Elixir",
+        "records": 152,
+        "files": 15305
+      },
+      {
+        "name": "Svelte",
+        "records": 109,
+        "files": 14123
+      },
+      {
+        "name": "Erlang",
+        "records": 90,
+        "files": 4628
+      },
+      {
+        "name": "Solidity",
+        "records": 37,
+        "files": 2037
+      }
+    ]
+  },
+  "uniqueRepositories": 10000,
+  "aliasRecords": 7,
+  "grades": {
+    "A": 3432,
+    "B": 2594,
+    "C": 2628,
+    "D": 1175,
+    "F": 178
+  },
+  "languages": {
+    "Python": {
+      "repos": 1417,
+      "medianScore": 84,
+      "findingsPer1k": 2.26
+    },
+    "TypeScript": {
+      "repos": 1176,
+      "medianScore": 81,
+      "findingsPer1k": 2.07
+    },
+    "JavaScript": {
+      "repos": 1028,
+      "medianScore": 85,
+      "findingsPer1k": 2.29
+    },
+    "Go": {
+      "repos": 941,
+      "medianScore": 82,
+      "findingsPer1k": 1.64
+    },
+    "other": {
+      "repos": 696,
+      "medianScore": 94,
+      "findingsPer1k": 0
+    },
+    "Java": {
+      "repos": 647,
+      "medianScore": 79,
+      "findingsPer1k": 2.41
+    },
+    "Rust": {
+      "repos": 631,
+      "medianScore": 68,
+      "findingsPer1k": 1.99
+    },
+    "PHP": {
+      "repos": 608,
+      "medianScore": 83,
+      "findingsPer1k": 2.21
+    },
+    "C++": {
+      "repos": 503,
+      "medianScore": 67,
+      "findingsPer1k": 2.06
+    },
+    "C#": {
+      "repos": 497,
+      "medianScore": 79,
+      "findingsPer1k": 2.09
+    },
+    "Swift": {
+      "repos": 474,
+      "medianScore": 88,
+      "findingsPer1k": 2.17
+    },
+    "Kotlin": {
+      "repos": 454,
+      "medianScore": 80,
+      "findingsPer1k": 2.28
+    },
+    "Ruby": {
+      "repos": 422,
+      "medianScore": 84,
+      "findingsPer1k": 2.56
+    },
+    "C": {
+      "repos": 317,
+      "medianScore": 73,
+      "findingsPer1k": 1.32
+    },
+    "Scala": {
+      "repos": 196,
+      "medianScore": 66,
+      "findingsPer1k": 3.76
+    }
+  },
+  "ruleShare": {
+    "duplicate": 0.661,
+    "bus-factor": 0.63,
+    "workflow-action-tag-first-party": 0.555,
+    "workflow-no-permissions": 0.468,
+    "todo": 0.464,
+    "workflow-action-tag": 0.449,
+    "hygiene-no-tests": 0.275,
+    "commented-code": 0.267,
+    "hygiene-no-ci": 0.261,
+    "dead-export": 0.18,
+    "doc-link": 0.171,
+    "eol-node": 0.121,
+    "hygiene-no-license": 0.112,
+    "eol-python": 0.074,
+    "skipped-test": 0.056,
+    "config-conflict": 0.052,
+    "lockfile-missing": 0.043,
+    "ci-no-pr-trigger": 0.038,
+    "docker-latest": 0.021,
+    "docs-badge": 0.017,
+    "dead-uikit": 0.015,
+    "insecure-sql-interpolated": 0.01,
+    "hygiene-no-readme": 0.009,
+    "eol-runner": 0.009,
+    "docs-script": 0.006
+  },
+  "ci": {
+    "withActions": 6987,
+    "unpinned": 5873,
+    "thirdPartyUnpinned": 4496,
+    "noPermissions": 4681
+  },
+  "eol": {
+    "node": {
+      "repos": 3147,
+      "eol": 1143
+    },
+    "python": {
+      "repos": 1417,
+      "eol": 483
+    }
+  },
+  "checklist": {
+    "readme": 0.023,
+    "license": 0.011,
+    "contributing": 0.039,
+    "security": 0.021,
+    "codeOfConduct": 0.02,
+    "changelog": 0.002,
+    "ci": 0.737,
+    "tests": 0.655
+  },
+  "todo": {
+    "dated": 179175,
+    "medianDays": 1251,
+    "overFiveYears": 66991,
+    "oldest": [
+      {
+        "repo": "apache/xerces2-j",
+        "location": "src/org/apache/xml/serialize/HTMLSerializer.java:865",
+        "years": 26.7
+      },
+      {
+        "repo": "apache/xerces2-j",
+        "location": "src/org/apache/xml/serialize/OutputFormat.java:868",
+        "years": 26.7
+      },
+      {
+        "repo": "orocos-toolchain/log4cpp",
+        "location": "src/NDC.cpp:125",
+        "years": 26
+      },
+      {
+        "repo": "apache/xerces2-j",
+        "location": "src/org/apache/xerces/jaxp/DefaultValidationErrorHandler.java:32",
+        "years": 25.8
+      },
+      {
+        "repo": "apache/xerces2-j",
+        "location": "src/org/apache/xerces/jaxp/SAXParserFactoryImpl.java:134",
+        "years": 25.8
+      }
+    ]
+  },
+  "activity": {
+    "active": 17,
+    "activeMedian": 94,
+    "quiet": 9952,
+    "quietMedian": 82
+  },
+  "sizeBands": [
+    {
+      "label": "< 5k lines",
+      "repos": 4175,
+      "medianScore": 91
+    },
+    {
+      "label": "5k–50k",
+      "repos": 3730,
+      "medianScore": 73
+    },
+    {
+      "label": "50k–200k",
+      "repos": 1472,
+      "medianScore": 66
+    },
+    {
+      "label": "> 200k",
+      "repos": 630,
+      "medianScore": 66
+    }
+  ],
+  "best": [
+    {
+      "repo": "ai/nanoid",
+      "score": 100,
+      "findings": 0
+    },
+    {
+      "repo": "jshttp/cookie",
+      "score": 100,
+      "findings": 0
+    },
+    {
+      "repo": "jonschlinkert/is-number",
+      "score": 100,
+      "findings": 0
+    },
+    {
+      "repo": "fastify/fastify-cors",
+      "score": 100,
+      "findings": 0
+    },
+    {
+      "repo": "fastify/fastify-static",
+      "score": 100,
+      "findings": 0
+    },
+    {
+      "repo": "electron/fiddle",
+      "score": 100,
+      "findings": 0
+    },
+    {
+      "repo": "metabase/toucan",
+      "score": 100,
+      "findings": 0
+    },
+    {
+      "repo": "JamesIves/github-pages-deploy-action",
+      "score": 100,
+      "findings": 0
+    },
+    {
+      "repo": "aquasecurity/trivy-action",
+      "score": 100,
+      "findings": 0
+    },
+    {
+      "repo": "traefik/traefik-helm-chart",
+      "score": 100,
+      "findings": 0
+    }
+  ],
+  "worst": [
+    {
+      "language": "C++",
+      "size": "very large",
+      "score": 0,
+      "findings": 3452,
+      "top": "todo"
+    },
+    {
+      "language": "C",
+      "size": "very large",
+      "score": 0,
+      "findings": 549,
+      "top": "todo"
+    },
+    {
+      "language": "Python",
+      "size": "very large",
+      "score": 0,
+      "findings": 322,
+      "top": "todo"
+    },
+    {
+      "language": "PHP",
+      "size": "large",
+      "score": 0,
+      "findings": 295,
+      "top": "todo"
+    },
+    {
+      "language": "TypeScript",
+      "size": "large",
+      "score": 0,
+      "findings": 268,
+      "top": "todo"
+    },
+    {
+      "language": "TypeScript",
+      "size": "large",
+      "score": 0,
+      "findings": 227,
+      "top": "hygiene"
+    },
+    {
+      "language": "Java",
+      "size": "very large",
+      "score": 0,
+      "findings": 206,
+      "top": "todo"
+    },
+    {
+      "language": "Python",
+      "size": "large",
+      "score": 0,
+      "findings": 182,
+      "top": "hygiene"
+    }
+  ],
+  "medianScore": 82,
+  "vulnerableApps": [
+    {
+      "repo": "ine-labs/AWSGoat",
+      "language": "JavaScript",
+      "high": 45,
+      "crossFile": 0
+    },
+    {
+      "repo": "zhuifengshaonianhanlu/pikachu",
+      "language": "PHP",
+      "high": 45,
+      "crossFile": 3
+    },
+    {
+      "repo": "digininja/DVWA",
+      "language": "PHP",
+      "high": 42,
+      "crossFile": 0
+    },
+    {
+      "repo": "OWASP-Benchmark/BenchmarkJava",
+      "language": "Java",
+      "high": 31,
+      "crossFile": 1
+    },
+    {
+      "repo": "Nua-org/nua-bench",
+      "language": "PHP",
+      "high": 30,
+      "crossFile": 0
+    },
+    {
+      "repo": "presidentbeef/inject-some-sql",
+      "language": "JavaScript",
+      "high": 15,
+      "crossFile": 0
+    },
+    {
+      "repo": "OWASP/Vulnerable-Web-Application",
+      "language": "PHP",
+      "high": 12,
+      "crossFile": 0
+    },
+    {
+      "repo": "WebGoat/WebGoat",
+      "language": "JavaScript",
+      "high": 11,
+      "crossFile": 0
+    },
+    {
+      "repo": "OWASP/OWASPWebGoatPHP",
+      "language": "PHP",
+      "high": 11,
+      "crossFile": 0
+    },
+    {
+      "repo": "jerryhoff/WebGoat.NET",
+      "language": "C#",
+      "high": 10,
+      "crossFile": 10
+    },
+    {
+      "repo": "SasanLabs/VulnerableApp",
+      "language": "Java",
+      "high": 10,
+      "crossFile": 0
+    },
+    {
+      "repo": "terracotta-bank/terracotta-bank",
+      "language": "Java",
+      "high": 9,
+      "crossFile": 7
+    },
+    {
+      "repo": "snoopysecurity/dvws",
+      "language": "PHP",
+      "high": 7,
+      "crossFile": 2
+    },
+    {
+      "repo": "adeyosemanputra/pygoat",
+      "language": "JavaScript",
+      "high": 6,
+      "crossFile": 0
+    },
+    {
+      "repo": "cr0hn/vulnerable-node",
+      "language": "JavaScript",
+      "high": 6,
+      "crossFile": 0
+    },
+    {
+      "repo": "stamparm/DSVW",
+      "language": "Python",
+      "high": 5,
+      "crossFile": 0
+    },
+    {
+      "repo": "CSPF-Founder/JavaVulnerableLab",
+      "language": "Java",
+      "high": 5,
+      "crossFile": 0
+    },
+    {
+      "repo": "WebGoat/WebGoat-Legacy",
+      "language": "JavaScript",
+      "high": 5,
+      "crossFile": 5
+    },
+    {
+      "repo": "0c34/govwa",
+      "language": "JavaScript",
+      "high": 4,
+      "crossFile": 0
+    },
+    {
+      "repo": "RhinoSecurityLabs/cloudgoat",
+      "language": "JavaScript",
+      "high": 4,
+      "crossFile": 0
+    },
+    {
+      "repo": "OWASP/NodeGoat",
+      "language": "JavaScript",
+      "high": 3,
+      "crossFile": 0
+    },
+    {
+      "repo": "OWASP/railsgoat",
+      "language": "JavaScript",
+      "high": 3,
+      "crossFile": 0
+    },
+    {
+      "repo": "peachycloudsecurity/very-vulnerable-serverless",
+      "language": "Python",
+      "high": 3,
+      "crossFile": 0
+    },
+    {
+      "repo": "snoopysecurity/dvws-node",
+      "language": "JavaScript",
+      "high": 2,
+      "crossFile": 0
+    },
+    {
+      "repo": "juice-shop/juice-shop",
+      "language": "TypeScript",
+      "high": 2,
+      "crossFile": 0
+    },
+    {
+      "repo": "OWASP/iGoat-Swift",
+      "language": "C",
+      "high": 2,
+      "crossFile": 0
+    },
+    {
+      "repo": "bridgecrewio/cfngoat",
+      "language": "other",
+      "high": 2,
+      "crossFile": 0
+    },
+    {
+      "repo": "bridgecrewio/terragoat",
+      "language": "other",
+      "high": 2,
+      "crossFile": 0
+    },
+    {
+      "repo": "fportantier/vulpy",
+      "language": "JavaScript",
+      "high": 2,
+      "crossFile": 2
+    },
+    {
+      "repo": "we45/Vulnerable-Flask-App",
+      "language": "JavaScript",
+      "high": 2,
+      "crossFile": 0
+    },
+    {
+      "repo": "appsecco/dvna",
+      "language": "JavaScript",
+      "high": 1,
+      "crossFile": 0
+    },
+    {
+      "repo": "OWASP/crAPI",
+      "language": "Go",
+      "high": 1,
+      "crossFile": 0
+    },
+    {
+      "repo": "dolevf/Damn-Vulnerable-GraphQL-Application",
+      "language": "JavaScript",
+      "high": 1,
+      "crossFile": 1
+    },
+    {
+      "repo": "erev0s/VAmPI",
+      "language": "Python",
+      "high": 1,
+      "crossFile": 1
+    },
+    {
+      "repo": "incredibleindishell/SSRF_Vulnerable_Lab",
+      "language": "PHP",
+      "high": 1,
+      "crossFile": 0
+    },
+    {
+      "repo": "Contrast-Security-OSS/vulnerable-spring-boot-application",
+      "language": "Java",
+      "high": 1,
+      "crossFile": 1
+    },
+    {
+      "repo": "madhuakula/kubernetes-goat",
+      "language": "JavaScript",
+      "high": 1,
+      "crossFile": 0
+    },
+    {
+      "repo": "snyk-labs/goof-kubernetes",
+      "language": "Python",
+      "high": 1,
+      "crossFile": 0
+    },
+    {
+      "repo": "snyk-labs/nodejs-goof",
+      "language": "JavaScript",
+      "high": 1,
+      "crossFile": 0
+    },
+    {
+      "repo": "Soham7-dev/AspGoat",
+      "language": "C#",
+      "high": 1,
+      "crossFile": 0
+    },
+    {
+      "repo": "DamnVulnerableCryptoApp/DamnVulnerableCryptoApp",
+      "language": "TypeScript",
+      "high": 0,
+      "crossFile": 0
+    },
+    {
+      "repo": "OWASP/DVSA",
+      "language": "JavaScript",
+      "high": 0,
+      "crossFile": 0
+    },
+    {
+      "repo": "anxolerd/dvpwa",
+      "language": "JavaScript",
+      "high": 0,
+      "crossFile": 0
+    },
+    {
+      "repo": "bridgecrewio/kustomizegoat",
+      "language": "other",
+      "high": 0,
+      "crossFile": 0
+    },
+    {
+      "repo": "snyk-labs/java-goof",
+      "language": "Java",
+      "high": 0,
+      "crossFile": 0
+    },
+    {
+      "repo": "we45/DVFaaS-Damn-Vulnerable-Functions-as-a-Service",
+      "language": "Python",
+      "high": 0,
+      "crossFile": 0
+    },
+    {
+      "repo": "OWASP/Serverless-Goat",
+      "language": "JavaScript",
+      "high": 0,
+      "crossFile": 0
+    },
+    {
+      "repo": "theowni/Damn-Vulnerable-RESTaurant-API-Game",
+      "language": "Python",
+      "high": 0,
+      "crossFile": 0
+    },
+    {
+      "repo": "veracode-research/actuator-testbed",
+      "language": "Java",
+      "high": 0,
+      "crossFile": 0
+    },
+    {
+      "repo": "jzheaux/spel-injection",
+      "language": "Java",
+      "high": 0,
+      "crossFile": 0
+    },
+    {
+      "repo": "eoftedal/deserialize",
+      "language": "Java",
+      "high": 0,
+      "crossFile": 0
+    },
+    {
+      "repo": "Forgo7ten/VulnerableApp",
+      "language": "Kotlin",
+      "high": 0,
+      "crossFile": 0
+    },
+    {
+      "repo": "mochiruntime/android-ctf",
+      "language": "Kotlin",
+      "high": 0,
+      "crossFile": 0
+    },
+    {
+      "repo": "cyllective/oauth-labs",
+      "language": "JavaScript",
+      "high": 0,
+      "crossFile": 0
+    },
+    {
+      "repo": "CxProfessionalServices/VulnerableApp",
+      "language": "Go",
+      "high": 0,
+      "crossFile": 0
+    },
+    {
+      "repo": "sonuoffsec/DVAP",
+      "language": "TypeScript",
+      "high": 0,
+      "crossFile": 0
+    },
+    {
+      "repo": "jankesec/evilcorp-ios",
+      "language": "Swift",
+      "high": 0,
+      "crossFile": 0
+    },
+    {
+      "repo": "appelsiini/vulnerable-laravel-app",
+      "language": "JavaScript",
+      "high": 0,
+      "crossFile": 0
+    },
+    {
+      "repo": "SasanLabs/VulnerableApp-php",
+      "language": "PHP",
+      "high": 0,
+      "crossFile": 0
+    }
+  ],
+  "practices": [
+    {
+      "key": "scorecard",
+      "label": "OpenSSF Scorecard",
+      "repos": 123,
+      "rawScoreGap": 1,
+      "scoreGap": 6.414634146341464,
+      "densityGap": -1.1111382512324322
+    },
+    {
+      "key": "tsconfig",
+      "label": "TypeScript",
+      "repos": 1077,
+      "rawScoreGap": 0,
+      "scoreGap": 1.6973073351903436,
+      "densityGap": 0.0599988302763306
+    },
+    {
+      "key": "security",
+      "label": "SECURITY.md",
+      "repos": 1567,
+      "rawScoreGap": -9,
+      "scoreGap": 0.9680918953414167,
+      "densityGap": -0.46657625252034596
+    },
+    {
+      "key": "eslintFlat",
+      "label": "ESLint flat config",
+      "repos": 524,
+      "rawScoreGap": -4,
+      "scoreGap": 0.7137404580152672,
+      "densityGap": -0.4725766222500277
+    },
+    {
+      "key": "prettier",
+      "label": "Prettier",
+      "repos": 584,
+      "rawScoreGap": -7,
+      "scoreGap": -2.8886986301369864,
+      "densityGap": 0.4944385044397132
+    },
+    {
+      "key": "codeql",
+      "label": "CodeQL",
+      "repos": 585,
+      "rawScoreGap": -13,
+      "scoreGap": -3.324786324786325,
+      "densityGap": -0.020494192480839273
+    },
+    {
+      "key": "renovate",
+      "label": "Renovate",
+      "repos": 468,
+      "rawScoreGap": -4,
+      "scoreGap": -3.4123931623931623,
+      "densityGap": 0.4101386137957634
+    },
+    {
+      "key": "editorconfig",
+      "label": ".editorconfig",
+      "repos": 1760,
+      "rawScoreGap": -9,
+      "scoreGap": -3.4988636363636365,
+      "densityGap": 0.09383278474772574
+    },
+    {
+      "key": "codeowners",
+      "label": "CODEOWNERS",
+      "repos": 967,
+      "rawScoreGap": -12,
+      "scoreGap": -4.082730093071355,
+      "densityGap": 0.13598464877259273
+    },
+    {
+      "key": "contributing",
+      "label": "CONTRIBUTING",
+      "repos": 3151,
+      "rawScoreGap": -13,
+      "scoreGap": -4.270043609527004,
+      "densityGap": -0.11888641579367623
+    },
+    {
+      "key": "prTemplate",
+      "label": "PR template",
+      "repos": 1791,
+      "rawScoreGap": -15,
+      "scoreGap": -4.781127861529872,
+      "densityGap": 0.040912357243036254
+    },
+    {
+      "key": "dependabot",
+      "label": "Dependabot",
+      "repos": 2174,
+      "rawScoreGap": -12,
+      "scoreGap": -4.856025758969642,
+      "densityGap": 0.09885013834560176
+    },
+    {
+      "key": "devcontainer",
+      "label": "Dev container",
+      "repos": 383,
+      "rawScoreGap": -15,
+      "scoreGap": -5.091383812010444,
+      "densityGap": -0.0356880108858629
+    },
+    {
+      "key": "issueTemplates",
+      "label": "Issue templates",
+      "repos": 2892,
+      "rawScoreGap": -17,
+      "scoreGap": -5.97797833935018,
+      "densityGap": 0.30155618372766035
+    },
+    {
+      "key": "changeset",
+      "label": "Changesets",
+      "repos": 107,
+      "rawScoreGap": -16,
+      "scoreGap": -6.158878504672897,
+      "densityGap": 0.1825624185721012
+    },
+    {
+      "key": "preCommit",
+      "label": "pre-commit",
+      "repos": 492,
+      "rawScoreGap": -14,
+      "scoreGap": -7.449186991869919,
+      "densityGap": -0.08658841971427232
+    }
+  ],
+  "scoreHistogram": [
+    47,
+    21,
+    29,
+    81,
+    271,
+    904,
+    2046,
+    1221,
+    1955,
+    3432
+  ],
+  "severity": {
+    "critical": 1589,
+    "warning": 220403,
+    "info": 286156
+  },
+  "exposure": {
+    "injection": 0.031,
+    "critical": 0.04,
+    "iac": 0.011,
+    "docker": 0.026,
+    "noLockfile": 0.043
+  },
+  "busFactor": {
+    "repos": 10007,
+    "over80": 0.311,
+    "bands": [
+      {
+        "label": "under 50%",
+        "share": 0.393
+      },
+      {
+        "label": "50–80%",
+        "share": 0.296
+      },
+      {
+        "label": "80–95%",
+        "share": 0.154
+      },
+      {
+        "label": "95% or more",
+        "share": 0.157
+      }
+    ],
+    "medianAuthors": 17,
+    "bySize": [
+      {
+        "size": "small",
+        "repos": 4175,
+        "over80": 0.353
+      },
+      {
+        "size": "mid-size",
+        "repos": 3730,
+        "over80": 0.311
+      },
+      {
+        "size": "large",
+        "repos": 1472,
+        "over80": 0.258
+      },
+      {
+        "size": "very large",
+        "repos": 630,
+        "over80": 0.165
+      }
+    ]
+  },
+  "age": [
+    {
+      "label": "before 2010",
+      "repos": 349,
+      "medianScore": 68,
+      "medianAuthors": 143
+    },
+    {
+      "label": "2010–2014",
+      "repos": 1605,
+      "medianScore": 80,
+      "medianAuthors": 69
+    },
+    {
+      "label": "2015–2018",
+      "repos": 2477,
+      "medianScore": 80,
+      "medianAuthors": 32
+    },
+    {
+      "label": "2019–2022",
+      "repos": 2511,
+      "medianScore": 78,
+      "medianAuthors": 16
+    },
+    {
+      "label": "2023 or later",
+      "repos": 3065,
+      "medianScore": 87,
+      "medianAuthors": 4
+    }
+  ],
+  "pulse": {
+    "repos": 205,
+    "activeLastMonth": 0.21,
+    "quietOverYear": 0.063,
+    "quietOverThreeYears": 0.024,
+    "dormantWithEol": 0,
+    "activeWithEol": 0
+  },
+  "testsByLanguage": [
+    {
+      "language": "Scala",
+      "repos": 196,
+      "withTests": 0.923,
+      "withCi": 0.888
+    },
+    {
+      "language": "Go",
+      "repos": 941,
+      "withTests": 0.91,
+      "withCi": 0.885
+    },
+    {
+      "language": "Ruby",
+      "repos": 422,
+      "withTests": 0.91,
+      "withCi": 0.91
+    },
+    {
+      "language": "PHP",
+      "repos": 608,
+      "withTests": 0.796,
+      "withCi": 0.763
+    },
+    {
+      "language": "TypeScript",
+      "repos": 1176,
+      "withTests": 0.779,
+      "withCi": 0.821
+    },
+    {
+      "language": "Java",
+      "repos": 647,
+      "withTests": 0.762,
+      "withCi": 0.652
+    },
+    {
+      "language": "Kotlin",
+      "repos": 454,
+      "withTests": 0.707,
+      "withCi": 0.773
+    },
+    {
+      "language": "Rust",
+      "repos": 631,
+      "withTests": 0.705,
+      "withCi": 0.903
+    },
+    {
+      "language": "Python",
+      "repos": 1417,
+      "withTests": 0.653,
+      "withCi": 0.635
+    },
+    {
+      "language": "JavaScript",
+      "repos": 1028,
+      "withTests": 0.595,
+      "withCi": 0.675
+    },
+    {
+      "language": "C++",
+      "repos": 503,
+      "withTests": 0.529,
+      "withCi": 0.728
+    },
+    {
+      "language": "Swift",
+      "repos": 474,
+      "withTests": 0.523,
+      "withCi": 0.7
+    },
+    {
+      "language": "C",
+      "repos": 317,
+      "withTests": 0.498,
+      "withCi": 0.58
+    },
+    {
+      "language": "C#",
+      "repos": 497,
+      "withTests": 0.419,
+      "withCi": 0.706
+    }
+  ],
+  "popularity": {
+    "repos": 6355,
+    "bands": [
+      {
+        "label": "under 100",
+        "repos": 386,
+        "medianScore": 86,
+        "gradeA": 0.409,
+        "density": 2.87
+      },
+      {
+        "label": "100–1k",
+        "repos": 2355,
+        "medianScore": 83,
+        "gradeA": 0.344,
+        "density": 2.77
+      },
+      {
+        "label": "1k–10k",
+        "repos": 2125,
+        "medianScore": 75,
+        "gradeA": 0.263,
+        "density": 2.21
+      },
+      {
+        "label": "10k–50k",
+        "repos": 1296,
+        "medianScore": 67,
+        "gradeA": 0.149,
+        "density": 1.34
+      },
+      {
+        "label": "50k+",
+        "repos": 193,
+        "medianScore": 69,
+        "gradeA": 0.223,
+        "density": 1.08
+      }
+    ]
+  },
+  "licenses": [
+    {
+      "license": "MIT",
+      "share": 0.443
+    },
+    {
+      "license": "Apache-2.0",
+      "share": 0.239
+    },
+    {
+      "license": "other or none",
+      "share": 0.188
+    },
+    {
+      "license": "GPL-3.0",
+      "share": 0.052
+    },
+    {
+      "license": "BSD-3-Clause",
+      "share": 0.033
+    },
+    {
+      "license": "AGPL-3.0",
+      "share": 0.024
+    },
+    {
+      "license": "GPL-2.0",
+      "share": 0.011
+    },
+    {
+      "license": "others",
+      "share": 0.01
+    }
+  ],
+  "scorecard": {
+    "repos": 3365,
+    "medianScorecard": 4.3,
+    "spearman": -0.21,
+    "bands": [
+      {
+        "label": "0–4",
+        "repos": 1441,
+        "medianOurScore": 82
+      },
+      {
+        "label": "4–6",
+        "repos": 1315,
+        "medianOurScore": 70
+      },
+      {
+        "label": "6–8",
+        "repos": 532,
+        "medianOurScore": 67
+      },
+      {
+        "label": "8–10",
+        "repos": 77,
+        "medianOurScore": 71
+      }
+    ],
+    "pinned": {
+      "repos": 2688,
+      "flaggedWhenScorecardGood": 0.14,
+      "flaggedWhenScorecardBad": 0.919
+    },
+    "tokens": {
+      "repos": 2585,
+      "flaggedWhenScorecardGood": 0.008,
+      "flaggedWhenScorecardBad": 0.866
+    }
+  },
+  "dependencyLicenses": {
+    "published": false,
+    "npmRepos": 3156,
+    "anyShipped": 0.008,
+    "network": 0.002,
+    "strong": 0.006,
+    "proprietary": 0.001,
+    "devOnly": 0.042
+  },
+  "vulnerableDeps": {
+    "repos": 10007,
+    "checkedAt": "2026-11-16",
+    "any": 0.376,
+    "shipped": 0.33,
+    "critical": 0.175,
+    "medianAffected": 11,
+    "byEcosystem": [
+      {
+        "ecosystem": "Go",
+        "repos": 1089,
+        "share": 0.595
+      },
+      {
+        "ecosystem": "Packagist",
+        "repos": 606,
+        "share": 0.533
+      },
+      {
+        "ecosystem": "crates.io",
+        "repos": 847,
+        "share": 0.511
+      },
+      {
+        "ecosystem": "npm",
+        "repos": 3192,
+        "share": 0.395
+      },
+      {
+        "ecosystem": "RubyGems",
+        "repos": 603,
+        "share": 0.358
+      },
+      {
+        "ecosystem": "PyPI",
+        "repos": 1677,
+        "share": 0.321
+      }
+    ],
+    "topPackages": [
+      {
+        "name": "golang.org/x/net",
+        "share": 0.043
+      },
+      {
+        "name": "minimatch",
+        "share": 0.041
+      },
+      {
+        "name": "golang.org/x/crypto",
+        "share": 0.039
+      },
+      {
+        "name": "brace-expansion",
+        "share": 0.034
+      },
+      {
+        "name": "source-map-js",
+        "share": 0.031
+      },
+      {
+        "name": "qs",
+        "share": 0.03
+      },
+      {
+        "name": "form-data",
+        "share": 0.027
+      },
+      {
+        "name": "postcss",
+        "share": 0.027
+      },
+      {
+        "name": "zod",
+        "share": 0.027
+      },
+      {
+        "name": "nanoid",
+        "share": 0.027
+      }
+    ]
+  },
+  "toolWars": {
+    "jsPackageManagers": {
+      "2016": {
+        "repos": 50,
+        "packageLock": 0.02,
+        "yarnLock": 0.98,
+        "pnpmLock": 0,
+        "bunLock": 0
+      },
+      "2017": {
+        "repos": 293,
+        "packageLock": 0.706,
+        "yarnLock": 0.457,
+        "pnpmLock": 0,
+        "bunLock": 0
+      },
+      "2018": {
+        "repos": 512,
+        "packageLock": 0.678,
+        "yarnLock": 0.451,
+        "pnpmLock": 0,
+        "bunLock": 0
+      },
+      "2019": {
+        "repos": 674,
+        "packageLock": 0.675,
+        "yarnLock": 0.433,
+        "pnpmLock": 0.001,
+        "bunLock": 0
+      },
+      "2020": {
+        "repos": 850,
+        "packageLock": 0.656,
+        "yarnLock": 0.432,
+        "pnpmLock": 0.006,
+        "bunLock": 0
+      },
+      "2021": {
+        "repos": 1007,
+        "packageLock": 0.638,
+        "yarnLock": 0.405,
+        "pnpmLock": 0.029,
+        "bunLock": 0
+      },
+      "2022": {
+        "repos": 1133,
+        "packageLock": 0.612,
+        "yarnLock": 0.364,
+        "pnpmLock": 0.091,
+        "bunLock": 0.001
+      },
+      "2023": {
+        "repos": 1236,
+        "packageLock": 0.584,
+        "yarnLock": 0.324,
+        "pnpmLock": 0.147,
+        "bunLock": 0.003
+      },
+      "2024": {
+        "repos": 1339,
+        "packageLock": 0.573,
+        "yarnLock": 0.28,
+        "pnpmLock": 0.191,
+        "bunLock": 0.016
+      },
+      "2025": {
+        "repos": 1504,
+        "packageLock": 0.561,
+        "yarnLock": 0.225,
+        "pnpmLock": 0.232,
+        "bunLock": 0.031
+      },
+      "2026": {
+        "repos": 1830,
+        "packageLock": 0.563,
+        "yarnLock": 0.153,
+        "pnpmLock": 0.268,
+        "bunLock": 0.046
+      }
+    },
+    "pythonPackaging": {
+      "2016": {
+        "repos": 112,
+        "requirements": 1,
+        "pipenv": 0,
+        "poetryLock": 0,
+        "uvLock": 0
+      },
+      "2017": {
+        "repos": 149,
+        "requirements": 0.993,
+        "pipenv": 0.02,
+        "poetryLock": 0,
+        "uvLock": 0
+      },
+      "2018": {
+        "repos": 182,
+        "requirements": 0.945,
+        "pipenv": 0.099,
+        "poetryLock": 0.011,
+        "uvLock": 0
+      },
+      "2019": {
+        "repos": 216,
+        "requirements": 0.907,
+        "pipenv": 0.125,
+        "poetryLock": 0.042,
+        "uvLock": 0
+      },
+      "2020": {
+        "repos": 254,
+        "requirements": 0.894,
+        "pipenv": 0.087,
+        "poetryLock": 0.075,
+        "uvLock": 0
+      },
+      "2021": {
+        "repos": 301,
+        "requirements": 0.887,
+        "pipenv": 0.076,
+        "poetryLock": 0.093,
+        "uvLock": 0
+      },
+      "2022": {
+        "repos": 329,
+        "requirements": 0.863,
+        "pipenv": 0.07,
+        "poetryLock": 0.109,
+        "uvLock": 0
+      },
+      "2023": {
+        "repos": 405,
+        "requirements": 0.84,
+        "pipenv": 0.059,
+        "poetryLock": 0.141,
+        "uvLock": 0
+      },
+      "2024": {
+        "repos": 463,
+        "requirements": 0.812,
+        "pipenv": 0.045,
+        "poetryLock": 0.151,
+        "uvLock": 0.028
+      },
+      "2025": {
+        "repos": 573,
+        "requirements": 0.712,
+        "pipenv": 0.031,
+        "poetryLock": 0.091,
+        "uvLock": 0.209
+      },
+      "2026": {
+        "repos": 721,
+        "requirements": 0.637,
+        "pipenv": 0.024,
+        "poetryLock": 0.061,
+        "uvLock": 0.311
+      }
+    },
+    "jsLinters": {
+      "2016": {
+        "repos": 185,
+        "eslintLegacy": 1,
+        "eslintFlat": 0,
+        "biome": 0
+      },
+      "2017": {
+        "repos": 255,
+        "eslintLegacy": 1,
+        "eslintFlat": 0,
+        "biome": 0
+      },
+      "2018": {
+        "repos": 330,
+        "eslintLegacy": 1,
+        "eslintFlat": 0,
+        "biome": 0
+      },
+      "2019": {
+        "repos": 411,
+        "eslintLegacy": 1,
+        "eslintFlat": 0,
+        "biome": 0
+      },
+      "2020": {
+        "repos": 538,
+        "eslintLegacy": 1,
+        "eslintFlat": 0,
+        "biome": 0
+      },
+      "2021": {
+        "repos": 625,
+        "eslintLegacy": 1,
+        "eslintFlat": 0,
+        "biome": 0
+      },
+      "2022": {
+        "repos": 706,
+        "eslintLegacy": 1,
+        "eslintFlat": 0.001,
+        "biome": 0
+      },
+      "2023": {
+        "repos": 783,
+        "eslintLegacy": 0.974,
+        "eslintFlat": 0.024,
+        "biome": 0.005
+      },
+      "2024": {
+        "repos": 843,
+        "eslintLegacy": 0.73,
+        "eslintFlat": 0.231,
+        "biome": 0.051
+      },
+      "2025": {
+        "repos": 957,
+        "eslintLegacy": 0.525,
+        "eslintFlat": 0.409,
+        "biome": 0.092
+      },
+      "2026": {
+        "repos": 1017,
+        "eslintLegacy": 0.39,
+        "eslintFlat": 0.518,
+        "biome": 0.117
+      }
+    },
+    "bundlers": {
+      "2016": {
+        "repos": 37,
+        "webpack": 1,
+        "vite": 0
+      },
+      "2017": {
+        "repos": 60,
+        "webpack": 1,
+        "vite": 0
+      },
+      "2018": {
+        "repos": 78,
+        "webpack": 1,
+        "vite": 0
+      },
+      "2019": {
+        "repos": 97,
+        "webpack": 1,
+        "vite": 0
+      },
+      "2020": {
+        "repos": 105,
+        "webpack": 1,
+        "vite": 0
+      },
+      "2021": {
+        "repos": 114,
+        "webpack": 0.921,
+        "vite": 0.079
+      },
+      "2022": {
+        "repos": 137,
+        "webpack": 0.708,
+        "vite": 0.299
+      },
+      "2023": {
+        "repos": 182,
+        "webpack": 0.516,
+        "vite": 0.495
+      },
+      "2024": {
+        "repos": 204,
+        "webpack": 0.451,
+        "vite": 0.549
+      },
+      "2025": {
+        "repos": 228,
+        "webpack": 0.368,
+        "vite": 0.632
+      },
+      "2026": {
+        "repos": 320,
+        "webpack": 0.228,
+        "vite": 0.772
+      }
+    }
+  },
+  "ai": {
+    "repos": 10007,
+    "any": 0.185,
+    "byTool": [
+      {
+        "tool": "aiAgents",
+        "share": 0.123
+      },
+      {
+        "tool": "aiClaude",
+        "share": 0.112
+      },
+      {
+        "tool": "aiCopilot",
+        "share": 0.022
+      },
+      {
+        "tool": "aiCursor",
+        "share": 0.007
+      },
+      {
+        "tool": "aiGemini",
+        "share": 0.005
+      },
+      {
+        "tool": "aiWindsurf",
+        "share": 0.001
+      }
+    ]
+  },
+  "actionVersions": [
+    {
+      "name": "actions/checkout",
+      "repos": 6640,
+      "outdated": 0.194,
+      "current": 4,
+      "majors": [
+        {
+          "major": 1,
+          "share": 0.016
+        },
+        {
+          "major": 2,
+          "share": 0.092
+        },
+        {
+          "major": 3,
+          "share": 0.086
+        },
+        {
+          "major": 4,
+          "share": 0.333
+        },
+        {
+          "major": 5,
+          "share": 0.041
+        },
+        {
+          "major": 6,
+          "share": 0.12
+        },
+        {
+          "major": 7,
+          "share": 0.312
+        }
+      ]
+    },
+    {
+      "name": "actions/setup-node",
+      "repos": 1984,
+      "outdated": 0.114,
+      "current": 4,
+      "majors": [
+        {
+          "major": 1,
+          "share": 0.026
+        },
+        {
+          "major": 2,
+          "share": 0.018
+        },
+        {
+          "major": 3,
+          "share": 0.071
+        },
+        {
+          "major": 4,
+          "share": 0.362
+        },
+        {
+          "major": 5,
+          "share": 0.037
+        },
+        {
+          "major": 6,
+          "share": 0.155
+        },
+        {
+          "major": 7,
+          "share": 0.332
+        }
+      ]
+    },
+    {
+      "name": "actions/setup-python",
+      "repos": 1158,
+      "outdated": 0.186,
+      "current": 5,
+      "majors": [
+        {
+          "major": 1,
+          "share": 0.016
+        },
+        {
+          "major": 2,
+          "share": 0.054
+        },
+        {
+          "major": 3,
+          "share": 0.022
+        },
+        {
+          "major": 4,
+          "share": 0.094
+        },
+        {
+          "major": 5,
+          "share": 0.335
+        },
+        {
+          "major": 6,
+          "share": 0.172
+        },
+        {
+          "major": 7,
+          "share": 0.307
+        }
+      ]
+    },
+    {
+      "name": "actions/cache",
+      "repos": 1437,
+      "outdated": 0.138,
+      "current": 4,
+      "majors": [
+        {
+          "major": 1,
+          "share": 0.011
+        },
+        {
+          "major": 2,
+          "share": 0.031
+        },
+        {
+          "major": 3,
+          "share": 0.095
+        },
+        {
+          "major": 4,
+          "share": 0.349
+        },
+        {
+          "major": 5,
+          "share": 0.12
+        },
+        {
+          "major": 6,
+          "share": 0.393
+        }
+      ]
+    },
+    {
+      "name": "actions/upload-artifact",
+      "repos": 2600,
+      "outdated": 0.028,
+      "current": 4,
+      "majors": [
+        {
+          "major": 1,
+          "share": 0.004
+        },
+        {
+          "major": 2,
+          "share": 0.011
+        },
+        {
+          "major": 3,
+          "share": 0.013
+        },
+        {
+          "major": 4,
+          "share": 0.423
+        },
+        {
+          "major": 5,
+          "share": 0.025
+        },
+        {
+          "major": 6,
+          "share": 0.042
+        },
+        {
+          "major": 7,
+          "share": 0.482
+        }
+      ]
+    }
+  ],
+  "actionPinning": {
+    "repos": 6802,
+    "usesShaPinned": 0.37,
+    "reposFullyPinned": 0.152
+  },
+  "dockerBases": {
+    "repos": 1982,
+    "families": [
+      {
+        "family": "Alpine",
+        "share": 0.381
+      },
+      {
+        "family": "Debian",
+        "share": 0.332
+      },
+      {
+        "family": "other",
+        "share": 0.279
+      },
+      {
+        "family": "language image (full)",
+        "share": 0.249
+      },
+      {
+        "family": "Ubuntu",
+        "share": 0.156
+      },
+      {
+        "family": "scratch / busybox",
+        "share": 0.094
+      },
+      {
+        "family": "distroless / Wolfi",
+        "share": 0.07
+      },
+      {
+        "family": "RHEL family",
+        "share": 0.041
+      },
+      {
+        "family": "service image",
+        "share": 0.022
+      }
+    ],
+    "latestOrUntagged": 0.234,
+    "digestPinned": 0.054
+  },
+  "corpus": {
+    "repos": 10007,
+    "linesOfCode": 594369215,
+    "files": 6988513,
+    "commits": 13485978,
+    "contributorsSummed": 845967,
+    "handPicked": 8391,
+    "randomLayer": 1616,
+    "randomMedianStars": 28,
+    "randomPopulation": "public, not a fork, not archived, stars >= 10, pushed since 2025-11-09, created 2010-01-01..2026-10-10",
+    "stars": 57710802,
+    "medianStars": 2991,
+    "under1kStars": 0.398,
+    "activeLastYear": 0.005,
+    "languages": 14,
+    "vulnerableApps": 59,
+    "labelled": 1893
+  },
+  "tracks": [
+    {
+      "id": "general",
+      "label": "General",
+      "population": "Every hand-picked repository in the corpus.",
+      "purpose": "Coverage and the cuts on /state (language, size, tools).",
+      "labelsPerRule": 10,
+      "repos": 8391,
+      "medianScore": 80,
+      "labelled": 1281,
+      "precision": 0.779,
+      "rulesFiring": 68,
+      "rulesAtTarget": 37
+    },
+    {
+      "id": "random",
+      "label": "Random layer",
+      "population": "Repositories drawn at random from active public GitHub projects (see random-layer.mjs).",
+      "purpose": "Corpus-wide percentages without selection bias.",
+      "labelsPerRule": 5,
+      "repos": 1616,
+      "medianScore": 90,
+      "labelled": 0,
+      "precision": null,
+      "rulesFiring": 49,
+      "rulesAtTarget": 0
+    },
+    {
+      "id": "security",
+      "label": "Security",
+      "population": "Deliberately vulnerable applications and labs.",
+      "purpose": "Recall: known holes are still found. Every high-confidence finding is labelled.",
+      "labelsPerRule": 30,
+      "repos": 63,
+      "medianScore": 57,
+      "labelled": 116,
+      "precision": 0.621,
+      "rulesFiring": 52,
+      "rulesAtTarget": 1
+    },
+    {
+      "id": "infra",
+      "label": "Infrastructure",
+      "population": "Repositories with at least 3 Terraform files, a Helm chart or a kustomization.",
+      "purpose": "Precision of IaC and CI rules, per format.",
+      "labelsPerRule": 30,
+      "repos": 429,
+      "medianScore": 72,
+      "labelled": 114,
+      "precision": 0.772,
+      "rulesFiring": 44,
+      "rulesAtTarget": 0
+    },
+    {
+      "id": "mobile",
+      "label": "Mobile",
+      "population": "Main language Swift, Kotlin or Dart, or at least 20 Swift or Dart files.",
+      "purpose": "Rules for languages that have few labels so far.",
+      "labelsPerRule": 30,
+      "repos": 1187,
+      "medianScore": 82,
+      "labelled": 96,
+      "precision": 0.844,
+      "rulesFiring": 44,
+      "rulesAtTarget": 0
+    },
+    {
+      "id": "webBackends",
+      "label": "Web backends",
+      "population": "Main language PHP, Ruby, Java, C#, Python or Go, and runs as a service: it ships a docker-compose / compose file.",
+      "purpose": "Injection, deserialisation, SSRF and dependency rules.",
+      "labelsPerRule": 30,
+      "repos": 673,
+      "medianScore": 75,
+      "labelled": 116,
+      "precision": 0.655,
+      "rulesFiring": 50,
+      "rulesAtTarget": 1
+    }
+  ],
+  "lowConfidenceHidden": 78862,
+  "shown": 508148,
+  "precision": {
+    "high": {
+      "tp": 697,
+      "fp": 103
+    },
+    "medium": {
+      "tp": 301,
+      "fp": 180
+    },
+    "low": {
+      "tp": 70,
+      "fp": 542
+    }
+  }
+}
