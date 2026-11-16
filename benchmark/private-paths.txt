@@ -14,3 +14,4 @@ benchmark/CYCLE-*.md
 datasets/
 benchmark/recall/cases/
 benchmark/recall-report.json
+benchmark/recall-report-advisories.json

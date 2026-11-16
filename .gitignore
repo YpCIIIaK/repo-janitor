@@ -89,3 +89,4 @@ benchmark/.local-rescans/
 /benchmark/recall/cases/
 /benchmark/recall-report.json
 /benchmark/.recall-cache/
+/benchmark/recall-report-advisories.json
