@@ -69,7 +69,7 @@
     "html-to-image": "^1.11.13",
     "input-otp": "1.4.2",
     "lucide-react": "^1.28.0",
-    "next": "16.3.8",
+    "next": "16.4.6",
     "next-themes": "^0.4.6",
     "react": "^19",
     "react-dom": "^19",
@@ -86,13 +86,13 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9.39.4",
-    "eslint-config-next": "16.3.8",
+    "eslint-config-next": "16.4.6",
     "postcss": "^8.5",
     "tailwindcss": "^4.2.0",
     "tw-animate-css": "1.3.3",
     "typescript": "5.7.3",
     "typescript-eslint": "^8.61.0",
-    "vitest": "^4.1.11"
+    "vitest": "^4.1.12"
   },
   "pnpm": {
     "comment": "CVE floors. Use `>=`, not `^`: a caret range that the already-locked version satisfies does not force an upgrade, so pnpm keeps the vulnerable resolution. Prefer an unversioned key — a `name@<exact-version>` selector writes the vulnerable string into the lockfile and the vulnerable-deps scanner reads it back. Deliberately absent: brace-expansion. GHSA-mh99-v99m-4gvg is fixed only in 5.0.8 with no backport, and forcing every consumer onto 5.x breaks minimatch@3 (`expand is not a function`), which eslint pulls in. The only path to it is eslint, so it cannot run in the deployed artefact — `pnpm audit --prod` is clean. This is exactly the build-only case the vulnerable-deps scanner scores as info rather than critical. Vite stays on the tested 7.x line; 7.3.6 closes the relevant advisories without an unnecessary build-tool major upgrade.",
@@ -101,11 +101,13 @@
       "browserslist": ">=4.28.7 <5",
       "postcss": ">=8.5.18",
       "lodash": ">=4.18.0",
-      "sharp": ">=0.35.0",
+      "sharp": ">=0.35.5",
       "js-yaml": ">=5.4.1",
       "source-map-js": ">=1.2.2",
-      "vite": ">=7.3.6 <8",
-      "esbuild": ">=0.28.1"
+      "vite": ">=7.3.8 <8",
+      "esbuild": ">=0.28.1",
+      "@vitest/mocker": ">=4.1.12 <5",
+      "minimatch@10": ">=10.2.6 <11"
     }
   }
 }
