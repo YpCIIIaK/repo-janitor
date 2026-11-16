@@ -73,3 +73,16 @@ benchmark/.gitlogcache/
 benchmark/.replay/
 benchmark/.replaycache/
 benchmark/.local-rescans/
+
+# Private benchmark data: synced with benchmark/private.mjs (see private-paths.txt)
+/benchmark/labels/
+/benchmark/reviews/
+/benchmark/corpus.json
+/benchmark/meta.json
+/benchmark/identities.json
+/benchmark/random-layer.json
+/benchmark/baseline.json
+/benchmark/REPORT.md
+/benchmark/STATS.md
+/benchmark/CYCLE-*.md
+/datasets/

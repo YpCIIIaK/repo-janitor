@@ -27,6 +27,9 @@ const here = dirname(fileURLToPath(import.meta.url))
 const root = join(here, "..")
 const archiveDir = join(here, ".archive")
 const BRANCH = process.env.BENCH_DATA_BRANCH || "bench-data"
+// Archives live in the private data repo, never on the public origin.
+const REMOTE = process.env.BENCH_DATA_REMOTE || "https://github.com/YpCIIIaK/repo-janitor-data"
+const LOCAL = `refs/bench-data/${BRANCH}`
 const CHUNK = 100
 
 function sh(cmd, args, opts = {}) {
@@ -95,10 +98,10 @@ function push() {
   const wt = join(here, ".archive-worktree")
   rmSync(wt, { recursive: true, force: true })
   sh("git", ["-C", root, "worktree", "prune"])
-  const exists = spawnSync("git", ["-C", root, "ls-remote", "--exit-code", "--heads", "origin", BRANCH]).status === 0
+  const exists = spawnSync("git", ["-C", root, "ls-remote", "--exit-code", "--heads", REMOTE, BRANCH]).status === 0
   if (exists) {
-    sh("git", ["-C", root, "fetch", "--quiet", "origin", BRANCH])
-    sh("git", ["-C", root, "worktree", "add", "--quiet", "-B", BRANCH, wt, `origin/${BRANCH}`])
+    sh("git", ["-C", root, "fetch", "--quiet", REMOTE, `+${BRANCH}:${LOCAL}`])
+    sh("git", ["-C", root, "worktree", "add", "--quiet", "-B", BRANCH, wt, LOCAL])
   } else {
     sh("git", ["-C", root, "worktree", "add", "--quiet", "--detach", wt])
     sh("git", ["-C", wt, "checkout", "--quiet", "--orphan", BRANCH])
@@ -115,15 +118,15 @@ function push() {
   const changed = spawnSync("git", ["-C", wt, "diff", "--cached", "--quiet"]).status !== 0
   if (changed) {
     sh("git", ["-C", wt, "commit", "--quiet", "-m", `bench-data: ${new Date().toISOString().slice(0, 10)} snapshot`])
-    sh("git", ["-C", wt, "push", "--quiet", "-u", "origin", BRANCH])
+    sh("git", ["-C", wt, "push", "--quiet", REMOTE, `HEAD:${BRANCH}`])
     console.log(`pushed to ${BRANCH}`)
   } else console.log("bench-data already up to date")
   sh("git", ["-C", root, "worktree", "remove", "--force", wt])
 }
 
 function pull(wanted) {
-  sh("git", ["-C", root, "fetch", "--quiet", "origin", BRANCH])
-  const show = (f) => spawnSync("git", ["-C", root, "show", `origin/${BRANCH}:${f}`], { maxBuffer: 1 << 30 })
+  sh("git", ["-C", root, "fetch", "--quiet", REMOTE, `+${BRANCH}:${LOCAL}`])
+  const show = (f) => spawnSync("git", ["-C", root, "show", `${LOCAL}:${f}`], { maxBuffer: 1 << 30 })
   const manifest = JSON.parse(show("manifest.json").stdout.toString())
   const ids = Object.entries(manifest.chunks)
     .filter(([, repos]) => !wanted.length || repos.some((r) => wanted.includes(r)))

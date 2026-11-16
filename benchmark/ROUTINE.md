@@ -203,3 +203,15 @@ New: <n> (tp <a>, fp <b>). Unsure: <list of finding ids with one-line reason>.
 3. Spot-check 10 random new labels (`git diff benchmark/labels`) against source.
 4. `lost TP` and vulnerable-app TPs unchanged or up.
 5. No edits outside the allowed files (`git diff --stat main`).
+
+## Private data
+
+Labels, reviews, the corpus, metadata, cycle reports and every scan archive live in the
+private repo `YpCIIIaK/repo-janitor-data`; the public repo keeps code and the anonymous
+aggregates the site reads (`stats.json`, `history.json`, `findings.json`,
+`lib/benchmark-scores.json`, `confidence-data.ts`).
+
+- Start of a cycle: `node benchmark/private.mjs pull` (clones to `../repo-janitor-data`).
+- End of a cycle: `node benchmark/private.mjs push "cycle …"` and `node benchmark/archive.mjs push`
+  (archives go to the private repo's `bench-data*` branches).
+- Never commit the paths in `benchmark/private-paths.txt` to the public repo; `.gitignore` covers them.

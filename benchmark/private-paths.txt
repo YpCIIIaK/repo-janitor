@@ -1,0 +1,14 @@
+# Benchmark data kept only in the private data repo (YpCIIIaK/repo-janitor-data).
+# Public site builds from aggregates only: stats.json, history.json, findings.json,
+# lib/benchmark-scores.json and packages/core/src/confidence-data.ts.
+benchmark/labels/
+benchmark/reviews/
+benchmark/corpus.json
+benchmark/meta.json
+benchmark/identities.json
+benchmark/random-layer.json
+benchmark/baseline.json
+benchmark/REPORT.md
+benchmark/STATS.md
+benchmark/CYCLE-*.md
+datasets/

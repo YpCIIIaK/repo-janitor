@@ -1,10 +1,12 @@
 import { test } from "node:test"
 import assert from "node:assert/strict"
-import { readFileSync } from "node:fs"
+import { existsSync, readFileSync } from "node:fs"
 import { STATS_CONTROL_NAME_RE, SECURITY_CONTROL_NAME_RE } from "./control-names.mjs"
 
-test("all 56 frozen training controls remain in the statistics cohort", () => {
-  const controls = JSON.parse(readFileSync(new URL("./reviews/2026-11-15-1-controls.json", import.meta.url)))
+// The control list is private data (benchmark/private.mjs pull); CI on the public repo has no copy.
+const controlsFile = new URL("./reviews/2026-11-15-1-controls.json", import.meta.url)
+test("all 56 frozen training controls remain in the statistics cohort", { skip: !existsSync(controlsFile) && "private data not pulled" }, () => {
+  const controls = JSON.parse(readFileSync(controlsFile))
   assert.equal(Object.keys(controls).length, 56)
   for (const name of Object.keys(controls)) assert.equal(STATS_CONTROL_NAME_RE.test(name), true, name)
 })

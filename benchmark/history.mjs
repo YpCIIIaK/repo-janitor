@@ -22,7 +22,9 @@ const here = dirname(fileURLToPath(import.meta.url))
 const cacheDir = join(here, ".cache")
 const outDir = join(here, ".history")
 mkdirSync(outDir, { recursive: true })
-const corpus = JSON.parse(readFileSync(join(here, "corpus.json"), "utf8"))
+// Private data (benchmark/private.mjs pull); only the CLI entry point below needs it.
+const corpusFile = join(here, "corpus.json")
+const corpus = existsSync(corpusFile) ? JSON.parse(readFileSync(corpusFile, "utf8")) : null
 
 /**
  * Practices tracked by the path that marks them. `added` is the first commit
@@ -260,6 +262,7 @@ export function buildRecord(repo, data, outFile) {
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  if (!corpus) throw new Error("benchmark/corpus.json missing: run `node benchmark/private.mjs pull` first")
 // `history.mjs repo…` refreshes just those repos (run.mjs calls it before it
 // drops a clone); the corpus-wide curves are always rebuilt from every cached file.
 const only = process.argv.slice(2)
