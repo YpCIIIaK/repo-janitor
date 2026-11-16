@@ -1,15 +1,15 @@
 {
- "overall": 0.554,
+ "overall": 0.557,
  "scanners": {
   "eol-runtime": 0.944,
   "todo-debt": 0.911,
   "broken-doc-links": 0.66,
   "bus-factor": 0.848,
   "workflow-security": 0.954,
-  "commented-code": 0.536,
   "duplicate-code": 0.722,
+  "commented-code": 0.549,
   "skipped-tests": 0.815,
-  "insecure-code": 0.168,
+  "insecure-code": 0.17,
   "docs-drift": 0.63,
   "lockfile-drift": 0.905,
   "dead-code": 0.8,
@@ -2351,8 +2351,7 @@
    "commented-roncoo-pay-common-core/src/main/java/com/roncoo/pay/common/core/utils/DateUtils.java:590",
    "commented-roncoo-pay-web-boss/src/main/webapp/common/scan/pay_files/common.js:29",
    "commented-roncoo-pay-web-boss/src/main/webapp/common/scan/pay_files/common.js:31663",
-   "commented-roncoo-pay-web-boss/src/main/webapp/common/scan/pay_files/common.js:39",
-   "commented-roncoo-pay-web-boss/src/main/webapp/common/scan/pay_files/common.js:9131"
+   "commented-roncoo-pay-web-boss/src/main/webapp/common/scan/pay_files/common.js:39"
   ],
   "mbleigh-acts-as-taggable-on": [
    "action-tag-.github/workflows/spec.yml-58",
@@ -3100,9 +3099,6 @@
   "albertlauncher-albert": [
    "commented-include/albert/rankitem.h:33"
   ],
-  "moudey-shell": [
-   "commented-src/3rdparty/plutosvg/plutosvg/source/stb_truetype.h:3079"
-  ],
   "aspnetboilerplate-aspnetboilerplate": [
    "commented-test/Abp.BlobStoring.FileSystem.Tests/Abp/BlobStoring/FileSystem/AbpBlobStoringFileSystemTestModule.cs:33"
   ],
@@ -3373,9 +3369,6 @@
   "lingframe-lingframe": [
    "insecure-sql-interpolated-lingframe-examples/lingframe-example-ling-user-canary/src/main/java/com/lingframe/example/user/canary/service/impl/UserServiceImpl.java:146"
   ],
-  "creativemd-littletiles": [
-   "insecure-sql-interpolated-src/main/java/team/creative/littletiles/client/player/LittleClientPlayerHandler.java:1089"
-  ],
   "ilovepdf-ilovepdf-php": [
    "insecure-ssrf-src/Task.php:477"
   ],
@@ -3400,9 +3393,6 @@
   "ifreeovo-i18n-cli": [
    "insecure-random-for-secret-packages/translate-utils/src/baidu.ts:19"
   ],
-  "aiven-open-klaw": [
-   "insecure-sql-interpolated-core/src/main/java/io/aiven/klaw/listeners/MetadataListener.java:47"
-  ],
   "lxcshine-zilan": [
    "insecure-exec-interpolated-Formula/weknora-lite.rb:72"
   ],
@@ -3418,24 +3408,14 @@
   "yuhengqin-quotern": [
    "insecure-localstorage-secret-apps/desktop/src/renderer/lib/utils.ts:61"
   ],
-  "transferia-transferia": [
-   "commented-pkg/abstract/storage.go:366"
-  ],
   "dry-rb-dry-logic": [
    "insecure-eval-dynamic-lib/dry/logic/operations/key.rb:16"
   ],
   "mck89-peast": [
    "insecure-exec-interpolated-lib/Peast/Query.php:62"
   ],
-  "vesoft-inc-nebula-java": [
-   "insecure-sql-interpolated-client/src/main/fbthrift/com/facebook/thrift/server/TNonblockingServer.java:454"
-  ],
   "higress-group-higress-console": [
-   "commented-backend/sdk/src/main/java/com/alibaba/higress/sdk/service/DomainServiceImpl.java:160",
-   "insecure-sql-interpolated-backend/console/src/main/java/com/alibaba/higress/console/service/KubernetesLoginAttemptStore.java:112"
-  ],
-  "arkworks-rs-r1cs-std": [
-   "commented-src/boolean/allocated.rs:82"
+   "commented-backend/sdk/src/main/java/com/alibaba/higress/sdk/service/DomainServiceImpl.java:160"
   ],
   "objecthub-swift-dynamicjson": [
    "commented-Sources/DynamicJSON/JSONSchema/JSONSchemaDraft2020.swift:252"
@@ -3455,9 +3435,6 @@
   "imperialcollegelondon-sharpy": [
    "insecure-py-os-system-sharpy/cases/templates/Ttail.py:709"
   ],
-  "webankfintech-defibus": [
-   "insecure-sql-interpolated-defibus-broker/src/main/java/com/webank/defibus/broker/consumequeue/ConsumeQueueManager.java:155"
-  ],
   "koedame-rails-mermaid-erd": [
    "insecure-eval-dynamic-lib/templates/index.html.erb:1659"
   ],
@@ -3469,9 +3446,6 @@
   ],
   "ruby-ostruct": [
    "insecure-eval-dynamic-lib/ostruct.rb:476"
-  ],
-  "blendogames-skindeep": [
-   "commented-cm/CollisionModel_rotate.cpp:71"
   ],
   "peeriot-myrmic": [
    "commented-swarm/sorg-common/src/serde.rs:55"

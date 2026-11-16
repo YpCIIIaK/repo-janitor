@@ -1,60 +1,76 @@
 {
-  "status": "in-progress",
-  "fullCorpusCurrent": false,
-  "sourceBase": "8ff45f7289970c0cfe196801ce26de45f0f53e20",
-  "projectTestsPassed": 1892,
-  "existingLiveAITestSkipped": 1,
-  "benchmarkHelperTestsPassed": 61,
-  "lintErrors": 0,
-  "existingLintWarnings": 8,
-  "coreTypecheck": "pass",
-  "dashboardTypecheck": "pass",
-  "packageBuilds": "pass",
+ "status": "in-progress",
+ "fullCorpusCurrent": false,
+ "sourceBase": "8ff45f7289970c0cfe196801ce26de45f0f53e20",
+ "projectTestsPassed": 1892,
+ "existingLiveAITestSkipped": 1,
+ "benchmarkHelperTestsPassed": 61,
+ "lintErrors": 0,
+ "existingLintWarnings": 8,
+ "coreTypecheck": "pass",
+ "dashboardTypecheck": "pass",
+ "packageBuilds": "pass",
+ "productionBuild": "pass",
+ "statsRouteSmoke": {
+  "statsRedirectsToState": true,
+  "coverageRendered": true,
+  "secondaryLanguagesRendered": true,
+  "snapshotLimitsRendered": true,
+  "uniqueCountRendered": true,
+  "recordsCountRendered": true
+ },
+ "frozenControls": 59,
+ "frozenHighSecurityIDs": 650,
+ "lostHighSecurityIDsOnInitialControlRescan": 0,
+ "reviewReplayCases": 41,
+ "reviewReplayTPPreserved": 8,
+ "reviewReplayFPRemoved": 7,
+ "originalBaselineGateOnPartialResults": "pass",
+ "fullCorpusGate": "pending",
+ "rescanPlan": {
+  "records": 10007,
+  "initialStale": 9804,
+  "commented-code": 8128,
+  "iac-security": 9087,
+  "insecure-code": 9259
+ },
+ "pendingSizeRetry": [
+  "pulumi-pulumi-aws"
+ ],
+ "newLabels": 0,
+ "oldLabelsFrozen": 2931,
+ "dataPublished": false,
+ "calibrationUpdated": false,
+ "statePageFollowup": {
   "productionBuild": "pass",
-  "statsRouteSmoke": {
-    "statsRedirectsToState": true,
-    "coverageRendered": true,
-    "secondaryLanguagesRendered": true,
-    "snapshotLimitsRendered": true,
-    "uniqueCountRendered": true,
-    "recordsCountRendered": true
+  "typecheck": "pass",
+  "changedFilesLint": "pass",
+  "httpSmoke": {
+   "downloadMatchesPublicSnapshotBytes": true,
+   "downloadHeader": true,
+   "downloadLink": true,
+   "practiceDetails": true,
+   "tpFpTable": true,
+   "precisionExplanation": true
+  }
+ },
+ "cloudRescanRunning": false,
+ "fullCorpusValidationLocation": "user-local-machine",
+ "localRescanVerification": "2026-11-16-1-local-rescan.json",
+ "completion": {
+  "rescanned": 9149,
+  "unreachable": 13,
+  "controls": {
+   "repos": 59,
+   "highIDs": 650,
+   "missing": 0
   },
-  "frozenControls": 59,
-  "frozenHighSecurityIDs": 650,
-  "lostHighSecurityIDsOnInitialControlRescan": 0,
-  "reviewReplayCases": 41,
-  "reviewReplayTPPreserved": 8,
-  "reviewReplayFPRemoved": 7,
-  "originalBaselineGateOnPartialResults": "pass",
-  "fullCorpusGate": "pending",
-  "rescanPlan": {
-    "records": 10007,
-    "initialStale": 9804,
-    "commented-code": 8128,
-    "iac-security": 9087,
-    "insecure-code": 9259
-  },
-  "pendingSizeRetry": [
-    "pulumi-pulumi-aws"
-  ],
-  "newLabels": 0,
-  "oldLabelsFrozen": 2931,
-  "dataPublished": false,
-  "calibrationUpdated": false,
-  "statePageFollowup": {
-    "productionBuild": "pass",
-    "typecheck": "pass",
-    "changedFilesLint": "pass",
-    "httpSmoke": {
-      "downloadMatchesPublicSnapshotBytes": true,
-      "downloadHeader": true,
-      "downloadLink": true,
-      "practiceDetails": true,
-      "tpFpTable": true,
-      "precisionExplanation": true
-    }
-  },
-  "cloudRescanRunning": false,
-  "fullCorpusValidationLocation": "user-local-machine",
-  "localRescanVerification": "2026-11-16-1-local-rescan.json"
+  "gate": "pass",
+  "lostTP": 0,
+  "osv": "all repos checked",
+  "tests": "940 passed",
+  "dataBranch": "bench-data-2026-11-16-1-full",
+  "dataCommit": "f07cf0794bbc164c97796147343e4b06d7efc75d",
+  "promoted": false
+ }
 }

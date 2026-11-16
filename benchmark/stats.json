@@ -1,30 +1,142 @@
 {
   "repos": 10007,
-  "generatedAt": "2026-11-15T18:33:52.098Z",
+  "generatedAt": "2026-11-16T10:29:45.395Z",
+  "dataCoverage": {
+    "records": 10007,
+    "inventories": 10007,
+    "metadataSnapshots": 10007,
+    "auditedMetadataSnapshots": 1714,
+    "legacyMetadataSnapshots": 8293,
+    "policyLimitedMetadataSnapshots": 339,
+    "metadataOldestDay": "2026-11-09",
+    "metadataNewestDay": "2026-11-15",
+    "formats": [
+      {
+        "name": "JavaScript",
+        "records": 4030,
+        "files": 354611
+      },
+      {
+        "name": "Python",
+        "records": 3117,
+        "files": 359017
+      },
+      {
+        "name": "TypeScript",
+        "records": 2255,
+        "files": 613029
+      },
+      {
+        "name": "C / C++",
+        "records": 1861,
+        "files": 335724
+      },
+      {
+        "name": "Java",
+        "records": 1213,
+        "files": 414905
+      },
+      {
+        "name": "Go",
+        "records": 1187,
+        "files": 362442
+      },
+      {
+        "name": "Kotlin",
+        "records": 904,
+        "files": 177466
+      },
+      {
+        "name": "Rust",
+        "records": 880,
+        "files": 139221
+      },
+      {
+        "name": "Swift",
+        "records": 874,
+        "files": 81363
+      },
+      {
+        "name": "PHP",
+        "records": 751,
+        "files": 222972
+      },
+      {
+        "name": "Ruby",
+        "records": 684,
+        "files": 115212
+      },
+      {
+        "name": "C#",
+        "records": 653,
+        "files": 296001
+      },
+      {
+        "name": "Vue",
+        "records": 368,
+        "files": 30497
+      },
+      {
+        "name": "Dart",
+        "records": 359,
+        "files": 80194
+      },
+      {
+        "name": "Terraform",
+        "records": 291,
+        "files": 39504
+      },
+      {
+        "name": "Scala",
+        "records": 237,
+        "files": 57901
+      },
+      {
+        "name": "Elixir",
+        "records": 152,
+        "files": 15305
+      },
+      {
+        "name": "Svelte",
+        "records": 109,
+        "files": 14123
+      },
+      {
+        "name": "Erlang",
+        "records": 90,
+        "files": 4628
+      },
+      {
+        "name": "Solidity",
+        "records": 37,
+        "files": 2037
+      }
+    ]
+  },
   "uniqueRepositories": 10000,
   "aliasRecords": 7,
   "grades": {
-    "A": 3434,
+    "A": 3432,
     "B": 2594,
-    "C": 2626,
+    "C": 2628,
     "D": 1175,
     "F": 178
   },
   "languages": {
     "Python": {
-      "repos": 1423,
+      "repos": 1417,
       "medianScore": 84,
-      "findingsPer1k": 2.27
+      "findingsPer1k": 2.26
     },
     "TypeScript": {
-      "repos": 1171,
+      "repos": 1176,
       "medianScore": 81,
-      "findingsPer1k": 2.05
+      "findingsPer1k": 2.07
     },
     "JavaScript": {
-      "repos": 1019,
+      "repos": 1028,
       "medianScore": 85,
-      "findingsPer1k": 2.26
+      "findingsPer1k": 2.29
     },
     "Go": {
       "repos": 941,
@@ -37,14 +149,14 @@
       "findingsPer1k": 0
     },
     "Java": {
-      "repos": 645,
+      "repos": 647,
       "medianScore": 79,
       "findingsPer1k": 2.41
     },
     "Rust": {
       "repos": 631,
       "medianScore": 68,
-      "findingsPer1k": 1.98
+      "findingsPer1k": 1.99
     },
     "PHP": {
       "repos": 608,
@@ -72,9 +184,9 @@
       "findingsPer1k": 2.28
     },
     "Ruby": {
-      "repos": 423,
+      "repos": 422,
       "medianScore": 84,
-      "findingsPer1k": 2.54
+      "findingsPer1k": 2.56
     },
     "C": {
       "repos": 317,
@@ -85,11 +197,6 @@
       "repos": 196,
       "medianScore": 66,
       "findingsPer1k": 3.76
-    },
-    "Vue": {
-      "repos": 9,
-      "medianScore": 84,
-      "findingsPer1k": 3.24
     }
   },
   "ruleShare": {
@@ -100,7 +207,7 @@
     "todo": 0.464,
     "workflow-action-tag": 0.449,
     "hygiene-no-tests": 0.275,
-    "commented-code": 0.268,
+    "commented-code": 0.267,
     "hygiene-no-ci": 0.261,
     "dead-export": 0.18,
     "doc-link": 0.171,
@@ -120,30 +227,30 @@
     "docs-script": 0.006
   },
   "ci": {
-    "withActions": 6971,
+    "withActions": 6987,
     "unpinned": 5873,
     "thirdPartyUnpinned": 4496,
     "noPermissions": 4681
   },
   "eol": {
     "node": {
-      "repos": 2475,
-      "eol": 919
+      "repos": 3147,
+      "eol": 1143
     },
     "python": {
-      "repos": 1423,
-      "eol": 486
+      "repos": 1417,
+      "eol": 483
     }
   },
   "checklist": {
-    "readme": 0.353,
-    "license": 0.3,
-    "contributing": 0.116,
-    "security": 0.052,
-    "codeOfConduct": 0.053,
-    "changelog": 0.101,
+    "readme": 0.023,
+    "license": 0.011,
+    "contributing": 0.039,
+    "security": 0.021,
+    "codeOfConduct": 0.02,
+    "changelog": 0.002,
     "ci": 0.737,
-    "tests": 0.683
+    "tests": 0.655
   },
   "todo": {
     "dated": 179175,
@@ -178,20 +285,20 @@
     ]
   },
   "activity": {
-    "active": 1100,
-    "activeMedian": 82,
-    "quiet": 7896,
-    "quietMedian": 81
+    "active": 17,
+    "activeMedian": 94,
+    "quiet": 9952,
+    "quietMedian": 82
   },
   "sizeBands": [
     {
       "label": "< 5k lines",
-      "repos": 4168,
+      "repos": 4175,
       "medianScore": 91
     },
     {
       "label": "5k–50k",
-      "repos": 3734,
+      "repos": 3730,
       "medianScore": 73
     },
     {
@@ -201,7 +308,7 @@
     },
     {
       "label": "> 200k",
-      "repos": 633,
+      "repos": 630,
       "medianScore": 66
     }
   ],
@@ -349,7 +456,7 @@
     },
     {
       "repo": "presidentbeef/inject-some-sql",
-      "language": "Ruby",
+      "language": "JavaScript",
       "high": 15,
       "crossFile": 0
     },
@@ -397,7 +504,7 @@
     },
     {
       "repo": "adeyosemanputra/pygoat",
-      "language": "Python",
+      "language": "JavaScript",
       "high": 6,
       "crossFile": 0
     },
@@ -433,7 +540,7 @@
     },
     {
       "repo": "RhinoSecurityLabs/cloudgoat",
-      "language": "Python",
+      "language": "JavaScript",
       "high": 4,
       "crossFile": 0
     },
@@ -487,13 +594,13 @@
     },
     {
       "repo": "fportantier/vulpy",
-      "language": "Python",
+      "language": "JavaScript",
       "high": 2,
       "crossFile": 2
     },
     {
       "repo": "we45/Vulnerable-Flask-App",
-      "language": "Python",
+      "language": "JavaScript",
       "high": 2,
       "crossFile": 0
     },
@@ -595,7 +702,7 @@
     },
     {
       "repo": "OWASP/Serverless-Goat",
-      "language": "Python",
+      "language": "JavaScript",
       "high": 0,
       "crossFile": 0
     },
@@ -649,7 +756,7 @@
     },
     {
       "repo": "sonuoffsec/DVAP",
-      "language": "Python",
+      "language": "TypeScript",
       "high": 0,
       "crossFile": 0
     },
@@ -679,95 +786,95 @@
       "repos": 123,
       "rawScoreGap": 1,
       "scoreGap": 6.414634146341464,
-      "densityGap": -1.1102660857041933
+      "densityGap": -1.1111382512324322
     },
     {
       "key": "tsconfig",
       "label": "TypeScript",
       "repos": 1077,
       "rawScoreGap": 0,
-      "scoreGap": 1.702878365831012,
-      "densityGap": 0.04508958829985394
+      "scoreGap": 1.6973073351903436,
+      "densityGap": 0.0599988302763306
     },
     {
       "key": "security",
       "label": "SECURITY.md",
       "repos": 1567,
       "rawScoreGap": -9,
-      "scoreGap": 0.797702616464582,
-      "densityGap": -0.4795687146831166
+      "scoreGap": 0.9680918953414167,
+      "densityGap": -0.46657625252034596
     },
     {
       "key": "eslintFlat",
       "label": "ESLint flat config",
       "repos": 524,
       "rawScoreGap": -4,
-      "scoreGap": 0.7175572519083969,
-      "densityGap": -0.5320266979020104
+      "scoreGap": 0.7137404580152672,
+      "densityGap": -0.4725766222500277
     },
     {
       "key": "prettier",
       "label": "Prettier",
       "repos": 584,
       "rawScoreGap": -7,
-      "scoreGap": -2.4726027397260273,
-      "densityGap": 0.49071911211658886
+      "scoreGap": -2.8886986301369864,
+      "densityGap": 0.4944385044397132
     },
     {
       "key": "codeql",
       "label": "CodeQL",
       "repos": 585,
-      "rawScoreGap": -14,
+      "rawScoreGap": -13,
       "scoreGap": -3.324786324786325,
-      "densityGap": -0.018187061097783338
+      "densityGap": -0.020494192480839273
     },
     {
       "key": "renovate",
       "label": "Renovate",
       "repos": 468,
       "rawScoreGap": -4,
-      "scoreGap": -3.4038461538461537,
-      "densityGap": 0.4117574062148294
+      "scoreGap": -3.4123931623931623,
+      "densityGap": 0.4101386137957634
     },
     {
       "key": "editorconfig",
       "label": ".editorconfig",
       "repos": 1760,
       "rawScoreGap": -9,
-      "scoreGap": -3.497159090909091,
-      "densityGap": 0.09988864561586129
-    },
-    {
-      "key": "contributing",
-      "label": "CONTRIBUTING",
-      "repos": 3151,
-      "rawScoreGap": -13,
-      "scoreGap": -4.269798657718121,
-      "densityGap": -0.11666501364237569
+      "scoreGap": -3.4988636363636365,
+      "densityGap": 0.09383278474772574
     },
     {
       "key": "codeowners",
       "label": "CODEOWNERS",
       "repos": 967,
       "rawScoreGap": -12,
-      "scoreGap": -4.411582213029989,
-      "densityGap": 0.14507314968293022
+      "scoreGap": -4.082730093071355,
+      "densityGap": 0.13598464877259273
     },
     {
-      "key": "dependabot",
-      "label": "Dependabot",
-      "repos": 2174,
-      "rawScoreGap": -12,
-      "scoreGap": -4.8514259429622815,
-      "densityGap": 0.10035732939227011
+      "key": "contributing",
+      "label": "CONTRIBUTING",
+      "repos": 3151,
+      "rawScoreGap": -13,
+      "scoreGap": -4.270043609527004,
+      "densityGap": -0.11888641579367623
     },
     {
       "key": "prTemplate",
       "label": "PR template",
       "repos": 1791,
       "rawScoreGap": -15,
-      "scoreGap": -5.046342825237297,
-      "densityGap": 0.04151760411109187
+      "scoreGap": -4.781127861529872,
+      "densityGap": 0.040912357243036254
+    },
+    {
+      "key": "dependabot",
+      "label": "Dependabot",
+      "repos": 2174,
+      "rawScoreGap": -12,
+      "scoreGap": -4.856025758969642,
+      "densityGap": 0.09885013834560176
     },
     {
       "key": "devcontainer",
@@ -775,31 +882,31 @@
       "repos": 383,
       "rawScoreGap": -15,
       "scoreGap": -5.091383812010444,
-      "densityGap": -0.03199567870661895
+      "densityGap": -0.0356880108858629
     },
     {
       "key": "issueTemplates",
       "label": "Issue templates",
       "repos": 2892,
       "rawScoreGap": -17,
-      "scoreGap": -5.9790538100397255,
-      "densityGap": 0.31330722730779637
+      "scoreGap": -5.97797833935018,
+      "densityGap": 0.30155618372766035
     },
     {
       "key": "changeset",
       "label": "Changesets",
       "repos": 107,
       "rawScoreGap": -16,
-      "scoreGap": -6.280373831775701,
-      "densityGap": 0.18143442927279047
+      "scoreGap": -6.158878504672897,
+      "densityGap": 0.1825624185721012
     },
     {
       "key": "preCommit",
       "label": "pre-commit",
       "repos": 492,
-      "rawScoreGap": -15,
-      "scoreGap": -7.134146341463414,
-      "densityGap": -0.087638038435047
+      "rawScoreGap": -14,
+      "scoreGap": -7.449186991869919,
+      "densityGap": -0.08658841971427232
     }
   ],
   "scoreHistogram": [
@@ -809,20 +916,20 @@
     81,
     271,
     904,
-    2043,
-    1220,
-    1957,
-    3434
+    2046,
+    1221,
+    1955,
+    3432
   ],
   "severity": {
     "critical": 1589,
-    "warning": 220377,
-    "info": 286279
+    "warning": 220403,
+    "info": 286156
   },
   "exposure": {
     "injection": 0.031,
     "critical": 0.04,
-    "iac": 0.01,
+    "iac": 0.011,
     "docker": 0.026,
     "noLockfile": 0.043
   },
@@ -851,12 +958,12 @@
     "bySize": [
       {
         "size": "small",
-        "repos": 4168,
-        "over80": 0.352
+        "repos": 4175,
+        "over80": 0.353
       },
       {
         "size": "mid-size",
-        "repos": 3734,
+        "repos": 3730,
         "over80": 0.311
       },
       {
@@ -866,8 +973,8 @@
       },
       {
         "size": "very large",
-        "repos": 633,
-        "over80": 0.166
+        "repos": 630,
+        "over80": 0.165
       }
     ]
   },
@@ -904,128 +1011,128 @@
     }
   ],
   "pulse": {
-    "repos": 3562,
-    "activeLastMonth": 0,
-    "quietOverYear": 0.999,
-    "quietOverThreeYears": 0.999,
-    "dormantWithEol": 0.14,
+    "repos": 205,
+    "activeLastMonth": 0.21,
+    "quietOverYear": 0.063,
+    "quietOverThreeYears": 0.024,
+    "dormantWithEol": 0,
     "activeWithEol": 0
   },
   "testsByLanguage": [
     {
       "language": "Scala",
       "repos": 196,
-      "withTests": 0.929,
+      "withTests": 0.923,
       "withCi": 0.888
-    },
-    {
-      "language": "Ruby",
-      "repos": 423,
-      "withTests": 0.913,
-      "withCi": 0.91
     },
     {
       "language": "Go",
       "repos": 941,
-      "withTests": 0.911,
+      "withTests": 0.91,
       "withCi": 0.885
+    },
+    {
+      "language": "Ruby",
+      "repos": 422,
+      "withTests": 0.91,
+      "withCi": 0.91
     },
     {
       "language": "PHP",
       "repos": 608,
-      "withTests": 0.798,
-      "withCi": 0.765
+      "withTests": 0.796,
+      "withCi": 0.763
     },
     {
       "language": "TypeScript",
-      "repos": 1171,
-      "withTests": 0.778,
-      "withCi": 0.822
+      "repos": 1176,
+      "withTests": 0.779,
+      "withCi": 0.821
     },
     {
       "language": "Java",
-      "repos": 645,
-      "withTests": 0.764,
-      "withCi": 0.653
+      "repos": 647,
+      "withTests": 0.762,
+      "withCi": 0.652
     },
     {
       "language": "Kotlin",
       "repos": 454,
-      "withTests": 0.727,
+      "withTests": 0.707,
       "withCi": 0.773
     },
     {
       "language": "Rust",
       "repos": 631,
-      "withTests": 0.715,
+      "withTests": 0.705,
       "withCi": 0.903
     },
     {
       "language": "Python",
-      "repos": 1423,
-      "withTests": 0.656,
+      "repos": 1417,
+      "withTests": 0.653,
       "withCi": 0.635
     },
     {
       "language": "JavaScript",
-      "repos": 1019,
-      "withTests": 0.614,
-      "withCi": 0.676
+      "repos": 1028,
+      "withTests": 0.595,
+      "withCi": 0.675
     },
     {
       "language": "C++",
       "repos": 503,
-      "withTests": 0.555,
-      "withCi": 0.724
+      "withTests": 0.529,
+      "withCi": 0.728
     },
     {
       "language": "Swift",
       "repos": 474,
-      "withTests": 0.54,
+      "withTests": 0.523,
       "withCi": 0.7
     },
     {
       "language": "C",
       "repos": 317,
-      "withTests": 0.511,
+      "withTests": 0.498,
       "withCi": 0.58
     },
     {
       "language": "C#",
       "repos": 497,
-      "withTests": 0.437,
-      "withCi": 0.698
+      "withTests": 0.419,
+      "withCi": 0.706
     }
   ],
   "popularity": {
-    "repos": 4327,
+    "repos": 6355,
     "bands": [
       {
         "label": "under 100",
-        "repos": 263,
-        "medianScore": 85,
-        "gradeA": 0.411,
-        "density": 2.73
+        "repos": 386,
+        "medianScore": 86,
+        "gradeA": 0.409,
+        "density": 2.87
       },
       {
         "label": "100–1k",
-        "repos": 488,
-        "medianScore": 80,
-        "gradeA": 0.328,
-        "density": 2.56
+        "repos": 2355,
+        "medianScore": 83,
+        "gradeA": 0.344,
+        "density": 2.77
       },
       {
         "label": "1k–10k",
-        "repos": 2091,
+        "repos": 2125,
         "medianScore": 75,
-        "gradeA": 0.261,
-        "density": 2.22
+        "gradeA": 0.263,
+        "density": 2.21
       },
       {
         "label": "10k–50k",
-        "repos": 1292,
+        "repos": 1296,
         "medianScore": 67,
-        "gradeA": 0.148,
+        "gradeA": 0.149,
         "density": 1.34
       },
       {
@@ -1044,68 +1151,68 @@
     },
     {
       "license": "Apache-2.0",
-      "share": 0.227
+      "share": 0.239
     },
     {
       "license": "other or none",
-      "share": 0.194
+      "share": 0.188
     },
     {
       "license": "GPL-3.0",
-      "share": 0.055
+      "share": 0.052
     },
     {
       "license": "BSD-3-Clause",
-      "share": 0.034
+      "share": 0.033
     },
     {
       "license": "AGPL-3.0",
-      "share": 0.028
+      "share": 0.024
     },
     {
       "license": "GPL-2.0",
-      "share": 0.012
+      "share": 0.011
     },
     {
       "license": "others",
-      "share": 0.007
+      "share": 0.01
     }
   ],
   "scorecard": {
-    "repos": 2719,
-    "medianScorecard": 4.5,
-    "spearman": -0.19,
+    "repos": 3365,
+    "medianScorecard": 4.3,
+    "spearman": -0.21,
     "bands": [
       {
         "label": "0–4",
-        "repos": 1057,
-        "medianOurScore": 80
+        "repos": 1441,
+        "medianOurScore": 82
       },
       {
         "label": "4–6",
-        "repos": 1117,
-        "medianOurScore": 68
+        "repos": 1315,
+        "medianOurScore": 70
       },
       {
         "label": "6–8",
-        "repos": 478,
-        "medianOurScore": 66
+        "repos": 532,
+        "medianOurScore": 67
       },
       {
         "label": "8–10",
-        "repos": 67,
-        "medianOurScore": 69
+        "repos": 77,
+        "medianOurScore": 71
       }
     ],
     "pinned": {
-      "repos": 2197,
-      "flaggedWhenScorecardGood": 0.157,
-      "flaggedWhenScorecardBad": 0.923
+      "repos": 2688,
+      "flaggedWhenScorecardGood": 0.14,
+      "flaggedWhenScorecardBad": 0.919
     },
     "tokens": {
-      "repos": 2119,
-      "flaggedWhenScorecardGood": 0.009,
-      "flaggedWhenScorecardBad": 0.865
+      "repos": 2585,
+      "flaggedWhenScorecardGood": 0.008,
+      "flaggedWhenScorecardBad": 0.866
     }
   },
   "dependencyLicenses": {
@@ -1119,7 +1226,7 @@
   },
   "vulnerableDeps": {
     "repos": 10007,
-    "checkedAt": "2026-11-15",
+    "checkedAt": "2026-11-16",
     "any": 0.376,
     "shipped": 0.33,
     "critical": 0.175,
@@ -1710,7 +1817,7 @@
   },
   "corpus": {
     "repos": 10007,
-    "linesOfCode": 595689550,
+    "linesOfCode": 594369215,
     "files": 6988513,
     "commits": 13485978,
     "contributorsSummed": 845967,
@@ -1718,13 +1825,13 @@
     "randomLayer": 1616,
     "randomMedianStars": 28,
     "randomPopulation": "public, not a fork, not archived, stars >= 10, pushed since 2025-11-09, created 2010-01-01..2026-10-10",
-    "stars": 57133461,
-    "medianStars": 6837,
-    "under1kStars": 0.095,
-    "activeLastYear": 0.358,
-    "languages": 15,
+    "stars": 57710802,
+    "medianStars": 2991,
+    "under1kStars": 0.398,
+    "activeLastYear": 0.005,
+    "languages": 14,
     "vulnerableApps": 59,
-    "labelled": 1903
+    "labelled": 1893
   },
   "tracks": [
     {
@@ -1735,8 +1842,8 @@
       "labelsPerRule": 10,
       "repos": 8391,
       "medianScore": 80,
-      "labelled": 1286,
-      "precision": 0.776,
+      "labelled": 1281,
+      "precision": 0.779,
       "rulesFiring": 68,
       "rulesAtTarget": 37
     },
@@ -1774,8 +1881,8 @@
       "labelsPerRule": 30,
       "repos": 429,
       "medianScore": 72,
-      "labelled": 115,
-      "precision": 0.765,
+      "labelled": 114,
+      "precision": 0.772,
       "rulesFiring": 44,
       "rulesAtTarget": 0
     },
@@ -1798,16 +1905,16 @@
       "population": "Main language PHP, Ruby, Java, C#, Python or Go, and runs as a service: it ships a docker-compose / compose file.",
       "purpose": "Injection, deserialisation, SSRF and dependency rules.",
       "labelsPerRule": 30,
-      "repos": 674,
+      "repos": 673,
       "medianScore": 75,
-      "labelled": 119,
+      "labelled": 116,
       "precision": 0.655,
       "rulesFiring": 50,
       "rulesAtTarget": 1
     }
   ],
-  "lowConfidenceHidden": 78966,
-  "shown": 508245,
+  "lowConfidenceHidden": 78862,
+  "shown": 508148,
   "precision": {
     "high": {
       "tp": 697,
@@ -1815,123 +1922,11 @@
     },
     "medium": {
       "tp": 301,
-      "fp": 185
+      "fp": 180
     },
     "low": {
       "tp": 70,
-      "fp": 547
+      "fp": 542
     }
-  },
-  "dataCoverage": {
-    "records": 10007,
-    "inventories": 10007,
-    "metadataSnapshots": 10007,
-    "auditedMetadataSnapshots": 1714,
-    "legacyMetadataSnapshots": 8293,
-    "policyLimitedMetadataSnapshots": 339,
-    "metadataOldestDay": "2026-11-09",
-    "metadataNewestDay": "2026-11-15",
-    "formats": [
-      {
-        "name": "JavaScript",
-        "records": 4030,
-        "files": 354611
-      },
-      {
-        "name": "Python",
-        "records": 3117,
-        "files": 359017
-      },
-      {
-        "name": "TypeScript",
-        "records": 2255,
-        "files": 613029
-      },
-      {
-        "name": "C / C++",
-        "records": 1861,
-        "files": 335724
-      },
-      {
-        "name": "Java",
-        "records": 1213,
-        "files": 414905
-      },
-      {
-        "name": "Go",
-        "records": 1187,
-        "files": 362442
-      },
-      {
-        "name": "Kotlin",
-        "records": 904,
-        "files": 177466
-      },
-      {
-        "name": "Rust",
-        "records": 880,
-        "files": 139221
-      },
-      {
-        "name": "Swift",
-        "records": 874,
-        "files": 81363
-      },
-      {
-        "name": "PHP",
-        "records": 751,
-        "files": 222972
-      },
-      {
-        "name": "Ruby",
-        "records": 684,
-        "files": 115212
-      },
-      {
-        "name": "C#",
-        "records": 653,
-        "files": 296001
-      },
-      {
-        "name": "Vue",
-        "records": 368,
-        "files": 30497
-      },
-      {
-        "name": "Dart",
-        "records": 359,
-        "files": 80194
-      },
-      {
-        "name": "Terraform",
-        "records": 291,
-        "files": 39504
-      },
-      {
-        "name": "Scala",
-        "records": 237,
-        "files": 57901
-      },
-      {
-        "name": "Elixir",
-        "records": 152,
-        "files": 15305
-      },
-      {
-        "name": "Svelte",
-        "records": 109,
-        "files": 14123
-      },
-      {
-        "name": "Erlang",
-        "records": 90,
-        "files": 4628
-      },
-      {
-        "name": "Solidity",
-        "records": 37,
-        "files": 2037
-      }
-    ]
   }
 }

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-15T18:33:52.098Z",
+  "generatedAt": "2026-11-16T10:29:45.395Z",
   "repos": 10007,
   "rules": [
     {
@@ -108,21 +108,21 @@
     },
     {
       "rule": "commented-code",
-      "count": 21118,
+      "count": 20995,
       "hidden": 0,
-      "repoShare": 0.268,
+      "repoShare": 0.267,
       "medianPerRepo": 3,
       "severity": "info",
       "where": {
         "source": 0.788,
-        "tests": 0.205,
+        "tests": 0.206,
         "docs": 0.003,
         "ci": 0,
-        "vendored": 0.004
+        "vendored": 0.003
       },
       "labelled": {
         "tp": 113,
-        "fp": 98
+        "fp": 93
       }
     },
     {
@@ -215,7 +215,7 @@
     {
       "rule": "insecure-sql-interpolated",
       "count": 544,
-      "hidden": 4773,
+      "hidden": 4665,
       "repoShare": 0.01,
       "medianPerRepo": 2,
       "severity": "critical",
@@ -225,7 +225,7 @@
       },
       "labelled": {
         "tp": 28,
-        "fp": 71
+        "fp": 66
       }
     },
     {
@@ -351,7 +351,7 @@
     {
       "rule": "insecure-exec-interpolated",
       "count": 150,
-      "hidden": 2339,
+      "hidden": 2343,
       "repoShare": 0.004,
       "medianPerRepo": 2,
       "severity": "critical",
@@ -951,6 +951,22 @@
       }
     },
     {
+      "rule": "iac-docker-socket",
+      "count": 94,
+      "hidden": 0,
+      "repoShare": 0.005,
+      "medianPerRepo": 1,
+      "severity": "warning",
+      "where": {
+        "config": 0.989,
+        "tests": 0.011
+      },
+      "labelled": {
+        "tp": 9,
+        "fp": 4
+      }
+    },
+    {
       "rule": "iac-public-bucket",
       "count": 89,
       "hidden": 0,
@@ -1004,21 +1020,6 @@
       "labelled": {
         "tp": 2,
         "fp": 19
-      }
-    },
-    {
-      "rule": "iac-docker-socket",
-      "count": 68,
-      "hidden": 0,
-      "repoShare": 0.003,
-      "medianPerRepo": 1,
-      "severity": "warning",
-      "where": {
-        "config": 1
-      },
-      "labelled": {
-        "tp": 9,
-        "fp": 4
       }
     },
     {

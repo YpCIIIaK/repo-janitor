@@ -26863,7 +26863,7 @@ var require_lib4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-YXG4M4ZE.js
+// ../cli/dist/chunk-C45B3T2R.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -45594,7 +45594,7 @@ function date4(params) {
 // ../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/classic/external.js
 config(en_default());
 
-// ../cli/dist/chunk-YXG4M4ZE.js
+// ../cli/dist/chunk-C45B3T2R.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -70263,7 +70263,7 @@ var RULE_PRECISION = {
   "ci-silenced-failure": { tp: 4, fp: 7 },
   "ci-swallowed": { tp: 3, fp: 2 },
   "ci-tests-not-run": { tp: 0, fp: 10 },
-  "commented-code": { tp: 113, fp: 98 },
+  "commented-code": { tp: 113, fp: 93 },
   "config-conflict": { tp: 19, fp: 1 },
   "dead-export": { tp: 17, fp: 3 },
   "dead-uikit": { tp: 3, fp: 2 },
@@ -70325,7 +70325,7 @@ var RULE_PRECISION = {
   "insecure-ruby-dynamic-dispatch": { tp: 0, fp: 3 },
   "insecure-ruby-marshal-load": { tp: 0, fp: 5 },
   "insecure-rust-tls-validation-disabled": { tp: 3, fp: 2 },
-  "insecure-sql-interpolated": { tp: 28, fp: 71 },
+  "insecure-sql-interpolated": { tp: 28, fp: 66 },
   "insecure-ssrf": { tp: 5, fp: 78 },
   "insecure-swift-plaintext-credential-storage": { tp: 1, fp: 0 },
   "insecure-swift-webview-html": { tp: 1, fp: 0 },
