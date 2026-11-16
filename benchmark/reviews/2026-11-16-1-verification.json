@@ -2,9 +2,9 @@
   "status": "in-progress",
   "fullCorpusCurrent": false,
   "sourceBase": "8ff45f7289970c0cfe196801ce26de45f0f53e20",
-  "projectTestsPassed": 1884,
+  "projectTestsPassed": 1892,
   "existingLiveAITestSkipped": 1,
-  "benchmarkHelperTestsPassed": 50,
+  "benchmarkHelperTestsPassed": 61,
   "lintErrors": 0,
   "existingLintWarnings": 8,
   "coreTypecheck": "pass",
@@ -53,5 +53,8 @@
       "tpFpTable": true,
       "precisionExplanation": true
     }
-  }
+  },
+  "cloudRescanRunning": false,
+  "fullCorpusValidationLocation": "user-local-machine",
+  "localRescanVerification": "2026-11-16-1-local-rescan.json"
 }

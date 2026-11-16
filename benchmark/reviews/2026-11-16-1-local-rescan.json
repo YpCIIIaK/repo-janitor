@@ -1,0 +1,61 @@
+{
+  "status": "implemented-and-verified",
+  "cloudMassRescan": "stopped-at-user-request",
+  "localDefaultWorkers": 4,
+  "configurableWorkers": [
+    1,
+    32
+  ],
+  "projectTestsPassed": 1892,
+  "benchmarkHelperTestsPassed": 61,
+  "existingLiveAITestSkipped": 1,
+  "existingLintWarnings": 8,
+  "lintErrors": 0,
+  "productionBuild": "pass",
+  "typecheck": "pass",
+  "http": {
+    "routes": {
+      "3111/local-rescan": 200,
+      "3111/api/local-rescan?catalog=1": 200,
+      "3112/local-rescan": 404,
+      "3112/api/local-rescan?catalog=1": 404
+    },
+    "publicMutationDenied": true,
+    "crossOriginDenied": true,
+    "publicHostDenied": true,
+    "cachedRecords": 4,
+    "cachedMode": "completed",
+    "fullPinnedRecord": {
+      "name": "ms",
+      "url": "https://github.com/vercel/ms",
+      "sha": "4ff48cec099f0514c3e9bbca18706c9c21122bfb"
+    },
+    "fullMode": "completed",
+    "selectiveMode": "completed",
+    "untouchedScannerVersionsPreserved": true,
+    "priorRunReused": true,
+    "diskReservePauses": true,
+    "originalResultsUnchanged": true
+  },
+  "launcher": {
+    "launcherBindsLoopback": true,
+    "localPage": 200,
+    "defaultWorkers": 4,
+    "catalogRecords": 10007,
+    "overridesPublicOrigin": true,
+    "largeImportReachesLocalHandler": true
+  },
+  "export": {
+    "verified": true,
+    "records": 1,
+    "contentsValidated": true,
+    "sha256": "46d4d4ca71cd6943bf82a4d067ee428893c380b2e01f322cc8fb8aa259def57d"
+  },
+  "deploymentTrace": {
+    "dynamicFilesystemWarnings": 0,
+    "localRunDataFiles": 0,
+    "rawBenchmarkSnapshots": 0
+  },
+  "baselineRestore": "verified Git fixture, SHA-256 rejection and non-overwrite tested",
+  "fullCorpusGate": "pending-local-rescan"
+}
