@@ -520,8 +520,9 @@ const RULES: VulnRule[] = [
     id: "java-xxe",
     lang: "java",
     // Judged per file in contextAllows: the factory is only a hole when nothing
-    // in the file turns off DTDs or external entities.
-    re: /\b(?:DocumentBuilderFactory|SAXParserFactory|TransformerFactory|XMLInputFactory|SchemaFactory|SAXTransformerFactory)\s*\.\s*new(?:Default)?(?:Instance|Factory)\s*\(|\bnew\s+SAXReader\s*\(|\bnew\s+SAXBuilder\s*\(/g,
+    // in the file turns off DTDs or external entities. TransformerFactory is left
+    // out: in the corpus it serialised in-memory DOM, which reads no input (5 of 20 sampled).
+    re: /\b(?:DocumentBuilderFactory|SAXParserFactory|XMLInputFactory|SchemaFactory)\s*\.\s*new(?:Default)?(?:Instance|Factory)\s*\(|\bnew\s+SAXReader\s*\(|\bnew\s+SAXBuilder\s*\(/g,
     severity: "warning",
     title: "XML parser with external entities left on",
     detail:
@@ -1050,7 +1051,7 @@ export function scanSource(content: string, lang: Lang): CodeHit[] {
       }
       if (rawLine.length > 1000) continue // minified bundle
       // The maintainers already reviewed this line for a security linter.
-      if (/#\s*(?:noqa|nosec)\b|\/\/\s*(?:nosemgrep|eslint-disable|phpcs:ignore)|\bNOSONAR\b/.test(rawLine)) continue
+      if (/#\s*(?:noqa|nosec)\b|\/\/\s*(?:nosemgrep|eslint-disable|phpcs:ignore|nolint:[\w,\s]*gosec)|\bNOSONAR\b/.test(rawLine)) continue
       // Docblock lines: ` * const v = await page.$eval(`, ``pickle.loads()``.
       if (/^\s*\*/.test(rawLine) || /``/.test(rawLine)) continue
       // Doctest continuation lines are documentation: `...     pickle.loads(x)`.
@@ -1144,6 +1145,8 @@ function sinkAllows(ruleId: string, line: string, col: number, lang: Lang): bool
   if (ruleId === "ssrf" && /^[^(]*\(\s*(?:f["'](?:\{\s*(?:self\.|this\.)?[A-Z][A-Z0-9_]*\s*\}|https?:\/\/[\w.-]+)|(?:self\.|this\.)?[A-Z][A-Z0-9_]*\s*\+)/.test(line.slice(col))) return false
   // `redis_script.eval(...)`, `expr.eval()` — a method on an object, not Kernel#eval.
   if (ruleId === "eval-dynamic" && line.slice(0, col).trimEnd().endsWith(".")) return false
+  // An import names a class; it disables nothing (`import …NoopHostnameVerifier;`).
+  if (ruleId === "tls-verification-off" && /^\s*import\s/.test(line)) return false
   // A shell=True call whose command is a plain string literal runs fixed text.
   if (ruleId === "py-shell-true" && /(?:subprocess\.\w+|(?<![\w.])(?:Popen|check_output|check_call))\s*\(\s*(?:r|b)?(["'])[^"'{}%]*\1\s*,/.test(line)) return false
   // `eval(time, snapshot) {` declares a method called eval (PlayCanvas animation tracks).
@@ -1154,7 +1157,7 @@ const BROWSER_CODE_RE =
   /(^|\/)(?:public|static|assets|frontend|client|ui|web|www|browser|extension|src\/components|components|pages|app\/javascript)\/|(?:^|\/)(?:sw|service-worker)\.[cm]?[jt]s$|\.(?:tsx|jsx|vue|svelte)$/i
 
 /** Rules whose risk depends on where the value comes from. */
-const INJECTION_RULES = new Set([
+export const INJECTION_RULES = new Set([
   "eval-dynamic",
   "new-function",
   "exec-interpolated",
@@ -1213,6 +1216,9 @@ function around(content: string, lineStart: number, before: number, after: numbe
  */
 function contextAllows(ruleId: string, content: string, lineStart: number): boolean {
   // A factory is safe once the file disables DTDs or external entities anywhere.
+  // Skipping verification behind an option the user sets (`if cfg.Insecure {`,
+  // `else if spec.TLSSkipVerify {`) is a feature, not a default: 12 of 15 sampled Go hits.
+  if (ruleId === "tls-verification-off" && /\bif\b[^\n{]*(?:insecure|skip_?tls|tls_?skip|skip_?verify|no_?verify|allow_?insecure|trust_?all|ignore_?(?:ssl|tls|cert))/i.test(around(content, lineStart, 4, 0))) return false
   if (ruleId === "java-xxe") {
     return !/disallow-doctype-decl|external-general-entities|external-parameter-entities|ACCESS_EXTERNAL_(?:DTD|SCHEMA|STYLESHEET)|FEATURE_SECURE_PROCESSING|SUPPORT_DTD|IS_SUPPORTING_EXTERNAL_ENTITIES|load-external-dtd/.test(content)
   }
@@ -1353,6 +1359,36 @@ function taintedCaller(sources: Source[], name: string, defFile: string, defLine
     }
   }
   return null
+}
+
+/**
+ * Keep `max` findings out of many. Most severe first, but taken in turns across
+ * rules, so one noisy rule cannot fill every slot: in mage-ai 25 SSRF and 11
+ * eval criticals (both hidden as low confidence) pushed out a confirmed XSS.
+ * Within a rule, order is severity, then confidence, then file order.
+ */
+export function capFindings(issues: Issue[], max: number): Issue[] {
+  const ordered = issues
+    .map((issue, i) => ({ issue, i }))
+    .sort((a, b) =>
+      rank(b.issue.severity) - rank(a.issue.severity) ||
+      (CONFIDENCE_RANK[b.issue.confidence ?? "medium"] ?? 1) - (CONFIDENCE_RANK[a.issue.confidence ?? "medium"] ?? 1) ||
+      a.i - b.i)
+  const byRule = new Map<string, Issue[]>()
+  for (const { issue } of ordered) {
+    const rule = issue.id.slice(0, issue.id.length - issue.location.length - 1)
+    if (!byRule.has(rule)) byRule.set(rule, [])
+    byRule.get(rule)!.push(issue)
+  }
+  const out: Issue[] = []
+  for (let round = 0; out.length < max; round++) {
+    let took = false
+    for (const list of byRule.values()) {
+      if (round < list.length && out.length < max) { out.push(list[round]); took = true }
+    }
+    if (!took) break
+  }
+  return out
 }
 
 export const insecureCodeScanner: Scanner = {
@@ -1496,14 +1532,6 @@ export const insecureCodeScanner: Scanner = {
     }
 
     if (issues.length <= MAX_TOTAL) return issues
-    // Stable: equal findings keep file order.
-    return issues
-      .map((issue, i) => ({ issue, i }))
-      .sort((a, b) =>
-        rank(b.issue.severity) - rank(a.issue.severity) ||
-        (CONFIDENCE_RANK[b.issue.confidence ?? "medium"] ?? 1) - (CONFIDENCE_RANK[a.issue.confidence ?? "medium"] ?? 1) ||
-        a.i - b.i)
-      .slice(0, MAX_TOTAL)
-      .map(({ issue }) => issue)
+    return capFindings(issues, MAX_TOTAL)
   },
 }

@@ -600,3 +600,31 @@ describe("weak hashes judged by what is hashed", () => {
     expect(r).toEqual([])
   })
 })
+
+describe("capFindings", () => {
+  it("takes rules in turns so one noisy rule cannot fill every slot", async () => {
+    const { capFindings } = await import("../../src/scanners/insecure-code")
+    const mk = (rule: string, sev: "critical" | "warning", n: number) =>
+      Array.from({ length: n }, (_, i) => ({ id: `insecure-${rule}-f${i}.py:1`, location: `f${i}.py:1`, severity: sev, category: "security", title: "", detail: "", ageDays: 0 }))
+    const out = capFindings([...mk("ssrf", "critical", 70), ...mk("react-dangerous-html", "warning", 1)] as never, 60)
+    expect(out).toHaveLength(60)
+    expect(out.some((i) => i.id.startsWith("insecure-react-dangerous-html-"))).toBe(true)
+  })
+})
+
+describe("precision fixes from the corpus sample", () => {
+  const rulesFor = async (files: Record<string, string>) =>
+    (await insecureCodeScanner.run(makeContext({ files }))).map((i) => i.id.slice(0, i.id.length - i.location.length - 1))
+  it("leaves TLS skipping behind a user option alone", async () => {
+    const go = "package p\nfunc c(cfg Config) {\n\tif cfg.Insecure {\n\t\ttpt.TLSClientConfig = &tls.Config{InsecureSkipVerify: true}\n\t}\n}\n"
+    expect((await rulesFor({ "proxy/backend.go": go })).filter((r) => r.includes("tls"))).toEqual([])
+  })
+  it("respects nolint:gosec and ignores imports", async () => {
+    expect((await rulesFor({ "m/s.go": "package m\nvar t = &tls.Config{InsecureSkipVerify: true} //nolint: gas, gosec\n" })).filter((r) => r.includes("tls"))).toEqual([])
+    expect((await rulesFor({ "src/W.java": "import org.apache.hc.client5.http.ssl.NoopHostnameVerifier;\nclass W {}\n" })).filter((r) => r.includes("tls"))).toEqual([])
+  })
+  it("does not treat TransformerFactory as an XXE parser", async () => {
+    const j = "class X { void p(Document d) throws Exception {\n  Transformer t = TransformerFactory.newInstance().newTransformer();\n  t.transform(new DOMSource(d), out);\n} }\n"
+    expect((await rulesFor({ "src/main/java/X.java": j })).filter((r) => r.includes("xxe"))).toEqual([])
+  })
+})

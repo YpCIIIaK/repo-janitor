@@ -26875,7 +26875,7 @@ var require_lib4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-YFTC6IKG.js
+// ../cli/dist/chunk-LX6SJJIE.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -50809,7 +50809,7 @@ function date4(params) {
   return _coercedDate(ZodDate, params);
 }
 
-// ../cli/dist/chunk-YFTC6IKG.js
+// ../cli/dist/chunk-LX6SJJIE.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -75536,8 +75536,9 @@ var RULE_PRECISION = {
   "insecure-eval-dynamic": { tp: 2, fp: 10 },
   "insecure-exec-interpolated": { tp: 5, fp: 26 },
   "insecure-go-template-html": { tp: 0, fp: 10 },
-  "insecure-innerhtml-dynamic": { tp: 0, fp: 16 },
+  "insecure-innerhtml-dynamic": { tp: 0, fp: 15 },
   "insecure-java-deserialization": { tp: 2, fp: 4 },
+  "insecure-java-xxe": { tp: 4, fp: 16 },
   "insecure-localstorage-secret": { tp: 2, fp: 10 },
   "insecure-new-function": { tp: 3, fp: 15 },
   "insecure-php-path-traversal": { tp: 4, fp: 0 },
@@ -75559,7 +75560,7 @@ var RULE_PRECISION = {
   "insecure-ssrf": { tp: 5, fp: 78 },
   "insecure-swift-plaintext-credential-storage": { tp: 1, fp: 0 },
   "insecure-swift-webview-html": { tp: 1, fp: 0 },
-  "insecure-tls-verification-off": { tp: 0, fp: 12 },
+  "insecure-tls-verification-off": { tp: 2, fp: 35 },
   "insecure-weak-hash": { tp: 2, fp: 8 },
   "license-network": { tp: 2, fp: 4 },
   "license-proprietary": { tp: 1, fp: 2 },
@@ -80926,8 +80927,9 @@ var RULES2 = [
     id: "java-xxe",
     lang: "java",
     // Judged per file in contextAllows: the factory is only a hole when nothing
-    // in the file turns off DTDs or external entities.
-    re: /\b(?:DocumentBuilderFactory|SAXParserFactory|TransformerFactory|XMLInputFactory|SchemaFactory|SAXTransformerFactory)\s*\.\s*new(?:Default)?(?:Instance|Factory)\s*\(|\bnew\s+SAXReader\s*\(|\bnew\s+SAXBuilder\s*\(/g,
+    // in the file turns off DTDs or external entities. TransformerFactory is left
+    // out: in the corpus it serialised in-memory DOM, which reads no input (5 of 20 sampled).
+    re: /\b(?:DocumentBuilderFactory|SAXParserFactory|XMLInputFactory|SchemaFactory)\s*\.\s*new(?:Default)?(?:Instance|Factory)\s*\(|\bnew\s+SAXReader\s*\(|\bnew\s+SAXBuilder\s*\(/g,
     severity: "warning",
     title: "XML parser with external entities left on",
     detail: 'Java XML parsers resolve DTDs and external entities by default, so a crafted document can read local files or reach internal hosts (XXE). Disable DOCTYPE declarations on the factory: `setFeature("http://apache.org/xml/features/disallow-doctype-decl", true)`, or set `XMLConstants.ACCESS_EXTERNAL_DTD` and `ACCESS_EXTERNAL_SCHEMA` to "".'
@@ -81340,7 +81342,7 @@ function scanSource(content, lang) {
         if (literalRanges(rawLine).some(([a, b3]) => col > a && col < b3)) continue;
       }
       if (rawLine.length > 1e3) continue;
-      if (/#\s*(?:noqa|nosec)\b|\/\/\s*(?:nosemgrep|eslint-disable|phpcs:ignore)|\bNOSONAR\b/.test(rawLine)) continue;
+      if (/#\s*(?:noqa|nosec)\b|\/\/\s*(?:nosemgrep|eslint-disable|phpcs:ignore|nolint:[\w,\s]*gosec)|\bNOSONAR\b/.test(rawLine)) continue;
       if (/^\s*\*/.test(rawLine) || /``/.test(rawLine)) continue;
       if (/^\s*(?:>>>|\.\.\.)\s/.test(rawLine)) continue;
       if (!contextAllows(rule.id, content, lineStart)) continue;
@@ -81390,6 +81392,7 @@ function sinkAllows(ruleId, line, col, lang) {
   if (ruleId === "sql-interpolated") return !/\bprepare\s*\(/.test(line);
   if (ruleId === "ssrf" && /^[^(]*\(\s*(?:f["'](?:\{\s*(?:self\.|this\.)?[A-Z][A-Z0-9_]*\s*\}|https?:\/\/[\w.-]+)|(?:self\.|this\.)?[A-Z][A-Z0-9_]*\s*\+)/.test(line.slice(col))) return false;
   if (ruleId === "eval-dynamic" && line.slice(0, col).trimEnd().endsWith(".")) return false;
+  if (ruleId === "tls-verification-off" && /^\s*import\s/.test(line)) return false;
   if (ruleId === "py-shell-true" && new RegExp(`(?:subprocess\\.\\w+|(?<![\\w.])(?:Popen|check_output|check_call))\\s*\\(\\s*(?:r|b)?(["'])[^"'{}%]*\\1\\s*,`).test(line)) return false;
   if (ruleId === "eval-dynamic" && /^\s*(?:async\s+|static\s+|public\s+|private\s+)*eval\s*\([^)]*\)\s*(?::\s*[\w<>[\]| ]+)?\s*\{/.test(line)) return false;
   return true;
@@ -81437,6 +81440,7 @@ function around(content, lineStart, before, after) {
   return content.slice(a, b3 === -1 ? void 0 : b3);
 }
 function contextAllows(ruleId, content, lineStart) {
+  if (ruleId === "tls-verification-off" && /\bif\b[^\n{]*(?:insecure|skip_?tls|tls_?skip|skip_?verify|no_?verify|allow_?insecure|trust_?all|ignore_?(?:ssl|tls|cert))/i.test(around(content, lineStart, 4, 0))) return false;
   if (ruleId === "java-xxe") {
     return !/disallow-doctype-decl|external-general-entities|external-parameter-entities|ACCESS_EXTERNAL_(?:DTD|SCHEMA|STYLESHEET)|FEATURE_SECURE_PROCESSING|SUPPORT_DTD|IS_SUPPORTING_EXTERNAL_ENTITIES|load-external-dtd/.test(content);
   }
@@ -81586,6 +81590,30 @@ function taintedCaller(sources, name, defFile, defLine) {
   }
   return null;
 }
+function capFindings(issues, max) {
+  const ordered = issues.map((issue2, i) => ({ issue: issue2, i })).sort((a, b3) => {
+    var _a22, _b, _c, _d;
+    return rank(b3.issue.severity) - rank(a.issue.severity) || ((_b = CONFIDENCE_RANK[(_a22 = b3.issue.confidence) != null ? _a22 : "medium"]) != null ? _b : 1) - ((_d = CONFIDENCE_RANK[(_c = a.issue.confidence) != null ? _c : "medium"]) != null ? _d : 1) || a.i - b3.i;
+  });
+  const byRule = /* @__PURE__ */ new Map();
+  for (const { issue: issue2 } of ordered) {
+    const rule = issue2.id.slice(0, issue2.id.length - issue2.location.length - 1);
+    if (!byRule.has(rule)) byRule.set(rule, []);
+    byRule.get(rule).push(issue2);
+  }
+  const out = [];
+  for (let round = 0; out.length < max; round++) {
+    let took = false;
+    for (const list of byRule.values()) {
+      if (round < list.length && out.length < max) {
+        out.push(list[round]);
+        took = true;
+      }
+    }
+    if (!took) break;
+  }
+  return out;
+}
 var insecureCodeScanner = {
   id: "insecure-code",
   category: "security",
@@ -81710,10 +81738,7 @@ var insecureCodeScanner = {
         p2.issue.detail += ` Request input reaches \`${fn2.name}()\` from ${caller}.`;
       }
       if (issues.length <= MAX_TOTAL8) return issues;
-      return issues.map((issue2, i) => ({ issue: issue2, i })).sort((a, b3) => {
-        var _a32, _b2, _c2, _d;
-        return rank(b3.issue.severity) - rank(a.issue.severity) || ((_b2 = CONFIDENCE_RANK[(_a32 = b3.issue.confidence) != null ? _a32 : "medium"]) != null ? _b2 : 1) - ((_d = CONFIDENCE_RANK[(_c2 = a.issue.confidence) != null ? _c2 : "medium"]) != null ? _d : 1) || a.i - b3.i;
-      }).slice(0, MAX_TOTAL8).map(({ issue: issue2 }) => issue2);
+      return capFindings(issues, MAX_TOTAL8);
     });
   }
 };
@@ -89803,8 +89828,9 @@ var RULES5 = [
     id: "java-xxe",
     lang: "java",
     // Judged per file in contextAllows: the factory is only a hole when nothing
-    // in the file turns off DTDs or external entities.
-    re: /\b(?:DocumentBuilderFactory|SAXParserFactory|TransformerFactory|XMLInputFactory|SchemaFactory|SAXTransformerFactory)\s*\.\s*new(?:Default)?(?:Instance|Factory)\s*\(|\bnew\s+SAXReader\s*\(|\bnew\s+SAXBuilder\s*\(/g,
+    // in the file turns off DTDs or external entities. TransformerFactory is left
+    // out: in the corpus it serialised in-memory DOM, which reads no input (5 of 20 sampled).
+    re: /\b(?:DocumentBuilderFactory|SAXParserFactory|XMLInputFactory|SchemaFactory)\s*\.\s*new(?:Default)?(?:Instance|Factory)\s*\(|\bnew\s+SAXReader\s*\(|\bnew\s+SAXBuilder\s*\(/g,
     severity: "warning",
     title: "XML parser with external entities left on",
     detail: 'Java XML parsers resolve DTDs and external entities by default, so a crafted document can read local files or reach internal hosts (XXE). Disable DOCTYPE declarations on the factory: `setFeature("http://apache.org/xml/features/disallow-doctype-decl", true)`, or set `XMLConstants.ACCESS_EXTERNAL_DTD` and `ACCESS_EXTERNAL_SCHEMA` to "".'
@@ -90214,7 +90240,7 @@ function scanSource2(content, lang) {
         if (literalRanges2(rawLine).some(([a, b3]) => col > a && col < b3)) continue;
       }
       if (rawLine.length > 1e3) continue;
-      if (/#\s*(?:noqa|nosec)\b|\/\/\s*(?:nosemgrep|eslint-disable|phpcs:ignore)|\bNOSONAR\b/.test(rawLine)) continue;
+      if (/#\s*(?:noqa|nosec)\b|\/\/\s*(?:nosemgrep|eslint-disable|phpcs:ignore|nolint:[\w,\s]*gosec)|\bNOSONAR\b/.test(rawLine)) continue;
       if (/^\s*\*/.test(rawLine) || /``/.test(rawLine)) continue;
       if (/^\s*(?:>>>|\.\.\.)\s/.test(rawLine)) continue;
       if (!contextAllows2(rule.id, content, lineStart)) continue;
@@ -90263,6 +90289,7 @@ function sinkAllows2(ruleId, line, col, lang) {
   if (ruleId === "sql-interpolated") return !/\bprepare\s*\(/.test(line);
   if (ruleId === "ssrf" && /^[^(]*\(\s*(?:f["'](?:\{\s*(?:self\.|this\.)?[A-Z][A-Z0-9_]*\s*\}|https?:\/\/[\w.-]+)|(?:self\.|this\.)?[A-Z][A-Z0-9_]*\s*\+)/.test(line.slice(col))) return false;
   if (ruleId === "eval-dynamic" && line.slice(0, col).trimEnd().endsWith(".")) return false;
+  if (ruleId === "tls-verification-off" && /^\s*import\s/.test(line)) return false;
   if (ruleId === "py-shell-true" && /(?:subprocess\.\w+|(?<![\w.])(?:Popen|check_output|check_call))\s*\(\s*(?:r|b)?(["'])[^"'{}%]*\1\s*,/.test(line)) return false;
   if (ruleId === "eval-dynamic" && /^\s*(?:async\s+|static\s+|public\s+|private\s+)*eval\s*\([^)]*\)\s*(?::\s*[\w<>[\]| ]+)?\s*\{/.test(line)) return false;
   return true;
@@ -90310,6 +90337,7 @@ function around2(content, lineStart, before, after) {
   return content.slice(a, b3 === -1 ? void 0 : b3);
 }
 function contextAllows2(ruleId, content, lineStart) {
+  if (ruleId === "tls-verification-off" && /\bif\b[^\n{]*(?:insecure|skip_?tls|tls_?skip|skip_?verify|no_?verify|allow_?insecure|trust_?all|ignore_?(?:ssl|tls|cert))/i.test(around2(content, lineStart, 4, 0))) return false;
   if (ruleId === "java-xxe") {
     return !/disallow-doctype-decl|external-general-entities|external-parameter-entities|ACCESS_EXTERNAL_(?:DTD|SCHEMA|STYLESHEET)|FEATURE_SECURE_PROCESSING|SUPPORT_DTD|IS_SUPPORTING_EXTERNAL_ENTITIES|load-external-dtd/.test(content);
   }
@@ -90457,6 +90485,27 @@ function taintedCaller2(sources, name, defFile, defLine) {
   }
   return null;
 }
+function capFindings2(issues, max) {
+  const ordered = issues.map((issue2, i) => ({ issue: issue2, i })).sort((a, b3) => rank2(b3.issue.severity) - rank2(a.issue.severity) || (CONFIDENCE_RANK2[b3.issue.confidence ?? "medium"] ?? 1) - (CONFIDENCE_RANK2[a.issue.confidence ?? "medium"] ?? 1) || a.i - b3.i);
+  const byRule = /* @__PURE__ */ new Map();
+  for (const { issue: issue2 } of ordered) {
+    const rule = issue2.id.slice(0, issue2.id.length - issue2.location.length - 1);
+    if (!byRule.has(rule)) byRule.set(rule, []);
+    byRule.get(rule).push(issue2);
+  }
+  const out = [];
+  for (let round = 0; out.length < max; round++) {
+    let took = false;
+    for (const list of byRule.values()) {
+      if (round < list.length && out.length < max) {
+        out.push(list[round]);
+        took = true;
+      }
+    }
+    if (!took) break;
+  }
+  return out;
+}
 var insecureCodeScanner2 = {
   id: "insecure-code",
   category: "security",
@@ -90581,7 +90630,7 @@ var insecureCodeScanner2 = {
       p2.issue.detail += ` Request input reaches \`${fn2.name}()\` from ${caller}.`;
     }
     if (issues.length <= MAX_TOTAL16) return issues;
-    return issues.map((issue2, i) => ({ issue: issue2, i })).sort((a, b3) => rank2(b3.issue.severity) - rank2(a.issue.severity) || (CONFIDENCE_RANK2[b3.issue.confidence ?? "medium"] ?? 1) - (CONFIDENCE_RANK2[a.issue.confidence ?? "medium"] ?? 1) || a.i - b3.i).slice(0, MAX_TOTAL16).map(({ issue: issue2 }) => issue2);
+    return capFindings2(issues, MAX_TOTAL16);
   }
 };
 
