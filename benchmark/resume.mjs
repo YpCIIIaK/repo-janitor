@@ -20,7 +20,10 @@ import { mayProduce } from "./scanner-inputs.mjs"
 const here = dirname(fileURLToPath(import.meta.url))
 // `resume.mjs --track X` limits the rescan to one track.
 const trackIdx = process.argv.indexOf("--track")
-const corpus = inShard(inTrack(JSON.parse(readFileSync(join(here, "corpus.json"), "utf8")), trackIdx >= 0 ? process.argv[trackIdx + 1] : ""))
+// BENCH_REPOS=<file>: a JSON list of repo names to limit the run to (e.g. the repos a
+// rule change can reach, when a shared file made every fingerprint stale).
+const only = process.env.BENCH_REPOS ? new Set(JSON.parse(readFileSync(process.env.BENCH_REPOS, "utf8"))) : null
+const corpus = inShard(inTrack(JSON.parse(readFileSync(join(here, "corpus.json"), "utf8")), trackIdx >= 0 ? process.argv[trackIdx + 1] : "")).filter((r) => !only || only.has(r.name))
 const fingerprint = scanFingerprint()
 const fps = scannerFingerprints()
 const stampOnly = []
