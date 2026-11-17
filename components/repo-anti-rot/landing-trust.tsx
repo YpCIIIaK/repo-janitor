@@ -56,19 +56,27 @@ export function TrustSection({ index }: { index: string }) {
           </h2>
           <p className="mt-3 text-pretty leading-relaxed text-muted-foreground">
             {ru
-              ? `Каждое правило прогоняется по ${fmt} закреплённым open-source проектам, и часть находок проверяется вручную. Из этого считается, как часто правило право, и по этому решается, показывать ли его находки.`
-              : `Every rule runs over ${fmt} pinned open-source projects, and a sample of its findings is checked by hand. That measures how often the rule is right, and decides whether its findings are shown.`}
+              ? `В корпусе ${fmt} закреплённых open-source проектов. Часть находок проверяется вручную: по этой выборке оценивается точность правил и выбирается уровень уверенности.`
+              : `The corpus contains ${fmt} pinned open-source projects. A sample of findings is reviewed by hand to estimate rule precision and assign confidence levels.`}
+          </p>
+          <p className="mt-3 font-mono text-xs text-muted-foreground">
+            {ru ? "Снимок данных: " : "Data snapshot: "}
+            <time dateTime={stats.generatedAt}>{new Intl.DateTimeFormat(ru ? "ru-RU" : "en-GB", { dateStyle: "medium", timeZone: "UTC" }).format(new Date(stats.generatedAt))}</time>
           </p>
         </div>
 
         <div className="mt-10 grid gap-4 sm:grid-cols-3">
           {levels.map((l) => (
             <div key={l.key} className="rounded-lg border border-border bg-card/40 p-5">
-              <div className={`font-mono text-3xl font-semibold tabular-nums ${l.tone}`}>{precision(p[l.key]) ?? "—"}%</div>
+              <div className={`font-mono text-3xl font-semibold tabular-nums ${l.tone}`}>{precision(p[l.key]) === null ? "—" : `${precision(p[l.key])}%`}</div>
               <div className="mt-1 text-sm font-medium">{ru ? `Уверенность: ${l.label}` : `Confidence: ${l.label}`}</div>
               <p className="mt-1 text-xs text-muted-foreground">
                 {ru ? "доля верных среди проверенных · " : "share right among checked · "}
                 {l.note}
+              </p>
+              <p className="mt-2 text-xs tabular-nums text-muted-foreground">
+                {ru ? "Проверено находок: " : "Reviewed findings: "}
+                {new Intl.NumberFormat(ru ? "ru-RU" : "en-US").format((p[l.key]?.tp ?? 0) + (p[l.key]?.fp ?? 0))}
               </p>
             </div>
           ))}
@@ -122,6 +130,14 @@ export function TrustSection({ index }: { index: string }) {
           </div>
         </div>
 
+        <aside className="mt-10 rounded-lg border border-border bg-muted/30 p-5">
+          <h3 className="font-semibold">{ru ? "Что делать с результатом" : "How to use the result"}</h3>
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+            {ru
+              ? "Начните с находок высокой уверенности: откройте указанный файл и проверьте контекст. Оценка A означает мало штрафов по выполненным проверкам; она не гарантирует отсутствие уязвимостей. Проценты выше описывают проверенную выборку, а не вероятность эксплуатации конкретной находки."
+              : "Start with high-confidence findings: open the referenced file and check its context. An A means few penalties from the checks that ran; it does not guarantee the absence of vulnerabilities. The percentages above describe the reviewed sample, not the exploitability of an individual finding."}
+          </p>
+        </aside>
         <div className="mt-10 flex flex-wrap gap-3 text-sm">
           <Link href="/state" className="inline-flex items-center rounded-md border border-border bg-background px-4 py-2 font-medium hover:bg-muted">
             {ru ? "Точность по каждому правилу" : "Precision for every rule"} →

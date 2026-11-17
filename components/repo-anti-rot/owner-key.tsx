@@ -6,6 +6,7 @@ import { KeyRound, Check, Loader2 } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
+import { useLocale } from "@/components/i18n/locale-provider"
 
 /**
  * Claiming the operator key, from Settings.
@@ -17,6 +18,8 @@ import { Label } from "@/components/ui/label"
  * component can answer from what it stored.
  */
 export function OwnerKey() {
+  const { locale } = useLocale()
+  const ru = locale === "ru"
   const [state, setState] = useState<{ owner: boolean } | null>(null)
   const [key, setKey] = useState("")
   const [busy, setBusy] = useState(false)
@@ -70,17 +73,17 @@ export function OwnerKey() {
     <div className="space-y-2 border-t border-border pt-5">
       <Label htmlFor="owner-key" className="flex items-center gap-1.5">
         <KeyRound className="size-4 text-primary" />
-        Operator key
+        {ru ? "Ключ оператора" : "Operator key"}
       </Label>
 
       {state?.owner ? (
         <div className="flex items-center justify-between gap-3 rounded-md border border-primary/30 bg-primary/5 px-3 py-2">
           <p className="flex items-center gap-2 text-sm text-primary">
             <Check className="size-4" />
-            Unlocked — scan limits do not apply to this browser.
+            {ru ? "Доступ открыт: ограничения сканирования для этого браузера сняты." : "Unlocked — scan limits do not apply to this browser."}
           </p>
           <Button variant="outline" size="sm" onClick={() => submit("DELETE")} disabled={busy}>
-            Sign out
+            {ru ? "Выйти" : "Sign out"}
           </Button>
         </div>
       ) : (
@@ -100,7 +103,7 @@ export function OwnerKey() {
             />
             <Button onClick={() => submit("POST")} disabled={busy || !key.trim()}>
               {busy ? <Loader2 className="size-4 animate-spin" /> : null}
-              Unlock
+              {ru ? "Открыть доступ" : "Unlock"}
             </Button>
           </div>
           {error && <p className="text-xs text-destructive">{error}</p>}
@@ -108,9 +111,7 @@ export function OwnerKey() {
       )}
 
       <p className="text-xs text-muted-foreground">
-        Lifts the per-hour scan allowance and the per-request repository cap for this browser.
-        The limit on how many scans run at once still applies — that one protects the machine&apos;s
-        memory, not its fairness.
+        {ru ? "Снимает почасовой лимит сканов и ограничение числа репозиториев в запросе для этого браузера. Ограничение одновременных сканов сохраняется для защиты памяти сервера." : "Lifts the per-hour scan allowance and the per-request repository cap for this browser. The limit on simultaneous scans still applies to protect server memory."}
       </p>
     </div>
   )

@@ -5,6 +5,7 @@ import { redirect } from "next/navigation"
 import { SESSION_COOKIE, readSession } from "@/lib/session"
 import { DEFAULT_RESUME } from "@/lib/resume-card-defaults"
 import { ResumeEditor } from "./resume-editor"
+import { LOCALE_COOKIE, resolveLocale } from "@/lib/i18n"
 
 /**
  * The resume card builder.
@@ -21,6 +22,7 @@ export const dynamic = "force-dynamic"
 
 export default async function ResumeBuilderPage() {
   const store = await cookies()
+  const ru = resolveLocale(store.get(LOCALE_COOKIE)?.value, null) === "ru"
   const session = readSession(
     store.get(SESSION_COOKIE)?.value,
     process.env.REPO_ANTI_ROT_SESSION_SECRET,
@@ -31,13 +33,11 @@ export default async function ResumeBuilderPage() {
   return (
     <main className="mx-auto max-w-7xl px-6 py-12">
       <Link href="/profile" className="text-muted-foreground text-sm hover:underline">
-        ← Profile
+        ← {ru ? "Профиль" : "Profile"}
       </Link>
-      <h1 className="mt-4 text-2xl font-bold">Resume card</h1>
+      <h1 className="mt-4 text-2xl font-bold">{ru ? "Карточка резюме" : "Resume card"}</h1>
       <p className="text-muted-foreground mt-2 max-w-2xl text-sm">
-        A poster-sized card built from what you type. The preview updates as you
-        edit — the generator is a plain function running in your browser, so
-        there is no round trip and no saved copy.
+        {ru ? "Большая карточка с вашими данными. Предпросмотр обновляется при редактировании прямо в браузере. Данные редактора не отправляются на сервер и не сохраняются." : "A poster-sized card built from what you type. The preview updates as you edit in your browser, with no server request or saved copy."}
       </p>
 
       <div className="mt-10">

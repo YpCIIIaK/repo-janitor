@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { downloadReport, type ExportFormat } from "@/lib/report-export"
 import type { ScanReport } from "@/lib/reports-store"
+import { useLocale } from "@/components/i18n/locale-provider"
 
 const OPTIONS: { format: ExportFormat; label: string; hint: string }[] = [
   { format: "md", label: "Markdown", hint: "Grouped report for PRs & docs" },
@@ -21,22 +22,25 @@ const OPTIONS: { format: ExportFormat; label: string; hint: string }[] = [
 
 /** Export the current repo's stored scan report as Markdown / CSV / JSON. */
 export function ExportMenu({ report, className }: { report: ScanReport; className?: string }) {
+  const { locale } = useLocale()
+  const ru = locale === "ru"
+  const hints = { md: "Отчёт для PR и документации", csv: "Одна строка на находку для таблицы", json: "Полный отчёт в исходной структуре" }
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button size="sm" variant="outline" className={className} title="Export this report">
+        <Button size="sm" variant="outline" className={className} title={ru ? "Экспортировать отчёт" : "Export this report"}>
           <Download className="size-4" />
-          Export
+          {ru ? "Экспорт" : "Export"}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
-        <DropdownMenuLabel>Export report</DropdownMenuLabel>
+        <DropdownMenuLabel>{ru ? "Экспорт отчёта" : "Export report"}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {OPTIONS.map((o) => (
           <DropdownMenuItem key={o.format} onSelect={() => downloadReport(report, o.format)}>
             <div className="flex flex-col">
               <span className="text-sm">{o.label}</span>
-              <span className="text-xs text-muted-foreground">{o.hint}</span>
+              <span className="text-xs text-muted-foreground">{ru ? hints[o.format] : o.hint}</span>
             </div>
           </DropdownMenuItem>
         ))}

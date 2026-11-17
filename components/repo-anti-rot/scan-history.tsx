@@ -9,12 +9,13 @@ import { EmptyState } from "@/components/ui/empty-state"
 import { Timeline, type TimelineItem } from "@/components/ui/timeline"
 
 import { gradeCssVar } from "@/lib/grade-style"
+import { useLocale } from "@/components/i18n/locale-provider"
 
-function formatWhen(iso: string): string {
+function formatWhen(iso: string, locale: string): string {
   const d = new Date(iso)
   return Number.isNaN(d.getTime())
     ? iso
-    : d.toLocaleString(undefined, {
+    : d.toLocaleString(locale, {
         month: "short",
         day: "numeric",
         hour: "2-digit",
@@ -31,6 +32,8 @@ function formatWhen(iso: string): string {
  * when a grade dropped and you want to know between which two scans.
  */
 export function ScanHistory({ history }: { history: TrendPoint[] }) {
+  const { locale } = useLocale()
+  const ru = locale === "ru"
   const items = useMemo<TimelineItem[]>(() => {
     // Newest first: the most recent scan is the one being asked about.
     const ordered = [...history].sort((a, b) => b.at.localeCompare(a.at))
@@ -61,19 +64,19 @@ export function ScanHistory({ history }: { history: TrendPoint[] }) {
             )}
           </span>
         ),
-        time: formatWhen(p.at),
-        description: `${p.critical} critical · ${p.warning} warning · ${p.info} info`,
+        time: formatWhen(p.at, locale),
+        description: ru ? `Критические: ${p.critical} · Предупреждения: ${p.warning} · Заметки: ${p.info}` : `${p.critical} critical · ${p.warning} warning · ${p.info} info`,
         icon: <Icon />,
         color: gradeCssVar(grade),
       }
     })
-  }, [history])
+  }, [history, locale, ru])
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-base">Scan history</CardTitle>
-        <CardDescription>Every scan of this repository, newest first.</CardDescription>
+        <CardTitle className="text-base">{ru ? "История сканов" : "Scan history"}</CardTitle>
+        <CardDescription>{ru ? "Все сканы репозитория, начиная с последнего." : "Every scan of this repository, newest first."}</CardDescription>
       </CardHeader>
       <CardContent>
         {/* One point is not a history: it shows nothing the grade card above
@@ -81,8 +84,8 @@ export function ScanHistory({ history }: { history: TrendPoint[] }) {
         {items.length < 2 ? (
           <EmptyState
             icon={<ScanLine />}
-            title="Only one scan so far"
-            description="Scan this repository again to see whether it is getting better or worse. Decay shows up between scans, not within one."
+            title={ru ? "Пока только один скан" : "Only one scan so far"}
+            description={ru ? "Просканируйте репозиторий снова, чтобы увидеть изменения его состояния." : "Scan this repository again to see whether it is getting better or worse. Decay shows up between scans, not within one."}
             className="border-0 py-8"
           />
         ) : (

@@ -1106,8 +1106,8 @@ export function negotiateLocale(header: string | null | undefined): Locale {
   return DEFAULT_LOCALE
 }
 
-/** Resolve the locale for a request: explicit cookie choice wins over the browser's guess. */
-export function resolveLocale(cookieValue: string | undefined, acceptLanguage: string | null): Locale {
+/** A saved choice wins; first-time visitors always start in English. */
+export function resolveLocale(cookieValue: string | undefined, _acceptLanguage: string | null): Locale {
   if (isLocale(cookieValue)) return cookieValue
-  return negotiateLocale(acceptLanguage)
+  return DEFAULT_LOCALE
 }

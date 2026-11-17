@@ -1,6 +1,18 @@
 "use client"
 
 import { useMemo, useState } from "react"
+import { useLocale } from "@/components/i18n/locale-provider"
+
+const LABELS_RU: Record<string, string> = {
+  Header: "Шапка", Handle: "Имя пользователя", Headline: "Заголовок", Subtitle: "Подзаголовок",
+  "Availability pill (empty hides it)": "Статус доступности (пустое поле скрывает его)", Summary: "Кратко о себе",
+  Stats: "Показатели", Value: "Значение", Label: "Подпись", Note: "Примечание", "Tech stack": "Технологии",
+  Group: "Группа", "Focus areas": "Специализация", Title: "Заголовок", Projects: "Проекты", Meta: "Сведения",
+  Body: "Описание", "Tags (comma separated, first 4 shown)": "Теги через запятую (видны первые четыре)",
+  "Education & about": "Образование и сведения о себе", Degree: "Образование", "Place & year": "Место и год",
+  "Notes (one per line)": "Примечания (каждое с новой строки)", "Certificates (one per line)": "Сертификаты (каждый с новой строки)",
+  About: "О себе", "Hobbies (comma separated)": "Увлечения через запятую", Contact: "Контакты",
+}
 
 import { RESUME_WIDTH, renderResumeCardSvg, type ResumeCardData } from "@/lib/resume-card"
 
@@ -34,9 +46,10 @@ function Field({
   rows?: number
   placeholder?: string
 }) {
+  const { locale } = useLocale()
   return (
     <label className="block">
-      <span className={label}>{title}</span>
+      <span className={label}>{locale === "ru" ? (LABELS_RU[title] ?? title) : title}</span>
       {rows ? (
         <textarea
           className={input}
@@ -58,25 +71,27 @@ function Field({
 }
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  const { locale } = useLocale()
   return (
     <details open className="rounded-lg border p-4">
-      <summary className="cursor-pointer text-sm font-semibold">{title}</summary>
+      <summary className="cursor-pointer text-sm font-semibold">{locale === "ru" ? (LABELS_RU[title] ?? title) : title}</summary>
       <div className="mt-4 space-y-3">{children}</div>
     </details>
   )
 }
 
 function RowTools({ onRemove, onAdd }: { onRemove?: () => void; onAdd?: () => void }) {
+  const { locale } = useLocale()
   return (
     <div className="flex gap-2">
       {onRemove ? (
         <button type="button" onClick={onRemove} className="text-muted-foreground text-xs underline">
-          remove
+          {locale === "ru" ? "удалить" : "remove"}
         </button>
       ) : null}
       {onAdd ? (
         <button type="button" onClick={onAdd} className="text-xs underline">
-          add
+          {locale === "ru" ? "добавить" : "add"}
         </button>
       ) : null}
     </div>
@@ -84,6 +99,8 @@ function RowTools({ onRemove, onAdd }: { onRemove?: () => void; onAdd?: () => vo
 }
 
 export function ResumeEditor({ initial }: { initial: ResumeCardData }) {
+  const { locale } = useLocale()
+  const ru = locale === "ru"
   const [data, setData] = useState<ResumeCardData>(initial)
 
   // Regenerating on every keystroke is affordable because the generator is pure
@@ -164,38 +181,35 @@ export function ResumeEditor({ initial }: { initial: ResumeCardData }) {
             onClick={() => downloadPng(2)}
             className="bg-foreground text-background rounded-lg px-4 py-2 text-sm font-semibold disabled:opacity-60"
           >
-            {busy ? "Rendering…" : "Download PNG (2×)"}
+            {busy ? (ru ? "Подготовка…" : "Rendering…") : (ru ? "Скачать PNG (2×)" : "Download PNG (2×)")}
           </button>
           <button
             type="button"
             onClick={downloadSvg}
             className="rounded-lg border px-4 py-2 text-sm font-medium"
           >
-            Download SVG
+            {ru ? "Скачать SVG" : "Download SVG"}
           </button>
           <button
             type="button"
             onClick={() => navigator.clipboard?.writeText(svg)}
             className="rounded-lg border px-4 py-2 text-sm font-medium"
           >
-            Copy SVG
+            {ru ? "Копировать SVG" : "Copy SVG"}
           </button>
           <button
             type="button"
             onClick={() => setData(initial)}
             className="text-muted-foreground rounded-lg border px-4 py-2 text-sm font-medium"
           >
-            Reset
+            {ru ? "Сбросить" : "Reset"}
           </button>
         </div>
         <p className="text-muted-foreground text-xs">
-          Nothing is saved — this page keeps no copy of your edits. Download
-          before you leave.
+          {ru ? "Изменения не сохраняются. Скачайте карточку перед уходом со страницы." : "Nothing is saved — this page keeps no copy of your edits. Download before you leave."}
         </p>
         <p className="text-muted-foreground text-xs">
-          <strong>PNG for a resume.</strong> Job boards, LinkedIn, Word and most
-          ATS either refuse SVG or parse it as HTML, which flattens the card
-          into a run of text. SVG is for a README or a site you control.
+          {ru ? "Для резюме выбирайте PNG. Сайты вакансий, LinkedIn, Word и многие системы подбора персонала могут не поддерживать SVG или превращать его в текст. SVG подходит для README и собственного сайта." : "Use PNG for a resume. Job boards, LinkedIn, Word and many applicant tracking systems may reject SVG or parse it as text. SVG is for a README or a site you control."}
         </p>
 
         <Section title="Header">

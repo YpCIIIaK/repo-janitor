@@ -13,6 +13,7 @@ import { GRADE_BADGE_CLASS } from "@/lib/grade-style"
 import { Card } from "@/components/ui/card"
 import { PortfolioTrend } from "@/components/repo-anti-rot/portfolio-trend"
 import { cn } from "@/lib/utils"
+import { useLocale } from "@/components/i18n/locale-provider"
 
 const severityChip: Record<"critical" | "warning" | "info", string> = {
   critical: "bg-destructive/15 text-destructive border-destructive/30",
@@ -32,6 +33,8 @@ export function ReposOverview({
   repos: StoredRepo[]
   onSelect: (id: string) => void
 }) {
+  const { locale } = useLocale()
+  const ru = locale === "ru"
   const total = repos.length
   const avgScore =
     total === 0 ? 0 : Math.round(repos.reduce((sum, r) => sum + r.latest.score, 0) / total)
@@ -44,15 +47,15 @@ export function ReposOverview({
   const trend = portfolioTrend(repos)
 
   const summary = [
-    { label: "Repositories", value: String(total) },
-    { label: "Avg score", value: String(avgScore) },
+    { label: ru ? "Репозитории" : "Repositories", value: String(total) },
+    { label: ru ? "Средняя оценка" : "Avg score", value: String(avgScore) },
     {
-      label: "Critical",
+      label: ru ? "Критические" : "Critical",
       value: String(totalCritical),
       tone: totalCritical > 0 ? "text-destructive" : undefined,
     },
     {
-      label: "Est. debt",
+      label: ru ? "Оценка трудозатрат" : "Est. debt",
       value: formatDebtHours(debtHours),
       tone: debtHours >= 8 ? "text-destructive" : undefined,
       hint: totalIssues > 0 ? `${totalIssues} open` : undefined,
@@ -62,9 +65,9 @@ export function ReposOverview({
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-balance text-2xl font-semibold tracking-tight">All repositories</h1>
+        <h1 className="text-balance text-2xl font-semibold tracking-tight">{ru ? "Все репозитории" : "All repositories"}</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Portfolio health across every scanned repo.
+          {ru ? "Состояние всех просканированных репозиториев." : "Portfolio health across every scanned repo."}
         </p>
       </div>
 

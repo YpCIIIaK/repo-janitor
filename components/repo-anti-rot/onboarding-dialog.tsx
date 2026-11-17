@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Check, Copy, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useLocale } from "@/components/i18n/locale-provider"
 import {
   Dialog,
   DialogContent,
@@ -40,6 +41,8 @@ jobs:
 
 /** `trigger` lets the sidebar rail supply a rail-shaped button. See SettingsDialog. */
 export function OnboardingDialog({ trigger }: { trigger?: React.ReactNode } = {}) {
+  const { locale } = useLocale()
+  const ru = locale === "ru"
   const [copied, setCopied] = useState(false)
 
   const copy = async () => {
@@ -54,16 +57,15 @@ export function OnboardingDialog({ trigger }: { trigger?: React.ReactNode } = {}
         {trigger ?? (
           <Button size="sm" className="h-8 gap-1.5">
             <Plus className="size-4" />
-            Add repo
+            {ru ? "Добавить репозиторий" : "Add repo"}
           </Button>
         )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>Connect a repository</DialogTitle>
+          <DialogTitle>{ru ? "Подключить репозиторий" : "Connect a repository"}</DialogTitle>
           <DialogDescription>
-            Repo Anti-Rot runs inside your own GitHub Actions — no compute on our side. Drop
-            this workflow into your repo and the first report lands here.
+            {ru ? "Repo Anti-Rot запускается в ваших GitHub Actions. Добавьте этот workflow в репозиторий, чтобы отправлять сюда отчёты." : "Repo Anti-Rot runs inside your own GitHub Actions. Add this workflow to your repository to send reports here."}
           </DialogDescription>
         </DialogHeader>
 
@@ -78,7 +80,7 @@ export function OnboardingDialog({ trigger }: { trigger?: React.ReactNode } = {}
             className="absolute right-2 top-2 h-7 gap-1.5"
           >
             {copied ? <Check className="size-3.5 text-primary" /> : <Copy className="size-3.5" />}
-            {copied ? "Copied" : "Copy"}
+            {copied ? (ru ? "Скопировано" : "Copied") : (ru ? "Копировать" : "Copy")}
           </Button>
         </div>
       </DialogContent>

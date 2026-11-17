@@ -7,6 +7,7 @@ import { type StoredRepo } from "@/lib/reports-store"
 import { rescanRepo } from "@/lib/rescan"
 import { Progress } from "@/components/ui/progress"
 import { cn } from "@/lib/utils"
+import { useLocale } from "@/components/i18n/locale-provider"
 
 /**
  * Re-runs a stored repo through the streaming `/api/scan` and appends a fresh
@@ -15,6 +16,8 @@ import { cn } from "@/lib/utils"
  * repos with no source URL (e.g. ingested from CI): nothing local to clone.
  */
 export function RescanButton({ repo, className }: { repo: StoredRepo; className?: string }) {
+  const { locale } = useLocale()
+  const ru = locale === "ru"
   const [loading, setLoading] = useState(false)
   const [progress, setProgress] = useState(0) // 0..1
   const [progressLabel, setProgressLabel] = useState("")
@@ -26,7 +29,7 @@ export function RescanButton({ repo, className }: { repo: StoredRepo; className?
     setLoading(true)
     setError(null)
     setProgress(0)
-    setProgressLabel("Starting…")
+    setProgressLabel(ru ? "Запуск…" : "Starting…")
 
     try {
       await rescanRepo(repo, {
@@ -50,10 +53,10 @@ export function RescanButton({ repo, className }: { repo: StoredRepo; className?
         variant="outline"
         onClick={rescan}
         disabled={loading || !url}
-        title={url ? `Re-scan ${url}` : "No source URL — this repo was ingested, not scanned locally"}
+        title={url ? `${ru ? "Пересканировать" : "Re-scan"} ${url}` : (ru ? "Нет исходного URL: отчёт получен извне" : "No source URL — this report was ingested")}
       >
         {loading ? <Loader2 className="size-4 animate-spin" /> : <RotateCw className="size-4" />}
-        {loading ? "Rescanning…" : "Rescan"}
+        {loading ? (ru ? "Сканирование…" : "Rescanning…") : (ru ? "Пересканировать" : "Rescan")}
       </Button>
       {loading && (
         <div className="w-[200px] space-y-1">

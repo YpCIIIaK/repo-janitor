@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useLocale } from "@/components/i18n/locale-provider"
 
 /**
  * Sign out, then reload.
@@ -9,6 +10,8 @@ import { useState } from "react"
  * note there about `<img src>` signing people out.
  */
 export function SignOutButton() {
+  const { locale } = useLocale()
+  const ru = locale === "ru"
   const [busy, setBusy] = useState(false)
 
   return (
@@ -28,7 +31,7 @@ export function SignOutButton() {
       }}
       className="rounded-lg border px-4 py-2 text-sm font-medium disabled:opacity-60"
     >
-      {busy ? "Signing out…" : "Sign out"}
+      {busy ? (ru ? "Выход…" : "Signing out…") : (ru ? "Выйти" : "Sign out")}
     </button>
   )
 }
