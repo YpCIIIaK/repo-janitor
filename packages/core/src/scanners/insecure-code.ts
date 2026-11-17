@@ -960,7 +960,7 @@ export interface CodeHit {
  */
 
 const PASSWORD_VALUE = /\b(?:password|passwd|passphrase|pwd|user_?pass)\w*\b|\$pass\b/i
-const SECRET_VALUE = /\b\w*(?:secret|private_?key|api_?key|signing_?key|hmac_?key)\w*\b/i
+const SECRET_VALUE = /\b\w*(?:secret|private_?key|api_?key|signing_?key|hmac_?key|encryption_?key)\w*\b/i
 // Protocols that mandate MD5/SHA-1 over a password or secret: not the project's choice.
 const MANDATED_HASH = /\bAPOP\b|\brealm\b|\bcnonce\b|WWW-Authenticate|258EAFA5-E914-47DA-95CA-C5AB0DC85B11/i
 

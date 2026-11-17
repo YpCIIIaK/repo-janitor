@@ -26875,7 +26875,7 @@ var require_lib4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-LX6SJJIE.js
+// ../cli/dist/chunk-5FLBFKKE.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -50809,7 +50809,7 @@ function date4(params) {
   return _coercedDate(ZodDate, params);
 }
 
-// ../cli/dist/chunk-LX6SJJIE.js
+// ../cli/dist/chunk-5FLBFKKE.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -81269,7 +81269,7 @@ var SKIP_IN_TEST = /* @__PURE__ */ new Set([
   "ssrf"
 ]);
 var PASSWORD_VALUE = /\b(?:password|passwd|passphrase|pwd|user_?pass)\w*\b|\$pass\b/i;
-var SECRET_VALUE = /\b\w*(?:secret|private_?key|api_?key|signing_?key|hmac_?key)\w*\b/i;
+var SECRET_VALUE = /\b\w*(?:secret|private_?key|api_?key|signing_?key|hmac_?key|encryption_?key)\w*\b/i;
 var MANDATED_HASH = /\bAPOP\b|\brealm\b|\bcnonce\b|WWW-Authenticate|258EAFA5-E914-47DA-95CA-C5AB0DC85B11/i;
 function hashInput(content, idx) {
   const open2 = content.indexOf("(", idx);
@@ -90169,7 +90169,7 @@ var SKIP_IN_TEST2 = /* @__PURE__ */ new Set([
   "ssrf"
 ]);
 var PASSWORD_VALUE2 = /\b(?:password|passwd|passphrase|pwd|user_?pass)\w*\b|\$pass\b/i;
-var SECRET_VALUE2 = /\b\w*(?:secret|private_?key|api_?key|signing_?key|hmac_?key)\w*\b/i;
+var SECRET_VALUE2 = /\b\w*(?:secret|private_?key|api_?key|signing_?key|hmac_?key|encryption_?key)\w*\b/i;
 var MANDATED_HASH2 = /\bAPOP\b|\brealm\b|\bcnonce\b|WWW-Authenticate|258EAFA5-E914-47DA-95CA-C5AB0DC85B11/i;
 function hashInput2(content, idx) {
   const open2 = content.indexOf("(", idx);
