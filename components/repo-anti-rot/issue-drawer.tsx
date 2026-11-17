@@ -286,7 +286,7 @@ export function IssueDrawer({
 
               <p className="text-sm leading-relaxed text-foreground/90">{issue.detail}</p>
 
-              {issue.flow && issue.flow.length > 1 && <FlowGraph steps={issue.flow} locale={locale} />}
+              {issue.flow && issue.flow.length > 1 && <FlowGraph steps={issue.flow} alternatives={issue.altFlows} locale={locale} />}
 
               {(() => {
                 const fix = fixExampleFor(issue.rule ?? ruleOf(issue))

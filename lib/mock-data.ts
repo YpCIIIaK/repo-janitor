@@ -50,6 +50,8 @@ export interface Issue {
   rule?: string
   /** Deep-engine findings: the path from untrusted input (source) to the dangerous call (sink). */
   flow?: FlowStep[]
+  /** Other paths into the same sink, each from a different place to fix. */
+  altFlows?: FlowStep[][]
 }
 
 export interface FlowStep {

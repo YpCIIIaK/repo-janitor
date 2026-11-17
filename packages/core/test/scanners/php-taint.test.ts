@@ -254,3 +254,20 @@ describe("flow graph", () => {
     expect(xss?.flow?.map((s) => s.text).join(" → ")).toContain("$_GET")
   })
 })
+
+describe("several origins into one sink", () => {
+  it("keeps a path per source file (DVWA: low/medium/high.php all echoed by index.php)", async () => {
+    const { phpTaintScanner } = await import("../../src/scanners/php-taint")
+    const { makeContext } = await import("../helpers")
+    const src = (body: string) => `<?php\nif (array_key_exists('name', $_GET) && $_GET['name'] != NULL) {\n${body}\n}\n`
+    const issues = await phpTaintScanner.run(makeContext({ files: {
+      "source/low.php": src("  $html .= '<pre>' . $_GET['name'] . '</pre>';"),
+      "source/medium.php": src("  $name = str_replace('<script>', '', $_GET['name']);\n  $html .= \"<pre>{$name}</pre>\";"),
+      "index.php": "<?php\nswitch ($level) { case 'low': $f = 'low.php'; break; default: $f = 'medium.php'; }\nrequire_once \"source/{$f}\";\necho $html;\n",
+    } }))
+    const xss = issues.find((i) => i.rule === "php-taint-xss")
+    const files = [xss?.flow ?? [], ...(xss?.altFlows ?? [])].flat().map((s) => s.file)
+    expect(files).toContain("source/low.php")
+    expect(files).toContain("source/medium.php")
+  })
+})

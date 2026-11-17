@@ -102,6 +102,8 @@ export const issueSchema = z.object({
    * Absent for single-line rules, which cannot see a path.
    */
   flow: z.array(flowStepSchema).optional(),
+  /** Other paths into the same sink (each starts at a different place to fix). */
+  altFlows: z.array(z.array(flowStepSchema)).optional(),
 })
 export type Issue = z.infer<typeof issueSchema>
 export type FlowStep = z.infer<typeof flowStepSchema>

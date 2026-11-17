@@ -36050,7 +36050,7 @@ var require_src4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-N37ICXUB.js
+// ../cli/dist/chunk-XZQP2SEH.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -59984,7 +59984,7 @@ function date4(params) {
   return _coercedDate(ZodDate, params);
 }
 
-// ../cli/dist/chunk-N37ICXUB.js
+// ../cli/dist/chunk-XZQP2SEH.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -93211,7 +93211,9 @@ var issueSchema = external_exports.object({
    * (guard, when one was seen but did not apply), and where it lands (sink).
    * Absent for single-line rules, which cannot see a path.
    */
-  flow: external_exports.array(flowStepSchema).optional()
+  flow: external_exports.array(flowStepSchema).optional(),
+  /** Other paths into the same sink (each starts at a different place to fix). */
+  altFlows: external_exports.array(external_exports.array(flowStepSchema)).optional()
 });
 var repoProfileSchema = external_exports.object({
   /** Total files the scan walked (after ignore globs). */
@@ -102285,6 +102287,11 @@ var posix2 = {
     return posix2.normalize(parts.filter(Boolean).join("/"));
   }
 };
+var MAX_ALT = 5;
+var originOf = (f3) => `${f3.source}|${f3.steps.filter((x3) => x3.line).map((x3) => {
+  var _a22;
+  return `${(_a22 = x3.file) != null ? _a22 : f3.file}:${x3.line}`;
+}).join(">")}`;
 var MAX_FACTS = 6;
 var MAX_STEPS = 8;
 var parser = new import_php_parser.Engine({
@@ -102317,7 +102324,11 @@ function merge2(...vals) {
   const seen = /* @__PURE__ */ new Set();
   for (const v2 of vals) {
     for (const f3 of v2) {
-      const key = `${(_a22 = f3.src) != null ? _a22 : ""}|${(_b = f3.param) != null ? _b : ""}|${[...f3.safe].sort().join(",")}|${f3.weak}`;
+      const from = f3.steps.slice(0, 2).map((x3) => {
+        var _a32;
+        return `${(_a32 = x3.file) != null ? _a32 : ""}:${x3.line}:${x3.text}`;
+      }).join(">");
+      const key = `${(_a22 = f3.src) != null ? _a22 : ""}|${(_b = f3.param) != null ? _b : ""}|${[...f3.safe].sort().join(",")}|${f3.weak}|${from}`;
       if (seen.has(key)) continue;
       seen.add(key);
       out.push(f3);
@@ -102604,10 +102615,17 @@ var Project = class {
     }
   }
   report(f3) {
+    var _a22, _b, _c, _d;
     const key = `${f3.kind}|${f3.file}|${f3.line}`;
     const at2 = this.reported.get(key);
     if (at2 !== void 0) {
-      if (this.findings[at2].weak && !f3.weak) this.findings[at2] = f3;
+      const kept = this.findings[at2];
+      if (kept.weak && !f3.weak) {
+        this.findings[at2] = __spreadProps(__spreadValues({}, f3), { alt: kept.alt });
+        return;
+      }
+      const seen = [kept, ...(_a22 = kept.alt) != null ? _a22 : []].map(originOf);
+      if (!seen.includes(originOf(f3)) && ((_c = (_b = kept.alt) == null ? void 0 : _b.length) != null ? _c : 0) < MAX_ALT) kept.alt = [...(_d = kept.alt) != null ? _d : [], __spreadProps(__spreadValues({}, f3), { alt: void 0 })];
       return;
     }
     this.reported.set(key, this.findings.length);
@@ -104036,7 +104054,7 @@ var phpTaintScanner = {
   category: "security",
   run(ctx) {
     return __async(this, null, function* () {
-      var _a22, _b, _c, _d, _e2, _f, _g, _h, _i, _j, _k;
+      var _a22, _b, _c, _d, _e2, _f, _g, _h, _i, _j, _k, _l, _m, _n2, _o, _p;
       const project = new Project();
       const contents = /* @__PURE__ */ new Map();
       let files = 0;
@@ -104057,29 +104075,40 @@ var phpTaintScanner = {
       project.run();
       const issues = [];
       const seen = /* @__PURE__ */ new Set();
+      const byId = /* @__PURE__ */ new Map();
       const reach = reachability(project);
       const CAP = /\b(?:current_user_can|is_super_admin|user_can|check_admin_referer)\s*\(/;
       for (const f3 of project.findings.sort(byPlace)) {
         if (issues.length >= MAX_FINDINGS2) break;
         const rule = RULES4[f3.kind];
         const id = `${rule.id}-${f3.file}:${f3.line}`;
-        if (seen.has(id)) continue;
+        if (seen.has(id)) {
+          const first = byId.get(id);
+          const flow = flowOf(f3);
+          const key = (fl) => fl.map((x3) => {
+            var _a32, _b2;
+            return `${x3.text}@${(_a32 = x3.file) != null ? _a32 : ""}:${(_b2 = x3.line) != null ? _b2 : ""}`;
+          }).join(">");
+          if ((first == null ? void 0 : first.flow) && key(flow) !== key(first.flow) && !((_b = first.altFlows) != null ? _b : []).some((a) => key(a) === key(flow)) && ((_d = (_c = first.altFlows) == null ? void 0 : _c.length) != null ? _d : 0) < MAX_ALT_FLOWS)
+            first.altFlows = [...(_e2 = first.altFlows) != null ? _e2 : [], flow];
+          continue;
+        }
         seen.add(id);
         let ageDays = 0;
         try {
           ageDays = yield ctx.git.blameAgeDays(f3.file, f3.line);
         } catch (e) {
         }
-        const line = (_c = (_b = contents.get(f3.file)) == null ? void 0 : _b.split(/\r?\n/)[f3.line - 1]) == null ? void 0 : _c.trim().slice(0, 200);
+        const line = (_g = (_f = contents.get(f3.file)) == null ? void 0 : _f.split(/\r?\n/)[f3.line - 1]) == null ? void 0 : _g.trim().slice(0, 200);
         const def = project.defAt(f3.file, f3.line);
         const entry = def ? reach.open.get(def.node) : void 0;
-        const body = def ? ((_d = contents.get(def.file)) != null ? _d : "").split(/\r?\n/).slice(((_g = (_f = (_e2 = def.node.loc) == null ? void 0 : _e2.start) == null ? void 0 : _f.line) != null ? _g : 1) - 1, f3.line - 1).join("\n") : "";
+        const body = def ? ((_h = contents.get(def.file)) != null ? _h : "").split(/\r?\n/).slice(((_k = (_j = (_i = def.node.loc) == null ? void 0 : _i.start) == null ? void 0 : _j.line) != null ? _k : 1) - 1, f3.line - 1).join("\n") : "";
         const adminOnly = !!def && !entry && (reach.admin.has(def.node) || CAP.test(body));
         let confidence = f3.weak ? "medium" : "high";
         if (adminOnly) confidence = confidence === "high" ? "medium" : "low";
         if (/HTTP_HOST|^\$_SERVER$/.test(f3.source) && f3.kind !== "sql" && f3.kind !== "cmd") confidence = confidence === "high" ? "medium" : "low";
         const where = entry ? ` Reachable from ${entry}.` : adminOnly ? " Reachable from admin screens only (or after a capability check): an administrator would have to be the attacker or be tricked into it." : "";
-        issues.push(__spreadProps(__spreadValues({
+        issues.push(__spreadValues(__spreadProps(__spreadValues({
           id,
           category: "security",
           severity: rule.severity,
@@ -104091,7 +104120,8 @@ var phpTaintScanner = {
           rule: rule.id,
           confidence,
           flow: flowOf(f3)
-        }));
+        }), ((_l = f3.alt) == null ? void 0 : _l.length) ? { altFlows: distinctFlows(flowOf(f3), f3.alt.map(flowOf)) } : {}));
+        byId.set(id, issues[issues.length - 1]);
       }
       for (const a of auditAccessControl(project)) {
         if (issues.length >= MAX_FINDINGS2) break;
@@ -104105,7 +104135,7 @@ var phpTaintScanner = {
         } catch (e) {
         }
         const who = a.exposure === "public" ? "any visitor (no login)" : "any logged-in user, including subscribers";
-        const line = (_i = (_h = contents.get(a.file)) == null ? void 0 : _h.split(/\r?\n/)[a.line - 1]) == null ? void 0 : _i.trim().slice(0, 200);
+        const line = (_n2 = (_m = contents.get(a.file)) == null ? void 0 : _m.split(/\r?\n/)[a.line - 1]) == null ? void 0 : _n2.trim().slice(0, 200);
         const path = `${a.hook} \u2192 ${a.chain.join(" \u2192 ")} \u2192 ${a.action}`;
         const text22 = a.kind === "csrf" ? { severity: "warning", title: `CSRF: ${a.action} changes data without a nonce check`, detail: `${path} checks the user's capability but not a nonce, so another site can make a logged-in administrator's browser send this request. Verify a nonce (check_admin_referer / check_ajax_referer) before acting.`, confidence: "medium" } : a.kind === "data-exposure" ? { severity: "critical", title: `Sensitive data sent to unauthenticated requests by ${a.action}`, detail: `${who} can call ${path}, which returns user records or secret options with no capability check. Return only public fields, or require the right capability.`, confidence: "medium" } : a.settings ? {
           severity: "critical",
@@ -104139,7 +104169,7 @@ var phpTaintScanner = {
           ageDays = yield ctx.git.blameAgeDays(l3.file, l3.line);
         } catch (e) {
         }
-        const line = (_k = (_j = contents.get(l3.file)) == null ? void 0 : _j.split(/\r?\n/)[l3.line - 1]) == null ? void 0 : _k.trim().slice(0, 200);
+        const line = (_p = (_o = contents.get(l3.file)) == null ? void 0 : _o.split(/\r?\n/)[l3.line - 1]) == null ? void 0 : _p.trim().slice(0, 200);
         issues.push(__spreadProps(__spreadValues({
           id,
           category: "security",
@@ -104160,6 +104190,15 @@ var phpTaintScanner = {
 function byPlace(a, b3) {
   return a.file.localeCompare(b3.file) || a.line - b3.line;
 }
+function distinctFlows(first, alts) {
+  const sig = (fl) => [...new Set(fl.map((x3) => {
+    var _a22;
+    return (_a22 = x3.file) != null ? _a22 : "";
+  }))].join(">");
+  const seen = /* @__PURE__ */ new Set([sig(first)]);
+  return alts.filter((a) => !seen.has(sig(a)) && (seen.add(sig(a)), true));
+}
+var MAX_ALT_FLOWS = 5;
 function flowOf(f3) {
   const out = [];
   const first = f3.steps[0];
@@ -104167,7 +104206,7 @@ function flowOf(f3) {
     var _a22, _b;
     return s ? __spreadValues(__spreadValues({}, ((_a22 = s.file) != null ? _a22 : f3.file) ? { file: (_b = s.file) != null ? _b : f3.file } : {}), s.line ? { line: s.line } : {}) : {};
   };
-  if (!first || first.text !== f3.source) out.push({ role: "source", text: f3.source });
+  if (!first || first.text !== f3.source) out.push(__spreadValues({ role: "source", text: f3.source }, at2(first)));
   for (const [i, s] of f3.steps.entries()) {
     if (s.text === "string" && f3.steps.length > 1) continue;
     out.push(__spreadValues({ role: i === 0 && (first == null ? void 0 : first.text) === f3.source ? "source" : "step", text: s.text }, at2(s)));
@@ -105034,7 +105073,9 @@ var issueSchema2 = external_exports.object({
    * (guard, when one was seen but did not apply), and where it lands (sink).
    * Absent for single-line rules, which cannot see a path.
    */
-  flow: external_exports.array(flowStepSchema2).optional()
+  flow: external_exports.array(flowStepSchema2).optional(),
+  /** Other paths into the same sink (each starts at a different place to fix). */
+  altFlows: external_exports.array(external_exports.array(flowStepSchema2)).optional()
 });
 var repoProfileSchema2 = external_exports.object({
   /** Total files the scan walked (after ignore globs). */
@@ -113617,6 +113658,8 @@ var posix3 = {
     return posix3.normalize(parts.filter(Boolean).join("/"));
   }
 };
+var MAX_ALT2 = 5;
+var originOf2 = (f3) => `${f3.source}|${f3.steps.filter((x3) => x3.line).map((x3) => `${x3.file ?? f3.file}:${x3.line}`).join(">")}`;
 var MAX_FACTS2 = 6;
 var MAX_STEPS2 = 8;
 var parser2 = new import_php_parser2.Engine({
@@ -113644,7 +113687,8 @@ function merge3(...vals) {
   const seen = /* @__PURE__ */ new Set();
   for (const v2 of vals) {
     for (const f3 of v2) {
-      const key = `${f3.src ?? ""}|${f3.param ?? ""}|${[...f3.safe].sort().join(",")}|${f3.weak}`;
+      const from = f3.steps.slice(0, 2).map((x3) => `${x3.file ?? ""}:${x3.line}:${x3.text}`).join(">");
+      const key = `${f3.src ?? ""}|${f3.param ?? ""}|${[...f3.safe].sort().join(",")}|${f3.weak}|${from}`;
       if (seen.has(key)) continue;
       seen.add(key);
       out.push(f3);
@@ -113914,7 +113958,13 @@ var Project2 = class {
     const key = `${f3.kind}|${f3.file}|${f3.line}`;
     const at2 = this.reported.get(key);
     if (at2 !== void 0) {
-      if (this.findings[at2].weak && !f3.weak) this.findings[at2] = f3;
+      const kept = this.findings[at2];
+      if (kept.weak && !f3.weak) {
+        this.findings[at2] = { ...f3, alt: kept.alt };
+        return;
+      }
+      const seen = [kept, ...kept.alt ?? []].map(originOf2);
+      if (!seen.includes(originOf2(f3)) && (kept.alt?.length ?? 0) < MAX_ALT2) kept.alt = [...kept.alt ?? [], { ...f3, alt: void 0 }];
       return;
     }
     this.reported.set(key, this.findings.length);
@@ -115317,13 +115367,21 @@ var phpTaintScanner2 = {
     project.run();
     const issues = [];
     const seen = /* @__PURE__ */ new Set();
+    const byId = /* @__PURE__ */ new Map();
     const reach = reachability2(project);
     const CAP = /\b(?:current_user_can|is_super_admin|user_can|check_admin_referer)\s*\(/;
     for (const f3 of project.findings.sort(byPlace2)) {
       if (issues.length >= MAX_FINDINGS4) break;
       const rule = RULES8[f3.kind];
       const id = `${rule.id}-${f3.file}:${f3.line}`;
-      if (seen.has(id)) continue;
+      if (seen.has(id)) {
+        const first = byId.get(id);
+        const flow = flowOf2(f3);
+        const key = (fl) => fl.map((x3) => `${x3.text}@${x3.file ?? ""}:${x3.line ?? ""}`).join(">");
+        if (first?.flow && key(flow) !== key(first.flow) && !(first.altFlows ?? []).some((a) => key(a) === key(flow)) && (first.altFlows?.length ?? 0) < MAX_ALT_FLOWS2)
+          first.altFlows = [...first.altFlows ?? [], flow];
+        continue;
+      }
       seen.add(id);
       let ageDays = 0;
       try {
@@ -115350,8 +115408,10 @@ var phpTaintScanner2 = {
         ...line ? { evidence: line } : {},
         rule: rule.id,
         confidence,
-        flow: flowOf2(f3)
+        flow: flowOf2(f3),
+        ...f3.alt?.length ? { altFlows: distinctFlows2(flowOf2(f3), f3.alt.map(flowOf2)) } : {}
       });
+      byId.set(id, issues[issues.length - 1]);
     }
     for (const a of auditAccessControl2(project)) {
       if (issues.length >= MAX_FINDINGS4) break;
@@ -115419,11 +115479,17 @@ var phpTaintScanner2 = {
 function byPlace2(a, b3) {
   return a.file.localeCompare(b3.file) || a.line - b3.line;
 }
+function distinctFlows2(first, alts) {
+  const sig = (fl) => [...new Set(fl.map((x3) => x3.file ?? ""))].join(">");
+  const seen = /* @__PURE__ */ new Set([sig(first)]);
+  return alts.filter((a) => !seen.has(sig(a)) && (seen.add(sig(a)), true));
+}
+var MAX_ALT_FLOWS2 = 5;
 function flowOf2(f3) {
   const out = [];
   const first = f3.steps[0];
   const at2 = (s) => s ? { ...s.file ?? f3.file ? { file: s.file ?? f3.file } : {}, ...s.line ? { line: s.line } : {} } : {};
-  if (!first || first.text !== f3.source) out.push({ role: "source", text: f3.source });
+  if (!first || first.text !== f3.source) out.push({ role: "source", text: f3.source, ...at2(first) });
   for (const [i, s] of f3.steps.entries()) {
     if (s.text === "string" && f3.steps.length > 1) continue;
     out.push({ role: i === 0 && first?.text === f3.source ? "source" : "step", text: s.text, ...at2(s) });

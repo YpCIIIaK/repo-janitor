@@ -72,7 +72,17 @@ export interface Finding {
   source: string
   steps: Step[]
   weak: boolean
+  /** Other paths into the same sink, each from a different origin (at most MAX_ALT). */
+  alt?: Finding[]
 }
+
+const MAX_ALT = 5
+/**
+ * A path's identity: its source and every located step. Long paths keep only their
+ * last steps, which several origins share (DVWA's low/medium/high.php all end in
+ * index.php → dvwaHtmlEcho), so the first located step alone cannot tell them apart.
+ */
+const originOf = (f: Finding) => `${f.source}|${f.steps.filter((x) => x.line).map((x) => `${x.file ?? f.file}:${x.line}`).join(">")}`
 
 interface SinkUse {
   param: number
@@ -138,7 +148,11 @@ function merge(...vals: Value[]): Value {
   const seen = new Set<string>()
   for (const v of vals) {
     for (const f of v) {
-      const key = `${f.src ?? ""}|${f.param ?? ""}|${[...f.safe].sort().join(",")}|${f.weak}`
+      // The file a path starts in is part of its identity: the same $_GET key read in
+      // low.php and in high.php are two places to fix, not one (bounded by MAX_FACTS).
+      // Steps inside the current file carry no file name, so the first steps themselves identify the start.
+      const from = f.steps.slice(0, 2).map((x) => `${x.file ?? ""}:${x.line}:${x.text}`).join(">")
+      const key = `${f.src ?? ""}|${f.param ?? ""}|${[...f.safe].sort().join(",")}|${f.weak}|${from}`
       if (seen.has(key)) continue
       seen.add(key)
       out.push(f)
@@ -438,8 +452,12 @@ export class Project {
     const key = `${f.kind}|${f.file}|${f.line}`
     const at = this.reported.get(key)
     if (at !== undefined) {
+      const kept = this.findings[at]
       // Keep the strongest evidence for a place: a direct request flow beats a header/cookie one.
-      if (this.findings[at].weak && !f.weak) this.findings[at] = f
+      if (kept.weak && !f.weak) { this.findings[at] = { ...f, alt: kept.alt }; return }
+      // Other origins into the same sink are separate places to fix (DVWA's low/medium/high.php).
+      const seen = [kept, ...(kept.alt ?? [])].map(originOf)
+      if (!seen.includes(originOf(f)) && (kept.alt?.length ?? 0) < MAX_ALT) kept.alt = [...(kept.alt ?? []), { ...f, alt: undefined }]
       return
     }
     this.reported.set(key, this.findings.length)

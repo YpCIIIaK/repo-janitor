@@ -45,13 +45,24 @@ export const phpTaintScanner: Scanner = {
 
     const issues: Issue[] = []
     const seen = new Set<string>()
+    // One finding per sink, but every distinct path into it is kept: DVWA's
+    // xss_r/index.php echoes $html from low.php, medium.php and high.php, and
+    // each source file is a separate place to fix.
+    const byId = new Map<string, Issue>()
     const reach = reachability(project)
     const CAP = /\b(?:current_user_can|is_super_admin|user_can|check_admin_referer)\s*\(/
     for (const f of project.findings.sort(byPlace)) {
       if (issues.length >= MAX_FINDINGS) break
       const rule = RULES[f.kind]
       const id = `${rule.id}-${f.file}:${f.line}`
-      if (seen.has(id)) continue
+      if (seen.has(id)) {
+        const first = byId.get(id)
+        const flow = flowOf(f)
+        const key = (fl: FlowStep[]) => fl.map((x) => `${x.text}@${x.file ?? ""}:${x.line ?? ""}`).join(">")
+        if (first?.flow && key(flow) !== key(first.flow) && !(first.altFlows ?? []).some((a) => key(a) === key(flow)) && (first.altFlows?.length ?? 0) < MAX_ALT_FLOWS)
+          first.altFlows = [...(first.altFlows ?? []), flow]
+        continue
+      }
       seen.add(id)
       let ageDays = 0
       try { ageDays = await ctx.git.blameAgeDays(f.file, f.line) } catch { /* blame unavailable */ }
@@ -79,7 +90,9 @@ export const phpTaintScanner: Scanner = {
         rule: rule.id,
         confidence,
         flow: flowOf(f),
+        ...(f.alt?.length ? { altFlows: distinctFlows(flowOf(f), f.alt.map(flowOf)) } : {}),
       })
+      byId.set(id, issues[issues.length - 1])
     }
 
     // Broken access control: public / any-user entry points reaching privileged actions.
@@ -146,12 +159,23 @@ function byPlace(a: Finding, b: Finding) {
  * source → steps → sink. Placeholder steps ("string": the value was
  * concatenated into a string) are kept only when they are all there is.
  */
+/** Paths shown as alternatives must start somewhere new: same files in the same order is the same fix. */
+function distinctFlows(first: FlowStep[], alts: FlowStep[][]): FlowStep[][] {
+  const sig = (fl: FlowStep[]) => [...new Set(fl.map((x) => x.file ?? ""))].join(">")
+  const seen = new Set([sig(first)])
+  return alts.filter((a) => !seen.has(sig(a)) && (seen.add(sig(a)), true))
+}
+
+/** Further paths kept per sink beyond the first: enough to name each place to fix. */
+const MAX_ALT_FLOWS = 5
+
 export function flowOf(f: Finding): FlowStep[] {
   const out: FlowStep[] = []
   const first = f.steps[0]
   const at = (s: { file?: string; line: number } | undefined) =>
     s ? { ...(s.file ?? f.file ? { file: s.file ?? f.file } : {}), ...(s.line ? { line: s.line } : {}) } : {}
-  if (!first || first.text !== f.source) out.push({ role: "source", text: f.source })
+  // Long paths keep only their last steps; the source still gets the earliest location known.
+  if (!first || first.text !== f.source) out.push({ role: "source", text: f.source, ...at(first) })
   for (const [i, s] of f.steps.entries()) {
     if (s.text === "string" && f.steps.length > 1) continue
     out.push({ role: i === 0 && first?.text === f.source ? "source" : "step", text: s.text, ...at(s) })

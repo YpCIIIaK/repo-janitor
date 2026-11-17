@@ -20,9 +20,12 @@ const KEEP_TAIL = 2
  * what carries it, and the call where it does harm. Each node names the code
  * as written and its file:line, so the path can be checked by reading it.
  */
-export function FlowGraph({ steps, locale }: { steps: FlowStep[]; locale: string }) {
+export function FlowGraph({ steps: first, alternatives = [], locale }: { steps: FlowStep[]; alternatives?: FlowStep[][]; locale: string }) {
   const ru = locale === "ru"
   const [open, setOpen] = useState(false)
+  const [pick, setPick] = useState(0)
+  const paths = [first, ...alternatives]
+  const steps = paths[Math.min(pick, paths.length - 1)]
   const foldable = steps.length > KEEP_HEAD + KEEP_TAIL + 1
   const hidden = foldable && !open ? steps.length - KEEP_HEAD - KEEP_TAIL : 0
   const labelled = withWhere(steps, ru)
@@ -36,6 +39,27 @@ export function FlowGraph({ steps, locale }: { steps: FlowStep[]; locale: string
           {ru ? `${steps.length} ${stepsRu(steps.length)} от ввода до вызова` : `${steps.length} steps from input to call`}
         </div>
       </div>
+      {paths.length > 1 && (
+        <div className="space-y-1">
+          <p className="text-[11px] text-muted-foreground">
+            {ru ? `Сюда ведут ${paths.length} разных пути — у каждого своё место для исправления:` : `${paths.length} different paths lead here; each has its own place to fix:`}
+          </p>
+          <div className="flex flex-wrap gap-1" role="tablist">
+            {paths.map((p, i) => (
+              <button
+                key={i}
+                type="button"
+                role="tab"
+                aria-selected={i === pick}
+                onClick={() => { setPick(i); setOpen(false) }}
+                className={cn("rounded border px-2 py-0.5 font-mono text-[11px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring", i === pick ? "border-foreground/40 bg-muted text-foreground" : "border-border text-muted-foreground hover:text-foreground")}
+              >
+                {startFile(p) ?? `${ru ? "путь" : "path"} ${i + 1}`}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
       <ol className="relative space-y-0">
         {shown.map((s, i) => {
           const last = i === shown.length - 1
@@ -94,4 +118,10 @@ function stepsRu(n: number): string {
   if (d === 1 && h !== 11) return "шаг"
   if (d >= 2 && d <= 4 && (h < 12 || h > 14)) return "шага"
   return "шагов"
+}
+
+/** The file a path starts in: the first step that names one. */
+function startFile(steps: FlowStep[]): string | undefined {
+  const f = steps.find((s) => s.file)?.file
+  return f ? f.split("/").slice(-2).join("/") : undefined
 }

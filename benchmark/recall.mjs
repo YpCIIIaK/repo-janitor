@@ -150,7 +150,7 @@ function deepEngine(dir) {
   rmSync(dirname(out), { recursive: true, force: true })
   return [...(r.issues ?? []), ...(r.lowConfidence ?? [])].map((i) => {
     const m = /^(.*?):(\d+)/.exec(i.location ?? "")
-    return { rule: i.rule ?? "", id: i.id, file: m ? m[1] : (i.location ?? ""), line: m ? +m[2] : 0, via: (i.flow ?? []).map((s) => s.file).filter(Boolean) }
+    return { rule: i.rule ?? "", id: i.id, file: m ? m[1] : (i.location ?? ""), line: m ? +m[2] : 0, via: [i.flow ?? [], ...(i.altFlows ?? [])].flat().map((s) => s.file).filter(Boolean) }
   })
 }
 
