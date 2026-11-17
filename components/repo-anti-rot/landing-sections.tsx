@@ -25,6 +25,8 @@ import {
   type CheckFamily,
 } from "@/lib/landing-facts"
 import { GRADE_CSS_VAR } from "@/lib/grade-style"
+import { TrustSection } from "@/components/repo-anti-rot/landing-trust"
+import benchStats from "@/benchmark/stats.json"
 import { falsePositiveUrl } from "@/lib/false-positive"
 import type { Grade } from "@/lib/mock-data"
 import { computeScore, issuesFromCounts, penaltyBreakdown, scoreToGrade } from "@/lib/score"
@@ -143,7 +145,12 @@ export function LandingSections() {
   // the numbers after it have to close the gap rather than skip a digit.
   const summary = useScanSummary()
   const num = (n: number) => String(n).padStart(2, "0")
-  const corpusIndex = 3
+  const { locale } = useLocale()
+  const corpusSize = new Intl.NumberFormat(locale === "ru" ? "ru-RU" : "en-US").format(
+    (benchStats as { uniqueRepositories?: number; repos: number }).uniqueRepositories ?? benchStats.repos,
+  )
+  const trustIndex = 3
+  const corpusIndex = trustIndex + 1
   const privacyIndex = summary ? corpusIndex + 1 : corpusIndex
 
   return (
@@ -385,6 +392,9 @@ export function LandingSections() {
           the letters mean, and this is where they find out what an ordinary
           repository actually gets. Renders nothing until the sample is big
           enough to be worth saying. */}
+      {/* ---- how we know findings are right: precision, recall, deep engine ---- */}
+      <TrustSection index={num(trustIndex)} />
+
       {summary && <ScanSummarySection summary={summary} index={num(corpusIndex)} />}
 
       {/* ---- what happens to your code --------------------------------------
@@ -546,7 +556,7 @@ export function LandingSections() {
       <section id="state" className="border-b border-border bg-card/20">
         <div className="mx-auto flex max-w-6xl flex-col items-start gap-4 px-4 py-12 sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <div className="max-w-2xl space-y-2">
-            <h2 className="text-xl font-semibold tracking-tight">{t("landing.state.title")}</h2>
+            <h2 className="text-xl font-semibold tracking-tight">{t("landing.state.title", { count: corpusSize })}</h2>
             <p className="text-sm leading-relaxed text-muted-foreground">{t("landing.state.text")}</p>
           </div>
           <Link
