@@ -18,6 +18,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { cn } from "@/lib/utils"
 import { fixExampleFor } from "@/lib/fix-examples"
 import { ruleOf } from "@/packages/core/src/rules"
+import { FlowGraph } from "@/components/repo-anti-rot/flow-graph"
 import { DependencyResearchGraph, type DependencyResearchGraphProps } from "@/components/repo-anti-rot/dependency-research-graph"
 
 interface Props {
@@ -284,6 +285,8 @@ export function IssueDrawer({
               )}
 
               <p className="text-sm leading-relaxed text-foreground/90">{issue.detail}</p>
+
+              {issue.flow && issue.flow.length > 1 && <FlowGraph steps={issue.flow} locale={locale} />}
 
               {(() => {
                 const fix = fixExampleFor(issue.rule ?? ruleOf(issue))

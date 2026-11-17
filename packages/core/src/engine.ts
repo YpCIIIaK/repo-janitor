@@ -31,6 +31,7 @@ import { configConflictScanner } from "./scanners/config-conflict"
 import { licenseRiskScanner } from "./scanners/license-risk"
 import { ciHealthScanner } from "./scanners/ci-health"
 import { duplicateCodeScanner } from "./scanners/duplicate-code"
+import { phpTaintScanner } from "./scanners/php-taint"
 import { supplyChainScanner } from "./scanners/supply-chain"
 
 /** Default scanner registry. Add new scanners here as they are implemented. */
@@ -64,6 +65,12 @@ export const defaultScanners: Scanner[] = [
   duplicateCodeScanner,
   supplyChainScanner,
 ]
+
+/**
+ * Deep engines: slower, whole-program analysis, off unless asked for
+ * (`--only php-taint`, or withAddons()). Their findings carry a data-flow path.
+ */
+export const addonScanners: Scanner[] = [phpTaintScanner]
 
 /** Severity penalties per finding, before the per-tier discount in
  * {@link SEVERITY_CURVE}. info is deliberately near-cosmetic — a quarter of a

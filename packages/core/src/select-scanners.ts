@@ -1,8 +1,22 @@
-import { defaultScanners } from "./engine"
+import { addonScanners, defaultScanners } from "./engine"
 import type { Scanner } from "./scanner"
 
 /** Every registered scanner id, in engine order. */
 export const ALL_SCANNER_IDS: readonly string[] = defaultScanners.map((s) => s.id)
+
+/** Add-on scanner ids: off unless enabled. */
+export const ADDON_SCANNER_IDS: readonly string[] = addonScanners.map((s) => s.id)
+
+/**
+ * The default registry plus the requested add-ons. Unknown add-on ids are
+ * reported so a typo is not silently ignored.
+ */
+export function withAddons(ids: readonly string[] | null | undefined, base: Scanner[] = defaultScanners): SelectScannersResult {
+  const wanted = new Set((ids ?? []).map((s) => s.trim()).filter(Boolean))
+  const unknown = [...wanted].filter((id) => !ADDON_SCANNER_IDS.includes(id))
+  const extra = addonScanners.filter((s) => wanted.has(s.id) && !base.some((b) => b.id === s.id))
+  return { scanners: [...base, ...extra], unknown }
+}
 
 /**
  * Parse a CLI `--only` value: comma-separated scanner ids.
@@ -35,8 +49,9 @@ export function selectScanners(only?: string[] | null): SelectScannersResult {
     return { scanners: defaultScanners, unknown: [] }
   }
   const wanted = new Set(only)
-  const known = new Set(ALL_SCANNER_IDS)
+  const known = new Set([...ALL_SCANNER_IDS, ...ADDON_SCANNER_IDS])
   const unknown = only.filter((id) => !known.has(id))
-  const scanners = defaultScanners.filter((s) => wanted.has(s.id))
+  // `--only` may name an add-on directly (e.g. `--only php-taint`).
+  const scanners = [...defaultScanners, ...addonScanners].filter((s) => wanted.has(s.id))
   return { scanners, unknown }
 }
