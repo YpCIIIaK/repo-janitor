@@ -36,6 +36,9 @@ export default tseslint.config(
       "packages/audit-engine/**",
       "packages/*/dist/**",
       "datamine/**",
+      // Third-party trees the benchmark clones for recall cases.
+      "benchmark/.recall-cache/**",
+      "benchmark/.replay/**",
       "sample-repo/**",
       "reports/**",
       ".repo-anti-rot/**",

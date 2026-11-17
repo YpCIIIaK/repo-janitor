@@ -6,8 +6,8 @@
  *
  *   pnpm --filter ./packages/core build && node benchmark/rescore.mjs
  *
- * Findings whose confidence the scanner set itself (insecure-code: taint-gated)
- * keep it; every other finding takes the per-rule confidence, as runScan does.
+ * Findings whose confidence the scanner set itself (insecure-code's taint-gated
+ * injection rules) keep it; every other finding takes the per-rule confidence, as runScan does.
  */
 import { existsSync, readFileSync, statSync, writeFileSync } from "node:fs"
 import { dirname, join } from "node:path"
@@ -20,9 +20,11 @@ if (!existsSync(coreDist) || statSync(coreDist).mtimeMs < statSync(data).mtimeMs
   console.error("Core build is older than confidence-data.ts: pnpm --filter ./packages/core build")
   process.exit(1)
 }
-const { computeScore, confidenceOf, scoreToGrade } = await import(pathToFileURL(coreDist).href)
-const SELF_STAMPED = new Set(["insecure-code"])
-const conf = (f) => (SELF_STAMPED.has(f.scanner) ? f.confidence : confidenceOf(f.rule))
+const { computeScore, confidenceOf, scoreToGrade, INJECTION_RULES } = await import(pathToFileURL(coreDist).href)
+// insecure-code stamps confidence only on its taint-gated injection rules; its
+// other rules (XXE, TLS, weak hashes) take the per-rule scale, as runScan does.
+const selfStamped = (f) => f.scanner === "insecure-code" && INJECTION_RULES.has(String(f.rule ?? "").replace(/^insecure-/, ""))
+const conf = (f) => (selfStamped(f) ? f.confidence : confidenceOf(f.rule))
 
 const corpus = JSON.parse(readFileSync(join(here, "corpus.json"), "utf8"))
 let changedScores = 0
