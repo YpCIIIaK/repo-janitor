@@ -45,10 +45,10 @@ const cacheDir = join(here, ".recall-cache")
 /** Vulnerability classes, keyed to the rule ids that report them. */
 export const CLASSES = {
   sqli: /sql/,
-  xss: /xss|innerhtml|dangerous-html|template-html/,
-  cmdi: /exec-interpolated|shell-true|os-system|command/,
-  "code-injection": /eval|new-function|include-user-input|code-injection/,
-  deserialization: /unserialize|deserializ|pickle|marshal|yaml-load/,
+  xss: /xss|innerhtml|dangerous-html|template-html|php-taint-html/,
+  cmdi: /exec-interpolated|shell-true|os-system|command|cmdi/,
+  "code-injection": /eval|new-function|include-user-input|code-injection|file-inclusion/,
+  deserialization: /unserialize|deserializ|pickle|marshal|yaml-load|object-injection/,
   ssrf: /ssrf/,
   "path-traversal": /path-traversal|path-injection/,
   xxe: /xxe/,
@@ -58,9 +58,9 @@ export const CLASSES = {
   secrets: /^secret-/,
   // No rule targets these yet. They stay in the table so the gap shows as 0%.
   csrf: /csrf/,
-  "access-control": /idor|access-control|missing-auth|capability/,
+  "access-control": /idor|access-control|missing-auth|capability|privilege-escalation|broken-access/,
   "file-upload": /upload/,
-  auth: /weak-session|brute|hardcoded-cred|auth-bypass/,
+  auth: /weak-session|brute|hardcoded-cred|auth-bypass|account-takeover/,
   "input-validation": /input-validation|mass-assign/,
   "data-exposure": /exposure|sensitive-file|debug-endpoint/,
   misconfig: /misconfig|cors|debug-mode/,
@@ -141,7 +141,20 @@ function banditEngine(dir, files) {
   return JSON.parse(r.stdout).results.map((x) => ({ rule: `cwe-${x.issue_cwe?.id ?? 0}`, id: x.test_id, file: x.filename.replace(/^\.\//, ""), line: x.line_number }))
 }
 
-export const ENGINES = { fast: fastEngine, semgrep: semgrepEngine, bandit: banditEngine }
+/** The deep PHP engine (php-taint): whole-program data flow, off in normal scans. */
+function deepEngine(dir) {
+  const out = join(mkdtempSync(join(tmpdir(), "recall-")), "r.json")
+  spawnSync(process.execPath, [join(root, "packages/cli/dist/index.js"), "scan", dir, "-f", "json", "--all", "--only", "php-taint", "-o", out], { stdio: "ignore", timeout: 900_000 })
+  if (!existsSync(out)) throw new Error(`deep engine produced no report for ${dir}`)
+  const r = JSON.parse(readFileSync(out, "utf8"))
+  rmSync(dirname(out), { recursive: true, force: true })
+  return [...(r.issues ?? []), ...(r.lowConfidence ?? [])].map((i) => {
+    const m = /^(.*?):(\d+)/.exec(i.location ?? "")
+    return { rule: i.rule ?? "", id: i.id, file: m ? m[1] : (i.location ?? ""), line: m ? +m[2] : 0, via: (i.flow ?? []).map((s) => s.file).filter(Boolean) }
+  })
+}
+
+export const ENGINES = { fast: fastEngine, deep: deepEngine, semgrep: semgrepEngine, bandit: banditEngine }
 
 /** Source files of each language; a fix's tests, docs and lockfiles are not where the vulnerability is. */
 export const LANGUAGE_EXT = {
@@ -217,7 +230,7 @@ function changedFiles(a, b) {
 }
 
 export function judge(c, vulnFindings, fixedFindings, files) {
-  const inScope = (f) => files.includes(f.file) && classOf(ruleOf(f)) === c.class
+  const inScope = (f) => touches(f, files) && classOf(ruleOf(f)) === c.class
   const v = vulnFindings.filter(inScope)
   const x = fixedFindings.filter(inScope)
   const count = (list) => list.reduce((m, f) => m.set(f.file, (m.get(f.file) ?? 0) + 1), new Map())
@@ -231,8 +244,11 @@ export function judge(c, vulnFindings, fixedFindings, files) {
  * vulnerability. vulnerable → hit / miss; clean → clean / fp (a false alarm on
  * code known to be fixed, e.g. DVWA's "impossible" level).
  */
+/** A finding is about a file when it is reported there, or its data-flow path passes through it. */
+const touches = (f, files) => files.includes(f.file) || (f.via ?? []).some((v) => files.includes(v))
+
 export function judgeExpected(c, findings) {
-  const found = findings.find((f) => c.files.includes(f.file) && classOf(ruleOf(f)) === c.class)
+  const found = findings.find((f) => touches(f, c.files) && classOf(ruleOf(f)) === c.class)
   if (c.expect === "clean") return { verdict: found ? "fp" : "clean", file: found?.file }
   return found ? { verdict: "hit", file: found.file } : { verdict: "miss" }
 }

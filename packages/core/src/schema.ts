@@ -41,6 +41,14 @@ const categoryInput = z.preprocess(
   categorySchema,
 )
 
+export const flowStepSchema = z.object({
+  role: z.enum(["source", "step", "guard", "sink"]),
+  /** The expression or call, as written in the code. */
+  text: z.string(),
+  file: z.string().optional(),
+  line: z.number().int().optional(),
+})
+
 export const issueSchema = z.object({
   id: z.string(),
   category: categoryInput,
@@ -87,8 +95,16 @@ export const issueSchema = z.object({
    * the score. Stamped by the engine; optional for older reports.
    */
   confidence: z.enum(["high", "medium", "low"]).optional(),
+  /**
+   * Data-flow path for injection findings from a deep engine: where untrusted
+   * input enters (source), what carries it (step), what would have made it safe
+   * (guard, when one was seen but did not apply), and where it lands (sink).
+   * Absent for single-line rules, which cannot see a path.
+   */
+  flow: z.array(flowStepSchema).optional(),
 })
 export type Issue = z.infer<typeof issueSchema>
+export type FlowStep = z.infer<typeof flowStepSchema>
 
 /**
  * Repo "profile" — what the codebase is made of: a language breakdown (by file

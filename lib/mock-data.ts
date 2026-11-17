@@ -48,6 +48,15 @@ export interface Issue {
   scanner?: string
   /** Specific check within the scanner; derived from `id` for older reports. */
   rule?: string
+  /** Deep-engine findings: the path from untrusted input (source) to the dangerous call (sink). */
+  flow?: FlowStep[]
+}
+
+export interface FlowStep {
+  role: "source" | "step" | "guard" | "sink"
+  text: string
+  file?: string
+  line?: number
 }
 
 export interface TrendPoint {

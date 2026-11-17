@@ -72,3 +72,8 @@ test("advisories: one fix commit and a mapped CWE make a case; picks are stable 
   assert.equal(pick(twins, 5, "s").length, 1)
   assert.deepEqual(pick([c], 5, "s"), pick([c], 5, "s"))
 })
+
+test("a deep finding counts for a file its data-flow path passes through", () => {
+  const xss = [{ rule: "php-taint-xss", file: "index.php", line: 3, via: ["source/low.php", "index.php"] }]
+  assert.equal(judgeExpected({ class: "xss", expect: "vulnerable", files: ["source/low.php"] }, xss).verdict, "hit")
+})

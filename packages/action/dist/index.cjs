@@ -1159,9 +1159,9 @@ var require_parse = __commonJS({
                 const idx = prev.value.lastIndexOf("[");
                 const pre = prev.value.slice(0, idx);
                 const rest2 = prev.value.slice(idx + 2);
-                const posix2 = POSIX_REGEX_SOURCE[rest2];
-                if (posix2) {
-                  prev.value = pre + posix2;
+                const posix4 = POSIX_REGEX_SOURCE[rest2];
+                if (posix4) {
+                  prev.value = pre + posix4;
                   state.backtrack = true;
                   advance();
                   if (!bos.output && tokens.indexOf(prev) === 1) {
@@ -1678,7 +1678,7 @@ var require_picomatch = __commonJS({
         throw new TypeError("Expected pattern to be a non-empty string");
       }
       const opts = options || {};
-      const posix2 = opts.windows;
+      const posix4 = opts.windows;
       const regex = isState ? picomatch2.compileRe(glob2, options) : picomatch2.makeRe(glob2, options, false, true);
       const state = regex.state;
       delete regex.state;
@@ -1688,8 +1688,8 @@ var require_picomatch = __commonJS({
         isIgnored = picomatch2(opts.ignore, ignoreOpts, returnState);
       }
       const matcher = (input2, returnObject = false) => {
-        const { isMatch, match, output: output2 } = picomatch2.test(input2, regex, options, { glob: glob2, posix: posix2 });
-        const result = { glob: glob2, state, regex, posix: posix2, input: input2, output: output2, match, isMatch };
+        const { isMatch, match, output: output2 } = picomatch2.test(input2, regex, options, { glob: glob2, posix: posix4 });
+        const result = { glob: glob2, state, regex, posix: posix4, input: input2, output: output2, match, isMatch };
         if (typeof opts.onResult === "function") {
           opts.onResult(result);
         }
@@ -1714,7 +1714,7 @@ var require_picomatch = __commonJS({
       }
       return matcher;
     };
-    picomatch2.test = (input2, regex, options, { glob: glob2, posix: posix2 } = {}) => {
+    picomatch2.test = (input2, regex, options, { glob: glob2, posix: posix4 } = {}) => {
       if (typeof input2 !== "string") {
         throw new TypeError("Expected input to be a string");
       }
@@ -1722,7 +1722,7 @@ var require_picomatch = __commonJS({
         return { isMatch: false, output: "" };
       }
       const opts = options || {};
-      const format = opts.format || (posix2 ? utils.toPosixSlashes : null);
+      const format = opts.format || (posix4 ? utils.toPosixSlashes : null);
       let match = input2 === glob2;
       let output2 = match && format ? format(input2) : input2;
       if (match === false) {
@@ -1731,16 +1731,16 @@ var require_picomatch = __commonJS({
       }
       if (match === false || opts.capture === true) {
         if (opts.matchBase === true || opts.basename === true) {
-          match = picomatch2.matchBase(input2, regex, options, posix2);
+          match = picomatch2.matchBase(input2, regex, options, posix4);
         } else {
           match = regex.exec(output2);
         }
       }
       return { isMatch: Boolean(match), match, output: output2 };
     };
-    picomatch2.matchBase = (input2, glob2, options, posix2 = options && options.windows) => {
+    picomatch2.matchBase = (input2, glob2, options, posix4 = options && options.windows) => {
       const regex = glob2 instanceof RegExp ? glob2 : picomatch2.makeRe(glob2, options);
-      return regex.test(utils.basename(input2, { windows: posix2 }));
+      return regex.test(utils.basename(input2, { windows: posix4 }));
     };
     picomatch2.isMatch = (str, patterns, options) => picomatch2(patterns, options)(str);
     picomatch2.parse = (pattern, options) => {
@@ -4199,12 +4199,12 @@ var require_lib3 = __commonJS({
       }
     };
     var ScopeHandler = class {
-      constructor(parser, inModule) {
+      constructor(parser3, inModule) {
         this.parser = void 0;
         this.scopeStack = [];
         this.inModule = void 0;
         this.undefinedExports = /* @__PURE__ */ new Map();
-        this.parser = parser;
+        this.parser = parser3;
         this.inModule = inModule;
       }
       get inTopLevel() {
@@ -9348,11 +9348,11 @@ var require_lib3 = __commonJS({
       }
     };
     var ClassScopeHandler = class {
-      constructor(parser) {
+      constructor(parser3) {
         this.parser = void 0;
         this.stack = [];
         this.undefinedPrivateNames = /* @__PURE__ */ new Map();
-        this.parser = parser;
+        this.parser = parser3;
       }
       current() {
         return this.stack[this.stack.length - 1];
@@ -9445,10 +9445,10 @@ var require_lib3 = __commonJS({
       }
     };
     var ExpressionScopeHandler = class {
-      constructor(parser) {
+      constructor(parser3) {
         this.parser = void 0;
         this.stack = [new ExpressionScope()];
-        this.parser = parser;
+        this.parser = parser3;
       }
       enter(scope) {
         this.stack.push(scope);
@@ -9761,13 +9761,13 @@ var require_lib3 = __commonJS({
       }
     };
     var Node = class {
-      constructor(parser, pos, loc) {
+      constructor(parser3, pos, loc) {
         this.type = "";
         this.start = pos;
         this.end = 0;
         this.loc = new SourceLocation(loc);
-        if ((parser == null ? void 0 : parser.optionFlags) & 128) this.range = [pos, 0];
-        if (parser != null && parser.filename) this.loc.filename = parser.filename;
+        if ((parser3 == null ? void 0 : parser3.optionFlags) & 128) this.range = [pos, 0];
+        if (parser3 != null && parser3.filename) this.loc.filename = parser3.filename;
       }
     };
     var NodePrototype = Node.prototype;
@@ -17175,12 +17175,12 @@ var require_lib3 = __commonJS({
         options = Object.assign({}, options);
         try {
           options.sourceType = "module";
-          const parser = getParser(options, input2);
-          const ast = parser.parse();
-          if (parser.sawUnambiguousESM) {
+          const parser3 = getParser(options, input2);
+          const ast = parser3.parse();
+          if (parser3.sawUnambiguousESM) {
             return ast;
           }
-          if (parser.ambiguousScriptDifferentAst) {
+          if (parser3.ambiguousScriptDifferentAst) {
             try {
               options.sourceType = "script";
               return getParser(options, input2).parse();
@@ -17203,11 +17203,11 @@ var require_lib3 = __commonJS({
       }
     }
     function parseExpression(input2, options) {
-      const parser = getParser(options, input2);
-      if (parser.options.strictMode) {
-        parser.state.strict = true;
+      const parser3 = getParser(options, input2);
+      if (parser3.options.strictMode) {
+        parser3.state.strict = true;
       }
-      return parser.getExpression();
+      return parser3.getExpression();
     }
     function generateExportedTokenTypes(internalTokenTypes) {
       const tokenTypes2 = {};
@@ -17395,8 +17395,8 @@ var require_shell3 = __commonJS({
         return { type: `argument`, segments: [].concat(...segments) };
       }, peg$c54 = function(string4) {
         return string4;
-      }, peg$c55 = "$'", peg$c56 = peg$literalExpectation("$'", false), peg$c57 = "'", peg$c58 = peg$literalExpectation("'", false), peg$c59 = function(text2) {
-        return [{ type: `text`, text: text2 }];
+      }, peg$c55 = "$'", peg$c56 = peg$literalExpectation("$'", false), peg$c57 = "'", peg$c58 = peg$literalExpectation("'", false), peg$c59 = function(text4) {
+        return [{ type: `text`, text: text4 }];
       }, peg$c60 = '""', peg$c61 = peg$literalExpectation('""', false), peg$c62 = function() {
         return { type: `text`, text: `` };
       }, peg$c63 = '"', peg$c64 = peg$literalExpectation('"', false), peg$c65 = function(segments) {
@@ -17407,8 +17407,8 @@ var require_shell3 = __commonJS({
         return { type: `shell`, shell, quoted: true };
       }, peg$c68 = function(variable) {
         return { type: `variable`, ...variable, quoted: true };
-      }, peg$c69 = function(text2) {
-        return { type: `text`, text: text2 };
+      }, peg$c69 = function(text4) {
+        return { type: `text`, text: text4 };
       }, peg$c70 = function(arithmetic) {
         return { type: `arithmetic`, arithmetic, quoted: false };
       }, peg$c71 = function(shell) {
@@ -17480,7 +17480,7 @@ var require_shell3 = __commonJS({
       }, peg$c173 = function(pattern) {
         return pattern;
       }, peg$c174 = /^[a-zA-Z0-9_]/, peg$c175 = peg$classExpectation([["a", "z"], ["A", "Z"], ["0", "9"], "_"], false, false), peg$c176 = function() {
-        return text();
+        return text3();
       }, peg$c177 = /^[$@*?#a-zA-Z0-9_\-]/, peg$c178 = peg$classExpectation(["$", "@", "*", "?", "#", ["a", "z"], ["A", "Z"], ["0", "9"], "_", "-"], false, false), peg$c179 = /^[()}<>$|&; \t"']/, peg$c180 = peg$classExpectation(["(", ")", "}", "<", ">", "$", "|", "&", ";", " ", "	", '"', "'"], false, false), peg$c181 = /^[<>&; \t"']/, peg$c182 = peg$classExpectation(["<", ">", "&", ";", " ", "	", '"', "'"], false, false), peg$c183 = /^[ \t]/, peg$c184 = peg$classExpectation([" ", "	"], false, false), peg$currPos = 0, peg$savedPos = 0, peg$posDetailsCache = [{ line: 1, column: 1 }], peg$maxFailPos = 0, peg$maxFailExpected = [], peg$silentFails = 0, peg$result;
       if ("startRule" in options) {
         if (!(options.startRule in peg$startRuleFunctions)) {
@@ -17488,7 +17488,7 @@ var require_shell3 = __commonJS({
         }
         peg$startRuleFunction = peg$startRuleFunctions[options.startRule];
       }
-      function text() {
+      function text3() {
         return input2.substring(peg$savedPos, peg$currPos);
       }
       function location() {
@@ -17506,8 +17506,8 @@ var require_shell3 = __commonJS({
         location2 = location2 !== void 0 ? location2 : peg$computeLocation(peg$savedPos, peg$currPos);
         throw peg$buildSimpleError(message, location2);
       }
-      function peg$literalExpectation(text2, ignoreCase) {
-        return { type: "literal", text: text2, ignoreCase };
+      function peg$literalExpectation(text4, ignoreCase) {
+        return { type: "literal", text: text4, ignoreCase };
       }
       function peg$classExpectation(parts, inverted, ignoreCase) {
         return { type: "class", parts, inverted, ignoreCase };
@@ -20948,17 +20948,17 @@ var require_shell4 = __commonJS({
     };
     function stringifyArgumentSegment(argumentSegment) {
       const doubleQuoteIfRequested = (string4, quote) => quote ? `"${string4}"` : string4;
-      const quoteIfNeeded = (text) => {
-        if (text === ``)
+      const quoteIfNeeded = (text3) => {
+        if (text3 === ``)
           return `''`;
-        if (!text.match(/[()}<>$|&;"'\n\t ]/))
-          return text;
-        if (!text.match(/['\t\p{C}]/u))
-          return `'${text}'`;
-        if (!text.match(/'/)) {
-          return `$'${text.replace(/[\t\p{C}]/u, getEscapedControlChar)}'`;
+        if (!text3.match(/[()}<>$|&;"'\n\t ]/))
+          return text3;
+        if (!text3.match(/['\t\p{C}]/u))
+          return `'${text3}'`;
+        if (!text3.match(/'/)) {
+          return `$'${text3.replace(/[\t\p{C}]/u, getEscapedControlChar)}'`;
         } else {
-          return `"${text.replace(/["$\t\p{C}]/u, getEscapedDblChar)}"`;
+          return `"${text3.replace(/["$\t\p{C}]/u, getEscapedDblChar)}"`;
         }
       };
       switch (argumentSegment.type) {
@@ -21112,7 +21112,7 @@ var require_resolution3 = __commonJS({
       }, peg$c7 = function(fullName) {
         return { fullName };
       }, peg$c8 = function() {
-        return text();
+        return text3();
       }, peg$c9 = /^[^\/@]/, peg$c10 = peg$classExpectation(["/", "@"], true, false), peg$c11 = /^[^\/]/, peg$c12 = peg$classExpectation(["/"], true, false), peg$currPos = 0, peg$savedPos = 0, peg$posDetailsCache = [{ line: 1, column: 1 }], peg$maxFailPos = 0, peg$maxFailExpected = [], peg$silentFails = 0, peg$result;
       if ("startRule" in options) {
         if (!(options.startRule in peg$startRuleFunctions)) {
@@ -21120,7 +21120,7 @@ var require_resolution3 = __commonJS({
         }
         peg$startRuleFunction = peg$startRuleFunctions[options.startRule];
       }
-      function text() {
+      function text3() {
         return input2.substring(peg$savedPos, peg$currPos);
       }
       function location() {
@@ -21138,8 +21138,8 @@ var require_resolution3 = __commonJS({
         location2 = location2 !== void 0 ? location2 : peg$computeLocation(peg$savedPos, peg$currPos);
         throw peg$buildSimpleError(message, location2);
       }
-      function peg$literalExpectation(text2, ignoreCase) {
-        return { type: "literal", text: text2, ignoreCase };
+      function peg$literalExpectation(text4, ignoreCase) {
+        return { type: "literal", text: text4, ignoreCase };
       }
       function peg$classExpectation(parts, inverted, ignoreCase) {
         return { type: "class", parts, inverted, ignoreCase };
@@ -24529,7 +24529,7 @@ ${" ".repeat(state.indent * level)}`;
       if ((node2.kind === "mapping" || node2.kind === "sequence") && !useBlockCollection) state.openEnded = false;
       if (useBlockCollection && compact && level > 0 && state.indent > 2) body = `${" ".repeat(state.indent - 2)}${body}`;
       const noBody = body === "";
-      let text = body;
+      let text3 = body;
       if (shouldPrintTag || hasAnchor) {
         const props = [];
         const tag = shouldPrintTag ? nodeTagShort(node2) : null;
@@ -24542,10 +24542,10 @@ ${" ".repeat(state.indent * level)}`;
           if (tag !== null) props.push(tag);
         }
         const sep2 = body === "" || body.charCodeAt(0) === CHAR_LINE_FEED ? "" : " ";
-        text = `${props.join(" ")}${sep2}${body}`;
+        text3 = `${props.join(" ")}${sep2}${body}`;
       }
       return {
-        text,
+        text: text3,
         noBody
       };
     }
@@ -24983,9 +24983,9 @@ var require_syml3 = __commonJS({
         indentLevel--;
         return true;
       }, peg$c25 = function() {
-        return text();
+        return text3();
       }, peg$c26 = peg$otherExpectation("pseudostring"), peg$c27 = /^[^\r\n\t ?:,\][{}#&*!|>'"%@`\-]/, peg$c28 = peg$classExpectation(["\r", "\n", "	", " ", "?", ":", ",", "]", "[", "{", "}", "#", "&", "*", "!", "|", ">", "'", '"', "%", "@", "`", "-"], true, false), peg$c29 = /^[^\r\n\t ,\][{}:#"']/, peg$c30 = peg$classExpectation(["\r", "\n", "	", " ", ",", "]", "[", "{", "}", ":", "#", '"', "'"], true, false), peg$c31 = function() {
-        return text().replace(/^ *| *$/g, "");
+        return text3().replace(/^ *| *$/g, "");
       }, peg$c32 = "--", peg$c33 = peg$literalExpectation("--", false), peg$c34 = /^[a-zA-Z\/0-9]/, peg$c35 = peg$classExpectation([["a", "z"], ["A", "Z"], "/", ["0", "9"]], false, false), peg$c36 = /^[^\r\n\t :,]/, peg$c37 = peg$classExpectation(["\r", "\n", "	", " ", ":", ","], true, false), peg$c38 = "null", peg$c39 = peg$literalExpectation("null", false), peg$c40 = function() {
         return null;
       }, peg$c41 = "true", peg$c42 = peg$literalExpectation("true", false), peg$c43 = function() {
@@ -25024,7 +25024,7 @@ var require_syml3 = __commonJS({
         }
         peg$startRuleFunction = peg$startRuleFunctions[options.startRule];
       }
-      function text() {
+      function text3() {
         return input2.substring(peg$savedPos, peg$currPos);
       }
       function location() {
@@ -25042,8 +25042,8 @@ var require_syml3 = __commonJS({
         location2 = location2 !== void 0 ? location2 : peg$computeLocation(peg$savedPos, peg$currPos);
         throw peg$buildSimpleError(message, location2);
       }
-      function peg$literalExpectation(text2, ignoreCase) {
-        return { type: "literal", text: text2, ignoreCase };
+      function peg$literalExpectation(text4, ignoreCase) {
+        return { type: "literal", text: text4, ignoreCase };
       }
       function peg$classExpectation(parts, inverted, ignoreCase) {
         return { type: "class", parts, inverted, ignoreCase };
@@ -26872,10 +26872,9185 @@ var require_lib4 = __commonJS({
   }
 });
 
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/lexer/attribute.js
+var require_attribute3 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/lexer/attribute.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      attributeIndex: 0,
+      attributeListDepth: {},
+      matchST_ATTRIBUTE() {
+        const ch = this.input();
+        if (this.is_WHITESPACE()) {
+          do {
+            this.input();
+          } while (this.is_WHITESPACE());
+          this.unput(1);
+          return null;
+        }
+        switch (ch) {
+          case "]":
+            if (this.attributeListDepth[this.attributeIndex] === 0) {
+              delete this.attributeListDepth[this.attributeIndex];
+              this.attributeIndex--;
+              this.popState();
+            } else {
+              this.attributeListDepth[this.attributeIndex]--;
+            }
+            return "]";
+          case "(":
+          case ")":
+          case ":":
+          case "=":
+          case ";":
+          case "|":
+          case "&":
+          case "^":
+          case "-":
+          case "+":
+          case "*":
+          case "%":
+          case "~":
+          case "<":
+          case ">":
+          case "!":
+          case ".":
+          case "{":
+          case "}":
+          case "$":
+            return this.consume_TOKEN();
+          case "[":
+            this.attributeListDepth[this.attributeIndex]++;
+            return "[";
+          case ",":
+            return ",";
+          case '"':
+            return this.ST_DOUBLE_QUOTES();
+          case "'":
+            return this.T_CONSTANT_ENCAPSED_STRING();
+          case "/":
+            if (this._input[this.offset] === "/") {
+              return this.T_COMMENT();
+            } else if (this._input[this.offset] === "*") {
+              this.input();
+              return this.T_DOC_COMMENT();
+            } else {
+              return this.consume_TOKEN();
+            }
+        }
+        if (this.is_LABEL_START() || ch === "\\") {
+          while (this.offset < this.size) {
+            const ch2 = this.input();
+            if (!(this.is_LABEL() || ch2 === "\\")) {
+              if (ch2) this.unput(1);
+              break;
+            }
+          }
+          return this.T_STRING();
+        } else if (this.is_NUM()) {
+          return this.consume_NUM();
+        }
+        throw new Error(
+          `Bad terminal sequence "${ch}" at line ${this.yylineno} (offset ${this.offset})`
+        );
+      }
+    };
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/lexer/comments.js
+var require_comments2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/lexer/comments.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      /*
+       * Reads a single line comment
+       */
+      T_COMMENT() {
+        while (this.offset < this.size) {
+          const ch = this.input();
+          if (ch === "\n" || ch === "\r") {
+            return this.tok.T_COMMENT;
+          } else if (ch === "?" && !this.aspTagMode && this._input[this.offset] === ">") {
+            this.unput(1);
+            return this.tok.T_COMMENT;
+          } else if (ch === "%" && this.aspTagMode && this._input[this.offset] === ">") {
+            this.unput(1);
+            return this.tok.T_COMMENT;
+          }
+        }
+        return this.tok.T_COMMENT;
+      },
+      /*
+       * Behaviour : https://github.com/php/php-src/blob/master/Zend/zend_language_scanner.l#L1927
+       */
+      T_DOC_COMMENT() {
+        let ch = this.input();
+        let token = this.tok.T_COMMENT;
+        if (ch === "*") {
+          ch = this.input();
+          if (this.is_WHITESPACE()) {
+            token = this.tok.T_DOC_COMMENT;
+          }
+          if (ch === "/") {
+            return token;
+          } else {
+            this.unput(1);
+          }
+        }
+        while (this.offset < this.size) {
+          ch = this.input();
+          if (ch === "*" && this._input[this.offset] === "/") {
+            this.input();
+            break;
+          }
+        }
+        return token;
+      }
+    };
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/lexer/initial.js
+var require_initial2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/lexer/initial.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      nextINITIAL() {
+        if (this.conditionStack.length > 1 && this.conditionStack[this.conditionStack.length - 1] === "INITIAL") {
+          this.popState();
+        } else {
+          this.begin("ST_IN_SCRIPTING");
+        }
+        return this;
+      },
+      matchINITIAL() {
+        while (this.offset < this.size) {
+          let ch = this.input();
+          if (ch == "<") {
+            ch = this.ahead(1);
+            if (ch == "?") {
+              if (this.tryMatch("?=")) {
+                this.unput(1).appendToken(this.tok.T_OPEN_TAG_WITH_ECHO, 3).nextINITIAL();
+                break;
+              } else if (this.tryMatchCaseless("?php")) {
+                ch = this._input[this.offset + 4];
+                if (ch === " " || ch === "	" || ch === "\n" || ch === "\r") {
+                  this.unput(1).appendToken(this.tok.T_OPEN_TAG, 6).nextINITIAL();
+                  break;
+                }
+              }
+              if (this.short_tags) {
+                this.unput(1).appendToken(this.tok.T_OPEN_TAG, 2).nextINITIAL();
+                break;
+              }
+            } else if (this.asp_tags && ch == "%") {
+              if (this.tryMatch("%=")) {
+                this.aspTagMode = true;
+                this.unput(1).appendToken(this.tok.T_OPEN_TAG_WITH_ECHO, 3).nextINITIAL();
+                break;
+              } else {
+                this.aspTagMode = true;
+                this.unput(1).appendToken(this.tok.T_OPEN_TAG, 2).nextINITIAL();
+                break;
+              }
+            }
+          }
+        }
+        if (this.yytext.length > 0) {
+          return this.tok.T_INLINE_HTML;
+        } else {
+          return false;
+        }
+      }
+    };
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/lexer/numbers.js
+var require_numbers2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/lexer/numbers.js"(exports2, module2) {
+    "use strict";
+    var MAX_LENGTH_OF_LONG = 10;
+    var long_min_digits = "2147483648";
+    if (process.arch == "x64") {
+      MAX_LENGTH_OF_LONG = 19;
+      long_min_digits = "9223372036854775808";
+    }
+    module2.exports = {
+      consume_NUM() {
+        let ch = this.yytext[0];
+        let hasPoint = ch === ".";
+        if (ch === "0") {
+          ch = this.input();
+          if (ch === "x" || ch === "X") {
+            ch = this.input();
+            if (ch !== "_" && this.is_HEX()) {
+              return this.consume_HNUM();
+            } else {
+              this.unput(ch ? 2 : 1);
+            }
+          } else if (ch === "b" || ch === "B") {
+            ch = this.input();
+            if (ch !== "_" && ch === "0" || ch === "1") {
+              return this.consume_BNUM();
+            } else {
+              this.unput(ch ? 2 : 1);
+            }
+          } else if (ch === "o" || ch === "O") {
+            ch = this.input();
+            if (ch !== "_" && this.is_OCTAL()) {
+              return this.consume_ONUM();
+            } else {
+              this.unput(ch ? 2 : 1);
+            }
+          } else if (!this.is_NUM()) {
+            if (ch) this.unput(1);
+          }
+        }
+        while (this.offset < this.size) {
+          const prev = ch;
+          ch = this.input();
+          if (ch === "_") {
+            if (prev === "_") {
+              this.unput(2);
+              break;
+            }
+            if (prev === ".") {
+              this.unput(1);
+              break;
+            }
+            if (prev === "e" || prev === "E") {
+              this.unput(2);
+              break;
+            }
+          } else if (ch === ".") {
+            if (hasPoint) {
+              this.unput(1);
+              break;
+            }
+            if (prev === "_") {
+              this.unput(2);
+              break;
+            }
+            hasPoint = true;
+            continue;
+          } else if (ch === "e" || ch === "E") {
+            if (prev === "_") {
+              this.unput(1);
+              break;
+            }
+            let undo = 2;
+            ch = this.input();
+            if (ch === "+" || ch === "-") {
+              undo = 3;
+              ch = this.input();
+            }
+            if (this.is_NUM_START()) {
+              this.consume_LNUM();
+              return this.tok.T_DNUMBER;
+            }
+            this.unput(ch ? undo : undo - 1);
+            break;
+          }
+          if (!this.is_NUM()) {
+            if (ch) this.unput(1);
+            break;
+          }
+        }
+        if (hasPoint) {
+          return this.tok.T_DNUMBER;
+        } else if (this.yytext.length < MAX_LENGTH_OF_LONG - 1) {
+          return this.tok.T_LNUMBER;
+        } else {
+          if (this.yytext.length < MAX_LENGTH_OF_LONG || this.yytext.length == MAX_LENGTH_OF_LONG && this.yytext < long_min_digits) {
+            return this.tok.T_LNUMBER;
+          }
+          return this.tok.T_DNUMBER;
+        }
+      },
+      // read hexa
+      consume_HNUM() {
+        while (this.offset < this.size) {
+          const ch = this.input();
+          if (!this.is_HEX()) {
+            if (ch) this.unput(1);
+            break;
+          }
+        }
+        return this.tok.T_LNUMBER;
+      },
+      // read a generic number
+      consume_LNUM() {
+        while (this.offset < this.size) {
+          const ch = this.input();
+          if (!this.is_NUM()) {
+            if (ch) this.unput(1);
+            break;
+          }
+        }
+        return this.tok.T_LNUMBER;
+      },
+      // read binary
+      consume_BNUM() {
+        let ch;
+        while (this.offset < this.size) {
+          ch = this.input();
+          if (ch !== "0" && ch !== "1" && ch !== "_") {
+            if (ch) this.unput(1);
+            break;
+          }
+        }
+        return this.tok.T_LNUMBER;
+      },
+      // read an octal number
+      consume_ONUM() {
+        while (this.offset < this.size) {
+          const ch = this.input();
+          if (!this.is_OCTAL()) {
+            if (ch) this.unput(1);
+            break;
+          }
+        }
+        return this.tok.T_LNUMBER;
+      }
+    };
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/lexer/property.js
+var require_property3 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/lexer/property.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      matchST_LOOKING_FOR_PROPERTY() {
+        let ch = this.input();
+        if (ch === "-") {
+          ch = this.input();
+          if (ch === ">") {
+            return this.tok.T_OBJECT_OPERATOR;
+          }
+          if (ch) this.unput(1);
+        } else if (this.is_WHITESPACE()) {
+          return this.tok.T_WHITESPACE;
+        } else if (this.is_LABEL_START()) {
+          this.consume_LABEL();
+          this.popState();
+          return this.tok.T_STRING;
+        }
+        this.popState();
+        if (ch) this.unput(1);
+        return false;
+      },
+      matchST_LOOKING_FOR_VARNAME() {
+        let ch = this.input();
+        this.popState();
+        this.begin("ST_IN_SCRIPTING");
+        if (this.is_LABEL_START()) {
+          this.consume_LABEL();
+          ch = this.input();
+          if (ch === "[" || ch === "}") {
+            this.unput(1);
+            return this.tok.T_STRING_VARNAME;
+          } else {
+            this.unput(this.yytext.length);
+          }
+        } else {
+          if (ch) this.unput(1);
+        }
+        return false;
+      },
+      matchST_VAR_OFFSET() {
+        const ch = this.input();
+        if (this.is_NUM_START()) {
+          this.consume_NUM();
+          return this.tok.T_NUM_STRING;
+        } else if (ch === "]") {
+          this.popState();
+          return "]";
+        } else if (ch === "$") {
+          this.input();
+          if (this.is_LABEL_START()) {
+            this.consume_LABEL();
+            return this.tok.T_VARIABLE;
+          } else {
+            throw new Error("Unexpected terminal");
+          }
+        } else if (this.is_LABEL_START()) {
+          this.consume_LABEL();
+          return this.tok.T_STRING;
+        } else if (this.is_WHITESPACE() || ch === "\\" || ch === "'" || ch === "#") {
+          return this.tok.T_ENCAPSED_AND_WHITESPACE;
+        } else if (ch === "[" || ch === "{" || ch === "}" || ch === '"' || ch === "`" || this.is_TOKEN()) {
+          return ch;
+        } else {
+          throw new Error("Unexpected terminal");
+        }
+      }
+    };
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/lexer/scripting.js
+var require_scripting2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/lexer/scripting.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      matchST_IN_SCRIPTING() {
+        let ch = this.input();
+        switch (ch) {
+          case " ":
+          case "	":
+          case "\n":
+          case "\r":
+          case "\r\n":
+            return this.T_WHITESPACE();
+          case "#":
+            if (this.version >= 800 && this._input[this.offset] === "[") {
+              this.input();
+              this.attributeListDepth[++this.attributeIndex] = 0;
+              this.begin("ST_ATTRIBUTE");
+              return this.tok.T_ATTRIBUTE;
+            }
+            return this.T_COMMENT();
+          case "/":
+            if (this._input[this.offset] === "/") {
+              return this.T_COMMENT();
+            } else if (this._input[this.offset] === "*") {
+              this.input();
+              return this.T_DOC_COMMENT();
+            }
+            return this.consume_TOKEN();
+          case "'":
+            return this.T_CONSTANT_ENCAPSED_STRING();
+          case '"':
+            return this.ST_DOUBLE_QUOTES();
+          case "`":
+            this.begin("ST_BACKQUOTE");
+            return "`";
+          case "?":
+            if (!this.aspTagMode && this.tryMatch(">")) {
+              this.input();
+              const nextCH = this._input[this.offset];
+              if (nextCH === "\n" || nextCH === "\r") this.input();
+              if (this.conditionStack.length > 1) {
+                this.begin("INITIAL");
+              }
+              return this.tok.T_CLOSE_TAG;
+            }
+            return this.consume_TOKEN();
+          case "%":
+            if (this.aspTagMode && this._input[this.offset] === ">") {
+              this.input();
+              ch = this._input[this.offset];
+              if (ch === "\n" || ch === "\r") {
+                this.input();
+              }
+              this.aspTagMode = false;
+              if (this.conditionStack.length > 1) {
+                this.begin("INITIAL");
+              }
+              return this.tok.T_CLOSE_TAG;
+            }
+            return this.consume_TOKEN();
+          case "{":
+            this.begin("ST_IN_SCRIPTING");
+            return "{";
+          case "}":
+            if (this.conditionStack.length > 2) {
+              this.popState();
+            }
+            return "}";
+          default:
+            if (ch === ".") {
+              ch = this.input();
+              if (this.is_NUM_START()) {
+                return this.consume_NUM();
+              } else {
+                if (ch) this.unput(1);
+              }
+            }
+            if (this.is_NUM_START()) {
+              return this.consume_NUM();
+            } else if (this.is_LABEL_START()) {
+              return this.consume_LABEL().T_STRING();
+            } else if (this.is_TOKEN()) {
+              return this.consume_TOKEN();
+            }
+        }
+        throw new Error(
+          'Bad terminal sequence "' + ch + '" at line ' + this.yylineno + " (offset " + this.offset + ")"
+        );
+      },
+      T_WHITESPACE() {
+        while (this.offset < this.size) {
+          const ch = this.input();
+          if (ch === " " || ch === "	" || ch === "\n" || ch === "\r") {
+            continue;
+          }
+          if (ch) this.unput(1);
+          break;
+        }
+        return this.tok.T_WHITESPACE;
+      }
+    };
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/lexer/strings.js
+var require_strings2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/lexer/strings.js"(exports2, module2) {
+    "use strict";
+    var newline = ["\n", "\r"];
+    var valid_after_heredoc = ["\n", "\r", ";"];
+    var valid_after_heredoc_73 = valid_after_heredoc.concat([
+      "	",
+      " ",
+      ",",
+      "]",
+      ")",
+      "/",
+      "=",
+      "!",
+      "."
+    ]);
+    module2.exports = {
+      T_CONSTANT_ENCAPSED_STRING() {
+        let ch;
+        while (this.offset < this.size) {
+          ch = this.input();
+          if (ch == "\\") {
+            this.input();
+          } else if (ch == "'") {
+            break;
+          }
+        }
+        return this.tok.T_CONSTANT_ENCAPSED_STRING;
+      },
+      // check if matching a HEREDOC state
+      is_HEREDOC() {
+        const revert = this.offset;
+        if (this._input[this.offset - 1] === "<" && this._input[this.offset] === "<" && this._input[this.offset + 1] === "<") {
+          this.offset += 3;
+          if (this.is_TABSPACE()) {
+            while (this.offset < this.size) {
+              this.offset++;
+              if (!this.is_TABSPACE()) {
+                break;
+              }
+            }
+          }
+          let tChar = this._input[this.offset - 1];
+          if (tChar === "'" || tChar === '"') {
+            this.offset++;
+          } else {
+            tChar = null;
+          }
+          if (this.is_LABEL_START()) {
+            let yyoffset = this.offset - 1;
+            while (this.offset < this.size) {
+              this.offset++;
+              if (!this.is_LABEL()) {
+                break;
+              }
+            }
+            const yylabel = this._input.substring(yyoffset, this.offset - 1);
+            if (!tChar || tChar === this._input[this.offset - 1]) {
+              if (tChar) this.offset++;
+              if (newline.includes(this._input[this.offset - 1])) {
+                this.heredoc_label.label = yylabel;
+                this.heredoc_label.length = yylabel.length;
+                this.heredoc_label.finished = false;
+                yyoffset = this.offset - revert;
+                this.offset = revert;
+                this.consume(yyoffset);
+                if (tChar === "'") {
+                  this.begin("ST_NOWDOC");
+                } else {
+                  this.begin("ST_HEREDOC");
+                }
+                this.prematch_ENDOFDOC();
+                return this.tok.T_START_HEREDOC;
+              }
+            }
+          }
+        }
+        this.offset = revert;
+        return false;
+      },
+      ST_DOUBLE_QUOTES() {
+        let ch;
+        while (this.offset < this.size) {
+          ch = this.input();
+          if (ch == "\\") {
+            this.input();
+          } else if (ch == '"') {
+            break;
+          } else if (ch == "$") {
+            ch = this.input();
+            if (ch == "{" || this.is_LABEL_START()) {
+              this.unput(2);
+              break;
+            }
+            if (ch) this.unput(1);
+          } else if (ch == "{") {
+            ch = this.input();
+            if (ch == "$") {
+              this.unput(2);
+              break;
+            }
+            if (ch) this.unput(1);
+          }
+        }
+        if (ch == '"') {
+          return this.tok.T_CONSTANT_ENCAPSED_STRING;
+        } else {
+          let prefix = 1;
+          if (this.yytext[0] === "b" || this.yytext[0] === "B") {
+            prefix = 2;
+          }
+          if (this.yytext.length > 2) {
+            this.appendToken(
+              this.tok.T_ENCAPSED_AND_WHITESPACE,
+              this.yytext.length - prefix
+            );
+          }
+          this.unput(this.yytext.length - prefix);
+          this.begin("ST_DOUBLE_QUOTES");
+          return this.yytext;
+        }
+      },
+      // check if its a DOC end sequence
+      isDOC_MATCH(offset, consumeLeadingSpaces) {
+        const prev_ch = this._input[offset - 2];
+        if (!newline.includes(prev_ch)) {
+          return false;
+        }
+        let indentation_uses_spaces = false;
+        let indentation_uses_tabs = false;
+        let indentation = 0;
+        let leading_ch = this._input[offset - 1];
+        if (this.version >= 703) {
+          while (leading_ch === "	" || leading_ch === " ") {
+            if (leading_ch === " ") {
+              indentation_uses_spaces = true;
+            } else if (leading_ch === "	") {
+              indentation_uses_tabs = true;
+            }
+            leading_ch = this._input[offset + indentation];
+            indentation++;
+          }
+          offset = offset + indentation;
+          if (newline.includes(this._input[offset - 1])) {
+            return false;
+          }
+        }
+        if (this._input.substring(
+          offset - 1,
+          offset - 1 + this.heredoc_label.length
+        ) === this.heredoc_label.label) {
+          const ch = this._input[offset - 1 + this.heredoc_label.length];
+          if ((this.version >= 703 ? valid_after_heredoc_73 : valid_after_heredoc).includes(ch)) {
+            if (consumeLeadingSpaces) {
+              this.consume(indentation);
+              if (indentation_uses_spaces && indentation_uses_tabs) {
+                throw new Error(
+                  "Parse error:  mixing spaces and tabs in ending marker at line " + this.yylineno + " (offset " + this.offset + ")"
+                );
+              }
+            } else {
+              this.heredoc_label.indentation = indentation;
+              this.heredoc_label.indentation_uses_spaces = indentation_uses_spaces;
+              this.heredoc_label.first_encaps_node = true;
+            }
+            return true;
+          }
+        }
+        return false;
+      },
+      /*
+       * Prematch the end of HEREDOC/NOWDOC end tag to preset the
+       * context of this.heredoc_label
+       */
+      prematch_ENDOFDOC() {
+        this.heredoc_label.indentation_uses_spaces = false;
+        this.heredoc_label.indentation = 0;
+        this.heredoc_label.first_encaps_node = true;
+        let offset = this.offset + 1;
+        while (offset < this._input.length) {
+          if (this.isDOC_MATCH(offset, false)) {
+            return;
+          }
+          if (!newline.includes(this._input[offset - 1])) {
+            while (!newline.includes(this._input[offset++]) && offset < this._input.length) {
+            }
+          }
+          offset++;
+        }
+      },
+      matchST_NOWDOC() {
+        if (this.isDOC_MATCH(this.offset, true)) {
+          this.consume(this.heredoc_label.length);
+          this.popState();
+          return this.tok.T_END_HEREDOC;
+        }
+        let ch = this._input[this.offset - 1];
+        while (this.offset < this.size) {
+          if (newline.includes(ch)) {
+            ch = this.input();
+            if (this.isDOC_MATCH(this.offset, true)) {
+              this.unput(1).popState();
+              this.appendToken(this.tok.T_END_HEREDOC, this.heredoc_label.length);
+              return this.tok.T_ENCAPSED_AND_WHITESPACE;
+            }
+          } else {
+            ch = this.input();
+          }
+        }
+        return this.tok.T_ENCAPSED_AND_WHITESPACE;
+      },
+      matchST_HEREDOC() {
+        let ch = this.input();
+        if (this.isDOC_MATCH(this.offset, true)) {
+          this.consume(this.heredoc_label.length - 1);
+          this.popState();
+          return this.tok.T_END_HEREDOC;
+        }
+        while (this.offset < this.size) {
+          if (ch === "\\") {
+            ch = this.input();
+            if (!newline.includes(ch)) {
+              ch = this.input();
+            }
+          }
+          if (newline.includes(ch)) {
+            ch = this.input();
+            if (this.isDOC_MATCH(this.offset, true)) {
+              this.unput(1).popState();
+              this.appendToken(this.tok.T_END_HEREDOC, this.heredoc_label.length);
+              return this.tok.T_ENCAPSED_AND_WHITESPACE;
+            }
+          } else if (ch === "$") {
+            ch = this.input();
+            if (ch === "{") {
+              this.begin("ST_LOOKING_FOR_VARNAME");
+              if (this.yytext.length > 2) {
+                this.appendToken(this.tok.T_DOLLAR_OPEN_CURLY_BRACES, 2);
+                this.unput(2);
+                return this.tok.T_ENCAPSED_AND_WHITESPACE;
+              } else {
+                return this.tok.T_DOLLAR_OPEN_CURLY_BRACES;
+              }
+            } else if (this.is_LABEL_START()) {
+              const yyoffset = this.offset;
+              const next = this.consume_VARIABLE();
+              if (this.yytext.length > this.offset - yyoffset + 2) {
+                this.appendToken(next, this.offset - yyoffset + 2);
+                this.unput(this.offset - yyoffset + 2);
+                return this.tok.T_ENCAPSED_AND_WHITESPACE;
+              } else {
+                return next;
+              }
+            }
+          } else if (ch === "{") {
+            ch = this.input();
+            if (ch === "$") {
+              this.begin("ST_IN_SCRIPTING");
+              if (this.yytext.length > 2) {
+                this.appendToken(this.tok.T_CURLY_OPEN, 1);
+                this.unput(2);
+                return this.tok.T_ENCAPSED_AND_WHITESPACE;
+              } else {
+                this.unput(1);
+                return this.tok.T_CURLY_OPEN;
+              }
+            }
+          } else {
+            ch = this.input();
+          }
+        }
+        return this.tok.T_ENCAPSED_AND_WHITESPACE;
+      },
+      consume_VARIABLE() {
+        this.consume_LABEL();
+        const ch = this.input();
+        if (ch == "[") {
+          this.unput(1);
+          this.begin("ST_VAR_OFFSET");
+          return this.tok.T_VARIABLE;
+        } else if (ch === "-") {
+          if (this.input() === ">") {
+            this.input();
+            if (this.is_LABEL_START()) {
+              this.begin("ST_LOOKING_FOR_PROPERTY");
+            }
+            this.unput(3);
+            return this.tok.T_VARIABLE;
+          } else {
+            this.unput(2);
+          }
+        } else {
+          if (ch) this.unput(1);
+        }
+        return this.tok.T_VARIABLE;
+      },
+      // HANDLES BACKQUOTES
+      matchST_BACKQUOTE() {
+        let ch = this.input();
+        if (ch === "$") {
+          ch = this.input();
+          if (ch === "{") {
+            this.begin("ST_LOOKING_FOR_VARNAME");
+            return this.tok.T_DOLLAR_OPEN_CURLY_BRACES;
+          } else if (this.is_LABEL_START()) {
+            const tok = this.consume_VARIABLE();
+            return tok;
+          }
+        } else if (ch === "{") {
+          if (this._input[this.offset] === "$") {
+            this.begin("ST_IN_SCRIPTING");
+            return this.tok.T_CURLY_OPEN;
+          }
+        } else if (ch === "`") {
+          this.popState();
+          return "`";
+        }
+        while (this.offset < this.size) {
+          if (ch === "\\") {
+            this.input();
+          } else if (ch === "`") {
+            this.unput(1);
+            this.popState();
+            this.appendToken("`", 1);
+            break;
+          } else if (ch === "$") {
+            ch = this.input();
+            if (ch === "{") {
+              this.begin("ST_LOOKING_FOR_VARNAME");
+              if (this.yytext.length > 2) {
+                this.appendToken(this.tok.T_DOLLAR_OPEN_CURLY_BRACES, 2);
+                this.unput(2);
+                return this.tok.T_ENCAPSED_AND_WHITESPACE;
+              } else {
+                return this.tok.T_DOLLAR_OPEN_CURLY_BRACES;
+              }
+            } else if (this.is_LABEL_START()) {
+              const yyoffset = this.offset;
+              const next = this.consume_VARIABLE();
+              if (this.yytext.length > this.offset - yyoffset + 2) {
+                this.appendToken(next, this.offset - yyoffset + 2);
+                this.unput(this.offset - yyoffset + 2);
+                return this.tok.T_ENCAPSED_AND_WHITESPACE;
+              } else {
+                return next;
+              }
+            }
+            continue;
+          } else if (ch === "{") {
+            ch = this.input();
+            if (ch === "$") {
+              this.begin("ST_IN_SCRIPTING");
+              if (this.yytext.length > 2) {
+                this.appendToken(this.tok.T_CURLY_OPEN, 1);
+                this.unput(2);
+                return this.tok.T_ENCAPSED_AND_WHITESPACE;
+              } else {
+                this.unput(1);
+                return this.tok.T_CURLY_OPEN;
+              }
+            }
+            continue;
+          }
+          ch = this.input();
+        }
+        return this.tok.T_ENCAPSED_AND_WHITESPACE;
+      },
+      matchST_DOUBLE_QUOTES() {
+        let ch = this.input();
+        if (ch === "$") {
+          ch = this.input();
+          if (ch === "{") {
+            this.begin("ST_LOOKING_FOR_VARNAME");
+            return this.tok.T_DOLLAR_OPEN_CURLY_BRACES;
+          } else if (this.is_LABEL_START()) {
+            const tok = this.consume_VARIABLE();
+            return tok;
+          }
+        } else if (ch === "{") {
+          if (this._input[this.offset] === "$") {
+            this.begin("ST_IN_SCRIPTING");
+            return this.tok.T_CURLY_OPEN;
+          }
+        } else if (ch === '"') {
+          this.popState();
+          return '"';
+        }
+        while (this.offset < this.size) {
+          if (ch === "\\") {
+            this.input();
+          } else if (ch === '"') {
+            this.unput(1);
+            this.popState();
+            this.appendToken('"', 1);
+            break;
+          } else if (ch === "$") {
+            ch = this.input();
+            if (ch === "{") {
+              this.begin("ST_LOOKING_FOR_VARNAME");
+              if (this.yytext.length > 2) {
+                this.appendToken(this.tok.T_DOLLAR_OPEN_CURLY_BRACES, 2);
+                this.unput(2);
+                return this.tok.T_ENCAPSED_AND_WHITESPACE;
+              } else {
+                return this.tok.T_DOLLAR_OPEN_CURLY_BRACES;
+              }
+            } else if (this.is_LABEL_START()) {
+              const yyoffset = this.offset;
+              const next = this.consume_VARIABLE();
+              if (this.yytext.length > this.offset - yyoffset + 2) {
+                this.appendToken(next, this.offset - yyoffset + 2);
+                this.unput(this.offset - yyoffset + 2);
+                return this.tok.T_ENCAPSED_AND_WHITESPACE;
+              } else {
+                return next;
+              }
+            }
+            if (ch) this.unput(1);
+          } else if (ch === "{") {
+            ch = this.input();
+            if (ch === "$") {
+              this.begin("ST_IN_SCRIPTING");
+              if (this.yytext.length > 2) {
+                this.appendToken(this.tok.T_CURLY_OPEN, 1);
+                this.unput(2);
+                return this.tok.T_ENCAPSED_AND_WHITESPACE;
+              } else {
+                this.unput(1);
+                return this.tok.T_CURLY_OPEN;
+              }
+            }
+            if (ch) this.unput(1);
+          }
+          ch = this.input();
+        }
+        return this.tok.T_ENCAPSED_AND_WHITESPACE;
+      }
+    };
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/lexer/tokens.js
+var require_tokens3 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/lexer/tokens.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      T_STRING() {
+        const token = this.yytext.toLowerCase();
+        let id = this.keywords[token];
+        if (typeof id !== "number") {
+          if (token === "yield") {
+            if (this.version >= 700 && this.tryMatch(" from")) {
+              this.consume(5);
+              id = this.tok.T_YIELD_FROM;
+            } else {
+              id = this.tok.T_YIELD;
+            }
+          } else {
+            id = this.tok.T_STRING;
+            if (token === "b" || token === "B") {
+              const ch = this.input();
+              if (ch === '"') {
+                return this.ST_DOUBLE_QUOTES();
+              } else if (ch === "'") {
+                return this.T_CONSTANT_ENCAPSED_STRING();
+              } else if (ch) {
+                this.unput(1);
+              }
+            }
+          }
+        }
+        if (id === this.tok.T_ENUM) {
+          if (this.version < 801) {
+            return this.tok.T_STRING;
+          }
+          const initial = this.offset;
+          let ch = this.input();
+          while (ch == " ") {
+            ch = this.input();
+          }
+          let isEnum = false;
+          if (this.is_LABEL_START()) {
+            while (this.is_LABEL()) {
+              ch += this.input();
+            }
+            const label = ch.slice(0, -1).toLowerCase();
+            isEnum = label !== "extends" && label !== "implements";
+          }
+          this.unput(this.offset - initial);
+          return isEnum ? this.tok.T_ENUM : this.tok.T_STRING;
+        }
+        if (this.offset < this.size && id !== this.tok.T_YIELD_FROM) {
+          let ch = this.input();
+          if (ch === "\\") {
+            id = token === "namespace" ? this.tok.T_NAME_RELATIVE : this.tok.T_NAME_QUALIFIED;
+            do {
+              if (this._input[this.offset] === "{") {
+                this.input();
+                break;
+              }
+              this.consume_LABEL();
+              ch = this.input();
+            } while (ch === "\\");
+          }
+          if (ch) {
+            this.unput(1);
+          }
+        }
+        return id;
+      },
+      // reads a custom token
+      consume_TOKEN() {
+        const ch = this._input[this.offset - 1];
+        const fn2 = this.tokenTerminals[ch];
+        if (fn2) {
+          return fn2.apply(this, []);
+        } else {
+          return this.yytext;
+        }
+      },
+      // list of special char tokens
+      tokenTerminals: {
+        $() {
+          this.offset++;
+          if (this.is_LABEL_START()) {
+            this.offset--;
+            this.consume_LABEL();
+            return this.tok.T_VARIABLE;
+          } else {
+            this.offset--;
+            return "$";
+          }
+        },
+        "-"() {
+          const nchar = this._input[this.offset];
+          if (nchar === ">") {
+            this.begin("ST_LOOKING_FOR_PROPERTY").input();
+            return this.tok.T_OBJECT_OPERATOR;
+          } else if (nchar === "-") {
+            this.input();
+            return this.tok.T_DEC;
+          } else if (nchar === "=") {
+            this.input();
+            return this.tok.T_MINUS_EQUAL;
+          }
+          return "-";
+        },
+        "\\"() {
+          if (this.offset < this.size) {
+            this.input();
+            if (this.is_LABEL_START()) {
+              let ch;
+              do {
+                if (this._input[this.offset] === "{") {
+                  this.input();
+                  break;
+                }
+                this.consume_LABEL();
+                ch = this.input();
+              } while (ch === "\\");
+              this.unput(1);
+              return this.tok.T_NAME_FULLY_QUALIFIED;
+            } else {
+              this.unput(1);
+            }
+          }
+          return this.tok.T_NS_SEPARATOR;
+        },
+        "/"() {
+          if (this._input[this.offset] === "=") {
+            this.input();
+            return this.tok.T_DIV_EQUAL;
+          }
+          return "/";
+        },
+        ":"() {
+          if (this._input[this.offset] === ":") {
+            this.input();
+            return this.tok.T_DOUBLE_COLON;
+          } else {
+            return ":";
+          }
+        },
+        "("() {
+          const initial = this.offset;
+          this.input();
+          if (this.is_TABSPACE()) {
+            this.consume_TABSPACE().input();
+          }
+          if (this.is_LABEL_START()) {
+            const yylen = this.yytext.length;
+            this.consume_LABEL();
+            const castToken = this.yytext.substring(yylen - 1).toLowerCase();
+            const castId = this.castKeywords[castToken];
+            if (typeof castId === "number") {
+              this.input();
+              if (this.is_TABSPACE()) {
+                this.consume_TABSPACE().input();
+              }
+              if (this._input[this.offset - 1] === ")") {
+                return castId;
+              }
+            }
+          }
+          this.unput(this.offset - initial);
+          return "(";
+        },
+        "="() {
+          const nchar = this._input[this.offset];
+          if (nchar === ">") {
+            this.input();
+            return this.tok.T_DOUBLE_ARROW;
+          } else if (nchar === "=") {
+            if (this._input[this.offset + 1] === "=") {
+              this.consume(2);
+              return this.tok.T_IS_IDENTICAL;
+            } else {
+              this.input();
+              return this.tok.T_IS_EQUAL;
+            }
+          }
+          return "=";
+        },
+        "+"() {
+          const nchar = this._input[this.offset];
+          if (nchar === "+") {
+            this.input();
+            return this.tok.T_INC;
+          } else if (nchar === "=") {
+            this.input();
+            return this.tok.T_PLUS_EQUAL;
+          }
+          return "+";
+        },
+        "!"() {
+          if (this._input[this.offset] === "=") {
+            if (this._input[this.offset + 1] === "=") {
+              this.consume(2);
+              return this.tok.T_IS_NOT_IDENTICAL;
+            } else {
+              this.input();
+              return this.tok.T_IS_NOT_EQUAL;
+            }
+          }
+          return "!";
+        },
+        "?"() {
+          if (this.version >= 700 && this._input[this.offset] === "?") {
+            if (this.version >= 704 && this._input[this.offset + 1] === "=") {
+              this.consume(2);
+              return this.tok.T_COALESCE_EQUAL;
+            } else {
+              this.input();
+              return this.tok.T_COALESCE;
+            }
+          }
+          if (this.version >= 800 && this._input[this.offset] === "-" && this._input[this.offset + 1] === ">") {
+            this.consume(1);
+            this.begin("ST_LOOKING_FOR_PROPERTY").input();
+            return this.tok.T_NULLSAFE_OBJECT_OPERATOR;
+          }
+          return "?";
+        },
+        "<"() {
+          let nchar = this._input[this.offset];
+          if (nchar === "<") {
+            nchar = this._input[this.offset + 1];
+            if (nchar === "=") {
+              this.consume(2);
+              return this.tok.T_SL_EQUAL;
+            } else if (nchar === "<") {
+              if (this.is_HEREDOC()) {
+                return this.tok.T_START_HEREDOC;
+              }
+            }
+            this.input();
+            return this.tok.T_SL;
+          } else if (nchar === "=") {
+            this.input();
+            if (this.version >= 700 && this._input[this.offset] === ">") {
+              this.input();
+              return this.tok.T_SPACESHIP;
+            } else {
+              return this.tok.T_IS_SMALLER_OR_EQUAL;
+            }
+          } else if (nchar === ">") {
+            this.input();
+            return this.tok.T_IS_NOT_EQUAL;
+          }
+          return "<";
+        },
+        ">"() {
+          let nchar = this._input[this.offset];
+          if (nchar === "=") {
+            this.input();
+            return this.tok.T_IS_GREATER_OR_EQUAL;
+          } else if (nchar === ">") {
+            nchar = this._input[this.offset + 1];
+            if (nchar === "=") {
+              this.consume(2);
+              return this.tok.T_SR_EQUAL;
+            } else {
+              this.input();
+              return this.tok.T_SR;
+            }
+          }
+          return ">";
+        },
+        "*"() {
+          const nchar = this._input[this.offset];
+          if (nchar === "=") {
+            this.input();
+            return this.tok.T_MUL_EQUAL;
+          } else if (nchar === "*") {
+            this.input();
+            if (this._input[this.offset] === "=") {
+              this.input();
+              return this.tok.T_POW_EQUAL;
+            } else {
+              return this.tok.T_POW;
+            }
+          }
+          return "*";
+        },
+        "."() {
+          const nchar = this._input[this.offset];
+          if (nchar === "=") {
+            this.input();
+            return this.tok.T_CONCAT_EQUAL;
+          } else if (nchar === "." && this._input[this.offset + 1] === ".") {
+            this.consume(2);
+            return this.tok.T_ELLIPSIS;
+          }
+          return ".";
+        },
+        "%"() {
+          if (this._input[this.offset] === "=") {
+            this.input();
+            return this.tok.T_MOD_EQUAL;
+          }
+          return "%";
+        },
+        "&"() {
+          const nchar = this._input[this.offset];
+          if (nchar === "=") {
+            this.input();
+            return this.tok.T_AND_EQUAL;
+          } else if (nchar === "&") {
+            this.input();
+            return this.tok.T_BOOLEAN_AND;
+          }
+          return "&";
+        },
+        "|"() {
+          const nchar = this._input[this.offset];
+          if (nchar === "=") {
+            this.input();
+            return this.tok.T_OR_EQUAL;
+          } else if (nchar === "|") {
+            this.input();
+            return this.tok.T_BOOLEAN_OR;
+          } else if (nchar === ">") {
+            this.input();
+            return this.tok.T_PIPE;
+          }
+          return "|";
+        },
+        "^"() {
+          if (this._input[this.offset] === "=") {
+            this.input();
+            return this.tok.T_XOR_EQUAL;
+          }
+          return "^";
+        }
+      }
+    };
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/lexer/utils.js
+var require_utils3 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/lexer/utils.js"(exports2, module2) {
+    "use strict";
+    var tokens = ";:,.\\[]()|^&+-/*=%!~$<>?@";
+    module2.exports = {
+      // check if the char can be a numeric
+      is_NUM() {
+        const ch = this._input.charCodeAt(this.offset - 1);
+        return ch > 47 && ch < 58 || ch === 95;
+      },
+      // check if the char can be a numeric
+      is_NUM_START() {
+        const ch = this._input.charCodeAt(this.offset - 1);
+        return ch > 47 && ch < 58;
+      },
+      // check if current char can be a label
+      is_LABEL() {
+        const ch = this._input.charCodeAt(this.offset - 1);
+        return ch > 96 && ch < 123 || ch > 64 && ch < 91 || ch === 95 || ch > 47 && ch < 58 || ch > 126;
+      },
+      // check if current char can be a label
+      is_LABEL_START() {
+        const ch = this._input.charCodeAt(this.offset - 1);
+        if (ch > 64 && ch < 91) return true;
+        if (ch > 96 && ch < 123) return true;
+        if (ch === 95) return true;
+        if (ch > 126) return true;
+        return false;
+      },
+      // reads each char of the label
+      consume_LABEL() {
+        while (this.offset < this.size) {
+          const ch = this.input();
+          if (!this.is_LABEL()) {
+            if (ch) this.unput(1);
+            break;
+          }
+        }
+        return this;
+      },
+      // check if current char is a token char
+      is_TOKEN() {
+        const ch = this._input[this.offset - 1];
+        return tokens.indexOf(ch) !== -1;
+      },
+      // check if current char is a whitespace
+      is_WHITESPACE() {
+        const ch = this._input[this.offset - 1];
+        return ch === " " || ch === "	" || ch === "\n" || ch === "\r";
+      },
+      // check if current char is a whitespace (without newlines)
+      is_TABSPACE() {
+        const ch = this._input[this.offset - 1];
+        return ch === " " || ch === "	";
+      },
+      // consume all whitespaces (excluding newlines)
+      consume_TABSPACE() {
+        while (this.offset < this.size) {
+          const ch = this.input();
+          if (!this.is_TABSPACE()) {
+            if (ch) this.unput(1);
+            break;
+          }
+        }
+        return this;
+      },
+      // check if current char can be a hexadecimal number
+      is_HEX() {
+        const ch = this._input.charCodeAt(this.offset - 1);
+        if (ch > 47 && ch < 58) return true;
+        if (ch > 64 && ch < 71) return true;
+        if (ch > 96 && ch < 103) return true;
+        if (ch === 95) return true;
+        return false;
+      },
+      // check if current char can be an octal number
+      is_OCTAL() {
+        const ch = this._input.charCodeAt(this.offset - 1);
+        if (ch > 47 && ch < 56) return true;
+        if (ch === 95) return true;
+        return false;
+      }
+    };
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/lexer.js
+var require_lexer2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/lexer.js"(exports2, module2) {
+    "use strict";
+    var Lexer = function(engine) {
+      this.engine = engine;
+      this.tok = this.engine.tokens.names;
+      this.EOF = 1;
+      this.debug = false;
+      this.all_tokens = true;
+      this.comment_tokens = false;
+      this.mode_eval = false;
+      this.asp_tags = false;
+      this.short_tags = false;
+      this.version = 803;
+      this.yyprevcol = 0;
+      this.keywords = {
+        __class__: this.tok.T_CLASS_C,
+        __trait__: this.tok.T_TRAIT_C,
+        __function__: this.tok.T_FUNC_C,
+        __method__: this.tok.T_METHOD_C,
+        __line__: this.tok.T_LINE,
+        __file__: this.tok.T_FILE,
+        __dir__: this.tok.T_DIR,
+        __namespace__: this.tok.T_NS_C,
+        exit: this.tok.T_EXIT,
+        die: this.tok.T_EXIT,
+        function: this.tok.T_FUNCTION,
+        const: this.tok.T_CONST,
+        return: this.tok.T_RETURN,
+        try: this.tok.T_TRY,
+        catch: this.tok.T_CATCH,
+        finally: this.tok.T_FINALLY,
+        throw: this.tok.T_THROW,
+        if: this.tok.T_IF,
+        elseif: this.tok.T_ELSEIF,
+        endif: this.tok.T_ENDIF,
+        else: this.tok.T_ELSE,
+        while: this.tok.T_WHILE,
+        endwhile: this.tok.T_ENDWHILE,
+        do: this.tok.T_DO,
+        for: this.tok.T_FOR,
+        endfor: this.tok.T_ENDFOR,
+        foreach: this.tok.T_FOREACH,
+        endforeach: this.tok.T_ENDFOREACH,
+        declare: this.tok.T_DECLARE,
+        enddeclare: this.tok.T_ENDDECLARE,
+        instanceof: this.tok.T_INSTANCEOF,
+        as: this.tok.T_AS,
+        switch: this.tok.T_SWITCH,
+        endswitch: this.tok.T_ENDSWITCH,
+        case: this.tok.T_CASE,
+        default: this.tok.T_DEFAULT,
+        break: this.tok.T_BREAK,
+        continue: this.tok.T_CONTINUE,
+        goto: this.tok.T_GOTO,
+        echo: this.tok.T_ECHO,
+        print: this.tok.T_PRINT,
+        class: this.tok.T_CLASS,
+        interface: this.tok.T_INTERFACE,
+        trait: this.tok.T_TRAIT,
+        enum: this.tok.T_ENUM,
+        extends: this.tok.T_EXTENDS,
+        implements: this.tok.T_IMPLEMENTS,
+        new: this.tok.T_NEW,
+        clone: this.tok.T_CLONE,
+        var: this.tok.T_VAR,
+        eval: this.tok.T_EVAL,
+        include: this.tok.T_INCLUDE,
+        include_once: this.tok.T_INCLUDE_ONCE,
+        require: this.tok.T_REQUIRE,
+        require_once: this.tok.T_REQUIRE_ONCE,
+        namespace: this.tok.T_NAMESPACE,
+        use: this.tok.T_USE,
+        insteadof: this.tok.T_INSTEADOF,
+        global: this.tok.T_GLOBAL,
+        isset: this.tok.T_ISSET,
+        empty: this.tok.T_EMPTY,
+        __halt_compiler: this.tok.T_HALT_COMPILER,
+        static: this.tok.T_STATIC,
+        abstract: this.tok.T_ABSTRACT,
+        final: this.tok.T_FINAL,
+        private: this.tok.T_PRIVATE,
+        protected: this.tok.T_PROTECTED,
+        public: this.tok.T_PUBLIC,
+        unset: this.tok.T_UNSET,
+        list: this.tok.T_LIST,
+        array: this.tok.T_ARRAY,
+        callable: this.tok.T_CALLABLE,
+        or: this.tok.T_LOGICAL_OR,
+        and: this.tok.T_LOGICAL_AND,
+        xor: this.tok.T_LOGICAL_XOR,
+        match: this.tok.T_MATCH,
+        readonly: this.tok.T_READ_ONLY
+      };
+      this.castKeywords = {
+        int: this.tok.T_INT_CAST,
+        integer: this.tok.T_INT_CAST,
+        real: this.tok.T_DOUBLE_CAST,
+        double: this.tok.T_DOUBLE_CAST,
+        float: this.tok.T_DOUBLE_CAST,
+        string: this.tok.T_STRING_CAST,
+        binary: this.tok.T_STRING_CAST,
+        array: this.tok.T_ARRAY_CAST,
+        object: this.tok.T_OBJECT_CAST,
+        bool: this.tok.T_BOOL_CAST,
+        boolean: this.tok.T_BOOL_CAST,
+        unset: this.tok.T_UNSET_CAST
+      };
+    };
+    Lexer.prototype.setInput = function(input2) {
+      this._input = input2;
+      this.size = input2.length;
+      this.yylineno = 1;
+      this.offset = 0;
+      this.yyprevcol = 0;
+      this.yytext = "";
+      this.yylloc = {
+        first_offset: 0,
+        first_line: 1,
+        first_column: 0,
+        prev_offset: 0,
+        prev_line: 1,
+        prev_column: 0,
+        last_line: 1,
+        last_column: 0
+      };
+      this.tokens = [];
+      if (this.version > 703) {
+        this.keywords.fn = this.tok.T_FN;
+      } else {
+        delete this.keywords.fn;
+      }
+      this.done = this.offset >= this.size;
+      if (!this.all_tokens && this.mode_eval) {
+        this.conditionStack = ["INITIAL"];
+        this.begin("ST_IN_SCRIPTING");
+      } else {
+        this.conditionStack = [];
+        this.begin("INITIAL");
+      }
+      this.heredoc_label = {
+        label: "",
+        length: 0,
+        indentation: 0,
+        indentation_uses_spaces: false,
+        finished: false,
+        /*
+         * this used for parser to detemine the if current node segment is first encaps node.
+         * if ture, the indentation will remove from the begining. and if false, the prev node
+         * might be a variable '}' ,and the leading spaces should not be removed util meet the
+         * first \n
+         */
+        first_encaps_node: false,
+        // for backward compatible
+        /* istanbul ignore next */
+        toString() {
+          this.label;
+        }
+      };
+      return this;
+    };
+    Lexer.prototype.input = function() {
+      const ch = this._input[this.offset];
+      if (!ch) return "";
+      this.yytext += ch;
+      this.offset++;
+      if (ch === "\r" && this._input[this.offset] === "\n") {
+        this.yytext += "\n";
+        this.offset++;
+      }
+      if (ch === "\n" || ch === "\r") {
+        this.yylloc.last_line = ++this.yylineno;
+        this.yyprevcol = this.yylloc.last_column;
+        this.yylloc.last_column = 0;
+      } else {
+        this.yylloc.last_column++;
+      }
+      return ch;
+    };
+    Lexer.prototype.unput = function(size) {
+      if (size === 1) {
+        this.offset--;
+        if (this._input[this.offset] === "\n" && this._input[this.offset - 1] === "\r") {
+          this.offset--;
+          size++;
+        }
+        if (this._input[this.offset] === "\r" || this._input[this.offset] === "\n") {
+          this.yylloc.last_line--;
+          this.yylineno--;
+          this.yylloc.last_column = this.yyprevcol;
+        } else {
+          this.yylloc.last_column--;
+        }
+        this.yytext = this.yytext.substring(0, this.yytext.length - size);
+      } else if (size > 0) {
+        this.offset -= size;
+        if (size < this.yytext.length) {
+          this.yytext = this.yytext.substring(0, this.yytext.length - size);
+          this.yylloc.last_line = this.yylloc.first_line;
+          this.yylloc.last_column = this.yyprevcol = this.yylloc.first_column;
+          for (let i = 0; i < this.yytext.length; i++) {
+            let c3 = this.yytext[i];
+            if (c3 === "\r") {
+              c3 = this.yytext[++i];
+              this.yyprevcol = this.yylloc.last_column;
+              this.yylloc.last_line++;
+              this.yylloc.last_column = 0;
+              if (c3 !== "\n") {
+                if (c3 === "\r") {
+                  this.yylloc.last_line++;
+                } else {
+                  this.yylloc.last_column++;
+                }
+              }
+            } else if (c3 === "\n") {
+              this.yyprevcol = this.yylloc.last_column;
+              this.yylloc.last_line++;
+              this.yylloc.last_column = 0;
+            } else {
+              this.yylloc.last_column++;
+            }
+          }
+          this.yylineno = this.yylloc.last_line;
+        } else {
+          this.yytext = "";
+          this.yylloc.last_line = this.yylineno = this.yylloc.first_line;
+          this.yylloc.last_column = this.yylloc.first_column;
+        }
+      }
+      return this;
+    };
+    Lexer.prototype.tryMatch = function(text3) {
+      return text3 === this.ahead(text3.length);
+    };
+    Lexer.prototype.tryMatchCaseless = function(text3) {
+      return text3 === this.ahead(text3.length).toLowerCase();
+    };
+    Lexer.prototype.ahead = function(size) {
+      let text3 = this._input.substring(this.offset, this.offset + size);
+      if (text3[text3.length - 1] === "\r" && this._input[this.offset + size + 1] === "\n") {
+        text3 += "\n";
+      }
+      return text3;
+    };
+    Lexer.prototype.consume = function(size) {
+      for (let i = 0; i < size; i++) {
+        const ch = this._input[this.offset];
+        if (!ch) break;
+        this.yytext += ch;
+        this.offset++;
+        if (ch === "\r" && this._input[this.offset] === "\n") {
+          this.yytext += "\n";
+          this.offset++;
+          i++;
+        }
+        if (ch === "\n" || ch === "\r") {
+          this.yylloc.last_line = ++this.yylineno;
+          this.yyprevcol = this.yylloc.last_column;
+          this.yylloc.last_column = 0;
+        } else {
+          this.yylloc.last_column++;
+        }
+      }
+      return this;
+    };
+    Lexer.prototype.getState = function() {
+      return {
+        yytext: this.yytext,
+        offset: this.offset,
+        yylineno: this.yylineno,
+        yyprevcol: this.yyprevcol,
+        yylloc: {
+          first_offset: this.yylloc.first_offset,
+          first_line: this.yylloc.first_line,
+          first_column: this.yylloc.first_column,
+          last_line: this.yylloc.last_line,
+          last_column: this.yylloc.last_column
+        },
+        heredoc_label: this.heredoc_label
+      };
+    };
+    Lexer.prototype.setState = function(state) {
+      this.yytext = state.yytext;
+      this.offset = state.offset;
+      this.yylineno = state.yylineno;
+      this.yyprevcol = state.yyprevcol;
+      this.yylloc = state.yylloc;
+      if (state.heredoc_label) {
+        this.heredoc_label = state.heredoc_label;
+      }
+      return this;
+    };
+    Lexer.prototype.appendToken = function(value, ahead) {
+      this.tokens.push([value, ahead]);
+      return this;
+    };
+    Lexer.prototype.lex = function() {
+      this.yylloc.prev_offset = this.offset;
+      this.yylloc.prev_line = this.yylloc.last_line;
+      this.yylloc.prev_column = this.yylloc.last_column;
+      let token = this.next() || this.lex();
+      if (!this.all_tokens) {
+        while (token === this.tok.T_WHITESPACE || // ignore white space
+        !this.comment_tokens && (token === this.tok.T_COMMENT || // ignore single lines comments
+        token === this.tok.T_DOC_COMMENT) || // ignore doc comments
+        // ignore open tags
+        token === this.tok.T_OPEN_TAG) {
+          token = this.next() || this.lex();
+        }
+        if (token == this.tok.T_OPEN_TAG_WITH_ECHO) {
+          return this.tok.T_ECHO;
+        } else if (token === this.tok.T_CLOSE_TAG) {
+          return ";";
+        }
+      }
+      if (!this.yylloc.prev_offset) {
+        this.yylloc.prev_offset = this.yylloc.first_offset;
+        this.yylloc.prev_line = this.yylloc.first_line;
+        this.yylloc.prev_column = this.yylloc.first_column;
+      }
+      return token;
+    };
+    Lexer.prototype.begin = function(condition) {
+      this.conditionStack.push(condition);
+      this.curCondition = condition;
+      this.stateCb = this["match" + condition];
+      if (typeof this.stateCb !== "function") {
+        throw new Error('Undefined condition state "' + condition + '"');
+      }
+      return this;
+    };
+    Lexer.prototype.popState = function() {
+      const n = this.conditionStack.length - 1;
+      const condition = n > 0 ? this.conditionStack.pop() : this.conditionStack[0];
+      this.curCondition = this.conditionStack[this.conditionStack.length - 1];
+      this.stateCb = this["match" + this.curCondition];
+      if (typeof this.stateCb !== "function") {
+        throw new Error('Undefined condition state "' + this.curCondition + '"');
+      }
+      return condition;
+    };
+    Lexer.prototype.next = function() {
+      let token;
+      if (!this._input) {
+        this.done = true;
+      }
+      this.yylloc.first_offset = this.offset;
+      this.yylloc.first_line = this.yylloc.last_line;
+      this.yylloc.first_column = this.yylloc.last_column;
+      this.yytext = "";
+      if (this.done) {
+        this.yylloc.prev_offset = this.yylloc.first_offset;
+        this.yylloc.prev_line = this.yylloc.first_line;
+        this.yylloc.prev_column = this.yylloc.first_column;
+        return this.EOF;
+      }
+      if (this.tokens.length > 0) {
+        token = this.tokens.shift();
+        if (typeof token[1] === "object") {
+          this.setState(token[1]);
+        } else {
+          this.consume(token[1]);
+        }
+        token = token[0];
+      } else {
+        token = this.stateCb.apply(this, []);
+      }
+      if (this.offset >= this.size && this.tokens.length === 0) {
+        this.done = true;
+      }
+      if (this.debug) {
+        let tName = token;
+        if (typeof tName === "number") {
+          tName = this.engine.tokens.values[tName];
+        } else {
+          tName = '"' + tName + '"';
+        }
+        const e = new Error(
+          tName + "	from " + this.yylloc.first_line + "," + this.yylloc.first_column + "	 - to " + this.yylloc.last_line + "," + this.yylloc.last_column + '	"' + this.yytext + '"'
+        );
+        console.error(e.stack);
+      }
+      return token;
+    };
+    [
+      require_attribute3(),
+      require_comments2(),
+      require_initial2(),
+      require_numbers2(),
+      require_property3(),
+      require_scripting2(),
+      require_strings2(),
+      require_tokens3(),
+      require_utils3()
+    ].forEach(function(ext) {
+      for (const k2 in ext) {
+        Lexer.prototype[k2] = ext[k2];
+      }
+    });
+    module2.exports = Lexer;
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/position.js
+var require_position2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/position.js"(exports2, module2) {
+    "use strict";
+    var Position = function(line, column, offset) {
+      this.line = line;
+      this.column = column;
+      this.offset = offset;
+    };
+    module2.exports = Position;
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/array.js
+var require_array3 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/array.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      /*
+       * Parse an array
+       * ```ebnf
+       * array ::= T_ARRAY '(' array_pair_list ')' |
+       *   '[' array_pair_list ']'
+       * ```
+       */
+      read_array() {
+        let expect;
+        let shortForm = false;
+        const result = this.node("array");
+        if (this.token === this.tok.T_ARRAY) {
+          this.next().expect("(");
+          expect = ")";
+        } else {
+          shortForm = true;
+          expect = "]";
+        }
+        let items = [];
+        if (this.next().token !== expect) {
+          items = this.read_array_pair_list(shortForm);
+        }
+        this.expect(expect);
+        this.next();
+        return result(shortForm, items);
+      },
+      /*
+       * Reads an array of items
+       * ```ebnf
+       * array_pair_list ::= array_pair (',' array_pair?)*
+       * ```
+       */
+      read_array_pair_list(shortForm) {
+        const self = this;
+        return this.read_list(
+          function() {
+            return self.read_array_pair(shortForm);
+          },
+          ",",
+          true
+        );
+      },
+      /*
+       * Reads an entry
+       * array_pair:
+       *  expr T_DOUBLE_ARROW expr
+       *  | expr
+       *  | expr T_DOUBLE_ARROW '&' variable
+       *  | '&' variable
+       *  | expr T_DOUBLE_ARROW T_LIST '(' array_pair_list ')'
+       *  | T_LIST '(' array_pair_list ')'
+       */
+      read_array_pair(shortForm) {
+        if (!shortForm && this.token === ")" || shortForm && this.token === "]") {
+          return;
+        }
+        if (this.token === ",") {
+          return this.node("noop")();
+        }
+        const entry = this.node("entry");
+        let key = null;
+        let value;
+        let byRef = false;
+        let unpack = false;
+        if (this.token === "&") {
+          this.next();
+          byRef = true;
+          value = this.read_variable(true, false);
+        } else if (this.token === this.tok.T_ELLIPSIS && this.version >= 704) {
+          this.next();
+          if (this.token === "&") {
+            this.error();
+          }
+          unpack = true;
+          value = this.read_expr();
+        } else {
+          const expr = this.read_expr();
+          if (this.token === this.tok.T_DOUBLE_ARROW) {
+            this.next();
+            key = expr;
+            if (this.token === "&") {
+              this.next();
+              byRef = true;
+              value = this.read_variable(true, false);
+            } else {
+              value = this.read_expr();
+            }
+          } else {
+            value = expr;
+          }
+        }
+        return entry(key, value, byRef, unpack);
+      }
+    };
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/class.js
+var require_class3 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/class.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      /*
+       * reading a class
+       * ```ebnf
+       * class ::= class_scope? T_CLASS T_STRING (T_EXTENDS NAMESPACE_NAME)? (T_IMPLEMENTS (NAMESPACE_NAME ',')* NAMESPACE_NAME)? '{' CLASS_BODY '}'
+       * ```
+       */
+      read_class_declaration_statement(attrs) {
+        const result = this.node("class");
+        const flag = this.read_class_modifiers();
+        if (this.token !== this.tok.T_CLASS) {
+          this.error(this.tok.T_CLASS);
+          this.next();
+          return null;
+        }
+        this.next().expect(this.tok.T_STRING);
+        let propName = this.node("identifier");
+        const name = this.text();
+        this.next();
+        propName = propName(name);
+        const propExtends = this.read_extends_from();
+        const propImplements = this.read_implements_list();
+        this.expect("{");
+        const body = this.next().read_class_body(true, false);
+        const node2 = result(propName, propExtends, propImplements, body, flag);
+        if (attrs) node2.attrGroups = attrs;
+        return node2;
+      },
+      read_class_modifiers() {
+        const modifier = this.read_class_modifier({
+          readonly: 0,
+          final_or_abstract: 0
+        });
+        return [0, 0, modifier.final_or_abstract, modifier.readonly];
+      },
+      read_class_modifier(memo2) {
+        if (this.token === this.tok.T_READ_ONLY) {
+          this.next();
+          memo2.readonly = 1;
+          memo2 = this.read_class_modifier(memo2);
+        } else if (memo2.final_or_abstract === 0 && this.token === this.tok.T_ABSTRACT) {
+          this.next();
+          memo2.final_or_abstract = 1;
+          memo2 = this.read_class_modifier(memo2);
+        } else if (memo2.final_or_abstract === 0 && this.token === this.tok.T_FINAL) {
+          this.next();
+          memo2.final_or_abstract = 2;
+          memo2 = this.read_class_modifier(memo2);
+        }
+        return memo2;
+      },
+      /*
+       * Reads a class body
+       * ```ebnf
+       *   class_body ::= (member_flags? (T_VAR | T_STRING | T_FUNCTION))*
+       * ```
+       */
+      read_class_body(allow_variables, allow_enum_cases) {
+        let result = [];
+        let attrs = [];
+        while (this.token !== this.EOF && this.token !== "}") {
+          if (this.token === this.tok.T_COMMENT) {
+            result.push(this.read_comment());
+            continue;
+          }
+          if (this.token === this.tok.T_DOC_COMMENT) {
+            result.push(this.read_doc_comment());
+            continue;
+          }
+          if (this.token === this.tok.T_USE) {
+            result = result.concat(this.read_trait_use_statement());
+            continue;
+          }
+          const locStart = this.position();
+          if (this.token === this.tok.T_ATTRIBUTE) {
+            attrs = this.read_attr_list();
+          }
+          if (allow_enum_cases && this.token === this.tok.T_CASE) {
+            const enumcase = this.read_enum_case(attrs);
+            attrs = [];
+            if (this.expect(";")) {
+              this.next();
+            }
+            result = result.concat(enumcase);
+            continue;
+          }
+          const flags = this.read_member_flags(false);
+          if (this.token === this.tok.T_CONST) {
+            if (flags[0][1] !== -1) {
+              this.raiseError("Cannot use asymmetric visibility on constants");
+            }
+            const constants = this.read_constant_list(flags, attrs, locStart);
+            if (this.expect(";")) {
+              this.next();
+            }
+            result = result.concat(constants);
+            continue;
+          }
+          if (allow_variables && this.token === this.tok.T_VAR) {
+            this.next().expect(this.tok.T_VARIABLE);
+            flags[0][0] = null;
+            flags[1] = 0;
+          }
+          if (this.token === this.tok.T_FUNCTION) {
+            result.push(this.read_function(false, flags, attrs, locStart));
+            attrs = [];
+          } else if (allow_variables && (this.token === this.tok.T_VARIABLE || this.version >= 801 && this.token === this.tok.T_READ_ONLY || // support https://wiki.php.net/rfc/typed_properties_v2
+          this.version >= 704 && (this.token === "?" || this.token === this.tok.T_ARRAY || this.token === this.tok.T_CALLABLE || this.token === this.tok.T_NAMESPACE || this.token === this.tok.T_NAME_FULLY_QUALIFIED || this.token === this.tok.T_NAME_QUALIFIED || this.token === this.tok.T_NAME_RELATIVE || this.token === this.tok.T_NS_SEPARATOR || this.token === this.tok.T_STRING))) {
+            const variables = this.read_variable_list(flags, attrs, locStart);
+            attrs = [];
+            result = result.concat(variables);
+          } else {
+            this.error([
+              this.tok.T_CONST,
+              ...allow_variables ? [this.tok.T_VARIABLE] : [],
+              ...allow_enum_cases ? [this.tok.T_CASE] : [],
+              this.tok.T_FUNCTION
+            ]);
+            this.next();
+          }
+        }
+        this.expect("}");
+        this.next();
+        return result;
+      },
+      /*
+       * Reads variable list
+       * ```ebnf
+       *  variable_list ::= (variable_declaration ',')* variable_declaration
+       * ```
+       */
+      read_variable_list(flags, attrs, locStart) {
+        let property_statement = this.node("propertystatement");
+        const properties = this.read_list(
+          /*
+           * Reads a variable declaration
+           *
+           * ```ebnf
+           *  variable_declaration ::= T_VARIABLE '=' scalar
+           * ```
+           */
+          function read_variable_declaration() {
+            const result = this.node("property");
+            let readonly2 = flags[3] === 1;
+            if (!readonly2 && this.token === this.tok.T_READ_ONLY) {
+              readonly2 = true;
+              this.next();
+            }
+            const [nullable2, type] = this.read_optional_type();
+            this.expect(this.tok.T_VARIABLE);
+            let propName = this.node("identifier");
+            const name = this.text().substring(1);
+            this.next();
+            propName = propName(name);
+            let value = null;
+            let property_hooks = [];
+            this.expect([",", ";", "=", "{"]);
+            if (this.token === "=") {
+              value = this.next().read_expr();
+            }
+            if (this.token === "{") {
+              property_hooks = this.read_property_hooks();
+            } else {
+              this.expect([";", ","]);
+            }
+            return result(
+              propName,
+              value,
+              readonly2,
+              nullable2,
+              type,
+              attrs || [],
+              property_hooks
+            );
+          },
+          ","
+        );
+        property_statement = property_statement(null, properties, flags);
+        if (locStart && property_statement.loc) {
+          property_statement.loc.start = locStart;
+          if (property_statement.loc.source) {
+            property_statement.loc.source = this.lexer._input.substr(
+              property_statement.loc.start.offset,
+              property_statement.loc.end.offset - property_statement.loc.start.offset
+            );
+          }
+        }
+        if (this.token === ";") {
+          this.next();
+        }
+        return property_statement;
+      },
+      /*
+       * Reads property hooks
+       */
+      read_property_hooks() {
+        if (this.version < 804) {
+          this.raiseError("Parse Error: Property hooks require PHP 8.4+");
+        }
+        this.expect("{");
+        this.next();
+        const hooks = [];
+        while (this.token !== this.EOF && this.token !== "}") {
+          hooks.push(this.read_property_hook());
+        }
+        this.expect("}");
+        this.next();
+        return hooks;
+      },
+      read_property_hook() {
+        const property_hooks = this.node("propertyhook");
+        let attrs = [];
+        if (this.token === this.tok.T_ATTRIBUTE) {
+          attrs = this.read_attr_list();
+        }
+        const is_final = this.token === this.tok.T_FINAL;
+        if (is_final) this.next();
+        const is_reference = this.token === "&";
+        if (is_reference) this.next();
+        const method_name = this.text();
+        if (method_name !== "get" && method_name !== "set") {
+          this.raiseError(
+            "Parse Error: Property hooks must be either 'get' or 'set'"
+          );
+        }
+        this.next();
+        let parameter = null;
+        let body = null;
+        this.expect([this.tok.T_DOUBLE_ARROW, "{", "(", ";"]);
+        if (this.token === ";") {
+          this.next();
+          return property_hooks(
+            method_name,
+            is_final,
+            is_reference,
+            parameter,
+            body,
+            attrs
+          );
+        }
+        if (this.token === "(") {
+          this.next();
+          parameter = this.read_parameter(false);
+          this.expect(")");
+          this.next();
+        }
+        if (this.token === this.tok.T_DOUBLE_ARROW) {
+          this.next();
+          body = this.read_expr();
+          this.next();
+        } else if (this.token === "{") {
+          body = this.read_code_block();
+        }
+        return property_hooks(
+          method_name,
+          is_final,
+          is_reference,
+          parameter,
+          body,
+          attrs
+        );
+      },
+      /*
+       * Reads constant list
+       * ```ebnf
+       *  constant_list ::= T_CONST [type] (constant_declaration ',')* constant_declaration
+       * ```
+       */
+      read_constant_list(flags, attrs, locStart) {
+        const result = this.node("classconstant");
+        if (this.expect(this.tok.T_CONST)) {
+          this.next();
+        }
+        if (flags[1] === 1 || flags[2] === 1 || flags[3] === 1) {
+          this.error();
+        }
+        if (flags[2] === 2 && this.version < 801) {
+          this.raiseError("Final class constants are not allowed before PHP 8.1");
+        }
+        const [nullable2, type] = this.version >= 803 ? this.read_optional_type() : [false, null];
+        const items = this.read_list(
+          /*
+           * Reads a constant declaration
+           *
+           * ```ebnf
+           *  constant_declaration ::= (T_STRING | IDENTIFIER) '=' expr
+           * ```
+           * @return {Constant} [:link:](AST.md#constant)
+           */
+          function read_constant_declaration() {
+            const result2 = this.node("constant");
+            let constName = null;
+            let value = null;
+            if (this.token === this.tok.T_STRING || this.version >= 700 && this.is("IDENTIFIER")) {
+              constName = this.node("identifier");
+              const name = this.text();
+              this.next();
+              constName = constName(name);
+            } else {
+              this.expect("IDENTIFIER");
+            }
+            if (this.expect("=")) {
+              value = this.next().read_expr();
+            }
+            return result2(constName, value);
+          },
+          ","
+        );
+        const node2 = result(null, items, flags, nullable2, type, attrs || []);
+        if (locStart && node2.loc) {
+          node2.loc.start = locStart;
+          if (node2.loc.source) {
+            node2.loc.source = this.lexer._input.substr(
+              node2.loc.start.offset,
+              node2.loc.end.offset - node2.loc.start.offset
+            );
+          }
+        }
+        return node2;
+      },
+      /*
+       * Read member flags
+       * @return array
+       *  1st index : [get, set] visibility tuple
+       *    get/set: -1 => no visibility, 0 => public, 1 => protected, 2 => private
+       *  2nd index : 0 => instance member, 1 => static member
+       *  3rd index : 0 => normal, 1 => abstract member, 2 => final member
+       *  4th index : 0 => no readonly, 1 => readonly
+       */
+      read_member_flags(asInterface) {
+        const result = [[-1, -1], 0, 0, 0];
+        const seen = /* @__PURE__ */ new Set();
+        while (this.is("T_MEMBER_FLAGS")) {
+          let idx = -1, val = -1;
+          switch (this.token) {
+            case this.tok.T_PUBLIC:
+            case this.tok.T_PROTECTED:
+            case this.tok.T_PRIVATE: {
+              idx = 0;
+              val = this.token === this.tok.T_PUBLIC ? 0 : this.token === this.tok.T_PROTECTED ? 1 : 2;
+              if (asInterface && val === 2) {
+                this.expect([this.tok.T_PUBLIC, this.tok.T_PROTECTED]);
+                val = -1;
+              }
+              this.next();
+              if (this.version >= 804 && this.token === "(") {
+                if (result[0][0] === -1) {
+                  result[0][0] = 0;
+                }
+                this.next();
+                if (this.token !== this.tok.T_STRING || this.text() !== "set") {
+                  this.error("set");
+                } else {
+                  this.next();
+                }
+                if (this.expect(")")) {
+                  this.next();
+                }
+                if (seen.has("set")) {
+                  this.error();
+                } else if (val !== -1) {
+                  seen.add("set");
+                  result[0][1] = val;
+                }
+                continue;
+              }
+              if (seen.has(idx)) {
+                this.error();
+              } else if (val !== -1) {
+                seen.add(idx);
+                result[0][0] = val;
+              }
+              continue;
+            }
+            case this.tok.T_STATIC:
+              idx = 1;
+              val = 1;
+              break;
+            case this.tok.T_ABSTRACT:
+              idx = 2;
+              val = 1;
+              break;
+            case this.tok.T_FINAL:
+              idx = 2;
+              val = 2;
+              break;
+            case this.tok.T_READ_ONLY:
+              idx = 3;
+              val = 1;
+              break;
+          }
+          if (asInterface && idx === 2 && val === 1) {
+            this.error();
+            val = -1;
+          }
+          if (seen.has(idx)) {
+            this.error();
+          } else if (val !== -1) {
+            seen.add(idx);
+            result[idx] = val;
+          }
+          this.next();
+        }
+        return result;
+      },
+      /*
+       * optional_type:
+       *	  /- empty -/	{ $$ = NULL; }
+       *   |	type_expr	{ $$ = $1; }
+       * ;
+       *
+       * type_expr:
+       *		type		{ $$ = $1; }
+       *	|	'?' type	{ $$ = $2; $$->attr |= ZEND_TYPE_NULLABLE; }
+       *	|	union_type	{ $$ = $1; }
+       * ;
+       *
+       * type:
+       * 		T_ARRAY		{ $$ = zend_ast_create_ex(ZEND_AST_TYPE, IS_ARRAY); }
+       * 	|	T_CALLABLE	{ $$ = zend_ast_create_ex(ZEND_AST_TYPE, IS_CALLABLE); }
+       * 	|	name		{ $$ = $1; }
+       * ;
+       *
+       * union_type:
+       * 		type '|' type       { $$ = zend_ast_create_list(2, ZEND_AST_TYPE_UNION, $1, $3); }
+       * 	|	union_type '|' type { $$ = zend_ast_list_add($1, $3); }
+       * ;
+       */
+      read_optional_type() {
+        const nullable2 = this.token === "?";
+        if (nullable2) {
+          this.next();
+        }
+        if (this.peekSkipComments() === "=") {
+          return [false, null];
+        }
+        let type = this.read_types();
+        if (nullable2 && !type) {
+          this.raiseError(
+            "Expecting a type definition combined with nullable operator"
+          );
+        }
+        if (!nullable2 && !type) {
+          return [false, null];
+        }
+        if (this.token === "|") {
+          type = [type];
+          do {
+            this.next();
+            const variant = this.read_type();
+            if (!variant) {
+              this.raiseError("Expecting a type definition");
+              break;
+            }
+            type.push(variant);
+          } while (this.token === "|");
+        }
+        return [nullable2, type];
+      },
+      peekSkipComments() {
+        const lexerState = this.lexer.getState();
+        let nextToken;
+        do {
+          nextToken = this.lexer.lex();
+        } while (nextToken === this.tok.T_COMMENT || nextToken === this.tok.T_WHITESPACE);
+        this.lexer.setState(lexerState);
+        return nextToken;
+      },
+      /*
+       * reading an interface
+       * ```ebnf
+       * interface ::= T_INTERFACE T_STRING (T_EXTENDS (NAMESPACE_NAME ',')* NAMESPACE_NAME)? '{' INTERFACE_BODY '}'
+       * ```
+       */
+      read_interface_declaration_statement(attrs) {
+        const result = this.node("interface");
+        if (this.token !== this.tok.T_INTERFACE) {
+          this.error(this.tok.T_INTERFACE);
+          this.next();
+          return null;
+        }
+        this.next().expect(this.tok.T_STRING);
+        let propName = this.node("identifier");
+        const name = this.text();
+        this.next();
+        propName = propName(name);
+        const propExtends = this.read_interface_extends_list();
+        this.expect("{");
+        const body = this.next().read_interface_body();
+        return result(propName, propExtends, body, attrs || []);
+      },
+      /*
+       * Reads an interface body
+       * ```ebnf
+       *   interface_body ::= (member_flags? (T_CONST | T_FUNCTION))*
+       * ```
+       */
+      read_interface_body() {
+        let result = [];
+        let attrs;
+        while (this.token !== this.EOF && this.token !== "}") {
+          if (this.token === this.tok.T_COMMENT) {
+            result.push(this.read_comment());
+            continue;
+          }
+          if (this.token === this.tok.T_DOC_COMMENT) {
+            result.push(this.read_doc_comment());
+            continue;
+          }
+          const locStart = this.position();
+          attrs = [];
+          if (this.token === this.tok.T_ATTRIBUTE) {
+            attrs = this.read_attr_list();
+          }
+          const flags = this.read_member_flags(true);
+          if (this.token === this.tok.T_CONST) {
+            if (flags[0][1] !== -1) {
+              this.raiseError("Cannot use asymmetric visibility on constants");
+            }
+            const constants = this.read_constant_list(flags, attrs, locStart);
+            if (this.expect(";")) {
+              this.next();
+            }
+            result = result.concat(constants);
+          } else if (this.token === this.tok.T_FUNCTION) {
+            const method = this.read_function_declaration(
+              2,
+              flags,
+              attrs,
+              locStart
+            );
+            method.parseFlags(flags);
+            result.push(method);
+            if (this.expect(";")) {
+              this.next();
+            }
+          } else if (this.token === this.tok.T_STRING) {
+            result.push(this.read_variable_list(flags, attrs, locStart));
+          } else {
+            this.error([this.tok.T_CONST, this.tok.T_FUNCTION, this.tok.T_STRING]);
+            this.next();
+          }
+        }
+        if (this.expect("}")) {
+          this.next();
+        }
+        return result;
+      },
+      /*
+       * reading a trait
+       * ```ebnf
+       * trait ::= T_TRAIT T_STRING (T_EXTENDS (NAMESPACE_NAME ',')* NAMESPACE_NAME)? '{' FUNCTION* '}'
+       * ```
+       */
+      read_trait_declaration_statement(attrs) {
+        const result = this.node("trait");
+        if (this.token !== this.tok.T_TRAIT) {
+          this.error(this.tok.T_TRAIT);
+          this.next();
+          return null;
+        }
+        this.next().expect(this.tok.T_STRING);
+        let propName = this.node("identifier");
+        const name = this.text();
+        this.next();
+        propName = propName(name);
+        this.expect("{");
+        const body = this.next().read_class_body(true, false);
+        const node2 = result(propName, body);
+        if (attrs) node2.attrGroups = attrs;
+        return node2;
+      },
+      /*
+       * reading a use statement
+       * ```ebnf
+       * trait_use_statement ::= namespace_name (',' namespace_name)* ('{' trait_use_alias '}')?
+       * ```
+       */
+      read_trait_use_statement() {
+        const node2 = this.node("traituse");
+        this.expect(this.tok.T_USE) && this.next();
+        const traits = [this.read_namespace_name()];
+        let adaptations = null;
+        while (this.token === ",") {
+          traits.push(this.next().read_namespace_name());
+        }
+        if (this.token === "{") {
+          adaptations = [];
+          while (this.next().token !== this.EOF) {
+            if (this.token === "}") break;
+            adaptations.push(this.read_trait_use_alias());
+            this.expect(";");
+          }
+          if (this.expect("}")) {
+            this.next();
+          }
+        } else {
+          if (this.expect(";")) {
+            this.next();
+          }
+        }
+        return node2(traits, adaptations);
+      },
+      /*
+       * Reading trait alias
+       * ```ebnf
+       * trait_use_alias ::= namespace_name ( T_DOUBLE_COLON T_STRING )? (T_INSTEADOF namespace_name) | (T_AS member_flags? T_STRING)
+       * ```
+       * name list : https://github.com/php/php-src/blob/master/Zend/zend_language_parser.y#L303
+       * trait adaptation : https://github.com/php/php-src/blob/master/Zend/zend_language_parser.y#L742
+       */
+      read_trait_use_alias() {
+        const node2 = this.node();
+        let trait = null;
+        let method;
+        if (this.is("IDENTIFIER")) {
+          method = this.node("identifier");
+          const methodName = this.text();
+          this.next();
+          method = method(methodName);
+        } else {
+          method = this.read_namespace_name();
+          if (this.token === this.tok.T_DOUBLE_COLON) {
+            this.next();
+            if (this.token === this.tok.T_STRING || this.version >= 700 && this.is("IDENTIFIER")) {
+              trait = method;
+              method = this.node("identifier");
+              const methodName = this.text();
+              this.next();
+              method = method(methodName);
+            } else {
+              this.expect(this.tok.T_STRING);
+            }
+          } else {
+            method = method.name;
+          }
+        }
+        if (this.token === this.tok.T_INSTEADOF) {
+          return node2(
+            "traitprecedence",
+            trait,
+            method,
+            this.next().read_name_list()
+          );
+        } else if (this.token === this.tok.T_AS) {
+          let flags = null;
+          let alias = null;
+          if (this.next().is("T_MEMBER_FLAGS")) {
+            flags = this.read_member_flags();
+          }
+          if (this.token === this.tok.T_STRING || this.version >= 700 && this.is("IDENTIFIER")) {
+            alias = this.node("identifier");
+            const name = this.text();
+            this.next();
+            alias = alias(name);
+          } else if (flags === null) {
+            this.expect(this.tok.T_STRING);
+          }
+          return node2("traitalias", trait, method, alias, flags);
+        }
+        this.expect([this.tok.T_AS, this.tok.T_INSTEADOF]);
+        return node2("traitalias", trait, method, null, null);
+      }
+    };
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/comment.js
+var require_comment3 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/comment.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      /*
+       *  Comments with // or # or / * ... * /
+       */
+      read_comment() {
+        const text3 = this.text();
+        let result = this.ast.prepare(
+          text3.substring(0, 2) === "/*" ? "commentblock" : "commentline",
+          null,
+          this
+        );
+        const offset = this.lexer.yylloc.first_offset;
+        const prev = this.prev;
+        this.prev = [
+          this.lexer.yylloc.last_line,
+          this.lexer.yylloc.last_column,
+          this.lexer.offset
+        ];
+        this.lex();
+        result = result(text3);
+        result.offset = offset;
+        this.prev = prev;
+        return result;
+      },
+      /*
+       * Comments with / ** ... * /
+       */
+      read_doc_comment() {
+        let result = this.ast.prepare("commentblock", null, this);
+        const offset = this.lexer.yylloc.first_offset;
+        const text3 = this.text();
+        const prev = this.prev;
+        this.prev = [
+          this.lexer.yylloc.last_line,
+          this.lexer.yylloc.last_column,
+          this.lexer.offset
+        ];
+        this.lex();
+        result = result(text3);
+        result.offset = offset;
+        this.prev = prev;
+        return result;
+      }
+    };
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/expr.js
+var require_expr2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/expr.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      read_expr(expr) {
+        const result = this.node();
+        if (this.token === "@") {
+          if (!expr) {
+            expr = this.next().read_expr();
+          }
+          return result("silent", expr);
+        }
+        if (!expr) {
+          expr = this.read_expr_item();
+        }
+        if (this.token === "|") {
+          return result("bin", "|", expr, this.next().read_expr());
+        }
+        if (this.token === "&") {
+          return result("bin", "&", expr, this.next().read_expr());
+        }
+        if (this.token === "^") {
+          return result("bin", "^", expr, this.next().read_expr());
+        }
+        if (this.token === ".") {
+          return result("bin", ".", expr, this.next().read_expr());
+        }
+        if (this.token === "+") {
+          return result("bin", "+", expr, this.next().read_expr());
+        }
+        if (this.token === "-") {
+          return result("bin", "-", expr, this.next().read_expr());
+        }
+        if (this.token === "*") {
+          return result("bin", "*", expr, this.next().read_expr());
+        }
+        if (this.token === "/") {
+          return result("bin", "/", expr, this.next().read_expr());
+        }
+        if (this.token === "%") {
+          return result("bin", "%", expr, this.next().read_expr());
+        }
+        if (this.token === this.tok.T_POW) {
+          return result("bin", "**", expr, this.next().read_expr());
+        }
+        if (this.token === this.tok.T_SL) {
+          return result("bin", "<<", expr, this.next().read_expr());
+        }
+        if (this.token === this.tok.T_SR) {
+          return result("bin", ">>", expr, this.next().read_expr());
+        }
+        if (this.token === this.tok.T_BOOLEAN_OR) {
+          return result("bin", "||", expr, this.next().read_expr());
+        }
+        if (this.token === this.tok.T_LOGICAL_OR) {
+          return result("bin", "or", expr, this.next().read_expr());
+        }
+        if (this.token === this.tok.T_BOOLEAN_AND) {
+          return result("bin", "&&", expr, this.next().read_expr());
+        }
+        if (this.token === this.tok.T_LOGICAL_AND) {
+          return result("bin", "and", expr, this.next().read_expr());
+        }
+        if (this.token === this.tok.T_LOGICAL_XOR) {
+          return result("bin", "xor", expr, this.next().read_expr());
+        }
+        if (this.token === this.tok.T_IS_IDENTICAL) {
+          return result("bin", "===", expr, this.next().read_expr());
+        }
+        if (this.token === this.tok.T_IS_NOT_IDENTICAL) {
+          return result("bin", "!==", expr, this.next().read_expr());
+        }
+        if (this.token === this.tok.T_IS_EQUAL) {
+          return result("bin", "==", expr, this.next().read_expr());
+        }
+        if (this.token === this.tok.T_IS_NOT_EQUAL) {
+          return result("bin", "!=", expr, this.next().read_expr());
+        }
+        if (this.token === "<") {
+          return result("bin", "<", expr, this.next().read_expr());
+        }
+        if (this.token === ">") {
+          return result("bin", ">", expr, this.next().read_expr());
+        }
+        if (this.token === this.tok.T_IS_SMALLER_OR_EQUAL) {
+          return result("bin", "<=", expr, this.next().read_expr());
+        }
+        if (this.token === this.tok.T_IS_GREATER_OR_EQUAL) {
+          return result("bin", ">=", expr, this.next().read_expr());
+        }
+        if (this.token === this.tok.T_SPACESHIP) {
+          return result("bin", "<=>", expr, this.next().read_expr());
+        }
+        if (this.token === this.tok.T_INSTANCEOF) {
+          expr = result(
+            "bin",
+            "instanceof",
+            expr,
+            this.next().read_class_name_reference()
+          );
+          if (this.token !== ";" && this.token !== this.tok.T_INLINE_HTML && this.token !== this.EOF) {
+            expr = this.read_expr(expr);
+          }
+        }
+        if (this.token === this.tok.T_NULLSAFE_OBJECT_OPERATOR) {
+          expr = result("nullsafepropertylookup", expr, this.read_what());
+          expr = this.recursive_variable_chain_scan(expr, false, true);
+        }
+        if (this.token === this.tok.T_COALESCE) {
+          return result("bin", "??", expr, this.next().read_expr());
+        }
+        if (this.token === this.tok.T_PIPE) {
+          if (this.version < 805) {
+            this.raiseError("PHP 8.5+ is required to use pipe operator");
+          }
+          const right = this.next().read_expr();
+          if (right.kind === "arrowfunc" && !right.parenthesizedExpression) {
+            this.raiseError(
+              "Arrow functions in a pipe chain must be wrapped in parentheses"
+            );
+          }
+          return result("bin", "|>", expr, right);
+        }
+        if (this.token === "?") {
+          let trueArg = null;
+          if (this.next().token !== ":") {
+            trueArg = this.read_expr();
+          }
+          this.expect(":") && this.next();
+          return result("retif", expr, trueArg, this.read_expr());
+        } else {
+          result.destroy(expr);
+        }
+        return expr;
+      },
+      /*
+       * Reads a cast expression
+       */
+      read_expr_cast(type) {
+        return this.node("cast")(type, this.text(), this.next().read_expr());
+      },
+      /*
+       * Read a isset variable
+       */
+      read_isset_variable() {
+        return this.read_expr();
+      },
+      /*
+       * Reads isset variables
+       */
+      read_isset_variables() {
+        return this.read_function_list(this.read_isset_variable, ",");
+      },
+      /*
+       * Reads internal PHP functions
+       */
+      read_internal_functions_in_yacc() {
+        let result = null;
+        switch (this.token) {
+          case this.tok.T_ISSET:
+            {
+              result = this.node("isset");
+              if (this.next().expect("(")) {
+                this.next();
+              }
+              const variables = this.read_isset_variables();
+              if (this.expect(")")) {
+                this.next();
+              }
+              result = result(variables);
+            }
+            break;
+          case this.tok.T_EMPTY:
+            {
+              result = this.node("empty");
+              if (this.next().expect("(")) {
+                this.next();
+              }
+              const expression = this.read_expr();
+              if (this.expect(")")) {
+                this.next();
+              }
+              result = result(expression);
+            }
+            break;
+          case this.tok.T_INCLUDE:
+            result = this.node("include")(false, false, this.next().read_expr());
+            break;
+          case this.tok.T_INCLUDE_ONCE:
+            result = this.node("include")(true, false, this.next().read_expr());
+            break;
+          case this.tok.T_EVAL:
+            {
+              result = this.node("eval");
+              if (this.next().expect("(")) {
+                this.next();
+              }
+              const expr = this.read_expr();
+              if (this.expect(")")) {
+                this.next();
+              }
+              result = result(expr);
+            }
+            break;
+          case this.tok.T_REQUIRE:
+            result = this.node("include")(false, true, this.next().read_expr());
+            break;
+          case this.tok.T_REQUIRE_ONCE:
+            result = this.node("include")(true, true, this.next().read_expr());
+            break;
+        }
+        return result;
+      },
+      /*
+       * Reads optional expression
+       */
+      read_optional_expr(stopToken) {
+        if (this.token !== stopToken) {
+          return this.read_expr();
+        }
+        return null;
+      },
+      /*
+       * Reads exit expression
+       */
+      read_exit_expr() {
+        let expression = null;
+        if (this.token === "(") {
+          this.next();
+          expression = this.read_optional_expr(")");
+          this.expect(")") && this.next();
+        }
+        return expression;
+      },
+      /*
+       * ```ebnf
+       * Reads an expression
+       *  expr ::= @todo
+       * ```
+       */
+      read_expr_item() {
+        let result, expr, attrs = [];
+        if (this.token === "+") {
+          return this.node("unary")("+", this.next().read_expr());
+        }
+        if (this.token === "-") {
+          return this.node("unary")("-", this.next().read_expr());
+        }
+        if (this.token === "!") {
+          return this.node("unary")("!", this.next().read_expr());
+        }
+        if (this.token === "~") {
+          return this.node("unary")("~", this.next().read_expr());
+        }
+        if (this.token === "(") {
+          expr = this.next().read_expr();
+          expr.parenthesizedExpression = true;
+          this.expect(")") && this.next();
+          return this.handleDereferencable(expr);
+        }
+        if (this.token === "`") {
+          return this.read_encapsed_string("`");
+        }
+        if (this.token === this.tok.T_LIST) {
+          let assign = null;
+          const isInner = this.innerList;
+          result = this.node("list");
+          if (!isInner) {
+            assign = this.node("assign");
+          }
+          if (this.next().expect("(")) {
+            this.next();
+          }
+          if (!this.innerList) this.innerList = true;
+          const assignList = this.read_array_pair_list(false);
+          if (this.expect(")")) {
+            this.next();
+          }
+          let hasItem = false;
+          for (let i = 0; i < assignList.length; i++) {
+            if (assignList[i] !== null && assignList[i].kind !== "noop") {
+              hasItem = true;
+              break;
+            }
+          }
+          if (!hasItem) {
+            this.raiseError(
+              "Fatal Error :  Cannot use empty list on line " + this.lexer.yylloc.first_line
+            );
+          }
+          if (!isInner) {
+            this.innerList = false;
+            if (this.expect("=")) {
+              return assign(
+                result(assignList, false),
+                this.next().read_expr(),
+                "="
+              );
+            } else {
+              return result(assignList, false);
+            }
+          } else {
+            return result(assignList, false);
+          }
+        }
+        if (this.token === this.tok.T_ATTRIBUTE) {
+          attrs = this.read_attr_list();
+        }
+        if (this.token === this.tok.T_CLONE) {
+          const node2 = this.node("clone");
+          this.next();
+          if (this.version >= 805 && this.token === "(") {
+            this.next();
+            let what2 = this.read_variable(false, false);
+            what2 = this.handleDereferencable(what2);
+            let properties = null;
+            if (this.token === ",") {
+              properties = this.next().read_expr();
+            }
+            this.expect(")") && this.next();
+            return node2(what2, properties);
+          }
+          let what = this.read_variable(false, false);
+          what = this.handleDereferencable(what);
+          return node2(what, null);
+        }
+        switch (this.token) {
+          case this.tok.T_INC:
+            return this.node("pre")("+", this.next().read_variable(false, false));
+          case this.tok.T_DEC:
+            return this.node("pre")("-", this.next().read_variable(false, false));
+          case this.tok.T_NEW:
+            expr = this.read_new_expr();
+            if (this.token === this.tok.T_OBJECT_OPERATOR && this.version < 804) {
+              this.raiseError(
+                "New without parenthesis is not allowed before PHP 8.4"
+              );
+            }
+            return this.handleDereferencable(expr);
+          case this.tok.T_ISSET:
+          case this.tok.T_EMPTY:
+          case this.tok.T_INCLUDE:
+          case this.tok.T_INCLUDE_ONCE:
+          case this.tok.T_EVAL:
+          case this.tok.T_REQUIRE:
+          case this.tok.T_REQUIRE_ONCE:
+            return this.read_internal_functions_in_yacc();
+          case this.tok.T_MATCH:
+            return this.read_match_expression();
+          case this.tok.T_INT_CAST:
+            return this.read_expr_cast("int");
+          case this.tok.T_DOUBLE_CAST:
+            return this.read_expr_cast("float");
+          case this.tok.T_STRING_CAST:
+            return this.read_expr_cast(
+              this.text().indexOf("binary") !== -1 ? "binary" : "string"
+            );
+          case this.tok.T_ARRAY_CAST:
+            return this.read_expr_cast("array");
+          case this.tok.T_OBJECT_CAST:
+            return this.read_expr_cast("object");
+          case this.tok.T_BOOL_CAST:
+            return this.read_expr_cast("bool");
+          case this.tok.T_UNSET_CAST:
+            return this.read_expr_cast("unset");
+          case this.tok.T_THROW: {
+            if (this.version < 800) {
+              this.raiseError("PHP 8+ is required to use throw as an expression");
+            }
+            const result2 = this.node("throw");
+            const expr2 = this.next().read_expr();
+            return result2(expr2);
+          }
+          case this.tok.T_EXIT: {
+            const useDie = this.lexer.yytext.toLowerCase() === "die";
+            result = this.node("exit");
+            this.next();
+            const expression = this.read_exit_expr();
+            return result(expression, useDie);
+          }
+          case this.tok.T_PRINT:
+            return this.node("print")(this.next().read_expr());
+          // T_YIELD (expr (T_DOUBLE_ARROW expr)?)?
+          case this.tok.T_YIELD: {
+            let value = null;
+            let key = null;
+            result = this.node("yield");
+            if (this.next().is("EXPR")) {
+              value = this.read_expr();
+              if (this.token === this.tok.T_DOUBLE_ARROW) {
+                key = value;
+                value = this.next().read_expr();
+              }
+            }
+            return result(value, key);
+          }
+          // T_YIELD_FROM expr
+          case this.tok.T_YIELD_FROM:
+            result = this.node("yieldfrom");
+            expr = this.next().read_expr();
+            return result(expr);
+          case this.tok.T_FN:
+          case this.tok.T_FUNCTION:
+            return this.read_inline_function(void 0, attrs);
+          case this.tok.T_STATIC: {
+            const backup = [this.token, this.lexer.getState()];
+            this.next();
+            if (this.token === this.tok.T_FUNCTION || this.version >= 704 && this.token === this.tok.T_FN) {
+              return this.read_inline_function([0, 1, 0], attrs);
+            } else {
+              this.lexer.tokens.push(backup);
+              this.next();
+            }
+          }
+        }
+        if (this.is("VARIABLE")) {
+          result = this.node();
+          expr = this.read_variable(false, false);
+          const isConst = expr.kind === "identifier" || expr.kind === "staticlookup" && expr.offset.kind === "identifier";
+          switch (this.token) {
+            case "=": {
+              if (isConst) this.error("VARIABLE");
+              if (this.next().token == "&") {
+                return this.read_assignref(result, expr);
+              }
+              return result("assign", expr, this.read_expr(), "=");
+            }
+            // operations :
+            case this.tok.T_PLUS_EQUAL:
+              if (isConst) this.error("VARIABLE");
+              return result("assign", expr, this.next().read_expr(), "+=");
+            case this.tok.T_MINUS_EQUAL:
+              if (isConst) this.error("VARIABLE");
+              return result("assign", expr, this.next().read_expr(), "-=");
+            case this.tok.T_MUL_EQUAL:
+              if (isConst) this.error("VARIABLE");
+              return result("assign", expr, this.next().read_expr(), "*=");
+            case this.tok.T_POW_EQUAL:
+              if (isConst) this.error("VARIABLE");
+              return result("assign", expr, this.next().read_expr(), "**=");
+            case this.tok.T_DIV_EQUAL:
+              if (isConst) this.error("VARIABLE");
+              return result("assign", expr, this.next().read_expr(), "/=");
+            case this.tok.T_CONCAT_EQUAL:
+              if (isConst) this.error("VARIABLE");
+              return result("assign", expr, this.next().read_expr(), ".=");
+            case this.tok.T_MOD_EQUAL:
+              if (isConst) this.error("VARIABLE");
+              return result("assign", expr, this.next().read_expr(), "%=");
+            case this.tok.T_AND_EQUAL:
+              if (isConst) this.error("VARIABLE");
+              return result("assign", expr, this.next().read_expr(), "&=");
+            case this.tok.T_OR_EQUAL:
+              if (isConst) this.error("VARIABLE");
+              return result("assign", expr, this.next().read_expr(), "|=");
+            case this.tok.T_XOR_EQUAL:
+              if (isConst) this.error("VARIABLE");
+              return result("assign", expr, this.next().read_expr(), "^=");
+            case this.tok.T_SL_EQUAL:
+              if (isConst) this.error("VARIABLE");
+              return result("assign", expr, this.next().read_expr(), "<<=");
+            case this.tok.T_SR_EQUAL:
+              if (isConst) this.error("VARIABLE");
+              return result("assign", expr, this.next().read_expr(), ">>=");
+            case this.tok.T_COALESCE_EQUAL:
+              if (isConst) this.error("VARIABLE");
+              return result("assign", expr, this.next().read_expr(), "??=");
+            case this.tok.T_INC:
+              if (isConst) this.error("VARIABLE");
+              this.next();
+              return result("post", "+", expr);
+            case this.tok.T_DEC:
+              if (isConst) this.error("VARIABLE");
+              this.next();
+              return result("post", "-", expr);
+            default:
+              result.destroy(expr);
+          }
+        } else if (this.is("SCALAR")) {
+          result = this.node();
+          expr = this.read_scalar();
+          if (expr.kind === "array" && expr.shortForm && this.token === "=") {
+            const list = this.convertToList(expr);
+            if (expr.loc) list.loc = expr.loc;
+            const right = this.next().read_expr();
+            return result("assign", list, right, "=");
+          } else {
+            result.destroy(expr);
+          }
+          return this.handleDereferencable(expr);
+        } else {
+          this.error("EXPR");
+          this.next();
+        }
+        return expr;
+      },
+      /*
+       * Recursively convert nested array to nested list.
+       */
+      convertToList(array2) {
+        const convertedItems = array2.items.map((entry) => {
+          if (entry.value && entry.value.kind === "array" && entry.value.shortForm) {
+            entry.value = this.convertToList(entry.value);
+          }
+          return entry;
+        });
+        const node2 = this.node("list")(convertedItems, true);
+        if (array2.loc) node2.loc = array2.loc;
+        if (array2.leadingComments) node2.leadingComments = array2.leadingComments;
+        if (array2.trailingComments) node2.trailingComments = array2.trailingComments;
+        return node2;
+      },
+      /*
+       * Reads assignment
+       * @param {*} left
+       */
+      read_assignref(result, left) {
+        this.next();
+        let right;
+        if (this.token === this.tok.T_NEW) {
+          if (this.version >= 700) {
+            this.error();
+          }
+          right = this.read_new_expr();
+        } else if (this.token === "(") {
+          right = this.next().read_expr();
+          this.expect(")") && this.next();
+          right = this.recursive_variable_chain_scan(right, false, false);
+        } else {
+          right = this.read_variable(false, false);
+        }
+        return result("assignref", left, right);
+      },
+      /*
+       *
+       * inline_function:
+       * 		function returns_ref backup_doc_comment '(' parameter_list ')' lexical_vars return_type
+       * 		backup_fn_flags '{' inner_statement_list '}' backup_fn_flags
+       * 			{ $$ = zend_ast_create_decl(ZEND_AST_CLOSURE, $2 | $13, $1, $3,
+       * 				  zend_string_init("{closure}", sizeof("{closure}") - 1, 0),
+       * 				  $5, $7, $11, $8); CG(extra_fn_flags) = $9; }
+       * 	|	fn returns_ref '(' parameter_list ')' return_type backup_doc_comment T_DOUBLE_ARROW backup_fn_flags backup_lex_pos expr backup_fn_flags
+       * 			{ $$ = zend_ast_create_decl(ZEND_AST_ARROW_FUNC, $2 | $12, $1, $7,
+       * 				  zend_string_init("{closure}", sizeof("{closure}") - 1, 0), $4, NULL,
+       * 				  zend_ast_create(ZEND_AST_RETURN, $11), $6);
+       * 				  ((zend_ast_decl *) $$)->lex_pos = $10;
+       * 				  CG(extra_fn_flags) = $9; }   *
+       */
+      read_inline_function(flags, attrs) {
+        if (this.token === this.tok.T_FUNCTION) {
+          const result2 = this.read_function(true, flags, attrs);
+          result2.attrGroups = attrs;
+          return result2;
+        }
+        if (this.version < 704) {
+          this.raiseError("Arrow Functions are not allowed");
+        }
+        const node2 = this.node("arrowfunc");
+        if (this.expect(this.tok.T_FN)) this.next();
+        const isRef2 = this.is_reference();
+        if (this.expect("(")) this.next();
+        const params = this.read_parameter_list();
+        if (this.expect(")")) this.next();
+        let nullable2 = false;
+        let returnType = null;
+        if (this.token === ":") {
+          if (this.next().token === "?") {
+            nullable2 = true;
+            this.next();
+          }
+          returnType = this.read_types();
+        }
+        if (this.expect(this.tok.T_DOUBLE_ARROW)) this.next();
+        const body = this.read_expr();
+        const result = node2(
+          params,
+          isRef2,
+          body,
+          returnType,
+          nullable2,
+          flags ? true : false
+        );
+        result.attrGroups = attrs;
+        return result;
+      },
+      read_match_expression() {
+        const node2 = this.node("match");
+        this.expect(this.tok.T_MATCH) && this.next();
+        if (this.version < 800) {
+          this.raiseError("Match statements are not allowed before PHP 8");
+        }
+        if (this.expect("(")) this.next();
+        const cond = this.read_expr();
+        if (this.expect(")")) this.next();
+        if (this.expect("{")) this.next();
+        const arms = this.read_match_arms();
+        if (this.expect("}")) this.next();
+        return node2(cond, arms);
+      },
+      read_match_arms() {
+        return this.read_list(() => this.read_match_arm(), ",", true);
+      },
+      read_match_arm() {
+        if (this.token === "}") {
+          return;
+        }
+        return this.node("matcharm")(this.read_match_arm_conds(), this.read_expr());
+      },
+      read_match_arm_conds() {
+        let conds = [];
+        if (this.token === this.tok.T_DEFAULT) {
+          conds = null;
+          this.next();
+        } else {
+          conds.push(this.read_expr());
+          while (this.token === ",") {
+            this.next();
+            if (this.token === this.tok.T_DOUBLE_ARROW) {
+              this.next();
+              return conds;
+            }
+            conds.push(this.read_expr());
+          }
+        }
+        if (this.expect(this.tok.T_DOUBLE_ARROW)) {
+          this.next();
+        }
+        return conds;
+      },
+      read_attribute() {
+        const node2 = this.node("attribute");
+        const name = this.text();
+        let args = [];
+        this.next();
+        if (this.token === "(") {
+          args = this.read_argument_list();
+        }
+        return node2(name, args);
+      },
+      read_attr_list() {
+        const list = [];
+        if (this.token === this.tok.T_ATTRIBUTE) {
+          do {
+            const node2 = this.node("attrgroup");
+            this.next();
+            const attrs = [this.read_attribute()];
+            while (this.token === ",") {
+              this.next();
+              if (this.token !== "]") attrs.push(this.read_attribute());
+            }
+            this.expect("]");
+            this.next();
+            list.push(node2(attrs));
+          } while (this.token === this.tok.T_ATTRIBUTE);
+        }
+        return list;
+      },
+      /*
+       * ```ebnf
+       *    new_expr ::= T_NEW (namespace_name function_argument_list) | (T_CLASS ... class declaration)
+       * ```
+       * https://github.com/php/php-src/blob/master/Zend/zend_language_parser.y#L850
+       */
+      read_new_expr() {
+        const result = this.node("new");
+        this.expect(this.tok.T_NEW) && this.next();
+        let args = [];
+        if (this.token === "(") {
+          this.next();
+          const newExp = this.read_expr();
+          this.expect(")");
+          this.next();
+          if (this.token === "(") {
+            args = this.read_argument_list();
+          }
+          return result(newExp, args);
+        }
+        const attrs = this.read_attr_list();
+        const isReadonly = this.token === this.tok.T_READ_ONLY;
+        if (isReadonly) {
+          if (this.version < 803) {
+            this.raiseError(
+              "Anonymous readonly classes are not allowed before PHP 8.3"
+            );
+          }
+          this.next();
+        }
+        if (this.token === this.tok.T_CLASS) {
+          const what = this.node("class");
+          if (this.next().token === "(") {
+            args = this.read_argument_list();
+          }
+          const propExtends = this.read_extends_from();
+          const propImplements = this.read_implements_list();
+          let body = null;
+          if (this.expect("{")) {
+            body = this.next().read_class_body(true, false);
+          }
+          const whatNode = what(null, propExtends, propImplements, body, [
+            0,
+            0,
+            0,
+            isReadonly ? 1 : 0
+          ]);
+          whatNode.attrGroups = attrs;
+          return result(whatNode, args);
+        }
+        let name = this.read_new_class_name();
+        while (this.token === "[") {
+          const offsetNode = this.node("offsetlookup");
+          const offset = this.next().read_encaps_var_offset();
+          this.expect("]") && this.next();
+          name = offsetNode(name, offset);
+        }
+        if (this.token === "(") {
+          args = this.read_argument_list();
+        }
+        return result(name, args);
+      },
+      /*
+       * Reads a class name
+       * ```ebnf
+       * read_new_class_name ::= namespace_name | variable
+       * ```
+       */
+      read_new_class_name() {
+        if (this.token === this.tok.T_NS_SEPARATOR || this.token === this.tok.T_NAME_RELATIVE || this.token === this.tok.T_NAME_QUALIFIED || this.token === this.tok.T_NAME_FULLY_QUALIFIED || this.token === this.tok.T_STRING || this.token === this.tok.T_NAMESPACE) {
+          let result = this.read_namespace_name(true);
+          if (this.token === this.tok.T_DOUBLE_COLON) {
+            result = this.read_static_getter(result);
+            return this.recursive_variable_chain_scan(result, true, false);
+          }
+          return result;
+        } else if (this.is("VARIABLE")) {
+          return this.read_variable(true, false);
+        } else {
+          this.expect([this.tok.T_STRING, "VARIABLE"]);
+        }
+      },
+      handleDereferencable(expr) {
+        while (this.token !== this.EOF) {
+          if (this.token === this.tok.T_OBJECT_OPERATOR || this.token === this.tok.T_DOUBLE_COLON || this.token === this.tok.T_NULLSAFE_OBJECT_OPERATOR) {
+            expr = this.recursive_variable_chain_scan(expr, false, false, true);
+          } else if (this.token === this.tok.T_CURLY_OPEN || this.token === "[") {
+            expr = this.read_dereferencable(expr);
+          } else if (this.token === "(") {
+            expr = this.node("call")(expr, this.read_argument_list());
+          } else {
+            return expr;
+          }
+        }
+        return expr;
+      }
+    };
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/enum.js
+var require_enum3 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/enum.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      /*
+       * reading an enum
+       * ```ebnf
+       * enum ::= enum_scope? T_ENUM T_STRING (':' NAMESPACE_NAME)? (T_IMPLEMENTS (NAMESPACE_NAME ',')* NAMESPACE_NAME)? '{' ENUM_BODY '}'
+       * ```
+       */
+      read_enum_declaration_statement(attrs) {
+        const result = this.node("enum");
+        if (!this.expect(this.tok.T_ENUM)) {
+          return null;
+        }
+        this.next().expect(this.tok.T_STRING);
+        let propName = this.node("identifier");
+        const name = this.text();
+        this.next();
+        propName = propName(name);
+        const valueType = this.read_enum_value_type();
+        const propImplements = this.read_implements_list();
+        this.expect("{");
+        const body = this.next().read_class_body(false, true);
+        const node2 = result(propName, valueType, propImplements, body);
+        if (attrs) node2.attrGroups = attrs;
+        return node2;
+      },
+      read_enum_value_type() {
+        if (this.token === ":") {
+          return this.next().read_namespace_name();
+        }
+        return null;
+      },
+      read_enum_case(attrs) {
+        this.expect(this.tok.T_CASE);
+        const result = this.node("enumcase");
+        let caseName = this.node("identifier");
+        const name = this.next().text();
+        this.next();
+        caseName = caseName(name);
+        const value = this.token === "=" ? this.next().read_expr() : null;
+        this.expect(";");
+        const node2 = result(caseName, value);
+        if (attrs && attrs.length > 0) node2.attrGroups = attrs;
+        return node2;
+      }
+    };
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/function.js
+var require_function3 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/function.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      /*
+       * checks if current token is a reference keyword
+       */
+      is_reference() {
+        if (this.token === "&") {
+          this.next();
+          return true;
+        }
+        return false;
+      },
+      /*
+       * checks if current token is a variadic keyword
+       */
+      is_variadic() {
+        if (this.token === this.tok.T_ELLIPSIS) {
+          this.next();
+          return true;
+        }
+        return false;
+      },
+      /*
+       * reading a function
+       * ```ebnf
+       * function ::= function_declaration code_block
+       * ```
+       */
+      read_function(closure, flag, attrs, locStart) {
+        const result = this.read_function_declaration(
+          closure ? 1 : flag ? 2 : 0,
+          flag && flag[1] === 1,
+          attrs || [],
+          locStart
+        );
+        if (flag && flag[2] == 1) {
+          result.parseFlags(flag);
+          if (this.expect(";")) {
+            this.next();
+          }
+        } else {
+          if (this.expect("{")) {
+            result.body = this.read_code_block(false);
+            if (result.loc && result.body.loc) {
+              result.loc.end = result.body.loc.end;
+            }
+          }
+          if (!closure && flag) {
+            result.parseFlags(flag);
+          }
+        }
+        return result;
+      },
+      /*
+       * reads a function declaration (without his body)
+       * ```ebnf
+       * function_declaration ::= T_FUNCTION '&'?  T_STRING '(' parameter_list ')'
+       * ```
+       */
+      read_function_declaration(type, isStatic, attrs, locStart) {
+        let nodeName = "function";
+        if (type === 1) {
+          nodeName = "closure";
+        } else if (type === 2) {
+          nodeName = "method";
+        }
+        const result = this.node(nodeName);
+        if (this.expect(this.tok.T_FUNCTION)) {
+          this.next();
+        }
+        const isRef2 = this.is_reference();
+        let name = false, use = [], returnType = null, nullable2 = false;
+        if (type !== 1) {
+          const nameNode = this.node("identifier");
+          if (type === 2) {
+            if (this.version >= 700) {
+              if (this.token === this.tok.T_STRING || this.is("IDENTIFIER")) {
+                name = this.text();
+                this.next();
+              } else if (this.version < 704) {
+                this.error("IDENTIFIER");
+              }
+            } else if (this.token === this.tok.T_STRING) {
+              name = this.text();
+              this.next();
+            } else {
+              this.error("IDENTIFIER");
+            }
+          } else {
+            if (this.version >= 700) {
+              if (this.token === this.tok.T_STRING) {
+                name = this.text();
+                this.next();
+              } else if (this.version >= 704) {
+                if (!this.expect("(")) {
+                  this.next();
+                }
+              } else {
+                this.error(this.tok.T_STRING);
+                this.next();
+              }
+            } else {
+              if (this.expect(this.tok.T_STRING)) {
+                name = this.text();
+              }
+              this.next();
+            }
+          }
+          name = nameNode(name);
+        }
+        if (this.expect("(")) this.next();
+        const params = this.read_parameter_list(name.name === "__construct");
+        if (this.expect(")")) this.next();
+        if (type === 1) {
+          use = this.read_lexical_vars();
+        }
+        if (this.token === ":") {
+          if (this.next().token === "?") {
+            nullable2 = true;
+            this.next();
+          }
+          returnType = this.read_types();
+        }
+        const apply_attrgroup_location = (node2) => {
+          node2.attrGroups = attrs || [];
+          if (locStart && node2.loc) {
+            node2.loc.start = locStart;
+            if (node2.loc.source) {
+              node2.loc.source = this.lexer._input.substr(
+                node2.loc.start.offset,
+                node2.loc.end.offset - node2.loc.start.offset
+              );
+            }
+          }
+          return node2;
+        };
+        if (type === 1) {
+          return apply_attrgroup_location(
+            result(params, isRef2, use, returnType, nullable2, isStatic)
+          );
+        }
+        return apply_attrgroup_location(
+          result(name, params, isRef2, returnType, nullable2)
+        );
+      },
+      read_lexical_vars() {
+        let result = [];
+        if (this.token === this.tok.T_USE) {
+          this.next();
+          this.expect("(") && this.next();
+          result = this.read_lexical_var_list();
+          this.expect(")") && this.next();
+        }
+        return result;
+      },
+      read_list_with_dangling_comma(item) {
+        const result = [];
+        while (this.token != this.EOF) {
+          result.push(item());
+          if (this.token == ",") {
+            this.next();
+            if (this.version >= 800 && this.token === ")") {
+              return result;
+            }
+          } else if (this.token == ")") {
+            break;
+          } else {
+            this.error([",", ")"]);
+            break;
+          }
+        }
+        return result;
+      },
+      read_lexical_var_list() {
+        return this.read_list_with_dangling_comma(this.read_lexical_var.bind(this));
+      },
+      /*
+       * ```ebnf
+       * lexical_var ::= '&'? T_VARIABLE
+       * ```
+       */
+      read_lexical_var() {
+        if (this.token === "&") {
+          return this.read_byref(this.read_lexical_var.bind(this));
+        }
+        const result = this.node("variable");
+        this.expect(this.tok.T_VARIABLE);
+        const name = this.text().substring(1);
+        this.next();
+        return result(name, false);
+      },
+      /*
+       * reads a list of parameters
+       * ```ebnf
+       *  parameter_list ::= (parameter ',')* parameter?
+       * ```
+       */
+      read_parameter_list(is_class_constructor) {
+        if (this.token !== ")") {
+          let wasVariadic = false;
+          return this.read_list_with_dangling_comma(
+            function() {
+              const parameter = this.read_parameter(is_class_constructor);
+              if (parameter) {
+                if (wasVariadic) {
+                  this.raiseError(
+                    "Unexpected parameter after a variadic parameter"
+                  );
+                }
+                if (parameter.variadic) {
+                  wasVariadic = true;
+                }
+              }
+              return parameter;
+            }.bind(this),
+            ","
+          );
+        }
+        return [];
+      },
+      /*
+       * ```ebnf
+       *  parameter ::= type? '&'? T_ELLIPSIS? T_VARIABLE ('=' expr)?
+       * ```
+       * @see https://github.com/php/php-src/blob/493524454d66adde84e00d249d607ecd540de99f/Zend/zend_language_parser.y#L640
+       */
+      read_parameter(is_class_constructor) {
+        const node2 = this.node("parameter");
+        let parameterName = null;
+        let value = null;
+        let nullable2 = false;
+        let readonly2 = false;
+        let attrs = [];
+        if (this.token === this.tok.T_ATTRIBUTE) attrs = this.read_attr_list();
+        if (this.version >= 801 && this.token === this.tok.T_READ_ONLY) {
+          if (is_class_constructor) {
+            this.next();
+            readonly2 = true;
+          } else {
+            this.raiseError(
+              "readonly properties can be used only on class constructor"
+            );
+          }
+        }
+        const [flags, flagsSet] = this.read_promoted();
+        if (!readonly2 && this.version >= 801 && this.token === this.tok.T_READ_ONLY) {
+          if (is_class_constructor) {
+            this.next();
+            readonly2 = true;
+          } else {
+            this.raiseError(
+              "readonly properties can be used only on class constructor"
+            );
+          }
+        }
+        if (this.token === "?") {
+          this.next();
+          nullable2 = true;
+        }
+        const types = this.read_types();
+        if (nullable2 && !types) {
+          this.raiseError(
+            "Expecting a type definition combined with nullable operator"
+          );
+        }
+        const isRef2 = this.is_reference();
+        const isVariadic = this.is_variadic();
+        if (this.expect(this.tok.T_VARIABLE)) {
+          parameterName = this.node("identifier");
+          const name = this.text().substring(1);
+          this.next();
+          parameterName = parameterName(name);
+        }
+        if (this.token == "=") {
+          value = this.next().read_expr();
+        }
+        let hooks = [];
+        if (this.version >= 804 && flags && this.token === "{") {
+          hooks = this.read_property_hooks();
+        }
+        const result = node2(
+          parameterName,
+          types,
+          value,
+          isRef2,
+          isVariadic,
+          readonly2,
+          nullable2,
+          flags,
+          hooks,
+          flagsSet
+        );
+        if (attrs) result.attrGroups = attrs;
+        return result;
+      },
+      read_types() {
+        const MODE_UNSET = "unset";
+        const MODE_UNION = "union";
+        const MODE_INTERSECTION = "intersection";
+        const types = [];
+        let mode = MODE_UNSET;
+        const node2 = this.node();
+        const type = this.read_type();
+        if (!type) {
+          node2.destroy();
+          return null;
+        }
+        types.push(type);
+        while (this.token === "|" || this.version >= 801 && this.token === "&") {
+          const nextToken = this.peek();
+          if (nextToken === this.tok.T_ELLIPSIS || nextToken === this.tok.T_VARIABLE) {
+            break;
+          }
+          if (mode === MODE_UNSET) {
+            mode = this.token === "|" ? MODE_UNION : MODE_INTERSECTION;
+          } else {
+            if (mode === MODE_UNION && this.token !== "|" || mode === MODE_INTERSECTION && this.token !== "&") {
+              this.raiseError(
+                'Unexpect token "' + this.token + '", "|" and "&" can not be mixed'
+              );
+            }
+          }
+          this.next();
+          types.push(this.read_type());
+        }
+        if (types.length === 1) {
+          node2.destroy();
+          return types[0];
+        } else {
+          return mode === MODE_INTERSECTION ? node2("intersectiontype", types) : node2("uniontype", types);
+        }
+      },
+      read_promoted() {
+        const MODIFIER_PUBLIC = 1;
+        const MODIFIER_PROTECTED = 2;
+        const MODIFIER_PRIVATE = 4;
+        let firstModifier;
+        if (this.token === this.tok.T_PUBLIC) {
+          this.next();
+          firstModifier = MODIFIER_PUBLIC;
+        } else if (this.token === this.tok.T_PROTECTED) {
+          this.next();
+          firstModifier = MODIFIER_PROTECTED;
+        } else if (this.token === this.tok.T_PRIVATE) {
+          this.next();
+          firstModifier = MODIFIER_PRIVATE;
+        } else {
+          return [0, 0];
+        }
+        if (this.version >= 804) {
+          if (this.token === "(") {
+            this.next();
+            if (this.token !== this.tok.T_STRING || this.text() !== "set") {
+              this.error("set");
+            } else {
+              this.next();
+            }
+            if (this.expect(")")) {
+              this.next();
+            }
+            return [0, firstModifier];
+          }
+          let setModifier = 0;
+          if (this.token === this.tok.T_PUBLIC) {
+            this.next();
+            setModifier = MODIFIER_PUBLIC;
+          } else if (this.token === this.tok.T_PROTECTED) {
+            this.next();
+            setModifier = MODIFIER_PROTECTED;
+          } else if (this.token === this.tok.T_PRIVATE) {
+            this.next();
+            setModifier = MODIFIER_PRIVATE;
+          }
+          if (setModifier > 0) {
+            if (this.expect("(")) {
+              this.next();
+            }
+            if (this.token !== this.tok.T_STRING || this.text() !== "set") {
+              this.error("set");
+            } else {
+              this.next();
+            }
+            if (this.expect(")")) {
+              this.next();
+            }
+            return [firstModifier, setModifier];
+          }
+        }
+        return [firstModifier, 0];
+      },
+      /*
+       * Reads a list of arguments
+       * ```ebnf
+       *  function_argument_list ::= '(' (argument_list (',' argument_list)*)? ')'
+       * ```
+       */
+      read_argument_list() {
+        let result = [];
+        this.expect("(") && this.next();
+        if (this.version >= 801 && this.token === this.tok.T_ELLIPSIS && this.peek() === ")") {
+          const variadicNode = this.node("variadicplaceholder");
+          this.next();
+          result.push(variadicNode());
+        } else if (this.token !== ")") {
+          result = this.read_non_empty_argument_list();
+        }
+        this.expect(")") && this.next();
+        return result;
+      },
+      /*
+       * Reads non empty argument list
+       */
+      read_non_empty_argument_list() {
+        let wasVariadic = false;
+        return this.read_function_list(
+          function() {
+            const argument = this.read_argument();
+            if (argument) {
+              const isVariadic = argument.kind === "variadic";
+              if (wasVariadic && !isVariadic) {
+                this.raiseError(
+                  "Unexpected non-variadic argument after a variadic argument"
+                );
+              }
+              if (isVariadic) {
+                wasVariadic = true;
+              }
+            }
+            return argument;
+          }.bind(this),
+          ","
+        );
+      },
+      /*
+       * ```ebnf
+       *    argument_list ::= T_STRING ':' expr | T_ELLIPSIS? expr
+       * ```
+       */
+      read_argument() {
+        if (this.token === this.tok.T_ELLIPSIS) {
+          return this.node("variadic")(this.next().read_expr());
+        }
+        if (this.token === this.tok.T_STRING || Object.values(this.lexer.keywords).includes(this.token)) {
+          const nextToken = this.peek();
+          if (nextToken === ":") {
+            if (this.version < 800) {
+              this.raiseError("PHP 8+ is required to use named arguments");
+            }
+            return this.node("namedargument")(
+              this.text(),
+              this.next().next().read_expr()
+            );
+          }
+        }
+        return this.read_expr();
+      },
+      /*
+       * read type hinting
+       * ```ebnf
+       *  type ::= T_ARRAY | T_CALLABLE | namespace_name
+       * ```
+       */
+      read_type() {
+        const result = this.node();
+        if (this.token === this.tok.T_ARRAY || this.token === this.tok.T_CALLABLE) {
+          const type = this.text();
+          this.next();
+          return result("typereference", type.toLowerCase(), type);
+        } else if (this.token === this.tok.T_NAME_RELATIVE || this.token === this.tok.T_NAME_QUALIFIED || this.token === this.tok.T_NAME_FULLY_QUALIFIED || this.token === this.tok.T_STRING || this.token === this.tok.T_STATIC) {
+          const type = this.text();
+          const backup = [this.token, this.lexer.getState()];
+          this.next();
+          if (this.token !== this.tok.T_NS_SEPARATOR && this.ast.typereference.types.indexOf(type.toLowerCase()) > -1) {
+            return result("typereference", type.toLowerCase(), type);
+          } else {
+            this.lexer.tokens.push(backup);
+            this.next();
+            result.destroy();
+            return this.read_namespace_name();
+          }
+        } else if (this.version >= 802 && this.token === "(") {
+          this.next();
+          const innerTypes = [];
+          innerTypes.push(this.read_type());
+          while (this.token === "&") {
+            const nextToken = this.peek();
+            if (nextToken === this.tok.T_ELLIPSIS || nextToken === this.tok.T_VARIABLE) {
+              break;
+            }
+            this.next();
+            innerTypes.push(this.read_type());
+          }
+          this.expect(")") && this.next();
+          return result("intersectiontype", innerTypes);
+        }
+        result.destroy();
+        return null;
+      }
+    };
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/if.js
+var require_if3 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/if.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      /*
+       * Reads an IF statement
+       *
+       * ```ebnf
+       *  if ::= T_IF '(' expr ')' ':' ...
+       * ```
+       */
+      read_if() {
+        const result = this.node("if");
+        const test = this.next().read_if_expr();
+        let body;
+        let alternate = null;
+        let shortForm = false;
+        if (this.token === ":") {
+          shortForm = true;
+          body = this.node("block");
+          this.next();
+          const items = [];
+          while (this.token !== this.EOF && this.token !== this.tok.T_ENDIF) {
+            if (this.token === this.tok.T_ELSEIF) {
+              alternate = this.read_elseif_short();
+              break;
+            } else if (this.token === this.tok.T_ELSE) {
+              alternate = this.read_else_short();
+              break;
+            }
+            items.push(this.read_inner_statement());
+          }
+          if (items.length === 0 && this.extractDoc && this._docs.length > this._docIndex) {
+            items.push(this.node("noop")());
+          }
+          body = body(null, items);
+          this.expect(this.tok.T_ENDIF) && this.next();
+          this.expectEndOfStatement();
+        } else {
+          body = this.read_statement();
+          if (this.token === this.tok.T_ELSEIF) {
+            alternate = this.read_if();
+          } else if (this.token === this.tok.T_ELSE) {
+            alternate = this.next().read_statement();
+          }
+        }
+        return result(test, body, alternate, shortForm);
+      },
+      /*
+       * reads an if expression : '(' expr ')'
+       */
+      read_if_expr() {
+        this.expect("(") && this.next();
+        const result = this.read_expr();
+        this.expect(")") && this.next();
+        return result;
+      },
+      /*
+       * reads an elseif (expr): statements
+       */
+      read_elseif_short() {
+        let alternate = null;
+        const result = this.node("if");
+        const test = this.next().read_if_expr();
+        const body = this.node("block");
+        if (this.expect(":")) this.next();
+        const items = [];
+        while (this.token != this.EOF && this.token !== this.tok.T_ENDIF) {
+          if (this.token === this.tok.T_ELSEIF) {
+            alternate = this.read_elseif_short();
+            break;
+          } else if (this.token === this.tok.T_ELSE) {
+            alternate = this.read_else_short();
+            break;
+          }
+          items.push(this.read_inner_statement());
+        }
+        if (items.length === 0 && this.extractDoc && this._docs.length > this._docIndex) {
+          items.push(this.node("noop")());
+        }
+        return result(test, body(null, items), alternate, true);
+      },
+      /*
+       *
+       */
+      read_else_short() {
+        this.next();
+        const body = this.node("block");
+        if (this.expect(":")) this.next();
+        const items = [];
+        while (this.token != this.EOF && this.token !== this.tok.T_ENDIF) {
+          items.push(this.read_inner_statement());
+        }
+        if (items.length === 0 && this.extractDoc && this._docs.length > this._docIndex) {
+          items.push(this.node("noop")());
+        }
+        return body(null, items);
+      }
+    };
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/loops.js
+var require_loops2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/loops.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      /*
+       * Reads a while statement
+       * ```ebnf
+       * while ::= T_WHILE (statement | ':' inner_statement_list T_ENDWHILE ';')
+       * ```
+       * @see https://github.com/php/php-src/blob/master/Zend/zend_language_parser.y#L587
+       * @return {While}
+       */
+      read_while() {
+        const result = this.node("while");
+        this.expect(this.tok.T_WHILE) && this.next();
+        let body;
+        let shortForm = false;
+        if (this.expect("(")) this.next();
+        const test = this.read_expr();
+        if (this.expect(")")) this.next();
+        if (this.token === ":") {
+          shortForm = true;
+          body = this.read_short_form(this.tok.T_ENDWHILE);
+        } else {
+          body = this.read_statement();
+        }
+        return result(test, body, shortForm);
+      },
+      /*
+       * Reads a do / while loop
+       * ```ebnf
+       * do ::= T_DO statement T_WHILE '(' expr ')' ';'
+       * ```
+       * @see https://github.com/php/php-src/blob/master/Zend/zend_language_parser.y#L423
+       * @return {Do}
+       */
+      read_do() {
+        const result = this.node("do");
+        this.expect(this.tok.T_DO) && this.next();
+        let test = null;
+        const body = this.read_statement();
+        if (this.expect(this.tok.T_WHILE)) {
+          if (this.next().expect("(")) this.next();
+          test = this.read_expr();
+          if (this.expect(")")) this.next();
+          if (this.expect(";")) this.next();
+        }
+        return result(test, body);
+      },
+      /*
+       * Read a for incremental loop
+       * ```ebnf
+       * for ::= T_FOR '(' for_exprs ';' for_exprs ';' for_exprs ')' for_statement
+       * for_statement ::= statement | ':' inner_statement_list T_ENDFOR ';'
+       * for_exprs ::= expr? (',' expr)*
+       * ```
+       * @see https://github.com/php/php-src/blob/master/Zend/zend_language_parser.y#L425
+       * @return {For}
+       */
+      read_for() {
+        const result = this.node("for");
+        this.expect(this.tok.T_FOR) && this.next();
+        let init = [];
+        let test = [];
+        let increment = [];
+        let body;
+        let shortForm = false;
+        if (this.expect("(")) this.next();
+        if (this.token !== ";") {
+          init = this.read_list(this.read_expr, ",");
+          if (this.expect(";")) this.next();
+        } else {
+          this.next();
+        }
+        if (this.token !== ";") {
+          test = this.read_list(this.read_expr, ",");
+          if (this.expect(";")) this.next();
+        } else {
+          this.next();
+        }
+        if (this.token !== ")") {
+          increment = this.read_list(this.read_expr, ",");
+          if (this.expect(")")) this.next();
+        } else {
+          this.next();
+        }
+        if (this.token === ":") {
+          shortForm = true;
+          body = this.read_short_form(this.tok.T_ENDFOR);
+        } else {
+          body = this.read_statement();
+        }
+        return result(init, test, increment, body, shortForm);
+      },
+      /*
+       * Reads a foreach loop
+       * ```ebnf
+       * foreach ::= '(' expr T_AS foreach_variable (T_DOUBLE_ARROW foreach_variable)? ')' statement
+       * ```
+       * @see https://github.com/php/php-src/blob/master/Zend/zend_language_parser.y#L438
+       * @return {Foreach}
+       */
+      read_foreach() {
+        const result = this.node("foreach");
+        this.expect(this.tok.T_FOREACH) && this.next();
+        let key = null;
+        let value = null;
+        let body;
+        let shortForm = false;
+        if (this.expect("(")) this.next();
+        const source = this.read_expr();
+        if (this.expect(this.tok.T_AS)) {
+          this.next();
+          value = this.read_foreach_variable();
+          if (this.token === this.tok.T_DOUBLE_ARROW) {
+            key = value;
+            value = this.next().read_foreach_variable();
+          }
+        }
+        if (key && key.kind === "list") {
+          this.raiseError("Fatal Error : Cannot use list as key element");
+        }
+        if (this.expect(")")) this.next();
+        if (this.token === ":") {
+          shortForm = true;
+          body = this.read_short_form(this.tok.T_ENDFOREACH);
+        } else {
+          body = this.read_statement();
+        }
+        return result(source, key, value, body, shortForm);
+      },
+      /*
+       * Reads a foreach variable statement
+       * ```ebnf
+       * foreach_variable =
+       *    variable |
+       *    '&' variable |
+       *    T_LIST '(' assignment_list ')' |
+       *    '[' assignment_list ']'
+       * ```
+       * @see https://github.com/php/php-src/blob/master/Zend/zend_language_parser.y#L544
+       * @return {Expression}
+       */
+      read_foreach_variable() {
+        if (this.token === this.tok.T_LIST || this.token === "[") {
+          const isShort = this.token === "[";
+          const result = this.node("list");
+          this.next();
+          if (!isShort && this.expect("(")) this.next();
+          const assignList = this.read_array_pair_list(isShort);
+          if (this.expect(isShort ? "]" : ")")) this.next();
+          return result(assignList, isShort);
+        } else {
+          return this.read_variable(false, false);
+        }
+      }
+    };
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/main.js
+var require_main2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/main.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      /*
+       * ```ebnf
+       * start ::= (namespace | top_statement)*
+       * ```
+       */
+      read_start() {
+        if (this.token == this.tok.T_NAMESPACE) {
+          return this.read_namespace();
+        } else {
+          return this.read_top_statement();
+        }
+      }
+    };
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/namespace.js
+var require_namespace3 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/namespace.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      /*
+       * Reads a namespace declaration block
+       * ```ebnf
+       * namespace ::= T_NAMESPACE namespace_name? '{'
+       *    top_statements
+       * '}'
+       * | T_NAMESPACE namespace_name ';' top_statements
+       * ```
+       * @see http://php.net/manual/en/language.namespaces.php
+       * @return {Namespace}
+       */
+      read_namespace() {
+        const result = this.node("namespace");
+        let body;
+        this.expect(this.tok.T_NAMESPACE) && this.next();
+        let name;
+        if (this.token === "{") {
+          name = {
+            name: [""]
+          };
+        } else {
+          name = this.read_namespace_name();
+        }
+        this.currentNamespace = name;
+        if (this.token === ";") {
+          this.currentNamespace = name;
+          body = this.next().read_top_statements(true);
+          return result(name.name, body, false);
+        } else if (this.token === "{") {
+          this.currentNamespace = name;
+          body = this.next().read_top_statements();
+          this.expect("}") && this.next();
+          if (body.length === 0 && this.extractDoc && this._docs.length > this._docIndex) {
+            body.push(this.node("noop")());
+          }
+          return result(name.name, body, true);
+        } else {
+          this.error(["{", ";"]);
+          this.currentNamespace = name;
+          body = this.read_top_statements();
+          this.expect(this.EOF);
+          return result(name, body, false);
+        }
+      },
+      /*
+       * Reads a namespace name
+       * ```ebnf
+       *  namespace_name ::= T_NS_SEPARATOR? (T_STRING T_NS_SEPARATOR)* T_STRING
+       * ```
+       * @see http://php.net/manual/en/language.namespaces.rules.php
+       * @return {Reference}
+       */
+      read_namespace_name(resolveReference) {
+        const result = this.node();
+        let resolution;
+        let name = this.text();
+        switch (this.token) {
+          case this.tok.T_NAME_RELATIVE:
+            resolution = this.ast.name.RELATIVE_NAME;
+            name = name.replace(/^namespace\\/, "");
+            break;
+          case this.tok.T_NAME_QUALIFIED:
+            resolution = this.ast.name.QUALIFIED_NAME;
+            break;
+          case this.tok.T_NAME_FULLY_QUALIFIED:
+            resolution = this.ast.name.FULL_QUALIFIED_NAME;
+            break;
+          default:
+            resolution = this.ast.name.UNQUALIFIED_NAME;
+            if (!this.expect(this.tok.T_STRING)) {
+              return result("name", "", this.ast.name.FULL_QUALIFIED_NAME);
+            }
+        }
+        this.next();
+        if (resolveReference || this.token !== "(") {
+          if (name.toLowerCase() === "parent") {
+            return result("parentreference", name);
+          } else if (name.toLowerCase() === "self") {
+            return result("selfreference", name);
+          }
+        }
+        return result("name", name, resolution);
+      },
+      /*
+       * Reads a use statement
+       * ```ebnf
+       * use_statement ::= T_USE
+       *   use_type? use_declarations |
+       *   use_type use_statement '{' use_declarations '}' |
+       *   use_statement '{' use_declarations(=>typed) '}'
+       * ';'
+       * ```
+       * @see http://php.net/manual/en/language.namespaces.importing.php
+       * @return {UseGroup}
+       */
+      read_use_statement() {
+        let result = this.node("usegroup");
+        let items = [];
+        let name = null;
+        this.expect(this.tok.T_USE) && this.next();
+        const type = this.read_use_type();
+        items.push(this.read_use_declaration(false));
+        if (this.token === ",") {
+          items = items.concat(this.next().read_use_declarations(false));
+        } else if (this.token === "{") {
+          name = items[0].name;
+          items = this.next().read_use_declarations(type === null);
+          this.expect("}") && this.next();
+        }
+        result = result(name, type, items);
+        this.expect(";") && this.next();
+        return result;
+      },
+      /*
+       *
+       * @see https://github.com/php/php-src/blob/master/Zend/zend_language_parser.y#L1045
+       */
+      read_class_name_reference() {
+        return this.read_variable(true, false);
+      },
+      /*
+       * Reads a use declaration
+       * ```ebnf
+       * use_declaration ::= use_type? namespace_name use_alias
+       * ```
+       * @see https://github.com/php/php-src/blob/master/Zend/zend_language_parser.y#L380
+       * @return {UseItem}
+       */
+      read_use_declaration(typed) {
+        const result = this.node("useitem");
+        let type = null;
+        if (typed) type = this.read_use_type();
+        const name = this.read_namespace_name();
+        const alias = this.read_use_alias();
+        return result(name.name, alias, type);
+      },
+      /*
+       * Reads a list of use declarations
+       * ```ebnf
+       * use_declarations ::= use_declaration (',' use_declaration)*
+       * ```
+       * @see https://github.com/php/php-src/blob/master/Zend/zend_language_parser.y#L380
+       * @return {UseItem[]}
+       */
+      read_use_declarations(typed) {
+        const result = [this.read_use_declaration(typed)];
+        while (this.token === ",") {
+          this.next();
+          if (typed) {
+            if (this.token !== this.tok.T_NAME_RELATIVE && this.token !== this.tok.T_NAME_QUALIFIED && this.token !== this.tok.T_NAME_FULLY_QUALIFIED && this.token !== this.tok.T_FUNCTION && this.token !== this.tok.T_CONST && this.token !== this.tok.T_STRING) {
+              break;
+            }
+          } else if (this.token !== this.tok.T_NAME_RELATIVE && this.token !== this.tok.T_NAME_QUALIFIED && this.token !== this.tok.T_NAME_FULLY_QUALIFIED && this.token !== this.tok.T_STRING && this.token !== this.tok.T_NS_SEPARATOR) {
+            break;
+          }
+          result.push(this.read_use_declaration(typed));
+        }
+        return result;
+      },
+      /*
+       * Reads a use statement
+       * ```ebnf
+       * use_alias ::= (T_AS T_STRING)?
+       * ```
+       * @return {String|null}
+       */
+      read_use_alias() {
+        let result = null;
+        if (this.token === this.tok.T_AS) {
+          if (this.next().expect(this.tok.T_STRING)) {
+            const aliasName = this.node("identifier");
+            const name = this.text();
+            this.next();
+            result = aliasName(name);
+          }
+        }
+        return result;
+      },
+      /*
+       * Reads the namespace type declaration
+       * ```ebnf
+       * use_type ::= (T_FUNCTION | T_CONST)?
+       * ```
+       * @see https://github.com/php/php-src/blob/master/Zend/zend_language_parser.y#L335
+       * @return {String|null} Possible values : function, const
+       */
+      read_use_type() {
+        if (this.token === this.tok.T_FUNCTION) {
+          this.next();
+          return this.ast.useitem.TYPE_FUNCTION;
+        } else if (this.token === this.tok.T_CONST) {
+          this.next();
+          return this.ast.useitem.TYPE_CONST;
+        }
+        return null;
+      }
+    };
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/scalar.js
+var require_scalar2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/scalar.js"(exports2, module2) {
+    "use strict";
+    var specialChar = {
+      "\\": "\\",
+      $: "$",
+      n: "\n",
+      r: "\r",
+      t: "	",
+      f: String.fromCharCode(12),
+      v: String.fromCharCode(11),
+      e: String.fromCharCode(27)
+    };
+    module2.exports = {
+      /*
+       * Unescape special chars
+       */
+      resolve_special_chars(text3, doubleQuote) {
+        if (!doubleQuote) {
+          return text3.replace(/\\\\/g, "\\").replace(/\\'/g, "'");
+        }
+        return text3.replace(/\\"/g, '"').replace(
+          /\\([\\$nrtfve]|[xX][0-9a-fA-F]{1,2}|[0-7]{1,3}|u{([0-9a-fA-F]+)})/g,
+          ($match, p1, p2) => {
+            if (specialChar[p1]) {
+              return specialChar[p1];
+            } else if ("x" === p1[0] || "X" === p1[0]) {
+              return String.fromCodePoint(parseInt(p1.substr(1), 16));
+            } else if ("u" === p1[0]) {
+              return String.fromCodePoint(parseInt(p2, 16));
+            } else {
+              return String.fromCodePoint(parseInt(p1, 8));
+            }
+          }
+        );
+      },
+      /*
+       * Remove all leading spaces each line for heredoc text if there is a indentation
+       * @param {string} text
+       * @param {number} indentation
+       * @param {boolean} indentation_uses_spaces
+       * @param {boolean} first_encaps_node if it is behind a variable, the first N spaces should not be removed
+       */
+      remove_heredoc_leading_whitespace_chars(text3, indentation, indentation_uses_spaces, first_encaps_node) {
+        if (indentation === 0) {
+          return text3;
+        }
+        this.check_heredoc_indentation_level(
+          text3,
+          indentation,
+          indentation_uses_spaces,
+          first_encaps_node
+        );
+        const matchedChar = indentation_uses_spaces ? " " : "	";
+        const removementRegExp = new RegExp(
+          `\\n${matchedChar}{${indentation}}`,
+          "g"
+        );
+        const removementFirstEncapsNodeRegExp = new RegExp(
+          `^${matchedChar}{${indentation}}`
+        );
+        if (first_encaps_node) {
+          text3 = text3.replace(removementFirstEncapsNodeRegExp, "");
+        }
+        return text3.replace(removementRegExp, "\n");
+      },
+      /*
+       * Check indentation level of heredoc in text, if mismatch, raiseError
+       * @param {string} text
+       * @param {number} indentation
+       * @param {boolean} indentation_uses_spaces
+       * @param {boolean} first_encaps_node if it is behind a variable, the first N spaces should not be removed
+       */
+      check_heredoc_indentation_level(text3, indentation, indentation_uses_spaces, first_encaps_node) {
+        const textSize = text3.length;
+        let offset = 0;
+        let leadingWhitespaceCharCount = 0;
+        let inCountingState = true;
+        const chToCheck = indentation_uses_spaces ? " " : "	";
+        let inCheckState = false;
+        if (!first_encaps_node) {
+          offset = text3.indexOf("\n");
+          if (offset === -1) {
+            return;
+          }
+          offset++;
+        }
+        while (offset < textSize) {
+          if (inCountingState) {
+            if (text3[offset] === chToCheck) {
+              leadingWhitespaceCharCount++;
+            } else {
+              inCheckState = true;
+            }
+          }
+          if (text3[offset] !== "\n" && inCheckState && leadingWhitespaceCharCount < indentation) {
+            this.raiseError(
+              `Invalid body indentation level (expecting an indentation at least ${indentation})`
+            );
+          } else {
+            inCheckState = false;
+          }
+          if (text3[offset] === "\n") {
+            inCountingState = true;
+            leadingWhitespaceCharCount = 0;
+          }
+          offset++;
+        }
+      },
+      /*
+       * Reads dereferencable scalar
+       */
+      read_dereferencable_scalar() {
+        let result = null;
+        switch (this.token) {
+          case this.tok.T_CONSTANT_ENCAPSED_STRING:
+            {
+              let value = this.node("string");
+              const text3 = this.text();
+              let offset = 0;
+              if (text3[0] === "b" || text3[0] === "B") {
+                offset = 1;
+              }
+              const isDoubleQuote = text3[offset] === '"';
+              this.next();
+              const textValue = this.resolve_special_chars(
+                text3.substring(offset + 1, text3.length - 1),
+                isDoubleQuote
+              );
+              value = value(
+                isDoubleQuote,
+                textValue,
+                offset === 1,
+                // unicode flag
+                text3
+              );
+              if (this.token === this.tok.T_DOUBLE_COLON) {
+                result = this.read_static_getter(value);
+              } else {
+                result = value;
+              }
+            }
+            break;
+          case this.tok.T_ARRAY:
+            result = this.read_array();
+            break;
+          case "[":
+            result = this.read_array();
+            break;
+        }
+        return result;
+      },
+      /*
+       * ```ebnf
+       *  scalar ::= T_MAGIC_CONST
+       *       | T_LNUMBER | T_DNUMBER
+       *       | T_START_HEREDOC T_ENCAPSED_AND_WHITESPACE? T_END_HEREDOC
+       *       | '"' encaps_list '"'
+       *       | T_START_HEREDOC encaps_list T_END_HEREDOC
+       *       | namespace_name (T_DOUBLE_COLON T_STRING)?
+       * ```
+       */
+      read_scalar() {
+        if (this.is("T_MAGIC_CONST")) {
+          return this.get_magic_constant();
+        } else {
+          let value, node2;
+          switch (this.token) {
+            // NUMERIC
+            case this.tok.T_LNUMBER:
+            // long
+            case this.tok.T_DNUMBER: {
+              const result = this.node("number");
+              value = this.text();
+              this.next();
+              return result(value, null);
+            }
+            case this.tok.T_START_HEREDOC:
+              if (this.lexer.curCondition === "ST_NOWDOC") {
+                const start = this.lexer.yylloc.first_offset;
+                node2 = this.node("nowdoc");
+                value = this.next().text();
+                if (this.lexer.heredoc_label.indentation > 0) {
+                  value = value.substring(
+                    0,
+                    value.length - this.lexer.heredoc_label.indentation
+                  );
+                }
+                const lastCh = value[value.length - 1];
+                if (lastCh === "\n") {
+                  if (value[value.length - 2] === "\r") {
+                    value = value.substring(0, value.length - 2);
+                  } else {
+                    value = value.substring(0, value.length - 1);
+                  }
+                } else if (lastCh === "\r") {
+                  value = value.substring(0, value.length - 1);
+                }
+                this.expect(this.tok.T_ENCAPSED_AND_WHITESPACE) && this.next();
+                this.expect(this.tok.T_END_HEREDOC) && this.next();
+                const raw = this.lexer._input.substring(
+                  start,
+                  this.lexer.yylloc.first_offset
+                );
+                node2 = node2(
+                  this.remove_heredoc_leading_whitespace_chars(
+                    value,
+                    this.lexer.heredoc_label.indentation,
+                    this.lexer.heredoc_label.indentation_uses_spaces,
+                    this.lexer.heredoc_label.first_encaps_node
+                  ),
+                  raw,
+                  this.lexer.heredoc_label.label
+                );
+                this.lexer.heredoc_label.finished = true;
+                return node2;
+              } else {
+                return this.read_encapsed_string(this.tok.T_END_HEREDOC);
+              }
+            case '"':
+              return this.read_encapsed_string('"');
+            case 'b"':
+            case 'B"': {
+              return this.read_encapsed_string('"', true);
+            }
+            // TEXTS
+            case this.tok.T_CONSTANT_ENCAPSED_STRING:
+            case this.tok.T_ARRAY:
+            // array parser
+            case "[":
+              return this.read_dereferencable_scalar();
+            default: {
+              const err = this.error("SCALAR");
+              this.next();
+              return err;
+            }
+          }
+        }
+      },
+      /*
+       * Handles the dereferencing
+       */
+      read_dereferencable(expr) {
+        let result, offset;
+        const node2 = this.node("offsetlookup");
+        if (this.token === "[") {
+          offset = this.next().read_expr();
+          if (this.expect("]")) this.next();
+          result = node2(expr, offset);
+        } else if (this.token === this.tok.T_DOLLAR_OPEN_CURLY_BRACES) {
+          offset = this.read_encapsed_string_item(false);
+          result = node2(expr, offset);
+        }
+        return result;
+      },
+      /*
+       * Reads and extracts an encapsed item
+       * ```ebnf
+       * encapsed_string_item ::= T_ENCAPSED_AND_WHITESPACE
+       *  | T_DOLLAR_OPEN_CURLY_BRACES expr '}'
+       *  | T_DOLLAR_OPEN_CURLY_BRACES T_STRING_VARNAME '}'
+       *  | T_DOLLAR_OPEN_CURLY_BRACES T_STRING_VARNAME '[' expr ']' '}'
+       *  | T_CURLY_OPEN variable '}'
+       *  | variable
+       *  | variable '[' expr ']'
+       *  | variable T_OBJECT_OPERATOR T_STRING
+       * ```
+       * @return {String|Variable|Expr|Lookup}
+       * @see https://github.com/php/php-src/blob/master/Zend/zend_language_parser.y#L1219
+       */
+      read_encapsed_string_item(isDoubleQuote) {
+        const encapsedPart = this.node("encapsedpart");
+        let syntax = null;
+        let curly = false;
+        let result = this.node(), offset, node2, name;
+        if (this.token === this.tok.T_ENCAPSED_AND_WHITESPACE) {
+          const text3 = this.text();
+          this.next();
+          result = result(
+            "string",
+            false,
+            this.version >= 703 && !this.lexer.heredoc_label.finished ? this.resolve_special_chars(
+              this.remove_heredoc_leading_whitespace_chars(
+                text3,
+                this.lexer.heredoc_label.indentation,
+                this.lexer.heredoc_label.indentation_uses_spaces,
+                this.lexer.heredoc_label.first_encaps_node
+              ),
+              isDoubleQuote
+            ) : this.resolve_special_chars(text3, isDoubleQuote),
+            false,
+            text3
+          );
+        } else if (this.token === this.tok.T_DOLLAR_OPEN_CURLY_BRACES) {
+          syntax = "simple";
+          curly = true;
+          if (this.next().token === this.tok.T_STRING_VARNAME) {
+            name = this.node("variable");
+            const varName = this.text();
+            this.next();
+            result.destroy();
+            if (this.token === "[") {
+              name = name(varName, false);
+              node2 = this.node("offsetlookup");
+              offset = this.next().read_expr();
+              this.expect("]") && this.next();
+              result = node2(name, offset);
+            } else {
+              result = name(varName, false);
+            }
+          } else {
+            result = result("variable", this.read_expr(), false);
+          }
+          this.expect("}") && this.next();
+        } else if (this.token === this.tok.T_CURLY_OPEN) {
+          syntax = "complex";
+          result.destroy();
+          result = this.next().read_variable(false, false);
+          this.expect("}") && this.next();
+        } else if (this.token === this.tok.T_VARIABLE) {
+          syntax = "simple";
+          result.destroy();
+          result = this.read_simple_variable();
+          if (this.token === "[") {
+            node2 = this.node("offsetlookup");
+            offset = this.next().read_encaps_var_offset();
+            this.expect("]") && this.next();
+            result = node2(result, offset);
+          }
+          if (this.token === this.tok.T_OBJECT_OPERATOR) {
+            node2 = this.node("propertylookup");
+            this.next().expect(this.tok.T_STRING);
+            const what = this.node("identifier");
+            name = this.text();
+            this.next();
+            result = node2(result, what(name));
+          }
+        } else {
+          this.expect(this.tok.T_ENCAPSED_AND_WHITESPACE);
+          const value = this.text();
+          this.next();
+          result.destroy();
+          result = result("string", false, value, false, value);
+        }
+        this.lexer.heredoc_label.first_encaps_node = false;
+        return encapsedPart(result, syntax, curly);
+      },
+      /*
+       * Reads an encapsed string
+       */
+      read_encapsed_string(expect, isBinary = false) {
+        const labelStart = this.lexer.yylloc.first_offset;
+        let node2 = this.node("encapsed");
+        this.next();
+        const start = this.lexer.yylloc.prev_offset - (isBinary ? 1 : 0);
+        const value = [];
+        let type;
+        if (expect === "`") {
+          type = this.ast.encapsed.TYPE_SHELL;
+        } else if (expect === '"') {
+          type = this.ast.encapsed.TYPE_STRING;
+        } else {
+          type = this.ast.encapsed.TYPE_HEREDOC;
+        }
+        while (this.token !== expect && this.token !== this.EOF) {
+          value.push(this.read_encapsed_string_item(true));
+        }
+        if (type === this.ast.encapsed.TYPE_HEREDOC && value.length > 0 && value[value.length - 1].kind === "encapsedpart" && value[value.length - 1].expression.kind === "string") {
+          const node3 = value[value.length - 1].expression;
+          const lastCh = node3.value[node3.value.length - 1];
+          if (lastCh === "\n") {
+            if (node3.value[node3.value.length - 2] === "\r") {
+              node3.value = node3.value.substring(0, node3.value.length - 2);
+            } else {
+              node3.value = node3.value.substring(0, node3.value.length - 1);
+            }
+          } else if (lastCh === "\r") {
+            node3.value = node3.value.substring(0, node3.value.length - 1);
+          }
+        }
+        this.expect(expect) && this.next();
+        const raw = this.lexer._input.substring(
+          type === "heredoc" ? labelStart : start - 1,
+          this.lexer.yylloc.first_offset
+        );
+        node2 = node2(value, raw, type);
+        if (expect === this.tok.T_END_HEREDOC) {
+          node2.label = this.lexer.heredoc_label.label;
+          this.lexer.heredoc_label.finished = true;
+        }
+        return node2;
+      },
+      /*
+       * Constant token
+       */
+      get_magic_constant() {
+        const result = this.node("magic");
+        const name = this.text();
+        this.next();
+        return result(name.toUpperCase(), name);
+      }
+    };
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/statement.js
+var require_statement3 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/statement.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      /*
+       * reading a list of top statements (helper for top_statement*)
+       * ```ebnf
+       *  top_statements ::= top_statement*
+       * ```
+       */
+      read_top_statements(stopAtNamespace) {
+        let result = [];
+        while (this.token !== this.EOF && this.token !== "}") {
+          if (stopAtNamespace && this.token === this.tok.T_NAMESPACE) break;
+          const statement = this.read_top_statement();
+          if (statement) {
+            if (Array.isArray(statement)) {
+              result = result.concat(statement);
+            } else {
+              result.push(statement);
+            }
+          }
+        }
+        return result;
+      },
+      /*
+       * reading a top statement
+       * ```ebnf
+       *  top_statement ::=
+       *       namespace | function | class
+       *       | interface | trait
+       *       | use_statements | const_list
+       *       | statement
+       * ```
+       */
+      read_top_statement() {
+        let attrs = [];
+        if (this.token === this.tok.T_ATTRIBUTE) {
+          attrs = this.read_attr_list();
+        }
+        switch (this.token) {
+          case this.tok.T_FUNCTION:
+            return this.read_function(false, false, attrs);
+          // optional flags
+          case this.tok.T_ABSTRACT:
+          case this.tok.T_FINAL:
+          case this.tok.T_READ_ONLY:
+          case this.tok.T_CLASS:
+            return this.read_class_declaration_statement(attrs);
+          case this.tok.T_INTERFACE:
+            return this.read_interface_declaration_statement(attrs);
+          case this.tok.T_TRAIT:
+            return this.read_trait_declaration_statement(attrs);
+          case this.tok.T_ENUM:
+            return this.read_enum_declaration_statement(attrs);
+          case this.tok.T_USE:
+            return this.read_use_statement();
+          case this.tok.T_CONST: {
+            const result = this.node("constantstatement");
+            const items = this.next().read_const_list();
+            this.expectEndOfStatement();
+            return result(null, items);
+          }
+          case this.tok.T_NAMESPACE:
+            return this.read_namespace();
+          case this.tok.T_HALT_COMPILER: {
+            const result = this.node("halt");
+            if (this.next().expect("(")) this.next();
+            if (this.expect(")")) this.next();
+            this.expect(";");
+            this.lexer.done = true;
+            return result(this.lexer._input.substring(this.lexer.offset));
+          }
+          default:
+            return this.read_statement();
+        }
+      },
+      /*
+       * reads a list of simple inner statements (helper for inner_statement*)
+       * ```ebnf
+       *  inner_statements ::= inner_statement*
+       * ```
+       */
+      read_inner_statements() {
+        let result = [];
+        while (this.token != this.EOF && this.token !== "}") {
+          const statement = this.read_inner_statement();
+          if (statement) {
+            if (Array.isArray(statement)) {
+              result = result.concat(statement);
+            } else {
+              result.push(statement);
+            }
+          }
+        }
+        return result;
+      },
+      /*
+       * Reads a list of constants declaration
+       * ```ebnf
+       *   const_list ::= T_CONST T_STRING '=' expr (',' T_STRING '=' expr)* ';'
+       * ```
+       */
+      read_const_list() {
+        return this.read_list(
+          function() {
+            this.expect(this.tok.T_STRING);
+            const result = this.node("constant");
+            let constName = this.node("identifier");
+            const name = this.text();
+            this.next();
+            constName = constName(name);
+            if (this.expect("=")) {
+              return result(constName, this.next().read_expr());
+            } else {
+              return result(constName, null);
+            }
+          },
+          ",",
+          false
+        );
+      },
+      /*
+       * Reads a list of constants declaration
+       * ```ebnf
+       *   declare_list ::= IDENTIFIER '=' expr (',' IDENTIFIER '=' expr)*
+       * ```
+       * @retrurn {Array}
+       */
+      read_declare_list() {
+        const result = [];
+        while (this.token != this.EOF && this.token !== ")") {
+          this.expect(this.tok.T_STRING);
+          const directive = this.node("declaredirective");
+          let key = this.node("identifier");
+          const name = this.text();
+          this.next();
+          key = key(name);
+          let value = null;
+          if (this.expect("=")) {
+            value = this.next().read_expr();
+          }
+          result.push(directive(key, value));
+          if (this.token !== ",") break;
+          this.next();
+        }
+        return result;
+      },
+      /*
+       * reads a simple inner statement
+       * ```ebnf
+       *  inner_statement ::= '{' inner_statements '}' | token
+       * ```
+       */
+      read_inner_statement() {
+        let attrs = [];
+        if (this.token === this.tok.T_ATTRIBUTE) {
+          attrs = this.read_attr_list();
+        }
+        switch (this.token) {
+          case this.tok.T_FUNCTION: {
+            const result = this.read_function(false, false);
+            result.attrGroups = attrs;
+            return result;
+          }
+          // optional flags
+          case this.tok.T_ABSTRACT:
+          case this.tok.T_FINAL:
+          case this.tok.T_CLASS:
+            return this.read_class_declaration_statement();
+          case this.tok.T_INTERFACE:
+            return this.read_interface_declaration_statement();
+          case this.tok.T_TRAIT:
+            return this.read_trait_declaration_statement(attrs);
+          case this.tok.T_ENUM:
+            return this.read_enum_declaration_statement(attrs);
+          case this.tok.T_HALT_COMPILER: {
+            this.raiseError(
+              "__HALT_COMPILER() can only be used from the outermost scope"
+            );
+            let node2 = this.node("halt");
+            this.next().expect("(") && this.next();
+            this.expect(")") && this.next();
+            node2 = node2(this.lexer._input.substring(this.lexer.offset));
+            this.expect(";") && this.next();
+            return node2;
+          }
+          default:
+            return this.read_statement();
+        }
+      },
+      /*
+       * Reads statements
+       */
+      read_statement() {
+        switch (this.token) {
+          case "{":
+            return this.read_code_block(false);
+          case this.tok.T_IF:
+            return this.read_if();
+          case this.tok.T_SWITCH:
+            return this.read_switch();
+          case this.tok.T_FOR:
+            return this.read_for();
+          case this.tok.T_FOREACH:
+            return this.read_foreach();
+          case this.tok.T_WHILE:
+            return this.read_while();
+          case this.tok.T_DO:
+            return this.read_do();
+          case this.tok.T_COMMENT:
+            return this.read_comment();
+          case this.tok.T_DOC_COMMENT:
+            return this.read_doc_comment();
+          case this.tok.T_RETURN: {
+            const result = this.node("return");
+            this.next();
+            const expr = this.read_optional_expr(";");
+            this.expectEndOfStatement();
+            return result(expr);
+          }
+          // https://github.com/php/php-src/blob/master/Zend/zend_language_parser.y#L429
+          case this.tok.T_BREAK:
+          case this.tok.T_CONTINUE: {
+            const result = this.node(
+              this.token === this.tok.T_CONTINUE ? "continue" : "break"
+            );
+            this.next();
+            const level = this.read_optional_expr(";");
+            this.expectEndOfStatement();
+            return result(level);
+          }
+          case this.tok.T_GLOBAL: {
+            const result = this.node("global");
+            const items = this.next().read_list(this.read_simple_variable, ",");
+            this.expectEndOfStatement();
+            return result(items);
+          }
+          case this.tok.T_STATIC: {
+            const current = [this.token, this.lexer.getState()];
+            const result = this.node();
+            if (this.next().token === this.tok.T_DOUBLE_COLON) {
+              this.lexer.tokens.push(current);
+              const expr = this.next().read_expr();
+              this.expectEndOfStatement(expr);
+              return result("expressionstatement", expr);
+            }
+            if (this.token === this.tok.T_FUNCTION) {
+              return this.read_function(true, [0, 1, 0]);
+            }
+            const items = this.read_variable_declarations();
+            this.expectEndOfStatement();
+            return result("static", items);
+          }
+          case this.tok.T_ECHO: {
+            const result = this.node("echo");
+            const text3 = this.text();
+            const shortForm = text3 === "<?=" || text3 === "<%=";
+            const expressions = this.next().read_function_list(this.read_expr, ",");
+            this.expectEndOfStatement();
+            return result(expressions, shortForm);
+          }
+          case this.tok.T_INLINE_HTML: {
+            const value = this.text();
+            let prevChar = this.lexer.yylloc.first_offset > 0 ? this.lexer._input[this.lexer.yylloc.first_offset - 1] : null;
+            const fixFirstLine = prevChar === "\r" || prevChar === "\n";
+            if (fixFirstLine) {
+              if (prevChar === "\n" && this.lexer.yylloc.first_offset > 1 && this.lexer._input[this.lexer.yylloc.first_offset - 2] === "\r") {
+                prevChar = "\r\n";
+              }
+            }
+            const result = this.node("inline");
+            this.next();
+            return result(value, fixFirstLine ? prevChar + value : value);
+          }
+          case this.tok.T_UNSET: {
+            const result = this.node("unset");
+            this.next().expect("(") && this.next();
+            const variables = this.read_function_list(this.read_variable, ",");
+            this.expect(")") && this.next();
+            this.expect(";") && this.next();
+            return result(variables);
+          }
+          case this.tok.T_DECLARE: {
+            const result = this.node("declare");
+            const body = [];
+            let mode;
+            this.next().expect("(") && this.next();
+            const directives = this.read_declare_list();
+            this.expect(")") && this.next();
+            if (this.token === ":") {
+              this.next();
+              while (this.token != this.EOF && this.token !== this.tok.T_ENDDECLARE) {
+                body.push(this.read_top_statement());
+              }
+              if (body.length === 0 && this.extractDoc && this._docs.length > this._docIndex) {
+                body.push(this.node("noop")());
+              }
+              this.expect(this.tok.T_ENDDECLARE) && this.next();
+              this.expectEndOfStatement();
+              mode = this.ast.declare.MODE_SHORT;
+            } else if (this.token === "{") {
+              this.next();
+              while (this.token != this.EOF && this.token !== "}") {
+                body.push(this.read_top_statement());
+              }
+              if (body.length === 0 && this.extractDoc && this._docs.length > this._docIndex) {
+                body.push(this.node("noop")());
+              }
+              this.expect("}") && this.next();
+              mode = this.ast.declare.MODE_BLOCK;
+            } else {
+              this.expect(";") && this.next();
+              mode = this.ast.declare.MODE_NONE;
+            }
+            return result(directives, body, mode);
+          }
+          case this.tok.T_TRY:
+            return this.read_try();
+          case this.tok.T_THROW: {
+            const result = this.node("throw");
+            const expr = this.next().read_expr();
+            this.expectEndOfStatement();
+            return result(expr);
+          }
+          // ignore this (extra ponctuation)
+          case ";": {
+            this.next();
+            return null;
+          }
+          case this.tok.T_STRING: {
+            const result = this.node();
+            const current = [this.token, this.lexer.getState()];
+            const labelNameText = this.text();
+            let labelName = this.node("identifier");
+            if (this.next().token === ":") {
+              labelName = labelName(labelNameText);
+              this.next();
+              return result("label", labelName);
+            } else {
+              labelName.destroy();
+            }
+            result.destroy();
+            this.lexer.tokens.push(current);
+            const statement = this.node("expressionstatement");
+            const expr = this.next().read_expr();
+            this.expectEndOfStatement(expr);
+            return statement(expr);
+          }
+          case this.tok.T_GOTO: {
+            const result = this.node("goto");
+            let labelName = null;
+            if (this.next().expect(this.tok.T_STRING)) {
+              labelName = this.node("identifier");
+              const name = this.text();
+              this.next();
+              labelName = labelName(name);
+              this.expectEndOfStatement();
+            }
+            return result(labelName);
+          }
+          default: {
+            const statement = this.node("expressionstatement");
+            const expr = this.read_expr();
+            this.expectEndOfStatement(expr);
+            return statement(expr);
+          }
+        }
+      },
+      /*
+       * ```ebnf
+       *  code_block ::= '{' (inner_statements | top_statements) '}'
+       * ```
+       */
+      read_code_block(top) {
+        const result = this.node("block");
+        this.expect("{") && this.next();
+        const body = top ? this.read_top_statements() : this.read_inner_statements();
+        if (body.length === 0 && this.extractDoc && this._docs.length > this._docIndex) {
+          body.push(this.node("noop")());
+        }
+        this.expect("}") && this.next();
+        return result(null, body);
+      }
+    };
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/switch.js
+var require_switch3 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/switch.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      /*
+       * Reads a switch statement
+       * ```ebnf
+       *  switch ::= T_SWITCH '(' expr ')' switch_case_list
+       * ```
+       * @return {Switch}
+       * @see http://php.net/manual/en/control-structures.switch.php
+       */
+      read_switch() {
+        const result = this.node("switch");
+        this.expect(this.tok.T_SWITCH) && this.next();
+        this.expect("(") && this.next();
+        const test = this.read_expr();
+        this.expect(")") && this.next();
+        const shortForm = this.token === ":";
+        const body = this.read_switch_case_list();
+        return result(test, body, shortForm);
+      },
+      /*
+       * ```ebnf
+       *  switch_case_list ::= '{' ';'? case_list* '}' | ':' ';'? case_list* T_ENDSWITCH ';'
+       * ```
+       * @see https://github.com/php/php-src/blob/master/Zend/zend_language_parser.y#L566
+       */
+      read_switch_case_list() {
+        let expect = null;
+        const result = this.node("block");
+        const items = [];
+        if (this.token === "{") {
+          expect = "}";
+        } else if (this.token === ":") {
+          expect = this.tok.T_ENDSWITCH;
+        } else {
+          this.expect(["{", ":"]);
+        }
+        this.next();
+        if (this.token === ";") {
+          this.next();
+        }
+        while (this.token !== this.EOF && this.token !== expect) {
+          items.push(this.read_case_list(expect));
+        }
+        if (items.length === 0 && this.extractDoc && this._docs.length > this._docIndex) {
+          items.push(this.node("noop")());
+        }
+        this.expect(expect) && this.next();
+        if (expect === this.tok.T_ENDSWITCH) {
+          this.expectEndOfStatement();
+        }
+        return result(null, items);
+      },
+      /*
+       * ```ebnf
+       *   case_list ::= ((T_CASE expr) | T_DEFAULT) (':' | ';') inner_statement*
+       * ```
+       */
+      read_case_list(stopToken) {
+        const result = this.node("case");
+        let test = null;
+        if (this.token === this.tok.T_CASE) {
+          test = this.next().read_expr();
+        } else if (this.token === this.tok.T_DEFAULT) {
+          this.next();
+        } else {
+          this.expect([this.tok.T_CASE, this.tok.T_DEFAULT]);
+        }
+        this.expect([":", ";"]) && this.next();
+        const body = this.node("block");
+        const items = [];
+        while (this.token !== this.EOF && this.token !== stopToken && this.token !== this.tok.T_CASE && this.token !== this.tok.T_DEFAULT) {
+          items.push(this.read_inner_statement());
+        }
+        return result(test, body(null, items));
+      }
+    };
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/try.js
+var require_try3 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/try.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      /*
+       * ```ebnf
+       *  try ::= T_TRY '{' inner_statement* '}'
+       *          (
+       *              T_CATCH '(' namespace_name (variable)? ')' '{'  inner_statement* '}'
+       *          )*
+       *          (T_FINALLY '{' inner_statement* '}')?
+       * ```
+       * @see https://github.com/php/php-src/blob/master/Zend/zend_language_parser.y#L448
+       * @return {Try}
+       */
+      read_try() {
+        this.expect(this.tok.T_TRY);
+        const result = this.node("try");
+        let always = null;
+        const catches = [];
+        const body = this.next().read_statement();
+        while (this.token === this.tok.T_CATCH) {
+          const item = this.node("catch");
+          this.next().expect("(") && this.next();
+          const what = this.read_list(this.read_namespace_name, "|", false);
+          let variable = null;
+          if (this.version < 800 || this.token === this.tok.T_VARIABLE) {
+            variable = this.read_variable(true, false);
+          }
+          this.expect(")");
+          catches.push(item(this.next().read_statement(), what, variable));
+        }
+        if (this.token === this.tok.T_FINALLY) {
+          always = this.next().read_statement();
+        }
+        return result(body, catches, always);
+      }
+    };
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/utils.js
+var require_utils4 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/utils.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      /*
+       * Reads a short form of tokens
+       * @param {Number} token - The ending token
+       * @return {Block}
+       */
+      read_short_form(token) {
+        const body = this.node("block");
+        const items = [];
+        if (this.expect(":")) this.next();
+        while (this.token != this.EOF && this.token !== token) {
+          items.push(this.read_inner_statement());
+        }
+        if (items.length === 0 && this.extractDoc && this._docs.length > this._docIndex) {
+          items.push(this.node("noop")());
+        }
+        if (this.expect(token)) this.next();
+        this.expectEndOfStatement();
+        return body(null, items);
+      },
+      /*
+       * https://wiki.php.net/rfc/trailing-comma-function-calls
+       * @param {*} item
+       * @param {*} separator
+       */
+      read_function_list(item, separator) {
+        const result = [];
+        do {
+          if (this.token == separator && this.version >= 703 && result.length > 0) {
+            result.push(this.node("noop")());
+            break;
+          }
+          result.push(item.apply(this, []));
+          if (this.token != separator) {
+            break;
+          }
+          if (this.next().token == ")" && this.version >= 703) {
+            break;
+          }
+        } while (this.token != this.EOF);
+        return result;
+      },
+      /*
+       * Helper : reads a list of tokens / sample : T_STRING ',' T_STRING ...
+       * ```ebnf
+       * list ::= separator? ( item separator )* item
+       * ```
+       */
+      read_list(item, separator, preserveFirstSeparator) {
+        const result = [];
+        if (this.token == separator) {
+          if (preserveFirstSeparator) {
+            result.push(typeof item === "function" ? this.node("noop")() : null);
+            this.next();
+          } else {
+            this.error();
+            return result;
+          }
+        }
+        if (typeof item === "function") {
+          do {
+            const itemResult = item.apply(this, []);
+            if (itemResult) {
+              result.push(itemResult);
+            }
+            if (this.token != separator) {
+              break;
+            }
+          } while (this.next().token != this.EOF);
+        } else {
+          if (this.expect(item)) {
+            result.push(this.text());
+          } else {
+            return [];
+          }
+          while (this.next().token != this.EOF) {
+            if (this.token != separator) break;
+            if (this.next().token != item) break;
+            result.push(this.text());
+          }
+        }
+        return result;
+      },
+      /*
+       * Reads a list of names separated by a comma
+       *
+       * ```ebnf
+       * name_list ::= namespace (',' namespace)*
+       * ```
+       *
+       * Sample code :
+       * ```php
+       * <?php class foo extends bar, baz { }
+       * ```
+       *
+       * @see https://github.com/php/php-src/blob/master/Zend/zend_language_parser.y#L726
+       * @return {Reference[]}
+       */
+      read_name_list() {
+        return this.read_list(this.read_namespace_name, ",", false);
+      },
+      /*
+       * Reads the byref token and assign it to the specified node
+       * @param {*} cb
+       */
+      read_byref(cb) {
+        let byref = this.node("byref");
+        this.next();
+        byref = byref(null);
+        const result = cb();
+        if (result) {
+          this.ast.swapLocations(result, byref, result, this);
+          result.byref = true;
+        }
+        return result;
+      },
+      /*
+       * Reads a list of variables declarations
+       *
+       * ```ebnf
+       * variable_declaration ::= T_VARIABLE ('=' expr)?*
+       * variable_declarations ::= variable_declaration (',' variable_declaration)*
+       * ```
+       *
+       * Sample code :
+       * ```php
+       * <?php static $a = 'hello', $b = 'world';
+       * ```
+       * @return {StaticVariable[]} Returns an array composed by a list of variables, or
+       * assign values
+       */
+      read_variable_declarations() {
+        return this.read_list(function() {
+          const node2 = this.node("staticvariable");
+          let variable = this.node("variable");
+          if (this.expect(this.tok.T_VARIABLE)) {
+            const name = this.text().substring(1);
+            this.next();
+            variable = variable(name, false);
+          } else {
+            variable = variable("#ERR", false);
+          }
+          if (this.token === "=") {
+            return node2(variable, this.next().read_expr());
+          } else {
+            return variable;
+          }
+        }, ",");
+      },
+      /*
+       * Reads class extends
+       */
+      read_extends_from() {
+        if (this.token === this.tok.T_EXTENDS) {
+          return this.next().read_namespace_name();
+        }
+        return null;
+      },
+      /*
+       * Reads interface extends list
+       */
+      read_interface_extends_list() {
+        if (this.token === this.tok.T_EXTENDS) {
+          return this.next().read_name_list();
+        }
+        return null;
+      },
+      /*
+       * Reads implements list
+       */
+      read_implements_list() {
+        if (this.token === this.tok.T_IMPLEMENTS) {
+          return this.next().read_name_list();
+        }
+        return null;
+      }
+    };
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/variable.js
+var require_variable3 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/variable.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      /*
+       * Reads a variable
+       *
+       * ```ebnf
+       *   variable ::= &? ...complex @todo
+       * ```
+       *
+       * Some samples of parsed code :
+       * ```php
+       *  &$var                      // simple var
+       *  $var                      // simple var
+       *  classname::CONST_NAME     // dynamic class name with const retrieval
+       *  foo()                     // function call
+       *  $var->func()->property    // chained calls
+       * ```
+       */
+      read_variable(read_only, encapsed) {
+        let result;
+        if (this.token === "&") {
+          return this.read_byref(
+            this.read_variable.bind(this, read_only, encapsed)
+          );
+        }
+        if (this.is([this.tok.T_VARIABLE, "$"])) {
+          result = this.read_reference_variable(encapsed);
+        } else if (this.is([
+          this.tok.T_NS_SEPARATOR,
+          this.tok.T_STRING,
+          this.tok.T_NAME_RELATIVE,
+          this.tok.T_NAME_QUALIFIED,
+          this.tok.T_NAME_FULLY_QUALIFIED,
+          this.tok.T_NAMESPACE
+        ])) {
+          result = this.node();
+          const name = this.read_namespace_name();
+          if (this.token != this.tok.T_DOUBLE_COLON && this.token != "(" && ["parentreference", "selfreference"].indexOf(name.kind) === -1) {
+            const literal2 = name.name.toLowerCase();
+            if (literal2 === "true") {
+              result = name.destroy(result("boolean", true, name.name));
+            } else if (literal2 === "false") {
+              result = name.destroy(result("boolean", false, name.name));
+            } else if (literal2 === "null") {
+              result = name.destroy(result("nullkeyword", name.name));
+            } else {
+              result.destroy(name);
+              result = name;
+            }
+          } else {
+            result.destroy(name);
+            result = name;
+          }
+        } else if (this.token === this.tok.T_STATIC) {
+          result = this.node("staticreference");
+          const raw = this.text();
+          this.next();
+          result = result(raw);
+        } else {
+          this.expect("VARIABLE");
+        }
+        if (this.token === this.tok.T_DOUBLE_COLON) {
+          result = this.read_static_getter(result, encapsed);
+        }
+        return this.recursive_variable_chain_scan(result, read_only, encapsed);
+      },
+      // resolves a static call
+      read_static_getter(what, encapsed) {
+        const result = this.node("staticlookup");
+        let offset, name;
+        if (this.next().is([this.tok.T_VARIABLE, "$"])) {
+          offset = this.read_reference_variable(encapsed);
+        } else if (this.token === this.tok.T_STRING || this.token === this.tok.T_CLASS || this.version >= 700 && this.is("IDENTIFIER")) {
+          offset = this.node("identifier");
+          name = this.text();
+          this.next();
+          offset = offset(name);
+        } else if (this.token === "{") {
+          offset = this.node("literal");
+          name = this.next().read_expr();
+          this.expect("}") && this.next();
+          offset = offset("literal", name, null);
+        } else {
+          this.error([this.tok.T_VARIABLE, this.tok.T_STRING]);
+          offset = this.node("identifier");
+          name = this.text();
+          this.next();
+          offset = offset(name);
+        }
+        return result(what, offset);
+      },
+      read_what(is_static_lookup = false) {
+        let what;
+        let name;
+        switch (this.next().token) {
+          case this.tok.T_STRING:
+            what = this.node("identifier");
+            name = this.text();
+            this.next();
+            what = what(name);
+            if (is_static_lookup && this.token === this.tok.T_OBJECT_OPERATOR) {
+              this.error();
+            }
+            break;
+          case this.tok.T_VARIABLE:
+            what = this.node("variable");
+            name = this.text().substring(1);
+            this.next();
+            what = what(name, false);
+            break;
+          case this.tok.T_CLASS:
+            if (!is_static_lookup) {
+              this.error();
+            }
+            what = this.node("identifier");
+            name = this.text();
+            this.next();
+            what = what(name, false);
+            break;
+          case "$":
+            what = this.node();
+            this.next().expect(["$", "{", this.tok.T_VARIABLE]);
+            if (this.token === "{") {
+              name = this.next().read_expr();
+              this.expect("}") && this.next();
+              what = what("variable", name, true);
+            } else {
+              name = this.read_expr();
+              what = what("variable", name, false);
+            }
+            break;
+          case "{":
+            what = this.node("encapsedpart");
+            name = this.next().read_expr();
+            this.expect("}") && this.next();
+            what = what(name, "complex", false);
+            break;
+          default:
+            this.error([this.tok.T_STRING, this.tok.T_VARIABLE, "$", "{"]);
+            what = this.node("identifier");
+            name = this.text();
+            this.next();
+            what = what(name);
+            break;
+        }
+        return what;
+      },
+      recursive_variable_chain_scan(result, read_only, encapsed) {
+        let node2, offset;
+        recursive_scan_loop: while (this.token != this.EOF) {
+          switch (this.token) {
+            case "(":
+              if (read_only) {
+                return result;
+              } else {
+                result = this.node("call")(result, this.read_argument_list());
+              }
+              break;
+            case "[":
+            case "{": {
+              const backet = this.token;
+              const isSquareBracket = backet === "[";
+              node2 = this.node("offsetlookup");
+              this.next();
+              offset = false;
+              if (encapsed) {
+                offset = this.read_encaps_var_offset();
+                this.expect(isSquareBracket ? "]" : "}") && this.next();
+              } else {
+                const isCallableVariable = isSquareBracket ? this.token !== "]" : this.token !== "}";
+                if (isCallableVariable) {
+                  offset = this.read_expr();
+                  this.expect(isSquareBracket ? "]" : "}") && this.next();
+                } else {
+                  this.next();
+                }
+              }
+              result = node2(result, offset);
+              break;
+            }
+            case this.tok.T_DOUBLE_COLON:
+              node2 = this.node("staticlookup");
+              result = node2(result, this.read_what(true));
+              break;
+            case this.tok.T_OBJECT_OPERATOR: {
+              node2 = this.node("propertylookup");
+              result = node2(result, this.read_what());
+              break;
+            }
+            case this.tok.T_NULLSAFE_OBJECT_OPERATOR: {
+              node2 = this.node("nullsafepropertylookup");
+              result = node2(result, this.read_what());
+              break;
+            }
+            default:
+              break recursive_scan_loop;
+          }
+        }
+        return result;
+      },
+      /*
+       * https://github.com/php/php-src/blob/493524454d66adde84e00d249d607ecd540de99f/Zend/zend_language_parser.y#L1231
+       */
+      read_encaps_var_offset() {
+        let offset = this.node();
+        if (this.token === this.tok.T_STRING) {
+          const text3 = this.text();
+          this.next();
+          offset = offset("identifier", text3);
+        } else if (this.token === this.tok.T_NUM_STRING) {
+          const num = this.text();
+          this.next();
+          offset = offset("number", num, null);
+        } else if (this.token === "-") {
+          this.next();
+          const num = -1 * this.text();
+          this.expect(this.tok.T_NUM_STRING) && this.next();
+          offset = offset("number", num, null);
+        } else if (this.token === this.tok.T_VARIABLE) {
+          const name = this.text().substring(1);
+          this.next();
+          offset = offset("variable", name, false);
+        } else {
+          this.expect([
+            this.tok.T_STRING,
+            this.tok.T_NUM_STRING,
+            "-",
+            this.tok.T_VARIABLE
+          ]);
+          const text3 = this.text();
+          this.next();
+          offset = offset("identifier", text3);
+        }
+        return offset;
+      },
+      /*
+       * ```ebnf
+       *  reference_variable ::=  simple_variable ('[' OFFSET ']')* | '{' EXPR '}'
+       * ```
+       * <code>
+       *  $foo[123];      // foo is an array ==> gets its entry
+       *  $foo{1};        // foo is a string ==> get the 2nd char offset
+       *  ${'foo'}[123];  // get the dynamic var $foo
+       *  $foo[123]{1};   // gets the 2nd char from the 123 array entry
+       * </code>
+       */
+      read_reference_variable(encapsed) {
+        let result = this.read_simple_variable();
+        let offset;
+        while (this.token != this.EOF) {
+          const node2 = this.node();
+          if (this.token == "{" && !encapsed) {
+            offset = this.next().read_expr();
+            this.expect("}") && this.next();
+            result = node2("offsetlookup", result, offset);
+          } else {
+            node2.destroy();
+            break;
+          }
+        }
+        return result;
+      },
+      /*
+       * ```ebnf
+       *  simple_variable ::= T_VARIABLE | '$' '{' expr '}' | '$' simple_variable
+       * ```
+       */
+      read_simple_variable() {
+        let result = this.node("variable");
+        let name;
+        if (this.expect([this.tok.T_VARIABLE, "$"]) && this.token === this.tok.T_VARIABLE) {
+          name = this.text().substring(1);
+          this.next();
+          result = result(name, false);
+        } else {
+          if (this.token === "$") this.next();
+          switch (this.token) {
+            case "{": {
+              const expr = this.next().read_expr();
+              this.expect("}") && this.next();
+              result = result(expr, true);
+              break;
+            }
+            case "$":
+              result = result(this.read_simple_variable(), false);
+              break;
+            case this.tok.T_VARIABLE: {
+              name = this.text().substring(1);
+              const node2 = this.node("variable");
+              this.next();
+              result = result(node2(name, false), false);
+              break;
+            }
+            default:
+              this.error(["{", "$", this.tok.T_VARIABLE]);
+              name = this.text();
+              this.next();
+              result = result(name, false);
+          }
+        }
+        return result;
+      }
+    };
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser.js
+var require_parser2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser.js"(exports2, module2) {
+    "use strict";
+    var Position = require_position2();
+    function isNumber(n) {
+      return n != "." && n != "," && !isNaN(parseFloat(n)) && isFinite(n);
+    }
+    var Parser = function(lexer, ast) {
+      this.lexer = lexer;
+      this.ast = ast;
+      this.tok = lexer.tok;
+      this.EOF = lexer.EOF;
+      this.token = null;
+      this.prev = null;
+      this.debug = false;
+      this.version = 803;
+      this.extractDoc = false;
+      this.extractTokens = false;
+      this.suppressErrors = false;
+      const mapIt = function(item) {
+        return [item, null];
+      };
+      this.entries = {
+        // reserved_non_modifiers
+        IDENTIFIER: new Map(
+          [
+            this.tok.T_ABSTRACT,
+            this.tok.T_ARRAY,
+            this.tok.T_AS,
+            this.tok.T_BREAK,
+            this.tok.T_CALLABLE,
+            this.tok.T_CASE,
+            this.tok.T_CATCH,
+            this.tok.T_CLASS,
+            this.tok.T_CLASS_C,
+            this.tok.T_CLONE,
+            this.tok.T_CONST,
+            this.tok.T_CONTINUE,
+            this.tok.T_DECLARE,
+            this.tok.T_DEFAULT,
+            this.tok.T_DIR,
+            this.tok.T_DO,
+            this.tok.T_ECHO,
+            this.tok.T_ELSE,
+            this.tok.T_ELSEIF,
+            this.tok.T_EMPTY,
+            this.tok.T_ENDDECLARE,
+            this.tok.T_ENDFOR,
+            this.tok.T_ENDFOREACH,
+            this.tok.T_ENDIF,
+            this.tok.T_ENDSWITCH,
+            this.tok.T_ENDWHILE,
+            this.tok.T_ENUM,
+            this.tok.T_EVAL,
+            this.tok.T_EXIT,
+            this.tok.T_EXTENDS,
+            this.tok.T_FILE,
+            this.tok.T_FINAL,
+            this.tok.T_FINALLY,
+            this.tok.T_FN,
+            this.tok.T_FOR,
+            this.tok.T_FOREACH,
+            this.tok.T_FUNC_C,
+            this.tok.T_FUNCTION,
+            this.tok.T_GLOBAL,
+            this.tok.T_GOTO,
+            this.tok.T_IF,
+            this.tok.T_IMPLEMENTS,
+            this.tok.T_INCLUDE,
+            this.tok.T_INCLUDE_ONCE,
+            this.tok.T_INSTANCEOF,
+            this.tok.T_INSTEADOF,
+            this.tok.T_INTERFACE,
+            this.tok.T_ISSET,
+            this.tok.T_LINE,
+            this.tok.T_LIST,
+            this.tok.T_LOGICAL_AND,
+            this.tok.T_LOGICAL_OR,
+            this.tok.T_LOGICAL_XOR,
+            this.tok.T_MATCH,
+            this.tok.T_METHOD_C,
+            this.tok.T_NAMESPACE,
+            this.tok.T_NEW,
+            this.tok.T_NS_C,
+            this.tok.T_PRINT,
+            this.tok.T_PRIVATE,
+            this.tok.T_PROTECTED,
+            this.tok.T_PUBLIC,
+            this.tok.T_READ_ONLY,
+            this.tok.T_REQUIRE,
+            this.tok.T_REQUIRE_ONCE,
+            this.tok.T_RETURN,
+            this.tok.T_STATIC,
+            this.tok.T_SWITCH,
+            this.tok.T_THROW,
+            this.tok.T_TRAIT,
+            this.tok.T_TRY,
+            this.tok.T_UNSET,
+            this.tok.T_USE,
+            this.tok.T_VAR,
+            this.tok.T_WHILE,
+            this.tok.T_YIELD
+          ].map(mapIt)
+        ),
+        VARIABLE: new Map(
+          [
+            this.tok.T_VARIABLE,
+            "$",
+            "&",
+            this.tok.T_STRING,
+            this.tok.T_NAME_RELATIVE,
+            this.tok.T_NAME_QUALIFIED,
+            this.tok.T_NAME_FULLY_QUALIFIED,
+            this.tok.T_NAMESPACE,
+            this.tok.T_STATIC
+          ].map(mapIt)
+        ),
+        SCALAR: new Map(
+          [
+            this.tok.T_CONSTANT_ENCAPSED_STRING,
+            this.tok.T_START_HEREDOC,
+            this.tok.T_LNUMBER,
+            this.tok.T_DNUMBER,
+            this.tok.T_ARRAY,
+            "[",
+            this.tok.T_CLASS_C,
+            this.tok.T_TRAIT_C,
+            this.tok.T_FUNC_C,
+            this.tok.T_METHOD_C,
+            this.tok.T_LINE,
+            this.tok.T_FILE,
+            this.tok.T_DIR,
+            this.tok.T_NS_C,
+            '"',
+            'b"',
+            'B"',
+            "-",
+            this.tok.T_NS_SEPARATOR
+          ].map(mapIt)
+        ),
+        T_MAGIC_CONST: new Map(
+          [
+            this.tok.T_CLASS_C,
+            this.tok.T_TRAIT_C,
+            this.tok.T_FUNC_C,
+            this.tok.T_METHOD_C,
+            this.tok.T_LINE,
+            this.tok.T_FILE,
+            this.tok.T_DIR,
+            this.tok.T_NS_C
+          ].map(mapIt)
+        ),
+        T_MEMBER_FLAGS: new Map(
+          [
+            this.tok.T_PUBLIC,
+            this.tok.T_PRIVATE,
+            this.tok.T_PROTECTED,
+            this.tok.T_STATIC,
+            this.tok.T_ABSTRACT,
+            this.tok.T_FINAL,
+            this.tok.T_READ_ONLY
+          ].map(mapIt)
+        ),
+        EOS: new Map([";", this.EOF, this.tok.T_INLINE_HTML].map(mapIt)),
+        EXPR: new Map(
+          [
+            "@",
+            "-",
+            "+",
+            "!",
+            "~",
+            "(",
+            "`",
+            this.tok.T_LIST,
+            this.tok.T_CLONE,
+            this.tok.T_INC,
+            this.tok.T_DEC,
+            this.tok.T_NEW,
+            this.tok.T_ISSET,
+            this.tok.T_EMPTY,
+            this.tok.T_MATCH,
+            this.tok.T_INCLUDE,
+            this.tok.T_INCLUDE_ONCE,
+            this.tok.T_REQUIRE,
+            this.tok.T_REQUIRE_ONCE,
+            this.tok.T_EVAL,
+            this.tok.T_INT_CAST,
+            this.tok.T_DOUBLE_CAST,
+            this.tok.T_STRING_CAST,
+            this.tok.T_ARRAY_CAST,
+            this.tok.T_OBJECT_CAST,
+            this.tok.T_BOOL_CAST,
+            this.tok.T_UNSET_CAST,
+            this.tok.T_EXIT,
+            this.tok.T_PRINT,
+            this.tok.T_YIELD,
+            this.tok.T_STATIC,
+            this.tok.T_FUNCTION,
+            this.tok.T_FN,
+            // using VARIABLES :
+            this.tok.T_VARIABLE,
+            "$",
+            this.tok.T_NS_SEPARATOR,
+            this.tok.T_STRING,
+            this.tok.T_NAME_RELATIVE,
+            this.tok.T_NAME_QUALIFIED,
+            this.tok.T_NAME_FULLY_QUALIFIED,
+            // using SCALAR :
+            this.tok.T_STRING,
+            // @see variable.js line 45 > conflict with variable = shift/reduce :)
+            this.tok.T_CONSTANT_ENCAPSED_STRING,
+            this.tok.T_START_HEREDOC,
+            this.tok.T_LNUMBER,
+            this.tok.T_DNUMBER,
+            this.tok.T_ARRAY,
+            "[",
+            this.tok.T_CLASS_C,
+            this.tok.T_TRAIT_C,
+            this.tok.T_FUNC_C,
+            this.tok.T_METHOD_C,
+            this.tok.T_LINE,
+            this.tok.T_FILE,
+            this.tok.T_DIR,
+            this.tok.T_NS_C,
+            '"',
+            'b"',
+            'B"',
+            "-",
+            this.tok.T_NS_SEPARATOR
+          ].map(mapIt)
+        )
+      };
+    };
+    Parser.prototype.getTokenName = function(token) {
+      if (!isNumber(token)) {
+        return "'" + token + "'";
+      } else {
+        if (token == this.EOF) return "the end of file (EOF)";
+        return this.lexer.engine.tokens.values[token];
+      }
+    };
+    Parser.prototype.parse = function(code, filename) {
+      this._errors = [];
+      this.filename = filename || "eval";
+      this.currentNamespace = [""];
+      if (this.extractDoc) {
+        this._docs = [];
+      } else {
+        this._docs = null;
+      }
+      if (this.extractTokens) {
+        this._tokens = [];
+      } else {
+        this._tokens = null;
+      }
+      this._docIndex = 0;
+      this._lastNode = null;
+      this.lexer.setInput(code);
+      this.lexer.all_tokens = this.extractTokens;
+      this.lexer.comment_tokens = this.extractDoc;
+      this.length = this.lexer._input.length;
+      this.innerList = false;
+      this.innerListForm = false;
+      const program = this.node("program");
+      const childs = [];
+      this.next();
+      while (this.token != this.EOF) {
+        childs.push(this.read_start());
+      }
+      if (childs.length === 0 && this.extractDoc && this._docs.length > this._docIndex) {
+        childs.push(this.node("noop")());
+      }
+      this.prev = [
+        this.lexer.yylloc.last_line,
+        this.lexer.yylloc.last_column,
+        this.lexer.offset
+      ];
+      const result = program(childs, this._errors, this._docs, this._tokens);
+      if (this.debug) {
+        const errors = this.ast.checkNodes();
+        if (errors.length > 0) {
+          errors.forEach(function(error62) {
+            if (error62.position) {
+              console.log(
+                "Node at line " + error62.position.line + ", column " + error62.position.column
+              );
+            }
+            console.log(error62.stack.join("\n"));
+          });
+          throw new Error("Some nodes are not closed");
+        }
+      }
+      return result;
+    };
+    Parser.prototype.raiseError = function(message, msgExpect, expect, token) {
+      message += " on line " + this.lexer.yylloc.first_line;
+      if (!this.suppressErrors) {
+        const err = new SyntaxError(
+          message,
+          this.filename,
+          this.lexer.yylloc.first_line
+        );
+        err.lineNumber = this.lexer.yylloc.first_line;
+        err.fileName = this.filename;
+        err.columnNumber = this.lexer.yylloc.first_column;
+        throw err;
+      }
+      const savedPrev = this.prev;
+      this.prev = [
+        this.lexer.yylloc.last_line,
+        this.lexer.yylloc.last_column,
+        this.lexer.offset
+      ];
+      const node2 = this.ast.prepare("error", null, this)(
+        message,
+        token,
+        this.lexer.yylloc.first_line,
+        expect
+      );
+      this.prev = savedPrev;
+      this._errors.push(node2);
+      return node2;
+    };
+    Parser.prototype.error = function(expect) {
+      let msg = "Parse Error : syntax error";
+      let token = this.getTokenName(this.token);
+      let msgExpect = "";
+      if (this.token !== this.EOF) {
+        if (isNumber(this.token)) {
+          let symbol2 = this.text();
+          if (symbol2.length > 10) {
+            symbol2 = symbol2.substring(0, 7) + "...";
+          }
+          token = "'" + symbol2 + "' (" + token + ")";
+        }
+        msg += ", unexpected " + token;
+      }
+      if (expect && !Array.isArray(expect)) {
+        if (isNumber(expect) || expect.length === 1) {
+          msgExpect = ", expecting " + this.getTokenName(expect);
+        }
+        msg += msgExpect;
+      }
+      return this.raiseError(msg, msgExpect, expect, token);
+    };
+    Parser.prototype.position = function() {
+      return new Position(
+        this.lexer.yylloc.first_line,
+        this.lexer.yylloc.first_column,
+        this.lexer.yylloc.first_offset
+      );
+    };
+    Parser.prototype.node = function(name) {
+      if (this.extractDoc) {
+        let docs = null;
+        if (this._docIndex < this._docs.length) {
+          docs = this._docs.slice(this._docIndex);
+          this._docIndex = this._docs.length;
+          if (this.debug) {
+            console.log(new Error("Append docs on " + name));
+            console.log(docs);
+          }
+        }
+        const node2 = this.ast.prepare(name, docs, this);
+        node2.postBuild = function(self) {
+          if (this._docIndex < this._docs.length) {
+            if (this._lastNode) {
+              const offset = this.prev[2];
+              let max = this._docIndex;
+              for (; max < this._docs.length; max++) {
+                if (this._docs[max].offset > offset) {
+                  break;
+                }
+              }
+              if (max > this._docIndex) {
+                this._lastNode.setTrailingComments(
+                  this._docs.slice(this._docIndex, max)
+                );
+                this._docIndex = max;
+              }
+            } else if (this.token === this.EOF) {
+              self.setTrailingComments(this._docs.slice(this._docIndex));
+              this._docIndex = this._docs.length;
+            }
+          }
+          this._lastNode = self;
+        }.bind(this);
+        return node2;
+      }
+      return this.ast.prepare(name, null, this);
+    };
+    Parser.prototype.expectEndOfStatement = function(node2) {
+      if (this.token === ";") {
+        if (node2 && this.lexer.yytext === ";") {
+          node2.includeToken(this);
+        }
+      } else if (this.token !== this.tok.T_INLINE_HTML && this.token !== this.EOF) {
+        this.error(";");
+        return false;
+      }
+      this.next();
+      return true;
+    };
+    var ignoreStack = ["parser.next", "parser.node", "parser.showlog"];
+    Parser.prototype.showlog = function() {
+      const stack = new Error().stack.split("\n");
+      let line;
+      for (let offset = 2; offset < stack.length; offset++) {
+        line = stack[offset].trim();
+        let found = false;
+        for (let i = 0; i < ignoreStack.length; i++) {
+          if (line.substring(3, 3 + ignoreStack[i].length) === ignoreStack[i]) {
+            found = true;
+            break;
+          }
+        }
+        if (!found) {
+          break;
+        }
+      }
+      console.log(
+        "Line " + this.lexer.yylloc.first_line + " : " + this.getTokenName(this.token) + ">" + this.lexer.yytext + "< @-->" + line
+      );
+      return this;
+    };
+    Parser.prototype.expect = function(token) {
+      if (Array.isArray(token)) {
+        if (token.indexOf(this.token) === -1) {
+          this.error(token);
+          return false;
+        }
+      } else if (this.token != token) {
+        this.error(token);
+        return false;
+      }
+      return true;
+    };
+    Parser.prototype.text = function() {
+      return this.lexer.yytext;
+    };
+    Parser.prototype.next = function() {
+      if (this.token !== ";" || this.lexer.yytext === ";") {
+        this.prev = [
+          this.lexer.yylloc.last_line,
+          this.lexer.yylloc.last_column,
+          this.lexer.offset
+        ];
+      }
+      this.lex();
+      if (this.debug) {
+        this.showlog();
+      }
+      if (this.extractDoc) {
+        while (this.token === this.tok.T_COMMENT || this.token === this.tok.T_DOC_COMMENT) {
+          if (this.token === this.tok.T_COMMENT) {
+            this._docs.push(this.read_comment());
+          } else {
+            this._docs.push(this.read_doc_comment());
+          }
+        }
+      }
+      return this;
+    };
+    Parser.prototype.peek = function() {
+      const lexerState = this.lexer.getState();
+      const nextToken = this.lexer.lex();
+      this.lexer.setState(lexerState);
+      return nextToken;
+    };
+    Parser.prototype.lex = function() {
+      if (this.extractTokens) {
+        do {
+          this.token = this.lexer.lex() || /* istanbul ignore next */
+          this.EOF;
+          if (this.token === this.EOF) return this;
+          let entry = this.lexer.yytext;
+          if (Object.prototype.hasOwnProperty.call(
+            this.lexer.engine.tokens.values,
+            this.token
+          )) {
+            entry = [
+              this.lexer.engine.tokens.values[this.token],
+              entry,
+              this.lexer.yylloc.first_line,
+              this.lexer.yylloc.first_offset,
+              this.lexer.offset
+            ];
+          } else {
+            entry = [
+              null,
+              entry,
+              this.lexer.yylloc.first_line,
+              this.lexer.yylloc.first_offset,
+              this.lexer.offset
+            ];
+          }
+          this._tokens.push(entry);
+          if (this.token === this.tok.T_CLOSE_TAG) {
+            this.token = ";";
+            return this;
+          } else if (this.token === this.tok.T_OPEN_TAG_WITH_ECHO) {
+            this.token = this.tok.T_ECHO;
+            return this;
+          }
+        } while (this.token === this.tok.T_WHITESPACE || // ignore white space
+        !this.extractDoc && (this.token === this.tok.T_COMMENT || // ignore single lines comments
+        this.token === this.tok.T_DOC_COMMENT) || // ignore doc comments
+        // ignore open tags
+        this.token === this.tok.T_OPEN_TAG);
+      } else {
+        this.token = this.lexer.lex() || /* istanbul ignore next */
+        this.EOF;
+      }
+      return this;
+    };
+    Parser.prototype.is = function(type) {
+      if (Array.isArray(type)) {
+        return type.indexOf(this.token) !== -1;
+      }
+      return this.entries[type].has(this.token);
+    };
+    [
+      require_array3(),
+      require_class3(),
+      require_comment3(),
+      require_expr2(),
+      require_enum3(),
+      require_function3(),
+      require_if3(),
+      require_loops2(),
+      require_main2(),
+      require_namespace3(),
+      require_scalar2(),
+      require_statement3(),
+      require_switch3(),
+      require_try3(),
+      require_utils4(),
+      require_variable3()
+    ].forEach(function(ext) {
+      for (const k2 in ext) {
+        if (Object.prototype.hasOwnProperty.call(Parser.prototype, k2)) {
+          throw new Error("Function " + k2 + " is already defined - collision");
+        }
+        Parser.prototype[k2] = ext[k2];
+      }
+    });
+    module2.exports = Parser;
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/tokens.js
+var require_tokens4 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/tokens.js"(exports2, module2) {
+    "use strict";
+    var TokenNames = {
+      T_HALT_COMPILER: 101,
+      T_USE: 102,
+      T_ENCAPSED_AND_WHITESPACE: 103,
+      T_OBJECT_OPERATOR: 104,
+      T_STRING: 105,
+      T_DOLLAR_OPEN_CURLY_BRACES: 106,
+      T_STRING_VARNAME: 107,
+      T_CURLY_OPEN: 108,
+      T_NUM_STRING: 109,
+      T_ISSET: 110,
+      T_EMPTY: 111,
+      T_INCLUDE: 112,
+      T_INCLUDE_ONCE: 113,
+      T_EVAL: 114,
+      T_REQUIRE: 115,
+      T_REQUIRE_ONCE: 116,
+      T_NAMESPACE: 117,
+      T_NS_SEPARATOR: 118,
+      T_AS: 119,
+      T_IF: 120,
+      T_ENDIF: 121,
+      T_WHILE: 122,
+      T_DO: 123,
+      T_FOR: 124,
+      T_SWITCH: 125,
+      T_BREAK: 126,
+      T_CONTINUE: 127,
+      T_RETURN: 128,
+      T_GLOBAL: 129,
+      T_STATIC: 130,
+      T_ECHO: 131,
+      T_INLINE_HTML: 132,
+      T_UNSET: 133,
+      T_FOREACH: 134,
+      T_DECLARE: 135,
+      T_TRY: 136,
+      T_THROW: 137,
+      T_GOTO: 138,
+      T_FINALLY: 139,
+      T_CATCH: 140,
+      T_ENDDECLARE: 141,
+      T_LIST: 142,
+      T_CLONE: 143,
+      T_PLUS_EQUAL: 144,
+      T_MINUS_EQUAL: 145,
+      T_MUL_EQUAL: 146,
+      T_DIV_EQUAL: 147,
+      T_CONCAT_EQUAL: 148,
+      T_MOD_EQUAL: 149,
+      T_AND_EQUAL: 150,
+      T_OR_EQUAL: 151,
+      T_XOR_EQUAL: 152,
+      T_SL_EQUAL: 153,
+      T_SR_EQUAL: 154,
+      T_INC: 155,
+      T_DEC: 156,
+      T_BOOLEAN_OR: 157,
+      T_BOOLEAN_AND: 158,
+      T_LOGICAL_OR: 159,
+      T_LOGICAL_AND: 160,
+      T_LOGICAL_XOR: 161,
+      T_SL: 162,
+      T_SR: 163,
+      T_IS_IDENTICAL: 164,
+      T_IS_NOT_IDENTICAL: 165,
+      T_IS_EQUAL: 166,
+      T_IS_NOT_EQUAL: 167,
+      T_IS_SMALLER_OR_EQUAL: 168,
+      T_IS_GREATER_OR_EQUAL: 169,
+      T_INSTANCEOF: 170,
+      T_INT_CAST: 171,
+      T_DOUBLE_CAST: 172,
+      T_STRING_CAST: 173,
+      T_ARRAY_CAST: 174,
+      T_OBJECT_CAST: 175,
+      T_BOOL_CAST: 176,
+      T_UNSET_CAST: 177,
+      T_EXIT: 178,
+      T_PRINT: 179,
+      T_YIELD: 180,
+      T_YIELD_FROM: 181,
+      T_FUNCTION: 182,
+      T_DOUBLE_ARROW: 183,
+      T_DOUBLE_COLON: 184,
+      T_ARRAY: 185,
+      T_CALLABLE: 186,
+      T_CLASS: 187,
+      T_ABSTRACT: 188,
+      T_TRAIT: 189,
+      T_FINAL: 190,
+      T_EXTENDS: 191,
+      T_INTERFACE: 192,
+      T_IMPLEMENTS: 193,
+      T_VAR: 194,
+      T_PUBLIC: 195,
+      T_PROTECTED: 196,
+      T_PRIVATE: 197,
+      T_CONST: 198,
+      T_NEW: 199,
+      T_INSTEADOF: 200,
+      T_ELSEIF: 201,
+      T_ELSE: 202,
+      T_ENDSWITCH: 203,
+      T_CASE: 204,
+      T_DEFAULT: 205,
+      T_ENDFOR: 206,
+      T_ENDFOREACH: 207,
+      T_ENDWHILE: 208,
+      T_CONSTANT_ENCAPSED_STRING: 209,
+      T_LNUMBER: 210,
+      T_DNUMBER: 211,
+      T_LINE: 212,
+      T_FILE: 213,
+      T_DIR: 214,
+      T_TRAIT_C: 215,
+      T_METHOD_C: 216,
+      T_FUNC_C: 217,
+      T_NS_C: 218,
+      T_START_HEREDOC: 219,
+      T_END_HEREDOC: 220,
+      T_CLASS_C: 221,
+      T_VARIABLE: 222,
+      T_OPEN_TAG: 223,
+      T_OPEN_TAG_WITH_ECHO: 224,
+      T_CLOSE_TAG: 225,
+      T_WHITESPACE: 226,
+      T_COMMENT: 227,
+      T_DOC_COMMENT: 228,
+      T_ELLIPSIS: 229,
+      T_COALESCE: 230,
+      T_POW: 231,
+      T_POW_EQUAL: 232,
+      T_SPACESHIP: 233,
+      T_COALESCE_EQUAL: 234,
+      T_FN: 235,
+      T_NULLSAFE_OBJECT_OPERATOR: 236,
+      T_MATCH: 237,
+      T_ATTRIBUTE: 238,
+      T_ENUM: 239,
+      T_READ_ONLY: 240,
+      T_NAME_RELATIVE: 241,
+      T_NAME_QUALIFIED: 242,
+      T_NAME_FULLY_QUALIFIED: 243,
+      T_PIPE: 244
+    };
+    var tokens = {
+      values: Object.entries(TokenNames).reduce(
+        (result, [key, value]) => ({ ...result, [value]: key }),
+        {}
+      ),
+      names: TokenNames
+    };
+    module2.exports = Object.freeze(tokens);
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/location.js
+var require_location2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/location.js"(exports2, module2) {
+    "use strict";
+    var Location = function(source, start, end) {
+      this.source = source;
+      this.start = start;
+      this.end = end;
+    };
+    module2.exports = Location;
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/node.js
+var require_node3 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/node.js"(exports2, module2) {
+    "use strict";
+    var Node = function Node2(kind, docs, location) {
+      this.kind = kind;
+      if (docs) {
+        this.leadingComments = docs;
+      }
+      if (location) {
+        this.loc = location;
+      }
+    };
+    Node.prototype.setTrailingComments = function(docs) {
+      this.trailingComments = docs;
+    };
+    Node.prototype.destroy = function(node2) {
+      if (!node2) {
+        throw new Error(
+          "Node already initialized, you must swap with another node"
+        );
+      }
+      if (this.leadingComments) {
+        if (node2.leadingComments) {
+          node2.leadingComments = Array.concat(
+            this.leadingComments,
+            node2.leadingComments
+          );
+        } else {
+          node2.leadingComments = this.leadingComments;
+        }
+      }
+      if (this.trailingComments) {
+        if (node2.trailingComments) {
+          node2.trailingComments = Array.concat(
+            this.trailingComments,
+            node2.trailingComments
+          );
+        } else {
+          node2.trailingComments = this.trailingComments;
+        }
+      }
+      return node2;
+    };
+    Node.prototype.includeToken = function(parser3) {
+      if (this.loc) {
+        if (this.loc.end) {
+          this.loc.end.line = parser3.lexer.yylloc.last_line;
+          this.loc.end.column = parser3.lexer.yylloc.last_column;
+          this.loc.end.offset = parser3.lexer.offset;
+        }
+        if (parser3.ast.withSource) {
+          this.loc.source = parser3.lexer._input.substring(
+            this.loc.start.offset,
+            parser3.lexer.offset
+          );
+        }
+      }
+      return this;
+    };
+    Node.extends = function(type, constructor) {
+      constructor.prototype = Object.create(this.prototype);
+      constructor.extends = this.extends;
+      constructor.prototype.constructor = constructor;
+      constructor.kind = type;
+      return constructor;
+    };
+    module2.exports = Node;
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/expression.js
+var require_expression2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/expression.js"(exports2, module2) {
+    "use strict";
+    var Node = require_node3();
+    var KIND = "expression";
+    module2.exports = Node.extends(KIND, function Expression(kind, docs, location) {
+      Node.apply(this, [kind || KIND, docs, location]);
+    });
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/array.js
+var require_array4 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/array.js"(exports2, module2) {
+    "use strict";
+    var Expr = require_expression2();
+    var KIND = "array";
+    module2.exports = Expr.extends(
+      KIND,
+      function Array2(shortForm, items, docs, location) {
+        Expr.apply(this, [KIND, docs, location]);
+        this.items = items;
+        this.shortForm = shortForm;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/arrowfunc.js
+var require_arrowfunc2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/arrowfunc.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression2();
+    var KIND = "arrowfunc";
+    module2.exports = Expression.extends(
+      KIND,
+      function Closure(args, byref, body, type, nullable2, isStatic, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.arguments = args;
+        this.byref = byref;
+        this.body = body;
+        this.type = type;
+        this.nullable = nullable2;
+        this.isStatic = isStatic || false;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/assign.js
+var require_assign2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/assign.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression2();
+    var KIND = "assign";
+    module2.exports = Expression.extends(
+      KIND,
+      function Assign(left, right, operator, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.left = left;
+        this.right = right;
+        this.operator = operator;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/assignref.js
+var require_assignref2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/assignref.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression2();
+    var KIND = "assignref";
+    module2.exports = Expression.extends(
+      KIND,
+      function AssignRef(left, right, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.left = left;
+        this.right = right;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/attribute.js
+var require_attribute4 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/attribute.js"(exports2, module2) {
+    "use strict";
+    var Node = require_node3();
+    var KIND = "attribute";
+    module2.exports = Node.extends(
+      KIND,
+      function Attribute(name, args, docs, location) {
+        Node.apply(this, [KIND, docs, location]);
+        this.name = name;
+        this.args = args;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/attrgroup.js
+var require_attrgroup2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/attrgroup.js"(exports2, module2) {
+    "use strict";
+    var Node = require_node3();
+    var KIND = "attrgroup";
+    module2.exports = Node.extends(KIND, function AttrGroup(attrs, docs, location) {
+      Node.apply(this, [KIND, docs, location]);
+      this.attrs = attrs || [];
+    });
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/operation.js
+var require_operation2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/operation.js"(exports2, module2) {
+    "use strict";
+    var Expr = require_expression2();
+    var KIND = "operation";
+    module2.exports = Expr.extends(KIND, function Operation(kind, docs, location) {
+      Expr.apply(this, [kind || KIND, docs, location]);
+    });
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/bin.js
+var require_bin2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/bin.js"(exports2, module2) {
+    "use strict";
+    var Operation = require_operation2();
+    var KIND = "bin";
+    module2.exports = Operation.extends(
+      KIND,
+      function Bin(type, left, right, docs, location) {
+        Operation.apply(this, [KIND, docs, location]);
+        this.type = type;
+        this.left = left;
+        this.right = right;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/statement.js
+var require_statement4 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/statement.js"(exports2, module2) {
+    "use strict";
+    var Node = require_node3();
+    var KIND = "statement";
+    module2.exports = Node.extends(KIND, function Statement(kind, docs, location) {
+      Node.apply(this, [kind || KIND, docs, location]);
+    });
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/block.js
+var require_block2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/block.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement4();
+    var KIND = "block";
+    module2.exports = Statement.extends(
+      KIND,
+      function Block(kind, children, docs, location) {
+        Statement.apply(this, [kind || KIND, docs, location]);
+        this.children = children.filter(Boolean);
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/literal.js
+var require_literal2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/literal.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression2();
+    var KIND = "literal";
+    module2.exports = Expression.extends(
+      KIND,
+      function Literal(kind, value, raw, docs, location) {
+        Expression.apply(this, [kind || KIND, docs, location]);
+        this.value = value;
+        if (raw) {
+          this.raw = raw;
+        }
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/boolean.js
+var require_boolean2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/boolean.js"(exports2, module2) {
+    "use strict";
+    var Literal = require_literal2();
+    var KIND = "boolean";
+    module2.exports = Literal.extends(
+      KIND,
+      function Boolean2(value, raw, docs, location) {
+        Literal.apply(this, [KIND, value, raw, docs, location]);
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/break.js
+var require_break2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/break.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement4();
+    var KIND = "break";
+    module2.exports = Statement.extends(KIND, function Break(level, docs, location) {
+      Statement.apply(this, [KIND, docs, location]);
+      this.level = level;
+    });
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/byref.js
+var require_byref2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/byref.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression2();
+    var KIND = "byref";
+    module2.exports = Expression.extends(KIND, function ByRef(what, docs, location) {
+      Expression.apply(this, [KIND, docs, location]);
+      this.what = what;
+    });
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/call.js
+var require_call2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/call.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression2();
+    var KIND = "call";
+    module2.exports = Expression.extends(
+      KIND,
+      function Call(what, args, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.what = what;
+        this.arguments = args;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/case.js
+var require_case2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/case.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement4();
+    var KIND = "case";
+    module2.exports = Statement.extends(
+      KIND,
+      function Case(test, body, docs, location) {
+        Statement.apply(this, [KIND, docs, location]);
+        this.test = test;
+        this.body = body;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/cast.js
+var require_cast2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/cast.js"(exports2, module2) {
+    "use strict";
+    var Operation = require_operation2();
+    var KIND = "cast";
+    module2.exports = Operation.extends(
+      KIND,
+      function Cast(type, raw, expr, docs, location) {
+        Operation.apply(this, [KIND, docs, location]);
+        this.type = type;
+        this.raw = raw;
+        this.expr = expr;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/catch.js
+var require_catch2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/catch.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement4();
+    var KIND = "catch";
+    module2.exports = Statement.extends(
+      KIND,
+      function Catch(body, what, variable, docs, location) {
+        Statement.apply(this, [KIND, docs, location]);
+        this.body = body;
+        this.what = what;
+        this.variable = variable;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/declaration.js
+var require_declaration2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/declaration.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement4();
+    var KIND = "declaration";
+    var IS_UNDEFINED = "";
+    var IS_PUBLIC = "public";
+    var IS_PROTECTED = "protected";
+    var IS_PRIVATE = "private";
+    var VISIBILITY_MAP = [IS_PUBLIC, IS_PROTECTED, IS_PRIVATE];
+    var Declaration = Statement.extends(
+      KIND,
+      function Declaration2(kind, name, docs, location) {
+        Statement.apply(this, [kind || KIND, docs, location]);
+        this.name = name;
+      }
+    );
+    Declaration.prototype.parseFlags = function(flags) {
+      this.isAbstract = flags[2] === 1;
+      this.isFinal = flags[2] === 2;
+      this.isReadonly = flags[3] === 1;
+      if (this.kind !== "class") {
+        const [getVis, setVis] = flags[0];
+        if (getVis === -1) {
+          this.visibility = IS_UNDEFINED;
+        } else if (getVis === null) {
+          this.visibility = null;
+        } else {
+          this.visibility = VISIBILITY_MAP[getVis];
+        }
+        this.isStatic = flags[1] === 1;
+        this.visibilitySet = setVis !== -1 ? VISIBILITY_MAP[setVis] : null;
+      }
+    };
+    module2.exports = Declaration;
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/class.js
+var require_class4 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/class.js"(exports2, module2) {
+    "use strict";
+    var Declaration = require_declaration2();
+    var KIND = "class";
+    module2.exports = Declaration.extends(
+      KIND,
+      function Class2(name, ext, impl, body, flags, docs, location) {
+        Declaration.apply(this, [KIND, name, docs, location]);
+        this.isAnonymous = name ? false : true;
+        this.extends = ext;
+        this.implements = impl;
+        this.body = body;
+        this.attrGroups = [];
+        this.parseFlags(flags);
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/constantstatement.js
+var require_constantstatement2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/constantstatement.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement4();
+    var KIND = "constantstatement";
+    module2.exports = Statement.extends(
+      KIND,
+      function ConstantStatement(kind, constants, docs, location) {
+        Statement.apply(this, [kind || KIND, docs, location]);
+        this.constants = constants;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/classconstant.js
+var require_classconstant2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/classconstant.js"(exports2, module2) {
+    "use strict";
+    var ConstantStatement = require_constantstatement2();
+    var KIND = "classconstant";
+    var IS_UNDEFINED = "";
+    var IS_PUBLIC = "public";
+    var IS_PROTECTED = "protected";
+    var IS_PRIVATE = "private";
+    var ClassConstant = ConstantStatement.extends(
+      KIND,
+      function ClassConstant2(kind, constants, flags, nullable2, type, attrGroups, docs, location) {
+        ConstantStatement.apply(this, [kind || KIND, constants, docs, location]);
+        this.parseFlags(flags);
+        this.nullable = nullable2;
+        this.type = type;
+        this.attrGroups = attrGroups;
+      }
+    );
+    ClassConstant.prototype.parseFlags = function(flags) {
+      const getVis = flags[0][0];
+      if (getVis === -1) {
+        this.visibility = IS_UNDEFINED;
+      } else if (getVis === null) {
+        this.visibility = null;
+      } else if (getVis === 0) {
+        this.visibility = IS_PUBLIC;
+      } else if (getVis === 1) {
+        this.visibility = IS_PROTECTED;
+      } else if (getVis === 2) {
+        this.visibility = IS_PRIVATE;
+      }
+      this.final = flags[2] === 2;
+    };
+    module2.exports = ClassConstant;
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/clone.js
+var require_clone2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/clone.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression2();
+    var KIND = "clone";
+    module2.exports = Expression.extends(
+      KIND,
+      function Clone(what, properties, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.what = what;
+        if (properties) {
+          this.properties = properties;
+        }
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/closure.js
+var require_closure2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/closure.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression2();
+    var KIND = "closure";
+    module2.exports = Expression.extends(
+      KIND,
+      function Closure(args, byref, uses, type, nullable2, isStatic, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.uses = uses;
+        this.arguments = args;
+        this.byref = byref;
+        this.type = type;
+        this.nullable = nullable2;
+        this.isStatic = isStatic || false;
+        this.body = null;
+        this.attrGroups = [];
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/comment.js
+var require_comment4 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/comment.js"(exports2, module2) {
+    "use strict";
+    var Node = require_node3();
+    module2.exports = Node.extends(
+      "comment",
+      function Comment(kind, value, docs, location) {
+        Node.apply(this, [kind, docs, location]);
+        this.value = value;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/commentblock.js
+var require_commentblock2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/commentblock.js"(exports2, module2) {
+    "use strict";
+    var Comment = require_comment4();
+    var KIND = "commentblock";
+    module2.exports = Comment.extends(
+      KIND,
+      function CommentBlock(value, docs, location) {
+        Comment.apply(this, [KIND, value, docs, location]);
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/commentline.js
+var require_commentline2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/commentline.js"(exports2, module2) {
+    "use strict";
+    var Comment = require_comment4();
+    var KIND = "commentline";
+    module2.exports = Comment.extends(
+      KIND,
+      function CommentLine(value, docs, location) {
+        Comment.apply(this, [KIND, value, docs, location]);
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/constant.js
+var require_constant2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/constant.js"(exports2, module2) {
+    "use strict";
+    var Node = require_node3();
+    var KIND = "constant";
+    module2.exports = Node.extends(
+      KIND,
+      function Constant(name, value, docs, location) {
+        Node.apply(this, [KIND, docs, location]);
+        this.name = name;
+        this.value = value;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/continue.js
+var require_continue2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/continue.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement4();
+    var KIND = "continue";
+    module2.exports = Statement.extends(
+      KIND,
+      function Continue(level, docs, location) {
+        Statement.apply(this, [KIND, docs, location]);
+        this.level = level;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/declare.js
+var require_declare2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/declare.js"(exports2, module2) {
+    "use strict";
+    var Block = require_block2();
+    var KIND = "declare";
+    var Declare = Block.extends(
+      KIND,
+      function Declare2(directives, body, mode, docs, location) {
+        Block.apply(this, [KIND, body, docs, location]);
+        this.directives = directives;
+        this.mode = mode;
+      }
+    );
+    Declare.MODE_SHORT = "short";
+    Declare.MODE_BLOCK = "block";
+    Declare.MODE_NONE = "none";
+    module2.exports = Declare;
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/declaredirective.js
+var require_declaredirective2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/declaredirective.js"(exports2, module2) {
+    "use strict";
+    var Node = require_node3();
+    var KIND = "declaredirective";
+    module2.exports = Node.extends(
+      KIND,
+      function DeclareDirective(key, value, docs, location) {
+        Node.apply(this, [KIND, docs, location]);
+        this.key = key;
+        this.value = value;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/do.js
+var require_do2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/do.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement4();
+    var KIND = "do";
+    module2.exports = Statement.extends(
+      KIND,
+      function Do(test, body, docs, location) {
+        Statement.apply(this, [KIND, docs, location]);
+        this.test = test;
+        this.body = body;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/echo.js
+var require_echo2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/echo.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement4();
+    var KIND = "echo";
+    module2.exports = Statement.extends(
+      KIND,
+      function Echo(expressions, shortForm, docs, location) {
+        Statement.apply(this, [KIND, docs, location]);
+        this.shortForm = shortForm;
+        this.expressions = expressions;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/empty.js
+var require_empty2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/empty.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression2();
+    var KIND = "empty";
+    module2.exports = Expression.extends(
+      KIND,
+      function Empty(expression, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.expression = expression;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/encapsed.js
+var require_encapsed2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/encapsed.js"(exports2, module2) {
+    "use strict";
+    var Literal = require_literal2();
+    var KIND = "encapsed";
+    var Encapsed = Literal.extends(
+      KIND,
+      function Encapsed2(value, raw, type, docs, location) {
+        Literal.apply(this, [KIND, value, raw, docs, location]);
+        this.type = type;
+      }
+    );
+    Encapsed.TYPE_STRING = "string";
+    Encapsed.TYPE_SHELL = "shell";
+    Encapsed.TYPE_HEREDOC = "heredoc";
+    Encapsed.TYPE_OFFSET = "offset";
+    module2.exports = Encapsed;
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/encapsedpart.js
+var require_encapsedpart2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/encapsedpart.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression2();
+    var KIND = "encapsedpart";
+    module2.exports = Expression.extends(
+      KIND,
+      function EncapsedPart(expression, syntax, curly, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.expression = expression;
+        this.syntax = syntax;
+        this.curly = curly;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/entry.js
+var require_entry2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/entry.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression2();
+    var KIND = "entry";
+    module2.exports = Expression.extends(
+      KIND,
+      function Entry(key, value, byRef, unpack, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.key = key;
+        this.value = value;
+        this.byRef = byRef;
+        this.unpack = unpack;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/enum.js
+var require_enum4 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/enum.js"(exports2, module2) {
+    "use strict";
+    var Declaration = require_declaration2();
+    var KIND = "enum";
+    module2.exports = Declaration.extends(
+      KIND,
+      function Enum(name, valueType, impl, body, docs, location) {
+        Declaration.apply(this, [KIND, name, docs, location]);
+        this.valueType = valueType;
+        this.implements = impl;
+        this.body = body;
+        this.attrGroups = [];
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/enumcase.js
+var require_enumcase2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/enumcase.js"(exports2, module2) {
+    "use strict";
+    var Node = require_node3();
+    var KIND = "enumcase";
+    module2.exports = Node.extends(
+      KIND,
+      function EnumCase(name, value, docs, location) {
+        Node.apply(this, [KIND, docs, location]);
+        this.name = name;
+        this.value = value;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/error.js
+var require_error2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/error.js"(exports2, module2) {
+    "use strict";
+    var Node = require_node3();
+    var KIND = "error";
+    module2.exports = Node.extends(
+      KIND,
+      function Error2(message, token, line, expected, docs, location) {
+        Node.apply(this, [KIND, docs, location]);
+        this.message = message;
+        this.token = token;
+        this.line = line;
+        this.expected = expected;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/eval.js
+var require_eval2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/eval.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression2();
+    var KIND = "eval";
+    module2.exports = Expression.extends(
+      KIND,
+      function Eval(source, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.source = source;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/exit.js
+var require_exit2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/exit.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression2();
+    var KIND = "exit";
+    module2.exports = Expression.extends(
+      KIND,
+      function Exit(expression, useDie, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.expression = expression;
+        this.useDie = useDie;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/expressionstatement.js
+var require_expressionstatement2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/expressionstatement.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement4();
+    var KIND = "expressionstatement";
+    module2.exports = Statement.extends(
+      KIND,
+      function ExpressionStatement(expr, docs, location) {
+        Statement.apply(this, [KIND, docs, location]);
+        this.expression = expr;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/for.js
+var require_for2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/for.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement4();
+    var KIND = "for";
+    module2.exports = Statement.extends(
+      KIND,
+      function For(init, test, increment, body, shortForm, docs, location) {
+        Statement.apply(this, [KIND, docs, location]);
+        this.init = init;
+        this.test = test;
+        this.increment = increment;
+        this.shortForm = shortForm;
+        this.body = body;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/foreach.js
+var require_foreach2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/foreach.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement4();
+    var KIND = "foreach";
+    module2.exports = Statement.extends(
+      KIND,
+      function Foreach(source, key, value, body, shortForm, docs, location) {
+        Statement.apply(this, [KIND, docs, location]);
+        this.source = source;
+        this.key = key;
+        this.value = value;
+        this.shortForm = shortForm;
+        this.body = body;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/function.js
+var require_function4 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/function.js"(exports2, module2) {
+    "use strict";
+    var Declaration = require_declaration2();
+    var KIND = "function";
+    module2.exports = Declaration.extends(
+      KIND,
+      function _Function(name, args, byref, type, nullable2, docs, location) {
+        Declaration.apply(this, [KIND, name, docs, location]);
+        this.arguments = args;
+        this.byref = byref;
+        this.type = type;
+        this.nullable = nullable2;
+        this.body = null;
+        this.attrGroups = [];
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/global.js
+var require_global2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/global.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement4();
+    var KIND = "global";
+    module2.exports = Statement.extends(
+      KIND,
+      function Global(items, docs, location) {
+        Statement.apply(this, [KIND, docs, location]);
+        this.items = items;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/goto.js
+var require_goto2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/goto.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement4();
+    var KIND = "goto";
+    module2.exports = Statement.extends(KIND, function Goto(label, docs, location) {
+      Statement.apply(this, [KIND, docs, location]);
+      this.label = label;
+    });
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/halt.js
+var require_halt2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/halt.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement4();
+    var KIND = "halt";
+    module2.exports = Statement.extends(KIND, function Halt(after, docs, location) {
+      Statement.apply(this, [KIND, docs, location]);
+      this.after = after;
+    });
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/identifier.js
+var require_identifier2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/identifier.js"(exports2, module2) {
+    "use strict";
+    var Node = require_node3();
+    var KIND = "identifier";
+    var Identifier = Node.extends(
+      KIND,
+      function Identifier2(name, docs, location) {
+        Node.apply(this, [KIND, docs, location]);
+        this.name = name;
+      }
+    );
+    module2.exports = Identifier;
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/if.js
+var require_if4 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/if.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement4();
+    var KIND = "if";
+    module2.exports = Statement.extends(
+      KIND,
+      function If(test, body, alternate, shortForm, docs, location) {
+        Statement.apply(this, [KIND, docs, location]);
+        this.test = test;
+        this.body = body;
+        this.alternate = alternate;
+        this.shortForm = shortForm;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/include.js
+var require_include2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/include.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression2();
+    var KIND = "include";
+    module2.exports = Expression.extends(
+      KIND,
+      function Include(once, require2, target, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.once = once;
+        this.require = require2;
+        this.target = target;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/inline.js
+var require_inline2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/inline.js"(exports2, module2) {
+    "use strict";
+    var Literal = require_literal2();
+    var KIND = "inline";
+    module2.exports = Literal.extends(
+      KIND,
+      function Inline(value, raw, docs, location) {
+        Literal.apply(this, [KIND, value, raw, docs, location]);
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/interface.js
+var require_interface2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/interface.js"(exports2, module2) {
+    "use strict";
+    var Declaration = require_declaration2();
+    var KIND = "interface";
+    module2.exports = Declaration.extends(
+      KIND,
+      function Interface(name, ext, body, attrGroups, docs, location) {
+        Declaration.apply(this, [KIND, name, docs, location]);
+        this.extends = ext;
+        this.body = body;
+        this.attrGroups = attrGroups;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/intersectiontype.js
+var require_intersectiontype2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/intersectiontype.js"(exports2, module2) {
+    "use strict";
+    var Declaration = require_declaration2();
+    var KIND = "intersectiontype";
+    module2.exports = Declaration.extends(
+      KIND,
+      function IntersectionType(types, docs, location) {
+        Declaration.apply(this, [KIND, null, docs, location]);
+        this.types = types;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/isset.js
+var require_isset2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/isset.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression2();
+    var KIND = "isset";
+    module2.exports = Expression.extends(
+      KIND,
+      function Isset(variables, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.variables = variables;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/label.js
+var require_label2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/label.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement4();
+    var KIND = "label";
+    module2.exports = Statement.extends(KIND, function Label(name, docs, location) {
+      Statement.apply(this, [KIND, docs, location]);
+      this.name = name;
+    });
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/list.js
+var require_list2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/list.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression2();
+    var KIND = "list";
+    module2.exports = Expression.extends(
+      KIND,
+      function List(items, shortForm, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.items = items;
+        this.shortForm = shortForm;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/lookup.js
+var require_lookup2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/lookup.js"(exports2, module2) {
+    "use strict";
+    var Expr = require_expression2();
+    var KIND = "lookup";
+    module2.exports = Expr.extends(
+      KIND,
+      function Lookup(kind, what, offset, docs, location) {
+        Expr.apply(this, [kind || KIND, docs, location]);
+        this.what = what;
+        this.offset = offset;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/magic.js
+var require_magic2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/magic.js"(exports2, module2) {
+    "use strict";
+    var Literal = require_literal2();
+    var KIND = "magic";
+    module2.exports = Literal.extends(
+      KIND,
+      function Magic(value, raw, docs, location) {
+        Literal.apply(this, [KIND, value, raw, docs, location]);
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/match.js
+var require_match2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/match.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression2();
+    var KIND = "match";
+    module2.exports = Expression.extends(
+      KIND,
+      function Match(cond, arms, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.cond = cond;
+        this.arms = arms;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/matcharm.js
+var require_matcharm2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/matcharm.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression2();
+    var KIND = "matcharm";
+    module2.exports = Expression.extends(
+      KIND,
+      function MatchArm(conds, body, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.conds = conds;
+        this.body = body;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/method.js
+var require_method2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/method.js"(exports2, module2) {
+    "use strict";
+    var Function_ = require_function4();
+    var KIND = "method";
+    module2.exports = Function_.extends(KIND, function Method() {
+      Function_.apply(this, arguments);
+      this.kind = KIND;
+    });
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/reference.js
+var require_reference2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/reference.js"(exports2, module2) {
+    "use strict";
+    var Node = require_node3();
+    var KIND = "reference";
+    var Reference = Node.extends(KIND, function Reference2(kind, docs, location) {
+      Node.apply(this, [kind || KIND, docs, location]);
+    });
+    module2.exports = Reference;
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/name.js
+var require_name2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/name.js"(exports2, module2) {
+    "use strict";
+    var Reference = require_reference2();
+    var KIND = "name";
+    var Name = Reference.extends(
+      KIND,
+      function Name2(name, resolution, docs, location) {
+        Reference.apply(this, [KIND, docs, location]);
+        this.name = name.replace(/\\$/, "");
+        this.resolution = resolution;
+      }
+    );
+    Name.UNQUALIFIED_NAME = "uqn";
+    Name.QUALIFIED_NAME = "qn";
+    Name.FULL_QUALIFIED_NAME = "fqn";
+    Name.RELATIVE_NAME = "rn";
+    module2.exports = Name;
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/namespace.js
+var require_namespace4 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/namespace.js"(exports2, module2) {
+    "use strict";
+    var Block = require_block2();
+    var KIND = "namespace";
+    module2.exports = Block.extends(
+      KIND,
+      function Namespace(name, children, withBrackets, docs, location) {
+        Block.apply(this, [KIND, children, docs, location]);
+        this.name = name;
+        this.withBrackets = withBrackets || false;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/namedargument.js
+var require_namedargument2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/namedargument.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression2();
+    var KIND = "namedargument";
+    module2.exports = Expression.extends(
+      KIND,
+      function namedargument(name, value, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.name = name;
+        this.value = value;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/new.js
+var require_new2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/new.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression2();
+    var KIND = "new";
+    module2.exports = Expression.extends(
+      KIND,
+      function New(what, args, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.what = what;
+        this.arguments = args;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/noop.js
+var require_noop2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/noop.js"(exports2, module2) {
+    "use strict";
+    var Node = require_node3();
+    var KIND = "noop";
+    module2.exports = Node.extends(KIND, function Noop(docs, location) {
+      Node.apply(this, [KIND, docs, location]);
+    });
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/nowdoc.js
+var require_nowdoc2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/nowdoc.js"(exports2, module2) {
+    "use strict";
+    var Literal = require_literal2();
+    var KIND = "nowdoc";
+    module2.exports = Literal.extends(
+      KIND,
+      function Nowdoc(value, raw, label, docs, location) {
+        Literal.apply(this, [KIND, value, raw, docs, location]);
+        this.label = label;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/nullkeyword.js
+var require_nullkeyword2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/nullkeyword.js"(exports2, module2) {
+    "use strict";
+    var Node = require_node3();
+    var KIND = "nullkeyword";
+    module2.exports = Node.extends(KIND, function NullKeyword(raw, docs, location) {
+      Node.apply(this, [KIND, docs, location]);
+      this.raw = raw;
+    });
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/nullsafepropertylookup.js
+var require_nullsafepropertylookup2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/nullsafepropertylookup.js"(exports2, module2) {
+    "use strict";
+    var Lookup = require_lookup2();
+    var KIND = "nullsafepropertylookup";
+    module2.exports = Lookup.extends(
+      KIND,
+      function NullSafePropertyLookup(what, offset, docs, location) {
+        Lookup.apply(this, [KIND, what, offset, docs, location]);
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/number.js
+var require_number2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/number.js"(exports2, module2) {
+    "use strict";
+    var Literal = require_literal2();
+    var KIND = "number";
+    module2.exports = Literal.extends(
+      KIND,
+      function Number2(value, raw, docs, location) {
+        Literal.apply(this, [KIND, value, raw, docs, location]);
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/offsetlookup.js
+var require_offsetlookup2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/offsetlookup.js"(exports2, module2) {
+    "use strict";
+    var Lookup = require_lookup2();
+    var KIND = "offsetlookup";
+    module2.exports = Lookup.extends(
+      KIND,
+      function OffsetLookup(what, offset, docs, location) {
+        Lookup.apply(this, [KIND, what, offset, docs, location]);
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/parameter.js
+var require_parameter2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/parameter.js"(exports2, module2) {
+    "use strict";
+    var Declaration = require_declaration2();
+    var KIND = "parameter";
+    module2.exports = Declaration.extends(
+      KIND,
+      function Parameter(name, type, value, isRef2, isVariadic, readonly2, nullable2, flags, hooks, flagsSet, docs, location) {
+        Declaration.apply(this, [KIND, name, docs, location]);
+        this.value = value;
+        this.type = type;
+        this.byref = isRef2;
+        this.variadic = isVariadic;
+        this.readonly = readonly2;
+        this.nullable = nullable2;
+        this.flags = flags || 0;
+        this.hooks = hooks || [];
+        this.flagsSet = flagsSet || 0;
+        this.attrGroups = [];
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/parentreference.js
+var require_parentreference2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/parentreference.js"(exports2, module2) {
+    "use strict";
+    var Reference = require_reference2();
+    var KIND = "parentreference";
+    var ParentReference = Reference.extends(
+      KIND,
+      function ParentReference2(raw, docs, location) {
+        Reference.apply(this, [KIND, docs, location]);
+        this.raw = raw;
+      }
+    );
+    module2.exports = ParentReference;
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/post.js
+var require_post2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/post.js"(exports2, module2) {
+    "use strict";
+    var Operation = require_operation2();
+    var KIND = "post";
+    module2.exports = Operation.extends(
+      KIND,
+      function Post(type, what, docs, location) {
+        Operation.apply(this, [KIND, docs, location]);
+        this.type = type;
+        this.what = what;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/pre.js
+var require_pre2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/pre.js"(exports2, module2) {
+    "use strict";
+    var Operation = require_operation2();
+    var KIND = "pre";
+    module2.exports = Operation.extends(
+      KIND,
+      function Pre(type, what, docs, location) {
+        Operation.apply(this, [KIND, docs, location]);
+        this.type = type;
+        this.what = what;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/print.js
+var require_print2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/print.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression2();
+    var KIND = "print";
+    module2.exports = Expression.extends(
+      KIND,
+      function Print(expression, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.expression = expression;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/program.js
+var require_program2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/program.js"(exports2, module2) {
+    "use strict";
+    var Block = require_block2();
+    var KIND = "program";
+    module2.exports = Block.extends(
+      KIND,
+      function Program(children, errors, comments, tokens, docs, location) {
+        Block.apply(this, [KIND, children, docs, location]);
+        this.errors = errors;
+        if (comments) {
+          this.comments = comments;
+        }
+        if (tokens) {
+          this.tokens = tokens;
+        }
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/property.js
+var require_property4 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/property.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement4();
+    var KIND = "property";
+    module2.exports = Statement.extends(
+      KIND,
+      function Property(name, value, readonly2, nullable2, type, attrGroups, hooks, docs, location) {
+        Statement.apply(this, [KIND, docs, location]);
+        this.name = name;
+        this.value = value;
+        this.readonly = readonly2;
+        this.nullable = nullable2;
+        this.type = type;
+        this.attrGroups = attrGroups;
+        this.hooks = hooks || [];
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/propertyhook.js
+var require_propertyhook2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/propertyhook.js"(exports2, module2) {
+    "use strict";
+    var Node = require_node3();
+    var KIND = "propertyhook";
+    module2.exports = Node.extends(
+      KIND,
+      function PropertyHook(name, isFinal, byref, parameter, body, attrGroups, docs, location) {
+        Node.apply(this, [KIND, docs, location]);
+        this.name = name;
+        this.isFinal = isFinal;
+        this.byref = byref;
+        this.parameter = parameter;
+        this.body = body;
+        this.attrGroups = attrGroups || [];
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/propertylookup.js
+var require_propertylookup2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/propertylookup.js"(exports2, module2) {
+    "use strict";
+    var Lookup = require_lookup2();
+    var KIND = "propertylookup";
+    module2.exports = Lookup.extends(
+      KIND,
+      function PropertyLookup(what, offset, docs, location) {
+        Lookup.apply(this, [KIND, what, offset, docs, location]);
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/propertystatement.js
+var require_propertystatement2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/propertystatement.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement4();
+    var KIND = "propertystatement";
+    var IS_UNDEFINED = "";
+    var IS_PUBLIC = "public";
+    var IS_PROTECTED = "protected";
+    var IS_PRIVATE = "private";
+    var VISIBILITY_MAP = [IS_PUBLIC, IS_PROTECTED, IS_PRIVATE];
+    var PropertyStatement = Statement.extends(
+      KIND,
+      function PropertyStatement2(kind, properties, flags, docs, location) {
+        Statement.apply(this, [KIND, docs, location]);
+        this.properties = properties;
+        this.parseFlags(flags);
+      }
+    );
+    PropertyStatement.prototype.parseFlags = function(flags) {
+      const [getVis, setVis] = flags[0];
+      if (getVis === -1) {
+        this.visibility = IS_UNDEFINED;
+      } else if (getVis === null) {
+        this.visibility = null;
+      } else {
+        this.visibility = VISIBILITY_MAP[getVis];
+      }
+      this.isStatic = flags[1] === 1;
+      this.isAbstract = flags[2] === 1;
+      this.isFinal = flags[2] === 2;
+      this.visibilitySet = setVis !== -1 ? VISIBILITY_MAP[setVis] : null;
+    };
+    module2.exports = PropertyStatement;
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/retif.js
+var require_retif2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/retif.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression2();
+    var KIND = "retif";
+    module2.exports = Expression.extends(
+      KIND,
+      function RetIf(test, trueExpr, falseExpr, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.test = test;
+        this.trueExpr = trueExpr;
+        this.falseExpr = falseExpr;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/return.js
+var require_return2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/return.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement4();
+    var KIND = "return";
+    module2.exports = Statement.extends(KIND, function Return(expr, docs, location) {
+      Statement.apply(this, [KIND, docs, location]);
+      this.expr = expr;
+    });
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/selfreference.js
+var require_selfreference2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/selfreference.js"(exports2, module2) {
+    "use strict";
+    var Reference = require_reference2();
+    var KIND = "selfreference";
+    var SelfReference = Reference.extends(
+      KIND,
+      function SelfReference2(raw, docs, location) {
+        Reference.apply(this, [KIND, docs, location]);
+        this.raw = raw;
+      }
+    );
+    module2.exports = SelfReference;
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/silent.js
+var require_silent2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/silent.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression2();
+    var KIND = "silent";
+    module2.exports = Expression.extends(
+      KIND,
+      function Silent(expr, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.expr = expr;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/static.js
+var require_static2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/static.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement4();
+    var KIND = "static";
+    module2.exports = Statement.extends(
+      KIND,
+      function Static(variables, docs, location) {
+        Statement.apply(this, [KIND, docs, location]);
+        this.variables = variables;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/staticvariable.js
+var require_staticvariable2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/staticvariable.js"(exports2, module2) {
+    "use strict";
+    var Node = require_node3();
+    var KIND = "staticvariable";
+    module2.exports = Node.extends(
+      KIND,
+      function StaticVariable(variable, defaultValue, docs, location) {
+        Node.apply(this, [KIND, docs, location]);
+        this.variable = variable;
+        this.defaultValue = defaultValue;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/staticlookup.js
+var require_staticlookup2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/staticlookup.js"(exports2, module2) {
+    "use strict";
+    var Lookup = require_lookup2();
+    var KIND = "staticlookup";
+    module2.exports = Lookup.extends(
+      KIND,
+      function StaticLookup(what, offset, docs, location) {
+        Lookup.apply(this, [KIND, what, offset, docs, location]);
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/staticreference.js
+var require_staticreference2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/staticreference.js"(exports2, module2) {
+    "use strict";
+    var Reference = require_reference2();
+    var KIND = "staticreference";
+    var StaticReference = Reference.extends(
+      KIND,
+      function StaticReference2(raw, docs, location) {
+        Reference.apply(this, [KIND, docs, location]);
+        this.raw = raw;
+      }
+    );
+    module2.exports = StaticReference;
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/string.js
+var require_string2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/string.js"(exports2, module2) {
+    "use strict";
+    var Literal = require_literal2();
+    var KIND = "string";
+    module2.exports = Literal.extends(
+      KIND,
+      function String2(isDoubleQuote, value, unicode, raw, docs, location) {
+        Literal.apply(this, [KIND, value, raw, docs, location]);
+        this.unicode = unicode;
+        this.isDoubleQuote = isDoubleQuote;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/switch.js
+var require_switch4 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/switch.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement4();
+    var KIND = "switch";
+    module2.exports = Statement.extends(
+      KIND,
+      function Switch(test, body, shortForm, docs, location) {
+        Statement.apply(this, [KIND, docs, location]);
+        this.test = test;
+        this.body = body;
+        this.shortForm = shortForm;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/throw.js
+var require_throw2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/throw.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement4();
+    var KIND = "throw";
+    module2.exports = Statement.extends(KIND, function Throw(what, docs, location) {
+      Statement.apply(this, [KIND, docs, location]);
+      this.what = what;
+    });
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/trait.js
+var require_trait2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/trait.js"(exports2, module2) {
+    "use strict";
+    var Declaration = require_declaration2();
+    var KIND = "trait";
+    module2.exports = Declaration.extends(
+      KIND,
+      function Trait(name, body, docs, location) {
+        Declaration.apply(this, [KIND, name, docs, location]);
+        this.body = body;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/traitalias.js
+var require_traitalias2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/traitalias.js"(exports2, module2) {
+    "use strict";
+    var Node = require_node3();
+    var KIND = "traitalias";
+    var IS_UNDEFINED = "";
+    var IS_PUBLIC = "public";
+    var IS_PROTECTED = "protected";
+    var IS_PRIVATE = "private";
+    module2.exports = Node.extends(
+      KIND,
+      function TraitAlias(trait, method, as2, flags, docs, location) {
+        Node.apply(this, [KIND, docs, location]);
+        this.trait = trait;
+        this.method = method;
+        this.as = as2;
+        this.visibility = IS_UNDEFINED;
+        if (flags) {
+          const getVis = flags[0][0];
+          if (getVis === 0) {
+            this.visibility = IS_PUBLIC;
+          } else if (getVis === 1) {
+            this.visibility = IS_PROTECTED;
+          } else if (getVis === 2) {
+            this.visibility = IS_PRIVATE;
+          }
+        }
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/traitprecedence.js
+var require_traitprecedence2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/traitprecedence.js"(exports2, module2) {
+    "use strict";
+    var Node = require_node3();
+    var KIND = "traitprecedence";
+    module2.exports = Node.extends(
+      KIND,
+      function TraitPrecedence(trait, method, instead, docs, location) {
+        Node.apply(this, [KIND, docs, location]);
+        this.trait = trait;
+        this.method = method;
+        this.instead = instead;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/traituse.js
+var require_traituse2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/traituse.js"(exports2, module2) {
+    "use strict";
+    var Node = require_node3();
+    var KIND = "traituse";
+    module2.exports = Node.extends(
+      KIND,
+      function TraitUse(traits, adaptations, docs, location) {
+        Node.apply(this, [KIND, docs, location]);
+        this.traits = traits;
+        this.adaptations = adaptations;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/try.js
+var require_try4 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/try.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement4();
+    var KIND = "try";
+    module2.exports = Statement.extends(
+      KIND,
+      function Try(body, catches, always, docs, location) {
+        Statement.apply(this, [KIND, docs, location]);
+        this.body = body;
+        this.catches = catches;
+        this.always = always;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/typereference.js
+var require_typereference2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/typereference.js"(exports2, module2) {
+    "use strict";
+    var Reference = require_reference2();
+    var KIND = "typereference";
+    var TypeReference = Reference.extends(
+      KIND,
+      function TypeReference2(name, raw, docs, location) {
+        Reference.apply(this, [KIND, docs, location]);
+        this.name = name;
+        this.raw = raw;
+      }
+    );
+    TypeReference.types = [
+      "int",
+      "float",
+      "string",
+      "bool",
+      "object",
+      "array",
+      "callable",
+      "iterable",
+      "void",
+      "static",
+      "null",
+      "never",
+      "mixed",
+      "true",
+      "false"
+    ];
+    module2.exports = TypeReference;
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/unary.js
+var require_unary2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/unary.js"(exports2, module2) {
+    "use strict";
+    var Operation = require_operation2();
+    var KIND = "unary";
+    module2.exports = Operation.extends(
+      KIND,
+      function Unary(type, what, docs, location) {
+        Operation.apply(this, [KIND, docs, location]);
+        this.type = type;
+        this.what = what;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/uniontype.js
+var require_uniontype2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/uniontype.js"(exports2, module2) {
+    "use strict";
+    var Declaration = require_declaration2();
+    var KIND = "uniontype";
+    module2.exports = Declaration.extends(
+      KIND,
+      function UnionType(types, docs, location) {
+        Declaration.apply(this, [KIND, null, docs, location]);
+        this.types = types;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/unset.js
+var require_unset2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/unset.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement4();
+    var KIND = "unset";
+    module2.exports = Statement.extends(
+      KIND,
+      function Unset(variables, docs, location) {
+        Statement.apply(this, [KIND, docs, location]);
+        this.variables = variables;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/usegroup.js
+var require_usegroup2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/usegroup.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement4();
+    var KIND = "usegroup";
+    module2.exports = Statement.extends(
+      KIND,
+      function UseGroup(name, type, items, docs, location) {
+        Statement.apply(this, [KIND, docs, location]);
+        this.name = name;
+        this.type = type;
+        this.items = items;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/useitem.js
+var require_useitem2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/useitem.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement4();
+    var KIND = "useitem";
+    var UseItem = Statement.extends(
+      KIND,
+      function UseItem2(name, alias, type, docs, location) {
+        Statement.apply(this, [KIND, docs, location]);
+        this.name = name;
+        this.alias = alias;
+        this.type = type;
+      }
+    );
+    UseItem.TYPE_CONST = "const";
+    UseItem.TYPE_FUNCTION = "function";
+    module2.exports = UseItem;
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/variable.js
+var require_variable4 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/variable.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression2();
+    var KIND = "variable";
+    module2.exports = Expression.extends(
+      KIND,
+      function Variable(name, curly, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.name = name;
+        this.curly = curly || false;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/variadic.js
+var require_variadic2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/variadic.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression2();
+    var KIND = "variadic";
+    module2.exports = Expression.extends(
+      KIND,
+      function variadic(what, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.what = what;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/variadicplaceholder.js
+var require_variadicplaceholder2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/variadicplaceholder.js"(exports2, module2) {
+    "use strict";
+    var Node = require_node3();
+    var KIND = "variadicplaceholder";
+    module2.exports = Node.extends(
+      KIND,
+      function VariadicPlaceholder(docs, location) {
+        Node.apply(this, [KIND, docs, location]);
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/while.js
+var require_while2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/while.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement4();
+    var KIND = "while";
+    module2.exports = Statement.extends(
+      KIND,
+      function While(test, body, shortForm, docs, location) {
+        Statement.apply(this, [KIND, docs, location]);
+        this.test = test;
+        this.body = body;
+        this.shortForm = shortForm;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/yield.js
+var require_yield2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/yield.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression2();
+    var KIND = "yield";
+    module2.exports = Expression.extends(
+      KIND,
+      function Yield(value, key, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.value = value;
+        this.key = key;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/yieldfrom.js
+var require_yieldfrom2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/yieldfrom.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression2();
+    var KIND = "yieldfrom";
+    module2.exports = Expression.extends(
+      KIND,
+      function YieldFrom(value, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.value = value;
+      }
+    );
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast.js
+var require_ast2 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast.js"(exports2, module2) {
+    "use strict";
+    var Location = require_location2();
+    var Position = require_position2();
+    var AST = function(withPositions, withSource) {
+      this.withPositions = withPositions;
+      this.withSource = withSource;
+    };
+    AST.precedence = {};
+    [
+      ["or"],
+      ["xor"],
+      ["and"],
+      ["="],
+      ["?"],
+      ["??"],
+      ["||"],
+      ["&&"],
+      ["|"],
+      ["^"],
+      ["&"],
+      [
+        "==",
+        "!=",
+        "===",
+        "!==",
+        /* '<>', */
+        "<=>"
+      ],
+      ["<", "<=", ">", ">="],
+      ["<<", ">>"],
+      ["+", "-", "."],
+      ["*", "/", "%"],
+      ["!"],
+      ["instanceof"],
+      ["u-", "u+", "u~"],
+      ["cast", "silent"],
+      ["**"]
+      // TODO: [ (array)
+      // TODO: new
+    ].forEach(function(list, index) {
+      list.forEach(function(operator) {
+        AST.precedence[operator] = index + 1;
+      });
+    });
+    AST.prototype.isRightAssociative = function(operator) {
+      return operator === "**" || operator === "??";
+    };
+    AST.prototype.swapLocations = function(target, first, last, parser3) {
+      if (this.withPositions) {
+        if (!target || !target.loc || !first || !first.loc || !last || !last.loc) {
+          return;
+        }
+        target.loc.start = first.loc.start;
+        target.loc.end = last.loc.end;
+        if (this.withSource) {
+          target.loc.source = parser3.lexer._input.substring(
+            target.loc.start.offset,
+            target.loc.end.offset
+          );
+        }
+      }
+    };
+    AST.prototype.resolveLocations = function(target, first, last, parser3) {
+      if (this.withPositions) {
+        if (!target || !target.loc || !first || !first.loc || !last || !last.loc) {
+          return;
+        }
+        if (target.loc.start.offset > first.loc.start.offset) {
+          target.loc.start = first.loc.start;
+        }
+        if (target.loc.end.offset < last.loc.end.offset) {
+          target.loc.end = last.loc.end;
+        }
+        if (this.withSource) {
+          target.loc.source = parser3.lexer._input.substring(
+            target.loc.start.offset,
+            target.loc.end.offset
+          );
+        }
+      }
+    };
+    AST.prototype.resolvePrecedence = function(result, parser3) {
+      let buffer, lLevel, rLevel;
+      if (result.kind === "call") {
+        this.resolveLocations(result, result.what, result, parser3);
+      } else if (result.kind === "propertylookup" || result.kind === "nullsafepropertylookup" || result.kind === "staticlookup" || result.kind === "offsetlookup" && result.offset) {
+        this.resolveLocations(result, result.what, result.offset, parser3);
+      } else if (result.kind === "bin") {
+        if (result.right && !result.right.parenthesizedExpression) {
+          if (result.right.kind === "bin") {
+            lLevel = AST.precedence[result.type];
+            rLevel = AST.precedence[result.right.type];
+            if (lLevel && rLevel && rLevel <= lLevel && (result.type !== result.right.type || !this.isRightAssociative(result.type))) {
+              buffer = result.right;
+              result.right = result.right.left;
+              this.swapLocations(result, result.left, result.right, parser3);
+              buffer.left = this.resolvePrecedence(result, parser3);
+              this.swapLocations(buffer, buffer.left, buffer.right, parser3);
+              result = buffer;
+            }
+          } else if (result.right.kind === "retif") {
+            lLevel = AST.precedence[result.type];
+            rLevel = AST.precedence["?"];
+            if (lLevel && rLevel && rLevel <= lLevel) {
+              buffer = result.right;
+              result.right = result.right.test;
+              this.swapLocations(result, result.left, result.right, parser3);
+              buffer.test = this.resolvePrecedence(result, parser3);
+              this.swapLocations(buffer, buffer.test, buffer.falseExpr, parser3);
+              result = buffer;
+            }
+          }
+        }
+      } else if ((result.kind === "silent" || result.kind === "cast") && result.expr && !result.expr.parenthesizedExpression) {
+        if (result.expr.kind === "bin") {
+          buffer = result.expr;
+          result.expr = result.expr.left;
+          this.swapLocations(result, result, result.expr, parser3);
+          buffer.left = this.resolvePrecedence(result, parser3);
+          this.swapLocations(buffer, buffer.left, buffer.right, parser3);
+          result = buffer;
+        } else if (result.expr.kind === "retif") {
+          buffer = result.expr;
+          result.expr = result.expr.test;
+          this.swapLocations(result, result, result.expr, parser3);
+          buffer.test = this.resolvePrecedence(result, parser3);
+          this.swapLocations(buffer, buffer.test, buffer.falseExpr, parser3);
+          result = buffer;
+        }
+      } else if (result.kind === "unary") {
+        if (result.what && !result.what.parenthesizedExpression) {
+          if (result.what.kind === "bin") {
+            lLevel = AST.precedence["u" + result.type] || AST.precedence[result.type];
+            rLevel = AST.precedence[result.what.type];
+            if (lLevel && rLevel && rLevel < lLevel) {
+              buffer = result.what;
+              result.what = result.what.left;
+              this.swapLocations(result, result, result.what, parser3);
+              buffer.left = this.resolvePrecedence(result, parser3);
+              this.swapLocations(buffer, buffer.left, buffer.right, parser3);
+              result = buffer;
+            }
+          } else if (result.what.kind === "retif") {
+            buffer = result.what;
+            result.what = result.what.test;
+            this.swapLocations(result, result, result.what, parser3);
+            buffer.test = this.resolvePrecedence(result, parser3);
+            this.swapLocations(buffer, buffer.test, buffer.falseExpr, parser3);
+            result = buffer;
+          }
+        }
+      } else if (result.kind === "retif") {
+        if (result.falseExpr && result.falseExpr.kind === "retif" && !result.falseExpr.parenthesizedExpression) {
+          buffer = result.falseExpr;
+          result.falseExpr = buffer.test;
+          this.swapLocations(result, result.test, result.falseExpr, parser3);
+          buffer.test = this.resolvePrecedence(result, parser3);
+          this.swapLocations(buffer, buffer.test, buffer.falseExpr, parser3);
+          result = buffer;
+        }
+      } else if (result.kind === "assign") {
+        if (result.right && result.right.kind === "bin" && !result.right.parenthesizedExpression) {
+          lLevel = AST.precedence["="];
+          rLevel = AST.precedence[result.right.type];
+          if (lLevel && rLevel && rLevel < lLevel) {
+            buffer = result.right;
+            result.right = result.right.left;
+            buffer.left = result;
+            this.swapLocations(buffer, buffer.left, result.right, parser3);
+            result = buffer;
+          }
+        }
+      } else if (result.kind === "expressionstatement") {
+        this.swapLocations(result, result.expression, result, parser3);
+      }
+      return result;
+    };
+    AST.prototype.prepare = function(kind, docs, parser3) {
+      let start = null;
+      if (this.withPositions || this.withSource) {
+        start = parser3.position();
+      }
+      const self = this;
+      const result = function() {
+        const args = Array.prototype.slice.call(arguments);
+        args.push(docs);
+        if (self.withPositions || self.withSource) {
+          let nodeStart = start;
+          let nodeEnd = new Position(
+            parser3.prev[0],
+            parser3.prev[1],
+            parser3.prev[2]
+          );
+          if (nodeStart.offset > nodeEnd.offset) {
+            const tmp = nodeStart;
+            nodeStart = nodeEnd;
+            nodeEnd = tmp;
+          }
+          let src = null;
+          if (self.withSource) {
+            src = parser3.lexer._input.substring(nodeStart.offset, nodeEnd.offset);
+          }
+          const location = new Location(src, nodeStart, nodeEnd);
+          args.push(location);
+        }
+        if (!kind) {
+          kind = args.shift();
+        }
+        const node2 = self[kind];
+        if (typeof node2 !== "function") {
+          throw new Error('Undefined node "' + kind + '"');
+        }
+        const astNode = Object.create(node2.prototype);
+        node2.apply(astNode, args);
+        result.instance = astNode;
+        if (result.trailingComments) {
+          astNode.trailingComments = result.trailingComments;
+        }
+        if (typeof result.postBuild === "function") {
+          result.postBuild(astNode);
+        }
+        if (parser3.debug) {
+          delete self.stack[result.stackUid];
+        }
+        return self.resolvePrecedence(astNode, parser3);
+      };
+      if (parser3.debug) {
+        if (!this.stack) {
+          this.stack = {};
+          this.stackUid = 1;
+        }
+        this.stack[++this.stackUid] = {
+          position: start,
+          stack: new Error().stack.split("\n").slice(3, 5)
+        };
+        result.stackUid = this.stackUid;
+      }
+      result.setTrailingComments = function(docs2) {
+        if (result.instance) {
+          result.instance.setTrailingComments(docs2);
+        } else {
+          result.trailingComments = docs2;
+        }
+      };
+      result.destroy = function(target) {
+        if (docs) {
+          if (target) {
+            if (!target.leadingComments) {
+              target.leadingComments = docs;
+            } else {
+              target.leadingComments = docs.concat(target.leadingComments);
+            }
+          } else {
+            parser3._docIndex = parser3._docs.length - docs.length;
+          }
+        }
+        if (parser3.debug) {
+          delete self.stack[result.stackUid];
+        }
+      };
+      return result;
+    };
+    AST.prototype.checkNodes = function() {
+      const errors = [];
+      for (const k2 in this.stack) {
+        if (Object.prototype.hasOwnProperty.call(this.stack, k2)) {
+          this.stack[k2].key = k2;
+          errors.push(this.stack[k2]);
+        }
+      }
+      this.stack = {};
+      return errors;
+    };
+    [
+      require_array4(),
+      require_arrowfunc2(),
+      require_assign2(),
+      require_assignref2(),
+      require_attribute4(),
+      require_attrgroup2(),
+      require_bin2(),
+      require_block2(),
+      require_boolean2(),
+      require_break2(),
+      require_byref2(),
+      require_call2(),
+      require_case2(),
+      require_cast2(),
+      require_catch2(),
+      require_class4(),
+      require_classconstant2(),
+      require_clone2(),
+      require_closure2(),
+      require_comment4(),
+      require_commentblock2(),
+      require_commentline2(),
+      require_constant2(),
+      require_constantstatement2(),
+      require_continue2(),
+      require_declaration2(),
+      require_declare2(),
+      require_declaredirective2(),
+      require_do2(),
+      require_echo2(),
+      require_empty2(),
+      require_encapsed2(),
+      require_encapsedpart2(),
+      require_entry2(),
+      require_enum4(),
+      require_enumcase2(),
+      require_error2(),
+      require_eval2(),
+      require_exit2(),
+      require_expression2(),
+      require_expressionstatement2(),
+      require_for2(),
+      require_foreach2(),
+      require_function4(),
+      require_global2(),
+      require_goto2(),
+      require_halt2(),
+      require_identifier2(),
+      require_if4(),
+      require_include2(),
+      require_inline2(),
+      require_interface2(),
+      require_intersectiontype2(),
+      require_isset2(),
+      require_label2(),
+      require_list2(),
+      require_literal2(),
+      require_lookup2(),
+      require_magic2(),
+      require_match2(),
+      require_matcharm2(),
+      require_method2(),
+      require_name2(),
+      require_namespace4(),
+      require_namedargument2(),
+      require_new2(),
+      require_node3(),
+      require_noop2(),
+      require_nowdoc2(),
+      require_nullkeyword2(),
+      require_nullsafepropertylookup2(),
+      require_number2(),
+      require_offsetlookup2(),
+      require_operation2(),
+      require_parameter2(),
+      require_parentreference2(),
+      require_post2(),
+      require_pre2(),
+      require_print2(),
+      require_program2(),
+      require_property4(),
+      require_propertyhook2(),
+      require_propertylookup2(),
+      require_propertystatement2(),
+      require_reference2(),
+      require_retif2(),
+      require_return2(),
+      require_selfreference2(),
+      require_silent2(),
+      require_statement4(),
+      require_static2(),
+      require_staticvariable2(),
+      require_staticlookup2(),
+      require_staticreference2(),
+      require_string2(),
+      require_switch4(),
+      require_throw2(),
+      require_trait2(),
+      require_traitalias2(),
+      require_traitprecedence2(),
+      require_traituse2(),
+      require_try4(),
+      require_typereference2(),
+      require_unary2(),
+      require_uniontype2(),
+      require_unset2(),
+      require_usegroup2(),
+      require_useitem2(),
+      require_variable4(),
+      require_variadic2(),
+      require_variadicplaceholder2(),
+      require_while2(),
+      require_yield2(),
+      require_yieldfrom2()
+    ].forEach(function(ctor) {
+      AST.prototype[ctor.kind] = ctor;
+    });
+    module2.exports = AST;
+  }
+});
+
+// ../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/index.js
+var require_src4 = __commonJS({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/index.js"(exports2, module2) {
+    "use strict";
+    var lexer = require_lexer2();
+    var parser3 = require_parser2();
+    var tokens = require_tokens4();
+    var AST = require_ast2();
+    function combine(src, to2) {
+      const keys = Object.keys(src);
+      let i = keys.length;
+      while (i--) {
+        const k2 = keys[i];
+        if (k2 === "__proto__" || k2 === "constructor" || k2 === "prototype") {
+          continue;
+        }
+        const val = src[k2];
+        if (val === null) {
+          delete to2[k2];
+        } else if (typeof val === "function") {
+          to2[k2] = val.bind(to2);
+        } else if (Array.isArray(val)) {
+          to2[k2] = Array.isArray(to2[k2]) ? to2[k2].concat(val) : val;
+        } else if (typeof val === "object") {
+          to2[k2] = typeof to2[k2] === "object" ? combine(val, to2[k2]) : val;
+        } else {
+          to2[k2] = val;
+        }
+      }
+      return to2;
+    }
+    var Engine2 = function(options) {
+      if (typeof this === "function") {
+        return new this(options);
+      }
+      this.tokens = tokens;
+      this.lexer = new lexer(this);
+      this.ast = new AST();
+      this.parser = new parser3(this.lexer, this.ast);
+      if (options && typeof options === "object") {
+        if (options.parser) {
+          if (!options.lexer) {
+            options.lexer = {};
+          }
+          if (options.parser.version) {
+            if (typeof options.parser.version === "string") {
+              let version2 = options.parser.version.split(".");
+              version2 = parseInt(version2[0]) * 100 + parseInt(version2[1]);
+              if (isNaN(version2)) {
+                throw new Error("Bad version number : " + options.parser.version);
+              } else {
+                options.parser.version = version2;
+              }
+            } else if (typeof options.parser.version !== "number") {
+              throw new Error("Expecting a number for version");
+            }
+            if (options.parser.version < 500 || options.parser.version > 900) {
+              throw new Error("Can only handle versions between 5.x to 8.x");
+            }
+          }
+        }
+        combine(options, this);
+        this.lexer.version = this.parser.version;
+      }
+    };
+    var getStringBuffer = function(buffer) {
+      return typeof buffer.write === "function" ? buffer.toString() : buffer;
+    };
+    Engine2.create = function(options) {
+      return new Engine2(options);
+    };
+    Engine2.parseEval = function(buffer, options) {
+      const self = new Engine2(options);
+      return self.parseEval(buffer);
+    };
+    Engine2.prototype.parseEval = function(buffer) {
+      this.lexer.mode_eval = true;
+      this.lexer.all_tokens = false;
+      buffer = getStringBuffer(buffer);
+      return this.parser.parse(buffer, "eval");
+    };
+    Engine2.parseCode = function(buffer, filename, options) {
+      if (typeof filename === "object" && !options) {
+        options = filename;
+        filename = "unknown";
+      }
+      const self = new Engine2(options);
+      return self.parseCode(buffer, filename);
+    };
+    Engine2.prototype.parseCode = function(buffer, filename) {
+      this.lexer.mode_eval = false;
+      this.lexer.all_tokens = false;
+      buffer = getStringBuffer(buffer);
+      return this.parser.parse(buffer, filename);
+    };
+    Engine2.tokenGetAll = function(buffer, options) {
+      const self = new Engine2(options);
+      return self.tokenGetAll(buffer);
+    };
+    Engine2.prototype.tokenGetAll = function(buffer) {
+      this.lexer.mode_eval = false;
+      this.lexer.all_tokens = true;
+      buffer = getStringBuffer(buffer);
+      const EOF = this.lexer.EOF;
+      const names = this.tokens.values;
+      this.lexer.setInput(buffer);
+      let token = this.lexer.lex() || EOF;
+      const result = [];
+      while (token != EOF) {
+        let entry = this.lexer.yytext;
+        if (Object.prototype.hasOwnProperty.call(names, token)) {
+          entry = [names[token], entry, this.lexer.yylloc.first_line];
+        }
+        result.push(entry);
+        token = this.lexer.lex() || EOF;
+      }
+      return result;
+    };
+    module2.exports = Engine2;
+    module2.exports.tokens = tokens;
+    module2.exports.lexer = lexer;
+    module2.exports.AST = AST;
+    module2.exports.parser = parser3;
+    module2.exports.combine = combine;
+    module2.exports.Engine = Engine2;
+    module2.exports.default = Engine2;
+  }
+});
+
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-7FCNOZ5Y.js
+// ../cli/dist/chunk-N37ICXUB.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -36186,7 +45361,7 @@ function isRecursive2(inst, stack, resolve4) {
     }
     return answer;
   };
-  const merge2 = (answer) => {
+  const merge4 = (answer) => {
     if (answer > result)
       result = answer;
   };
@@ -36195,7 +45370,7 @@ function isRecursive2(inst, stack, resolve4) {
   switch (kind) {
     case "object": {
       const raw = rawShape(def);
-      merge2(raw ? shape(raw, true) : ASSUMED);
+      merge4(raw ? shape(raw, true) : ASSUMED);
       check2(def.catchall);
       break;
     }
@@ -36245,7 +45420,7 @@ function isRecursive2(inst, stack, resolve4) {
     // `$ZodLazy` caches its inner on the def, so a resolved edge is followed exactly
     case "lazy": {
       const inner = def._cachedInner ?? (resolve4 ? inst._zod.innerType : void 0);
-      merge2(inner ? isRecursive2(inner, stack, false) : ASSUMED);
+      merge4(inner ? isRecursive2(inner, stack, false) : ASSUMED);
       break;
     }
     // a leaf by choice: `parts` are regex fragments, not data positions
@@ -40442,8 +49617,8 @@ function ko_default() {
 }
 
 // ../../node_modules/.pnpm/zod@4.6.7/node_modules/zod/v4/locales/lt.js
-var capitalizeFirstCharacter = (text) => {
-  return text.charAt(0).toUpperCase() + text.slice(1);
+var capitalizeFirstCharacter = (text3) => {
+  return text3.charAt(0).toUpperCase() + text3.slice(1);
 };
 function getUnitTypeFromNumber(number4) {
   const abs = Math.abs(number4);
@@ -44050,18 +53225,18 @@ var ZodCompileUnsupportedError = class extends Error {
     this.islandable = islandable;
   }
 };
-function compileValidator(schema, parser) {
+function compileValidator(schema, parser3) {
   try {
     return compileFn(schema, { assertOnly: true });
   } catch {
-    return parser;
+    return parser3;
   }
 }
 function compile(schema, options) {
   try {
-    const parser = compileFn(schema);
-    const clone2 = withParser(schema, parser);
-    clone2._zod.bag.validator = compileValidator(schema, parser);
+    const parser3 = compileFn(schema);
+    const clone2 = withParser(schema, parser3);
+    clone2._zod.bag.validator = compileValidator(schema, parser3);
     return clone2;
   } catch (err) {
     if (options?.strict)
@@ -44069,7 +53244,7 @@ function compile(schema, options) {
     return schema;
   }
 }
-function withParser(schema, parser) {
+function withParser(schema, parser3) {
   if (isRecursiveSchema(schema)) {
     throw new ZodCompileUnsupportedError("a schema whose subtree contains a reference cycle");
   }
@@ -44083,7 +53258,7 @@ function withParser(schema, parser) {
     if (ctx && isBackEdge(ctx, payload.value)) {
       return originalRun(payload, ctx);
     }
-    const out = parser(payload.value);
+    const out = parser3(payload.value);
     if (out !== INVALID) {
       payload.value = out;
       return payload;
@@ -44094,19 +53269,19 @@ function withParser(schema, parser) {
   };
   wrapped.__originalRun = originalRun;
   clone2._zod.bag.fallbackRun = originalRun;
-  clone2._zod.bag.validator = parser;
+  clone2._zod.bag.validator = parser3;
   clone2._zod.run = wrapped;
   if (!liveRun.__originalRun)
-    installCompiledUserMethods(clone2, schema, parser);
+    installCompiledUserMethods(clone2, schema, parser3);
   return clone2;
 }
-function installCompiledUserMethods(target, source, parser) {
+function installCompiledUserMethods(target, source, parser3) {
   const targetAny = target;
   const sourceAny = source;
   if (typeof sourceAny.safeParse === "function") {
     const originalSafeParse = sourceAny.safeParse;
     targetAny.safeParse = (data, params) => {
-      const out = parser(data);
+      const out = parser3(data);
       if (out !== INVALID) {
         return { success: true, data: out };
       }
@@ -44116,7 +53291,7 @@ function installCompiledUserMethods(target, source, parser) {
   if (typeof sourceAny.parse === "function") {
     const originalParse = sourceAny.parse;
     targetAny.parse = (data, params) => {
-      const out = parser(data);
+      const out = parser3(data);
       if (out !== INVALID) {
         return out;
       }
@@ -50809,7 +59984,7 @@ function date4(params) {
   return _coercedDate(ZodDate, params);
 }
 
-// ../cli/dist/chunk-7FCNOZ5Y.js
+// ../cli/dist/chunk-N37ICXUB.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -52416,12 +61591,12 @@ var require_lib = __commonJS2({
       }
     };
     var ScopeHandler = class {
-      constructor(parser, inModule) {
+      constructor(parser22, inModule) {
         this.parser = void 0;
         this.scopeStack = [];
         this.inModule = void 0;
         this.undefinedExports = /* @__PURE__ */ new Map();
-        this.parser = parser;
+        this.parser = parser22;
         this.inModule = inModule;
       }
       get inTopLevel() {
@@ -57565,11 +66740,11 @@ var require_lib = __commonJS2({
       }
     };
     var ClassScopeHandler = class {
-      constructor(parser) {
+      constructor(parser22) {
         this.parser = void 0;
         this.stack = [];
         this.undefinedPrivateNames = /* @__PURE__ */ new Map();
-        this.parser = parser;
+        this.parser = parser22;
       }
       current() {
         return this.stack[this.stack.length - 1];
@@ -57662,10 +66837,10 @@ var require_lib = __commonJS2({
       }
     };
     var ExpressionScopeHandler = class {
-      constructor(parser) {
+      constructor(parser22) {
         this.parser = void 0;
         this.stack = [new ExpressionScope()];
-        this.parser = parser;
+        this.parser = parser22;
       }
       enter(scope) {
         this.stack.push(scope);
@@ -57978,13 +67153,13 @@ var require_lib = __commonJS2({
       }
     };
     var Node = class {
-      constructor(parser, pos, loc) {
+      constructor(parser22, pos, loc) {
         this.type = "";
         this.start = pos;
         this.end = 0;
         this.loc = new SourceLocation(loc);
-        if ((parser == null ? void 0 : parser.optionFlags) & 128) this.range = [pos, 0];
-        if (parser != null && parser.filename) this.loc.filename = parser.filename;
+        if ((parser22 == null ? void 0 : parser22.optionFlags) & 128) this.range = [pos, 0];
+        if (parser22 != null && parser22.filename) this.loc.filename = parser22.filename;
       }
     };
     var NodePrototype = Node.prototype;
@@ -65392,12 +74567,12 @@ var require_lib = __commonJS2({
         options = Object.assign({}, options);
         try {
           options.sourceType = "module";
-          const parser = getParser(options, input2);
-          const ast = parser.parse();
-          if (parser.sawUnambiguousESM) {
+          const parser22 = getParser(options, input2);
+          const ast = parser22.parse();
+          if (parser22.sawUnambiguousESM) {
             return ast;
           }
-          if (parser.ambiguousScriptDifferentAst) {
+          if (parser22.ambiguousScriptDifferentAst) {
             try {
               options.sourceType = "script";
               return getParser(options, input2).parse();
@@ -65420,11 +74595,11 @@ var require_lib = __commonJS2({
       }
     }
     function parseExpression(input2, options) {
-      const parser = getParser(options, input2);
-      if (parser.options.strictMode) {
-        parser.state.strict = true;
+      const parser22 = getParser(options, input2);
+      if (parser22.options.strictMode) {
+        parser22.state.strict = true;
       }
-      return parser.getExpression();
+      return parser22.getExpression();
     }
     function generateExportedTokenTypes(internalTokenTypes) {
       const tokenTypes2 = {};
@@ -65610,8 +74785,8 @@ var require_shell = __commonJS2({
         return { type: `argument`, segments: [].concat(...segments) };
       }, peg$c54 = function(string4) {
         return string4;
-      }, peg$c55 = "$'", peg$c56 = peg$literalExpectation("$'", false), peg$c57 = "'", peg$c58 = peg$literalExpectation("'", false), peg$c59 = function(text2) {
-        return [{ type: `text`, text: text2 }];
+      }, peg$c55 = "$'", peg$c56 = peg$literalExpectation("$'", false), peg$c57 = "'", peg$c58 = peg$literalExpectation("'", false), peg$c59 = function(text3) {
+        return [{ type: `text`, text: text3 }];
       }, peg$c60 = '""', peg$c61 = peg$literalExpectation('""', false), peg$c62 = function() {
         return { type: `text`, text: `` };
       }, peg$c63 = '"', peg$c64 = peg$literalExpectation('"', false), peg$c65 = function(segments) {
@@ -65622,8 +74797,8 @@ var require_shell = __commonJS2({
         return { type: `shell`, shell, quoted: true };
       }, peg$c68 = function(variable) {
         return __spreadProps(__spreadValues({ type: `variable` }, variable), { quoted: true });
-      }, peg$c69 = function(text2) {
-        return { type: `text`, text: text2 };
+      }, peg$c69 = function(text3) {
+        return { type: `text`, text: text3 };
       }, peg$c70 = function(arithmetic) {
         return { type: `arithmetic`, arithmetic, quoted: false };
       }, peg$c71 = function(shell) {
@@ -65695,7 +74870,7 @@ var require_shell = __commonJS2({
       }, peg$c173 = function(pattern) {
         return pattern;
       }, peg$c174 = /^[a-zA-Z0-9_]/, peg$c175 = peg$classExpectation([["a", "z"], ["A", "Z"], ["0", "9"], "_"], false, false), peg$c176 = function() {
-        return text();
+        return text22();
       }, peg$c177 = /^[$@*?#a-zA-Z0-9_\-]/, peg$c178 = peg$classExpectation(["$", "@", "*", "?", "#", ["a", "z"], ["A", "Z"], ["0", "9"], "_", "-"], false, false), peg$c179 = /^[()}<>$|&; \t"']/, peg$c180 = peg$classExpectation(["(", ")", "}", "<", ">", "$", "|", "&", ";", " ", "	", '"', "'"], false, false), peg$c181 = /^[<>&; \t"']/, peg$c182 = peg$classExpectation(["<", ">", "&", ";", " ", "	", '"', "'"], false, false), peg$c183 = /^[ \t]/, peg$c184 = peg$classExpectation([" ", "	"], false, false), peg$currPos = 0, peg$savedPos = 0, peg$posDetailsCache = [{ line: 1, column: 1 }], peg$maxFailPos = 0, peg$maxFailExpected = [], peg$silentFails = 0, peg$result;
       if ("startRule" in options) {
         if (!(options.startRule in peg$startRuleFunctions)) {
@@ -65703,7 +74878,7 @@ var require_shell = __commonJS2({
         }
         peg$startRuleFunction = peg$startRuleFunctions[options.startRule];
       }
-      function text() {
+      function text22() {
         return input2.substring(peg$savedPos, peg$currPos);
       }
       function location() {
@@ -65721,8 +74896,8 @@ var require_shell = __commonJS2({
         location2 = location2 !== void 0 ? location2 : peg$computeLocation(peg$savedPos, peg$currPos);
         throw peg$buildSimpleError(message, location2);
       }
-      function peg$literalExpectation(text2, ignoreCase) {
-        return { type: "literal", text: text2, ignoreCase };
+      function peg$literalExpectation(text3, ignoreCase) {
+        return { type: "literal", text: text3, ignoreCase };
       }
       function peg$classExpectation(parts, inverted, ignoreCase) {
         return { type: "class", parts, inverted, ignoreCase };
@@ -69163,17 +78338,17 @@ var require_shell2 = __commonJS2({
     };
     function stringifyArgumentSegment(argumentSegment) {
       const doubleQuoteIfRequested = (string4, quote) => quote ? `"${string4}"` : string4;
-      const quoteIfNeeded = (text) => {
-        if (text === ``)
+      const quoteIfNeeded = (text22) => {
+        if (text22 === ``)
           return `''`;
-        if (!text.match(/[()}<>$|&;"'\n\t ]/))
-          return text;
-        if (!text.match(/['\t\p{C}]/u))
-          return `'${text}'`;
-        if (!text.match(/'/)) {
-          return `$'${text.replace(/[\t\p{C}]/u, getEscapedControlChar)}'`;
+        if (!text22.match(/[()}<>$|&;"'\n\t ]/))
+          return text22;
+        if (!text22.match(/['\t\p{C}]/u))
+          return `'${text22}'`;
+        if (!text22.match(/'/)) {
+          return `$'${text22.replace(/[\t\p{C}]/u, getEscapedControlChar)}'`;
         } else {
-          return `"${text.replace(/["$\t\p{C}]/u, getEscapedDblChar)}"`;
+          return `"${text22.replace(/["$\t\p{C}]/u, getEscapedDblChar)}"`;
         }
       };
       switch (argumentSegment.type) {
@@ -69325,7 +78500,7 @@ var require_resolution = __commonJS2({
       }, peg$c7 = function(fullName) {
         return { fullName };
       }, peg$c8 = function() {
-        return text();
+        return text22();
       }, peg$c9 = /^[^\/@]/, peg$c10 = peg$classExpectation(["/", "@"], true, false), peg$c11 = /^[^\/]/, peg$c12 = peg$classExpectation(["/"], true, false), peg$currPos = 0, peg$savedPos = 0, peg$posDetailsCache = [{ line: 1, column: 1 }], peg$maxFailPos = 0, peg$maxFailExpected = [], peg$silentFails = 0, peg$result;
       if ("startRule" in options) {
         if (!(options.startRule in peg$startRuleFunctions)) {
@@ -69333,7 +78508,7 @@ var require_resolution = __commonJS2({
         }
         peg$startRuleFunction = peg$startRuleFunctions[options.startRule];
       }
-      function text() {
+      function text22() {
         return input2.substring(peg$savedPos, peg$currPos);
       }
       function location() {
@@ -69351,8 +78526,8 @@ var require_resolution = __commonJS2({
         location2 = location2 !== void 0 ? location2 : peg$computeLocation(peg$savedPos, peg$currPos);
         throw peg$buildSimpleError(message, location2);
       }
-      function peg$literalExpectation(text2, ignoreCase) {
-        return { type: "literal", text: text2, ignoreCase };
+      function peg$literalExpectation(text3, ignoreCase) {
+        return { type: "literal", text: text3, ignoreCase };
       }
       function peg$classExpectation(parts, inverted, ignoreCase) {
         return { type: "class", parts, inverted, ignoreCase };
@@ -72738,7 +81913,7 @@ ${" ".repeat(state.indent * level)}`;
       if ((node2.kind === "mapping" || node2.kind === "sequence") && !useBlockCollection) state.openEnded = false;
       if (useBlockCollection && compact && level > 0 && state.indent > 2) body = `${" ".repeat(state.indent - 2)}${body}`;
       const noBody = body === "";
-      let text = body;
+      let text22 = body;
       if (shouldPrintTag || hasAnchor) {
         const props = [];
         const tag = shouldPrintTag ? nodeTagShort(node2) : null;
@@ -72751,10 +81926,10 @@ ${" ".repeat(state.indent * level)}`;
           if (tag !== null) props.push(tag);
         }
         const sep2 = body === "" || body.charCodeAt(0) === CHAR_LINE_FEED ? "" : " ";
-        text = `${props.join(" ")}${sep2}${body}`;
+        text22 = `${props.join(" ")}${sep2}${body}`;
       }
       return {
-        text,
+        text: text22,
         noBody
       };
     }
@@ -73190,9 +82365,9 @@ var require_syml = __commonJS2({
         indentLevel--;
         return true;
       }, peg$c25 = function() {
-        return text();
+        return text22();
       }, peg$c26 = peg$otherExpectation("pseudostring"), peg$c27 = /^[^\r\n\t ?:,\][{}#&*!|>'"%@`\-]/, peg$c28 = peg$classExpectation(["\r", "\n", "	", " ", "?", ":", ",", "]", "[", "{", "}", "#", "&", "*", "!", "|", ">", "'", '"', "%", "@", "`", "-"], true, false), peg$c29 = /^[^\r\n\t ,\][{}:#"']/, peg$c30 = peg$classExpectation(["\r", "\n", "	", " ", ",", "]", "[", "{", "}", ":", "#", '"', "'"], true, false), peg$c31 = function() {
-        return text().replace(/^ *| *$/g, "");
+        return text22().replace(/^ *| *$/g, "");
       }, peg$c32 = "--", peg$c33 = peg$literalExpectation("--", false), peg$c34 = /^[a-zA-Z\/0-9]/, peg$c35 = peg$classExpectation([["a", "z"], ["A", "Z"], "/", ["0", "9"]], false, false), peg$c36 = /^[^\r\n\t :,]/, peg$c37 = peg$classExpectation(["\r", "\n", "	", " ", ":", ","], true, false), peg$c38 = "null", peg$c39 = peg$literalExpectation("null", false), peg$c40 = function() {
         return null;
       }, peg$c41 = "true", peg$c42 = peg$literalExpectation("true", false), peg$c43 = function() {
@@ -73231,7 +82406,7 @@ var require_syml = __commonJS2({
         }
         peg$startRuleFunction = peg$startRuleFunctions[options.startRule];
       }
-      function text() {
+      function text22() {
         return input2.substring(peg$savedPos, peg$currPos);
       }
       function location() {
@@ -73249,8 +82424,8 @@ var require_syml = __commonJS2({
         location2 = location2 !== void 0 ? location2 : peg$computeLocation(peg$savedPos, peg$currPos);
         throw peg$buildSimpleError(message, location2);
       }
-      function peg$literalExpectation(text2, ignoreCase) {
-        return { type: "literal", text: text2, ignoreCase };
+      function peg$literalExpectation(text3, ignoreCase) {
+        return { type: "literal", text: text3, ignoreCase };
       }
       function peg$classExpectation(parts, inverted, ignoreCase) {
         return { type: "class", parts, inverted, ignoreCase };
@@ -75074,6 +84249,8889 @@ var require_lib2 = __commonJS2({
     } });
   }
 });
+var require_attribute = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/lexer/attribute.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      attributeIndex: 0,
+      attributeListDepth: {},
+      matchST_ATTRIBUTE() {
+        const ch = this.input();
+        if (this.is_WHITESPACE()) {
+          do {
+            this.input();
+          } while (this.is_WHITESPACE());
+          this.unput(1);
+          return null;
+        }
+        switch (ch) {
+          case "]":
+            if (this.attributeListDepth[this.attributeIndex] === 0) {
+              delete this.attributeListDepth[this.attributeIndex];
+              this.attributeIndex--;
+              this.popState();
+            } else {
+              this.attributeListDepth[this.attributeIndex]--;
+            }
+            return "]";
+          case "(":
+          case ")":
+          case ":":
+          case "=":
+          case ";":
+          case "|":
+          case "&":
+          case "^":
+          case "-":
+          case "+":
+          case "*":
+          case "%":
+          case "~":
+          case "<":
+          case ">":
+          case "!":
+          case ".":
+          case "{":
+          case "}":
+          case "$":
+            return this.consume_TOKEN();
+          case "[":
+            this.attributeListDepth[this.attributeIndex]++;
+            return "[";
+          case ",":
+            return ",";
+          case '"':
+            return this.ST_DOUBLE_QUOTES();
+          case "'":
+            return this.T_CONSTANT_ENCAPSED_STRING();
+          case "/":
+            if (this._input[this.offset] === "/") {
+              return this.T_COMMENT();
+            } else if (this._input[this.offset] === "*") {
+              this.input();
+              return this.T_DOC_COMMENT();
+            } else {
+              return this.consume_TOKEN();
+            }
+        }
+        if (this.is_LABEL_START() || ch === "\\") {
+          while (this.offset < this.size) {
+            const ch2 = this.input();
+            if (!(this.is_LABEL() || ch2 === "\\")) {
+              if (ch2) this.unput(1);
+              break;
+            }
+          }
+          return this.T_STRING();
+        } else if (this.is_NUM()) {
+          return this.consume_NUM();
+        }
+        throw new Error(
+          `Bad terminal sequence "${ch}" at line ${this.yylineno} (offset ${this.offset})`
+        );
+      }
+    };
+  }
+});
+var require_comments = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/lexer/comments.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      /*
+       * Reads a single line comment
+       */
+      T_COMMENT() {
+        while (this.offset < this.size) {
+          const ch = this.input();
+          if (ch === "\n" || ch === "\r") {
+            return this.tok.T_COMMENT;
+          } else if (ch === "?" && !this.aspTagMode && this._input[this.offset] === ">") {
+            this.unput(1);
+            return this.tok.T_COMMENT;
+          } else if (ch === "%" && this.aspTagMode && this._input[this.offset] === ">") {
+            this.unput(1);
+            return this.tok.T_COMMENT;
+          }
+        }
+        return this.tok.T_COMMENT;
+      },
+      /*
+       * Behaviour : https://github.com/php/php-src/blob/master/Zend/zend_language_scanner.l#L1927
+       */
+      T_DOC_COMMENT() {
+        let ch = this.input();
+        let token = this.tok.T_COMMENT;
+        if (ch === "*") {
+          ch = this.input();
+          if (this.is_WHITESPACE()) {
+            token = this.tok.T_DOC_COMMENT;
+          }
+          if (ch === "/") {
+            return token;
+          } else {
+            this.unput(1);
+          }
+        }
+        while (this.offset < this.size) {
+          ch = this.input();
+          if (ch === "*" && this._input[this.offset] === "/") {
+            this.input();
+            break;
+          }
+        }
+        return token;
+      }
+    };
+  }
+});
+var require_initial = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/lexer/initial.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      nextINITIAL() {
+        if (this.conditionStack.length > 1 && this.conditionStack[this.conditionStack.length - 1] === "INITIAL") {
+          this.popState();
+        } else {
+          this.begin("ST_IN_SCRIPTING");
+        }
+        return this;
+      },
+      matchINITIAL() {
+        while (this.offset < this.size) {
+          let ch = this.input();
+          if (ch == "<") {
+            ch = this.ahead(1);
+            if (ch == "?") {
+              if (this.tryMatch("?=")) {
+                this.unput(1).appendToken(this.tok.T_OPEN_TAG_WITH_ECHO, 3).nextINITIAL();
+                break;
+              } else if (this.tryMatchCaseless("?php")) {
+                ch = this._input[this.offset + 4];
+                if (ch === " " || ch === "	" || ch === "\n" || ch === "\r") {
+                  this.unput(1).appendToken(this.tok.T_OPEN_TAG, 6).nextINITIAL();
+                  break;
+                }
+              }
+              if (this.short_tags) {
+                this.unput(1).appendToken(this.tok.T_OPEN_TAG, 2).nextINITIAL();
+                break;
+              }
+            } else if (this.asp_tags && ch == "%") {
+              if (this.tryMatch("%=")) {
+                this.aspTagMode = true;
+                this.unput(1).appendToken(this.tok.T_OPEN_TAG_WITH_ECHO, 3).nextINITIAL();
+                break;
+              } else {
+                this.aspTagMode = true;
+                this.unput(1).appendToken(this.tok.T_OPEN_TAG, 2).nextINITIAL();
+                break;
+              }
+            }
+          }
+        }
+        if (this.yytext.length > 0) {
+          return this.tok.T_INLINE_HTML;
+        } else {
+          return false;
+        }
+      }
+    };
+  }
+});
+var require_numbers = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/lexer/numbers.js"(exports2, module2) {
+    "use strict";
+    var MAX_LENGTH_OF_LONG = 10;
+    var long_min_digits = "2147483648";
+    if (process.arch == "x64") {
+      MAX_LENGTH_OF_LONG = 19;
+      long_min_digits = "9223372036854775808";
+    }
+    module2.exports = {
+      consume_NUM() {
+        let ch = this.yytext[0];
+        let hasPoint = ch === ".";
+        if (ch === "0") {
+          ch = this.input();
+          if (ch === "x" || ch === "X") {
+            ch = this.input();
+            if (ch !== "_" && this.is_HEX()) {
+              return this.consume_HNUM();
+            } else {
+              this.unput(ch ? 2 : 1);
+            }
+          } else if (ch === "b" || ch === "B") {
+            ch = this.input();
+            if (ch !== "_" && ch === "0" || ch === "1") {
+              return this.consume_BNUM();
+            } else {
+              this.unput(ch ? 2 : 1);
+            }
+          } else if (ch === "o" || ch === "O") {
+            ch = this.input();
+            if (ch !== "_" && this.is_OCTAL()) {
+              return this.consume_ONUM();
+            } else {
+              this.unput(ch ? 2 : 1);
+            }
+          } else if (!this.is_NUM()) {
+            if (ch) this.unput(1);
+          }
+        }
+        while (this.offset < this.size) {
+          const prev = ch;
+          ch = this.input();
+          if (ch === "_") {
+            if (prev === "_") {
+              this.unput(2);
+              break;
+            }
+            if (prev === ".") {
+              this.unput(1);
+              break;
+            }
+            if (prev === "e" || prev === "E") {
+              this.unput(2);
+              break;
+            }
+          } else if (ch === ".") {
+            if (hasPoint) {
+              this.unput(1);
+              break;
+            }
+            if (prev === "_") {
+              this.unput(2);
+              break;
+            }
+            hasPoint = true;
+            continue;
+          } else if (ch === "e" || ch === "E") {
+            if (prev === "_") {
+              this.unput(1);
+              break;
+            }
+            let undo = 2;
+            ch = this.input();
+            if (ch === "+" || ch === "-") {
+              undo = 3;
+              ch = this.input();
+            }
+            if (this.is_NUM_START()) {
+              this.consume_LNUM();
+              return this.tok.T_DNUMBER;
+            }
+            this.unput(ch ? undo : undo - 1);
+            break;
+          }
+          if (!this.is_NUM()) {
+            if (ch) this.unput(1);
+            break;
+          }
+        }
+        if (hasPoint) {
+          return this.tok.T_DNUMBER;
+        } else if (this.yytext.length < MAX_LENGTH_OF_LONG - 1) {
+          return this.tok.T_LNUMBER;
+        } else {
+          if (this.yytext.length < MAX_LENGTH_OF_LONG || this.yytext.length == MAX_LENGTH_OF_LONG && this.yytext < long_min_digits) {
+            return this.tok.T_LNUMBER;
+          }
+          return this.tok.T_DNUMBER;
+        }
+      },
+      // read hexa
+      consume_HNUM() {
+        while (this.offset < this.size) {
+          const ch = this.input();
+          if (!this.is_HEX()) {
+            if (ch) this.unput(1);
+            break;
+          }
+        }
+        return this.tok.T_LNUMBER;
+      },
+      // read a generic number
+      consume_LNUM() {
+        while (this.offset < this.size) {
+          const ch = this.input();
+          if (!this.is_NUM()) {
+            if (ch) this.unput(1);
+            break;
+          }
+        }
+        return this.tok.T_LNUMBER;
+      },
+      // read binary
+      consume_BNUM() {
+        let ch;
+        while (this.offset < this.size) {
+          ch = this.input();
+          if (ch !== "0" && ch !== "1" && ch !== "_") {
+            if (ch) this.unput(1);
+            break;
+          }
+        }
+        return this.tok.T_LNUMBER;
+      },
+      // read an octal number
+      consume_ONUM() {
+        while (this.offset < this.size) {
+          const ch = this.input();
+          if (!this.is_OCTAL()) {
+            if (ch) this.unput(1);
+            break;
+          }
+        }
+        return this.tok.T_LNUMBER;
+      }
+    };
+  }
+});
+var require_property = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/lexer/property.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      matchST_LOOKING_FOR_PROPERTY() {
+        let ch = this.input();
+        if (ch === "-") {
+          ch = this.input();
+          if (ch === ">") {
+            return this.tok.T_OBJECT_OPERATOR;
+          }
+          if (ch) this.unput(1);
+        } else if (this.is_WHITESPACE()) {
+          return this.tok.T_WHITESPACE;
+        } else if (this.is_LABEL_START()) {
+          this.consume_LABEL();
+          this.popState();
+          return this.tok.T_STRING;
+        }
+        this.popState();
+        if (ch) this.unput(1);
+        return false;
+      },
+      matchST_LOOKING_FOR_VARNAME() {
+        let ch = this.input();
+        this.popState();
+        this.begin("ST_IN_SCRIPTING");
+        if (this.is_LABEL_START()) {
+          this.consume_LABEL();
+          ch = this.input();
+          if (ch === "[" || ch === "}") {
+            this.unput(1);
+            return this.tok.T_STRING_VARNAME;
+          } else {
+            this.unput(this.yytext.length);
+          }
+        } else {
+          if (ch) this.unput(1);
+        }
+        return false;
+      },
+      matchST_VAR_OFFSET() {
+        const ch = this.input();
+        if (this.is_NUM_START()) {
+          this.consume_NUM();
+          return this.tok.T_NUM_STRING;
+        } else if (ch === "]") {
+          this.popState();
+          return "]";
+        } else if (ch === "$") {
+          this.input();
+          if (this.is_LABEL_START()) {
+            this.consume_LABEL();
+            return this.tok.T_VARIABLE;
+          } else {
+            throw new Error("Unexpected terminal");
+          }
+        } else if (this.is_LABEL_START()) {
+          this.consume_LABEL();
+          return this.tok.T_STRING;
+        } else if (this.is_WHITESPACE() || ch === "\\" || ch === "'" || ch === "#") {
+          return this.tok.T_ENCAPSED_AND_WHITESPACE;
+        } else if (ch === "[" || ch === "{" || ch === "}" || ch === '"' || ch === "`" || this.is_TOKEN()) {
+          return ch;
+        } else {
+          throw new Error("Unexpected terminal");
+        }
+      }
+    };
+  }
+});
+var require_scripting = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/lexer/scripting.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      matchST_IN_SCRIPTING() {
+        let ch = this.input();
+        switch (ch) {
+          case " ":
+          case "	":
+          case "\n":
+          case "\r":
+          case "\r\n":
+            return this.T_WHITESPACE();
+          case "#":
+            if (this.version >= 800 && this._input[this.offset] === "[") {
+              this.input();
+              this.attributeListDepth[++this.attributeIndex] = 0;
+              this.begin("ST_ATTRIBUTE");
+              return this.tok.T_ATTRIBUTE;
+            }
+            return this.T_COMMENT();
+          case "/":
+            if (this._input[this.offset] === "/") {
+              return this.T_COMMENT();
+            } else if (this._input[this.offset] === "*") {
+              this.input();
+              return this.T_DOC_COMMENT();
+            }
+            return this.consume_TOKEN();
+          case "'":
+            return this.T_CONSTANT_ENCAPSED_STRING();
+          case '"':
+            return this.ST_DOUBLE_QUOTES();
+          case "`":
+            this.begin("ST_BACKQUOTE");
+            return "`";
+          case "?":
+            if (!this.aspTagMode && this.tryMatch(">")) {
+              this.input();
+              const nextCH = this._input[this.offset];
+              if (nextCH === "\n" || nextCH === "\r") this.input();
+              if (this.conditionStack.length > 1) {
+                this.begin("INITIAL");
+              }
+              return this.tok.T_CLOSE_TAG;
+            }
+            return this.consume_TOKEN();
+          case "%":
+            if (this.aspTagMode && this._input[this.offset] === ">") {
+              this.input();
+              ch = this._input[this.offset];
+              if (ch === "\n" || ch === "\r") {
+                this.input();
+              }
+              this.aspTagMode = false;
+              if (this.conditionStack.length > 1) {
+                this.begin("INITIAL");
+              }
+              return this.tok.T_CLOSE_TAG;
+            }
+            return this.consume_TOKEN();
+          case "{":
+            this.begin("ST_IN_SCRIPTING");
+            return "{";
+          case "}":
+            if (this.conditionStack.length > 2) {
+              this.popState();
+            }
+            return "}";
+          default:
+            if (ch === ".") {
+              ch = this.input();
+              if (this.is_NUM_START()) {
+                return this.consume_NUM();
+              } else {
+                if (ch) this.unput(1);
+              }
+            }
+            if (this.is_NUM_START()) {
+              return this.consume_NUM();
+            } else if (this.is_LABEL_START()) {
+              return this.consume_LABEL().T_STRING();
+            } else if (this.is_TOKEN()) {
+              return this.consume_TOKEN();
+            }
+        }
+        throw new Error(
+          'Bad terminal sequence "' + ch + '" at line ' + this.yylineno + " (offset " + this.offset + ")"
+        );
+      },
+      T_WHITESPACE() {
+        while (this.offset < this.size) {
+          const ch = this.input();
+          if (ch === " " || ch === "	" || ch === "\n" || ch === "\r") {
+            continue;
+          }
+          if (ch) this.unput(1);
+          break;
+        }
+        return this.tok.T_WHITESPACE;
+      }
+    };
+  }
+});
+var require_strings = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/lexer/strings.js"(exports2, module2) {
+    "use strict";
+    var newline = ["\n", "\r"];
+    var valid_after_heredoc = ["\n", "\r", ";"];
+    var valid_after_heredoc_73 = valid_after_heredoc.concat([
+      "	",
+      " ",
+      ",",
+      "]",
+      ")",
+      "/",
+      "=",
+      "!",
+      "."
+    ]);
+    module2.exports = {
+      T_CONSTANT_ENCAPSED_STRING() {
+        let ch;
+        while (this.offset < this.size) {
+          ch = this.input();
+          if (ch == "\\") {
+            this.input();
+          } else if (ch == "'") {
+            break;
+          }
+        }
+        return this.tok.T_CONSTANT_ENCAPSED_STRING;
+      },
+      // check if matching a HEREDOC state
+      is_HEREDOC() {
+        const revert = this.offset;
+        if (this._input[this.offset - 1] === "<" && this._input[this.offset] === "<" && this._input[this.offset + 1] === "<") {
+          this.offset += 3;
+          if (this.is_TABSPACE()) {
+            while (this.offset < this.size) {
+              this.offset++;
+              if (!this.is_TABSPACE()) {
+                break;
+              }
+            }
+          }
+          let tChar = this._input[this.offset - 1];
+          if (tChar === "'" || tChar === '"') {
+            this.offset++;
+          } else {
+            tChar = null;
+          }
+          if (this.is_LABEL_START()) {
+            let yyoffset = this.offset - 1;
+            while (this.offset < this.size) {
+              this.offset++;
+              if (!this.is_LABEL()) {
+                break;
+              }
+            }
+            const yylabel = this._input.substring(yyoffset, this.offset - 1);
+            if (!tChar || tChar === this._input[this.offset - 1]) {
+              if (tChar) this.offset++;
+              if (newline.includes(this._input[this.offset - 1])) {
+                this.heredoc_label.label = yylabel;
+                this.heredoc_label.length = yylabel.length;
+                this.heredoc_label.finished = false;
+                yyoffset = this.offset - revert;
+                this.offset = revert;
+                this.consume(yyoffset);
+                if (tChar === "'") {
+                  this.begin("ST_NOWDOC");
+                } else {
+                  this.begin("ST_HEREDOC");
+                }
+                this.prematch_ENDOFDOC();
+                return this.tok.T_START_HEREDOC;
+              }
+            }
+          }
+        }
+        this.offset = revert;
+        return false;
+      },
+      ST_DOUBLE_QUOTES() {
+        let ch;
+        while (this.offset < this.size) {
+          ch = this.input();
+          if (ch == "\\") {
+            this.input();
+          } else if (ch == '"') {
+            break;
+          } else if (ch == "$") {
+            ch = this.input();
+            if (ch == "{" || this.is_LABEL_START()) {
+              this.unput(2);
+              break;
+            }
+            if (ch) this.unput(1);
+          } else if (ch == "{") {
+            ch = this.input();
+            if (ch == "$") {
+              this.unput(2);
+              break;
+            }
+            if (ch) this.unput(1);
+          }
+        }
+        if (ch == '"') {
+          return this.tok.T_CONSTANT_ENCAPSED_STRING;
+        } else {
+          let prefix = 1;
+          if (this.yytext[0] === "b" || this.yytext[0] === "B") {
+            prefix = 2;
+          }
+          if (this.yytext.length > 2) {
+            this.appendToken(
+              this.tok.T_ENCAPSED_AND_WHITESPACE,
+              this.yytext.length - prefix
+            );
+          }
+          this.unput(this.yytext.length - prefix);
+          this.begin("ST_DOUBLE_QUOTES");
+          return this.yytext;
+        }
+      },
+      // check if its a DOC end sequence
+      isDOC_MATCH(offset, consumeLeadingSpaces) {
+        const prev_ch = this._input[offset - 2];
+        if (!newline.includes(prev_ch)) {
+          return false;
+        }
+        let indentation_uses_spaces = false;
+        let indentation_uses_tabs = false;
+        let indentation = 0;
+        let leading_ch = this._input[offset - 1];
+        if (this.version >= 703) {
+          while (leading_ch === "	" || leading_ch === " ") {
+            if (leading_ch === " ") {
+              indentation_uses_spaces = true;
+            } else if (leading_ch === "	") {
+              indentation_uses_tabs = true;
+            }
+            leading_ch = this._input[offset + indentation];
+            indentation++;
+          }
+          offset = offset + indentation;
+          if (newline.includes(this._input[offset - 1])) {
+            return false;
+          }
+        }
+        if (this._input.substring(
+          offset - 1,
+          offset - 1 + this.heredoc_label.length
+        ) === this.heredoc_label.label) {
+          const ch = this._input[offset - 1 + this.heredoc_label.length];
+          if ((this.version >= 703 ? valid_after_heredoc_73 : valid_after_heredoc).includes(ch)) {
+            if (consumeLeadingSpaces) {
+              this.consume(indentation);
+              if (indentation_uses_spaces && indentation_uses_tabs) {
+                throw new Error(
+                  "Parse error:  mixing spaces and tabs in ending marker at line " + this.yylineno + " (offset " + this.offset + ")"
+                );
+              }
+            } else {
+              this.heredoc_label.indentation = indentation;
+              this.heredoc_label.indentation_uses_spaces = indentation_uses_spaces;
+              this.heredoc_label.first_encaps_node = true;
+            }
+            return true;
+          }
+        }
+        return false;
+      },
+      /*
+       * Prematch the end of HEREDOC/NOWDOC end tag to preset the
+       * context of this.heredoc_label
+       */
+      prematch_ENDOFDOC() {
+        this.heredoc_label.indentation_uses_spaces = false;
+        this.heredoc_label.indentation = 0;
+        this.heredoc_label.first_encaps_node = true;
+        let offset = this.offset + 1;
+        while (offset < this._input.length) {
+          if (this.isDOC_MATCH(offset, false)) {
+            return;
+          }
+          if (!newline.includes(this._input[offset - 1])) {
+            while (!newline.includes(this._input[offset++]) && offset < this._input.length) {
+            }
+          }
+          offset++;
+        }
+      },
+      matchST_NOWDOC() {
+        if (this.isDOC_MATCH(this.offset, true)) {
+          this.consume(this.heredoc_label.length);
+          this.popState();
+          return this.tok.T_END_HEREDOC;
+        }
+        let ch = this._input[this.offset - 1];
+        while (this.offset < this.size) {
+          if (newline.includes(ch)) {
+            ch = this.input();
+            if (this.isDOC_MATCH(this.offset, true)) {
+              this.unput(1).popState();
+              this.appendToken(this.tok.T_END_HEREDOC, this.heredoc_label.length);
+              return this.tok.T_ENCAPSED_AND_WHITESPACE;
+            }
+          } else {
+            ch = this.input();
+          }
+        }
+        return this.tok.T_ENCAPSED_AND_WHITESPACE;
+      },
+      matchST_HEREDOC() {
+        let ch = this.input();
+        if (this.isDOC_MATCH(this.offset, true)) {
+          this.consume(this.heredoc_label.length - 1);
+          this.popState();
+          return this.tok.T_END_HEREDOC;
+        }
+        while (this.offset < this.size) {
+          if (ch === "\\") {
+            ch = this.input();
+            if (!newline.includes(ch)) {
+              ch = this.input();
+            }
+          }
+          if (newline.includes(ch)) {
+            ch = this.input();
+            if (this.isDOC_MATCH(this.offset, true)) {
+              this.unput(1).popState();
+              this.appendToken(this.tok.T_END_HEREDOC, this.heredoc_label.length);
+              return this.tok.T_ENCAPSED_AND_WHITESPACE;
+            }
+          } else if (ch === "$") {
+            ch = this.input();
+            if (ch === "{") {
+              this.begin("ST_LOOKING_FOR_VARNAME");
+              if (this.yytext.length > 2) {
+                this.appendToken(this.tok.T_DOLLAR_OPEN_CURLY_BRACES, 2);
+                this.unput(2);
+                return this.tok.T_ENCAPSED_AND_WHITESPACE;
+              } else {
+                return this.tok.T_DOLLAR_OPEN_CURLY_BRACES;
+              }
+            } else if (this.is_LABEL_START()) {
+              const yyoffset = this.offset;
+              const next = this.consume_VARIABLE();
+              if (this.yytext.length > this.offset - yyoffset + 2) {
+                this.appendToken(next, this.offset - yyoffset + 2);
+                this.unput(this.offset - yyoffset + 2);
+                return this.tok.T_ENCAPSED_AND_WHITESPACE;
+              } else {
+                return next;
+              }
+            }
+          } else if (ch === "{") {
+            ch = this.input();
+            if (ch === "$") {
+              this.begin("ST_IN_SCRIPTING");
+              if (this.yytext.length > 2) {
+                this.appendToken(this.tok.T_CURLY_OPEN, 1);
+                this.unput(2);
+                return this.tok.T_ENCAPSED_AND_WHITESPACE;
+              } else {
+                this.unput(1);
+                return this.tok.T_CURLY_OPEN;
+              }
+            }
+          } else {
+            ch = this.input();
+          }
+        }
+        return this.tok.T_ENCAPSED_AND_WHITESPACE;
+      },
+      consume_VARIABLE() {
+        this.consume_LABEL();
+        const ch = this.input();
+        if (ch == "[") {
+          this.unput(1);
+          this.begin("ST_VAR_OFFSET");
+          return this.tok.T_VARIABLE;
+        } else if (ch === "-") {
+          if (this.input() === ">") {
+            this.input();
+            if (this.is_LABEL_START()) {
+              this.begin("ST_LOOKING_FOR_PROPERTY");
+            }
+            this.unput(3);
+            return this.tok.T_VARIABLE;
+          } else {
+            this.unput(2);
+          }
+        } else {
+          if (ch) this.unput(1);
+        }
+        return this.tok.T_VARIABLE;
+      },
+      // HANDLES BACKQUOTES
+      matchST_BACKQUOTE() {
+        let ch = this.input();
+        if (ch === "$") {
+          ch = this.input();
+          if (ch === "{") {
+            this.begin("ST_LOOKING_FOR_VARNAME");
+            return this.tok.T_DOLLAR_OPEN_CURLY_BRACES;
+          } else if (this.is_LABEL_START()) {
+            const tok = this.consume_VARIABLE();
+            return tok;
+          }
+        } else if (ch === "{") {
+          if (this._input[this.offset] === "$") {
+            this.begin("ST_IN_SCRIPTING");
+            return this.tok.T_CURLY_OPEN;
+          }
+        } else if (ch === "`") {
+          this.popState();
+          return "`";
+        }
+        while (this.offset < this.size) {
+          if (ch === "\\") {
+            this.input();
+          } else if (ch === "`") {
+            this.unput(1);
+            this.popState();
+            this.appendToken("`", 1);
+            break;
+          } else if (ch === "$") {
+            ch = this.input();
+            if (ch === "{") {
+              this.begin("ST_LOOKING_FOR_VARNAME");
+              if (this.yytext.length > 2) {
+                this.appendToken(this.tok.T_DOLLAR_OPEN_CURLY_BRACES, 2);
+                this.unput(2);
+                return this.tok.T_ENCAPSED_AND_WHITESPACE;
+              } else {
+                return this.tok.T_DOLLAR_OPEN_CURLY_BRACES;
+              }
+            } else if (this.is_LABEL_START()) {
+              const yyoffset = this.offset;
+              const next = this.consume_VARIABLE();
+              if (this.yytext.length > this.offset - yyoffset + 2) {
+                this.appendToken(next, this.offset - yyoffset + 2);
+                this.unput(this.offset - yyoffset + 2);
+                return this.tok.T_ENCAPSED_AND_WHITESPACE;
+              } else {
+                return next;
+              }
+            }
+            continue;
+          } else if (ch === "{") {
+            ch = this.input();
+            if (ch === "$") {
+              this.begin("ST_IN_SCRIPTING");
+              if (this.yytext.length > 2) {
+                this.appendToken(this.tok.T_CURLY_OPEN, 1);
+                this.unput(2);
+                return this.tok.T_ENCAPSED_AND_WHITESPACE;
+              } else {
+                this.unput(1);
+                return this.tok.T_CURLY_OPEN;
+              }
+            }
+            continue;
+          }
+          ch = this.input();
+        }
+        return this.tok.T_ENCAPSED_AND_WHITESPACE;
+      },
+      matchST_DOUBLE_QUOTES() {
+        let ch = this.input();
+        if (ch === "$") {
+          ch = this.input();
+          if (ch === "{") {
+            this.begin("ST_LOOKING_FOR_VARNAME");
+            return this.tok.T_DOLLAR_OPEN_CURLY_BRACES;
+          } else if (this.is_LABEL_START()) {
+            const tok = this.consume_VARIABLE();
+            return tok;
+          }
+        } else if (ch === "{") {
+          if (this._input[this.offset] === "$") {
+            this.begin("ST_IN_SCRIPTING");
+            return this.tok.T_CURLY_OPEN;
+          }
+        } else if (ch === '"') {
+          this.popState();
+          return '"';
+        }
+        while (this.offset < this.size) {
+          if (ch === "\\") {
+            this.input();
+          } else if (ch === '"') {
+            this.unput(1);
+            this.popState();
+            this.appendToken('"', 1);
+            break;
+          } else if (ch === "$") {
+            ch = this.input();
+            if (ch === "{") {
+              this.begin("ST_LOOKING_FOR_VARNAME");
+              if (this.yytext.length > 2) {
+                this.appendToken(this.tok.T_DOLLAR_OPEN_CURLY_BRACES, 2);
+                this.unput(2);
+                return this.tok.T_ENCAPSED_AND_WHITESPACE;
+              } else {
+                return this.tok.T_DOLLAR_OPEN_CURLY_BRACES;
+              }
+            } else if (this.is_LABEL_START()) {
+              const yyoffset = this.offset;
+              const next = this.consume_VARIABLE();
+              if (this.yytext.length > this.offset - yyoffset + 2) {
+                this.appendToken(next, this.offset - yyoffset + 2);
+                this.unput(this.offset - yyoffset + 2);
+                return this.tok.T_ENCAPSED_AND_WHITESPACE;
+              } else {
+                return next;
+              }
+            }
+            if (ch) this.unput(1);
+          } else if (ch === "{") {
+            ch = this.input();
+            if (ch === "$") {
+              this.begin("ST_IN_SCRIPTING");
+              if (this.yytext.length > 2) {
+                this.appendToken(this.tok.T_CURLY_OPEN, 1);
+                this.unput(2);
+                return this.tok.T_ENCAPSED_AND_WHITESPACE;
+              } else {
+                this.unput(1);
+                return this.tok.T_CURLY_OPEN;
+              }
+            }
+            if (ch) this.unput(1);
+          }
+          ch = this.input();
+        }
+        return this.tok.T_ENCAPSED_AND_WHITESPACE;
+      }
+    };
+  }
+});
+var require_tokens = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/lexer/tokens.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      T_STRING() {
+        const token = this.yytext.toLowerCase();
+        let id = this.keywords[token];
+        if (typeof id !== "number") {
+          if (token === "yield") {
+            if (this.version >= 700 && this.tryMatch(" from")) {
+              this.consume(5);
+              id = this.tok.T_YIELD_FROM;
+            } else {
+              id = this.tok.T_YIELD;
+            }
+          } else {
+            id = this.tok.T_STRING;
+            if (token === "b" || token === "B") {
+              const ch = this.input();
+              if (ch === '"') {
+                return this.ST_DOUBLE_QUOTES();
+              } else if (ch === "'") {
+                return this.T_CONSTANT_ENCAPSED_STRING();
+              } else if (ch) {
+                this.unput(1);
+              }
+            }
+          }
+        }
+        if (id === this.tok.T_ENUM) {
+          if (this.version < 801) {
+            return this.tok.T_STRING;
+          }
+          const initial = this.offset;
+          let ch = this.input();
+          while (ch == " ") {
+            ch = this.input();
+          }
+          let isEnum = false;
+          if (this.is_LABEL_START()) {
+            while (this.is_LABEL()) {
+              ch += this.input();
+            }
+            const label = ch.slice(0, -1).toLowerCase();
+            isEnum = label !== "extends" && label !== "implements";
+          }
+          this.unput(this.offset - initial);
+          return isEnum ? this.tok.T_ENUM : this.tok.T_STRING;
+        }
+        if (this.offset < this.size && id !== this.tok.T_YIELD_FROM) {
+          let ch = this.input();
+          if (ch === "\\") {
+            id = token === "namespace" ? this.tok.T_NAME_RELATIVE : this.tok.T_NAME_QUALIFIED;
+            do {
+              if (this._input[this.offset] === "{") {
+                this.input();
+                break;
+              }
+              this.consume_LABEL();
+              ch = this.input();
+            } while (ch === "\\");
+          }
+          if (ch) {
+            this.unput(1);
+          }
+        }
+        return id;
+      },
+      // reads a custom token
+      consume_TOKEN() {
+        const ch = this._input[this.offset - 1];
+        const fn2 = this.tokenTerminals[ch];
+        if (fn2) {
+          return fn2.apply(this, []);
+        } else {
+          return this.yytext;
+        }
+      },
+      // list of special char tokens
+      tokenTerminals: {
+        $() {
+          this.offset++;
+          if (this.is_LABEL_START()) {
+            this.offset--;
+            this.consume_LABEL();
+            return this.tok.T_VARIABLE;
+          } else {
+            this.offset--;
+            return "$";
+          }
+        },
+        "-"() {
+          const nchar = this._input[this.offset];
+          if (nchar === ">") {
+            this.begin("ST_LOOKING_FOR_PROPERTY").input();
+            return this.tok.T_OBJECT_OPERATOR;
+          } else if (nchar === "-") {
+            this.input();
+            return this.tok.T_DEC;
+          } else if (nchar === "=") {
+            this.input();
+            return this.tok.T_MINUS_EQUAL;
+          }
+          return "-";
+        },
+        "\\"() {
+          if (this.offset < this.size) {
+            this.input();
+            if (this.is_LABEL_START()) {
+              let ch;
+              do {
+                if (this._input[this.offset] === "{") {
+                  this.input();
+                  break;
+                }
+                this.consume_LABEL();
+                ch = this.input();
+              } while (ch === "\\");
+              this.unput(1);
+              return this.tok.T_NAME_FULLY_QUALIFIED;
+            } else {
+              this.unput(1);
+            }
+          }
+          return this.tok.T_NS_SEPARATOR;
+        },
+        "/"() {
+          if (this._input[this.offset] === "=") {
+            this.input();
+            return this.tok.T_DIV_EQUAL;
+          }
+          return "/";
+        },
+        ":"() {
+          if (this._input[this.offset] === ":") {
+            this.input();
+            return this.tok.T_DOUBLE_COLON;
+          } else {
+            return ":";
+          }
+        },
+        "("() {
+          const initial = this.offset;
+          this.input();
+          if (this.is_TABSPACE()) {
+            this.consume_TABSPACE().input();
+          }
+          if (this.is_LABEL_START()) {
+            const yylen = this.yytext.length;
+            this.consume_LABEL();
+            const castToken = this.yytext.substring(yylen - 1).toLowerCase();
+            const castId = this.castKeywords[castToken];
+            if (typeof castId === "number") {
+              this.input();
+              if (this.is_TABSPACE()) {
+                this.consume_TABSPACE().input();
+              }
+              if (this._input[this.offset - 1] === ")") {
+                return castId;
+              }
+            }
+          }
+          this.unput(this.offset - initial);
+          return "(";
+        },
+        "="() {
+          const nchar = this._input[this.offset];
+          if (nchar === ">") {
+            this.input();
+            return this.tok.T_DOUBLE_ARROW;
+          } else if (nchar === "=") {
+            if (this._input[this.offset + 1] === "=") {
+              this.consume(2);
+              return this.tok.T_IS_IDENTICAL;
+            } else {
+              this.input();
+              return this.tok.T_IS_EQUAL;
+            }
+          }
+          return "=";
+        },
+        "+"() {
+          const nchar = this._input[this.offset];
+          if (nchar === "+") {
+            this.input();
+            return this.tok.T_INC;
+          } else if (nchar === "=") {
+            this.input();
+            return this.tok.T_PLUS_EQUAL;
+          }
+          return "+";
+        },
+        "!"() {
+          if (this._input[this.offset] === "=") {
+            if (this._input[this.offset + 1] === "=") {
+              this.consume(2);
+              return this.tok.T_IS_NOT_IDENTICAL;
+            } else {
+              this.input();
+              return this.tok.T_IS_NOT_EQUAL;
+            }
+          }
+          return "!";
+        },
+        "?"() {
+          if (this.version >= 700 && this._input[this.offset] === "?") {
+            if (this.version >= 704 && this._input[this.offset + 1] === "=") {
+              this.consume(2);
+              return this.tok.T_COALESCE_EQUAL;
+            } else {
+              this.input();
+              return this.tok.T_COALESCE;
+            }
+          }
+          if (this.version >= 800 && this._input[this.offset] === "-" && this._input[this.offset + 1] === ">") {
+            this.consume(1);
+            this.begin("ST_LOOKING_FOR_PROPERTY").input();
+            return this.tok.T_NULLSAFE_OBJECT_OPERATOR;
+          }
+          return "?";
+        },
+        "<"() {
+          let nchar = this._input[this.offset];
+          if (nchar === "<") {
+            nchar = this._input[this.offset + 1];
+            if (nchar === "=") {
+              this.consume(2);
+              return this.tok.T_SL_EQUAL;
+            } else if (nchar === "<") {
+              if (this.is_HEREDOC()) {
+                return this.tok.T_START_HEREDOC;
+              }
+            }
+            this.input();
+            return this.tok.T_SL;
+          } else if (nchar === "=") {
+            this.input();
+            if (this.version >= 700 && this._input[this.offset] === ">") {
+              this.input();
+              return this.tok.T_SPACESHIP;
+            } else {
+              return this.tok.T_IS_SMALLER_OR_EQUAL;
+            }
+          } else if (nchar === ">") {
+            this.input();
+            return this.tok.T_IS_NOT_EQUAL;
+          }
+          return "<";
+        },
+        ">"() {
+          let nchar = this._input[this.offset];
+          if (nchar === "=") {
+            this.input();
+            return this.tok.T_IS_GREATER_OR_EQUAL;
+          } else if (nchar === ">") {
+            nchar = this._input[this.offset + 1];
+            if (nchar === "=") {
+              this.consume(2);
+              return this.tok.T_SR_EQUAL;
+            } else {
+              this.input();
+              return this.tok.T_SR;
+            }
+          }
+          return ">";
+        },
+        "*"() {
+          const nchar = this._input[this.offset];
+          if (nchar === "=") {
+            this.input();
+            return this.tok.T_MUL_EQUAL;
+          } else if (nchar === "*") {
+            this.input();
+            if (this._input[this.offset] === "=") {
+              this.input();
+              return this.tok.T_POW_EQUAL;
+            } else {
+              return this.tok.T_POW;
+            }
+          }
+          return "*";
+        },
+        "."() {
+          const nchar = this._input[this.offset];
+          if (nchar === "=") {
+            this.input();
+            return this.tok.T_CONCAT_EQUAL;
+          } else if (nchar === "." && this._input[this.offset + 1] === ".") {
+            this.consume(2);
+            return this.tok.T_ELLIPSIS;
+          }
+          return ".";
+        },
+        "%"() {
+          if (this._input[this.offset] === "=") {
+            this.input();
+            return this.tok.T_MOD_EQUAL;
+          }
+          return "%";
+        },
+        "&"() {
+          const nchar = this._input[this.offset];
+          if (nchar === "=") {
+            this.input();
+            return this.tok.T_AND_EQUAL;
+          } else if (nchar === "&") {
+            this.input();
+            return this.tok.T_BOOLEAN_AND;
+          }
+          return "&";
+        },
+        "|"() {
+          const nchar = this._input[this.offset];
+          if (nchar === "=") {
+            this.input();
+            return this.tok.T_OR_EQUAL;
+          } else if (nchar === "|") {
+            this.input();
+            return this.tok.T_BOOLEAN_OR;
+          } else if (nchar === ">") {
+            this.input();
+            return this.tok.T_PIPE;
+          }
+          return "|";
+        },
+        "^"() {
+          if (this._input[this.offset] === "=") {
+            this.input();
+            return this.tok.T_XOR_EQUAL;
+          }
+          return "^";
+        }
+      }
+    };
+  }
+});
+var require_utils2 = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/lexer/utils.js"(exports2, module2) {
+    "use strict";
+    var tokens = ";:,.\\[]()|^&+-/*=%!~$<>?@";
+    module2.exports = {
+      // check if the char can be a numeric
+      is_NUM() {
+        const ch = this._input.charCodeAt(this.offset - 1);
+        return ch > 47 && ch < 58 || ch === 95;
+      },
+      // check if the char can be a numeric
+      is_NUM_START() {
+        const ch = this._input.charCodeAt(this.offset - 1);
+        return ch > 47 && ch < 58;
+      },
+      // check if current char can be a label
+      is_LABEL() {
+        const ch = this._input.charCodeAt(this.offset - 1);
+        return ch > 96 && ch < 123 || ch > 64 && ch < 91 || ch === 95 || ch > 47 && ch < 58 || ch > 126;
+      },
+      // check if current char can be a label
+      is_LABEL_START() {
+        const ch = this._input.charCodeAt(this.offset - 1);
+        if (ch > 64 && ch < 91) return true;
+        if (ch > 96 && ch < 123) return true;
+        if (ch === 95) return true;
+        if (ch > 126) return true;
+        return false;
+      },
+      // reads each char of the label
+      consume_LABEL() {
+        while (this.offset < this.size) {
+          const ch = this.input();
+          if (!this.is_LABEL()) {
+            if (ch) this.unput(1);
+            break;
+          }
+        }
+        return this;
+      },
+      // check if current char is a token char
+      is_TOKEN() {
+        const ch = this._input[this.offset - 1];
+        return tokens.indexOf(ch) !== -1;
+      },
+      // check if current char is a whitespace
+      is_WHITESPACE() {
+        const ch = this._input[this.offset - 1];
+        return ch === " " || ch === "	" || ch === "\n" || ch === "\r";
+      },
+      // check if current char is a whitespace (without newlines)
+      is_TABSPACE() {
+        const ch = this._input[this.offset - 1];
+        return ch === " " || ch === "	";
+      },
+      // consume all whitespaces (excluding newlines)
+      consume_TABSPACE() {
+        while (this.offset < this.size) {
+          const ch = this.input();
+          if (!this.is_TABSPACE()) {
+            if (ch) this.unput(1);
+            break;
+          }
+        }
+        return this;
+      },
+      // check if current char can be a hexadecimal number
+      is_HEX() {
+        const ch = this._input.charCodeAt(this.offset - 1);
+        if (ch > 47 && ch < 58) return true;
+        if (ch > 64 && ch < 71) return true;
+        if (ch > 96 && ch < 103) return true;
+        if (ch === 95) return true;
+        return false;
+      },
+      // check if current char can be an octal number
+      is_OCTAL() {
+        const ch = this._input.charCodeAt(this.offset - 1);
+        if (ch > 47 && ch < 56) return true;
+        if (ch === 95) return true;
+        return false;
+      }
+    };
+  }
+});
+var require_lexer = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/lexer.js"(exports2, module2) {
+    "use strict";
+    var Lexer = function(engine) {
+      this.engine = engine;
+      this.tok = this.engine.tokens.names;
+      this.EOF = 1;
+      this.debug = false;
+      this.all_tokens = true;
+      this.comment_tokens = false;
+      this.mode_eval = false;
+      this.asp_tags = false;
+      this.short_tags = false;
+      this.version = 803;
+      this.yyprevcol = 0;
+      this.keywords = {
+        __class__: this.tok.T_CLASS_C,
+        __trait__: this.tok.T_TRAIT_C,
+        __function__: this.tok.T_FUNC_C,
+        __method__: this.tok.T_METHOD_C,
+        __line__: this.tok.T_LINE,
+        __file__: this.tok.T_FILE,
+        __dir__: this.tok.T_DIR,
+        __namespace__: this.tok.T_NS_C,
+        exit: this.tok.T_EXIT,
+        die: this.tok.T_EXIT,
+        function: this.tok.T_FUNCTION,
+        const: this.tok.T_CONST,
+        return: this.tok.T_RETURN,
+        try: this.tok.T_TRY,
+        catch: this.tok.T_CATCH,
+        finally: this.tok.T_FINALLY,
+        throw: this.tok.T_THROW,
+        if: this.tok.T_IF,
+        elseif: this.tok.T_ELSEIF,
+        endif: this.tok.T_ENDIF,
+        else: this.tok.T_ELSE,
+        while: this.tok.T_WHILE,
+        endwhile: this.tok.T_ENDWHILE,
+        do: this.tok.T_DO,
+        for: this.tok.T_FOR,
+        endfor: this.tok.T_ENDFOR,
+        foreach: this.tok.T_FOREACH,
+        endforeach: this.tok.T_ENDFOREACH,
+        declare: this.tok.T_DECLARE,
+        enddeclare: this.tok.T_ENDDECLARE,
+        instanceof: this.tok.T_INSTANCEOF,
+        as: this.tok.T_AS,
+        switch: this.tok.T_SWITCH,
+        endswitch: this.tok.T_ENDSWITCH,
+        case: this.tok.T_CASE,
+        default: this.tok.T_DEFAULT,
+        break: this.tok.T_BREAK,
+        continue: this.tok.T_CONTINUE,
+        goto: this.tok.T_GOTO,
+        echo: this.tok.T_ECHO,
+        print: this.tok.T_PRINT,
+        class: this.tok.T_CLASS,
+        interface: this.tok.T_INTERFACE,
+        trait: this.tok.T_TRAIT,
+        enum: this.tok.T_ENUM,
+        extends: this.tok.T_EXTENDS,
+        implements: this.tok.T_IMPLEMENTS,
+        new: this.tok.T_NEW,
+        clone: this.tok.T_CLONE,
+        var: this.tok.T_VAR,
+        eval: this.tok.T_EVAL,
+        include: this.tok.T_INCLUDE,
+        include_once: this.tok.T_INCLUDE_ONCE,
+        require: this.tok.T_REQUIRE,
+        require_once: this.tok.T_REQUIRE_ONCE,
+        namespace: this.tok.T_NAMESPACE,
+        use: this.tok.T_USE,
+        insteadof: this.tok.T_INSTEADOF,
+        global: this.tok.T_GLOBAL,
+        isset: this.tok.T_ISSET,
+        empty: this.tok.T_EMPTY,
+        __halt_compiler: this.tok.T_HALT_COMPILER,
+        static: this.tok.T_STATIC,
+        abstract: this.tok.T_ABSTRACT,
+        final: this.tok.T_FINAL,
+        private: this.tok.T_PRIVATE,
+        protected: this.tok.T_PROTECTED,
+        public: this.tok.T_PUBLIC,
+        unset: this.tok.T_UNSET,
+        list: this.tok.T_LIST,
+        array: this.tok.T_ARRAY,
+        callable: this.tok.T_CALLABLE,
+        or: this.tok.T_LOGICAL_OR,
+        and: this.tok.T_LOGICAL_AND,
+        xor: this.tok.T_LOGICAL_XOR,
+        match: this.tok.T_MATCH,
+        readonly: this.tok.T_READ_ONLY
+      };
+      this.castKeywords = {
+        int: this.tok.T_INT_CAST,
+        integer: this.tok.T_INT_CAST,
+        real: this.tok.T_DOUBLE_CAST,
+        double: this.tok.T_DOUBLE_CAST,
+        float: this.tok.T_DOUBLE_CAST,
+        string: this.tok.T_STRING_CAST,
+        binary: this.tok.T_STRING_CAST,
+        array: this.tok.T_ARRAY_CAST,
+        object: this.tok.T_OBJECT_CAST,
+        bool: this.tok.T_BOOL_CAST,
+        boolean: this.tok.T_BOOL_CAST,
+        unset: this.tok.T_UNSET_CAST
+      };
+    };
+    Lexer.prototype.setInput = function(input2) {
+      this._input = input2;
+      this.size = input2.length;
+      this.yylineno = 1;
+      this.offset = 0;
+      this.yyprevcol = 0;
+      this.yytext = "";
+      this.yylloc = {
+        first_offset: 0,
+        first_line: 1,
+        first_column: 0,
+        prev_offset: 0,
+        prev_line: 1,
+        prev_column: 0,
+        last_line: 1,
+        last_column: 0
+      };
+      this.tokens = [];
+      if (this.version > 703) {
+        this.keywords.fn = this.tok.T_FN;
+      } else {
+        delete this.keywords.fn;
+      }
+      this.done = this.offset >= this.size;
+      if (!this.all_tokens && this.mode_eval) {
+        this.conditionStack = ["INITIAL"];
+        this.begin("ST_IN_SCRIPTING");
+      } else {
+        this.conditionStack = [];
+        this.begin("INITIAL");
+      }
+      this.heredoc_label = {
+        label: "",
+        length: 0,
+        indentation: 0,
+        indentation_uses_spaces: false,
+        finished: false,
+        /*
+         * this used for parser to detemine the if current node segment is first encaps node.
+         * if ture, the indentation will remove from the begining. and if false, the prev node
+         * might be a variable '}' ,and the leading spaces should not be removed util meet the
+         * first \n
+         */
+        first_encaps_node: false,
+        // for backward compatible
+        /* istanbul ignore next */
+        toString() {
+          this.label;
+        }
+      };
+      return this;
+    };
+    Lexer.prototype.input = function() {
+      const ch = this._input[this.offset];
+      if (!ch) return "";
+      this.yytext += ch;
+      this.offset++;
+      if (ch === "\r" && this._input[this.offset] === "\n") {
+        this.yytext += "\n";
+        this.offset++;
+      }
+      if (ch === "\n" || ch === "\r") {
+        this.yylloc.last_line = ++this.yylineno;
+        this.yyprevcol = this.yylloc.last_column;
+        this.yylloc.last_column = 0;
+      } else {
+        this.yylloc.last_column++;
+      }
+      return ch;
+    };
+    Lexer.prototype.unput = function(size) {
+      if (size === 1) {
+        this.offset--;
+        if (this._input[this.offset] === "\n" && this._input[this.offset - 1] === "\r") {
+          this.offset--;
+          size++;
+        }
+        if (this._input[this.offset] === "\r" || this._input[this.offset] === "\n") {
+          this.yylloc.last_line--;
+          this.yylineno--;
+          this.yylloc.last_column = this.yyprevcol;
+        } else {
+          this.yylloc.last_column--;
+        }
+        this.yytext = this.yytext.substring(0, this.yytext.length - size);
+      } else if (size > 0) {
+        this.offset -= size;
+        if (size < this.yytext.length) {
+          this.yytext = this.yytext.substring(0, this.yytext.length - size);
+          this.yylloc.last_line = this.yylloc.first_line;
+          this.yylloc.last_column = this.yyprevcol = this.yylloc.first_column;
+          for (let i = 0; i < this.yytext.length; i++) {
+            let c3 = this.yytext[i];
+            if (c3 === "\r") {
+              c3 = this.yytext[++i];
+              this.yyprevcol = this.yylloc.last_column;
+              this.yylloc.last_line++;
+              this.yylloc.last_column = 0;
+              if (c3 !== "\n") {
+                if (c3 === "\r") {
+                  this.yylloc.last_line++;
+                } else {
+                  this.yylloc.last_column++;
+                }
+              }
+            } else if (c3 === "\n") {
+              this.yyprevcol = this.yylloc.last_column;
+              this.yylloc.last_line++;
+              this.yylloc.last_column = 0;
+            } else {
+              this.yylloc.last_column++;
+            }
+          }
+          this.yylineno = this.yylloc.last_line;
+        } else {
+          this.yytext = "";
+          this.yylloc.last_line = this.yylineno = this.yylloc.first_line;
+          this.yylloc.last_column = this.yylloc.first_column;
+        }
+      }
+      return this;
+    };
+    Lexer.prototype.tryMatch = function(text22) {
+      return text22 === this.ahead(text22.length);
+    };
+    Lexer.prototype.tryMatchCaseless = function(text22) {
+      return text22 === this.ahead(text22.length).toLowerCase();
+    };
+    Lexer.prototype.ahead = function(size) {
+      let text22 = this._input.substring(this.offset, this.offset + size);
+      if (text22[text22.length - 1] === "\r" && this._input[this.offset + size + 1] === "\n") {
+        text22 += "\n";
+      }
+      return text22;
+    };
+    Lexer.prototype.consume = function(size) {
+      for (let i = 0; i < size; i++) {
+        const ch = this._input[this.offset];
+        if (!ch) break;
+        this.yytext += ch;
+        this.offset++;
+        if (ch === "\r" && this._input[this.offset] === "\n") {
+          this.yytext += "\n";
+          this.offset++;
+          i++;
+        }
+        if (ch === "\n" || ch === "\r") {
+          this.yylloc.last_line = ++this.yylineno;
+          this.yyprevcol = this.yylloc.last_column;
+          this.yylloc.last_column = 0;
+        } else {
+          this.yylloc.last_column++;
+        }
+      }
+      return this;
+    };
+    Lexer.prototype.getState = function() {
+      return {
+        yytext: this.yytext,
+        offset: this.offset,
+        yylineno: this.yylineno,
+        yyprevcol: this.yyprevcol,
+        yylloc: {
+          first_offset: this.yylloc.first_offset,
+          first_line: this.yylloc.first_line,
+          first_column: this.yylloc.first_column,
+          last_line: this.yylloc.last_line,
+          last_column: this.yylloc.last_column
+        },
+        heredoc_label: this.heredoc_label
+      };
+    };
+    Lexer.prototype.setState = function(state) {
+      this.yytext = state.yytext;
+      this.offset = state.offset;
+      this.yylineno = state.yylineno;
+      this.yyprevcol = state.yyprevcol;
+      this.yylloc = state.yylloc;
+      if (state.heredoc_label) {
+        this.heredoc_label = state.heredoc_label;
+      }
+      return this;
+    };
+    Lexer.prototype.appendToken = function(value, ahead) {
+      this.tokens.push([value, ahead]);
+      return this;
+    };
+    Lexer.prototype.lex = function() {
+      this.yylloc.prev_offset = this.offset;
+      this.yylloc.prev_line = this.yylloc.last_line;
+      this.yylloc.prev_column = this.yylloc.last_column;
+      let token = this.next() || this.lex();
+      if (!this.all_tokens) {
+        while (token === this.tok.T_WHITESPACE || // ignore white space
+        !this.comment_tokens && (token === this.tok.T_COMMENT || // ignore single lines comments
+        token === this.tok.T_DOC_COMMENT) || // ignore doc comments
+        // ignore open tags
+        token === this.tok.T_OPEN_TAG) {
+          token = this.next() || this.lex();
+        }
+        if (token == this.tok.T_OPEN_TAG_WITH_ECHO) {
+          return this.tok.T_ECHO;
+        } else if (token === this.tok.T_CLOSE_TAG) {
+          return ";";
+        }
+      }
+      if (!this.yylloc.prev_offset) {
+        this.yylloc.prev_offset = this.yylloc.first_offset;
+        this.yylloc.prev_line = this.yylloc.first_line;
+        this.yylloc.prev_column = this.yylloc.first_column;
+      }
+      return token;
+    };
+    Lexer.prototype.begin = function(condition) {
+      this.conditionStack.push(condition);
+      this.curCondition = condition;
+      this.stateCb = this["match" + condition];
+      if (typeof this.stateCb !== "function") {
+        throw new Error('Undefined condition state "' + condition + '"');
+      }
+      return this;
+    };
+    Lexer.prototype.popState = function() {
+      const n = this.conditionStack.length - 1;
+      const condition = n > 0 ? this.conditionStack.pop() : this.conditionStack[0];
+      this.curCondition = this.conditionStack[this.conditionStack.length - 1];
+      this.stateCb = this["match" + this.curCondition];
+      if (typeof this.stateCb !== "function") {
+        throw new Error('Undefined condition state "' + this.curCondition + '"');
+      }
+      return condition;
+    };
+    Lexer.prototype.next = function() {
+      let token;
+      if (!this._input) {
+        this.done = true;
+      }
+      this.yylloc.first_offset = this.offset;
+      this.yylloc.first_line = this.yylloc.last_line;
+      this.yylloc.first_column = this.yylloc.last_column;
+      this.yytext = "";
+      if (this.done) {
+        this.yylloc.prev_offset = this.yylloc.first_offset;
+        this.yylloc.prev_line = this.yylloc.first_line;
+        this.yylloc.prev_column = this.yylloc.first_column;
+        return this.EOF;
+      }
+      if (this.tokens.length > 0) {
+        token = this.tokens.shift();
+        if (typeof token[1] === "object") {
+          this.setState(token[1]);
+        } else {
+          this.consume(token[1]);
+        }
+        token = token[0];
+      } else {
+        token = this.stateCb.apply(this, []);
+      }
+      if (this.offset >= this.size && this.tokens.length === 0) {
+        this.done = true;
+      }
+      if (this.debug) {
+        let tName = token;
+        if (typeof tName === "number") {
+          tName = this.engine.tokens.values[tName];
+        } else {
+          tName = '"' + tName + '"';
+        }
+        const e = new Error(
+          tName + "	from " + this.yylloc.first_line + "," + this.yylloc.first_column + "	 - to " + this.yylloc.last_line + "," + this.yylloc.last_column + '	"' + this.yytext + '"'
+        );
+        console.error(e.stack);
+      }
+      return token;
+    };
+    [
+      require_attribute(),
+      require_comments(),
+      require_initial(),
+      require_numbers(),
+      require_property(),
+      require_scripting(),
+      require_strings(),
+      require_tokens(),
+      require_utils2()
+    ].forEach(function(ext) {
+      for (const k2 in ext) {
+        Lexer.prototype[k2] = ext[k2];
+      }
+    });
+    module2.exports = Lexer;
+  }
+});
+var require_position = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/position.js"(exports2, module2) {
+    "use strict";
+    var Position = function(line, column, offset) {
+      this.line = line;
+      this.column = column;
+      this.offset = offset;
+    };
+    module2.exports = Position;
+  }
+});
+var require_array = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/array.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      /*
+       * Parse an array
+       * ```ebnf
+       * array ::= T_ARRAY '(' array_pair_list ')' |
+       *   '[' array_pair_list ']'
+       * ```
+       */
+      read_array() {
+        let expect;
+        let shortForm = false;
+        const result = this.node("array");
+        if (this.token === this.tok.T_ARRAY) {
+          this.next().expect("(");
+          expect = ")";
+        } else {
+          shortForm = true;
+          expect = "]";
+        }
+        let items = [];
+        if (this.next().token !== expect) {
+          items = this.read_array_pair_list(shortForm);
+        }
+        this.expect(expect);
+        this.next();
+        return result(shortForm, items);
+      },
+      /*
+       * Reads an array of items
+       * ```ebnf
+       * array_pair_list ::= array_pair (',' array_pair?)*
+       * ```
+       */
+      read_array_pair_list(shortForm) {
+        const self = this;
+        return this.read_list(
+          function() {
+            return self.read_array_pair(shortForm);
+          },
+          ",",
+          true
+        );
+      },
+      /*
+       * Reads an entry
+       * array_pair:
+       *  expr T_DOUBLE_ARROW expr
+       *  | expr
+       *  | expr T_DOUBLE_ARROW '&' variable
+       *  | '&' variable
+       *  | expr T_DOUBLE_ARROW T_LIST '(' array_pair_list ')'
+       *  | T_LIST '(' array_pair_list ')'
+       */
+      read_array_pair(shortForm) {
+        if (!shortForm && this.token === ")" || shortForm && this.token === "]") {
+          return;
+        }
+        if (this.token === ",") {
+          return this.node("noop")();
+        }
+        const entry = this.node("entry");
+        let key = null;
+        let value;
+        let byRef = false;
+        let unpack = false;
+        if (this.token === "&") {
+          this.next();
+          byRef = true;
+          value = this.read_variable(true, false);
+        } else if (this.token === this.tok.T_ELLIPSIS && this.version >= 704) {
+          this.next();
+          if (this.token === "&") {
+            this.error();
+          }
+          unpack = true;
+          value = this.read_expr();
+        } else {
+          const expr = this.read_expr();
+          if (this.token === this.tok.T_DOUBLE_ARROW) {
+            this.next();
+            key = expr;
+            if (this.token === "&") {
+              this.next();
+              byRef = true;
+              value = this.read_variable(true, false);
+            } else {
+              value = this.read_expr();
+            }
+          } else {
+            value = expr;
+          }
+        }
+        return entry(key, value, byRef, unpack);
+      }
+    };
+  }
+});
+var require_class = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/class.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      /*
+       * reading a class
+       * ```ebnf
+       * class ::= class_scope? T_CLASS T_STRING (T_EXTENDS NAMESPACE_NAME)? (T_IMPLEMENTS (NAMESPACE_NAME ',')* NAMESPACE_NAME)? '{' CLASS_BODY '}'
+       * ```
+       */
+      read_class_declaration_statement(attrs) {
+        const result = this.node("class");
+        const flag = this.read_class_modifiers();
+        if (this.token !== this.tok.T_CLASS) {
+          this.error(this.tok.T_CLASS);
+          this.next();
+          return null;
+        }
+        this.next().expect(this.tok.T_STRING);
+        let propName = this.node("identifier");
+        const name = this.text();
+        this.next();
+        propName = propName(name);
+        const propExtends = this.read_extends_from();
+        const propImplements = this.read_implements_list();
+        this.expect("{");
+        const body = this.next().read_class_body(true, false);
+        const node2 = result(propName, propExtends, propImplements, body, flag);
+        if (attrs) node2.attrGroups = attrs;
+        return node2;
+      },
+      read_class_modifiers() {
+        const modifier = this.read_class_modifier({
+          readonly: 0,
+          final_or_abstract: 0
+        });
+        return [0, 0, modifier.final_or_abstract, modifier.readonly];
+      },
+      read_class_modifier(memo2) {
+        if (this.token === this.tok.T_READ_ONLY) {
+          this.next();
+          memo2.readonly = 1;
+          memo2 = this.read_class_modifier(memo2);
+        } else if (memo2.final_or_abstract === 0 && this.token === this.tok.T_ABSTRACT) {
+          this.next();
+          memo2.final_or_abstract = 1;
+          memo2 = this.read_class_modifier(memo2);
+        } else if (memo2.final_or_abstract === 0 && this.token === this.tok.T_FINAL) {
+          this.next();
+          memo2.final_or_abstract = 2;
+          memo2 = this.read_class_modifier(memo2);
+        }
+        return memo2;
+      },
+      /*
+       * Reads a class body
+       * ```ebnf
+       *   class_body ::= (member_flags? (T_VAR | T_STRING | T_FUNCTION))*
+       * ```
+       */
+      read_class_body(allow_variables, allow_enum_cases) {
+        let result = [];
+        let attrs = [];
+        while (this.token !== this.EOF && this.token !== "}") {
+          if (this.token === this.tok.T_COMMENT) {
+            result.push(this.read_comment());
+            continue;
+          }
+          if (this.token === this.tok.T_DOC_COMMENT) {
+            result.push(this.read_doc_comment());
+            continue;
+          }
+          if (this.token === this.tok.T_USE) {
+            result = result.concat(this.read_trait_use_statement());
+            continue;
+          }
+          const locStart = this.position();
+          if (this.token === this.tok.T_ATTRIBUTE) {
+            attrs = this.read_attr_list();
+          }
+          if (allow_enum_cases && this.token === this.tok.T_CASE) {
+            const enumcase = this.read_enum_case(attrs);
+            attrs = [];
+            if (this.expect(";")) {
+              this.next();
+            }
+            result = result.concat(enumcase);
+            continue;
+          }
+          const flags = this.read_member_flags(false);
+          if (this.token === this.tok.T_CONST) {
+            if (flags[0][1] !== -1) {
+              this.raiseError("Cannot use asymmetric visibility on constants");
+            }
+            const constants = this.read_constant_list(flags, attrs, locStart);
+            if (this.expect(";")) {
+              this.next();
+            }
+            result = result.concat(constants);
+            continue;
+          }
+          if (allow_variables && this.token === this.tok.T_VAR) {
+            this.next().expect(this.tok.T_VARIABLE);
+            flags[0][0] = null;
+            flags[1] = 0;
+          }
+          if (this.token === this.tok.T_FUNCTION) {
+            result.push(this.read_function(false, flags, attrs, locStart));
+            attrs = [];
+          } else if (allow_variables && (this.token === this.tok.T_VARIABLE || this.version >= 801 && this.token === this.tok.T_READ_ONLY || // support https://wiki.php.net/rfc/typed_properties_v2
+          this.version >= 704 && (this.token === "?" || this.token === this.tok.T_ARRAY || this.token === this.tok.T_CALLABLE || this.token === this.tok.T_NAMESPACE || this.token === this.tok.T_NAME_FULLY_QUALIFIED || this.token === this.tok.T_NAME_QUALIFIED || this.token === this.tok.T_NAME_RELATIVE || this.token === this.tok.T_NS_SEPARATOR || this.token === this.tok.T_STRING))) {
+            const variables = this.read_variable_list(flags, attrs, locStart);
+            attrs = [];
+            result = result.concat(variables);
+          } else {
+            this.error([
+              this.tok.T_CONST,
+              ...allow_variables ? [this.tok.T_VARIABLE] : [],
+              ...allow_enum_cases ? [this.tok.T_CASE] : [],
+              this.tok.T_FUNCTION
+            ]);
+            this.next();
+          }
+        }
+        this.expect("}");
+        this.next();
+        return result;
+      },
+      /*
+       * Reads variable list
+       * ```ebnf
+       *  variable_list ::= (variable_declaration ',')* variable_declaration
+       * ```
+       */
+      read_variable_list(flags, attrs, locStart) {
+        let property_statement = this.node("propertystatement");
+        const properties = this.read_list(
+          /*
+           * Reads a variable declaration
+           *
+           * ```ebnf
+           *  variable_declaration ::= T_VARIABLE '=' scalar
+           * ```
+           */
+          function read_variable_declaration() {
+            const result = this.node("property");
+            let readonly2 = flags[3] === 1;
+            if (!readonly2 && this.token === this.tok.T_READ_ONLY) {
+              readonly2 = true;
+              this.next();
+            }
+            const [nullable2, type] = this.read_optional_type();
+            this.expect(this.tok.T_VARIABLE);
+            let propName = this.node("identifier");
+            const name = this.text().substring(1);
+            this.next();
+            propName = propName(name);
+            let value = null;
+            let property_hooks = [];
+            this.expect([",", ";", "=", "{"]);
+            if (this.token === "=") {
+              value = this.next().read_expr();
+            }
+            if (this.token === "{") {
+              property_hooks = this.read_property_hooks();
+            } else {
+              this.expect([";", ","]);
+            }
+            return result(
+              propName,
+              value,
+              readonly2,
+              nullable2,
+              type,
+              attrs || [],
+              property_hooks
+            );
+          },
+          ","
+        );
+        property_statement = property_statement(null, properties, flags);
+        if (locStart && property_statement.loc) {
+          property_statement.loc.start = locStart;
+          if (property_statement.loc.source) {
+            property_statement.loc.source = this.lexer._input.substr(
+              property_statement.loc.start.offset,
+              property_statement.loc.end.offset - property_statement.loc.start.offset
+            );
+          }
+        }
+        if (this.token === ";") {
+          this.next();
+        }
+        return property_statement;
+      },
+      /*
+       * Reads property hooks
+       */
+      read_property_hooks() {
+        if (this.version < 804) {
+          this.raiseError("Parse Error: Property hooks require PHP 8.4+");
+        }
+        this.expect("{");
+        this.next();
+        const hooks = [];
+        while (this.token !== this.EOF && this.token !== "}") {
+          hooks.push(this.read_property_hook());
+        }
+        this.expect("}");
+        this.next();
+        return hooks;
+      },
+      read_property_hook() {
+        const property_hooks = this.node("propertyhook");
+        let attrs = [];
+        if (this.token === this.tok.T_ATTRIBUTE) {
+          attrs = this.read_attr_list();
+        }
+        const is_final = this.token === this.tok.T_FINAL;
+        if (is_final) this.next();
+        const is_reference = this.token === "&";
+        if (is_reference) this.next();
+        const method_name = this.text();
+        if (method_name !== "get" && method_name !== "set") {
+          this.raiseError(
+            "Parse Error: Property hooks must be either 'get' or 'set'"
+          );
+        }
+        this.next();
+        let parameter = null;
+        let body = null;
+        this.expect([this.tok.T_DOUBLE_ARROW, "{", "(", ";"]);
+        if (this.token === ";") {
+          this.next();
+          return property_hooks(
+            method_name,
+            is_final,
+            is_reference,
+            parameter,
+            body,
+            attrs
+          );
+        }
+        if (this.token === "(") {
+          this.next();
+          parameter = this.read_parameter(false);
+          this.expect(")");
+          this.next();
+        }
+        if (this.token === this.tok.T_DOUBLE_ARROW) {
+          this.next();
+          body = this.read_expr();
+          this.next();
+        } else if (this.token === "{") {
+          body = this.read_code_block();
+        }
+        return property_hooks(
+          method_name,
+          is_final,
+          is_reference,
+          parameter,
+          body,
+          attrs
+        );
+      },
+      /*
+       * Reads constant list
+       * ```ebnf
+       *  constant_list ::= T_CONST [type] (constant_declaration ',')* constant_declaration
+       * ```
+       */
+      read_constant_list(flags, attrs, locStart) {
+        const result = this.node("classconstant");
+        if (this.expect(this.tok.T_CONST)) {
+          this.next();
+        }
+        if (flags[1] === 1 || flags[2] === 1 || flags[3] === 1) {
+          this.error();
+        }
+        if (flags[2] === 2 && this.version < 801) {
+          this.raiseError("Final class constants are not allowed before PHP 8.1");
+        }
+        const [nullable2, type] = this.version >= 803 ? this.read_optional_type() : [false, null];
+        const items = this.read_list(
+          /*
+           * Reads a constant declaration
+           *
+           * ```ebnf
+           *  constant_declaration ::= (T_STRING | IDENTIFIER) '=' expr
+           * ```
+           * @return {Constant} [:link:](AST.md#constant)
+           */
+          function read_constant_declaration() {
+            const result2 = this.node("constant");
+            let constName = null;
+            let value = null;
+            if (this.token === this.tok.T_STRING || this.version >= 700 && this.is("IDENTIFIER")) {
+              constName = this.node("identifier");
+              const name = this.text();
+              this.next();
+              constName = constName(name);
+            } else {
+              this.expect("IDENTIFIER");
+            }
+            if (this.expect("=")) {
+              value = this.next().read_expr();
+            }
+            return result2(constName, value);
+          },
+          ","
+        );
+        const node2 = result(null, items, flags, nullable2, type, attrs || []);
+        if (locStart && node2.loc) {
+          node2.loc.start = locStart;
+          if (node2.loc.source) {
+            node2.loc.source = this.lexer._input.substr(
+              node2.loc.start.offset,
+              node2.loc.end.offset - node2.loc.start.offset
+            );
+          }
+        }
+        return node2;
+      },
+      /*
+       * Read member flags
+       * @return array
+       *  1st index : [get, set] visibility tuple
+       *    get/set: -1 => no visibility, 0 => public, 1 => protected, 2 => private
+       *  2nd index : 0 => instance member, 1 => static member
+       *  3rd index : 0 => normal, 1 => abstract member, 2 => final member
+       *  4th index : 0 => no readonly, 1 => readonly
+       */
+      read_member_flags(asInterface) {
+        const result = [[-1, -1], 0, 0, 0];
+        const seen = /* @__PURE__ */ new Set();
+        while (this.is("T_MEMBER_FLAGS")) {
+          let idx = -1, val = -1;
+          switch (this.token) {
+            case this.tok.T_PUBLIC:
+            case this.tok.T_PROTECTED:
+            case this.tok.T_PRIVATE: {
+              idx = 0;
+              val = this.token === this.tok.T_PUBLIC ? 0 : this.token === this.tok.T_PROTECTED ? 1 : 2;
+              if (asInterface && val === 2) {
+                this.expect([this.tok.T_PUBLIC, this.tok.T_PROTECTED]);
+                val = -1;
+              }
+              this.next();
+              if (this.version >= 804 && this.token === "(") {
+                if (result[0][0] === -1) {
+                  result[0][0] = 0;
+                }
+                this.next();
+                if (this.token !== this.tok.T_STRING || this.text() !== "set") {
+                  this.error("set");
+                } else {
+                  this.next();
+                }
+                if (this.expect(")")) {
+                  this.next();
+                }
+                if (seen.has("set")) {
+                  this.error();
+                } else if (val !== -1) {
+                  seen.add("set");
+                  result[0][1] = val;
+                }
+                continue;
+              }
+              if (seen.has(idx)) {
+                this.error();
+              } else if (val !== -1) {
+                seen.add(idx);
+                result[0][0] = val;
+              }
+              continue;
+            }
+            case this.tok.T_STATIC:
+              idx = 1;
+              val = 1;
+              break;
+            case this.tok.T_ABSTRACT:
+              idx = 2;
+              val = 1;
+              break;
+            case this.tok.T_FINAL:
+              idx = 2;
+              val = 2;
+              break;
+            case this.tok.T_READ_ONLY:
+              idx = 3;
+              val = 1;
+              break;
+          }
+          if (asInterface && idx === 2 && val === 1) {
+            this.error();
+            val = -1;
+          }
+          if (seen.has(idx)) {
+            this.error();
+          } else if (val !== -1) {
+            seen.add(idx);
+            result[idx] = val;
+          }
+          this.next();
+        }
+        return result;
+      },
+      /*
+       * optional_type:
+       *	  /- empty -/	{ $$ = NULL; }
+       *   |	type_expr	{ $$ = $1; }
+       * ;
+       *
+       * type_expr:
+       *		type		{ $$ = $1; }
+       *	|	'?' type	{ $$ = $2; $$->attr |= ZEND_TYPE_NULLABLE; }
+       *	|	union_type	{ $$ = $1; }
+       * ;
+       *
+       * type:
+       * 		T_ARRAY		{ $$ = zend_ast_create_ex(ZEND_AST_TYPE, IS_ARRAY); }
+       * 	|	T_CALLABLE	{ $$ = zend_ast_create_ex(ZEND_AST_TYPE, IS_CALLABLE); }
+       * 	|	name		{ $$ = $1; }
+       * ;
+       *
+       * union_type:
+       * 		type '|' type       { $$ = zend_ast_create_list(2, ZEND_AST_TYPE_UNION, $1, $3); }
+       * 	|	union_type '|' type { $$ = zend_ast_list_add($1, $3); }
+       * ;
+       */
+      read_optional_type() {
+        const nullable2 = this.token === "?";
+        if (nullable2) {
+          this.next();
+        }
+        if (this.peekSkipComments() === "=") {
+          return [false, null];
+        }
+        let type = this.read_types();
+        if (nullable2 && !type) {
+          this.raiseError(
+            "Expecting a type definition combined with nullable operator"
+          );
+        }
+        if (!nullable2 && !type) {
+          return [false, null];
+        }
+        if (this.token === "|") {
+          type = [type];
+          do {
+            this.next();
+            const variant = this.read_type();
+            if (!variant) {
+              this.raiseError("Expecting a type definition");
+              break;
+            }
+            type.push(variant);
+          } while (this.token === "|");
+        }
+        return [nullable2, type];
+      },
+      peekSkipComments() {
+        const lexerState = this.lexer.getState();
+        let nextToken;
+        do {
+          nextToken = this.lexer.lex();
+        } while (nextToken === this.tok.T_COMMENT || nextToken === this.tok.T_WHITESPACE);
+        this.lexer.setState(lexerState);
+        return nextToken;
+      },
+      /*
+       * reading an interface
+       * ```ebnf
+       * interface ::= T_INTERFACE T_STRING (T_EXTENDS (NAMESPACE_NAME ',')* NAMESPACE_NAME)? '{' INTERFACE_BODY '}'
+       * ```
+       */
+      read_interface_declaration_statement(attrs) {
+        const result = this.node("interface");
+        if (this.token !== this.tok.T_INTERFACE) {
+          this.error(this.tok.T_INTERFACE);
+          this.next();
+          return null;
+        }
+        this.next().expect(this.tok.T_STRING);
+        let propName = this.node("identifier");
+        const name = this.text();
+        this.next();
+        propName = propName(name);
+        const propExtends = this.read_interface_extends_list();
+        this.expect("{");
+        const body = this.next().read_interface_body();
+        return result(propName, propExtends, body, attrs || []);
+      },
+      /*
+       * Reads an interface body
+       * ```ebnf
+       *   interface_body ::= (member_flags? (T_CONST | T_FUNCTION))*
+       * ```
+       */
+      read_interface_body() {
+        let result = [];
+        let attrs;
+        while (this.token !== this.EOF && this.token !== "}") {
+          if (this.token === this.tok.T_COMMENT) {
+            result.push(this.read_comment());
+            continue;
+          }
+          if (this.token === this.tok.T_DOC_COMMENT) {
+            result.push(this.read_doc_comment());
+            continue;
+          }
+          const locStart = this.position();
+          attrs = [];
+          if (this.token === this.tok.T_ATTRIBUTE) {
+            attrs = this.read_attr_list();
+          }
+          const flags = this.read_member_flags(true);
+          if (this.token === this.tok.T_CONST) {
+            if (flags[0][1] !== -1) {
+              this.raiseError("Cannot use asymmetric visibility on constants");
+            }
+            const constants = this.read_constant_list(flags, attrs, locStart);
+            if (this.expect(";")) {
+              this.next();
+            }
+            result = result.concat(constants);
+          } else if (this.token === this.tok.T_FUNCTION) {
+            const method = this.read_function_declaration(
+              2,
+              flags,
+              attrs,
+              locStart
+            );
+            method.parseFlags(flags);
+            result.push(method);
+            if (this.expect(";")) {
+              this.next();
+            }
+          } else if (this.token === this.tok.T_STRING) {
+            result.push(this.read_variable_list(flags, attrs, locStart));
+          } else {
+            this.error([this.tok.T_CONST, this.tok.T_FUNCTION, this.tok.T_STRING]);
+            this.next();
+          }
+        }
+        if (this.expect("}")) {
+          this.next();
+        }
+        return result;
+      },
+      /*
+       * reading a trait
+       * ```ebnf
+       * trait ::= T_TRAIT T_STRING (T_EXTENDS (NAMESPACE_NAME ',')* NAMESPACE_NAME)? '{' FUNCTION* '}'
+       * ```
+       */
+      read_trait_declaration_statement(attrs) {
+        const result = this.node("trait");
+        if (this.token !== this.tok.T_TRAIT) {
+          this.error(this.tok.T_TRAIT);
+          this.next();
+          return null;
+        }
+        this.next().expect(this.tok.T_STRING);
+        let propName = this.node("identifier");
+        const name = this.text();
+        this.next();
+        propName = propName(name);
+        this.expect("{");
+        const body = this.next().read_class_body(true, false);
+        const node2 = result(propName, body);
+        if (attrs) node2.attrGroups = attrs;
+        return node2;
+      },
+      /*
+       * reading a use statement
+       * ```ebnf
+       * trait_use_statement ::= namespace_name (',' namespace_name)* ('{' trait_use_alias '}')?
+       * ```
+       */
+      read_trait_use_statement() {
+        const node2 = this.node("traituse");
+        this.expect(this.tok.T_USE) && this.next();
+        const traits = [this.read_namespace_name()];
+        let adaptations = null;
+        while (this.token === ",") {
+          traits.push(this.next().read_namespace_name());
+        }
+        if (this.token === "{") {
+          adaptations = [];
+          while (this.next().token !== this.EOF) {
+            if (this.token === "}") break;
+            adaptations.push(this.read_trait_use_alias());
+            this.expect(";");
+          }
+          if (this.expect("}")) {
+            this.next();
+          }
+        } else {
+          if (this.expect(";")) {
+            this.next();
+          }
+        }
+        return node2(traits, adaptations);
+      },
+      /*
+       * Reading trait alias
+       * ```ebnf
+       * trait_use_alias ::= namespace_name ( T_DOUBLE_COLON T_STRING )? (T_INSTEADOF namespace_name) | (T_AS member_flags? T_STRING)
+       * ```
+       * name list : https://github.com/php/php-src/blob/master/Zend/zend_language_parser.y#L303
+       * trait adaptation : https://github.com/php/php-src/blob/master/Zend/zend_language_parser.y#L742
+       */
+      read_trait_use_alias() {
+        const node2 = this.node();
+        let trait = null;
+        let method;
+        if (this.is("IDENTIFIER")) {
+          method = this.node("identifier");
+          const methodName = this.text();
+          this.next();
+          method = method(methodName);
+        } else {
+          method = this.read_namespace_name();
+          if (this.token === this.tok.T_DOUBLE_COLON) {
+            this.next();
+            if (this.token === this.tok.T_STRING || this.version >= 700 && this.is("IDENTIFIER")) {
+              trait = method;
+              method = this.node("identifier");
+              const methodName = this.text();
+              this.next();
+              method = method(methodName);
+            } else {
+              this.expect(this.tok.T_STRING);
+            }
+          } else {
+            method = method.name;
+          }
+        }
+        if (this.token === this.tok.T_INSTEADOF) {
+          return node2(
+            "traitprecedence",
+            trait,
+            method,
+            this.next().read_name_list()
+          );
+        } else if (this.token === this.tok.T_AS) {
+          let flags = null;
+          let alias = null;
+          if (this.next().is("T_MEMBER_FLAGS")) {
+            flags = this.read_member_flags();
+          }
+          if (this.token === this.tok.T_STRING || this.version >= 700 && this.is("IDENTIFIER")) {
+            alias = this.node("identifier");
+            const name = this.text();
+            this.next();
+            alias = alias(name);
+          } else if (flags === null) {
+            this.expect(this.tok.T_STRING);
+          }
+          return node2("traitalias", trait, method, alias, flags);
+        }
+        this.expect([this.tok.T_AS, this.tok.T_INSTEADOF]);
+        return node2("traitalias", trait, method, null, null);
+      }
+    };
+  }
+});
+var require_comment = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/comment.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      /*
+       *  Comments with // or # or / * ... * /
+       */
+      read_comment() {
+        const text22 = this.text();
+        let result = this.ast.prepare(
+          text22.substring(0, 2) === "/*" ? "commentblock" : "commentline",
+          null,
+          this
+        );
+        const offset = this.lexer.yylloc.first_offset;
+        const prev = this.prev;
+        this.prev = [
+          this.lexer.yylloc.last_line,
+          this.lexer.yylloc.last_column,
+          this.lexer.offset
+        ];
+        this.lex();
+        result = result(text22);
+        result.offset = offset;
+        this.prev = prev;
+        return result;
+      },
+      /*
+       * Comments with / ** ... * /
+       */
+      read_doc_comment() {
+        let result = this.ast.prepare("commentblock", null, this);
+        const offset = this.lexer.yylloc.first_offset;
+        const text22 = this.text();
+        const prev = this.prev;
+        this.prev = [
+          this.lexer.yylloc.last_line,
+          this.lexer.yylloc.last_column,
+          this.lexer.offset
+        ];
+        this.lex();
+        result = result(text22);
+        result.offset = offset;
+        this.prev = prev;
+        return result;
+      }
+    };
+  }
+});
+var require_expr = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/expr.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      read_expr(expr) {
+        const result = this.node();
+        if (this.token === "@") {
+          if (!expr) {
+            expr = this.next().read_expr();
+          }
+          return result("silent", expr);
+        }
+        if (!expr) {
+          expr = this.read_expr_item();
+        }
+        if (this.token === "|") {
+          return result("bin", "|", expr, this.next().read_expr());
+        }
+        if (this.token === "&") {
+          return result("bin", "&", expr, this.next().read_expr());
+        }
+        if (this.token === "^") {
+          return result("bin", "^", expr, this.next().read_expr());
+        }
+        if (this.token === ".") {
+          return result("bin", ".", expr, this.next().read_expr());
+        }
+        if (this.token === "+") {
+          return result("bin", "+", expr, this.next().read_expr());
+        }
+        if (this.token === "-") {
+          return result("bin", "-", expr, this.next().read_expr());
+        }
+        if (this.token === "*") {
+          return result("bin", "*", expr, this.next().read_expr());
+        }
+        if (this.token === "/") {
+          return result("bin", "/", expr, this.next().read_expr());
+        }
+        if (this.token === "%") {
+          return result("bin", "%", expr, this.next().read_expr());
+        }
+        if (this.token === this.tok.T_POW) {
+          return result("bin", "**", expr, this.next().read_expr());
+        }
+        if (this.token === this.tok.T_SL) {
+          return result("bin", "<<", expr, this.next().read_expr());
+        }
+        if (this.token === this.tok.T_SR) {
+          return result("bin", ">>", expr, this.next().read_expr());
+        }
+        if (this.token === this.tok.T_BOOLEAN_OR) {
+          return result("bin", "||", expr, this.next().read_expr());
+        }
+        if (this.token === this.tok.T_LOGICAL_OR) {
+          return result("bin", "or", expr, this.next().read_expr());
+        }
+        if (this.token === this.tok.T_BOOLEAN_AND) {
+          return result("bin", "&&", expr, this.next().read_expr());
+        }
+        if (this.token === this.tok.T_LOGICAL_AND) {
+          return result("bin", "and", expr, this.next().read_expr());
+        }
+        if (this.token === this.tok.T_LOGICAL_XOR) {
+          return result("bin", "xor", expr, this.next().read_expr());
+        }
+        if (this.token === this.tok.T_IS_IDENTICAL) {
+          return result("bin", "===", expr, this.next().read_expr());
+        }
+        if (this.token === this.tok.T_IS_NOT_IDENTICAL) {
+          return result("bin", "!==", expr, this.next().read_expr());
+        }
+        if (this.token === this.tok.T_IS_EQUAL) {
+          return result("bin", "==", expr, this.next().read_expr());
+        }
+        if (this.token === this.tok.T_IS_NOT_EQUAL) {
+          return result("bin", "!=", expr, this.next().read_expr());
+        }
+        if (this.token === "<") {
+          return result("bin", "<", expr, this.next().read_expr());
+        }
+        if (this.token === ">") {
+          return result("bin", ">", expr, this.next().read_expr());
+        }
+        if (this.token === this.tok.T_IS_SMALLER_OR_EQUAL) {
+          return result("bin", "<=", expr, this.next().read_expr());
+        }
+        if (this.token === this.tok.T_IS_GREATER_OR_EQUAL) {
+          return result("bin", ">=", expr, this.next().read_expr());
+        }
+        if (this.token === this.tok.T_SPACESHIP) {
+          return result("bin", "<=>", expr, this.next().read_expr());
+        }
+        if (this.token === this.tok.T_INSTANCEOF) {
+          expr = result(
+            "bin",
+            "instanceof",
+            expr,
+            this.next().read_class_name_reference()
+          );
+          if (this.token !== ";" && this.token !== this.tok.T_INLINE_HTML && this.token !== this.EOF) {
+            expr = this.read_expr(expr);
+          }
+        }
+        if (this.token === this.tok.T_NULLSAFE_OBJECT_OPERATOR) {
+          expr = result("nullsafepropertylookup", expr, this.read_what());
+          expr = this.recursive_variable_chain_scan(expr, false, true);
+        }
+        if (this.token === this.tok.T_COALESCE) {
+          return result("bin", "??", expr, this.next().read_expr());
+        }
+        if (this.token === this.tok.T_PIPE) {
+          if (this.version < 805) {
+            this.raiseError("PHP 8.5+ is required to use pipe operator");
+          }
+          const right = this.next().read_expr();
+          if (right.kind === "arrowfunc" && !right.parenthesizedExpression) {
+            this.raiseError(
+              "Arrow functions in a pipe chain must be wrapped in parentheses"
+            );
+          }
+          return result("bin", "|>", expr, right);
+        }
+        if (this.token === "?") {
+          let trueArg = null;
+          if (this.next().token !== ":") {
+            trueArg = this.read_expr();
+          }
+          this.expect(":") && this.next();
+          return result("retif", expr, trueArg, this.read_expr());
+        } else {
+          result.destroy(expr);
+        }
+        return expr;
+      },
+      /*
+       * Reads a cast expression
+       */
+      read_expr_cast(type) {
+        return this.node("cast")(type, this.text(), this.next().read_expr());
+      },
+      /*
+       * Read a isset variable
+       */
+      read_isset_variable() {
+        return this.read_expr();
+      },
+      /*
+       * Reads isset variables
+       */
+      read_isset_variables() {
+        return this.read_function_list(this.read_isset_variable, ",");
+      },
+      /*
+       * Reads internal PHP functions
+       */
+      read_internal_functions_in_yacc() {
+        let result = null;
+        switch (this.token) {
+          case this.tok.T_ISSET:
+            {
+              result = this.node("isset");
+              if (this.next().expect("(")) {
+                this.next();
+              }
+              const variables = this.read_isset_variables();
+              if (this.expect(")")) {
+                this.next();
+              }
+              result = result(variables);
+            }
+            break;
+          case this.tok.T_EMPTY:
+            {
+              result = this.node("empty");
+              if (this.next().expect("(")) {
+                this.next();
+              }
+              const expression = this.read_expr();
+              if (this.expect(")")) {
+                this.next();
+              }
+              result = result(expression);
+            }
+            break;
+          case this.tok.T_INCLUDE:
+            result = this.node("include")(false, false, this.next().read_expr());
+            break;
+          case this.tok.T_INCLUDE_ONCE:
+            result = this.node("include")(true, false, this.next().read_expr());
+            break;
+          case this.tok.T_EVAL:
+            {
+              result = this.node("eval");
+              if (this.next().expect("(")) {
+                this.next();
+              }
+              const expr = this.read_expr();
+              if (this.expect(")")) {
+                this.next();
+              }
+              result = result(expr);
+            }
+            break;
+          case this.tok.T_REQUIRE:
+            result = this.node("include")(false, true, this.next().read_expr());
+            break;
+          case this.tok.T_REQUIRE_ONCE:
+            result = this.node("include")(true, true, this.next().read_expr());
+            break;
+        }
+        return result;
+      },
+      /*
+       * Reads optional expression
+       */
+      read_optional_expr(stopToken) {
+        if (this.token !== stopToken) {
+          return this.read_expr();
+        }
+        return null;
+      },
+      /*
+       * Reads exit expression
+       */
+      read_exit_expr() {
+        let expression = null;
+        if (this.token === "(") {
+          this.next();
+          expression = this.read_optional_expr(")");
+          this.expect(")") && this.next();
+        }
+        return expression;
+      },
+      /*
+       * ```ebnf
+       * Reads an expression
+       *  expr ::= @todo
+       * ```
+       */
+      read_expr_item() {
+        let result, expr, attrs = [];
+        if (this.token === "+") {
+          return this.node("unary")("+", this.next().read_expr());
+        }
+        if (this.token === "-") {
+          return this.node("unary")("-", this.next().read_expr());
+        }
+        if (this.token === "!") {
+          return this.node("unary")("!", this.next().read_expr());
+        }
+        if (this.token === "~") {
+          return this.node("unary")("~", this.next().read_expr());
+        }
+        if (this.token === "(") {
+          expr = this.next().read_expr();
+          expr.parenthesizedExpression = true;
+          this.expect(")") && this.next();
+          return this.handleDereferencable(expr);
+        }
+        if (this.token === "`") {
+          return this.read_encapsed_string("`");
+        }
+        if (this.token === this.tok.T_LIST) {
+          let assign = null;
+          const isInner = this.innerList;
+          result = this.node("list");
+          if (!isInner) {
+            assign = this.node("assign");
+          }
+          if (this.next().expect("(")) {
+            this.next();
+          }
+          if (!this.innerList) this.innerList = true;
+          const assignList = this.read_array_pair_list(false);
+          if (this.expect(")")) {
+            this.next();
+          }
+          let hasItem = false;
+          for (let i = 0; i < assignList.length; i++) {
+            if (assignList[i] !== null && assignList[i].kind !== "noop") {
+              hasItem = true;
+              break;
+            }
+          }
+          if (!hasItem) {
+            this.raiseError(
+              "Fatal Error :  Cannot use empty list on line " + this.lexer.yylloc.first_line
+            );
+          }
+          if (!isInner) {
+            this.innerList = false;
+            if (this.expect("=")) {
+              return assign(
+                result(assignList, false),
+                this.next().read_expr(),
+                "="
+              );
+            } else {
+              return result(assignList, false);
+            }
+          } else {
+            return result(assignList, false);
+          }
+        }
+        if (this.token === this.tok.T_ATTRIBUTE) {
+          attrs = this.read_attr_list();
+        }
+        if (this.token === this.tok.T_CLONE) {
+          const node2 = this.node("clone");
+          this.next();
+          if (this.version >= 805 && this.token === "(") {
+            this.next();
+            let what2 = this.read_variable(false, false);
+            what2 = this.handleDereferencable(what2);
+            let properties = null;
+            if (this.token === ",") {
+              properties = this.next().read_expr();
+            }
+            this.expect(")") && this.next();
+            return node2(what2, properties);
+          }
+          let what = this.read_variable(false, false);
+          what = this.handleDereferencable(what);
+          return node2(what, null);
+        }
+        switch (this.token) {
+          case this.tok.T_INC:
+            return this.node("pre")("+", this.next().read_variable(false, false));
+          case this.tok.T_DEC:
+            return this.node("pre")("-", this.next().read_variable(false, false));
+          case this.tok.T_NEW:
+            expr = this.read_new_expr();
+            if (this.token === this.tok.T_OBJECT_OPERATOR && this.version < 804) {
+              this.raiseError(
+                "New without parenthesis is not allowed before PHP 8.4"
+              );
+            }
+            return this.handleDereferencable(expr);
+          case this.tok.T_ISSET:
+          case this.tok.T_EMPTY:
+          case this.tok.T_INCLUDE:
+          case this.tok.T_INCLUDE_ONCE:
+          case this.tok.T_EVAL:
+          case this.tok.T_REQUIRE:
+          case this.tok.T_REQUIRE_ONCE:
+            return this.read_internal_functions_in_yacc();
+          case this.tok.T_MATCH:
+            return this.read_match_expression();
+          case this.tok.T_INT_CAST:
+            return this.read_expr_cast("int");
+          case this.tok.T_DOUBLE_CAST:
+            return this.read_expr_cast("float");
+          case this.tok.T_STRING_CAST:
+            return this.read_expr_cast(
+              this.text().indexOf("binary") !== -1 ? "binary" : "string"
+            );
+          case this.tok.T_ARRAY_CAST:
+            return this.read_expr_cast("array");
+          case this.tok.T_OBJECT_CAST:
+            return this.read_expr_cast("object");
+          case this.tok.T_BOOL_CAST:
+            return this.read_expr_cast("bool");
+          case this.tok.T_UNSET_CAST:
+            return this.read_expr_cast("unset");
+          case this.tok.T_THROW: {
+            if (this.version < 800) {
+              this.raiseError("PHP 8+ is required to use throw as an expression");
+            }
+            const result2 = this.node("throw");
+            const expr2 = this.next().read_expr();
+            return result2(expr2);
+          }
+          case this.tok.T_EXIT: {
+            const useDie = this.lexer.yytext.toLowerCase() === "die";
+            result = this.node("exit");
+            this.next();
+            const expression = this.read_exit_expr();
+            return result(expression, useDie);
+          }
+          case this.tok.T_PRINT:
+            return this.node("print")(this.next().read_expr());
+          // T_YIELD (expr (T_DOUBLE_ARROW expr)?)?
+          case this.tok.T_YIELD: {
+            let value = null;
+            let key = null;
+            result = this.node("yield");
+            if (this.next().is("EXPR")) {
+              value = this.read_expr();
+              if (this.token === this.tok.T_DOUBLE_ARROW) {
+                key = value;
+                value = this.next().read_expr();
+              }
+            }
+            return result(value, key);
+          }
+          // T_YIELD_FROM expr
+          case this.tok.T_YIELD_FROM:
+            result = this.node("yieldfrom");
+            expr = this.next().read_expr();
+            return result(expr);
+          case this.tok.T_FN:
+          case this.tok.T_FUNCTION:
+            return this.read_inline_function(void 0, attrs);
+          case this.tok.T_STATIC: {
+            const backup = [this.token, this.lexer.getState()];
+            this.next();
+            if (this.token === this.tok.T_FUNCTION || this.version >= 704 && this.token === this.tok.T_FN) {
+              return this.read_inline_function([0, 1, 0], attrs);
+            } else {
+              this.lexer.tokens.push(backup);
+              this.next();
+            }
+          }
+        }
+        if (this.is("VARIABLE")) {
+          result = this.node();
+          expr = this.read_variable(false, false);
+          const isConst = expr.kind === "identifier" || expr.kind === "staticlookup" && expr.offset.kind === "identifier";
+          switch (this.token) {
+            case "=": {
+              if (isConst) this.error("VARIABLE");
+              if (this.next().token == "&") {
+                return this.read_assignref(result, expr);
+              }
+              return result("assign", expr, this.read_expr(), "=");
+            }
+            // operations :
+            case this.tok.T_PLUS_EQUAL:
+              if (isConst) this.error("VARIABLE");
+              return result("assign", expr, this.next().read_expr(), "+=");
+            case this.tok.T_MINUS_EQUAL:
+              if (isConst) this.error("VARIABLE");
+              return result("assign", expr, this.next().read_expr(), "-=");
+            case this.tok.T_MUL_EQUAL:
+              if (isConst) this.error("VARIABLE");
+              return result("assign", expr, this.next().read_expr(), "*=");
+            case this.tok.T_POW_EQUAL:
+              if (isConst) this.error("VARIABLE");
+              return result("assign", expr, this.next().read_expr(), "**=");
+            case this.tok.T_DIV_EQUAL:
+              if (isConst) this.error("VARIABLE");
+              return result("assign", expr, this.next().read_expr(), "/=");
+            case this.tok.T_CONCAT_EQUAL:
+              if (isConst) this.error("VARIABLE");
+              return result("assign", expr, this.next().read_expr(), ".=");
+            case this.tok.T_MOD_EQUAL:
+              if (isConst) this.error("VARIABLE");
+              return result("assign", expr, this.next().read_expr(), "%=");
+            case this.tok.T_AND_EQUAL:
+              if (isConst) this.error("VARIABLE");
+              return result("assign", expr, this.next().read_expr(), "&=");
+            case this.tok.T_OR_EQUAL:
+              if (isConst) this.error("VARIABLE");
+              return result("assign", expr, this.next().read_expr(), "|=");
+            case this.tok.T_XOR_EQUAL:
+              if (isConst) this.error("VARIABLE");
+              return result("assign", expr, this.next().read_expr(), "^=");
+            case this.tok.T_SL_EQUAL:
+              if (isConst) this.error("VARIABLE");
+              return result("assign", expr, this.next().read_expr(), "<<=");
+            case this.tok.T_SR_EQUAL:
+              if (isConst) this.error("VARIABLE");
+              return result("assign", expr, this.next().read_expr(), ">>=");
+            case this.tok.T_COALESCE_EQUAL:
+              if (isConst) this.error("VARIABLE");
+              return result("assign", expr, this.next().read_expr(), "??=");
+            case this.tok.T_INC:
+              if (isConst) this.error("VARIABLE");
+              this.next();
+              return result("post", "+", expr);
+            case this.tok.T_DEC:
+              if (isConst) this.error("VARIABLE");
+              this.next();
+              return result("post", "-", expr);
+            default:
+              result.destroy(expr);
+          }
+        } else if (this.is("SCALAR")) {
+          result = this.node();
+          expr = this.read_scalar();
+          if (expr.kind === "array" && expr.shortForm && this.token === "=") {
+            const list = this.convertToList(expr);
+            if (expr.loc) list.loc = expr.loc;
+            const right = this.next().read_expr();
+            return result("assign", list, right, "=");
+          } else {
+            result.destroy(expr);
+          }
+          return this.handleDereferencable(expr);
+        } else {
+          this.error("EXPR");
+          this.next();
+        }
+        return expr;
+      },
+      /*
+       * Recursively convert nested array to nested list.
+       */
+      convertToList(array2) {
+        const convertedItems = array2.items.map((entry) => {
+          if (entry.value && entry.value.kind === "array" && entry.value.shortForm) {
+            entry.value = this.convertToList(entry.value);
+          }
+          return entry;
+        });
+        const node2 = this.node("list")(convertedItems, true);
+        if (array2.loc) node2.loc = array2.loc;
+        if (array2.leadingComments) node2.leadingComments = array2.leadingComments;
+        if (array2.trailingComments) node2.trailingComments = array2.trailingComments;
+        return node2;
+      },
+      /*
+       * Reads assignment
+       * @param {*} left
+       */
+      read_assignref(result, left) {
+        this.next();
+        let right;
+        if (this.token === this.tok.T_NEW) {
+          if (this.version >= 700) {
+            this.error();
+          }
+          right = this.read_new_expr();
+        } else if (this.token === "(") {
+          right = this.next().read_expr();
+          this.expect(")") && this.next();
+          right = this.recursive_variable_chain_scan(right, false, false);
+        } else {
+          right = this.read_variable(false, false);
+        }
+        return result("assignref", left, right);
+      },
+      /*
+       *
+       * inline_function:
+       * 		function returns_ref backup_doc_comment '(' parameter_list ')' lexical_vars return_type
+       * 		backup_fn_flags '{' inner_statement_list '}' backup_fn_flags
+       * 			{ $$ = zend_ast_create_decl(ZEND_AST_CLOSURE, $2 | $13, $1, $3,
+       * 				  zend_string_init("{closure}", sizeof("{closure}") - 1, 0),
+       * 				  $5, $7, $11, $8); CG(extra_fn_flags) = $9; }
+       * 	|	fn returns_ref '(' parameter_list ')' return_type backup_doc_comment T_DOUBLE_ARROW backup_fn_flags backup_lex_pos expr backup_fn_flags
+       * 			{ $$ = zend_ast_create_decl(ZEND_AST_ARROW_FUNC, $2 | $12, $1, $7,
+       * 				  zend_string_init("{closure}", sizeof("{closure}") - 1, 0), $4, NULL,
+       * 				  zend_ast_create(ZEND_AST_RETURN, $11), $6);
+       * 				  ((zend_ast_decl *) $$)->lex_pos = $10;
+       * 				  CG(extra_fn_flags) = $9; }   *
+       */
+      read_inline_function(flags, attrs) {
+        if (this.token === this.tok.T_FUNCTION) {
+          const result2 = this.read_function(true, flags, attrs);
+          result2.attrGroups = attrs;
+          return result2;
+        }
+        if (this.version < 704) {
+          this.raiseError("Arrow Functions are not allowed");
+        }
+        const node2 = this.node("arrowfunc");
+        if (this.expect(this.tok.T_FN)) this.next();
+        const isRef2 = this.is_reference();
+        if (this.expect("(")) this.next();
+        const params = this.read_parameter_list();
+        if (this.expect(")")) this.next();
+        let nullable2 = false;
+        let returnType = null;
+        if (this.token === ":") {
+          if (this.next().token === "?") {
+            nullable2 = true;
+            this.next();
+          }
+          returnType = this.read_types();
+        }
+        if (this.expect(this.tok.T_DOUBLE_ARROW)) this.next();
+        const body = this.read_expr();
+        const result = node2(
+          params,
+          isRef2,
+          body,
+          returnType,
+          nullable2,
+          flags ? true : false
+        );
+        result.attrGroups = attrs;
+        return result;
+      },
+      read_match_expression() {
+        const node2 = this.node("match");
+        this.expect(this.tok.T_MATCH) && this.next();
+        if (this.version < 800) {
+          this.raiseError("Match statements are not allowed before PHP 8");
+        }
+        if (this.expect("(")) this.next();
+        const cond = this.read_expr();
+        if (this.expect(")")) this.next();
+        if (this.expect("{")) this.next();
+        const arms = this.read_match_arms();
+        if (this.expect("}")) this.next();
+        return node2(cond, arms);
+      },
+      read_match_arms() {
+        return this.read_list(() => this.read_match_arm(), ",", true);
+      },
+      read_match_arm() {
+        if (this.token === "}") {
+          return;
+        }
+        return this.node("matcharm")(this.read_match_arm_conds(), this.read_expr());
+      },
+      read_match_arm_conds() {
+        let conds = [];
+        if (this.token === this.tok.T_DEFAULT) {
+          conds = null;
+          this.next();
+        } else {
+          conds.push(this.read_expr());
+          while (this.token === ",") {
+            this.next();
+            if (this.token === this.tok.T_DOUBLE_ARROW) {
+              this.next();
+              return conds;
+            }
+            conds.push(this.read_expr());
+          }
+        }
+        if (this.expect(this.tok.T_DOUBLE_ARROW)) {
+          this.next();
+        }
+        return conds;
+      },
+      read_attribute() {
+        const node2 = this.node("attribute");
+        const name = this.text();
+        let args = [];
+        this.next();
+        if (this.token === "(") {
+          args = this.read_argument_list();
+        }
+        return node2(name, args);
+      },
+      read_attr_list() {
+        const list = [];
+        if (this.token === this.tok.T_ATTRIBUTE) {
+          do {
+            const node2 = this.node("attrgroup");
+            this.next();
+            const attrs = [this.read_attribute()];
+            while (this.token === ",") {
+              this.next();
+              if (this.token !== "]") attrs.push(this.read_attribute());
+            }
+            this.expect("]");
+            this.next();
+            list.push(node2(attrs));
+          } while (this.token === this.tok.T_ATTRIBUTE);
+        }
+        return list;
+      },
+      /*
+       * ```ebnf
+       *    new_expr ::= T_NEW (namespace_name function_argument_list) | (T_CLASS ... class declaration)
+       * ```
+       * https://github.com/php/php-src/blob/master/Zend/zend_language_parser.y#L850
+       */
+      read_new_expr() {
+        const result = this.node("new");
+        this.expect(this.tok.T_NEW) && this.next();
+        let args = [];
+        if (this.token === "(") {
+          this.next();
+          const newExp = this.read_expr();
+          this.expect(")");
+          this.next();
+          if (this.token === "(") {
+            args = this.read_argument_list();
+          }
+          return result(newExp, args);
+        }
+        const attrs = this.read_attr_list();
+        const isReadonly = this.token === this.tok.T_READ_ONLY;
+        if (isReadonly) {
+          if (this.version < 803) {
+            this.raiseError(
+              "Anonymous readonly classes are not allowed before PHP 8.3"
+            );
+          }
+          this.next();
+        }
+        if (this.token === this.tok.T_CLASS) {
+          const what = this.node("class");
+          if (this.next().token === "(") {
+            args = this.read_argument_list();
+          }
+          const propExtends = this.read_extends_from();
+          const propImplements = this.read_implements_list();
+          let body = null;
+          if (this.expect("{")) {
+            body = this.next().read_class_body(true, false);
+          }
+          const whatNode = what(null, propExtends, propImplements, body, [
+            0,
+            0,
+            0,
+            isReadonly ? 1 : 0
+          ]);
+          whatNode.attrGroups = attrs;
+          return result(whatNode, args);
+        }
+        let name = this.read_new_class_name();
+        while (this.token === "[") {
+          const offsetNode = this.node("offsetlookup");
+          const offset = this.next().read_encaps_var_offset();
+          this.expect("]") && this.next();
+          name = offsetNode(name, offset);
+        }
+        if (this.token === "(") {
+          args = this.read_argument_list();
+        }
+        return result(name, args);
+      },
+      /*
+       * Reads a class name
+       * ```ebnf
+       * read_new_class_name ::= namespace_name | variable
+       * ```
+       */
+      read_new_class_name() {
+        if (this.token === this.tok.T_NS_SEPARATOR || this.token === this.tok.T_NAME_RELATIVE || this.token === this.tok.T_NAME_QUALIFIED || this.token === this.tok.T_NAME_FULLY_QUALIFIED || this.token === this.tok.T_STRING || this.token === this.tok.T_NAMESPACE) {
+          let result = this.read_namespace_name(true);
+          if (this.token === this.tok.T_DOUBLE_COLON) {
+            result = this.read_static_getter(result);
+            return this.recursive_variable_chain_scan(result, true, false);
+          }
+          return result;
+        } else if (this.is("VARIABLE")) {
+          return this.read_variable(true, false);
+        } else {
+          this.expect([this.tok.T_STRING, "VARIABLE"]);
+        }
+      },
+      handleDereferencable(expr) {
+        while (this.token !== this.EOF) {
+          if (this.token === this.tok.T_OBJECT_OPERATOR || this.token === this.tok.T_DOUBLE_COLON || this.token === this.tok.T_NULLSAFE_OBJECT_OPERATOR) {
+            expr = this.recursive_variable_chain_scan(expr, false, false, true);
+          } else if (this.token === this.tok.T_CURLY_OPEN || this.token === "[") {
+            expr = this.read_dereferencable(expr);
+          } else if (this.token === "(") {
+            expr = this.node("call")(expr, this.read_argument_list());
+          } else {
+            return expr;
+          }
+        }
+        return expr;
+      }
+    };
+  }
+});
+var require_enum = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/enum.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      /*
+       * reading an enum
+       * ```ebnf
+       * enum ::= enum_scope? T_ENUM T_STRING (':' NAMESPACE_NAME)? (T_IMPLEMENTS (NAMESPACE_NAME ',')* NAMESPACE_NAME)? '{' ENUM_BODY '}'
+       * ```
+       */
+      read_enum_declaration_statement(attrs) {
+        const result = this.node("enum");
+        if (!this.expect(this.tok.T_ENUM)) {
+          return null;
+        }
+        this.next().expect(this.tok.T_STRING);
+        let propName = this.node("identifier");
+        const name = this.text();
+        this.next();
+        propName = propName(name);
+        const valueType = this.read_enum_value_type();
+        const propImplements = this.read_implements_list();
+        this.expect("{");
+        const body = this.next().read_class_body(false, true);
+        const node2 = result(propName, valueType, propImplements, body);
+        if (attrs) node2.attrGroups = attrs;
+        return node2;
+      },
+      read_enum_value_type() {
+        if (this.token === ":") {
+          return this.next().read_namespace_name();
+        }
+        return null;
+      },
+      read_enum_case(attrs) {
+        this.expect(this.tok.T_CASE);
+        const result = this.node("enumcase");
+        let caseName = this.node("identifier");
+        const name = this.next().text();
+        this.next();
+        caseName = caseName(name);
+        const value = this.token === "=" ? this.next().read_expr() : null;
+        this.expect(";");
+        const node2 = result(caseName, value);
+        if (attrs && attrs.length > 0) node2.attrGroups = attrs;
+        return node2;
+      }
+    };
+  }
+});
+var require_function = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/function.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      /*
+       * checks if current token is a reference keyword
+       */
+      is_reference() {
+        if (this.token === "&") {
+          this.next();
+          return true;
+        }
+        return false;
+      },
+      /*
+       * checks if current token is a variadic keyword
+       */
+      is_variadic() {
+        if (this.token === this.tok.T_ELLIPSIS) {
+          this.next();
+          return true;
+        }
+        return false;
+      },
+      /*
+       * reading a function
+       * ```ebnf
+       * function ::= function_declaration code_block
+       * ```
+       */
+      read_function(closure, flag, attrs, locStart) {
+        const result = this.read_function_declaration(
+          closure ? 1 : flag ? 2 : 0,
+          flag && flag[1] === 1,
+          attrs || [],
+          locStart
+        );
+        if (flag && flag[2] == 1) {
+          result.parseFlags(flag);
+          if (this.expect(";")) {
+            this.next();
+          }
+        } else {
+          if (this.expect("{")) {
+            result.body = this.read_code_block(false);
+            if (result.loc && result.body.loc) {
+              result.loc.end = result.body.loc.end;
+            }
+          }
+          if (!closure && flag) {
+            result.parseFlags(flag);
+          }
+        }
+        return result;
+      },
+      /*
+       * reads a function declaration (without his body)
+       * ```ebnf
+       * function_declaration ::= T_FUNCTION '&'?  T_STRING '(' parameter_list ')'
+       * ```
+       */
+      read_function_declaration(type, isStatic, attrs, locStart) {
+        let nodeName = "function";
+        if (type === 1) {
+          nodeName = "closure";
+        } else if (type === 2) {
+          nodeName = "method";
+        }
+        const result = this.node(nodeName);
+        if (this.expect(this.tok.T_FUNCTION)) {
+          this.next();
+        }
+        const isRef2 = this.is_reference();
+        let name = false, use = [], returnType = null, nullable2 = false;
+        if (type !== 1) {
+          const nameNode = this.node("identifier");
+          if (type === 2) {
+            if (this.version >= 700) {
+              if (this.token === this.tok.T_STRING || this.is("IDENTIFIER")) {
+                name = this.text();
+                this.next();
+              } else if (this.version < 704) {
+                this.error("IDENTIFIER");
+              }
+            } else if (this.token === this.tok.T_STRING) {
+              name = this.text();
+              this.next();
+            } else {
+              this.error("IDENTIFIER");
+            }
+          } else {
+            if (this.version >= 700) {
+              if (this.token === this.tok.T_STRING) {
+                name = this.text();
+                this.next();
+              } else if (this.version >= 704) {
+                if (!this.expect("(")) {
+                  this.next();
+                }
+              } else {
+                this.error(this.tok.T_STRING);
+                this.next();
+              }
+            } else {
+              if (this.expect(this.tok.T_STRING)) {
+                name = this.text();
+              }
+              this.next();
+            }
+          }
+          name = nameNode(name);
+        }
+        if (this.expect("(")) this.next();
+        const params = this.read_parameter_list(name.name === "__construct");
+        if (this.expect(")")) this.next();
+        if (type === 1) {
+          use = this.read_lexical_vars();
+        }
+        if (this.token === ":") {
+          if (this.next().token === "?") {
+            nullable2 = true;
+            this.next();
+          }
+          returnType = this.read_types();
+        }
+        const apply_attrgroup_location = (node2) => {
+          node2.attrGroups = attrs || [];
+          if (locStart && node2.loc) {
+            node2.loc.start = locStart;
+            if (node2.loc.source) {
+              node2.loc.source = this.lexer._input.substr(
+                node2.loc.start.offset,
+                node2.loc.end.offset - node2.loc.start.offset
+              );
+            }
+          }
+          return node2;
+        };
+        if (type === 1) {
+          return apply_attrgroup_location(
+            result(params, isRef2, use, returnType, nullable2, isStatic)
+          );
+        }
+        return apply_attrgroup_location(
+          result(name, params, isRef2, returnType, nullable2)
+        );
+      },
+      read_lexical_vars() {
+        let result = [];
+        if (this.token === this.tok.T_USE) {
+          this.next();
+          this.expect("(") && this.next();
+          result = this.read_lexical_var_list();
+          this.expect(")") && this.next();
+        }
+        return result;
+      },
+      read_list_with_dangling_comma(item) {
+        const result = [];
+        while (this.token != this.EOF) {
+          result.push(item());
+          if (this.token == ",") {
+            this.next();
+            if (this.version >= 800 && this.token === ")") {
+              return result;
+            }
+          } else if (this.token == ")") {
+            break;
+          } else {
+            this.error([",", ")"]);
+            break;
+          }
+        }
+        return result;
+      },
+      read_lexical_var_list() {
+        return this.read_list_with_dangling_comma(this.read_lexical_var.bind(this));
+      },
+      /*
+       * ```ebnf
+       * lexical_var ::= '&'? T_VARIABLE
+       * ```
+       */
+      read_lexical_var() {
+        if (this.token === "&") {
+          return this.read_byref(this.read_lexical_var.bind(this));
+        }
+        const result = this.node("variable");
+        this.expect(this.tok.T_VARIABLE);
+        const name = this.text().substring(1);
+        this.next();
+        return result(name, false);
+      },
+      /*
+       * reads a list of parameters
+       * ```ebnf
+       *  parameter_list ::= (parameter ',')* parameter?
+       * ```
+       */
+      read_parameter_list(is_class_constructor) {
+        if (this.token !== ")") {
+          let wasVariadic = false;
+          return this.read_list_with_dangling_comma(
+            function() {
+              const parameter = this.read_parameter(is_class_constructor);
+              if (parameter) {
+                if (wasVariadic) {
+                  this.raiseError(
+                    "Unexpected parameter after a variadic parameter"
+                  );
+                }
+                if (parameter.variadic) {
+                  wasVariadic = true;
+                }
+              }
+              return parameter;
+            }.bind(this),
+            ","
+          );
+        }
+        return [];
+      },
+      /*
+       * ```ebnf
+       *  parameter ::= type? '&'? T_ELLIPSIS? T_VARIABLE ('=' expr)?
+       * ```
+       * @see https://github.com/php/php-src/blob/493524454d66adde84e00d249d607ecd540de99f/Zend/zend_language_parser.y#L640
+       */
+      read_parameter(is_class_constructor) {
+        const node2 = this.node("parameter");
+        let parameterName = null;
+        let value = null;
+        let nullable2 = false;
+        let readonly2 = false;
+        let attrs = [];
+        if (this.token === this.tok.T_ATTRIBUTE) attrs = this.read_attr_list();
+        if (this.version >= 801 && this.token === this.tok.T_READ_ONLY) {
+          if (is_class_constructor) {
+            this.next();
+            readonly2 = true;
+          } else {
+            this.raiseError(
+              "readonly properties can be used only on class constructor"
+            );
+          }
+        }
+        const [flags, flagsSet] = this.read_promoted();
+        if (!readonly2 && this.version >= 801 && this.token === this.tok.T_READ_ONLY) {
+          if (is_class_constructor) {
+            this.next();
+            readonly2 = true;
+          } else {
+            this.raiseError(
+              "readonly properties can be used only on class constructor"
+            );
+          }
+        }
+        if (this.token === "?") {
+          this.next();
+          nullable2 = true;
+        }
+        const types = this.read_types();
+        if (nullable2 && !types) {
+          this.raiseError(
+            "Expecting a type definition combined with nullable operator"
+          );
+        }
+        const isRef2 = this.is_reference();
+        const isVariadic = this.is_variadic();
+        if (this.expect(this.tok.T_VARIABLE)) {
+          parameterName = this.node("identifier");
+          const name = this.text().substring(1);
+          this.next();
+          parameterName = parameterName(name);
+        }
+        if (this.token == "=") {
+          value = this.next().read_expr();
+        }
+        let hooks = [];
+        if (this.version >= 804 && flags && this.token === "{") {
+          hooks = this.read_property_hooks();
+        }
+        const result = node2(
+          parameterName,
+          types,
+          value,
+          isRef2,
+          isVariadic,
+          readonly2,
+          nullable2,
+          flags,
+          hooks,
+          flagsSet
+        );
+        if (attrs) result.attrGroups = attrs;
+        return result;
+      },
+      read_types() {
+        const MODE_UNSET = "unset";
+        const MODE_UNION = "union";
+        const MODE_INTERSECTION = "intersection";
+        const types = [];
+        let mode = MODE_UNSET;
+        const node2 = this.node();
+        const type = this.read_type();
+        if (!type) {
+          node2.destroy();
+          return null;
+        }
+        types.push(type);
+        while (this.token === "|" || this.version >= 801 && this.token === "&") {
+          const nextToken = this.peek();
+          if (nextToken === this.tok.T_ELLIPSIS || nextToken === this.tok.T_VARIABLE) {
+            break;
+          }
+          if (mode === MODE_UNSET) {
+            mode = this.token === "|" ? MODE_UNION : MODE_INTERSECTION;
+          } else {
+            if (mode === MODE_UNION && this.token !== "|" || mode === MODE_INTERSECTION && this.token !== "&") {
+              this.raiseError(
+                'Unexpect token "' + this.token + '", "|" and "&" can not be mixed'
+              );
+            }
+          }
+          this.next();
+          types.push(this.read_type());
+        }
+        if (types.length === 1) {
+          node2.destroy();
+          return types[0];
+        } else {
+          return mode === MODE_INTERSECTION ? node2("intersectiontype", types) : node2("uniontype", types);
+        }
+      },
+      read_promoted() {
+        const MODIFIER_PUBLIC = 1;
+        const MODIFIER_PROTECTED = 2;
+        const MODIFIER_PRIVATE = 4;
+        let firstModifier;
+        if (this.token === this.tok.T_PUBLIC) {
+          this.next();
+          firstModifier = MODIFIER_PUBLIC;
+        } else if (this.token === this.tok.T_PROTECTED) {
+          this.next();
+          firstModifier = MODIFIER_PROTECTED;
+        } else if (this.token === this.tok.T_PRIVATE) {
+          this.next();
+          firstModifier = MODIFIER_PRIVATE;
+        } else {
+          return [0, 0];
+        }
+        if (this.version >= 804) {
+          if (this.token === "(") {
+            this.next();
+            if (this.token !== this.tok.T_STRING || this.text() !== "set") {
+              this.error("set");
+            } else {
+              this.next();
+            }
+            if (this.expect(")")) {
+              this.next();
+            }
+            return [0, firstModifier];
+          }
+          let setModifier = 0;
+          if (this.token === this.tok.T_PUBLIC) {
+            this.next();
+            setModifier = MODIFIER_PUBLIC;
+          } else if (this.token === this.tok.T_PROTECTED) {
+            this.next();
+            setModifier = MODIFIER_PROTECTED;
+          } else if (this.token === this.tok.T_PRIVATE) {
+            this.next();
+            setModifier = MODIFIER_PRIVATE;
+          }
+          if (setModifier > 0) {
+            if (this.expect("(")) {
+              this.next();
+            }
+            if (this.token !== this.tok.T_STRING || this.text() !== "set") {
+              this.error("set");
+            } else {
+              this.next();
+            }
+            if (this.expect(")")) {
+              this.next();
+            }
+            return [firstModifier, setModifier];
+          }
+        }
+        return [firstModifier, 0];
+      },
+      /*
+       * Reads a list of arguments
+       * ```ebnf
+       *  function_argument_list ::= '(' (argument_list (',' argument_list)*)? ')'
+       * ```
+       */
+      read_argument_list() {
+        let result = [];
+        this.expect("(") && this.next();
+        if (this.version >= 801 && this.token === this.tok.T_ELLIPSIS && this.peek() === ")") {
+          const variadicNode = this.node("variadicplaceholder");
+          this.next();
+          result.push(variadicNode());
+        } else if (this.token !== ")") {
+          result = this.read_non_empty_argument_list();
+        }
+        this.expect(")") && this.next();
+        return result;
+      },
+      /*
+       * Reads non empty argument list
+       */
+      read_non_empty_argument_list() {
+        let wasVariadic = false;
+        return this.read_function_list(
+          function() {
+            const argument = this.read_argument();
+            if (argument) {
+              const isVariadic = argument.kind === "variadic";
+              if (wasVariadic && !isVariadic) {
+                this.raiseError(
+                  "Unexpected non-variadic argument after a variadic argument"
+                );
+              }
+              if (isVariadic) {
+                wasVariadic = true;
+              }
+            }
+            return argument;
+          }.bind(this),
+          ","
+        );
+      },
+      /*
+       * ```ebnf
+       *    argument_list ::= T_STRING ':' expr | T_ELLIPSIS? expr
+       * ```
+       */
+      read_argument() {
+        if (this.token === this.tok.T_ELLIPSIS) {
+          return this.node("variadic")(this.next().read_expr());
+        }
+        if (this.token === this.tok.T_STRING || Object.values(this.lexer.keywords).includes(this.token)) {
+          const nextToken = this.peek();
+          if (nextToken === ":") {
+            if (this.version < 800) {
+              this.raiseError("PHP 8+ is required to use named arguments");
+            }
+            return this.node("namedargument")(
+              this.text(),
+              this.next().next().read_expr()
+            );
+          }
+        }
+        return this.read_expr();
+      },
+      /*
+       * read type hinting
+       * ```ebnf
+       *  type ::= T_ARRAY | T_CALLABLE | namespace_name
+       * ```
+       */
+      read_type() {
+        const result = this.node();
+        if (this.token === this.tok.T_ARRAY || this.token === this.tok.T_CALLABLE) {
+          const type = this.text();
+          this.next();
+          return result("typereference", type.toLowerCase(), type);
+        } else if (this.token === this.tok.T_NAME_RELATIVE || this.token === this.tok.T_NAME_QUALIFIED || this.token === this.tok.T_NAME_FULLY_QUALIFIED || this.token === this.tok.T_STRING || this.token === this.tok.T_STATIC) {
+          const type = this.text();
+          const backup = [this.token, this.lexer.getState()];
+          this.next();
+          if (this.token !== this.tok.T_NS_SEPARATOR && this.ast.typereference.types.indexOf(type.toLowerCase()) > -1) {
+            return result("typereference", type.toLowerCase(), type);
+          } else {
+            this.lexer.tokens.push(backup);
+            this.next();
+            result.destroy();
+            return this.read_namespace_name();
+          }
+        } else if (this.version >= 802 && this.token === "(") {
+          this.next();
+          const innerTypes = [];
+          innerTypes.push(this.read_type());
+          while (this.token === "&") {
+            const nextToken = this.peek();
+            if (nextToken === this.tok.T_ELLIPSIS || nextToken === this.tok.T_VARIABLE) {
+              break;
+            }
+            this.next();
+            innerTypes.push(this.read_type());
+          }
+          this.expect(")") && this.next();
+          return result("intersectiontype", innerTypes);
+        }
+        result.destroy();
+        return null;
+      }
+    };
+  }
+});
+var require_if = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/if.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      /*
+       * Reads an IF statement
+       *
+       * ```ebnf
+       *  if ::= T_IF '(' expr ')' ':' ...
+       * ```
+       */
+      read_if() {
+        const result = this.node("if");
+        const test = this.next().read_if_expr();
+        let body;
+        let alternate = null;
+        let shortForm = false;
+        if (this.token === ":") {
+          shortForm = true;
+          body = this.node("block");
+          this.next();
+          const items = [];
+          while (this.token !== this.EOF && this.token !== this.tok.T_ENDIF) {
+            if (this.token === this.tok.T_ELSEIF) {
+              alternate = this.read_elseif_short();
+              break;
+            } else if (this.token === this.tok.T_ELSE) {
+              alternate = this.read_else_short();
+              break;
+            }
+            items.push(this.read_inner_statement());
+          }
+          if (items.length === 0 && this.extractDoc && this._docs.length > this._docIndex) {
+            items.push(this.node("noop")());
+          }
+          body = body(null, items);
+          this.expect(this.tok.T_ENDIF) && this.next();
+          this.expectEndOfStatement();
+        } else {
+          body = this.read_statement();
+          if (this.token === this.tok.T_ELSEIF) {
+            alternate = this.read_if();
+          } else if (this.token === this.tok.T_ELSE) {
+            alternate = this.next().read_statement();
+          }
+        }
+        return result(test, body, alternate, shortForm);
+      },
+      /*
+       * reads an if expression : '(' expr ')'
+       */
+      read_if_expr() {
+        this.expect("(") && this.next();
+        const result = this.read_expr();
+        this.expect(")") && this.next();
+        return result;
+      },
+      /*
+       * reads an elseif (expr): statements
+       */
+      read_elseif_short() {
+        let alternate = null;
+        const result = this.node("if");
+        const test = this.next().read_if_expr();
+        const body = this.node("block");
+        if (this.expect(":")) this.next();
+        const items = [];
+        while (this.token != this.EOF && this.token !== this.tok.T_ENDIF) {
+          if (this.token === this.tok.T_ELSEIF) {
+            alternate = this.read_elseif_short();
+            break;
+          } else if (this.token === this.tok.T_ELSE) {
+            alternate = this.read_else_short();
+            break;
+          }
+          items.push(this.read_inner_statement());
+        }
+        if (items.length === 0 && this.extractDoc && this._docs.length > this._docIndex) {
+          items.push(this.node("noop")());
+        }
+        return result(test, body(null, items), alternate, true);
+      },
+      /*
+       *
+       */
+      read_else_short() {
+        this.next();
+        const body = this.node("block");
+        if (this.expect(":")) this.next();
+        const items = [];
+        while (this.token != this.EOF && this.token !== this.tok.T_ENDIF) {
+          items.push(this.read_inner_statement());
+        }
+        if (items.length === 0 && this.extractDoc && this._docs.length > this._docIndex) {
+          items.push(this.node("noop")());
+        }
+        return body(null, items);
+      }
+    };
+  }
+});
+var require_loops = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/loops.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      /*
+       * Reads a while statement
+       * ```ebnf
+       * while ::= T_WHILE (statement | ':' inner_statement_list T_ENDWHILE ';')
+       * ```
+       * @see https://github.com/php/php-src/blob/master/Zend/zend_language_parser.y#L587
+       * @return {While}
+       */
+      read_while() {
+        const result = this.node("while");
+        this.expect(this.tok.T_WHILE) && this.next();
+        let body;
+        let shortForm = false;
+        if (this.expect("(")) this.next();
+        const test = this.read_expr();
+        if (this.expect(")")) this.next();
+        if (this.token === ":") {
+          shortForm = true;
+          body = this.read_short_form(this.tok.T_ENDWHILE);
+        } else {
+          body = this.read_statement();
+        }
+        return result(test, body, shortForm);
+      },
+      /*
+       * Reads a do / while loop
+       * ```ebnf
+       * do ::= T_DO statement T_WHILE '(' expr ')' ';'
+       * ```
+       * @see https://github.com/php/php-src/blob/master/Zend/zend_language_parser.y#L423
+       * @return {Do}
+       */
+      read_do() {
+        const result = this.node("do");
+        this.expect(this.tok.T_DO) && this.next();
+        let test = null;
+        const body = this.read_statement();
+        if (this.expect(this.tok.T_WHILE)) {
+          if (this.next().expect("(")) this.next();
+          test = this.read_expr();
+          if (this.expect(")")) this.next();
+          if (this.expect(";")) this.next();
+        }
+        return result(test, body);
+      },
+      /*
+       * Read a for incremental loop
+       * ```ebnf
+       * for ::= T_FOR '(' for_exprs ';' for_exprs ';' for_exprs ')' for_statement
+       * for_statement ::= statement | ':' inner_statement_list T_ENDFOR ';'
+       * for_exprs ::= expr? (',' expr)*
+       * ```
+       * @see https://github.com/php/php-src/blob/master/Zend/zend_language_parser.y#L425
+       * @return {For}
+       */
+      read_for() {
+        const result = this.node("for");
+        this.expect(this.tok.T_FOR) && this.next();
+        let init = [];
+        let test = [];
+        let increment = [];
+        let body;
+        let shortForm = false;
+        if (this.expect("(")) this.next();
+        if (this.token !== ";") {
+          init = this.read_list(this.read_expr, ",");
+          if (this.expect(";")) this.next();
+        } else {
+          this.next();
+        }
+        if (this.token !== ";") {
+          test = this.read_list(this.read_expr, ",");
+          if (this.expect(";")) this.next();
+        } else {
+          this.next();
+        }
+        if (this.token !== ")") {
+          increment = this.read_list(this.read_expr, ",");
+          if (this.expect(")")) this.next();
+        } else {
+          this.next();
+        }
+        if (this.token === ":") {
+          shortForm = true;
+          body = this.read_short_form(this.tok.T_ENDFOR);
+        } else {
+          body = this.read_statement();
+        }
+        return result(init, test, increment, body, shortForm);
+      },
+      /*
+       * Reads a foreach loop
+       * ```ebnf
+       * foreach ::= '(' expr T_AS foreach_variable (T_DOUBLE_ARROW foreach_variable)? ')' statement
+       * ```
+       * @see https://github.com/php/php-src/blob/master/Zend/zend_language_parser.y#L438
+       * @return {Foreach}
+       */
+      read_foreach() {
+        const result = this.node("foreach");
+        this.expect(this.tok.T_FOREACH) && this.next();
+        let key = null;
+        let value = null;
+        let body;
+        let shortForm = false;
+        if (this.expect("(")) this.next();
+        const source = this.read_expr();
+        if (this.expect(this.tok.T_AS)) {
+          this.next();
+          value = this.read_foreach_variable();
+          if (this.token === this.tok.T_DOUBLE_ARROW) {
+            key = value;
+            value = this.next().read_foreach_variable();
+          }
+        }
+        if (key && key.kind === "list") {
+          this.raiseError("Fatal Error : Cannot use list as key element");
+        }
+        if (this.expect(")")) this.next();
+        if (this.token === ":") {
+          shortForm = true;
+          body = this.read_short_form(this.tok.T_ENDFOREACH);
+        } else {
+          body = this.read_statement();
+        }
+        return result(source, key, value, body, shortForm);
+      },
+      /*
+       * Reads a foreach variable statement
+       * ```ebnf
+       * foreach_variable =
+       *    variable |
+       *    '&' variable |
+       *    T_LIST '(' assignment_list ')' |
+       *    '[' assignment_list ']'
+       * ```
+       * @see https://github.com/php/php-src/blob/master/Zend/zend_language_parser.y#L544
+       * @return {Expression}
+       */
+      read_foreach_variable() {
+        if (this.token === this.tok.T_LIST || this.token === "[") {
+          const isShort = this.token === "[";
+          const result = this.node("list");
+          this.next();
+          if (!isShort && this.expect("(")) this.next();
+          const assignList = this.read_array_pair_list(isShort);
+          if (this.expect(isShort ? "]" : ")")) this.next();
+          return result(assignList, isShort);
+        } else {
+          return this.read_variable(false, false);
+        }
+      }
+    };
+  }
+});
+var require_main = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/main.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      /*
+       * ```ebnf
+       * start ::= (namespace | top_statement)*
+       * ```
+       */
+      read_start() {
+        if (this.token == this.tok.T_NAMESPACE) {
+          return this.read_namespace();
+        } else {
+          return this.read_top_statement();
+        }
+      }
+    };
+  }
+});
+var require_namespace = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/namespace.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      /*
+       * Reads a namespace declaration block
+       * ```ebnf
+       * namespace ::= T_NAMESPACE namespace_name? '{'
+       *    top_statements
+       * '}'
+       * | T_NAMESPACE namespace_name ';' top_statements
+       * ```
+       * @see http://php.net/manual/en/language.namespaces.php
+       * @return {Namespace}
+       */
+      read_namespace() {
+        const result = this.node("namespace");
+        let body;
+        this.expect(this.tok.T_NAMESPACE) && this.next();
+        let name;
+        if (this.token === "{") {
+          name = {
+            name: [""]
+          };
+        } else {
+          name = this.read_namespace_name();
+        }
+        this.currentNamespace = name;
+        if (this.token === ";") {
+          this.currentNamespace = name;
+          body = this.next().read_top_statements(true);
+          return result(name.name, body, false);
+        } else if (this.token === "{") {
+          this.currentNamespace = name;
+          body = this.next().read_top_statements();
+          this.expect("}") && this.next();
+          if (body.length === 0 && this.extractDoc && this._docs.length > this._docIndex) {
+            body.push(this.node("noop")());
+          }
+          return result(name.name, body, true);
+        } else {
+          this.error(["{", ";"]);
+          this.currentNamespace = name;
+          body = this.read_top_statements();
+          this.expect(this.EOF);
+          return result(name, body, false);
+        }
+      },
+      /*
+       * Reads a namespace name
+       * ```ebnf
+       *  namespace_name ::= T_NS_SEPARATOR? (T_STRING T_NS_SEPARATOR)* T_STRING
+       * ```
+       * @see http://php.net/manual/en/language.namespaces.rules.php
+       * @return {Reference}
+       */
+      read_namespace_name(resolveReference) {
+        const result = this.node();
+        let resolution;
+        let name = this.text();
+        switch (this.token) {
+          case this.tok.T_NAME_RELATIVE:
+            resolution = this.ast.name.RELATIVE_NAME;
+            name = name.replace(/^namespace\\/, "");
+            break;
+          case this.tok.T_NAME_QUALIFIED:
+            resolution = this.ast.name.QUALIFIED_NAME;
+            break;
+          case this.tok.T_NAME_FULLY_QUALIFIED:
+            resolution = this.ast.name.FULL_QUALIFIED_NAME;
+            break;
+          default:
+            resolution = this.ast.name.UNQUALIFIED_NAME;
+            if (!this.expect(this.tok.T_STRING)) {
+              return result("name", "", this.ast.name.FULL_QUALIFIED_NAME);
+            }
+        }
+        this.next();
+        if (resolveReference || this.token !== "(") {
+          if (name.toLowerCase() === "parent") {
+            return result("parentreference", name);
+          } else if (name.toLowerCase() === "self") {
+            return result("selfreference", name);
+          }
+        }
+        return result("name", name, resolution);
+      },
+      /*
+       * Reads a use statement
+       * ```ebnf
+       * use_statement ::= T_USE
+       *   use_type? use_declarations |
+       *   use_type use_statement '{' use_declarations '}' |
+       *   use_statement '{' use_declarations(=>typed) '}'
+       * ';'
+       * ```
+       * @see http://php.net/manual/en/language.namespaces.importing.php
+       * @return {UseGroup}
+       */
+      read_use_statement() {
+        let result = this.node("usegroup");
+        let items = [];
+        let name = null;
+        this.expect(this.tok.T_USE) && this.next();
+        const type = this.read_use_type();
+        items.push(this.read_use_declaration(false));
+        if (this.token === ",") {
+          items = items.concat(this.next().read_use_declarations(false));
+        } else if (this.token === "{") {
+          name = items[0].name;
+          items = this.next().read_use_declarations(type === null);
+          this.expect("}") && this.next();
+        }
+        result = result(name, type, items);
+        this.expect(";") && this.next();
+        return result;
+      },
+      /*
+       *
+       * @see https://github.com/php/php-src/blob/master/Zend/zend_language_parser.y#L1045
+       */
+      read_class_name_reference() {
+        return this.read_variable(true, false);
+      },
+      /*
+       * Reads a use declaration
+       * ```ebnf
+       * use_declaration ::= use_type? namespace_name use_alias
+       * ```
+       * @see https://github.com/php/php-src/blob/master/Zend/zend_language_parser.y#L380
+       * @return {UseItem}
+       */
+      read_use_declaration(typed) {
+        const result = this.node("useitem");
+        let type = null;
+        if (typed) type = this.read_use_type();
+        const name = this.read_namespace_name();
+        const alias = this.read_use_alias();
+        return result(name.name, alias, type);
+      },
+      /*
+       * Reads a list of use declarations
+       * ```ebnf
+       * use_declarations ::= use_declaration (',' use_declaration)*
+       * ```
+       * @see https://github.com/php/php-src/blob/master/Zend/zend_language_parser.y#L380
+       * @return {UseItem[]}
+       */
+      read_use_declarations(typed) {
+        const result = [this.read_use_declaration(typed)];
+        while (this.token === ",") {
+          this.next();
+          if (typed) {
+            if (this.token !== this.tok.T_NAME_RELATIVE && this.token !== this.tok.T_NAME_QUALIFIED && this.token !== this.tok.T_NAME_FULLY_QUALIFIED && this.token !== this.tok.T_FUNCTION && this.token !== this.tok.T_CONST && this.token !== this.tok.T_STRING) {
+              break;
+            }
+          } else if (this.token !== this.tok.T_NAME_RELATIVE && this.token !== this.tok.T_NAME_QUALIFIED && this.token !== this.tok.T_NAME_FULLY_QUALIFIED && this.token !== this.tok.T_STRING && this.token !== this.tok.T_NS_SEPARATOR) {
+            break;
+          }
+          result.push(this.read_use_declaration(typed));
+        }
+        return result;
+      },
+      /*
+       * Reads a use statement
+       * ```ebnf
+       * use_alias ::= (T_AS T_STRING)?
+       * ```
+       * @return {String|null}
+       */
+      read_use_alias() {
+        let result = null;
+        if (this.token === this.tok.T_AS) {
+          if (this.next().expect(this.tok.T_STRING)) {
+            const aliasName = this.node("identifier");
+            const name = this.text();
+            this.next();
+            result = aliasName(name);
+          }
+        }
+        return result;
+      },
+      /*
+       * Reads the namespace type declaration
+       * ```ebnf
+       * use_type ::= (T_FUNCTION | T_CONST)?
+       * ```
+       * @see https://github.com/php/php-src/blob/master/Zend/zend_language_parser.y#L335
+       * @return {String|null} Possible values : function, const
+       */
+      read_use_type() {
+        if (this.token === this.tok.T_FUNCTION) {
+          this.next();
+          return this.ast.useitem.TYPE_FUNCTION;
+        } else if (this.token === this.tok.T_CONST) {
+          this.next();
+          return this.ast.useitem.TYPE_CONST;
+        }
+        return null;
+      }
+    };
+  }
+});
+var require_scalar = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/scalar.js"(exports2, module2) {
+    "use strict";
+    var specialChar = {
+      "\\": "\\",
+      $: "$",
+      n: "\n",
+      r: "\r",
+      t: "	",
+      f: String.fromCharCode(12),
+      v: String.fromCharCode(11),
+      e: String.fromCharCode(27)
+    };
+    module2.exports = {
+      /*
+       * Unescape special chars
+       */
+      resolve_special_chars(text22, doubleQuote) {
+        if (!doubleQuote) {
+          return text22.replace(/\\\\/g, "\\").replace(/\\'/g, "'");
+        }
+        return text22.replace(/\\"/g, '"').replace(
+          /\\([\\$nrtfve]|[xX][0-9a-fA-F]{1,2}|[0-7]{1,3}|u{([0-9a-fA-F]+)})/g,
+          ($match, p1, p2) => {
+            if (specialChar[p1]) {
+              return specialChar[p1];
+            } else if ("x" === p1[0] || "X" === p1[0]) {
+              return String.fromCodePoint(parseInt(p1.substr(1), 16));
+            } else if ("u" === p1[0]) {
+              return String.fromCodePoint(parseInt(p2, 16));
+            } else {
+              return String.fromCodePoint(parseInt(p1, 8));
+            }
+          }
+        );
+      },
+      /*
+       * Remove all leading spaces each line for heredoc text if there is a indentation
+       * @param {string} text
+       * @param {number} indentation
+       * @param {boolean} indentation_uses_spaces
+       * @param {boolean} first_encaps_node if it is behind a variable, the first N spaces should not be removed
+       */
+      remove_heredoc_leading_whitespace_chars(text22, indentation, indentation_uses_spaces, first_encaps_node) {
+        if (indentation === 0) {
+          return text22;
+        }
+        this.check_heredoc_indentation_level(
+          text22,
+          indentation,
+          indentation_uses_spaces,
+          first_encaps_node
+        );
+        const matchedChar = indentation_uses_spaces ? " " : "	";
+        const removementRegExp = new RegExp(
+          `\\n${matchedChar}{${indentation}}`,
+          "g"
+        );
+        const removementFirstEncapsNodeRegExp = new RegExp(
+          `^${matchedChar}{${indentation}}`
+        );
+        if (first_encaps_node) {
+          text22 = text22.replace(removementFirstEncapsNodeRegExp, "");
+        }
+        return text22.replace(removementRegExp, "\n");
+      },
+      /*
+       * Check indentation level of heredoc in text, if mismatch, raiseError
+       * @param {string} text
+       * @param {number} indentation
+       * @param {boolean} indentation_uses_spaces
+       * @param {boolean} first_encaps_node if it is behind a variable, the first N spaces should not be removed
+       */
+      check_heredoc_indentation_level(text22, indentation, indentation_uses_spaces, first_encaps_node) {
+        const textSize = text22.length;
+        let offset = 0;
+        let leadingWhitespaceCharCount = 0;
+        let inCountingState = true;
+        const chToCheck = indentation_uses_spaces ? " " : "	";
+        let inCheckState = false;
+        if (!first_encaps_node) {
+          offset = text22.indexOf("\n");
+          if (offset === -1) {
+            return;
+          }
+          offset++;
+        }
+        while (offset < textSize) {
+          if (inCountingState) {
+            if (text22[offset] === chToCheck) {
+              leadingWhitespaceCharCount++;
+            } else {
+              inCheckState = true;
+            }
+          }
+          if (text22[offset] !== "\n" && inCheckState && leadingWhitespaceCharCount < indentation) {
+            this.raiseError(
+              `Invalid body indentation level (expecting an indentation at least ${indentation})`
+            );
+          } else {
+            inCheckState = false;
+          }
+          if (text22[offset] === "\n") {
+            inCountingState = true;
+            leadingWhitespaceCharCount = 0;
+          }
+          offset++;
+        }
+      },
+      /*
+       * Reads dereferencable scalar
+       */
+      read_dereferencable_scalar() {
+        let result = null;
+        switch (this.token) {
+          case this.tok.T_CONSTANT_ENCAPSED_STRING:
+            {
+              let value = this.node("string");
+              const text22 = this.text();
+              let offset = 0;
+              if (text22[0] === "b" || text22[0] === "B") {
+                offset = 1;
+              }
+              const isDoubleQuote = text22[offset] === '"';
+              this.next();
+              const textValue = this.resolve_special_chars(
+                text22.substring(offset + 1, text22.length - 1),
+                isDoubleQuote
+              );
+              value = value(
+                isDoubleQuote,
+                textValue,
+                offset === 1,
+                // unicode flag
+                text22
+              );
+              if (this.token === this.tok.T_DOUBLE_COLON) {
+                result = this.read_static_getter(value);
+              } else {
+                result = value;
+              }
+            }
+            break;
+          case this.tok.T_ARRAY:
+            result = this.read_array();
+            break;
+          case "[":
+            result = this.read_array();
+            break;
+        }
+        return result;
+      },
+      /*
+       * ```ebnf
+       *  scalar ::= T_MAGIC_CONST
+       *       | T_LNUMBER | T_DNUMBER
+       *       | T_START_HEREDOC T_ENCAPSED_AND_WHITESPACE? T_END_HEREDOC
+       *       | '"' encaps_list '"'
+       *       | T_START_HEREDOC encaps_list T_END_HEREDOC
+       *       | namespace_name (T_DOUBLE_COLON T_STRING)?
+       * ```
+       */
+      read_scalar() {
+        if (this.is("T_MAGIC_CONST")) {
+          return this.get_magic_constant();
+        } else {
+          let value, node2;
+          switch (this.token) {
+            // NUMERIC
+            case this.tok.T_LNUMBER:
+            // long
+            case this.tok.T_DNUMBER: {
+              const result = this.node("number");
+              value = this.text();
+              this.next();
+              return result(value, null);
+            }
+            case this.tok.T_START_HEREDOC:
+              if (this.lexer.curCondition === "ST_NOWDOC") {
+                const start = this.lexer.yylloc.first_offset;
+                node2 = this.node("nowdoc");
+                value = this.next().text();
+                if (this.lexer.heredoc_label.indentation > 0) {
+                  value = value.substring(
+                    0,
+                    value.length - this.lexer.heredoc_label.indentation
+                  );
+                }
+                const lastCh = value[value.length - 1];
+                if (lastCh === "\n") {
+                  if (value[value.length - 2] === "\r") {
+                    value = value.substring(0, value.length - 2);
+                  } else {
+                    value = value.substring(0, value.length - 1);
+                  }
+                } else if (lastCh === "\r") {
+                  value = value.substring(0, value.length - 1);
+                }
+                this.expect(this.tok.T_ENCAPSED_AND_WHITESPACE) && this.next();
+                this.expect(this.tok.T_END_HEREDOC) && this.next();
+                const raw = this.lexer._input.substring(
+                  start,
+                  this.lexer.yylloc.first_offset
+                );
+                node2 = node2(
+                  this.remove_heredoc_leading_whitespace_chars(
+                    value,
+                    this.lexer.heredoc_label.indentation,
+                    this.lexer.heredoc_label.indentation_uses_spaces,
+                    this.lexer.heredoc_label.first_encaps_node
+                  ),
+                  raw,
+                  this.lexer.heredoc_label.label
+                );
+                this.lexer.heredoc_label.finished = true;
+                return node2;
+              } else {
+                return this.read_encapsed_string(this.tok.T_END_HEREDOC);
+              }
+            case '"':
+              return this.read_encapsed_string('"');
+            case 'b"':
+            case 'B"': {
+              return this.read_encapsed_string('"', true);
+            }
+            // TEXTS
+            case this.tok.T_CONSTANT_ENCAPSED_STRING:
+            case this.tok.T_ARRAY:
+            // array parser
+            case "[":
+              return this.read_dereferencable_scalar();
+            default: {
+              const err = this.error("SCALAR");
+              this.next();
+              return err;
+            }
+          }
+        }
+      },
+      /*
+       * Handles the dereferencing
+       */
+      read_dereferencable(expr) {
+        let result, offset;
+        const node2 = this.node("offsetlookup");
+        if (this.token === "[") {
+          offset = this.next().read_expr();
+          if (this.expect("]")) this.next();
+          result = node2(expr, offset);
+        } else if (this.token === this.tok.T_DOLLAR_OPEN_CURLY_BRACES) {
+          offset = this.read_encapsed_string_item(false);
+          result = node2(expr, offset);
+        }
+        return result;
+      },
+      /*
+       * Reads and extracts an encapsed item
+       * ```ebnf
+       * encapsed_string_item ::= T_ENCAPSED_AND_WHITESPACE
+       *  | T_DOLLAR_OPEN_CURLY_BRACES expr '}'
+       *  | T_DOLLAR_OPEN_CURLY_BRACES T_STRING_VARNAME '}'
+       *  | T_DOLLAR_OPEN_CURLY_BRACES T_STRING_VARNAME '[' expr ']' '}'
+       *  | T_CURLY_OPEN variable '}'
+       *  | variable
+       *  | variable '[' expr ']'
+       *  | variable T_OBJECT_OPERATOR T_STRING
+       * ```
+       * @return {String|Variable|Expr|Lookup}
+       * @see https://github.com/php/php-src/blob/master/Zend/zend_language_parser.y#L1219
+       */
+      read_encapsed_string_item(isDoubleQuote) {
+        const encapsedPart = this.node("encapsedpart");
+        let syntax = null;
+        let curly = false;
+        let result = this.node(), offset, node2, name;
+        if (this.token === this.tok.T_ENCAPSED_AND_WHITESPACE) {
+          const text22 = this.text();
+          this.next();
+          result = result(
+            "string",
+            false,
+            this.version >= 703 && !this.lexer.heredoc_label.finished ? this.resolve_special_chars(
+              this.remove_heredoc_leading_whitespace_chars(
+                text22,
+                this.lexer.heredoc_label.indentation,
+                this.lexer.heredoc_label.indentation_uses_spaces,
+                this.lexer.heredoc_label.first_encaps_node
+              ),
+              isDoubleQuote
+            ) : this.resolve_special_chars(text22, isDoubleQuote),
+            false,
+            text22
+          );
+        } else if (this.token === this.tok.T_DOLLAR_OPEN_CURLY_BRACES) {
+          syntax = "simple";
+          curly = true;
+          if (this.next().token === this.tok.T_STRING_VARNAME) {
+            name = this.node("variable");
+            const varName = this.text();
+            this.next();
+            result.destroy();
+            if (this.token === "[") {
+              name = name(varName, false);
+              node2 = this.node("offsetlookup");
+              offset = this.next().read_expr();
+              this.expect("]") && this.next();
+              result = node2(name, offset);
+            } else {
+              result = name(varName, false);
+            }
+          } else {
+            result = result("variable", this.read_expr(), false);
+          }
+          this.expect("}") && this.next();
+        } else if (this.token === this.tok.T_CURLY_OPEN) {
+          syntax = "complex";
+          result.destroy();
+          result = this.next().read_variable(false, false);
+          this.expect("}") && this.next();
+        } else if (this.token === this.tok.T_VARIABLE) {
+          syntax = "simple";
+          result.destroy();
+          result = this.read_simple_variable();
+          if (this.token === "[") {
+            node2 = this.node("offsetlookup");
+            offset = this.next().read_encaps_var_offset();
+            this.expect("]") && this.next();
+            result = node2(result, offset);
+          }
+          if (this.token === this.tok.T_OBJECT_OPERATOR) {
+            node2 = this.node("propertylookup");
+            this.next().expect(this.tok.T_STRING);
+            const what = this.node("identifier");
+            name = this.text();
+            this.next();
+            result = node2(result, what(name));
+          }
+        } else {
+          this.expect(this.tok.T_ENCAPSED_AND_WHITESPACE);
+          const value = this.text();
+          this.next();
+          result.destroy();
+          result = result("string", false, value, false, value);
+        }
+        this.lexer.heredoc_label.first_encaps_node = false;
+        return encapsedPart(result, syntax, curly);
+      },
+      /*
+       * Reads an encapsed string
+       */
+      read_encapsed_string(expect, isBinary = false) {
+        const labelStart = this.lexer.yylloc.first_offset;
+        let node2 = this.node("encapsed");
+        this.next();
+        const start = this.lexer.yylloc.prev_offset - (isBinary ? 1 : 0);
+        const value = [];
+        let type;
+        if (expect === "`") {
+          type = this.ast.encapsed.TYPE_SHELL;
+        } else if (expect === '"') {
+          type = this.ast.encapsed.TYPE_STRING;
+        } else {
+          type = this.ast.encapsed.TYPE_HEREDOC;
+        }
+        while (this.token !== expect && this.token !== this.EOF) {
+          value.push(this.read_encapsed_string_item(true));
+        }
+        if (type === this.ast.encapsed.TYPE_HEREDOC && value.length > 0 && value[value.length - 1].kind === "encapsedpart" && value[value.length - 1].expression.kind === "string") {
+          const node22 = value[value.length - 1].expression;
+          const lastCh = node22.value[node22.value.length - 1];
+          if (lastCh === "\n") {
+            if (node22.value[node22.value.length - 2] === "\r") {
+              node22.value = node22.value.substring(0, node22.value.length - 2);
+            } else {
+              node22.value = node22.value.substring(0, node22.value.length - 1);
+            }
+          } else if (lastCh === "\r") {
+            node22.value = node22.value.substring(0, node22.value.length - 1);
+          }
+        }
+        this.expect(expect) && this.next();
+        const raw = this.lexer._input.substring(
+          type === "heredoc" ? labelStart : start - 1,
+          this.lexer.yylloc.first_offset
+        );
+        node2 = node2(value, raw, type);
+        if (expect === this.tok.T_END_HEREDOC) {
+          node2.label = this.lexer.heredoc_label.label;
+          this.lexer.heredoc_label.finished = true;
+        }
+        return node2;
+      },
+      /*
+       * Constant token
+       */
+      get_magic_constant() {
+        const result = this.node("magic");
+        const name = this.text();
+        this.next();
+        return result(name.toUpperCase(), name);
+      }
+    };
+  }
+});
+var require_statement = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/statement.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      /*
+       * reading a list of top statements (helper for top_statement*)
+       * ```ebnf
+       *  top_statements ::= top_statement*
+       * ```
+       */
+      read_top_statements(stopAtNamespace) {
+        let result = [];
+        while (this.token !== this.EOF && this.token !== "}") {
+          if (stopAtNamespace && this.token === this.tok.T_NAMESPACE) break;
+          const statement = this.read_top_statement();
+          if (statement) {
+            if (Array.isArray(statement)) {
+              result = result.concat(statement);
+            } else {
+              result.push(statement);
+            }
+          }
+        }
+        return result;
+      },
+      /*
+       * reading a top statement
+       * ```ebnf
+       *  top_statement ::=
+       *       namespace | function | class
+       *       | interface | trait
+       *       | use_statements | const_list
+       *       | statement
+       * ```
+       */
+      read_top_statement() {
+        let attrs = [];
+        if (this.token === this.tok.T_ATTRIBUTE) {
+          attrs = this.read_attr_list();
+        }
+        switch (this.token) {
+          case this.tok.T_FUNCTION:
+            return this.read_function(false, false, attrs);
+          // optional flags
+          case this.tok.T_ABSTRACT:
+          case this.tok.T_FINAL:
+          case this.tok.T_READ_ONLY:
+          case this.tok.T_CLASS:
+            return this.read_class_declaration_statement(attrs);
+          case this.tok.T_INTERFACE:
+            return this.read_interface_declaration_statement(attrs);
+          case this.tok.T_TRAIT:
+            return this.read_trait_declaration_statement(attrs);
+          case this.tok.T_ENUM:
+            return this.read_enum_declaration_statement(attrs);
+          case this.tok.T_USE:
+            return this.read_use_statement();
+          case this.tok.T_CONST: {
+            const result = this.node("constantstatement");
+            const items = this.next().read_const_list();
+            this.expectEndOfStatement();
+            return result(null, items);
+          }
+          case this.tok.T_NAMESPACE:
+            return this.read_namespace();
+          case this.tok.T_HALT_COMPILER: {
+            const result = this.node("halt");
+            if (this.next().expect("(")) this.next();
+            if (this.expect(")")) this.next();
+            this.expect(";");
+            this.lexer.done = true;
+            return result(this.lexer._input.substring(this.lexer.offset));
+          }
+          default:
+            return this.read_statement();
+        }
+      },
+      /*
+       * reads a list of simple inner statements (helper for inner_statement*)
+       * ```ebnf
+       *  inner_statements ::= inner_statement*
+       * ```
+       */
+      read_inner_statements() {
+        let result = [];
+        while (this.token != this.EOF && this.token !== "}") {
+          const statement = this.read_inner_statement();
+          if (statement) {
+            if (Array.isArray(statement)) {
+              result = result.concat(statement);
+            } else {
+              result.push(statement);
+            }
+          }
+        }
+        return result;
+      },
+      /*
+       * Reads a list of constants declaration
+       * ```ebnf
+       *   const_list ::= T_CONST T_STRING '=' expr (',' T_STRING '=' expr)* ';'
+       * ```
+       */
+      read_const_list() {
+        return this.read_list(
+          function() {
+            this.expect(this.tok.T_STRING);
+            const result = this.node("constant");
+            let constName = this.node("identifier");
+            const name = this.text();
+            this.next();
+            constName = constName(name);
+            if (this.expect("=")) {
+              return result(constName, this.next().read_expr());
+            } else {
+              return result(constName, null);
+            }
+          },
+          ",",
+          false
+        );
+      },
+      /*
+       * Reads a list of constants declaration
+       * ```ebnf
+       *   declare_list ::= IDENTIFIER '=' expr (',' IDENTIFIER '=' expr)*
+       * ```
+       * @retrurn {Array}
+       */
+      read_declare_list() {
+        const result = [];
+        while (this.token != this.EOF && this.token !== ")") {
+          this.expect(this.tok.T_STRING);
+          const directive = this.node("declaredirective");
+          let key = this.node("identifier");
+          const name = this.text();
+          this.next();
+          key = key(name);
+          let value = null;
+          if (this.expect("=")) {
+            value = this.next().read_expr();
+          }
+          result.push(directive(key, value));
+          if (this.token !== ",") break;
+          this.next();
+        }
+        return result;
+      },
+      /*
+       * reads a simple inner statement
+       * ```ebnf
+       *  inner_statement ::= '{' inner_statements '}' | token
+       * ```
+       */
+      read_inner_statement() {
+        let attrs = [];
+        if (this.token === this.tok.T_ATTRIBUTE) {
+          attrs = this.read_attr_list();
+        }
+        switch (this.token) {
+          case this.tok.T_FUNCTION: {
+            const result = this.read_function(false, false);
+            result.attrGroups = attrs;
+            return result;
+          }
+          // optional flags
+          case this.tok.T_ABSTRACT:
+          case this.tok.T_FINAL:
+          case this.tok.T_CLASS:
+            return this.read_class_declaration_statement();
+          case this.tok.T_INTERFACE:
+            return this.read_interface_declaration_statement();
+          case this.tok.T_TRAIT:
+            return this.read_trait_declaration_statement(attrs);
+          case this.tok.T_ENUM:
+            return this.read_enum_declaration_statement(attrs);
+          case this.tok.T_HALT_COMPILER: {
+            this.raiseError(
+              "__HALT_COMPILER() can only be used from the outermost scope"
+            );
+            let node2 = this.node("halt");
+            this.next().expect("(") && this.next();
+            this.expect(")") && this.next();
+            node2 = node2(this.lexer._input.substring(this.lexer.offset));
+            this.expect(";") && this.next();
+            return node2;
+          }
+          default:
+            return this.read_statement();
+        }
+      },
+      /*
+       * Reads statements
+       */
+      read_statement() {
+        switch (this.token) {
+          case "{":
+            return this.read_code_block(false);
+          case this.tok.T_IF:
+            return this.read_if();
+          case this.tok.T_SWITCH:
+            return this.read_switch();
+          case this.tok.T_FOR:
+            return this.read_for();
+          case this.tok.T_FOREACH:
+            return this.read_foreach();
+          case this.tok.T_WHILE:
+            return this.read_while();
+          case this.tok.T_DO:
+            return this.read_do();
+          case this.tok.T_COMMENT:
+            return this.read_comment();
+          case this.tok.T_DOC_COMMENT:
+            return this.read_doc_comment();
+          case this.tok.T_RETURN: {
+            const result = this.node("return");
+            this.next();
+            const expr = this.read_optional_expr(";");
+            this.expectEndOfStatement();
+            return result(expr);
+          }
+          // https://github.com/php/php-src/blob/master/Zend/zend_language_parser.y#L429
+          case this.tok.T_BREAK:
+          case this.tok.T_CONTINUE: {
+            const result = this.node(
+              this.token === this.tok.T_CONTINUE ? "continue" : "break"
+            );
+            this.next();
+            const level = this.read_optional_expr(";");
+            this.expectEndOfStatement();
+            return result(level);
+          }
+          case this.tok.T_GLOBAL: {
+            const result = this.node("global");
+            const items = this.next().read_list(this.read_simple_variable, ",");
+            this.expectEndOfStatement();
+            return result(items);
+          }
+          case this.tok.T_STATIC: {
+            const current = [this.token, this.lexer.getState()];
+            const result = this.node();
+            if (this.next().token === this.tok.T_DOUBLE_COLON) {
+              this.lexer.tokens.push(current);
+              const expr = this.next().read_expr();
+              this.expectEndOfStatement(expr);
+              return result("expressionstatement", expr);
+            }
+            if (this.token === this.tok.T_FUNCTION) {
+              return this.read_function(true, [0, 1, 0]);
+            }
+            const items = this.read_variable_declarations();
+            this.expectEndOfStatement();
+            return result("static", items);
+          }
+          case this.tok.T_ECHO: {
+            const result = this.node("echo");
+            const text22 = this.text();
+            const shortForm = text22 === "<?=" || text22 === "<%=";
+            const expressions = this.next().read_function_list(this.read_expr, ",");
+            this.expectEndOfStatement();
+            return result(expressions, shortForm);
+          }
+          case this.tok.T_INLINE_HTML: {
+            const value = this.text();
+            let prevChar = this.lexer.yylloc.first_offset > 0 ? this.lexer._input[this.lexer.yylloc.first_offset - 1] : null;
+            const fixFirstLine = prevChar === "\r" || prevChar === "\n";
+            if (fixFirstLine) {
+              if (prevChar === "\n" && this.lexer.yylloc.first_offset > 1 && this.lexer._input[this.lexer.yylloc.first_offset - 2] === "\r") {
+                prevChar = "\r\n";
+              }
+            }
+            const result = this.node("inline");
+            this.next();
+            return result(value, fixFirstLine ? prevChar + value : value);
+          }
+          case this.tok.T_UNSET: {
+            const result = this.node("unset");
+            this.next().expect("(") && this.next();
+            const variables = this.read_function_list(this.read_variable, ",");
+            this.expect(")") && this.next();
+            this.expect(";") && this.next();
+            return result(variables);
+          }
+          case this.tok.T_DECLARE: {
+            const result = this.node("declare");
+            const body = [];
+            let mode;
+            this.next().expect("(") && this.next();
+            const directives = this.read_declare_list();
+            this.expect(")") && this.next();
+            if (this.token === ":") {
+              this.next();
+              while (this.token != this.EOF && this.token !== this.tok.T_ENDDECLARE) {
+                body.push(this.read_top_statement());
+              }
+              if (body.length === 0 && this.extractDoc && this._docs.length > this._docIndex) {
+                body.push(this.node("noop")());
+              }
+              this.expect(this.tok.T_ENDDECLARE) && this.next();
+              this.expectEndOfStatement();
+              mode = this.ast.declare.MODE_SHORT;
+            } else if (this.token === "{") {
+              this.next();
+              while (this.token != this.EOF && this.token !== "}") {
+                body.push(this.read_top_statement());
+              }
+              if (body.length === 0 && this.extractDoc && this._docs.length > this._docIndex) {
+                body.push(this.node("noop")());
+              }
+              this.expect("}") && this.next();
+              mode = this.ast.declare.MODE_BLOCK;
+            } else {
+              this.expect(";") && this.next();
+              mode = this.ast.declare.MODE_NONE;
+            }
+            return result(directives, body, mode);
+          }
+          case this.tok.T_TRY:
+            return this.read_try();
+          case this.tok.T_THROW: {
+            const result = this.node("throw");
+            const expr = this.next().read_expr();
+            this.expectEndOfStatement();
+            return result(expr);
+          }
+          // ignore this (extra ponctuation)
+          case ";": {
+            this.next();
+            return null;
+          }
+          case this.tok.T_STRING: {
+            const result = this.node();
+            const current = [this.token, this.lexer.getState()];
+            const labelNameText = this.text();
+            let labelName = this.node("identifier");
+            if (this.next().token === ":") {
+              labelName = labelName(labelNameText);
+              this.next();
+              return result("label", labelName);
+            } else {
+              labelName.destroy();
+            }
+            result.destroy();
+            this.lexer.tokens.push(current);
+            const statement = this.node("expressionstatement");
+            const expr = this.next().read_expr();
+            this.expectEndOfStatement(expr);
+            return statement(expr);
+          }
+          case this.tok.T_GOTO: {
+            const result = this.node("goto");
+            let labelName = null;
+            if (this.next().expect(this.tok.T_STRING)) {
+              labelName = this.node("identifier");
+              const name = this.text();
+              this.next();
+              labelName = labelName(name);
+              this.expectEndOfStatement();
+            }
+            return result(labelName);
+          }
+          default: {
+            const statement = this.node("expressionstatement");
+            const expr = this.read_expr();
+            this.expectEndOfStatement(expr);
+            return statement(expr);
+          }
+        }
+      },
+      /*
+       * ```ebnf
+       *  code_block ::= '{' (inner_statements | top_statements) '}'
+       * ```
+       */
+      read_code_block(top) {
+        const result = this.node("block");
+        this.expect("{") && this.next();
+        const body = top ? this.read_top_statements() : this.read_inner_statements();
+        if (body.length === 0 && this.extractDoc && this._docs.length > this._docIndex) {
+          body.push(this.node("noop")());
+        }
+        this.expect("}") && this.next();
+        return result(null, body);
+      }
+    };
+  }
+});
+var require_switch = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/switch.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      /*
+       * Reads a switch statement
+       * ```ebnf
+       *  switch ::= T_SWITCH '(' expr ')' switch_case_list
+       * ```
+       * @return {Switch}
+       * @see http://php.net/manual/en/control-structures.switch.php
+       */
+      read_switch() {
+        const result = this.node("switch");
+        this.expect(this.tok.T_SWITCH) && this.next();
+        this.expect("(") && this.next();
+        const test = this.read_expr();
+        this.expect(")") && this.next();
+        const shortForm = this.token === ":";
+        const body = this.read_switch_case_list();
+        return result(test, body, shortForm);
+      },
+      /*
+       * ```ebnf
+       *  switch_case_list ::= '{' ';'? case_list* '}' | ':' ';'? case_list* T_ENDSWITCH ';'
+       * ```
+       * @see https://github.com/php/php-src/blob/master/Zend/zend_language_parser.y#L566
+       */
+      read_switch_case_list() {
+        let expect = null;
+        const result = this.node("block");
+        const items = [];
+        if (this.token === "{") {
+          expect = "}";
+        } else if (this.token === ":") {
+          expect = this.tok.T_ENDSWITCH;
+        } else {
+          this.expect(["{", ":"]);
+        }
+        this.next();
+        if (this.token === ";") {
+          this.next();
+        }
+        while (this.token !== this.EOF && this.token !== expect) {
+          items.push(this.read_case_list(expect));
+        }
+        if (items.length === 0 && this.extractDoc && this._docs.length > this._docIndex) {
+          items.push(this.node("noop")());
+        }
+        this.expect(expect) && this.next();
+        if (expect === this.tok.T_ENDSWITCH) {
+          this.expectEndOfStatement();
+        }
+        return result(null, items);
+      },
+      /*
+       * ```ebnf
+       *   case_list ::= ((T_CASE expr) | T_DEFAULT) (':' | ';') inner_statement*
+       * ```
+       */
+      read_case_list(stopToken) {
+        const result = this.node("case");
+        let test = null;
+        if (this.token === this.tok.T_CASE) {
+          test = this.next().read_expr();
+        } else if (this.token === this.tok.T_DEFAULT) {
+          this.next();
+        } else {
+          this.expect([this.tok.T_CASE, this.tok.T_DEFAULT]);
+        }
+        this.expect([":", ";"]) && this.next();
+        const body = this.node("block");
+        const items = [];
+        while (this.token !== this.EOF && this.token !== stopToken && this.token !== this.tok.T_CASE && this.token !== this.tok.T_DEFAULT) {
+          items.push(this.read_inner_statement());
+        }
+        return result(test, body(null, items));
+      }
+    };
+  }
+});
+var require_try = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/try.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      /*
+       * ```ebnf
+       *  try ::= T_TRY '{' inner_statement* '}'
+       *          (
+       *              T_CATCH '(' namespace_name (variable)? ')' '{'  inner_statement* '}'
+       *          )*
+       *          (T_FINALLY '{' inner_statement* '}')?
+       * ```
+       * @see https://github.com/php/php-src/blob/master/Zend/zend_language_parser.y#L448
+       * @return {Try}
+       */
+      read_try() {
+        this.expect(this.tok.T_TRY);
+        const result = this.node("try");
+        let always = null;
+        const catches = [];
+        const body = this.next().read_statement();
+        while (this.token === this.tok.T_CATCH) {
+          const item = this.node("catch");
+          this.next().expect("(") && this.next();
+          const what = this.read_list(this.read_namespace_name, "|", false);
+          let variable = null;
+          if (this.version < 800 || this.token === this.tok.T_VARIABLE) {
+            variable = this.read_variable(true, false);
+          }
+          this.expect(")");
+          catches.push(item(this.next().read_statement(), what, variable));
+        }
+        if (this.token === this.tok.T_FINALLY) {
+          always = this.next().read_statement();
+        }
+        return result(body, catches, always);
+      }
+    };
+  }
+});
+var require_utils22 = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/utils.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      /*
+       * Reads a short form of tokens
+       * @param {Number} token - The ending token
+       * @return {Block}
+       */
+      read_short_form(token) {
+        const body = this.node("block");
+        const items = [];
+        if (this.expect(":")) this.next();
+        while (this.token != this.EOF && this.token !== token) {
+          items.push(this.read_inner_statement());
+        }
+        if (items.length === 0 && this.extractDoc && this._docs.length > this._docIndex) {
+          items.push(this.node("noop")());
+        }
+        if (this.expect(token)) this.next();
+        this.expectEndOfStatement();
+        return body(null, items);
+      },
+      /*
+       * https://wiki.php.net/rfc/trailing-comma-function-calls
+       * @param {*} item
+       * @param {*} separator
+       */
+      read_function_list(item, separator) {
+        const result = [];
+        do {
+          if (this.token == separator && this.version >= 703 && result.length > 0) {
+            result.push(this.node("noop")());
+            break;
+          }
+          result.push(item.apply(this, []));
+          if (this.token != separator) {
+            break;
+          }
+          if (this.next().token == ")" && this.version >= 703) {
+            break;
+          }
+        } while (this.token != this.EOF);
+        return result;
+      },
+      /*
+       * Helper : reads a list of tokens / sample : T_STRING ',' T_STRING ...
+       * ```ebnf
+       * list ::= separator? ( item separator )* item
+       * ```
+       */
+      read_list(item, separator, preserveFirstSeparator) {
+        const result = [];
+        if (this.token == separator) {
+          if (preserveFirstSeparator) {
+            result.push(typeof item === "function" ? this.node("noop")() : null);
+            this.next();
+          } else {
+            this.error();
+            return result;
+          }
+        }
+        if (typeof item === "function") {
+          do {
+            const itemResult = item.apply(this, []);
+            if (itemResult) {
+              result.push(itemResult);
+            }
+            if (this.token != separator) {
+              break;
+            }
+          } while (this.next().token != this.EOF);
+        } else {
+          if (this.expect(item)) {
+            result.push(this.text());
+          } else {
+            return [];
+          }
+          while (this.next().token != this.EOF) {
+            if (this.token != separator) break;
+            if (this.next().token != item) break;
+            result.push(this.text());
+          }
+        }
+        return result;
+      },
+      /*
+       * Reads a list of names separated by a comma
+       *
+       * ```ebnf
+       * name_list ::= namespace (',' namespace)*
+       * ```
+       *
+       * Sample code :
+       * ```php
+       * <?php class foo extends bar, baz { }
+       * ```
+       *
+       * @see https://github.com/php/php-src/blob/master/Zend/zend_language_parser.y#L726
+       * @return {Reference[]}
+       */
+      read_name_list() {
+        return this.read_list(this.read_namespace_name, ",", false);
+      },
+      /*
+       * Reads the byref token and assign it to the specified node
+       * @param {*} cb
+       */
+      read_byref(cb) {
+        let byref = this.node("byref");
+        this.next();
+        byref = byref(null);
+        const result = cb();
+        if (result) {
+          this.ast.swapLocations(result, byref, result, this);
+          result.byref = true;
+        }
+        return result;
+      },
+      /*
+       * Reads a list of variables declarations
+       *
+       * ```ebnf
+       * variable_declaration ::= T_VARIABLE ('=' expr)?*
+       * variable_declarations ::= variable_declaration (',' variable_declaration)*
+       * ```
+       *
+       * Sample code :
+       * ```php
+       * <?php static $a = 'hello', $b = 'world';
+       * ```
+       * @return {StaticVariable[]} Returns an array composed by a list of variables, or
+       * assign values
+       */
+      read_variable_declarations() {
+        return this.read_list(function() {
+          const node2 = this.node("staticvariable");
+          let variable = this.node("variable");
+          if (this.expect(this.tok.T_VARIABLE)) {
+            const name = this.text().substring(1);
+            this.next();
+            variable = variable(name, false);
+          } else {
+            variable = variable("#ERR", false);
+          }
+          if (this.token === "=") {
+            return node2(variable, this.next().read_expr());
+          } else {
+            return variable;
+          }
+        }, ",");
+      },
+      /*
+       * Reads class extends
+       */
+      read_extends_from() {
+        if (this.token === this.tok.T_EXTENDS) {
+          return this.next().read_namespace_name();
+        }
+        return null;
+      },
+      /*
+       * Reads interface extends list
+       */
+      read_interface_extends_list() {
+        if (this.token === this.tok.T_EXTENDS) {
+          return this.next().read_name_list();
+        }
+        return null;
+      },
+      /*
+       * Reads implements list
+       */
+      read_implements_list() {
+        if (this.token === this.tok.T_IMPLEMENTS) {
+          return this.next().read_name_list();
+        }
+        return null;
+      }
+    };
+  }
+});
+var require_variable = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser/variable.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      /*
+       * Reads a variable
+       *
+       * ```ebnf
+       *   variable ::= &? ...complex @todo
+       * ```
+       *
+       * Some samples of parsed code :
+       * ```php
+       *  &$var                      // simple var
+       *  $var                      // simple var
+       *  classname::CONST_NAME     // dynamic class name with const retrieval
+       *  foo()                     // function call
+       *  $var->func()->property    // chained calls
+       * ```
+       */
+      read_variable(read_only, encapsed) {
+        let result;
+        if (this.token === "&") {
+          return this.read_byref(
+            this.read_variable.bind(this, read_only, encapsed)
+          );
+        }
+        if (this.is([this.tok.T_VARIABLE, "$"])) {
+          result = this.read_reference_variable(encapsed);
+        } else if (this.is([
+          this.tok.T_NS_SEPARATOR,
+          this.tok.T_STRING,
+          this.tok.T_NAME_RELATIVE,
+          this.tok.T_NAME_QUALIFIED,
+          this.tok.T_NAME_FULLY_QUALIFIED,
+          this.tok.T_NAMESPACE
+        ])) {
+          result = this.node();
+          const name = this.read_namespace_name();
+          if (this.token != this.tok.T_DOUBLE_COLON && this.token != "(" && ["parentreference", "selfreference"].indexOf(name.kind) === -1) {
+            const literal2 = name.name.toLowerCase();
+            if (literal2 === "true") {
+              result = name.destroy(result("boolean", true, name.name));
+            } else if (literal2 === "false") {
+              result = name.destroy(result("boolean", false, name.name));
+            } else if (literal2 === "null") {
+              result = name.destroy(result("nullkeyword", name.name));
+            } else {
+              result.destroy(name);
+              result = name;
+            }
+          } else {
+            result.destroy(name);
+            result = name;
+          }
+        } else if (this.token === this.tok.T_STATIC) {
+          result = this.node("staticreference");
+          const raw = this.text();
+          this.next();
+          result = result(raw);
+        } else {
+          this.expect("VARIABLE");
+        }
+        if (this.token === this.tok.T_DOUBLE_COLON) {
+          result = this.read_static_getter(result, encapsed);
+        }
+        return this.recursive_variable_chain_scan(result, read_only, encapsed);
+      },
+      // resolves a static call
+      read_static_getter(what, encapsed) {
+        const result = this.node("staticlookup");
+        let offset, name;
+        if (this.next().is([this.tok.T_VARIABLE, "$"])) {
+          offset = this.read_reference_variable(encapsed);
+        } else if (this.token === this.tok.T_STRING || this.token === this.tok.T_CLASS || this.version >= 700 && this.is("IDENTIFIER")) {
+          offset = this.node("identifier");
+          name = this.text();
+          this.next();
+          offset = offset(name);
+        } else if (this.token === "{") {
+          offset = this.node("literal");
+          name = this.next().read_expr();
+          this.expect("}") && this.next();
+          offset = offset("literal", name, null);
+        } else {
+          this.error([this.tok.T_VARIABLE, this.tok.T_STRING]);
+          offset = this.node("identifier");
+          name = this.text();
+          this.next();
+          offset = offset(name);
+        }
+        return result(what, offset);
+      },
+      read_what(is_static_lookup = false) {
+        let what;
+        let name;
+        switch (this.next().token) {
+          case this.tok.T_STRING:
+            what = this.node("identifier");
+            name = this.text();
+            this.next();
+            what = what(name);
+            if (is_static_lookup && this.token === this.tok.T_OBJECT_OPERATOR) {
+              this.error();
+            }
+            break;
+          case this.tok.T_VARIABLE:
+            what = this.node("variable");
+            name = this.text().substring(1);
+            this.next();
+            what = what(name, false);
+            break;
+          case this.tok.T_CLASS:
+            if (!is_static_lookup) {
+              this.error();
+            }
+            what = this.node("identifier");
+            name = this.text();
+            this.next();
+            what = what(name, false);
+            break;
+          case "$":
+            what = this.node();
+            this.next().expect(["$", "{", this.tok.T_VARIABLE]);
+            if (this.token === "{") {
+              name = this.next().read_expr();
+              this.expect("}") && this.next();
+              what = what("variable", name, true);
+            } else {
+              name = this.read_expr();
+              what = what("variable", name, false);
+            }
+            break;
+          case "{":
+            what = this.node("encapsedpart");
+            name = this.next().read_expr();
+            this.expect("}") && this.next();
+            what = what(name, "complex", false);
+            break;
+          default:
+            this.error([this.tok.T_STRING, this.tok.T_VARIABLE, "$", "{"]);
+            what = this.node("identifier");
+            name = this.text();
+            this.next();
+            what = what(name);
+            break;
+        }
+        return what;
+      },
+      recursive_variable_chain_scan(result, read_only, encapsed) {
+        let node2, offset;
+        recursive_scan_loop: while (this.token != this.EOF) {
+          switch (this.token) {
+            case "(":
+              if (read_only) {
+                return result;
+              } else {
+                result = this.node("call")(result, this.read_argument_list());
+              }
+              break;
+            case "[":
+            case "{": {
+              const backet = this.token;
+              const isSquareBracket = backet === "[";
+              node2 = this.node("offsetlookup");
+              this.next();
+              offset = false;
+              if (encapsed) {
+                offset = this.read_encaps_var_offset();
+                this.expect(isSquareBracket ? "]" : "}") && this.next();
+              } else {
+                const isCallableVariable = isSquareBracket ? this.token !== "]" : this.token !== "}";
+                if (isCallableVariable) {
+                  offset = this.read_expr();
+                  this.expect(isSquareBracket ? "]" : "}") && this.next();
+                } else {
+                  this.next();
+                }
+              }
+              result = node2(result, offset);
+              break;
+            }
+            case this.tok.T_DOUBLE_COLON:
+              node2 = this.node("staticlookup");
+              result = node2(result, this.read_what(true));
+              break;
+            case this.tok.T_OBJECT_OPERATOR: {
+              node2 = this.node("propertylookup");
+              result = node2(result, this.read_what());
+              break;
+            }
+            case this.tok.T_NULLSAFE_OBJECT_OPERATOR: {
+              node2 = this.node("nullsafepropertylookup");
+              result = node2(result, this.read_what());
+              break;
+            }
+            default:
+              break recursive_scan_loop;
+          }
+        }
+        return result;
+      },
+      /*
+       * https://github.com/php/php-src/blob/493524454d66adde84e00d249d607ecd540de99f/Zend/zend_language_parser.y#L1231
+       */
+      read_encaps_var_offset() {
+        let offset = this.node();
+        if (this.token === this.tok.T_STRING) {
+          const text22 = this.text();
+          this.next();
+          offset = offset("identifier", text22);
+        } else if (this.token === this.tok.T_NUM_STRING) {
+          const num = this.text();
+          this.next();
+          offset = offset("number", num, null);
+        } else if (this.token === "-") {
+          this.next();
+          const num = -1 * this.text();
+          this.expect(this.tok.T_NUM_STRING) && this.next();
+          offset = offset("number", num, null);
+        } else if (this.token === this.tok.T_VARIABLE) {
+          const name = this.text().substring(1);
+          this.next();
+          offset = offset("variable", name, false);
+        } else {
+          this.expect([
+            this.tok.T_STRING,
+            this.tok.T_NUM_STRING,
+            "-",
+            this.tok.T_VARIABLE
+          ]);
+          const text22 = this.text();
+          this.next();
+          offset = offset("identifier", text22);
+        }
+        return offset;
+      },
+      /*
+       * ```ebnf
+       *  reference_variable ::=  simple_variable ('[' OFFSET ']')* | '{' EXPR '}'
+       * ```
+       * <code>
+       *  $foo[123];      // foo is an array ==> gets its entry
+       *  $foo{1};        // foo is a string ==> get the 2nd char offset
+       *  ${'foo'}[123];  // get the dynamic var $foo
+       *  $foo[123]{1};   // gets the 2nd char from the 123 array entry
+       * </code>
+       */
+      read_reference_variable(encapsed) {
+        let result = this.read_simple_variable();
+        let offset;
+        while (this.token != this.EOF) {
+          const node2 = this.node();
+          if (this.token == "{" && !encapsed) {
+            offset = this.next().read_expr();
+            this.expect("}") && this.next();
+            result = node2("offsetlookup", result, offset);
+          } else {
+            node2.destroy();
+            break;
+          }
+        }
+        return result;
+      },
+      /*
+       * ```ebnf
+       *  simple_variable ::= T_VARIABLE | '$' '{' expr '}' | '$' simple_variable
+       * ```
+       */
+      read_simple_variable() {
+        let result = this.node("variable");
+        let name;
+        if (this.expect([this.tok.T_VARIABLE, "$"]) && this.token === this.tok.T_VARIABLE) {
+          name = this.text().substring(1);
+          this.next();
+          result = result(name, false);
+        } else {
+          if (this.token === "$") this.next();
+          switch (this.token) {
+            case "{": {
+              const expr = this.next().read_expr();
+              this.expect("}") && this.next();
+              result = result(expr, true);
+              break;
+            }
+            case "$":
+              result = result(this.read_simple_variable(), false);
+              break;
+            case this.tok.T_VARIABLE: {
+              name = this.text().substring(1);
+              const node2 = this.node("variable");
+              this.next();
+              result = result(node2(name, false), false);
+              break;
+            }
+            default:
+              this.error(["{", "$", this.tok.T_VARIABLE]);
+              name = this.text();
+              this.next();
+              result = result(name, false);
+          }
+        }
+        return result;
+      }
+    };
+  }
+});
+var require_parser = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/parser.js"(exports2, module2) {
+    "use strict";
+    var Position = require_position();
+    function isNumber(n) {
+      return n != "." && n != "," && !isNaN(parseFloat(n)) && isFinite(n);
+    }
+    var Parser = function(lexer, ast) {
+      this.lexer = lexer;
+      this.ast = ast;
+      this.tok = lexer.tok;
+      this.EOF = lexer.EOF;
+      this.token = null;
+      this.prev = null;
+      this.debug = false;
+      this.version = 803;
+      this.extractDoc = false;
+      this.extractTokens = false;
+      this.suppressErrors = false;
+      const mapIt = function(item) {
+        return [item, null];
+      };
+      this.entries = {
+        // reserved_non_modifiers
+        IDENTIFIER: new Map(
+          [
+            this.tok.T_ABSTRACT,
+            this.tok.T_ARRAY,
+            this.tok.T_AS,
+            this.tok.T_BREAK,
+            this.tok.T_CALLABLE,
+            this.tok.T_CASE,
+            this.tok.T_CATCH,
+            this.tok.T_CLASS,
+            this.tok.T_CLASS_C,
+            this.tok.T_CLONE,
+            this.tok.T_CONST,
+            this.tok.T_CONTINUE,
+            this.tok.T_DECLARE,
+            this.tok.T_DEFAULT,
+            this.tok.T_DIR,
+            this.tok.T_DO,
+            this.tok.T_ECHO,
+            this.tok.T_ELSE,
+            this.tok.T_ELSEIF,
+            this.tok.T_EMPTY,
+            this.tok.T_ENDDECLARE,
+            this.tok.T_ENDFOR,
+            this.tok.T_ENDFOREACH,
+            this.tok.T_ENDIF,
+            this.tok.T_ENDSWITCH,
+            this.tok.T_ENDWHILE,
+            this.tok.T_ENUM,
+            this.tok.T_EVAL,
+            this.tok.T_EXIT,
+            this.tok.T_EXTENDS,
+            this.tok.T_FILE,
+            this.tok.T_FINAL,
+            this.tok.T_FINALLY,
+            this.tok.T_FN,
+            this.tok.T_FOR,
+            this.tok.T_FOREACH,
+            this.tok.T_FUNC_C,
+            this.tok.T_FUNCTION,
+            this.tok.T_GLOBAL,
+            this.tok.T_GOTO,
+            this.tok.T_IF,
+            this.tok.T_IMPLEMENTS,
+            this.tok.T_INCLUDE,
+            this.tok.T_INCLUDE_ONCE,
+            this.tok.T_INSTANCEOF,
+            this.tok.T_INSTEADOF,
+            this.tok.T_INTERFACE,
+            this.tok.T_ISSET,
+            this.tok.T_LINE,
+            this.tok.T_LIST,
+            this.tok.T_LOGICAL_AND,
+            this.tok.T_LOGICAL_OR,
+            this.tok.T_LOGICAL_XOR,
+            this.tok.T_MATCH,
+            this.tok.T_METHOD_C,
+            this.tok.T_NAMESPACE,
+            this.tok.T_NEW,
+            this.tok.T_NS_C,
+            this.tok.T_PRINT,
+            this.tok.T_PRIVATE,
+            this.tok.T_PROTECTED,
+            this.tok.T_PUBLIC,
+            this.tok.T_READ_ONLY,
+            this.tok.T_REQUIRE,
+            this.tok.T_REQUIRE_ONCE,
+            this.tok.T_RETURN,
+            this.tok.T_STATIC,
+            this.tok.T_SWITCH,
+            this.tok.T_THROW,
+            this.tok.T_TRAIT,
+            this.tok.T_TRY,
+            this.tok.T_UNSET,
+            this.tok.T_USE,
+            this.tok.T_VAR,
+            this.tok.T_WHILE,
+            this.tok.T_YIELD
+          ].map(mapIt)
+        ),
+        VARIABLE: new Map(
+          [
+            this.tok.T_VARIABLE,
+            "$",
+            "&",
+            this.tok.T_STRING,
+            this.tok.T_NAME_RELATIVE,
+            this.tok.T_NAME_QUALIFIED,
+            this.tok.T_NAME_FULLY_QUALIFIED,
+            this.tok.T_NAMESPACE,
+            this.tok.T_STATIC
+          ].map(mapIt)
+        ),
+        SCALAR: new Map(
+          [
+            this.tok.T_CONSTANT_ENCAPSED_STRING,
+            this.tok.T_START_HEREDOC,
+            this.tok.T_LNUMBER,
+            this.tok.T_DNUMBER,
+            this.tok.T_ARRAY,
+            "[",
+            this.tok.T_CLASS_C,
+            this.tok.T_TRAIT_C,
+            this.tok.T_FUNC_C,
+            this.tok.T_METHOD_C,
+            this.tok.T_LINE,
+            this.tok.T_FILE,
+            this.tok.T_DIR,
+            this.tok.T_NS_C,
+            '"',
+            'b"',
+            'B"',
+            "-",
+            this.tok.T_NS_SEPARATOR
+          ].map(mapIt)
+        ),
+        T_MAGIC_CONST: new Map(
+          [
+            this.tok.T_CLASS_C,
+            this.tok.T_TRAIT_C,
+            this.tok.T_FUNC_C,
+            this.tok.T_METHOD_C,
+            this.tok.T_LINE,
+            this.tok.T_FILE,
+            this.tok.T_DIR,
+            this.tok.T_NS_C
+          ].map(mapIt)
+        ),
+        T_MEMBER_FLAGS: new Map(
+          [
+            this.tok.T_PUBLIC,
+            this.tok.T_PRIVATE,
+            this.tok.T_PROTECTED,
+            this.tok.T_STATIC,
+            this.tok.T_ABSTRACT,
+            this.tok.T_FINAL,
+            this.tok.T_READ_ONLY
+          ].map(mapIt)
+        ),
+        EOS: new Map([";", this.EOF, this.tok.T_INLINE_HTML].map(mapIt)),
+        EXPR: new Map(
+          [
+            "@",
+            "-",
+            "+",
+            "!",
+            "~",
+            "(",
+            "`",
+            this.tok.T_LIST,
+            this.tok.T_CLONE,
+            this.tok.T_INC,
+            this.tok.T_DEC,
+            this.tok.T_NEW,
+            this.tok.T_ISSET,
+            this.tok.T_EMPTY,
+            this.tok.T_MATCH,
+            this.tok.T_INCLUDE,
+            this.tok.T_INCLUDE_ONCE,
+            this.tok.T_REQUIRE,
+            this.tok.T_REQUIRE_ONCE,
+            this.tok.T_EVAL,
+            this.tok.T_INT_CAST,
+            this.tok.T_DOUBLE_CAST,
+            this.tok.T_STRING_CAST,
+            this.tok.T_ARRAY_CAST,
+            this.tok.T_OBJECT_CAST,
+            this.tok.T_BOOL_CAST,
+            this.tok.T_UNSET_CAST,
+            this.tok.T_EXIT,
+            this.tok.T_PRINT,
+            this.tok.T_YIELD,
+            this.tok.T_STATIC,
+            this.tok.T_FUNCTION,
+            this.tok.T_FN,
+            // using VARIABLES :
+            this.tok.T_VARIABLE,
+            "$",
+            this.tok.T_NS_SEPARATOR,
+            this.tok.T_STRING,
+            this.tok.T_NAME_RELATIVE,
+            this.tok.T_NAME_QUALIFIED,
+            this.tok.T_NAME_FULLY_QUALIFIED,
+            // using SCALAR :
+            this.tok.T_STRING,
+            // @see variable.js line 45 > conflict with variable = shift/reduce :)
+            this.tok.T_CONSTANT_ENCAPSED_STRING,
+            this.tok.T_START_HEREDOC,
+            this.tok.T_LNUMBER,
+            this.tok.T_DNUMBER,
+            this.tok.T_ARRAY,
+            "[",
+            this.tok.T_CLASS_C,
+            this.tok.T_TRAIT_C,
+            this.tok.T_FUNC_C,
+            this.tok.T_METHOD_C,
+            this.tok.T_LINE,
+            this.tok.T_FILE,
+            this.tok.T_DIR,
+            this.tok.T_NS_C,
+            '"',
+            'b"',
+            'B"',
+            "-",
+            this.tok.T_NS_SEPARATOR
+          ].map(mapIt)
+        )
+      };
+    };
+    Parser.prototype.getTokenName = function(token) {
+      if (!isNumber(token)) {
+        return "'" + token + "'";
+      } else {
+        if (token == this.EOF) return "the end of file (EOF)";
+        return this.lexer.engine.tokens.values[token];
+      }
+    };
+    Parser.prototype.parse = function(code, filename) {
+      this._errors = [];
+      this.filename = filename || "eval";
+      this.currentNamespace = [""];
+      if (this.extractDoc) {
+        this._docs = [];
+      } else {
+        this._docs = null;
+      }
+      if (this.extractTokens) {
+        this._tokens = [];
+      } else {
+        this._tokens = null;
+      }
+      this._docIndex = 0;
+      this._lastNode = null;
+      this.lexer.setInput(code);
+      this.lexer.all_tokens = this.extractTokens;
+      this.lexer.comment_tokens = this.extractDoc;
+      this.length = this.lexer._input.length;
+      this.innerList = false;
+      this.innerListForm = false;
+      const program = this.node("program");
+      const childs = [];
+      this.next();
+      while (this.token != this.EOF) {
+        childs.push(this.read_start());
+      }
+      if (childs.length === 0 && this.extractDoc && this._docs.length > this._docIndex) {
+        childs.push(this.node("noop")());
+      }
+      this.prev = [
+        this.lexer.yylloc.last_line,
+        this.lexer.yylloc.last_column,
+        this.lexer.offset
+      ];
+      const result = program(childs, this._errors, this._docs, this._tokens);
+      if (this.debug) {
+        const errors = this.ast.checkNodes();
+        if (errors.length > 0) {
+          errors.forEach(function(error62) {
+            if (error62.position) {
+              console.log(
+                "Node at line " + error62.position.line + ", column " + error62.position.column
+              );
+            }
+            console.log(error62.stack.join("\n"));
+          });
+          throw new Error("Some nodes are not closed");
+        }
+      }
+      return result;
+    };
+    Parser.prototype.raiseError = function(message, msgExpect, expect, token) {
+      message += " on line " + this.lexer.yylloc.first_line;
+      if (!this.suppressErrors) {
+        const err = new SyntaxError(
+          message,
+          this.filename,
+          this.lexer.yylloc.first_line
+        );
+        err.lineNumber = this.lexer.yylloc.first_line;
+        err.fileName = this.filename;
+        err.columnNumber = this.lexer.yylloc.first_column;
+        throw err;
+      }
+      const savedPrev = this.prev;
+      this.prev = [
+        this.lexer.yylloc.last_line,
+        this.lexer.yylloc.last_column,
+        this.lexer.offset
+      ];
+      const node2 = this.ast.prepare("error", null, this)(
+        message,
+        token,
+        this.lexer.yylloc.first_line,
+        expect
+      );
+      this.prev = savedPrev;
+      this._errors.push(node2);
+      return node2;
+    };
+    Parser.prototype.error = function(expect) {
+      let msg = "Parse Error : syntax error";
+      let token = this.getTokenName(this.token);
+      let msgExpect = "";
+      if (this.token !== this.EOF) {
+        if (isNumber(this.token)) {
+          let symbol2 = this.text();
+          if (symbol2.length > 10) {
+            symbol2 = symbol2.substring(0, 7) + "...";
+          }
+          token = "'" + symbol2 + "' (" + token + ")";
+        }
+        msg += ", unexpected " + token;
+      }
+      if (expect && !Array.isArray(expect)) {
+        if (isNumber(expect) || expect.length === 1) {
+          msgExpect = ", expecting " + this.getTokenName(expect);
+        }
+        msg += msgExpect;
+      }
+      return this.raiseError(msg, msgExpect, expect, token);
+    };
+    Parser.prototype.position = function() {
+      return new Position(
+        this.lexer.yylloc.first_line,
+        this.lexer.yylloc.first_column,
+        this.lexer.yylloc.first_offset
+      );
+    };
+    Parser.prototype.node = function(name) {
+      if (this.extractDoc) {
+        let docs = null;
+        if (this._docIndex < this._docs.length) {
+          docs = this._docs.slice(this._docIndex);
+          this._docIndex = this._docs.length;
+          if (this.debug) {
+            console.log(new Error("Append docs on " + name));
+            console.log(docs);
+          }
+        }
+        const node2 = this.ast.prepare(name, docs, this);
+        node2.postBuild = function(self) {
+          if (this._docIndex < this._docs.length) {
+            if (this._lastNode) {
+              const offset = this.prev[2];
+              let max = this._docIndex;
+              for (; max < this._docs.length; max++) {
+                if (this._docs[max].offset > offset) {
+                  break;
+                }
+              }
+              if (max > this._docIndex) {
+                this._lastNode.setTrailingComments(
+                  this._docs.slice(this._docIndex, max)
+                );
+                this._docIndex = max;
+              }
+            } else if (this.token === this.EOF) {
+              self.setTrailingComments(this._docs.slice(this._docIndex));
+              this._docIndex = this._docs.length;
+            }
+          }
+          this._lastNode = self;
+        }.bind(this);
+        return node2;
+      }
+      return this.ast.prepare(name, null, this);
+    };
+    Parser.prototype.expectEndOfStatement = function(node2) {
+      if (this.token === ";") {
+        if (node2 && this.lexer.yytext === ";") {
+          node2.includeToken(this);
+        }
+      } else if (this.token !== this.tok.T_INLINE_HTML && this.token !== this.EOF) {
+        this.error(";");
+        return false;
+      }
+      this.next();
+      return true;
+    };
+    var ignoreStack = ["parser.next", "parser.node", "parser.showlog"];
+    Parser.prototype.showlog = function() {
+      const stack = new Error().stack.split("\n");
+      let line;
+      for (let offset = 2; offset < stack.length; offset++) {
+        line = stack[offset].trim();
+        let found = false;
+        for (let i = 0; i < ignoreStack.length; i++) {
+          if (line.substring(3, 3 + ignoreStack[i].length) === ignoreStack[i]) {
+            found = true;
+            break;
+          }
+        }
+        if (!found) {
+          break;
+        }
+      }
+      console.log(
+        "Line " + this.lexer.yylloc.first_line + " : " + this.getTokenName(this.token) + ">" + this.lexer.yytext + "< @-->" + line
+      );
+      return this;
+    };
+    Parser.prototype.expect = function(token) {
+      if (Array.isArray(token)) {
+        if (token.indexOf(this.token) === -1) {
+          this.error(token);
+          return false;
+        }
+      } else if (this.token != token) {
+        this.error(token);
+        return false;
+      }
+      return true;
+    };
+    Parser.prototype.text = function() {
+      return this.lexer.yytext;
+    };
+    Parser.prototype.next = function() {
+      if (this.token !== ";" || this.lexer.yytext === ";") {
+        this.prev = [
+          this.lexer.yylloc.last_line,
+          this.lexer.yylloc.last_column,
+          this.lexer.offset
+        ];
+      }
+      this.lex();
+      if (this.debug) {
+        this.showlog();
+      }
+      if (this.extractDoc) {
+        while (this.token === this.tok.T_COMMENT || this.token === this.tok.T_DOC_COMMENT) {
+          if (this.token === this.tok.T_COMMENT) {
+            this._docs.push(this.read_comment());
+          } else {
+            this._docs.push(this.read_doc_comment());
+          }
+        }
+      }
+      return this;
+    };
+    Parser.prototype.peek = function() {
+      const lexerState = this.lexer.getState();
+      const nextToken = this.lexer.lex();
+      this.lexer.setState(lexerState);
+      return nextToken;
+    };
+    Parser.prototype.lex = function() {
+      if (this.extractTokens) {
+        do {
+          this.token = this.lexer.lex() || /* istanbul ignore next */
+          this.EOF;
+          if (this.token === this.EOF) return this;
+          let entry = this.lexer.yytext;
+          if (Object.prototype.hasOwnProperty.call(
+            this.lexer.engine.tokens.values,
+            this.token
+          )) {
+            entry = [
+              this.lexer.engine.tokens.values[this.token],
+              entry,
+              this.lexer.yylloc.first_line,
+              this.lexer.yylloc.first_offset,
+              this.lexer.offset
+            ];
+          } else {
+            entry = [
+              null,
+              entry,
+              this.lexer.yylloc.first_line,
+              this.lexer.yylloc.first_offset,
+              this.lexer.offset
+            ];
+          }
+          this._tokens.push(entry);
+          if (this.token === this.tok.T_CLOSE_TAG) {
+            this.token = ";";
+            return this;
+          } else if (this.token === this.tok.T_OPEN_TAG_WITH_ECHO) {
+            this.token = this.tok.T_ECHO;
+            return this;
+          }
+        } while (this.token === this.tok.T_WHITESPACE || // ignore white space
+        !this.extractDoc && (this.token === this.tok.T_COMMENT || // ignore single lines comments
+        this.token === this.tok.T_DOC_COMMENT) || // ignore doc comments
+        // ignore open tags
+        this.token === this.tok.T_OPEN_TAG);
+      } else {
+        this.token = this.lexer.lex() || /* istanbul ignore next */
+        this.EOF;
+      }
+      return this;
+    };
+    Parser.prototype.is = function(type) {
+      if (Array.isArray(type)) {
+        return type.indexOf(this.token) !== -1;
+      }
+      return this.entries[type].has(this.token);
+    };
+    [
+      require_array(),
+      require_class(),
+      require_comment(),
+      require_expr(),
+      require_enum(),
+      require_function(),
+      require_if(),
+      require_loops(),
+      require_main(),
+      require_namespace(),
+      require_scalar(),
+      require_statement(),
+      require_switch(),
+      require_try(),
+      require_utils22(),
+      require_variable()
+    ].forEach(function(ext) {
+      for (const k2 in ext) {
+        if (Object.prototype.hasOwnProperty.call(Parser.prototype, k2)) {
+          throw new Error("Function " + k2 + " is already defined - collision");
+        }
+        Parser.prototype[k2] = ext[k2];
+      }
+    });
+    module2.exports = Parser;
+  }
+});
+var require_tokens2 = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/tokens.js"(exports2, module2) {
+    "use strict";
+    var TokenNames = {
+      T_HALT_COMPILER: 101,
+      T_USE: 102,
+      T_ENCAPSED_AND_WHITESPACE: 103,
+      T_OBJECT_OPERATOR: 104,
+      T_STRING: 105,
+      T_DOLLAR_OPEN_CURLY_BRACES: 106,
+      T_STRING_VARNAME: 107,
+      T_CURLY_OPEN: 108,
+      T_NUM_STRING: 109,
+      T_ISSET: 110,
+      T_EMPTY: 111,
+      T_INCLUDE: 112,
+      T_INCLUDE_ONCE: 113,
+      T_EVAL: 114,
+      T_REQUIRE: 115,
+      T_REQUIRE_ONCE: 116,
+      T_NAMESPACE: 117,
+      T_NS_SEPARATOR: 118,
+      T_AS: 119,
+      T_IF: 120,
+      T_ENDIF: 121,
+      T_WHILE: 122,
+      T_DO: 123,
+      T_FOR: 124,
+      T_SWITCH: 125,
+      T_BREAK: 126,
+      T_CONTINUE: 127,
+      T_RETURN: 128,
+      T_GLOBAL: 129,
+      T_STATIC: 130,
+      T_ECHO: 131,
+      T_INLINE_HTML: 132,
+      T_UNSET: 133,
+      T_FOREACH: 134,
+      T_DECLARE: 135,
+      T_TRY: 136,
+      T_THROW: 137,
+      T_GOTO: 138,
+      T_FINALLY: 139,
+      T_CATCH: 140,
+      T_ENDDECLARE: 141,
+      T_LIST: 142,
+      T_CLONE: 143,
+      T_PLUS_EQUAL: 144,
+      T_MINUS_EQUAL: 145,
+      T_MUL_EQUAL: 146,
+      T_DIV_EQUAL: 147,
+      T_CONCAT_EQUAL: 148,
+      T_MOD_EQUAL: 149,
+      T_AND_EQUAL: 150,
+      T_OR_EQUAL: 151,
+      T_XOR_EQUAL: 152,
+      T_SL_EQUAL: 153,
+      T_SR_EQUAL: 154,
+      T_INC: 155,
+      T_DEC: 156,
+      T_BOOLEAN_OR: 157,
+      T_BOOLEAN_AND: 158,
+      T_LOGICAL_OR: 159,
+      T_LOGICAL_AND: 160,
+      T_LOGICAL_XOR: 161,
+      T_SL: 162,
+      T_SR: 163,
+      T_IS_IDENTICAL: 164,
+      T_IS_NOT_IDENTICAL: 165,
+      T_IS_EQUAL: 166,
+      T_IS_NOT_EQUAL: 167,
+      T_IS_SMALLER_OR_EQUAL: 168,
+      T_IS_GREATER_OR_EQUAL: 169,
+      T_INSTANCEOF: 170,
+      T_INT_CAST: 171,
+      T_DOUBLE_CAST: 172,
+      T_STRING_CAST: 173,
+      T_ARRAY_CAST: 174,
+      T_OBJECT_CAST: 175,
+      T_BOOL_CAST: 176,
+      T_UNSET_CAST: 177,
+      T_EXIT: 178,
+      T_PRINT: 179,
+      T_YIELD: 180,
+      T_YIELD_FROM: 181,
+      T_FUNCTION: 182,
+      T_DOUBLE_ARROW: 183,
+      T_DOUBLE_COLON: 184,
+      T_ARRAY: 185,
+      T_CALLABLE: 186,
+      T_CLASS: 187,
+      T_ABSTRACT: 188,
+      T_TRAIT: 189,
+      T_FINAL: 190,
+      T_EXTENDS: 191,
+      T_INTERFACE: 192,
+      T_IMPLEMENTS: 193,
+      T_VAR: 194,
+      T_PUBLIC: 195,
+      T_PROTECTED: 196,
+      T_PRIVATE: 197,
+      T_CONST: 198,
+      T_NEW: 199,
+      T_INSTEADOF: 200,
+      T_ELSEIF: 201,
+      T_ELSE: 202,
+      T_ENDSWITCH: 203,
+      T_CASE: 204,
+      T_DEFAULT: 205,
+      T_ENDFOR: 206,
+      T_ENDFOREACH: 207,
+      T_ENDWHILE: 208,
+      T_CONSTANT_ENCAPSED_STRING: 209,
+      T_LNUMBER: 210,
+      T_DNUMBER: 211,
+      T_LINE: 212,
+      T_FILE: 213,
+      T_DIR: 214,
+      T_TRAIT_C: 215,
+      T_METHOD_C: 216,
+      T_FUNC_C: 217,
+      T_NS_C: 218,
+      T_START_HEREDOC: 219,
+      T_END_HEREDOC: 220,
+      T_CLASS_C: 221,
+      T_VARIABLE: 222,
+      T_OPEN_TAG: 223,
+      T_OPEN_TAG_WITH_ECHO: 224,
+      T_CLOSE_TAG: 225,
+      T_WHITESPACE: 226,
+      T_COMMENT: 227,
+      T_DOC_COMMENT: 228,
+      T_ELLIPSIS: 229,
+      T_COALESCE: 230,
+      T_POW: 231,
+      T_POW_EQUAL: 232,
+      T_SPACESHIP: 233,
+      T_COALESCE_EQUAL: 234,
+      T_FN: 235,
+      T_NULLSAFE_OBJECT_OPERATOR: 236,
+      T_MATCH: 237,
+      T_ATTRIBUTE: 238,
+      T_ENUM: 239,
+      T_READ_ONLY: 240,
+      T_NAME_RELATIVE: 241,
+      T_NAME_QUALIFIED: 242,
+      T_NAME_FULLY_QUALIFIED: 243,
+      T_PIPE: 244
+    };
+    var tokens = {
+      values: Object.entries(TokenNames).reduce(
+        (result, [key, value]) => __spreadProps(__spreadValues({}, result), { [value]: key }),
+        {}
+      ),
+      names: TokenNames
+    };
+    module2.exports = Object.freeze(tokens);
+  }
+});
+var require_location = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/location.js"(exports2, module2) {
+    "use strict";
+    var Location = function(source, start, end) {
+      this.source = source;
+      this.start = start;
+      this.end = end;
+    };
+    module2.exports = Location;
+  }
+});
+var require_node2 = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/node.js"(exports2, module2) {
+    "use strict";
+    var Node = function Node2(kind, docs, location) {
+      this.kind = kind;
+      if (docs) {
+        this.leadingComments = docs;
+      }
+      if (location) {
+        this.loc = location;
+      }
+    };
+    Node.prototype.setTrailingComments = function(docs) {
+      this.trailingComments = docs;
+    };
+    Node.prototype.destroy = function(node2) {
+      if (!node2) {
+        throw new Error(
+          "Node already initialized, you must swap with another node"
+        );
+      }
+      if (this.leadingComments) {
+        if (node2.leadingComments) {
+          node2.leadingComments = Array.concat(
+            this.leadingComments,
+            node2.leadingComments
+          );
+        } else {
+          node2.leadingComments = this.leadingComments;
+        }
+      }
+      if (this.trailingComments) {
+        if (node2.trailingComments) {
+          node2.trailingComments = Array.concat(
+            this.trailingComments,
+            node2.trailingComments
+          );
+        } else {
+          node2.trailingComments = this.trailingComments;
+        }
+      }
+      return node2;
+    };
+    Node.prototype.includeToken = function(parser22) {
+      if (this.loc) {
+        if (this.loc.end) {
+          this.loc.end.line = parser22.lexer.yylloc.last_line;
+          this.loc.end.column = parser22.lexer.yylloc.last_column;
+          this.loc.end.offset = parser22.lexer.offset;
+        }
+        if (parser22.ast.withSource) {
+          this.loc.source = parser22.lexer._input.substring(
+            this.loc.start.offset,
+            parser22.lexer.offset
+          );
+        }
+      }
+      return this;
+    };
+    Node.extends = function(type, constructor) {
+      constructor.prototype = Object.create(this.prototype);
+      constructor.extends = this.extends;
+      constructor.prototype.constructor = constructor;
+      constructor.kind = type;
+      return constructor;
+    };
+    module2.exports = Node;
+  }
+});
+var require_expression = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/expression.js"(exports2, module2) {
+    "use strict";
+    var Node = require_node2();
+    var KIND = "expression";
+    module2.exports = Node.extends(KIND, function Expression(kind, docs, location) {
+      Node.apply(this, [kind || KIND, docs, location]);
+    });
+  }
+});
+var require_array2 = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/array.js"(exports2, module2) {
+    "use strict";
+    var Expr = require_expression();
+    var KIND = "array";
+    module2.exports = Expr.extends(
+      KIND,
+      function Array2(shortForm, items, docs, location) {
+        Expr.apply(this, [KIND, docs, location]);
+        this.items = items;
+        this.shortForm = shortForm;
+      }
+    );
+  }
+});
+var require_arrowfunc = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/arrowfunc.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression();
+    var KIND = "arrowfunc";
+    module2.exports = Expression.extends(
+      KIND,
+      function Closure(args, byref, body, type, nullable2, isStatic, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.arguments = args;
+        this.byref = byref;
+        this.body = body;
+        this.type = type;
+        this.nullable = nullable2;
+        this.isStatic = isStatic || false;
+      }
+    );
+  }
+});
+var require_assign = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/assign.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression();
+    var KIND = "assign";
+    module2.exports = Expression.extends(
+      KIND,
+      function Assign(left, right, operator, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.left = left;
+        this.right = right;
+        this.operator = operator;
+      }
+    );
+  }
+});
+var require_assignref = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/assignref.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression();
+    var KIND = "assignref";
+    module2.exports = Expression.extends(
+      KIND,
+      function AssignRef(left, right, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.left = left;
+        this.right = right;
+      }
+    );
+  }
+});
+var require_attribute2 = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/attribute.js"(exports2, module2) {
+    "use strict";
+    var Node = require_node2();
+    var KIND = "attribute";
+    module2.exports = Node.extends(
+      KIND,
+      function Attribute(name, args, docs, location) {
+        Node.apply(this, [KIND, docs, location]);
+        this.name = name;
+        this.args = args;
+      }
+    );
+  }
+});
+var require_attrgroup = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/attrgroup.js"(exports2, module2) {
+    "use strict";
+    var Node = require_node2();
+    var KIND = "attrgroup";
+    module2.exports = Node.extends(KIND, function AttrGroup(attrs, docs, location) {
+      Node.apply(this, [KIND, docs, location]);
+      this.attrs = attrs || [];
+    });
+  }
+});
+var require_operation = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/operation.js"(exports2, module2) {
+    "use strict";
+    var Expr = require_expression();
+    var KIND = "operation";
+    module2.exports = Expr.extends(KIND, function Operation(kind, docs, location) {
+      Expr.apply(this, [kind || KIND, docs, location]);
+    });
+  }
+});
+var require_bin = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/bin.js"(exports2, module2) {
+    "use strict";
+    var Operation = require_operation();
+    var KIND = "bin";
+    module2.exports = Operation.extends(
+      KIND,
+      function Bin(type, left, right, docs, location) {
+        Operation.apply(this, [KIND, docs, location]);
+        this.type = type;
+        this.left = left;
+        this.right = right;
+      }
+    );
+  }
+});
+var require_statement2 = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/statement.js"(exports2, module2) {
+    "use strict";
+    var Node = require_node2();
+    var KIND = "statement";
+    module2.exports = Node.extends(KIND, function Statement(kind, docs, location) {
+      Node.apply(this, [kind || KIND, docs, location]);
+    });
+  }
+});
+var require_block = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/block.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement2();
+    var KIND = "block";
+    module2.exports = Statement.extends(
+      KIND,
+      function Block(kind, children, docs, location) {
+        Statement.apply(this, [kind || KIND, docs, location]);
+        this.children = children.filter(Boolean);
+      }
+    );
+  }
+});
+var require_literal = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/literal.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression();
+    var KIND = "literal";
+    module2.exports = Expression.extends(
+      KIND,
+      function Literal(kind, value, raw, docs, location) {
+        Expression.apply(this, [kind || KIND, docs, location]);
+        this.value = value;
+        if (raw) {
+          this.raw = raw;
+        }
+      }
+    );
+  }
+});
+var require_boolean = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/boolean.js"(exports2, module2) {
+    "use strict";
+    var Literal = require_literal();
+    var KIND = "boolean";
+    module2.exports = Literal.extends(
+      KIND,
+      function Boolean2(value, raw, docs, location) {
+        Literal.apply(this, [KIND, value, raw, docs, location]);
+      }
+    );
+  }
+});
+var require_break = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/break.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement2();
+    var KIND = "break";
+    module2.exports = Statement.extends(KIND, function Break(level, docs, location) {
+      Statement.apply(this, [KIND, docs, location]);
+      this.level = level;
+    });
+  }
+});
+var require_byref = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/byref.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression();
+    var KIND = "byref";
+    module2.exports = Expression.extends(KIND, function ByRef(what, docs, location) {
+      Expression.apply(this, [KIND, docs, location]);
+      this.what = what;
+    });
+  }
+});
+var require_call = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/call.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression();
+    var KIND = "call";
+    module2.exports = Expression.extends(
+      KIND,
+      function Call(what, args, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.what = what;
+        this.arguments = args;
+      }
+    );
+  }
+});
+var require_case = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/case.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement2();
+    var KIND = "case";
+    module2.exports = Statement.extends(
+      KIND,
+      function Case(test, body, docs, location) {
+        Statement.apply(this, [KIND, docs, location]);
+        this.test = test;
+        this.body = body;
+      }
+    );
+  }
+});
+var require_cast = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/cast.js"(exports2, module2) {
+    "use strict";
+    var Operation = require_operation();
+    var KIND = "cast";
+    module2.exports = Operation.extends(
+      KIND,
+      function Cast(type, raw, expr, docs, location) {
+        Operation.apply(this, [KIND, docs, location]);
+        this.type = type;
+        this.raw = raw;
+        this.expr = expr;
+      }
+    );
+  }
+});
+var require_catch = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/catch.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement2();
+    var KIND = "catch";
+    module2.exports = Statement.extends(
+      KIND,
+      function Catch(body, what, variable, docs, location) {
+        Statement.apply(this, [KIND, docs, location]);
+        this.body = body;
+        this.what = what;
+        this.variable = variable;
+      }
+    );
+  }
+});
+var require_declaration = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/declaration.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement2();
+    var KIND = "declaration";
+    var IS_UNDEFINED = "";
+    var IS_PUBLIC = "public";
+    var IS_PROTECTED = "protected";
+    var IS_PRIVATE = "private";
+    var VISIBILITY_MAP = [IS_PUBLIC, IS_PROTECTED, IS_PRIVATE];
+    var Declaration = Statement.extends(
+      KIND,
+      function Declaration2(kind, name, docs, location) {
+        Statement.apply(this, [kind || KIND, docs, location]);
+        this.name = name;
+      }
+    );
+    Declaration.prototype.parseFlags = function(flags) {
+      this.isAbstract = flags[2] === 1;
+      this.isFinal = flags[2] === 2;
+      this.isReadonly = flags[3] === 1;
+      if (this.kind !== "class") {
+        const [getVis, setVis] = flags[0];
+        if (getVis === -1) {
+          this.visibility = IS_UNDEFINED;
+        } else if (getVis === null) {
+          this.visibility = null;
+        } else {
+          this.visibility = VISIBILITY_MAP[getVis];
+        }
+        this.isStatic = flags[1] === 1;
+        this.visibilitySet = setVis !== -1 ? VISIBILITY_MAP[setVis] : null;
+      }
+    };
+    module2.exports = Declaration;
+  }
+});
+var require_class2 = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/class.js"(exports2, module2) {
+    "use strict";
+    var Declaration = require_declaration();
+    var KIND = "class";
+    module2.exports = Declaration.extends(
+      KIND,
+      function Class2(name, ext, impl, body, flags, docs, location) {
+        Declaration.apply(this, [KIND, name, docs, location]);
+        this.isAnonymous = name ? false : true;
+        this.extends = ext;
+        this.implements = impl;
+        this.body = body;
+        this.attrGroups = [];
+        this.parseFlags(flags);
+      }
+    );
+  }
+});
+var require_constantstatement = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/constantstatement.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement2();
+    var KIND = "constantstatement";
+    module2.exports = Statement.extends(
+      KIND,
+      function ConstantStatement(kind, constants, docs, location) {
+        Statement.apply(this, [kind || KIND, docs, location]);
+        this.constants = constants;
+      }
+    );
+  }
+});
+var require_classconstant = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/classconstant.js"(exports2, module2) {
+    "use strict";
+    var ConstantStatement = require_constantstatement();
+    var KIND = "classconstant";
+    var IS_UNDEFINED = "";
+    var IS_PUBLIC = "public";
+    var IS_PROTECTED = "protected";
+    var IS_PRIVATE = "private";
+    var ClassConstant = ConstantStatement.extends(
+      KIND,
+      function ClassConstant2(kind, constants, flags, nullable2, type, attrGroups, docs, location) {
+        ConstantStatement.apply(this, [kind || KIND, constants, docs, location]);
+        this.parseFlags(flags);
+        this.nullable = nullable2;
+        this.type = type;
+        this.attrGroups = attrGroups;
+      }
+    );
+    ClassConstant.prototype.parseFlags = function(flags) {
+      const getVis = flags[0][0];
+      if (getVis === -1) {
+        this.visibility = IS_UNDEFINED;
+      } else if (getVis === null) {
+        this.visibility = null;
+      } else if (getVis === 0) {
+        this.visibility = IS_PUBLIC;
+      } else if (getVis === 1) {
+        this.visibility = IS_PROTECTED;
+      } else if (getVis === 2) {
+        this.visibility = IS_PRIVATE;
+      }
+      this.final = flags[2] === 2;
+    };
+    module2.exports = ClassConstant;
+  }
+});
+var require_clone = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/clone.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression();
+    var KIND = "clone";
+    module2.exports = Expression.extends(
+      KIND,
+      function Clone(what, properties, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.what = what;
+        if (properties) {
+          this.properties = properties;
+        }
+      }
+    );
+  }
+});
+var require_closure = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/closure.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression();
+    var KIND = "closure";
+    module2.exports = Expression.extends(
+      KIND,
+      function Closure(args, byref, uses, type, nullable2, isStatic, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.uses = uses;
+        this.arguments = args;
+        this.byref = byref;
+        this.type = type;
+        this.nullable = nullable2;
+        this.isStatic = isStatic || false;
+        this.body = null;
+        this.attrGroups = [];
+      }
+    );
+  }
+});
+var require_comment2 = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/comment.js"(exports2, module2) {
+    "use strict";
+    var Node = require_node2();
+    module2.exports = Node.extends(
+      "comment",
+      function Comment(kind, value, docs, location) {
+        Node.apply(this, [kind, docs, location]);
+        this.value = value;
+      }
+    );
+  }
+});
+var require_commentblock = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/commentblock.js"(exports2, module2) {
+    "use strict";
+    var Comment = require_comment2();
+    var KIND = "commentblock";
+    module2.exports = Comment.extends(
+      KIND,
+      function CommentBlock(value, docs, location) {
+        Comment.apply(this, [KIND, value, docs, location]);
+      }
+    );
+  }
+});
+var require_commentline = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/commentline.js"(exports2, module2) {
+    "use strict";
+    var Comment = require_comment2();
+    var KIND = "commentline";
+    module2.exports = Comment.extends(
+      KIND,
+      function CommentLine(value, docs, location) {
+        Comment.apply(this, [KIND, value, docs, location]);
+      }
+    );
+  }
+});
+var require_constant = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/constant.js"(exports2, module2) {
+    "use strict";
+    var Node = require_node2();
+    var KIND = "constant";
+    module2.exports = Node.extends(
+      KIND,
+      function Constant(name, value, docs, location) {
+        Node.apply(this, [KIND, docs, location]);
+        this.name = name;
+        this.value = value;
+      }
+    );
+  }
+});
+var require_continue = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/continue.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement2();
+    var KIND = "continue";
+    module2.exports = Statement.extends(
+      KIND,
+      function Continue(level, docs, location) {
+        Statement.apply(this, [KIND, docs, location]);
+        this.level = level;
+      }
+    );
+  }
+});
+var require_declare = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/declare.js"(exports2, module2) {
+    "use strict";
+    var Block = require_block();
+    var KIND = "declare";
+    var Declare = Block.extends(
+      KIND,
+      function Declare2(directives, body, mode, docs, location) {
+        Block.apply(this, [KIND, body, docs, location]);
+        this.directives = directives;
+        this.mode = mode;
+      }
+    );
+    Declare.MODE_SHORT = "short";
+    Declare.MODE_BLOCK = "block";
+    Declare.MODE_NONE = "none";
+    module2.exports = Declare;
+  }
+});
+var require_declaredirective = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/declaredirective.js"(exports2, module2) {
+    "use strict";
+    var Node = require_node2();
+    var KIND = "declaredirective";
+    module2.exports = Node.extends(
+      KIND,
+      function DeclareDirective(key, value, docs, location) {
+        Node.apply(this, [KIND, docs, location]);
+        this.key = key;
+        this.value = value;
+      }
+    );
+  }
+});
+var require_do = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/do.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement2();
+    var KIND = "do";
+    module2.exports = Statement.extends(
+      KIND,
+      function Do(test, body, docs, location) {
+        Statement.apply(this, [KIND, docs, location]);
+        this.test = test;
+        this.body = body;
+      }
+    );
+  }
+});
+var require_echo = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/echo.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement2();
+    var KIND = "echo";
+    module2.exports = Statement.extends(
+      KIND,
+      function Echo(expressions, shortForm, docs, location) {
+        Statement.apply(this, [KIND, docs, location]);
+        this.shortForm = shortForm;
+        this.expressions = expressions;
+      }
+    );
+  }
+});
+var require_empty = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/empty.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression();
+    var KIND = "empty";
+    module2.exports = Expression.extends(
+      KIND,
+      function Empty(expression, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.expression = expression;
+      }
+    );
+  }
+});
+var require_encapsed = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/encapsed.js"(exports2, module2) {
+    "use strict";
+    var Literal = require_literal();
+    var KIND = "encapsed";
+    var Encapsed = Literal.extends(
+      KIND,
+      function Encapsed2(value, raw, type, docs, location) {
+        Literal.apply(this, [KIND, value, raw, docs, location]);
+        this.type = type;
+      }
+    );
+    Encapsed.TYPE_STRING = "string";
+    Encapsed.TYPE_SHELL = "shell";
+    Encapsed.TYPE_HEREDOC = "heredoc";
+    Encapsed.TYPE_OFFSET = "offset";
+    module2.exports = Encapsed;
+  }
+});
+var require_encapsedpart = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/encapsedpart.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression();
+    var KIND = "encapsedpart";
+    module2.exports = Expression.extends(
+      KIND,
+      function EncapsedPart(expression, syntax, curly, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.expression = expression;
+        this.syntax = syntax;
+        this.curly = curly;
+      }
+    );
+  }
+});
+var require_entry = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/entry.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression();
+    var KIND = "entry";
+    module2.exports = Expression.extends(
+      KIND,
+      function Entry(key, value, byRef, unpack, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.key = key;
+        this.value = value;
+        this.byRef = byRef;
+        this.unpack = unpack;
+      }
+    );
+  }
+});
+var require_enum2 = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/enum.js"(exports2, module2) {
+    "use strict";
+    var Declaration = require_declaration();
+    var KIND = "enum";
+    module2.exports = Declaration.extends(
+      KIND,
+      function Enum(name, valueType, impl, body, docs, location) {
+        Declaration.apply(this, [KIND, name, docs, location]);
+        this.valueType = valueType;
+        this.implements = impl;
+        this.body = body;
+        this.attrGroups = [];
+      }
+    );
+  }
+});
+var require_enumcase = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/enumcase.js"(exports2, module2) {
+    "use strict";
+    var Node = require_node2();
+    var KIND = "enumcase";
+    module2.exports = Node.extends(
+      KIND,
+      function EnumCase(name, value, docs, location) {
+        Node.apply(this, [KIND, docs, location]);
+        this.name = name;
+        this.value = value;
+      }
+    );
+  }
+});
+var require_error = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/error.js"(exports2, module2) {
+    "use strict";
+    var Node = require_node2();
+    var KIND = "error";
+    module2.exports = Node.extends(
+      KIND,
+      function Error2(message, token, line, expected, docs, location) {
+        Node.apply(this, [KIND, docs, location]);
+        this.message = message;
+        this.token = token;
+        this.line = line;
+        this.expected = expected;
+      }
+    );
+  }
+});
+var require_eval = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/eval.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression();
+    var KIND = "eval";
+    module2.exports = Expression.extends(
+      KIND,
+      function Eval(source, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.source = source;
+      }
+    );
+  }
+});
+var require_exit = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/exit.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression();
+    var KIND = "exit";
+    module2.exports = Expression.extends(
+      KIND,
+      function Exit(expression, useDie, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.expression = expression;
+        this.useDie = useDie;
+      }
+    );
+  }
+});
+var require_expressionstatement = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/expressionstatement.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement2();
+    var KIND = "expressionstatement";
+    module2.exports = Statement.extends(
+      KIND,
+      function ExpressionStatement(expr, docs, location) {
+        Statement.apply(this, [KIND, docs, location]);
+        this.expression = expr;
+      }
+    );
+  }
+});
+var require_for = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/for.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement2();
+    var KIND = "for";
+    module2.exports = Statement.extends(
+      KIND,
+      function For(init, test, increment, body, shortForm, docs, location) {
+        Statement.apply(this, [KIND, docs, location]);
+        this.init = init;
+        this.test = test;
+        this.increment = increment;
+        this.shortForm = shortForm;
+        this.body = body;
+      }
+    );
+  }
+});
+var require_foreach = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/foreach.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement2();
+    var KIND = "foreach";
+    module2.exports = Statement.extends(
+      KIND,
+      function Foreach(source, key, value, body, shortForm, docs, location) {
+        Statement.apply(this, [KIND, docs, location]);
+        this.source = source;
+        this.key = key;
+        this.value = value;
+        this.shortForm = shortForm;
+        this.body = body;
+      }
+    );
+  }
+});
+var require_function2 = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/function.js"(exports2, module2) {
+    "use strict";
+    var Declaration = require_declaration();
+    var KIND = "function";
+    module2.exports = Declaration.extends(
+      KIND,
+      function _Function(name, args, byref, type, nullable2, docs, location) {
+        Declaration.apply(this, [KIND, name, docs, location]);
+        this.arguments = args;
+        this.byref = byref;
+        this.type = type;
+        this.nullable = nullable2;
+        this.body = null;
+        this.attrGroups = [];
+      }
+    );
+  }
+});
+var require_global = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/global.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement2();
+    var KIND = "global";
+    module2.exports = Statement.extends(
+      KIND,
+      function Global(items, docs, location) {
+        Statement.apply(this, [KIND, docs, location]);
+        this.items = items;
+      }
+    );
+  }
+});
+var require_goto = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/goto.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement2();
+    var KIND = "goto";
+    module2.exports = Statement.extends(KIND, function Goto(label, docs, location) {
+      Statement.apply(this, [KIND, docs, location]);
+      this.label = label;
+    });
+  }
+});
+var require_halt = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/halt.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement2();
+    var KIND = "halt";
+    module2.exports = Statement.extends(KIND, function Halt(after, docs, location) {
+      Statement.apply(this, [KIND, docs, location]);
+      this.after = after;
+    });
+  }
+});
+var require_identifier = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/identifier.js"(exports2, module2) {
+    "use strict";
+    var Node = require_node2();
+    var KIND = "identifier";
+    var Identifier = Node.extends(
+      KIND,
+      function Identifier2(name, docs, location) {
+        Node.apply(this, [KIND, docs, location]);
+        this.name = name;
+      }
+    );
+    module2.exports = Identifier;
+  }
+});
+var require_if2 = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/if.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement2();
+    var KIND = "if";
+    module2.exports = Statement.extends(
+      KIND,
+      function If(test, body, alternate, shortForm, docs, location) {
+        Statement.apply(this, [KIND, docs, location]);
+        this.test = test;
+        this.body = body;
+        this.alternate = alternate;
+        this.shortForm = shortForm;
+      }
+    );
+  }
+});
+var require_include = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/include.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression();
+    var KIND = "include";
+    module2.exports = Expression.extends(
+      KIND,
+      function Include(once, require2, target, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.once = once;
+        this.require = require2;
+        this.target = target;
+      }
+    );
+  }
+});
+var require_inline = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/inline.js"(exports2, module2) {
+    "use strict";
+    var Literal = require_literal();
+    var KIND = "inline";
+    module2.exports = Literal.extends(
+      KIND,
+      function Inline(value, raw, docs, location) {
+        Literal.apply(this, [KIND, value, raw, docs, location]);
+      }
+    );
+  }
+});
+var require_interface = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/interface.js"(exports2, module2) {
+    "use strict";
+    var Declaration = require_declaration();
+    var KIND = "interface";
+    module2.exports = Declaration.extends(
+      KIND,
+      function Interface(name, ext, body, attrGroups, docs, location) {
+        Declaration.apply(this, [KIND, name, docs, location]);
+        this.extends = ext;
+        this.body = body;
+        this.attrGroups = attrGroups;
+      }
+    );
+  }
+});
+var require_intersectiontype = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/intersectiontype.js"(exports2, module2) {
+    "use strict";
+    var Declaration = require_declaration();
+    var KIND = "intersectiontype";
+    module2.exports = Declaration.extends(
+      KIND,
+      function IntersectionType(types, docs, location) {
+        Declaration.apply(this, [KIND, null, docs, location]);
+        this.types = types;
+      }
+    );
+  }
+});
+var require_isset = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/isset.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression();
+    var KIND = "isset";
+    module2.exports = Expression.extends(
+      KIND,
+      function Isset(variables, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.variables = variables;
+      }
+    );
+  }
+});
+var require_label = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/label.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement2();
+    var KIND = "label";
+    module2.exports = Statement.extends(KIND, function Label(name, docs, location) {
+      Statement.apply(this, [KIND, docs, location]);
+      this.name = name;
+    });
+  }
+});
+var require_list = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/list.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression();
+    var KIND = "list";
+    module2.exports = Expression.extends(
+      KIND,
+      function List(items, shortForm, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.items = items;
+        this.shortForm = shortForm;
+      }
+    );
+  }
+});
+var require_lookup = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/lookup.js"(exports2, module2) {
+    "use strict";
+    var Expr = require_expression();
+    var KIND = "lookup";
+    module2.exports = Expr.extends(
+      KIND,
+      function Lookup(kind, what, offset, docs, location) {
+        Expr.apply(this, [kind || KIND, docs, location]);
+        this.what = what;
+        this.offset = offset;
+      }
+    );
+  }
+});
+var require_magic = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/magic.js"(exports2, module2) {
+    "use strict";
+    var Literal = require_literal();
+    var KIND = "magic";
+    module2.exports = Literal.extends(
+      KIND,
+      function Magic(value, raw, docs, location) {
+        Literal.apply(this, [KIND, value, raw, docs, location]);
+      }
+    );
+  }
+});
+var require_match = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/match.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression();
+    var KIND = "match";
+    module2.exports = Expression.extends(
+      KIND,
+      function Match(cond, arms, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.cond = cond;
+        this.arms = arms;
+      }
+    );
+  }
+});
+var require_matcharm = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/matcharm.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression();
+    var KIND = "matcharm";
+    module2.exports = Expression.extends(
+      KIND,
+      function MatchArm(conds, body, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.conds = conds;
+        this.body = body;
+      }
+    );
+  }
+});
+var require_method = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/method.js"(exports2, module2) {
+    "use strict";
+    var Function_ = require_function2();
+    var KIND = "method";
+    module2.exports = Function_.extends(KIND, function Method() {
+      Function_.apply(this, arguments);
+      this.kind = KIND;
+    });
+  }
+});
+var require_reference = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/reference.js"(exports2, module2) {
+    "use strict";
+    var Node = require_node2();
+    var KIND = "reference";
+    var Reference = Node.extends(KIND, function Reference2(kind, docs, location) {
+      Node.apply(this, [kind || KIND, docs, location]);
+    });
+    module2.exports = Reference;
+  }
+});
+var require_name = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/name.js"(exports2, module2) {
+    "use strict";
+    var Reference = require_reference();
+    var KIND = "name";
+    var Name = Reference.extends(
+      KIND,
+      function Name2(name, resolution, docs, location) {
+        Reference.apply(this, [KIND, docs, location]);
+        this.name = name.replace(/\\$/, "");
+        this.resolution = resolution;
+      }
+    );
+    Name.UNQUALIFIED_NAME = "uqn";
+    Name.QUALIFIED_NAME = "qn";
+    Name.FULL_QUALIFIED_NAME = "fqn";
+    Name.RELATIVE_NAME = "rn";
+    module2.exports = Name;
+  }
+});
+var require_namespace2 = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/namespace.js"(exports2, module2) {
+    "use strict";
+    var Block = require_block();
+    var KIND = "namespace";
+    module2.exports = Block.extends(
+      KIND,
+      function Namespace(name, children, withBrackets, docs, location) {
+        Block.apply(this, [KIND, children, docs, location]);
+        this.name = name;
+        this.withBrackets = withBrackets || false;
+      }
+    );
+  }
+});
+var require_namedargument = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/namedargument.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression();
+    var KIND = "namedargument";
+    module2.exports = Expression.extends(
+      KIND,
+      function namedargument(name, value, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.name = name;
+        this.value = value;
+      }
+    );
+  }
+});
+var require_new = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/new.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression();
+    var KIND = "new";
+    module2.exports = Expression.extends(
+      KIND,
+      function New(what, args, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.what = what;
+        this.arguments = args;
+      }
+    );
+  }
+});
+var require_noop = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/noop.js"(exports2, module2) {
+    "use strict";
+    var Node = require_node2();
+    var KIND = "noop";
+    module2.exports = Node.extends(KIND, function Noop(docs, location) {
+      Node.apply(this, [KIND, docs, location]);
+    });
+  }
+});
+var require_nowdoc = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/nowdoc.js"(exports2, module2) {
+    "use strict";
+    var Literal = require_literal();
+    var KIND = "nowdoc";
+    module2.exports = Literal.extends(
+      KIND,
+      function Nowdoc(value, raw, label, docs, location) {
+        Literal.apply(this, [KIND, value, raw, docs, location]);
+        this.label = label;
+      }
+    );
+  }
+});
+var require_nullkeyword = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/nullkeyword.js"(exports2, module2) {
+    "use strict";
+    var Node = require_node2();
+    var KIND = "nullkeyword";
+    module2.exports = Node.extends(KIND, function NullKeyword(raw, docs, location) {
+      Node.apply(this, [KIND, docs, location]);
+      this.raw = raw;
+    });
+  }
+});
+var require_nullsafepropertylookup = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/nullsafepropertylookup.js"(exports2, module2) {
+    "use strict";
+    var Lookup = require_lookup();
+    var KIND = "nullsafepropertylookup";
+    module2.exports = Lookup.extends(
+      KIND,
+      function NullSafePropertyLookup(what, offset, docs, location) {
+        Lookup.apply(this, [KIND, what, offset, docs, location]);
+      }
+    );
+  }
+});
+var require_number = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/number.js"(exports2, module2) {
+    "use strict";
+    var Literal = require_literal();
+    var KIND = "number";
+    module2.exports = Literal.extends(
+      KIND,
+      function Number2(value, raw, docs, location) {
+        Literal.apply(this, [KIND, value, raw, docs, location]);
+      }
+    );
+  }
+});
+var require_offsetlookup = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/offsetlookup.js"(exports2, module2) {
+    "use strict";
+    var Lookup = require_lookup();
+    var KIND = "offsetlookup";
+    module2.exports = Lookup.extends(
+      KIND,
+      function OffsetLookup(what, offset, docs, location) {
+        Lookup.apply(this, [KIND, what, offset, docs, location]);
+      }
+    );
+  }
+});
+var require_parameter = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/parameter.js"(exports2, module2) {
+    "use strict";
+    var Declaration = require_declaration();
+    var KIND = "parameter";
+    module2.exports = Declaration.extends(
+      KIND,
+      function Parameter(name, type, value, isRef2, isVariadic, readonly2, nullable2, flags, hooks, flagsSet, docs, location) {
+        Declaration.apply(this, [KIND, name, docs, location]);
+        this.value = value;
+        this.type = type;
+        this.byref = isRef2;
+        this.variadic = isVariadic;
+        this.readonly = readonly2;
+        this.nullable = nullable2;
+        this.flags = flags || 0;
+        this.hooks = hooks || [];
+        this.flagsSet = flagsSet || 0;
+        this.attrGroups = [];
+      }
+    );
+  }
+});
+var require_parentreference = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/parentreference.js"(exports2, module2) {
+    "use strict";
+    var Reference = require_reference();
+    var KIND = "parentreference";
+    var ParentReference = Reference.extends(
+      KIND,
+      function ParentReference2(raw, docs, location) {
+        Reference.apply(this, [KIND, docs, location]);
+        this.raw = raw;
+      }
+    );
+    module2.exports = ParentReference;
+  }
+});
+var require_post = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/post.js"(exports2, module2) {
+    "use strict";
+    var Operation = require_operation();
+    var KIND = "post";
+    module2.exports = Operation.extends(
+      KIND,
+      function Post(type, what, docs, location) {
+        Operation.apply(this, [KIND, docs, location]);
+        this.type = type;
+        this.what = what;
+      }
+    );
+  }
+});
+var require_pre = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/pre.js"(exports2, module2) {
+    "use strict";
+    var Operation = require_operation();
+    var KIND = "pre";
+    module2.exports = Operation.extends(
+      KIND,
+      function Pre(type, what, docs, location) {
+        Operation.apply(this, [KIND, docs, location]);
+        this.type = type;
+        this.what = what;
+      }
+    );
+  }
+});
+var require_print = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/print.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression();
+    var KIND = "print";
+    module2.exports = Expression.extends(
+      KIND,
+      function Print(expression, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.expression = expression;
+      }
+    );
+  }
+});
+var require_program = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/program.js"(exports2, module2) {
+    "use strict";
+    var Block = require_block();
+    var KIND = "program";
+    module2.exports = Block.extends(
+      KIND,
+      function Program(children, errors, comments, tokens, docs, location) {
+        Block.apply(this, [KIND, children, docs, location]);
+        this.errors = errors;
+        if (comments) {
+          this.comments = comments;
+        }
+        if (tokens) {
+          this.tokens = tokens;
+        }
+      }
+    );
+  }
+});
+var require_property2 = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/property.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement2();
+    var KIND = "property";
+    module2.exports = Statement.extends(
+      KIND,
+      function Property(name, value, readonly2, nullable2, type, attrGroups, hooks, docs, location) {
+        Statement.apply(this, [KIND, docs, location]);
+        this.name = name;
+        this.value = value;
+        this.readonly = readonly2;
+        this.nullable = nullable2;
+        this.type = type;
+        this.attrGroups = attrGroups;
+        this.hooks = hooks || [];
+      }
+    );
+  }
+});
+var require_propertyhook = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/propertyhook.js"(exports2, module2) {
+    "use strict";
+    var Node = require_node2();
+    var KIND = "propertyhook";
+    module2.exports = Node.extends(
+      KIND,
+      function PropertyHook(name, isFinal, byref, parameter, body, attrGroups, docs, location) {
+        Node.apply(this, [KIND, docs, location]);
+        this.name = name;
+        this.isFinal = isFinal;
+        this.byref = byref;
+        this.parameter = parameter;
+        this.body = body;
+        this.attrGroups = attrGroups || [];
+      }
+    );
+  }
+});
+var require_propertylookup = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/propertylookup.js"(exports2, module2) {
+    "use strict";
+    var Lookup = require_lookup();
+    var KIND = "propertylookup";
+    module2.exports = Lookup.extends(
+      KIND,
+      function PropertyLookup(what, offset, docs, location) {
+        Lookup.apply(this, [KIND, what, offset, docs, location]);
+      }
+    );
+  }
+});
+var require_propertystatement = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/propertystatement.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement2();
+    var KIND = "propertystatement";
+    var IS_UNDEFINED = "";
+    var IS_PUBLIC = "public";
+    var IS_PROTECTED = "protected";
+    var IS_PRIVATE = "private";
+    var VISIBILITY_MAP = [IS_PUBLIC, IS_PROTECTED, IS_PRIVATE];
+    var PropertyStatement = Statement.extends(
+      KIND,
+      function PropertyStatement2(kind, properties, flags, docs, location) {
+        Statement.apply(this, [KIND, docs, location]);
+        this.properties = properties;
+        this.parseFlags(flags);
+      }
+    );
+    PropertyStatement.prototype.parseFlags = function(flags) {
+      const [getVis, setVis] = flags[0];
+      if (getVis === -1) {
+        this.visibility = IS_UNDEFINED;
+      } else if (getVis === null) {
+        this.visibility = null;
+      } else {
+        this.visibility = VISIBILITY_MAP[getVis];
+      }
+      this.isStatic = flags[1] === 1;
+      this.isAbstract = flags[2] === 1;
+      this.isFinal = flags[2] === 2;
+      this.visibilitySet = setVis !== -1 ? VISIBILITY_MAP[setVis] : null;
+    };
+    module2.exports = PropertyStatement;
+  }
+});
+var require_retif = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/retif.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression();
+    var KIND = "retif";
+    module2.exports = Expression.extends(
+      KIND,
+      function RetIf(test, trueExpr, falseExpr, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.test = test;
+        this.trueExpr = trueExpr;
+        this.falseExpr = falseExpr;
+      }
+    );
+  }
+});
+var require_return = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/return.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement2();
+    var KIND = "return";
+    module2.exports = Statement.extends(KIND, function Return(expr, docs, location) {
+      Statement.apply(this, [KIND, docs, location]);
+      this.expr = expr;
+    });
+  }
+});
+var require_selfreference = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/selfreference.js"(exports2, module2) {
+    "use strict";
+    var Reference = require_reference();
+    var KIND = "selfreference";
+    var SelfReference = Reference.extends(
+      KIND,
+      function SelfReference2(raw, docs, location) {
+        Reference.apply(this, [KIND, docs, location]);
+        this.raw = raw;
+      }
+    );
+    module2.exports = SelfReference;
+  }
+});
+var require_silent = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/silent.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression();
+    var KIND = "silent";
+    module2.exports = Expression.extends(
+      KIND,
+      function Silent(expr, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.expr = expr;
+      }
+    );
+  }
+});
+var require_static = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/static.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement2();
+    var KIND = "static";
+    module2.exports = Statement.extends(
+      KIND,
+      function Static(variables, docs, location) {
+        Statement.apply(this, [KIND, docs, location]);
+        this.variables = variables;
+      }
+    );
+  }
+});
+var require_staticvariable = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/staticvariable.js"(exports2, module2) {
+    "use strict";
+    var Node = require_node2();
+    var KIND = "staticvariable";
+    module2.exports = Node.extends(
+      KIND,
+      function StaticVariable(variable, defaultValue, docs, location) {
+        Node.apply(this, [KIND, docs, location]);
+        this.variable = variable;
+        this.defaultValue = defaultValue;
+      }
+    );
+  }
+});
+var require_staticlookup = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/staticlookup.js"(exports2, module2) {
+    "use strict";
+    var Lookup = require_lookup();
+    var KIND = "staticlookup";
+    module2.exports = Lookup.extends(
+      KIND,
+      function StaticLookup(what, offset, docs, location) {
+        Lookup.apply(this, [KIND, what, offset, docs, location]);
+      }
+    );
+  }
+});
+var require_staticreference = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/staticreference.js"(exports2, module2) {
+    "use strict";
+    var Reference = require_reference();
+    var KIND = "staticreference";
+    var StaticReference = Reference.extends(
+      KIND,
+      function StaticReference2(raw, docs, location) {
+        Reference.apply(this, [KIND, docs, location]);
+        this.raw = raw;
+      }
+    );
+    module2.exports = StaticReference;
+  }
+});
+var require_string = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/string.js"(exports2, module2) {
+    "use strict";
+    var Literal = require_literal();
+    var KIND = "string";
+    module2.exports = Literal.extends(
+      KIND,
+      function String2(isDoubleQuote, value, unicode, raw, docs, location) {
+        Literal.apply(this, [KIND, value, raw, docs, location]);
+        this.unicode = unicode;
+        this.isDoubleQuote = isDoubleQuote;
+      }
+    );
+  }
+});
+var require_switch2 = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/switch.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement2();
+    var KIND = "switch";
+    module2.exports = Statement.extends(
+      KIND,
+      function Switch(test, body, shortForm, docs, location) {
+        Statement.apply(this, [KIND, docs, location]);
+        this.test = test;
+        this.body = body;
+        this.shortForm = shortForm;
+      }
+    );
+  }
+});
+var require_throw = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/throw.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement2();
+    var KIND = "throw";
+    module2.exports = Statement.extends(KIND, function Throw(what, docs, location) {
+      Statement.apply(this, [KIND, docs, location]);
+      this.what = what;
+    });
+  }
+});
+var require_trait = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/trait.js"(exports2, module2) {
+    "use strict";
+    var Declaration = require_declaration();
+    var KIND = "trait";
+    module2.exports = Declaration.extends(
+      KIND,
+      function Trait(name, body, docs, location) {
+        Declaration.apply(this, [KIND, name, docs, location]);
+        this.body = body;
+      }
+    );
+  }
+});
+var require_traitalias = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/traitalias.js"(exports2, module2) {
+    "use strict";
+    var Node = require_node2();
+    var KIND = "traitalias";
+    var IS_UNDEFINED = "";
+    var IS_PUBLIC = "public";
+    var IS_PROTECTED = "protected";
+    var IS_PRIVATE = "private";
+    module2.exports = Node.extends(
+      KIND,
+      function TraitAlias(trait, method, as2, flags, docs, location) {
+        Node.apply(this, [KIND, docs, location]);
+        this.trait = trait;
+        this.method = method;
+        this.as = as2;
+        this.visibility = IS_UNDEFINED;
+        if (flags) {
+          const getVis = flags[0][0];
+          if (getVis === 0) {
+            this.visibility = IS_PUBLIC;
+          } else if (getVis === 1) {
+            this.visibility = IS_PROTECTED;
+          } else if (getVis === 2) {
+            this.visibility = IS_PRIVATE;
+          }
+        }
+      }
+    );
+  }
+});
+var require_traitprecedence = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/traitprecedence.js"(exports2, module2) {
+    "use strict";
+    var Node = require_node2();
+    var KIND = "traitprecedence";
+    module2.exports = Node.extends(
+      KIND,
+      function TraitPrecedence(trait, method, instead, docs, location) {
+        Node.apply(this, [KIND, docs, location]);
+        this.trait = trait;
+        this.method = method;
+        this.instead = instead;
+      }
+    );
+  }
+});
+var require_traituse = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/traituse.js"(exports2, module2) {
+    "use strict";
+    var Node = require_node2();
+    var KIND = "traituse";
+    module2.exports = Node.extends(
+      KIND,
+      function TraitUse(traits, adaptations, docs, location) {
+        Node.apply(this, [KIND, docs, location]);
+        this.traits = traits;
+        this.adaptations = adaptations;
+      }
+    );
+  }
+});
+var require_try2 = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/try.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement2();
+    var KIND = "try";
+    module2.exports = Statement.extends(
+      KIND,
+      function Try(body, catches, always, docs, location) {
+        Statement.apply(this, [KIND, docs, location]);
+        this.body = body;
+        this.catches = catches;
+        this.always = always;
+      }
+    );
+  }
+});
+var require_typereference = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/typereference.js"(exports2, module2) {
+    "use strict";
+    var Reference = require_reference();
+    var KIND = "typereference";
+    var TypeReference = Reference.extends(
+      KIND,
+      function TypeReference2(name, raw, docs, location) {
+        Reference.apply(this, [KIND, docs, location]);
+        this.name = name;
+        this.raw = raw;
+      }
+    );
+    TypeReference.types = [
+      "int",
+      "float",
+      "string",
+      "bool",
+      "object",
+      "array",
+      "callable",
+      "iterable",
+      "void",
+      "static",
+      "null",
+      "never",
+      "mixed",
+      "true",
+      "false"
+    ];
+    module2.exports = TypeReference;
+  }
+});
+var require_unary = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/unary.js"(exports2, module2) {
+    "use strict";
+    var Operation = require_operation();
+    var KIND = "unary";
+    module2.exports = Operation.extends(
+      KIND,
+      function Unary(type, what, docs, location) {
+        Operation.apply(this, [KIND, docs, location]);
+        this.type = type;
+        this.what = what;
+      }
+    );
+  }
+});
+var require_uniontype = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/uniontype.js"(exports2, module2) {
+    "use strict";
+    var Declaration = require_declaration();
+    var KIND = "uniontype";
+    module2.exports = Declaration.extends(
+      KIND,
+      function UnionType(types, docs, location) {
+        Declaration.apply(this, [KIND, null, docs, location]);
+        this.types = types;
+      }
+    );
+  }
+});
+var require_unset = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/unset.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement2();
+    var KIND = "unset";
+    module2.exports = Statement.extends(
+      KIND,
+      function Unset(variables, docs, location) {
+        Statement.apply(this, [KIND, docs, location]);
+        this.variables = variables;
+      }
+    );
+  }
+});
+var require_usegroup = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/usegroup.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement2();
+    var KIND = "usegroup";
+    module2.exports = Statement.extends(
+      KIND,
+      function UseGroup(name, type, items, docs, location) {
+        Statement.apply(this, [KIND, docs, location]);
+        this.name = name;
+        this.type = type;
+        this.items = items;
+      }
+    );
+  }
+});
+var require_useitem = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/useitem.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement2();
+    var KIND = "useitem";
+    var UseItem = Statement.extends(
+      KIND,
+      function UseItem2(name, alias, type, docs, location) {
+        Statement.apply(this, [KIND, docs, location]);
+        this.name = name;
+        this.alias = alias;
+        this.type = type;
+      }
+    );
+    UseItem.TYPE_CONST = "const";
+    UseItem.TYPE_FUNCTION = "function";
+    module2.exports = UseItem;
+  }
+});
+var require_variable2 = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/variable.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression();
+    var KIND = "variable";
+    module2.exports = Expression.extends(
+      KIND,
+      function Variable(name, curly, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.name = name;
+        this.curly = curly || false;
+      }
+    );
+  }
+});
+var require_variadic = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/variadic.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression();
+    var KIND = "variadic";
+    module2.exports = Expression.extends(
+      KIND,
+      function variadic(what, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.what = what;
+      }
+    );
+  }
+});
+var require_variadicplaceholder = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/variadicplaceholder.js"(exports2, module2) {
+    "use strict";
+    var Node = require_node2();
+    var KIND = "variadicplaceholder";
+    module2.exports = Node.extends(
+      KIND,
+      function VariadicPlaceholder(docs, location) {
+        Node.apply(this, [KIND, docs, location]);
+      }
+    );
+  }
+});
+var require_while = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/while.js"(exports2, module2) {
+    "use strict";
+    var Statement = require_statement2();
+    var KIND = "while";
+    module2.exports = Statement.extends(
+      KIND,
+      function While(test, body, shortForm, docs, location) {
+        Statement.apply(this, [KIND, docs, location]);
+        this.test = test;
+        this.body = body;
+        this.shortForm = shortForm;
+      }
+    );
+  }
+});
+var require_yield = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/yield.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression();
+    var KIND = "yield";
+    module2.exports = Expression.extends(
+      KIND,
+      function Yield(value, key, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.value = value;
+        this.key = key;
+      }
+    );
+  }
+});
+var require_yieldfrom = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast/yieldfrom.js"(exports2, module2) {
+    "use strict";
+    var Expression = require_expression();
+    var KIND = "yieldfrom";
+    module2.exports = Expression.extends(
+      KIND,
+      function YieldFrom(value, docs, location) {
+        Expression.apply(this, [KIND, docs, location]);
+        this.value = value;
+      }
+    );
+  }
+});
+var require_ast = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/ast.js"(exports2, module2) {
+    "use strict";
+    var Location = require_location();
+    var Position = require_position();
+    var AST = function(withPositions, withSource) {
+      this.withPositions = withPositions;
+      this.withSource = withSource;
+    };
+    AST.precedence = {};
+    [
+      ["or"],
+      ["xor"],
+      ["and"],
+      ["="],
+      ["?"],
+      ["??"],
+      ["||"],
+      ["&&"],
+      ["|"],
+      ["^"],
+      ["&"],
+      [
+        "==",
+        "!=",
+        "===",
+        "!==",
+        /* '<>', */
+        "<=>"
+      ],
+      ["<", "<=", ">", ">="],
+      ["<<", ">>"],
+      ["+", "-", "."],
+      ["*", "/", "%"],
+      ["!"],
+      ["instanceof"],
+      ["u-", "u+", "u~"],
+      ["cast", "silent"],
+      ["**"]
+      // TODO: [ (array)
+      // TODO: new
+    ].forEach(function(list, index) {
+      list.forEach(function(operator) {
+        AST.precedence[operator] = index + 1;
+      });
+    });
+    AST.prototype.isRightAssociative = function(operator) {
+      return operator === "**" || operator === "??";
+    };
+    AST.prototype.swapLocations = function(target, first, last, parser22) {
+      if (this.withPositions) {
+        if (!target || !target.loc || !first || !first.loc || !last || !last.loc) {
+          return;
+        }
+        target.loc.start = first.loc.start;
+        target.loc.end = last.loc.end;
+        if (this.withSource) {
+          target.loc.source = parser22.lexer._input.substring(
+            target.loc.start.offset,
+            target.loc.end.offset
+          );
+        }
+      }
+    };
+    AST.prototype.resolveLocations = function(target, first, last, parser22) {
+      if (this.withPositions) {
+        if (!target || !target.loc || !first || !first.loc || !last || !last.loc) {
+          return;
+        }
+        if (target.loc.start.offset > first.loc.start.offset) {
+          target.loc.start = first.loc.start;
+        }
+        if (target.loc.end.offset < last.loc.end.offset) {
+          target.loc.end = last.loc.end;
+        }
+        if (this.withSource) {
+          target.loc.source = parser22.lexer._input.substring(
+            target.loc.start.offset,
+            target.loc.end.offset
+          );
+        }
+      }
+    };
+    AST.prototype.resolvePrecedence = function(result, parser22) {
+      let buffer, lLevel, rLevel;
+      if (result.kind === "call") {
+        this.resolveLocations(result, result.what, result, parser22);
+      } else if (result.kind === "propertylookup" || result.kind === "nullsafepropertylookup" || result.kind === "staticlookup" || result.kind === "offsetlookup" && result.offset) {
+        this.resolveLocations(result, result.what, result.offset, parser22);
+      } else if (result.kind === "bin") {
+        if (result.right && !result.right.parenthesizedExpression) {
+          if (result.right.kind === "bin") {
+            lLevel = AST.precedence[result.type];
+            rLevel = AST.precedence[result.right.type];
+            if (lLevel && rLevel && rLevel <= lLevel && (result.type !== result.right.type || !this.isRightAssociative(result.type))) {
+              buffer = result.right;
+              result.right = result.right.left;
+              this.swapLocations(result, result.left, result.right, parser22);
+              buffer.left = this.resolvePrecedence(result, parser22);
+              this.swapLocations(buffer, buffer.left, buffer.right, parser22);
+              result = buffer;
+            }
+          } else if (result.right.kind === "retif") {
+            lLevel = AST.precedence[result.type];
+            rLevel = AST.precedence["?"];
+            if (lLevel && rLevel && rLevel <= lLevel) {
+              buffer = result.right;
+              result.right = result.right.test;
+              this.swapLocations(result, result.left, result.right, parser22);
+              buffer.test = this.resolvePrecedence(result, parser22);
+              this.swapLocations(buffer, buffer.test, buffer.falseExpr, parser22);
+              result = buffer;
+            }
+          }
+        }
+      } else if ((result.kind === "silent" || result.kind === "cast") && result.expr && !result.expr.parenthesizedExpression) {
+        if (result.expr.kind === "bin") {
+          buffer = result.expr;
+          result.expr = result.expr.left;
+          this.swapLocations(result, result, result.expr, parser22);
+          buffer.left = this.resolvePrecedence(result, parser22);
+          this.swapLocations(buffer, buffer.left, buffer.right, parser22);
+          result = buffer;
+        } else if (result.expr.kind === "retif") {
+          buffer = result.expr;
+          result.expr = result.expr.test;
+          this.swapLocations(result, result, result.expr, parser22);
+          buffer.test = this.resolvePrecedence(result, parser22);
+          this.swapLocations(buffer, buffer.test, buffer.falseExpr, parser22);
+          result = buffer;
+        }
+      } else if (result.kind === "unary") {
+        if (result.what && !result.what.parenthesizedExpression) {
+          if (result.what.kind === "bin") {
+            lLevel = AST.precedence["u" + result.type] || AST.precedence[result.type];
+            rLevel = AST.precedence[result.what.type];
+            if (lLevel && rLevel && rLevel < lLevel) {
+              buffer = result.what;
+              result.what = result.what.left;
+              this.swapLocations(result, result, result.what, parser22);
+              buffer.left = this.resolvePrecedence(result, parser22);
+              this.swapLocations(buffer, buffer.left, buffer.right, parser22);
+              result = buffer;
+            }
+          } else if (result.what.kind === "retif") {
+            buffer = result.what;
+            result.what = result.what.test;
+            this.swapLocations(result, result, result.what, parser22);
+            buffer.test = this.resolvePrecedence(result, parser22);
+            this.swapLocations(buffer, buffer.test, buffer.falseExpr, parser22);
+            result = buffer;
+          }
+        }
+      } else if (result.kind === "retif") {
+        if (result.falseExpr && result.falseExpr.kind === "retif" && !result.falseExpr.parenthesizedExpression) {
+          buffer = result.falseExpr;
+          result.falseExpr = buffer.test;
+          this.swapLocations(result, result.test, result.falseExpr, parser22);
+          buffer.test = this.resolvePrecedence(result, parser22);
+          this.swapLocations(buffer, buffer.test, buffer.falseExpr, parser22);
+          result = buffer;
+        }
+      } else if (result.kind === "assign") {
+        if (result.right && result.right.kind === "bin" && !result.right.parenthesizedExpression) {
+          lLevel = AST.precedence["="];
+          rLevel = AST.precedence[result.right.type];
+          if (lLevel && rLevel && rLevel < lLevel) {
+            buffer = result.right;
+            result.right = result.right.left;
+            buffer.left = result;
+            this.swapLocations(buffer, buffer.left, result.right, parser22);
+            result = buffer;
+          }
+        }
+      } else if (result.kind === "expressionstatement") {
+        this.swapLocations(result, result.expression, result, parser22);
+      }
+      return result;
+    };
+    AST.prototype.prepare = function(kind, docs, parser22) {
+      let start = null;
+      if (this.withPositions || this.withSource) {
+        start = parser22.position();
+      }
+      const self = this;
+      const result = function() {
+        const args = Array.prototype.slice.call(arguments);
+        args.push(docs);
+        if (self.withPositions || self.withSource) {
+          let nodeStart = start;
+          let nodeEnd = new Position(
+            parser22.prev[0],
+            parser22.prev[1],
+            parser22.prev[2]
+          );
+          if (nodeStart.offset > nodeEnd.offset) {
+            const tmp = nodeStart;
+            nodeStart = nodeEnd;
+            nodeEnd = tmp;
+          }
+          let src = null;
+          if (self.withSource) {
+            src = parser22.lexer._input.substring(nodeStart.offset, nodeEnd.offset);
+          }
+          const location = new Location(src, nodeStart, nodeEnd);
+          args.push(location);
+        }
+        if (!kind) {
+          kind = args.shift();
+        }
+        const node2 = self[kind];
+        if (typeof node2 !== "function") {
+          throw new Error('Undefined node "' + kind + '"');
+        }
+        const astNode = Object.create(node2.prototype);
+        node2.apply(astNode, args);
+        result.instance = astNode;
+        if (result.trailingComments) {
+          astNode.trailingComments = result.trailingComments;
+        }
+        if (typeof result.postBuild === "function") {
+          result.postBuild(astNode);
+        }
+        if (parser22.debug) {
+          delete self.stack[result.stackUid];
+        }
+        return self.resolvePrecedence(astNode, parser22);
+      };
+      if (parser22.debug) {
+        if (!this.stack) {
+          this.stack = {};
+          this.stackUid = 1;
+        }
+        this.stack[++this.stackUid] = {
+          position: start,
+          stack: new Error().stack.split("\n").slice(3, 5)
+        };
+        result.stackUid = this.stackUid;
+      }
+      result.setTrailingComments = function(docs2) {
+        if (result.instance) {
+          result.instance.setTrailingComments(docs2);
+        } else {
+          result.trailingComments = docs2;
+        }
+      };
+      result.destroy = function(target) {
+        if (docs) {
+          if (target) {
+            if (!target.leadingComments) {
+              target.leadingComments = docs;
+            } else {
+              target.leadingComments = docs.concat(target.leadingComments);
+            }
+          } else {
+            parser22._docIndex = parser22._docs.length - docs.length;
+          }
+        }
+        if (parser22.debug) {
+          delete self.stack[result.stackUid];
+        }
+      };
+      return result;
+    };
+    AST.prototype.checkNodes = function() {
+      const errors = [];
+      for (const k2 in this.stack) {
+        if (Object.prototype.hasOwnProperty.call(this.stack, k2)) {
+          this.stack[k2].key = k2;
+          errors.push(this.stack[k2]);
+        }
+      }
+      this.stack = {};
+      return errors;
+    };
+    [
+      require_array2(),
+      require_arrowfunc(),
+      require_assign(),
+      require_assignref(),
+      require_attribute2(),
+      require_attrgroup(),
+      require_bin(),
+      require_block(),
+      require_boolean(),
+      require_break(),
+      require_byref(),
+      require_call(),
+      require_case(),
+      require_cast(),
+      require_catch(),
+      require_class2(),
+      require_classconstant(),
+      require_clone(),
+      require_closure(),
+      require_comment2(),
+      require_commentblock(),
+      require_commentline(),
+      require_constant(),
+      require_constantstatement(),
+      require_continue(),
+      require_declaration(),
+      require_declare(),
+      require_declaredirective(),
+      require_do(),
+      require_echo(),
+      require_empty(),
+      require_encapsed(),
+      require_encapsedpart(),
+      require_entry(),
+      require_enum2(),
+      require_enumcase(),
+      require_error(),
+      require_eval(),
+      require_exit(),
+      require_expression(),
+      require_expressionstatement(),
+      require_for(),
+      require_foreach(),
+      require_function2(),
+      require_global(),
+      require_goto(),
+      require_halt(),
+      require_identifier(),
+      require_if2(),
+      require_include(),
+      require_inline(),
+      require_interface(),
+      require_intersectiontype(),
+      require_isset(),
+      require_label(),
+      require_list(),
+      require_literal(),
+      require_lookup(),
+      require_magic(),
+      require_match(),
+      require_matcharm(),
+      require_method(),
+      require_name(),
+      require_namespace2(),
+      require_namedargument(),
+      require_new(),
+      require_node2(),
+      require_noop(),
+      require_nowdoc(),
+      require_nullkeyword(),
+      require_nullsafepropertylookup(),
+      require_number(),
+      require_offsetlookup(),
+      require_operation(),
+      require_parameter(),
+      require_parentreference(),
+      require_post(),
+      require_pre(),
+      require_print(),
+      require_program(),
+      require_property2(),
+      require_propertyhook(),
+      require_propertylookup(),
+      require_propertystatement(),
+      require_reference(),
+      require_retif(),
+      require_return(),
+      require_selfreference(),
+      require_silent(),
+      require_statement2(),
+      require_static(),
+      require_staticvariable(),
+      require_staticlookup(),
+      require_staticreference(),
+      require_string(),
+      require_switch2(),
+      require_throw(),
+      require_trait(),
+      require_traitalias(),
+      require_traitprecedence(),
+      require_traituse(),
+      require_try2(),
+      require_typereference(),
+      require_unary(),
+      require_uniontype(),
+      require_unset(),
+      require_usegroup(),
+      require_useitem(),
+      require_variable2(),
+      require_variadic(),
+      require_variadicplaceholder(),
+      require_while(),
+      require_yield(),
+      require_yieldfrom()
+    ].forEach(function(ctor) {
+      AST.prototype[ctor.kind] = ctor;
+    });
+    module2.exports = AST;
+  }
+});
+var require_src3 = __commonJS2({
+  "../../node_modules/.pnpm/php-parser@3.7.0/node_modules/php-parser/src/index.js"(exports2, module2) {
+    "use strict";
+    var lexer = require_lexer();
+    var parser22 = require_parser();
+    var tokens = require_tokens2();
+    var AST = require_ast();
+    function combine(src, to2) {
+      const keys = Object.keys(src);
+      let i = keys.length;
+      while (i--) {
+        const k2 = keys[i];
+        if (k2 === "__proto__" || k2 === "constructor" || k2 === "prototype") {
+          continue;
+        }
+        const val = src[k2];
+        if (val === null) {
+          delete to2[k2];
+        } else if (typeof val === "function") {
+          to2[k2] = val.bind(to2);
+        } else if (Array.isArray(val)) {
+          to2[k2] = Array.isArray(to2[k2]) ? to2[k2].concat(val) : val;
+        } else if (typeof val === "object") {
+          to2[k2] = typeof to2[k2] === "object" ? combine(val, to2[k2]) : val;
+        } else {
+          to2[k2] = val;
+        }
+      }
+      return to2;
+    }
+    var Engine2 = function(options) {
+      if (typeof this === "function") {
+        return new this(options);
+      }
+      this.tokens = tokens;
+      this.lexer = new lexer(this);
+      this.ast = new AST();
+      this.parser = new parser22(this.lexer, this.ast);
+      if (options && typeof options === "object") {
+        if (options.parser) {
+          if (!options.lexer) {
+            options.lexer = {};
+          }
+          if (options.parser.version) {
+            if (typeof options.parser.version === "string") {
+              let version2 = options.parser.version.split(".");
+              version2 = parseInt(version2[0]) * 100 + parseInt(version2[1]);
+              if (isNaN(version2)) {
+                throw new Error("Bad version number : " + options.parser.version);
+              } else {
+                options.parser.version = version2;
+              }
+            } else if (typeof options.parser.version !== "number") {
+              throw new Error("Expecting a number for version");
+            }
+            if (options.parser.version < 500 || options.parser.version > 900) {
+              throw new Error("Can only handle versions between 5.x to 8.x");
+            }
+          }
+        }
+        combine(options, this);
+        this.lexer.version = this.parser.version;
+      }
+    };
+    var getStringBuffer = function(buffer) {
+      return typeof buffer.write === "function" ? buffer.toString() : buffer;
+    };
+    Engine2.create = function(options) {
+      return new Engine2(options);
+    };
+    Engine2.parseEval = function(buffer, options) {
+      const self = new Engine2(options);
+      return self.parseEval(buffer);
+    };
+    Engine2.prototype.parseEval = function(buffer) {
+      this.lexer.mode_eval = true;
+      this.lexer.all_tokens = false;
+      buffer = getStringBuffer(buffer);
+      return this.parser.parse(buffer, "eval");
+    };
+    Engine2.parseCode = function(buffer, filename, options) {
+      if (typeof filename === "object" && !options) {
+        options = filename;
+        filename = "unknown";
+      }
+      const self = new Engine2(options);
+      return self.parseCode(buffer, filename);
+    };
+    Engine2.prototype.parseCode = function(buffer, filename) {
+      this.lexer.mode_eval = false;
+      this.lexer.all_tokens = false;
+      buffer = getStringBuffer(buffer);
+      return this.parser.parse(buffer, filename);
+    };
+    Engine2.tokenGetAll = function(buffer, options) {
+      const self = new Engine2(options);
+      return self.tokenGetAll(buffer);
+    };
+    Engine2.prototype.tokenGetAll = function(buffer) {
+      this.lexer.mode_eval = false;
+      this.lexer.all_tokens = true;
+      buffer = getStringBuffer(buffer);
+      const EOF = this.lexer.EOF;
+      const names = this.tokens.values;
+      this.lexer.setInput(buffer);
+      let token = this.lexer.lex() || EOF;
+      const result = [];
+      while (token != EOF) {
+        let entry = this.lexer.yytext;
+        if (Object.prototype.hasOwnProperty.call(names, token)) {
+          entry = [names[token], entry, this.lexer.yylloc.first_line];
+        }
+        result.push(entry);
+        token = this.lexer.lex() || EOF;
+      }
+      return result;
+    };
+    module2.exports = Engine2;
+    module2.exports.tokens = tokens;
+    module2.exports.lexer = lexer;
+    module2.exports.AST = AST;
+    module2.exports.parser = parser22;
+    module2.exports.combine = combine;
+    module2.exports.Engine = Engine2;
+    module2.exports.default = Engine2;
+  }
+});
 var SCHEMA_VERSION = 1;
 var gradeSchema = external_exports.enum(["A", "B", "C", "D", "F"]);
 var severitySchema = external_exports.enum(["critical", "warning", "info"]);
@@ -75094,6 +93152,13 @@ var categoryInput = external_exports.preprocess(
   (v2) => v2 === "secret" ? "security" : v2,
   categorySchema
 );
+var flowStepSchema = external_exports.object({
+  role: external_exports.enum(["source", "step", "guard", "sink"]),
+  /** The expression or call, as written in the code. */
+  text: external_exports.string(),
+  file: external_exports.string().optional(),
+  line: external_exports.number().int().optional()
+});
 var issueSchema = external_exports.object({
   id: external_exports.string(),
   category: categoryInput,
@@ -75139,7 +93204,14 @@ var issueSchema = external_exports.object({
    * (see confidence.ts). `low` findings are hidden by default and left out of
    * the score. Stamped by the engine; optional for older reports.
    */
-  confidence: external_exports.enum(["high", "medium", "low"]).optional()
+  confidence: external_exports.enum(["high", "medium", "low"]).optional(),
+  /**
+   * Data-flow path for injection findings from a deep engine: where untrusted
+   * input enters (source), what carries it (step), what would have made it safe
+   * (guard, when one was seen but did not apply), and where it lands (sink).
+   * Absent for single-line rules, which cannot see a path.
+   */
+  flow: external_exports.array(flowStepSchema).optional()
 });
 var repoProfileSchema = external_exports.object({
   /** Total files the scan walked (after ignore globs). */
@@ -75829,12 +93901,12 @@ function makeLineLookup(content) {
 function analyzeWithRegexLang(content, file2, lang, acc) {
   var _a22;
   const cfg = LANG_PATTERNS[lang];
-  const lineOf52 = makeLineLookup(content);
+  const lineOf62 = makeLineLookup(content);
   for (const p2 of cfg.reads) {
     for (const m2 of content.matchAll(p2.re)) {
       const name = m2[1];
       if (!name) continue;
-      recordUsage(acc, name, file2, lineOf52((_a22 = m2.index) != null ? _a22 : 0));
+      recordUsage(acc, name, file2, lineOf62((_a22 = m2.index) != null ? _a22 : 0));
       if (p2.fallbackGroup && m2[p2.fallbackGroup]) acc.withFallback.add(name);
     }
   }
@@ -75945,9 +94017,9 @@ var envLifecycleScanner = {
         if (isJs) {
           const ok = analyzeWithAst(content, file2, acc);
           if (!ok) {
-            const lineOf52 = makeLineLookup(content);
+            const lineOf62 = makeLineLookup(content);
             for (const match of content.matchAll(ENV_REGEX)) {
-              recordUsage(acc, match[1], file2, lineOf52((_a22 = match.index) != null ? _a22 : 0));
+              recordUsage(acc, match[1], file2, lineOf62((_a22 = match.index) != null ? _a22 : 0));
             }
           }
         } else if (lang) {
@@ -76069,8 +94141,8 @@ var staleBranchScanner = {
 var SOURCE_RE = /\.(ts|tsx|js|jsx|mjs|mts|cts|py|go|rs|java|rb|php|c|cc|cpp|h|hpp|cs|kt|swift|scala)$/;
 var MARKER_RE = /^[\s*>!-]*(TODO|FIXME|HACK|XXX)\b:?\s*(.*)$/;
 var STALE_DAYS2 = 365;
-function findMarker(text) {
-  const m2 = text.trimEnd().match(MARKER_RE);
+function findMarker(text22) {
+  const m2 = text22.trimEnd().match(MARKER_RE);
   if (!m2) return null;
   return { marker: m2[1], rest: m2[2].trim() };
 }
@@ -76361,14 +94433,14 @@ var FRAMEWORK_IMPLICIT = /* @__PURE__ */ new Set(["react-dom"]);
 var CONFIG_FILE_RE = /(^|\/)(next|postcss|tailwind|vite|vitest|rollup|webpack|babel|jest|eslint|prettier|stylelint|playwright|cypress|tsup|drizzle|svelte|astro|nuxt)\.config\.[cm]?[jt]s$|(^|\/)\.(babelrc|eslintrc|prettierrc|stylelintrc)[\w.]*$/i;
 function collectToolingText(ctx, scripts) {
   return __async(this, null, function* () {
-    let text = Object.values(scripts != null ? scripts : {}).join("\n");
+    let text22 = Object.values(scripts != null ? scripts : {}).join("\n");
     for (const file2 of ctx.files) {
       if (!CONFIG_FILE_RE.test(file2)) continue;
       const content = yield ctx.readFile(file2);
-      if (content) text += `
+      if (content) text22 += `
 ${content}`;
     }
-    return text;
+    return text22;
   });
 }
 var IMPORT_TEXT_RE = /(?:\bfrom\s*|\bimport\s*\(?\s*|\brequire\s*\(\s*)["']([^"'\s]+)["']|\bimport\s+["']([^"'\s]+)["']/g;
@@ -76892,13 +94964,13 @@ function computeNpmPackageInstances(ctx, fileSet) {
             add(actualName, value.version, value.dev !== true, nodeModulesCount === 1, path);
           }
         }
-        const walk22 = (deps) => {
+        const walk42 = (deps) => {
           for (const [name, value] of Object.entries(deps != null ? deps : {})) {
             if (typeof value.version === "string") add(name, value.version, value.dev !== true, false, name);
-            walk22(value.dependencies);
+            walk42(value.dependencies);
           }
         };
-        walk22(json2.dependencies);
+        walk42(json2.dependencies);
         if (found.size) return [...found.values()];
       } catch (e) {
       }
@@ -77123,14 +95195,14 @@ function parseNpmLock(txt) {
       saw = true;
       if ((val == null ? void 0 : val.dev) !== true) prod.add(m2[1]);
     }
-    const walk22 = (deps) => {
+    const walk42 = (deps) => {
       for (const [name, val] of Object.entries(deps != null ? deps : {})) {
         saw = true;
         if ((val == null ? void 0 : val.dev) !== true) prod.add(name);
-        walk22(val == null ? void 0 : val.dependencies);
+        walk42(val == null ? void 0 : val.dependencies);
       }
     };
-    walk22(json2.dependencies);
+    walk42(json2.dependencies);
     return saw ? prod : null;
   } catch (e) {
     return null;
@@ -77216,7 +95288,7 @@ function finalizeDependencyResearch(manager, lockfile, nodeMap, edges, options, 
   const paths = [];
   const maxPaths = Math.max(1, (_d = options.maxPaths) != null ? _d : 100);
   let truncated = false;
-  const walk22 = (start, mode) => {
+  const walk42 = (start, mode) => {
     var _a32;
     const stack = [{ id: start, path: [], devStarted: false }];
     let walkSteps = 0;
@@ -77243,8 +95315,8 @@ function finalizeDependencyResearch(manager, lockfile, nodeMap, edges, options, 
     if (stack.length && (walkSteps >= 2e4 || paths.length >= maxPaths)) truncated = true;
   };
   if (options.target) for (const root of roots) {
-    walk22(root.id, "production");
-    walk22(root.id, "development");
+    walk42(root.id, "production");
+    walk42(root.id, "development");
   }
   if (truncated) warnings.push("Dependency path search reached its safety limit; the path list may be incomplete.");
   const nodes = [...nodeMap.values()].map((_e2) => {
@@ -77286,11 +95358,11 @@ function dependencyEntries(value) {
   const record2 = asRecord(value);
   return record2 ? Object.entries(record2).filter((entry) => typeof entry[1] === "string") : [];
 }
-function parseYarnDependencyResearch(text, manifests, options = {}) {
+function parseYarnDependencyResearch(text22, manifests, options = {}) {
   var _a22, _b, _c, _d, _e2, _f;
   let parsed;
   try {
-    parsed = (0, import_parsers.parseSyml)(text);
+    parsed = (0, import_parsers.parseSyml)(text22);
   } catch (e) {
     return null;
   }
@@ -77598,13 +95670,13 @@ function enumerateNpmInstalled(ctx, fileSet) {
           const m2 = key.match(/(?:^|\/)node_modules\/((?:@[^/]+\/)?[^/]+)$/);
           if (m2 && typeof (val == null ? void 0 : val.version) === "string") add(m2[1], val.version, val.dev === true);
         }
-        const walk22 = (deps) => {
+        const walk42 = (deps) => {
           for (const [name, val] of Object.entries(deps != null ? deps : {})) {
             if (typeof (val == null ? void 0 : val.version) === "string") add(name, val.version, val.dev === true);
-            walk22(val == null ? void 0 : val.dependencies);
+            walk42(val == null ? void 0 : val.dependencies);
           }
         };
-        walk22(json2.dependencies);
+        walk42(json2.dependencies);
       } catch (e) {
       }
     }
@@ -77633,8 +95705,8 @@ function enumerateYarnInstalled(ctx, fileSet) {
   return __async(this, null, function* () {
     var _a22;
     if (!fileSet.has("yarn.lock")) return null;
-    const text = yield ctx.readFile("yarn.lock");
-    if (!text) return null;
+    const text22 = yield ctx.readFile("yarn.lock");
+    if (!text22) return null;
     const manifests = /* @__PURE__ */ new Map();
     for (const file2 of fileSet) if (file2 === "package.json" || file2.endsWith("/package.json")) {
       const body = yield ctx.readFile(file2);
@@ -77642,7 +95714,7 @@ function enumerateYarnInstalled(ctx, fileSet) {
     }
     let graph;
     try {
-      graph = parseYarnDependencyResearch(text, manifests, { maxNodes: MAX_QUERIES, maxEdges: MAX_QUERIES * 3 });
+      graph = parseYarnDependencyResearch(text22, manifests, { maxNodes: MAX_QUERIES, maxEdges: MAX_QUERIES * 3 });
     } catch (e) {
       return null;
     }
@@ -78245,9 +96317,9 @@ function collectEntrypoints(ctx) {
     const entries = /* @__PURE__ */ new Set();
     for (const file2 of ctx.files) {
       const norm = file2.replace(/\\/g, "/");
-      const lower = norm.toLowerCase();
+      const lower42 = norm.toLowerCase();
       const dir = norm.includes("/") ? norm.slice(0, norm.lastIndexOf("/")) : "";
-      if (lower === "package.json" || lower.endsWith("/package.json")) {
+      if (lower42 === "package.json" || lower42.endsWith("/package.json")) {
         const txt = yield ctx.readFile(file2);
         if (!txt) continue;
         let json2;
@@ -78260,7 +96332,7 @@ function collectEntrypoints(ctx) {
         const paths = typeof bin === "string" ? [bin] : bin && typeof bin === "object" ? Object.values(bin).map(String) : [];
         for (const p2 of paths)
           for (const c3 of entrySourceCandidates(joinPath2(dir, p2))) entries.add(c3);
-      } else if (lower.endsWith("/action.yml") || lower.endsWith("/action.yaml") || lower === "action.yml" || lower === "action.yaml") {
+      } else if (lower42.endsWith("/action.yml") || lower42.endsWith("/action.yaml") || lower42 === "action.yml" || lower42 === "action.yaml") {
         const txt = yield ctx.readFile(file2);
         if (!txt) continue;
         const m2 = txt.match(/(?:^|\n)\s*main:\s*["']?([^"'\n#]+?)["']?\s*(?:#.*)?$/m);
@@ -78482,9 +96554,9 @@ function resolveRel(baseDir, target) {
 function stripCode(src) {
   return src.replace(/```[\s\S]*?```/g, (m2) => m2.replace(/[^\n]/g, " ")).replace(/~~~[\s\S]*?~~~/g, (m2) => m2.replace(/[^\n]/g, " ")).replace(/`[^`\n]*`/g, (m2) => " ".repeat(m2.length));
 }
-function lineAt2(text, index) {
+function lineAt2(text22, index) {
   let line = 1;
-  for (let i = 0; i < index && i < text.length; i++) if (text[i] === "\n") line++;
+  for (let i = 0; i < index && i < text22.length; i++) if (text22[i] === "\n") line++;
   return line;
 }
 var NOT_LINKED_DOC_RE = /(^|\/)(?:CHANGELOG|CHANGES|HISTORY|NEWS|RELEASES?)[^/]*\.\w+$|(^|\/)(?:test|tests|spec|specs|deps|vendor|website|docs_src|blog)\/|(^|\/)README[-.][a-z]{2}(?:[-_][A-Za-z]{2,4})?\.\w+$/i;
@@ -78539,11 +96611,11 @@ var brokenDocLinksScanner = {
         if (NOT_LINKED_DOC_RE.test(norm)) continue;
         const raw = yield ctx.readFile(file2);
         if (!raw || !raw.includes("](")) continue;
-        const text = stripCode(raw);
+        const text22 = stripCode(raw);
         const baseDir = dirOf(norm);
         LINK_RE.lastIndex = 0;
         let m2;
-        while ((m2 = LINK_RE.exec(text)) !== null) {
+        while ((m2 = LINK_RE.exec(text22)) !== null) {
           if (issues.length >= MAX_TOTAL2) break;
           let target = m2[1].trim().split(/\s+/)[0].replace(/^<|>$/g, "");
           target = target.split("#")[0].split("?")[0];
@@ -78563,7 +96635,7 @@ var brokenDocLinksScanner = {
             if (asDir && (fileSet.has(`${asDir}.md`) || fileSet.has(`${asDir}/index.md`) || fileSet.has(asDir))) continue;
             if (fileSet.has(`${resolved}.md`)) continue;
           }
-          const line = lineAt2(text, m2.index);
+          const line = lineAt2(text22, m2.index);
           issues.push({
             id: `doclink-${norm}:${line}:${target}`,
             category: "hygiene",
@@ -79515,9 +97587,9 @@ var DOCKER_API_IMAGE = /^\s*image:\s*["']?(?:[\w.-]+\/)*(?:traefik|watchtower|po
 var HOST_AGENT_IMAGE = /^\s*image:\s*["']?(?:[\w.-]+\/)*(?:node-exporter|cadvisor|netdata|telegraf|promtail|grafana-agent|alloy|docker(?=:[^\s"']*dind))\b/;
 function containerHits(lines, compose) {
   const hits = [];
-  const text = lines.join("\n");
-  const nodeAgent = /^\s*kind:\s*DaemonSet\b/m.test(text);
-  if (/^\s*kind:\s*(?:PodSecurityPolicy|SecurityContextConstraints|ClusterPolicy|Policy|ValidatingAdmissionPolicy)\b/m.test(text)) return hits;
+  const text22 = lines.join("\n");
+  const nodeAgent = /^\s*kind:\s*DaemonSet\b/m.test(text22);
+  if (/^\s*kind:\s*(?:PodSecurityPolicy|SecurityContextConstraints|ClusterPolicy|Policy|ValidatingAdmissionPolicy)\b/m.test(text22)) return hits;
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     const t2 = line.trim();
@@ -81334,7 +99406,7 @@ function scanSource(content, lang) {
       const line = lineAt3(content, idx);
       const lineEnd = content.indexOf("\n", idx);
       const rawLine = content.slice(lineStart, lineEnd === -1 ? void 0 : lineEnd);
-      const text = rawLine.trim();
+      const text22 = rawLine.trim();
       if (lang === "js") {
         const col = idx - lineStart;
         if (literalRanges(rawLine).some(([a, b3]) => col > a && col < b3)) continue;
@@ -81356,7 +99428,7 @@ function scanSource(content, lang) {
       if (lang === "php" && rule.id === "exec-interpolated" && /\bproc_open\s*\(\s*\[/.test(rawLine)) continue;
       if ((rule.id === "php-include-user-input" || rule.id === "php-reflected-xss") && !/\$_(?:GET|POST|REQUEST|COOKIE)\b/.test(m2[0]) && !phpLocalRequestValue(content, idx, m2[0])) continue;
       const tainted = !INJECTION_RULES.has(rule.id) ? void 0 : rule.id === "ssrf" ? SSRF_TAINT.test(around(content, lineStart, 2, 0)) : TAINT_RE[lang].test(around(content, lineStart, TAINT_WINDOW, 2));
-      byLine.set(line, { rule, line, evidence: text.slice(0, 160), tainted });
+      byLine.set(line, { rule, line, evidence: text22.slice(0, 160), tainted });
     }
   }
   if (lang === "php") for (const hit of scanPhpSecurity(content)) {
@@ -81489,8 +99561,8 @@ var CROSS_FILE_KIND = [
   [/^insecure-(?:exec-interpolated|py-os-system|py-shell-true|eval-dynamic|py-eval-exec|new-function)-/, "exec"]
 ];
 var VENDORED_SINK_RE = /(^|\/)(?:vendor|third_party|node_modules|lib\/(?:mako|cherrypy|jinja2|six|requests|urllib3))\//;
-function paramReaches(kind, n, text) {
-  if (kind === "exec") return new RegExp(`\\b${n}\\b`).test(text);
+function paramReaches(kind, n, text22) {
+  if (kind === "exec") return new RegExp(`\\b${n}\\b`).test(text22);
   return new RegExp(
     [
       `\\{\\s*${n}\\b`,
@@ -81510,7 +99582,7 @@ function paramReaches(kind, n, text) {
       `%[sv][^\\n]*,\\s*${n}\\b`
       // Sprintf("…%s", n)
     ].join("|")
-  ).test(text);
+  ).test(text22);
 }
 var GENERIC_FN = /* @__PURE__ */ new Set([
   "get",
@@ -81778,17 +99850,17 @@ function isCheckable(raw) {
   if (PLACEHOLDER_RE2.test(raw)) return false;
   return true;
 }
-function extractUrls(text) {
-  return extractUrlsWithLines(text).map((u2) => u2.url);
+function extractUrls(text22) {
+  return extractUrlsWithLines(text22).map((u2) => u2.url);
 }
-function extractUrlsWithLines(text) {
+function extractUrlsWithLines(text22) {
   var _a22;
   const out = [];
-  for (const m2 of text.matchAll(URL_RE)) {
+  for (const m2 of text22.matchAll(URL_RE)) {
     const at2 = (_a22 = m2.index) != null ? _a22 : 0;
-    if (text[at2 + m2[0].length] === "<") continue;
+    if (text22[at2 + m2[0].length] === "<") continue;
     const cleaned = stripTrailingPunctuation(m2[0]);
-    if (cleaned) out.push({ url: cleaned, line: lineAt4(text, at2) });
+    if (cleaned) out.push({ url: cleaned, line: lineAt4(text22, at2) });
   }
   return out;
 }
@@ -81828,8 +99900,8 @@ function manifestUrls(json2) {
   push(j3.funding);
   return out;
 }
-function lineAt4(text, index) {
-  return text.slice(0, index).split("\n").length;
+function lineAt4(text22, index) {
+  return text22.slice(0, index).split("\n").length;
 }
 function mapPool(items, limit, worker) {
   return __async(this, null, function* () {
@@ -81861,23 +99933,23 @@ var deadLinksScanner = {
         const isCode = CODE_RE.test(norm);
         const isManifest = norm === "package.json" || norm.endsWith("/package.json");
         if (!isMd && !isCode && !isManifest) continue;
-        const text = yield ctx.readFile(file2);
-        if (!text || !text.includes("http")) continue;
+        const text22 = yield ctx.readFile(file2);
+        if (!text22 || !text22.includes("http")) continue;
         if (isManifest) {
           let json2;
           try {
-            json2 = JSON.parse(text);
+            json2 = JSON.parse(text22);
           } catch (e) {
             continue;
           }
           for (const url2 of manifestUrls(json2)) {
             if (!isCheckable(url2) || seen.has(url2)) continue;
-            const idx = text.indexOf(url2);
-            seen.set(url2, { file: norm, line: idx === -1 ? 1 : lineAt4(text, idx) });
+            const idx = text22.indexOf(url2);
+            seen.set(url2, { file: norm, line: idx === -1 ? 1 : lineAt4(text22, idx) });
           }
           continue;
         }
-        const found = isMd ? extractUrlsWithLines(text) : commentUrls(text);
+        const found = isMd ? extractUrlsWithLines(text22) : commentUrls(text22);
         for (const { url: url2, line } of found) {
           if (!isCheckable(url2) || seen.has(url2)) continue;
           seen.set(url2, { file: norm, line });
@@ -83121,8 +101193,8 @@ function pickVersion(range, versions) {
   const hits = published.filter(([, v2]) => ok(v2)).sort((a, b3) => a[1][0] - b3[1][0] || a[1][1] - b3[1][1] || a[1][2] - b3[1][2]);
   return hits.length ? hits[hits.length - 1][0] : null;
 }
-function licenseFromText(text) {
-  const head = text.slice(0, 4e3);
+function licenseFromText(text22) {
+  const head = text22.slice(0, 4e3);
   const patterns = [
     [/GNU AFFERO GENERAL PUBLIC LICENSE/i, "AGPL-3.0"],
     [/Server Side Public License/i, "SSPL-1.0"],
@@ -83160,8 +101232,8 @@ var licenseRiskScanner = {
       if (!projectLicense) {
         const lic = rootLicenseFile(ctx.files);
         if (lic) {
-          const text = yield ctx.readFile(lic);
-          if (text) projectLicense = licenseFromText(text);
+          const text22 = yield ctx.readFile(lic);
+          if (text22) projectLicense = licenseFromText(text22);
         }
       }
       const projectClass = classifyLicense(projectLicense);
@@ -83489,29 +101561,29 @@ function significantLines(content) {
   let inBlockComment = false;
   let inDocstring = null;
   for (let i = 0; i < lines.length; i++) {
-    let text = lines[i].trim();
+    let text22 = lines[i].trim();
     if (inDocstring) {
-      if (text.includes(inDocstring)) inDocstring = null;
+      if (text22.includes(inDocstring)) inDocstring = null;
       continue;
     }
-    const doc = text.match(/^[rRuUbB]?("""|''')/);
+    const doc = text22.match(/^[rRuUbB]?("""|''')/);
     if (doc) {
-      const rest = text.slice(text.indexOf(doc[1]) + 3);
+      const rest = text22.slice(text22.indexOf(doc[1]) + 3);
       if (!rest.includes(doc[1])) inDocstring = doc[1];
       continue;
     }
     if (inBlockComment) {
-      if (text.includes("*/")) inBlockComment = false;
+      if (text22.includes("*/")) inBlockComment = false;
       continue;
     }
-    if (text.startsWith("/*")) {
-      if (!text.includes("*/")) inBlockComment = true;
+    if (text22.startsWith("/*")) {
+      if (!text22.includes("*/")) inBlockComment = true;
       continue;
     }
-    if (!text || COMMENT.test(text)) continue;
-    text = text.replace(/\s+/g, " ");
-    if (NOISE.test(text) || IMPORTISH.test(text)) continue;
-    out.push({ text, line: i + 1 });
+    if (!text22 || COMMENT.test(text22)) continue;
+    text22 = text22.replace(/\s+/g, " ");
+    if (NOISE.test(text22) || IMPORTISH.test(text22)) continue;
+    out.push({ text: text22, line: i + 1 });
   }
   return out;
 }
@@ -83532,8 +101604,8 @@ var DECLARATIVE = [
   // The frame of a signature: `def send(`, `self,`, `) -> Response:`, `@overload`
   /^(?:async\s+)?def\s+\w+\($|^(?:self|cls|\*),?$|^\)\s*->.*:$|^@(?:t\.|typing\.)?overload$/
 ];
-function isDeclarative(text) {
-  return DECLARATIVE.some((re2) => re2.test(text));
+function isDeclarative(text22) {
+  return DECLARATIVE.some((re2) => re2.test(text22));
 }
 var DECLARATIVE_SHARE = 0.7;
 var SVG_TAG = /^<\/?(?:svg|g|defs|path|filter|fe[A-Z]\w*|clipPath|mask|stop|linearGradient|radialGradient|circle|rect|ellipse|polygon|polyline|line|use|symbol)\b/i;
@@ -83610,8 +101682,8 @@ function findDuplicates(files) {
         };
       };
       const block = lines.slice(i, i + length);
-      const text = block.map((l3) => l3.text).join("\n");
-      if (text.length < MIN_CHARS) continue;
+      const text22 = block.map((l3) => l3.text).join("\n");
+      if (text22.length < MIN_CHARS) continue;
       if (block.filter((l3) => isDeclarative(l3.text)).length / block.length >= DECLARATIVE_SHARE) {
         continue;
       }
@@ -83674,6 +101746,2453 @@ var duplicateCodeScanner = {
     });
   }
 };
+var import_php_parser = __toESM2(require_src3(), 1);
+var ALL_SAFE = ["sql", "sqlq", "cmd", "code", "include", "file", "ssrf", "xss", "redirect", "deser", "ldap", "upload", "account", "privesc"];
+var RULES4 = {
+  sql: {
+    id: "php-taint-sqli",
+    title: "SQL injection: request input reaches a query",
+    detail: "Request data is built into an SQL statement. Use a prepared statement with bound parameters (PDO/mysqli prepare + bind, $wpdb->prepare, query-builder bindings) instead of putting the value into the SQL text.",
+    severity: "critical"
+  },
+  cmd: {
+    id: "php-taint-cmdi",
+    title: "Command injection: request input reaches a shell command",
+    detail: "Request data is passed to a shell. Avoid the shell (proc_open with an argument array) or escape every argument with escapeshellarg() and validate it against an allowlist.",
+    severity: "critical"
+  },
+  code: {
+    id: "php-taint-code-injection",
+    title: "Code injection: request input is executed as PHP",
+    detail: "Request data reaches eval/assert/create_function or picks the function that is called. Never evaluate request data; map it to a fixed set of callables.",
+    severity: "critical"
+  },
+  include: {
+    id: "php-taint-file-inclusion",
+    title: "File inclusion: request input chooses the file that is included",
+    detail: "Request data selects the file passed to include/require, which allows local (and with allow_url_include remote) file inclusion. Map the input to an allowlist of files.",
+    severity: "critical"
+  },
+  file: {
+    id: "php-taint-path-traversal",
+    title: "Path traversal: request input chooses a file that is read or written",
+    detail: "Request data selects a filesystem path for a read, write, delete or upload. Use basename() and a fixed directory, or map the input to an allowlist, and verify the resolved path stays inside that directory.",
+    severity: "critical"
+  },
+  ssrf: {
+    id: "php-taint-ssrf",
+    title: "SSRF: request input chooses the URL the server fetches",
+    detail: "Request data controls the URL of a server-side request. Allow only known hosts and schemes and block internal addresses after DNS resolution.",
+    severity: "critical"
+  },
+  xss: {
+    id: "php-taint-xss",
+    title: "XSS: request input is written to the page unescaped",
+    detail: "Request data is echoed into HTML without escaping. Escape on output with htmlspecialchars($v, ENT_QUOTES, 'UTF-8') (or the framework's escaping helper).",
+    severity: "critical"
+  },
+  redirect: {
+    id: "php-taint-open-redirect",
+    title: "Open redirect: request input chooses the redirect target",
+    detail: "Request data becomes a redirect location. Redirect only to relative paths or an allowlist of hosts.",
+    severity: "warning"
+  },
+  deser: {
+    id: "php-taint-object-injection",
+    title: "Object injection: request input is unserialized",
+    detail: "unserialize() on request data can instantiate arbitrary classes (POP chains). Use json_decode, or pass ['allowed_classes' => false].",
+    severity: "critical"
+  },
+  upload: {
+    id: "php-taint-unrestricted-upload",
+    title: "Unrestricted upload: the client chooses the stored file's name and extension",
+    detail: "An uploaded file is stored under a name taken from the request without checking the extension against an allowlist, so a .php file can be uploaded into a web-served directory and executed. Generate the stored name yourself and allow only known extensions (and content types) outside the web root.",
+    severity: "critical"
+  },
+  account: {
+    id: "php-taint-account-takeover",
+    title: "Account takeover: the request chooses whose password or login is changed",
+    detail: "A request value selects the user whose password is reset/set or who is logged in, with no reset-key or capability check on the way. Verify the reset key (check_password_reset_key) or require current_user_can('edit_user', $id) before changing another account.",
+    severity: "critical"
+  },
+  privesc: {
+    id: "php-taint-privilege-escalation",
+    title: "Privilege escalation: the request chooses which user meta or role is written",
+    detail: "A request value picks the user meta key (or role) that is written, so a visitor can set wp_capabilities / user_level and become an administrator. Write only an allowlist of known meta keys.",
+    severity: "critical"
+  },
+  ldap: {
+    id: "php-taint-ldapi",
+    title: "LDAP injection: request input reaches an LDAP filter",
+    detail: "Request data is put into an LDAP search filter. Escape it with ldap_escape($v, '', LDAP_ESCAPE_FILTER).",
+    severity: "critical"
+  }
+};
+var SUPERGLOBALS = /* @__PURE__ */ new Set(["_get", "_post", "_request", "_cookie", "_files"]);
+var TAINTED_SERVER = /^(?:HTTP_\w+|REQUEST_URI|QUERY_STRING|PHP_SELF|PATH_INFO|PATH_TRANSLATED|ORIG_PATH_INFO|REDIRECT_URL|REDIRECT_QUERY_STRING|CONTENT_TYPE)$/i;
+var SOURCE_FUNCTIONS = /* @__PURE__ */ new Set(["getallheaders", "apache_request_headers", "filter_input_array", "get_query_var", "request", "input"]);
+var SOURCE_METHODS = /* @__PURE__ */ new Set([
+  "input",
+  "query",
+  "post",
+  "get",
+  "all",
+  "only",
+  "except",
+  "cookie",
+  "header",
+  "json",
+  "file",
+  "files",
+  "getqueryparams",
+  "getparsedbody",
+  "getcontent",
+  "getbody",
+  "param",
+  "params",
+  "getparam",
+  "getparams",
+  "getpost",
+  "getquery",
+  "getvar",
+  "getget",
+  "getcookie",
+  "getrawinput",
+  "getjson",
+  "fromquery",
+  "route",
+  "getpathinfo",
+  "getrequesturi",
+  "getheader",
+  "getheaderline",
+  "getuploadedfiles",
+  "getclientfilename",
+  "get_param",
+  "get_params",
+  "get_json_params",
+  "get_body_params",
+  "get_query_params",
+  "get_file_params",
+  "get_body",
+  "get_url_params",
+  "get_header",
+  // Joomla-style input (JRequest, JInput, $app->input and ports like VikRequest)
+  "getstring",
+  "getvar",
+  "getraw",
+  "getcmd",
+  "getword",
+  "gethtml",
+  "getarray",
+  "getpath",
+  "getusername",
+  "getemail",
+  "getbase64"
+]);
+var CLEAN_REQUEST_METHODS = /* @__PURE__ */ new Set(["getint", "getuint", "getfloat", "getdouble", "getbool", "getboolean", "absint", "getalnum"]);
+var REQUEST_RECEIVER = /(?:^(?:\\?\w+\\)*\w*(?:Request|Input)$|->input$|^\$input$|^\$(?:request|req|httprequest|serverrequest|wp_rest_request|rest_request)$|^\$this->(?:request|input)$|->(?:request|query|attributes|cookies|headers|files)$|^request\(\)$|^(?:\\?\w+\\)*(?:Input|Request)$|^\$this->(?:request|input)->(?:query|request|attributes|cookies|headers|files)$|getRequest\(\)$|^Yii::\$app->request$)/i;
+var VALIDATORS = /* @__PURE__ */ new Set([
+  "is_numeric",
+  "is_int",
+  "is_integer",
+  "is_float",
+  "is_bool",
+  "ctype_digit",
+  "ctype_alnum",
+  "ctype_alpha",
+  "ctype_xdigit",
+  "preg_match",
+  "in_array",
+  "array_key_exists",
+  "filter_var",
+  "is_uuid",
+  "checkdate"
+]);
+var CLEAN_FUNCTIONS = /* @__PURE__ */ new Set([
+  "intval",
+  "floatval",
+  "doubleval",
+  "boolval",
+  "count",
+  "sizeof",
+  "strlen",
+  "mb_strlen",
+  "md5",
+  "sha1",
+  "hash",
+  "hash_hmac",
+  "crc32",
+  "password_hash",
+  "password_verify",
+  "abs",
+  "round",
+  "ceil",
+  "floor",
+  "number_format",
+  "bin2hex",
+  "base64_encode",
+  "uniqid",
+  "time",
+  "microtime",
+  "rand",
+  "mt_rand",
+  "random_int",
+  "is_numeric",
+  "is_int",
+  "is_string",
+  "is_array",
+  "isset",
+  "empty",
+  "ctype_digit",
+  "ctype_alnum",
+  "preg_match",
+  "in_array",
+  "array_key_exists",
+  "strcmp",
+  "strcasecmp",
+  "strpos",
+  "stripos",
+  "strrpos",
+  "str_contains",
+  "str_starts_with",
+  "str_ends_with",
+  "file_exists",
+  "is_file",
+  "is_dir",
+  "gettype",
+  "get_class",
+  "spl_object_hash",
+  "date",
+  "strtotime",
+  "mktime",
+  "checkdate",
+  "array_sum",
+  "max",
+  "min",
+  "ord",
+  "dechex",
+  "hexdec",
+  "octdec",
+  "bindec",
+  "levenshtein",
+  "similar_text",
+  "soundex",
+  "metaphone",
+  "filesize",
+  "filemtime",
+  "ip2long",
+  "inet_pton",
+  "mysqli_num_rows",
+  "mysql_num_rows",
+  "mysqli_insert_id",
+  "mysql_insert_id",
+  "mysqli_affected_rows",
+  "array_search",
+  "array_count_values",
+  "version_compare",
+  "is_uploaded_file",
+  "getimagesize",
+  "exif_imagetype",
+  "mime_content_type",
+  "finfo_file",
+  "uuid_create",
+  "crypt",
+  "sodium_crypto_secretbox"
+]);
+var SANITIZERS = {
+  htmlspecialchars: ["xss", "redirect"],
+  htmlentities: ["xss", "redirect"],
+  strip_tags: ["xss"],
+  esc_html: ["xss"],
+  esc_attr: ["xss"],
+  esc_textarea: ["xss"],
+  esc_js: ["xss"],
+  esc_url: ["xss", "redirect"],
+  esc_url_raw: ["redirect"],
+  wp_kses: ["xss"],
+  wp_kses_post: ["xss"],
+  wp_kses_data: ["xss"],
+  sanitize_text_field: ["xss"],
+  sanitize_key: ["xss", "sql", "cmd", "file", "include", "ldap"],
+  sanitize_file_name: ["file", "include", "xss"],
+  sanitize_email: ["xss", "cmd"],
+  absint: [...ALL_SAFE],
+  e: ["xss"],
+  h: ["xss"],
+  urlencode: ["xss", "cmd", "ldap"],
+  rawurlencode: ["xss", "cmd", "ldap"],
+  json_encode: ["xss"],
+  wp_json_encode: ["xss"],
+  mysqli_real_escape_string: ["sqlq"],
+  mysql_real_escape_string: ["sqlq"],
+  mysql_escape_string: ["sqlq"],
+  real_escape_string: ["sqlq"],
+  escape_string: ["sqlq"],
+  escape_str: ["sqlq"],
+  addslashes: ["sqlq"],
+  pg_escape_string: ["sqlq"],
+  sqlite_escape_string: ["sqlq"],
+  esc_sql: ["sqlq"],
+  pg_escape_literal: ["sql"],
+  pg_escape_identifier: ["sql"],
+  quote: ["sql"],
+  escape: ["sql"],
+  prepare: ["sql"],
+  escapeshellarg: ["cmd"],
+  escapeshellcmd: ["cmd"],
+  basename: ["file", "include"],
+  ldap_escape: ["ldap"],
+  preg_quote: []
+};
+var PASSTHROUGH = /* @__PURE__ */ new Set([
+  "trim",
+  "ltrim",
+  "rtrim",
+  "chop",
+  "strtolower",
+  "strtoupper",
+  "mb_strtolower",
+  "mb_strtoupper",
+  "ucfirst",
+  "lcfirst",
+  "ucwords",
+  "substr",
+  "mb_substr",
+  "str_replace",
+  "str_ireplace",
+  "preg_replace",
+  "sprintf",
+  "vsprintf",
+  "implode",
+  "join",
+  "explode",
+  "str_split",
+  "array_values",
+  "array_keys",
+  "array_merge",
+  "array_map",
+  "array_filter",
+  "array_slice",
+  "array_reverse",
+  "array_unique",
+  "array_pop",
+  "array_shift",
+  "end",
+  "reset",
+  "current",
+  "next",
+  "urldecode",
+  "rawurldecode",
+  "base64_decode",
+  "stripslashes",
+  "stripcslashes",
+  "json_decode",
+  "html_entity_decode",
+  "htmlspecialchars_decode",
+  "nl2br",
+  "str_pad",
+  "str_repeat",
+  "strrev",
+  "wordwrap",
+  "strstr",
+  "stristr",
+  "strrchr",
+  "substr_replace",
+  "iconv",
+  "mb_convert_encoding",
+  "utf8_decode",
+  "utf8_encode",
+  "strval",
+  "print_r",
+  "var_export",
+  "serialize",
+  "unserialize",
+  "http_build_query",
+  "parse_url",
+  "pathinfo",
+  "dirname",
+  "realpath",
+  "compact",
+  "array_combine",
+  "array_fill_keys",
+  "array_pad",
+  "array_column",
+  "filter_var",
+  "stream_get_contents",
+  "file_get_contents",
+  "fread",
+  "fgets",
+  "gzuncompress",
+  "gzinflate",
+  "hex2bin",
+  "str_word_count",
+  "nl2br",
+  "addcslashes",
+  "quotemeta",
+  "trim",
+  "mb_strimwidth",
+  "number_format",
+  "wp_unslash",
+  "stripslashes_deep",
+  "urlencode_deep",
+  "get_user_by",
+  "get_userdata",
+  "get_user_by_email",
+  "get_user",
+  "wp_get_current_user_by"
+]);
+var FUNCTION_SINKS = {
+  mysql_query: [{ arg: 0, kind: "sql" }],
+  mysql_unbuffered_query: [{ arg: 0, kind: "sql" }],
+  mysql_db_query: [{ arg: 1, kind: "sql" }],
+  mysqli_query: [{ arg: 1, kind: "sql" }],
+  mysqli_real_query: [{ arg: 1, kind: "sql" }],
+  mysqli_multi_query: [{ arg: 1, kind: "sql" }],
+  mysqli_prepare: [{ arg: 1, kind: "sql" }],
+  pg_query: [{ arg: "last", kind: "sql" }],
+  pg_send_query: [{ arg: 1, kind: "sql" }],
+  pg_prepare: [{ arg: 2, kind: "sql" }],
+  sqlite_query: [{ arg: 0, kind: "sql" }, { arg: 1, kind: "sql" }],
+  sqlsrv_query: [{ arg: 1, kind: "sql" }],
+  oci_parse: [{ arg: 1, kind: "sql" }],
+  odbc_exec: [{ arg: 1, kind: "sql" }],
+  db2_exec: [{ arg: 1, kind: "sql" }],
+  system: [{ arg: 0, kind: "cmd" }],
+  exec: [{ arg: 0, kind: "cmd" }],
+  passthru: [{ arg: 0, kind: "cmd" }],
+  shell_exec: [{ arg: 0, kind: "cmd" }],
+  popen: [{ arg: 0, kind: "cmd" }],
+  proc_open: [{ arg: 0, kind: "cmd" }],
+  pcntl_exec: [{ arg: 0, kind: "cmd" }],
+  expect_popen: [{ arg: 0, kind: "cmd" }],
+  mail: [{ arg: 4, kind: "cmd" }],
+  assert: [{ arg: 0, kind: "code" }],
+  create_function: [{ arg: 1, kind: "code" }],
+  call_user_func: [{ arg: 0, kind: "code" }],
+  call_user_method: [{ arg: 0, kind: "code" }],
+  call_user_func_array: [{ arg: 0, kind: "code" }],
+  forward_static_call: [{ arg: 0, kind: "code" }],
+  array_map: [{ arg: 0, kind: "code" }],
+  usort: [{ arg: 1, kind: "code" }],
+  register_shutdown_function: [{ arg: 0, kind: "code" }],
+  fopen: [{ arg: 0, kind: "file" }],
+  file_get_contents: [{ arg: 0, kind: "file" }],
+  file_put_contents: [{ arg: 0, kind: "file" }],
+  readfile: [{ arg: 0, kind: "file" }],
+  file: [{ arg: 0, kind: "file" }],
+  unlink: [{ arg: 0, kind: "file" }],
+  copy: [{ arg: 0, kind: "file" }, { arg: 1, kind: "file" }],
+  rename: [{ arg: 0, kind: "file" }, { arg: 1, kind: "file" }],
+  rmdir: [{ arg: 0, kind: "file" }],
+  mkdir: [{ arg: 0, kind: "file" }],
+  touch: [{ arg: 0, kind: "file" }],
+  move_uploaded_file: [{ arg: 1, kind: "upload" }],
+  highlight_file: [{ arg: 0, kind: "file" }],
+  show_source: [{ arg: 0, kind: "file" }],
+  parse_ini_file: [{ arg: 0, kind: "file" }],
+  simplexml_load_file: [{ arg: 0, kind: "file" }],
+  fpassthru: [],
+  curl_init: [{ arg: 0, kind: "ssrf" }],
+  fsockopen: [{ arg: 0, kind: "ssrf" }],
+  pfsockopen: [{ arg: 0, kind: "ssrf" }],
+  get_headers: [{ arg: 0, kind: "ssrf" }],
+  wp_remote_get: [{ arg: 0, kind: "ssrf" }],
+  wp_remote_post: [{ arg: 0, kind: "ssrf" }],
+  wp_remote_request: [{ arg: 0, kind: "ssrf" }],
+  wp_safe_remote_get: [],
+  unserialize: [{ arg: 0, kind: "deser" }],
+  maybe_unserialize: [{ arg: 0, kind: "deser" }],
+  ldap_search: [{ arg: 2, kind: "ldap" }],
+  ldap_list: [{ arg: 2, kind: "ldap" }],
+  ldap_read: [{ arg: 2, kind: "ldap" }],
+  printf: [{ arg: 0, kind: "xss" }, { arg: 1, kind: "xss" }, { arg: 2, kind: "xss" }],
+  vprintf: [{ arg: 0, kind: "xss" }, { arg: 1, kind: "xss" }],
+  wp_redirect: [{ arg: 0, kind: "redirect" }],
+  reset_password: [{ arg: 0, kind: "account" }],
+  wp_set_password: [{ arg: 1, kind: "account" }],
+  wp_set_auth_cookie: [{ arg: 0, kind: "account" }],
+  wp_set_current_user: [{ arg: 0, kind: "account" }],
+  wp_update_user: [{ arg: 0, kind: "account" }],
+  update_user_meta: [{ arg: 1, kind: "privesc" }],
+  add_user_meta: [{ arg: 1, kind: "privesc" }],
+  update_user_option: [{ arg: 1, kind: "privesc" }],
+  redirect: [{ arg: 0, kind: "redirect" }]
+};
+var SQL_METHODS = /* @__PURE__ */ new Set([
+  "query",
+  "exec",
+  "execute_query",
+  "prepare",
+  "multi_query",
+  "real_query",
+  "rawquery",
+  "unprepared",
+  "statement",
+  "select",
+  "insert",
+  "update",
+  "delete",
+  "get_results",
+  "get_var",
+  "get_row",
+  "get_col",
+  "raw",
+  "whereraw",
+  "orwhereraw",
+  "havingraw",
+  "orhavingraw",
+  "orderbyraw",
+  "selectraw",
+  "groupbyraw",
+  "fromraw",
+  "executequery",
+  "executestatement",
+  "executeupdate",
+  "fetchall",
+  "fetchassociative",
+  "fetchallassociative",
+  "fetchone",
+  "fetchcolumn",
+  "createquery",
+  "createnativequery",
+  "sql",
+  "setquery",
+  "loadresult",
+  "loadassoclist",
+  "loadobjectlist"
+]);
+var SQL_METHOD_NEEDS_DB = /* @__PURE__ */ new Set(["query", "exec", "prepare", "select", "insert", "update", "delete", "raw", "statement", "sql", "fetchall", "fetchone", "fetchcolumn"]);
+var DB_RECEIVER = /(?:db|dbo|pdo|conn|connection|mysql|mysqli|link|wpdb|database|sql|dbh|dbc|sth|stmt|adapter|entitymanager|em|doctrine|capsule|\bDB\b)/i;
+var SQL_TEXT = /\b(?:select\s[\s\S]*\bfrom|insert\s+into|update\s+\S+\s+set|delete\s+from|replace\s+into|drop\s+table|create\s+table|alter\s+table|where\s|order\s+by|union\s+select)\b/i;
+var SKIP_PATH2 = /(?:^|\/)(?:vendor|vendor[-_]prefixed|node_modules|third[-_]party|bower_components|freemius|tests?|specs?|fixtures?|__tests__|docs?|examples?)\//i;
+var posix2 = {
+  dirname(p2) {
+    const i = p2.lastIndexOf("/");
+    return i < 0 ? "." : i === 0 ? "/" : p2.slice(0, i);
+  },
+  normalize(p2) {
+    const out = [];
+    for (const part of p2.split("/")) {
+      if (!part || part === ".") continue;
+      if (part === "..") {
+        if (out.length && out[out.length - 1] !== "..") out.pop();
+        else out.push("..");
+      } else out.push(part);
+    }
+    return out.join("/") || ".";
+  },
+  join(...parts) {
+    return posix2.normalize(parts.filter(Boolean).join("/"));
+  }
+};
+var MAX_FACTS = 6;
+var MAX_STEPS = 8;
+var parser = new import_php_parser.Engine({
+  parser: { php8: true, suppressErrors: true, extractDoc: false },
+  ast: { withPositions: true, withSource: false },
+  lexer: { short_tags: true, asp_tags: false }
+});
+function parsePhp(content, file2) {
+  try {
+    return parser.parseCode(content, file2);
+  } catch (e) {
+    return null;
+  }
+}
+var lineOf5 = (n) => {
+  var _a22, _b, _c;
+  return (_c = (_b = (_a22 = n == null ? void 0 : n.loc) == null ? void 0 : _a22.start) == null ? void 0 : _b.line) != null ? _c : 0;
+};
+var lower = (s) => (typeof s === "string" ? s : typeof (s == null ? void 0 : s.name) === "string" ? s.name : "").toLowerCase().replace(/^\\/, "");
+function nameOf(n) {
+  var _a22;
+  if (!n) return "";
+  if (typeof n === "string") return n;
+  if (n.kind === "name" || n.kind === "identifier") return String((_a22 = n.name) != null ? _a22 : "");
+  return "";
+}
+function merge2(...vals) {
+  var _a22, _b;
+  const out = [];
+  const seen = /* @__PURE__ */ new Set();
+  for (const v2 of vals) {
+    for (const f3 of v2) {
+      const key = `${(_a22 = f3.src) != null ? _a22 : ""}|${(_b = f3.param) != null ? _b : ""}|${[...f3.safe].sort().join(",")}|${f3.weak}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push(f3);
+      if (out.length >= MAX_FACTS) return out;
+    }
+  }
+  return out;
+}
+function withStep(v2, step) {
+  return v2.map((f3) => {
+    var _a22, _b;
+    return f3.steps.length >= MAX_STEPS || ((_a22 = f3.steps.at(-1)) == null ? void 0 : _a22.text) === step.text && ((_b = f3.steps.at(-1)) == null ? void 0 : _b.line) === step.line ? f3 : __spreadProps(__spreadValues({}, f3), { steps: [...f3.steps, step] });
+  });
+}
+function makeSafe(v2, kinds) {
+  if (!kinds.length) return v2;
+  return v2.map((f3) => __spreadProps(__spreadValues({}, f3), { safe: /* @__PURE__ */ new Set([...f3.safe, ...kinds]) }));
+}
+function keyOf(n) {
+  var _a22, _b, _c, _d;
+  if (!n) return null;
+  if (n.kind === "variable" && typeof n.name === "string") return n.name.toLowerCase();
+  if (n.kind === "offsetlookup" && (((_a22 = n.offset) == null ? void 0 : _a22.kind) === "string" || ((_b = n.offset) == null ? void 0 : _b.kind) === "number")) {
+    const base = keyOf(n.what);
+    return base ? `${base}[${String(n.offset.value).toLowerCase()}]` : null;
+  }
+  if (n.kind === "propertylookup" && (((_c = n.offset) == null ? void 0 : _c.kind) === "identifier" || ((_d = n.offset) == null ? void 0 : _d.kind) === "name")) {
+    const base = keyOf(n.what);
+    return base ? `${base}->${String(n.offset.name).toLowerCase()}` : null;
+  }
+  return null;
+}
+function flattenConcat(n) {
+  const out = [];
+  const stack = [n];
+  while (stack.length) {
+    const cur = stack.pop();
+    if ((cur == null ? void 0 : cur.kind) === "bin" && cur.type === ".") {
+      stack.push(cur.right);
+      stack.push(cur.left);
+    } else out.push(cur);
+  }
+  return out;
+}
+function cloneEnv(env) {
+  return new Map(env);
+}
+function mergeEnvs(envs) {
+  var _a22;
+  const live = envs.filter(Boolean);
+  if (!live.length) return /* @__PURE__ */ new Map();
+  const out = /* @__PURE__ */ new Map();
+  for (const env of live) for (const [k2, v2] of env) out.set(k2, merge2((_a22 = out.get(k2)) != null ? _a22 : [], v2));
+  return out;
+}
+function exprText(n) {
+  var _a22;
+  if (!n) return "";
+  switch (n.kind) {
+    case "variable":
+      return typeof n.name === "string" ? `$${n.name}` : "$$";
+    case "propertylookup":
+    case "nullsafepropertylookup":
+      return `${exprText(n.what)}->${nameOf(n.offset) || "?"}`;
+    case "staticlookup":
+      return `${exprText(n.what)}::${nameOf(n.offset) || (((_a22 = n.offset) == null ? void 0 : _a22.kind) === "variable" ? `$${n.offset.name}` : "?")}`;
+    case "name":
+      return String(n.name);
+    case "selfreference":
+      return "self";
+    case "staticreference":
+      return "static";
+    case "parentreference":
+      return "parent";
+    case "call":
+      return `${exprText(n.what)}()`;
+    case "offsetlookup":
+      return `${exprText(n.what)}[]`;
+    default:
+      return n.kind;
+  }
+}
+function literalText(n) {
+  var _a22;
+  if (!n) return "";
+  if (n.kind === "string") return String(n.value);
+  if (n.kind === "encapsed") return ((_a22 = n.value) != null ? _a22 : []).map((p2) => {
+    var _a32;
+    return ((_a32 = p2.expression) == null ? void 0 : _a32.kind) === "string" ? p2.expression.value : " ";
+  }).join("");
+  if (n.kind === "bin" && n.type === ".") return literalText(n.left) + " " + literalText(n.right);
+  return "";
+}
+function leadingLiteral(n) {
+  var _a22, _b;
+  if (!n) return "";
+  if (n.kind === "string") return String(n.value);
+  if (n.kind === "encapsed") {
+    const first = (_a22 = n.value) == null ? void 0 : _a22[0];
+    return ((_b = first == null ? void 0 : first.expression) == null ? void 0 : _b.kind) === "string" ? String(first.expression.value) : "";
+  }
+  if (n.kind === "bin" && n.type === ".") return leadingLiteral(n.left);
+  return "";
+}
+var Project = class {
+  constructor() {
+    this.fns = /* @__PURE__ */ new Map();
+    this.methods = /* @__PURE__ */ new Map();
+    this.findings = [];
+    this.reported = /* @__PURE__ */ new Map();
+    this.files = [];
+    this.byPath = /* @__PURE__ */ new Map();
+    this.sessionKeys = /* @__PURE__ */ new Map();
+    this.constants = /* @__PURE__ */ new Map();
+    this.fields = /* @__PURE__ */ new Map();
+    this.defineSites = /* @__PURE__ */ new Map();
+    this.failed = /* @__PURE__ */ new Set();
+  }
+  /** define('NAME', <request data>) anywhere in the project. */
+  taintConstant(name, f3) {
+    if (!this.constants.has(name)) this.constants.set(name, f3);
+  }
+  /** A constant is request data project-wide only when it is defined in exactly one place. */
+  constant(name) {
+    const f3 = this.constants.get(name);
+    if (!f3) return void 0;
+    let n = this.defineSites.get(name);
+    if (n === void 0) {
+      const re2 = new RegExp(`\\bdefine\\s*\\(\\s*['"]${name.replace(/[^\w]/g, "")}['"]`, "g");
+      n = this.files.reduce((sum, f22) => {
+        var _a22, _b;
+        return sum + ((_b = (_a22 = f22.content.match(re2)) == null ? void 0 : _a22.length) != null ? _b : 0);
+      }, 0);
+      this.defineSites.set(name, n);
+    }
+    return n === 1 ? f3 : void 0;
+  }
+  /** `$this->p = <request data>` / `self::$p = ...` in any method of the class. */
+  taintField(cls, prop, f3) {
+    const key = `${cls}::${prop}`;
+    if (!this.fields.has(key)) this.fields.set(key, f3);
+  }
+  field(cls, prop) {
+    return this.fields.get(`${cls}::${prop}`);
+  }
+  /** Whether another pass is needed because cross-scope stores changed. */
+  storesSize() {
+    return this.sessionKeys.size + this.constants.size + this.fields.size;
+  }
+  taintSession(key, f3, file2, line) {
+    if (!this.sessionKeys.has(key)) this.sessionKeys.set(key, { src: f3.src, safe: f3.safe, weak: f3.weak, file: file2, line });
+  }
+  session(key) {
+    return this.sessionKeys.get(key);
+  }
+  /** Project files an include target can name (literal parts, wildcard elsewhere). */
+  resolveInclude(from, target) {
+    const dir = posix2.dirname(from);
+    const parts = [];
+    const walk42 = (n) => {
+      var _a22, _b, _c, _d, _e2;
+      if (!n) return parts.push(null);
+      if (n.kind === "string") parts.push(String(n.value));
+      else if (n.kind === "bin" && n.type === ".") {
+        walk42(n.left);
+        walk42(n.right);
+      } else if (n.kind === "encapsed") for (const p2 of (_a22 = n.value) != null ? _a22 : []) walk42((_b = p2.expression) != null ? _b : p2);
+      else if (n.kind === "magic" && /__DIR__/i.test(String((_c = n.value) != null ? _c : n.raw))) parts.push(`${dir}/`);
+      else if (n.kind === "call" && lower(nameOf(n.what)) === "dirname" && ((_e2 = (_d = n.arguments) == null ? void 0 : _d[0]) == null ? void 0 : _e2.kind) === "magic") parts.push(`${dir}/`);
+      else if (n.kind === "parenthesis") walk42(n.inner);
+      else parts.push(null);
+    };
+    walk42(target);
+    const lits = parts.filter((p2) => p2 !== null).join("");
+    if (lits.replace(/[./\\]/g, "").length < 3) return [];
+    if (parts.every((p2) => p2 !== null)) {
+      const raw = parts.join("").replace(/\\/g, "/");
+      for (const c3 of [posix2.normalize(raw.startsWith("/") ? raw.slice(1) : posix2.join(dir, raw)), posix2.normalize(raw.replace(/^\.?\//, ""))]) {
+        const hit = this.byPath.get(c3);
+        if (hit) return [hit];
+      }
+      const tail = raw.replace(/^(?:\.\.?\/)+/, "");
+      const hits2 = [...this.byPath.values()].filter((f3) => f3.file === tail || f3.file.endsWith(`/${tail}`));
+      return hits2.length === 1 ? hits2 : [];
+    }
+    const esc2 = (t2) => t2.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const re2 = new RegExp(`(?:^|/)${parts.map((p2) => p2 === null ? "[^]*" : esc2(p2.replace(/\\/g, "/").replace(/^(?:\.\.?\/)+/, ""))).join("")}$`);
+    const hits = [...this.byPath.values()].filter((f3) => re2.test(f3.file));
+    return hits.length >= 1 && hits.length <= 6 ? hits : [];
+  }
+  add(file2, content) {
+    const ast = parsePhp(content, file2);
+    if (!ast) return false;
+    this.files.push({ file: file2, content, ast });
+    this.byPath.set(file2, { file: file2, content, ast });
+    this.index(ast, file2, content, "");
+    return true;
+  }
+  index(node2, file2, content, cls) {
+    var _a22, _b, _c, _d;
+    if (!node2 || typeof node2 !== "object") return;
+    if (Array.isArray(node2)) {
+      for (const c3 of node2) this.index(c3, file2, content, cls);
+      return;
+    }
+    if (node2.kind === "function") {
+      const def = { node: node2, cls: "", file: file2, content, params: ((_a22 = node2.arguments) != null ? _a22 : []).map((p2) => lower(p2.name)) };
+      const key = lower(node2.name);
+      this.fns.set(key, [...(_b = this.fns.get(key)) != null ? _b : [], def]);
+    } else if (node2.kind === "method") {
+      const def = { node: node2, cls, file: file2, content, params: ((_c = node2.arguments) != null ? _c : []).map((p2) => lower(p2.name)) };
+      const key = lower(node2.name);
+      this.methods.set(key, [...(_d = this.methods.get(key)) != null ? _d : [], def]);
+    }
+    for (const k2 of ["children", "body"]) {
+      const c3 = node2[k2];
+      if (c3 && typeof c3 === "object") this.index(c3, file2, content, node2.kind === "class" ? lower(node2.name) : cls);
+    }
+  }
+  /** Marks add_shortcode callbacks so their attributes count as (author-level) input. */
+  markShortcodes() {
+    var _a22, _b, _c, _d, _e2, _f, _g, _h;
+    for (const { file: file2, content, ast } of this.files) {
+      if (!content.includes("add_shortcode") && !content.includes("register_rest_route")) continue;
+      const stack = [ast];
+      while (stack.length) {
+        const n = stack.pop();
+        if (!n || typeof n !== "object") continue;
+        if (Array.isArray(n)) {
+          stack.push(...n);
+          continue;
+        }
+        if (n.kind === "call" && ((_a22 = n.what) == null ? void 0 : _a22.kind) === "name" && lower(n.what.name) === "add_shortcode") {
+          for (const h3 of this.resolveCallback((_b = n.arguments) == null ? void 0 : _b[1], file2)) {
+            for (const defs of [...this.fns.values(), ...this.methods.values()]) for (const d2 of defs) if (d2.node === h3.node) d2.shortcode = true;
+          }
+        }
+        if (n.kind === "call" && ((_c = n.what) == null ? void 0 : _c.kind) === "name" && lower(n.what.name) === "register_rest_route") {
+          const opts = (_d = n.arguments) == null ? void 0 : _d[2];
+          const routes = (opts == null ? void 0 : opts.kind) === "array" && ((_f = (_e2 = opts.items) == null ? void 0 : _e2[0]) == null ? void 0 : _f.kind) === "entry" && opts.items[0].key == null ? opts.items.map((i) => i.value) : [opts];
+          for (const r2 of routes) {
+            const cb = (r2 == null ? void 0 : r2.kind) === "array" ? (_h = (_g = r2.items) == null ? void 0 : _g.find((i) => {
+              var _a32;
+              return (i == null ? void 0 : i.kind) === "entry" && ((_a32 = i.key) == null ? void 0 : _a32.kind) === "string" && i.key.value === "callback";
+            })) == null ? void 0 : _h.value : null;
+            for (const h3 of this.resolveCallback(cb, file2)) {
+              for (const defs of [...this.fns.values(), ...this.methods.values()]) for (const d2 of defs) if (d2.node === h3.node) d2.rest = true;
+            }
+          }
+        }
+        for (const k2 of Object.keys(n)) if (k2 !== "loc" && n[k2] && typeof n[k2] === "object") stack.push(n[k2]);
+      }
+    }
+  }
+  run() {
+    this.markShortcodes();
+    let before = -1;
+    for (let i = 0; i < 3 && this.storesSize() !== before; i++) {
+      before = this.storesSize();
+      if (i) for (const defs of [...this.fns.values(), ...this.methods.values()]) for (const d2 of defs) d2.summary = void 0;
+      this.pass();
+    }
+  }
+  pass() {
+    var _a22;
+    for (const { file: file2, content, ast } of this.files) {
+      try {
+        const ctx = new Ctx(this, file2, content, null);
+        ctx.block((_a22 = ast.children) != null ? _a22 : [], /* @__PURE__ */ new Map());
+      } catch (e) {
+        this.failed.add(file2);
+      }
+    }
+    for (const defs of [...this.fns.values(), ...this.methods.values()]) {
+      for (const d2 of defs) {
+        try {
+          this.summary(d2);
+        } catch (e) {
+          d2.busy = false;
+          d2.summary = { returns: [], sinks: [] };
+          this.failed.add(d2.file);
+        }
+      }
+    }
+  }
+  report(f3) {
+    const key = `${f3.kind}|${f3.file}|${f3.line}`;
+    const at2 = this.reported.get(key);
+    if (at2 !== void 0) {
+      if (this.findings[at2].weak && !f3.weak) this.findings[at2] = f3;
+      return;
+    }
+    this.reported.set(key, this.findings.length);
+    this.findings.push(f3);
+  }
+  allFiles() {
+    return this.files;
+  }
+  /** Every project function/method, for reachability. */
+  allDefs() {
+    return [...this.fns.values(), ...this.methods.values()].flat();
+  }
+  /** The innermost function or method containing file:line. */
+  defAt(file2, line) {
+    var _a22, _b, _c, _d, _e2, _f, _g, _h, _i;
+    let best = null;
+    for (const d2 of this.allDefs()) {
+      if (d2.file !== file2) continue;
+      const a = (_d = (_c = (_b = (_a22 = d2.node) == null ? void 0 : _a22.loc) == null ? void 0 : _b.start) == null ? void 0 : _c.line) != null ? _d : 0, b3 = (_h = (_g = (_f = (_e2 = d2.node) == null ? void 0 : _e2.loc) == null ? void 0 : _f.end) == null ? void 0 : _g.line) != null ? _h : 0;
+      if (line >= a && line <= b3 && (!best || a >= ((_i = best.node.loc.start.line) != null ? _i : 0))) best = d2;
+    }
+    return best;
+  }
+  lookupDef(name, method) {
+    return this.lookup(name, method);
+  }
+  /** Handlers named by a hook callback: 'fn', 'Cls::m', [$this, 'm'], [Cls::class, 'm'], closures. */
+  resolveCallback(cb, file2) {
+    var _a22, _b, _c, _d, _e2;
+    if (!cb) return [];
+    const at2 = this.byPath.get(file2);
+    if (cb.kind === "closure" || cb.kind === "arrowfunc") return at2 ? [{ node: cb, file: file2, content: at2.content, label: "closure" }] : [];
+    const pick2 = (defs, cls, label) => {
+      if (!(defs == null ? void 0 : defs.length)) return [];
+      let chosen = defs.length === 1 ? defs : defs.filter((d2) => cls && d2.cls === cls);
+      if (!chosen.length) chosen = defs.filter((d2) => d2.file === file2);
+      return chosen.map((d2) => ({ node: d2.node, file: d2.file, content: d2.content, label }));
+    };
+    if (cb.kind === "string") {
+      const v2 = String(cb.value);
+      if (v2.includes("::")) {
+        const [c3, m2] = v2.split("::");
+        return pick2(this.methods.get(m2.toLowerCase()), c3.split("\\").pop().toLowerCase(), v2);
+      }
+      return pick2(this.fns.get(v2.toLowerCase().replace(/^\\/, "")), "", v2);
+    }
+    if (cb.kind === "array" && ((_a22 = cb.items) == null ? void 0 : _a22.length) === 2) {
+      const [o2, m2] = cb.items.map((i) => (i == null ? void 0 : i.kind) === "entry" ? i.value : i);
+      if ((m2 == null ? void 0 : m2.kind) !== "string") return [];
+      const cls = (o2 == null ? void 0 : o2.kind) === "string" ? String(o2.value) : (o2 == null ? void 0 : o2.kind) === "staticlookup" ? String((_c = (_b = o2.what) == null ? void 0 : _b.name) != null ? _c : "") : (o2 == null ? void 0 : o2.kind) === "new" ? String((_e2 = (_d = o2.what) == null ? void 0 : _d.name) != null ? _e2 : "") : "";
+      return pick2(this.methods.get(String(m2.value).toLowerCase()), cls.split("\\").pop().toLowerCase(), `${cls || exprText(o2)}::${m2.value}`);
+    }
+    return [];
+  }
+  /** Callee for a plain function call or a method call by name; null when unknown or ambiguous. */
+  lookup(name, method) {
+    const defs = (method ? this.methods : this.fns).get(name);
+    if (!defs || defs.length !== 1) return null;
+    return defs[0];
+  }
+  summary(def) {
+    var _a22, _b;
+    if (def.summary) return def.summary;
+    if (def.busy) return null;
+    def.busy = true;
+    const ctx = new Ctx(this, def.file, def.content, { returns: [], sinks: [] });
+    ctx.cls = def.cls;
+    const env = /* @__PURE__ */ new Map();
+    def.params.forEach((p2, i) => {
+      const param = { param: i, safe: /* @__PURE__ */ new Set(), steps: [{ line: lineOf5(def.node), text: `$${p2}`, file: def.file }], weak: false };
+      const author = def.shortcode && i < 2 ? [{ src: `shortcode ${i ? "content" : "attributes"} ($${p2})`, safe: /* @__PURE__ */ new Set(), steps: [{ line: lineOf5(def.node), text: `$${p2}`, file: def.file }], weak: true }] : def.rest && i === 0 ? [{ src: `REST request ($${p2})`, safe: /* @__PURE__ */ new Set(), steps: [{ line: lineOf5(def.node), text: `$${p2}`, file: def.file }], weak: false }] : [];
+      env.set(p2, [param, ...author]);
+    });
+    ctx.block((_b = (_a22 = def.node.body) == null ? void 0 : _a22.children) != null ? _b : def.node.body ? [def.node.body] : [], env);
+    def.summary = ctx.summary;
+    def.busy = false;
+    return def.summary;
+  }
+};
+var Ctx = class _Ctx {
+  constructor(project, file2, content, summary, includeDepth = 0, including = /* @__PURE__ */ new Set()) {
+    this.project = project;
+    this.file = file2;
+    this.content = content;
+    this.summary = summary;
+    this.includeDepth = includeDepth;
+    this.including = including;
+    this.guarded = false;
+    this.cls = "";
+    this.aliases = /* @__PURE__ */ new Map();
+    this.prefixedVars = /* @__PURE__ */ new Map();
+    this.currentEnv = null;
+    this.jsonResponse = /content-type\s*:\s*(?:application\/(?:json|xml|octet-stream)|text\/(?:plain|csv|xml))/i.test(content) || /->json\s*\(|wp_send_json|JsonResponse/.test(content);
+  }
+  /** Runs statements; returns the env after them, or null when every path exits. */
+  block(nodes, env) {
+    let cur = env;
+    for (const n of nodes) {
+      if (!cur) return null;
+      cur = this.stmt(n, cur);
+    }
+    return cur;
+  }
+  body(n, env) {
+    var _a22;
+    if (!n) return env;
+    if (n.kind === "block") return this.block((_a22 = n.children) != null ? _a22 : [], env);
+    return this.stmt(n, env);
+  }
+  stmt(n, env) {
+    var _a22, _b, _c, _d, _e2, _f, _g, _h, _i, _j, _k, _l;
+    if (!n) return env;
+    switch (n.kind) {
+      case "expressionstatement":
+        this.expr(n.expression, env);
+        return this.exits(n.expression) ? null : env;
+      case "echo":
+      case "print":
+        for (const e of (_a22 = n.expressions) != null ? _a22 : n.expression ? [n.expression] : []) this.sink("xss", this.expr(e, env), e, n, "echo");
+        return env;
+      case "inline":
+        return env;
+      case "block":
+        return this.block((_b = n.children) != null ? _b : [], env);
+      case "if":
+        return this.ifStmt(n, env);
+      case "switch": {
+        this.expr(n.test, env);
+        const arms = [];
+        let fall = null;
+        for (const c3 of (_d = (_c = n.body) == null ? void 0 : _c.children) != null ? _d : []) {
+          const start = fall ? mergeEnvs([fall, env]) : cloneEnv(env);
+          fall = this.body(c3.body, start);
+          arms.push(fall);
+        }
+        const hasDefault = ((_f = (_e2 = n.body) == null ? void 0 : _e2.children) != null ? _f : []).some((c3) => c3.test == null);
+        const out = arms.filter((e) => !!e);
+        if (!hasDefault) out.push(env);
+        return out.length ? mergeEnvs(out) : null;
+      }
+      case "match":
+        this.expr(n, env);
+        return env;
+      case "for":
+      case "while":
+      case "do": {
+        for (const e of [n.init, n.test, n.increment].flat().filter(Boolean)) this.expr(e, env);
+        if (n.test && !Array.isArray(n.test)) this.expr(n.test, env);
+        let cur = cloneEnv(env);
+        for (let i = 0; i < 2; i++) {
+          const after = this.body(n.body, cloneEnv(cur));
+          cur = mergeEnvs([cur, after != null ? after : cur]);
+        }
+        return cur;
+      }
+      case "foreach": {
+        const src = this.expr(n.source, env);
+        let cur = cloneEnv(env);
+        const line = lineOf5(n);
+        if (n.key) this.assignTo(n.key, withStep(src, { line, text: `foreach key`, file: this.file }), cur);
+        if (n.value) this.assignTo(n.value, withStep(src, { line, text: `foreach value`, file: this.file }), cur);
+        for (let i = 0; i < 2; i++) {
+          const after = this.body(n.body, cloneEnv(cur));
+          cur = mergeEnvs([cur, after != null ? after : cur]);
+        }
+        return cur;
+      }
+      case "try": {
+        const after = this.body(n.body, cloneEnv(env));
+        const arms = after ? [after] : [];
+        for (const c3 of (_g = n.catches) != null ? _g : []) {
+          const e = this.body(c3.body, mergeEnvs([env, after != null ? after : env]));
+          if (e) arms.push(e);
+        }
+        let out = arms.length ? mergeEnvs(arms) : null;
+        if (n.always) out = this.body(n.always, out != null ? out : cloneEnv(env));
+        return out;
+      }
+      case "return": {
+        const v2 = n.expr ? this.expr(n.expr, env) : [];
+        if (this.summary && v2.length) this.summary.returns = merge2(this.summary.returns, withStep(v2, { line: lineOf5(n), text: "return", file: this.file }));
+        return null;
+      }
+      case "throw":
+        this.expr(n.what, env);
+        return null;
+      case "global":
+      case "static":
+        for (const item of (_i = (_h = n.items) != null ? _h : n.variables) != null ? _i : []) if ((item == null ? void 0 : item.kind) === "staticvariable" && item.defaultValue) this.assignTo(item.variable, this.expr(item.defaultValue, env), env);
+        return env;
+      case "unset":
+        for (const v2 of (_j = n.variables) != null ? _j : []) if (v2.kind === "variable" && typeof v2.name === "string") env.delete(v2.name.toLowerCase());
+        return env;
+      case "function":
+      case "class":
+      case "interface":
+      case "trait":
+      case "enum":
+      case "namespace":
+        if (n.kind === "namespace") return this.block((_k = n.children) != null ? _k : [], env);
+        return env;
+      case "declare":
+        return this.block((_l = n.children) != null ? _l : [], env);
+      case "label":
+      case "goto":
+      case "break":
+      case "continue":
+      case "noop":
+      case "usegroup":
+      case "constantstatement":
+      case "classconstant":
+        return env;
+      default:
+        if (n.kind === "exit") {
+          this.expr(n, env);
+          return null;
+        }
+        if (n.expression) this.expr(n.expression, env);
+        return env;
+    }
+  }
+  exits(e) {
+    return (e == null ? void 0 : e.kind) === "exit" || (e == null ? void 0 : e.kind) === "throw" || (e == null ? void 0 : e.kind) === "call" && ["die", "exit", "wp_die", "abort", "trigger_error"].includes(lower(nameOf(e.what))) && lower(nameOf(e.what)) !== "trigger_error";
+  }
+  ifStmt(n, env) {
+    this.expr(n.test, env);
+    const { whenTrue, whenFalse } = this.guards(n.test);
+    const thenEnv = this.validate(cloneEnv(env), whenTrue);
+    const elseEnv = this.validate(cloneEnv(env), whenFalse);
+    const a = this.body(n.body, thenEnv);
+    const b3 = n.alternate ? this.body(n.alternate, elseEnv) : elseEnv;
+    if (!a && !b3) return null;
+    if (!a) return b3;
+    if (!b3) return a;
+    return mergeEnvs([a, b3]);
+  }
+  /** Variables a condition proves safe when it holds (and when it fails). */
+  guards(test) {
+    var _a22, _b, _c, _d, _e2, _f, _g, _h;
+    if (!test) return { whenTrue: [], whenFalse: [] };
+    if (test.kind === "unary" && test.type === "!") {
+      const g2 = this.guards(test.what);
+      return { whenTrue: g2.whenFalse, whenFalse: g2.whenTrue };
+    }
+    if (test.kind === "bin" && (test.type === "&&" || test.type === "and")) {
+      const l3 = this.guards(test.left), r2 = this.guards(test.right);
+      return { whenTrue: [...l3.whenTrue, ...r2.whenTrue], whenFalse: l3.whenFalse.filter((k2) => r2.whenFalse.includes(k2)) };
+    }
+    if (test.kind === "bin" && (test.type === "||" || test.type === "or")) {
+      const l3 = this.guards(test.left), r2 = this.guards(test.right);
+      return { whenTrue: l3.whenTrue.filter((k2) => r2.whenTrue.includes(k2)), whenFalse: [...l3.whenFalse, ...r2.whenFalse] };
+    }
+    if (test.kind === "bin" && ["===", "==", "!==", "!=", "<>"].includes(test.type)) {
+      const negated = test.type.startsWith("!") || test.type === "<>";
+      const [call, other] = ((_a22 = test.left) == null ? void 0 : _a22.kind) === "call" ? [test.left, test.right] : [test.right, test.left];
+      const isLit = (s) => ["string", "number", "boolean", "nullkeyword"].includes(s == null ? void 0 : s.kind);
+      const pinned = isLit(test.left) ? keyOf(this.unwrap(test.right)) : isLit(test.right) ? keyOf(this.unwrap(test.left)) : null;
+      const pinnedLit = isLit(test.left) ? test.left : test.right;
+      if (pinned && !((pinnedLit == null ? void 0 : pinnedLit.kind) === "boolean" || (pinnedLit == null ? void 0 : pinnedLit.kind) === "nullkeyword" || (pinnedLit == null ? void 0 : pinnedLit.kind) === "string" && pinnedLit.value === "")) {
+        return negated ? { whenTrue: [], whenFalse: [pinned] } : { whenTrue: [pinned], whenFalse: [] };
+      }
+      if ((call == null ? void 0 : call.kind) === "call" && /^(?:strpos|stripos|mb_strpos)$/.test(lower(nameOf(call.what))) && (other == null ? void 0 : other.kind) === "number" && Number(other.value) === 0) {
+        const k2 = keyOf(this.unwrap((_b = call.arguments) == null ? void 0 : _b[0]));
+        if (k2) return negated ? { whenTrue: [], whenFalse: [k2] } : { whenTrue: [k2], whenFalse: [] };
+      }
+      if ((call == null ? void 0 : call.kind) === "call") {
+        const g2 = this.guards(call);
+        const falsy = (other == null ? void 0 : other.kind) === "boolean" ? !other.value : (other == null ? void 0 : other.kind) === "number" ? Number(other.value) === 0 : (other == null ? void 0 : other.kind) === "nullkeyword";
+        const positive = falsy ? negated : !negated;
+        return positive ? g2 : { whenTrue: g2.whenFalse, whenFalse: g2.whenTrue };
+      }
+      const v2 = [test.left, test.right].find((s) => (s == null ? void 0 : s.kind) === "variable");
+      const lit = [test.left, test.right].find((s) => ["string", "number", "boolean"].includes(s == null ? void 0 : s.kind));
+      if (v2 && lit && typeof v2.name === "string") return negated ? { whenTrue: [], whenFalse: [v2.name.toLowerCase()] } : { whenTrue: [v2.name.toLowerCase()], whenFalse: [] };
+      return { whenTrue: [], whenFalse: [] };
+    }
+    if (test.kind === "call" && /^(?:str_starts_with|wp_is_stream|validate_file)$/.test(lower(nameOf(test.what)))) {
+      const fn2 = lower(nameOf(test.what));
+      const k2 = keyOf(this.unwrap((_c = test.arguments) == null ? void 0 : _c[0]));
+      if (!k2) return { whenTrue: [], whenFalse: [] };
+      return fn2 === "validate_file" ? { whenTrue: [], whenFalse: [k2] } : { whenTrue: [k2], whenFalse: [] };
+    }
+    if (test.kind === "call") {
+      const fn2 = lower(nameOf(test.what));
+      if (!VALIDATORS.has(fn2)) return { whenTrue: [], whenFalse: [] };
+      const arg = fn2 === "preg_match" ? (_d = test.arguments) == null ? void 0 : _d[1] : (_e2 = test.arguments) == null ? void 0 : _e2[0];
+      if (fn2 === "preg_match") {
+        const pattern = literalText((_f = test.arguments) == null ? void 0 : _f[0]);
+        if (!/^.\^/.test(pattern) || !/\$.?[a-zA-Z]*$/.test(pattern) || /\.\*|\.\+|\\S|\[\^/.test(pattern)) return { whenTrue: [], whenFalse: [] };
+      }
+      if (fn2 === "filter_var" && !/FILTER_VALIDATE_(?:INT|FLOAT|BOOL|BOOLEAN|IP)/i.test(exprText((_g = test.arguments) == null ? void 0 : _g[1]) + nameOf((_h = test.arguments) == null ? void 0 : _h[1]))) return { whenTrue: [], whenFalse: [] };
+      const name = keyOf(this.unwrap(arg));
+      return name ? { whenTrue: [name], whenFalse: [] } : { whenTrue: [], whenFalse: [] };
+    }
+    return { whenTrue: [], whenFalse: [] };
+  }
+  validate(env, names) {
+    var _a22;
+    const all = [...names];
+    for (const n of names) {
+      let a = this.aliases.get(n);
+      for (let i = 0; a && i < 3; i++, a = this.aliases.get(a)) all.push(a);
+    }
+    for (const n of all) {
+      const base = n.replace(/\[[^\]]*\]$|->[^>]*$/, "");
+      const v2 = (_a22 = env.get(n)) != null ? _a22 : base !== n ? env.get(base) : void 0;
+      if (v2) env.set(n, makeSafe(v2, ALL_SAFE));
+      const mark = `$${n}`;
+      for (const [k2, val] of env) {
+        if (k2 === n || !val.length) continue;
+        if (val.every((f3) => f3.steps.some((st2) => st2.text.toLowerCase() === mark))) env.set(k2, makeSafe(val, ALL_SAFE));
+      }
+    }
+    return env;
+  }
+  /** `strtolower($x)`, `trim($x)`, `(string)$x` → `$x` for guard purposes. */
+  unwrap(n) {
+    var _a22, _b, _c;
+    while (n) {
+      if (n.kind === "call" && PASSTHROUGH.has(lower(nameOf(n.what))) && ((_a22 = n.arguments) == null ? void 0 : _a22.length) === 1) n = n.arguments[0];
+      else if (n.kind === "cast" || n.kind === "parenthesis") n = (_c = (_b = n.expr) != null ? _b : n.what) != null ? _c : n.inner;
+      else break;
+    }
+    return n;
+  }
+  step(n, text22) {
+    return { line: lineOf5(n), text: text22, file: this.file };
+  }
+  assignTo(target, v2, env, append = false) {
+    var _a22, _b, _c, _d, _e2, _f;
+    if (!target) return;
+    if (target.kind === "variable" && typeof target.name === "string") {
+      const key = target.name.toLowerCase();
+      this.prefixedVars.set(key, false);
+      const val = withStep(v2, this.step(target, `$${target.name}`));
+      env.set(key, append ? merge2((_a22 = env.get(key)) != null ? _a22 : [], val) : val);
+    } else if (target.kind === "offsetlookup" && ((_b = target.what) == null ? void 0 : _b.kind) === "variable" && String(target.what.name).toLowerCase() === "_session" && ((_c = target.offset) == null ? void 0 : _c.kind) === "string") {
+      const src = v2.find((f3) => f3.src);
+      if (src) this.project.taintSession(String(target.offset.value), src, this.file, lineOf5(target));
+    } else if (target.kind === "offsetlookup") {
+      const elem = keyOf(target);
+      if (elem) env.set(elem, withStep(v2, this.step(target, exprText(target))));
+      let base = target.what;
+      while ((base == null ? void 0 : base.kind) === "offsetlookup") base = base.what;
+      if ((base == null ? void 0 : base.kind) === "variable" && typeof base.name === "string") {
+        const key = base.name.toLowerCase();
+        env.set(key, merge2((_d = env.get(key)) != null ? _d : [], withStep(v2, this.step(target, `$${base.name}[]`))));
+      } else if (base) this.assignTo(base, v2, env, true);
+    } else if (target.kind === "propertylookup" || target.kind === "nullsafepropertylookup" || target.kind === "staticlookup") {
+      const owner = this.fieldOwner(target);
+      const src = v2.find((f3) => f3.src);
+      if (owner && src) this.project.taintField(owner.cls, owner.prop, __spreadProps(__spreadValues({}, src), { steps: [...src.steps, this.step(target, exprText(target))].slice(-MAX_STEPS) }));
+      const key = exprText(target).toLowerCase();
+      const val = withStep(v2, this.step(target, exprText(target)));
+      env.set(key, append ? merge2((_e2 = env.get(key)) != null ? _e2 : [], val) : val);
+    } else if (target.kind === "list" || target.kind === "array") {
+      for (const item of (_f = target.items) != null ? _f : []) this.assignTo((item == null ? void 0 : item.kind) === "entry" ? item.value : item, v2, env);
+    }
+  }
+  /** Request data in `n`, after evaluating any sinks inside it. */
+  expr(n, env) {
+    var _a22, _b, _c, _d, _e2, _f, _g, _h, _i, _j, _k, _l, _m, _n2, _o, _p, _q, _r2, _s2, _t2, _u, _v, _w, _x, _y, _z, _A, _B, _C, _D, _E2;
+    if (!n || typeof n !== "object") return [];
+    switch (n.kind) {
+      case "variable": {
+        if (typeof n.name !== "string") return this.expr(n.name, env);
+        const name = n.name.toLowerCase();
+        if (SUPERGLOBALS.has(name)) return [{ src: `$${n.name}`, safe: /* @__PURE__ */ new Set(), steps: [this.step(n, `$${n.name}`)], weak: false }];
+        if (name === "_server") return [{ src: "$_SERVER", safe: /* @__PURE__ */ new Set(), steps: [this.step(n, "$_SERVER")], weak: true }];
+        return (_a22 = env.get(name)) != null ? _a22 : [];
+      }
+      case "offsetlookup": {
+        const base = n.what;
+        if ((base == null ? void 0 : base.kind) === "variable" && typeof base.name === "string" && base.name.toLowerCase() === "_server") {
+          const key = ((_b = n.offset) == null ? void 0 : _b.kind) === "string" ? String(n.offset.value) : "";
+          return TAINTED_SERVER.test(key) ? [{ src: `$_SERVER['${key}']`, safe: /* @__PURE__ */ new Set(), steps: [this.step(n, `$_SERVER['${key}']`)], weak: key === "HTTP_HOST" }] : [];
+        }
+        if ((base == null ? void 0 : base.kind) === "variable" && String(base.name).toLowerCase() === "_session" && ((_c = n.offset) == null ? void 0 : _c.kind) === "string") {
+          const stored = this.project.session(String(n.offset.value));
+          if (stored) return [{ src: `$_SESSION['${n.offset.value}'] \u2190 ${stored.src}`, safe: new Set(stored.safe), steps: [{ line: stored.line, text: `${stored.src} \u2192 $_SESSION['${n.offset.value}']`, file: stored.file }, this.step(n, `$_SESSION['${n.offset.value}']`)], weak: stored.weak }];
+          return [];
+        }
+        if (((_d = n.offset) == null ? void 0 : _d.kind) === "string" && /^(?:tmp_name|size|error)$/.test(String(n.offset.value)) && exprText(base).toLowerCase().startsWith("$_files")) return [];
+        if ((base == null ? void 0 : base.kind) === "variable" && /^(?:request|req|wp_rest_request)$/i.test(String(base.name)) && !env.has(String(base.name).toLowerCase())) {
+          const label = `$${base.name}[${((_e2 = n.offset) == null ? void 0 : _e2.kind) === "string" ? `'${n.offset.value}'` : "\u2026"}]`;
+          return [{ src: label, safe: /* @__PURE__ */ new Set(), steps: [this.step(n, label)], weak: false }];
+        }
+        this.expr(n.offset, env);
+        const elem = keyOf(n);
+        if (elem && env.has(elem)) return env.get(elem);
+        const v2 = this.expr(base, env);
+        if ((base == null ? void 0 : base.kind) === "variable" && SUPERGLOBALS.has(String(base.name).toLowerCase()) && ((_f = n.offset) == null ? void 0 : _f.kind) === "string") {
+          const label = `$${base.name}['${n.offset.value}']`;
+          return v2.map((f3) => __spreadProps(__spreadValues({}, f3), { src: label, steps: [this.step(n, label)] }));
+        }
+        return v2;
+      }
+      case "propertylookup":
+      case "nullsafepropertylookup":
+      case "staticlookup": {
+        const key = exprText(n).toLowerCase();
+        if (env.has(key)) return env.get(key);
+        const owner = this.fieldOwner(n);
+        if (owner) {
+          const stored = this.project.field(owner.cls, owner.prop);
+          if (stored) return [__spreadProps(__spreadValues({}, stored), { steps: [...stored.steps, this.step(n, exprText(n))].slice(-MAX_STEPS) })];
+        }
+        if (n.kind !== "staticlookup" && ((_g = n.what) == null ? void 0 : _g.kind) !== "variable" || ((_h = n.what) == null ? void 0 : _h.kind) === "variable" && n.what.name !== "this") {
+          const inner = this.expr(n.what, env);
+          if (inner.length) return withStep(inner, this.step(n, exprText(n)));
+        }
+        if (n.kind === "propertylookup" && /^\$(?:request|req)$/i.test(exprText(n.what)) && !/^(?:query|request|attributes|cookies|headers|files|server)$/i.test(nameOf(n.offset))) {
+          return [{ src: exprText(n), safe: /* @__PURE__ */ new Set(), steps: [this.step(n, exprText(n))], weak: true }];
+        }
+        return [];
+      }
+      case "name": {
+        const cname = String(n.name).replace(/^\\/, "");
+        if (env.has(`#${cname}`)) return env.get(`#${cname}`);
+        const c3 = this.project.constant(cname);
+        return c3 ? [__spreadProps(__spreadValues({}, c3), { steps: [...c3.steps, this.step(n, String(n.name))].slice(-MAX_STEPS) })] : [];
+      }
+      case "string":
+      case "number":
+      case "boolean":
+      case "nullkeyword":
+      case "magic":
+      case "constref":
+      case "inline":
+        return [];
+      case "encapsed":
+        return this.concat(n.value.map((p2) => {
+          var _a32;
+          return (_a32 = p2.expression) != null ? _a32 : p2;
+        }), env, n);
+      case "encapsedpart":
+        return this.expr(n.expression, env);
+      case "bin": {
+        if (n.type === ".") return this.concat(flattenConcat(n), env, n);
+        const l3 = this.expr(n.left, env), r2 = this.expr(n.right, env);
+        if (["??", "?:"].includes(n.type)) return merge2(l3, r2);
+        return [];
+      }
+      case "unary":
+      case "pre":
+      case "post":
+        this.expr(n.what, env);
+        return [];
+      case "cast":
+        return ["string", "array", "object"].includes(n.type) ? this.expr((_i = n.expr) != null ? _i : n.what, env) : (this.expr((_j = n.expr) != null ? _j : n.what, env), []);
+      case "silent":
+      case "parenthesis":
+        return this.expr((_k = n.expr) != null ? _k : n.inner, env);
+      case "clone":
+        return this.expr(n.what, env);
+      case "retif":
+      case "ternary": {
+        this.expr(n.test, env);
+        return merge2(n.trueExpr ? this.expr(n.trueExpr, env) : this.expr(n.test, env), this.expr(n.falseExpr, env));
+      }
+      case "isset":
+      case "empty":
+        for (const v2 of (_l = n.variables) != null ? _l : n.expression ? [n.expression] : []) this.expr(v2, env);
+        return [];
+      case "assign": {
+        const v2 = this.expr(n.right, env);
+        if (n.operator === "=" || n.operator === "??=") this.assignTo(n.left, v2, env, n.operator === "??=");
+        if (n.operator === "=" && ((_m = n.left) == null ? void 0 : _m.kind) === "variable" && typeof n.left.name === "string" && leadingLiteral(n.right)) this.prefixedVars.set(n.left.name.toLowerCase(), true);
+        if (n.operator === "=" && ((_n2 = n.left) == null ? void 0 : _n2.kind) === "variable" && typeof n.left.name === "string") {
+          const r2 = ((_o = n.right) == null ? void 0 : _o.kind) === "call" && /^(?:realpath|wp_normalize_path|trim|rtrim|untrailingslashit|trailingslashit|str_replace|wp_unslash|stripslashes|urldecode|rawurldecode)$/.test(lower(nameOf(n.right.what))) ? (_p = n.right.arguments) == null ? void 0 : _p[n.right.what && lower(nameOf(n.right.what)) === "str_replace" ? 2 : 0] : null;
+          const src = (r2 == null ? void 0 : r2.kind) === "variable" && typeof r2.name === "string" ? r2.name.toLowerCase() : null;
+          if (src) this.aliases.set(n.left.name.toLowerCase(), src);
+          else this.aliases.delete(n.left.name.toLowerCase());
+        }
+        const target = keyOf(n.left);
+        if (n.operator === "=" && target && ((_q = n.right) == null ? void 0 : _q.kind) === "array") {
+          for (const [k2] of env) if (k2.startsWith(`${target}[`) || k2.startsWith(`${target}->`)) env.delete(k2);
+          for (const item of (_r2 = n.right.items) != null ? _r2 : []) {
+            if ((item == null ? void 0 : item.kind) === "entry" && (((_s2 = item.key) == null ? void 0 : _s2.kind) === "string" || ((_t2 = item.key) == null ? void 0 : _t2.kind) === "number")) {
+              env.set(`${target}[${String(item.key.value).toLowerCase()}]`, this.expr(item.value, env));
+            }
+          }
+        } else if (n.operator === "=" && target) {
+          for (const [k2] of env) if (k2.startsWith(`${target}[`)) env.delete(k2);
+        } else if (n.operator === ".=") {
+          this.assignTo(n.left, this.concat([n.left, n.right], env, n), env);
+        } else this.assignTo(n.left, [], env);
+        return v2;
+      }
+      case "assignref":
+        return this.expr({ kind: "assign", left: n.left, right: n.right, operator: "=" }, env);
+      case "array": {
+        let out = [];
+        for (const item of (_u = n.items) != null ? _u : []) {
+          if (!item) continue;
+          if (item.kind === "entry") {
+            this.expr(item.key, env);
+            out = merge2(out, this.expr(item.value, env));
+          } else out = merge2(out, this.expr(item, env));
+        }
+        return out;
+      }
+      case "include": {
+        const v2 = this.expr(n.target, env);
+        this.sink("include", v2, n.target, n, n.require ? "require" : "include");
+        if (this.includeDepth < 3) {
+          const hits = this.project.resolveInclude(this.file, n.target).filter((h3) => !this.including.has(h3.file));
+          if (hits.length) {
+            const outs = [];
+            for (const h3 of hits) {
+              const ctx = new _Ctx(this.project, h3.file, h3.content, this.summary, this.includeDepth + 1, /* @__PURE__ */ new Set([...this.including, this.file, h3.file]));
+              ctx.cls = this.cls;
+              const out = ctx.block((_v = h3.ast.children) != null ? _v : [], cloneEnv(env));
+              if (out) outs.push(out);
+            }
+            if (outs.length) {
+              const merged = mergeEnvs(hits.length === 1 && outs.length === 1 ? outs : [...outs]);
+              env.clear();
+              for (const [k2, val] of merged) env.set(k2, val);
+            }
+          }
+        }
+        return [];
+      }
+      case "eval": {
+        const v2 = this.expr(n.source, env);
+        this.sink("code", v2, n.source, n, "eval");
+        return [];
+      }
+      case "shell": {
+        const v2 = this.concat(((_x = (_w = n.value) == null ? void 0 : _w.value) != null ? _x : []).map((p2) => {
+          var _a32;
+          return (_a32 = p2.expression) != null ? _a32 : p2;
+        }), env, n);
+        this.sink("cmd", v2, n, n, "`backticks`");
+        return v2;
+      }
+      case "print": {
+        const v2 = this.expr(n.expression, env);
+        this.sink("xss", v2, n.expression, n, "print");
+        return [];
+      }
+      case "exit": {
+        const v2 = this.expr((_y = n.expression) != null ? _y : n.status, env);
+        if (n.expression && n.expression.kind !== "number") this.sink("xss", v2, n.expression, n, n.useDie ? "die" : "exit");
+        return [];
+      }
+      case "closure":
+      case "arrowfunc": {
+        const inner = /* @__PURE__ */ new Map();
+        for (const u2 of (_z = n.uses) != null ? _z : []) if (typeof u2.name === "string") inner.set(u2.name.toLowerCase(), (_A = env.get(u2.name.toLowerCase())) != null ? _A : []);
+        if (n.kind === "arrowfunc") for (const [k2, v2] of env) inner.set(k2, v2);
+        const ctx = new _Ctx(this.project, this.file, this.content, null);
+        if (n.kind === "arrowfunc") ctx.expr(n.body, inner);
+        else ctx.block((_C = (_B = n.body) == null ? void 0 : _B.children) != null ? _C : [], inner);
+        return [];
+      }
+      case "match": {
+        this.expr(n.cond, env);
+        let out = [];
+        for (const arm of (_D = n.arms) != null ? _D : []) out = merge2(out, this.expr(arm.body, env));
+        return out;
+      }
+      case "new":
+        return this.newExpr(n, env);
+      case "call":
+        return this.call(n, env);
+      case "yield":
+      case "yieldfrom":
+        return this.expr((_E2 = n.value) != null ? _E2 : n.expression, env);
+      default:
+        return [];
+    }
+  }
+  /** String building. Escaping for a quoted SQL literal only counts when the part sits between quotes. */
+  concat(parts, env, at2) {
+    let out = [];
+    let sqlSoFar = "";
+    const open2 = (text22, q3) => (text22.replace(/\\./g, "").split(q3).length - 1) % 2 === 1;
+    for (let i = 0; i < parts.length; i++) {
+      const p2 = parts[i];
+      if ((p2 == null ? void 0 : p2.kind) === "string") {
+        sqlSoFar += String(p2.value);
+        continue;
+      }
+      let v2 = this.expr(p2, env);
+      if (v2.length) {
+        const quoted = open2(sqlSoFar, "'") || open2(sqlSoFar, '"');
+        if (!quoted) v2 = v2.map((f3) => f3.safe.has("sqlq") && !f3.safe.has("sql") ? __spreadProps(__spreadValues({}, f3), { safe: new Set([...f3.safe].filter((k2) => k2 !== "sqlq")), weak: true }) : f3);
+        out = merge2(out, v2);
+      }
+      sqlSoFar += literalText(p2) || "0";
+    }
+    return withStep(out, this.step(at2, "string"));
+  }
+  /** `$this->p` → (current class, p); `self::$p` / `Cls::$p` → (class, p). */
+  fieldOwner(n) {
+    var _a22, _b;
+    if ((n.kind === "propertylookup" || n.kind === "nullsafepropertylookup") && ((_a22 = n.what) == null ? void 0 : _a22.kind) === "variable" && n.what.name === "this") {
+      const prop = nameOf(n.offset);
+      return prop && this.cls ? { cls: this.cls, prop: prop.toLowerCase() } : null;
+    }
+    if (n.kind === "staticlookup" && ((_b = n.offset) == null ? void 0 : _b.kind) === "variable" && typeof n.offset.name === "string") {
+      const w2 = n.what;
+      const cls = (w2 == null ? void 0 : w2.kind) === "selfreference" || (w2 == null ? void 0 : w2.kind) === "staticreference" ? this.cls : (w2 == null ? void 0 : w2.kind) === "name" ? String(w2.name).split("\\").pop().toLowerCase() : "";
+      return cls ? { cls, prop: n.offset.name.toLowerCase() } : null;
+    }
+    return null;
+  }
+  /** Name built with a literal prefix (`'block' . $type`): only a fixed family of callables is reachable. */
+  prefixed(n, _env) {
+    var _a22, _b, _c;
+    if (leadingLiteral(n)) return true;
+    if ((n == null ? void 0 : n.kind) === "array" && ((_a22 = n.items) == null ? void 0 : _a22.length) === 2) {
+      const m2 = ((_b = n.items[1]) == null ? void 0 : _b.kind) === "entry" ? n.items[1].value : n.items[1];
+      if (m2 && (m2.kind === "string" || leadingLiteral(m2))) return true;
+    }
+    const k2 = (n == null ? void 0 : n.kind) === "variable" && typeof n.name === "string" ? n.name.toLowerCase() : null;
+    return !!k2 && ((_c = this.prefixedVars.get(k2)) != null ? _c : false);
+  }
+  args(n, env) {
+    var _a22;
+    this.currentEnv = env;
+    return ((_a22 = n.arguments) != null ? _a22 : []).map((a) => this.expr((a == null ? void 0 : a.kind) === "variadic" ? a.what : a, env));
+  }
+  newExpr(n, env) {
+    var _a22, _b, _c, _d, _e2, _f, _g;
+    const cls = lower(nameOf(n.what));
+    const args = this.args(n, env);
+    if (((_a22 = n.what) == null ? void 0 : _a22.kind) === "variable") this.sink("code", this.expr(n.what, env), n.what, n, "new $class");
+    if (/(?:^|\\)(?:redirectresponse|redirect)$/.test(cls)) this.sink("redirect", (_b = args[0]) != null ? _b : [], (_c = n.arguments) == null ? void 0 : _c[0], n, `new ${nameOf(n.what)}`);
+    if (/(?:^|\\)(?:splfileobject|splfileinfo|directoryiterator|ziparchive)$/.test(cls)) this.sink("file", (_d = args[0]) != null ? _d : [], (_e2 = n.arguments) == null ? void 0 : _e2[0], n, `new ${nameOf(n.what)}`);
+    if (/(?:^|\\)(?:soapclient)$/.test(cls)) this.sink("ssrf", (_f = args[0]) != null ? _f : [], (_g = n.arguments) == null ? void 0 : _g[0], n, `new ${nameOf(n.what)}`);
+    if (/(?:^|\\)pdo$/.test(cls)) return [];
+    return [];
+  }
+  call(n, env) {
+    var _a22, _b, _c, _d, _e2, _f, _g, _h, _i, _j, _k, _l, _m, _n2, _o, _p, _q, _r2, _s2, _t2, _u, _v, _w, _x, _y, _z, _A, _B, _C, _D, _E2, _F, _G, _H, _I, _J, _K, _L, _M, _N;
+    const what = n.what;
+    const args = this.args(n, env);
+    const line = lineOf5(n);
+    const argNodes = (_a22 = n.arguments) != null ? _a22 : [];
+    if ((what == null ? void 0 : what.kind) === "propertylookup" || (what == null ? void 0 : what.kind) === "nullsafepropertylookup" || (what == null ? void 0 : what.kind) === "staticlookup") {
+      const method = lower(nameOf(what.offset));
+      const recv = exprText(what.what);
+      this.expr(what.what, env);
+      if (!method) {
+        if (!this.prefixed(what.offset, env)) this.sink("code", this.expr(what.offset, env), what.offset, n, "$obj->$method()");
+        return [];
+      }
+      if (CLEAN_REQUEST_METHODS.has(method) && REQUEST_RECEIVER.test(recv)) return [];
+      if (SOURCE_METHODS.has(method) && REQUEST_RECEIVER.test(recv)) {
+        const label2 = `${recv}->${nameOf(what.offset)}(${((_b = argNodes[0]) == null ? void 0 : _b.kind) === "string" ? `'${argNodes[0].value}'` : ""})`;
+        return [{ src: label2, safe: /* @__PURE__ */ new Set(), steps: [{ line, text: label2, file: this.file }], weak: false }];
+      }
+      if (SOURCE_METHODS.has(method) && /->(?:query|request|attributes|cookies|headers)$/i.test(recv) && /request/i.test(recv)) {
+        const label2 = `${recv}->${nameOf(what.offset)}()`;
+        return [{ src: label2, safe: /* @__PURE__ */ new Set(), steps: [{ line, text: label2, file: this.file }], weak: false }];
+      }
+      if (method === "esc_like" || method === "escape_like_str") return withStep(merge2(...args), { line, text: `${recv}->${method}()`, file: this.file });
+      if (["quote", "escape", "escape_string", "real_escape_string", "escape_str", "prepare"].includes(method) && DB_RECEIVER.test(recv)) {
+        if (method === "prepare" && /wpdb/i.test(recv)) {
+          const first = argNodes[0];
+          if ((_c = args[0]) == null ? void 0 : _c.length) this.sink("sql", args[0], first, n, "$wpdb->prepare");
+          return makeSafe(merge2(...args.slice(1)), ["sql"]);
+        }
+        if (method === "prepare") {
+          this.sink("sql", (_d = args[0]) != null ? _d : [], argNodes[0], n, `${recv}->prepare`);
+          return [];
+        }
+        return makeSafe(merge2(...args), (_e2 = SANITIZERS[method]) != null ? _e2 : ["sqlq"]);
+      }
+      if (/^(?:where|orwhere|andwhere|having|orhaving|order|orderby|group|groupby|set|join|innerjoin|leftjoin|rightjoin|outerjoin|select|from)$/.test(method) && argNodes.length === 1 && (((_f = argNodes[0]) == null ? void 0 : _f.kind) === "bin" || ((_g = argNodes[0]) == null ? void 0 : _g.kind) === "encapsed") && /query|qb|builder|db/i.test(recv)) {
+        this.sink("sql", (_h = args[0]) != null ? _h : [], argNodes[0], n, `${recv}->${nameOf(what.offset)}()`);
+        return [];
+      }
+      if (SQL_METHODS.has(method)) {
+        const sqlLike = SQL_TEXT.test(literalText(argNodes[0]));
+        const dbLike = DB_RECEIVER.test(recv) || /^(?:DB|\\?Illuminate\\Support\\Facades\\DB)$/i.test(recv);
+        if ((sqlLike || dbLike) && (!SQL_METHOD_NEEDS_DB.has(method) || dbLike || sqlLike)) {
+          this.sink("sql", (_i = args[0]) != null ? _i : [], argNodes[0], n, `${recv}->${nameOf(what.offset)}()`);
+          return [];
+        }
+      }
+      if (/filesystem|wp_fs|\$fs$/i.test(recv)) {
+        const fsArg = { get_contents: [0], get_contents_array: [0], put_contents: [0], delete: [0], move: [0, 1], copy: [0, 1], mkdir: [0], rmdir: [0], chmod: [0], touch: [0] };
+        for (const i of (_j = fsArg[method]) != null ? _j : []) this.sink("file", (_k = args[i]) != null ? _k : [], argNodes[i], n, `${recv}->${method}()`);
+        if (method === "get_contents" || method === "get_contents_array") return [];
+      }
+      if (SOURCE_METHODS.has(method)) {
+        const recvVal = this.expr(what.what, env).filter((f3) => f3.src);
+        if (recvVal.length) return withStep(recvVal, { line, text: `${recv}->${nameOf(what.offset)}()`, file: this.file });
+      }
+      if (method === "set_role" || method === "add_role" || method === "add_cap") {
+        this.sink("privesc", (_l = args[0]) != null ? _l : [], argNodes[0], n, `${recv}->${method}()`);
+        return [];
+      }
+      if (method === "setopt" || method === "seturl") this.sink("ssrf", (_m = args[method === "setopt" ? 1 : 0]) != null ? _m : [], argNodes[method === "setopt" ? 1 : 0], n, `${recv}->${method}()`);
+      if (/^(?:request|get|post|put|delete|head|patch)$/.test(method) && /(?:client|guzzle|http)$/i.test(recv)) {
+        const urlArg = method === "request" ? 1 : 0;
+        this.sink("ssrf", (_n2 = args[urlArg]) != null ? _n2 : [], argNodes[urlArg], n, `${recv}->${method}()`);
+        return [];
+      }
+      if (/^(?:redirect|redirectto|to|away)$/.test(method) && /redirect|response|\$this$/i.test(recv)) this.sink("redirect", (_o = args[0]) != null ? _o : [], argNodes[0], n, `${recv}->${method}()`);
+      if (method === "loadxml" || method === "load") return [];
+      const def2 = this.project.lookup(method, true);
+      if (def2) return this.applyCallee(def2, args, n, `${recv}->${nameOf(what.offset)}()`);
+      return [];
+    }
+    if ((what == null ? void 0 : what.kind) === "variable" || (what == null ? void 0 : what.kind) === "offsetlookup" || (what == null ? void 0 : what.kind) === "encapsed" || (what == null ? void 0 : what.kind) === "bin") {
+      if (!this.prefixed(what, env)) this.sink("code", this.expr(what, env), what, n, "$function()");
+      return [];
+    }
+    const fn2 = lower(nameOf(what));
+    const label = `${nameOf(what)}()`;
+    if (["current_user_can", "user_can", "is_super_admin", "check_password_reset_key", "wp_check_password", "current_user_can_for_blog"].includes(fn2)) this.guarded = true;
+    if (fn2 === "file_get_contents" && literalText(argNodes[0]) === "php://input") return [{ src: "php://input", safe: /* @__PURE__ */ new Set(), steps: [{ line, text: "php://input", file: this.file }], weak: false }];
+    if (fn2 === "filter_input") {
+      const filter = exprText(argNodes[2]) + nameOf(argNodes[2]);
+      if (/FILTER_VALIDATE_(?:INT|FLOAT|BOOL|BOOLEAN|IP|EMAIL)|FILTER_SANITIZE_NUMBER/i.test(filter)) return [];
+      const safe = /FILTER_SANITIZE_(?:SPECIAL_CHARS|FULL_SPECIAL_CHARS|ENCODED)/i.test(filter) ? ["xss"] : [];
+      return [{ src: `filter_input(${nameOf(argNodes[0])}, ${((_p = argNodes[1]) == null ? void 0 : _p.kind) === "string" ? `'${argNodes[1].value}'` : "\u2026"})`, safe: new Set(safe), steps: [{ line, text: label, file: this.file }], weak: false }];
+    }
+    if (SOURCE_FUNCTIONS.has(fn2) && (!this.project.lookup(fn2, false) || ["getallheaders", "apache_request_headers"].includes(fn2))) {
+      if ((fn2 === "request" || fn2 === "input") && !argNodes.length) return [];
+      return [{ src: label, safe: /* @__PURE__ */ new Set(), steps: [{ line, text: label, file: this.file }], weak: fn2 === "get_query_var" }];
+    }
+    if ((fn2 === "wp_insert_user" || fn2 === "wp_update_user" || fn2 === "wp_insert_post" || fn2 === "wp_update_post") && argNodes[0]) {
+      const whole = ((_q = args[0]) != null ? _q : []).filter((f3) => f3.src && /^\$_(?:POST|GET|REQUEST)$|->(?:get_params|get_json_params|get_body_params|all|input)\(\)$/i.test(f3.src));
+      if (whole.length) this.sink("privesc", whole, argNodes[0], n, `${label} with the whole request`);
+      const target = keyOf(argNodes[0]);
+      const roleNode = argNodes[0].kind === "array" ? (_s2 = (_r2 = argNodes[0].items) == null ? void 0 : _r2.find((i) => {
+        var _a32;
+        return (i == null ? void 0 : i.kind) === "entry" && ((_a32 = i.key) == null ? void 0 : _a32.kind) === "string" && /^(?:role|user_level|wp_capabilities)$/.test(i.key.value);
+      })) == null ? void 0 : _s2.value : null;
+      const role = roleNode ? this.expr(roleNode, env) : target ? (_t2 = env.get(`${target}[role]`)) != null ? _t2 : [] : [];
+      if (role.length && fn2.includes("user")) this.sink("privesc", role, roleNode != null ? roleNode : argNodes[0], n, `${label} role`);
+    }
+    if (fn2 === "define" && ((_u = argNodes[0]) == null ? void 0 : _u.kind) === "string") {
+      env.set(`#${String(argNodes[0].value)}`, (_v = args[1]) != null ? _v : []);
+      const src = (_w = args[1]) == null ? void 0 : _w.find((f3) => f3.src);
+      if (src) this.project.taintConstant(String(argNodes[0].value), __spreadProps(__spreadValues({}, src), { steps: [...src.steps, { line, text: `define('${argNodes[0].value}')`, file: this.file }].slice(-MAX_STEPS) }));
+      return [];
+    }
+    if (fn2 === "extract" || fn2 === "parse_str" && argNodes.length === 1) {
+      const direct = ((_x = argNodes[0]) == null ? void 0 : _x.kind) === "variable" && /^_(?:GET|POST|REQUEST|COOKIE|SERVER)$/i.test(String(argNodes[0].name)) || fn2 === "parse_str" && ((_y = args[0]) == null ? void 0 : _y.some((f3) => f3.src));
+      if (direct && ((_z = args[0]) == null ? void 0 : _z.length)) this.sink("code", args[0], argNodes[0], n, label);
+      return [];
+    }
+    const sinks = FUNCTION_SINKS[fn2];
+    if (sinks && !this.project.lookup(fn2, false)) {
+      for (const s of sinks) {
+        const i = s.arg === "last" ? args.length - 1 : s.arg;
+        if (i < 0 || i >= args.length) continue;
+        let kind = s.kind;
+        if ((fn2 === "array_map" || fn2 === "usort") && ((_A = argNodes[i]) == null ? void 0 : _A.kind) !== "variable") continue;
+        if (fn2 === "unserialize" && argNodes[1] && /allowed_classes/.test(literalText(argNodes[1]) + JSON.stringify(argNodes[1]).slice(0, 400))) continue;
+        if (fn2 === "mail" && i === 4) kind = "cmd";
+        if (kind === "file" && /^(?:https?|ftp):\/\//i.test(leadingLiteral(argNodes[i]))) kind = "ssrf";
+        if (fn2 === "fopen" && argNodes[0] && literalText(argNodes[0]) === "php://input") continue;
+        if (fn2 === "redirect" && i === 0 && !argNodes.length) continue;
+        if (kind === "privesc" && (leadingLiteral(argNodes[i]) || ((_B = argNodes[i]) == null ? void 0 : _B.kind) === "bin" || ((_C = argNodes[i]) == null ? void 0 : _C.kind) === "encapsed")) continue;
+        this.sink(kind, args[i], argNodes[i], n, label);
+      }
+      if (fn2 === "file_get_contents" || fn2 === "fread" || fn2 === "file") return [];
+      if (fn2 === "shell_exec" || fn2 === "exec" || fn2 === "system" || fn2 === "passthru") return [];
+    }
+    if (fn2 === "header") {
+      const lead = leadingLiteral(argNodes[0]);
+      if (/^\s*location\s*:/i.test(lead) || ((_D = argNodes[0]) == null ? void 0 : _D.kind) !== "string" && !lead && ((_E2 = args[0]) == null ? void 0 : _E2.length)) {
+        if (/^\s*location\s*:\s*$/i.test(lead) || !lead) this.sink("redirect", (_F = args[0]) != null ? _F : [], argNodes[0], n, "header('Location: \u2026')");
+      }
+      return [];
+    }
+    if (fn2 === "curl_setopt" || fn2 === "curl_setopt_array") {
+      if (fn2 === "curl_setopt" && /CURLOPT_URL/i.test(nameOf(argNodes[1]) || exprText(argNodes[1]))) this.sink("ssrf", (_G = args[2]) != null ? _G : [], argNodes[2], n, "curl_setopt(CURLOPT_URL)");
+      return [];
+    }
+    if (fn2 === "preg_replace" && /\/[a-z]*e[a-z]*$/i.test(literalText(argNodes[0]))) this.sink("code", (_H = args[1]) != null ? _H : [], argNodes[1], n, "preg_replace /e");
+    const def = this.project.lookup(fn2, false);
+    if (def) return this.applyCallee(def, args, n, label);
+    if (fn2 === "filter_var") {
+      const filter = exprText(argNodes[1]) + nameOf(argNodes[1]);
+      if (/FILTER_VALIDATE_(?:INT|FLOAT|BOOL|BOOLEAN|IP)|FILTER_SANITIZE_NUMBER/i.test(filter)) return [];
+      if (/FILTER_SANITIZE_(?:SPECIAL_CHARS|FULL_SPECIAL_CHARS|ENCODED)/i.test(filter)) return makeSafe((_I = args[0]) != null ? _I : [], ["xss"]);
+      return withStep((_J = args[0]) != null ? _J : [], { line, text: label, file: this.file });
+    }
+    if (fn2 === "pathinfo" && /PATHINFO_(?:FILENAME|EXTENSION)/.test(nameOf(argNodes[1]))) return makeSafe((_K = args[0]) != null ? _K : [], ["file", "include"]);
+    if (/^(?:apply_filters|apply_filters_ref_array|apply_filters_deprecated)$/.test(fn2)) return withStep((_L = args[1]) != null ? _L : [], { line, text: label, file: this.file });
+    if (/^(?:wp_parse_args|shortcode_atts|map_deep|wc_clean|wc_sanitize_textarea|stripslashes_deep|wp_slash|wp_unslash|maybe_serialize|wp_json_encode|array_merge_recursive|wp_list_pluck)$/.test(fn2)) {
+      const v2 = fn2 === "shortcode_atts" ? (_M = args[1]) != null ? _M : [] : fn2 === "wp_list_pluck" ? (_N = args[0]) != null ? _N : [] : merge2(...args);
+      return withStep(fn2 === "wc_clean" ? makeSafe(v2, ["xss"]) : fn2 === "wp_json_encode" ? makeSafe(v2, ["xss"]) : v2, { line, text: label, file: this.file });
+    }
+    if (CLEAN_FUNCTIONS.has(fn2)) return [];
+    if (fn2 in SANITIZERS) return withStep(makeSafe(merge2(...args), SANITIZERS[fn2]), { line, text: label, file: this.file });
+    if (PASSTHROUGH.has(fn2)) return withStep(merge2(...args), { line, text: label, file: this.file });
+    return [];
+  }
+  /** Apply a project function's summary at a call site. */
+  applyCallee(def, args, call, label) {
+    var _a22, _b;
+    const s = this.project.summary(def);
+    if (!s) return [];
+    const callStep = { line: lineOf5(call), text: label, file: this.file };
+    for (const use of s.sinks) {
+      if ((use.kind === "account" || use.kind === "privesc") && this.guarded) continue;
+      const arg = args[use.param];
+      if (!(arg == null ? void 0 : arg.length)) continue;
+      for (const f3 of arg) {
+        if (f3.safe.has(use.kind) || use.safe.has(use.kind)) continue;
+        if (use.kind === "sql" && use.safe.has("sqlq") && !use.weak) continue;
+        const fact = __spreadProps(__spreadValues({}, f3), { safe: /* @__PURE__ */ new Set([...f3.safe, ...use.safe]), steps: [...f3.steps, callStep, ...use.steps].slice(-MAX_STEPS), weak: f3.weak || use.weak });
+        if (f3.param !== void 0) {
+          (_a22 = this.summary) == null ? void 0 : _a22.sinks.push({ param: f3.param, kind: use.kind, line: use.line, file: use.file, sink: use.sink, steps: fact.steps, safe: fact.safe, weak: fact.weak });
+        } else if (f3.src) {
+          const inner = { line: use.line, text: use.sink, file: use.file };
+          this.emit(use.kind, __spreadProps(__spreadValues({}, fact), { steps: [...fact.steps, inner].slice(-MAX_STEPS) }), this.file, lineOf5(call), label);
+        }
+      }
+    }
+    let out = [];
+    for (const r2 of s.returns) {
+      if (r2.src) out = merge2(out, [__spreadProps(__spreadValues({}, r2), { steps: [...r2.steps, callStep].slice(-MAX_STEPS) })]);
+      else if (r2.param !== void 0 && ((_b = args[r2.param]) == null ? void 0 : _b.length)) {
+        out = merge2(out, args[r2.param].map((f3) => __spreadProps(__spreadValues({}, f3), { safe: /* @__PURE__ */ new Set([...f3.safe, ...r2.safe]), steps: [...f3.steps, callStep].slice(-MAX_STEPS), weak: f3.weak || r2.weak })));
+      }
+    }
+    return out;
+  }
+  /** Reach a sink: report request data, or record a parameter use for the summary. */
+  sink(kind, v2, argNode, at2, sink) {
+    var _a22, _b, _c, _d, _e2;
+    if (!v2.length) return;
+    if (kind === "upload") {
+      const end = (_c = (_b = (_a22 = at2 == null ? void 0 : at2.loc) == null ? void 0 : _a22.start) == null ? void 0 : _b.offset) != null ? _c : 0;
+      const start = Math.max(this.content.lastIndexOf("function", end), end - 12e3, 0);
+      const window2 = this.content.slice(start, end);
+      const extVars = new Set([...window2.matchAll(/\$(\w+)\s*=\s*[^;]*(?:PATHINFO_EXTENSION|explode\s*\(\s*['"]\.['"]|strrchr\s*\([^)]*['"]\.['"]|strrpos\s*\([^)]*['"]\.['"])/g)].map((m2) => m2[1]));
+      const inArrayExt = [...window2.matchAll(/in_array\s*\(\s*([^,]+),/g)].some((m2) => /ext/i.test(m2[1]) || [...extVars].some((v22) => m2[1].includes(`$${v22}`)));
+      const nameRegex = /preg_match\s*\(\s*['"][^'"]*\\\.\s*\(?[^'"]*(?:jpe?g|png|gif|pdf|docx?)[^'"]*\$/i.test(window2);
+      if (inArrayExt || nameRegex || /wp_check_filetype(?:_and_ext)?\s*\(|PATHINFO_EXTENSION[^;]*\)\s*[;,)]?[^;]*(?:===|!==|==|!=)\s*['"]|wp_handle_upload\s*\(|wp_handle_sideload\s*\(|media_handle_upload\s*\(/i.test(window2)) return;
+    }
+    const dynamicCall = kind === "code" && /^(?:\$obj->\$method\(\)|\$function\(\)|new \$class|call_user_func(?:_array)?\(\)|forward_static_call\(\)|usort\(\)|array_map\(\)|register_shutdown_function\(\))$/.test(sink);
+    if (dynamicCall) {
+      if ((argNode == null ? void 0 : argNode.kind) === "offsetlookup") {
+        const k2 = keyOf(argNode);
+        if (!k2 || !((_d = this.currentEnv) == null ? void 0 : _d.has(k2))) return;
+      }
+      v2 = v2.filter((f3) => f3.src);
+    }
+    if ((kind === "account" || kind === "privesc") && this.guarded) return;
+    if (kind === "xss" && this.jsonResponse) return;
+    for (const f3 of v2) {
+      if (f3.safe.has(kind)) continue;
+      if (kind === "sql" && f3.safe.has("sqlq")) continue;
+      if (f3.param !== void 0) {
+        (_e2 = this.summary) == null ? void 0 : _e2.sinks.push({ param: f3.param, kind, line: lineOf5(at2), file: this.file, sink, steps: f3.steps, safe: f3.safe, weak: f3.weak });
+        continue;
+      }
+      this.emit(kind, f3, this.file, lineOf5(at2), sink);
+    }
+    void argNode;
+  }
+  emit(kind, f3, file2, line, sink) {
+    var _a22, _b;
+    const selfOnly = (kind === "xss" || kind === "redirect") && /^\$_COOKIE|^\$_SERVER\['HTTP_|->(?:cookie|header)\(/i.test((_a22 = f3.src) != null ? _a22 : "");
+    this.project.report({ kind, file: file2, line, sink, source: (_b = f3.src) != null ? _b : "request", steps: f3.steps, weak: f3.weak || selfOnly });
+  }
+};
+var PUBLIC_HOOKS = /^(?:wp_ajax_nopriv_.+|admin_post_nopriv_.+|init|wp_loaded|admin_init|template_redirect|parse_request|wp|send_headers|plugins_loaded|setup_theme|after_setup_theme|wp_head|wp_footer|login_init|login_form_.+|woocommerce_api_.+|rest_api_init_?.*|user_register|wp_login|authenticate|determine_current_user)$/;
+var USER_HOOKS = /^(?:wp_ajax_(?!nopriv_).+|admin_post_(?!nopriv_).+)$/;
+var CAP_CHECKS = /* @__PURE__ */ new Set([
+  "current_user_can",
+  "user_can",
+  "is_super_admin",
+  "current_user_can_for_blog",
+  "author_can",
+  "map_meta_cap",
+  "check_password_reset_key",
+  "wp_check_password",
+  "wp_authenticate",
+  "wp_authenticate_username_password"
+]);
+var NONCE_CHECKS = /* @__PURE__ */ new Set(["check_ajax_referer", "wp_verify_nonce", "check_admin_referer", "verify_nonce"]);
+var ACTIONS = {
+  update_option: [0],
+  add_option: [0],
+  delete_option: [0],
+  update_site_option: [0],
+  delete_site_option: [0],
+  update_user_meta: [1],
+  add_user_meta: [1],
+  delete_user_meta: [1],
+  update_user_option: [1],
+  update_post_meta: [1],
+  delete_post_meta: [1],
+  file_put_contents: [0],
+  unlink: [0],
+  rename: [0, 1],
+  copy: [1],
+  rmdir: [0],
+  put_contents: [0],
+  set_role: [0],
+  add_role: [0],
+  add_cap: [0],
+  remove_cap: [0],
+  grant_super_admin: [0],
+  wp_delete_user: [0],
+  wp_delete_post: [0],
+  wp_trash_post: [0],
+  wp_delete_attachment: [0],
+  wp_delete_comment: [0],
+  wp_update_post: [0],
+  wp_insert_post: [0],
+  activate_plugin: [0],
+  activate_plugins: [0],
+  deactivate_plugins: [0],
+  delete_plugins: [0],
+  switch_theme: [0],
+  install: [0],
+  move_uploaded_file: [],
+  wp_handle_upload: [],
+  wp_handle_sideload: [],
+  media_handle_upload: [],
+  media_handle_sideload: [],
+  unzip_file: []
+};
+var VALUE_ACTIONS = {
+  update_option: { value: 1 },
+  update_site_option: { value: 1 },
+  add_option: { value: 1 },
+  update_post_meta: { value: 2, target: 0 },
+  update_term_meta: { value: 2, target: 0 },
+  update_comment_meta: { value: 2, target: 0 },
+  delete_option: { value: -1 },
+  delete_site_option: { value: -1 }
+};
+var UI_STATE = /count|like|view|visit|click|vote|rating|stat|cache|transient|dismiss|notice|seen|review|feedback|popup_shown|last_|_time|timestamp|nonce|session|cart|wishlist|compare|recent|track|impression/i;
+var UPLOADS = /* @__PURE__ */ new Set(["move_uploaded_file", "wp_handle_upload", "wp_handle_sideload", "media_handle_upload", "media_handle_sideload", "unzip_file"]);
+var OUTPUT = /^(?:wp_send_json|wp_send_json_success|wp_send_json_error|print_r|var_dump|var_export|wp_die)$/;
+var SENSITIVE = /->get_results\s*\(\s*["'][^"']*\bFROM\b[^"']*(?:lead|entr|submission|subscriber|order|customer|contact|message|member|applicant|registration|booking|payment|invoice|user)|get_users\s*\(|get_userdata\s*\(|get_user_by\s*\(|user_email|user_pass|user_activation_key|->users\b|get_option\s*\(\s*['"][^'"]*(?:key|secret|token|pass|licen|credential|smtp|api)[^'"]*['"]/i;
+var REQUEST2 = /\$_(?:GET|POST|REQUEST|COOKIE|FILES|SERVER)\b|php:\/\/input|->get_(?:param|params|json_params|body_params|query_params|file_params|body)\s*\(|\$request\s*\[/i;
+var lower2 = (n) => (typeof n === "string" ? n : typeof (n == null ? void 0 : n.name) === "string" ? n.name : "").toLowerCase().replace(/^\\/, "");
+function walk2(node2, visit2) {
+  const stack = [[node2, []]];
+  while (stack.length) {
+    const [n, parents] = stack.pop();
+    if (!n || typeof n !== "object") continue;
+    if (Array.isArray(n)) {
+      for (let i = n.length - 1; i >= 0; i--) stack.push([n[i], parents]);
+      continue;
+    }
+    if (n.kind) visit2(n, parents);
+    const next = n.kind ? [...parents.slice(-6), n] : parents;
+    for (const k2 of Object.keys(n)) {
+      if (k2 === "loc" || k2 === "leadingComments" || k2 === "trailingComments") continue;
+      const v2 = n[k2];
+      if (v2 && typeof v2 === "object") stack.push([v2, next]);
+    }
+  }
+}
+function callsInOrder(body) {
+  const out = [];
+  walk2(body, (n, parents) => {
+    if (parents.some((p2) => p2.kind === "closure" || p2.kind === "arrowfunc" || p2.kind === "function" || p2.kind === "class")) return;
+    if (n.kind === "call" || n.kind === "new") out.push(n);
+  });
+  return out.sort((a, b3) => {
+    var _a22, _b, _c, _d, _e2, _f;
+    return ((_c = (_b = (_a22 = a.loc) == null ? void 0 : _a22.start) == null ? void 0 : _b.offset) != null ? _c : 0) - ((_f = (_e2 = (_d = b3.loc) == null ? void 0 : _d.start) == null ? void 0 : _e2.offset) != null ? _f : 0);
+  });
+}
+function calleeName(call) {
+  var _a22, _b, _c;
+  const w2 = call.what;
+  if (call.kind === "new") return { name: lower2((_a22 = w2 == null ? void 0 : w2.name) != null ? _a22 : ""), method: false };
+  if ((w2 == null ? void 0 : w2.kind) === "propertylookup" || (w2 == null ? void 0 : w2.kind) === "nullsafepropertylookup" || (w2 == null ? void 0 : w2.kind) === "staticlookup") return { name: lower2((_c = (_b = w2.offset) == null ? void 0 : _b.name) != null ? _c : ""), method: true };
+  if ((w2 == null ? void 0 : w2.kind) === "name") return { name: lower2(w2.name), method: false };
+  return { name: "", method: false };
+}
+function requestVars(src) {
+  const vars = /* @__PURE__ */ new Set();
+  const assigns = [...src.matchAll(/\$(\w+)\s*(?:\[[^\]]*\])?\s*\.?=\s*([^;]+);/g)];
+  for (let pass = 0; pass < 3; pass++) {
+    for (const [, name, rhs] of assigns) {
+      if (REQUEST2.test(rhs) || [...rhs.matchAll(/\$(\w+)/g)].some((m2) => vars.has(m2[1]))) vars.add(name);
+    }
+  }
+  return vars;
+}
+function auditAccessControl(project) {
+  const findings = [];
+  const seen = /* @__PURE__ */ new Set();
+  for (const { file: file2, content, ast } of project.allFiles()) {
+    if (!/add_action|add_filter|register_rest_route/.test(content)) continue;
+    walk2(ast, (n) => {
+      var _a22, _b, _c, _d, _e2, _f, _g;
+      if (n.kind !== "call" || ((_a22 = n.what) == null ? void 0 : _a22.kind) !== "name") return;
+      const fn2 = lower2(n.what.name);
+      const args = (_b = n.arguments) != null ? _b : [];
+      if ((fn2 === "add_action" || fn2 === "add_filter") && ((_c = args[0]) == null ? void 0 : _c.kind) === "string") {
+        const hook = String(args[0].value);
+        const exposure = PUBLIC_HOOKS.test(hook) ? "public" : USER_HOOKS.test(hook) ? "user" : null;
+        if (!exposure) return;
+        for (const h3 of project.resolveCallback(args[1], file2)) audit(h3, hook, exposure);
+      }
+      if (fn2 === "register_rest_route") {
+        const opts = args[2];
+        const routes = (opts == null ? void 0 : opts.kind) === "array" && ((_e2 = (_d = opts.items) == null ? void 0 : _d[0]) == null ? void 0 : _e2.kind) === "entry" && opts.items[0].key == null ? opts.items.map((i) => i.value) : [opts];
+        for (const r2 of routes) {
+          if ((r2 == null ? void 0 : r2.kind) !== "array") continue;
+          const entry = (k2) => {
+            var _a32, _b2;
+            return (_b2 = (_a32 = r2.items) == null ? void 0 : _a32.find((i) => {
+              var _a4;
+              return (i == null ? void 0 : i.kind) === "entry" && ((_a4 = i.key) == null ? void 0 : _a4.kind) === "string" && i.key.value === k2;
+            })) == null ? void 0 : _b2.value;
+          };
+          const pc = entry("permission_callback");
+          const cb = entry("callback");
+          if (!cb || !isOpenPermission(pc, project, file2)) continue;
+          const route = `${((_f = args[0]) == null ? void 0 : _f.kind) === "string" ? args[0].value : "\u2026"}${((_g = args[1]) == null ? void 0 : _g.kind) === "string" ? args[1].value : ""}`;
+          for (const h3 of project.resolveCallback(cb, file2)) audit(h3, `REST ${route}`, "public");
+        }
+      }
+    });
+  }
+  return findings;
+  function audit(h3, hook, exposure) {
+    const state = { guarded: false, nonce: false };
+    visitFn(h3.node, h3.file, h3.content, [h3.label], 0, state, /* @__PURE__ */ new Set());
+    function visitFn(fnNode, fFile, fContent, chain, depth, st2, stack) {
+      var _a22, _b, _c, _d, _e2, _f, _g, _h, _i, _j, _k, _l, _m, _n2, _o, _p, _q, _r2, _s2, _t2, _u, _v, _w, _x, _y, _z, _A, _B, _C, _D, _E2, _F, _G, _H, _I, _J, _K, _L, _M, _N, _O, _P, _Q, _R, _S, _T;
+      if (stack.has(fnNode) || depth > 3) return;
+      stack.add(fnNode);
+      const body = (_a22 = fnNode.body) != null ? _a22 : fnNode;
+      const src = fContent.slice((_d = (_c = (_b = body.loc) == null ? void 0 : _b.start) == null ? void 0 : _c.offset) != null ? _d : 0, (_g = (_f = (_e2 = body.loc) == null ? void 0 : _e2.end) == null ? void 0 : _f.offset) != null ? _g : fContent.length);
+      const params = ((_h = fnNode.arguments) != null ? _h : []).map((p2) => lower2(p2.name));
+      const tainted = requestVars(src);
+      const sensitiveVars = new Set([...src.matchAll(/\$(\w+)\s*=\s*([^;]+);/g)].filter((m2) => SENSITIVE.test(m2[2])).map((m2) => m2[1]));
+      if (depth === 0 && hook.startsWith("REST")) for (const p2 of params) tainted.add(p2);
+      const fromRequest = (a) => {
+        var _a32, _b2, _c2, _d2, _e22, _f2;
+        const text22 = fContent.slice((_c2 = (_b2 = (_a32 = a == null ? void 0 : a.loc) == null ? void 0 : _a32.start) == null ? void 0 : _b2.offset) != null ? _c2 : 0, (_f2 = (_e22 = (_d2 = a == null ? void 0 : a.loc) == null ? void 0 : _d2.end) == null ? void 0 : _e22.offset) != null ? _f2 : 0);
+        return REQUEST2.test(text22) || [...text22.matchAll(/\$(\w+)/g)].some((m2) => tainted.has(m2[1]) || depth > 0 && params.includes(m2[1].toLowerCase()));
+      };
+      for (const call of callsInOrder(body)) {
+        const { name, method } = calleeName(call);
+        if (!name) continue;
+        if (CAP_CHECKS.has(name)) st2.guarded = true;
+        if (NONCE_CHECKS.has(name)) st2.nonce = true;
+        const args = (_i = call.arguments) != null ? _i : [];
+        const line = (_l = (_k = (_j = call.loc) == null ? void 0 : _j.start) == null ? void 0 : _k.line) != null ? _l : 0;
+        const need = ACTIONS[name];
+        const keyed = /option|meta/.test(name);
+        const whole = (a) => !(keyed && ((a == null ? void 0 : a.kind) === "bin" || (a == null ? void 0 : a.kind) === "encapsed" || (a == null ? void 0 : a.kind) === "string"));
+        const hit = need !== void 0 && !(name === "install" && !method) && (need.length === 0 || need.some((i) => args[i] && whole(args[i]) && fromRequest(args[i])));
+        if (!hit && !st2.guarded && method && /^(?:update|delete|replace|query)$/.test(name)) {
+          const recvText = fContent.slice((_q = (_p = (_o = (_n2 = (_m = call.what) == null ? void 0 : _m.what) == null ? void 0 : _n2.loc) == null ? void 0 : _o.start) == null ? void 0 : _p.offset) != null ? _q : 0, (_v = (_u = (_t2 = (_s2 = (_r2 = call.what) == null ? void 0 : _r2.what) == null ? void 0 : _s2.loc) == null ? void 0 : _t2.end) == null ? void 0 : _u.offset) != null ? _v : 0);
+          const sqlText = name === "query" ? fContent.slice((_z = (_y = (_x = (_w = args[0]) == null ? void 0 : _w.loc) == null ? void 0 : _x.start) == null ? void 0 : _y.offset) != null ? _z : 0, (_D = (_C = (_B = (_A = args[0]) == null ? void 0 : _A.loc) == null ? void 0 : _B.end) == null ? void 0 : _C.offset) != null ? _D : 0) : "";
+          const modifies = name !== "query" || /^\s*["'`]?\s*(?:UPDATE|DELETE)\b/i.test(sqlText);
+          if (/wpdb|\bdb\b|dbo|database/i.test(recvText) && modifies && args.some((a) => fromRequest(a)) && !/webhook|ipn|notify|callback|cron/i.test(`${hook} ${chain.join(" ")}`)) {
+            const key = `${fFile}:${line}`;
+            if (!seen.has(key)) {
+              seen.add(key);
+              findings.push({ kind: "missing-authz", file: fFile, line, action: `${recvText}->${name}()`, hook, handler: chain[0], exposure, nonce: true, chain });
+            }
+            continue;
+          }
+        }
+        const va = VALUE_ACTIONS[name];
+        if (!hit && va && !st2.guarded && !/webhook|ipn|notify|callback|stripe|paypal|cron/i.test(`${hook} ${chain.join(" ")}`)) {
+          const keyText = fContent.slice((_H = (_G = (_F = (_E2 = args[0]) == null ? void 0 : _E2.loc) == null ? void 0 : _F.start) == null ? void 0 : _G.offset) != null ? _H : 0, (_L = (_K = (_J = (_I = args[0]) == null ? void 0 : _I.loc) == null ? void 0 : _J.end) == null ? void 0 : _K.offset) != null ? _L : 0);
+          const valueFromRequest = va.value < 0 ? true : !!args[va.value] && fromRequest(args[va.value]);
+          const targetOk = va.target === void 0 || !!args[va.target] && fromRequest(args[va.target]);
+          const optionName = va.target === void 0 ? keyText : fContent.slice((_P = (_O = (_N = (_M = args[1]) == null ? void 0 : _M.loc) == null ? void 0 : _N.start) == null ? void 0 : _O.offset) != null ? _P : 0, (_T = (_S = (_R = (_Q = args[1]) == null ? void 0 : _Q.loc) == null ? void 0 : _R.end) == null ? void 0 : _S.offset) != null ? _T : 0);
+          if (valueFromRequest && targetOk && !UI_STATE.test(optionName) && !(va.value < 0 && !fromRequest(args[0]))) {
+            const key = `${fFile}:${line}`;
+            if (!seen.has(key)) {
+              seen.add(key);
+              findings.push({ kind: "missing-authz", settings: true, file: fFile, line, action: `${name}()`, hook, handler: chain[0], exposure, nonce: true, chain });
+            }
+            continue;
+          }
+        }
+        if (hit) {
+          const key = `${fFile}:${line}`;
+          if (!seen.has(key)) {
+            if (st2.guarded && !st2.nonce && !UPLOADS.has(name)) {
+              seen.add(key);
+              findings.push({ kind: "csrf", file: fFile, line, action: `${name}()`, hook, handler: chain[0], exposure, nonce: false, chain });
+            } else if (!st2.guarded) {
+              seen.add(key);
+              findings.push({ kind: "missing-authz", file: fFile, line, action: `${name}()`, hook, handler: chain[0], exposure, nonce: st2.nonce || UPLOADS.has(name), chain });
+            }
+          }
+          continue;
+        }
+        if (!st2.guarded && exposure === "public" && OUTPUT.test(name)) {
+          const shown = args.map((a) => {
+            var _a32, _b2, _c2, _d2, _e22, _f2;
+            return fContent.slice((_c2 = (_b2 = (_a32 = a == null ? void 0 : a.loc) == null ? void 0 : _a32.start) == null ? void 0 : _b2.offset) != null ? _c2 : 0, (_f2 = (_e22 = (_d2 = a == null ? void 0 : a.loc) == null ? void 0 : _d2.end) == null ? void 0 : _e22.offset) != null ? _f2 : 0);
+          }).join(" ");
+          if (SENSITIVE.test(shown) || [...shown.matchAll(/\$(\w+)/g)].some((m2) => sensitiveVars.has(m2[1]))) {
+            const key = `x:${fFile}:${line}`;
+            if (!seen.has(key)) {
+              seen.add(key);
+              findings.push({ kind: "data-exposure", file: fFile, line, action: `${name}()`, hook, handler: chain[0], exposure, nonce: st2.nonce, chain });
+            }
+          }
+        }
+        if (st2.guarded && st2.nonce) continue;
+        const def = project.lookupDef(name, method);
+        if (def) visitFn(def.node, def.file, def.content, [...chain, `${name}()`], depth + 1, st2, stack);
+      }
+      stack.delete(fnNode);
+    }
+  }
+}
+var ADMIN_PAGE_CALLBACK = {
+  add_menu_page: 4,
+  add_submenu_page: 5,
+  add_options_page: 4,
+  add_management_page: 4,
+  add_theme_page: 4,
+  add_users_page: 4,
+  add_dashboard_page: 4,
+  add_plugins_page: 4,
+  add_posts_page: 4,
+  add_media_page: 4,
+  add_pages_page: 4,
+  add_comments_page: 4,
+  add_links_page: 4,
+  add_object_page: 4,
+  add_utility_page: 4,
+  add_meta_box: 2,
+  add_settings_field: 2,
+  add_settings_section: 2
+};
+var ADMIN_HOOKS = /^(?:admin_menu|network_admin_menu|user_admin_menu|admin_notices|network_admin_notices|all_admin_notices|admin_footer|admin_head|admin_enqueue_scripts|admin_print_scripts|current_screen|load-.+|in_admin_.+|manage_.+|add_meta_boxes.*|admin_page_.+|toplevel_page_.+|.+_page_.+|show_user_profile|edit_user_profile|personal_options.*|edit_user_profile_update|personal_options_update|admin_action_.+|wp_dashboard_setup|activate_.+|deactivate_.+|upgrader_process_complete|customize_register)$/;
+function reachability(project) {
+  const open2 = /* @__PURE__ */ new Map();
+  const admin = /* @__PURE__ */ new Set();
+  const visit2 = (start, mark) => {
+    var _a22;
+    const queue = [{ node: start.node, depth: 0 }];
+    while (queue.length) {
+      const { node: node2, depth } = queue.shift();
+      if (!mark(node2) || depth >= 6) continue;
+      for (const call of callsInOrder((_a22 = node2.body) != null ? _a22 : node2)) {
+        const { name, method } = calleeName(call);
+        const def = name ? project.lookupDef(name, method) : null;
+        if (def) queue.push({ node: def.node, depth: depth + 1 });
+      }
+    }
+  };
+  const openStarts = [];
+  const adminStarts = [];
+  for (const { file: file2, content, ast } of project.allFiles()) {
+    if (!/add_action|add_filter|register_rest_route|add_\w+_page|add_meta_box|add_settings_field/.test(content)) continue;
+    walk2(ast, (n) => {
+      var _a22, _b, _c, _d, _e2, _f;
+      if (n.kind !== "call" || ((_a22 = n.what) == null ? void 0 : _a22.kind) !== "name") return;
+      const fn2 = lower2(n.what.name);
+      const args = (_b = n.arguments) != null ? _b : [];
+      if ((fn2 === "add_action" || fn2 === "add_filter") && ((_c = args[0]) == null ? void 0 : _c.kind) === "string") {
+        const hook = String(args[0].value);
+        const cbs = project.resolveCallback(args[1], file2);
+        if (PUBLIC_HOOKS.test(hook) || USER_HOOKS.test(hook)) for (const h3 of cbs) openStarts.push({ h: h3, label: hook });
+        else if (ADMIN_HOOKS.test(hook)) adminStarts.push(...cbs);
+      } else if (fn2 in ADMIN_PAGE_CALLBACK) {
+        adminStarts.push(...project.resolveCallback(args[ADMIN_PAGE_CALLBACK[fn2]], file2));
+      } else if (fn2 === "register_rest_route") {
+        const opts = args[2];
+        const routes = (opts == null ? void 0 : opts.kind) === "array" && ((_e2 = (_d = opts.items) == null ? void 0 : _d[0]) == null ? void 0 : _e2.kind) === "entry" && opts.items[0].key == null ? opts.items.map((i) => i.value) : [opts];
+        for (const r2 of routes) {
+          if ((r2 == null ? void 0 : r2.kind) !== "array") continue;
+          const entry = (k2) => {
+            var _a32, _b2;
+            return (_b2 = (_a32 = r2.items) == null ? void 0 : _a32.find((i) => {
+              var _a4;
+              return (i == null ? void 0 : i.kind) === "entry" && ((_a4 = i.key) == null ? void 0 : _a4.kind) === "string" && i.key.value === k2;
+            })) == null ? void 0 : _b2.value;
+          };
+          const cbs = project.resolveCallback(entry("callback"), file2);
+          if (isOpenPermission(entry("permission_callback"), project, file2)) for (const h3 of cbs) openStarts.push({ h: h3, label: `REST ${((_f = args[1]) == null ? void 0 : _f.kind) === "string" ? args[1].value : "\u2026"}` });
+          else adminStarts.push(...cbs);
+        }
+      }
+    });
+  }
+  for (const { h: h3, label } of openStarts) visit2(h3, (n) => open2.has(n) ? false : (open2.set(n, label), true));
+  for (const h3 of adminStarts) visit2(h3, (n) => admin.has(n) || open2.has(n) ? false : (admin.add(n), true));
+  return { open: open2, admin };
+}
+function isOpenPermission(pc, project, file2) {
+  if (!pc) return true;
+  if (pc.kind === "string" && /^__return_true$/i.test(pc.value)) return true;
+  if (pc.kind === "boolean" && pc.value) return true;
+  const defs = project.resolveCallback(pc, file2);
+  if (!defs.length) return false;
+  return defs.every((d2) => {
+    var _a22;
+    let open2 = true;
+    walk2((_a22 = d2.node.body) != null ? _a22 : d2.node, (n) => {
+      var _a32;
+      if (n.kind === "call" && (CAP_CHECKS.has(calleeName(n).name) || /auth|permission|can_|nonce|verify|logged/i.test(calleeName(n).name))) open2 = false;
+      if (n.kind === "return" && !(((_a32 = n.expr) == null ? void 0 : _a32.kind) === "boolean" && n.expr.value)) open2 = false;
+    });
+    return open2;
+  });
+}
+var LOGIC_RULES = {
+  "ignored-check": {
+    id: "php-taint-ignored-check",
+    title: "Security check whose result is ignored",
+    detail: "A nonce, capability, password or reset-key check is called as a statement: its true/false result is dropped and execution continues either way. Use it in a condition and stop (wp_die / return) when it fails.",
+    severity: "critical"
+  },
+  "guard-falls-through": {
+    id: "php-taint-guard-falls-through",
+    title: "Failed check redirects but does not stop",
+    detail: "When the check fails the code redirects, but without exit/return the rest of the handler still runs for the unauthorised request (wp_redirect/header only send a header). Add exit; after the redirect.",
+    severity: "critical"
+  },
+  "loose-secret-compare": {
+    id: "php-taint-loose-secret-compare",
+    title: "Secret compared with == (type juggling)",
+    detail: "Request data is compared to a token, key, hash or password with == / != / strcmp. PHP compares numeric-looking strings ('0e123\u2026') as numbers and strcmp(array, \u2026) returns null, so a crafted value can pass. Use hash_equals() with strings.",
+    severity: "critical"
+  },
+  "predictable-token": {
+    id: "php-taint-predictable-token",
+    title: "Security token from predictable randomness",
+    detail: "A token, key, code or password is generated from rand/mt_rand/uniqid/time, which an attacker can predict or brute-force. Use random_bytes(), random_int() or wp_generate_password().",
+    severity: "warning"
+  },
+  "public-sensitive-file": {
+    id: "php-taint-public-sensitive-file",
+    title: "Log, export or backup written to a web-accessible path",
+    detail: "A log, export, backup or dump file is written under the uploads / wp-content / plugin directory with a name that can be guessed, so anyone can download it with a direct URL. Store it outside the web root, or add a long random part to the name and deny access (.htaccess / index.php), and delete it after use.",
+    severity: "warning"
+  },
+  "is-admin-as-auth": {
+    id: "php-taint-is-admin-as-auth",
+    title: "is_admin() used as a permission check",
+    detail: "is_admin() only says the request goes to an admin URL, and admin-ajax.php / admin-post.php count \u2014 including for visitors who are not logged in. It is not a capability check. Use current_user_can() with the capability the action needs.",
+    severity: "critical"
+  },
+  "magic-switch": {
+    id: "php-taint-magic-switch",
+    title: "Request parameter switch logs a user in or grants a role",
+    detail: "A request value compared with a fixed string unlocks a login, user creation or role change, with no capability or credential check in between. This is how debug back doors and hidden admin switches look; remove it or require a real authentication step.",
+    severity: "critical"
+  }
+};
+var REQUEST3 = /\$_(?:GET|POST|REQUEST|COOKIE|SERVER)\b|->get_param\s*\(|\$request\s*\[|php:\/\/input/i;
+var SECRET_NAME = /(?:token|nonce|secret|api_?key|apikey|hash|signature|sig\b|otp|passw|pwd|pass_?code|auth_?code|reset_?key|activation|verify_?code|access_?key|license)/i;
+var CHECKS = /* @__PURE__ */ new Set(["wp_verify_nonce", "current_user_can", "user_can", "check_password_reset_key", "wp_check_password", "password_verify", "hash_equals", "is_user_logged_in", "is_super_admin"]);
+var AUTH_ACTIONS = /* @__PURE__ */ new Set(["wp_set_auth_cookie", "wp_set_current_user", "wp_create_user", "wp_insert_user", "set_role", "add_role", "add_cap", "grant_super_admin", "wp_set_password"]);
+var VERIFY_HINT = /verify|valid|check|auth|oauth|token|signature|hash_equals|password|login|nonce|can_|capab/i;
+var WEAK_RANDOM = /\b(?:rand|mt_rand|uniqid|lcg_value|str_shuffle|array_rand)\s*\(|\b(?:md5|sha1|hash|base64_encode)\s*\([^;]*\b(?:time|microtime)\s*\(/i;
+var TOKEN_NAME = /(?:token|secret|reset_?key|activation_?key|api_?key|otp|password|passw|nonce|verif\w*_?code|pin_?code|auth_?code|confirm\w*_?(?:key|code)|invite_?code|magic_?link)/i;
+var STRONG_RANDOM = /\b(?:random_bytes|random_int|wp_generate_password|openssl_random_pseudo_bytes|wp_generate_uuid4|bin2hex\s*\(\s*random_bytes|sodium_|wp_hash_password|wp_rand)\s*\(/i;
+var lower3 = (n) => (typeof n === "string" ? n : typeof (n == null ? void 0 : n.name) === "string" ? n.name : "").toLowerCase().replace(/^\\/, "");
+function calleeName2(call) {
+  var _a22, _b;
+  const w2 = call == null ? void 0 : call.what;
+  if ((w2 == null ? void 0 : w2.kind) === "name") return lower3(w2.name);
+  if ((w2 == null ? void 0 : w2.kind) === "propertylookup" || (w2 == null ? void 0 : w2.kind) === "staticlookup" || (w2 == null ? void 0 : w2.kind) === "nullsafepropertylookup") return lower3((_b = (_a22 = w2.offset) == null ? void 0 : _a22.name) != null ? _b : "");
+  return "";
+}
+function walk3(node2, visit2) {
+  const stack = [node2];
+  while (stack.length) {
+    const n = stack.pop();
+    if (!n || typeof n !== "object") continue;
+    if (Array.isArray(n)) {
+      for (let i = n.length - 1; i >= 0; i--) stack.push(n[i]);
+      continue;
+    }
+    if (n.kind) visit2(n);
+    for (const k2 of Object.keys(n)) {
+      if (k2 === "loc") continue;
+      const v2 = n[k2];
+      if (v2 && typeof v2 === "object") stack.push(v2);
+    }
+  }
+}
+function text(content, n) {
+  return (n == null ? void 0 : n.loc) ? content.slice(n.loc.start.offset, n.loc.end.offset) : "";
+}
+function stops(body) {
+  let stop = false;
+  walk3(body, (n) => {
+    if (n.kind === "exit" || n.kind === "return" || n.kind === "throw") stop = true;
+    if (n.kind === "call" && /^(?:wp_die|die|exit|wp_send_json(?:_error|_success)?|wp_safe_redirect_exit|abort|status_header_exit)$/.test(calleeName2(n))) stop = true;
+  });
+  return stop;
+}
+function negatedCheck(test) {
+  var _a22, _b, _c;
+  if ((test == null ? void 0 : test.kind) === "unary" && test.type === "!" && ((_a22 = test.what) == null ? void 0 : _a22.kind) === "call" && CHECKS.has(calleeName2(test.what))) return test.what;
+  if ((test == null ? void 0 : test.kind) === "bin" && ["===", "=="].includes(test.type)) {
+    const [c3, o2] = ((_b = test.left) == null ? void 0 : _b.kind) === "call" ? [test.left, test.right] : [test.right, test.left];
+    if ((c3 == null ? void 0 : c3.kind) === "call" && CHECKS.has(calleeName2(c3)) && (o2 == null ? void 0 : o2.kind) === "boolean" && !o2.value) return c3;
+  }
+  if ((test == null ? void 0 : test.kind) === "bin" && (test.type === "||" || test.type === "&&")) return (_c = negatedCheck(test.left)) != null ? _c : negatedCheck(test.right);
+  return null;
+}
+function auditLogic(project) {
+  const out = [];
+  const seen = /* @__PURE__ */ new Set();
+  const push = (f3) => {
+    const k2 = `${f3.kind}|${f3.file}|${f3.line}`;
+    if (!seen.has(k2)) {
+      seen.add(k2);
+      out.push(f3);
+    }
+  };
+  for (const { file: file2, content, ast } of project.allFiles()) {
+    walk3(ast, (n) => {
+      var _a22, _b, _c, _d, _e2, _f, _g, _h, _i;
+      const line = (_c = (_b = (_a22 = n.loc) == null ? void 0 : _a22.start) == null ? void 0 : _b.line) != null ? _c : 0;
+      if (n.kind === "expressionstatement" && ((_d = n.expression) == null ? void 0 : _d.kind) === "call") {
+        const name = calleeName2(n.expression);
+        const args = (_e2 = n.expression.arguments) != null ? _e2 : [];
+        const softAjax = (name === "check_ajax_referer" || name === "check_admin_referer") && ((_f = args[2]) == null ? void 0 : _f.kind) === "boolean" && !args[2].value;
+        if (CHECKS.has(name) && name !== "is_user_logged_in" || softAjax) push({ kind: "ignored-check", file: file2, line, what: `${name}()`, weak: name === "hash_equals" });
+      }
+      if (n.kind === "if") {
+        const check2 = negatedCheck(n.test);
+        if (check2 && n.body && !stops(n.body)) {
+          let redirects = false;
+          walk3(n.body, (b3) => {
+            if (b3.kind === "call" && /^(?:wp_redirect|wp_safe_redirect|header|auth_redirect)$/.test(calleeName2(b3))) redirects = true;
+          });
+          if (redirects) push({ kind: "guard-falls-through", file: file2, line, what: `${calleeName2(check2)}()`, weak: false });
+        }
+        const t2 = text(content, n.test);
+        const literalCompare = /(?:==|===|!=|!==)\s*['"][^'"]{3,}['"]|['"][^'"]{3,}['"]\s*(?:==|===)/.test(t2) || /\b(?:isset|array_key_exists)\s*\(/.test(t2);
+        if (REQUEST3.test(t2) && literalCompare && !VERIFY_HINT.test(t2)) {
+          let action = "";
+          let verified = false;
+          walk3(n.body, (b3) => {
+            if (b3.kind !== "call") return;
+            const c3 = calleeName2(b3);
+            if (AUTH_ACTIONS.has(c3) && !action && !verified) {
+              action = c3;
+            }
+            if (VERIFY_HINT.test(c3) && !action) verified = true;
+          });
+          if (/hash_equals|===|!==|get_(?:user_)?meta|get_option|get_transient|wp_check_password|password_verify/.test((_g = text(content, n.body).split(action)[0]) != null ? _g : "")) verified = true;
+          if (action && !verified) push({ kind: "magic-switch", file: file2, line, what: `${action}()`, weak: !/['"](?:administrator|admin)['"]|\b1\s*\)/.test(text(content, n.body)) });
+        }
+      }
+      if (n.kind === "if" && n.test) {
+        const t2 = text(content, n.test);
+        if (/\bis_admin\s*\(\s*\)/.test(t2) && !/current_user_can|user_can|is_super_admin|check_admin_referer|check_ajax_referer|wp_verify_nonce|is_user_logged_in|wp_doing_ajax|DOING_AJAX|is_network_admin/.test(t2)) {
+          const negated = /!\s*is_admin\s*\(\s*\)/.test(t2);
+          const guarded = negated ? stops(n.body) ? null : n.alternate : n.body;
+          let action = "";
+          if (guarded) walk3(guarded, (b3) => {
+            if (b3.kind === "call" && !action && /^(?:update_option|delete_option|add_option|update_site_option|unlink|rmdir|file_put_contents|rename|copy|wp_delete_post|wp_insert_post|wp_update_post|wp_delete_user|wp_insert_user|wp_update_user|wp_set_password|update_user_meta|set_role|add_cap|activate_plugin|deactivate_plugins|move_uploaded_file|wp_handle_upload|query|delete|put_contents)$/.test(calleeName2(b3))) {
+              const args = text(content, b3);
+              if (REQUEST3.test(args) || /\$_(?:GET|POST|REQUEST)/.test(text(content, guarded))) action = calleeName2(b3);
+            }
+          });
+          if (negated && stops(n.body)) {
+            const parentText = content.slice(n.loc.end.offset, Math.min(content.length, n.loc.end.offset + 3e3));
+            const m2 = /\b(update_option|delete_option|unlink|file_put_contents|wp_delete_post|wp_update_user|wp_insert_user|update_user_meta|set_role|move_uploaded_file|wp_handle_upload)\s*\(/.exec(parentText);
+            if (m2 && /\$_(?:GET|POST|REQUEST)/.test(parentText.slice(0, m2.index + 400)) && !/current_user_can|check_ajax_referer|check_admin_referer|wp_verify_nonce/.test(parentText.slice(0, m2.index))) action = m2[1];
+          }
+          if (action) push({ kind: "is-admin-as-auth", file: file2, line, what: `is_admin() \u2192 ${action}()`, weak: false });
+        }
+      }
+      if (n.kind === "bin" && ["==", "!="].includes(n.type)) {
+        const l3 = text(content, n.left), r2 = text(content, n.right);
+        const req = REQUEST3.test(l3) && !REQUEST3.test(r2) ? r2 : REQUEST3.test(r2) && !REQUEST3.test(l3) ? l3 : null;
+        if (req !== null && SECRET_NAME.test(req) && !/^['"]|^\d|^(?:null|true|false)$/i.test(req.trim())) push({ kind: "loose-secret-compare", file: file2, line, what: `${l3.slice(0, 40)} ${n.type} ${r2.slice(0, 40)}`, weak: false });
+      }
+      if (n.kind === "call" && calleeName2(n) === "strcmp") {
+        const args = ((_h = n.arguments) != null ? _h : []).map((a) => text(content, a));
+        if (args.some((a) => REQUEST3.test(a)) && args.some((a) => SECRET_NAME.test(a))) push({ kind: "loose-secret-compare", file: file2, line, what: "strcmp()", weak: true });
+      }
+      if (n.kind === "call" || n.kind === "new") {
+        const c3 = calleeName2(n);
+        const args = (_i = n.arguments) != null ? _i : [];
+        const writes = /^(?:file_put_contents|fopen|error_log|put_contents|open|save|move_uploaded_file|copy|rename|fputcsv)$/.test(c3);
+        const target = c3 === "error_log" ? args[1] && text(content, args[1]) === "3" ? args[2] : null : c3 === "copy" || c3 === "rename" || c3 === "move_uploaded_file" ? args[1] : args[0];
+        if (writes && target) {
+          const t2 = text(content, target);
+          const publicDir = /wp_upload_dir|WP_CONTENT_DIR|wp-content|uploads|plugin_dir_path|__DIR__|dirname\s*\(\s*__FILE__|ABSPATH|_PLUGIN_DIR|_PATH\b/i.test(t2);
+          const sensitive = /\.(?:log|sql|csv|bak|dump|txt|zip|tar|gz|json|xml)\b|(?:log|debug|export|backup|dump|invoice|order|report|archive)/i.test(t2);
+          const random = /wp_generate_password|random_bytes|wp_rand|random_int|bin2hex|wp_hash|hash_hmac|AUTH_KEY|NONCE_KEY|SECURE_AUTH|wp_salt|md5\s*\(\s*(?:wp_salt|AUTH|SECURE)|sha1\s*\(\s*(?:wp_salt|AUTH)/i;
+          let resolved = t2;
+          const v2 = /^\$(\w+)$/.exec(t2.trim());
+          if (v2) {
+            const m2 = new RegExp(`\\$${v2[1]}\\s*\\.?=\\s*([^;]+);`, "g");
+            resolved = [...content.matchAll(m2)].map((x3) => x3[1]).join(" ") || t2;
+          }
+          const pub = publicDir || /wp_upload_dir|WP_CONTENT_DIR|wp-content|uploads|plugin_dir_path|__DIR__|dirname\s*\(\s*__FILE__|ABSPATH|_PLUGIN_DIR/i.test(resolved);
+          const sens = sensitive || /\.(?:log|sql|csv|bak|dump|zip|tar|gz)\b|(?:debug|export|backup|dump|invoice|archive)/i.test(resolved);
+          if (pub && sens && !random.test(resolved) && !/tmp|temp|get_temp_dir|sys_get_temp_dir|\.htaccess|index\.php|\.css|\.js\b|cache/i.test(resolved)) {
+            push({ kind: "public-sensitive-file", file: file2, line, what: `${c3}(${t2.slice(0, 60)})`, weak: !/\.(?:log|sql|bak|dump)\b|debug|backup|dump/i.test(resolved) });
+          }
+        }
+      }
+      if (n.kind === "assign" && n.operator === "=") {
+        const target = text(content, n.left);
+        const value = text(content, n.right);
+        if (TOKEN_NAME.test(target) && WEAK_RANDOM.test(value) && !STRONG_RANDOM.test(value) && !/nonce_?life|time_?out|expir|timestamp|created|_at\b|date/i.test(target)) {
+          push({ kind: "predictable-token", file: file2, line, what: target.slice(0, 60), weak: !/reset|activation|otp|password|passw|api_?key|secret/i.test(target) });
+        }
+      }
+    });
+  }
+  return out;
+}
+var PHP_FILE = /\.(?:php|phtml|php[3-8]|inc)$/i;
+var MAX_BYTES3 = 1e6;
+var MAX_FILES2 = 8e3;
+var MAX_FINDINGS2 = 400;
+var phpTaintScanner = {
+  id: "php-taint",
+  category: "security",
+  run(ctx) {
+    return __async(this, null, function* () {
+      var _a22, _b, _c, _d, _e2, _f, _g, _h, _i, _j, _k;
+      const project = new Project();
+      const contents = /* @__PURE__ */ new Map();
+      let files = 0;
+      for (const file2 of ctx.files) {
+        const norm = file2.replace(/\\/g, "/");
+        if (!PHP_FILE.test(norm) || SKIP_PATH2.test(norm)) continue;
+        if (files >= MAX_FILES2) break;
+        const size = yield (_a22 = ctx.fileSize) == null ? void 0 : _a22.call(ctx, file2);
+        if (size != null && size > MAX_BYTES3) continue;
+        const content = yield ctx.readFile(file2);
+        if (!content || content.length > MAX_BYTES3) continue;
+        if (project.add(norm, content)) {
+          contents.set(norm, content);
+          files++;
+        }
+      }
+      if (!files) return [];
+      project.run();
+      const issues = [];
+      const seen = /* @__PURE__ */ new Set();
+      const reach = reachability(project);
+      const CAP = /\b(?:current_user_can|is_super_admin|user_can|check_admin_referer)\s*\(/;
+      for (const f3 of project.findings.sort(byPlace)) {
+        if (issues.length >= MAX_FINDINGS2) break;
+        const rule = RULES4[f3.kind];
+        const id = `${rule.id}-${f3.file}:${f3.line}`;
+        if (seen.has(id)) continue;
+        seen.add(id);
+        let ageDays = 0;
+        try {
+          ageDays = yield ctx.git.blameAgeDays(f3.file, f3.line);
+        } catch (e) {
+        }
+        const line = (_c = (_b = contents.get(f3.file)) == null ? void 0 : _b.split(/\r?\n/)[f3.line - 1]) == null ? void 0 : _c.trim().slice(0, 200);
+        const def = project.defAt(f3.file, f3.line);
+        const entry = def ? reach.open.get(def.node) : void 0;
+        const body = def ? ((_d = contents.get(def.file)) != null ? _d : "").split(/\r?\n/).slice(((_g = (_f = (_e2 = def.node.loc) == null ? void 0 : _e2.start) == null ? void 0 : _f.line) != null ? _g : 1) - 1, f3.line - 1).join("\n") : "";
+        const adminOnly = !!def && !entry && (reach.admin.has(def.node) || CAP.test(body));
+        let confidence = f3.weak ? "medium" : "high";
+        if (adminOnly) confidence = confidence === "high" ? "medium" : "low";
+        if (/HTTP_HOST|^\$_SERVER$/.test(f3.source) && f3.kind !== "sql" && f3.kind !== "cmd") confidence = confidence === "high" ? "medium" : "low";
+        const where = entry ? ` Reachable from ${entry}.` : adminOnly ? " Reachable from admin screens only (or after a capability check): an administrator would have to be the attacker or be tricked into it." : "";
+        issues.push(__spreadProps(__spreadValues({
+          id,
+          category: "security",
+          severity: rule.severity,
+          title: rule.title,
+          location: `${f3.file}:${f3.line}`,
+          ageDays,
+          detail: `${rule.detail} Data flow: ${trace(f3)}.${where}`
+        }, line ? { evidence: line } : {}), {
+          rule: rule.id,
+          confidence,
+          flow: flowOf(f3)
+        }));
+      }
+      for (const a of auditAccessControl(project)) {
+        if (issues.length >= MAX_FINDINGS2) break;
+        const rule = `php-taint-${a.kind}`;
+        const id = `${rule}-${a.file}:${a.line}`;
+        if (seen.has(id)) continue;
+        seen.add(id);
+        let ageDays = 0;
+        try {
+          ageDays = yield ctx.git.blameAgeDays(a.file, a.line);
+        } catch (e) {
+        }
+        const who = a.exposure === "public" ? "any visitor (no login)" : "any logged-in user, including subscribers";
+        const line = (_i = (_h = contents.get(a.file)) == null ? void 0 : _h.split(/\r?\n/)[a.line - 1]) == null ? void 0 : _i.trim().slice(0, 200);
+        const path = `${a.hook} \u2192 ${a.chain.join(" \u2192 ")} \u2192 ${a.action}`;
+        const text22 = a.kind === "csrf" ? { severity: "warning", title: `CSRF: ${a.action} changes data without a nonce check`, detail: `${path} checks the user's capability but not a nonce, so another site can make a logged-in administrator's browser send this request. Verify a nonce (check_admin_referer / check_ajax_referer) before acting.`, confidence: "medium" } : a.kind === "data-exposure" ? { severity: "critical", title: `Sensitive data sent to unauthenticated requests by ${a.action}`, detail: `${who} can call ${path}, which returns user records or secret options with no capability check. Return only public fields, or require the right capability.`, confidence: "medium" } : a.settings ? {
+          severity: "critical",
+          title: `Missing authorization: ${a.exposure === "public" ? "unauthenticated" : "any logged-in user's"} request changes settings via ${a.action}`,
+          detail: `${who} can call ${path} and store a value from the request, with no capability check (current_user_can) on the way. Plugin settings changed by visitors are a common takeover path (redirect URLs, script snippets, role defaults). Check the capability before saving.`,
+          // Anonymous AJAX / REST: shown. Subscriber-level handlers and every-request hooks: listed with --all.
+          confidence: a.exposure === "public" && !/^(?:init|admin_init|wp_loaded|plugins_loaded|wp|template_redirect)$/.test(a.hook) ? "medium" : "low"
+        } : { severity: "critical", title: `Missing authorization: ${a.action} is reachable by ${a.exposure === "public" ? "unauthenticated" : "any logged-in"} requests`, detail: `${who} can call ${path} with no capability check (current_user_can) on the way${a.nonce ? "; a nonce is checked, but a nonce is a CSRF token, not a permission" : ""}. Check the capability the action needs before doing it.`, confidence: a.nonce || a.exposure === "user" ? "medium" : "high" };
+        issues.push(__spreadProps(__spreadValues({
+          id,
+          category: "security",
+          severity: text22.severity,
+          title: text22.title,
+          location: `${a.file}:${a.line}`,
+          ageDays,
+          detail: text22.detail
+        }, line ? { evidence: line } : {}), {
+          rule,
+          confidence: text22.confidence
+        }));
+      }
+      for (const l3 of auditLogic(project)) {
+        if (issues.length >= MAX_FINDINGS2) break;
+        if (SKIP_PATH2.test(l3.file)) continue;
+        const rule = LOGIC_RULES[l3.kind];
+        const id = `${rule.id}-${l3.file}:${l3.line}`;
+        if (seen.has(id)) continue;
+        seen.add(id);
+        let ageDays = 0;
+        try {
+          ageDays = yield ctx.git.blameAgeDays(l3.file, l3.line);
+        } catch (e) {
+        }
+        const line = (_k = (_j = contents.get(l3.file)) == null ? void 0 : _j.split(/\r?\n/)[l3.line - 1]) == null ? void 0 : _k.trim().slice(0, 200);
+        issues.push(__spreadProps(__spreadValues({
+          id,
+          category: "security",
+          severity: rule.severity,
+          title: rule.title,
+          location: `${l3.file}:${l3.line}`,
+          ageDays,
+          detail: `${rule.detail} Here: ${l3.what}.`
+        }, line ? { evidence: line } : {}), {
+          rule: rule.id,
+          confidence: l3.weak ? "medium" : "high"
+        }));
+      }
+      return issues;
+    });
+  }
+};
+function byPlace(a, b3) {
+  return a.file.localeCompare(b3.file) || a.line - b3.line;
+}
+function flowOf(f3) {
+  const out = [];
+  const first = f3.steps[0];
+  const at2 = (s) => {
+    var _a22, _b;
+    return s ? __spreadValues(__spreadValues({}, ((_a22 = s.file) != null ? _a22 : f3.file) ? { file: (_b = s.file) != null ? _b : f3.file } : {}), s.line ? { line: s.line } : {}) : {};
+  };
+  if (!first || first.text !== f3.source) out.push({ role: "source", text: f3.source });
+  for (const [i, s] of f3.steps.entries()) {
+    if (s.text === "string" && f3.steps.length > 1) continue;
+    out.push(__spreadValues({ role: i === 0 && (first == null ? void 0 : first.text) === f3.source ? "source" : "step", text: s.text }, at2(s)));
+  }
+  if (out.some((s) => s.text === f3.sink && s.line === f3.line) && out.length > 1) {
+    out[out.length - 1] = __spreadProps(__spreadValues({}, out[out.length - 1]), { role: "sink" });
+    return out;
+  }
+  out.push({ role: "sink", text: f3.sink, file: f3.file, line: f3.line });
+  return out;
+}
+function trace(f3) {
+  var _a22;
+  const parts = [];
+  let lastFile = "";
+  if (((_a22 = f3.steps[0]) == null ? void 0 : _a22.text) !== f3.source) parts.push(`${f3.source} \u2026 `);
+  for (const s of f3.steps) {
+    const where = s.file && s.file !== lastFile ? ` (${s.file}:${s.line})` : s.line ? ` (line ${s.line})` : "";
+    if (s.text === "string" && parts.at(-1) === "string") continue;
+    parts.push(`${s.text}${where}`);
+    if (s.file) lastFile = s.file;
+  }
+  parts.push(`${f3.sink} (${f3.file === lastFile ? `line ${f3.line}` : `${f3.file}:${f3.line}`})`);
+  return parts.filter((p2) => !p2.startsWith("string")).join(" \u2192 ");
+}
 var PACKAGE_JSON_RE = /(^|\/)package\.json$/i;
 var LIFECYCLE2 = /* @__PURE__ */ new Set([
   "preinstall",
@@ -83816,6 +104335,7 @@ var defaultScanners = [
   duplicateCodeScanner,
   supplyChainScanner
 ];
+var addonScanners = [phpTaintScanner];
 var SEVERITY_CURVE = {
   critical: { full: 2, alpha: 0.7 },
   warning: { full: 8, alpha: 0.5 },
@@ -83971,6 +104491,7 @@ function runScan(_0) {
   });
 }
 var ALL_SCANNER_IDS = defaultScanners.map((s) => s.id);
+var ADDON_SCANNER_IDS = addonScanners.map((s) => s.id);
 var _a3;
 var useColor = ((_a3 = process.stdout) == null ? void 0 : _a3.isTTY) === true && !process.env.NO_COLOR;
 var blocked = new import_net.BlockList();
@@ -84319,9 +104840,9 @@ function buildScanContext(root) {
                   return true;
                 }
                 if (line.startsWith("+") && !line.startsWith("+++") && file2 && commit) {
-                  const text = line.slice(1);
-                  if (text.length <= MAX_LINE_LEN) {
-                    additions.push({ commit, date: date5, file: file2, text });
+                  const text22 = line.slice(1);
+                  if (text22.length <= MAX_LINE_LEN) {
+                    additions.push({ commit, date: date5, file: file2, text: text22 });
                     if (additions.length >= MAX_LINES) return false;
                   }
                 }
@@ -84454,6 +104975,13 @@ var categoryInput2 = external_exports.preprocess(
   (v2) => v2 === "secret" ? "security" : v2,
   categorySchema2
 );
+var flowStepSchema2 = external_exports.object({
+  role: external_exports.enum(["source", "step", "guard", "sink"]),
+  /** The expression or call, as written in the code. */
+  text: external_exports.string(),
+  file: external_exports.string().optional(),
+  line: external_exports.number().int().optional()
+});
 var issueSchema2 = external_exports.object({
   id: external_exports.string(),
   category: categoryInput2,
@@ -84499,7 +105027,14 @@ var issueSchema2 = external_exports.object({
    * (see confidence.ts). `low` findings are hidden by default and left out of
    * the score. Stamped by the engine; optional for older reports.
    */
-  confidence: external_exports.enum(["high", "medium", "low"]).optional()
+  confidence: external_exports.enum(["high", "medium", "low"]).optional(),
+  /**
+   * Data-flow path for injection findings from a deep engine: where untrusted
+   * input enters (source), what carries it (step), what would have made it safe
+   * (guard, when one was seen but did not apply), and where it lands (sink).
+   * Absent for single-line rules, which cannot see a path.
+   */
+  flow: external_exports.array(flowStepSchema2).optional()
 });
 var repoProfileSchema2 = external_exports.object({
   /** Total files the scan walked (after ignore globs). */
@@ -84778,10 +105313,10 @@ function parseFile2(content, file2, opts = {}) {
     return null;
   }
 }
-function walk2(node2, visit2) {
+function walk4(node2, visit2) {
   if (!node2 || typeof node2 !== "object") return;
   if (Array.isArray(node2)) {
-    for (const child of node2) walk2(child, visit2);
+    for (const child of node2) walk4(child, visit2);
     return;
   }
   const n = node2;
@@ -84789,7 +105324,7 @@ function walk2(node2, visit2) {
   for (const key in n) {
     if (SKIP_KEYS2.has(key)) continue;
     const val = n[key];
-    if (val && typeof val === "object") walk2(val, visit2);
+    if (val && typeof val === "object") walk4(val, visit2);
   }
 }
 
@@ -84878,12 +105413,12 @@ function makeLineLookup2(content) {
 }
 function analyzeWithRegexLang2(content, file2, lang, acc) {
   const cfg = LANG_PATTERNS2[lang];
-  const lineOf9 = makeLineLookup2(content);
+  const lineOf11 = makeLineLookup2(content);
   for (const p2 of cfg.reads) {
     for (const m2 of content.matchAll(p2.re)) {
       const name = m2[1];
       if (!name) continue;
-      recordUsage2(acc, name, file2, lineOf9(m2.index ?? 0));
+      recordUsage2(acc, name, file2, lineOf11(m2.index ?? 0));
       if (p2.fallbackGroup && m2[p2.fallbackGroup]) acc.withFallback.add(name);
     }
   }
@@ -84892,7 +105427,7 @@ function analyzeWithRegexLang2(content, file2, lang, acc) {
   }
 }
 var TEST_PATH_RE2 = /(^|\/)(?:__tests__|tests?|specs?|fixtures?)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test_[^/]+\.py$|_test\.py$|(?:^|\/)conftest\.py$/i;
-function lineOf5(node2) {
+function lineOf6(node2) {
   const loc = node2.loc;
   return loc?.start?.line ?? 0;
 }
@@ -84922,13 +105457,13 @@ function envVarName2(n) {
 function analyzeWithAst2(content, file2, acc) {
   const ast = parseFile2(content, file2);
   if (!ast) return false;
-  walk2(ast, (node2) => {
+  walk4(ast, (node2) => {
     if ((node2.type === "MemberExpression" || node2.type === "OptionalMemberExpression") && isProcessEnv2(node2.object)) {
       const prop = node2.property;
       if (!node2.computed && prop?.type === "Identifier") {
-        recordUsage2(acc, prop.name, file2, lineOf5(node2));
+        recordUsage2(acc, prop.name, file2, lineOf6(node2));
       } else if (node2.computed && prop?.type === "StringLiteral") {
-        recordUsage2(acc, prop.value, file2, lineOf5(node2));
+        recordUsage2(acc, prop.value, file2, lineOf6(node2));
       } else if (node2.computed) {
         acc.dynamic = true;
       }
@@ -84951,7 +105486,7 @@ function analyzeWithAst2(content, file2, acc) {
           if (!raw.computed && key?.type === "Identifier") name = key.name;
           else if (key?.type === "StringLiteral") name = key.value;
           if (!name) continue;
-          recordUsage2(acc, name, file2, lineOf5(raw));
+          recordUsage2(acc, name, file2, lineOf6(raw));
           if (raw.value?.type === "AssignmentPattern") acc.withFallback.add(name);
         }
       } else if (id.type === "Identifier") {
@@ -84989,9 +105524,9 @@ var envLifecycleScanner2 = {
       if (isJs) {
         const ok = analyzeWithAst2(content, file2, acc);
         if (!ok) {
-          const lineOf9 = makeLineLookup2(content);
+          const lineOf11 = makeLineLookup2(content);
           for (const match of content.matchAll(ENV_REGEX2)) {
-            recordUsage2(acc, match[1], file2, lineOf9(match.index ?? 0));
+            recordUsage2(acc, match[1], file2, lineOf11(match.index ?? 0));
           }
         }
       } else if (lang) {
@@ -85114,8 +105649,8 @@ var staleBranchScanner2 = {
 var SOURCE_RE8 = /\.(ts|tsx|js|jsx|mjs|mts|cts|py|go|rs|java|rb|php|c|cc|cpp|h|hpp|cs|kt|swift|scala)$/;
 var MARKER_RE2 = /^[\s*>!-]*(TODO|FIXME|HACK|XXX)\b:?\s*(.*)$/;
 var STALE_DAYS5 = 365;
-function findMarker2(text) {
-  const m2 = text.trimEnd().match(MARKER_RE2);
+function findMarker2(text3) {
+  const m2 = text3.trimEnd().match(MARKER_RE2);
   if (!m2) return null;
   return { marker: m2[1], rest: m2[2].trim() };
 }
@@ -85232,7 +105767,7 @@ var KNOWN_EXAMPLE_RE2 = /EXAMPLE/;
 var BINARY_EXT2 = /\.(png|jpe?g|gif|webp|ico|bmp|pdf|zip|gz|tar|woff2?|ttf|eot|mp[34]|mov|wasm)$/i;
 var SKIP_NAME2 = /(?:^|\/)(package-lock\.json|pnpm-lock\.yaml|yarn\.lock)$/;
 var NUL2 = String.fromCharCode(0);
-var MAX_BYTES3 = 1e6;
+var MAX_BYTES4 = 1e6;
 var LOW_CONFIDENCE_DIR2 = /(?:^|\/)(?:t|tests?|test_certs|cassettes|_examples|test_files|vectors|[\w-]*_vectors|interop|__tests__|__mocks__|spec|specs?|e2e|integration|testserver|test-utils|fixtures?|__fixtures__|testdata|mocks?|examples?|samples?|docs?)\//i;
 var LOW_CONFIDENCE_NAME2 = /(?:^|[/._-])(?:test|tests|spec|specs|example|examples|sample|samples|fixture|fixtures|mock|mocks|dummy|stub|demo)\.[a-z0-9]+$/i;
 function isLowConfidenceSecretFile2(file2) {
@@ -85293,7 +105828,7 @@ var secretsScanner2 = {
     for (const file2 of ctx.files) {
       if (isSkippedSecretFile2(file2)) continue;
       const content = await ctx.readFile(file2);
-      if (!content || content.length > MAX_BYTES3 || content.includes(NUL2)) continue;
+      if (!content || content.length > MAX_BYTES4 || content.includes(NUL2)) continue;
       const lowConf = isLowConfidenceSecretFile2(file2);
       const lines = content.split("\n");
       for (let i = 0; i < lines.length; i++) {
@@ -85340,7 +105875,7 @@ var secretsScanner2 = {
       for (const add of additions) {
         if (count >= HISTORY_MAX_FINDINGS2) break;
         if (isSkippedSecretFile2(add.file)) continue;
-        if (add.text.length > MAX_BYTES3 || add.text.includes(NUL2)) continue;
+        if (add.text.length > MAX_BYTES4 || add.text.includes(NUL2)) continue;
         const lowConf = isLowConfidenceSecretFile2(add.file);
         for (const hit of findSecretsInLine2(add.text)) {
           if (hit.entropyHit && lowConf) continue;
@@ -85402,14 +105937,14 @@ function packageOf2(spec) {
 var FRAMEWORK_IMPLICIT2 = /* @__PURE__ */ new Set(["react-dom"]);
 var CONFIG_FILE_RE2 = /(^|\/)(next|postcss|tailwind|vite|vitest|rollup|webpack|babel|jest|eslint|prettier|stylelint|playwright|cypress|tsup|drizzle|svelte|astro|nuxt)\.config\.[cm]?[jt]s$|(^|\/)\.(babelrc|eslintrc|prettierrc|stylelintrc)[\w.]*$/i;
 async function collectToolingText2(ctx, scripts) {
-  let text = Object.values(scripts ?? {}).join("\n");
+  let text3 = Object.values(scripts ?? {}).join("\n");
   for (const file2 of ctx.files) {
     if (!CONFIG_FILE_RE2.test(file2)) continue;
     const content = await ctx.readFile(file2);
-    if (content) text += `
+    if (content) text3 += `
 ${content}`;
   }
-  return text;
+  return text3;
 }
 var IMPORT_TEXT_RE2 = /(?:\bfrom\s*|\bimport\s*\(?\s*|\brequire\s*\(\s*)["']([^"'\s]+)["']|\bimport\s+["']([^"'\s]+)["']/g;
 async function collectImports2(ctx) {
@@ -85424,7 +105959,7 @@ async function collectImports2(ctx) {
     }
     const ast = /\.(vue|svelte|astro)$/.test(file2) ? null : parseFile2(content, file2);
     if (!ast) continue;
-    walk2(ast, (node2) => {
+    walk4(ast, (node2) => {
       let spec = null;
       if ((node2.type === "ImportDeclaration" || node2.type === "ExportNamedDeclaration" || node2.type === "ExportAllDeclaration") && node2.source) {
         spec = node2.source.value ?? null;
@@ -85905,13 +106440,13 @@ async function computeNpmPackageInstances2(ctx, fileSet) {
           add(actualName, value.version, value.dev !== true, nodeModulesCount === 1, path);
         }
       }
-      const walk3 = (deps) => {
+      const walk7 = (deps) => {
         for (const [name, value] of Object.entries(deps ?? {})) {
           if (typeof value.version === "string") add(name, value.version, value.dev !== true, false, name);
-          walk3(value.dependencies);
+          walk7(value.dependencies);
         }
       };
-      walk3(json2.dependencies);
+      walk7(json2.dependencies);
       if (found.size) return [...found.values()];
     } catch {
     }
@@ -86128,14 +106663,14 @@ function parseNpmLock2(txt) {
       saw = true;
       if (val?.dev !== true) prod.add(m2[1]);
     }
-    const walk3 = (deps) => {
+    const walk7 = (deps) => {
       for (const [name, val] of Object.entries(deps ?? {})) {
         saw = true;
         if (val?.dev !== true) prod.add(name);
-        walk3(val?.dependencies);
+        walk7(val?.dependencies);
       }
     };
-    walk3(json2.dependencies);
+    walk7(json2.dependencies);
     return saw ? prod : null;
   } catch {
     return null;
@@ -86220,7 +106755,7 @@ function finalizeDependencyResearch2(manager, lockfile, nodeMap, edges, options,
   const paths = [];
   const maxPaths = Math.max(1, options.maxPaths ?? 100);
   let truncated = false;
-  const walk3 = (start, mode) => {
+  const walk7 = (start, mode) => {
     const stack = [{ id: start, path: [], devStarted: false }];
     let walkSteps = 0;
     while (stack.length && paths.length < maxPaths && walkSteps < 2e4) {
@@ -86246,8 +106781,8 @@ function finalizeDependencyResearch2(manager, lockfile, nodeMap, edges, options,
     if (stack.length && (walkSteps >= 2e4 || paths.length >= maxPaths)) truncated = true;
   };
   if (options.target) for (const root of roots) {
-    walk3(root.id, "production");
-    walk3(root.id, "development");
+    walk7(root.id, "production");
+    walk7(root.id, "development");
   }
   if (truncated) warnings.push("Dependency path search reached its safety limit; the path list may be incomplete.");
   const nodes = [...nodeMap.values()].map(({ prod: _prod, dev: _dev, ...node2 }) => node2);
@@ -86288,10 +106823,10 @@ function dependencyEntries2(value) {
   const record2 = asRecord2(value);
   return record2 ? Object.entries(record2).filter((entry) => typeof entry[1] === "string") : [];
 }
-function parseYarnDependencyResearch2(text, manifests, options = {}) {
+function parseYarnDependencyResearch2(text3, manifests, options = {}) {
   let parsed;
   try {
-    parsed = (0, import_parsers2.parseSyml)(text);
+    parsed = (0, import_parsers2.parseSyml)(text3);
   } catch {
     return null;
   }
@@ -86585,13 +107120,13 @@ async function enumerateNpmInstalled2(ctx, fileSet) {
         const m2 = key.match(/(?:^|\/)node_modules\/((?:@[^/]+\/)?[^/]+)$/);
         if (m2 && typeof val?.version === "string") add(m2[1], val.version, val.dev === true);
       }
-      const walk3 = (deps) => {
+      const walk7 = (deps) => {
         for (const [name, val] of Object.entries(deps ?? {})) {
           if (typeof val?.version === "string") add(name, val.version, val.dev === true);
-          walk3(val?.dependencies);
+          walk7(val?.dependencies);
         }
       };
-      walk3(json2.dependencies);
+      walk7(json2.dependencies);
     } catch {
     }
   }
@@ -86617,8 +107152,8 @@ async function enumerateNpmInstalled2(ctx, fileSet) {
 }
 async function enumerateYarnInstalled2(ctx, fileSet) {
   if (!fileSet.has("yarn.lock")) return null;
-  const text = await ctx.readFile("yarn.lock");
-  if (!text) return null;
+  const text3 = await ctx.readFile("yarn.lock");
+  if (!text3) return null;
   const manifests = /* @__PURE__ */ new Map();
   for (const file2 of fileSet) if (file2 === "package.json" || file2.endsWith("/package.json")) {
     const body = await ctx.readFile(file2);
@@ -86626,7 +107161,7 @@ async function enumerateYarnInstalled2(ctx, fileSet) {
   }
   let graph;
   try {
-    graph = parseYarnDependencyResearch2(text, manifests, { maxNodes: MAX_QUERIES2, maxEdges: MAX_QUERIES2 * 3 });
+    graph = parseYarnDependencyResearch2(text3, manifests, { maxNodes: MAX_QUERIES2, maxEdges: MAX_QUERIES2 * 3 });
   } catch {
     return null;
   }
@@ -87197,9 +107732,9 @@ async function collectEntrypoints2(ctx) {
   const entries = /* @__PURE__ */ new Set();
   for (const file2 of ctx.files) {
     const norm = file2.replace(/\\/g, "/");
-    const lower = norm.toLowerCase();
+    const lower7 = norm.toLowerCase();
     const dir = norm.includes("/") ? norm.slice(0, norm.lastIndexOf("/")) : "";
-    if (lower === "package.json" || lower.endsWith("/package.json")) {
+    if (lower7 === "package.json" || lower7.endsWith("/package.json")) {
       const txt = await ctx.readFile(file2);
       if (!txt) continue;
       let json2;
@@ -87212,7 +107747,7 @@ async function collectEntrypoints2(ctx) {
       const paths = typeof bin === "string" ? [bin] : bin && typeof bin === "object" ? Object.values(bin).map(String) : [];
       for (const p2 of paths)
         for (const c3 of entrySourceCandidates2(joinPath3(dir, p2))) entries.add(c3);
-    } else if (lower.endsWith("/action.yml") || lower.endsWith("/action.yaml") || lower === "action.yml" || lower === "action.yaml") {
+    } else if (lower7.endsWith("/action.yml") || lower7.endsWith("/action.yaml") || lower7 === "action.yml" || lower7 === "action.yaml") {
       const txt = await ctx.readFile(file2);
       if (!txt) continue;
       const m2 = txt.match(/(?:^|\n)\s*main:\s*["']?([^"'\n#]+?)["']?\s*(?:#.*)?$/m);
@@ -87256,7 +107791,7 @@ function debugLangOf2(file2) {
   if (ext === "php") return "php";
   return null;
 }
-function lineOf6(node2) {
+function lineOf7(node2) {
   const loc = node2.loc;
   return loc?.start?.line ?? 0;
 }
@@ -87279,7 +107814,7 @@ function intentionalLog2(node2, lines) {
     const quasis = first.quasis ?? [];
     if (/\w\s+\w/.test(quasis.map((q3) => q3.value?.raw ?? "").join(" "))) return true;
   }
-  const line = lineOf6(node2);
+  const line = lineOf7(node2);
   for (let i = Math.max(0, line - 3); i < line - 1; i++) if (DEBUG_GUARD_RE2.test(lines[i] ?? "")) return true;
   return false;
 }
@@ -87358,13 +107893,13 @@ var leftoverDebugScanner2 = {
         const srcLines = content.split("\n");
         let perFile = 0;
         const found = [];
-        walk2(ast, (n) => {
+        walk4(ast, (n) => {
           if (perFile >= MAX_PER_FILE6) return;
           const label = debugLabel2(n);
           if (!label) return;
           if (isEntrypoint && label !== "debugger") return;
           if (label !== "debugger" && intentionalLog2(n, srcLines)) return;
-          found.push({ line: lineOf6(n), label });
+          found.push({ line: lineOf7(n), label });
           perFile++;
         });
         for (const { line, label } of found) {
@@ -87423,9 +107958,9 @@ function resolveRel2(baseDir, target) {
 function stripCode2(src) {
   return src.replace(/```[\s\S]*?```/g, (m2) => m2.replace(/[^\n]/g, " ")).replace(/~~~[\s\S]*?~~~/g, (m2) => m2.replace(/[^\n]/g, " ")).replace(/`[^`\n]*`/g, (m2) => " ".repeat(m2.length));
 }
-function lineAt6(text, index) {
+function lineAt6(text3, index) {
   let line = 1;
-  for (let i = 0; i < index && i < text.length; i++) if (text[i] === "\n") line++;
+  for (let i = 0; i < index && i < text3.length; i++) if (text3[i] === "\n") line++;
   return line;
 }
 var NOT_LINKED_DOC_RE2 = /(^|\/)(?:CHANGELOG|CHANGES|HISTORY|NEWS|RELEASES?)[^/]*\.\w+$|(^|\/)(?:test|tests|spec|specs|deps|vendor|website|docs_src|blog)\/|(^|\/)README[-.][a-z]{2}(?:[-_][A-Za-z]{2,4})?\.\w+$/i;
@@ -87478,11 +108013,11 @@ var brokenDocLinksScanner2 = {
       if (NOT_LINKED_DOC_RE2.test(norm)) continue;
       const raw = await ctx.readFile(file2);
       if (!raw || !raw.includes("](")) continue;
-      const text = stripCode2(raw);
+      const text3 = stripCode2(raw);
       const baseDir = dirOf3(norm);
       LINK_RE2.lastIndex = 0;
       let m2;
-      while ((m2 = LINK_RE2.exec(text)) !== null) {
+      while ((m2 = LINK_RE2.exec(text3)) !== null) {
         if (issues.length >= MAX_TOTAL10) break;
         let target = m2[1].trim().split(/\s+/)[0].replace(/^<|>$/g, "");
         target = target.split("#")[0].split("?")[0];
@@ -87502,7 +108037,7 @@ var brokenDocLinksScanner2 = {
           if (asDir && (fileSet.has(`${asDir}.md`) || fileSet.has(`${asDir}/index.md`) || fileSet.has(asDir))) continue;
           if (fileSet.has(`${resolved}.md`)) continue;
         }
-        const line = lineAt6(text, m2.index);
+        const line = lineAt6(text3, m2.index);
         issues.push({
           id: `doclink-${norm}:${line}:${target}`,
           category: "hygiene",
@@ -87722,7 +108257,7 @@ async function scanJsTsExports2(ctx, sources) {
     const isBarrel = /(^|\/)index(\.d)?\.[a-z]+$/.test(file2) || entryFiles.has(file2) || NOT_SHIPPED_RE3.test(file2);
     const srcLines = content.split("\n");
     const snip = (n) => {
-      const start = lineOf7(n);
+      const start = lineOf8(n);
       if (start < 1) return void 0;
       const lead = [];
       for (let i = start - 2; i >= 0 && lead.length < 6; i--) {
@@ -87752,7 +108287,7 @@ async function scanJsTsExports2(ctx, sources) {
       return out.trim() || void 0;
     };
     const idCounts = /* @__PURE__ */ new Map();
-    walk2(ast, (node2) => {
+    walk4(ast, (node2) => {
       if (node2.type === "TSModuleDeclaration") {
         const loc = node2.loc;
         if (loc?.start?.line && loc.end?.line) namespaceRanges.push([file2, loc.start.line, loc.end.line]);
@@ -87808,11 +108343,11 @@ async function scanJsTsExports2(ctx, sources) {
         if (decl && !isType2(decl) && !isBarrel) {
           if (decl.type === "FunctionDeclaration" || decl.type === "ClassDeclaration") {
             const id = decl.id;
-            if (id?.type === "Identifier") exports2.push({ name: id.name, file: file2, line: lineOf7(node2), code: snip(node2) });
+            if (id?.type === "Identifier") exports2.push({ name: id.name, file: file2, line: lineOf8(node2), code: snip(node2) });
           } else if (decl.type === "VariableDeclaration") {
             for (const d2 of decl.declarations ?? []) {
               const id = d2.id;
-              if (id?.type === "Identifier") exports2.push({ name: id.name, file: file2, line: lineOf7(node2), code: snip(node2) });
+              if (id?.type === "Identifier") exports2.push({ name: id.name, file: file2, line: lineOf8(node2), code: snip(node2) });
             }
           }
         }
@@ -87820,7 +108355,7 @@ async function scanJsTsExports2(ctx, sources) {
           for (const spec of node2.specifiers ?? []) {
             const exported = spec.exported;
             const name = exported?.type === "Identifier" ? exported.name : void 0;
-            if (name && name !== "default") exports2.push({ name, file: file2, line: lineOf7(node2), code: snip(node2) });
+            if (name && name !== "default") exports2.push({ name, file: file2, line: lineOf8(node2), code: snip(node2) });
           }
         }
       }
@@ -87890,7 +108425,7 @@ async function scanJsTsExports2(ctx, sources) {
   }
   return issues;
 }
-function lineOf7(node2) {
+function lineOf8(node2) {
   const loc = node2.loc;
   return loc?.start?.line ?? 0;
 }
@@ -88032,7 +108567,7 @@ var MB2 = 1024 * 1024;
 var LARGE_BYTES2 = 5 * MB2;
 var MEDIA_BYTES2 = 10 * MB2;
 var FIXTURE_LARGE_BYTES2 = 25 * MB2;
-var MAX_FINDINGS2 = 30;
+var MAX_FINDINGS3 = 30;
 var SMALL_ARTIFACT_BYTES2 = 100 * 1024;
 var FIXTURE_DIR2 = /(^|\/)(?:tests?|__tests__|spec|fixtures?|__fixtures__|testdata|test_protos|examples?)\//i;
 var ARTIFACT_EXT2 = /* @__PURE__ */ new Set([
@@ -88140,7 +108675,7 @@ var repoBloatScanner2 = {
     if (candidates.length === 0) return [];
     candidates.sort((a, b3) => (b3.size ?? -1) - (a.size ?? -1));
     const issues = [];
-    for (const c3 of candidates.slice(0, MAX_FINDINGS2)) {
+    for (const c3 of candidates.slice(0, MAX_FINDINGS3)) {
       const sizeStr = c3.size != null ? ` (${humanSize2(c3.size)})` : "";
       let title;
       let detail;
@@ -88285,7 +108820,7 @@ var DEV_COMPOSE_RE2 = /(^|\/)(?:docker-)?compose[.-](?:[\w.-]*[.-])?(?:ci|test|t
 var MAX_TOTAL13 = 60;
 var MAX_PER_FILE7 = 8;
 var ADMIN_PORTS2 = /* @__PURE__ */ new Set([22, 23, 3389, 5900, 3306, 5432, 1433, 1521, 27017, 6379, 11211, 9200, 9300, 2375, 2376, 5984, 8086]);
-var RULES4 = {
+var RULES5 = {
   "public-bucket": {
     id: "public-bucket",
     severity: "critical",
@@ -88402,7 +108937,7 @@ function cloudHits2(lines, isTerraform) {
     const line = lines[i];
     const t2 = line.trim();
     if (/^(?:#|\/\/)/.test(t2)) continue;
-    const push = (id) => hits.push({ rule: RULES4[id], line: i + 1, evidence: t2.slice(0, 160) });
+    const push = (id) => hits.push({ rule: RULES5[id], line: i + 1, evidence: t2.slice(0, 160) });
     if (/\bacl\b\s*=\s*"public-read(?:-write)?"|AccessControl["']?\s*:\s*["']?PublicRead(?:Write)?\b/.test(line)) push("public-bucket");
     else if (/\b(?:block_public_acls|block_public_policy|restrict_public_buckets|ignore_public_acls)\s*=\s*false\b|\b(?:BlockPublicAcls|BlockPublicPolicy|RestrictPublicBuckets)["']?\s*:\s*["']?false\b/.test(line)) push("public-bucket");
     else if (/(?:"|\b)(?:0\.0\.0\.0\/0|::\/0)"/.test(line) || /CidrIp(?:v6)?["']?\s*:\s*["']?(?:0\.0\.0\.0\/0|::\/0)/.test(line)) {
@@ -88433,14 +108968,14 @@ var DOCKER_API_IMAGE2 = /^\s*image:\s*["']?(?:[\w.-]+\/)*(?:traefik|watchtower|p
 var HOST_AGENT_IMAGE2 = /^\s*image:\s*["']?(?:[\w.-]+\/)*(?:node-exporter|cadvisor|netdata|telegraf|promtail|grafana-agent|alloy|docker(?=:[^\s"']*dind))\b/;
 function containerHits2(lines, compose) {
   const hits = [];
-  const text = lines.join("\n");
-  const nodeAgent = /^\s*kind:\s*DaemonSet\b/m.test(text);
-  if (/^\s*kind:\s*(?:PodSecurityPolicy|SecurityContextConstraints|ClusterPolicy|Policy|ValidatingAdmissionPolicy)\b/m.test(text)) return hits;
+  const text3 = lines.join("\n");
+  const nodeAgent = /^\s*kind:\s*DaemonSet\b/m.test(text3);
+  if (/^\s*kind:\s*(?:PodSecurityPolicy|SecurityContextConstraints|ClusterPolicy|Policy|ValidatingAdmissionPolicy)\b/m.test(text3)) return hits;
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     const t2 = line.trim();
     if (t2.startsWith("#")) continue;
-    const push = (id) => hits.push({ rule: RULES4[id], line: i + 1, evidence: t2.slice(0, 160) });
+    const push = (id) => hits.push({ rule: RULES5[id], line: i + 1, evidence: t2.slice(0, 160) });
     if (/\{\{-?\s*(?:if|with)\b/.test(near2(lines, i, 2, 0))) continue;
     const inInit = /^\s*initContainers:|sysctl|chown|chmod|volume-?permissions|init-?container/i.test(near2(lines, i, 25, 0));
     const hostAgent = compose && HOST_AGENT_IMAGE2.test(nearestImage2(lines, i));
@@ -88551,7 +109086,7 @@ var PY_RULES2 = [
   { re: /@(?:pytest\.mark\.skip|unittest\.skip)\b/, severity: "info", label: "skipped test (@skip)" }
 ];
 var PREFILTER2 = /\.(?:only|skip|todo)\s*\(|\bf(?:it|describe|test)\s*\(|\bx(?:it|describe|test|context)\s*\(|@(?:pytest\.mark\.skip|unittest\.skip)|skipTest|pytest\.skip/;
-function lineOf8(node2) {
+function lineOf9(node2) {
   const loc = node2.loc;
   return loc?.start?.line ?? 0;
 }
@@ -88573,11 +109108,11 @@ var skippedTestsScanner2 = {
       if (isJs) {
         const ast = parseFile2(content, file2);
         if (ast) {
-          walk2(ast, (n) => {
+          walk4(ast, (n) => {
             if (byLine.size >= MAX_PER_FILE8) return;
             const hit = jsHit2(n);
             if (!hit) return;
-            const line = lineOf8(n);
+            const line = lineOf9(n);
             if (!byLine.has(line)) byLine.set(line, hit);
           });
         } else {
@@ -89198,7 +109733,7 @@ function scanKotlinSource2(content) {
 }
 
 // ../core/src/scanners/php-security.ts
-var REQUEST2 = /\$_(?:GET|POST|REQUEST|COOKIE|FILES)\b|\bfile_get_contents\s*\(\s*['"]php:\/\/input['"]/i;
+var REQUEST4 = /\$_(?:GET|POST|REQUEST|COOKIE|FILES)\b|\bfile_get_contents\s*\(\s*['"]php:\/\/input['"]/i;
 function scanPhpSecurity2(content) {
   const hits = [];
   const tainted = /* @__PURE__ */ new Set();
@@ -89237,7 +109772,7 @@ function scanPhpSecurity2(content) {
     if (/\b(?:function|if|else|switch|for|foreach|while|try|catch)\b|^\s*}/.test(executable)) tainted.clear();
     const carries = (expr) => {
       const value = expr.replace(/\\\$/g, "").replace(/'(?:\\.|[^'\\])*'/g, "");
-      return REQUEST2.test(value) || /\bfile_get_contents\s*\(\s*['"]php:\/\/input['"]/.test(expr) || [...value.matchAll(/\$[A-Za-z_]\w*/g)].some((m2) => tainted.has(m2[0]));
+      return REQUEST4.test(value) || /\bfile_get_contents\s*\(\s*['"]php:\/\/input['"]/.test(expr) || [...value.matchAll(/\$[A-Za-z_]\w*/g)].some((m2) => tainted.has(m2[0]));
     };
     for (const statement of code.split(";")) {
       const assignment = statement.match(/^\s*(?:<\?php\s*)?(\$[A-Za-z_]\w*)\s*=\s*(.*)$/);
@@ -89470,7 +110005,7 @@ var MAX_PER_FILE10 = 6;
 var MAX_TOTAL16 = 60;
 var MAX_COLLECT2 = 2e3;
 var CONFIDENCE_RANK2 = { high: 2, medium: 1, low: 0 };
-var MAX_BYTES4 = 4e5;
+var MAX_BYTES5 = 4e5;
 var PHP_JAVA_RULES2 = [
   // --- Python SQL (VAmPI: f"SELECT … '{username}'") ---------------------------
   {
@@ -89712,7 +110247,7 @@ var PHP_JAVA_RULES2 = [
     detail: "Native Java deserialisation of untrusted bytes is a classic remote-code-execution path (gadget chains). Use a data format such as JSON, or an allow-list `ObjectInputFilter`."
   }
 ];
-var RULES5 = [
+var RULES6 = [
   // ---- JavaScript / TypeScript -------------------------------------------
   {
     id: "eval-dynamic",
@@ -90208,7 +110743,7 @@ function scanSource2(content, lang) {
       }
     };
     if (tree) {
-      walk2(tree, (node2) => {
+      walk4(tree, (node2) => {
         if (["StringLiteral", "RegExpLiteral", "TemplateElement"].includes(node2.type ?? "")) record2(node2);
         const callee = node2.callee;
         if (node2.type === "NewExpression" && callee?.type === "Identifier" && callee.name === "Function" && typeof node2.start === "number" && Array.isArray(node2.arguments) && node2.arguments.every((arg) => arg.type === "StringLiteral" || arg.type === "TemplateLiteral" && Array.isArray(arg.expressions) && arg.expressions.length === 0)) {
@@ -90219,7 +110754,7 @@ function scanSource2(content, lang) {
     }
   }
   const byLine = /* @__PURE__ */ new Map();
-  for (const rule of RULES5) {
+  for (const rule of RULES6) {
     if (rule.lang !== lang) continue;
     rule.re.lastIndex = 0;
     for (const m2 of content.matchAll(rule.re)) {
@@ -90232,7 +110767,7 @@ function scanSource2(content, lang) {
       const line = lineAt7(content, idx);
       const lineEnd = content.indexOf("\n", idx);
       const rawLine = content.slice(lineStart, lineEnd === -1 ? void 0 : lineEnd);
-      const text = rawLine.trim();
+      const text3 = rawLine.trim();
       if (lang === "js") {
         const col = idx - lineStart;
         if (literalRanges2(rawLine).some(([a, b3]) => col > a && col < b3)) continue;
@@ -90254,7 +110789,7 @@ function scanSource2(content, lang) {
       if (lang === "php" && rule.id === "exec-interpolated" && /\bproc_open\s*\(\s*\[/.test(rawLine)) continue;
       if ((rule.id === "php-include-user-input" || rule.id === "php-reflected-xss") && !/\$_(?:GET|POST|REQUEST|COOKIE)\b/.test(m2[0]) && !phpLocalRequestValue2(content, idx, m2[0])) continue;
       const tainted = !INJECTION_RULES2.has(rule.id) ? void 0 : rule.id === "ssrf" ? SSRF_TAINT2.test(around2(content, lineStart, 2, 0)) : TAINT_RE2[lang].test(around2(content, lineStart, TAINT_WINDOW2, 2));
-      byLine.set(line, { rule, line, evidence: text.slice(0, 160), tainted });
+      byLine.set(line, { rule, line, evidence: text3.slice(0, 160), tainted });
     }
   }
   if (lang === "php") for (const hit of scanPhpSecurity2(content)) {
@@ -90386,8 +110921,8 @@ var CROSS_FILE_KIND2 = [
   [/^insecure-(?:exec-interpolated|py-os-system|py-shell-true|eval-dynamic|py-eval-exec|new-function)-/, "exec"]
 ];
 var VENDORED_SINK_RE2 = /(^|\/)(?:vendor|third_party|node_modules|lib\/(?:mako|cherrypy|jinja2|six|requests|urllib3))\//;
-function paramReaches2(kind, n, text) {
-  if (kind === "exec") return new RegExp(`\\b${n}\\b`).test(text);
+function paramReaches2(kind, n, text3) {
+  if (kind === "exec") return new RegExp(`\\b${n}\\b`).test(text3);
   return new RegExp(
     [
       `\\{\\s*${n}\\b`,
@@ -90407,7 +110942,7 @@ function paramReaches2(kind, n, text) {
       `%[sv][^\\n]*,\\s*${n}\\b`
       // Sprintf("…%s", n)
     ].join("|")
-  ).test(text);
+  ).test(text3);
 }
 var GENERIC_FN2 = /* @__PURE__ */ new Set([
   "get",
@@ -90526,7 +111061,7 @@ var insecureCodeScanner2 = {
       if (/\.(?:rs|c|cc|cpp|cxx|h|hpp|hxx)$/i.test(norm)) {
         if (TEST_RE7.test(norm) || /(?:^|\/)(?:test|tests)\.(?:rs|c|cc|cpp|cxx)$|_test\.(?:rs|c|cc|cpp|cxx)$/i.test(norm)) continue;
         const size2 = await ctx.fileSize?.(file2);
-        if (size2 !== null && size2 !== void 0 && size2 > MAX_BYTES4) continue;
+        if (size2 !== null && size2 !== void 0 && size2 > MAX_BYTES5) continue;
         const content2 = await ctx.readFile(file2);
         if (!content2) continue;
         const nativeHits = /\.rs$/i.test(norm) ? scanRustTlsSource2(content2) : scanCppTlsSource2(content2);
@@ -90553,7 +111088,7 @@ var insecureCodeScanner2 = {
       const lang = langOf2(norm);
       if (!lang && !/\.(?:swift|scala)$/i.test(norm)) continue;
       const size = await ctx.fileSize?.(file2);
-      if (size !== null && size !== void 0 && size > MAX_BYTES4) continue;
+      if (size !== null && size !== void 0 && size > MAX_BYTES5) continue;
       const content = await ctx.readFile(file2);
       if (!content) continue;
       if (!lang) {
@@ -90671,16 +111206,16 @@ function isCheckable2(raw) {
   if (PLACEHOLDER_RE4.test(raw)) return false;
   return true;
 }
-function extractUrls2(text) {
-  return extractUrlsWithLines2(text).map((u2) => u2.url);
+function extractUrls2(text3) {
+  return extractUrlsWithLines2(text3).map((u2) => u2.url);
 }
-function extractUrlsWithLines2(text) {
+function extractUrlsWithLines2(text3) {
   const out = [];
-  for (const m2 of text.matchAll(URL_RE2)) {
+  for (const m2 of text3.matchAll(URL_RE2)) {
     const at2 = m2.index ?? 0;
-    if (text[at2 + m2[0].length] === "<") continue;
+    if (text3[at2 + m2[0].length] === "<") continue;
     const cleaned = stripTrailingPunctuation2(m2[0]);
-    if (cleaned) out.push({ url: cleaned, line: lineAt8(text, at2) });
+    if (cleaned) out.push({ url: cleaned, line: lineAt8(text3, at2) });
   }
   return out;
 }
@@ -90720,8 +111255,8 @@ function manifestUrls2(json2) {
   push(j3.funding);
   return out;
 }
-function lineAt8(text, index) {
-  return text.slice(0, index).split("\n").length;
+function lineAt8(text3, index) {
+  return text3.slice(0, index).split("\n").length;
 }
 async function mapPool2(items, limit, worker) {
   const results = new Array(items.length);
@@ -90750,23 +111285,23 @@ var deadLinksScanner2 = {
       const isCode = CODE_RE2.test(norm);
       const isManifest = norm === "package.json" || norm.endsWith("/package.json");
       if (!isMd && !isCode && !isManifest) continue;
-      const text = await ctx.readFile(file2);
-      if (!text || !text.includes("http")) continue;
+      const text3 = await ctx.readFile(file2);
+      if (!text3 || !text3.includes("http")) continue;
       if (isManifest) {
         let json2;
         try {
-          json2 = JSON.parse(text);
+          json2 = JSON.parse(text3);
         } catch {
           continue;
         }
         for (const url2 of manifestUrls2(json2)) {
           if (!isCheckable2(url2) || seen.has(url2)) continue;
-          const idx = text.indexOf(url2);
-          seen.set(url2, { file: norm, line: idx === -1 ? 1 : lineAt8(text, idx) });
+          const idx = text3.indexOf(url2);
+          seen.set(url2, { file: norm, line: idx === -1 ? 1 : lineAt8(text3, idx) });
         }
         continue;
       }
-      const found = isMd ? extractUrlsWithLines2(text) : commentUrls2(text);
+      const found = isMd ? extractUrlsWithLines2(text3) : commentUrls2(text3);
       for (const { url: url2, line } of found) {
         if (!isCheckable2(url2) || seen.has(url2)) continue;
         seen.set(url2, { file: norm, line });
@@ -90983,7 +111518,7 @@ function everyJobHasPermissions2(lines) {
   }
   return jobs > 0 && withPerms === jobs;
 }
-var RULES6 = {
+var RULES7 = {
   "pr-target-checkout": {
     severity: "critical",
     title: () => "pull_request_target checks out the pull request's own code",
@@ -91037,7 +111572,7 @@ var workflowSecurityScanner2 = {
       if (!content) continue;
       for (const finding of scanWorkflow2(content)) {
         if (issues.length >= MAX_ISSUES11) break;
-        const rule = RULES6[finding.rule];
+        const rule = RULES7[finding.rule];
         if (!rule) continue;
         let ageDays = 0;
         try {
@@ -92002,8 +112537,8 @@ function pickVersion2(range, versions) {
   const hits = published.filter(([, v2]) => ok(v2)).sort((a, b3) => a[1][0] - b3[1][0] || a[1][1] - b3[1][1] || a[1][2] - b3[1][2]);
   return hits.length ? hits[hits.length - 1][0] : null;
 }
-function licenseFromText2(text) {
-  const head = text.slice(0, 4e3);
+function licenseFromText2(text3) {
+  const head = text3.slice(0, 4e3);
   const patterns = [
     [/GNU AFFERO GENERAL PUBLIC LICENSE/i, "AGPL-3.0"],
     [/Server Side Public License/i, "SSPL-1.0"],
@@ -92038,8 +112573,8 @@ var licenseRiskScanner2 = {
     if (!projectLicense) {
       const lic = rootLicenseFile2(ctx.files);
       if (lic) {
-        const text = await ctx.readFile(lic);
-        if (text) projectLicense = licenseFromText2(text);
+        const text3 = await ctx.readFile(lic);
+        if (text3) projectLicense = licenseFromText2(text3);
       }
     }
     const projectClass = classifyLicense2(projectLicense);
@@ -92341,11 +112876,11 @@ var ciHealthScanner2 = {
 var WINDOW2 = 8;
 var MIN_CHARS2 = 240;
 var MAX_ISSUES17 = 15;
-var MAX_FILES2 = 4e3;
+var MAX_FILES3 = 4e3;
 var MANY_COPIES2 = 4;
 var LARGE_BLOCK2 = 30;
 var CODE_EXT2 = /\.(?:[cm]?[jt]sx?|py|go|rs|rb|php|java|kt|kts|swift|scala|cs|c|cc|cpp|h|hpp|m|mm|dart|ex|exs|vue|svelte)$/i;
-var SKIP_PATH2 = /(^|\/)(?:node_modules|vendor|third_party|thirdparty|dist|build|out|target|generated|__generated__|\.next|\.nuxt|coverage|migrations|__snapshots__|__fixtures__|fixtures?|testdata|examples?(?:[-_][\w.-]+)?|[^/]+\.docset|templates?(?:[-_.][\w.-]*)?|scaffolds?|starters?|playgrounds?|bench(?:mark)?s?|locales?|i18n|translations?)\//i;
+var SKIP_PATH3 = /(^|\/)(?:node_modules|vendor|third_party|thirdparty|dist|build|out|target|generated|__generated__|\.next|\.nuxt|coverage|migrations|__snapshots__|__fixtures__|fixtures?|testdata|examples?(?:[-_][\w.-]+)?|[^/]+\.docset|templates?(?:[-_.][\w.-]*)?|scaffolds?|starters?|playgrounds?|bench(?:mark)?s?|locales?|i18n|translations?)\//i;
 var GENERATED_FILE2 = /(?:\.min\.[jt]s|\.bundle\.js|\.(?:g|freezed)\.dart|_pb2?\.py|\.pb\.go|\.generated\.[a-z]+|\.d\.ts)$/i;
 var TEST_FILE2 = /(^|\/)(?:tests?|spec|__tests__|e2e|[^/]+\.Tests?)\/|(^|\/)src\/androidTest\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(^|\/)test_[^/]+\.py$|[^/]+_test\.(?:py|go|rb|cc|cpp)$|[^/]+Test\.(?:java|kt|cs)$|_spec\.rb$/i;
 var SWIFT_TEST_FILE2 = /(?:^|\/)[^/]+Tests(?:\/.*)?\.swift$/i;
@@ -92358,29 +112893,29 @@ function significantLines2(content) {
   let inBlockComment = false;
   let inDocstring = null;
   for (let i = 0; i < lines.length; i++) {
-    let text = lines[i].trim();
+    let text3 = lines[i].trim();
     if (inDocstring) {
-      if (text.includes(inDocstring)) inDocstring = null;
+      if (text3.includes(inDocstring)) inDocstring = null;
       continue;
     }
-    const doc = text.match(/^[rRuUbB]?("""|''')/);
+    const doc = text3.match(/^[rRuUbB]?("""|''')/);
     if (doc) {
-      const rest = text.slice(text.indexOf(doc[1]) + 3);
+      const rest = text3.slice(text3.indexOf(doc[1]) + 3);
       if (!rest.includes(doc[1])) inDocstring = doc[1];
       continue;
     }
     if (inBlockComment) {
-      if (text.includes("*/")) inBlockComment = false;
+      if (text3.includes("*/")) inBlockComment = false;
       continue;
     }
-    if (text.startsWith("/*")) {
-      if (!text.includes("*/")) inBlockComment = true;
+    if (text3.startsWith("/*")) {
+      if (!text3.includes("*/")) inBlockComment = true;
       continue;
     }
-    if (!text || COMMENT2.test(text)) continue;
-    text = text.replace(/\s+/g, " ");
-    if (NOISE2.test(text) || IMPORTISH2.test(text)) continue;
-    out.push({ text, line: i + 1 });
+    if (!text3 || COMMENT2.test(text3)) continue;
+    text3 = text3.replace(/\s+/g, " ");
+    if (NOISE2.test(text3) || IMPORTISH2.test(text3)) continue;
+    out.push({ text: text3, line: i + 1 });
   }
   return out;
 }
@@ -92401,8 +112936,8 @@ var DECLARATIVE2 = [
   // The frame of a signature: `def send(`, `self,`, `) -> Response:`, `@overload`
   /^(?:async\s+)?def\s+\w+\($|^(?:self|cls|\*),?$|^\)\s*->.*:$|^@(?:t\.|typing\.)?overload$/
 ];
-function isDeclarative2(text) {
-  return DECLARATIVE2.some((re2) => re2.test(text));
+function isDeclarative2(text3) {
+  return DECLARATIVE2.some((re2) => re2.test(text3));
 }
 var DECLARATIVE_SHARE2 = 0.7;
 var SVG_TAG2 = /^<\/?(?:svg|g|defs|path|filter|fe[A-Z]\w*|clipPath|mask|stop|linearGradient|radialGradient|circle|rect|ellipse|polygon|polyline|line|use|symbol)\b/i;
@@ -92475,8 +113010,8 @@ function findDuplicates2(files) {
         };
       };
       const block = lines.slice(i, i + length);
-      const text = block.map((l3) => l3.text).join("\n");
-      if (text.length < MIN_CHARS2) continue;
+      const text3 = block.map((l3) => l3.text).join("\n");
+      if (text3.length < MIN_CHARS2) continue;
       if (block.filter((l3) => isDeclarative2(l3.text)).length / block.length >= DECLARATIVE_SHARE2) {
         continue;
       }
@@ -92494,13 +113029,13 @@ function findDuplicates2(files) {
 }
 function isComparable2(file2) {
   const norm = file2.replace(/\\/g, "/");
-  return CODE_EXT2.test(norm) && !SKIP_PATH2.test(norm) && !GENERATED_FILE2.test(norm) && !TEST_FILE2.test(norm) && !SWIFT_TEST_FILE2.test(norm);
+  return CODE_EXT2.test(norm) && !SKIP_PATH3.test(norm) && !GENERATED_FILE2.test(norm) && !TEST_FILE2.test(norm) && !SWIFT_TEST_FILE2.test(norm);
 }
 var duplicateCodeScanner2 = {
   id: "duplicate-code",
   category: "hygiene",
   async run(ctx) {
-    const candidates = ctx.files.filter(isComparable2).slice(0, MAX_FILES2);
+    const candidates = ctx.files.filter(isComparable2).slice(0, MAX_FILES3);
     if (candidates.length < 2) return [];
     const normalized = /* @__PURE__ */ new Map();
     for (const file2 of candidates) {
@@ -92537,6 +113072,2382 @@ var duplicateCodeScanner2 = {
     return issues;
   }
 };
+
+// ../core/src/scanners/php-taint/analyze.ts
+var import_php_parser2 = __toESM(require_src4(), 1);
+
+// ../core/src/scanners/php-taint/model.ts
+var ALL_SAFE2 = ["sql", "sqlq", "cmd", "code", "include", "file", "ssrf", "xss", "redirect", "deser", "ldap", "upload", "account", "privesc"];
+var RULES8 = {
+  sql: {
+    id: "php-taint-sqli",
+    title: "SQL injection: request input reaches a query",
+    detail: "Request data is built into an SQL statement. Use a prepared statement with bound parameters (PDO/mysqli prepare + bind, $wpdb->prepare, query-builder bindings) instead of putting the value into the SQL text.",
+    severity: "critical"
+  },
+  cmd: {
+    id: "php-taint-cmdi",
+    title: "Command injection: request input reaches a shell command",
+    detail: "Request data is passed to a shell. Avoid the shell (proc_open with an argument array) or escape every argument with escapeshellarg() and validate it against an allowlist.",
+    severity: "critical"
+  },
+  code: {
+    id: "php-taint-code-injection",
+    title: "Code injection: request input is executed as PHP",
+    detail: "Request data reaches eval/assert/create_function or picks the function that is called. Never evaluate request data; map it to a fixed set of callables.",
+    severity: "critical"
+  },
+  include: {
+    id: "php-taint-file-inclusion",
+    title: "File inclusion: request input chooses the file that is included",
+    detail: "Request data selects the file passed to include/require, which allows local (and with allow_url_include remote) file inclusion. Map the input to an allowlist of files.",
+    severity: "critical"
+  },
+  file: {
+    id: "php-taint-path-traversal",
+    title: "Path traversal: request input chooses a file that is read or written",
+    detail: "Request data selects a filesystem path for a read, write, delete or upload. Use basename() and a fixed directory, or map the input to an allowlist, and verify the resolved path stays inside that directory.",
+    severity: "critical"
+  },
+  ssrf: {
+    id: "php-taint-ssrf",
+    title: "SSRF: request input chooses the URL the server fetches",
+    detail: "Request data controls the URL of a server-side request. Allow only known hosts and schemes and block internal addresses after DNS resolution.",
+    severity: "critical"
+  },
+  xss: {
+    id: "php-taint-xss",
+    title: "XSS: request input is written to the page unescaped",
+    detail: "Request data is echoed into HTML without escaping. Escape on output with htmlspecialchars($v, ENT_QUOTES, 'UTF-8') (or the framework's escaping helper).",
+    severity: "critical"
+  },
+  redirect: {
+    id: "php-taint-open-redirect",
+    title: "Open redirect: request input chooses the redirect target",
+    detail: "Request data becomes a redirect location. Redirect only to relative paths or an allowlist of hosts.",
+    severity: "warning"
+  },
+  deser: {
+    id: "php-taint-object-injection",
+    title: "Object injection: request input is unserialized",
+    detail: "unserialize() on request data can instantiate arbitrary classes (POP chains). Use json_decode, or pass ['allowed_classes' => false].",
+    severity: "critical"
+  },
+  upload: {
+    id: "php-taint-unrestricted-upload",
+    title: "Unrestricted upload: the client chooses the stored file's name and extension",
+    detail: "An uploaded file is stored under a name taken from the request without checking the extension against an allowlist, so a .php file can be uploaded into a web-served directory and executed. Generate the stored name yourself and allow only known extensions (and content types) outside the web root.",
+    severity: "critical"
+  },
+  account: {
+    id: "php-taint-account-takeover",
+    title: "Account takeover: the request chooses whose password or login is changed",
+    detail: "A request value selects the user whose password is reset/set or who is logged in, with no reset-key or capability check on the way. Verify the reset key (check_password_reset_key) or require current_user_can('edit_user', $id) before changing another account.",
+    severity: "critical"
+  },
+  privesc: {
+    id: "php-taint-privilege-escalation",
+    title: "Privilege escalation: the request chooses which user meta or role is written",
+    detail: "A request value picks the user meta key (or role) that is written, so a visitor can set wp_capabilities / user_level and become an administrator. Write only an allowlist of known meta keys.",
+    severity: "critical"
+  },
+  ldap: {
+    id: "php-taint-ldapi",
+    title: "LDAP injection: request input reaches an LDAP filter",
+    detail: "Request data is put into an LDAP search filter. Escape it with ldap_escape($v, '', LDAP_ESCAPE_FILTER).",
+    severity: "critical"
+  }
+};
+var SUPERGLOBALS2 = /* @__PURE__ */ new Set(["_get", "_post", "_request", "_cookie", "_files"]);
+var TAINTED_SERVER2 = /^(?:HTTP_\w+|REQUEST_URI|QUERY_STRING|PHP_SELF|PATH_INFO|PATH_TRANSLATED|ORIG_PATH_INFO|REDIRECT_URL|REDIRECT_QUERY_STRING|CONTENT_TYPE)$/i;
+var SOURCE_FUNCTIONS2 = /* @__PURE__ */ new Set(["getallheaders", "apache_request_headers", "filter_input_array", "get_query_var", "request", "input"]);
+var SOURCE_METHODS2 = /* @__PURE__ */ new Set([
+  "input",
+  "query",
+  "post",
+  "get",
+  "all",
+  "only",
+  "except",
+  "cookie",
+  "header",
+  "json",
+  "file",
+  "files",
+  "getqueryparams",
+  "getparsedbody",
+  "getcontent",
+  "getbody",
+  "param",
+  "params",
+  "getparam",
+  "getparams",
+  "getpost",
+  "getquery",
+  "getvar",
+  "getget",
+  "getcookie",
+  "getrawinput",
+  "getjson",
+  "fromquery",
+  "route",
+  "getpathinfo",
+  "getrequesturi",
+  "getheader",
+  "getheaderline",
+  "getuploadedfiles",
+  "getclientfilename",
+  "get_param",
+  "get_params",
+  "get_json_params",
+  "get_body_params",
+  "get_query_params",
+  "get_file_params",
+  "get_body",
+  "get_url_params",
+  "get_header",
+  // Joomla-style input (JRequest, JInput, $app->input and ports like VikRequest)
+  "getstring",
+  "getvar",
+  "getraw",
+  "getcmd",
+  "getword",
+  "gethtml",
+  "getarray",
+  "getpath",
+  "getusername",
+  "getemail",
+  "getbase64"
+]);
+var CLEAN_REQUEST_METHODS2 = /* @__PURE__ */ new Set(["getint", "getuint", "getfloat", "getdouble", "getbool", "getboolean", "absint", "getalnum"]);
+var REQUEST_RECEIVER2 = /(?:^(?:\\?\w+\\)*\w*(?:Request|Input)$|->input$|^\$input$|^\$(?:request|req|httprequest|serverrequest|wp_rest_request|rest_request)$|^\$this->(?:request|input)$|->(?:request|query|attributes|cookies|headers|files)$|^request\(\)$|^(?:\\?\w+\\)*(?:Input|Request)$|^\$this->(?:request|input)->(?:query|request|attributes|cookies|headers|files)$|getRequest\(\)$|^Yii::\$app->request$)/i;
+var VALIDATORS2 = /* @__PURE__ */ new Set([
+  "is_numeric",
+  "is_int",
+  "is_integer",
+  "is_float",
+  "is_bool",
+  "ctype_digit",
+  "ctype_alnum",
+  "ctype_alpha",
+  "ctype_xdigit",
+  "preg_match",
+  "in_array",
+  "array_key_exists",
+  "filter_var",
+  "is_uuid",
+  "checkdate"
+]);
+var CLEAN_FUNCTIONS2 = /* @__PURE__ */ new Set([
+  "intval",
+  "floatval",
+  "doubleval",
+  "boolval",
+  "count",
+  "sizeof",
+  "strlen",
+  "mb_strlen",
+  "md5",
+  "sha1",
+  "hash",
+  "hash_hmac",
+  "crc32",
+  "password_hash",
+  "password_verify",
+  "abs",
+  "round",
+  "ceil",
+  "floor",
+  "number_format",
+  "bin2hex",
+  "base64_encode",
+  "uniqid",
+  "time",
+  "microtime",
+  "rand",
+  "mt_rand",
+  "random_int",
+  "is_numeric",
+  "is_int",
+  "is_string",
+  "is_array",
+  "isset",
+  "empty",
+  "ctype_digit",
+  "ctype_alnum",
+  "preg_match",
+  "in_array",
+  "array_key_exists",
+  "strcmp",
+  "strcasecmp",
+  "strpos",
+  "stripos",
+  "strrpos",
+  "str_contains",
+  "str_starts_with",
+  "str_ends_with",
+  "file_exists",
+  "is_file",
+  "is_dir",
+  "gettype",
+  "get_class",
+  "spl_object_hash",
+  "date",
+  "strtotime",
+  "mktime",
+  "checkdate",
+  "array_sum",
+  "max",
+  "min",
+  "ord",
+  "dechex",
+  "hexdec",
+  "octdec",
+  "bindec",
+  "levenshtein",
+  "similar_text",
+  "soundex",
+  "metaphone",
+  "filesize",
+  "filemtime",
+  "ip2long",
+  "inet_pton",
+  "mysqli_num_rows",
+  "mysql_num_rows",
+  "mysqli_insert_id",
+  "mysql_insert_id",
+  "mysqli_affected_rows",
+  "array_search",
+  "array_count_values",
+  "version_compare",
+  "is_uploaded_file",
+  "getimagesize",
+  "exif_imagetype",
+  "mime_content_type",
+  "finfo_file",
+  "uuid_create",
+  "crypt",
+  "sodium_crypto_secretbox"
+]);
+var SANITIZERS2 = {
+  htmlspecialchars: ["xss", "redirect"],
+  htmlentities: ["xss", "redirect"],
+  strip_tags: ["xss"],
+  esc_html: ["xss"],
+  esc_attr: ["xss"],
+  esc_textarea: ["xss"],
+  esc_js: ["xss"],
+  esc_url: ["xss", "redirect"],
+  esc_url_raw: ["redirect"],
+  wp_kses: ["xss"],
+  wp_kses_post: ["xss"],
+  wp_kses_data: ["xss"],
+  sanitize_text_field: ["xss"],
+  sanitize_key: ["xss", "sql", "cmd", "file", "include", "ldap"],
+  sanitize_file_name: ["file", "include", "xss"],
+  sanitize_email: ["xss", "cmd"],
+  absint: [...ALL_SAFE2],
+  e: ["xss"],
+  h: ["xss"],
+  urlencode: ["xss", "cmd", "ldap"],
+  rawurlencode: ["xss", "cmd", "ldap"],
+  json_encode: ["xss"],
+  wp_json_encode: ["xss"],
+  mysqli_real_escape_string: ["sqlq"],
+  mysql_real_escape_string: ["sqlq"],
+  mysql_escape_string: ["sqlq"],
+  real_escape_string: ["sqlq"],
+  escape_string: ["sqlq"],
+  escape_str: ["sqlq"],
+  addslashes: ["sqlq"],
+  pg_escape_string: ["sqlq"],
+  sqlite_escape_string: ["sqlq"],
+  esc_sql: ["sqlq"],
+  pg_escape_literal: ["sql"],
+  pg_escape_identifier: ["sql"],
+  quote: ["sql"],
+  escape: ["sql"],
+  prepare: ["sql"],
+  escapeshellarg: ["cmd"],
+  escapeshellcmd: ["cmd"],
+  basename: ["file", "include"],
+  ldap_escape: ["ldap"],
+  preg_quote: []
+};
+var PASSTHROUGH2 = /* @__PURE__ */ new Set([
+  "trim",
+  "ltrim",
+  "rtrim",
+  "chop",
+  "strtolower",
+  "strtoupper",
+  "mb_strtolower",
+  "mb_strtoupper",
+  "ucfirst",
+  "lcfirst",
+  "ucwords",
+  "substr",
+  "mb_substr",
+  "str_replace",
+  "str_ireplace",
+  "preg_replace",
+  "sprintf",
+  "vsprintf",
+  "implode",
+  "join",
+  "explode",
+  "str_split",
+  "array_values",
+  "array_keys",
+  "array_merge",
+  "array_map",
+  "array_filter",
+  "array_slice",
+  "array_reverse",
+  "array_unique",
+  "array_pop",
+  "array_shift",
+  "end",
+  "reset",
+  "current",
+  "next",
+  "urldecode",
+  "rawurldecode",
+  "base64_decode",
+  "stripslashes",
+  "stripcslashes",
+  "json_decode",
+  "html_entity_decode",
+  "htmlspecialchars_decode",
+  "nl2br",
+  "str_pad",
+  "str_repeat",
+  "strrev",
+  "wordwrap",
+  "strstr",
+  "stristr",
+  "strrchr",
+  "substr_replace",
+  "iconv",
+  "mb_convert_encoding",
+  "utf8_decode",
+  "utf8_encode",
+  "strval",
+  "print_r",
+  "var_export",
+  "serialize",
+  "unserialize",
+  "http_build_query",
+  "parse_url",
+  "pathinfo",
+  "dirname",
+  "realpath",
+  "compact",
+  "array_combine",
+  "array_fill_keys",
+  "array_pad",
+  "array_column",
+  "filter_var",
+  "stream_get_contents",
+  "file_get_contents",
+  "fread",
+  "fgets",
+  "gzuncompress",
+  "gzinflate",
+  "hex2bin",
+  "str_word_count",
+  "nl2br",
+  "addcslashes",
+  "quotemeta",
+  "trim",
+  "mb_strimwidth",
+  "number_format",
+  "wp_unslash",
+  "stripslashes_deep",
+  "urlencode_deep",
+  "get_user_by",
+  "get_userdata",
+  "get_user_by_email",
+  "get_user",
+  "wp_get_current_user_by"
+]);
+var FUNCTION_SINKS2 = {
+  mysql_query: [{ arg: 0, kind: "sql" }],
+  mysql_unbuffered_query: [{ arg: 0, kind: "sql" }],
+  mysql_db_query: [{ arg: 1, kind: "sql" }],
+  mysqli_query: [{ arg: 1, kind: "sql" }],
+  mysqli_real_query: [{ arg: 1, kind: "sql" }],
+  mysqli_multi_query: [{ arg: 1, kind: "sql" }],
+  mysqli_prepare: [{ arg: 1, kind: "sql" }],
+  pg_query: [{ arg: "last", kind: "sql" }],
+  pg_send_query: [{ arg: 1, kind: "sql" }],
+  pg_prepare: [{ arg: 2, kind: "sql" }],
+  sqlite_query: [{ arg: 0, kind: "sql" }, { arg: 1, kind: "sql" }],
+  sqlsrv_query: [{ arg: 1, kind: "sql" }],
+  oci_parse: [{ arg: 1, kind: "sql" }],
+  odbc_exec: [{ arg: 1, kind: "sql" }],
+  db2_exec: [{ arg: 1, kind: "sql" }],
+  system: [{ arg: 0, kind: "cmd" }],
+  exec: [{ arg: 0, kind: "cmd" }],
+  passthru: [{ arg: 0, kind: "cmd" }],
+  shell_exec: [{ arg: 0, kind: "cmd" }],
+  popen: [{ arg: 0, kind: "cmd" }],
+  proc_open: [{ arg: 0, kind: "cmd" }],
+  pcntl_exec: [{ arg: 0, kind: "cmd" }],
+  expect_popen: [{ arg: 0, kind: "cmd" }],
+  mail: [{ arg: 4, kind: "cmd" }],
+  assert: [{ arg: 0, kind: "code" }],
+  create_function: [{ arg: 1, kind: "code" }],
+  call_user_func: [{ arg: 0, kind: "code" }],
+  call_user_method: [{ arg: 0, kind: "code" }],
+  call_user_func_array: [{ arg: 0, kind: "code" }],
+  forward_static_call: [{ arg: 0, kind: "code" }],
+  array_map: [{ arg: 0, kind: "code" }],
+  usort: [{ arg: 1, kind: "code" }],
+  register_shutdown_function: [{ arg: 0, kind: "code" }],
+  fopen: [{ arg: 0, kind: "file" }],
+  file_get_contents: [{ arg: 0, kind: "file" }],
+  file_put_contents: [{ arg: 0, kind: "file" }],
+  readfile: [{ arg: 0, kind: "file" }],
+  file: [{ arg: 0, kind: "file" }],
+  unlink: [{ arg: 0, kind: "file" }],
+  copy: [{ arg: 0, kind: "file" }, { arg: 1, kind: "file" }],
+  rename: [{ arg: 0, kind: "file" }, { arg: 1, kind: "file" }],
+  rmdir: [{ arg: 0, kind: "file" }],
+  mkdir: [{ arg: 0, kind: "file" }],
+  touch: [{ arg: 0, kind: "file" }],
+  move_uploaded_file: [{ arg: 1, kind: "upload" }],
+  highlight_file: [{ arg: 0, kind: "file" }],
+  show_source: [{ arg: 0, kind: "file" }],
+  parse_ini_file: [{ arg: 0, kind: "file" }],
+  simplexml_load_file: [{ arg: 0, kind: "file" }],
+  fpassthru: [],
+  curl_init: [{ arg: 0, kind: "ssrf" }],
+  fsockopen: [{ arg: 0, kind: "ssrf" }],
+  pfsockopen: [{ arg: 0, kind: "ssrf" }],
+  get_headers: [{ arg: 0, kind: "ssrf" }],
+  wp_remote_get: [{ arg: 0, kind: "ssrf" }],
+  wp_remote_post: [{ arg: 0, kind: "ssrf" }],
+  wp_remote_request: [{ arg: 0, kind: "ssrf" }],
+  wp_safe_remote_get: [],
+  unserialize: [{ arg: 0, kind: "deser" }],
+  maybe_unserialize: [{ arg: 0, kind: "deser" }],
+  ldap_search: [{ arg: 2, kind: "ldap" }],
+  ldap_list: [{ arg: 2, kind: "ldap" }],
+  ldap_read: [{ arg: 2, kind: "ldap" }],
+  printf: [{ arg: 0, kind: "xss" }, { arg: 1, kind: "xss" }, { arg: 2, kind: "xss" }],
+  vprintf: [{ arg: 0, kind: "xss" }, { arg: 1, kind: "xss" }],
+  wp_redirect: [{ arg: 0, kind: "redirect" }],
+  reset_password: [{ arg: 0, kind: "account" }],
+  wp_set_password: [{ arg: 1, kind: "account" }],
+  wp_set_auth_cookie: [{ arg: 0, kind: "account" }],
+  wp_set_current_user: [{ arg: 0, kind: "account" }],
+  wp_update_user: [{ arg: 0, kind: "account" }],
+  update_user_meta: [{ arg: 1, kind: "privesc" }],
+  add_user_meta: [{ arg: 1, kind: "privesc" }],
+  update_user_option: [{ arg: 1, kind: "privesc" }],
+  redirect: [{ arg: 0, kind: "redirect" }]
+};
+var SQL_METHODS2 = /* @__PURE__ */ new Set([
+  "query",
+  "exec",
+  "execute_query",
+  "prepare",
+  "multi_query",
+  "real_query",
+  "rawquery",
+  "unprepared",
+  "statement",
+  "select",
+  "insert",
+  "update",
+  "delete",
+  "get_results",
+  "get_var",
+  "get_row",
+  "get_col",
+  "raw",
+  "whereraw",
+  "orwhereraw",
+  "havingraw",
+  "orhavingraw",
+  "orderbyraw",
+  "selectraw",
+  "groupbyraw",
+  "fromraw",
+  "executequery",
+  "executestatement",
+  "executeupdate",
+  "fetchall",
+  "fetchassociative",
+  "fetchallassociative",
+  "fetchone",
+  "fetchcolumn",
+  "createquery",
+  "createnativequery",
+  "sql",
+  "setquery",
+  "loadresult",
+  "loadassoclist",
+  "loadobjectlist"
+]);
+var SQL_METHOD_NEEDS_DB2 = /* @__PURE__ */ new Set(["query", "exec", "prepare", "select", "insert", "update", "delete", "raw", "statement", "sql", "fetchall", "fetchone", "fetchcolumn"]);
+var DB_RECEIVER2 = /(?:db|dbo|pdo|conn|connection|mysql|mysqli|link|wpdb|database|sql|dbh|dbc|sth|stmt|adapter|entitymanager|em|doctrine|capsule|\bDB\b)/i;
+var SQL_TEXT2 = /\b(?:select\s[\s\S]*\bfrom|insert\s+into|update\s+\S+\s+set|delete\s+from|replace\s+into|drop\s+table|create\s+table|alter\s+table|where\s|order\s+by|union\s+select)\b/i;
+var SKIP_PATH4 = /(?:^|\/)(?:vendor|vendor[-_]prefixed|node_modules|third[-_]party|bower_components|freemius|tests?|specs?|fixtures?|__tests__|docs?|examples?)\//i;
+
+// ../core/src/scanners/php-taint/analyze.ts
+var posix3 = {
+  dirname(p2) {
+    const i = p2.lastIndexOf("/");
+    return i < 0 ? "." : i === 0 ? "/" : p2.slice(0, i);
+  },
+  normalize(p2) {
+    const out = [];
+    for (const part of p2.split("/")) {
+      if (!part || part === ".") continue;
+      if (part === "..") {
+        if (out.length && out[out.length - 1] !== "..") out.pop();
+        else out.push("..");
+      } else out.push(part);
+    }
+    return out.join("/") || ".";
+  },
+  join(...parts) {
+    return posix3.normalize(parts.filter(Boolean).join("/"));
+  }
+};
+var MAX_FACTS2 = 6;
+var MAX_STEPS2 = 8;
+var parser2 = new import_php_parser2.Engine({
+  parser: { php8: true, suppressErrors: true, extractDoc: false },
+  ast: { withPositions: true, withSource: false },
+  lexer: { short_tags: true, asp_tags: false }
+});
+function parsePhp2(content, file2) {
+  try {
+    return parser2.parseCode(content, file2);
+  } catch {
+    return null;
+  }
+}
+var lineOf10 = (n) => n?.loc?.start?.line ?? 0;
+var lower4 = (s) => (typeof s === "string" ? s : typeof s?.name === "string" ? s.name : "").toLowerCase().replace(/^\\/, "");
+function nameOf2(n) {
+  if (!n) return "";
+  if (typeof n === "string") return n;
+  if (n.kind === "name" || n.kind === "identifier") return String(n.name ?? "");
+  return "";
+}
+function merge3(...vals) {
+  const out = [];
+  const seen = /* @__PURE__ */ new Set();
+  for (const v2 of vals) {
+    for (const f3 of v2) {
+      const key = `${f3.src ?? ""}|${f3.param ?? ""}|${[...f3.safe].sort().join(",")}|${f3.weak}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push(f3);
+      if (out.length >= MAX_FACTS2) return out;
+    }
+  }
+  return out;
+}
+function withStep2(v2, step) {
+  return v2.map((f3) => f3.steps.length >= MAX_STEPS2 || f3.steps.at(-1)?.text === step.text && f3.steps.at(-1)?.line === step.line ? f3 : { ...f3, steps: [...f3.steps, step] });
+}
+function makeSafe2(v2, kinds) {
+  if (!kinds.length) return v2;
+  return v2.map((f3) => ({ ...f3, safe: /* @__PURE__ */ new Set([...f3.safe, ...kinds]) }));
+}
+function keyOf2(n) {
+  if (!n) return null;
+  if (n.kind === "variable" && typeof n.name === "string") return n.name.toLowerCase();
+  if (n.kind === "offsetlookup" && (n.offset?.kind === "string" || n.offset?.kind === "number")) {
+    const base = keyOf2(n.what);
+    return base ? `${base}[${String(n.offset.value).toLowerCase()}]` : null;
+  }
+  if (n.kind === "propertylookup" && (n.offset?.kind === "identifier" || n.offset?.kind === "name")) {
+    const base = keyOf2(n.what);
+    return base ? `${base}->${String(n.offset.name).toLowerCase()}` : null;
+  }
+  return null;
+}
+function flattenConcat2(n) {
+  const out = [];
+  const stack = [n];
+  while (stack.length) {
+    const cur = stack.pop();
+    if (cur?.kind === "bin" && cur.type === ".") {
+      stack.push(cur.right);
+      stack.push(cur.left);
+    } else out.push(cur);
+  }
+  return out;
+}
+function cloneEnv2(env) {
+  return new Map(env);
+}
+function mergeEnvs2(envs) {
+  const live = envs.filter(Boolean);
+  if (!live.length) return /* @__PURE__ */ new Map();
+  const out = /* @__PURE__ */ new Map();
+  for (const env of live) for (const [k2, v2] of env) out.set(k2, merge3(out.get(k2) ?? [], v2));
+  return out;
+}
+function exprText2(n) {
+  if (!n) return "";
+  switch (n.kind) {
+    case "variable":
+      return typeof n.name === "string" ? `$${n.name}` : "$$";
+    case "propertylookup":
+    case "nullsafepropertylookup":
+      return `${exprText2(n.what)}->${nameOf2(n.offset) || "?"}`;
+    case "staticlookup":
+      return `${exprText2(n.what)}::${nameOf2(n.offset) || (n.offset?.kind === "variable" ? `$${n.offset.name}` : "?")}`;
+    case "name":
+      return String(n.name);
+    case "selfreference":
+      return "self";
+    case "staticreference":
+      return "static";
+    case "parentreference":
+      return "parent";
+    case "call":
+      return `${exprText2(n.what)}()`;
+    case "offsetlookup":
+      return `${exprText2(n.what)}[]`;
+    default:
+      return n.kind;
+  }
+}
+function literalText2(n) {
+  if (!n) return "";
+  if (n.kind === "string") return String(n.value);
+  if (n.kind === "encapsed") return (n.value ?? []).map((p2) => p2.expression?.kind === "string" ? p2.expression.value : " ").join("");
+  if (n.kind === "bin" && n.type === ".") return literalText2(n.left) + " " + literalText2(n.right);
+  return "";
+}
+function leadingLiteral2(n) {
+  if (!n) return "";
+  if (n.kind === "string") return String(n.value);
+  if (n.kind === "encapsed") {
+    const first = n.value?.[0];
+    return first?.expression?.kind === "string" ? String(first.expression.value) : "";
+  }
+  if (n.kind === "bin" && n.type === ".") return leadingLiteral2(n.left);
+  return "";
+}
+var Project2 = class {
+  constructor() {
+    this.fns = /* @__PURE__ */ new Map();
+    this.methods = /* @__PURE__ */ new Map();
+    this.findings = [];
+    this.reported = /* @__PURE__ */ new Map();
+    this.files = [];
+    this.byPath = /* @__PURE__ */ new Map();
+    this.sessionKeys = /* @__PURE__ */ new Map();
+    this.constants = /* @__PURE__ */ new Map();
+    this.fields = /* @__PURE__ */ new Map();
+    this.defineSites = /* @__PURE__ */ new Map();
+    /** Files the analysis gave up on (too deep / malformed). */
+    this.failed = /* @__PURE__ */ new Set();
+  }
+  /** define('NAME', <request data>) anywhere in the project. */
+  taintConstant(name, f3) {
+    if (!this.constants.has(name)) this.constants.set(name, f3);
+  }
+  /** A constant is request data project-wide only when it is defined in exactly one place. */
+  constant(name) {
+    const f3 = this.constants.get(name);
+    if (!f3) return void 0;
+    let n = this.defineSites.get(name);
+    if (n === void 0) {
+      const re2 = new RegExp(`\\bdefine\\s*\\(\\s*['"]${name.replace(/[^\w]/g, "")}['"]`, "g");
+      n = this.files.reduce((sum, f4) => sum + (f4.content.match(re2)?.length ?? 0), 0);
+      this.defineSites.set(name, n);
+    }
+    return n === 1 ? f3 : void 0;
+  }
+  /** `$this->p = <request data>` / `self::$p = ...` in any method of the class. */
+  taintField(cls, prop, f3) {
+    const key = `${cls}::${prop}`;
+    if (!this.fields.has(key)) this.fields.set(key, f3);
+  }
+  field(cls, prop) {
+    return this.fields.get(`${cls}::${prop}`);
+  }
+  /** Whether another pass is needed because cross-scope stores changed. */
+  storesSize() {
+    return this.sessionKeys.size + this.constants.size + this.fields.size;
+  }
+  taintSession(key, f3, file2, line) {
+    if (!this.sessionKeys.has(key)) this.sessionKeys.set(key, { src: f3.src, safe: f3.safe, weak: f3.weak, file: file2, line });
+  }
+  session(key) {
+    return this.sessionKeys.get(key);
+  }
+  /** Project files an include target can name (literal parts, wildcard elsewhere). */
+  resolveInclude(from, target) {
+    const dir = posix3.dirname(from);
+    const parts = [];
+    const walk7 = (n) => {
+      if (!n) return parts.push(null);
+      if (n.kind === "string") parts.push(String(n.value));
+      else if (n.kind === "bin" && n.type === ".") {
+        walk7(n.left);
+        walk7(n.right);
+      } else if (n.kind === "encapsed") for (const p2 of n.value ?? []) walk7(p2.expression ?? p2);
+      else if (n.kind === "magic" && /__DIR__/i.test(String(n.value ?? n.raw))) parts.push(`${dir}/`);
+      else if (n.kind === "call" && lower4(nameOf2(n.what)) === "dirname" && n.arguments?.[0]?.kind === "magic") parts.push(`${dir}/`);
+      else if (n.kind === "parenthesis") walk7(n.inner);
+      else parts.push(null);
+    };
+    walk7(target);
+    const lits = parts.filter((p2) => p2 !== null).join("");
+    if (lits.replace(/[./\\]/g, "").length < 3) return [];
+    if (parts.every((p2) => p2 !== null)) {
+      const raw = parts.join("").replace(/\\/g, "/");
+      for (const c3 of [posix3.normalize(raw.startsWith("/") ? raw.slice(1) : posix3.join(dir, raw)), posix3.normalize(raw.replace(/^\.?\//, ""))]) {
+        const hit = this.byPath.get(c3);
+        if (hit) return [hit];
+      }
+      const tail = raw.replace(/^(?:\.\.?\/)+/, "");
+      const hits2 = [...this.byPath.values()].filter((f3) => f3.file === tail || f3.file.endsWith(`/${tail}`));
+      return hits2.length === 1 ? hits2 : [];
+    }
+    const esc2 = (t2) => t2.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const re2 = new RegExp(`(?:^|/)${parts.map((p2) => p2 === null ? "[^]*" : esc2(p2.replace(/\\/g, "/").replace(/^(?:\.\.?\/)+/, ""))).join("")}$`);
+    const hits = [...this.byPath.values()].filter((f3) => re2.test(f3.file));
+    return hits.length >= 1 && hits.length <= 6 ? hits : [];
+  }
+  add(file2, content) {
+    const ast = parsePhp2(content, file2);
+    if (!ast) return false;
+    this.files.push({ file: file2, content, ast });
+    this.byPath.set(file2, { file: file2, content, ast });
+    this.index(ast, file2, content, "");
+    return true;
+  }
+  index(node2, file2, content, cls) {
+    if (!node2 || typeof node2 !== "object") return;
+    if (Array.isArray(node2)) {
+      for (const c3 of node2) this.index(c3, file2, content, cls);
+      return;
+    }
+    if (node2.kind === "function") {
+      const def = { node: node2, cls: "", file: file2, content, params: (node2.arguments ?? []).map((p2) => lower4(p2.name)) };
+      const key = lower4(node2.name);
+      this.fns.set(key, [...this.fns.get(key) ?? [], def]);
+    } else if (node2.kind === "method") {
+      const def = { node: node2, cls, file: file2, content, params: (node2.arguments ?? []).map((p2) => lower4(p2.name)) };
+      const key = lower4(node2.name);
+      this.methods.set(key, [...this.methods.get(key) ?? [], def]);
+    }
+    for (const k2 of ["children", "body"]) {
+      const c3 = node2[k2];
+      if (c3 && typeof c3 === "object") this.index(c3, file2, content, node2.kind === "class" ? lower4(node2.name) : cls);
+    }
+  }
+  /** Marks add_shortcode callbacks so their attributes count as (author-level) input. */
+  markShortcodes() {
+    for (const { file: file2, content, ast } of this.files) {
+      if (!content.includes("add_shortcode") && !content.includes("register_rest_route")) continue;
+      const stack = [ast];
+      while (stack.length) {
+        const n = stack.pop();
+        if (!n || typeof n !== "object") continue;
+        if (Array.isArray(n)) {
+          stack.push(...n);
+          continue;
+        }
+        if (n.kind === "call" && n.what?.kind === "name" && lower4(n.what.name) === "add_shortcode") {
+          for (const h3 of this.resolveCallback(n.arguments?.[1], file2)) {
+            for (const defs of [...this.fns.values(), ...this.methods.values()]) for (const d2 of defs) if (d2.node === h3.node) d2.shortcode = true;
+          }
+        }
+        if (n.kind === "call" && n.what?.kind === "name" && lower4(n.what.name) === "register_rest_route") {
+          const opts = n.arguments?.[2];
+          const routes = opts?.kind === "array" && opts.items?.[0]?.kind === "entry" && opts.items[0].key == null ? opts.items.map((i) => i.value) : [opts];
+          for (const r2 of routes) {
+            const cb = r2?.kind === "array" ? r2.items?.find((i) => i?.kind === "entry" && i.key?.kind === "string" && i.key.value === "callback")?.value : null;
+            for (const h3 of this.resolveCallback(cb, file2)) {
+              for (const defs of [...this.fns.values(), ...this.methods.values()]) for (const d2 of defs) if (d2.node === h3.node) d2.rest = true;
+            }
+          }
+        }
+        for (const k2 of Object.keys(n)) if (k2 !== "loc" && n[k2] && typeof n[k2] === "object") stack.push(n[k2]);
+      }
+    }
+  }
+  run() {
+    this.markShortcodes();
+    let before = -1;
+    for (let i = 0; i < 3 && this.storesSize() !== before; i++) {
+      before = this.storesSize();
+      if (i) for (const defs of [...this.fns.values(), ...this.methods.values()]) for (const d2 of defs) d2.summary = void 0;
+      this.pass();
+    }
+  }
+  pass() {
+    for (const { file: file2, content, ast } of this.files) {
+      try {
+        const ctx = new Ctx2(this, file2, content, null);
+        ctx.block(ast.children ?? [], /* @__PURE__ */ new Map());
+      } catch {
+        this.failed.add(file2);
+      }
+    }
+    for (const defs of [...this.fns.values(), ...this.methods.values()]) {
+      for (const d2 of defs) {
+        try {
+          this.summary(d2);
+        } catch {
+          d2.busy = false;
+          d2.summary = { returns: [], sinks: [] };
+          this.failed.add(d2.file);
+        }
+      }
+    }
+  }
+  report(f3) {
+    const key = `${f3.kind}|${f3.file}|${f3.line}`;
+    const at2 = this.reported.get(key);
+    if (at2 !== void 0) {
+      if (this.findings[at2].weak && !f3.weak) this.findings[at2] = f3;
+      return;
+    }
+    this.reported.set(key, this.findings.length);
+    this.findings.push(f3);
+  }
+  allFiles() {
+    return this.files;
+  }
+  /** Every project function/method, for reachability. */
+  allDefs() {
+    return [...this.fns.values(), ...this.methods.values()].flat();
+  }
+  /** The innermost function or method containing file:line. */
+  defAt(file2, line) {
+    let best = null;
+    for (const d2 of this.allDefs()) {
+      if (d2.file !== file2) continue;
+      const a = d2.node?.loc?.start?.line ?? 0, b3 = d2.node?.loc?.end?.line ?? 0;
+      if (line >= a && line <= b3 && (!best || a >= (best.node.loc.start.line ?? 0))) best = d2;
+    }
+    return best;
+  }
+  lookupDef(name, method) {
+    return this.lookup(name, method);
+  }
+  /** Handlers named by a hook callback: 'fn', 'Cls::m', [$this, 'm'], [Cls::class, 'm'], closures. */
+  resolveCallback(cb, file2) {
+    if (!cb) return [];
+    const at2 = this.byPath.get(file2);
+    if (cb.kind === "closure" || cb.kind === "arrowfunc") return at2 ? [{ node: cb, file: file2, content: at2.content, label: "closure" }] : [];
+    const pick2 = (defs, cls, label) => {
+      if (!defs?.length) return [];
+      let chosen = defs.length === 1 ? defs : defs.filter((d2) => cls && d2.cls === cls);
+      if (!chosen.length) chosen = defs.filter((d2) => d2.file === file2);
+      return chosen.map((d2) => ({ node: d2.node, file: d2.file, content: d2.content, label }));
+    };
+    if (cb.kind === "string") {
+      const v2 = String(cb.value);
+      if (v2.includes("::")) {
+        const [c3, m2] = v2.split("::");
+        return pick2(this.methods.get(m2.toLowerCase()), c3.split("\\").pop().toLowerCase(), v2);
+      }
+      return pick2(this.fns.get(v2.toLowerCase().replace(/^\\/, "")), "", v2);
+    }
+    if (cb.kind === "array" && cb.items?.length === 2) {
+      const [o2, m2] = cb.items.map((i) => i?.kind === "entry" ? i.value : i);
+      if (m2?.kind !== "string") return [];
+      const cls = o2?.kind === "string" ? String(o2.value) : o2?.kind === "staticlookup" ? String(o2.what?.name ?? "") : o2?.kind === "new" ? String(o2.what?.name ?? "") : "";
+      return pick2(this.methods.get(String(m2.value).toLowerCase()), cls.split("\\").pop().toLowerCase(), `${cls || exprText2(o2)}::${m2.value}`);
+    }
+    return [];
+  }
+  /** Callee for a plain function call or a method call by name; null when unknown or ambiguous. */
+  lookup(name, method) {
+    const defs = (method ? this.methods : this.fns).get(name);
+    if (!defs || defs.length !== 1) return null;
+    return defs[0];
+  }
+  summary(def) {
+    if (def.summary) return def.summary;
+    if (def.busy) return null;
+    def.busy = true;
+    const ctx = new Ctx2(this, def.file, def.content, { returns: [], sinks: [] });
+    ctx.cls = def.cls;
+    const env = /* @__PURE__ */ new Map();
+    def.params.forEach((p2, i) => {
+      const param = { param: i, safe: /* @__PURE__ */ new Set(), steps: [{ line: lineOf10(def.node), text: `$${p2}`, file: def.file }], weak: false };
+      const author = def.shortcode && i < 2 ? [{ src: `shortcode ${i ? "content" : "attributes"} ($${p2})`, safe: /* @__PURE__ */ new Set(), steps: [{ line: lineOf10(def.node), text: `$${p2}`, file: def.file }], weak: true }] : def.rest && i === 0 ? [{ src: `REST request ($${p2})`, safe: /* @__PURE__ */ new Set(), steps: [{ line: lineOf10(def.node), text: `$${p2}`, file: def.file }], weak: false }] : [];
+      env.set(p2, [param, ...author]);
+    });
+    ctx.block(def.node.body?.children ?? (def.node.body ? [def.node.body] : []), env);
+    def.summary = ctx.summary;
+    def.busy = false;
+    return def.summary;
+  }
+};
+var Ctx2 = class _Ctx2 {
+  constructor(project, file2, content, summary, includeDepth = 0, including = /* @__PURE__ */ new Set()) {
+    this.project = project;
+    this.file = file2;
+    this.content = content;
+    this.summary = summary;
+    this.includeDepth = includeDepth;
+    this.including = including;
+    /** A capability or reset-key check ran earlier in this flow. */
+    this.guarded = false;
+    /** Class whose method is being analysed ("" outside classes). */
+    this.cls = "";
+    /** `$real = realpath($path)`: validating $real validates $path (canonical form of the same value). */
+    this.aliases = /* @__PURE__ */ new Map();
+    /** Variables last assigned a string with a literal prefix. */
+    this.prefixedVars = /* @__PURE__ */ new Map();
+    /** Env of the expression being evaluated (for sink-side checks). */
+    this.currentEnv = null;
+    this.jsonResponse = /content-type\s*:\s*(?:application\/(?:json|xml|octet-stream)|text\/(?:plain|csv|xml))/i.test(content) || /->json\s*\(|wp_send_json|JsonResponse/.test(content);
+  }
+  /** Runs statements; returns the env after them, or null when every path exits. */
+  block(nodes, env) {
+    let cur = env;
+    for (const n of nodes) {
+      if (!cur) return null;
+      cur = this.stmt(n, cur);
+    }
+    return cur;
+  }
+  body(n, env) {
+    if (!n) return env;
+    if (n.kind === "block") return this.block(n.children ?? [], env);
+    return this.stmt(n, env);
+  }
+  stmt(n, env) {
+    if (!n) return env;
+    switch (n.kind) {
+      case "expressionstatement":
+        this.expr(n.expression, env);
+        return this.exits(n.expression) ? null : env;
+      case "echo":
+      case "print":
+        for (const e of n.expressions ?? (n.expression ? [n.expression] : [])) this.sink("xss", this.expr(e, env), e, n, "echo");
+        return env;
+      case "inline":
+        return env;
+      case "block":
+        return this.block(n.children ?? [], env);
+      case "if":
+        return this.ifStmt(n, env);
+      case "switch": {
+        this.expr(n.test, env);
+        const arms = [];
+        let fall = null;
+        for (const c3 of n.body?.children ?? []) {
+          const start = fall ? mergeEnvs2([fall, env]) : cloneEnv2(env);
+          fall = this.body(c3.body, start);
+          arms.push(fall);
+        }
+        const hasDefault = (n.body?.children ?? []).some((c3) => c3.test == null);
+        const out = arms.filter((e) => !!e);
+        if (!hasDefault) out.push(env);
+        return out.length ? mergeEnvs2(out) : null;
+      }
+      case "match":
+        this.expr(n, env);
+        return env;
+      case "for":
+      case "while":
+      case "do": {
+        for (const e of [n.init, n.test, n.increment].flat().filter(Boolean)) this.expr(e, env);
+        if (n.test && !Array.isArray(n.test)) this.expr(n.test, env);
+        let cur = cloneEnv2(env);
+        for (let i = 0; i < 2; i++) {
+          const after = this.body(n.body, cloneEnv2(cur));
+          cur = mergeEnvs2([cur, after ?? cur]);
+        }
+        return cur;
+      }
+      case "foreach": {
+        const src = this.expr(n.source, env);
+        let cur = cloneEnv2(env);
+        const line = lineOf10(n);
+        if (n.key) this.assignTo(n.key, withStep2(src, { line, text: `foreach key`, file: this.file }), cur);
+        if (n.value) this.assignTo(n.value, withStep2(src, { line, text: `foreach value`, file: this.file }), cur);
+        for (let i = 0; i < 2; i++) {
+          const after = this.body(n.body, cloneEnv2(cur));
+          cur = mergeEnvs2([cur, after ?? cur]);
+        }
+        return cur;
+      }
+      case "try": {
+        const after = this.body(n.body, cloneEnv2(env));
+        const arms = after ? [after] : [];
+        for (const c3 of n.catches ?? []) {
+          const e = this.body(c3.body, mergeEnvs2([env, after ?? env]));
+          if (e) arms.push(e);
+        }
+        let out = arms.length ? mergeEnvs2(arms) : null;
+        if (n.always) out = this.body(n.always, out ?? cloneEnv2(env));
+        return out;
+      }
+      case "return": {
+        const v2 = n.expr ? this.expr(n.expr, env) : [];
+        if (this.summary && v2.length) this.summary.returns = merge3(this.summary.returns, withStep2(v2, { line: lineOf10(n), text: "return", file: this.file }));
+        return null;
+      }
+      case "throw":
+        this.expr(n.what, env);
+        return null;
+      case "global":
+      case "static":
+        for (const item of n.items ?? n.variables ?? []) if (item?.kind === "staticvariable" && item.defaultValue) this.assignTo(item.variable, this.expr(item.defaultValue, env), env);
+        return env;
+      case "unset":
+        for (const v2 of n.variables ?? []) if (v2.kind === "variable" && typeof v2.name === "string") env.delete(v2.name.toLowerCase());
+        return env;
+      case "function":
+      case "class":
+      case "interface":
+      case "trait":
+      case "enum":
+      case "namespace":
+        if (n.kind === "namespace") return this.block(n.children ?? [], env);
+        return env;
+      case "declare":
+        return this.block(n.children ?? [], env);
+      case "label":
+      case "goto":
+      case "break":
+      case "continue":
+      case "noop":
+      case "usegroup":
+      case "constantstatement":
+      case "classconstant":
+        return env;
+      default:
+        if (n.kind === "exit") {
+          this.expr(n, env);
+          return null;
+        }
+        if (n.expression) this.expr(n.expression, env);
+        return env;
+    }
+  }
+  exits(e) {
+    return e?.kind === "exit" || e?.kind === "throw" || e?.kind === "call" && ["die", "exit", "wp_die", "abort", "trigger_error"].includes(lower4(nameOf2(e.what))) && lower4(nameOf2(e.what)) !== "trigger_error";
+  }
+  ifStmt(n, env) {
+    this.expr(n.test, env);
+    const { whenTrue, whenFalse } = this.guards(n.test);
+    const thenEnv = this.validate(cloneEnv2(env), whenTrue);
+    const elseEnv = this.validate(cloneEnv2(env), whenFalse);
+    const a = this.body(n.body, thenEnv);
+    const b3 = n.alternate ? this.body(n.alternate, elseEnv) : elseEnv;
+    if (!a && !b3) return null;
+    if (!a) return b3;
+    if (!b3) return a;
+    return mergeEnvs2([a, b3]);
+  }
+  /** Variables a condition proves safe when it holds (and when it fails). */
+  guards(test) {
+    if (!test) return { whenTrue: [], whenFalse: [] };
+    if (test.kind === "unary" && test.type === "!") {
+      const g2 = this.guards(test.what);
+      return { whenTrue: g2.whenFalse, whenFalse: g2.whenTrue };
+    }
+    if (test.kind === "bin" && (test.type === "&&" || test.type === "and")) {
+      const l3 = this.guards(test.left), r2 = this.guards(test.right);
+      return { whenTrue: [...l3.whenTrue, ...r2.whenTrue], whenFalse: l3.whenFalse.filter((k2) => r2.whenFalse.includes(k2)) };
+    }
+    if (test.kind === "bin" && (test.type === "||" || test.type === "or")) {
+      const l3 = this.guards(test.left), r2 = this.guards(test.right);
+      return { whenTrue: l3.whenTrue.filter((k2) => r2.whenTrue.includes(k2)), whenFalse: [...l3.whenFalse, ...r2.whenFalse] };
+    }
+    if (test.kind === "bin" && ["===", "==", "!==", "!=", "<>"].includes(test.type)) {
+      const negated = test.type.startsWith("!") || test.type === "<>";
+      const [call, other] = test.left?.kind === "call" ? [test.left, test.right] : [test.right, test.left];
+      const isLit = (s) => ["string", "number", "boolean", "nullkeyword"].includes(s?.kind);
+      const pinned = isLit(test.left) ? keyOf2(this.unwrap(test.right)) : isLit(test.right) ? keyOf2(this.unwrap(test.left)) : null;
+      const pinnedLit = isLit(test.left) ? test.left : test.right;
+      if (pinned && !(pinnedLit?.kind === "boolean" || pinnedLit?.kind === "nullkeyword" || pinnedLit?.kind === "string" && pinnedLit.value === "")) {
+        return negated ? { whenTrue: [], whenFalse: [pinned] } : { whenTrue: [pinned], whenFalse: [] };
+      }
+      if (call?.kind === "call" && /^(?:strpos|stripos|mb_strpos)$/.test(lower4(nameOf2(call.what))) && other?.kind === "number" && Number(other.value) === 0) {
+        const k2 = keyOf2(this.unwrap(call.arguments?.[0]));
+        if (k2) return negated ? { whenTrue: [], whenFalse: [k2] } : { whenTrue: [k2], whenFalse: [] };
+      }
+      if (call?.kind === "call") {
+        const g2 = this.guards(call);
+        const falsy = other?.kind === "boolean" ? !other.value : other?.kind === "number" ? Number(other.value) === 0 : other?.kind === "nullkeyword";
+        const positive = falsy ? negated : !negated;
+        return positive ? g2 : { whenTrue: g2.whenFalse, whenFalse: g2.whenTrue };
+      }
+      const v2 = [test.left, test.right].find((s) => s?.kind === "variable");
+      const lit = [test.left, test.right].find((s) => ["string", "number", "boolean"].includes(s?.kind));
+      if (v2 && lit && typeof v2.name === "string") return negated ? { whenTrue: [], whenFalse: [v2.name.toLowerCase()] } : { whenTrue: [v2.name.toLowerCase()], whenFalse: [] };
+      return { whenTrue: [], whenFalse: [] };
+    }
+    if (test.kind === "call" && /^(?:str_starts_with|wp_is_stream|validate_file)$/.test(lower4(nameOf2(test.what)))) {
+      const fn2 = lower4(nameOf2(test.what));
+      const k2 = keyOf2(this.unwrap(test.arguments?.[0]));
+      if (!k2) return { whenTrue: [], whenFalse: [] };
+      return fn2 === "validate_file" ? { whenTrue: [], whenFalse: [k2] } : { whenTrue: [k2], whenFalse: [] };
+    }
+    if (test.kind === "call") {
+      const fn2 = lower4(nameOf2(test.what));
+      if (!VALIDATORS2.has(fn2)) return { whenTrue: [], whenFalse: [] };
+      const arg = fn2 === "preg_match" ? test.arguments?.[1] : test.arguments?.[0];
+      if (fn2 === "preg_match") {
+        const pattern = literalText2(test.arguments?.[0]);
+        if (!/^.\^/.test(pattern) || !/\$.?[a-zA-Z]*$/.test(pattern) || /\.\*|\.\+|\\S|\[\^/.test(pattern)) return { whenTrue: [], whenFalse: [] };
+      }
+      if (fn2 === "filter_var" && !/FILTER_VALIDATE_(?:INT|FLOAT|BOOL|BOOLEAN|IP)/i.test(exprText2(test.arguments?.[1]) + nameOf2(test.arguments?.[1]))) return { whenTrue: [], whenFalse: [] };
+      const name = keyOf2(this.unwrap(arg));
+      return name ? { whenTrue: [name], whenFalse: [] } : { whenTrue: [], whenFalse: [] };
+    }
+    return { whenTrue: [], whenFalse: [] };
+  }
+  validate(env, names) {
+    const all = [...names];
+    for (const n of names) {
+      let a = this.aliases.get(n);
+      for (let i = 0; a && i < 3; i++, a = this.aliases.get(a)) all.push(a);
+    }
+    for (const n of all) {
+      const base = n.replace(/\[[^\]]*\]$|->[^>]*$/, "");
+      const v2 = env.get(n) ?? (base !== n ? env.get(base) : void 0);
+      if (v2) env.set(n, makeSafe2(v2, ALL_SAFE2));
+      const mark = `$${n}`;
+      for (const [k2, val] of env) {
+        if (k2 === n || !val.length) continue;
+        if (val.every((f3) => f3.steps.some((st2) => st2.text.toLowerCase() === mark))) env.set(k2, makeSafe2(val, ALL_SAFE2));
+      }
+    }
+    return env;
+  }
+  /** `strtolower($x)`, `trim($x)`, `(string)$x` → `$x` for guard purposes. */
+  unwrap(n) {
+    while (n) {
+      if (n.kind === "call" && PASSTHROUGH2.has(lower4(nameOf2(n.what))) && n.arguments?.length === 1) n = n.arguments[0];
+      else if (n.kind === "cast" || n.kind === "parenthesis") n = n.expr ?? n.what ?? n.inner;
+      else break;
+    }
+    return n;
+  }
+  step(n, text3) {
+    return { line: lineOf10(n), text: text3, file: this.file };
+  }
+  assignTo(target, v2, env, append = false) {
+    if (!target) return;
+    if (target.kind === "variable" && typeof target.name === "string") {
+      const key = target.name.toLowerCase();
+      this.prefixedVars.set(key, false);
+      const val = withStep2(v2, this.step(target, `$${target.name}`));
+      env.set(key, append ? merge3(env.get(key) ?? [], val) : val);
+    } else if (target.kind === "offsetlookup" && target.what?.kind === "variable" && String(target.what.name).toLowerCase() === "_session" && target.offset?.kind === "string") {
+      const src = v2.find((f3) => f3.src);
+      if (src) this.project.taintSession(String(target.offset.value), src, this.file, lineOf10(target));
+    } else if (target.kind === "offsetlookup") {
+      const elem = keyOf2(target);
+      if (elem) env.set(elem, withStep2(v2, this.step(target, exprText2(target))));
+      let base = target.what;
+      while (base?.kind === "offsetlookup") base = base.what;
+      if (base?.kind === "variable" && typeof base.name === "string") {
+        const key = base.name.toLowerCase();
+        env.set(key, merge3(env.get(key) ?? [], withStep2(v2, this.step(target, `$${base.name}[]`))));
+      } else if (base) this.assignTo(base, v2, env, true);
+    } else if (target.kind === "propertylookup" || target.kind === "nullsafepropertylookup" || target.kind === "staticlookup") {
+      const owner = this.fieldOwner(target);
+      const src = v2.find((f3) => f3.src);
+      if (owner && src) this.project.taintField(owner.cls, owner.prop, { ...src, steps: [...src.steps, this.step(target, exprText2(target))].slice(-MAX_STEPS2) });
+      const key = exprText2(target).toLowerCase();
+      const val = withStep2(v2, this.step(target, exprText2(target)));
+      env.set(key, append ? merge3(env.get(key) ?? [], val) : val);
+    } else if (target.kind === "list" || target.kind === "array") {
+      for (const item of target.items ?? []) this.assignTo(item?.kind === "entry" ? item.value : item, v2, env);
+    }
+  }
+  /** Request data in `n`, after evaluating any sinks inside it. */
+  expr(n, env) {
+    if (!n || typeof n !== "object") return [];
+    switch (n.kind) {
+      case "variable": {
+        if (typeof n.name !== "string") return this.expr(n.name, env);
+        const name = n.name.toLowerCase();
+        if (SUPERGLOBALS2.has(name)) return [{ src: `$${n.name}`, safe: /* @__PURE__ */ new Set(), steps: [this.step(n, `$${n.name}`)], weak: false }];
+        if (name === "_server") return [{ src: "$_SERVER", safe: /* @__PURE__ */ new Set(), steps: [this.step(n, "$_SERVER")], weak: true }];
+        return env.get(name) ?? [];
+      }
+      case "offsetlookup": {
+        const base = n.what;
+        if (base?.kind === "variable" && typeof base.name === "string" && base.name.toLowerCase() === "_server") {
+          const key = n.offset?.kind === "string" ? String(n.offset.value) : "";
+          return TAINTED_SERVER2.test(key) ? [{ src: `$_SERVER['${key}']`, safe: /* @__PURE__ */ new Set(), steps: [this.step(n, `$_SERVER['${key}']`)], weak: key === "HTTP_HOST" }] : [];
+        }
+        if (base?.kind === "variable" && String(base.name).toLowerCase() === "_session" && n.offset?.kind === "string") {
+          const stored = this.project.session(String(n.offset.value));
+          if (stored) return [{ src: `$_SESSION['${n.offset.value}'] \u2190 ${stored.src}`, safe: new Set(stored.safe), steps: [{ line: stored.line, text: `${stored.src} \u2192 $_SESSION['${n.offset.value}']`, file: stored.file }, this.step(n, `$_SESSION['${n.offset.value}']`)], weak: stored.weak }];
+          return [];
+        }
+        if (n.offset?.kind === "string" && /^(?:tmp_name|size|error)$/.test(String(n.offset.value)) && exprText2(base).toLowerCase().startsWith("$_files")) return [];
+        if (base?.kind === "variable" && /^(?:request|req|wp_rest_request)$/i.test(String(base.name)) && !env.has(String(base.name).toLowerCase())) {
+          const label = `$${base.name}[${n.offset?.kind === "string" ? `'${n.offset.value}'` : "\u2026"}]`;
+          return [{ src: label, safe: /* @__PURE__ */ new Set(), steps: [this.step(n, label)], weak: false }];
+        }
+        this.expr(n.offset, env);
+        const elem = keyOf2(n);
+        if (elem && env.has(elem)) return env.get(elem);
+        const v2 = this.expr(base, env);
+        if (base?.kind === "variable" && SUPERGLOBALS2.has(String(base.name).toLowerCase()) && n.offset?.kind === "string") {
+          const label = `$${base.name}['${n.offset.value}']`;
+          return v2.map((f3) => ({ ...f3, src: label, steps: [this.step(n, label)] }));
+        }
+        return v2;
+      }
+      case "propertylookup":
+      case "nullsafepropertylookup":
+      case "staticlookup": {
+        const key = exprText2(n).toLowerCase();
+        if (env.has(key)) return env.get(key);
+        const owner = this.fieldOwner(n);
+        if (owner) {
+          const stored = this.project.field(owner.cls, owner.prop);
+          if (stored) return [{ ...stored, steps: [...stored.steps, this.step(n, exprText2(n))].slice(-MAX_STEPS2) }];
+        }
+        if (n.kind !== "staticlookup" && n.what?.kind !== "variable" || n.what?.kind === "variable" && n.what.name !== "this") {
+          const inner = this.expr(n.what, env);
+          if (inner.length) return withStep2(inner, this.step(n, exprText2(n)));
+        }
+        if (n.kind === "propertylookup" && /^\$(?:request|req)$/i.test(exprText2(n.what)) && !/^(?:query|request|attributes|cookies|headers|files|server)$/i.test(nameOf2(n.offset))) {
+          return [{ src: exprText2(n), safe: /* @__PURE__ */ new Set(), steps: [this.step(n, exprText2(n))], weak: true }];
+        }
+        return [];
+      }
+      case "name": {
+        const cname = String(n.name).replace(/^\\/, "");
+        if (env.has(`#${cname}`)) return env.get(`#${cname}`);
+        const c3 = this.project.constant(cname);
+        return c3 ? [{ ...c3, steps: [...c3.steps, this.step(n, String(n.name))].slice(-MAX_STEPS2) }] : [];
+      }
+      case "string":
+      case "number":
+      case "boolean":
+      case "nullkeyword":
+      case "magic":
+      case "constref":
+      case "inline":
+        return [];
+      case "encapsed":
+        return this.concat(n.value.map((p2) => p2.expression ?? p2), env, n);
+      case "encapsedpart":
+        return this.expr(n.expression, env);
+      case "bin": {
+        if (n.type === ".") return this.concat(flattenConcat2(n), env, n);
+        const l3 = this.expr(n.left, env), r2 = this.expr(n.right, env);
+        if (["??", "?:"].includes(n.type)) return merge3(l3, r2);
+        return [];
+      }
+      case "unary":
+      case "pre":
+      case "post":
+        this.expr(n.what, env);
+        return [];
+      case "cast":
+        return ["string", "array", "object"].includes(n.type) ? this.expr(n.expr ?? n.what, env) : (this.expr(n.expr ?? n.what, env), []);
+      case "silent":
+      case "parenthesis":
+        return this.expr(n.expr ?? n.inner, env);
+      case "clone":
+        return this.expr(n.what, env);
+      case "retif":
+      case "ternary": {
+        this.expr(n.test, env);
+        return merge3(n.trueExpr ? this.expr(n.trueExpr, env) : this.expr(n.test, env), this.expr(n.falseExpr, env));
+      }
+      case "isset":
+      case "empty":
+        for (const v2 of n.variables ?? (n.expression ? [n.expression] : [])) this.expr(v2, env);
+        return [];
+      case "assign": {
+        const v2 = this.expr(n.right, env);
+        if (n.operator === "=" || n.operator === "??=") this.assignTo(n.left, v2, env, n.operator === "??=");
+        if (n.operator === "=" && n.left?.kind === "variable" && typeof n.left.name === "string" && leadingLiteral2(n.right)) this.prefixedVars.set(n.left.name.toLowerCase(), true);
+        if (n.operator === "=" && n.left?.kind === "variable" && typeof n.left.name === "string") {
+          const r2 = n.right?.kind === "call" && /^(?:realpath|wp_normalize_path|trim|rtrim|untrailingslashit|trailingslashit|str_replace|wp_unslash|stripslashes|urldecode|rawurldecode)$/.test(lower4(nameOf2(n.right.what))) ? n.right.arguments?.[n.right.what && lower4(nameOf2(n.right.what)) === "str_replace" ? 2 : 0] : null;
+          const src = r2?.kind === "variable" && typeof r2.name === "string" ? r2.name.toLowerCase() : null;
+          if (src) this.aliases.set(n.left.name.toLowerCase(), src);
+          else this.aliases.delete(n.left.name.toLowerCase());
+        }
+        const target = keyOf2(n.left);
+        if (n.operator === "=" && target && n.right?.kind === "array") {
+          for (const [k2] of env) if (k2.startsWith(`${target}[`) || k2.startsWith(`${target}->`)) env.delete(k2);
+          for (const item of n.right.items ?? []) {
+            if (item?.kind === "entry" && (item.key?.kind === "string" || item.key?.kind === "number")) {
+              env.set(`${target}[${String(item.key.value).toLowerCase()}]`, this.expr(item.value, env));
+            }
+          }
+        } else if (n.operator === "=" && target) {
+          for (const [k2] of env) if (k2.startsWith(`${target}[`)) env.delete(k2);
+        } else if (n.operator === ".=") {
+          this.assignTo(n.left, this.concat([n.left, n.right], env, n), env);
+        } else this.assignTo(n.left, [], env);
+        return v2;
+      }
+      case "assignref":
+        return this.expr({ kind: "assign", left: n.left, right: n.right, operator: "=" }, env);
+      case "array": {
+        let out = [];
+        for (const item of n.items ?? []) {
+          if (!item) continue;
+          if (item.kind === "entry") {
+            this.expr(item.key, env);
+            out = merge3(out, this.expr(item.value, env));
+          } else out = merge3(out, this.expr(item, env));
+        }
+        return out;
+      }
+      case "include": {
+        const v2 = this.expr(n.target, env);
+        this.sink("include", v2, n.target, n, n.require ? "require" : "include");
+        if (this.includeDepth < 3) {
+          const hits = this.project.resolveInclude(this.file, n.target).filter((h3) => !this.including.has(h3.file));
+          if (hits.length) {
+            const outs = [];
+            for (const h3 of hits) {
+              const ctx = new _Ctx2(this.project, h3.file, h3.content, this.summary, this.includeDepth + 1, /* @__PURE__ */ new Set([...this.including, this.file, h3.file]));
+              ctx.cls = this.cls;
+              const out = ctx.block(h3.ast.children ?? [], cloneEnv2(env));
+              if (out) outs.push(out);
+            }
+            if (outs.length) {
+              const merged = mergeEnvs2(hits.length === 1 && outs.length === 1 ? outs : [...outs]);
+              env.clear();
+              for (const [k2, val] of merged) env.set(k2, val);
+            }
+          }
+        }
+        return [];
+      }
+      case "eval": {
+        const v2 = this.expr(n.source, env);
+        this.sink("code", v2, n.source, n, "eval");
+        return [];
+      }
+      case "shell": {
+        const v2 = this.concat((n.value?.value ?? []).map((p2) => p2.expression ?? p2), env, n);
+        this.sink("cmd", v2, n, n, "`backticks`");
+        return v2;
+      }
+      case "print": {
+        const v2 = this.expr(n.expression, env);
+        this.sink("xss", v2, n.expression, n, "print");
+        return [];
+      }
+      case "exit": {
+        const v2 = this.expr(n.expression ?? n.status, env);
+        if (n.expression && n.expression.kind !== "number") this.sink("xss", v2, n.expression, n, n.useDie ? "die" : "exit");
+        return [];
+      }
+      case "closure":
+      case "arrowfunc": {
+        const inner = /* @__PURE__ */ new Map();
+        for (const u2 of n.uses ?? []) if (typeof u2.name === "string") inner.set(u2.name.toLowerCase(), env.get(u2.name.toLowerCase()) ?? []);
+        if (n.kind === "arrowfunc") for (const [k2, v2] of env) inner.set(k2, v2);
+        const ctx = new _Ctx2(this.project, this.file, this.content, null);
+        if (n.kind === "arrowfunc") ctx.expr(n.body, inner);
+        else ctx.block(n.body?.children ?? [], inner);
+        return [];
+      }
+      case "match": {
+        this.expr(n.cond, env);
+        let out = [];
+        for (const arm of n.arms ?? []) out = merge3(out, this.expr(arm.body, env));
+        return out;
+      }
+      case "new":
+        return this.newExpr(n, env);
+      case "call":
+        return this.call(n, env);
+      case "yield":
+      case "yieldfrom":
+        return this.expr(n.value ?? n.expression, env);
+      default:
+        return [];
+    }
+  }
+  /** String building. Escaping for a quoted SQL literal only counts when the part sits between quotes. */
+  concat(parts, env, at2) {
+    let out = [];
+    let sqlSoFar = "";
+    const open2 = (text3, q3) => (text3.replace(/\\./g, "").split(q3).length - 1) % 2 === 1;
+    for (let i = 0; i < parts.length; i++) {
+      const p2 = parts[i];
+      if (p2?.kind === "string") {
+        sqlSoFar += String(p2.value);
+        continue;
+      }
+      let v2 = this.expr(p2, env);
+      if (v2.length) {
+        const quoted = open2(sqlSoFar, "'") || open2(sqlSoFar, '"');
+        if (!quoted) v2 = v2.map((f3) => f3.safe.has("sqlq") && !f3.safe.has("sql") ? { ...f3, safe: new Set([...f3.safe].filter((k2) => k2 !== "sqlq")), weak: true } : f3);
+        out = merge3(out, v2);
+      }
+      sqlSoFar += literalText2(p2) || "0";
+    }
+    return withStep2(out, this.step(at2, "string"));
+  }
+  /** `$this->p` → (current class, p); `self::$p` / `Cls::$p` → (class, p). */
+  fieldOwner(n) {
+    if ((n.kind === "propertylookup" || n.kind === "nullsafepropertylookup") && n.what?.kind === "variable" && n.what.name === "this") {
+      const prop = nameOf2(n.offset);
+      return prop && this.cls ? { cls: this.cls, prop: prop.toLowerCase() } : null;
+    }
+    if (n.kind === "staticlookup" && n.offset?.kind === "variable" && typeof n.offset.name === "string") {
+      const w2 = n.what;
+      const cls = w2?.kind === "selfreference" || w2?.kind === "staticreference" ? this.cls : w2?.kind === "name" ? String(w2.name).split("\\").pop().toLowerCase() : "";
+      return cls ? { cls, prop: n.offset.name.toLowerCase() } : null;
+    }
+    return null;
+  }
+  /** Name built with a literal prefix (`'block' . $type`): only a fixed family of callables is reachable. */
+  prefixed(n, _env) {
+    if (leadingLiteral2(n)) return true;
+    if (n?.kind === "array" && n.items?.length === 2) {
+      const m2 = n.items[1]?.kind === "entry" ? n.items[1].value : n.items[1];
+      if (m2 && (m2.kind === "string" || leadingLiteral2(m2))) return true;
+    }
+    const k2 = n?.kind === "variable" && typeof n.name === "string" ? n.name.toLowerCase() : null;
+    return !!k2 && (this.prefixedVars.get(k2) ?? false);
+  }
+  args(n, env) {
+    this.currentEnv = env;
+    return (n.arguments ?? []).map((a) => this.expr(a?.kind === "variadic" ? a.what : a, env));
+  }
+  newExpr(n, env) {
+    const cls = lower4(nameOf2(n.what));
+    const args = this.args(n, env);
+    if (n.what?.kind === "variable") this.sink("code", this.expr(n.what, env), n.what, n, "new $class");
+    if (/(?:^|\\)(?:redirectresponse|redirect)$/.test(cls)) this.sink("redirect", args[0] ?? [], n.arguments?.[0], n, `new ${nameOf2(n.what)}`);
+    if (/(?:^|\\)(?:splfileobject|splfileinfo|directoryiterator|ziparchive)$/.test(cls)) this.sink("file", args[0] ?? [], n.arguments?.[0], n, `new ${nameOf2(n.what)}`);
+    if (/(?:^|\\)(?:soapclient)$/.test(cls)) this.sink("ssrf", args[0] ?? [], n.arguments?.[0], n, `new ${nameOf2(n.what)}`);
+    if (/(?:^|\\)pdo$/.test(cls)) return [];
+    return [];
+  }
+  call(n, env) {
+    const what = n.what;
+    const args = this.args(n, env);
+    const line = lineOf10(n);
+    const argNodes = n.arguments ?? [];
+    if (what?.kind === "propertylookup" || what?.kind === "nullsafepropertylookup" || what?.kind === "staticlookup") {
+      const method = lower4(nameOf2(what.offset));
+      const recv = exprText2(what.what);
+      this.expr(what.what, env);
+      if (!method) {
+        if (!this.prefixed(what.offset, env)) this.sink("code", this.expr(what.offset, env), what.offset, n, "$obj->$method()");
+        return [];
+      }
+      if (CLEAN_REQUEST_METHODS2.has(method) && REQUEST_RECEIVER2.test(recv)) return [];
+      if (SOURCE_METHODS2.has(method) && REQUEST_RECEIVER2.test(recv)) {
+        const label2 = `${recv}->${nameOf2(what.offset)}(${argNodes[0]?.kind === "string" ? `'${argNodes[0].value}'` : ""})`;
+        return [{ src: label2, safe: /* @__PURE__ */ new Set(), steps: [{ line, text: label2, file: this.file }], weak: false }];
+      }
+      if (SOURCE_METHODS2.has(method) && /->(?:query|request|attributes|cookies|headers)$/i.test(recv) && /request/i.test(recv)) {
+        const label2 = `${recv}->${nameOf2(what.offset)}()`;
+        return [{ src: label2, safe: /* @__PURE__ */ new Set(), steps: [{ line, text: label2, file: this.file }], weak: false }];
+      }
+      if (method === "esc_like" || method === "escape_like_str") return withStep2(merge3(...args), { line, text: `${recv}->${method}()`, file: this.file });
+      if (["quote", "escape", "escape_string", "real_escape_string", "escape_str", "prepare"].includes(method) && DB_RECEIVER2.test(recv)) {
+        if (method === "prepare" && /wpdb/i.test(recv)) {
+          const first = argNodes[0];
+          if (args[0]?.length) this.sink("sql", args[0], first, n, "$wpdb->prepare");
+          return makeSafe2(merge3(...args.slice(1)), ["sql"]);
+        }
+        if (method === "prepare") {
+          this.sink("sql", args[0] ?? [], argNodes[0], n, `${recv}->prepare`);
+          return [];
+        }
+        return makeSafe2(merge3(...args), SANITIZERS2[method] ?? ["sqlq"]);
+      }
+      if (/^(?:where|orwhere|andwhere|having|orhaving|order|orderby|group|groupby|set|join|innerjoin|leftjoin|rightjoin|outerjoin|select|from)$/.test(method) && argNodes.length === 1 && (argNodes[0]?.kind === "bin" || argNodes[0]?.kind === "encapsed") && /query|qb|builder|db/i.test(recv)) {
+        this.sink("sql", args[0] ?? [], argNodes[0], n, `${recv}->${nameOf2(what.offset)}()`);
+        return [];
+      }
+      if (SQL_METHODS2.has(method)) {
+        const sqlLike = SQL_TEXT2.test(literalText2(argNodes[0]));
+        const dbLike = DB_RECEIVER2.test(recv) || /^(?:DB|\\?Illuminate\\Support\\Facades\\DB)$/i.test(recv);
+        if ((sqlLike || dbLike) && (!SQL_METHOD_NEEDS_DB2.has(method) || dbLike || sqlLike)) {
+          this.sink("sql", args[0] ?? [], argNodes[0], n, `${recv}->${nameOf2(what.offset)}()`);
+          return [];
+        }
+      }
+      if (/filesystem|wp_fs|\$fs$/i.test(recv)) {
+        const fsArg = { get_contents: [0], get_contents_array: [0], put_contents: [0], delete: [0], move: [0, 1], copy: [0, 1], mkdir: [0], rmdir: [0], chmod: [0], touch: [0] };
+        for (const i of fsArg[method] ?? []) this.sink("file", args[i] ?? [], argNodes[i], n, `${recv}->${method}()`);
+        if (method === "get_contents" || method === "get_contents_array") return [];
+      }
+      if (SOURCE_METHODS2.has(method)) {
+        const recvVal = this.expr(what.what, env).filter((f3) => f3.src);
+        if (recvVal.length) return withStep2(recvVal, { line, text: `${recv}->${nameOf2(what.offset)}()`, file: this.file });
+      }
+      if (method === "set_role" || method === "add_role" || method === "add_cap") {
+        this.sink("privesc", args[0] ?? [], argNodes[0], n, `${recv}->${method}()`);
+        return [];
+      }
+      if (method === "setopt" || method === "seturl") this.sink("ssrf", args[method === "setopt" ? 1 : 0] ?? [], argNodes[method === "setopt" ? 1 : 0], n, `${recv}->${method}()`);
+      if (/^(?:request|get|post|put|delete|head|patch)$/.test(method) && /(?:client|guzzle|http)$/i.test(recv)) {
+        const urlArg = method === "request" ? 1 : 0;
+        this.sink("ssrf", args[urlArg] ?? [], argNodes[urlArg], n, `${recv}->${method}()`);
+        return [];
+      }
+      if (/^(?:redirect|redirectto|to|away)$/.test(method) && /redirect|response|\$this$/i.test(recv)) this.sink("redirect", args[0] ?? [], argNodes[0], n, `${recv}->${method}()`);
+      if (method === "loadxml" || method === "load") return [];
+      const def2 = this.project.lookup(method, true);
+      if (def2) return this.applyCallee(def2, args, n, `${recv}->${nameOf2(what.offset)}()`);
+      return [];
+    }
+    if (what?.kind === "variable" || what?.kind === "offsetlookup" || what?.kind === "encapsed" || what?.kind === "bin") {
+      if (!this.prefixed(what, env)) this.sink("code", this.expr(what, env), what, n, "$function()");
+      return [];
+    }
+    const fn2 = lower4(nameOf2(what));
+    const label = `${nameOf2(what)}()`;
+    if (["current_user_can", "user_can", "is_super_admin", "check_password_reset_key", "wp_check_password", "current_user_can_for_blog"].includes(fn2)) this.guarded = true;
+    if (fn2 === "file_get_contents" && literalText2(argNodes[0]) === "php://input") return [{ src: "php://input", safe: /* @__PURE__ */ new Set(), steps: [{ line, text: "php://input", file: this.file }], weak: false }];
+    if (fn2 === "filter_input") {
+      const filter = exprText2(argNodes[2]) + nameOf2(argNodes[2]);
+      if (/FILTER_VALIDATE_(?:INT|FLOAT|BOOL|BOOLEAN|IP|EMAIL)|FILTER_SANITIZE_NUMBER/i.test(filter)) return [];
+      const safe = /FILTER_SANITIZE_(?:SPECIAL_CHARS|FULL_SPECIAL_CHARS|ENCODED)/i.test(filter) ? ["xss"] : [];
+      return [{ src: `filter_input(${nameOf2(argNodes[0])}, ${argNodes[1]?.kind === "string" ? `'${argNodes[1].value}'` : "\u2026"})`, safe: new Set(safe), steps: [{ line, text: label, file: this.file }], weak: false }];
+    }
+    if (SOURCE_FUNCTIONS2.has(fn2) && (!this.project.lookup(fn2, false) || ["getallheaders", "apache_request_headers"].includes(fn2))) {
+      if ((fn2 === "request" || fn2 === "input") && !argNodes.length) return [];
+      return [{ src: label, safe: /* @__PURE__ */ new Set(), steps: [{ line, text: label, file: this.file }], weak: fn2 === "get_query_var" }];
+    }
+    if ((fn2 === "wp_insert_user" || fn2 === "wp_update_user" || fn2 === "wp_insert_post" || fn2 === "wp_update_post") && argNodes[0]) {
+      const whole = (args[0] ?? []).filter((f3) => f3.src && /^\$_(?:POST|GET|REQUEST)$|->(?:get_params|get_json_params|get_body_params|all|input)\(\)$/i.test(f3.src));
+      if (whole.length) this.sink("privesc", whole, argNodes[0], n, `${label} with the whole request`);
+      const target = keyOf2(argNodes[0]);
+      const roleNode = argNodes[0].kind === "array" ? argNodes[0].items?.find((i) => i?.kind === "entry" && i.key?.kind === "string" && /^(?:role|user_level|wp_capabilities)$/.test(i.key.value))?.value : null;
+      const role = roleNode ? this.expr(roleNode, env) : target ? env.get(`${target}[role]`) ?? [] : [];
+      if (role.length && fn2.includes("user")) this.sink("privesc", role, roleNode ?? argNodes[0], n, `${label} role`);
+    }
+    if (fn2 === "define" && argNodes[0]?.kind === "string") {
+      env.set(`#${String(argNodes[0].value)}`, args[1] ?? []);
+      const src = args[1]?.find((f3) => f3.src);
+      if (src) this.project.taintConstant(String(argNodes[0].value), { ...src, steps: [...src.steps, { line, text: `define('${argNodes[0].value}')`, file: this.file }].slice(-MAX_STEPS2) });
+      return [];
+    }
+    if (fn2 === "extract" || fn2 === "parse_str" && argNodes.length === 1) {
+      const direct = argNodes[0]?.kind === "variable" && /^_(?:GET|POST|REQUEST|COOKIE|SERVER)$/i.test(String(argNodes[0].name)) || fn2 === "parse_str" && args[0]?.some((f3) => f3.src);
+      if (direct && args[0]?.length) this.sink("code", args[0], argNodes[0], n, label);
+      return [];
+    }
+    const sinks = FUNCTION_SINKS2[fn2];
+    if (sinks && !this.project.lookup(fn2, false)) {
+      for (const s of sinks) {
+        const i = s.arg === "last" ? args.length - 1 : s.arg;
+        if (i < 0 || i >= args.length) continue;
+        let kind = s.kind;
+        if ((fn2 === "array_map" || fn2 === "usort") && argNodes[i]?.kind !== "variable") continue;
+        if (fn2 === "unserialize" && argNodes[1] && /allowed_classes/.test(literalText2(argNodes[1]) + JSON.stringify(argNodes[1]).slice(0, 400))) continue;
+        if (fn2 === "mail" && i === 4) kind = "cmd";
+        if (kind === "file" && /^(?:https?|ftp):\/\//i.test(leadingLiteral2(argNodes[i]))) kind = "ssrf";
+        if (fn2 === "fopen" && argNodes[0] && literalText2(argNodes[0]) === "php://input") continue;
+        if (fn2 === "redirect" && i === 0 && !argNodes.length) continue;
+        if (kind === "privesc" && (leadingLiteral2(argNodes[i]) || argNodes[i]?.kind === "bin" || argNodes[i]?.kind === "encapsed")) continue;
+        this.sink(kind, args[i], argNodes[i], n, label);
+      }
+      if (fn2 === "file_get_contents" || fn2 === "fread" || fn2 === "file") return [];
+      if (fn2 === "shell_exec" || fn2 === "exec" || fn2 === "system" || fn2 === "passthru") return [];
+    }
+    if (fn2 === "header") {
+      const lead = leadingLiteral2(argNodes[0]);
+      if (/^\s*location\s*:/i.test(lead) || argNodes[0]?.kind !== "string" && !lead && args[0]?.length) {
+        if (/^\s*location\s*:\s*$/i.test(lead) || !lead) this.sink("redirect", args[0] ?? [], argNodes[0], n, "header('Location: \u2026')");
+      }
+      return [];
+    }
+    if (fn2 === "curl_setopt" || fn2 === "curl_setopt_array") {
+      if (fn2 === "curl_setopt" && /CURLOPT_URL/i.test(nameOf2(argNodes[1]) || exprText2(argNodes[1]))) this.sink("ssrf", args[2] ?? [], argNodes[2], n, "curl_setopt(CURLOPT_URL)");
+      return [];
+    }
+    if (fn2 === "preg_replace" && /\/[a-z]*e[a-z]*$/i.test(literalText2(argNodes[0]))) this.sink("code", args[1] ?? [], argNodes[1], n, "preg_replace /e");
+    const def = this.project.lookup(fn2, false);
+    if (def) return this.applyCallee(def, args, n, label);
+    if (fn2 === "filter_var") {
+      const filter = exprText2(argNodes[1]) + nameOf2(argNodes[1]);
+      if (/FILTER_VALIDATE_(?:INT|FLOAT|BOOL|BOOLEAN|IP)|FILTER_SANITIZE_NUMBER/i.test(filter)) return [];
+      if (/FILTER_SANITIZE_(?:SPECIAL_CHARS|FULL_SPECIAL_CHARS|ENCODED)/i.test(filter)) return makeSafe2(args[0] ?? [], ["xss"]);
+      return withStep2(args[0] ?? [], { line, text: label, file: this.file });
+    }
+    if (fn2 === "pathinfo" && /PATHINFO_(?:FILENAME|EXTENSION)/.test(nameOf2(argNodes[1]))) return makeSafe2(args[0] ?? [], ["file", "include"]);
+    if (/^(?:apply_filters|apply_filters_ref_array|apply_filters_deprecated)$/.test(fn2)) return withStep2(args[1] ?? [], { line, text: label, file: this.file });
+    if (/^(?:wp_parse_args|shortcode_atts|map_deep|wc_clean|wc_sanitize_textarea|stripslashes_deep|wp_slash|wp_unslash|maybe_serialize|wp_json_encode|array_merge_recursive|wp_list_pluck)$/.test(fn2)) {
+      const v2 = fn2 === "shortcode_atts" ? args[1] ?? [] : fn2 === "wp_list_pluck" ? args[0] ?? [] : merge3(...args);
+      return withStep2(fn2 === "wc_clean" ? makeSafe2(v2, ["xss"]) : fn2 === "wp_json_encode" ? makeSafe2(v2, ["xss"]) : v2, { line, text: label, file: this.file });
+    }
+    if (CLEAN_FUNCTIONS2.has(fn2)) return [];
+    if (fn2 in SANITIZERS2) return withStep2(makeSafe2(merge3(...args), SANITIZERS2[fn2]), { line, text: label, file: this.file });
+    if (PASSTHROUGH2.has(fn2)) return withStep2(merge3(...args), { line, text: label, file: this.file });
+    return [];
+  }
+  /** Apply a project function's summary at a call site. */
+  applyCallee(def, args, call, label) {
+    const s = this.project.summary(def);
+    if (!s) return [];
+    const callStep = { line: lineOf10(call), text: label, file: this.file };
+    for (const use of s.sinks) {
+      if ((use.kind === "account" || use.kind === "privesc") && this.guarded) continue;
+      const arg = args[use.param];
+      if (!arg?.length) continue;
+      for (const f3 of arg) {
+        if (f3.safe.has(use.kind) || use.safe.has(use.kind)) continue;
+        if (use.kind === "sql" && use.safe.has("sqlq") && !use.weak) continue;
+        const fact = { ...f3, safe: /* @__PURE__ */ new Set([...f3.safe, ...use.safe]), steps: [...f3.steps, callStep, ...use.steps].slice(-MAX_STEPS2), weak: f3.weak || use.weak };
+        if (f3.param !== void 0) {
+          this.summary?.sinks.push({ param: f3.param, kind: use.kind, line: use.line, file: use.file, sink: use.sink, steps: fact.steps, safe: fact.safe, weak: fact.weak });
+        } else if (f3.src) {
+          const inner = { line: use.line, text: use.sink, file: use.file };
+          this.emit(use.kind, { ...fact, steps: [...fact.steps, inner].slice(-MAX_STEPS2) }, this.file, lineOf10(call), label);
+        }
+      }
+    }
+    let out = [];
+    for (const r2 of s.returns) {
+      if (r2.src) out = merge3(out, [{ ...r2, steps: [...r2.steps, callStep].slice(-MAX_STEPS2) }]);
+      else if (r2.param !== void 0 && args[r2.param]?.length) {
+        out = merge3(out, args[r2.param].map((f3) => ({ ...f3, safe: /* @__PURE__ */ new Set([...f3.safe, ...r2.safe]), steps: [...f3.steps, callStep].slice(-MAX_STEPS2), weak: f3.weak || r2.weak })));
+      }
+    }
+    return out;
+  }
+  /** Reach a sink: report request data, or record a parameter use for the summary. */
+  sink(kind, v2, argNode, at2, sink) {
+    if (!v2.length) return;
+    if (kind === "upload") {
+      const end = at2?.loc?.start?.offset ?? 0;
+      const start = Math.max(this.content.lastIndexOf("function", end), end - 12e3, 0);
+      const window2 = this.content.slice(start, end);
+      const extVars = new Set([...window2.matchAll(/\$(\w+)\s*=\s*[^;]*(?:PATHINFO_EXTENSION|explode\s*\(\s*['"]\.['"]|strrchr\s*\([^)]*['"]\.['"]|strrpos\s*\([^)]*['"]\.['"])/g)].map((m2) => m2[1]));
+      const inArrayExt = [...window2.matchAll(/in_array\s*\(\s*([^,]+),/g)].some((m2) => /ext/i.test(m2[1]) || [...extVars].some((v3) => m2[1].includes(`$${v3}`)));
+      const nameRegex = /preg_match\s*\(\s*['"][^'"]*\\\.\s*\(?[^'"]*(?:jpe?g|png|gif|pdf|docx?)[^'"]*\$/i.test(window2);
+      if (inArrayExt || nameRegex || /wp_check_filetype(?:_and_ext)?\s*\(|PATHINFO_EXTENSION[^;]*\)\s*[;,)]?[^;]*(?:===|!==|==|!=)\s*['"]|wp_handle_upload\s*\(|wp_handle_sideload\s*\(|media_handle_upload\s*\(/i.test(window2)) return;
+    }
+    const dynamicCall = kind === "code" && /^(?:\$obj->\$method\(\)|\$function\(\)|new \$class|call_user_func(?:_array)?\(\)|forward_static_call\(\)|usort\(\)|array_map\(\)|register_shutdown_function\(\))$/.test(sink);
+    if (dynamicCall) {
+      if (argNode?.kind === "offsetlookup") {
+        const k2 = keyOf2(argNode);
+        if (!k2 || !this.currentEnv?.has(k2)) return;
+      }
+      v2 = v2.filter((f3) => f3.src);
+    }
+    if ((kind === "account" || kind === "privesc") && this.guarded) return;
+    if (kind === "xss" && this.jsonResponse) return;
+    for (const f3 of v2) {
+      if (f3.safe.has(kind)) continue;
+      if (kind === "sql" && f3.safe.has("sqlq")) continue;
+      if (f3.param !== void 0) {
+        this.summary?.sinks.push({ param: f3.param, kind, line: lineOf10(at2), file: this.file, sink, steps: f3.steps, safe: f3.safe, weak: f3.weak });
+        continue;
+      }
+      this.emit(kind, f3, this.file, lineOf10(at2), sink);
+    }
+    void argNode;
+  }
+  emit(kind, f3, file2, line, sink) {
+    const selfOnly = (kind === "xss" || kind === "redirect") && /^\$_COOKIE|^\$_SERVER\['HTTP_|->(?:cookie|header)\(/i.test(f3.src ?? "");
+    this.project.report({ kind, file: file2, line, sink, source: f3.src ?? "request", steps: f3.steps, weak: f3.weak || selfOnly });
+  }
+};
+
+// ../core/src/scanners/php-taint/authz.ts
+var PUBLIC_HOOKS2 = /^(?:wp_ajax_nopriv_.+|admin_post_nopriv_.+|init|wp_loaded|admin_init|template_redirect|parse_request|wp|send_headers|plugins_loaded|setup_theme|after_setup_theme|wp_head|wp_footer|login_init|login_form_.+|woocommerce_api_.+|rest_api_init_?.*|user_register|wp_login|authenticate|determine_current_user)$/;
+var USER_HOOKS2 = /^(?:wp_ajax_(?!nopriv_).+|admin_post_(?!nopriv_).+)$/;
+var CAP_CHECKS2 = /* @__PURE__ */ new Set([
+  "current_user_can",
+  "user_can",
+  "is_super_admin",
+  "current_user_can_for_blog",
+  "author_can",
+  "map_meta_cap",
+  "check_password_reset_key",
+  "wp_check_password",
+  "wp_authenticate",
+  "wp_authenticate_username_password"
+]);
+var NONCE_CHECKS2 = /* @__PURE__ */ new Set(["check_ajax_referer", "wp_verify_nonce", "check_admin_referer", "verify_nonce"]);
+var ACTIONS2 = {
+  update_option: [0],
+  add_option: [0],
+  delete_option: [0],
+  update_site_option: [0],
+  delete_site_option: [0],
+  update_user_meta: [1],
+  add_user_meta: [1],
+  delete_user_meta: [1],
+  update_user_option: [1],
+  update_post_meta: [1],
+  delete_post_meta: [1],
+  file_put_contents: [0],
+  unlink: [0],
+  rename: [0, 1],
+  copy: [1],
+  rmdir: [0],
+  put_contents: [0],
+  set_role: [0],
+  add_role: [0],
+  add_cap: [0],
+  remove_cap: [0],
+  grant_super_admin: [0],
+  wp_delete_user: [0],
+  wp_delete_post: [0],
+  wp_trash_post: [0],
+  wp_delete_attachment: [0],
+  wp_delete_comment: [0],
+  wp_update_post: [0],
+  wp_insert_post: [0],
+  activate_plugin: [0],
+  activate_plugins: [0],
+  deactivate_plugins: [0],
+  delete_plugins: [0],
+  switch_theme: [0],
+  install: [0],
+  move_uploaded_file: [],
+  wp_handle_upload: [],
+  wp_handle_sideload: [],
+  media_handle_upload: [],
+  media_handle_sideload: [],
+  unzip_file: []
+};
+var VALUE_ACTIONS2 = {
+  update_option: { value: 1 },
+  update_site_option: { value: 1 },
+  add_option: { value: 1 },
+  update_post_meta: { value: 2, target: 0 },
+  update_term_meta: { value: 2, target: 0 },
+  update_comment_meta: { value: 2, target: 0 },
+  delete_option: { value: -1 },
+  delete_site_option: { value: -1 }
+};
+var UI_STATE2 = /count|like|view|visit|click|vote|rating|stat|cache|transient|dismiss|notice|seen|review|feedback|popup_shown|last_|_time|timestamp|nonce|session|cart|wishlist|compare|recent|track|impression/i;
+var UPLOADS2 = /* @__PURE__ */ new Set(["move_uploaded_file", "wp_handle_upload", "wp_handle_sideload", "media_handle_upload", "media_handle_sideload", "unzip_file"]);
+var OUTPUT2 = /^(?:wp_send_json|wp_send_json_success|wp_send_json_error|print_r|var_dump|var_export|wp_die)$/;
+var SENSITIVE2 = /->get_results\s*\(\s*["'][^"']*\bFROM\b[^"']*(?:lead|entr|submission|subscriber|order|customer|contact|message|member|applicant|registration|booking|payment|invoice|user)|get_users\s*\(|get_userdata\s*\(|get_user_by\s*\(|user_email|user_pass|user_activation_key|->users\b|get_option\s*\(\s*['"][^'"]*(?:key|secret|token|pass|licen|credential|smtp|api)[^'"]*['"]/i;
+var REQUEST5 = /\$_(?:GET|POST|REQUEST|COOKIE|FILES|SERVER)\b|php:\/\/input|->get_(?:param|params|json_params|body_params|query_params|file_params|body)\s*\(|\$request\s*\[/i;
+var lower5 = (n) => (typeof n === "string" ? n : typeof n?.name === "string" ? n.name : "").toLowerCase().replace(/^\\/, "");
+function walk5(node2, visit2) {
+  const stack = [[node2, []]];
+  while (stack.length) {
+    const [n, parents] = stack.pop();
+    if (!n || typeof n !== "object") continue;
+    if (Array.isArray(n)) {
+      for (let i = n.length - 1; i >= 0; i--) stack.push([n[i], parents]);
+      continue;
+    }
+    if (n.kind) visit2(n, parents);
+    const next = n.kind ? [...parents.slice(-6), n] : parents;
+    for (const k2 of Object.keys(n)) {
+      if (k2 === "loc" || k2 === "leadingComments" || k2 === "trailingComments") continue;
+      const v2 = n[k2];
+      if (v2 && typeof v2 === "object") stack.push([v2, next]);
+    }
+  }
+}
+function callsInOrder2(body) {
+  const out = [];
+  walk5(body, (n, parents) => {
+    if (parents.some((p2) => p2.kind === "closure" || p2.kind === "arrowfunc" || p2.kind === "function" || p2.kind === "class")) return;
+    if (n.kind === "call" || n.kind === "new") out.push(n);
+  });
+  return out.sort((a, b3) => (a.loc?.start?.offset ?? 0) - (b3.loc?.start?.offset ?? 0));
+}
+function calleeName3(call) {
+  const w2 = call.what;
+  if (call.kind === "new") return { name: lower5(w2?.name ?? ""), method: false };
+  if (w2?.kind === "propertylookup" || w2?.kind === "nullsafepropertylookup" || w2?.kind === "staticlookup") return { name: lower5(w2.offset?.name ?? ""), method: true };
+  if (w2?.kind === "name") return { name: lower5(w2.name), method: false };
+  return { name: "", method: false };
+}
+function requestVars2(src) {
+  const vars = /* @__PURE__ */ new Set();
+  const assigns = [...src.matchAll(/\$(\w+)\s*(?:\[[^\]]*\])?\s*\.?=\s*([^;]+);/g)];
+  for (let pass = 0; pass < 3; pass++) {
+    for (const [, name, rhs] of assigns) {
+      if (REQUEST5.test(rhs) || [...rhs.matchAll(/\$(\w+)/g)].some((m2) => vars.has(m2[1]))) vars.add(name);
+    }
+  }
+  return vars;
+}
+function auditAccessControl2(project) {
+  const findings = [];
+  const seen = /* @__PURE__ */ new Set();
+  for (const { file: file2, content, ast } of project.allFiles()) {
+    if (!/add_action|add_filter|register_rest_route/.test(content)) continue;
+    walk5(ast, (n) => {
+      if (n.kind !== "call" || n.what?.kind !== "name") return;
+      const fn2 = lower5(n.what.name);
+      const args = n.arguments ?? [];
+      if ((fn2 === "add_action" || fn2 === "add_filter") && args[0]?.kind === "string") {
+        const hook = String(args[0].value);
+        const exposure = PUBLIC_HOOKS2.test(hook) ? "public" : USER_HOOKS2.test(hook) ? "user" : null;
+        if (!exposure) return;
+        for (const h3 of project.resolveCallback(args[1], file2)) audit(h3, hook, exposure);
+      }
+      if (fn2 === "register_rest_route") {
+        const opts = args[2];
+        const routes = opts?.kind === "array" && opts.items?.[0]?.kind === "entry" && opts.items[0].key == null ? opts.items.map((i) => i.value) : [opts];
+        for (const r2 of routes) {
+          if (r2?.kind !== "array") continue;
+          const entry = (k2) => r2.items?.find((i) => i?.kind === "entry" && i.key?.kind === "string" && i.key.value === k2)?.value;
+          const pc = entry("permission_callback");
+          const cb = entry("callback");
+          if (!cb || !isOpenPermission2(pc, project, file2)) continue;
+          const route = `${args[0]?.kind === "string" ? args[0].value : "\u2026"}${args[1]?.kind === "string" ? args[1].value : ""}`;
+          for (const h3 of project.resolveCallback(cb, file2)) audit(h3, `REST ${route}`, "public");
+        }
+      }
+    });
+  }
+  return findings;
+  function audit(h3, hook, exposure) {
+    const state = { guarded: false, nonce: false };
+    visitFn(h3.node, h3.file, h3.content, [h3.label], 0, state, /* @__PURE__ */ new Set());
+    function visitFn(fnNode, fFile, fContent, chain, depth, st2, stack) {
+      if (stack.has(fnNode) || depth > 3) return;
+      stack.add(fnNode);
+      const body = fnNode.body ?? fnNode;
+      const src = fContent.slice(body.loc?.start?.offset ?? 0, body.loc?.end?.offset ?? fContent.length);
+      const params = (fnNode.arguments ?? []).map((p2) => lower5(p2.name));
+      const tainted = requestVars2(src);
+      const sensitiveVars = new Set([...src.matchAll(/\$(\w+)\s*=\s*([^;]+);/g)].filter((m2) => SENSITIVE2.test(m2[2])).map((m2) => m2[1]));
+      if (depth === 0 && hook.startsWith("REST")) for (const p2 of params) tainted.add(p2);
+      const fromRequest = (a) => {
+        const text3 = fContent.slice(a?.loc?.start?.offset ?? 0, a?.loc?.end?.offset ?? 0);
+        return REQUEST5.test(text3) || [...text3.matchAll(/\$(\w+)/g)].some((m2) => tainted.has(m2[1]) || depth > 0 && params.includes(m2[1].toLowerCase()));
+      };
+      for (const call of callsInOrder2(body)) {
+        const { name, method } = calleeName3(call);
+        if (!name) continue;
+        if (CAP_CHECKS2.has(name)) st2.guarded = true;
+        if (NONCE_CHECKS2.has(name)) st2.nonce = true;
+        const args = call.arguments ?? [];
+        const line = call.loc?.start?.line ?? 0;
+        const need = ACTIONS2[name];
+        const keyed = /option|meta/.test(name);
+        const whole = (a) => !(keyed && (a?.kind === "bin" || a?.kind === "encapsed" || a?.kind === "string"));
+        const hit = need !== void 0 && !(name === "install" && !method) && (need.length === 0 || need.some((i) => args[i] && whole(args[i]) && fromRequest(args[i])));
+        if (!hit && !st2.guarded && method && /^(?:update|delete|replace|query)$/.test(name)) {
+          const recvText = fContent.slice(call.what?.what?.loc?.start?.offset ?? 0, call.what?.what?.loc?.end?.offset ?? 0);
+          const sqlText = name === "query" ? fContent.slice(args[0]?.loc?.start?.offset ?? 0, args[0]?.loc?.end?.offset ?? 0) : "";
+          const modifies = name !== "query" || /^\s*["'`]?\s*(?:UPDATE|DELETE)\b/i.test(sqlText);
+          if (/wpdb|\bdb\b|dbo|database/i.test(recvText) && modifies && args.some((a) => fromRequest(a)) && !/webhook|ipn|notify|callback|cron/i.test(`${hook} ${chain.join(" ")}`)) {
+            const key = `${fFile}:${line}`;
+            if (!seen.has(key)) {
+              seen.add(key);
+              findings.push({ kind: "missing-authz", file: fFile, line, action: `${recvText}->${name}()`, hook, handler: chain[0], exposure, nonce: true, chain });
+            }
+            continue;
+          }
+        }
+        const va = VALUE_ACTIONS2[name];
+        if (!hit && va && !st2.guarded && !/webhook|ipn|notify|callback|stripe|paypal|cron/i.test(`${hook} ${chain.join(" ")}`)) {
+          const keyText = fContent.slice(args[0]?.loc?.start?.offset ?? 0, args[0]?.loc?.end?.offset ?? 0);
+          const valueFromRequest = va.value < 0 ? true : !!args[va.value] && fromRequest(args[va.value]);
+          const targetOk = va.target === void 0 || !!args[va.target] && fromRequest(args[va.target]);
+          const optionName = va.target === void 0 ? keyText : fContent.slice(args[1]?.loc?.start?.offset ?? 0, args[1]?.loc?.end?.offset ?? 0);
+          if (valueFromRequest && targetOk && !UI_STATE2.test(optionName) && !(va.value < 0 && !fromRequest(args[0]))) {
+            const key = `${fFile}:${line}`;
+            if (!seen.has(key)) {
+              seen.add(key);
+              findings.push({ kind: "missing-authz", settings: true, file: fFile, line, action: `${name}()`, hook, handler: chain[0], exposure, nonce: true, chain });
+            }
+            continue;
+          }
+        }
+        if (hit) {
+          const key = `${fFile}:${line}`;
+          if (!seen.has(key)) {
+            if (st2.guarded && !st2.nonce && !UPLOADS2.has(name)) {
+              seen.add(key);
+              findings.push({ kind: "csrf", file: fFile, line, action: `${name}()`, hook, handler: chain[0], exposure, nonce: false, chain });
+            } else if (!st2.guarded) {
+              seen.add(key);
+              findings.push({ kind: "missing-authz", file: fFile, line, action: `${name}()`, hook, handler: chain[0], exposure, nonce: st2.nonce || UPLOADS2.has(name), chain });
+            }
+          }
+          continue;
+        }
+        if (!st2.guarded && exposure === "public" && OUTPUT2.test(name)) {
+          const shown = args.map((a) => fContent.slice(a?.loc?.start?.offset ?? 0, a?.loc?.end?.offset ?? 0)).join(" ");
+          if (SENSITIVE2.test(shown) || [...shown.matchAll(/\$(\w+)/g)].some((m2) => sensitiveVars.has(m2[1]))) {
+            const key = `x:${fFile}:${line}`;
+            if (!seen.has(key)) {
+              seen.add(key);
+              findings.push({ kind: "data-exposure", file: fFile, line, action: `${name}()`, hook, handler: chain[0], exposure, nonce: st2.nonce, chain });
+            }
+          }
+        }
+        if (st2.guarded && st2.nonce) continue;
+        const def = project.lookupDef(name, method);
+        if (def) visitFn(def.node, def.file, def.content, [...chain, `${name}()`], depth + 1, st2, stack);
+      }
+      stack.delete(fnNode);
+    }
+  }
+}
+var ADMIN_PAGE_CALLBACK2 = {
+  add_menu_page: 4,
+  add_submenu_page: 5,
+  add_options_page: 4,
+  add_management_page: 4,
+  add_theme_page: 4,
+  add_users_page: 4,
+  add_dashboard_page: 4,
+  add_plugins_page: 4,
+  add_posts_page: 4,
+  add_media_page: 4,
+  add_pages_page: 4,
+  add_comments_page: 4,
+  add_links_page: 4,
+  add_object_page: 4,
+  add_utility_page: 4,
+  add_meta_box: 2,
+  add_settings_field: 2,
+  add_settings_section: 2
+};
+var ADMIN_HOOKS2 = /^(?:admin_menu|network_admin_menu|user_admin_menu|admin_notices|network_admin_notices|all_admin_notices|admin_footer|admin_head|admin_enqueue_scripts|admin_print_scripts|current_screen|load-.+|in_admin_.+|manage_.+|add_meta_boxes.*|admin_page_.+|toplevel_page_.+|.+_page_.+|show_user_profile|edit_user_profile|personal_options.*|edit_user_profile_update|personal_options_update|admin_action_.+|wp_dashboard_setup|activate_.+|deactivate_.+|upgrader_process_complete|customize_register)$/;
+function reachability2(project) {
+  const open2 = /* @__PURE__ */ new Map();
+  const admin = /* @__PURE__ */ new Set();
+  const visit2 = (start, mark) => {
+    const queue = [{ node: start.node, depth: 0 }];
+    while (queue.length) {
+      const { node: node2, depth } = queue.shift();
+      if (!mark(node2) || depth >= 6) continue;
+      for (const call of callsInOrder2(node2.body ?? node2)) {
+        const { name, method } = calleeName3(call);
+        const def = name ? project.lookupDef(name, method) : null;
+        if (def) queue.push({ node: def.node, depth: depth + 1 });
+      }
+    }
+  };
+  const openStarts = [];
+  const adminStarts = [];
+  for (const { file: file2, content, ast } of project.allFiles()) {
+    if (!/add_action|add_filter|register_rest_route|add_\w+_page|add_meta_box|add_settings_field/.test(content)) continue;
+    walk5(ast, (n) => {
+      if (n.kind !== "call" || n.what?.kind !== "name") return;
+      const fn2 = lower5(n.what.name);
+      const args = n.arguments ?? [];
+      if ((fn2 === "add_action" || fn2 === "add_filter") && args[0]?.kind === "string") {
+        const hook = String(args[0].value);
+        const cbs = project.resolveCallback(args[1], file2);
+        if (PUBLIC_HOOKS2.test(hook) || USER_HOOKS2.test(hook)) for (const h3 of cbs) openStarts.push({ h: h3, label: hook });
+        else if (ADMIN_HOOKS2.test(hook)) adminStarts.push(...cbs);
+      } else if (fn2 in ADMIN_PAGE_CALLBACK2) {
+        adminStarts.push(...project.resolveCallback(args[ADMIN_PAGE_CALLBACK2[fn2]], file2));
+      } else if (fn2 === "register_rest_route") {
+        const opts = args[2];
+        const routes = opts?.kind === "array" && opts.items?.[0]?.kind === "entry" && opts.items[0].key == null ? opts.items.map((i) => i.value) : [opts];
+        for (const r2 of routes) {
+          if (r2?.kind !== "array") continue;
+          const entry = (k2) => r2.items?.find((i) => i?.kind === "entry" && i.key?.kind === "string" && i.key.value === k2)?.value;
+          const cbs = project.resolveCallback(entry("callback"), file2);
+          if (isOpenPermission2(entry("permission_callback"), project, file2)) for (const h3 of cbs) openStarts.push({ h: h3, label: `REST ${args[1]?.kind === "string" ? args[1].value : "\u2026"}` });
+          else adminStarts.push(...cbs);
+        }
+      }
+    });
+  }
+  for (const { h: h3, label } of openStarts) visit2(h3, (n) => open2.has(n) ? false : (open2.set(n, label), true));
+  for (const h3 of adminStarts) visit2(h3, (n) => admin.has(n) || open2.has(n) ? false : (admin.add(n), true));
+  return { open: open2, admin };
+}
+function isOpenPermission2(pc, project, file2) {
+  if (!pc) return true;
+  if (pc.kind === "string" && /^__return_true$/i.test(pc.value)) return true;
+  if (pc.kind === "boolean" && pc.value) return true;
+  const defs = project.resolveCallback(pc, file2);
+  if (!defs.length) return false;
+  return defs.every((d2) => {
+    let open2 = true;
+    walk5(d2.node.body ?? d2.node, (n) => {
+      if (n.kind === "call" && (CAP_CHECKS2.has(calleeName3(n).name) || /auth|permission|can_|nonce|verify|logged/i.test(calleeName3(n).name))) open2 = false;
+      if (n.kind === "return" && !(n.expr?.kind === "boolean" && n.expr.value)) open2 = false;
+    });
+    return open2;
+  });
+}
+
+// ../core/src/scanners/php-taint/logic.ts
+var LOGIC_RULES2 = {
+  "ignored-check": {
+    id: "php-taint-ignored-check",
+    title: "Security check whose result is ignored",
+    detail: "A nonce, capability, password or reset-key check is called as a statement: its true/false result is dropped and execution continues either way. Use it in a condition and stop (wp_die / return) when it fails.",
+    severity: "critical"
+  },
+  "guard-falls-through": {
+    id: "php-taint-guard-falls-through",
+    title: "Failed check redirects but does not stop",
+    detail: "When the check fails the code redirects, but without exit/return the rest of the handler still runs for the unauthorised request (wp_redirect/header only send a header). Add exit; after the redirect.",
+    severity: "critical"
+  },
+  "loose-secret-compare": {
+    id: "php-taint-loose-secret-compare",
+    title: "Secret compared with == (type juggling)",
+    detail: "Request data is compared to a token, key, hash or password with == / != / strcmp. PHP compares numeric-looking strings ('0e123\u2026') as numbers and strcmp(array, \u2026) returns null, so a crafted value can pass. Use hash_equals() with strings.",
+    severity: "critical"
+  },
+  "predictable-token": {
+    id: "php-taint-predictable-token",
+    title: "Security token from predictable randomness",
+    detail: "A token, key, code or password is generated from rand/mt_rand/uniqid/time, which an attacker can predict or brute-force. Use random_bytes(), random_int() or wp_generate_password().",
+    severity: "warning"
+  },
+  "public-sensitive-file": {
+    id: "php-taint-public-sensitive-file",
+    title: "Log, export or backup written to a web-accessible path",
+    detail: "A log, export, backup or dump file is written under the uploads / wp-content / plugin directory with a name that can be guessed, so anyone can download it with a direct URL. Store it outside the web root, or add a long random part to the name and deny access (.htaccess / index.php), and delete it after use.",
+    severity: "warning"
+  },
+  "is-admin-as-auth": {
+    id: "php-taint-is-admin-as-auth",
+    title: "is_admin() used as a permission check",
+    detail: "is_admin() only says the request goes to an admin URL, and admin-ajax.php / admin-post.php count \u2014 including for visitors who are not logged in. It is not a capability check. Use current_user_can() with the capability the action needs.",
+    severity: "critical"
+  },
+  "magic-switch": {
+    id: "php-taint-magic-switch",
+    title: "Request parameter switch logs a user in or grants a role",
+    detail: "A request value compared with a fixed string unlocks a login, user creation or role change, with no capability or credential check in between. This is how debug back doors and hidden admin switches look; remove it or require a real authentication step.",
+    severity: "critical"
+  }
+};
+var REQUEST6 = /\$_(?:GET|POST|REQUEST|COOKIE|SERVER)\b|->get_param\s*\(|\$request\s*\[|php:\/\/input/i;
+var SECRET_NAME2 = /(?:token|nonce|secret|api_?key|apikey|hash|signature|sig\b|otp|passw|pwd|pass_?code|auth_?code|reset_?key|activation|verify_?code|access_?key|license)/i;
+var CHECKS2 = /* @__PURE__ */ new Set(["wp_verify_nonce", "current_user_can", "user_can", "check_password_reset_key", "wp_check_password", "password_verify", "hash_equals", "is_user_logged_in", "is_super_admin"]);
+var AUTH_ACTIONS2 = /* @__PURE__ */ new Set(["wp_set_auth_cookie", "wp_set_current_user", "wp_create_user", "wp_insert_user", "set_role", "add_role", "add_cap", "grant_super_admin", "wp_set_password"]);
+var VERIFY_HINT2 = /verify|valid|check|auth|oauth|token|signature|hash_equals|password|login|nonce|can_|capab/i;
+var WEAK_RANDOM2 = /\b(?:rand|mt_rand|uniqid|lcg_value|str_shuffle|array_rand)\s*\(|\b(?:md5|sha1|hash|base64_encode)\s*\([^;]*\b(?:time|microtime)\s*\(/i;
+var TOKEN_NAME2 = /(?:token|secret|reset_?key|activation_?key|api_?key|otp|password|passw|nonce|verif\w*_?code|pin_?code|auth_?code|confirm\w*_?(?:key|code)|invite_?code|magic_?link)/i;
+var STRONG_RANDOM2 = /\b(?:random_bytes|random_int|wp_generate_password|openssl_random_pseudo_bytes|wp_generate_uuid4|bin2hex\s*\(\s*random_bytes|sodium_|wp_hash_password|wp_rand)\s*\(/i;
+var lower6 = (n) => (typeof n === "string" ? n : typeof n?.name === "string" ? n.name : "").toLowerCase().replace(/^\\/, "");
+function calleeName4(call) {
+  const w2 = call?.what;
+  if (w2?.kind === "name") return lower6(w2.name);
+  if (w2?.kind === "propertylookup" || w2?.kind === "staticlookup" || w2?.kind === "nullsafepropertylookup") return lower6(w2.offset?.name ?? "");
+  return "";
+}
+function walk6(node2, visit2) {
+  const stack = [node2];
+  while (stack.length) {
+    const n = stack.pop();
+    if (!n || typeof n !== "object") continue;
+    if (Array.isArray(n)) {
+      for (let i = n.length - 1; i >= 0; i--) stack.push(n[i]);
+      continue;
+    }
+    if (n.kind) visit2(n);
+    for (const k2 of Object.keys(n)) {
+      if (k2 === "loc") continue;
+      const v2 = n[k2];
+      if (v2 && typeof v2 === "object") stack.push(v2);
+    }
+  }
+}
+function text2(content, n) {
+  return n?.loc ? content.slice(n.loc.start.offset, n.loc.end.offset) : "";
+}
+function stops2(body) {
+  let stop = false;
+  walk6(body, (n) => {
+    if (n.kind === "exit" || n.kind === "return" || n.kind === "throw") stop = true;
+    if (n.kind === "call" && /^(?:wp_die|die|exit|wp_send_json(?:_error|_success)?|wp_safe_redirect_exit|abort|status_header_exit)$/.test(calleeName4(n))) stop = true;
+  });
+  return stop;
+}
+function negatedCheck2(test) {
+  if (test?.kind === "unary" && test.type === "!" && test.what?.kind === "call" && CHECKS2.has(calleeName4(test.what))) return test.what;
+  if (test?.kind === "bin" && ["===", "=="].includes(test.type)) {
+    const [c3, o2] = test.left?.kind === "call" ? [test.left, test.right] : [test.right, test.left];
+    if (c3?.kind === "call" && CHECKS2.has(calleeName4(c3)) && o2?.kind === "boolean" && !o2.value) return c3;
+  }
+  if (test?.kind === "bin" && (test.type === "||" || test.type === "&&")) return negatedCheck2(test.left) ?? negatedCheck2(test.right);
+  return null;
+}
+function auditLogic2(project) {
+  const out = [];
+  const seen = /* @__PURE__ */ new Set();
+  const push = (f3) => {
+    const k2 = `${f3.kind}|${f3.file}|${f3.line}`;
+    if (!seen.has(k2)) {
+      seen.add(k2);
+      out.push(f3);
+    }
+  };
+  for (const { file: file2, content, ast } of project.allFiles()) {
+    walk6(ast, (n) => {
+      const line = n.loc?.start?.line ?? 0;
+      if (n.kind === "expressionstatement" && n.expression?.kind === "call") {
+        const name = calleeName4(n.expression);
+        const args = n.expression.arguments ?? [];
+        const softAjax = (name === "check_ajax_referer" || name === "check_admin_referer") && args[2]?.kind === "boolean" && !args[2].value;
+        if (CHECKS2.has(name) && name !== "is_user_logged_in" || softAjax) push({ kind: "ignored-check", file: file2, line, what: `${name}()`, weak: name === "hash_equals" });
+      }
+      if (n.kind === "if") {
+        const check2 = negatedCheck2(n.test);
+        if (check2 && n.body && !stops2(n.body)) {
+          let redirects = false;
+          walk6(n.body, (b3) => {
+            if (b3.kind === "call" && /^(?:wp_redirect|wp_safe_redirect|header|auth_redirect)$/.test(calleeName4(b3))) redirects = true;
+          });
+          if (redirects) push({ kind: "guard-falls-through", file: file2, line, what: `${calleeName4(check2)}()`, weak: false });
+        }
+        const t2 = text2(content, n.test);
+        const literalCompare = /(?:==|===|!=|!==)\s*['"][^'"]{3,}['"]|['"][^'"]{3,}['"]\s*(?:==|===)/.test(t2) || /\b(?:isset|array_key_exists)\s*\(/.test(t2);
+        if (REQUEST6.test(t2) && literalCompare && !VERIFY_HINT2.test(t2)) {
+          let action = "";
+          let verified = false;
+          walk6(n.body, (b3) => {
+            if (b3.kind !== "call") return;
+            const c3 = calleeName4(b3);
+            if (AUTH_ACTIONS2.has(c3) && !action && !verified) {
+              action = c3;
+            }
+            if (VERIFY_HINT2.test(c3) && !action) verified = true;
+          });
+          if (/hash_equals|===|!==|get_(?:user_)?meta|get_option|get_transient|wp_check_password|password_verify/.test(text2(content, n.body).split(action)[0] ?? "")) verified = true;
+          if (action && !verified) push({ kind: "magic-switch", file: file2, line, what: `${action}()`, weak: !/['"](?:administrator|admin)['"]|\b1\s*\)/.test(text2(content, n.body)) });
+        }
+      }
+      if (n.kind === "if" && n.test) {
+        const t2 = text2(content, n.test);
+        if (/\bis_admin\s*\(\s*\)/.test(t2) && !/current_user_can|user_can|is_super_admin|check_admin_referer|check_ajax_referer|wp_verify_nonce|is_user_logged_in|wp_doing_ajax|DOING_AJAX|is_network_admin/.test(t2)) {
+          const negated = /!\s*is_admin\s*\(\s*\)/.test(t2);
+          const guarded = negated ? stops2(n.body) ? null : n.alternate : n.body;
+          let action = "";
+          if (guarded) walk6(guarded, (b3) => {
+            if (b3.kind === "call" && !action && /^(?:update_option|delete_option|add_option|update_site_option|unlink|rmdir|file_put_contents|rename|copy|wp_delete_post|wp_insert_post|wp_update_post|wp_delete_user|wp_insert_user|wp_update_user|wp_set_password|update_user_meta|set_role|add_cap|activate_plugin|deactivate_plugins|move_uploaded_file|wp_handle_upload|query|delete|put_contents)$/.test(calleeName4(b3))) {
+              const args = text2(content, b3);
+              if (REQUEST6.test(args) || /\$_(?:GET|POST|REQUEST)/.test(text2(content, guarded))) action = calleeName4(b3);
+            }
+          });
+          if (negated && stops2(n.body)) {
+            const parentText = content.slice(n.loc.end.offset, Math.min(content.length, n.loc.end.offset + 3e3));
+            const m2 = /\b(update_option|delete_option|unlink|file_put_contents|wp_delete_post|wp_update_user|wp_insert_user|update_user_meta|set_role|move_uploaded_file|wp_handle_upload)\s*\(/.exec(parentText);
+            if (m2 && /\$_(?:GET|POST|REQUEST)/.test(parentText.slice(0, m2.index + 400)) && !/current_user_can|check_ajax_referer|check_admin_referer|wp_verify_nonce/.test(parentText.slice(0, m2.index))) action = m2[1];
+          }
+          if (action) push({ kind: "is-admin-as-auth", file: file2, line, what: `is_admin() \u2192 ${action}()`, weak: false });
+        }
+      }
+      if (n.kind === "bin" && ["==", "!="].includes(n.type)) {
+        const l3 = text2(content, n.left), r2 = text2(content, n.right);
+        const req = REQUEST6.test(l3) && !REQUEST6.test(r2) ? r2 : REQUEST6.test(r2) && !REQUEST6.test(l3) ? l3 : null;
+        if (req !== null && SECRET_NAME2.test(req) && !/^['"]|^\d|^(?:null|true|false)$/i.test(req.trim())) push({ kind: "loose-secret-compare", file: file2, line, what: `${l3.slice(0, 40)} ${n.type} ${r2.slice(0, 40)}`, weak: false });
+      }
+      if (n.kind === "call" && calleeName4(n) === "strcmp") {
+        const args = (n.arguments ?? []).map((a) => text2(content, a));
+        if (args.some((a) => REQUEST6.test(a)) && args.some((a) => SECRET_NAME2.test(a))) push({ kind: "loose-secret-compare", file: file2, line, what: "strcmp()", weak: true });
+      }
+      if (n.kind === "call" || n.kind === "new") {
+        const c3 = calleeName4(n);
+        const args = n.arguments ?? [];
+        const writes = /^(?:file_put_contents|fopen|error_log|put_contents|open|save|move_uploaded_file|copy|rename|fputcsv)$/.test(c3);
+        const target = c3 === "error_log" ? args[1] && text2(content, args[1]) === "3" ? args[2] : null : c3 === "copy" || c3 === "rename" || c3 === "move_uploaded_file" ? args[1] : args[0];
+        if (writes && target) {
+          const t2 = text2(content, target);
+          const publicDir = /wp_upload_dir|WP_CONTENT_DIR|wp-content|uploads|plugin_dir_path|__DIR__|dirname\s*\(\s*__FILE__|ABSPATH|_PLUGIN_DIR|_PATH\b/i.test(t2);
+          const sensitive = /\.(?:log|sql|csv|bak|dump|txt|zip|tar|gz|json|xml)\b|(?:log|debug|export|backup|dump|invoice|order|report|archive)/i.test(t2);
+          const random = /wp_generate_password|random_bytes|wp_rand|random_int|bin2hex|wp_hash|hash_hmac|AUTH_KEY|NONCE_KEY|SECURE_AUTH|wp_salt|md5\s*\(\s*(?:wp_salt|AUTH|SECURE)|sha1\s*\(\s*(?:wp_salt|AUTH)/i;
+          let resolved = t2;
+          const v2 = /^\$(\w+)$/.exec(t2.trim());
+          if (v2) {
+            const m2 = new RegExp(`\\$${v2[1]}\\s*\\.?=\\s*([^;]+);`, "g");
+            resolved = [...content.matchAll(m2)].map((x3) => x3[1]).join(" ") || t2;
+          }
+          const pub = publicDir || /wp_upload_dir|WP_CONTENT_DIR|wp-content|uploads|plugin_dir_path|__DIR__|dirname\s*\(\s*__FILE__|ABSPATH|_PLUGIN_DIR/i.test(resolved);
+          const sens = sensitive || /\.(?:log|sql|csv|bak|dump|zip|tar|gz)\b|(?:debug|export|backup|dump|invoice|archive)/i.test(resolved);
+          if (pub && sens && !random.test(resolved) && !/tmp|temp|get_temp_dir|sys_get_temp_dir|\.htaccess|index\.php|\.css|\.js\b|cache/i.test(resolved)) {
+            push({ kind: "public-sensitive-file", file: file2, line, what: `${c3}(${t2.slice(0, 60)})`, weak: !/\.(?:log|sql|bak|dump)\b|debug|backup|dump/i.test(resolved) });
+          }
+        }
+      }
+      if (n.kind === "assign" && n.operator === "=") {
+        const target = text2(content, n.left);
+        const value = text2(content, n.right);
+        if (TOKEN_NAME2.test(target) && WEAK_RANDOM2.test(value) && !STRONG_RANDOM2.test(value) && !/nonce_?life|time_?out|expir|timestamp|created|_at\b|date/i.test(target)) {
+          push({ kind: "predictable-token", file: file2, line, what: target.slice(0, 60), weak: !/reset|activation|otp|password|passw|api_?key|secret/i.test(target) });
+        }
+      }
+    });
+  }
+  return out;
+}
+
+// ../core/src/scanners/php-taint/index.ts
+var PHP_FILE2 = /\.(?:php|phtml|php[3-8]|inc)$/i;
+var MAX_BYTES6 = 1e6;
+var MAX_FILES4 = 8e3;
+var MAX_FINDINGS4 = 400;
+var phpTaintScanner2 = {
+  id: "php-taint",
+  category: "security",
+  async run(ctx) {
+    const project = new Project2();
+    const contents = /* @__PURE__ */ new Map();
+    let files = 0;
+    for (const file2 of ctx.files) {
+      const norm = file2.replace(/\\/g, "/");
+      if (!PHP_FILE2.test(norm) || SKIP_PATH4.test(norm)) continue;
+      if (files >= MAX_FILES4) break;
+      const size = await ctx.fileSize?.(file2);
+      if (size != null && size > MAX_BYTES6) continue;
+      const content = await ctx.readFile(file2);
+      if (!content || content.length > MAX_BYTES6) continue;
+      if (project.add(norm, content)) {
+        contents.set(norm, content);
+        files++;
+      }
+    }
+    if (!files) return [];
+    project.run();
+    const issues = [];
+    const seen = /* @__PURE__ */ new Set();
+    const reach = reachability2(project);
+    const CAP = /\b(?:current_user_can|is_super_admin|user_can|check_admin_referer)\s*\(/;
+    for (const f3 of project.findings.sort(byPlace2)) {
+      if (issues.length >= MAX_FINDINGS4) break;
+      const rule = RULES8[f3.kind];
+      const id = `${rule.id}-${f3.file}:${f3.line}`;
+      if (seen.has(id)) continue;
+      seen.add(id);
+      let ageDays = 0;
+      try {
+        ageDays = await ctx.git.blameAgeDays(f3.file, f3.line);
+      } catch {
+      }
+      const line = contents.get(f3.file)?.split(/\r?\n/)[f3.line - 1]?.trim().slice(0, 200);
+      const def = project.defAt(f3.file, f3.line);
+      const entry = def ? reach.open.get(def.node) : void 0;
+      const body = def ? (contents.get(def.file) ?? "").split(/\r?\n/).slice((def.node.loc?.start?.line ?? 1) - 1, f3.line - 1).join("\n") : "";
+      const adminOnly = !!def && !entry && (reach.admin.has(def.node) || CAP.test(body));
+      let confidence = f3.weak ? "medium" : "high";
+      if (adminOnly) confidence = confidence === "high" ? "medium" : "low";
+      if (/HTTP_HOST|^\$_SERVER$/.test(f3.source) && f3.kind !== "sql" && f3.kind !== "cmd") confidence = confidence === "high" ? "medium" : "low";
+      const where = entry ? ` Reachable from ${entry}.` : adminOnly ? " Reachable from admin screens only (or after a capability check): an administrator would have to be the attacker or be tricked into it." : "";
+      issues.push({
+        id,
+        category: "security",
+        severity: rule.severity,
+        title: rule.title,
+        location: `${f3.file}:${f3.line}`,
+        ageDays,
+        detail: `${rule.detail} Data flow: ${trace2(f3)}.${where}`,
+        ...line ? { evidence: line } : {},
+        rule: rule.id,
+        confidence,
+        flow: flowOf2(f3)
+      });
+    }
+    for (const a of auditAccessControl2(project)) {
+      if (issues.length >= MAX_FINDINGS4) break;
+      const rule = `php-taint-${a.kind}`;
+      const id = `${rule}-${a.file}:${a.line}`;
+      if (seen.has(id)) continue;
+      seen.add(id);
+      let ageDays = 0;
+      try {
+        ageDays = await ctx.git.blameAgeDays(a.file, a.line);
+      } catch {
+      }
+      const who = a.exposure === "public" ? "any visitor (no login)" : "any logged-in user, including subscribers";
+      const line = contents.get(a.file)?.split(/\r?\n/)[a.line - 1]?.trim().slice(0, 200);
+      const path = `${a.hook} \u2192 ${a.chain.join(" \u2192 ")} \u2192 ${a.action}`;
+      const text3 = a.kind === "csrf" ? { severity: "warning", title: `CSRF: ${a.action} changes data without a nonce check`, detail: `${path} checks the user's capability but not a nonce, so another site can make a logged-in administrator's browser send this request. Verify a nonce (check_admin_referer / check_ajax_referer) before acting.`, confidence: "medium" } : a.kind === "data-exposure" ? { severity: "critical", title: `Sensitive data sent to unauthenticated requests by ${a.action}`, detail: `${who} can call ${path}, which returns user records or secret options with no capability check. Return only public fields, or require the right capability.`, confidence: "medium" } : a.settings ? {
+        severity: "critical",
+        title: `Missing authorization: ${a.exposure === "public" ? "unauthenticated" : "any logged-in user's"} request changes settings via ${a.action}`,
+        detail: `${who} can call ${path} and store a value from the request, with no capability check (current_user_can) on the way. Plugin settings changed by visitors are a common takeover path (redirect URLs, script snippets, role defaults). Check the capability before saving.`,
+        // Anonymous AJAX / REST: shown. Subscriber-level handlers and every-request hooks: listed with --all.
+        confidence: a.exposure === "public" && !/^(?:init|admin_init|wp_loaded|plugins_loaded|wp|template_redirect)$/.test(a.hook) ? "medium" : "low"
+      } : { severity: "critical", title: `Missing authorization: ${a.action} is reachable by ${a.exposure === "public" ? "unauthenticated" : "any logged-in"} requests`, detail: `${who} can call ${path} with no capability check (current_user_can) on the way${a.nonce ? "; a nonce is checked, but a nonce is a CSRF token, not a permission" : ""}. Check the capability the action needs before doing it.`, confidence: a.nonce || a.exposure === "user" ? "medium" : "high" };
+      issues.push({
+        id,
+        category: "security",
+        severity: text3.severity,
+        title: text3.title,
+        location: `${a.file}:${a.line}`,
+        ageDays,
+        detail: text3.detail,
+        ...line ? { evidence: line } : {},
+        rule,
+        confidence: text3.confidence
+      });
+    }
+    for (const l3 of auditLogic2(project)) {
+      if (issues.length >= MAX_FINDINGS4) break;
+      if (SKIP_PATH4.test(l3.file)) continue;
+      const rule = LOGIC_RULES2[l3.kind];
+      const id = `${rule.id}-${l3.file}:${l3.line}`;
+      if (seen.has(id)) continue;
+      seen.add(id);
+      let ageDays = 0;
+      try {
+        ageDays = await ctx.git.blameAgeDays(l3.file, l3.line);
+      } catch {
+      }
+      const line = contents.get(l3.file)?.split(/\r?\n/)[l3.line - 1]?.trim().slice(0, 200);
+      issues.push({
+        id,
+        category: "security",
+        severity: rule.severity,
+        title: rule.title,
+        location: `${l3.file}:${l3.line}`,
+        ageDays,
+        detail: `${rule.detail} Here: ${l3.what}.`,
+        ...line ? { evidence: line } : {},
+        rule: rule.id,
+        confidence: l3.weak ? "medium" : "high"
+      });
+    }
+    return issues;
+  }
+};
+function byPlace2(a, b3) {
+  return a.file.localeCompare(b3.file) || a.line - b3.line;
+}
+function flowOf2(f3) {
+  const out = [];
+  const first = f3.steps[0];
+  const at2 = (s) => s ? { ...s.file ?? f3.file ? { file: s.file ?? f3.file } : {}, ...s.line ? { line: s.line } : {} } : {};
+  if (!first || first.text !== f3.source) out.push({ role: "source", text: f3.source });
+  for (const [i, s] of f3.steps.entries()) {
+    if (s.text === "string" && f3.steps.length > 1) continue;
+    out.push({ role: i === 0 && first?.text === f3.source ? "source" : "step", text: s.text, ...at2(s) });
+  }
+  if (out.some((s) => s.text === f3.sink && s.line === f3.line) && out.length > 1) {
+    out[out.length - 1] = { ...out[out.length - 1], role: "sink" };
+    return out;
+  }
+  out.push({ role: "sink", text: f3.sink, file: f3.file, line: f3.line });
+  return out;
+}
+function trace2(f3) {
+  const parts = [];
+  let lastFile = "";
+  if (f3.steps[0]?.text !== f3.source) parts.push(`${f3.source} \u2026 `);
+  for (const s of f3.steps) {
+    const where = s.file && s.file !== lastFile ? ` (${s.file}:${s.line})` : s.line ? ` (line ${s.line})` : "";
+    if (s.text === "string" && parts.at(-1) === "string") continue;
+    parts.push(`${s.text}${where}`);
+    if (s.file) lastFile = s.file;
+  }
+  parts.push(`${f3.sink} (${f3.file === lastFile ? `line ${f3.line}` : `${f3.file}:${f3.line}`})`);
+  return parts.filter((p2) => !p2.startsWith("string")).join(" \u2192 ");
+}
 
 // ../core/src/scanners/supply-chain.ts
 var PACKAGE_JSON_RE2 = /(^|\/)package\.json$/i;
@@ -92681,9 +115592,11 @@ var defaultScanners2 = [
   duplicateCodeScanner2,
   supplyChainScanner2
 ];
+var addonScanners2 = [phpTaintScanner2];
 
 // ../core/src/select-scanners.ts
 var ALL_SCANNER_IDS2 = defaultScanners2.map((s) => s.id);
+var ADDON_SCANNER_IDS2 = addonScanners2.map((s) => s.id);
 
 // ../core/src/reporters/shared.ts
 var SEVERITY_RANK3 = { critical: 3, warning: 2, info: 1 };
@@ -92837,11 +115750,11 @@ function fileLocation(issue2) {
 }
 function messageText(issue2) {
   const parts = [issue2.title.trim(), issue2.detail.trim()].filter(Boolean);
-  let text = parts.join("\n\n");
-  if (issue2.evidence) text += `
+  let text3 = parts.join("\n\n");
+  if (issue2.evidence) text3 += `
 
 ${issue2.evidence.trim()}`;
-  return text;
+  return text3;
 }
 function renderSarif(report2) {
   const issues = sortIssues(report2.issues);
