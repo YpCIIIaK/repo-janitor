@@ -54,7 +54,7 @@ export const CLASSES = {
   xxe: /xxe/,
   "open-redirect": /redirect/,
   tls: /tls/,
-  crypto: /weak-hash|random-for-secret|weak-cipher/,
+  crypto: /weak-hash|weak-password-hash|weak-secret-mac|random-for-secret|weak-cipher/,
   secrets: /^secret-/,
   // No rule targets these yet. They stay in the table so the gap shows as 0%.
   csrf: /csrf/,

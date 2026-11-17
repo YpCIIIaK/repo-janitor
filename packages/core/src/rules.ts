@@ -45,6 +45,8 @@ const INSECURE: Record<string, string> = {
   "php-reflected-xss": "Request input echoed unescaped",
   "java-deserialization": "Java native deserialisation",
   "java-xxe": "Java XML parser open to XXE",
+  "weak-password-hash": "Password hashed with MD5/SHA-1",
+  "weak-secret-mac": "Secret signed with plain MD5/SHA-1",
   "ruby-dynamic-dispatch": "Method or class chosen by request input",
   "ruby-marshal-load": "Marshal / unsafe YAML load",
   "ruby-html-safe": "Request input marked html_safe",

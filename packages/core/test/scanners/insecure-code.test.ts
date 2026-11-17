@@ -563,8 +563,40 @@ describe("recall: advisory-derived rules", () => {
   })
 
   it("flags weak hashes for passwords in Go and Java, not for cache keys", async () => {
-    expect(await rulesFor({ "u/p.go": "package u\nfunc h(password string) []byte { s := md5.Sum([]byte(password)); return s[:] }\n" })).toContain("insecure-weak-hash@u/p.go:2")
+    expect(await rulesFor({ "u/p.go": "package u\nfunc h(password string) []byte { s := md5.Sum([]byte(password)); return s[:] }\n" })).toContain("insecure-weak-password-hash@u/p.go:2")
     expect((await rulesFor({ "c/k.go": "package c\nfunc key(name string) string { m := md5.New(); m.Write([]byte(name)); return hex(m) }\n" })).filter((x) => x.includes("weak-hash"))).toEqual([])
-    expect(await rulesFor({ "src/P.java": "class P { byte[] h(String password) throws Exception {\n  return MessageDigest.getInstance(\"MD5\").digest(password.getBytes()); } }\n" })).toContain("insecure-weak-hash@src/P.java:2")
+    expect(await rulesFor({ "src/P.java": "class P { byte[] h(String password) throws Exception {\n  return MessageDigest.getInstance(\"MD5\").digest(password.getBytes()); } }\n" })).toContain("insecure-weak-password-hash@src/P.java:2")
+  })
+})
+
+/** Shapes taken from the 350-repo weak-hash study (benchmark, Nov 2026). */
+describe("weak hashes judged by what is hashed", () => {
+  const rulesFor = async (files: Record<string, string>) =>
+    (await insecureCodeScanner.run(makeContext({ files }))).map((i) => i.id.slice(0, i.id.length - i.location.length - 1))
+
+  it("flags passwords stored with md5/sha1", async () => {
+    expect(await rulesFor({ "app/user.php": "<?php\n$data = ['password' => md5($this->in['password'])];\n" })).toContain("insecure-weak-password-hash")
+    expect(await rulesFor({ "src/auth.py": "import hashlib\ndef store(password):\n    return hashlib.sha1(password.encode()).hexdigest()\n" })).toContain("insecure-weak-password-hash")
+  })
+
+  it("flags a secret glued to data and hashed, including Go's New-then-Write", async () => {
+    expect(await rulesFor({ "api/token.php": "<?php\n$token = md5($config['apiKey'] . $path . $time);\n" })).toContain("insecure-weak-secret-mac")
+    const go = "package tool\nfunc Code(data string) string {\n\tsh := sha1.New()\n\t_, _ = sh.Write([]byte(data + conf.Security.SecretKey + start))\n\treturn hex(sh)\n}\n"
+    expect(await rulesFor({ "internal/tool/tool.go": go })).toContain("insecure-weak-secret-mac")
+  })
+
+  it("stays quiet on cache keys, protocols and words near the call", async () => {
+    const quiet = await rulesFor({
+      "app/cache.php": "<?php\n$key = 'kb:source:' . sha1($fullPath);\n",
+      "lib/pop.php": "<?php\n$this->write('APOP ' . $user . ' ' . md5($match[0] . $this->password));\n",
+      "ui/form.php": "<?php\n$f = new gui_textbox('userman|password', md5(uniqid()), 'Password For New User');\n",
+      "src/ws.js": "const accept = createHash('sha1').update(key + '258EAFA5-E914-47DA-95CA-C5AB0DC85B11').digest('base64')\n",
+    })
+    expect(quiet.filter((r) => /weak-(password-hash|secret-mac)/.test(r))).toEqual([])
+  })
+
+  it("skips vendored library copies", async () => {
+    const r = await rulesFor({ "Library/lib/python3.9/site-packages/x/auth.py": "import hashlib\nh = hashlib.md5(password).hexdigest()\n" })
+    expect(r).toEqual([])
   })
 })

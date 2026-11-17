@@ -28,6 +28,8 @@ const RU: Record<string, string> = {
   "insecure-php-reflected-xss": "Ввод запроса выводится без экранирования",
   "insecure-java-deserialization": "Нативная десериализация Java",
   "insecure-java-xxe": "XML-парсер Java без защиты от XXE",
+  "insecure-weak-password-hash": "Пароль под MD5/SHA-1",
+  "insecure-weak-secret-mac": "Подпись секретом через MD5/SHA-1",
   "insecure-ruby-dynamic-dispatch": "Метод или класс выбирается вводом запроса",
   "insecure-ruby-marshal-load": "Marshal / небезопасный YAML.load",
   "insecure-ruby-html-safe": "Ввод запроса помечен html_safe",

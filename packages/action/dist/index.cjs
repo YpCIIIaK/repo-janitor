@@ -26875,7 +26875,7 @@ var require_lib4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-3U75TW76.js
+// ../cli/dist/chunk-566YFZUL.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -50809,7 +50809,7 @@ function date4(params) {
   return _coercedDate(ZodDate, params);
 }
 
-// ../cli/dist/chunk-3U75TW76.js
+// ../cli/dist/chunk-566YFZUL.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -75387,6 +75387,8 @@ var INSECURE = {
   "php-reflected-xss": "Request input echoed unescaped",
   "java-deserialization": "Java native deserialisation",
   "java-xxe": "Java XML parser open to XXE",
+  "weak-password-hash": "Password hashed with MD5/SHA-1",
+  "weak-secret-mac": "Secret signed with plain MD5/SHA-1",
   "ruby-dynamic-dispatch": "Method or class chosen by request input",
   "ruby-marshal-load": "Marshal / unsafe YAML load",
   "ruby-html-safe": "Request input marked html_safe",
@@ -80557,8 +80559,8 @@ var JAVA_RE = /\.(?:java|kts?)$/i;
 var RB_RE = /\.(?:rb|erb|rake)$/i;
 var GO_RE2 = /\.go$/i;
 var CS_RE = /\.(?:cs|cshtml)$/i;
-var SKIP_RE = /(^|\/)(?:node_modules|vendor|third_party|dist|build|out|\.next)\/|\.min\.[cm]?js$/i;
-var NOT_SHIPPED_RE2 = /(^|\/)(?:_?examples?|demos?|benchmarks?|bench|perf(?:-testing)?|performance|docs?|documentation|www|website|site|scripts?|tools?|[\w-]*_assets|static|_?vendor(?:ed)?|third_party|integration-?[tT]ests|test-utils|tooling|_tools|sphinx)\/|(^|\/)jquery[-.\d]*\.js$/i;
+var SKIP_RE = /(^|\/)(?:node_modules|vendor|third_party|dist|build|out|\.next|site-packages|dist-packages|_vendor|lib\/python\d(?:\.\d+)?|Pods|bower_components|pear|phpseclib)\/|\.min\.[cm]?js$/i;
+var NOT_SHIPPED_RE2 = new RegExp("(^|\\/)(?:_?examples?|demos?|benchmarks?|bench|perf(?:-testing)?|performance|docs?|documentation|www|website|site|scripts?|(?<!(?:internal|pkg|src|lib)\\/)tools?|[\\w-]*_assets|static|_?vendor(?:ed)?|third_party|integration-?[tT]ests|test-utils|tooling|_tools|sphinx)\\/|(^|\\/)jquery[-.\\d]*\\.js$", "i");
 var TEST_RE3 = /(^|\/)(?:__tests__|tests?|specs?|fixtures?)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test\.[cm]?[jt]s$|(?:^|\/)test_[^/]+\.py$|_test\.py$|(?:^|\/)conftest\.py$|_test\.go$|(?:Test|Tests|IT)\.(?:java|kt|cs|php)$|_spec\.rb$/i;
 var MAX_PER_FILE5 = 6;
 var MAX_TOTAL8 = 60;
@@ -80981,6 +80983,129 @@ var RULES2 = [
     title: "Security value generated with java.util.Random",
     detail: "`java.util.Random` and `Math.random` are predictable. Use `SecureRandom` for tokens, salts and keys."
   },
+  // ---- Weak hashes where they matter: password storage and home-made MACs ----
+  // Measured on 350 corpus repos (Nov 2026): the generic weak-hash rule was right
+  // 1 time in 21; these two, judged on what is hashed, 36 of 60.
+  {
+    id: "weak-password-hash",
+    lang: "php",
+    // Judged by weakHashKindAllows(): the hashed value has to be a password
+    // (or a secret concatenated with data), not just sit near one.
+    re: new RegExp(`(?<![\\w$>:\\\\])(?:md5|sha1)\\s*\\(|\\bhash\\s*\\(\\s*[\\'"](?:md5|sha1)[\\'"]\\s*,|\\bMD5\\s*\\(\\s*\\'`, "g"),
+    severity: "critical",
+    title: "Password hashed with MD5/SHA-1",
+    detail: "MD5 and SHA-1 are fast hashes: a leaked table of them is cracked at billions of guesses a second, and unsalted ones fall to lookup tables. Store passwords with a password hash (bcrypt, scrypt, argon2; `password_hash()` in PHP) and rehash old entries at the next login."
+  },
+  {
+    id: "weak-secret-mac",
+    lang: "php",
+    // Judged by weakHashKindAllows(): the hashed value has to be a password
+    // (or a secret concatenated with data), not just sit near one.
+    re: new RegExp(`(?<![\\w$>:\\\\])(?:md5|sha1)\\s*\\(|\\bhash\\s*\\(\\s*[\\'"](?:md5|sha1)[\\'"]\\s*,|\\bMD5\\s*\\(\\s*\\'`, "g"),
+    severity: "warning",
+    title: "Secret signed with a plain MD5/SHA-1 hash",
+    detail: "Gluing a secret to the data and hashing it is not a signature: MD5 and SHA-1 allow length-extension and collision tricks. Use HMAC-SHA256 (`hash_hmac`, `hmac.new`, `crypto.createHmac`) and compare in constant time."
+  },
+  {
+    id: "weak-password-hash",
+    lang: "py",
+    // Judged by weakHashKindAllows(): the hashed value has to be a password
+    // (or a secret concatenated with data), not just sit near one.
+    re: /\bhashlib\.(?:md5|sha1)\s*\(|\b(?:MD5|SHA1|SHA)\.new\s*\(/g,
+    severity: "critical",
+    title: "Password hashed with MD5/SHA-1",
+    detail: "MD5 and SHA-1 are fast hashes: a leaked table of them is cracked at billions of guesses a second, and unsalted ones fall to lookup tables. Store passwords with a password hash (bcrypt, scrypt, argon2; `password_hash()` in PHP) and rehash old entries at the next login."
+  },
+  {
+    id: "weak-secret-mac",
+    lang: "py",
+    // Judged by weakHashKindAllows(): the hashed value has to be a password
+    // (or a secret concatenated with data), not just sit near one.
+    re: /\bhashlib\.(?:md5|sha1)\s*\(|\b(?:MD5|SHA1|SHA)\.new\s*\(/g,
+    severity: "warning",
+    title: "Secret signed with a plain MD5/SHA-1 hash",
+    detail: "Gluing a secret to the data and hashing it is not a signature: MD5 and SHA-1 allow length-extension and collision tricks. Use HMAC-SHA256 (`hash_hmac`, `hmac.new`, `crypto.createHmac`) and compare in constant time."
+  },
+  {
+    id: "weak-password-hash",
+    lang: "js",
+    // Judged by weakHashKindAllows(): the hashed value has to be a password
+    // (or a secret concatenated with data), not just sit near one.
+    re: /\bcreateHash\s*\(\s*[\'"](?:md5|sha1)[\'"]\s*\)/g,
+    severity: "critical",
+    title: "Password hashed with MD5/SHA-1",
+    detail: "MD5 and SHA-1 are fast hashes: a leaked table of them is cracked at billions of guesses a second, and unsalted ones fall to lookup tables. Store passwords with a password hash (bcrypt, scrypt, argon2; `password_hash()` in PHP) and rehash old entries at the next login."
+  },
+  {
+    id: "weak-secret-mac",
+    lang: "js",
+    // Judged by weakHashKindAllows(): the hashed value has to be a password
+    // (or a secret concatenated with data), not just sit near one.
+    re: /\bcreateHash\s*\(\s*[\'"](?:md5|sha1)[\'"]\s*\)/g,
+    severity: "warning",
+    title: "Secret signed with a plain MD5/SHA-1 hash",
+    detail: "Gluing a secret to the data and hashing it is not a signature: MD5 and SHA-1 allow length-extension and collision tricks. Use HMAC-SHA256 (`hash_hmac`, `hmac.new`, `crypto.createHmac`) and compare in constant time."
+  },
+  {
+    id: "weak-password-hash",
+    lang: "go",
+    // Judged by weakHashKindAllows(): the hashed value has to be a password
+    // (or a secret concatenated with data), not just sit near one.
+    re: /\b(?:md5|sha1)\.(?:New|Sum)\s*\(/g,
+    severity: "critical",
+    title: "Password hashed with MD5/SHA-1",
+    detail: "MD5 and SHA-1 are fast hashes: a leaked table of them is cracked at billions of guesses a second, and unsalted ones fall to lookup tables. Store passwords with a password hash (bcrypt, scrypt, argon2; `password_hash()` in PHP) and rehash old entries at the next login."
+  },
+  {
+    id: "weak-secret-mac",
+    lang: "go",
+    // Judged by weakHashKindAllows(): the hashed value has to be a password
+    // (or a secret concatenated with data), not just sit near one.
+    re: /\b(?:md5|sha1)\.(?:New|Sum)\s*\(/g,
+    severity: "warning",
+    title: "Secret signed with a plain MD5/SHA-1 hash",
+    detail: "Gluing a secret to the data and hashing it is not a signature: MD5 and SHA-1 allow length-extension and collision tricks. Use HMAC-SHA256 (`hash_hmac`, `hmac.new`, `crypto.createHmac`) and compare in constant time."
+  },
+  {
+    id: "weak-password-hash",
+    lang: "java",
+    // Judged by weakHashKindAllows(): the hashed value has to be a password
+    // (or a secret concatenated with data), not just sit near one.
+    re: /\bMessageDigest\s*\.\s*getInstance\s*\(\s*"(?:MD5|SHA-?1)"\s*\)|\bDigestUtils\s*\.\s*(?:md5|sha1)\w*\s*\(/g,
+    severity: "critical",
+    title: "Password hashed with MD5/SHA-1",
+    detail: "MD5 and SHA-1 are fast hashes: a leaked table of them is cracked at billions of guesses a second, and unsalted ones fall to lookup tables. Store passwords with a password hash (bcrypt, scrypt, argon2; `password_hash()` in PHP) and rehash old entries at the next login."
+  },
+  {
+    id: "weak-secret-mac",
+    lang: "java",
+    // Judged by weakHashKindAllows(): the hashed value has to be a password
+    // (or a secret concatenated with data), not just sit near one.
+    re: /\bMessageDigest\s*\.\s*getInstance\s*\(\s*"(?:MD5|SHA-?1)"\s*\)|\bDigestUtils\s*\.\s*(?:md5|sha1)\w*\s*\(/g,
+    severity: "warning",
+    title: "Secret signed with a plain MD5/SHA-1 hash",
+    detail: "Gluing a secret to the data and hashing it is not a signature: MD5 and SHA-1 allow length-extension and collision tricks. Use HMAC-SHA256 (`hash_hmac`, `hmac.new`, `crypto.createHmac`) and compare in constant time."
+  },
+  {
+    id: "weak-password-hash",
+    lang: "rb",
+    // Judged by weakHashKindAllows(): the hashed value has to be a password
+    // (or a secret concatenated with data), not just sit near one.
+    re: /\bDigest::(?:MD5|SHA1)\.\w*digest\s*\(/g,
+    severity: "critical",
+    title: "Password hashed with MD5/SHA-1",
+    detail: "MD5 and SHA-1 are fast hashes: a leaked table of them is cracked at billions of guesses a second, and unsalted ones fall to lookup tables. Store passwords with a password hash (bcrypt, scrypt, argon2; `password_hash()` in PHP) and rehash old entries at the next login."
+  },
+  {
+    id: "weak-secret-mac",
+    lang: "rb",
+    // Judged by weakHashKindAllows(): the hashed value has to be a password
+    // (or a secret concatenated with data), not just sit near one.
+    re: /\bDigest::(?:MD5|SHA1)\.\w*digest\s*\(/g,
+    severity: "warning",
+    title: "Secret signed with a plain MD5/SHA-1 hash",
+    detail: "Gluing a secret to the data and hashing it is not a signature: MD5 and SHA-1 allow length-extension and collision tricks. Use HMAC-SHA256 (`hash_hmac`, `hmac.new`, `crypto.createHmac`) and compare in constant time."
+  },
   // ---- Python -------------------------------------------------------------
   {
     id: "py-shell-true",
@@ -81128,6 +81253,8 @@ var SKIP_IN_TEST = /* @__PURE__ */ new Set([
   "py-pickle-load",
   "random-for-secret",
   "java-xxe",
+  "weak-password-hash",
+  "weak-secret-mac",
   "php-include-user-input",
   "php-unserialize",
   "php-reflected-xss",
@@ -81139,6 +81266,32 @@ var SKIP_IN_TEST = /* @__PURE__ */ new Set([
   "dotnet-deserialization",
   "ssrf"
 ]);
+var PASSWORD_VALUE = /\b(?:password|passwd|passphrase|pwd|user_?pass)\w*\b|\$pass\b/i;
+var SECRET_VALUE = /\b\w*(?:secret|private_?key|api_?key|signing_?key|hmac_?key)\w*\b/i;
+var MANDATED_HASH = /\bAPOP\b|\brealm\b|\bcnonce\b|WWW-Authenticate|258EAFA5-E914-47DA-95CA-C5AB0DC85B11/i;
+function hashInput(content, idx) {
+  const open2 = content.indexOf("(", idx);
+  if (open2 < 0) return "";
+  let depth = 0;
+  let end = open2;
+  for (; end < content.length && end < open2 + 400; end++) {
+    const ch = content[end];
+    if (ch === "(") depth++;
+    else if (ch === ")" && --depth === 0) break;
+  }
+  const own2 = content.slice(open2 + 1, end);
+  let stop = end;
+  for (let n = 0; n < 3 && stop >= 0; n++) stop = content.indexOf("\n", stop + 1);
+  const next = content.slice(end, stop < 0 ? void 0 : stop);
+  const fed = [...next.matchAll(/\.(?:update|Write|digest)\s*\(([^\n]*)/g)].map((m2) => m2[1]).join(" ");
+  return `${own2} ${fed}`;
+}
+function weakHashKindAllows(ruleId, content, idx, line) {
+  const input2 = hashInput(content, idx);
+  if (MANDATED_HASH.test(line) || MANDATED_HASH.test(input2)) return false;
+  if (ruleId === "weak-password-hash") return PASSWORD_VALUE.test(input2);
+  return !PASSWORD_VALUE.test(input2) && SECRET_VALUE.test(input2) && /\+|\s\.\s|\.\s*\$|\$\w+(?:\[[^\]]*\])?\s*\.|,/.test(input2);
+}
 function scanSource(content, lang) {
   var _a22;
   const markers = COMMENT_MARKERS2[lang];
@@ -81191,8 +81344,10 @@ function scanSource(content, lang) {
       if (/^\s*\*/.test(rawLine) || /``/.test(rawLine)) continue;
       if (/^\s*(?:>>>|\.\.\.)\s/.test(rawLine)) continue;
       if (!contextAllows(rule.id, content, lineStart)) continue;
+      if ((rule.id === "weak-password-hash" || rule.id === "weak-secret-mac") && !weakHashKindAllows(rule.id, content, idx, rawLine)) continue;
       const existing = byLine.get(line);
-      if (existing && rank(existing.rule.severity) >= rank(rule.severity)) continue;
+      const specific = (rule.id === "weak-password-hash" || rule.id === "weak-secret-mac") && (existing == null ? void 0 : existing.rule.id) === "weak-hash";
+      if (existing && !specific && rank(existing.rule.severity) >= rank(rule.severity)) continue;
       if (!sinkAllows(rule.id, rawLine, idx - lineStart, lang)) continue;
       if (lang === "php" && rule.id === "exec-interpolated" && /\bproc_open\s*\(\s*\[/.test(rawLine)) continue;
       if ((rule.id === "php-include-user-input" || rule.id === "php-reflected-xss") && !/\$_(?:GET|POST|REQUEST|COOKIE)\b/.test(m2[0]) && !phpLocalRequestValue(content, idx, m2[0])) continue;
@@ -84435,6 +84590,8 @@ var INSECURE2 = {
   "php-reflected-xss": "Request input echoed unescaped",
   "java-deserialization": "Java native deserialisation",
   "java-xxe": "Java XML parser open to XXE",
+  "weak-password-hash": "Password hashed with MD5/SHA-1",
+  "weak-secret-mac": "Secret signed with plain MD5/SHA-1",
   "ruby-dynamic-dispatch": "Method or class chosen by request input",
   "ruby-marshal-load": "Marshal / unsafe YAML load",
   "ruby-html-safe": "Request input marked html_safe",
@@ -89279,8 +89436,8 @@ var JAVA_RE2 = /\.(?:java|kts?)$/i;
 var RB_RE2 = /\.(?:rb|erb|rake)$/i;
 var GO_RE4 = /\.go$/i;
 var CS_RE2 = /\.(?:cs|cshtml)$/i;
-var SKIP_RE2 = /(^|\/)(?:node_modules|vendor|third_party|dist|build|out|\.next)\/|\.min\.[cm]?js$/i;
-var NOT_SHIPPED_RE4 = /(^|\/)(?:_?examples?|demos?|benchmarks?|bench|perf(?:-testing)?|performance|docs?|documentation|www|website|site|scripts?|tools?|[\w-]*_assets|static|_?vendor(?:ed)?|third_party|integration-?[tT]ests|test-utils|tooling|_tools|sphinx)\/|(^|\/)jquery[-.\d]*\.js$/i;
+var SKIP_RE2 = /(^|\/)(?:node_modules|vendor|third_party|dist|build|out|\.next|site-packages|dist-packages|_vendor|lib\/python\d(?:\.\d+)?|Pods|bower_components|pear|phpseclib)\/|\.min\.[cm]?js$/i;
+var NOT_SHIPPED_RE4 = /(^|\/)(?:_?examples?|demos?|benchmarks?|bench|perf(?:-testing)?|performance|docs?|documentation|www|website|site|scripts?|(?<!(?:internal|pkg|src|lib)\/)tools?|[\w-]*_assets|static|_?vendor(?:ed)?|third_party|integration-?[tT]ests|test-utils|tooling|_tools|sphinx)\/|(^|\/)jquery[-.\d]*\.js$/i;
 var TEST_RE7 = /(^|\/)(?:__tests__|tests?|specs?|fixtures?)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test\.[cm]?[jt]s$|(?:^|\/)test_[^/]+\.py$|_test\.py$|(?:^|\/)conftest\.py$|_test\.go$|(?:Test|Tests|IT)\.(?:java|kt|cs|php)$|_spec\.rb$/i;
 var MAX_PER_FILE10 = 6;
 var MAX_TOTAL16 = 60;
@@ -89703,6 +89860,129 @@ var RULES5 = [
     title: "Security value generated with java.util.Random",
     detail: "`java.util.Random` and `Math.random` are predictable. Use `SecureRandom` for tokens, salts and keys."
   },
+  // ---- Weak hashes where they matter: password storage and home-made MACs ----
+  // Measured on 350 corpus repos (Nov 2026): the generic weak-hash rule was right
+  // 1 time in 21; these two, judged on what is hashed, 36 of 60.
+  {
+    id: "weak-password-hash",
+    lang: "php",
+    // Judged by weakHashKindAllows(): the hashed value has to be a password
+    // (or a secret concatenated with data), not just sit near one.
+    re: /(?<![\w$>:\\])(?:md5|sha1)\s*\(|\bhash\s*\(\s*[\'"](?:md5|sha1)[\'"]\s*,|\bMD5\s*\(\s*\'/g,
+    severity: "critical",
+    title: "Password hashed with MD5/SHA-1",
+    detail: "MD5 and SHA-1 are fast hashes: a leaked table of them is cracked at billions of guesses a second, and unsalted ones fall to lookup tables. Store passwords with a password hash (bcrypt, scrypt, argon2; `password_hash()` in PHP) and rehash old entries at the next login."
+  },
+  {
+    id: "weak-secret-mac",
+    lang: "php",
+    // Judged by weakHashKindAllows(): the hashed value has to be a password
+    // (or a secret concatenated with data), not just sit near one.
+    re: /(?<![\w$>:\\])(?:md5|sha1)\s*\(|\bhash\s*\(\s*[\'"](?:md5|sha1)[\'"]\s*,|\bMD5\s*\(\s*\'/g,
+    severity: "warning",
+    title: "Secret signed with a plain MD5/SHA-1 hash",
+    detail: "Gluing a secret to the data and hashing it is not a signature: MD5 and SHA-1 allow length-extension and collision tricks. Use HMAC-SHA256 (`hash_hmac`, `hmac.new`, `crypto.createHmac`) and compare in constant time."
+  },
+  {
+    id: "weak-password-hash",
+    lang: "py",
+    // Judged by weakHashKindAllows(): the hashed value has to be a password
+    // (or a secret concatenated with data), not just sit near one.
+    re: /\bhashlib\.(?:md5|sha1)\s*\(|\b(?:MD5|SHA1|SHA)\.new\s*\(/g,
+    severity: "critical",
+    title: "Password hashed with MD5/SHA-1",
+    detail: "MD5 and SHA-1 are fast hashes: a leaked table of them is cracked at billions of guesses a second, and unsalted ones fall to lookup tables. Store passwords with a password hash (bcrypt, scrypt, argon2; `password_hash()` in PHP) and rehash old entries at the next login."
+  },
+  {
+    id: "weak-secret-mac",
+    lang: "py",
+    // Judged by weakHashKindAllows(): the hashed value has to be a password
+    // (or a secret concatenated with data), not just sit near one.
+    re: /\bhashlib\.(?:md5|sha1)\s*\(|\b(?:MD5|SHA1|SHA)\.new\s*\(/g,
+    severity: "warning",
+    title: "Secret signed with a plain MD5/SHA-1 hash",
+    detail: "Gluing a secret to the data and hashing it is not a signature: MD5 and SHA-1 allow length-extension and collision tricks. Use HMAC-SHA256 (`hash_hmac`, `hmac.new`, `crypto.createHmac`) and compare in constant time."
+  },
+  {
+    id: "weak-password-hash",
+    lang: "js",
+    // Judged by weakHashKindAllows(): the hashed value has to be a password
+    // (or a secret concatenated with data), not just sit near one.
+    re: /\bcreateHash\s*\(\s*[\'"](?:md5|sha1)[\'"]\s*\)/g,
+    severity: "critical",
+    title: "Password hashed with MD5/SHA-1",
+    detail: "MD5 and SHA-1 are fast hashes: a leaked table of them is cracked at billions of guesses a second, and unsalted ones fall to lookup tables. Store passwords with a password hash (bcrypt, scrypt, argon2; `password_hash()` in PHP) and rehash old entries at the next login."
+  },
+  {
+    id: "weak-secret-mac",
+    lang: "js",
+    // Judged by weakHashKindAllows(): the hashed value has to be a password
+    // (or a secret concatenated with data), not just sit near one.
+    re: /\bcreateHash\s*\(\s*[\'"](?:md5|sha1)[\'"]\s*\)/g,
+    severity: "warning",
+    title: "Secret signed with a plain MD5/SHA-1 hash",
+    detail: "Gluing a secret to the data and hashing it is not a signature: MD5 and SHA-1 allow length-extension and collision tricks. Use HMAC-SHA256 (`hash_hmac`, `hmac.new`, `crypto.createHmac`) and compare in constant time."
+  },
+  {
+    id: "weak-password-hash",
+    lang: "go",
+    // Judged by weakHashKindAllows(): the hashed value has to be a password
+    // (or a secret concatenated with data), not just sit near one.
+    re: /\b(?:md5|sha1)\.(?:New|Sum)\s*\(/g,
+    severity: "critical",
+    title: "Password hashed with MD5/SHA-1",
+    detail: "MD5 and SHA-1 are fast hashes: a leaked table of them is cracked at billions of guesses a second, and unsalted ones fall to lookup tables. Store passwords with a password hash (bcrypt, scrypt, argon2; `password_hash()` in PHP) and rehash old entries at the next login."
+  },
+  {
+    id: "weak-secret-mac",
+    lang: "go",
+    // Judged by weakHashKindAllows(): the hashed value has to be a password
+    // (or a secret concatenated with data), not just sit near one.
+    re: /\b(?:md5|sha1)\.(?:New|Sum)\s*\(/g,
+    severity: "warning",
+    title: "Secret signed with a plain MD5/SHA-1 hash",
+    detail: "Gluing a secret to the data and hashing it is not a signature: MD5 and SHA-1 allow length-extension and collision tricks. Use HMAC-SHA256 (`hash_hmac`, `hmac.new`, `crypto.createHmac`) and compare in constant time."
+  },
+  {
+    id: "weak-password-hash",
+    lang: "java",
+    // Judged by weakHashKindAllows(): the hashed value has to be a password
+    // (or a secret concatenated with data), not just sit near one.
+    re: /\bMessageDigest\s*\.\s*getInstance\s*\(\s*"(?:MD5|SHA-?1)"\s*\)|\bDigestUtils\s*\.\s*(?:md5|sha1)\w*\s*\(/g,
+    severity: "critical",
+    title: "Password hashed with MD5/SHA-1",
+    detail: "MD5 and SHA-1 are fast hashes: a leaked table of them is cracked at billions of guesses a second, and unsalted ones fall to lookup tables. Store passwords with a password hash (bcrypt, scrypt, argon2; `password_hash()` in PHP) and rehash old entries at the next login."
+  },
+  {
+    id: "weak-secret-mac",
+    lang: "java",
+    // Judged by weakHashKindAllows(): the hashed value has to be a password
+    // (or a secret concatenated with data), not just sit near one.
+    re: /\bMessageDigest\s*\.\s*getInstance\s*\(\s*"(?:MD5|SHA-?1)"\s*\)|\bDigestUtils\s*\.\s*(?:md5|sha1)\w*\s*\(/g,
+    severity: "warning",
+    title: "Secret signed with a plain MD5/SHA-1 hash",
+    detail: "Gluing a secret to the data and hashing it is not a signature: MD5 and SHA-1 allow length-extension and collision tricks. Use HMAC-SHA256 (`hash_hmac`, `hmac.new`, `crypto.createHmac`) and compare in constant time."
+  },
+  {
+    id: "weak-password-hash",
+    lang: "rb",
+    // Judged by weakHashKindAllows(): the hashed value has to be a password
+    // (or a secret concatenated with data), not just sit near one.
+    re: /\bDigest::(?:MD5|SHA1)\.\w*digest\s*\(/g,
+    severity: "critical",
+    title: "Password hashed with MD5/SHA-1",
+    detail: "MD5 and SHA-1 are fast hashes: a leaked table of them is cracked at billions of guesses a second, and unsalted ones fall to lookup tables. Store passwords with a password hash (bcrypt, scrypt, argon2; `password_hash()` in PHP) and rehash old entries at the next login."
+  },
+  {
+    id: "weak-secret-mac",
+    lang: "rb",
+    // Judged by weakHashKindAllows(): the hashed value has to be a password
+    // (or a secret concatenated with data), not just sit near one.
+    re: /\bDigest::(?:MD5|SHA1)\.\w*digest\s*\(/g,
+    severity: "warning",
+    title: "Secret signed with a plain MD5/SHA-1 hash",
+    detail: "Gluing a secret to the data and hashing it is not a signature: MD5 and SHA-1 allow length-extension and collision tricks. Use HMAC-SHA256 (`hash_hmac`, `hmac.new`, `crypto.createHmac`) and compare in constant time."
+  },
   // ---- Python -------------------------------------------------------------
   {
     id: "py-shell-true",
@@ -89849,6 +90129,8 @@ var SKIP_IN_TEST2 = /* @__PURE__ */ new Set([
   "py-pickle-load",
   "random-for-secret",
   "java-xxe",
+  "weak-password-hash",
+  "weak-secret-mac",
   "php-include-user-input",
   "php-unserialize",
   "php-reflected-xss",
@@ -89860,6 +90142,32 @@ var SKIP_IN_TEST2 = /* @__PURE__ */ new Set([
   "dotnet-deserialization",
   "ssrf"
 ]);
+var PASSWORD_VALUE2 = /\b(?:password|passwd|passphrase|pwd|user_?pass)\w*\b|\$pass\b/i;
+var SECRET_VALUE2 = /\b\w*(?:secret|private_?key|api_?key|signing_?key|hmac_?key)\w*\b/i;
+var MANDATED_HASH2 = /\bAPOP\b|\brealm\b|\bcnonce\b|WWW-Authenticate|258EAFA5-E914-47DA-95CA-C5AB0DC85B11/i;
+function hashInput2(content, idx) {
+  const open2 = content.indexOf("(", idx);
+  if (open2 < 0) return "";
+  let depth = 0;
+  let end = open2;
+  for (; end < content.length && end < open2 + 400; end++) {
+    const ch = content[end];
+    if (ch === "(") depth++;
+    else if (ch === ")" && --depth === 0) break;
+  }
+  const own2 = content.slice(open2 + 1, end);
+  let stop = end;
+  for (let n = 0; n < 3 && stop >= 0; n++) stop = content.indexOf("\n", stop + 1);
+  const next = content.slice(end, stop < 0 ? void 0 : stop);
+  const fed = [...next.matchAll(/\.(?:update|Write|digest)\s*\(([^\n]*)/g)].map((m2) => m2[1]).join(" ");
+  return `${own2} ${fed}`;
+}
+function weakHashKindAllows2(ruleId, content, idx, line) {
+  const input2 = hashInput2(content, idx);
+  if (MANDATED_HASH2.test(line) || MANDATED_HASH2.test(input2)) return false;
+  if (ruleId === "weak-password-hash") return PASSWORD_VALUE2.test(input2);
+  return !PASSWORD_VALUE2.test(input2) && SECRET_VALUE2.test(input2) && /\+|\s\.\s|\.\s*\$|\$\w+(?:\[[^\]]*\])?\s*\.|,/.test(input2);
+}
 function scanSource2(content, lang) {
   const markers = COMMENT_MARKERS4[lang];
   const textRanges = [];
@@ -89910,8 +90218,10 @@ function scanSource2(content, lang) {
       if (/^\s*\*/.test(rawLine) || /``/.test(rawLine)) continue;
       if (/^\s*(?:>>>|\.\.\.)\s/.test(rawLine)) continue;
       if (!contextAllows2(rule.id, content, lineStart)) continue;
+      if ((rule.id === "weak-password-hash" || rule.id === "weak-secret-mac") && !weakHashKindAllows2(rule.id, content, idx, rawLine)) continue;
       const existing = byLine.get(line);
-      if (existing && rank2(existing.rule.severity) >= rank2(rule.severity)) continue;
+      const specific = (rule.id === "weak-password-hash" || rule.id === "weak-secret-mac") && existing?.rule.id === "weak-hash";
+      if (existing && !specific && rank2(existing.rule.severity) >= rank2(rule.severity)) continue;
       if (!sinkAllows2(rule.id, rawLine, idx - lineStart, lang)) continue;
       if (lang === "php" && rule.id === "exec-interpolated" && /\bproc_open\s*\(\s*\[/.test(rawLine)) continue;
       if ((rule.id === "php-include-user-input" || rule.id === "php-reflected-xss") && !/\$_(?:GET|POST|REQUEST|COOKIE)\b/.test(m2[0]) && !phpLocalRequestValue2(content, idx, m2[0])) continue;
