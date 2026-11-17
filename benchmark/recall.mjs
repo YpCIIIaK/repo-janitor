@@ -32,7 +32,7 @@
  * per-language deep analysers) register in ENGINES.
  */
 import { spawnSync } from "node:child_process"
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs"
+import { appendFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { dirname, join, relative, resolve } from "node:path"
 import { fileURLToPath } from "node:url"
@@ -278,12 +278,29 @@ export function summarise(results) {
     .sort((a, b) => a.language.localeCompare(b.language) || a.class.localeCompare(b.class) || a.engine.localeCompare(b.engine))
 }
 
-export function run(cases, engines) {
+/**
+ * `journal`: a JSONL file every result is appended to as soon as it exists, and
+ * whose results are reused on the next run — a long run that hits a time limit
+ * or a container restart picks up where it stopped.
+ */
+export function run(cases, engines, journal) {
   const results = []
+  const done = new Map()
+  if (journal && existsSync(journal)) {
+    for (const line of readFileSync(journal, "utf8").split("\n").filter(Boolean)) {
+      try { const r = JSON.parse(line); done.set(`${r.id}|${r.engine}`, r) } catch { /* torn last line */ }
+    }
+  }
   for (const c of cases) {
     if (!CLASSES[c.class]) throw new Error(`${c.id}: unknown class "${c.class}"`)
     const base = { id: c.id, set: c._set, language: c.language, class: c.class }
-    for (const engine of engines) {
+    const todo = engines.filter((engine) => {
+      const prev = done.get(`${c.id}|${engine}`)
+      if (prev) results.push(prev)
+      return !prev
+    })
+    const before = results.length
+    for (const engine of todo) {
       try {
         if (c.expect) {
           if (!c.files?.length) throw new Error("expect cases need files")
@@ -298,6 +315,7 @@ export function run(cases, engines) {
         results.push({ ...base, engine, verdict: "error", error: String(e.message).slice(0, 200) })
       }
     }
+    if (journal) for (const r of results.slice(before)) appendFileSync(journal, JSON.stringify(r) + "\n")
     // BENCH_DROP_CLONES=1 keeps disk flat on long runs: a case's checkouts go once it is judged.
     if (process.env.BENCH_DROP_CLONES === "1" && c.source?.type === "git") {
       for (const d of usedTrees) rmSync(d, { recursive: true, force: true })
@@ -329,7 +347,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     console.log("no recall cases found (private data: node benchmark/private.mjs pull)")
     process.exit(0)
   }
-  const results = run(cases, engines)
+  const results = run(cases, engines, arg("journal", null))
   const summary = summarise(results)
   const out = resolve(arg("out", join(here, "recall-report.json")))
   writeFileSync(out, JSON.stringify({ generatedAt: new Date().toISOString(), engines, cases: cases.length, summary, results }, null, 1) + "\n")

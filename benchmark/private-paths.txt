@@ -15,3 +15,4 @@ datasets/
 benchmark/recall/cases/
 benchmark/recall-report.json
 benchmark/recall-report-advisories.json
+benchmark/recall-advisories.jsonl
