@@ -26875,7 +26875,7 @@ var require_lib4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-566YFZUL.js
+// ../cli/dist/chunk-YFTC6IKG.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -50809,7 +50809,7 @@ function date4(params) {
   return _coercedDate(ZodDate, params);
 }
 
-// ../cli/dist/chunk-566YFZUL.js
+// ../cli/dist/chunk-YFTC6IKG.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -80991,7 +80991,7 @@ var RULES2 = [
     lang: "php",
     // Judged by weakHashKindAllows(): the hashed value has to be a password
     // (or a secret concatenated with data), not just sit near one.
-    re: new RegExp(`(?<![\\w$>:\\\\])(?:md5|sha1)\\s*\\(|\\bhash\\s*\\(\\s*[\\'"](?:md5|sha1)[\\'"]\\s*,|\\bMD5\\s*\\(\\s*\\'`, "g"),
+    re: new RegExp(`(?<![\\w$>:\\\\])(?:md5|sha1)\\s*\\(|\\bhash\\s*\\(\\s*['"](?:md5|sha1)['"]\\s*,|\\bMD5\\s*\\(\\s*'`, "g"),
     severity: "critical",
     title: "Password hashed with MD5/SHA-1",
     detail: "MD5 and SHA-1 are fast hashes: a leaked table of them is cracked at billions of guesses a second, and unsalted ones fall to lookup tables. Store passwords with a password hash (bcrypt, scrypt, argon2; `password_hash()` in PHP) and rehash old entries at the next login."
@@ -81001,7 +81001,7 @@ var RULES2 = [
     lang: "php",
     // Judged by weakHashKindAllows(): the hashed value has to be a password
     // (or a secret concatenated with data), not just sit near one.
-    re: new RegExp(`(?<![\\w$>:\\\\])(?:md5|sha1)\\s*\\(|\\bhash\\s*\\(\\s*[\\'"](?:md5|sha1)[\\'"]\\s*,|\\bMD5\\s*\\(\\s*\\'`, "g"),
+    re: new RegExp(`(?<![\\w$>:\\\\])(?:md5|sha1)\\s*\\(|\\bhash\\s*\\(\\s*['"](?:md5|sha1)['"]\\s*,|\\bMD5\\s*\\(\\s*'`, "g"),
     severity: "warning",
     title: "Secret signed with a plain MD5/SHA-1 hash",
     detail: "Gluing a secret to the data and hashing it is not a signature: MD5 and SHA-1 allow length-extension and collision tricks. Use HMAC-SHA256 (`hash_hmac`, `hmac.new`, `crypto.createHmac`) and compare in constant time."
@@ -81031,7 +81031,7 @@ var RULES2 = [
     lang: "js",
     // Judged by weakHashKindAllows(): the hashed value has to be a password
     // (or a secret concatenated with data), not just sit near one.
-    re: /\bcreateHash\s*\(\s*[\'"](?:md5|sha1)[\'"]\s*\)/g,
+    re: /\bcreateHash\s*\(\s*['"](?:md5|sha1)['"]\s*\)/g,
     severity: "critical",
     title: "Password hashed with MD5/SHA-1",
     detail: "MD5 and SHA-1 are fast hashes: a leaked table of them is cracked at billions of guesses a second, and unsalted ones fall to lookup tables. Store passwords with a password hash (bcrypt, scrypt, argon2; `password_hash()` in PHP) and rehash old entries at the next login."
@@ -81041,7 +81041,7 @@ var RULES2 = [
     lang: "js",
     // Judged by weakHashKindAllows(): the hashed value has to be a password
     // (or a secret concatenated with data), not just sit near one.
-    re: /\bcreateHash\s*\(\s*[\'"](?:md5|sha1)[\'"]\s*\)/g,
+    re: /\bcreateHash\s*\(\s*['"](?:md5|sha1)['"]\s*\)/g,
     severity: "warning",
     title: "Secret signed with a plain MD5/SHA-1 hash",
     detail: "Gluing a secret to the data and hashing it is not a signature: MD5 and SHA-1 allow length-extension and collision tricks. Use HMAC-SHA256 (`hash_hmac`, `hmac.new`, `crypto.createHmac`) and compare in constant time."
@@ -89868,7 +89868,7 @@ var RULES5 = [
     lang: "php",
     // Judged by weakHashKindAllows(): the hashed value has to be a password
     // (or a secret concatenated with data), not just sit near one.
-    re: /(?<![\w$>:\\])(?:md5|sha1)\s*\(|\bhash\s*\(\s*[\'"](?:md5|sha1)[\'"]\s*,|\bMD5\s*\(\s*\'/g,
+    re: /(?<![\w$>:\\])(?:md5|sha1)\s*\(|\bhash\s*\(\s*['"](?:md5|sha1)['"]\s*,|\bMD5\s*\(\s*'/g,
     severity: "critical",
     title: "Password hashed with MD5/SHA-1",
     detail: "MD5 and SHA-1 are fast hashes: a leaked table of them is cracked at billions of guesses a second, and unsalted ones fall to lookup tables. Store passwords with a password hash (bcrypt, scrypt, argon2; `password_hash()` in PHP) and rehash old entries at the next login."
@@ -89878,7 +89878,7 @@ var RULES5 = [
     lang: "php",
     // Judged by weakHashKindAllows(): the hashed value has to be a password
     // (or a secret concatenated with data), not just sit near one.
-    re: /(?<![\w$>:\\])(?:md5|sha1)\s*\(|\bhash\s*\(\s*[\'"](?:md5|sha1)[\'"]\s*,|\bMD5\s*\(\s*\'/g,
+    re: /(?<![\w$>:\\])(?:md5|sha1)\s*\(|\bhash\s*\(\s*['"](?:md5|sha1)['"]\s*,|\bMD5\s*\(\s*'/g,
     severity: "warning",
     title: "Secret signed with a plain MD5/SHA-1 hash",
     detail: "Gluing a secret to the data and hashing it is not a signature: MD5 and SHA-1 allow length-extension and collision tricks. Use HMAC-SHA256 (`hash_hmac`, `hmac.new`, `crypto.createHmac`) and compare in constant time."
@@ -89908,7 +89908,7 @@ var RULES5 = [
     lang: "js",
     // Judged by weakHashKindAllows(): the hashed value has to be a password
     // (or a secret concatenated with data), not just sit near one.
-    re: /\bcreateHash\s*\(\s*[\'"](?:md5|sha1)[\'"]\s*\)/g,
+    re: /\bcreateHash\s*\(\s*['"](?:md5|sha1)['"]\s*\)/g,
     severity: "critical",
     title: "Password hashed with MD5/SHA-1",
     detail: "MD5 and SHA-1 are fast hashes: a leaked table of them is cracked at billions of guesses a second, and unsalted ones fall to lookup tables. Store passwords with a password hash (bcrypt, scrypt, argon2; `password_hash()` in PHP) and rehash old entries at the next login."
@@ -89918,7 +89918,7 @@ var RULES5 = [
     lang: "js",
     // Judged by weakHashKindAllows(): the hashed value has to be a password
     // (or a secret concatenated with data), not just sit near one.
-    re: /\bcreateHash\s*\(\s*[\'"](?:md5|sha1)[\'"]\s*\)/g,
+    re: /\bcreateHash\s*\(\s*['"](?:md5|sha1)['"]\s*\)/g,
     severity: "warning",
     title: "Secret signed with a plain MD5/SHA-1 hash",
     detail: "Gluing a secret to the data and hashing it is not a signature: MD5 and SHA-1 allow length-extension and collision tricks. Use HMAC-SHA256 (`hash_hmac`, `hmac.new`, `crypto.createHmac`) and compare in constant time."

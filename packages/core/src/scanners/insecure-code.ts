@@ -601,7 +601,7 @@ const RULES: VulnRule[] = [
     lang: "php",
     // Judged by weakHashKindAllows(): the hashed value has to be a password
     // (or a secret concatenated with data), not just sit near one.
-    re: /(?<![\w$>:\\])(?:md5|sha1)\s*\(|\bhash\s*\(\s*[\'"](?:md5|sha1)[\'"]\s*,|\bMD5\s*\(\s*\'/g,
+    re: /(?<![\w$>:\\])(?:md5|sha1)\s*\(|\bhash\s*\(\s*['"](?:md5|sha1)['"]\s*,|\bMD5\s*\(\s*'/g,
     severity: "critical",
     title: "Password hashed with MD5/SHA-1",
     detail:
@@ -612,7 +612,7 @@ const RULES: VulnRule[] = [
     lang: "php",
     // Judged by weakHashKindAllows(): the hashed value has to be a password
     // (or a secret concatenated with data), not just sit near one.
-    re: /(?<![\w$>:\\])(?:md5|sha1)\s*\(|\bhash\s*\(\s*[\'"](?:md5|sha1)[\'"]\s*,|\bMD5\s*\(\s*\'/g,
+    re: /(?<![\w$>:\\])(?:md5|sha1)\s*\(|\bhash\s*\(\s*['"](?:md5|sha1)['"]\s*,|\bMD5\s*\(\s*'/g,
     severity: "warning",
     title: "Secret signed with a plain MD5/SHA-1 hash",
     detail:
@@ -645,7 +645,7 @@ const RULES: VulnRule[] = [
     lang: "js",
     // Judged by weakHashKindAllows(): the hashed value has to be a password
     // (or a secret concatenated with data), not just sit near one.
-    re: /\bcreateHash\s*\(\s*[\'"](?:md5|sha1)[\'"]\s*\)/g,
+    re: /\bcreateHash\s*\(\s*['"](?:md5|sha1)['"]\s*\)/g,
     severity: "critical",
     title: "Password hashed with MD5/SHA-1",
     detail:
@@ -656,7 +656,7 @@ const RULES: VulnRule[] = [
     lang: "js",
     // Judged by weakHashKindAllows(): the hashed value has to be a password
     // (or a secret concatenated with data), not just sit near one.
-    re: /\bcreateHash\s*\(\s*[\'"](?:md5|sha1)[\'"]\s*\)/g,
+    re: /\bcreateHash\s*\(\s*['"](?:md5|sha1)['"]\s*\)/g,
     severity: "warning",
     title: "Secret signed with a plain MD5/SHA-1 hash",
     detail:
