@@ -26875,7 +26875,7 @@ var require_lib4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-5FLBFKKE.js
+// ../cli/dist/chunk-7FCNOZ5Y.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -50809,7 +50809,7 @@ function date4(params) {
   return _coercedDate(ZodDate, params);
 }
 
-// ../cli/dist/chunk-5FLBFKKE.js
+// ../cli/dist/chunk-7FCNOZ5Y.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -75561,7 +75561,9 @@ var RULE_PRECISION = {
   "insecure-swift-plaintext-credential-storage": { tp: 1, fp: 0 },
   "insecure-swift-webview-html": { tp: 1, fp: 0 },
   "insecure-tls-verification-off": { tp: 2, fp: 35 },
-  "insecure-weak-hash": { tp: 2, fp: 8 },
+  "insecure-weak-hash": { tp: 0, fp: 8 },
+  "insecure-weak-password-hash": { tp: 29, fp: 7 },
+  "insecure-weak-secret-mac": { tp: 8, fp: 2 },
   "license-network": { tp: 2, fp: 4 },
   "license-proprietary": { tp: 1, fp: 2 },
   "license-strong": { tp: 2, fp: 2 },
