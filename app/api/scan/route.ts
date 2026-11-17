@@ -29,7 +29,7 @@ import {
 import { recordRepoUsage, visitorFrom } from "@/lib/usage"
 import { recordScanStat } from "@/lib/percentile"
 import { isOwner } from "@/lib/owner"
-import { ALL_SCAN_IDS, onlyForRequest, sanitizeScannerIds } from "@/lib/scan-selection"
+import { ALL_SCAN_IDS, DEEP_SCAN_IDS, onlyForRequest, sanitizeScannerIds } from "@/lib/scan-selection"
 import { readJson } from "@/lib/request-json"
 
 // Cloning + scanning is real work — run on the Node runtime, allow time for it.
@@ -242,7 +242,7 @@ export async function POST(request: Request) {
         { status: 400 },
       )
     }
-    const unknown = rawOnly.map(String).filter((id) => !ALL_SCAN_IDS.includes(id))
+    const unknown = rawOnly.map(String).filter((id) => !ALL_SCAN_IDS.includes(id) && !DEEP_SCAN_IDS.includes(id))
     if (unknown.length > 0) {
       return NextResponse.json(
         { error: `Unknown scanner id(s): ${unknown.join(", ")}` },

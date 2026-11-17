@@ -13,7 +13,13 @@ export const ALL_SCAN_IDS: readonly string[] = CHECK_FAMILIES.flatMap((f) => f.s
 
 export { TOTAL_CHECKS }
 
-const KNOWN = new Set(ALL_SCAN_IDS)
+/**
+ * Deep engines: slower whole-program analysis, off unless ticked. Not counted in
+ * TOTAL_CHECKS and not part of "all" — their precision is still being measured.
+ */
+export const DEEP_SCAN_IDS: readonly string[] = ["php-taint"]
+
+const KNOWN = new Set([...ALL_SCAN_IDS, ...DEEP_SCAN_IDS])
 
 /** Sanitize a list from the wire or localStorage — drop unknowns, dedupe. */
 export function sanitizeScannerIds(ids: unknown): string[] {
@@ -29,10 +35,11 @@ export function sanitizeScannerIds(ids: unknown): string[] {
   return out.length > 0 ? out : [...ALL_SCAN_IDS]
 }
 
-/** `null` means “full scan” — omit `--only` on the wire. */
+/** `null` means “full scan” — omit `--only` on the wire. A deep engine always needs an explicit list. */
 export function onlyForRequest(selected: string[]): string[] | null {
   const clean = sanitizeScannerIds(selected)
-  if (clean.length >= ALL_SCAN_IDS.length) return null
+  const base = clean.filter((id) => !DEEP_SCAN_IDS.includes(id))
+  if (base.length === clean.length && base.length >= ALL_SCAN_IDS.length) return null
   return clean
 }
 
@@ -51,7 +58,7 @@ export function saveScannerSelection(ids: string[]): void {
   if (typeof window === "undefined") return
   try {
     const clean = sanitizeScannerIds(ids)
-    if (clean.length >= ALL_SCAN_IDS.length) localStorage.removeItem(STORAGE_KEY)
+    if (clean.length === ALL_SCAN_IDS.length && !clean.some((id) => DEEP_SCAN_IDS.includes(id))) localStorage.removeItem(STORAGE_KEY)
     else localStorage.setItem(STORAGE_KEY, JSON.stringify(clean))
   } catch {
     /* ignore */

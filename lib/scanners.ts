@@ -25,6 +25,7 @@ const LABEL_OVERRIDES: Record<string, string> = {
   "eol-runtime": "EOL Runtime",
   "license-risk": "License Risk",
   "insecure-code": "Insecure Code",
+  "php-taint": "Deep PHP analysis",
   "workflow-security": "Workflow Security",
   "project-hygiene": "Project Hygiene",
   "leftover-debug": "Leftover Debug",
@@ -47,6 +48,7 @@ const LABEL_OVERRIDES: Record<string, string> = {
  * Narrow and ordered longest-first so `doclink-` wins over a hypothetical `doc-`.
  */
 const LEGACY_PREFIXES: { prefix: string; scanner: string }[] = [
+  { prefix: "php-taint-", scanner: "php-taint" },
   { prefix: "insecure-", scanner: "insecure-code" },
   { prefix: "secret-", scanner: "secrets" },
   { prefix: "vuln-", scanner: "vulnerable-deps" },

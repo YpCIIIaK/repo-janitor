@@ -14,6 +14,7 @@ import { CHECK_FAMILIES } from "@/lib/landing-facts"
 import { scannerLabel } from "@/lib/scanners"
 import {
   ALL_SCAN_IDS,
+  DEEP_SCAN_IDS,
   SCAN_PRESETS,
   TOTAL_CHECKS,
 } from "@/lib/scan-selection"
@@ -32,11 +33,14 @@ export function ScannerPicker({
   onChange: (ids: string[]) => void
   disabled?: boolean
 }) {
-  const { t } = useLocale()
+  const { t, locale } = useLocale()
+  const ru = locale === "ru"
+  const ORDER = [...ALL_SCAN_IDS, ...DEEP_SCAN_IDS]
   const [open, setOpen] = useState(false)
   const set = new Set(selected)
-  const count = selected.length
+  const count = selected.filter((id) => !DEEP_SCAN_IDS.includes(id)).length
   const allOn = count >= ALL_SCAN_IDS.length
+  const deepOn = DEEP_SCAN_IDS.every((id) => set.has(id))
 
   function toggleOne(id: string, on: boolean) {
     const next = new Set(selected)
@@ -44,7 +48,7 @@ export function ScannerPicker({
     else next.delete(id)
     // Never allow an empty selection — empty means “I forgot”, not “run nothing”.
     if (next.size === 0) return
-    onChange([...ALL_SCAN_IDS].filter((x) => next.has(x)))
+    onChange(ORDER.filter((x) => next.has(x)))
   }
 
   function toggleFamily(ids: string[], on: boolean) {
@@ -54,7 +58,7 @@ export function ScannerPicker({
       else next.delete(id)
     }
     if (next.size === 0) return
-    onChange([...ALL_SCAN_IDS].filter((x) => next.has(x)))
+    onChange(ORDER.filter((x) => next.has(x)))
   }
 
   return (
@@ -136,6 +140,22 @@ export function ScannerPicker({
             )
           })}
         </div>
+        <label className="flex cursor-pointer items-start gap-2 rounded-md border border-dashed border-border p-2">
+          <Checkbox
+            checked={deepOn}
+            disabled={disabled}
+            onCheckedChange={(v) => toggleFamily([...DEEP_SCAN_IDS], v === true)}
+            className="mt-0.5"
+          />
+          <span className="space-y-0.5">
+            <span className="block text-xs font-medium">{ru ? "Глубокий анализ PHP (бета)" : "Deep PHP analysis (beta)"}</span>
+            <span className="block text-[11px] leading-relaxed text-muted-foreground">
+              {ru
+                ? "Прослеживает путь данных от запроса до опасного вызова через файлы и функции и показывает его графом. Медленнее обычного скана; точность ещё измеряется."
+                : "Follows request data through files and functions to the dangerous call and draws the path. Slower than a normal scan; precision is still being measured."}
+            </span>
+          </span>
+        </label>
       </CollapsibleContent>
     </Collapsible>
   )
