@@ -23,6 +23,7 @@ import { CHECKLIST_LABELS, TOOL_CHECKS, languageShares, type RepoProfile } from 
 import { compactCount, type GithubRepo } from "@/lib/github-repo"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
+import { useLocale } from "@/components/i18n/locale-provider"
 
 // Cycling palette for the language bar; "Other" always uses a muted tone.
 const LANG_BAR = ["bg-chart-1", "bg-chart-2", "bg-chart-3", "bg-chart-4", "bg-chart-5", "bg-primary"]
@@ -70,6 +71,8 @@ export function RepoOverview({
   lastScan: string
   repo: OverviewRepo
 }) {
+  const { locale } = useLocale()
+  const ru = locale === "ru"
   const repoUrl = repo.url?.replace(/\.git$/, "")
 
   if (!profile) {
@@ -77,10 +80,9 @@ export function RepoOverview({
       <Card>
         <CardContent className="flex flex-col items-center justify-center py-16 text-center">
           <PackageOpen className="size-8 text-muted-foreground/50" />
-          <p className="mt-3 text-sm font-medium">No profile yet</p>
+          <p className="mt-3 text-sm font-medium">{ru ? "Профиль пока отсутствует" : "No profile yet"}</p>
           <p className="mt-1 max-w-sm text-xs text-muted-foreground">
-            This report predates repository profiling. Re-scan the repo to see its language breakdown
-            and detected tooling here.
+            {ru ? "В этом отчёте ещё нет профиля проекта. Повторите сканирование, чтобы увидеть языки и инструменты." : "This report predates repository profiling. Re-scan the repo to see its language breakdown and detected tooling here."}
           </p>
         </CardContent>
       </Card>
@@ -102,9 +104,9 @@ export function RepoOverview({
             </CardTitle>
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <span className="rounded-full border border-border px-2 py-0.5 font-medium tabular-nums text-foreground">
-                Grade {grade} · {score}
+                {ru ? "Оценка" : "Grade"} {grade} · {score}
               </span>
-              <span className="hidden sm:inline">scanned {lastScan}</span>
+              <span className="hidden sm:inline">{ru ? "Скан:" : "scanned"} {lastScan}</span>
               {repoUrl && (
                 <a
                   href={repoUrl}
@@ -121,10 +123,10 @@ export function RepoOverview({
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            <Stat icon={<FileCode2 className="size-4" />} label="Files scanned" value={profile.totalFiles.toLocaleString()} />
-            <Stat icon={<ScrollText className="size-4" />} label="Lines of code" value={loc.toLocaleString()} />
-            <Stat icon={<Layers className="size-4" />} label="Languages" value={String(profile.languages.length)} />
-            <Stat icon={<PackageOpen className="size-4" />} label="Tools" value={String(profile.tools.length)} />
+            <Stat icon={<FileCode2 className="size-4" />} label={ru ? "Проверено файлов" : "Files scanned"} value={profile.totalFiles.toLocaleString(locale)} />
+            <Stat icon={<ScrollText className="size-4" />} label={ru ? "Строк кода" : "Lines of code"} value={loc.toLocaleString(locale)} />
+            <Stat icon={<Layers className="size-4" />} label={ru ? "Языки" : "Languages"} value={String(profile.languages.length)} />
+            <Stat icon={<PackageOpen className="size-4" />} label={ru ? "Инструменты" : "Tools"} value={String(profile.tools.length)} />
           </div>
         </CardContent>
       </Card>
@@ -142,17 +144,17 @@ export function RepoOverview({
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2 text-base">
               <Layers className="size-4 text-muted-foreground" />
-              Languages
+              {ru ? "Языки" : "Languages"}
             </CardTitle>
           </CardHeader>
           <CardContent>
             {shares.length === 0 ? (
-              <p className="text-sm text-muted-foreground">No recognized source files.</p>
+              <p className="text-sm text-muted-foreground">{ru ? "Исходные файлы не распознаны." : "No recognized source files."}</p>
             ) : (
               <>
                 {primary && (
                   <p className="mb-3 text-xs text-muted-foreground">
-                    Mostly <span className="font-medium text-foreground">{primary.language}</span> (
+                    {ru ? "Основной язык:" : "Mostly"} <span className="font-medium text-foreground">{primary.language}</span> (
                     {primary.share.toFixed(0)}%)
                   </p>
                 )}
@@ -172,9 +174,9 @@ export function RepoOverview({
                   {shares.map((s, i) => (
                     <li key={s.language} className="flex items-center gap-2 text-xs">
                       <span className={cn("size-2.5 shrink-0 rounded-sm", barColor(s.language, i))} />
-                      <span className="flex-1 truncate text-foreground">{s.language}</span>
+                      <span className="flex-1 truncate text-foreground">{ru && s.language === "Other" ? "Другие" : s.language}</span>
                       <span className="tabular-nums text-muted-foreground">
-                        {s.files} file{s.files === 1 ? "" : "s"}
+                        {ru ? `Файлов: ${s.files}` : `${s.files} file${s.files === 1 ? "" : "s"}`}
                       </span>
                       <span className="w-10 text-right font-medium tabular-nums">{s.share.toFixed(0)}%</span>
                     </li>
@@ -190,12 +192,12 @@ export function RepoOverview({
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2 text-base">
               <PackageOpen className="size-4 text-muted-foreground" />
-              Stack &amp; tooling
+              {ru ? "Стек и инструменты" : "Stack & tooling"}
             </CardTitle>
           </CardHeader>
           <CardContent>
             {profile.tools.length === 0 ? (
-              <p className="text-sm text-muted-foreground">No ecosystems detected from manifest files.</p>
+              <p className="text-sm text-muted-foreground">{ru ? "По манифестам экосистемы не определены." : "No ecosystems detected from manifest files."}</p>
             ) : (
               <ul className="space-y-2">
                 {profile.tools.map((tool) => (
@@ -217,10 +219,16 @@ export function RepoOverview({
   )
 }
 
-function relativeDays(iso: string | null | undefined): string | null {
+function relativeDays(iso: string | null | undefined, locale = "en"): string | null {
   if (!iso) return null
   const days = Math.floor((Date.now() - new Date(iso).getTime()) / 86_400_000)
   if (!Number.isFinite(days)) return null
+  if (locale === "ru") {
+    const fmt = new Intl.RelativeTimeFormat("ru", { numeric: "auto" })
+    if (days < 60) return fmt.format(-days, "day")
+    if (days < 730) return fmt.format(-Math.floor(days / 30), "month")
+    return fmt.format(-Math.floor(days / 365), "year")
+  }
   if (days < 1) return "today"
   if (days < 60) return `${days} day${days === 1 ? "" : "s"} ago`
   if (days < 730) return `${Math.floor(days / 30)} months ago`
@@ -229,6 +237,8 @@ function relativeDays(iso: string | null | undefined): string | null {
 
 /** Live facts from GitHub (cached server-side by /api/github). Hidden for non-GitHub repos or on error. */
 function GithubFacts({ owner, name }: { owner: string; name: string }) {
+  const { locale } = useLocale()
+  const ru = locale === "ru"
   const [gh, setGh] = useState<GithubRepo | null>(null)
   useEffect(() => {
     const controller = new AbortController()
@@ -243,12 +253,12 @@ function GithubFacts({ owner, name }: { owner: string; name: string }) {
 
   if (!gh) return null
   const facts: { icon: React.ReactNode; text: string }[] = [
-    { icon: <Star className="size-3.5" />, text: `${compactCount(gh.stars)} stars` },
-    { icon: <GitFork className="size-3.5" />, text: `${compactCount(gh.forks)} forks` },
-    { icon: <CircleDot className="size-3.5" />, text: `${compactCount(gh.openIssues)} open issues & PRs` },
-    { icon: <Scale className="size-3.5" />, text: gh.license ?? "No license" },
+    { icon: <Star className="size-3.5" />, text: ru ? `Звёзды: ${compactCount(gh.stars)}` : `${compactCount(gh.stars)} stars` },
+    { icon: <GitFork className="size-3.5" />, text: ru ? `Форки: ${compactCount(gh.forks)}` : `${compactCount(gh.forks)} forks` },
+    { icon: <CircleDot className="size-3.5" />, text: ru ? `Открытые issues и PR: ${compactCount(gh.openIssues)}` : `${compactCount(gh.openIssues)} open issues & PRs` },
+    { icon: <Scale className="size-3.5" />, text: gh.license ?? (ru ? "Нет лицензии" : "No license") },
   ]
-  const pushed = relativeDays(gh.pushedAt)
+  const pushed = relativeDays(gh.pushedAt, locale)
   const created = gh.createdAt ? new Date(gh.createdAt).getFullYear() : null
 
   return (
@@ -256,7 +266,7 @@ function GithubFacts({ owner, name }: { owner: string; name: string }) {
       <CardContent className="space-y-3 pt-6">
         {gh.archived && (
           <p className="flex items-center gap-1.5 text-xs font-medium text-amber-600 dark:text-amber-400">
-            <Archive className="size-3.5" /> Archived on GitHub — read-only, no longer maintained
+            <Archive className="size-3.5" /> {ru ? "Архивирован на GitHub — доступен только для чтения" : "Archived on GitHub — read-only"}
           </p>
         )}
         {gh.description && <p className="text-sm leading-relaxed">{gh.description}</p>}
@@ -267,8 +277,8 @@ function GithubFacts({ owner, name }: { owner: string; name: string }) {
               {f.text}
             </span>
           ))}
-          {pushed && <span>Last push {pushed}</span>}
-          {created && <span>Since {created}</span>}
+          {pushed && <span>{ru ? "Последний push:" : "Last push"} {pushed}</span>}
+          {created && <span>{ru ? "С" : "Since"} {created}</span>}
         </div>
         {gh.topics.length > 0 && (
           <div className="flex flex-wrap gap-1.5">
@@ -285,6 +295,8 @@ function GithubFacts({ owner, name }: { owner: string; name: string }) {
 }
 
 function ChecklistCard({ checklist }: { checklist?: Record<string, boolean> }) {
+  const { locale } = useLocale()
+  const ru = locale === "ru"
   const items = Object.keys(CHECKLIST_LABELS)
   const have = checklist ? items.filter((k) => checklist[k]).length : 0
   return (
@@ -292,7 +304,7 @@ function ChecklistCard({ checklist }: { checklist?: Record<string, boolean> }) {
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 text-base">
           <ClipboardCheck className="size-4 text-muted-foreground" />
-          Project essentials
+          {ru ? "Основы проекта" : "Project essentials"}
           {checklist && (
             <span className="ml-auto text-xs font-normal tabular-nums text-muted-foreground">
               {have}/{items.length}
@@ -302,7 +314,7 @@ function ChecklistCard({ checklist }: { checklist?: Record<string, boolean> }) {
       </CardHeader>
       <CardContent>
         {!checklist ? (
-          <p className="text-sm text-muted-foreground">Rescan to see which essentials this repository has.</p>
+          <p className="text-sm text-muted-foreground">{ru ? "Повторите сканирование для проверки основных файлов проекта." : "Rescan to see which essentials this repository has."}</p>
         ) : (
           <ul className="space-y-2">
             {items.map((k) => (
@@ -326,27 +338,29 @@ function ChecklistCard({ checklist }: { checklist?: Record<string, boolean> }) {
 }
 
 function ActivityCard({ activity }: { activity?: RepoProfile["activity"] }) {
+  const { locale } = useLocale()
+  const ru = locale === "ru"
   const max = Math.max(1, ...(activity?.months.map((m) => m.commits) ?? [0]))
-  const last = relativeDays(activity?.lastCommitAt)
+  const last = relativeDays(activity?.lastCommitAt, locale)
   return (
     <Card>
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 text-base">
           <Activity className="size-4 text-muted-foreground" />
-          Activity, last 12 months
+          {ru ? "Активность за 12 месяцев" : "Activity, last 12 months"}
         </CardTitle>
       </CardHeader>
       <CardContent>
         {!activity ? (
           <p className="text-sm text-muted-foreground">
-            Needs the full git history. Rescan with full history to see commits and contributors.
+            {ru ? "Для сведений о коммитах и участниках повторите сканирование с полной историей Git." : "Needs the full git history. Rescan with full history to see commits and contributors."}
           </p>
         ) : (
           <div className="space-y-4">
             <div className="grid grid-cols-3 gap-3">
-              <Stat icon={<ScrollText className="size-4" />} label="Commits" value={activity.commitsLastYear.toLocaleString()} />
-              <Stat icon={<Boxes className="size-4" />} label="Authors" value={String(activity.authors)} />
-              <Stat icon={<Layers className="size-4" />} label="Make 80% of commits" value={String(activity.coreAuthors)} />
+              <Stat icon={<ScrollText className="size-4" />} label={ru ? "Коммиты" : "Commits"} value={activity.commitsLastYear.toLocaleString(locale)} />
+              <Stat icon={<Boxes className="size-4" />} label={ru ? "Авторы" : "Authors"} value={String(activity.authors)} />
+              <Stat icon={<Layers className="size-4" />} label={ru ? "Создают 80% коммитов" : "Make 80% of commits"} value={String(activity.coreAuthors)} />
             </div>
             <div>
               <div className="flex h-16 items-end gap-1">
@@ -365,9 +379,9 @@ function ActivityCard({ activity }: { activity?: RepoProfile["activity"] }) {
               </div>
             </div>
             <p className="text-xs text-muted-foreground">
-              {last && <>Last commit {last}. </>}
+              {last && <>{ru ? "Последний коммит:" : "Last commit"} {last}. </>}
               {activity.coreAuthors === 1 && activity.commitsLastYear > 0
-                ? "One person carries most of the work — a bus-factor risk."
+                ? (ru ? "Основную работу выполняет один человек: проект зависит от его участия." : "One person carries most of the work — a bus-factor risk.")
                 : null}
             </p>
           </div>

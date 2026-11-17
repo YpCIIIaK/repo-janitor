@@ -1,4 +1,5 @@
 "use client"
+import { useLocale } from "@/components/i18n/locale-provider"
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { CalendarHeatmap } from "@/components/charts/calendar-heatmap"
@@ -271,6 +272,8 @@ const DEFAULT_SAMPLE = 18
 const MAX_SAMPLE = 40
 
 function CommitTreeInner({ initialUrl = "" }: { initialUrl?: string }) {
+  const { locale } = useLocale()
+  const ru = locale === "ru"
   const { theme } = useTheme()
   const colorMode = isDarkTheme(theme) ? "dark" : "light"
   const [url, setUrl] = useState(initialUrl)
@@ -465,12 +468,12 @@ function CommitTreeInner({ initialUrl = "" }: { initialUrl?: string }) {
       {activity.length > 0 && (
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Commit activity</CardTitle>
+            <CardTitle className="text-base">{ru ? "Активность коммитов" : "Commit activity"}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
             <CalendarHeatmap data={activity} />
             <p className="text-xs text-muted-foreground">
-              Every commit in the history, not just the scanned sample.
+              {ru ? "Все коммиты истории, включая не вошедшие в выборку сканирования." : "Every commit in the history, not just the scanned sample."}
               {lastCommitAgo && ` Last commit ${lastCommitAgo}.`}
             </p>
           </CardContent>
@@ -479,12 +482,11 @@ function CommitTreeInner({ initialUrl = "" }: { initialUrl?: string }) {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Commit health tree</CardTitle>
+          <CardTitle className="text-base">{ru ? "Состояние проекта по коммитам" : "Commit health tree"}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
           <p className="text-sm text-muted-foreground">
-            Clone a repo&apos;s history, sample its commits (releases, merges, and a weekly spread), and scan
-            each — then walk the health of the codebase commit by commit.
+            {ru ? "Загрузите историю репозитория и просканируйте выбранные коммиты: релизы, слияния и выборку по неделям. Дерево покажет изменение состояния проекта." : "Clone a repo’s history, sample its commits (releases, merges, and a weekly spread), and scan each to explore codebase health commit by commit."}
           </p>
           <div className="flex flex-wrap items-center gap-2">
             <Input
@@ -501,14 +503,14 @@ function CommitTreeInner({ initialUrl = "" }: { initialUrl?: string }) {
                 value={scope}
                 onChange={(v) => setScope(v as typeof scope)}
                 items={[
-                  { value: "sample", label: "Sample" },
-                  { value: "pick", label: "Pick" },
-                  { value: "all", label: "All" },
+                  { value: "sample", label: ru ? "Выборка" : "Sample" },
+                  { value: "pick", label: ru ? "Выбрать" : "Pick" },
+                  { value: "all", label: ru ? "Все" : "All" },
                 ]}
               />
               {scope === "sample" && (
                 <label className="flex items-center gap-1.5">
-                  commits
+                  {ru ? "коммитов" : "commits"}
                   <Input
                     type="number"
                     min={1}
@@ -528,12 +530,12 @@ function CommitTreeInner({ initialUrl = "" }: { initialUrl?: string }) {
             {loading || loadingPool ? (
               <Button variant="destructive" onClick={stop}>
                 <Square className="size-4" />
-                Stop
+                {ru ? "Остановить" : "Stop"}
               </Button>
             ) : scope === "pick" && pool.length === 0 ? (
               <Button onClick={loadPool} disabled={!url.trim()}>
                 <ListChecks className="size-4" />
-                Load commits
+                {ru ? "Загрузить коммиты" : "Load commits"}
               </Button>
             ) : (
               <Button
@@ -541,7 +543,7 @@ function CommitTreeInner({ initialUrl = "" }: { initialUrl?: string }) {
                 disabled={!url.trim() || (scope === "pick" && picked.size === 0)}
               >
                 <Play className="size-4" />
-                {scope === "pick" ? `Scan ${picked.size} selected` : "Build tree"}
+                {scope === "pick" ? (ru ? `Сканировать выбранные: ${picked.size}` : `Scan ${picked.size} selected`) : (ru ? "Построить дерево" : "Build tree")}
               </Button>
             )}
           </div>

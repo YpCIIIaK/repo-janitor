@@ -10,6 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
+import { useLocale } from "@/components/i18n/locale-provider"
 
 // Grade → chip style. Greens for healthy, amber for middling, red for failing.
 const gradeStyle: Record<Grade, string> = {
@@ -37,6 +38,8 @@ function fmtCost(cost: number): string {
  * the total simply by holding more findings.
  */
 export function CategoryScores({ issues, weights }: { issues: Issue[]; weights?: SeverityWeights }) {
+  const { locale } = useLocale()
+  const ru = locale === "ru"
   const scores = categoryScores(issues, weights)
   const costs = new Map(categoryCosts(issues, weights).map((c) => [c.category, c.cost]))
   if (scores.length === 0) return null
@@ -44,9 +47,9 @@ export function CategoryScores({ issues, weights }: { issues: Issue[]; weights?:
   return (
     <Card>
       <CardHeader className="pb-3">
-        <CardTitle className="text-base">Health by category</CardTitle>
+        <CardTitle className="text-base">{ru ? "Состояние по категориям" : "Health by category"}</CardTitle>
         <CardDescription>
-          Sub-score on its own, and the points it takes off the total.
+          {ru ? "Оценка каждой категории и её вклад в общий штраф." : "Sub-score on its own, and the points it takes off the total."}
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-wrap gap-2">

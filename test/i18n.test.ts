@@ -128,9 +128,9 @@ describe("resolveLocale", () => {
     expect(resolveLocale("ru", "en-US,en;q=0.9")).toBe("ru")
   })
 
-  it("falls back to negotiation when the cookie is absent or junk", () => {
-    expect(resolveLocale(undefined, "ru-RU")).toBe("ru")
-    expect(resolveLocale("klingon", "ru-RU")).toBe("ru")
+  it("starts in English when the cookie is absent or invalid, regardless of browser language", () => {
+    expect(resolveLocale(undefined, "ru-RU")).toBe("en")
+    expect(resolveLocale("klingon", "ru-RU")).toBe("en")
   })
 })
 

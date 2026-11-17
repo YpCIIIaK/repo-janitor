@@ -1,4 +1,5 @@
 "use client"
+import { useLocale } from "@/components/i18n/locale-provider"
 
 import { useMemo, useState, useCallback, useEffect, useRef } from "react"
 import {
@@ -341,6 +342,8 @@ interface RepoTreeProps {
 }
 
 function RepoTreeInner({ issues, weights, repo, onViewInIssues }: RepoTreeProps) {
+  const { locale } = useLocale()
+  const ru = locale === "ru"
   const { theme } = useTheme()
   const { fitView, getNodes } = useReactFlow()
   const wrapperRef = useRef<HTMLDivElement>(null)
@@ -507,7 +510,7 @@ function RepoTreeInner({ issues, weights, repo, onViewInIssues }: RepoTreeProps)
           <Input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Find a file or folder…"
+            placeholder={ru ? "Найти файл или папку…" : "Find a file or folder…"}
             className="h-8 pl-8 text-xs"
           />
           {query && (
@@ -515,7 +518,7 @@ function RepoTreeInner({ issues, weights, repo, onViewInIssues }: RepoTreeProps)
               type="button"
               onClick={() => setQuery("")}
               className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-              title="Clear"
+              title={ru ? "Очистить" : "Clear"}
             >
               <X className="size-3.5" />
             </button>
@@ -525,27 +528,27 @@ function RepoTreeInner({ issues, weights, repo, onViewInIssues }: RepoTreeProps)
         <div className="flex items-center gap-1">
           <Button size="sm" variant="outline" className="h-8 gap-1.5 px-2 text-xs" onClick={expandAll} title="Expand all">
             <Maximize2 className="size-3.5" />
-            <span className="hidden sm:inline">Expand</span>
+            <span className="hidden sm:inline">{ru ? "Развернуть" : "Expand"}</span>
           </Button>
           <Button size="sm" variant="outline" className="h-8 gap-1.5 px-2 text-xs" onClick={collapseAll} title="Collapse all">
             <Minimize2 className="size-3.5" />
-            <span className="hidden sm:inline">Collapse</span>
+            <span className="hidden sm:inline">{ru ? "Свернуть" : "Collapse"}</span>
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button size="sm" variant="outline" className="h-8 gap-1.5 px-2 text-xs" disabled={empty} title="Export map">
                 <Download className="size-3.5" />
-                <span className="hidden sm:inline">Export</span>
+                <span className="hidden sm:inline">{ru ? "Экспорт" : "Export"}</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem onClick={() => exportImage("png")}>
                 <ImageDown className="size-4" />
-                Export as PNG
+                {ru ? "Экспорт в PNG" : "Export as PNG"}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => exportImage("svg")}>
                 <Code className="size-4" />
-                Export as SVG
+                {ru ? "Экспорт в SVG" : "Export as SVG"}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -557,9 +560,9 @@ function RepoTreeInner({ issues, weights, repo, onViewInIssues }: RepoTreeProps)
         {empty ? (
           <div className="flex h-full flex-col items-center justify-center text-center">
             <Boxes className="size-8 text-muted-foreground/50" />
-            <p className="mt-3 text-sm font-medium">Nothing to map</p>
+            <p className="mt-3 text-sm font-medium">{ru ? "Нет данных для карты" : "Nothing to map"}</p>
             <p className="mt-1 max-w-xs text-xs text-muted-foreground">
-              No findings match the active severity filters — adjust them above, or the last scan was clean.
+              {ru ? "Нет находок с выбранной важностью. Измените фильтры выше; возможно, последний скан не выявил проблем." : "No findings match the active severity filters — adjust them above, or the last scan was clean."}
             </p>
           </div>
         ) : (

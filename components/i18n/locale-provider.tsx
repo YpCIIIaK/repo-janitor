@@ -40,7 +40,7 @@ export function LocaleProvider({
   initial,
   children,
 }: {
-  /** Resolved server-side from cookie + Accept-Language, so SSR and the client agree. */
+  /** Resolved server-side from the saved choice, with English as the default. */
   initial?: Locale
   children: ReactNode
 }) {

@@ -15,6 +15,7 @@ import {
 import { downloadReport } from "@/lib/report-export"
 import type { ScanReport } from "@/lib/reports-store"
 import type { Grade } from "@/lib/mock-data"
+import { useLocale } from "@/components/i18n/locale-provider"
 
 export type PaletteTab =
   | "overview"
@@ -65,6 +66,8 @@ export function CommandPalette({
   onGoToTab,
   report,
 }: CommandPaletteProps) {
+  const { locale } = useLocale()
+  const ru = locale === "ru"
   // Global hotkey: ⌘K (mac) / Ctrl+K (win/linux) toggles the palette.
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -85,58 +88,58 @@ export function CommandPalette({
 
   return (
     <CommandDialog open={open} onOpenChange={onOpenChange}>
-      <CommandInput placeholder="Search repos, actions…" />
+      <CommandInput placeholder={ru ? "Поиск репозиториев и действий…" : "Search repos, actions…"} />
       <CommandList>
-        <CommandEmpty>No results.</CommandEmpty>
+        <CommandEmpty>{ru ? "Ничего не найдено." : "No results."}</CommandEmpty>
 
         {report && (
-          <CommandGroup heading="View">
+          <CommandGroup heading={ru ? "Разделы" : "View"}>
             <CommandItem onSelect={run(() => onGoToTab("overview"))}>
               <LayoutGrid />
-              Overview
+              {ru ? "Обзор" : "Overview"}
             </CommandItem>
             <CommandItem onSelect={run(() => onGoToTab("issues"))}>
               <ListTree />
-              Issues
+              {ru ? "Находки" : "Issues"}
             </CommandItem>
             <CommandItem
               keywords={["security", "vulnerabilities", "secrets", "cve", "injection", "xss"]}
               onSelect={run(() => onGoToTab("security"))}
             >
               <ShieldCheck />
-              Security
+              {ru ? "Безопасность" : "Security"}
             </CommandItem>
             <CommandItem
               keywords={["links", "urls", "404", "dead", "broken"]}
               onSelect={run(() => onGoToTab("links"))}
             >
               <LinkIcon />
-              Links
+              {ru ? "Ссылки" : "Links"}
             </CommandItem>
             <CommandItem keywords={["tree", "map", "graph", "files"]} onSelect={run(() => onGoToTab("tree"))}>
               <Workflow />
-              Tree
+              {ru ? "Дерево" : "Tree"}
             </CommandItem>
             <CommandItem keywords={["history", "commits", "timeline", "trend", "decay"]} onSelect={run(() => onGoToTab("history"))}>
               <GitGraph />
-              History
+              {ru ? "История" : "History"}
             </CommandItem>
             <CommandItem keywords={["about", "profile", "languages", "stack", "tech"]} onSelect={run(() => onGoToTab("about"))}>
               <Info />
-              About
+              {ru ? "О проекте" : "About"}
             </CommandItem>
             <CommandItem onSelect={run(() => onGoToTab("breakdown"))}>
               <Boxes />
-              Breakdown
+              {ru ? "Разбор оценки" : "Breakdown"}
             </CommandItem>
           </CommandGroup>
         )}
 
-        <CommandGroup heading="Actions">
+        <CommandGroup heading={ru ? "Действия" : "Actions"}>
           <CommandItem onSelect={run(onNewScan)}>
             <PlusCircle />
-            New scan…
-            <CommandShortcut>add repo</CommandShortcut>
+            {ru ? "Новый скан…" : "New scan…"}
+            <CommandShortcut>{ru ? "добавить" : "add repo"}</CommandShortcut>
           </CommandItem>
           {report && (
             <>
@@ -145,21 +148,21 @@ export function CommandPalette({
                 onSelect={run(() => downloadReport(report, "md"))}
               >
                 <FileText />
-                Export as Markdown
+                {ru ? "Экспорт в Markdown" : "Export as Markdown"}
               </CommandItem>
               <CommandItem
                 keywords={["export", "download", "csv", "spreadsheet"]}
                 onSelect={run(() => downloadReport(report, "csv"))}
               >
                 <FileDown />
-                Export as CSV
+                {ru ? "Экспорт в CSV" : "Export as CSV"}
               </CommandItem>
               <CommandItem
                 keywords={["export", "download", "json", "raw"]}
                 onSelect={run(() => downloadReport(report, "json"))}
               >
                 <FileJson />
-                Export as JSON
+                {ru ? "Экспорт в JSON" : "Export as JSON"}
               </CommandItem>
             </>
           )}

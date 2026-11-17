@@ -35,6 +35,7 @@ import {
 } from "@/lib/schedule-store"
 import { setUsageOptedOut, useUsageOptedOut } from "@/lib/visitor"
 import { OwnerKey } from "./owner-key"
+import { useLocale } from "@/components/i18n/locale-provider"
 
 const CATEGORY_HINT: Record<string, string> = {
   "dead-code": "Is each unused export really safe to remove?",
@@ -52,6 +53,8 @@ const CATEGORY_HINT: Record<string, string> = {
  * contents next to a second trigger.
  */
 export function SettingsDialog({ trigger }: { trigger?: React.ReactNode } = {}) {
+  const { locale } = useLocale()
+  const ru = locale === "ru"
   const [open, setOpen] = useState(false)
   const [draft, setDraft] = useState<AiSettings>(readAiSettings)
   const [sched, setSched] = useState<ScheduleSettings>(readSchedule)
@@ -88,7 +91,7 @@ export function SettingsDialog({ trigger }: { trigger?: React.ReactNode } = {}) 
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         {trigger ?? (
-          <Button variant="ghost" size="icon" className="size-8" title="Settings">
+          <Button variant="ghost" size="icon" className="size-8" title={ru ? "Настройки" : "Settings"} aria-label={ru ? "Настройки" : "Settings"}>
             <Settings className="size-4" />
           </Button>
         )}
@@ -97,10 +100,10 @@ export function SettingsDialog({ trigger }: { trigger?: React.ReactNode } = {}) 
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Settings className="size-4 text-primary" />
-            Settings
+            {ru ? "Настройки" : "Settings"}
           </DialogTitle>
           <DialogDescription>
-            Configure AI analysis and scheduled scans. Everything is stored only in this browser.
+            {ru ? "Настройте анализ ИИ и расписание сканирования. Настройки сохраняются в этом браузере." : "Configure AI analysis and scheduled scans. Preferences are saved in this browser."}
           </DialogDescription>
         </DialogHeader>
 
@@ -110,10 +113,10 @@ export function SettingsDialog({ trigger }: { trigger?: React.ReactNode } = {}) 
             <div className="space-y-0.5">
               <h3 className="flex items-center gap-1.5 text-sm font-semibold">
                 <Palette className="size-4 text-primary" />
-                Appearance
+                {ru ? "Внешний вид" : "Appearance"}
               </h3>
               <p className="text-xs text-muted-foreground">
-                Colour themes for this browser. The choice takes effect immediately.
+                {ru ? "Тема для этого браузера. Применяется сразу." : "Colour themes for this browser. The choice takes effect immediately."}
               </p>
             </div>
             <ThemePicker />
@@ -123,17 +126,16 @@ export function SettingsDialog({ trigger }: { trigger?: React.ReactNode } = {}) 
           <div className="space-y-0.5 border-t border-border pt-5">
             <h3 className="flex items-center gap-1.5 text-sm font-semibold">
               <Sparkles className="size-4 text-primary" />
-              AI analysis
+              {ru ? "Анализ с ИИ" : "AI analysis"}
             </h3>
             <p className="text-xs text-muted-foreground">
-              Connect OpenRouter to enrich findings with an AI assessment. Your key is sent through
-              our own server — never directly to a third party.
+              {ru ? "Подключите OpenRouter для оценки находок с помощью ИИ. Запросы с вашим ключом проходят через наш сервер к OpenRouter." : "Connect OpenRouter to assess findings with AI. Requests using your key pass through our server to OpenRouter."}
             </p>
           </div>
 
           {/* API key */}
           <div className="space-y-1.5">
-            <Label htmlFor="ai-key">OpenRouter API key</Label>
+            <Label htmlFor="ai-key">{ru ? "API-ключ OpenRouter" : "OpenRouter API key"}</Label>
             <div className="relative">
               <Input
                 id="ai-key"
@@ -148,13 +150,14 @@ export function SettingsDialog({ trigger }: { trigger?: React.ReactNode } = {}) 
                 type="button"
                 onClick={() => setShowKey((s) => !s)}
                 className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                title={showKey ? "Hide" : "Show"}
+                title={showKey ? (ru ? "Скрыть" : "Hide") : (ru ? "Показать" : "Show")}
+                aria-label={showKey ? (ru ? "Скрыть ключ" : "Hide key") : (ru ? "Показать ключ" : "Show key")}
               >
                 {showKey ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
               </button>
             </div>
             <p className="text-xs text-muted-foreground">
-              Get one at{" "}
+              {ru ? "Получить ключ: " : "Get one at "}
               <a
                 href="https://openrouter.ai/keys"
                 target="_blank"
@@ -169,7 +172,7 @@ export function SettingsDialog({ trigger }: { trigger?: React.ReactNode } = {}) 
 
           {/* Model id */}
           <div className="space-y-1.5">
-            <Label htmlFor="ai-model">Model id</Label>
+            <Label htmlFor="ai-model">{ru ? "Идентификатор модели" : "Model ID"}</Label>
             <Input
               id="ai-model"
               value={draft.model}
@@ -197,12 +200,11 @@ export function SettingsDialog({ trigger }: { trigger?: React.ReactNode } = {}) 
               ))}
             </div>
             <p className="text-xs text-muted-foreground">
-              Paste any OpenRouter model id, or pick a preset above.
+              {ru ? "Введите идентификатор модели OpenRouter или выберите модель выше." : "Paste any OpenRouter model id, or pick a preset above."}
               {isLargeContextModel(draft.model) ? (
                 <span className="text-primary">
                   {" "}
-                  Large context ({(modelContextTokens(draft.model) / 1_000_000).toFixed(1)}M) — analyzing
-                  more findings per pass.
+                  {ru ? "Большой контекст" : "Large context"} ({(modelContextTokens(draft.model) / 1_000_000).toFixed(1)}M) — {ru ? "больше находок за один запрос." : "more findings per pass."}
                 </span>
               ) : null}
             </p>
@@ -213,12 +215,10 @@ export function SettingsDialog({ trigger }: { trigger?: React.ReactNode } = {}) 
             <div className="min-w-0 space-y-0.5">
               <Label htmlFor="ai-web" className="flex items-center gap-1.5">
                 <Globe className="size-4 text-primary" />
-                Check current sources
+                {ru ? "Проверять актуальные источники" : "Check current sources"}
               </Label>
               <p className="text-xs text-muted-foreground">
-                Fetch advisories from OSV, npm package metadata and linked GitHub repository status.
-                No paid search plugin. Results are cached; unavailable sources are marked unverified.
-                Model token charges and public API limits still apply.
+                {ru ? "Проверяем сведения об уязвимостях в OSV, метаданные пакетов npm и состояние связанных репозиториев GitHub. Результаты кешируются; недоступные источники отмечаются как непроверенные. Платный поисковый плагин не нужен, но оплата токенов модели и лимиты публичных API сохраняются." : "Fetch advisories from OSV, npm package metadata and linked GitHub repository status. No paid search plugin. Results are cached; unavailable sources are marked unverified. Model token charges and public API limits still apply."}
               </p>
             </div>
             <Switch
@@ -231,10 +231,9 @@ export function SettingsDialog({ trigger }: { trigger?: React.ReactNode } = {}) 
           {/* Per-category toggles */}
           <div className="space-y-2">
             <div className="space-y-0.5">
-              <Label>Analyze these categories on scan</Label>
+              <Label>{ru ? "Категории для анализа при сканировании" : "Analyze these categories on scan"}</Label>
               <p className="text-xs text-muted-foreground">
-                After each scan, warning and critical findings in the enabled categories get an AI verdict. Info notes are excluded. Only the
-                finding's title, location and (redacted) snippet are sent.
+                {ru ? "После сканирования ИИ оценивает предупреждения и критические находки выбранных категорий. Информационные заметки исключены. Передаются только название находки, расположение и фрагмент кода с замаскированными секретами." : "After each scan, warning and critical findings in the enabled categories get an AI verdict. Info notes are excluded. Only the finding's title, location and (redacted) snippet are sent."}
               </p>
             </div>
             <div className="divide-y divide-border rounded-md border border-border">
@@ -264,11 +263,10 @@ export function SettingsDialog({ trigger }: { trigger?: React.ReactNode } = {}) 
               <div className="min-w-0 space-y-0.5">
                 <Label htmlFor="sched-enabled" className="flex items-center gap-1.5">
                   <Clock className="size-4 text-primary" />
-                  Scheduled scans
+                  {ru ? "Сканирование по расписанию" : "Scheduled scans"}
                 </Label>
                 <p className="text-xs text-muted-foreground">
-                  Runs only while this browser tab stays open — closing it stops the schedule.
-                  For unattended monitoring use the GitHub Action or Watch email alerts.
+                  {ru ? "Работает, пока открыта эта вкладка браузера. Закрытие вкладки останавливает расписание. Для автоматического мониторинга используйте GitHub Action или уведомления Watch по почте." : "Runs only while this browser tab stays open — closing it stops the schedule. For unattended monitoring use the GitHub Action or Watch email alerts."}
                 </p>
               </div>
               <Switch
@@ -294,14 +292,14 @@ export function SettingsDialog({ trigger }: { trigger?: React.ReactNode } = {}) 
                           : "border-border text-muted-foreground hover:bg-accent hover:text-foreground",
                       )}
                     >
-                      {m === "interval" ? "Every N hours" : "Daily at time"}
+                      {m === "interval" ? (ru ? "Каждые N часов" : "Every N hours") : (ru ? "Ежедневно" : "Daily at time")}
                     </button>
                   ))}
                 </div>
 
                 {sched.mode === "interval" ? (
                   <div className="space-y-1.5">
-                    <Label htmlFor="sched-hours">Hours between scans (per repo)</Label>
+                    <Label htmlFor="sched-hours">{ru ? "Часов между сканами каждого репозитория" : "Hours between scans (per repo)"}</Label>
                     <Input
                       id="sched-hours"
                       type="number"
@@ -320,7 +318,7 @@ export function SettingsDialog({ trigger }: { trigger?: React.ReactNode } = {}) 
                   </div>
                 ) : (
                   <div className="space-y-1.5">
-                    <Label htmlFor="sched-time">Local time of day</Label>
+                    <Label htmlFor="sched-time">{ru ? "Местное время" : "Local time of day"}</Label>
                     <Input
                       id="sched-time"
                       type="time"
@@ -332,9 +330,7 @@ export function SettingsDialog({ trigger }: { trigger?: React.ReactNode } = {}) 
                 )}
 
                 <p className="text-xs text-muted-foreground">
-                  {describeSchedule(sched)} · this tab must stay open. Unattended: Action{" "}
-                  <code>schedule:</code> (Settings → Connect a repository) or leave an email on{" "}
-                  <strong>Watch for drops</strong> after a scan.
+                  {ru ? (sched.mode === "daily" ? `Ежедневно в ${sched.dailyTime}` : `Интервал в часах: ${sched.intervalHours}`) : describeSchedule(sched)} · {ru ? "Вкладка должна оставаться открытой. Для работы без браузера настройте GitHub Action или уведомления Watch по почте после скана." : "This tab must stay open. For unattended scans, configure the GitHub Action or Watch email alerts after a scan."}
                 </p>
               </div>
             )}
@@ -348,7 +344,7 @@ export function SettingsDialog({ trigger }: { trigger?: React.ReactNode } = {}) 
               <div className="min-w-0 space-y-0.5">
                 <Label htmlFor="usage-stats" className="flex items-center gap-1.5">
                   <BarChart3 className="size-4 text-primary" />
-                  Usage statistics
+                  {ru ? "Статистика использования" : "Usage statistics"}
                 </Label>
                 {/* Says exactly what is recorded, in the place where it can be
                     switched off. A vaguer sentence would be easier to write and
@@ -357,6 +353,7 @@ export function SettingsDialog({ trigger }: { trigger?: React.ReactNode } = {}) 
                     one describes something the other does not do, the switch is
                     a lie with a nice UI. */}
                 <p className="text-xs text-muted-foreground">
+                  {ru ? "Сохраняются две раздельные записи. Статистика использования: случайный идентификатор браузера, событие и адрес репозитория без оценки. Статистика результатов: оценка, буква, основной язык, диапазон размера и число находок по важности, без имени и адреса репозитория, идентификатора браузера и содержимого кода. Вторая запись датируется днём и используется для сравнения с похожими репозиториями. Пути файлов, код и IP-адрес не сохраняются. Изменение применяется сразу: кнопка «Отмена» его не отменяет." : <>
                   Writes two rows, into two tables that cannot be joined.{" "}
                   <strong className="font-medium text-foreground/80">Usage:</strong> a random id
                   for this browser, the event, and the repository&apos;s address — no score.{" "}
@@ -367,6 +364,7 @@ export function SettingsDialog({ trigger }: { trigger?: React.ReactNode } = {}) 
                   comparable repositories&rdquo; possible, and it is dated to the day rather
                   than the second so the two cannot be lined up. Never your file paths, code or
                   IP address. Takes effect immediately — Cancel does not undo it.
+                  </>}
                 </p>
               </div>
               <Switch
@@ -380,11 +378,11 @@ export function SettingsDialog({ trigger }: { trigger?: React.ReactNode } = {}) 
 
         <div className="flex justify-end gap-2">
           <Button variant="outline" onClick={() => setOpen(false)}>
-            Cancel
+            {ru ? "Отмена" : "Cancel"}
           </Button>
           <Button onClick={save}>
             {saved ? <Check className="size-4" /> : null}
-            {saved ? "Saved" : "Save"}
+            {saved ? (ru ? "Сохранено" : "Saved") : (ru ? "Сохранить" : "Save")}
           </Button>
         </div>
       </DialogContent>

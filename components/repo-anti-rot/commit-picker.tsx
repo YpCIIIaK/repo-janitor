@@ -1,4 +1,5 @@
 "use client"
+import { useLocale } from "@/components/i18n/locale-provider"
 
 import { useMemo, useState } from "react"
 import { ChevronDown, ChevronRight, GitMerge, Tag, Search, FileDiff } from "lucide-react"
@@ -73,6 +74,8 @@ export function CommitPicker({
   onChange: (next: Set<string>) => void
   disabled?: boolean
 }) {
+  const { locale } = useLocale()
+  const ru = locale === "ru"
   const [query, setQuery] = useState("")
   const [filter, setFilter] = useState<Filter>("all")
   const [expanded, setExpanded] = useState<string | null>(null)
@@ -115,7 +118,7 @@ export function CommitPicker({
           <Input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Filter by message or sha…"
+            placeholder={ru ? "Поиск по сообщению или SHA…" : "Filter by message or sha…"}
             className="h-8 pl-8 text-sm"
             disabled={disabled}
           />
@@ -126,14 +129,14 @@ export function CommitPicker({
           value={filter}
           onChange={(v) => setFilter(v as Filter)}
           items={[
-            { value: "all", label: "All" },
-            { value: "tagged", label: "Tagged" },
-            { value: "merges", label: "Merges" },
-            { value: "big", label: "Big" },
+            { value: "all", label: ru ? "Все" : "All" },
+            { value: "tagged", label: ru ? "С тегами" : "Tagged" },
+            { value: "merges", label: ru ? "Слияния" : "Merges" },
+            { value: "big", label: ru ? "Крупные" : "Big" },
           ]}
         />
         <Button variant="outline" size="sm" onClick={toggleVisible} disabled={disabled || visible.length === 0}>
-          {allVisibleSelected ? "Clear shown" : `Select shown (${visible.length})`}
+          {allVisibleSelected ? (ru ? "Снять выбор видимых" : "Clear shown") : (ru ? `Выбрать видимые (${visible.length})` : `Select shown (${visible.length})`)}
         </Button>
       </div>
 
@@ -149,7 +152,7 @@ export function CommitPicker({
 
       {visible.length === 0 ? (
         <p className="rounded-xl border border-dashed border-border py-10 text-center text-sm text-muted-foreground">
-          No commits match this filter.
+          {ru ? "Нет коммитов с такими условиями." : "No commits match this filter."}
         </p>
       ) : (
         <VirtualList
@@ -220,6 +223,8 @@ export function CommitPicker({
 }
 
 function FileList({ commit, onClose }: { commit?: CommitWithStats; onClose: () => void }) {
+  const { locale } = useLocale()
+  const ru = locale === "ru"
   if (!commit) return null
   return (
     <div className="rounded-xl border border-border bg-card p-3">
@@ -227,11 +232,11 @@ function FileList({ commit, onClose }: { commit?: CommitWithStats; onClose: () =
         <FileDiff className="size-4 text-muted-foreground" />
         <span className="min-w-0 flex-1 truncate text-sm font-medium">{commit.subject}</span>
         <button onClick={onClose} className="text-xs text-muted-foreground hover:text-foreground">
-          Close
+          {ru ? "Закрыть" : "Close"}
         </button>
       </div>
       {commit.files.length === 0 ? (
-        <p className="text-xs text-muted-foreground">This commit changed no files.</p>
+        <p className="text-xs text-muted-foreground">{ru ? "В этом коммите нет изменений файлов." : "This commit changed no files."}</p>
       ) : (
         <ul className="space-y-1">
           {commit.files.map((f) => (
