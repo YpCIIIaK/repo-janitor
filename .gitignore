@@ -91,3 +91,4 @@ benchmark/.local-rescans/
 /benchmark/.recall-cache/
 /benchmark/recall-report-advisories.json
 /benchmark/recall-advisories.jsonl
+/benchmark/.deep-php/
