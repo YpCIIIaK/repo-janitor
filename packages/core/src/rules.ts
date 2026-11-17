@@ -44,6 +44,7 @@ const INSECURE: Record<string, string> = {
   "php-unserialize": "PHP unserialize() of a variable",
   "php-reflected-xss": "Request input echoed unescaped",
   "java-deserialization": "Java native deserialisation",
+  "java-xxe": "Java XML parser open to XXE",
   "ruby-dynamic-dispatch": "Method or class chosen by request input",
   "ruby-marshal-load": "Marshal / unsafe YAML load",
   "ruby-html-safe": "Request input marked html_safe",

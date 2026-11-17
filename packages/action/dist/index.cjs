@@ -26875,7 +26875,7 @@ var require_lib4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-IPDG22JQ.js
+// ../cli/dist/chunk-3U75TW76.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -50809,7 +50809,7 @@ function date4(params) {
   return _coercedDate(ZodDate, params);
 }
 
-// ../cli/dist/chunk-IPDG22JQ.js
+// ../cli/dist/chunk-3U75TW76.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -75386,6 +75386,7 @@ var INSECURE = {
   "php-unserialize": "PHP unserialize() of a variable",
   "php-reflected-xss": "Request input echoed unescaped",
   "java-deserialization": "Java native deserialisation",
+  "java-xxe": "Java XML parser open to XXE",
   "ruby-dynamic-dispatch": "Method or class chosen by request input",
   "ruby-marshal-load": "Marshal / unsafe YAML load",
   "ruby-html-safe": "Request input marked html_safe",
@@ -80561,9 +80562,21 @@ var NOT_SHIPPED_RE2 = /(^|\/)(?:_?examples?|demos?|benchmarks?|bench|perf(?:-tes
 var TEST_RE3 = /(^|\/)(?:__tests__|tests?|specs?|fixtures?)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test\.[cm]?[jt]s$|(?:^|\/)test_[^/]+\.py$|_test\.py$|(?:^|\/)conftest\.py$|_test\.go$|(?:Test|Tests|IT)\.(?:java|kt|cs|php)$|_spec\.rb$/i;
 var MAX_PER_FILE5 = 6;
 var MAX_TOTAL8 = 60;
+var MAX_COLLECT = 2e3;
+var CONFIDENCE_RANK = { high: 2, medium: 1, low: 0 };
 var MAX_BYTES2 = 4e5;
 var PHP_JAVA_RULES = [
   // --- Python SQL (VAmPI: f"SELECT … '{username}'") ---------------------------
+  {
+    id: "sql-interpolated",
+    lang: "py",
+    // Any formatted string handed straight to a DB-API execute, whatever the
+    // statement (SHOW, SET, CREATE… are injectable too): `cur.execute(f"SHOW {t}")`.
+    re: /\.(?:execute|executemany|executescript|exec_driver_sql)\s*\(\s*(?:f(["'])[^"'\n]*\{[^"'\n]*\1|(["'])[^"'\n]*\2\s*(?:%\s*[(\w]|\.format\s*\())/g,
+    severity: "critical",
+    title: "SQL query assembled by string formatting",
+    detail: 'A formatted string goes straight to execute(): any value in it becomes SQL. Pass values as parameters (`cur.execute("\u2026 WHERE id = %s", (id,))`); identifiers need an allow-list.'
+  },
   {
     id: "sql-interpolated",
     lang: "py",
@@ -80906,13 +80919,76 @@ var RULES2 = [
     title: "document.write() with a value built at runtime",
     detail: "`document.write` injects markup into the page. If any part of the argument can carry user input this is cross-site scripting. Prefer DOM APIs (`textContent`, `createElement`) or a sanitiser when HTML is required."
   },
+  // ---- Java / Go: XML, TLS, weak crypto -----------------------------------
+  {
+    id: "java-xxe",
+    lang: "java",
+    // Judged per file in contextAllows: the factory is only a hole when nothing
+    // in the file turns off DTDs or external entities.
+    re: /\b(?:DocumentBuilderFactory|SAXParserFactory|TransformerFactory|XMLInputFactory|SchemaFactory|SAXTransformerFactory)\s*\.\s*new(?:Default)?(?:Instance|Factory)\s*\(|\bnew\s+SAXReader\s*\(|\bnew\s+SAXBuilder\s*\(/g,
+    severity: "warning",
+    title: "XML parser with external entities left on",
+    detail: 'Java XML parsers resolve DTDs and external entities by default, so a crafted document can read local files or reach internal hosts (XXE). Disable DOCTYPE declarations on the factory: `setFeature("http://apache.org/xml/features/disallow-doctype-decl", true)`, or set `XMLConstants.ACCESS_EXTERNAL_DTD` and `ACCESS_EXTERNAL_SCHEMA` to "".'
+  },
+  {
+    id: "tls-verification-off",
+    lang: "java",
+    // An X509TrustManager whose checkServerTrusted does nothing, or a hostname
+    // verifier that accepts every name.
+    re: /\bcheckServerTrusted\s*\([^)]*\)\s*(?:throws\s+[\w.,\s]+)?\{\s*(?:\/\/[^\n]*\s*)*\}|\bNoopHostnameVerifier\b|\bALLOW_ALL_HOSTNAME_VERIFIER\b|\bsetHostnameVerifier\s*\(\s*\(\s*\w+\s*,\s*\w+\s*\)\s*->\s*true\b|\bverify\s*\(\s*String\s+\w+\s*,\s*SSLSession\s+\w+\s*\)\s*\{\s*return\s+true\s*;/g,
+    severity: "critical",
+    title: "TLS certificate or hostname checks disabled",
+    detail: "This trusts any certificate (or any host name), so anyone on the network path can impersonate the server. Use the default trust manager; to trust a private CA, add it to a KeyStore instead."
+  },
+  {
+    id: "tls-verification-off",
+    lang: "go",
+    re: /\bInsecureSkipVerify\s*:\s*true\b/g,
+    severity: "critical",
+    title: "TLS certificate checks disabled",
+    detail: "`InsecureSkipVerify: true` accepts any certificate, so the connection is encrypted but not authenticated. Add the server's CA to `RootCAs` instead."
+  },
+  {
+    id: "weak-hash",
+    lang: "go",
+    re: /\b(?:md5|sha1)\.(?:New|Sum)\s*\(/g,
+    severity: "warning",
+    title: "Weak hash algorithm (MD5/SHA-1)",
+    detail: "MD5 and SHA-1 have practical collision attacks. Use SHA-256 for integrity and a password hash (argon2, bcrypt, scrypt) for passwords. Harmless for cache keys."
+  },
+  {
+    id: "weak-hash",
+    lang: "java",
+    re: /\bMessageDigest\s*\.\s*getInstance\s*\(\s*"(?:MD5|MD2|SHA-?1)"|\bDigestUtils\s*\.\s*(?:md5|sha1|sha)(?:Hex)?\s*\(/gi,
+    severity: "warning",
+    title: "Weak hash algorithm (MD5/SHA-1)",
+    detail: "MD5 and SHA-1 have practical collision attacks. Use SHA-256 for integrity and a password hash (argon2, bcrypt, scrypt) for passwords. Harmless for cache keys."
+  },
+  {
+    id: "random-for-secret",
+    lang: "go",
+    // math/rand only: crypto/rand exposes rand.Read and rand.Int too, so the file's import decides (contextAllows).
+    re: /\b\w*(?:token|secret|password|passwd|salt|nonce|api_?key|session_?id)\w*\s*:?=\s*[^\n]*\brand\.(?:Intn|Int63n?|Int31n?|Int|Uint32|Uint64|Float64|Perm|Read)\s*\(/gi,
+    severity: "warning",
+    title: "Security value generated with math/rand",
+    detail: "`math/rand` is predictable; its sequence can be reconstructed. Use `crypto/rand` for anything anyone is not supposed to guess."
+  },
+  {
+    id: "random-for-secret",
+    lang: "java",
+    re: /\b\w*(?:token|secret|password|passwd|salt|nonce|apiKey|sessionId)\w*\s*=\s*[^;\n]*\bnew\s+Random\s*\(|\b\w*(?:token|secret|password|salt|nonce)\w*\s*=\s*[^;\n]*\bMath\.random\s*\(/gi,
+    severity: "warning",
+    title: "Security value generated with java.util.Random",
+    detail: "`java.util.Random` and `Math.random` are predictable. Use `SecureRandom` for tokens, salts and keys."
+  },
   // ---- Python -------------------------------------------------------------
   {
     id: "py-shell-true",
     lang: "py",
     // No dotAll flag needed: `[^)]` already spans newlines, and `s` requires an
     // ES2018 target the dashboard's tsconfig does not use.
-    re: /\bsubprocess\.(?:run|call|check_output|check_call|Popen)\s*\([^)]*shell\s*=\s*True/g,
+    // Bare names cover `from subprocess import Popen`; bare run/call are too generic to claim.
+    re: new RegExp("(?:\\bsubprocess\\.(?:run|call|check_output|check_call|Popen)|(?<![\\w.])(?:Popen|check_output|check_call))\\s*\\((?:[^()]|\\([^()]*\\))*shell\\s*=\\s*True", "g"),
     severity: "critical",
     title: "subprocess called with shell=True",
     detail: "`shell=True` sends the command through a shell, so any interpolated value containing `;` or backticks runs as its own command. Drop it and pass the command as a list of arguments."
@@ -81051,6 +81127,7 @@ var SKIP_IN_TEST = /* @__PURE__ */ new Set([
   "weak-hash",
   "py-pickle-load",
   "random-for-secret",
+  "java-xxe",
   "php-include-user-input",
   "php-unserialize",
   "php-reflected-xss",
@@ -81158,7 +81235,7 @@ function sinkAllows(ruleId, line, col, lang) {
   if (ruleId === "sql-interpolated") return !/\bprepare\s*\(/.test(line);
   if (ruleId === "ssrf" && /^[^(]*\(\s*(?:f["'](?:\{\s*(?:self\.|this\.)?[A-Z][A-Z0-9_]*\s*\}|https?:\/\/[\w.-]+)|(?:self\.|this\.)?[A-Z][A-Z0-9_]*\s*\+)/.test(line.slice(col))) return false;
   if (ruleId === "eval-dynamic" && line.slice(0, col).trimEnd().endsWith(".")) return false;
-  if (ruleId === "py-shell-true" && /subprocess\.\w+\s*\(\s*(?:r|b)?(["'])[^"'{}%]*\1\s*,/.test(line)) return false;
+  if (ruleId === "py-shell-true" && new RegExp(`(?:subprocess\\.\\w+|(?<![\\w.])(?:Popen|check_output|check_call))\\s*\\(\\s*(?:r|b)?(["'])[^"'{}%]*\\1\\s*,`).test(line)) return false;
   if (ruleId === "eval-dynamic" && /^\s*(?:async\s+|static\s+|public\s+|private\s+)*eval\s*\([^)]*\)\s*(?::\s*[\w<>[\]| ]+)?\s*\{/.test(line)) return false;
   return true;
 }
@@ -81205,6 +81282,12 @@ function around(content, lineStart, before, after) {
   return content.slice(a, b3 === -1 ? void 0 : b3);
 }
 function contextAllows(ruleId, content, lineStart) {
+  if (ruleId === "java-xxe") {
+    return !/disallow-doctype-decl|external-general-entities|external-parameter-entities|ACCESS_EXTERNAL_(?:DTD|SCHEMA|STYLESHEET)|FEATURE_SECURE_PROCESSING|SUPPORT_DTD|IS_SUPPORTING_EXTERNAL_ENTITIES|load-external-dtd/.test(content);
+  }
+  if (ruleId === "random-for-secret" && /^import\s*(?:\(|")/m.test(content)) {
+    if (!/"math\/rand(?:\/v2)?"/.test(content)) return false;
+  }
   if (ruleId === "weak-hash") {
     return /password|passwd|secret|token|signature|\bsign|hmac|credential|\bauth/i.test(around(content, lineStart, 3, 3));
   }
@@ -81358,7 +81441,7 @@ var insecureCodeScanner = {
       const sources = [];
       const pending = [];
       for (const file2 of ctx.files) {
-        if (issues.length >= MAX_TOTAL8) break;
+        if (issues.length >= MAX_COLLECT) break;
         const norm = file2.replace(/\\/g, "/");
         if (/\.d\.(?:ts|mts|cts)$/i.test(norm)) continue;
         const webRoot = /\.php$/i.test(norm) && /(^|\/)(?:www|public|htdocs)\//.test(norm);
@@ -81373,7 +81456,7 @@ var insecureCodeScanner = {
           if (!content2) continue;
           const nativeHits = /\.rs$/i.test(norm) ? scanRustTlsSource(content2) : scanCppTlsSource(content2);
           for (const hit of nativeHits.slice(0, MAX_PER_FILE5)) {
-            if (issues.length >= MAX_TOTAL8) break;
+            if (issues.length >= MAX_COLLECT) break;
             let ageDays = 0;
             try {
               ageDays = yield ctx.git.blameAgeDays(file2, hit.line);
@@ -81401,7 +81484,7 @@ var insecureCodeScanner = {
         if (!lang) {
           const isLanguageTest = TEST_RE3.test(norm) || /Tests?\.(?:swift|scala)$/i.test(norm);
           for (const hit of (/\.scala$/i.test(norm) ? scanScalaSource(content) : scanSwiftSource(content)).slice(0, MAX_PER_FILE5)) {
-            if (issues.length >= MAX_TOTAL8) break;
+            if (issues.length >= MAX_COLLECT) break;
             let ageDays = 0;
             try {
               ageDays = yield ctx.git.blameAgeDays(file2, hit.line);
@@ -81434,7 +81517,7 @@ var insecureCodeScanner = {
           else hits.push(hit);
         }
         for (const hit of hits) {
-          if (issues.length >= MAX_TOTAL8 || perFile >= MAX_PER_FILE5) break;
+          if (issues.length >= MAX_COLLECT || perFile >= MAX_PER_FILE5) break;
           if (isTest && SKIP_IN_TEST.has(hit.rule.id)) continue;
           if (hit.rule.id === "ssrf" && lang === "js" && BROWSER_CODE_RE.test(norm)) continue;
           perFile++;
@@ -81471,7 +81554,11 @@ var insecureCodeScanner = {
         p2.issue.confidence = "high";
         p2.issue.detail += ` Request input reaches \`${fn2.name}()\` from ${caller}.`;
       }
-      return issues;
+      if (issues.length <= MAX_TOTAL8) return issues;
+      return issues.map((issue2, i) => ({ issue: issue2, i })).sort((a, b3) => {
+        var _a32, _b2, _c2, _d;
+        return rank(b3.issue.severity) - rank(a.issue.severity) || ((_b2 = CONFIDENCE_RANK[(_a32 = b3.issue.confidence) != null ? _a32 : "medium"]) != null ? _b2 : 1) - ((_d = CONFIDENCE_RANK[(_c2 = a.issue.confidence) != null ? _c2 : "medium"]) != null ? _d : 1) || a.i - b3.i;
+      }).slice(0, MAX_TOTAL8).map(({ issue: issue2 }) => issue2);
     });
   }
 };
@@ -84347,6 +84434,7 @@ var INSECURE2 = {
   "php-unserialize": "PHP unserialize() of a variable",
   "php-reflected-xss": "Request input echoed unescaped",
   "java-deserialization": "Java native deserialisation",
+  "java-xxe": "Java XML parser open to XXE",
   "ruby-dynamic-dispatch": "Method or class chosen by request input",
   "ruby-marshal-load": "Marshal / unsafe YAML load",
   "ruby-html-safe": "Request input marked html_safe",
@@ -89196,9 +89284,21 @@ var NOT_SHIPPED_RE4 = /(^|\/)(?:_?examples?|demos?|benchmarks?|bench|perf(?:-tes
 var TEST_RE7 = /(^|\/)(?:__tests__|tests?|specs?|fixtures?)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test\.[cm]?[jt]s$|(?:^|\/)test_[^/]+\.py$|_test\.py$|(?:^|\/)conftest\.py$|_test\.go$|(?:Test|Tests|IT)\.(?:java|kt|cs|php)$|_spec\.rb$/i;
 var MAX_PER_FILE10 = 6;
 var MAX_TOTAL16 = 60;
+var MAX_COLLECT2 = 2e3;
+var CONFIDENCE_RANK2 = { high: 2, medium: 1, low: 0 };
 var MAX_BYTES4 = 4e5;
 var PHP_JAVA_RULES2 = [
   // --- Python SQL (VAmPI: f"SELECT … '{username}'") ---------------------------
+  {
+    id: "sql-interpolated",
+    lang: "py",
+    // Any formatted string handed straight to a DB-API execute, whatever the
+    // statement (SHOW, SET, CREATE… are injectable too): `cur.execute(f"SHOW {t}")`.
+    re: /\.(?:execute|executemany|executescript|exec_driver_sql)\s*\(\s*(?:f(["'])[^"'\n]*\{[^"'\n]*\1|(["'])[^"'\n]*\2\s*(?:%\s*[(\w]|\.format\s*\())/g,
+    severity: "critical",
+    title: "SQL query assembled by string formatting",
+    detail: 'A formatted string goes straight to execute(): any value in it becomes SQL. Pass values as parameters (`cur.execute("\u2026 WHERE id = %s", (id,))`); identifiers need an allow-list.'
+  },
   {
     id: "sql-interpolated",
     lang: "py",
@@ -89541,13 +89641,76 @@ var RULES5 = [
     title: "document.write() with a value built at runtime",
     detail: "`document.write` injects markup into the page. If any part of the argument can carry user input this is cross-site scripting. Prefer DOM APIs (`textContent`, `createElement`) or a sanitiser when HTML is required."
   },
+  // ---- Java / Go: XML, TLS, weak crypto -----------------------------------
+  {
+    id: "java-xxe",
+    lang: "java",
+    // Judged per file in contextAllows: the factory is only a hole when nothing
+    // in the file turns off DTDs or external entities.
+    re: /\b(?:DocumentBuilderFactory|SAXParserFactory|TransformerFactory|XMLInputFactory|SchemaFactory|SAXTransformerFactory)\s*\.\s*new(?:Default)?(?:Instance|Factory)\s*\(|\bnew\s+SAXReader\s*\(|\bnew\s+SAXBuilder\s*\(/g,
+    severity: "warning",
+    title: "XML parser with external entities left on",
+    detail: 'Java XML parsers resolve DTDs and external entities by default, so a crafted document can read local files or reach internal hosts (XXE). Disable DOCTYPE declarations on the factory: `setFeature("http://apache.org/xml/features/disallow-doctype-decl", true)`, or set `XMLConstants.ACCESS_EXTERNAL_DTD` and `ACCESS_EXTERNAL_SCHEMA` to "".'
+  },
+  {
+    id: "tls-verification-off",
+    lang: "java",
+    // An X509TrustManager whose checkServerTrusted does nothing, or a hostname
+    // verifier that accepts every name.
+    re: /\bcheckServerTrusted\s*\([^)]*\)\s*(?:throws\s+[\w.,\s]+)?\{\s*(?:\/\/[^\n]*\s*)*\}|\bNoopHostnameVerifier\b|\bALLOW_ALL_HOSTNAME_VERIFIER\b|\bsetHostnameVerifier\s*\(\s*\(\s*\w+\s*,\s*\w+\s*\)\s*->\s*true\b|\bverify\s*\(\s*String\s+\w+\s*,\s*SSLSession\s+\w+\s*\)\s*\{\s*return\s+true\s*;/g,
+    severity: "critical",
+    title: "TLS certificate or hostname checks disabled",
+    detail: "This trusts any certificate (or any host name), so anyone on the network path can impersonate the server. Use the default trust manager; to trust a private CA, add it to a KeyStore instead."
+  },
+  {
+    id: "tls-verification-off",
+    lang: "go",
+    re: /\bInsecureSkipVerify\s*:\s*true\b/g,
+    severity: "critical",
+    title: "TLS certificate checks disabled",
+    detail: "`InsecureSkipVerify: true` accepts any certificate, so the connection is encrypted but not authenticated. Add the server's CA to `RootCAs` instead."
+  },
+  {
+    id: "weak-hash",
+    lang: "go",
+    re: /\b(?:md5|sha1)\.(?:New|Sum)\s*\(/g,
+    severity: "warning",
+    title: "Weak hash algorithm (MD5/SHA-1)",
+    detail: "MD5 and SHA-1 have practical collision attacks. Use SHA-256 for integrity and a password hash (argon2, bcrypt, scrypt) for passwords. Harmless for cache keys."
+  },
+  {
+    id: "weak-hash",
+    lang: "java",
+    re: /\bMessageDigest\s*\.\s*getInstance\s*\(\s*"(?:MD5|MD2|SHA-?1)"|\bDigestUtils\s*\.\s*(?:md5|sha1|sha)(?:Hex)?\s*\(/gi,
+    severity: "warning",
+    title: "Weak hash algorithm (MD5/SHA-1)",
+    detail: "MD5 and SHA-1 have practical collision attacks. Use SHA-256 for integrity and a password hash (argon2, bcrypt, scrypt) for passwords. Harmless for cache keys."
+  },
+  {
+    id: "random-for-secret",
+    lang: "go",
+    // math/rand only: crypto/rand exposes rand.Read and rand.Int too, so the file's import decides (contextAllows).
+    re: /\b\w*(?:token|secret|password|passwd|salt|nonce|api_?key|session_?id)\w*\s*:?=\s*[^\n]*\brand\.(?:Intn|Int63n?|Int31n?|Int|Uint32|Uint64|Float64|Perm|Read)\s*\(/gi,
+    severity: "warning",
+    title: "Security value generated with math/rand",
+    detail: "`math/rand` is predictable; its sequence can be reconstructed. Use `crypto/rand` for anything anyone is not supposed to guess."
+  },
+  {
+    id: "random-for-secret",
+    lang: "java",
+    re: /\b\w*(?:token|secret|password|passwd|salt|nonce|apiKey|sessionId)\w*\s*=\s*[^;\n]*\bnew\s+Random\s*\(|\b\w*(?:token|secret|password|salt|nonce)\w*\s*=\s*[^;\n]*\bMath\.random\s*\(/gi,
+    severity: "warning",
+    title: "Security value generated with java.util.Random",
+    detail: "`java.util.Random` and `Math.random` are predictable. Use `SecureRandom` for tokens, salts and keys."
+  },
   // ---- Python -------------------------------------------------------------
   {
     id: "py-shell-true",
     lang: "py",
     // No dotAll flag needed: `[^)]` already spans newlines, and `s` requires an
     // ES2018 target the dashboard's tsconfig does not use.
-    re: /\bsubprocess\.(?:run|call|check_output|check_call|Popen)\s*\([^)]*shell\s*=\s*True/g,
+    // Bare names cover `from subprocess import Popen`; bare run/call are too generic to claim.
+    re: /(?:\bsubprocess\.(?:run|call|check_output|check_call|Popen)|(?<![\w.])(?:Popen|check_output|check_call))\s*\((?:[^()]|\([^()]*\))*shell\s*=\s*True/g,
     severity: "critical",
     title: "subprocess called with shell=True",
     detail: "`shell=True` sends the command through a shell, so any interpolated value containing `;` or backticks runs as its own command. Drop it and pass the command as a list of arguments."
@@ -89685,6 +89848,7 @@ var SKIP_IN_TEST2 = /* @__PURE__ */ new Set([
   "weak-hash",
   "py-pickle-load",
   "random-for-secret",
+  "java-xxe",
   "php-include-user-input",
   "php-unserialize",
   "php-reflected-xss",
@@ -89789,7 +89953,7 @@ function sinkAllows2(ruleId, line, col, lang) {
   if (ruleId === "sql-interpolated") return !/\bprepare\s*\(/.test(line);
   if (ruleId === "ssrf" && /^[^(]*\(\s*(?:f["'](?:\{\s*(?:self\.|this\.)?[A-Z][A-Z0-9_]*\s*\}|https?:\/\/[\w.-]+)|(?:self\.|this\.)?[A-Z][A-Z0-9_]*\s*\+)/.test(line.slice(col))) return false;
   if (ruleId === "eval-dynamic" && line.slice(0, col).trimEnd().endsWith(".")) return false;
-  if (ruleId === "py-shell-true" && /subprocess\.\w+\s*\(\s*(?:r|b)?(["'])[^"'{}%]*\1\s*,/.test(line)) return false;
+  if (ruleId === "py-shell-true" && /(?:subprocess\.\w+|(?<![\w.])(?:Popen|check_output|check_call))\s*\(\s*(?:r|b)?(["'])[^"'{}%]*\1\s*,/.test(line)) return false;
   if (ruleId === "eval-dynamic" && /^\s*(?:async\s+|static\s+|public\s+|private\s+)*eval\s*\([^)]*\)\s*(?::\s*[\w<>[\]| ]+)?\s*\{/.test(line)) return false;
   return true;
 }
@@ -89836,6 +90000,12 @@ function around2(content, lineStart, before, after) {
   return content.slice(a, b3 === -1 ? void 0 : b3);
 }
 function contextAllows2(ruleId, content, lineStart) {
+  if (ruleId === "java-xxe") {
+    return !/disallow-doctype-decl|external-general-entities|external-parameter-entities|ACCESS_EXTERNAL_(?:DTD|SCHEMA|STYLESHEET)|FEATURE_SECURE_PROCESSING|SUPPORT_DTD|IS_SUPPORTING_EXTERNAL_ENTITIES|load-external-dtd/.test(content);
+  }
+  if (ruleId === "random-for-secret" && /^import\s*(?:\(|")/m.test(content)) {
+    if (!/"math\/rand(?:\/v2)?"/.test(content)) return false;
+  }
   if (ruleId === "weak-hash") {
     return /password|passwd|secret|token|signature|\bsign|hmac|credential|\bauth/i.test(around2(content, lineStart, 3, 3));
   }
@@ -89985,7 +90155,7 @@ var insecureCodeScanner2 = {
     const sources = [];
     const pending = [];
     for (const file2 of ctx.files) {
-      if (issues.length >= MAX_TOTAL16) break;
+      if (issues.length >= MAX_COLLECT2) break;
       const norm = file2.replace(/\\/g, "/");
       if (/\.d\.(?:ts|mts|cts)$/i.test(norm)) continue;
       const webRoot = /\.php$/i.test(norm) && /(^|\/)(?:www|public|htdocs)\//.test(norm);
@@ -90000,7 +90170,7 @@ var insecureCodeScanner2 = {
         if (!content2) continue;
         const nativeHits = /\.rs$/i.test(norm) ? scanRustTlsSource2(content2) : scanCppTlsSource2(content2);
         for (const hit of nativeHits.slice(0, MAX_PER_FILE10)) {
-          if (issues.length >= MAX_TOTAL16) break;
+          if (issues.length >= MAX_COLLECT2) break;
           let ageDays = 0;
           try {
             ageDays = await ctx.git.blameAgeDays(file2, hit.line);
@@ -90028,7 +90198,7 @@ var insecureCodeScanner2 = {
       if (!lang) {
         const isLanguageTest = TEST_RE7.test(norm) || /Tests?\.(?:swift|scala)$/i.test(norm);
         for (const hit of (/\.scala$/i.test(norm) ? scanScalaSource2(content) : scanSwiftSource2(content)).slice(0, MAX_PER_FILE10)) {
-          if (issues.length >= MAX_TOTAL16) break;
+          if (issues.length >= MAX_COLLECT2) break;
           let ageDays = 0;
           try {
             ageDays = await ctx.git.blameAgeDays(file2, hit.line);
@@ -90059,7 +90229,7 @@ var insecureCodeScanner2 = {
         else hits.push(hit);
       }
       for (const hit of hits) {
-        if (issues.length >= MAX_TOTAL16 || perFile >= MAX_PER_FILE10) break;
+        if (issues.length >= MAX_COLLECT2 || perFile >= MAX_PER_FILE10) break;
         if (isTest && SKIP_IN_TEST2.has(hit.rule.id)) continue;
         if (hit.rule.id === "ssrf" && lang === "js" && BROWSER_CODE_RE2.test(norm)) continue;
         perFile++;
@@ -90100,7 +90270,8 @@ var insecureCodeScanner2 = {
       p2.issue.confidence = "high";
       p2.issue.detail += ` Request input reaches \`${fn2.name}()\` from ${caller}.`;
     }
-    return issues;
+    if (issues.length <= MAX_TOTAL16) return issues;
+    return issues.map((issue2, i) => ({ issue: issue2, i })).sort((a, b3) => rank2(b3.issue.severity) - rank2(a.issue.severity) || (CONFIDENCE_RANK2[b3.issue.confidence ?? "medium"] ?? 1) - (CONFIDENCE_RANK2[a.issue.confidence ?? "medium"] ?? 1) || a.i - b3.i).slice(0, MAX_TOTAL16).map(({ issue: issue2 }) => issue2);
   }
 };
 

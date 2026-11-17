@@ -50,6 +50,13 @@ const TEST_RE =
 
 const MAX_PER_FILE = 6
 const MAX_TOTAL = 60
+/**
+ * Collect well past MAX_TOTAL, then keep the most severe. A plain first-60 cut
+ * follows file order, so in a large repository low-confidence noise early in the
+ * tree crowded out a critical finding further down (CoreNLP's XXE, GHSA-8gf7).
+ */
+const MAX_COLLECT = 2000
+const CONFIDENCE_RANK: Record<string, number> = { high: 2, medium: 1, low: 0 }
 /** Skip enormous files: generated payloads dominate the report and cost time. */
 const MAX_BYTES = 400_000
 
@@ -69,6 +76,18 @@ interface VulnRule {
 /** PHP, Java/Kotlin, Ruby, Go and C#: the injection classes DVWA, WebGoat, RailsGoat, govwa and WebGoat.NET teach. */
 const PHP_JAVA_RULES: VulnRule[] = [
   // --- Python SQL (VAmPI: f"SELECT … '{username}'") ---------------------------
+  {
+    id: "sql-interpolated",
+    lang: "py",
+    // Any formatted string handed straight to a DB-API execute, whatever the
+    // statement (SHOW, SET, CREATE… are injectable too): `cur.execute(f"SHOW {t}")`.
+    re: /\.(?:execute|executemany|executescript|exec_driver_sql)\s*\(\s*(?:f(["'])[^"'\n]*\{[^"'\n]*\1|(["'])[^"'\n]*\2\s*(?:%\s*[(\w]|\.format\s*\())/g,
+    severity: "critical",
+    title: "SQL query assembled by string formatting",
+    detail:
+      "A formatted string goes straight to execute(): any value in it becomes SQL. Pass values as " +
+      "parameters (`cur.execute(\"… WHERE id = %s\", (id,))`); identifiers need an allow-list.",
+  },
   {
     id: "sql-interpolated",
     lang: "py",
@@ -492,13 +511,92 @@ const RULES: VulnRule[] = [
       "sanitiser when HTML is required.",
   },
 
+  // ---- Java / Go: XML, TLS, weak crypto -----------------------------------
+  {
+    id: "java-xxe",
+    lang: "java",
+    // Judged per file in contextAllows: the factory is only a hole when nothing
+    // in the file turns off DTDs or external entities.
+    re: /\b(?:DocumentBuilderFactory|SAXParserFactory|TransformerFactory|XMLInputFactory|SchemaFactory|SAXTransformerFactory)\s*\.\s*new(?:Default)?(?:Instance|Factory)\s*\(|\bnew\s+SAXReader\s*\(|\bnew\s+SAXBuilder\s*\(/g,
+    severity: "warning",
+    title: "XML parser with external entities left on",
+    detail:
+      "Java XML parsers resolve DTDs and external entities by default, so a crafted document can read " +
+      "local files or reach internal hosts (XXE). Disable DOCTYPE declarations on the factory: " +
+      "`setFeature(\"http://apache.org/xml/features/disallow-doctype-decl\", true)`, or set " +
+      "`XMLConstants.ACCESS_EXTERNAL_DTD` and `ACCESS_EXTERNAL_SCHEMA` to \"\".",
+  },
+  {
+    id: "tls-verification-off",
+    lang: "java",
+    // An X509TrustManager whose checkServerTrusted does nothing, or a hostname
+    // verifier that accepts every name.
+    re: /\bcheckServerTrusted\s*\([^)]*\)\s*(?:throws\s+[\w.,\s]+)?\{\s*(?:\/\/[^\n]*\s*)*\}|\bNoopHostnameVerifier\b|\bALLOW_ALL_HOSTNAME_VERIFIER\b|\bsetHostnameVerifier\s*\(\s*\(\s*\w+\s*,\s*\w+\s*\)\s*->\s*true\b|\bverify\s*\(\s*String\s+\w+\s*,\s*SSLSession\s+\w+\s*\)\s*\{\s*return\s+true\s*;/g,
+    severity: "critical",
+    title: "TLS certificate or hostname checks disabled",
+    detail:
+      "This trusts any certificate (or any host name), so anyone on the network path can impersonate " +
+      "the server. Use the default trust manager; to trust a private CA, add it to a KeyStore instead.",
+  },
+  {
+    id: "tls-verification-off",
+    lang: "go",
+    re: /\bInsecureSkipVerify\s*:\s*true\b/g,
+    severity: "critical",
+    title: "TLS certificate checks disabled",
+    detail:
+      "`InsecureSkipVerify: true` accepts any certificate, so the connection is encrypted but not " +
+      "authenticated. Add the server's CA to `RootCAs` instead.",
+  },
+  {
+    id: "weak-hash",
+    lang: "go",
+    re: /\b(?:md5|sha1)\.(?:New|Sum)\s*\(/g,
+    severity: "warning",
+    title: "Weak hash algorithm (MD5/SHA-1)",
+    detail:
+      "MD5 and SHA-1 have practical collision attacks. Use SHA-256 for integrity and a password hash " +
+      "(argon2, bcrypt, scrypt) for passwords. Harmless for cache keys.",
+  },
+  {
+    id: "weak-hash",
+    lang: "java",
+    re: /\bMessageDigest\s*\.\s*getInstance\s*\(\s*"(?:MD5|MD2|SHA-?1)"|\bDigestUtils\s*\.\s*(?:md5|sha1|sha)(?:Hex)?\s*\(/gi,
+    severity: "warning",
+    title: "Weak hash algorithm (MD5/SHA-1)",
+    detail:
+      "MD5 and SHA-1 have practical collision attacks. Use SHA-256 for integrity and a password hash " +
+      "(argon2, bcrypt, scrypt) for passwords. Harmless for cache keys.",
+  },
+  {
+    id: "random-for-secret",
+    lang: "go",
+    // math/rand only: crypto/rand exposes rand.Read and rand.Int too, so the file's import decides (contextAllows).
+    re: /\b\w*(?:token|secret|password|passwd|salt|nonce|api_?key|session_?id)\w*\s*:?=\s*[^\n]*\brand\.(?:Intn|Int63n?|Int31n?|Int|Uint32|Uint64|Float64|Perm|Read)\s*\(/gi,
+    severity: "warning",
+    title: "Security value generated with math/rand",
+    detail:
+      "`math/rand` is predictable; its sequence can be reconstructed. Use `crypto/rand` for anything " +
+      "anyone is not supposed to guess.",
+  },
+  {
+    id: "random-for-secret",
+    lang: "java",
+    re: /\b\w*(?:token|secret|password|passwd|salt|nonce|apiKey|sessionId)\w*\s*=\s*[^;\n]*\bnew\s+Random\s*\(|\b\w*(?:token|secret|password|salt|nonce)\w*\s*=\s*[^;\n]*\bMath\.random\s*\(/gi,
+    severity: "warning",
+    title: "Security value generated with java.util.Random",
+    detail:
+      "`java.util.Random` and `Math.random` are predictable. Use `SecureRandom` for tokens, salts and keys.",
+  },
+
   // ---- Python -------------------------------------------------------------
   {
     id: "py-shell-true",
     lang: "py",
     // No dotAll flag needed: `[^)]` already spans newlines, and `s` requires an
     // ES2018 target the dashboard's tsconfig does not use.
-    re: /\bsubprocess\.(?:run|call|check_output|check_call|Popen)\s*\([^)]*shell\s*=\s*True/g,
+    // Bare names cover `from subprocess import Popen`; bare run/call are too generic to claim.
+    re: /(?:\bsubprocess\.(?:run|call|check_output|check_call|Popen)|(?<![\w.])(?:Popen|check_output|check_call))\s*\((?:[^()]|\([^()]*\))*shell\s*=\s*True/g,
     severity: "critical",
     title: "subprocess called with shell=True",
     detail:
@@ -690,6 +788,7 @@ const SKIP_IN_TEST = new Set([
   "weak-hash",
   "py-pickle-load",
   "random-for-secret",
+  "java-xxe",
   "php-include-user-input",
   "php-unserialize",
   "php-reflected-xss",
@@ -866,7 +965,7 @@ function sinkAllows(ruleId: string, line: string, col: number, lang: Lang): bool
   // `redis_script.eval(...)`, `expr.eval()` — a method on an object, not Kernel#eval.
   if (ruleId === "eval-dynamic" && line.slice(0, col).trimEnd().endsWith(".")) return false
   // A shell=True call whose command is a plain string literal runs fixed text.
-  if (ruleId === "py-shell-true" && /subprocess\.\w+\s*\(\s*(?:r|b)?(["'])[^"'{}%]*\1\s*,/.test(line)) return false
+  if (ruleId === "py-shell-true" && /(?:subprocess\.\w+|(?<![\w.])(?:Popen|check_output|check_call))\s*\(\s*(?:r|b)?(["'])[^"'{}%]*\1\s*,/.test(line)) return false
   // `eval(time, snapshot) {` declares a method called eval (PlayCanvas animation tracks).
   if (ruleId === "eval-dynamic" && /^\s*(?:async\s+|static\s+|public\s+|private\s+)*eval\s*\([^)]*\)\s*(?::\s*[\w<>[\]| ]+)?\s*\{/.test(line)) return false
   return true
@@ -933,6 +1032,14 @@ function around(content: string, lineStart: number, before: number, after: numbe
  *  - react-dangerous-html: `__html` set to a literal is markup the author wrote.
  */
 function contextAllows(ruleId: string, content: string, lineStart: number): boolean {
+  // A factory is safe once the file disables DTDs or external entities anywhere.
+  if (ruleId === "java-xxe") {
+    return !/disallow-doctype-decl|external-general-entities|external-parameter-entities|ACCESS_EXTERNAL_(?:DTD|SCHEMA|STYLESHEET)|FEATURE_SECURE_PROCESSING|SUPPORT_DTD|IS_SUPPORTING_EXTERNAL_ENTITIES|load-external-dtd/.test(content)
+  }
+  // Go's rand.Read/rand.Int are also crypto/rand; only math/rand is predictable.
+  if (ruleId === "random-for-secret" && /^import\s*(?:\(|")/m.test(content)) {
+    if (!/"math\/rand(?:\/v2)?"/.test(content)) return false
+  }
   if (ruleId === "weak-hash") {
     return /password|passwd|secret|token|signature|\bsign|hmac|credential|\bauth/i.test(around(content, lineStart, 3, 3))
   }
@@ -1079,7 +1186,7 @@ export const insecureCodeScanner: Scanner = {
     const pending: { issue: Issue; lang: Lang; lines: string[]; line: number; norm: string }[] = []
 
     for (const file of ctx.files) {
-      if (issues.length >= MAX_TOTAL) break
+      if (issues.length >= MAX_COLLECT) break
       const norm = file.replace(/\\/g, "/")
       // Declaration signatures are erased by TypeScript; they cannot execute sinks.
       if (/\.d\.(?:ts|mts|cts)$/i.test(norm)) continue
@@ -1101,7 +1208,7 @@ export const insecureCodeScanner: Scanner = {
         if (!content) continue
         const nativeHits = /\.rs$/i.test(norm) ? scanRustTlsSource(content) : scanCppTlsSource(content)
         for (const hit of nativeHits.slice(0, MAX_PER_FILE)) {
-          if (issues.length >= MAX_TOTAL) break
+          if (issues.length >= MAX_COLLECT) break
           let ageDays = 0
           try { ageDays = await ctx.git.blameAgeDays(file, hit.line) } catch { /* blame unavailable */ }
           issues.push({ id: `insecure-${hit.rule.id}-${norm}:${hit.line}`, category: "security",
@@ -1124,7 +1231,7 @@ export const insecureCodeScanner: Scanner = {
       if (!lang) {
         const isLanguageTest = TEST_RE.test(norm) || /Tests?\.(?:swift|scala)$/i.test(norm)
         for (const hit of (/\.scala$/i.test(norm) ? scanScalaSource(content) : scanSwiftSource(content)).slice(0, MAX_PER_FILE)) {
-          if (issues.length >= MAX_TOTAL) break
+          if (issues.length >= MAX_COLLECT) break
           let ageDays = 0
           try { ageDays = await ctx.git.blameAgeDays(file, hit.line) } catch { /* blame unavailable */ }
           issues.push({
@@ -1153,7 +1260,7 @@ export const insecureCodeScanner: Scanner = {
         else hits.push(hit)
       }
       for (const hit of hits) {
-        if (issues.length >= MAX_TOTAL || perFile >= MAX_PER_FILE) break
+        if (issues.length >= MAX_COLLECT || perFile >= MAX_PER_FILE) break
         if (isTest && SKIP_IN_TEST.has(hit.rule.id)) continue
         if (hit.rule.id === "ssrf" && lang === "js" && BROWSER_CODE_RE.test(norm)) continue
         perFile++
@@ -1208,6 +1315,15 @@ export const insecureCodeScanner: Scanner = {
       p.issue.detail += ` Request input reaches \`${fn.name}()\` from ${caller}.`
     }
 
+    if (issues.length <= MAX_TOTAL) return issues
+    // Stable: equal findings keep file order.
     return issues
+      .map((issue, i) => ({ issue, i }))
+      .sort((a, b) =>
+        rank(b.issue.severity) - rank(a.issue.severity) ||
+        (CONFIDENCE_RANK[b.issue.confidence ?? "medium"] ?? 1) - (CONFIDENCE_RANK[a.issue.confidence ?? "medium"] ?? 1) ||
+        a.i - b.i)
+      .slice(0, MAX_TOTAL)
+      .map(({ issue }) => issue)
   },
 }

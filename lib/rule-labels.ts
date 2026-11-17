@@ -27,6 +27,7 @@ const RU: Record<string, string> = {
   "insecure-php-unserialize": "unserialize() переменной в PHP",
   "insecure-php-reflected-xss": "Ввод запроса выводится без экранирования",
   "insecure-java-deserialization": "Нативная десериализация Java",
+  "insecure-java-xxe": "XML-парсер Java без защиты от XXE",
   "insecure-ruby-dynamic-dispatch": "Метод или класс выбирается вводом запроса",
   "insecure-ruby-marshal-load": "Marshal / небезопасный YAML.load",
   "insecure-ruby-html-safe": "Ввод запроса помечен html_safe",

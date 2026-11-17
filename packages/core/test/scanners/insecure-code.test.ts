@@ -528,3 +528,43 @@ describe("SQL diagnostics versus executable query construction", () => {
     ])
   })
 })
+
+/** Gaps found by the recall harness: each case mirrors a real advisory fix (GHSA). */
+describe("recall: advisory-derived rules", () => {
+  const rulesFor = async (files: Record<string, string>) =>
+    (await insecureCodeScanner.run(makeContext({ files }))).map((i) => `${i.id.slice(0, i.id.length - i.location.length - 1)}@${i.location}`)
+
+  it("flags shell=True on Popen imported by name", async () => {
+    const r = await rulesFor({ "app/vector.py": "from subprocess import Popen, PIPE\ndef run(cmd, f):\n    Popen(cmd + f, stdout=PIPE, shell=True)\n" })
+    expect(r).toContain("insecure-py-shell-true@app/vector.py:3")
+  })
+  it("keeps a literal command with shell=True quiet", async () => {
+    const r = await rulesFor({ "app/v.py": "from subprocess import Popen\nPopen(\"ogr2ogr --version\", shell=True)\n" })
+    expect(r.filter((x) => x.includes("shell-true"))).toEqual([])
+  })
+
+  it("flags a Java XML factory only when the file never hardens it", async () => {
+    const open = "import javax.xml.parsers.*;\nclass X { Doc p(InputStream in) throws Exception {\n  DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();\n  return f.newDocumentBuilder().parse(in);\n} }\n"
+    const hardened = open.replace("newInstance();", "newInstance();\n  f.setFeature(\"http://apache.org/xml/features/disallow-doctype-decl\", true);")
+    expect(await rulesFor({ "src/main/java/X.java": open })).toContain("insecure-java-xxe@src/main/java/X.java:3")
+    expect((await rulesFor({ "src/main/java/X.java": hardened })).filter((x) => x.includes("xxe"))).toEqual([])
+  })
+
+  it("flags trust-all TLS in Java and Go", async () => {
+    const java = "class T implements X509TrustManager {\n  public void checkServerTrusted(X509Certificate[] c, String a) {}\n}\n"
+    expect(await rulesFor({ "src/T.java": java })).toContain("insecure-tls-verification-off@src/T.java:2")
+    expect(await rulesFor({ "net/c.go": "package net\nvar cfg = &tls.Config{InsecureSkipVerify: true}\n" })).toContain("insecure-tls-verification-off@net/c.go:2")
+  })
+
+  it("flags math/rand secrets in Go but not crypto/rand", async () => {
+    const weak = "package auth\nimport (\n  \"math/rand\"\n)\nfunc t() { sessionToken := rand.Int63() ; _ = sessionToken }\n"
+    expect(await rulesFor({ "auth/t.go": weak })).toContain("insecure-random-for-secret@auth/t.go:5")
+    expect((await rulesFor({ "auth/t.go": weak.replace("math/rand", "crypto/rand") })).filter((x) => x.includes("random"))).toEqual([])
+  })
+
+  it("flags weak hashes for passwords in Go and Java, not for cache keys", async () => {
+    expect(await rulesFor({ "u/p.go": "package u\nfunc h(password string) []byte { s := md5.Sum([]byte(password)); return s[:] }\n" })).toContain("insecure-weak-hash@u/p.go:2")
+    expect((await rulesFor({ "c/k.go": "package c\nfunc key(name string) string { m := md5.New(); m.Write([]byte(name)); return hex(m) }\n" })).filter((x) => x.includes("weak-hash"))).toEqual([])
+    expect(await rulesFor({ "src/P.java": "class P { byte[] h(String password) throws Exception {\n  return MessageDigest.getInstance(\"MD5\").digest(password.getBytes()); } }\n" })).toContain("insecure-weak-hash@src/P.java:2")
+  })
+})
