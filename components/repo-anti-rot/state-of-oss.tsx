@@ -1038,6 +1038,63 @@ export function StateOfOpenSource() {
         </div>
       </Section>
 
+      {(() => {
+        type Cell = { n: number; hit: number; recall: number } | null
+        type Row = { fast: Cell; deep: Cell; semgrep: Cell; bandit: Cell; language?: string; class?: string }
+        const r = (stats as { recall?: { cases: number; overall: Row; byLanguage: Row[]; byClass: Row[] } }).recall
+        if (!r) return null
+        const ru = l === "ru"
+        const cell = (c: Cell) => (c ? <span>{pct(c.recall)}<span className="text-xs text-muted-foreground"> · {c.hit}/{c.n}</span></span> : <span className="text-xs text-muted-foreground">—</span>)
+        const head = (first: string) => (
+          <tr>
+            <th className="pb-2 font-medium">{first}</th>
+            <th className="pb-2 pl-5 text-right font-medium">{ru ? "Обычный скан" : "Regular scan"}</th>
+            <th className="pb-2 pl-5 text-right font-medium">{ru ? "Глубокий PHP" : "Deep PHP"}</th>
+            <th className="pb-2 pl-5 text-right font-medium">Semgrep</th>
+            <th className="pb-2 pl-5 text-right font-medium">Bandit</th>
+          </tr>
+        )
+        const body = (rows: Row[], key: "language" | "class") => rows.map((row) => (
+          <tr key={row[key]} className="border-t border-border">
+            <td className="py-2 pr-3 font-medium">{row[key]}</td>
+            {(["fast", "deep", "semgrep", "bandit"] as const).map((e) => (
+              <td key={e} className="py-2 pl-5 text-right font-mono tabular-nums whitespace-nowrap">{cell(row[e])}</td>
+            ))}
+          </tr>
+        ))
+        return (
+          <Section
+            title={ru ? "Полнота: сколько известных уязвимостей находит сканер" : "Recall: how many known vulnerabilities a scanner finds"}
+            note={ru
+              ? `${r.cases.toLocaleString(l)} уязвимостей из GitHub Security Advisories с одним исправляющим коммитом: сканируется код до исправления и после, находка засчитывается, если исправление её убрало. Глубокий анализ считается только на PHP, Bandit — только на Python. Большая часть реальных уязвимостей — ошибки логики (контроль доступа, CSRF), которые не видит ни один сканер по шаблонам.`
+              : `${r.cases.toLocaleString(l)} GitHub Security Advisories with one fix commit: the code before and after the fix is scanned, and a finding counts when the fix removed it. Deep analysis is counted on PHP only, Bandit on Python only. Most real vulnerabilities are logic flaws (access control, CSRF) that no pattern scanner sees.`}
+          >
+            <div className="space-y-6">
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[620px] text-sm">
+                  <thead className="text-left text-xs text-muted-foreground">{head(ru ? "Язык" : "Language")}</thead>
+                  <tbody>
+                    {body(r.byLanguage, "language")}
+                    <tr className="border-t-2 border-border font-medium">
+                      <td className="py-2 pr-3">{ru ? "Всего" : "All"}</td>
+                      {(["fast", "deep", "semgrep", "bandit"] as const).map((e) => (
+                        <td key={e} className="py-2 pl-5 text-right font-mono tabular-nums whitespace-nowrap">{cell(r.overall[e])}</td>
+                      ))}
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[620px] text-sm">
+                  <thead className="text-left text-xs text-muted-foreground">{head(ru ? "Тип уязвимости" : "Vulnerability class")}</thead>
+                  <tbody>{body(r.byClass, "class")}</tbody>
+                </table>
+              </div>
+            </div>
+          </Section>
+        )
+      })()}
+
       <Section title={t.tracksT} note={t.tracksNote}>
         <div className="overflow-x-auto">
           <table className="w-full min-w-[620px] text-sm">

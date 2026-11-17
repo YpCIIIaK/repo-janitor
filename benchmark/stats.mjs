@@ -631,6 +631,49 @@ for (const r of repos) for (const i of r.issues) if (i.severity in json.severity
   }
 }
 
+// --- recall: known vulnerabilities each engine finds (benchmark/recall.mjs) -----
+// Read from the private journal; only per-language / per-class counts leave it.
+{
+  const journal = join(here, "recall-advisories.jsonl")
+  if (existsSync(journal)) {
+    const byKey = new Map()
+    for (const line of readFileSync(journal, "utf8").split("\n").filter(Boolean)) {
+      try { const r = JSON.parse(line); byKey.set(`${r.id}|${r.engine}`, r) } catch { /* torn line */ }
+    }
+    // Each engine is judged only on the languages it reads.
+    const reads = { deep: ["php"], bandit: ["python"] }
+    const rows = [...byKey.values()].filter((r) => ["hit", "near", "miss"].includes(r.verdict) && (!reads[r.engine] || reads[r.engine].includes(r.language)))
+    const engines = ["fast", "deep", "semgrep", "bandit"]
+    const tally = (keyOf) => {
+      const m = new Map()
+      for (const r of rows) {
+        const k = keyOf(r)
+        if (!m.has(k)) m.set(k, Object.fromEntries(engines.map((e) => [e, { n: 0, hit: 0 }])))
+        const e = m.get(k)[r.engine]
+        if (!e) continue
+        e.n++
+        if (r.verdict === "hit") e.hit++
+      }
+      return m
+    }
+    const share = (e) => (e && e.n ? { n: e.n, hit: e.hit, recall: Number((e.hit / e.n).toFixed(3)) } : null)
+    const out = (m, label) =>
+      [...m].map(([k, v]) => ({ [label]: k, ...Object.fromEntries(engines.map((e) => [e, share(v[e])])) }))
+        .filter((x) => (x.fast?.n ?? 0) >= 10)
+        .sort((a, b) => (b.fast?.n ?? 0) - (a.fast?.n ?? 0))
+    const cases = new Set(rows.map((r) => r.id)).size
+    // Deep analysis is PHP-only and Bandit Python-only: their totals are over the cases they can read.
+    const all = tally(() => "all").get("all")
+    json.recall = {
+      source: "GitHub Security Advisories with one fix commit: the commit before the fix vs the fix",
+      cases,
+      overall: Object.fromEntries(engines.map((e) => [e, share(all?.[e])])),
+      byLanguage: out(tally((r) => r.language), "language"),
+      byClass: out(tally((r) => r.class), "class"),
+    }
+  }
+}
+
 // --- tracks: per-slice size, health, measured precision and label coverage --
 {
   const { TRACKS, tracksOf } = await import("./tracks.mjs")
