@@ -38,3 +38,30 @@ Labels are judgement calls; disagreeing with one is a reason to change it in
 `labels/<repo>.json`, with the reason in the commit message.
 
 "Lost TP" counts confirmed findings that no longer appear — a recall regression.
+
+## JavaScript ReDoS acceptance
+
+Report the static recall measured on pinned advisory pairs. There is no target
+of complete coverage. Count a hit only when a complexity finding meets the
+existing recall criteria. Track two kinds of unresolved evidence separately:
+`js-dynamic-regexp` when the pattern or flags cannot be resolved statically and
+`js-regexp-analysis-budget` when the static detector reaches its step or time
+limit. These low-confidence findings identify code for follow-up review and do
+not contribute to confirmed recall. A case without either finding is a
+coverage gap. Keep it in the denominator and record the limitation when known.
+
+### Advisory review (2026-11-20)
+
+The static sample contains seven JavaScript cases explicitly tagged CWE-1333.
+Two qualify as hits. The five remaining cases are deferred:
+
+| Advisory | Static result | Follow-up |
+| --- | --- | --- |
+| GHSA-3ppc-4f35-3m26 (minimatch) | miss | Dynamic pattern findings in the changed glob compiler files. Resolving their runtime patterns is outside this scanner's current analysis. |
+| GHSA-6g33-8w2q-4hxv (robots-txt-guard) | miss | Dynamic pattern findings in the changed pattern generator. |
+| GHSA-c2c7-rcm5-vvqj (picomatch) | near | Dynamic pattern finding in the changed glob parser. |
+| GHSA-fp36-299x-pwmw (devcert) | miss | The local validation pattern reached the static analysis budget in the scan. The fix replaces local validation with a dependency. |
+| GHSA-xmc8-cjfr-phx3 (Highcharts) | near | Findings in the changed renderer do not isolate the expressions removed by the fix. A dynamic pattern finding in the same file does not establish the cause. |
+
+These results describe the current analyzer and budget. No claim is made that
+the remaining cases cannot be detected by another static method.

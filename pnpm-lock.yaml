@@ -260,15 +260,15 @@ importers:
       '@babel/parser':
         specifier: ^7.29.7
         version: 7.29.8
-      '@eslint-community/regexpp':
-        specifier: 4.12.2
-        version: 4.12.2
       '@yarnpkg/parsers':
         specifier: ^3.1.0
         version: 3.1.0
       php-parser:
         specifier: 3.7.0
         version: 3.7.0
+      redos-detector:
+        specifier: 6.1.4
+        version: 6.1.4
       scslre:
         specifier: 0.3.0
         version: 0.3.0
@@ -3405,6 +3405,11 @@ packages:
       react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
       react-is: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
+  redos-detector@6.1.4:
+    resolution: {integrity: sha512-lPlka1rEH6kK42gtgokvvxMmpAvyc28DcRjQbGxeP5RJsJWgAduBOdGedVCDPdSyCr4ay/JDxq3nGYsJZyt8tA==}
+    engines: {node: '>=16.0.0'}
+    hasBin: true
+
   redux-thunk@3.1.0:
     resolution: {integrity: sha512-NW2r5T6ksUKXCabzhL9z+h206HQw/NJkcLm1GPImRQ8IzfXwRGqjVhKJGauHirT0DAuyy6hjdnMZaRoAcy0Klw==}
     peerDependencies:
@@ -3428,6 +3433,10 @@ packages:
   regexp.prototype.flags@1.5.4:
     resolution: {integrity: sha512-dYqgNSZbDwkaJ2ceRd9ojCGjBq+mOm9LmtXnAnEGyHhN/5R7iDW2TRw3h+o/jCFxus3P2LfWIIiwowAjANm7IA==}
     engines: {node: '>= 0.4'}
+
+  regjsparser@0.13.0:
+    resolution: {integrity: sha512-NZQZdC5wOE/H3UT28fVGL+ikOZcEzfMGk/c3iN9UGxzWHMa1op7274oyiUVrAG4B2EuFhus8SvkaYnhvW92p9Q==}
+    hasBin: true
 
   reselect@5.2.0:
     resolution: {integrity: sha512-AgZ3UOZm3YndfrJ4OYjgrT7bmCm/1iqkjvEfH/oYjzh6PD2qw4QuT3jjnXIrpdt4MTpMXclMT3lXbmRY+XRakw==}
@@ -7082,6 +7091,10 @@ snapshots:
       - '@types/react'
       - redux
 
+  redos-detector@6.1.4:
+    dependencies:
+      regjsparser: 0.13.0
+
   redux-thunk@3.1.0(redux@5.0.1):
     dependencies:
       redux: 5.0.1
@@ -7116,6 +7129,10 @@ snapshots:
       get-proto: 1.0.1
       gopd: 1.2.0
       set-function-name: 2.0.2
+
+  regjsparser@0.13.0:
+    dependencies:
+      jsesc: 3.1.0
 
   reselect@5.2.0: {}
 

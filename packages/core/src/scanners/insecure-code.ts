@@ -4,7 +4,7 @@ import { scanRustTlsSource } from "./insecure-rust"
 import { scanKotlinSource } from "./insecure-kotlin"
 import { scanPhpSecurity } from "./php-security"
 import { scanSwiftSource } from "./insecure-swift"
-import { jsRiskRule, streamedKeyWrite, streamedKeyWrites } from "./insecure-js-risk"
+import { scanJsRisk } from "./insecure-js-risk"
 import type { Scanner, ScanContext } from "../scanner"
 import type { Issue, Severity } from "../schema"
 import { parseFile, walk, type Node } from "../ast"
@@ -1009,16 +1009,8 @@ export function scanSource(content: string, lang: Lang): CodeHit[] {
       }
     }
     if (tree) {
-      const addJsHit = (node: Node, rule: CodeHit["rule"], tainted?: boolean) => {
-        const line = (node.loc as { start?: { line?: number } } | undefined)?.start?.line
-        if (line && typeof node.start === "number" && typeof node.end === "number") {
-          jsHits.push({ rule, line, evidence: content.slice(node.start, Math.min(node.end, node.start + 160)), tainted })
-        }
-      }
+      jsHits.push(...scanJsRisk(tree, content, TAINT_RE.js, TAINT_WINDOW))
       walk(tree, (node) => {
-        const rule = jsRiskRule(node)
-        if (rule) addJsHit(node, rule)
-        for (const write of streamedKeyWrites(node)) addJsHit(write, streamedKeyWrite, false)
         if (["StringLiteral", "RegExpLiteral", "TemplateElement"].includes(node.type ?? "")) record(node)
         // Feature probes and literal functions do not execute external input.
         // Keep dynamic code generation visible; this is not taint analysis.

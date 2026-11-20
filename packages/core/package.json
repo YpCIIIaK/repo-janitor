@@ -16,11 +16,11 @@
   },
   "dependencies": {
     "@babel/parser": "^7.29.7",
-    "@eslint-community/regexpp": "4.12.2",
     "@yarnpkg/parsers": "^3.1.0",
-    "zod": "^4.6.7",
     "php-parser": "3.7.0",
-    "scslre": "0.3.0"
+    "redos-detector": "6.1.4",
+    "scslre": "0.3.0",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "tsup": "^8.0.0",
