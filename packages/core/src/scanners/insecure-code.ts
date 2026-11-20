@@ -4,6 +4,7 @@ import { scanRustTlsSource } from "./insecure-rust"
 import { scanKotlinSource } from "./insecure-kotlin"
 import { scanPhpSecurity } from "./php-security"
 import { scanSwiftSource } from "./insecure-swift"
+import { jsRiskRule, streamedKeyWrite, streamedKeyWrites } from "./insecure-js-risk"
 import type { Scanner, ScanContext } from "../scanner"
 import type { Issue, Severity } from "../schema"
 import { parseFile, walk, type Node } from "../ast"
@@ -998,6 +999,7 @@ export function scanSource(content: string, lang: Lang): CodeHit[] {
   // Parse whole-file text boundaries: line-local quoting cannot distinguish a
   // multiline documentation string or block comment from executable code.
   const textRanges: [number, number][] = []
+  const jsHits: CodeHit[] = []
   const staticFunctionCalls = new Set<number>()
   if (lang === "js") {
     const tree = parseFile(content, "source.tsx", { comments: true })
@@ -1007,7 +1009,16 @@ export function scanSource(content: string, lang: Lang): CodeHit[] {
       }
     }
     if (tree) {
+      const addJsHit = (node: Node, rule: CodeHit["rule"], tainted?: boolean) => {
+        const line = (node.loc as { start?: { line?: number } } | undefined)?.start?.line
+        if (line && typeof node.start === "number" && typeof node.end === "number") {
+          jsHits.push({ rule, line, evidence: content.slice(node.start, Math.min(node.end, node.start + 160)), tainted })
+        }
+      }
       walk(tree, (node) => {
+        const rule = jsRiskRule(node)
+        if (rule) addJsHit(node, rule)
+        for (const write of streamedKeyWrites(node)) addJsHit(write, streamedKeyWrite, false)
         if (["StringLiteral", "RegExpLiteral", "TemplateElement"].includes(node.type ?? "")) record(node)
         // Feature probes and literal functions do not execute external input.
         // Keep dynamic code generation visible; this is not taint analysis.
@@ -1084,6 +1095,12 @@ export function scanSource(content: string, lang: Lang): CodeHit[] {
 
   if (lang === "php") for (const hit of scanPhpSecurity(content)) {
     if (!byLine.has(hit.line)) byLine.set(hit.line, hit)
+  }
+  const sourceLines = jsHits.length ? content.split("\n") : []
+  for (const hit of jsHits) {
+    if (!byLine.has(hit.line) && !/\b(?:nosemgrep|NOSONAR)\b/.test(sourceLines[hit.line - 1] ?? "")) {
+      byLine.set(hit.line, hit)
+    }
   }
   return [...byLine.values()].sort((a, b) => a.line - b.line)
 }

@@ -19,6 +19,12 @@ test("hit: the fix removes a finding of the case's class in a changed file", () 
   assert.equal(judge(c, [f("insecure-sql-interpolated", "a.php")], [], ["a.php"]).verdict, "hit")
 })
 
+test("a generic scanner id does not hide the class in a finding id", () => {
+  const finding = { rule: "insecure-code", id: "insecure-js-redos-lib/a.js:3", file: "lib/a.js", line: 3 }
+  assert.equal(judge({ class: "redos" }, [finding], [], ["lib/a.js"]).verdict, "hit")
+  assert.equal(judge({ class: "redos" }, [finding], [finding], ["lib/a.js"]).verdict, "near")
+})
+
 test("near: flagged in both versions; miss: nothing of that class in changed files", () => {
   const c = { class: "sqli" }
   const both = [f("insecure-sql-interpolated", "a.php")]
@@ -55,6 +61,8 @@ test("CWE-reporting engines and advisories map through CWE ids", async () => {
   const { sourceFiles } = await import("./recall.mjs")
   assert.equal(classOf("cwe-89"), "sqli")
   assert.equal(classOf("cwe-1321"), "prototype-pollution")
+  assert.equal(classOf("cwe-1333"), "redos")
+  assert.equal(classOf("cwe-400"), null)
   assert.equal(classOf("cwe-9999"), null)
   assert.deepEqual(sourceFiles(["lib/a.js", "test/a.js", "a.test.ts", "README.md", "x_test.go"], "javascript"), ["lib/a.js"])
 })
@@ -68,6 +76,8 @@ test("advisories: one fix commit and a mapped CWE make a case; picks are stable 
   assert.equal(c.language, "python")
   assert.equal(caseOf(adv("GHSA-2", "CWE-89", [fix, fix.replace(/a+$/, "b".repeat(40))]), "PyPI"), null)
   assert.equal(caseOf(adv("GHSA-3", "CWE-1", [fix]), "PyPI"), null)
+  assert.equal(caseOf(adv("GHSA-5", "CWE-400", [fix]), "npm"), null)
+  assert.equal(caseOf(adv("GHSA-6", "CWE-1333", [fix]), "npm").class, "redos")
   const twins = [c, { ...c, id: "GHSA-4" }]
   assert.equal(pick(twins, 5, "s").length, 1)
   assert.deepEqual(pick([c], 5, "s"), pick([c], 5, "s"))

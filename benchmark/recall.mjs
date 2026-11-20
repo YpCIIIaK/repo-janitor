@@ -40,7 +40,7 @@ import { inShard } from "./shard.mjs"
 
 const here = dirname(fileURLToPath(import.meta.url))
 const root = resolve(here, "..")
-const cacheDir = join(here, ".recall-cache")
+const cacheDir = resolve(process.env.BENCH_RECALL_CACHE_DIR || join(here, ".recall-cache"))
 
 /** Vulnerability classes, keyed to the rule ids that report them. */
 export const CLASSES = {
@@ -65,7 +65,7 @@ export const CLASSES = {
   "data-exposure": /exposure|sensitive-file|debug-endpoint/,
   misconfig: /misconfig|cors|debug-mode/,
   "client-logic": /client-logic/,
-  "prototype-pollution": /prototype-pollution/,
+  "prototype-pollution": /prototype-pollution|js-request-deep-merge/,
   redos: /redos|regex-dos/,
 }
 
@@ -88,7 +88,9 @@ export const CWE_CLASS = {
   434: "file-upload",
   287: "auth", 306: "auth", 307: "auth", 384: "auth", 613: "auth",
   1321: "prototype-pollution", 915: "prototype-pollution",
-  1333: "redos", 400: "redos",
+  // CWE-400 covers many unrelated resource exhaustion mechanisms. It cannot
+  // establish that a case involves a regular expression.
+  1333: "redos",
 }
 
 export function classOf(rule) {
@@ -110,10 +112,18 @@ const SECURITY_SCANNERS = "insecure-code,secrets,iac-security,dockerfile,workflo
 
 function fastEngine(dir) {
   const out = join(mkdtempSync(join(tmpdir(), "recall-")), "r.json")
-  spawnSync(process.execPath, [join(root, "packages/cli/dist/index.js"), "scan", dir, "-f", "json", "--all", "--only", SECURITY_SCANNERS, "-o", out], { stdio: "ignore" })
-  if (!existsSync(out)) throw new Error(`fast engine produced no report for ${dir}`)
-  const r = JSON.parse(readFileSync(out, "utf8"))
-  rmSync(dirname(out), { recursive: true, force: true })
+  let r
+  try {
+    const result = spawnSync(process.execPath, [join(root, "packages/cli/dist/index.js"), "scan", dir, "-f", "json", "--all", "--only", SECURITY_SCANNERS, "-o", out], { stdio: "ignore" })
+    if (result.error) throw result.error
+    if (result.status !== 0 || !existsSync(out)) throw new Error(`fast engine failed for ${dir}: ${result.signal ?? result.status}`)
+    r = JSON.parse(readFileSync(out, "utf8"))
+    if (r.diagnostics?.failedScanners?.length) {
+      throw new Error(`fast engine incomplete: ${r.diagnostics.failedScanners.join(", ")}`)
+    }
+  } finally {
+    rmSync(dirname(out), { recursive: true, force: true })
+  }
   return [...(r.issues ?? []), ...(r.lowConfidence ?? [])].map((i) => {
     const m = /^(.*?):(\d+)/.exec(i.location ?? "")
     return { rule: i.rule ?? "", id: i.id, file: m ? m[1] : (i.location ?? ""), line: m ? +m[2] : 0 }
@@ -169,9 +179,10 @@ export function sourceFiles(files, language) {
 
 // --- cases --------------------------------------------------------------------
 
-/** Rule id of a finding: explicit `rule`, else the id prefix before the location. */
+/** Reports can carry a scanner id rather than a specific security rule. */
 function ruleOf(f) {
-  if (f.rule) return f.rule
+  if (f.rule && classOf(f.rule)) return f.rule
+  if (!f.id) return f.rule ?? ""
   const loc = f.file ? f.id.indexOf(`-${f.file}`) : -1
   return loc > 0 ? f.id.slice(0, loc) : f.id
 }
@@ -183,10 +194,15 @@ function gitTree(url, sha) {
   if (!existsSync(join(d, ".git"))) {
     rmSync(d, { recursive: true, force: true })
     mkdirSync(d, { recursive: true })
-    sh("git", ["-C", d, "init", "-q"])
-    // Big monorepos would stall a run; a case that cannot be fetched in 10 minutes is an error.
-    sh("git", ["-C", d, "fetch", "-q", "--depth", "1", url, sha], { timeout: 600_000 })
-    sh("git", ["-C", d, "checkout", "-q", "FETCH_HEAD"])
+    try {
+      sh("git", ["-C", d, "init", "-q"])
+      // A failed checkout must never become a cached tree for a later case.
+      sh("git", ["-C", d, "fetch", "-q", "--depth", "1", url, sha], { timeout: 600_000 })
+      sh("git", ["-C", d, "checkout", "-q", "FETCH_HEAD"])
+    } catch (error) {
+      rmSync(d, { recursive: true, force: true })
+      throw error
+    }
   }
   usedTrees.add(d)
   return d
@@ -219,6 +235,8 @@ function scan(engine, dir, files) {
 /** Files that differ between the two versions (relative paths). */
 function changedFiles(a, b) {
   const r = spawnSync("git", ["diff", "--no-index", "--name-only", "--", a, b], { encoding: "utf8", maxBuffer: 1 << 26 })
+  if (r.error) throw r.error
+  if (r.status !== 0 && r.status !== 1) throw new Error(`git diff failed: ${r.stderr.trim()}`)
   const rel = new Set()
   for (const line of r.stdout.split("\n").filter(Boolean)) {
     for (const base of [a, b]) {
