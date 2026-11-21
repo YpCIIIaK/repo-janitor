@@ -53,6 +53,12 @@ const INSECURE: Record<string, string> = {
   "go-template-html": "Value marked as trusted HTML in a Go template",
   "dotnet-deserialization": "Unsafe .NET deserialiser",
   ssrf: "Server fetches a URL from a variable (SSRF)",
+  "py-xxe": "Python XML parsed without entity protection",
+  "py-unsafe-deserialization": "torch.load / shelve / dill on a file",
+  "py-random-for-secret": "Security value from Python's random module",
+  "sql-builder-interpolated": "Go query builder handed a formatted string",
+  "go-archive-path-traversal": "Archive entry name used as a path (zip slip)",
+  "java-code-injection": "Expression engine evaluates a computed string",
 }
 
 const WORKFLOW: Record<string, string> = {

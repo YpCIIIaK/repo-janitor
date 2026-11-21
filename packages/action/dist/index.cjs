@@ -36050,7 +36050,7 @@ var require_src4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-2E3JEFYH.js
+// ../cli/dist/chunk-44CGSUZA.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -59984,7 +59984,7 @@ function date4(params) {
   return _coercedDate(ZodDate, params);
 }
 
-// ../cli/dist/chunk-2E3JEFYH.js
+// ../cli/dist/chunk-44CGSUZA.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -93468,7 +93468,13 @@ var INSECURE = {
   "ruby-html-safe": "Request input marked html_safe",
   "go-template-html": "Value marked as trusted HTML in a Go template",
   "dotnet-deserialization": "Unsafe .NET deserialiser",
-  ssrf: "Server fetches a URL from a variable (SSRF)"
+  ssrf: "Server fetches a URL from a variable (SSRF)",
+  "py-xxe": "Python XML parsed without entity protection",
+  "py-unsafe-deserialization": "torch.load / shelve / dill on a file",
+  "py-random-for-secret": "Security value from Python's random module",
+  "sql-builder-interpolated": "Go query builder handed a formatted string",
+  "go-archive-path-traversal": "Archive entry name used as a path (zip slip)",
+  "java-code-injection": "Expression engine evaluates a computed string"
 };
 var WORKFLOW = {
   "action-tag-first-party": "First-party action pinned to a mutable tag",
@@ -105367,7 +105373,13 @@ var INSECURE2 = {
   "ruby-html-safe": "Request input marked html_safe",
   "go-template-html": "Value marked as trusted HTML in a Go template",
   "dotnet-deserialization": "Unsafe .NET deserialiser",
-  ssrf: "Server fetches a URL from a variable (SSRF)"
+  ssrf: "Server fetches a URL from a variable (SSRF)",
+  "py-xxe": "Python XML parsed without entity protection",
+  "py-unsafe-deserialization": "torch.load / shelve / dill on a file",
+  "py-random-for-secret": "Security value from Python's random module",
+  "sql-builder-interpolated": "Go query builder handed a formatted string",
+  "go-archive-path-traversal": "Archive entry name used as a path (zip slip)",
+  "java-code-injection": "Expression engine evaluates a computed string"
 };
 var WORKFLOW2 = {
   "action-tag-first-party": "First-party action pinned to a mutable tag",
