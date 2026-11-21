@@ -36050,7 +36050,7 @@ var require_src4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-XZQP2SEH.js
+// ../cli/dist/chunk-2E3JEFYH.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -59984,7 +59984,7 @@ function date4(params) {
   return _coercedDate(ZodDate, params);
 }
 
-// ../cli/dist/chunk-XZQP2SEH.js
+// ../cli/dist/chunk-2E3JEFYH.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -93662,10 +93662,18 @@ var MIN_LABELLED = 3;
 var MIN_LABELLED_HIGH = 5;
 var HIGH = 0.8;
 var LOW = 0.5;
+var PROVISIONAL_RULES = /* @__PURE__ */ new Set([
+  "insecure-py-xxe",
+  "insecure-py-unsafe-deserialization",
+  "insecure-py-random-for-secret",
+  "insecure-sql-builder-interpolated",
+  "insecure-go-archive-path-traversal",
+  "insecure-java-code-injection"
+]);
 function confidenceOf(rule) {
   const p2 = RULE_PRECISION[rule];
   const n = p2 ? p2.tp + p2.fp : 0;
-  if (!p2 || n < MIN_LABELLED) return "medium";
+  if (!p2 || n < MIN_LABELLED) return PROVISIONAL_RULES.has(rule) ? "low" : "medium";
   const precision = (p2.tp + 1) / (n + 2);
   if (precision >= HIGH && n >= MIN_LABELLED_HIGH) return "high";
   if (precision < LOW) return "low";
@@ -99061,6 +99069,99 @@ var RULES2 = [
     title: "Security value generated with java.util.Random",
     detail: "`java.util.Random` and `Math.random` are predictable. Use `SecureRandom` for tokens, salts and keys."
   },
+  // ---- Sink rules from the harvested sink DB (Nov 2026) ----------------------
+  // Shapes taken from the vulnerable lines of GitHub-advisory fixes the fast engine
+  // missed (benchmark/sinks-gap.mjs). Provisional: confidence stays low until labelled.
+  {
+    id: "py-xxe",
+    lang: "py",
+    // lxml's XMLParser resolves entities unless told not to.
+    re: new RegExp("(?<![\\w.])(?:(?:lxml\\.)?etree\\.|ET\\.)?XMLParser\\s*\\((?![^)]*resolve_entities\\s*=\\s*False)", "g"),
+    severity: "warning",
+    title: "lxml parser resolves XML entities",
+    detail: "An lxml `XMLParser` built without `resolve_entities=False` expands entities in the document, so a crafted file can read local files or reach internal hosts (XXE). Pass `resolve_entities=False, no_network=True`, or parse untrusted XML with `defusedxml`.",
+    check: (_m, content) => /\blxml\b/.test(content)
+  },
+  {
+    id: "py-xxe",
+    lang: "py",
+    // ElementTree / minidom / sax / lxml parse calls, by module alias or by an imported bare name.
+    re: new RegExp("(?<![\\w.])(?:(\\w+)\\.)?(parse|fromstring|parseString|iterparse|XML)\\s*\\(((?:[^()]|\\((?:[^()]|\\([^()]*\\))*\\))*)\\)", "g"),
+    severity: "warning",
+    title: "XML parsed without entity protection",
+    detail: "Python's XML parsers (lxml, ElementTree, minidom, sax) expand entities and, depending on the version, resolve external ones, so an untrusted document can exhaust memory or read files. Parse it with `defusedxml` (`defusedxml.ElementTree.fromstring`), or give lxml a parser with `resolve_entities=False`.",
+    check: (m2, content) => pyXmlCallUnsafe(m2[1], m2[2], m2[3], content)
+  },
+  {
+    id: "py-unsafe-deserialization",
+    lang: "py",
+    re: /\btorch\.load\s*\(((?:[^()]|\((?:[^()]|\([^()]*\))*\))*)\)|\b(?:shelve\.open|dill\.loads?|jsonpickle\.decode|marshal\.loads?|cloudpickle\.loads?|pickle\.Unpickler|pd\.read_pickle|pandas\.read_pickle)\s*\(/g,
+    severity: "warning",
+    title: "Deserialiser that runs code from the data",
+    detail: "`torch.load` without `weights_only=True`, `shelve`, `dill`, `jsonpickle`, `marshal` and `read_pickle` all unpickle, which executes whatever the file says. Load only files you wrote; for models use `torch.load(\u2026, weights_only=True)` or safetensors, for data use JSON.",
+    check: (m2) => m2[1] === void 0 || !/\bweights_only\s*=\s*True\b/.test(m2[1])
+  },
+  {
+    id: "py-random-for-secret",
+    lang: "py",
+    re: new RegExp("(?<![\\w.])random\\.(?:randint|randrange|choice|choices|sample|random|getrandbits|shuffle)\\s*\\(", "g"),
+    severity: "warning",
+    title: "Security value generated with the random module",
+    detail: "`random` is a Mersenne Twister: its output can be predicted from earlier values. Tokens, passwords, OTPs and nonces need `secrets` (`secrets.token_urlsafe`, `secrets.choice`).",
+    check: (m2, content) => {
+      var _a22;
+      return pyRandomForSecret(content, (_a22 = m2.index) != null ? _a22 : 0);
+    }
+  },
+  {
+    id: "sql-builder-interpolated",
+    lang: "go",
+    // gorm / xorm / sqlbuilder / database/sql methods handed a formatted or concatenated string.
+    re: /\.(?:Where|Or|Not|Having|Order|Group|Joins|Select|Raw|Exec|Query|QueryRow|QueryContext|ExecContext|Table|Distinct)\s*\(\s*(?:ctx\s*,\s*)?(?:fmt\.Sprintf\s*\(|"[^"\n]*"\s*\+\s*[A-Za-z_]|[A-Za-z_][\w.]*\s*\+\s*")/g,
+    severity: "warning",
+    title: "Query builder handed a formatted string",
+    detail: 'The SQL fragment passed to the query builder is built with Sprintf or `+`, so a value in it is parsed as SQL. Use placeholders (`Where("name = ?", name)`) and map sort columns through an allowlist.',
+    check: (_m, content) => GO_SQL_IMPORT.test(content)
+  },
+  {
+    id: "sql-builder-interpolated",
+    lang: "go",
+    // A string quoted into SQL by hand: `fmt.Sprintf("… = '%s'", v)` in a file that talks to a database.
+    re: /\bfmt\.Sprintf\s*\(\s*["`][^"`\n]*(?:'%[sv]'|\b(?:WHERE|SET|VALUES|LIKE|IN)\b[^"`\n]*%[sv])/gi,
+    severity: "warning",
+    title: "SQL text built with Sprintf",
+    detail: 'A value is formatted into SQL text, which is what SQL injection is. Pass it as a query argument (`db.Query("\u2026 WHERE id = $1", id)`).',
+    check: (_m, content) => GO_SQL_IMPORT.test(content)
+  },
+  {
+    id: "go-archive-path-traversal",
+    lang: "go",
+    // Zip slip: an archive entry's own name joined onto the extraction directory.
+    re: /\b(?:filepath|path)\.Join\s*\([^()\n]*\b\w+\.(?:Name|FileHeader\.Name)\b(?!\s*\()/g,
+    severity: "warning",
+    title: "Archive entry name used as a path",
+    detail: "Entry names in zip and tar archives are chosen by whoever made the archive; `../../etc/x` escapes the target directory (zip slip). Reject names that are not `filepath.IsLocal`, or check the joined path still has the directory plus a separator as its prefix.",
+    check: (_m, content) => /"archive\/(?:zip|tar)"/.test(content) && !/\bHasPrefix\s*\(|\bIsLocal\s*\(|\bfilepath\.Rel\s*\(|\bsecurejoin\b|\bOpenRoot\s*\(|\bSecureJoin\s*\(/.test(content)
+  },
+  {
+    id: "java-code-injection",
+    lang: "java",
+    // Expression and script engines handed a non-literal string.
+    re: /\.parseExpression\s*\(\s*(?!")[\w.]|\bOgnl\.(?:getValue|setValue|parseExpression)\s*\(\s*(?!")[\w.]|\bMVEL\.(?:eval|compileExpression|executeExpression)\s*\(\s*(?!")[\w.]|\bnew\s+GroovyShell\s*\([^)]*\)\s*\.\s*(?:evaluate|parse)\s*\(\s*(?!")|\bVelocity\.evaluate\s*\(|\.createExpression\s*\(\s*(?!")[\w.]|\bnew\s+Template\s*\([^;\n]*\bnew\s+StringReader\s*\(/g,
+    severity: "warning",
+    title: "Expression or template engine evaluates a computed string",
+    detail: "SpEL, OGNL, MVEL, JEXL, Groovy, Velocity and FreeMarker can call arbitrary Java methods. Evaluating a string that carries user input is remote code execution. Evaluate fixed expressions only, or use a restricted context (`SimpleEvaluationContext`, a sandboxed resolver).",
+    check: (_m, content) => /\bimport\s+(?:org\.springframework\.expression|ognl|org\.mvel2|org\.apache\.commons\.jexl\d?|groovy\.lang|org\.apache\.velocity|freemarker\.template)\b/.test(content) && !/\bSimpleEvaluationContext\b|\bSAFER_RESOLVER\b/.test(content)
+  },
+  {
+    id: "java-code-injection",
+    lang: "java",
+    re: /\b\w*[eE]ngine\s*\.\s*eval\s*\(\s*(?!")[\w.]/g,
+    severity: "warning",
+    title: "Script engine evaluates a computed string",
+    detail: "`ScriptEngine.eval` runs the string as a program with full access to the JVM. Evaluating anything derived from input is remote code execution.",
+    check: (_m, content) => /\bimport\s+javax\.script\b/.test(content)
+  },
   // ---- Weak hashes where they matter: password storage and home-made MACs ----
   // Measured on 350 corpus repos (Nov 2026): the generic weak-hash rule was right
   // 1 time in 21; these two, judged on what is hashed, 36 of 60.
@@ -99342,7 +99443,13 @@ var SKIP_IN_TEST = /* @__PURE__ */ new Set([
   "ruby-html-safe",
   "go-template-html",
   "dotnet-deserialization",
-  "ssrf"
+  "ssrf",
+  "py-xxe",
+  "py-unsafe-deserialization",
+  "py-random-for-secret",
+  "sql-builder-interpolated",
+  "go-archive-path-traversal",
+  "java-code-injection"
 ]);
 var PASSWORD_VALUE = /\b(?:password|passwd|passphrase|pwd|user_?pass)\w*\b|\$pass\b/i;
 var SECRET_VALUE = /\b\w*(?:secret|private_?key|api_?key|signing_?key|hmac_?key|encryption_?key)\w*\b/i;
@@ -99422,6 +99529,7 @@ function scanSource(content, lang) {
       if (/^\s*\*/.test(rawLine) || /``/.test(rawLine)) continue;
       if (/^\s*(?:>>>|\.\.\.)\s/.test(rawLine)) continue;
       if (!contextAllows(rule.id, content, lineStart)) continue;
+      if (rule.check && !rule.check(m2, content)) continue;
       if ((rule.id === "weak-password-hash" || rule.id === "weak-secret-mac") && !weakHashKindAllows(rule.id, content, idx, rawLine)) continue;
       const existing = byLine.get(line);
       const specific = (rule.id === "weak-password-hash" || rule.id === "weak-secret-mac") && (existing == null ? void 0 : existing.rule.id) === "weak-hash";
@@ -99437,6 +99545,65 @@ function scanSource(content, lang) {
     if (!byLine.has(hit.line)) byLine.set(hit.line, hit);
   }
   return [...byLine.values()].sort((a, b3) => a.line - b3.line);
+}
+var GO_SQL_IMPORT = /"(?:database\/sql|gorm\.io\/gorm|github\.com\/jinzhu\/gorm|xorm\.io\/xorm|github\.com\/go-xorm\/xorm|github\.com\/huandu\/go-sqlbuilder|github\.com\/jmoiron\/sqlx|github\.com\/jackc\/pgx[^"]*|github\.com\/gocql\/gocql|github\.com\/uptrace\/bun|github\.com\/Masterminds\/squirrel|github\.com\/doug-martin\/goqu[^"]*|github\.com\/go-pg\/pg[^"]*)"|\bsqldb\b/;
+var PY_XML_MODULE = /^(?:xml\.etree\.c?ElementTree|xml\.etree|lxml\.etree|lxml|xml\.dom\.minidom|xml\.dom\.pulldom|xml\.dom|xml\.sax|xml\.dom\.expatbuilder)$/;
+function pyXmlNames(content) {
+  var _a22, _b;
+  const modules = /* @__PURE__ */ new Set();
+  const functions = /* @__PURE__ */ new Set();
+  const defused = /* @__PURE__ */ new Set();
+  const names = (list) => list.replace(/[()\\]/g, " ").split(",").map((n) => n.trim()).filter(Boolean).map((n) => {
+    const [orig, alias] = n.split(/\s+as\s+/);
+    return { orig: orig.trim(), bound: (alias != null ? alias : orig).trim() };
+  });
+  for (const m2 of content.matchAll(/^[ \t]*import[ \t]+([\w.]+)(?:[ \t]+as[ \t]+(\w+))?/gm)) {
+    if (/^defusedxml\b/.test(m2[1])) {
+      defused.add((_a22 = m2[2]) != null ? _a22 : m2[1].split(".").pop());
+      continue;
+    }
+    if (PY_XML_MODULE.test(m2[1])) modules.add((_b = m2[2]) != null ? _b : m2[1].split(".").pop());
+  }
+  for (const m2 of content.matchAll(/^[ \t]*from[ \t]+([\w.]+)[ \t]+import[ \t]+(\([^)]*\)|[^\n#]+)/gm)) {
+    const from = m2[1];
+    for (const { orig, bound } of names(m2[2])) {
+      if (/^defusedxml\b/.test(from)) {
+        defused.add(bound);
+        continue;
+      }
+      if (PY_XML_MODULE.test(`${from}.${orig}`)) modules.add(bound);
+      else if (PY_XML_MODULE.test(from)) functions.add(bound);
+    }
+  }
+  for (const d2 of defused) {
+    modules.delete(d2);
+    functions.delete(d2);
+  }
+  return { modules, functions, defused };
+}
+function pyXmlCallUnsafe(alias, fn2, args, content) {
+  if (/parser/i.test(args) || /^\s*[rbuf]*["']/i.test(args) || !args.trim()) return false;
+  const { modules, functions } = pyXmlNames(content);
+  return alias ? modules.has(alias) : functions.has(fn2);
+}
+var PY_SECRET_NAME = /token|secret|passw|pwd|nonce|salt|otp|verifier|verification|reset_?code|api_?key|session_?(?:id|key)|csrf|one_?time|captcha|authenticator|activation/i;
+var PY_NOT_SECRET = /tokeni[sz]|tokens\b|token_ids|_tokens|num_token|max_token|token_count/i;
+function pyRandomForSecret(content, idx) {
+  if (!/^[ \t]*(?:import[ \t]+(?:[\w.]+[ \t]*,[ \t]*)*random\b|from[ \t]+random[ \t]+import)/m.test(content)) return false;
+  const lineStart = content.lastIndexOf("\n", idx - 1) + 1;
+  const line = content.slice(lineStart, idx);
+  const secret = (s) => PY_SECRET_NAME.test(s) && !PY_NOT_SECRET.test(s);
+  const lhs = line.match(/^\s*([\w.[\]'"]+)\s*\+?=(?!=)/);
+  if (lhs) return secret(lhs[1]);
+  if (!/^\s*(?:return\b|yield\b|[\w'"]*\.join\s*\(|str\s*\(|\w+\s*\()/.test(line) && line.trim()) return false;
+  const before = content.slice(Math.max(0, lineStart - 3e3), lineStart).split("\n").reverse();
+  for (const l3 of before.slice(0, 40)) {
+    const def = l3.match(/^\s*(?:async\s+)?def\s+(\w+)/);
+    if (def) return secret(def[1]);
+    const assign = l3.match(/^\s*([\w.[\]'"]+)\s*\+?=(?!=)/);
+    if (assign && /\(\s*$|\[\s*$/.test(l3)) return secret(assign[1]);
+  }
+  return false;
 }
 var SSRF_TAINT = /\b(?:req|request)\.(?:query|body|params|args|form|values|GET|POST)\b|\$_(?:GET|POST|REQUEST|COOKIE)\b|\bparams\s*\[|\brequest\.get_json\b|\bc\.(?:Query|Param|PostForm)\s*\(|\br\.(?:FormValue|URL\.Query)\b/;
 function phpLocalRequestValue(content, sinkOffset, sink) {
@@ -110464,6 +110631,96 @@ var RULES6 = [
     title: "Security value generated with java.util.Random",
     detail: "`java.util.Random` and `Math.random` are predictable. Use `SecureRandom` for tokens, salts and keys."
   },
+  // ---- Sink rules from the harvested sink DB (Nov 2026) ----------------------
+  // Shapes taken from the vulnerable lines of GitHub-advisory fixes the fast engine
+  // missed (benchmark/sinks-gap.mjs). Provisional: confidence stays low until labelled.
+  {
+    id: "py-xxe",
+    lang: "py",
+    // lxml's XMLParser resolves entities unless told not to.
+    re: /(?<![\w.])(?:(?:lxml\.)?etree\.|ET\.)?XMLParser\s*\((?![^)]*resolve_entities\s*=\s*False)/g,
+    severity: "warning",
+    title: "lxml parser resolves XML entities",
+    detail: "An lxml `XMLParser` built without `resolve_entities=False` expands entities in the document, so a crafted file can read local files or reach internal hosts (XXE). Pass `resolve_entities=False, no_network=True`, or parse untrusted XML with `defusedxml`.",
+    check: (_m, content) => /\blxml\b/.test(content)
+  },
+  {
+    id: "py-xxe",
+    lang: "py",
+    // ElementTree / minidom / sax / lxml parse calls, by module alias or by an imported bare name.
+    re: /(?<![\w.])(?:(\w+)\.)?(parse|fromstring|parseString|iterparse|XML)\s*\(((?:[^()]|\((?:[^()]|\([^()]*\))*\))*)\)/g,
+    severity: "warning",
+    title: "XML parsed without entity protection",
+    detail: "Python's XML parsers (lxml, ElementTree, minidom, sax) expand entities and, depending on the version, resolve external ones, so an untrusted document can exhaust memory or read files. Parse it with `defusedxml` (`defusedxml.ElementTree.fromstring`), or give lxml a parser with `resolve_entities=False`.",
+    check: (m2, content) => pyXmlCallUnsafe2(m2[1], m2[2], m2[3], content)
+  },
+  {
+    id: "py-unsafe-deserialization",
+    lang: "py",
+    re: /\btorch\.load\s*\(((?:[^()]|\((?:[^()]|\([^()]*\))*\))*)\)|\b(?:shelve\.open|dill\.loads?|jsonpickle\.decode|marshal\.loads?|cloudpickle\.loads?|pickle\.Unpickler|pd\.read_pickle|pandas\.read_pickle)\s*\(/g,
+    severity: "warning",
+    title: "Deserialiser that runs code from the data",
+    detail: "`torch.load` without `weights_only=True`, `shelve`, `dill`, `jsonpickle`, `marshal` and `read_pickle` all unpickle, which executes whatever the file says. Load only files you wrote; for models use `torch.load(\u2026, weights_only=True)` or safetensors, for data use JSON.",
+    check: (m2) => m2[1] === void 0 || !/\bweights_only\s*=\s*True\b/.test(m2[1])
+  },
+  {
+    id: "py-random-for-secret",
+    lang: "py",
+    re: /(?<![\w.])random\.(?:randint|randrange|choice|choices|sample|random|getrandbits|shuffle)\s*\(/g,
+    severity: "warning",
+    title: "Security value generated with the random module",
+    detail: "`random` is a Mersenne Twister: its output can be predicted from earlier values. Tokens, passwords, OTPs and nonces need `secrets` (`secrets.token_urlsafe`, `secrets.choice`).",
+    check: (m2, content) => pyRandomForSecret2(content, m2.index ?? 0)
+  },
+  {
+    id: "sql-builder-interpolated",
+    lang: "go",
+    // gorm / xorm / sqlbuilder / database/sql methods handed a formatted or concatenated string.
+    re: /\.(?:Where|Or|Not|Having|Order|Group|Joins|Select|Raw|Exec|Query|QueryRow|QueryContext|ExecContext|Table|Distinct)\s*\(\s*(?:ctx\s*,\s*)?(?:fmt\.Sprintf\s*\(|"[^"\n]*"\s*\+\s*[A-Za-z_]|[A-Za-z_][\w.]*\s*\+\s*")/g,
+    severity: "warning",
+    title: "Query builder handed a formatted string",
+    detail: 'The SQL fragment passed to the query builder is built with Sprintf or `+`, so a value in it is parsed as SQL. Use placeholders (`Where("name = ?", name)`) and map sort columns through an allowlist.',
+    check: (_m, content) => GO_SQL_IMPORT2.test(content)
+  },
+  {
+    id: "sql-builder-interpolated",
+    lang: "go",
+    // A string quoted into SQL by hand: `fmt.Sprintf("… = '%s'", v)` in a file that talks to a database.
+    re: /\bfmt\.Sprintf\s*\(\s*["`][^"`\n]*(?:'%[sv]'|\b(?:WHERE|SET|VALUES|LIKE|IN)\b[^"`\n]*%[sv])/gi,
+    severity: "warning",
+    title: "SQL text built with Sprintf",
+    detail: 'A value is formatted into SQL text, which is what SQL injection is. Pass it as a query argument (`db.Query("\u2026 WHERE id = $1", id)`).',
+    check: (_m, content) => GO_SQL_IMPORT2.test(content)
+  },
+  {
+    id: "go-archive-path-traversal",
+    lang: "go",
+    // Zip slip: an archive entry's own name joined onto the extraction directory.
+    re: /\b(?:filepath|path)\.Join\s*\([^()\n]*\b\w+\.(?:Name|FileHeader\.Name)\b(?!\s*\()/g,
+    severity: "warning",
+    title: "Archive entry name used as a path",
+    detail: "Entry names in zip and tar archives are chosen by whoever made the archive; `../../etc/x` escapes the target directory (zip slip). Reject names that are not `filepath.IsLocal`, or check the joined path still has the directory plus a separator as its prefix.",
+    check: (_m, content) => /"archive\/(?:zip|tar)"/.test(content) && !/\bHasPrefix\s*\(|\bIsLocal\s*\(|\bfilepath\.Rel\s*\(|\bsecurejoin\b|\bOpenRoot\s*\(|\bSecureJoin\s*\(/.test(content)
+  },
+  {
+    id: "java-code-injection",
+    lang: "java",
+    // Expression and script engines handed a non-literal string.
+    re: /\.parseExpression\s*\(\s*(?!")[\w.]|\bOgnl\.(?:getValue|setValue|parseExpression)\s*\(\s*(?!")[\w.]|\bMVEL\.(?:eval|compileExpression|executeExpression)\s*\(\s*(?!")[\w.]|\bnew\s+GroovyShell\s*\([^)]*\)\s*\.\s*(?:evaluate|parse)\s*\(\s*(?!")|\bVelocity\.evaluate\s*\(|\.createExpression\s*\(\s*(?!")[\w.]|\bnew\s+Template\s*\([^;\n]*\bnew\s+StringReader\s*\(/g,
+    severity: "warning",
+    title: "Expression or template engine evaluates a computed string",
+    detail: "SpEL, OGNL, MVEL, JEXL, Groovy, Velocity and FreeMarker can call arbitrary Java methods. Evaluating a string that carries user input is remote code execution. Evaluate fixed expressions only, or use a restricted context (`SimpleEvaluationContext`, a sandboxed resolver).",
+    check: (_m, content) => /\bimport\s+(?:org\.springframework\.expression|ognl|org\.mvel2|org\.apache\.commons\.jexl\d?|groovy\.lang|org\.apache\.velocity|freemarker\.template)\b/.test(content) && !/\bSimpleEvaluationContext\b|\bSAFER_RESOLVER\b/.test(content)
+  },
+  {
+    id: "java-code-injection",
+    lang: "java",
+    re: /\b\w*[eE]ngine\s*\.\s*eval\s*\(\s*(?!")[\w.]/g,
+    severity: "warning",
+    title: "Script engine evaluates a computed string",
+    detail: "`ScriptEngine.eval` runs the string as a program with full access to the JVM. Evaluating anything derived from input is remote code execution.",
+    check: (_m, content) => /\bimport\s+javax\.script\b/.test(content)
+  },
   // ---- Weak hashes where they matter: password storage and home-made MACs ----
   // Measured on 350 corpus repos (Nov 2026): the generic weak-hash rule was right
   // 1 time in 21; these two, judged on what is hashed, 36 of 60.
@@ -110744,7 +111001,13 @@ var SKIP_IN_TEST2 = /* @__PURE__ */ new Set([
   "ruby-html-safe",
   "go-template-html",
   "dotnet-deserialization",
-  "ssrf"
+  "ssrf",
+  "py-xxe",
+  "py-unsafe-deserialization",
+  "py-random-for-secret",
+  "sql-builder-interpolated",
+  "go-archive-path-traversal",
+  "java-code-injection"
 ]);
 var PASSWORD_VALUE2 = /\b(?:password|passwd|passphrase|pwd|user_?pass)\w*\b|\$pass\b/i;
 var SECRET_VALUE2 = /\b\w*(?:secret|private_?key|api_?key|signing_?key|hmac_?key|encryption_?key)\w*\b/i;
@@ -110822,6 +111085,7 @@ function scanSource2(content, lang) {
       if (/^\s*\*/.test(rawLine) || /``/.test(rawLine)) continue;
       if (/^\s*(?:>>>|\.\.\.)\s/.test(rawLine)) continue;
       if (!contextAllows2(rule.id, content, lineStart)) continue;
+      if (rule.check && !rule.check(m2, content)) continue;
       if ((rule.id === "weak-password-hash" || rule.id === "weak-secret-mac") && !weakHashKindAllows2(rule.id, content, idx, rawLine)) continue;
       const existing = byLine.get(line);
       const specific = (rule.id === "weak-password-hash" || rule.id === "weak-secret-mac") && existing?.rule.id === "weak-hash";
@@ -110837,6 +111101,64 @@ function scanSource2(content, lang) {
     if (!byLine.has(hit.line)) byLine.set(hit.line, hit);
   }
   return [...byLine.values()].sort((a, b3) => a.line - b3.line);
+}
+var GO_SQL_IMPORT2 = /"(?:database\/sql|gorm\.io\/gorm|github\.com\/jinzhu\/gorm|xorm\.io\/xorm|github\.com\/go-xorm\/xorm|github\.com\/huandu\/go-sqlbuilder|github\.com\/jmoiron\/sqlx|github\.com\/jackc\/pgx[^"]*|github\.com\/gocql\/gocql|github\.com\/uptrace\/bun|github\.com\/Masterminds\/squirrel|github\.com\/doug-martin\/goqu[^"]*|github\.com\/go-pg\/pg[^"]*)"|\bsqldb\b/;
+var PY_XML_MODULE2 = /^(?:xml\.etree\.c?ElementTree|xml\.etree|lxml\.etree|lxml|xml\.dom\.minidom|xml\.dom\.pulldom|xml\.dom|xml\.sax|xml\.dom\.expatbuilder)$/;
+function pyXmlNames2(content) {
+  const modules = /* @__PURE__ */ new Set();
+  const functions = /* @__PURE__ */ new Set();
+  const defused = /* @__PURE__ */ new Set();
+  const names = (list) => list.replace(/[()\\]/g, " ").split(",").map((n) => n.trim()).filter(Boolean).map((n) => {
+    const [orig, alias] = n.split(/\s+as\s+/);
+    return { orig: orig.trim(), bound: (alias ?? orig).trim() };
+  });
+  for (const m2 of content.matchAll(/^[ \t]*import[ \t]+([\w.]+)(?:[ \t]+as[ \t]+(\w+))?/gm)) {
+    if (/^defusedxml\b/.test(m2[1])) {
+      defused.add(m2[2] ?? m2[1].split(".").pop());
+      continue;
+    }
+    if (PY_XML_MODULE2.test(m2[1])) modules.add(m2[2] ?? m2[1].split(".").pop());
+  }
+  for (const m2 of content.matchAll(/^[ \t]*from[ \t]+([\w.]+)[ \t]+import[ \t]+(\([^)]*\)|[^\n#]+)/gm)) {
+    const from = m2[1];
+    for (const { orig, bound } of names(m2[2])) {
+      if (/^defusedxml\b/.test(from)) {
+        defused.add(bound);
+        continue;
+      }
+      if (PY_XML_MODULE2.test(`${from}.${orig}`)) modules.add(bound);
+      else if (PY_XML_MODULE2.test(from)) functions.add(bound);
+    }
+  }
+  for (const d2 of defused) {
+    modules.delete(d2);
+    functions.delete(d2);
+  }
+  return { modules, functions, defused };
+}
+function pyXmlCallUnsafe2(alias, fn2, args, content) {
+  if (/parser/i.test(args) || /^\s*[rbuf]*["']/i.test(args) || !args.trim()) return false;
+  const { modules, functions } = pyXmlNames2(content);
+  return alias ? modules.has(alias) : functions.has(fn2);
+}
+var PY_SECRET_NAME2 = /token|secret|passw|pwd|nonce|salt|otp|verifier|verification|reset_?code|api_?key|session_?(?:id|key)|csrf|one_?time|captcha|authenticator|activation/i;
+var PY_NOT_SECRET2 = /tokeni[sz]|tokens\b|token_ids|_tokens|num_token|max_token|token_count/i;
+function pyRandomForSecret2(content, idx) {
+  if (!/^[ \t]*(?:import[ \t]+(?:[\w.]+[ \t]*,[ \t]*)*random\b|from[ \t]+random[ \t]+import)/m.test(content)) return false;
+  const lineStart = content.lastIndexOf("\n", idx - 1) + 1;
+  const line = content.slice(lineStart, idx);
+  const secret = (s) => PY_SECRET_NAME2.test(s) && !PY_NOT_SECRET2.test(s);
+  const lhs = line.match(/^\s*([\w.[\]'"]+)\s*\+?=(?!=)/);
+  if (lhs) return secret(lhs[1]);
+  if (!/^\s*(?:return\b|yield\b|[\w'"]*\.join\s*\(|str\s*\(|\w+\s*\()/.test(line) && line.trim()) return false;
+  const before = content.slice(Math.max(0, lineStart - 3e3), lineStart).split("\n").reverse();
+  for (const l3 of before.slice(0, 40)) {
+    const def = l3.match(/^\s*(?:async\s+)?def\s+(\w+)/);
+    if (def) return secret(def[1]);
+    const assign = l3.match(/^\s*([\w.[\]'"]+)\s*\+?=(?!=)/);
+    if (assign && /\(\s*$|\[\s*$/.test(l3)) return secret(assign[1]);
+  }
+  return false;
 }
 var SSRF_TAINT2 = /\b(?:req|request)\.(?:query|body|params|args|form|values|GET|POST)\b|\$_(?:GET|POST|REQUEST|COOKIE)\b|\bparams\s*\[|\brequest\.get_json\b|\bc\.(?:Query|Param|PostForm)\s*\(|\br\.(?:FormValue|URL\.Query)\b/;
 function phpLocalRequestValue2(content, sinkOffset, sink) {
