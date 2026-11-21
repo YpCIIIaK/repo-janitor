@@ -1071,6 +1071,16 @@ const SKIP_IN_TEST = new Set([
   "java-code-injection",
 ])
 
+/** Sink rules from the harvested DB, still unlabelled (see PROVISIONAL_RULES in confidence.ts). */
+const PROVISIONAL_SINK_RULES = new Set([
+  "py-xxe",
+  "py-unsafe-deserialization",
+  "py-random-for-secret",
+  "sql-builder-interpolated",
+  "go-archive-path-traversal",
+  "java-code-injection",
+])
+
 export interface CodeHit {
   rule: VulnRule
   line: number
@@ -1572,12 +1582,18 @@ export function capFindings(issues: Issue[], max: number): Issue[] {
     byRule.get(rule)!.push(issue)
   }
   const out: Issue[] = []
-  for (let round = 0; out.length < max; round++) {
-    let took = false
-    for (const list of byRule.values()) {
-      if (round < list.length && out.length < max) { out.push(list[round]); took = true }
+  // Calibrated rules share the slots first; provisional ones only fill what is left,
+  // so an unlabelled rule cannot push a known finding past the cap (commix testbed).
+  const provisional = (rule: string) => PROVISIONAL_SINK_RULES.has(rule.replace(/^insecure-/, ""))
+  for (const pass of [false, true]) {
+    const lists = [...byRule].filter(([rule]) => provisional(rule) === pass).map(([, list]) => list)
+    for (let round = 0; out.length < max; round++) {
+      let took = false
+      for (const list of lists) {
+        if (round < list.length && out.length < max) { out.push(list[round]); took = true }
+      }
+      if (!took) break
     }
-    if (!took) break
   }
   return out
 }
@@ -1666,6 +1682,9 @@ export const insecureCodeScanner: Scanner = {
         if (existing >= 0) hits[existing] = hit
         else hits.push(hit)
       }
+      // Provisional (unlabelled) rules queue behind calibrated ones for the per-file slots:
+      // a noisy new rule must not push a known finding out of a busy file (dsvw, nua-bench).
+      hits.sort((a, b) => Number(PROVISIONAL_SINK_RULES.has(a.rule.id)) - Number(PROVISIONAL_SINK_RULES.has(b.rule.id)) || a.line - b.line)
       for (const hit of hits) {
         if (issues.length >= MAX_COLLECT || perFile >= MAX_PER_FILE) break
         if (isTest && SKIP_IN_TEST.has(hit.rule.id)) continue

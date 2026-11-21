@@ -36050,7 +36050,7 @@ var require_src4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-44CGSUZA.js
+// ../cli/dist/chunk-W3LUFAJ6.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -59984,7 +59984,7 @@ function date4(params) {
   return _coercedDate(ZodDate, params);
 }
 
-// ../cli/dist/chunk-44CGSUZA.js
+// ../cli/dist/chunk-W3LUFAJ6.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -99457,6 +99457,14 @@ var SKIP_IN_TEST = /* @__PURE__ */ new Set([
   "go-archive-path-traversal",
   "java-code-injection"
 ]);
+var PROVISIONAL_SINK_RULES = /* @__PURE__ */ new Set([
+  "py-xxe",
+  "py-unsafe-deserialization",
+  "py-random-for-secret",
+  "sql-builder-interpolated",
+  "go-archive-path-traversal",
+  "java-code-injection"
+]);
 var PASSWORD_VALUE = /\b(?:password|passwd|passphrase|pwd|user_?pass)\w*\b|\$pass\b/i;
 var SECRET_VALUE = /\b\w*(?:secret|private_?key|api_?key|signing_?key|hmac_?key|encryption_?key)\w*\b/i;
 var MANDATED_HASH = /\bAPOP\b|\brealm\b|\bcnonce\b|WWW-Authenticate|258EAFA5-E914-47DA-95CA-C5AB0DC85B11/i;
@@ -99851,15 +99859,19 @@ function capFindings(issues, max) {
     byRule.get(rule).push(issue2);
   }
   const out = [];
-  for (let round = 0; out.length < max; round++) {
-    let took = false;
-    for (const list of byRule.values()) {
-      if (round < list.length && out.length < max) {
-        out.push(list[round]);
-        took = true;
+  const provisional = (rule) => PROVISIONAL_SINK_RULES.has(rule.replace(/^insecure-/, ""));
+  for (const pass of [false, true]) {
+    const lists = [...byRule].filter(([rule]) => provisional(rule) === pass).map(([, list]) => list);
+    for (let round = 0; out.length < max; round++) {
+      let took = false;
+      for (const list of lists) {
+        if (round < list.length && out.length < max) {
+          out.push(list[round]);
+          took = true;
+        }
       }
+      if (!took) break;
     }
-    if (!took) break;
   }
   return out;
 }
@@ -99948,6 +99960,7 @@ var insecureCodeScanner = {
           if (existing >= 0) hits[existing] = hit;
           else hits.push(hit);
         }
+        hits.sort((a, b3) => Number(PROVISIONAL_SINK_RULES.has(a.rule.id)) - Number(PROVISIONAL_SINK_RULES.has(b3.rule.id)) || a.line - b3.line);
         for (const hit of hits) {
           if (issues.length >= MAX_COLLECT || perFile >= MAX_PER_FILE5) break;
           if (isTest && SKIP_IN_TEST.has(hit.rule.id)) continue;
@@ -111021,6 +111034,14 @@ var SKIP_IN_TEST2 = /* @__PURE__ */ new Set([
   "go-archive-path-traversal",
   "java-code-injection"
 ]);
+var PROVISIONAL_SINK_RULES2 = /* @__PURE__ */ new Set([
+  "py-xxe",
+  "py-unsafe-deserialization",
+  "py-random-for-secret",
+  "sql-builder-interpolated",
+  "go-archive-path-traversal",
+  "java-code-injection"
+]);
 var PASSWORD_VALUE2 = /\b(?:password|passwd|passphrase|pwd|user_?pass)\w*\b|\$pass\b/i;
 var SECRET_VALUE2 = /\b\w*(?:secret|private_?key|api_?key|signing_?key|hmac_?key|encryption_?key)\w*\b/i;
 var MANDATED_HASH2 = /\bAPOP\b|\brealm\b|\bcnonce\b|WWW-Authenticate|258EAFA5-E914-47DA-95CA-C5AB0DC85B11/i;
@@ -111406,15 +111427,19 @@ function capFindings2(issues, max) {
     byRule.get(rule).push(issue2);
   }
   const out = [];
-  for (let round = 0; out.length < max; round++) {
-    let took = false;
-    for (const list of byRule.values()) {
-      if (round < list.length && out.length < max) {
-        out.push(list[round]);
-        took = true;
+  const provisional = (rule) => PROVISIONAL_SINK_RULES2.has(rule.replace(/^insecure-/, ""));
+  for (const pass of [false, true]) {
+    const lists = [...byRule].filter(([rule]) => provisional(rule) === pass).map(([, list]) => list);
+    for (let round = 0; out.length < max; round++) {
+      let took = false;
+      for (const list of lists) {
+        if (round < list.length && out.length < max) {
+          out.push(list[round]);
+          took = true;
+        }
       }
+      if (!took) break;
     }
-    if (!took) break;
   }
   return out;
 }
@@ -111499,6 +111524,7 @@ var insecureCodeScanner2 = {
         if (existing >= 0) hits[existing] = hit;
         else hits.push(hit);
       }
+      hits.sort((a, b3) => Number(PROVISIONAL_SINK_RULES2.has(a.rule.id)) - Number(PROVISIONAL_SINK_RULES2.has(b3.rule.id)) || a.line - b3.line);
       for (const hit of hits) {
         if (issues.length >= MAX_COLLECT2 || perFile >= MAX_PER_FILE10) break;
         if (isTest && SKIP_IN_TEST2.has(hit.rule.id)) continue;
