@@ -75,6 +75,8 @@ interface VulnRule {
   title: string
   /** What is wrong and what to do instead. Findings without a fix are noise. */
   detail: string
+  /** Extra per-match judgement when a regex alone cannot see enough (imports, call arguments). */
+  check?: (m: RegExpMatchArray, content: string) => boolean
 }
 
 /** PHP, Java/Kotlin, Ruby, Go and C#: the injection classes DVWA, WebGoat, RailsGoat, govwa and WebGoat.NET teach. */
@@ -594,6 +596,125 @@ const RULES: VulnRule[] = [
       "`java.util.Random` and `Math.random` are predictable. Use `SecureRandom` for tokens, salts and keys.",
   },
 
+  // ---- Sink rules from the harvested sink DB (Nov 2026) ----------------------
+  // Shapes taken from the vulnerable lines of GitHub-advisory fixes the fast engine
+  // missed (benchmark/sinks-gap.mjs). Provisional: confidence stays low until labelled.
+  {
+    id: "py-xxe",
+    lang: "py",
+    // lxml's XMLParser resolves entities unless told not to.
+    re: /(?<![\w.])(?:(?:lxml\.)?etree\.|ET\.)?XMLParser\s*\((?![^)]*resolve_entities\s*=\s*False)/g,
+    severity: "warning",
+    title: "lxml parser resolves XML entities",
+    detail:
+      "An lxml `XMLParser` built without `resolve_entities=False` expands entities in the document, so " +
+      "a crafted file can read local files or reach internal hosts (XXE). Pass " +
+      "`resolve_entities=False, no_network=True`, or parse untrusted XML with `defusedxml`.",
+    check: (_m, content) => /\blxml\b/.test(content),
+  },
+  {
+    id: "py-xxe",
+    lang: "py",
+    // ElementTree / minidom / sax / lxml parse calls, by module alias or by an imported bare name.
+    re: /(?<![\w.])(?:(\w+)\.)?(parse|fromstring|parseString|iterparse|XML)\s*\(((?:[^()]|\((?:[^()]|\([^()]*\))*\))*)\)/g,
+    severity: "warning",
+    title: "XML parsed without entity protection",
+    detail:
+      "Python's XML parsers (lxml, ElementTree, minidom, sax) expand entities and, depending on the " +
+      "version, resolve external ones, so an untrusted document can exhaust memory or read files. " +
+      "Parse it with `defusedxml` (`defusedxml.ElementTree.fromstring`), or give lxml a parser with " +
+      "`resolve_entities=False`.",
+    check: (m, content) => pyXmlCallUnsafe(m[1], m[2], m[3], content),
+  },
+  {
+    id: "py-unsafe-deserialization",
+    lang: "py",
+    re: /\btorch\.load\s*\(((?:[^()]|\((?:[^()]|\([^()]*\))*\))*)\)|\b(?:shelve\.open|dill\.loads?|jsonpickle\.decode|marshal\.loads?|cloudpickle\.loads?|pickle\.Unpickler|pd\.read_pickle|pandas\.read_pickle)\s*\(/g,
+    severity: "warning",
+    title: "Deserialiser that runs code from the data",
+    detail:
+      "`torch.load` without `weights_only=True`, `shelve`, `dill`, `jsonpickle`, `marshal` and " +
+      "`read_pickle` all unpickle, which executes whatever the file says. Load only files you wrote; " +
+      "for models use `torch.load(…, weights_only=True)` or safetensors, for data use JSON.",
+    check: (m) => m[1] === undefined || !/\bweights_only\s*=\s*True\b/.test(m[1]),
+  },
+  {
+    id: "py-random-for-secret",
+    lang: "py",
+    re: /(?<![\w.])random\.(?:randint|randrange|choice|choices|sample|random|getrandbits|shuffle)\s*\(/g,
+    severity: "warning",
+    title: "Security value generated with the random module",
+    detail:
+      "`random` is a Mersenne Twister: its output can be predicted from earlier values. Tokens, " +
+      "passwords, OTPs and nonces need `secrets` (`secrets.token_urlsafe`, `secrets.choice`).",
+    check: (m, content) => pyRandomForSecret(content, m.index ?? 0),
+  },
+  {
+    id: "sql-builder-interpolated",
+    lang: "go",
+    // gorm / xorm / sqlbuilder / database/sql methods handed a formatted or concatenated string.
+    re: /\.(?:Where|Or|Not|Having|Order|Group|Joins|Select|Raw|Exec|Query|QueryRow|QueryContext|ExecContext|Table|Distinct)\s*\(\s*(?:ctx\s*,\s*)?(?:fmt\.Sprintf\s*\(|"[^"\n]*"\s*\+\s*[A-Za-z_]|[A-Za-z_][\w.]*\s*\+\s*")/g,
+    severity: "warning",
+    title: "Query builder handed a formatted string",
+    detail:
+      "The SQL fragment passed to the query builder is built with Sprintf or `+`, so a value in it is " +
+      "parsed as SQL. Use placeholders (`Where(\"name = ?\", name)`) and map sort columns through an allowlist.",
+    check: (_m, content) => GO_SQL_IMPORT.test(content),
+  },
+  {
+    id: "sql-builder-interpolated",
+    lang: "go",
+    // A string quoted into SQL by hand: `fmt.Sprintf("… = '%s'", v)` in a file that talks to a database.
+    re: /\bfmt\.Sprintf\s*\(\s*["`][^"`\n]*(?:'%[sv]'|\b(?:WHERE|SET|VALUES|LIKE|IN)\b[^"`\n]*%[sv])/gi,
+    severity: "warning",
+    title: "SQL text built with Sprintf",
+    detail:
+      "A value is formatted into SQL text, which is what SQL injection is. Pass it as a query " +
+      "argument (`db.Query(\"… WHERE id = $1\", id)`).",
+    check: (_m, content) => GO_SQL_IMPORT.test(content),
+  },
+  {
+    id: "go-archive-path-traversal",
+    lang: "go",
+    // Zip slip: an archive entry's own name joined onto the extraction directory.
+    re: /\b(?:filepath|path)\.Join\s*\([^()\n]*\b\w+\.(?:Name|FileHeader\.Name)\b(?!\s*\()/g,
+    severity: "warning",
+    title: "Archive entry name used as a path",
+    detail:
+      "Entry names in zip and tar archives are chosen by whoever made the archive; `../../etc/x` " +
+      "escapes the target directory (zip slip). Reject names that are not `filepath.IsLocal`, or " +
+      "check the joined path still has the directory plus a separator as its prefix.",
+    check: (_m, content) =>
+      /"archive\/(?:zip|tar)"/.test(content) &&
+      !/\bHasPrefix\s*\(|\bIsLocal\s*\(|\bfilepath\.Rel\s*\(|\bsecurejoin\b|\bOpenRoot\s*\(|\bSecureJoin\s*\(/.test(content),
+  },
+  {
+    id: "java-code-injection",
+    lang: "java",
+    // Expression and script engines handed a non-literal string.
+    re: /\.parseExpression\s*\(\s*(?!")[\w.]|\bOgnl\.(?:getValue|setValue|parseExpression)\s*\(\s*(?!")[\w.]|\bMVEL\.(?:eval|compileExpression|executeExpression)\s*\(\s*(?!")[\w.]|\bnew\s+GroovyShell\s*\([^)]*\)\s*\.\s*(?:evaluate|parse)\s*\(\s*(?!")|\bVelocity\.evaluate\s*\(|\.createExpression\s*\(\s*(?!")[\w.]|\bnew\s+Template\s*\([^;\n]*\bnew\s+StringReader\s*\(/g,
+    severity: "warning",
+    title: "Expression or template engine evaluates a computed string",
+    detail:
+      "SpEL, OGNL, MVEL, JEXL, Groovy, Velocity and FreeMarker can call arbitrary Java methods. " +
+      "Evaluating a string that carries user input is remote code execution. Evaluate fixed " +
+      "expressions only, or use a restricted context (`SimpleEvaluationContext`, a sandboxed resolver).",
+    check: (_m, content) =>
+      /\bimport\s+(?:org\.springframework\.expression|ognl|org\.mvel2|org\.apache\.commons\.jexl\d?|groovy\.lang|org\.apache\.velocity|freemarker\.template)\b/.test(content) &&
+      !/\bSimpleEvaluationContext\b|\bSAFER_RESOLVER\b/.test(content),
+  },
+  {
+    id: "java-code-injection",
+    lang: "java",
+    re: /\b\w*[eE]ngine\s*\.\s*eval\s*\(\s*(?!")[\w.]/g,
+    severity: "warning",
+    title: "Script engine evaluates a computed string",
+    detail:
+      "`ScriptEngine.eval` runs the string as a program with full access to the JVM. Evaluating " +
+      "anything derived from input is remote code execution.",
+    check: (_m, content) => /\bimport\s+javax\.script\b/.test(content),
+  },
+
   // ---- Weak hashes where they matter: password storage and home-made MACs ----
   // Measured on 350 corpus repos (Nov 2026): the generic weak-hash rule was right
   // 1 time in 21; these two, judged on what is hashed, 36 of 60.
@@ -942,6 +1063,12 @@ const SKIP_IN_TEST = new Set([
   "go-template-html",
   "dotnet-deserialization",
   "ssrf",
+  "py-xxe",
+  "py-unsafe-deserialization",
+  "py-random-for-secret",
+  "sql-builder-interpolated",
+  "go-archive-path-traversal",
+  "java-code-injection",
 ])
 
 export interface CodeHit {
@@ -1057,6 +1184,7 @@ export function scanSource(content: string, lang: Lang): CodeHit[] {
       // Doctest continuation lines are documentation: `...     pickle.loads(x)`.
       if (/^\s*(?:>>>|\.\.\.)\s/.test(rawLine)) continue
       if (!contextAllows(rule.id, content, lineStart)) continue
+      if (rule.check && !rule.check(m, content)) continue
       if ((rule.id === "weak-password-hash" || rule.id === "weak-secret-mac") && !weakHashKindAllows(rule.id, content, idx, rawLine)) continue
 
       const existing = byLine.get(line)
@@ -1086,6 +1214,69 @@ export function scanSource(content: string, lang: Lang): CodeHit[] {
     if (!byLine.has(hit.line)) byLine.set(hit.line, hit)
   }
   return [...byLine.values()].sort((a, b) => a.line - b.line)
+}
+
+// --- helpers for the harvested-sink rules ------------------------------------
+
+/** Go files that talk to a database: the SQL-builder rules only judge these. */
+const GO_SQL_IMPORT =
+  /"(?:database\/sql|gorm\.io\/gorm|github\.com\/jinzhu\/gorm|xorm\.io\/xorm|github\.com\/go-xorm\/xorm|github\.com\/huandu\/go-sqlbuilder|github\.com\/jmoiron\/sqlx|github\.com\/jackc\/pgx[^"]*|github\.com\/gocql\/gocql|github\.com\/uptrace\/bun|github\.com\/Masterminds\/squirrel|github\.com\/doug-martin\/goqu[^"]*|github\.com\/go-pg\/pg[^"]*)"|\bsqldb\b/
+
+const PY_XML_MODULE = /^(?:xml\.etree\.c?ElementTree|xml\.etree|lxml\.etree|lxml|xml\.dom\.minidom|xml\.dom\.pulldom|xml\.dom|xml\.sax|xml\.dom\.expatbuilder)$/
+
+/** Names a Python file binds to XML parsing modules and functions, minus defusedxml's. */
+function pyXmlNames(content: string): { modules: Set<string>; functions: Set<string>; defused: Set<string> } {
+  const modules = new Set<string>()
+  const functions = new Set<string>()
+  const defused = new Set<string>()
+  const names = (list: string) =>
+    list.replace(/[()\\]/g, " ").split(",").map((n) => n.trim()).filter(Boolean).map((n) => {
+      const [orig, alias] = n.split(/\s+as\s+/)
+      return { orig: orig.trim(), bound: (alias ?? orig).trim() }
+    })
+  for (const m of content.matchAll(/^[ \t]*import[ \t]+([\w.]+)(?:[ \t]+as[ \t]+(\w+))?/gm)) {
+    if (/^defusedxml\b/.test(m[1])) { defused.add(m[2] ?? m[1].split(".").pop()!); continue }
+    if (PY_XML_MODULE.test(m[1])) modules.add(m[2] ?? m[1].split(".").pop()!)
+  }
+  for (const m of content.matchAll(/^[ \t]*from[ \t]+([\w.]+)[ \t]+import[ \t]+(\([^)]*\)|[^\n#]+)/gm)) {
+    const from = m[1]
+    for (const { orig, bound } of names(m[2])) {
+      if (/^defusedxml\b/.test(from)) { defused.add(bound); continue }
+      if (PY_XML_MODULE.test(`${from}.${orig}`)) modules.add(bound)
+      else if (PY_XML_MODULE.test(from)) functions.add(bound)
+    }
+  }
+  for (const d of defused) { modules.delete(d); functions.delete(d) }
+  return { modules, functions, defused }
+}
+
+/** py-xxe: a parse call on an XML module (or a function imported from one) with no parser handed in. */
+function pyXmlCallUnsafe(alias: string | undefined, fn: string, args: string, content: string): boolean {
+  if (/parser/i.test(args) || /^\s*[rbuf]*["']/i.test(args) || !args.trim()) return false
+  const { modules, functions } = pyXmlNames(content)
+  return alias ? modules.has(alias) : functions.has(fn)
+}
+
+const PY_SECRET_NAME = /token|secret|passw|pwd|nonce|salt|otp|verifier|verification|reset_?code|api_?key|session_?(?:id|key)|csrf|one_?time|captcha|authenticator|activation/i
+const PY_NOT_SECRET = /tokeni[sz]|tokens\b|token_ids|_tokens|num_token|max_token|token_count/i
+
+/** py-random-for-secret: the value lands in a secret-named variable, or is returned by a secret-named function. */
+function pyRandomForSecret(content: string, idx: number): boolean {
+  if (!/^[ \t]*(?:import[ \t]+(?:[\w.]+[ \t]*,[ \t]*)*random\b|from[ \t]+random[ \t]+import)/m.test(content)) return false
+  const lineStart = content.lastIndexOf("\n", idx - 1) + 1
+  const line = content.slice(lineStart, idx)
+  const secret = (s: string) => PY_SECRET_NAME.test(s) && !PY_NOT_SECRET.test(s)
+  const lhs = line.match(/^\s*([\w.[\]'"]+)\s*\+?=(?!=)/)
+  if (lhs) return secret(lhs[1])
+  if (!/^\s*(?:return\b|yield\b|[\w'"]*\.join\s*\(|str\s*\(|\w+\s*\()/.test(line) && line.trim()) return false
+  const before = content.slice(Math.max(0, lineStart - 3000), lineStart).split("\n").reverse()
+  for (const l of before.slice(0, 40)) {
+    const def = l.match(/^\s*(?:async\s+)?def\s+(\w+)/)
+    if (def) return secret(def[1])
+    const assign = l.match(/^\s*([\w.[\]'"]+)\s*\+?=(?!=)/)
+    if (assign && /\(\s*$|\[\s*$/.test(l)) return secret(assign[1])
+  }
+  return false
 }
 
 /** Request input as a URL source, for SSRF (any language). */
