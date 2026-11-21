@@ -36050,7 +36050,7 @@ var require_src4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-W3LUFAJ6.js
+// ../cli/dist/chunk-ONKDAP2I.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -59984,7 +59984,7 @@ function date4(params) {
   return _coercedDate(ZodDate, params);
 }
 
-// ../cli/dist/chunk-W3LUFAJ6.js
+// ../cli/dist/chunk-ONKDAP2I.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -98650,7 +98650,7 @@ var JAVA_RE = /\.(?:java|kts?)$/i;
 var RB_RE = /\.(?:rb|erb|rake)$/i;
 var GO_RE2 = /\.go$/i;
 var CS_RE = /\.(?:cs|cshtml)$/i;
-var SKIP_RE = /(^|\/)(?:node_modules|vendor|third_party|dist|build|out|\.next|site-packages|dist-packages|_vendor|lib\/python\d(?:\.\d+)?|Pods|bower_components|pear|phpseclib)\/|\.min\.[cm]?js$/i;
+var SKIP_RE = /(^|\/)(?:node_modules|vendor|third_?party|thirdparty|dist|build|out|\.next|site-packages|dist-packages|_vendor|lib\/python\d(?:\.\d+)?|Pods|bower_components|pear|phpseclib)\/|\.min\.[cm]?js$/i;
 var NOT_SHIPPED_RE2 = new RegExp("(^|\\/)(?:_?examples?|demos?|benchmarks?|bench|perf(?:-testing)?|performance|docs?|documentation|www|website|site|scripts?|(?<!(?:internal|pkg|src|lib)\\/)tools?|[\\w-]*_assets|static|_?vendor(?:ed)?|third_party|integration-?[tT]ests|test-utils|tooling|_tools|sphinx)\\/|(^|\\/)jquery[-.\\d]*\\.js$", "i");
 var TEST_RE3 = /(^|\/)(?:__tests__|tests?|specs?|fixtures?)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test\.[cm]?[jt]s$|(?:^|\/)test_[^/]+\.py$|_test\.py$|(?:^|\/)conftest\.py$|_test\.go$|(?:Test|Tests|IT)\.(?:java|kt|cs|php)$|_spec\.rb$/i;
 var MAX_PER_FILE5 = 6;
@@ -99539,7 +99539,10 @@ function scanSource(content, lang) {
         if (literalRanges(rawLine).some(([a, b3]) => col > a && col < b3)) continue;
       }
       if (rawLine.length > 1e3) continue;
-      if (/#\s*(?:noqa|nosec)\b|\/\/\s*(?:nosemgrep|eslint-disable|phpcs:ignore|nolint:[\w,\s]*gosec)|\bNOSONAR\b/.test(rawLine)) continue;
+      const prevStart = content.lastIndexOf("\n", lineStart - 2) + 1;
+      const prevLine = lineStart > 0 ? content.slice(prevStart, lineStart - 1) : "";
+      const REVIEWED = /#\s*(?:noqa|nosec)\b|\/\/\s*(?:nosemgrep|eslint-disable|phpcs:ignore|nolint:[\w,\s]*gosec)|\bNOSONAR\b/;
+      if (REVIEWED.test(rawLine) || /^\s*(?:#|\/\/)/.test(prevLine) && REVIEWED.test(prevLine)) continue;
       if (/^\s*\*/.test(rawLine) || /``/.test(rawLine)) continue;
       if (/^\s*(?:>>>|\.\.\.)\s/.test(rawLine)) continue;
       if (!contextAllows(rule.id, content, lineStart)) continue;
@@ -99565,6 +99568,7 @@ var PY_XML_MODULE = /^(?:xml\.etree\.c?ElementTree|xml\.etree|lxml\.etree|lxml|x
 function pyXmlNames(content) {
   var _a22, _b;
   const modules = /* @__PURE__ */ new Set();
+  const lxml = /* @__PURE__ */ new Set();
   const functions = /* @__PURE__ */ new Set();
   const defused = /* @__PURE__ */ new Set();
   const names = (list) => list.replace(/[()\\]/g, " ").split(",").map((n) => n.trim()).filter(Boolean).map((n) => {
@@ -99576,7 +99580,11 @@ function pyXmlNames(content) {
       defused.add((_a22 = m2[2]) != null ? _a22 : m2[1].split(".").pop());
       continue;
     }
-    if (PY_XML_MODULE.test(m2[1])) modules.add((_b = m2[2]) != null ? _b : m2[1].split(".").pop());
+    if (PY_XML_MODULE.test(m2[1])) {
+      const bound = (_b = m2[2]) != null ? _b : m2[1].split(".").pop();
+      modules.add(bound);
+      if (/^lxml\b/.test(m2[1])) lxml.add(bound);
+    }
   }
   for (const m2 of content.matchAll(/^[ \t]*from[ \t]+([\w.]+)[ \t]+import[ \t]+(\([^)]*\)|[^\n#]+)/gm)) {
     const from = m2[1];
@@ -99587,19 +99595,24 @@ function pyXmlNames(content) {
       }
       if (PY_XML_MODULE.test(`${from}.${orig}`)) modules.add(bound);
       else if (PY_XML_MODULE.test(from)) functions.add(bound);
+      else continue;
+      if (/^lxml\b/.test(from)) lxml.add(bound);
     }
   }
   for (const d2 of defused) {
     modules.delete(d2);
     functions.delete(d2);
   }
-  return { modules, functions, defused };
+  return { modules, functions, defused, lxml };
 }
 function pyXmlCallUnsafe(alias, fn2, args, content) {
   if (/parser/i.test(args) || /^\s*[rbuf]*["']/i.test(args) || !args.trim()) return false;
-  const { modules, functions } = pyXmlNames(content);
-  return alias ? modules.has(alias) : functions.has(fn2);
+  const { modules, functions, lxml } = pyXmlNames(content);
+  const name = alias != null ? alias : fn2;
+  if (!(alias ? modules.has(alias) : functions.has(fn2))) return false;
+  return lxml.has(name) || PY_XML_EXTERNAL.test(args);
 }
+var PY_XML_EXTERNAL = /\b(?:resp|response|request|req|res|r)\b|\.(?:content|text|body|data|read)\b|\b(?:get_data|payload|upload\w*|xml_?string|xml_?str|xml_?data|raw_?xml|body|envelope|soap\w*|message|stream|data)\b/i;
 var PY_SECRET_NAME = /token|secret|passw|pwd|nonce|salt|otp|verifier|verification|reset_?code|api_?key|session_?(?:id|key)|csrf|one_?time|captcha|authenticator|activation/i;
 var PY_NOT_SECRET = /tokeni[sz]|tokens\b|token_ids|_tokens|num_token|max_token|token_count/i;
 function pyRandomForSecret(content, idx) {
@@ -110231,7 +110244,7 @@ var JAVA_RE2 = /\.(?:java|kts?)$/i;
 var RB_RE2 = /\.(?:rb|erb|rake)$/i;
 var GO_RE4 = /\.go$/i;
 var CS_RE2 = /\.(?:cs|cshtml)$/i;
-var SKIP_RE2 = /(^|\/)(?:node_modules|vendor|third_party|dist|build|out|\.next|site-packages|dist-packages|_vendor|lib\/python\d(?:\.\d+)?|Pods|bower_components|pear|phpseclib)\/|\.min\.[cm]?js$/i;
+var SKIP_RE2 = /(^|\/)(?:node_modules|vendor|third_?party|thirdparty|dist|build|out|\.next|site-packages|dist-packages|_vendor|lib\/python\d(?:\.\d+)?|Pods|bower_components|pear|phpseclib)\/|\.min\.[cm]?js$/i;
 var NOT_SHIPPED_RE4 = /(^|\/)(?:_?examples?|demos?|benchmarks?|bench|perf(?:-testing)?|performance|docs?|documentation|www|website|site|scripts?|(?<!(?:internal|pkg|src|lib)\/)tools?|[\w-]*_assets|static|_?vendor(?:ed)?|third_party|integration-?[tT]ests|test-utils|tooling|_tools|sphinx)\/|(^|\/)jquery[-.\d]*\.js$/i;
 var TEST_RE7 = /(^|\/)(?:__tests__|tests?|specs?|fixtures?)\/|\.(?:test|spec)\.[cm]?[jt]sx?$|(?:^|\/)test\.[cm]?[jt]s$|(?:^|\/)test_[^/]+\.py$|_test\.py$|(?:^|\/)conftest\.py$|_test\.go$|(?:Test|Tests|IT)\.(?:java|kt|cs|php)$|_spec\.rb$/i;
 var MAX_PER_FILE10 = 6;
@@ -111114,7 +111127,10 @@ function scanSource2(content, lang) {
         if (literalRanges2(rawLine).some(([a, b3]) => col > a && col < b3)) continue;
       }
       if (rawLine.length > 1e3) continue;
-      if (/#\s*(?:noqa|nosec)\b|\/\/\s*(?:nosemgrep|eslint-disable|phpcs:ignore|nolint:[\w,\s]*gosec)|\bNOSONAR\b/.test(rawLine)) continue;
+      const prevStart = content.lastIndexOf("\n", lineStart - 2) + 1;
+      const prevLine = lineStart > 0 ? content.slice(prevStart, lineStart - 1) : "";
+      const REVIEWED = /#\s*(?:noqa|nosec)\b|\/\/\s*(?:nosemgrep|eslint-disable|phpcs:ignore|nolint:[\w,\s]*gosec)|\bNOSONAR\b/;
+      if (REVIEWED.test(rawLine) || /^\s*(?:#|\/\/)/.test(prevLine) && REVIEWED.test(prevLine)) continue;
       if (/^\s*\*/.test(rawLine) || /``/.test(rawLine)) continue;
       if (/^\s*(?:>>>|\.\.\.)\s/.test(rawLine)) continue;
       if (!contextAllows2(rule.id, content, lineStart)) continue;
@@ -111139,6 +111155,7 @@ var GO_SQL_IMPORT2 = /"(?:database\/sql|gorm\.io\/gorm|github\.com\/jinzhu\/gorm
 var PY_XML_MODULE2 = /^(?:xml\.etree\.c?ElementTree|xml\.etree|lxml\.etree|lxml|xml\.dom\.minidom|xml\.dom\.pulldom|xml\.dom|xml\.sax|xml\.dom\.expatbuilder)$/;
 function pyXmlNames2(content) {
   const modules = /* @__PURE__ */ new Set();
+  const lxml = /* @__PURE__ */ new Set();
   const functions = /* @__PURE__ */ new Set();
   const defused = /* @__PURE__ */ new Set();
   const names = (list) => list.replace(/[()\\]/g, " ").split(",").map((n) => n.trim()).filter(Boolean).map((n) => {
@@ -111150,7 +111167,11 @@ function pyXmlNames2(content) {
       defused.add(m2[2] ?? m2[1].split(".").pop());
       continue;
     }
-    if (PY_XML_MODULE2.test(m2[1])) modules.add(m2[2] ?? m2[1].split(".").pop());
+    if (PY_XML_MODULE2.test(m2[1])) {
+      const bound = m2[2] ?? m2[1].split(".").pop();
+      modules.add(bound);
+      if (/^lxml\b/.test(m2[1])) lxml.add(bound);
+    }
   }
   for (const m2 of content.matchAll(/^[ \t]*from[ \t]+([\w.]+)[ \t]+import[ \t]+(\([^)]*\)|[^\n#]+)/gm)) {
     const from = m2[1];
@@ -111161,19 +111182,24 @@ function pyXmlNames2(content) {
       }
       if (PY_XML_MODULE2.test(`${from}.${orig}`)) modules.add(bound);
       else if (PY_XML_MODULE2.test(from)) functions.add(bound);
+      else continue;
+      if (/^lxml\b/.test(from)) lxml.add(bound);
     }
   }
   for (const d2 of defused) {
     modules.delete(d2);
     functions.delete(d2);
   }
-  return { modules, functions, defused };
+  return { modules, functions, defused, lxml };
 }
 function pyXmlCallUnsafe2(alias, fn2, args, content) {
   if (/parser/i.test(args) || /^\s*[rbuf]*["']/i.test(args) || !args.trim()) return false;
-  const { modules, functions } = pyXmlNames2(content);
-  return alias ? modules.has(alias) : functions.has(fn2);
+  const { modules, functions, lxml } = pyXmlNames2(content);
+  const name = alias ?? fn2;
+  if (!(alias ? modules.has(alias) : functions.has(fn2))) return false;
+  return lxml.has(name) || PY_XML_EXTERNAL2.test(args);
 }
+var PY_XML_EXTERNAL2 = /\b(?:resp|response|request|req|res|r)\b|\.(?:content|text|body|data|read)\b|\b(?:get_data|payload|upload\w*|xml_?string|xml_?str|xml_?data|raw_?xml|body|envelope|soap\w*|message|stream|data)\b/i;
 var PY_SECRET_NAME2 = /token|secret|passw|pwd|nonce|salt|otp|verifier|verification|reset_?code|api_?key|session_?(?:id|key)|csrf|one_?time|captcha|authenticator|activation/i;
 var PY_NOT_SECRET2 = /tokeni[sz]|tokens\b|token_ids|_tokens|num_token|max_token|token_count/i;
 function pyRandomForSecret2(content, idx) {

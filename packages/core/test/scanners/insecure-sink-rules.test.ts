@@ -60,3 +60,17 @@ describe("insecure-code — harvested sink rules (Nov 2026)", () => {
     expect(confidenceOf("insecure-never-heard-of")).toBe("medium")
   })
 })
+
+describe("insecure-code — sink rule precision levers (corpus review 2026-11-21)", () => {
+  it("py-xxe: stdlib parser on a local file or tool reply is not reported; on a response it is", () => {
+    expect(rules(`import xml.etree.ElementTree as ET\nroot = ET.fromstring(xml_text)\n`, "py")).not.toContain("py-xxe")
+    expect(rules(`from xml.etree import ElementTree\ntree = ElementTree.parse(file_path)\n`, "py")).not.toContain("py-xxe")
+    expect(rules(`import xml.etree.ElementTree as ET\nroot = ET.fromstring(resp.content)\n`, "py")).toContain("py-xxe")
+    expect(rules(`from lxml import etree\ntree = etree.parse(xmlf)\n`, "py")).toContain("py-xxe")
+  })
+  it("a //nolint:gosec or # nosec directive on the line above counts as reviewed", () => {
+    const go = `import "archive/zip"\nfunc x() {\n\t//nolint:gosec\n\tfilePath := filepath.Join(dstDir, f.Name)\n}\n`
+    expect(rules(go, "go")).not.toContain("go-archive-path-traversal")
+    expect(rules(`import pickle\n# nosec B301\ndata = pickle.loads(blob)\n`, "py")).not.toContain("py-pickle-load")
+  })
+})

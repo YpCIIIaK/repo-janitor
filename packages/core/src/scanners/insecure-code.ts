@@ -38,7 +38,7 @@ const CS_RE = /\.(?:cs|cshtml)$/i
 // garbage line numbers.
 // Copies of other people's libraries inside the tree are not the project's code:
 // a bundled Python stdlib/site-packages, pip's _vendor, CocoaPods, PEAR, phpseclib.
-const SKIP_RE = /(^|\/)(?:node_modules|vendor|third_party|dist|build|out|\.next|site-packages|dist-packages|_vendor|lib\/python\d(?:\.\d+)?|Pods|bower_components|pear|phpseclib)\/|\.min\.[cm]?js$/i
+const SKIP_RE = /(^|\/)(?:node_modules|vendor|third_?party|thirdparty|dist|build|out|\.next|site-packages|dist-packages|_vendor|lib\/python\d(?:\.\d+)?|Pods|bower_components|pear|phpseclib)\/|\.min\.[cm]?js$/i
 /**
  * Code that never runs on anyone's input: examples, demos, benchmarks, docs
  * sites and their copies of the library, build and release scripts, and
@@ -1188,7 +1188,11 @@ export function scanSource(content: string, lang: Lang): CodeHit[] {
       }
       if (rawLine.length > 1000) continue // minified bundle
       // The maintainers already reviewed this line for a security linter.
-      if (/#\s*(?:noqa|nosec)\b|\/\/\s*(?:nosemgrep|eslint-disable|phpcs:ignore|nolint:[\w,\s]*gosec)|\bNOSONAR\b/.test(rawLine)) continue
+      // …on the line itself, or as a standalone directive on the line above (`//nolint:gosec` before the call).
+      const prevStart = content.lastIndexOf("\n", lineStart - 2) + 1
+      const prevLine = lineStart > 0 ? content.slice(prevStart, lineStart - 1) : ""
+      const REVIEWED = /#\s*(?:noqa|nosec)\b|\/\/\s*(?:nosemgrep|eslint-disable|phpcs:ignore|nolint:[\w,\s]*gosec)|\bNOSONAR\b/
+      if (REVIEWED.test(rawLine) || (/^\s*(?:#|\/\/)/.test(prevLine) && REVIEWED.test(prevLine))) continue
       // Docblock lines: ` * const v = await page.$eval(`, ``pickle.loads()``.
       if (/^\s*\*/.test(rawLine) || /``/.test(rawLine)) continue
       // Doctest continuation lines are documentation: `...     pickle.loads(x)`.
@@ -1235,8 +1239,9 @@ const GO_SQL_IMPORT =
 const PY_XML_MODULE = /^(?:xml\.etree\.c?ElementTree|xml\.etree|lxml\.etree|lxml|xml\.dom\.minidom|xml\.dom\.pulldom|xml\.dom|xml\.sax|xml\.dom\.expatbuilder)$/
 
 /** Names a Python file binds to XML parsing modules and functions, minus defusedxml's. */
-function pyXmlNames(content: string): { modules: Set<string>; functions: Set<string>; defused: Set<string> } {
+function pyXmlNames(content: string): { modules: Set<string>; functions: Set<string>; defused: Set<string>; lxml: Set<string> } {
   const modules = new Set<string>()
+  const lxml = new Set<string>()
   const functions = new Set<string>()
   const defused = new Set<string>()
   const names = (list: string) =>
@@ -1246,7 +1251,11 @@ function pyXmlNames(content: string): { modules: Set<string>; functions: Set<str
     })
   for (const m of content.matchAll(/^[ \t]*import[ \t]+([\w.]+)(?:[ \t]+as[ \t]+(\w+))?/gm)) {
     if (/^defusedxml\b/.test(m[1])) { defused.add(m[2] ?? m[1].split(".").pop()!); continue }
-    if (PY_XML_MODULE.test(m[1])) modules.add(m[2] ?? m[1].split(".").pop()!)
+    if (PY_XML_MODULE.test(m[1])) {
+      const bound = m[2] ?? m[1].split(".").pop()!
+      modules.add(bound)
+      if (/^lxml\b/.test(m[1])) lxml.add(bound)
+    }
   }
   for (const m of content.matchAll(/^[ \t]*from[ \t]+([\w.]+)[ \t]+import[ \t]+(\([^)]*\)|[^\n#]+)/gm)) {
     const from = m[1]
@@ -1254,18 +1263,28 @@ function pyXmlNames(content: string): { modules: Set<string>; functions: Set<str
       if (/^defusedxml\b/.test(from)) { defused.add(bound); continue }
       if (PY_XML_MODULE.test(`${from}.${orig}`)) modules.add(bound)
       else if (PY_XML_MODULE.test(from)) functions.add(bound)
+      else continue
+      if (/^lxml\b/.test(from)) lxml.add(bound)
     }
   }
   for (const d of defused) { modules.delete(d); functions.delete(d) }
-  return { modules, functions, defused }
+  return { modules, functions, defused, lxml }
 }
 
 /** py-xxe: a parse call on an XML module (or a function imported from one) with no parser handed in. */
 function pyXmlCallUnsafe(alias: string | undefined, fn: string, args: string, content: string): boolean {
   if (/parser/i.test(args) || /^\s*[rbuf]*["']/i.test(args) || !args.trim()) return false
-  const { modules, functions } = pyXmlNames(content)
-  return alias ? modules.has(alias) : functions.has(fn)
+  const { modules, functions, lxml } = pyXmlNames(content)
+  const name = alias ?? fn
+  if (!(alias ? modules.has(alias) : functions.has(fn))) return false
+  // Since Python 3.7.1 the standard library parsers resolve no external entities; what is
+  // left (entity expansion) matters only for documents from outside. In the corpus all
+  // stdlib hits on local files and tool replies were noise (3/3), so require such input.
+  return lxml.has(name) || PY_XML_EXTERNAL.test(args)
 }
+
+/** Argument text that reads like a document from outside: an HTTP response or request, an upload, a payload. */
+const PY_XML_EXTERNAL = /\b(?:resp|response|request|req|res|r)\b|\.(?:content|text|body|data|read)\b|\b(?:get_data|payload|upload\w*|xml_?string|xml_?str|xml_?data|raw_?xml|body|envelope|soap\w*|message|stream|data)\b/i
 
 const PY_SECRET_NAME = /token|secret|passw|pwd|nonce|salt|otp|verifier|verification|reset_?code|api_?key|session_?(?:id|key)|csrf|one_?time|captcha|authenticator|activation/i
 const PY_NOT_SECRET = /tokeni[sz]|tokens\b|token_ids|_tokens|num_token|max_token|token_count/i
