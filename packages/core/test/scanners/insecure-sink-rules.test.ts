@@ -74,3 +74,18 @@ describe("insecure-code — sink rule precision levers (corpus review 2026-11-21
     expect(rules(`import pickle\n# nosec B301\ndata = pickle.loads(blob)\n`, "py")).not.toContain("py-pickle-load")
   })
 })
+
+describe("insecure-code — sink rule precision levers, round 2", () => {
+  it("torch.load of a checkpoint named on the command line is the operator's own file", () => {
+    expect(rules(`import argparse, torch\nckpt = torch.load(args.resume, map_location="cpu")\n`, "py")).not.toContain("py-unsafe-deserialization")
+    expect(rules(`import torch\nreturn torch.load(hashfile, weights_only=False)\n`, "py")).toContain("py-unsafe-deserialization")
+  })
+  it("Go: ORM internals, placeholder lists and quoted identifiers are not SQL injection", () => {
+    expect(rules(`package migrator\nimport "gorm.io/gorm"\nfunc f() { s += fmt.Sprintf(" COMMENT '%s'", idx.Comment) }\n`, "go")).not.toContain("sql-builder-interpolated")
+    const ph = `import "database/sql"\nfunc f() {\n\tp := strings.TrimSuffix(strings.Repeat("?,", n), ",")\n\ttx.ExecContext(ctx, fmt.Sprintf("DELETE FROM t WHERE id NOT IN (%s)", p), args...)\n}\n`
+    expect(rules(ph, "go")).not.toContain("sql-builder-interpolated")
+  })
+  it("Java: a scripting tool's own engine wrapper is the feature", () => {
+    expect(rules(`import javax.script.ScriptEngine;\npublic class ScriptHandler {\n  Object r = engine.eval(script, bindings);\n}\n`, "java")).not.toContain("java-code-injection")
+  })
+})

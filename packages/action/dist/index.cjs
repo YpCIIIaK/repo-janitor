@@ -36050,7 +36050,7 @@ var require_src4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-ONKDAP2I.js
+// ../cli/dist/chunk-V7AI7TT7.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -59984,7 +59984,7 @@ function date4(params) {
   return _coercedDate(ZodDate, params);
 }
 
-// ../cli/dist/chunk-ONKDAP2I.js
+// ../cli/dist/chunk-V7AI7TT7.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -99105,7 +99105,9 @@ var RULES2 = [
     severity: "warning",
     title: "Deserialiser that runs code from the data",
     detail: "`torch.load` without `weights_only=True`, `shelve`, `dill`, `jsonpickle`, `marshal` and `read_pickle` all unpickle, which executes whatever the file says. Load only files you wrote; for models use `torch.load(\u2026, weights_only=True)` or safetensors, for data use JSON.",
-    check: (m2) => m2[1] === void 0 || !/\bweights_only\s*=\s*True\b/.test(m2[1])
+    // A training or eval script loading the checkpoint its own operator passes on the
+    // command line is not a trust boundary (18 of 18 corpus hits after thirdparty/).
+    check: (m2, content) => (m2[1] === void 0 || !/\bweights_only\s*=\s*True\b/.test(m2[1])) && !(m2[1] !== void 0 && (/^\s*(?:self\.)?args\.|\bopt\.|\bcfg\.|\bconfig\./.test(m2[1]) || /^[ \t]*import[ \t]+argparse\b|ArgumentParser\s*\(/m.test(content)))
   },
   {
     id: "py-random-for-secret",
@@ -99127,7 +99129,7 @@ var RULES2 = [
     severity: "warning",
     title: "Query builder handed a formatted string",
     detail: 'The SQL fragment passed to the query builder is built with Sprintf or `+`, so a value in it is parsed as SQL. Use placeholders (`Where("name = ?", name)`) and map sort columns through an allowlist.',
-    check: (_m, content) => GO_SQL_IMPORT.test(content)
+    check: (m2, content) => goSqlBuilderAllows(m2, content)
   },
   {
     id: "sql-builder-interpolated",
@@ -99137,7 +99139,7 @@ var RULES2 = [
     severity: "warning",
     title: "SQL text built with Sprintf",
     detail: 'A value is formatted into SQL text, which is what SQL injection is. Pass it as a query argument (`db.Query("\u2026 WHERE id = $1", id)`).',
-    check: (_m, content) => GO_SQL_IMPORT.test(content)
+    check: (m2, content) => goSqlBuilderAllows(m2, content)
   },
   {
     id: "go-archive-path-traversal",
@@ -99157,7 +99159,7 @@ var RULES2 = [
     severity: "warning",
     title: "Expression or template engine evaluates a computed string",
     detail: "SpEL, OGNL, MVEL, JEXL, Groovy, Velocity and FreeMarker can call arbitrary Java methods. Evaluating a string that carries user input is remote code execution. Evaluate fixed expressions only, or use a restricted context (`SimpleEvaluationContext`, a sandboxed resolver).",
-    check: (_m, content) => /\bimport\s+(?:org\.springframework\.expression|ognl|org\.mvel2|org\.apache\.commons\.jexl\d?|groovy\.lang|org\.apache\.velocity|freemarker\.template)\b/.test(content) && !/\bSimpleEvaluationContext\b|\bSAFER_RESOLVER\b/.test(content)
+    check: (_m, content) => !JAVA_SCRIPTING_TOOL.test(content) && /\bimport\s+(?:org\.springframework\.expression|ognl|org\.mvel2|org\.apache\.commons\.jexl\d?|groovy\.lang|org\.apache\.velocity|freemarker\.template)\b/.test(content) && !/\bSimpleEvaluationContext\b|\bSAFER_RESOLVER\b/.test(content)
   },
   {
     id: "java-code-injection",
@@ -99166,7 +99168,7 @@ var RULES2 = [
     severity: "warning",
     title: "Script engine evaluates a computed string",
     detail: "`ScriptEngine.eval` runs the string as a program with full access to the JVM. Evaluating anything derived from input is remote code execution.",
-    check: (_m, content) => /\bimport\s+javax\.script\b/.test(content)
+    check: (_m, content) => /\bimport\s+javax\.script\b/.test(content) && !JAVA_SCRIPTING_TOOL.test(content)
   },
   // ---- Weak hashes where they matter: password storage and home-made MACs ----
   // Measured on 350 corpus repos (Nov 2026): the generic weak-hash rule was right
@@ -99564,6 +99566,17 @@ function scanSource(content, lang) {
   return [...byLine.values()].sort((a, b3) => a.line - b3.line);
 }
 var GO_SQL_IMPORT = /"(?:database\/sql|gorm\.io\/gorm|github\.com\/jinzhu\/gorm|xorm\.io\/xorm|github\.com\/go-xorm\/xorm|github\.com\/huandu\/go-sqlbuilder|github\.com\/jmoiron\/sqlx|github\.com\/jackc\/pgx[^"]*|github\.com\/gocql\/gocql|github\.com\/uptrace\/bun|github\.com\/Masterminds\/squirrel|github\.com\/doug-martin\/goqu[^"]*|github\.com\/go-pg\/pg[^"]*)"|\bsqldb\b/;
+var JAVA_SCRIPTING_TOOL = /\bclass\s+\w*(?:Script|Ognl|Expression|Interpreter|Evaluator|Console|Repl|Shell)\w*/;
+function goSqlBuilderAllows(m2, content) {
+  var _a22;
+  if (!GO_SQL_IMPORT.test(content)) return false;
+  if (/^package\s+(?:migrator|clause|schema|gorm|dialect\w*|callbacks)\b/m.test(content)) return false;
+  const idx = (_a22 = m2.index) != null ? _a22 : 0;
+  const end = content.indexOf("\n", content.indexOf(")", idx) + 1);
+  const call = content.slice(Math.max(0, content.lastIndexOf("\n", idx - 1) - 400), end < 0 ? void 0 : end);
+  if (/strings\.Repeat\s*\(\s*"\?|Placeholders?\b|quote\w*Ident|QuoteIdentifier|pq\.Quote/i.test(call)) return false;
+  return true;
+}
 var PY_XML_MODULE = /^(?:xml\.etree\.c?ElementTree|xml\.etree|lxml\.etree|lxml|xml\.dom\.minidom|xml\.dom\.pulldom|xml\.dom|xml\.sax|xml\.dom\.expatbuilder)$/;
 function pyXmlNames(content) {
   var _a22, _b;
@@ -110699,7 +110712,9 @@ var RULES6 = [
     severity: "warning",
     title: "Deserialiser that runs code from the data",
     detail: "`torch.load` without `weights_only=True`, `shelve`, `dill`, `jsonpickle`, `marshal` and `read_pickle` all unpickle, which executes whatever the file says. Load only files you wrote; for models use `torch.load(\u2026, weights_only=True)` or safetensors, for data use JSON.",
-    check: (m2) => m2[1] === void 0 || !/\bweights_only\s*=\s*True\b/.test(m2[1])
+    // A training or eval script loading the checkpoint its own operator passes on the
+    // command line is not a trust boundary (18 of 18 corpus hits after thirdparty/).
+    check: (m2, content) => (m2[1] === void 0 || !/\bweights_only\s*=\s*True\b/.test(m2[1])) && !(m2[1] !== void 0 && (/^\s*(?:self\.)?args\.|\bopt\.|\bcfg\.|\bconfig\./.test(m2[1]) || /^[ \t]*import[ \t]+argparse\b|ArgumentParser\s*\(/m.test(content)))
   },
   {
     id: "py-random-for-secret",
@@ -110718,7 +110733,7 @@ var RULES6 = [
     severity: "warning",
     title: "Query builder handed a formatted string",
     detail: 'The SQL fragment passed to the query builder is built with Sprintf or `+`, so a value in it is parsed as SQL. Use placeholders (`Where("name = ?", name)`) and map sort columns through an allowlist.',
-    check: (_m, content) => GO_SQL_IMPORT2.test(content)
+    check: (m2, content) => goSqlBuilderAllows2(m2, content)
   },
   {
     id: "sql-builder-interpolated",
@@ -110728,7 +110743,7 @@ var RULES6 = [
     severity: "warning",
     title: "SQL text built with Sprintf",
     detail: 'A value is formatted into SQL text, which is what SQL injection is. Pass it as a query argument (`db.Query("\u2026 WHERE id = $1", id)`).',
-    check: (_m, content) => GO_SQL_IMPORT2.test(content)
+    check: (m2, content) => goSqlBuilderAllows2(m2, content)
   },
   {
     id: "go-archive-path-traversal",
@@ -110748,7 +110763,7 @@ var RULES6 = [
     severity: "warning",
     title: "Expression or template engine evaluates a computed string",
     detail: "SpEL, OGNL, MVEL, JEXL, Groovy, Velocity and FreeMarker can call arbitrary Java methods. Evaluating a string that carries user input is remote code execution. Evaluate fixed expressions only, or use a restricted context (`SimpleEvaluationContext`, a sandboxed resolver).",
-    check: (_m, content) => /\bimport\s+(?:org\.springframework\.expression|ognl|org\.mvel2|org\.apache\.commons\.jexl\d?|groovy\.lang|org\.apache\.velocity|freemarker\.template)\b/.test(content) && !/\bSimpleEvaluationContext\b|\bSAFER_RESOLVER\b/.test(content)
+    check: (_m, content) => !JAVA_SCRIPTING_TOOL2.test(content) && /\bimport\s+(?:org\.springframework\.expression|ognl|org\.mvel2|org\.apache\.commons\.jexl\d?|groovy\.lang|org\.apache\.velocity|freemarker\.template)\b/.test(content) && !/\bSimpleEvaluationContext\b|\bSAFER_RESOLVER\b/.test(content)
   },
   {
     id: "java-code-injection",
@@ -110757,7 +110772,7 @@ var RULES6 = [
     severity: "warning",
     title: "Script engine evaluates a computed string",
     detail: "`ScriptEngine.eval` runs the string as a program with full access to the JVM. Evaluating anything derived from input is remote code execution.",
-    check: (_m, content) => /\bimport\s+javax\.script\b/.test(content)
+    check: (_m, content) => /\bimport\s+javax\.script\b/.test(content) && !JAVA_SCRIPTING_TOOL2.test(content)
   },
   // ---- Weak hashes where they matter: password storage and home-made MACs ----
   // Measured on 350 corpus repos (Nov 2026): the generic weak-hash rule was right
@@ -111152,6 +111167,16 @@ function scanSource2(content, lang) {
   return [...byLine.values()].sort((a, b3) => a.line - b3.line);
 }
 var GO_SQL_IMPORT2 = /"(?:database\/sql|gorm\.io\/gorm|github\.com\/jinzhu\/gorm|xorm\.io\/xorm|github\.com\/go-xorm\/xorm|github\.com\/huandu\/go-sqlbuilder|github\.com\/jmoiron\/sqlx|github\.com\/jackc\/pgx[^"]*|github\.com\/gocql\/gocql|github\.com\/uptrace\/bun|github\.com\/Masterminds\/squirrel|github\.com\/doug-martin\/goqu[^"]*|github\.com\/go-pg\/pg[^"]*)"|\bsqldb\b/;
+var JAVA_SCRIPTING_TOOL2 = /\bclass\s+\w*(?:Script|Ognl|Expression|Interpreter|Evaluator|Console|Repl|Shell)\w*/;
+function goSqlBuilderAllows2(m2, content) {
+  if (!GO_SQL_IMPORT2.test(content)) return false;
+  if (/^package\s+(?:migrator|clause|schema|gorm|dialect\w*|callbacks)\b/m.test(content)) return false;
+  const idx = m2.index ?? 0;
+  const end = content.indexOf("\n", content.indexOf(")", idx) + 1);
+  const call = content.slice(Math.max(0, content.lastIndexOf("\n", idx - 1) - 400), end < 0 ? void 0 : end);
+  if (/strings\.Repeat\s*\(\s*"\?|Placeholders?\b|quote\w*Ident|QuoteIdentifier|pq\.Quote/i.test(call)) return false;
+  return true;
+}
 var PY_XML_MODULE2 = /^(?:xml\.etree\.c?ElementTree|xml\.etree|lxml\.etree|lxml|xml\.dom\.minidom|xml\.dom\.pulldom|xml\.dom|xml\.sax|xml\.dom\.expatbuilder)$/;
 function pyXmlNames2(content) {
   const modules = /* @__PURE__ */ new Set();
