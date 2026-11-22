@@ -112,8 +112,8 @@ export function TrustSection({ index }: { index: string }) {
             </div>
             <p className="text-xs leading-relaxed text-muted-foreground">
               {ru
-                ? "Хранимый XSS (запись в базу и вывод при чтении) глубокий анализ теперь прослеживает. Оставшиеся XSS в DVWA — DOM-based, в JavaScript браузера, и ещё один, который DVWA считает закрытым политикой CSP."
-                : "Stored XSS (written to the database, echoed when read back) is now followed. The XSS still missed in DVWA are DOM-based, in browser JavaScript, plus one DVWA treats as closed by its CSP."}
+                ? "Хранимый XSS (запись в базу и вывод при чтении) глубокий анализ теперь прослеживает. Оставшиеся XSS в DVWA живут в JavaScript браузера (DOM-based и обход CSP через .js), их анализ PHP не видит."
+                : "Stored XSS (written to the database, echoed when read back) is now followed. The XSS still missed in DVWA live in browser JavaScript (DOM-based, and a CSP bypass in a .js file), which the PHP engine does not read."}
             </p>
           </div>
 
