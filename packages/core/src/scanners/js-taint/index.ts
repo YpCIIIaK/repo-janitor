@@ -667,18 +667,24 @@ class Ctx {
       // The page's own URL, whole (request.url, location.href, req.path): forwarding or rebuilding it
       // stays on our site / our upstream. Only a parameter taken out of it chooses a target.
       if ((kind === "redirect" || kind === "ssrf") && WHOLE_URL.test(f.src) && !f.steps.some((s) => /\.get\(\)$|\.getAll\(\)$|\[\]$/.test(s.text))) continue
-      this.project.report({ kind, file: this.file, line, sink: label, fact: { ...f, steps: [...f.steps, { line, text: label, file: this.file }] }, guarded: guardedNear(this.content, line, f.src, kind, f.steps[0]?.file === this.file ? f.steps[0].line : undefined) })
+      this.project.report({ kind, file: this.file, line, sink: label, fact: { ...f, steps: [...f.steps, { line, text: label, file: this.file }] }, guarded: guardedNear(this.content, line, f.src, kind, f.steps[0]?.file === this.file ? f.steps[0].line : undefined, f.steps.filter((x) => x.file === this.file).map((x) => x.text)) })
     }
   }
 }
 
 /** A check just above the sink on the same value: allowlist, prefix check, path containment, host check. */
-export function guardedNear(content: string, line: number, src: string, kind: Kind, from?: number): boolean {
+export function guardedNear(content: string, line: number, src: string, kind: Kind, from?: number, names: string[] = []): boolean {
   // Up to 40 lines: handlers validate first and use the value further down (thelounge's name regex).
   // From where the value was read (same file, up to 200 lines), else the 40 lines above.
   const start = from && from <= line && line - from <= 200 ? from - 1 : Math.max(0, line - 41)
   const window = content.split(/\r?\n/).slice(start, line).join("\n")
-  const key = src.split(".").pop()?.replace(/\(.*$/, "") ?? ""
+  const srcKey = src.split(".").pop()?.replace(/\(.*$/, "") ?? ""
+  // The value's names along the way in this file (remixId, name), not only the request key.
+  const keys = [...new Set([srcKey, ...names.filter((n) => /^[A-Za-z_$][\w$]{2,}$/.test(n))])]
+  return keys.some((key) => guardedBy(window, key, kind))
+}
+
+function guardedBy(window: string, key: string, kind: Kind): boolean {
   // `if (typeof req.body.id !== 'string')`: an operator object cannot get past a type check.
   if (kind === "nosql" && key && new RegExp(`typeof\\s+[\\w.]*\\b${key.replace(/[^\w]/g, "")}\\b\\s*!==?\\s*['"]string`).test(window)) return true
   if ((kind === "file") && /\.startsWith\s*\(|path\.relative\s*\(|includes\s*\(\s*['"]\.\.['"]|isPathInside|isSubPath|realpath/.test(window)) return true
@@ -744,6 +750,9 @@ export const jsTaintScanner: Scanner = {
       if (issues.length >= MAX_FINDINGS) break
       const crossFile = f.fact.steps.some((s) => s.file !== f.file)
       let confidence: Issue["confidence"] = f.guarded ? "low" : crossFile ? "medium" : "high"
+      // Electron's main process: "requests" come from the app's own window, not from the network.
+      const srcFile = files.find((x) => x.file === (f.fact.steps[0]?.file ?? f.file))?.content ?? ""
+      if (/from\s+['"]electron['"]|require\(\s*['"]electron['"]\s*\)/.test(srcFile) || /(?:^|\/)(?:electron|main)\/[^/]*$/.test(f.fact.steps[0]?.file ?? "") && /electron/.test(srcFile)) confidence = "low"
       // Headers and cookies are set by the attacker in their own request: reflected XSS or a redirect from them needs another bug.
       if ((f.kind === "xss" || f.kind === "redirect") && /\.(?:headers|cookies|signedCookies)\b|\.(?:get|header)\(/.test(f.fact.src) && confidence !== "low") confidence = "low"
       let ageDays = 0

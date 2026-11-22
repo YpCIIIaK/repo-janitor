@@ -93,3 +93,4 @@ benchmark/.local-rescans/
 /benchmark/recall-advisories.jsonl
 /benchmark/.deep-php/
 packages/cli/.dist-php/
+packages/cli/.dist-js/
