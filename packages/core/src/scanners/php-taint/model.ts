@@ -316,9 +316,22 @@ export const SQL_METHODS = new Set([
 /** Methods that need a DB-looking receiver (they are common words elsewhere). */
 export const SQL_METHOD_NEEDS_DB = new Set(["query", "exec", "prepare", "select", "insert", "update", "delete", "raw", "statement", "sql", "fetchall", "fetchone", "fetchcolumn"])
 
-export const DB_RECEIVER = /(?:db|dbo|pdo|conn|connection|mysql|mysqli|link|wpdb|database|sql|dbh|dbc|sth|stmt|adapter|entitymanager|em|doctrine|capsule|\bDB\b)/i
+const DB_WORDS = new Set(["db", "dbo", "pdo", "conn", "connection", "mysql", "mysqli", "link", "wpdb", "database", "sql", "dbh", "dbc", "sth", "stmt", "adapter", "entitymanager", "em", "doctrine", "capsule"])
+/**
+ * A receiver that is a database handle, judged by its last name's words: `$this->db`,
+ * `$pdo`, `$entityManager`. Substrings used to match: "em" in measurementFamilyRepository
+ * and emailRepository made ORM repositories SQL sinks (deep-PHP review 2026-11-17, 7 fp).
+ */
+export const DB_RECEIVER = {
+  test(recv: string): boolean {
+    if (/^(?:DB|\\?Illuminate\\Support\\Facades\\DB)$/.test(recv)) return true
+    const last = recv.split(/->|::|\\/).pop() ?? recv
+    const words = last.replace(/[$()]/g, " ").replace(/([a-z0-9])([A-Z])/g, "$1 $2").toLowerCase().split(/[^a-z0-9]+/).filter(Boolean)
+    return words.some((w) => DB_WORDS.has(w) || /^(?:db|mysqli?|sql)\w*$/.test(w)) || words.join("") === "entitymanager"
+  },
+}
 
 export const SQL_TEXT = /\b(?:select\s[\s\S]*\bfrom|insert\s+into|update\s+\S+\s+set|delete\s+from|replace\s+into|drop\s+table|create\s+table|alter\s+table|where\s|order\s+by|union\s+select)\b/i
 
 /** Paths that are not the project's own shipped code. */
-export const SKIP_PATH = /(?:^|\/)(?:vendor|vendor[-_]prefixed|node_modules|third[-_]party|bower_components|freemius|tests?|specs?|fixtures?|__tests__|docs?|examples?)\//i
+export const SKIP_PATH = /(?:^|\/)(?:vendor|vendor[-_]prefixed|node_modules|third[-_]?party|thirdparty|bower_components|freemius|tests?|specs?|fixtures?|__tests__|docs?|examples?|demos?|payloads?|static|resources\/static)\//i

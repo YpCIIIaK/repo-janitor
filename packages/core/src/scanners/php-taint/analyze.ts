@@ -1182,6 +1182,8 @@ class Ctx {
         return []
       }
       // SQL
+      // An ORM call handed an array ($repo->update(['units' => $units], $id)): values are bound, not SQL text.
+      if (SQL_METHODS.has(method) && argNodes[0]?.kind === "array") return []
       if (SQL_METHODS.has(method)) {
         const sqlLike = SQL_TEXT.test(literalText(argNodes[0]))
         const dbLike = DB_RECEIVER.test(recv) || /^(?:DB|\\?Illuminate\\Support\\Facades\\DB)$/i.test(recv)
@@ -1205,7 +1207,8 @@ class Ctx {
         this.sink("privesc", args[0] ?? [], argNodes[0], n, `${recv}->${method}()`)
         return []
       }
-      if (method === "setopt" || method === "seturl") this.sink("ssrf", args[method === "setopt" ? 1 : 0] ?? [], argNodes[method === "setopt" ? 1 : 0], n, `${recv}->${method}()`)
+      // setUrl() is a fetch only on an HTTP client; on a bookmark or an entry it stores a link (wallabag, shaarli).
+      if (method === "setopt" || (method === "seturl" && /curl|http|client|request|fetch|guzzle/i.test(recv))) this.sink("ssrf", args[method === "setopt" ? 1 : 0] ?? [], argNodes[method === "setopt" ? 1 : 0], n, `${recv}->${method}()`)
       if (/^(?:request|get|post|put|delete|head|patch)$/.test(method) && /(?:client|guzzle|http)$/i.test(recv)) {
         const urlArg = method === "request" ? 1 : 0
         this.sink("ssrf", args[urlArg] ?? [], argNodes[urlArg], n, `${recv}->${method}()`)
@@ -1301,7 +1304,11 @@ class Ctx {
       return []
     }
     if (fn === "preg_replace" && /\/[a-z]*e[a-z]*$/i.test(literalText(argNodes[0]))) this.sink("code", args[1] ?? [], argNodes[1], n, "preg_replace /e")
+    // preg_replace('/[^a-zA-Z0-9]/', '', $x): a character allowlist leaves nothing dangerous (raspap, freescout).
+    if (fn === "preg_replace" && /^\/\[\^[\w\\.\- ]+\]\+?\/[a-z]*$/i.test(literalText(argNodes[0])) && literalText(argNodes[1]) === "") return []
 
+    // The project's own cleaners: sanitize_resolved_theme(), resolve_language(), clean_path().
+    if (/^(?:sanitize|resolve|clean|validate|normali[sz]e|whitelist|allowlist)_/i.test(fn)) return withStep(makeSafe(merge(...args), ["xss", "file", "include", "redirect"]), { line, text: label, file: this.file })
     // Project function
     const def = this.project.lookup(fn, false)
     if (def) return this.applyCallee(def, args, n, label)

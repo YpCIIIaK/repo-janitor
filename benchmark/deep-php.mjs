@@ -3,7 +3,7 @@
  * Run the deep PHP engine (php-taint) over the PHP part of the corpus, kept
  * apart from the regular results so it can be measured before it is trusted.
  *
- *   node benchmark/deep-php.mjs [--min-files 20] [--jobs 4]
+ *   node benchmark/deep-php.mjs [--min-files 20] [--jobs 4] [--out dir] [--repos names.json] [--cli path]
  *
  * For each corpus repo with at least --min-files PHP files (from its inventory):
  * a blob-filtered sparse checkout of *.php at the pinned sha, `scan --only
@@ -19,9 +19,11 @@ import { inShard } from "./shard.mjs"
 
 const here = dirname(fileURLToPath(import.meta.url))
 const root = join(here, "..")
-const outDir = join(here, ".deep-php")
-const cli = join(root, "packages/cli/dist/index.js")
 const arg = (n, d) => (process.argv.includes(`--${n}`) ? process.argv[process.argv.indexOf(`--${n}`) + 1] : d)
+// --out keeps a re-measurement apart from the first run; --repos limits it to a JSON list of names.
+const outDir = arg("out", join(here, ".deep-php"))
+const cli = arg("cli", join(root, "packages/cli/dist/index.js"))
+const only = arg("repos", null) ? new Set(JSON.parse(readFileSync(arg("repos"), "utf8"))) : null
 const minFiles = Number(arg("min-files", 20))
 const jobs = Number(arg("jobs", 4))
 
@@ -72,7 +74,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   if (!existsSync(cli)) throw new Error("build the CLI first: pnpm run build:packages")
   mkdirSync(outDir, { recursive: true })
   const corpus = JSON.parse(readFileSync(join(here, "corpus.json"), "utf8"))
-  const queue = inShard(phpRepos(corpus, minFiles))
+  const queue = inShard(phpRepos(corpus, minFiles).filter((r) => !only || only.has(r.name)))
   console.log(`${queue.length} PHP repos (≥${minFiles} PHP files)`)
   let next = 0
   await Promise.all(Array.from({ length: jobs }, async () => {

@@ -77,6 +77,14 @@ export const phpTaintScanner: Scanner = {
       // The Host header / the whole $_SERVER array: web servers usually accept only configured hosts.
       // Still worth a look for SQL and shell; for paths, includes, redirects and output, listed with --all.
       if (/HTTP_HOST|^\$_SERVER$/.test(f.source) && f.kind !== "sql" && f.kind !== "cmd") confidence = confidence === "high" ? "medium" : "low"
+      // The request path ($_SERVER['REQUEST_URI'], PHP_SELF, PATH_INFO) arrives URL-encoded and
+      // mostly flows into the app's own links and same-page redirects: 7 of 7 reviewed were noise.
+      if (/REQUEST_URI|PHP_SELF|PATH_INFO|QUERY_STRING|DOCUMENT_ROOT|SCRIPT_NAME/.test(f.source) && f.kind !== "sql" && f.kind !== "cmd") confidence = "low"
+      // A guard on the same value just above the sink: an allowlist, a pattern check, a same-host check.
+      if (guardedNearby(contents.get(f.file) ?? "", f.line, f.source, f.kind)) confidence = "low"
+      // Request values packed into a query string behind a fixed URL (http_build_query) choose
+      // parameters, not where the browser goes: 2 of 2 reviewed "open redirects".
+      if (f.kind === "redirect" && f.steps.some((s) => /http_build_query/.test(s.text))) confidence = "low"
       const where = entry ? ` Reachable from ${entry}.` : adminOnly ? " Reachable from admin screens only (or after a capability check): an administrator would have to be the attacker or be tricked into it." : ""
       issues.push({
         id,
@@ -143,7 +151,10 @@ export const phpTaintScanner: Scanner = {
       const line = contents.get(l.file)?.split(/\r?\n/)[l.line - 1]?.trim().slice(0, 200)
       issues.push({
         id, category: "security", severity: rule.severity, title: rule.title, location: `${l.file}:${l.line}`, ageDays,
-        detail: `${rule.detail} Here: ${l.what}.`, ...(line ? { evidence: line } : {}), rule: rule.id, confidence: l.weak ? "medium" : "high",
+        detail: `${rule.detail} Here: ${l.what}.`, ...(line ? { evidence: line } : {}), rule: rule.id,
+        // A file left in the web root is judged by its name alone; 3 of 3 reviewed were dump
+        // scripts and helper CLIs never served. Listed with --all.
+        confidence: l.kind === "public-sensitive-file" ? "low" : l.weak ? "medium" : "high",
       })
     }
     return issues
@@ -204,4 +215,24 @@ export function trace(f: Finding): string {
   }
   parts.push(`${f.sink} (${f.file === lastFile ? `line ${f.line}` : `${f.file}:${f.line}`})`)
   return parts.filter((p) => !p.startsWith("string")).join(" → ")
+}
+
+/** Name of the request key behind a source label: `$_POST['format']` → format, `->get('referer')` → referer. */
+function sourceKey(source: string): string | null {
+  return source.match(/\[\s*['"]([\w-]+)['"]\s*\]|\(\s*['"]([\w-]+)['"]\s*\)/)?.slice(1).find(Boolean) ?? null
+}
+
+/**
+ * Up to eight lines above the sink, a check that bounds the value: in_array / array_key_exists /
+ * preg_match on the same request key, or a lookup in the project's own map (isset($formats[$v])).
+ * For redirects, a comparison with the site's own host. isset() on the superglobal itself only
+ * says the key is present. Deep-PHP review 2026-11-17: 3 allowlist and 3 same-host false positives.
+ */
+export function guardedNearby(content: string, line: number, source: string, kind: string): boolean {
+  if (!content) return false
+  const window = content.split(/\r?\n/).slice(Math.max(0, line - 9), line).join("\n")
+  if (kind === "redirect" && /getHost\s*\(|getSchemeAndHttpHost\s*\(|PHP_URL_HOST|\$_SERVER\[\s*['"](?:HTTP_HOST|SERVER_NAME)['"]\s*\]\s*[!=]==?|redirect_allow|allowed_?hosts|isSameOrigin|is_safe_url|wp_validate_redirect/i.test(window)) return true
+  const key = sourceKey(source)
+  if (!key) return false
+  return window.split("\n").some((l) => l.includes(key) && /\b(?:in_array|array_key_exists|preg_match)\s*\(|\bisset\s*\(\s*\$(?!_(?:GET|POST|REQUEST|COOKIE|SERVER|FILES)\b)\w+\s*\[\s*\$/.test(l))
 }
