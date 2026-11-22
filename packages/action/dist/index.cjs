@@ -22863,14 +22863,14 @@ ${exception.mark.snippet}`;
     }
     function mergeKeys(state, frame, source, sourceTag) {
       chargeMergeWork(state);
-      for (const sourceKey of sourceTag.keys(source)) {
+      for (const sourceKey3 of sourceTag.keys(source)) {
         var _frame$overridable;
         chargeMergeWork(state);
-        if (frame.tag.has(frame.value, sourceKey)) continue;
-        const err = frame.tag.addPair(frame.value, sourceKey, sourceTag.get(source, sourceKey));
+        if (frame.tag.has(frame.value, sourceKey3)) continue;
+        const err = frame.tag.addPair(frame.value, sourceKey3, sourceTag.get(source, sourceKey3));
         if (err) throwError$1(state, err);
         (_frame$overridable = frame.overridable) !== null && _frame$overridable !== void 0 || (frame.overridable = /* @__PURE__ */ new Set());
-        frame.overridable.add(sourceKey);
+        frame.overridable.add(sourceKey3);
       }
     }
     function mergeSource(state, frame, source, sourceTag) {
@@ -36050,7 +36050,7 @@ var require_src4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-V7AI7TT7.js
+// ../cli/dist/chunk-ZQN24WQB.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -59984,7 +59984,7 @@ function date4(params) {
   return _coercedDate(ZodDate, params);
 }
 
-// ../cli/dist/chunk-V7AI7TT7.js
+// ../cli/dist/chunk-ZQN24WQB.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -80247,14 +80247,14 @@ ${exception.mark.snippet}`;
     }
     function mergeKeys(state, frame, source, sourceTag) {
       chargeMergeWork(state);
-      for (const sourceKey of sourceTag.keys(source)) {
+      for (const sourceKey22 of sourceTag.keys(source)) {
         var _frame$overridable;
         chargeMergeWork(state);
-        if (frame.tag.has(frame.value, sourceKey)) continue;
-        const err = frame.tag.addPair(frame.value, sourceKey, sourceTag.get(source, sourceKey));
+        if (frame.tag.has(frame.value, sourceKey22)) continue;
+        const err = frame.tag.addPair(frame.value, sourceKey22, sourceTag.get(source, sourceKey22));
         if (err) throwError$1(state, err);
         (_frame$overridable = frame.overridable) !== null && _frame$overridable !== void 0 || (frame.overridable = /* @__PURE__ */ new Set());
-        frame.overridable.add(sourceKey);
+        frame.overridable.add(sourceKey22);
       }
     }
     function mergeSource(state, frame, source, sourceTag) {
@@ -102476,9 +102476,18 @@ var SQL_METHODS = /* @__PURE__ */ new Set([
   "loadobjectlist"
 ]);
 var SQL_METHOD_NEEDS_DB = /* @__PURE__ */ new Set(["query", "exec", "prepare", "select", "insert", "update", "delete", "raw", "statement", "sql", "fetchall", "fetchone", "fetchcolumn"]);
-var DB_RECEIVER = /(?:db|dbo|pdo|conn|connection|mysql|mysqli|link|wpdb|database|sql|dbh|dbc|sth|stmt|adapter|entitymanager|em|doctrine|capsule|\bDB\b)/i;
+var DB_WORDS = /* @__PURE__ */ new Set(["db", "dbo", "pdo", "conn", "connection", "mysql", "mysqli", "link", "wpdb", "database", "sql", "dbh", "dbc", "sth", "stmt", "adapter", "entitymanager", "em", "doctrine", "capsule"]);
+var DB_RECEIVER = {
+  test(recv) {
+    var _a22;
+    if (/^(?:DB|\\?Illuminate\\Support\\Facades\\DB)$/.test(recv)) return true;
+    const last = (_a22 = recv.split(/->|::|\\/).pop()) != null ? _a22 : recv;
+    const words = last.replace(/[$()]/g, " ").replace(/([a-z0-9])([A-Z])/g, "$1 $2").toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
+    return words.some((w2) => DB_WORDS.has(w2) || /^(?:db|mysqli?|sql)\w*$/.test(w2)) || words.join("") === "entitymanager";
+  }
+};
 var SQL_TEXT = /\b(?:select\s[\s\S]*\bfrom|insert\s+into|update\s+\S+\s+set|delete\s+from|replace\s+into|drop\s+table|create\s+table|alter\s+table|where\s|order\s+by|union\s+select)\b/i;
-var SKIP_PATH2 = /(?:^|\/)(?:vendor|vendor[-_]prefixed|node_modules|third[-_]party|bower_components|freemius|tests?|specs?|fixtures?|__tests__|docs?|examples?)\//i;
+var SKIP_PATH2 = /(?:^|\/)(?:vendor|vendor[-_]prefixed|node_modules|third[-_]?party|thirdparty|bower_components|freemius|tests?|specs?|fixtures?|__tests__|docs?|examples?|demos?|payloads?|static|resources\/static)\//i;
 var posix2 = {
   dirname(p2) {
     const i = p2.lastIndexOf("/");
@@ -103475,7 +103484,7 @@ var Ctx = class _Ctx {
     return [];
   }
   call(n, env) {
-    var _a22, _b, _c, _d, _e2, _f, _g, _h, _i, _j, _k, _l, _m, _n2, _o, _p, _q, _r2, _s2, _t2, _u, _v, _w, _x, _y, _z, _A, _B, _C, _D, _E2, _F, _G, _H, _I, _J, _K, _L, _M, _N;
+    var _a22, _b, _c, _d, _e2, _f, _g, _h, _i, _j, _k, _l, _m, _n2, _o, _p, _q, _r2, _s2, _t2, _u, _v, _w, _x, _y, _z, _A, _B, _C, _D, _E2, _F, _G, _H, _I, _J, _K, _L, _M, _N, _O;
     const what = n.what;
     const args = this.args(n, env);
     const line = lineOf5(n);
@@ -103514,17 +103523,18 @@ var Ctx = class _Ctx {
         this.sink("sql", (_h = args[0]) != null ? _h : [], argNodes[0], n, `${recv}->${nameOf(what.offset)}()`);
         return [];
       }
+      if (SQL_METHODS.has(method) && ((_i = argNodes[0]) == null ? void 0 : _i.kind) === "array") return [];
       if (SQL_METHODS.has(method)) {
         const sqlLike = SQL_TEXT.test(literalText(argNodes[0]));
         const dbLike = DB_RECEIVER.test(recv) || /^(?:DB|\\?Illuminate\\Support\\Facades\\DB)$/i.test(recv);
         if ((sqlLike || dbLike) && (!SQL_METHOD_NEEDS_DB.has(method) || dbLike || sqlLike)) {
-          this.sink("sql", (_i = args[0]) != null ? _i : [], argNodes[0], n, `${recv}->${nameOf(what.offset)}()`);
+          this.sink("sql", (_j = args[0]) != null ? _j : [], argNodes[0], n, `${recv}->${nameOf(what.offset)}()`);
           return [];
         }
       }
       if (/filesystem|wp_fs|\$fs$/i.test(recv)) {
         const fsArg = { get_contents: [0], get_contents_array: [0], put_contents: [0], delete: [0], move: [0, 1], copy: [0, 1], mkdir: [0], rmdir: [0], chmod: [0], touch: [0] };
-        for (const i of (_j = fsArg[method]) != null ? _j : []) this.sink("file", (_k = args[i]) != null ? _k : [], argNodes[i], n, `${recv}->${method}()`);
+        for (const i of (_k = fsArg[method]) != null ? _k : []) this.sink("file", (_l = args[i]) != null ? _l : [], argNodes[i], n, `${recv}->${method}()`);
         if (method === "get_contents" || method === "get_contents_array") return [];
       }
       if (SOURCE_METHODS.has(method)) {
@@ -103532,16 +103542,16 @@ var Ctx = class _Ctx {
         if (recvVal.length) return withStep(recvVal, { line, text: `${recv}->${nameOf(what.offset)}()`, file: this.file });
       }
       if (method === "set_role" || method === "add_role" || method === "add_cap") {
-        this.sink("privesc", (_l = args[0]) != null ? _l : [], argNodes[0], n, `${recv}->${method}()`);
+        this.sink("privesc", (_m = args[0]) != null ? _m : [], argNodes[0], n, `${recv}->${method}()`);
         return [];
       }
-      if (method === "setopt" || method === "seturl") this.sink("ssrf", (_m = args[method === "setopt" ? 1 : 0]) != null ? _m : [], argNodes[method === "setopt" ? 1 : 0], n, `${recv}->${method}()`);
+      if (method === "setopt" || method === "seturl" && /curl|http|client|request|fetch|guzzle/i.test(recv)) this.sink("ssrf", (_n2 = args[method === "setopt" ? 1 : 0]) != null ? _n2 : [], argNodes[method === "setopt" ? 1 : 0], n, `${recv}->${method}()`);
       if (/^(?:request|get|post|put|delete|head|patch)$/.test(method) && /(?:client|guzzle|http)$/i.test(recv)) {
         const urlArg = method === "request" ? 1 : 0;
-        this.sink("ssrf", (_n2 = args[urlArg]) != null ? _n2 : [], argNodes[urlArg], n, `${recv}->${method}()`);
+        this.sink("ssrf", (_o = args[urlArg]) != null ? _o : [], argNodes[urlArg], n, `${recv}->${method}()`);
         return [];
       }
-      if (/^(?:redirect|redirectto|to|away)$/.test(method) && /redirect|response|\$this$/i.test(recv)) this.sink("redirect", (_o = args[0]) != null ? _o : [], argNodes[0], n, `${recv}->${method}()`);
+      if (/^(?:redirect|redirectto|to|away)$/.test(method) && /redirect|response|\$this$/i.test(recv)) this.sink("redirect", (_p = args[0]) != null ? _p : [], argNodes[0], n, `${recv}->${method}()`);
       if (method === "loadxml" || method === "load") return [];
       const def2 = this.project.lookup(method, true);
       if (def2) return this.applyCallee(def2, args, n, `${recv}->${nameOf(what.offset)}()`);
@@ -103559,32 +103569,32 @@ var Ctx = class _Ctx {
       const filter = exprText(argNodes[2]) + nameOf(argNodes[2]);
       if (/FILTER_VALIDATE_(?:INT|FLOAT|BOOL|BOOLEAN|IP|EMAIL)|FILTER_SANITIZE_NUMBER/i.test(filter)) return [];
       const safe = /FILTER_SANITIZE_(?:SPECIAL_CHARS|FULL_SPECIAL_CHARS|ENCODED)/i.test(filter) ? ["xss"] : [];
-      return [{ src: `filter_input(${nameOf(argNodes[0])}, ${((_p = argNodes[1]) == null ? void 0 : _p.kind) === "string" ? `'${argNodes[1].value}'` : "\u2026"})`, safe: new Set(safe), steps: [{ line, text: label, file: this.file }], weak: false }];
+      return [{ src: `filter_input(${nameOf(argNodes[0])}, ${((_q = argNodes[1]) == null ? void 0 : _q.kind) === "string" ? `'${argNodes[1].value}'` : "\u2026"})`, safe: new Set(safe), steps: [{ line, text: label, file: this.file }], weak: false }];
     }
     if (SOURCE_FUNCTIONS.has(fn2) && (!this.project.lookup(fn2, false) || ["getallheaders", "apache_request_headers"].includes(fn2))) {
       if ((fn2 === "request" || fn2 === "input") && !argNodes.length) return [];
       return [{ src: label, safe: /* @__PURE__ */ new Set(), steps: [{ line, text: label, file: this.file }], weak: fn2 === "get_query_var" }];
     }
     if ((fn2 === "wp_insert_user" || fn2 === "wp_update_user" || fn2 === "wp_insert_post" || fn2 === "wp_update_post") && argNodes[0]) {
-      const whole = ((_q = args[0]) != null ? _q : []).filter((f3) => f3.src && /^\$_(?:POST|GET|REQUEST)$|->(?:get_params|get_json_params|get_body_params|all|input)\(\)$/i.test(f3.src));
+      const whole = ((_r2 = args[0]) != null ? _r2 : []).filter((f3) => f3.src && /^\$_(?:POST|GET|REQUEST)$|->(?:get_params|get_json_params|get_body_params|all|input)\(\)$/i.test(f3.src));
       if (whole.length) this.sink("privesc", whole, argNodes[0], n, `${label} with the whole request`);
       const target = keyOf(argNodes[0]);
-      const roleNode = argNodes[0].kind === "array" ? (_s2 = (_r2 = argNodes[0].items) == null ? void 0 : _r2.find((i) => {
+      const roleNode = argNodes[0].kind === "array" ? (_t2 = (_s2 = argNodes[0].items) == null ? void 0 : _s2.find((i) => {
         var _a32;
         return (i == null ? void 0 : i.kind) === "entry" && ((_a32 = i.key) == null ? void 0 : _a32.kind) === "string" && /^(?:role|user_level|wp_capabilities)$/.test(i.key.value);
-      })) == null ? void 0 : _s2.value : null;
-      const role = roleNode ? this.expr(roleNode, env) : target ? (_t2 = env.get(`${target}[role]`)) != null ? _t2 : [] : [];
+      })) == null ? void 0 : _t2.value : null;
+      const role = roleNode ? this.expr(roleNode, env) : target ? (_u = env.get(`${target}[role]`)) != null ? _u : [] : [];
       if (role.length && fn2.includes("user")) this.sink("privesc", role, roleNode != null ? roleNode : argNodes[0], n, `${label} role`);
     }
-    if (fn2 === "define" && ((_u = argNodes[0]) == null ? void 0 : _u.kind) === "string") {
-      env.set(`#${String(argNodes[0].value)}`, (_v = args[1]) != null ? _v : []);
-      const src = (_w = args[1]) == null ? void 0 : _w.find((f3) => f3.src);
+    if (fn2 === "define" && ((_v = argNodes[0]) == null ? void 0 : _v.kind) === "string") {
+      env.set(`#${String(argNodes[0].value)}`, (_w = args[1]) != null ? _w : []);
+      const src = (_x = args[1]) == null ? void 0 : _x.find((f3) => f3.src);
       if (src) this.project.taintConstant(String(argNodes[0].value), __spreadProps(__spreadValues({}, src), { steps: [...src.steps, { line, text: `define('${argNodes[0].value}')`, file: this.file }].slice(-MAX_STEPS) }));
       return [];
     }
     if (fn2 === "extract" || fn2 === "parse_str" && argNodes.length === 1) {
-      const direct = ((_x = argNodes[0]) == null ? void 0 : _x.kind) === "variable" && /^_(?:GET|POST|REQUEST|COOKIE|SERVER)$/i.test(String(argNodes[0].name)) || fn2 === "parse_str" && ((_y = args[0]) == null ? void 0 : _y.some((f3) => f3.src));
-      if (direct && ((_z = args[0]) == null ? void 0 : _z.length)) this.sink("code", args[0], argNodes[0], n, label);
+      const direct = ((_y = argNodes[0]) == null ? void 0 : _y.kind) === "variable" && /^_(?:GET|POST|REQUEST|COOKIE|SERVER)$/i.test(String(argNodes[0].name)) || fn2 === "parse_str" && ((_z = args[0]) == null ? void 0 : _z.some((f3) => f3.src));
+      if (direct && ((_A = args[0]) == null ? void 0 : _A.length)) this.sink("code", args[0], argNodes[0], n, label);
       return [];
     }
     const sinks = FUNCTION_SINKS[fn2];
@@ -103593,13 +103603,13 @@ var Ctx = class _Ctx {
         const i = s.arg === "last" ? args.length - 1 : s.arg;
         if (i < 0 || i >= args.length) continue;
         let kind = s.kind;
-        if ((fn2 === "array_map" || fn2 === "usort") && ((_A = argNodes[i]) == null ? void 0 : _A.kind) !== "variable") continue;
+        if ((fn2 === "array_map" || fn2 === "usort") && ((_B = argNodes[i]) == null ? void 0 : _B.kind) !== "variable") continue;
         if (fn2 === "unserialize" && argNodes[1] && /allowed_classes/.test(literalText(argNodes[1]) + JSON.stringify(argNodes[1]).slice(0, 400))) continue;
         if (fn2 === "mail" && i === 4) kind = "cmd";
         if (kind === "file" && /^(?:https?|ftp):\/\//i.test(leadingLiteral(argNodes[i]))) kind = "ssrf";
         if (fn2 === "fopen" && argNodes[0] && literalText(argNodes[0]) === "php://input") continue;
         if (fn2 === "redirect" && i === 0 && !argNodes.length) continue;
-        if (kind === "privesc" && (leadingLiteral(argNodes[i]) || ((_B = argNodes[i]) == null ? void 0 : _B.kind) === "bin" || ((_C = argNodes[i]) == null ? void 0 : _C.kind) === "encapsed")) continue;
+        if (kind === "privesc" && (leadingLiteral(argNodes[i]) || ((_C = argNodes[i]) == null ? void 0 : _C.kind) === "bin" || ((_D = argNodes[i]) == null ? void 0 : _D.kind) === "encapsed")) continue;
         this.sink(kind, args[i], argNodes[i], n, label);
       }
       if (fn2 === "file_get_contents" || fn2 === "fread" || fn2 === "file") return [];
@@ -103607,28 +103617,30 @@ var Ctx = class _Ctx {
     }
     if (fn2 === "header") {
       const lead = leadingLiteral(argNodes[0]);
-      if (/^\s*location\s*:/i.test(lead) || ((_D = argNodes[0]) == null ? void 0 : _D.kind) !== "string" && !lead && ((_E2 = args[0]) == null ? void 0 : _E2.length)) {
-        if (/^\s*location\s*:\s*$/i.test(lead) || !lead) this.sink("redirect", (_F = args[0]) != null ? _F : [], argNodes[0], n, "header('Location: \u2026')");
+      if (/^\s*location\s*:/i.test(lead) || ((_E2 = argNodes[0]) == null ? void 0 : _E2.kind) !== "string" && !lead && ((_F = args[0]) == null ? void 0 : _F.length)) {
+        if (/^\s*location\s*:\s*$/i.test(lead) || !lead) this.sink("redirect", (_G = args[0]) != null ? _G : [], argNodes[0], n, "header('Location: \u2026')");
       }
       return [];
     }
     if (fn2 === "curl_setopt" || fn2 === "curl_setopt_array") {
-      if (fn2 === "curl_setopt" && /CURLOPT_URL/i.test(nameOf(argNodes[1]) || exprText(argNodes[1]))) this.sink("ssrf", (_G = args[2]) != null ? _G : [], argNodes[2], n, "curl_setopt(CURLOPT_URL)");
+      if (fn2 === "curl_setopt" && /CURLOPT_URL/i.test(nameOf(argNodes[1]) || exprText(argNodes[1]))) this.sink("ssrf", (_H = args[2]) != null ? _H : [], argNodes[2], n, "curl_setopt(CURLOPT_URL)");
       return [];
     }
-    if (fn2 === "preg_replace" && /\/[a-z]*e[a-z]*$/i.test(literalText(argNodes[0]))) this.sink("code", (_H = args[1]) != null ? _H : [], argNodes[1], n, "preg_replace /e");
+    if (fn2 === "preg_replace" && /\/[a-z]*e[a-z]*$/i.test(literalText(argNodes[0]))) this.sink("code", (_I = args[1]) != null ? _I : [], argNodes[1], n, "preg_replace /e");
+    if (fn2 === "preg_replace" && /^\/\[\^[\w\\.\- ]+\]\+?\/[a-z]*$/i.test(literalText(argNodes[0])) && literalText(argNodes[1]) === "") return [];
+    if (/^(?:sanitize|resolve|clean|validate|normali[sz]e|whitelist|allowlist)_/i.test(fn2)) return withStep(makeSafe(merge2(...args), ["xss", "file", "include", "redirect"]), { line, text: label, file: this.file });
     const def = this.project.lookup(fn2, false);
     if (def) return this.applyCallee(def, args, n, label);
     if (fn2 === "filter_var") {
       const filter = exprText(argNodes[1]) + nameOf(argNodes[1]);
       if (/FILTER_VALIDATE_(?:INT|FLOAT|BOOL|BOOLEAN|IP)|FILTER_SANITIZE_NUMBER/i.test(filter)) return [];
-      if (/FILTER_SANITIZE_(?:SPECIAL_CHARS|FULL_SPECIAL_CHARS|ENCODED)/i.test(filter)) return makeSafe((_I = args[0]) != null ? _I : [], ["xss"]);
-      return withStep((_J = args[0]) != null ? _J : [], { line, text: label, file: this.file });
+      if (/FILTER_SANITIZE_(?:SPECIAL_CHARS|FULL_SPECIAL_CHARS|ENCODED)/i.test(filter)) return makeSafe((_J = args[0]) != null ? _J : [], ["xss"]);
+      return withStep((_K = args[0]) != null ? _K : [], { line, text: label, file: this.file });
     }
-    if (fn2 === "pathinfo" && /PATHINFO_(?:FILENAME|EXTENSION)/.test(nameOf(argNodes[1]))) return makeSafe((_K = args[0]) != null ? _K : [], ["file", "include"]);
-    if (/^(?:apply_filters|apply_filters_ref_array|apply_filters_deprecated)$/.test(fn2)) return withStep((_L = args[1]) != null ? _L : [], { line, text: label, file: this.file });
+    if (fn2 === "pathinfo" && /PATHINFO_(?:FILENAME|EXTENSION)/.test(nameOf(argNodes[1]))) return makeSafe((_L = args[0]) != null ? _L : [], ["file", "include"]);
+    if (/^(?:apply_filters|apply_filters_ref_array|apply_filters_deprecated)$/.test(fn2)) return withStep((_M = args[1]) != null ? _M : [], { line, text: label, file: this.file });
     if (/^(?:wp_parse_args|shortcode_atts|map_deep|wc_clean|wc_sanitize_textarea|stripslashes_deep|wp_slash|wp_unslash|maybe_serialize|wp_json_encode|array_merge_recursive|wp_list_pluck)$/.test(fn2)) {
-      const v2 = fn2 === "shortcode_atts" ? (_M = args[1]) != null ? _M : [] : fn2 === "wp_list_pluck" ? (_N = args[0]) != null ? _N : [] : merge2(...args);
+      const v2 = fn2 === "shortcode_atts" ? (_N = args[1]) != null ? _N : [] : fn2 === "wp_list_pluck" ? (_O = args[0]) != null ? _O : [] : merge2(...args);
       return withStep(fn2 === "wc_clean" ? makeSafe(v2, ["xss"]) : fn2 === "wp_json_encode" ? makeSafe(v2, ["xss"]) : v2, { line, text: label, file: this.file });
     }
     if (CLEAN_FUNCTIONS.has(fn2)) return [];
@@ -104266,7 +104278,7 @@ var phpTaintScanner = {
   category: "security",
   run(ctx) {
     return __async(this, null, function* () {
-      var _a22, _b, _c, _d, _e2, _f, _g, _h, _i, _j, _k, _l, _m, _n2, _o, _p;
+      var _a22, _b, _c, _d, _e2, _f, _g, _h, _i, _j, _k, _l, _m, _n2, _o, _p, _q;
       const project = new Project();
       const contents = /* @__PURE__ */ new Map();
       let files = 0;
@@ -104319,6 +104331,9 @@ var phpTaintScanner = {
         let confidence = f3.weak ? "medium" : "high";
         if (adminOnly) confidence = confidence === "high" ? "medium" : "low";
         if (/HTTP_HOST|^\$_SERVER$/.test(f3.source) && f3.kind !== "sql" && f3.kind !== "cmd") confidence = confidence === "high" ? "medium" : "low";
+        if (/REQUEST_URI|PHP_SELF|PATH_INFO|QUERY_STRING|DOCUMENT_ROOT|SCRIPT_NAME/.test(f3.source) && f3.kind !== "sql" && f3.kind !== "cmd") confidence = "low";
+        if (guardedNearby((_l = contents.get(f3.file)) != null ? _l : "", f3.line, f3.source, f3.kind)) confidence = "low";
+        if (f3.kind === "redirect" && f3.steps.some((s) => /http_build_query/.test(s.text))) confidence = "low";
         const where = entry ? ` Reachable from ${entry}.` : adminOnly ? " Reachable from admin screens only (or after a capability check): an administrator would have to be the attacker or be tricked into it." : "";
         issues.push(__spreadValues(__spreadProps(__spreadValues({
           id,
@@ -104332,7 +104347,7 @@ var phpTaintScanner = {
           rule: rule.id,
           confidence,
           flow: flowOf(f3)
-        }), ((_l = f3.alt) == null ? void 0 : _l.length) ? { altFlows: distinctFlows(flowOf(f3), f3.alt.map(flowOf)) } : {}));
+        }), ((_m = f3.alt) == null ? void 0 : _m.length) ? { altFlows: distinctFlows(flowOf(f3), f3.alt.map(flowOf)) } : {}));
         byId.set(id, issues[issues.length - 1]);
       }
       for (const a of auditAccessControl(project)) {
@@ -104347,7 +104362,7 @@ var phpTaintScanner = {
         } catch (e) {
         }
         const who = a.exposure === "public" ? "any visitor (no login)" : "any logged-in user, including subscribers";
-        const line = (_n2 = (_m = contents.get(a.file)) == null ? void 0 : _m.split(/\r?\n/)[a.line - 1]) == null ? void 0 : _n2.trim().slice(0, 200);
+        const line = (_o = (_n2 = contents.get(a.file)) == null ? void 0 : _n2.split(/\r?\n/)[a.line - 1]) == null ? void 0 : _o.trim().slice(0, 200);
         const path = `${a.hook} \u2192 ${a.chain.join(" \u2192 ")} \u2192 ${a.action}`;
         const text22 = a.kind === "csrf" ? { severity: "warning", title: `CSRF: ${a.action} changes data without a nonce check`, detail: `${path} checks the user's capability but not a nonce, so another site can make a logged-in administrator's browser send this request. Verify a nonce (check_admin_referer / check_ajax_referer) before acting.`, confidence: "medium" } : a.kind === "data-exposure" ? { severity: "critical", title: `Sensitive data sent to unauthenticated requests by ${a.action}`, detail: `${who} can call ${path}, which returns user records or secret options with no capability check. Return only public fields, or require the right capability.`, confidence: "medium" } : a.settings ? {
           severity: "critical",
@@ -104381,7 +104396,7 @@ var phpTaintScanner = {
           ageDays = yield ctx.git.blameAgeDays(l3.file, l3.line);
         } catch (e) {
         }
-        const line = (_p = (_o = contents.get(l3.file)) == null ? void 0 : _o.split(/\r?\n/)[l3.line - 1]) == null ? void 0 : _p.trim().slice(0, 200);
+        const line = (_q = (_p = contents.get(l3.file)) == null ? void 0 : _p.split(/\r?\n/)[l3.line - 1]) == null ? void 0 : _q.trim().slice(0, 200);
         issues.push(__spreadProps(__spreadValues({
           id,
           category: "security",
@@ -104392,7 +104407,9 @@ var phpTaintScanner = {
           detail: `${rule.detail} Here: ${l3.what}.`
         }, line ? { evidence: line } : {}), {
           rule: rule.id,
-          confidence: l3.weak ? "medium" : "high"
+          // A file left in the web root is judged by its name alone; 3 of 3 reviewed were dump
+          // scripts and helper CLIs never served. Listed with --all.
+          confidence: l3.kind === "public-sensitive-file" ? "low" : l3.weak ? "medium" : "high"
         }));
       }
       return issues;
@@ -104443,6 +104460,18 @@ function trace(f3) {
   }
   parts.push(`${f3.sink} (${f3.file === lastFile ? `line ${f3.line}` : `${f3.file}:${f3.line}`})`);
   return parts.filter((p2) => !p2.startsWith("string")).join(" \u2192 ");
+}
+function sourceKey(source) {
+  var _a22, _b;
+  return (_b = (_a22 = source.match(/\[\s*['"]([\w-]+)['"]\s*\]|\(\s*['"]([\w-]+)['"]\s*\)/)) == null ? void 0 : _a22.slice(1).find(Boolean)) != null ? _b : null;
+}
+function guardedNearby(content, line, source, kind) {
+  if (!content) return false;
+  const window2 = content.split(/\r?\n/).slice(Math.max(0, line - 9), line).join("\n");
+  if (kind === "redirect" && /getHost\s*\(|getSchemeAndHttpHost\s*\(|PHP_URL_HOST|\$_SERVER\[\s*['"](?:HTTP_HOST|SERVER_NAME)['"]\s*\]\s*[!=]==?|redirect_allow|allowed_?hosts|isSameOrigin|is_safe_url|wp_validate_redirect/i.test(window2)) return true;
+  const key = sourceKey(source);
+  if (!key) return false;
+  return window2.split("\n").some((l3) => l3.includes(key) && /\b(?:in_array|array_key_exists|preg_match)\s*\(|\bisset\s*\(\s*\$(?!_(?:GET|POST|REQUEST|COOKIE|SERVER|FILES)\b)\w+\s*\[\s*\$/.test(l3));
 }
 var PACKAGE_JSON_RE = /(^|\/)package\.json$/i;
 var LIFECYCLE2 = /* @__PURE__ */ new Set([
@@ -114044,9 +114073,17 @@ var SQL_METHODS2 = /* @__PURE__ */ new Set([
   "loadobjectlist"
 ]);
 var SQL_METHOD_NEEDS_DB2 = /* @__PURE__ */ new Set(["query", "exec", "prepare", "select", "insert", "update", "delete", "raw", "statement", "sql", "fetchall", "fetchone", "fetchcolumn"]);
-var DB_RECEIVER2 = /(?:db|dbo|pdo|conn|connection|mysql|mysqli|link|wpdb|database|sql|dbh|dbc|sth|stmt|adapter|entitymanager|em|doctrine|capsule|\bDB\b)/i;
+var DB_WORDS2 = /* @__PURE__ */ new Set(["db", "dbo", "pdo", "conn", "connection", "mysql", "mysqli", "link", "wpdb", "database", "sql", "dbh", "dbc", "sth", "stmt", "adapter", "entitymanager", "em", "doctrine", "capsule"]);
+var DB_RECEIVER2 = {
+  test(recv) {
+    if (/^(?:DB|\\?Illuminate\\Support\\Facades\\DB)$/.test(recv)) return true;
+    const last = recv.split(/->|::|\\/).pop() ?? recv;
+    const words = last.replace(/[$()]/g, " ").replace(/([a-z0-9])([A-Z])/g, "$1 $2").toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
+    return words.some((w2) => DB_WORDS2.has(w2) || /^(?:db|mysqli?|sql)\w*$/.test(w2)) || words.join("") === "entitymanager";
+  }
+};
 var SQL_TEXT2 = /\b(?:select\s[\s\S]*\bfrom|insert\s+into|update\s+\S+\s+set|delete\s+from|replace\s+into|drop\s+table|create\s+table|alter\s+table|where\s|order\s+by|union\s+select)\b/i;
-var SKIP_PATH4 = /(?:^|\/)(?:vendor|vendor[-_]prefixed|node_modules|third[-_]party|bower_components|freemius|tests?|specs?|fixtures?|__tests__|docs?|examples?)\//i;
+var SKIP_PATH4 = /(?:^|\/)(?:vendor|vendor[-_]prefixed|node_modules|third[-_]?party|thirdparty|bower_components|freemius|tests?|specs?|fixtures?|__tests__|docs?|examples?|demos?|payloads?|static|resources\/static)\//i;
 
 // ../core/src/scanners/php-taint/analyze.ts
 var posix3 = {
@@ -115036,6 +115073,7 @@ var Ctx2 = class _Ctx2 {
         this.sink("sql", args[0] ?? [], argNodes[0], n, `${recv}->${nameOf2(what.offset)}()`);
         return [];
       }
+      if (SQL_METHODS2.has(method) && argNodes[0]?.kind === "array") return [];
       if (SQL_METHODS2.has(method)) {
         const sqlLike = SQL_TEXT2.test(literalText2(argNodes[0]));
         const dbLike = DB_RECEIVER2.test(recv) || /^(?:DB|\\?Illuminate\\Support\\Facades\\DB)$/i.test(recv);
@@ -115057,7 +115095,7 @@ var Ctx2 = class _Ctx2 {
         this.sink("privesc", args[0] ?? [], argNodes[0], n, `${recv}->${method}()`);
         return [];
       }
-      if (method === "setopt" || method === "seturl") this.sink("ssrf", args[method === "setopt" ? 1 : 0] ?? [], argNodes[method === "setopt" ? 1 : 0], n, `${recv}->${method}()`);
+      if (method === "setopt" || method === "seturl" && /curl|http|client|request|fetch|guzzle/i.test(recv)) this.sink("ssrf", args[method === "setopt" ? 1 : 0] ?? [], argNodes[method === "setopt" ? 1 : 0], n, `${recv}->${method}()`);
       if (/^(?:request|get|post|put|delete|head|patch)$/.test(method) && /(?:client|guzzle|http)$/i.test(recv)) {
         const urlArg = method === "request" ? 1 : 0;
         this.sink("ssrf", args[urlArg] ?? [], argNodes[urlArg], n, `${recv}->${method}()`);
@@ -115136,6 +115174,8 @@ var Ctx2 = class _Ctx2 {
       return [];
     }
     if (fn2 === "preg_replace" && /\/[a-z]*e[a-z]*$/i.test(literalText2(argNodes[0]))) this.sink("code", args[1] ?? [], argNodes[1], n, "preg_replace /e");
+    if (fn2 === "preg_replace" && /^\/\[\^[\w\\.\- ]+\]\+?\/[a-z]*$/i.test(literalText2(argNodes[0])) && literalText2(argNodes[1]) === "") return [];
+    if (/^(?:sanitize|resolve|clean|validate|normali[sz]e|whitelist|allowlist)_/i.test(fn2)) return withStep2(makeSafe2(merge3(...args), ["xss", "file", "include", "redirect"]), { line, text: label, file: this.file });
     const def = this.project.lookup(fn2, false);
     if (def) return this.applyCallee(def, args, n, label);
     if (fn2 === "filter_var") {
@@ -115807,6 +115847,9 @@ var phpTaintScanner2 = {
       let confidence = f3.weak ? "medium" : "high";
       if (adminOnly) confidence = confidence === "high" ? "medium" : "low";
       if (/HTTP_HOST|^\$_SERVER$/.test(f3.source) && f3.kind !== "sql" && f3.kind !== "cmd") confidence = confidence === "high" ? "medium" : "low";
+      if (/REQUEST_URI|PHP_SELF|PATH_INFO|QUERY_STRING|DOCUMENT_ROOT|SCRIPT_NAME/.test(f3.source) && f3.kind !== "sql" && f3.kind !== "cmd") confidence = "low";
+      if (guardedNearby2(contents.get(f3.file) ?? "", f3.line, f3.source, f3.kind)) confidence = "low";
+      if (f3.kind === "redirect" && f3.steps.some((s) => /http_build_query/.test(s.text))) confidence = "low";
       const where = entry ? ` Reachable from ${entry}.` : adminOnly ? " Reachable from admin screens only (or after a capability check): an administrator would have to be the attacker or be tricked into it." : "";
       issues.push({
         id,
@@ -115881,7 +115924,9 @@ var phpTaintScanner2 = {
         detail: `${rule.detail} Here: ${l3.what}.`,
         ...line ? { evidence: line } : {},
         rule: rule.id,
-        confidence: l3.weak ? "medium" : "high"
+        // A file left in the web root is judged by its name alone; 3 of 3 reviewed were dump
+        // scripts and helper CLIs never served. Listed with --all.
+        confidence: l3.kind === "public-sensitive-file" ? "low" : l3.weak ? "medium" : "high"
       });
     }
     return issues;
@@ -115924,6 +115969,17 @@ function trace2(f3) {
   }
   parts.push(`${f3.sink} (${f3.file === lastFile ? `line ${f3.line}` : `${f3.file}:${f3.line}`})`);
   return parts.filter((p2) => !p2.startsWith("string")).join(" \u2192 ");
+}
+function sourceKey2(source) {
+  return source.match(/\[\s*['"]([\w-]+)['"]\s*\]|\(\s*['"]([\w-]+)['"]\s*\)/)?.slice(1).find(Boolean) ?? null;
+}
+function guardedNearby2(content, line, source, kind) {
+  if (!content) return false;
+  const window2 = content.split(/\r?\n/).slice(Math.max(0, line - 9), line).join("\n");
+  if (kind === "redirect" && /getHost\s*\(|getSchemeAndHttpHost\s*\(|PHP_URL_HOST|\$_SERVER\[\s*['"](?:HTTP_HOST|SERVER_NAME)['"]\s*\]\s*[!=]==?|redirect_allow|allowed_?hosts|isSameOrigin|is_safe_url|wp_validate_redirect/i.test(window2)) return true;
+  const key = sourceKey2(source);
+  if (!key) return false;
+  return window2.split("\n").some((l3) => l3.includes(key) && /\b(?:in_array|array_key_exists|preg_match)\s*\(|\bisset\s*\(\s*\$(?!_(?:GET|POST|REQUEST|COOKIE|SERVER|FILES)\b)\w+\s*\[\s*\$/.test(l3));
 }
 
 // ../core/src/scanners/supply-chain.ts
