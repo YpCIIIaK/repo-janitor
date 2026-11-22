@@ -197,9 +197,20 @@ def run(cmd: str, n: int = 1):
     expect(await rules({ "handlers.py": src })).toContain("py-taint-path-traversal@handlers.py:5")
   })
 
-  it("no request in the file: no findings", async () => {
-    const src = `import os\ndef cli(path):\n    os.system("rm " + path)\n`
-    expect(await rules({ "tool.py": src })).toEqual([])
+  it("library mode: a public function's text parameter, low confidence, SQL/shell/code only", async () => {
+    const src = `import os, subprocess
+def drop(table_name, n: int = 1):
+    cursor.execute("DESCRIBE " + table_name)
+    os.system("dot -Tpdf " + table_name)
+    subprocess.run([table_name, "-x"])
+    open(table_name).read()
+    cursor.execute(f"SELECT * FROM t LIMIT {n}")
+def _private(q):
+    cursor.execute("SELECT " + q)
+`
+    const out = await run({ "lib/store.py": src })
+    expect(out.map((i) => i.location).sort()).toEqual(["lib/store.py:3", "lib/store.py:4"])
+    expect(out.every((i) => i.confidence === "low")).toBe(true)
   })
 })
 

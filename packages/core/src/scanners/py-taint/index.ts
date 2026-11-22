@@ -37,6 +37,8 @@ interface Fact {
   segment?: boolean
   /** An uploaded file object: only its `.filename` is a name the client chose. */
   upload?: boolean
+  /** A parameter of a library's public function (library mode): whoever calls it chooses the value. */
+  lib?: boolean
 }
 type Value = Fact[]
 type Env = Map<string, Value>
@@ -138,7 +140,7 @@ const SANITIZE: [RegExp, Kind[]][] = [
 ]
 
 const DB_RECV = /(?:^|\.|_)(?:cursor|cur|curs|c|conn|connection|con|db|database|session|engine|sess|tx|txn|transaction|client|pool|sqlite|sqlite3|mysql|pg|psycopg2?|duckdb|dbapi|connection\.cursor\(\)|cursor\(\)|db\.session|self\.db|self\.conn|self\.cursor|self\.cur|self\.session|db_session)$/i
-const SQL_TEXT = /\b(?:select\s[\s\S]*\bfrom|insert\s+into|update\s+\S+\s+set|delete\s+from|where\s|order\s+by|union\s+select|create\s+table|drop\s+table|alter\s+table|pragma\s)\b/i
+const SQL_TEXT = /\b(?:select\s[\s\S]*\bfrom|insert\s+into|update\s+\S+\s+set|delete\s+from|where\s|order\s+by|union\s+select|create\s+table|drop\s+table|alter\s+table|pragma\s|describe\s+\S|truncate\s+(?:table\s+)?\S)\b/i
 
 // ---- helpers
 
@@ -288,6 +290,9 @@ class Ctx {
   cls?: string
   /** Base classes of that class, as written (`BaseHTTPRequestHandler`). */
   clsBases = ""
+  /** Library mode: the file serves no requests, so public functions' parameters are the inputs. */
+  lib = false
+  libParams = false
   constructor(private project: Project, private file: string, private content: string, private depth: number, private callStack: Set<object>, private route = false) {}
 
   private step(n: PyNode | undefined, t: string): Step {
@@ -315,6 +320,7 @@ class Ctx {
       else if (p.kind === "varargs") v = merge(...args.slice(pos))
       else if (p.kind === "kwargs") v = merge(...kwargs.values())
       if (!v.length && route && this.depth === 0) v = this.routeParam(node, p, route.path)
+      if (!v.length && this.libParams && libParam(p)) v = [{ ...this.fact(p, `parameter ${name}`), lib: true }]
       if (!v.length && gql >= 0 && names.indexOf(name) > gql && !NON_TEXT_TYPE.test(annText(p.annotation as Expr))) v = [this.fact(p, `graphql arg ${name}`)]
       if (p.default) v = merge(v, this.expr(p.default as Expr, env).filter(() => false))
       env.set(name, v.length ? withStep(v, this.step(p, name)) : [])
@@ -437,10 +443,10 @@ class Ctx {
         this.branch((s.cases as Stmt[][]) ?? [], env)
         return
       }
-      case "FunctionDef": this.closure(s, env); return
+      case "FunctionDef": this.closure(s, env, [], undefined, undefined, true); return
       case "ClassDef":
         for (const m of (s.body as Stmt[]) ?? []) {
-          if (m.type === "FunctionDef") this.closure(m, env, [], String(s.name), ((s.bases as PyNode[]) ?? []).map((b) => text(b.value as Expr)).join(","))
+          if (m.type === "FunctionDef") this.closure(m, env, [], String(s.name), ((s.bases as PyNode[]) ?? []).map((b) => text(b.value as Expr)).join(","), true)
           else if (m.type !== "ClassDef") this.stmt(m, env)
         }
         return
@@ -456,7 +462,7 @@ class Ctx {
     return v
   }
 
-  private closure(fn: Stmt, env: Env, args: Value[] = [], cls?: string, bases?: string): Value {
+  private closure(fn: Stmt, env: Env, args: Value[] = [], cls?: string, bases?: string, defined = false): Value {
     if (this.depth >= MAX_DEPTH || this.callStack.has(fn)) return []
     const stack = new Set(this.callStack).add(fn)
     // Nested defs and methods keep the depth of a root when they are handlers (`def create_app(): @app.route …`, class views).
@@ -464,6 +470,8 @@ class Ctx {
     const c = new Ctx(this.project, this.file, this.content, root ? 0 : this.depth + 1, stack, root ? false : this.route)
     c.cls = cls ?? this.cls
     c.clsBases = bases ?? this.clsBases
+    c.lib = this.lib
+    c.libParams = this.lib && defined && !args.length && isPublic(String(fn.name)) && (!cls || isPublic(cls))
     return c.fn(fn, args, env)
   }
 
@@ -708,7 +716,7 @@ class Ctx {
       const dbLike = DB_RECV.test(recv) || /^(?:pd|pandas)$/.test(recv) || /\.objects$/.test(recv)
       const builtSql = sqlLike || (node0?.type === "Name" && new RegExp(`\\b${String(node0.id)}\\s*\\+?=\\s*[fFrRbBuU]{0,2}(?:'''|"""|'|")[^\\n]*\\b(?:SELECT|INSERT|UPDATE|DELETE|WHERE|FROM)\\b`, "i").test(this.content))
       // A query string passed whole (cursor.execute(q)) is SQL only if it was built by pasting: its facts saw an f-string, % or +.
-      const pasted = a0.some((f) => f.steps.some((s) => /f"…\{\}"|% format|\.format\(\)|\.join\(\)|\+/.test(s.text))) || sqlLike
+      const pasted = a0.some((f) => f.steps.some((s) => /f"…\{\}"|% format|\.format\(\)|\.join\(\)|\+/.test(s.text))) || sqlLike || node0?.type === "BinOp" || node0?.type === "Str" && Array.isArray(node0.parts)
       if ((dbLike || builtSql) && (!generic || builtSql || dbLike && pasted) && node0 && !/^(?:Dict|List|Tuple)$/.test(node0.type))
         this.sink("sql", a0, n, `${recv ? `${recv.length > 30 ? "…" : recv}.` : ""}${method}()`)
     }
@@ -840,6 +848,8 @@ class Ctx {
     const line = at.line
     for (const f of v) {
       if (f.safe.has(kind)) continue
+      // Library mode: only text that is pasted into SQL, a shell line or code; a path or URL from the caller is the API.
+      if (f.lib && (!LIB_KINDS.has(kind) || /\[program/.test(label))) continue
       this.project.report({
         kind, file: this.file, line, sink: label,
         fact: { ...f, steps: [...f.steps, { line, text: label, file: this.file }] },
@@ -898,6 +908,20 @@ function flowOf(f: Finding): FlowStep[] {
   }))
 }
 
+const LIB_KINDS = new Set<Kind>(["sql", "cmd", "code"])
+const isPublic = (name: string) => name === "__init__" || name === "__call__" || !name.startsWith("_")
+/** A text-like parameter: not self, not typed as a number or an object, not defaulting to a number or flag. */
+function libParam(p: PyNode): boolean {
+  const name = String(p.name)
+  if (p.kind !== "pos" && p.kind !== "kwonly") return false
+  if (/^(?:self|cls|mcs|request|req|ctx|context|config|cfg|settings|options|opts|logger|log|session|conn|connection|cursor|engine|db|client|model|callback|cb|fn|func)$/.test(name)) return false
+  const ann = annText(p.annotation as Expr)
+  if (ann && !/^(?:str|Optional\[str\]|str \| None|Any|Text|AnyStr|Union\[str[^\]]*\])$/.test(ann)) return false
+  const d = p.default as Expr | undefined
+  if (d && (d.type === "Num" || d.type === "Const" && d.value !== "None" || d.type === "Dict" || d.type === "List" || d.type === "Tuple")) return false
+  return true
+}
+
 const ROOT = /\b(?:request|req)\b|RequestHandler|\binfo\b|@\w+\.(?:route|get|post|put|patch|delete)\b|get_argument|get_query_argument|self\.request/
 
 export const pyTaintScanner: Scanner = {
@@ -922,8 +946,8 @@ export const pyTaintScanner: Scanner = {
     }
     for (const f of files) {
       if (project.work > MAX_WORK) break
-      if (!ROOT.test(f.content)) continue
       const c = new Ctx(project, f.file, f.content, 0, new Set())
+      c.lib = !ROOT.test(f.content)
       c.fn({ type: "FunctionDef", line: 0, name: "<module>", params: [], body: f.body, decorators: [] }, [], new Map())
     }
 
@@ -945,6 +969,8 @@ export const pyTaintScanner: Scanner = {
       let confidence: Issue["confidence"] = f.guarded ? "low" : crossFile ? "medium" : "high"
       // One URL segment can only be `..`: one level up, with the rest of the path still ours.
       if (f.kind === "file" && f.fact.segment) confidence = "low"
+      // Library mode: whether a caller passes untrusted text is not known here.
+      if (f.fact.lib) confidence = "low"
       // Headers, cookies and the request's own URL are set by the attacker in their own request:
       // reflecting them back needs another bug first.
       if ((f.kind === "xss" || f.kind === "redirect") && /\.(?:headers|cookies|COOKIES|META)\b|get_cookie|\.(?:path|url|full_path)$/.test(f.fact.src) && confidence !== "low") confidence = "low"
