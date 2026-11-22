@@ -36050,7 +36050,7 @@ var require_src4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-4PHTWKRG.js
+// ../cli/dist/chunk-MC7VBKFN.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -59984,7 +59984,7 @@ function date4(params) {
   return _coercedDate(ZodDate, params);
 }
 
-// ../cli/dist/chunk-4PHTWKRG.js
+// ../cli/dist/chunk-MC7VBKFN.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -105149,7 +105149,7 @@ var Ctx2 = class _Ctx2 {
       return [{ src: `${recv}.${method}(${((_d = argNodes[0]) == null ? void 0 : _d.type) === "StringLiteral" ? `'${argNodes[0].value}'` : ""})`, safe: /* @__PURE__ */ new Set(), steps: [line], client: false }];
     if (/(?:^|\.)useSearchParams$/.test(ct2) || /(?:^|\.)useParams$/.test(ct2)) return [{ src: `${ct2}()`, safe: /* @__PURE__ */ new Set(), steps: [line], client: true }];
     if (CLEAN_FUNCS.test(ct2)) return [];
-    if (/(?:^|\.)(?:slugify|slug|safe\w*|\w*Within\w*|sanitize\w*|normali[sz]e\w*Name|clean\w*)$/i.test(ct2))
+    if (/(?:^|\.)(?:slugify|slug|\w*[sS]afe\w*|\w*Within\w*|\w*[sS]anitiz\w*|normali[sz]e\w*Name|clean\w*|\w*[vV]alidat\w*)$/.test(ct2))
       return withStep2(makeSafe2(merge22(...args, recvVal), ["file", "cmd", "xss", "redirect"]), line);
     for (const [re2, kinds] of SANITIZE) {
       if (re2.test(ct2)) {
@@ -105186,7 +105186,8 @@ var Ctx2 = class _Ctx2 {
       const generic = /^(?:exec|run|all|get|prepare|each|execute|query|raw)$/.test(method);
       const sqlLike = SQL_TEXT2.test(literalAll(node0));
       const dbLike = DB_WORDS2.test(recv) || /^(?:Sequelize|sequelize)$/.test(recv);
-      if ((!generic || sqlLike || dbLike) && node0 && node0.type !== "ObjectExpression" && node0.type !== "ArrayExpression") {
+      const builtSql = sqlLike || (node0 == null ? void 0 : node0.type) === "Identifier" && new RegExp(`\\b${String(node0.name).replace(/[^\w$]/g, "")}\\s*\\+?=\\s*[\`'"][^\\n]*\\b(?:SELECT|INSERT|UPDATE|DELETE|WHERE)\\b`, "i").test(this.content);
+      if ((!generic || builtSql) && node0 && node0.type !== "ObjectExpression" && node0.type !== "ArrayExpression") {
         this.sink("sql", a0, n, `${recv ? `${recv}.` : ""}${method}()`);
       }
     }
@@ -105253,18 +105254,23 @@ var Ctx2 = class _Ctx2 {
       if (f3.safe.has(kind)) continue;
       if (f3.client && !(kind === "xss" || kind === "redirect" || kind === "code")) continue;
       if ((kind === "redirect" || kind === "ssrf") && WHOLE_URL.test(f3.src) && !f3.steps.some((s) => /\.get\(\)$|\.getAll\(\)$|\[\]$/.test(s.text))) continue;
-      this.project.report({ kind, file: this.file, line, sink: label, fact: __spreadProps(__spreadValues({}, f3), { steps: [...f3.steps, { line, text: label, file: this.file }] }), guarded: guardedNear(this.content, line, f3.src, kind, ((_a22 = f3.steps[0]) == null ? void 0 : _a22.file) === this.file ? f3.steps[0].line : void 0) });
+      this.project.report({ kind, file: this.file, line, sink: label, fact: __spreadProps(__spreadValues({}, f3), { steps: [...f3.steps, { line, text: label, file: this.file }] }), guarded: guardedNear(this.content, line, f3.src, kind, ((_a22 = f3.steps[0]) == null ? void 0 : _a22.file) === this.file ? f3.steps[0].line : void 0, f3.steps.filter((x3) => x3.file === this.file).map((x3) => x3.text)) });
     }
   }
 };
-function guardedNear(content, line, src, kind, from) {
+function guardedNear(content, line, src, kind, from, names = []) {
   var _a22, _b;
   const start = from && from <= line && line - from <= 200 ? from - 1 : Math.max(0, line - 41);
   const window2 = content.split(/\r?\n/).slice(start, line).join("\n");
-  const key = (_b = (_a22 = src.split(".").pop()) == null ? void 0 : _a22.replace(/\(.*$/, "")) != null ? _b : "";
+  const srcKey = (_b = (_a22 = src.split(".").pop()) == null ? void 0 : _a22.replace(/\(.*$/, "")) != null ? _b : "";
+  const keys = [.../* @__PURE__ */ new Set([srcKey, ...names.filter((n) => /^[A-Za-z_$][\w$]{2,}$/.test(n))])];
+  return keys.some((key) => guardedBy(window2, key, kind));
+}
+function guardedBy(window2, key, kind) {
   if (kind === "nosql" && key && new RegExp(`typeof\\s+[\\w.]*\\b${key.replace(/[^\w]/g, "")}\\b\\s*!==?\\s*['"]string`).test(window2)) return true;
   if (kind === "file" && /\.startsWith\s*\(|path\.relative\s*\(|includes\s*\(\s*['"]\.\.['"]|isPathInside|isSubPath|realpath/.test(window2)) return true;
   if (kind === "redirect" && /\.startsWith\s*\(\s*['"]\/|allowed\w*\.(?:includes|has)\s*\(|new URL\([^)]*\)\.(?:host|origin)\s*[!=]==/.test(window2)) return true;
+  if (key && key.length > 2 && new RegExp(`\\.(?:find|some|findIndex|filter)\\([^)]*===\\s*${key.replace(/[^\w]/g, "")}\\b`).test(window2)) return true;
   if (key && key.length > 2 && new RegExp(`(?:includes|has|indexOf)\\s*\\(\\s*[\\w.]*\\b${key.replace(/[^\w]/g, "")}\\b|\\b${key.replace(/[^\w]/g, "")}\\b[^\\n]*\\.test\\(|\\.test\\([^)]*\\b${key.replace(/[^\w]/g, "")}\\b`).test(window2)) return true;
   return false;
 }
@@ -105280,7 +105286,7 @@ var jsTaintScanner = {
   category: "security",
   run(ctx) {
     return __async(this, null, function* () {
-      var _a22, _b, _c, _d, _e2, _f, _g, _h, _i;
+      var _a22, _b, _c, _d, _e2, _f, _g, _h, _i, _j, _k, _l, _m;
       const project = new Project2();
       const files = [];
       for (const file2 of ctx.files) {
@@ -105320,13 +105326,18 @@ var jsTaintScanner = {
         if (issues.length >= MAX_FINDINGS3) break;
         const crossFile = f3.fact.steps.some((s) => s.file !== f3.file);
         let confidence = f3.guarded ? "low" : crossFile ? "medium" : "high";
+        const srcFile = (_i = (_h = files.find((x3) => {
+          var _a32, _b2;
+          return x3.file === ((_b2 = (_a32 = f3.fact.steps[0]) == null ? void 0 : _a32.file) != null ? _b2 : f3.file);
+        })) == null ? void 0 : _h.content) != null ? _i : "";
+        if (/from\s+['"]electron['"]|require\(\s*['"]electron['"]\s*\)/.test(srcFile) || /(?:^|\/)(?:electron|main)\/[^/]*$/.test((_k = (_j = f3.fact.steps[0]) == null ? void 0 : _j.file) != null ? _k : "") && /electron/.test(srcFile)) confidence = "low";
         if ((f3.kind === "xss" || f3.kind === "redirect") && /\.(?:headers|cookies|signedCookies)\b|\.(?:get|header)\(/.test(f3.fact.src) && confidence !== "low") confidence = "low";
         let ageDays = 0;
         try {
           ageDays = yield ctx.git.blameAgeDays(f3.file, f3.line);
         } catch (e) {
         }
-        const line = (_i = (_h = files.find((x3) => x3.file === f3.file)) == null ? void 0 : _h.content.split(/\r?\n/)[f3.line - 1]) == null ? void 0 : _i.trim().slice(0, 200);
+        const line = (_m = (_l = files.find((x3) => x3.file === f3.file)) == null ? void 0 : _l.content.split(/\r?\n/)[f3.line - 1]) == null ? void 0 : _m.trim().slice(0, 200);
         const trace22 = f3.fact.steps.map((s) => `${s.text} (${s.file === f3.file ? `line ${s.line}` : `${s.file}:${s.line}`})`).join(" \u2192 ");
         const issue2 = __spreadProps(__spreadValues({
           id,
@@ -117506,7 +117517,7 @@ var Ctx4 = class _Ctx3 {
       return [{ src: `${recv}.${method}(${argNodes[0]?.type === "StringLiteral" ? `'${argNodes[0].value}'` : ""})`, safe: /* @__PURE__ */ new Set(), steps: [line], client: false }];
     if (/(?:^|\.)useSearchParams$/.test(ct2) || /(?:^|\.)useParams$/.test(ct2)) return [{ src: `${ct2}()`, safe: /* @__PURE__ */ new Set(), steps: [line], client: true }];
     if (CLEAN_FUNCS2.test(ct2)) return [];
-    if (/(?:^|\.)(?:slugify|slug|safe\w*|\w*Within\w*|sanitize\w*|normali[sz]e\w*Name|clean\w*)$/i.test(ct2))
+    if (/(?:^|\.)(?:slugify|slug|\w*[sS]afe\w*|\w*Within\w*|\w*[sS]anitiz\w*|normali[sz]e\w*Name|clean\w*|\w*[vV]alidat\w*)$/.test(ct2))
       return withStep4(makeSafe4(merge4(...args, recvVal), ["file", "cmd", "xss", "redirect"]), line);
     for (const [re2, kinds] of SANITIZE2) {
       if (re2.test(ct2)) {
@@ -117542,7 +117553,8 @@ var Ctx4 = class _Ctx3 {
       const generic = /^(?:exec|run|all|get|prepare|each|execute|query|raw)$/.test(method);
       const sqlLike = SQL_TEXT4.test(literalAll2(node0));
       const dbLike = DB_WORDS4.test(recv) || /^(?:Sequelize|sequelize)$/.test(recv);
-      if ((!generic || sqlLike || dbLike) && node0 && node0.type !== "ObjectExpression" && node0.type !== "ArrayExpression") {
+      const builtSql = sqlLike || node0?.type === "Identifier" && new RegExp(`\\b${String(node0.name).replace(/[^\w$]/g, "")}\\s*\\+?=\\s*[\`'"][^\\n]*\\b(?:SELECT|INSERT|UPDATE|DELETE|WHERE)\\b`, "i").test(this.content);
+      if ((!generic || builtSql) && node0 && node0.type !== "ObjectExpression" && node0.type !== "ArrayExpression") {
         this.sink("sql", a0, n, `${recv ? `${recv}.` : ""}${method}()`);
       }
     }
@@ -117605,17 +117617,22 @@ var Ctx4 = class _Ctx3 {
       if (f3.safe.has(kind)) continue;
       if (f3.client && !(kind === "xss" || kind === "redirect" || kind === "code")) continue;
       if ((kind === "redirect" || kind === "ssrf") && WHOLE_URL2.test(f3.src) && !f3.steps.some((s) => /\.get\(\)$|\.getAll\(\)$|\[\]$/.test(s.text))) continue;
-      this.project.report({ kind, file: this.file, line, sink: label, fact: { ...f3, steps: [...f3.steps, { line, text: label, file: this.file }] }, guarded: guardedNear2(this.content, line, f3.src, kind, f3.steps[0]?.file === this.file ? f3.steps[0].line : void 0) });
+      this.project.report({ kind, file: this.file, line, sink: label, fact: { ...f3, steps: [...f3.steps, { line, text: label, file: this.file }] }, guarded: guardedNear2(this.content, line, f3.src, kind, f3.steps[0]?.file === this.file ? f3.steps[0].line : void 0, f3.steps.filter((x3) => x3.file === this.file).map((x3) => x3.text)) });
     }
   }
 };
-function guardedNear2(content, line, src, kind, from) {
+function guardedNear2(content, line, src, kind, from, names = []) {
   const start = from && from <= line && line - from <= 200 ? from - 1 : Math.max(0, line - 41);
   const window2 = content.split(/\r?\n/).slice(start, line).join("\n");
-  const key = src.split(".").pop()?.replace(/\(.*$/, "") ?? "";
+  const srcKey = src.split(".").pop()?.replace(/\(.*$/, "") ?? "";
+  const keys = [.../* @__PURE__ */ new Set([srcKey, ...names.filter((n) => /^[A-Za-z_$][\w$]{2,}$/.test(n))])];
+  return keys.some((key) => guardedBy2(window2, key, kind));
+}
+function guardedBy2(window2, key, kind) {
   if (kind === "nosql" && key && new RegExp(`typeof\\s+[\\w.]*\\b${key.replace(/[^\w]/g, "")}\\b\\s*!==?\\s*['"]string`).test(window2)) return true;
   if (kind === "file" && /\.startsWith\s*\(|path\.relative\s*\(|includes\s*\(\s*['"]\.\.['"]|isPathInside|isSubPath|realpath/.test(window2)) return true;
   if (kind === "redirect" && /\.startsWith\s*\(\s*['"]\/|allowed\w*\.(?:includes|has)\s*\(|new URL\([^)]*\)\.(?:host|origin)\s*[!=]==/.test(window2)) return true;
+  if (key && key.length > 2 && new RegExp(`\\.(?:find|some|findIndex|filter)\\([^)]*===\\s*${key.replace(/[^\w]/g, "")}\\b`).test(window2)) return true;
   if (key && key.length > 2 && new RegExp(`(?:includes|has|indexOf)\\s*\\(\\s*[\\w.]*\\b${key.replace(/[^\w]/g, "")}\\b|\\b${key.replace(/[^\w]/g, "")}\\b[^\\n]*\\.test\\(|\\.test\\([^)]*\\b${key.replace(/[^\w]/g, "")}\\b`).test(window2)) return true;
   return false;
 }
@@ -117671,6 +117688,8 @@ var jsTaintScanner2 = {
       if (issues.length >= MAX_FINDINGS6) break;
       const crossFile = f3.fact.steps.some((s) => s.file !== f3.file);
       let confidence = f3.guarded ? "low" : crossFile ? "medium" : "high";
+      const srcFile = files.find((x3) => x3.file === (f3.fact.steps[0]?.file ?? f3.file))?.content ?? "";
+      if (/from\s+['"]electron['"]|require\(\s*['"]electron['"]\s*\)/.test(srcFile) || /(?:^|\/)(?:electron|main)\/[^/]*$/.test(f3.fact.steps[0]?.file ?? "") && /electron/.test(srcFile)) confidence = "low";
       if ((f3.kind === "xss" || f3.kind === "redirect") && /\.(?:headers|cookies|signedCookies)\b|\.(?:get|header)\(/.test(f3.fact.src) && confidence !== "low") confidence = "low";
       let ageDays = 0;
       try {
