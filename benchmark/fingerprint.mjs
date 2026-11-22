@@ -86,6 +86,8 @@ function engineWithoutRegistry() {
   return text
     .replace(/^import \{ \w+Scanner \} from "\.\/scanners\/[^"]+"\n/gm, "")
     .replace(/export const defaultScanners: Scanner\[\] = \[[\s\S]*?\n\]\n/, "")
+    // Opt-in scanners (deep engines) never run in a default scan: adding one changes no result.
+    .replace(/^export const addonScanners: Scanner\[\] = \[[^\]]*\]\n/m, "")
 }
 
 function hashFiles(files, extra = "") {
