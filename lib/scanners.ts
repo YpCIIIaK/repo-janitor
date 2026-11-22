@@ -27,6 +27,7 @@ const LABEL_OVERRIDES: Record<string, string> = {
   "insecure-code": "Insecure Code",
   "php-taint": "Deep PHP analysis",
   "js-taint": "Deep JavaScript/TypeScript analysis",
+  "py-taint": "Deep Python analysis",
   "workflow-security": "Workflow Security",
   "project-hygiene": "Project Hygiene",
   "leftover-debug": "Leftover Debug",
@@ -51,6 +52,7 @@ const LABEL_OVERRIDES: Record<string, string> = {
 const LEGACY_PREFIXES: { prefix: string; scanner: string }[] = [
   { prefix: "php-taint-", scanner: "php-taint" },
   { prefix: "js-taint-", scanner: "js-taint" },
+  { prefix: "py-taint-", scanner: "py-taint" },
   { prefix: "insecure-", scanner: "insecure-code" },
   { prefix: "secret-", scanner: "secrets" },
   { prefix: "vuln-", scanner: "vulnerable-deps" },

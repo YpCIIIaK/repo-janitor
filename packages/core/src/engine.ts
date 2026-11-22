@@ -33,6 +33,7 @@ import { ciHealthScanner } from "./scanners/ci-health"
 import { duplicateCodeScanner } from "./scanners/duplicate-code"
 import { phpTaintScanner } from "./scanners/php-taint"
 import { jsTaintScanner } from "./scanners/js-taint"
+import { pyTaintScanner } from "./scanners/py-taint"
 import { supplyChainScanner } from "./scanners/supply-chain"
 
 /** Default scanner registry. Add new scanners here as they are implemented. */
@@ -71,7 +72,7 @@ export const defaultScanners: Scanner[] = [
  * Deep engines: slower, whole-program analysis, off unless asked for
  * (`--only php-taint`, or withAddons()). Their findings carry a data-flow path.
  */
-export const addonScanners: Scanner[] = [phpTaintScanner, jsTaintScanner]
+export const addonScanners: Scanner[] = [phpTaintScanner, jsTaintScanner, pyTaintScanner]
 
 /** Severity penalties per finding, before the per-tier discount in
  * {@link SEVERITY_CURVE}. info is deliberately near-cosmetic — a quarter of a
