@@ -141,10 +141,10 @@ function banditEngine(dir, files) {
   return JSON.parse(r.stdout).results.map((x) => ({ rule: `cwe-${x.issue_cwe?.id ?? 0}`, id: x.test_id, file: x.filename.replace(/^\.\//, ""), line: x.line_number }))
 }
 
-/** The deep PHP engine (php-taint): whole-program data flow, off in normal scans. */
+/** The deep engines (php-taint, js-taint): whole-program data flow, off in normal scans. */
 function deepEngine(dir) {
   const out = join(mkdtempSync(join(tmpdir(), "recall-")), "r.json")
-  spawnSync(process.execPath, [join(root, "packages/cli/dist/index.js"), "scan", dir, "-f", "json", "--all", "--only", "php-taint", "-o", out], { stdio: "ignore", timeout: 900_000 })
+  spawnSync(process.execPath, [join(root, "packages/cli/dist/index.js"), "scan", dir, "-f", "json", "--all", "--only", "php-taint,js-taint", "-o", out], { stdio: "ignore", timeout: 900_000 })
   if (!existsSync(out)) throw new Error(`deep engine produced no report for ${dir}`)
   const r = JSON.parse(readFileSync(out, "utf8"))
   rmSync(dirname(out), { recursive: true, force: true })
