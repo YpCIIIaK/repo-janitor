@@ -20,7 +20,7 @@ const RECALL: { cls: { en: string; ru: string }; fast: string; deep: string }[] 
   { cls: { en: "File upload", ru: "Загрузка файлов" }, fast: "0/3", deep: "3/3" },
   { cls: { en: "Open redirect", ru: "Открытый редирект" }, fast: "0/3", deep: "3/3" },
   { cls: { en: "File inclusion", ru: "Включение файлов" }, fast: "0/3", deep: "3/3" },
-  { cls: { en: "Cross-site scripting", ru: "XSS" }, fast: "0/13", deep: "6/13" },
+  { cls: { en: "Cross-site scripting", ru: "XSS" }, fast: "0/13", deep: "9/13" },
 ]
 
 /** DVWA's reflected XSS: three source files, one echo. What the deep engine draws. */
@@ -112,8 +112,8 @@ export function TrustSection({ index }: { index: string }) {
             </div>
             <p className="text-xs leading-relaxed text-muted-foreground">
               {ru
-                ? "Оставшиеся XSS в DVWA — хранимый (через базу данных) и DOM (в JavaScript браузера): их глубокий анализ PHP пока не видит."
-                : "The XSS still missed in DVWA are stored (through the database) and DOM-based (in browser JavaScript), which the PHP engine does not follow yet."}
+                ? "Хранимый XSS (запись в базу и вывод при чтении) глубокий анализ теперь прослеживает. Оставшиеся XSS в DVWA — DOM-based, в JavaScript браузера, и ещё один, который DVWA считает закрытым политикой CSP."
+                : "Stored XSS (written to the database, echoed when read back) is now followed. The XSS still missed in DVWA are DOM-based, in browser JavaScript, plus one DVWA treats as closed by its CSP."}
             </p>
           </div>
 
