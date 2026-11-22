@@ -148,7 +148,7 @@ export function ScannerPicker({
             className="mt-0.5"
           />
           <span className="space-y-0.5">
-            <span className="block text-xs font-medium">{ru ? "Глубокий анализ PHP (бета)" : "Deep PHP analysis (beta)"}</span>
+            <span className="block text-xs font-medium">{ru ? "Глубокий анализ PHP и JS/TS (бета)" : "Deep PHP and JS/TS analysis (beta)"}</span>
             <span className="block text-[11px] leading-relaxed text-muted-foreground">
               {ru
                 ? "Прослеживает путь данных от запроса до опасного вызова через файлы и функции и показывает его графом. Медленнее обычного скана; точность ещё измеряется."

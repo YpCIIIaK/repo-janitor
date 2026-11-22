@@ -17,7 +17,7 @@ export { TOTAL_CHECKS }
  * Deep engines: slower whole-program analysis, off unless ticked. Not counted in
  * TOTAL_CHECKS and not part of "all" — their precision is still being measured.
  */
-export const DEEP_SCAN_IDS: readonly string[] = ["php-taint"]
+export const DEEP_SCAN_IDS: readonly string[] = ["php-taint", "js-taint"]
 
 const KNOWN = new Set([...ALL_SCAN_IDS, ...DEEP_SCAN_IDS])
 
