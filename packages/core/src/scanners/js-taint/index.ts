@@ -310,7 +310,11 @@ class Ctx {
         return
       case "ReturnStatement": if (s.argument) this.returns = merge(this.returns, this.expr(s.argument as Node, env)); return
       case "IfStatement": this.expr(s.test as Node, env); this.branch([s.consequent as Node, s.alternate as Node], env); return
-      case "ForStatement": if (s.init) (s.init as Node).type === "VariableDeclaration" ? this.stmt(s.init as Node, env) : this.expr(s.init as Node, env); this.stmt(s.body as Node, env); return
+      case "ForStatement":
+        if (s.init && (s.init as Node).type === "VariableDeclaration") this.stmt(s.init as Node, env)
+        else if (s.init) this.expr(s.init as Node, env)
+        this.stmt(s.body as Node, env)
+        return
       case "ForInStatement":
       case "ForOfStatement": {
         const right = this.expr(s.right as Node, env)
@@ -602,7 +606,6 @@ class Ctx {
     if (/^(?:html|append|prepend|after|before|replaceWith)$/.test(method) && /^\$|jQuery/.test(recv) && a0.length && method === "html") this.sink("xss", a0, n, `$().${method}()`)
     if (/^(?:send|write|end)$/.test(method) && /^(?:res|response|reply|ctx\.res|this\.res)$/.test(recv) && a0.length && /<[a-zA-Z!/]/.test(literalAll(node0)))
       this.sink("xss", a0, n, `${recv}.${method}(html)`)
-    if (/^(?:body)$/.test(method) === false && recv === "ctx" && method === "body") void 0
   }
 
   /** The URL's host is chosen by the input: it starts with the value, or with only a scheme. */
