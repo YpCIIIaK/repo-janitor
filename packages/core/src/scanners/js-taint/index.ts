@@ -528,7 +528,7 @@ class Ctx {
 
     if (CLEAN_FUNCS.test(ct)) return []
     // The project's own confining helpers: slugify(), safeJoin(), resolveWithin(), sanitizeFilename().
-    if (/(?:^|\.)(?:slugify|slug|safe\w*|\w*Within\w*|sanitize\w*|normali[sz]e\w*Name|clean\w*)$/i.test(ct))
+    if (/(?:^|\.)(?:slugify|slug|\w*[sS]afe\w*|\w*Within\w*|\w*[sS]anitiz\w*|normali[sz]e\w*Name|clean\w*|\w*[vV]alidat\w*)$/.test(ct))
       return withStep(makeSafe(merge(...args, recvVal), ["file", "cmd", "xss", "redirect"]), line)
     for (const [re, kinds] of SANITIZE) {
       if (re.test(ct)) {
@@ -574,7 +574,10 @@ class Ctx {
       const generic = /^(?:exec|run|all|get|prepare|each|execute|query|raw)$/.test(method)
       const sqlLike = SQL_TEXT.test(literalAll(node0))
       const dbLike = DB_WORDS.test(recv) || /^(?:Sequelize|sequelize)$/.test(recv)
-      if ((!generic || sqlLike || dbLike) && node0 && node0.type !== "ObjectExpression" && node0.type !== "ArrayExpression") {
+      // A generic name (execute, query, run) on a DB-looking receiver still needs SQL in sight: a worker
+      // pool's execute(key) is not a query. The text is the literal, or the literal the variable was built from.
+      const builtSql = sqlLike || (node0?.type === "Identifier" && new RegExp(`\\b${String(node0.name).replace(/[^\w$]/g, "")}\\s*\\+?=\\s*[\`'"][^\\n]*\\b(?:SELECT|INSERT|UPDATE|DELETE|WHERE)\\b`, "i").test(this.content))
+      if ((!generic || builtSql) && node0 && node0.type !== "ObjectExpression" && node0.type !== "ArrayExpression") {
         // A plain variable is SQL text only if it was built by pasting: the facts saw a template or a +.
         this.sink("sql", a0, n, `${recv ? `${recv}.` : ""}${method}()`)
       }
@@ -680,6 +683,8 @@ export function guardedNear(content: string, line: number, src: string, kind: Ki
   if (kind === "nosql" && key && new RegExp(`typeof\\s+[\\w.]*\\b${key.replace(/[^\w]/g, "")}\\b\\s*!==?\\s*['"]string`).test(window)) return true
   if ((kind === "file") && /\.startsWith\s*\(|path\.relative\s*\(|includes\s*\(\s*['"]\.\.['"]|isPathInside|isSubPath|realpath/.test(window)) return true
   if (kind === "redirect" && /\.startsWith\s*\(\s*['"]\/|allowed\w*\.(?:includes|has)\s*\(|new URL\([^)]*\)\.(?:host|origin)\s*[!=]==/.test(window)) return true
+  // A lookup in a known list: games.find((g) => g.filename === remixId).
+  if (key && key.length > 2 && new RegExp(`\\.(?:find|some|findIndex|filter)\\([^)]*===\\s*${key.replace(/[^\w]/g, "")}\\b`).test(window)) return true
   if (key && key.length > 2 && new RegExp(`(?:includes|has|indexOf)\\s*\\(\\s*[\\w.]*\\b${key.replace(/[^\w]/g, "")}\\b|\\b${key.replace(/[^\w]/g, "")}\\b[^\\n]*\\.test\\(|\\.test\\([^)]*\\b${key.replace(/[^\w]/g, "")}\\b`).test(window)) return true
   return false
 }
