@@ -21974,7 +21974,7 @@ var require_js_yaml_cjs2 = __commonJS({
       const prototype = Object.getPrototypeOf(data);
       return prototype === null || prototype === Object.prototype;
     }
-    function pick2(object2, keys) {
+    function pick4(object2, keys) {
       const result = {};
       for (const key of keys) if (object2[key] !== void 0) result[key] = object2[key];
       return result;
@@ -23877,7 +23877,7 @@ ${exception.mark.snippet}`;
       const source = String(input2);
       const PARSER_OPT_KEYS = Object.keys(DEFAULT_PARSER_OPTIONS);
       const CONSTRUCTOR_OPT_KEYS = Object.keys(DEFAULT_CONSTRUCTOR_OPTIONS);
-      return constructFromEvents(parseEvents(source, pick2(opts, PARSER_OPT_KEYS)), _objectSpread2(_objectSpread2({}, pick2(opts, CONSTRUCTOR_OPT_KEYS)), {}, { source }));
+      return constructFromEvents(parseEvents(source, pick4(opts, PARSER_OPT_KEYS)), _objectSpread2(_objectSpread2({}, pick4(opts, CONSTRUCTOR_OPT_KEYS)), {}, { source }));
     }
     function loadAll(input2, iteratorOrOptions, options) {
       let iterator = null;
@@ -24631,7 +24631,7 @@ ${" ".repeat(state.indent * level)}`;
         });
       }
       opts.transform(documents);
-      return present(documents, _objectSpread2(_objectSpread2({}, pick2(opts, Object.keys(DEFAULT_PRESENTER_OPTIONS))), {}, { schema: opts.schema }));
+      return present(documents, _objectSpread2(_objectSpread2({}, pick4(opts, Object.keys(DEFAULT_PRESENTER_OPTIONS))), {}, { schema: opts.schema }));
     }
     var NO_RANGE = -1;
     function eventPosition(event) {
@@ -36050,7 +36050,7 @@ var require_src4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-GLMGEHLE.js
+// ../cli/dist/chunk-4PHTWKRG.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -59984,7 +59984,7 @@ function date4(params) {
   return _coercedDate(ZodDate, params);
 }
 
-// ../cli/dist/chunk-GLMGEHLE.js
+// ../cli/dist/chunk-4PHTWKRG.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -79358,7 +79358,7 @@ var require_js_yaml_cjs = __commonJS2({
       const prototype = Object.getPrototypeOf(data);
       return prototype === null || prototype === Object.prototype;
     }
-    function pick2(object2, keys) {
+    function pick22(object2, keys) {
       const result = {};
       for (const key of keys) if (object2[key] !== void 0) result[key] = object2[key];
       return result;
@@ -81261,7 +81261,7 @@ ${exception.mark.snippet}`;
       const source = String(input2);
       const PARSER_OPT_KEYS = Object.keys(DEFAULT_PARSER_OPTIONS);
       const CONSTRUCTOR_OPT_KEYS = Object.keys(DEFAULT_CONSTRUCTOR_OPTIONS);
-      return constructFromEvents(parseEvents(source, pick2(opts, PARSER_OPT_KEYS)), _objectSpread2(_objectSpread2({}, pick2(opts, CONSTRUCTOR_OPT_KEYS)), {}, { source }));
+      return constructFromEvents(parseEvents(source, pick22(opts, PARSER_OPT_KEYS)), _objectSpread2(_objectSpread2({}, pick22(opts, CONSTRUCTOR_OPT_KEYS)), {}, { source }));
     }
     function loadAll(input2, iteratorOrOptions, options) {
       let iterator = null;
@@ -82015,7 +82015,7 @@ ${" ".repeat(state.indent * level)}`;
         });
       }
       opts.transform(documents);
-      return present(documents, _objectSpread2(_objectSpread2({}, pick2(opts, Object.keys(DEFAULT_PRESENTER_OPTIONS))), {}, { schema: opts.schema }));
+      return present(documents, _objectSpread2(_objectSpread2({}, pick22(opts, Object.keys(DEFAULT_PRESENTER_OPTIONS))), {}, { schema: opts.schema }));
     }
     var NO_RANGE = -1;
     function eventPosition(event) {
@@ -102898,7 +102898,7 @@ var Project = class {
     if (!cb) return [];
     const at2 = this.byPath.get(file2);
     if (cb.kind === "closure" || cb.kind === "arrowfunc") return at2 ? [{ node: cb, file: file2, content: at2.content, label: "closure" }] : [];
-    const pick2 = (defs, cls, label) => {
+    const pick22 = (defs, cls, label) => {
       if (!(defs == null ? void 0 : defs.length)) return [];
       let chosen = defs.length === 1 ? defs : defs.filter((d2) => cls && d2.cls === cls);
       if (!chosen.length) chosen = defs.filter((d2) => d2.file === file2);
@@ -102908,15 +102908,15 @@ var Project = class {
       const v2 = String(cb.value);
       if (v2.includes("::")) {
         const [c3, m2] = v2.split("::");
-        return pick2(this.methods.get(m2.toLowerCase()), c3.split("\\").pop().toLowerCase(), v2);
+        return pick22(this.methods.get(m2.toLowerCase()), c3.split("\\").pop().toLowerCase(), v2);
       }
-      return pick2(this.fns.get(v2.toLowerCase().replace(/^\\/, "")), "", v2);
+      return pick22(this.fns.get(v2.toLowerCase().replace(/^\\/, "")), "", v2);
     }
     if (cb.kind === "array" && ((_a22 = cb.items) == null ? void 0 : _a22.length) === 2) {
       const [o2, m2] = cb.items.map((i) => (i == null ? void 0 : i.kind) === "entry" ? i.value : i);
       if ((m2 == null ? void 0 : m2.kind) !== "string") return [];
       const cls = (o2 == null ? void 0 : o2.kind) === "string" ? String(o2.value) : (o2 == null ? void 0 : o2.kind) === "staticlookup" ? String((_c = (_b = o2.what) == null ? void 0 : _b.name) != null ? _c : "") : (o2 == null ? void 0 : o2.kind) === "new" ? String((_e2 = (_d = o2.what) == null ? void 0 : _d.name) != null ? _e2 : "") : "";
-      return pick2(this.methods.get(String(m2.value).toLowerCase()), cls.split("\\").pop().toLowerCase(), `${cls || exprText(o2)}::${m2.value}`);
+      return pick22(this.methods.get(String(m2.value).toLowerCase()), cls.split("\\").pop().toLowerCase(), `${cls || exprText(o2)}::${m2.value}`);
     }
     return [];
   }
@@ -104613,8 +104613,9 @@ var RULES5 = {
     severity: "critical"
   }
 };
+var WHOLE_URL = /(?:^|\.)(?:req|request|ctx|context|c|r|event)\.(?:url|originalUrl|path|nextUrl(?:\.searchParams)?|search|searchParams)$|location\.(?:href|search|hash|pathname)$|^searchParams$/;
 var JS_FILE = /\.(?:[cm]?[jt]sx?)$/i;
-var SKIP_PATH3 = /(?:^|\/)(?:node_modules|dist|build|out|coverage|\.next|\.nuxt|vendor|third[-_]?party|tests?|__tests__|specs?|e2e|cypress|fixtures?|__mocks__|mocks?|examples?|demos?|docs?|stories|storybook|benchmarks?|scripts)\/|\.(?:test|spec|stories|d)\.[cm]?[jt]sx?$|\.min\.js$/i;
+var SKIP_PATH3 = /(?:^|\/)(?:node_modules|dist|build|out|coverage|\.next|\.nuxt|vendor|third[-_]?party|tests?|__tests__|specs?|e2e|cypress|fixtures?|__mocks__|mocks?|examples?|demos?|docs?|stories|storybook|benchmarks?|scripts)\/|\.(?:test|spec|stories|d|config)\.[cm]?[jt]sx?$|\.min\.js$/i;
 var MAX_FILES3 = 4e3;
 var MAX_BYTES4 = 3e5;
 var MAX_DEPTH = 4;
@@ -104772,6 +104773,7 @@ function merge22(...vals) {
   }
   return out;
 }
+var pick2 = (v2, prop) => v2.filter((f3) => f3.field === void 0 || prop === void 0 || f3.field === prop).map((f3) => f3.field === void 0 ? f3 : __spreadProps(__spreadValues({}, f3), { field: void 0 }));
 var withStep2 = (v2, s) => v2.map((f3) => __spreadProps(__spreadValues({}, f3), { steps: f3.steps.length > 12 ? [...f3.steps.slice(0, 4), ...f3.steps.slice(-7), s] : [...f3.steps, s] }));
 var makeSafe2 = (v2, kinds) => v2.map((f3) => __spreadProps(__spreadValues({}, f3), { safe: /* @__PURE__ */ new Set([...f3.safe, ...kinds]) }));
 var GENERIC = /* @__PURE__ */ new Set(["get", "set", "run", "main", "init", "handler", "handle", "render", "load", "save", "find", "create", "update", "delete", "remove", "add", "call", "apply", "bind", "exec", "query", "send", "fetch", "request", "start", "stop", "next", "then", "catch", "default", "index", "constructor", "toString", "map", "filter", "use", "listen", "close", "open", "write", "read", "parse"]);
@@ -104854,7 +104856,7 @@ var Ctx2 = class _Ctx2 {
     return this.returns;
   }
   bind(pattern, v2, env, at2) {
-    var _a22, _b, _c;
+    var _a22, _b, _c, _d;
     if (!pattern) return;
     switch (pattern.type) {
       case "Identifier":
@@ -104866,11 +104868,14 @@ var Ctx2 = class _Ctx2 {
       case "ObjectPattern":
         for (const p2 of (_a22 = pattern.properties) != null ? _a22 : []) {
           if (p2.type === "RestElement") this.bind(p2.argument, v2, env, at2);
-          else this.bind((_b = p2.value) != null ? _b : p2.key, v2, env, at2);
+          else {
+            const key = ((_b = p2.key) == null ? void 0 : _b.type) === "Identifier" && !p2.computed ? String(p2.key.name) : void 0;
+            this.bind((_c = p2.value) != null ? _c : p2.key, pick2(v2, key), env, at2);
+          }
         }
         return;
       case "ArrayPattern":
-        for (const e of (_c = pattern.elements) != null ? _c : []) this.bind(e, v2, env, at2);
+        for (const e of (_d = pattern.elements) != null ? _d : []) this.bind(e, v2, env, at2);
         return;
       case "RestElement":
         this.bind(pattern.argument, v2, env, at2);
@@ -105013,7 +105018,7 @@ var Ctx2 = class _Ctx2 {
     return [];
   }
   expr(n, env) {
-    var _a22, _b, _c, _d, _e2, _f, _g, _h, _i, _j, _k, _l, _m, _n2;
+    var _a22, _b, _c, _d, _e2, _f, _g, _h, _i, _j, _k, _l, _m, _n2, _o, _p;
     if (!n || ++this.project.work > MAX_WORK) return [];
     switch (n.type) {
       case "Identifier":
@@ -105026,10 +105031,10 @@ var Ctx2 = class _Ctx2 {
         const obj = this.expr(n.object, env);
         const prop = !n.computed ? String((_c = (_b = n.property) == null ? void 0 : _b.name) != null ? _c : "") : "";
         if (/^(?:length|size|byteLength)$/.test(prop)) return [];
-        return obj;
+        return pick2(obj, prop || void 0);
       }
       case "TemplateLiteral":
-        return withStep2(merge22(...((_d = n.expressions) != null ? _d : []).map((e) => this.expr(e, env))), this.step(n, "`\u2026${}`"));
+        return withStep2(pick2(merge22(...((_d = n.expressions) != null ? _d : []).map((e) => this.expr(e, env))), void 0), this.step(n, "`\u2026${}`"));
       case "TaggedTemplateExpression": {
         const tag = text2(n.tag);
         const v2 = this.expr(n.quasi, env);
@@ -105072,25 +105077,26 @@ var Ctx2 = class _Ctx2 {
         for (const p2 of (_g = n.properties) != null ? _g : []) {
           if (p2.type === "ObjectProperty") {
             const v2 = this.expr(p2.value, env);
-            vals.push(v2);
-            if (((_h = p2.key) == null ? void 0 : _h.type) === "Identifier" && p2.key.name === "__html") this.sink("xss", v2, p2, "dangerouslySetInnerHTML");
-            if (((_i = p2.key) == null ? void 0 : _i.name) === "$where" || ((_j = p2.key) == null ? void 0 : _j.value) === "$where") this.sink("nosql", v2, p2, "$where");
+            const key = ((_h = p2.key) == null ? void 0 : _h.type) === "Identifier" ? String(p2.key.name) : ((_i = p2.key) == null ? void 0 : _i.type) === "StringLiteral" ? String(p2.key.value) : void 0;
+            vals.push(key && !p2.computed ? v2.map((f3) => __spreadProps(__spreadValues({}, f3), { field: key })) : v2);
+            if (((_j = p2.key) == null ? void 0 : _j.type) === "Identifier" && p2.key.name === "__html") this.sink("xss", v2, p2, "dangerouslySetInnerHTML");
+            if (((_k = p2.key) == null ? void 0 : _k.name) === "$where" || ((_l = p2.key) == null ? void 0 : _l.value) === "$where") this.sink("nosql", v2, p2, "$where");
           } else if (p2.type === "SpreadElement") vals.push(this.expr(p2.argument, env));
           else if (p2.type === "ObjectMethod") this.closure(p2, env);
         }
         return merge22(...vals);
       }
       case "ArrayExpression":
-        return merge22(...((_k = n.elements) != null ? _k : []).map((e) => this.expr(e, env)));
+        return merge22(...((_m = n.elements) != null ? _m : []).map((e) => this.expr(e, env)));
       case "ArrowFunctionExpression":
       case "FunctionExpression":
         this.closure(n, env);
         return [];
       case "ClassDeclaration":
       case "ClassExpression":
-        for (const m2 of (_m = (_l = n.body) == null ? void 0 : _l.body) != null ? _m : []) {
+        for (const m2 of (_o = (_n2 = n.body) == null ? void 0 : _n2.body) != null ? _o : []) {
           if (m2.type === "ClassMethod" || m2.type === "ClassPrivateMethod") this.closure(m2, env);
-          else if (m2.type === "ClassProperty" && /Function|Arrow/.test(String((_n2 = m2.value) == null ? void 0 : _n2.type))) this.closure(m2.value, env);
+          else if (m2.type === "ClassProperty" && /Function|Arrow/.test(String((_p = m2.value) == null ? void 0 : _p.type))) this.closure(m2.value, env);
         }
         return [];
       case "NewExpression":
@@ -105121,7 +105127,7 @@ var Ctx2 = class _Ctx2 {
     }
   }
   call(n, env, isNew) {
-    var _a22, _b, _c, _d;
+    var _a22, _b, _c, _d, _e2, _f, _g, _h;
     const callee = n.callee;
     const argNodes = (_a22 = n.arguments) != null ? _a22 : [];
     const fnArgs = argNodes.map((a) => /Function|Arrow/.test(String(a.type)) ? null : a);
@@ -105143,14 +105149,23 @@ var Ctx2 = class _Ctx2 {
       return [{ src: `${recv}.${method}(${((_d = argNodes[0]) == null ? void 0 : _d.type) === "StringLiteral" ? `'${argNodes[0].value}'` : ""})`, safe: /* @__PURE__ */ new Set(), steps: [line], client: false }];
     if (/(?:^|\.)useSearchParams$/.test(ct2) || /(?:^|\.)useParams$/.test(ct2)) return [{ src: `${ct2}()`, safe: /* @__PURE__ */ new Set(), steps: [line], client: true }];
     if (CLEAN_FUNCS.test(ct2)) return [];
+    if (/(?:^|\.)(?:slugify|slug|safe\w*|\w*Within\w*|sanitize\w*|normali[sz]e\w*Name|clean\w*)$/i.test(ct2))
+      return withStep2(makeSafe2(merge22(...args, recvVal), ["file", "cmd", "xss", "redirect"]), line);
     for (const [re2, kinds] of SANITIZE) {
       if (re2.test(ct2)) {
         if (kinds[0] === "sql" && !/(?:SqlString|mysql|connection|conn|pool|db|pg|sqlstring|format)\b/i.test(ct2)) continue;
         return withStep2(makeSafe2(merge22(...args, recvVal), kinds), line);
       }
     }
-    if (isNew && /^(?:URL|URLSearchParams|String|Buffer)$/.test(ct2)) return withStep2(merge22(...args), line);
+    if (isNew && ct2 === "URL") return withStep2(((_e2 = argNodes[0]) == null ? void 0 : _e2.type) === "StringLiteral" || ((_f = argNodes[0]) == null ? void 0 : _f.type) === "TemplateLiteral" && literalLead(argNodes[0]).startsWith("/") ? [] : (_g = args[0]) != null ? _g : [], line);
+    if (isNew && /^(?:URLSearchParams|String|Buffer)$/.test(ct2)) return withStep2(merge22(...args), line);
     if (PASS_FUNCS.has(ct2) || PASS_FUNCS.has(method) && /^(?:path|util|JSON|Buffer|Object|Array|querystring|qs|url)$/.test(recv)) return withStep2(merge22(...args), line);
+    const lines = this.content.split(/\r?\n/).slice(Math.max(0, lineOf6(n) - 9), lineOf6(n)).join("\n");
+    for (const [i, a] of argNodes.entries()) {
+      if ((a == null ? void 0 : a.type) !== "Identifier" || !((_h = args[i]) == null ? void 0 : _h.length)) continue;
+      const id = String(a.name).replace(/[^\w$]/g, "");
+      if (new RegExp(`\\.(?:has|includes)\\(\\s*${id}\\s*\\)|\\b${id}\\s*===?\\s*['"\`]`).test(lines)) args[i] = makeSafe2(args[i], ["file", "redirect", "ssrf", "cmd", "code", "sql", "xss", "nosql"]);
+    }
     const def = !isNew && !recvVal.length ? this.project.lookup(method) : void 0;
     if (def && this.depth < MAX_DEPTH && !this.callStack.has(def.node) && args.some((a) => a.length)) {
       const fnNode = def.node.type === "VariableDeclarator" ? def.node.init : def.node;
@@ -105175,7 +105190,7 @@ var Ctx2 = class _Ctx2 {
         this.sink("sql", a0, n, `${recv ? `${recv}.` : ""}${method}()`);
       }
     }
-    if (/^(?:find|findOne|findOneAndUpdate|findOneAndDelete|updateOne|updateMany|deleteOne|deleteMany|countDocuments|exists|where)$/.test(method) && node0 && (node0.type === "MemberExpression" || node0.type === "Identifier") && a0.some((f3) => /\.(?:body|query)$/.test(f3.src)))
+    if (/^(?:find|findOne|findOneAndUpdate|findOneAndDelete|updateOne|updateMany|deleteOne|deleteMany|countDocuments|exists|where)$/.test(method) && node0 && (node0.type === "MemberExpression" || node0.type === "Identifier") && a0.some((f3) => /\.(?:body|query)$/.test(f3.src)) && /(?:collection|Collection|model|Model|db\.|^[A-Z]\w*$)/.test(recv))
       this.sink("nosql", a0, n, `${method}()`);
     if (/^(?:find|findOne|findOneAndUpdate|findOneAndDelete|update|updateOne|updateMany|deleteOne|deleteMany|remove|countDocuments|exists)$/.test(method) && (node0 == null ? void 0 : node0.type) === "ObjectExpression" && /(?:collection|Collection|model|Model|db\.|\bUser|\bProduct|\bReview)/.test(recv) && ((_b = node0.properties) != null ? _b : []).some((p2) => {
       var _a32;
@@ -105207,7 +105222,7 @@ var Ctx2 = class _Ctx2 {
       const i = argNodes.length > 1 && /^(?:NumericLiteral|Identifier)$/.test(String((_d = argNodes[0]) == null ? void 0 : _d.type)) && !((_e2 = args[0]) == null ? void 0 : _e2.length) ? 1 : 0;
       if (((_f = args[i]) == null ? void 0 : _f.length) && this.leavesSite(argNodes[i])) this.sink("redirect", args[i], n, `${recv ? `${recv}.` : ""}${method}()`);
     }
-    if (/^(?:location\.assign|location\.replace|window\.location\.assign|window\.location\.replace|window\.open|router\.push|navigate)$/.test(ct2) && a0.length && this.leavesSite(node0))
+    if (/^(?:location\.assign|location\.replace|window\.location\.assign|window\.location\.replace|window\.open)$/.test(ct2) && a0.length && this.leavesSite(node0))
       this.sink("redirect", a0, n, `${ct2}()`);
     if (/^bypassSecurityTrust(?:Html|Script|Url|ResourceUrl|Style)$/.test(method) && a0.length) this.sink("xss", a0, n, `${method}()`);
     if (/^(?:document\.write|document\.writeln)$/.test(ct2) && any2) this.sink("xss", merge22(...args), n, ct2);
@@ -105232,17 +105247,20 @@ var Ctx2 = class _Ctx2 {
     return !(lead.startsWith("/") && !lead.startsWith("//") && !lead.startsWith("/\\")) && !/^\?|^#/.test(lead) && !/^https?:\/\/[^/$]/.test(lead);
   }
   sink(kind, v2, at2, label) {
+    var _a22;
     const line = lineOf6(at2);
     for (const f3 of v2) {
       if (f3.safe.has(kind)) continue;
       if (f3.client && !(kind === "xss" || kind === "redirect" || kind === "code")) continue;
-      this.project.report({ kind, file: this.file, line, sink: label, fact: __spreadProps(__spreadValues({}, f3), { steps: [...f3.steps, { line, text: label, file: this.file }] }), guarded: guardedNear(this.content, line, f3.src, kind) });
+      if ((kind === "redirect" || kind === "ssrf") && WHOLE_URL.test(f3.src) && !f3.steps.some((s) => /\.get\(\)$|\.getAll\(\)$|\[\]$/.test(s.text))) continue;
+      this.project.report({ kind, file: this.file, line, sink: label, fact: __spreadProps(__spreadValues({}, f3), { steps: [...f3.steps, { line, text: label, file: this.file }] }), guarded: guardedNear(this.content, line, f3.src, kind, ((_a22 = f3.steps[0]) == null ? void 0 : _a22.file) === this.file ? f3.steps[0].line : void 0) });
     }
   }
 };
-function guardedNear(content, line, src, kind) {
+function guardedNear(content, line, src, kind, from) {
   var _a22, _b;
-  const window2 = content.split(/\r?\n/).slice(Math.max(0, line - 9), line).join("\n");
+  const start = from && from <= line && line - from <= 200 ? from - 1 : Math.max(0, line - 41);
+  const window2 = content.split(/\r?\n/).slice(start, line).join("\n");
   const key = (_b = (_a22 = src.split(".").pop()) == null ? void 0 : _a22.replace(/\(.*$/, "")) != null ? _b : "";
   if (kind === "nosql" && key && new RegExp(`typeof\\s+[\\w.]*\\b${key.replace(/[^\w]/g, "")}\\b\\s*!==?\\s*['"]string`).test(window2)) return true;
   if (kind === "file" && /\.startsWith\s*\(|path\.relative\s*\(|includes\s*\(\s*['"]\.\.['"]|isPathInside|isSubPath|realpath/.test(window2)) return true;
@@ -115320,7 +115338,7 @@ var Project3 = class {
     if (!cb) return [];
     const at2 = this.byPath.get(file2);
     if (cb.kind === "closure" || cb.kind === "arrowfunc") return at2 ? [{ node: cb, file: file2, content: at2.content, label: "closure" }] : [];
-    const pick2 = (defs, cls, label) => {
+    const pick4 = (defs, cls, label) => {
       if (!defs?.length) return [];
       let chosen = defs.length === 1 ? defs : defs.filter((d2) => cls && d2.cls === cls);
       if (!chosen.length) chosen = defs.filter((d2) => d2.file === file2);
@@ -115330,15 +115348,15 @@ var Project3 = class {
       const v2 = String(cb.value);
       if (v2.includes("::")) {
         const [c3, m2] = v2.split("::");
-        return pick2(this.methods.get(m2.toLowerCase()), c3.split("\\").pop().toLowerCase(), v2);
+        return pick4(this.methods.get(m2.toLowerCase()), c3.split("\\").pop().toLowerCase(), v2);
       }
-      return pick2(this.fns.get(v2.toLowerCase().replace(/^\\/, "")), "", v2);
+      return pick4(this.fns.get(v2.toLowerCase().replace(/^\\/, "")), "", v2);
     }
     if (cb.kind === "array" && cb.items?.length === 2) {
       const [o2, m2] = cb.items.map((i) => i?.kind === "entry" ? i.value : i);
       if (m2?.kind !== "string") return [];
       const cls = o2?.kind === "string" ? String(o2.value) : o2?.kind === "staticlookup" ? String(o2.what?.name ?? "") : o2?.kind === "new" ? String(o2.what?.name ?? "") : "";
-      return pick2(this.methods.get(String(m2.value).toLowerCase()), cls.split("\\").pop().toLowerCase(), `${cls || exprText2(o2)}::${m2.value}`);
+      return pick4(this.methods.get(String(m2.value).toLowerCase()), cls.split("\\").pop().toLowerCase(), `${cls || exprText2(o2)}::${m2.value}`);
     }
     return [];
   }
@@ -116974,8 +116992,9 @@ var RULES10 = {
     severity: "critical"
   }
 };
+var WHOLE_URL2 = /(?:^|\.)(?:req|request|ctx|context|c|r|event)\.(?:url|originalUrl|path|nextUrl(?:\.searchParams)?|search|searchParams)$|location\.(?:href|search|hash|pathname)$|^searchParams$/;
 var JS_FILE2 = /\.(?:[cm]?[jt]sx?)$/i;
-var SKIP_PATH6 = /(?:^|\/)(?:node_modules|dist|build|out|coverage|\.next|\.nuxt|vendor|third[-_]?party|tests?|__tests__|specs?|e2e|cypress|fixtures?|__mocks__|mocks?|examples?|demos?|docs?|stories|storybook|benchmarks?|scripts)\/|\.(?:test|spec|stories|d)\.[cm]?[jt]sx?$|\.min\.js$/i;
+var SKIP_PATH6 = /(?:^|\/)(?:node_modules|dist|build|out|coverage|\.next|\.nuxt|vendor|third[-_]?party|tests?|__tests__|specs?|e2e|cypress|fixtures?|__mocks__|mocks?|examples?|demos?|docs?|stories|storybook|benchmarks?|scripts)\/|\.(?:test|spec|stories|d|config)\.[cm]?[jt]sx?$|\.min\.js$/i;
 var MAX_FILES6 = 4e3;
 var MAX_BYTES8 = 3e5;
 var MAX_DEPTH2 = 4;
@@ -117124,6 +117143,7 @@ function merge4(...vals) {
   }
   return out;
 }
+var pick3 = (v2, prop) => v2.filter((f3) => f3.field === void 0 || prop === void 0 || f3.field === prop).map((f3) => f3.field === void 0 ? f3 : { ...f3, field: void 0 });
 var withStep4 = (v2, s) => v2.map((f3) => ({ ...f3, steps: f3.steps.length > 12 ? [...f3.steps.slice(0, 4), ...f3.steps.slice(-7), s] : [...f3.steps, s] }));
 var makeSafe4 = (v2, kinds) => v2.map((f3) => ({ ...f3, safe: /* @__PURE__ */ new Set([...f3.safe, ...kinds]) }));
 var GENERIC2 = /* @__PURE__ */ new Set(["get", "set", "run", "main", "init", "handler", "handle", "render", "load", "save", "find", "create", "update", "delete", "remove", "add", "call", "apply", "bind", "exec", "query", "send", "fetch", "request", "start", "stop", "next", "then", "catch", "default", "index", "constructor", "toString", "map", "filter", "use", "listen", "close", "open", "write", "read", "parse"]);
@@ -117211,7 +117231,10 @@ var Ctx4 = class _Ctx3 {
       case "ObjectPattern":
         for (const p2 of pattern.properties ?? []) {
           if (p2.type === "RestElement") this.bind(p2.argument, v2, env, at2);
-          else this.bind(p2.value ?? p2.key, v2, env, at2);
+          else {
+            const key = p2.key?.type === "Identifier" && !p2.computed ? String(p2.key.name) : void 0;
+            this.bind(p2.value ?? p2.key, pick3(v2, key), env, at2);
+          }
         }
         return;
       case "ArrayPattern":
@@ -117367,10 +117390,10 @@ var Ctx4 = class _Ctx3 {
         const obj = this.expr(n.object, env);
         const prop = !n.computed ? String(n.property?.name ?? "") : "";
         if (/^(?:length|size|byteLength)$/.test(prop)) return [];
-        return obj;
+        return pick3(obj, prop || void 0);
       }
       case "TemplateLiteral":
-        return withStep4(merge4(...(n.expressions ?? []).map((e) => this.expr(e, env))), this.step(n, "`\u2026${}`"));
+        return withStep4(pick3(merge4(...(n.expressions ?? []).map((e) => this.expr(e, env))), void 0), this.step(n, "`\u2026${}`"));
       case "TaggedTemplateExpression": {
         const tag = text4(n.tag);
         const v2 = this.expr(n.quasi, env);
@@ -117413,7 +117436,8 @@ var Ctx4 = class _Ctx3 {
         for (const p2 of n.properties ?? []) {
           if (p2.type === "ObjectProperty") {
             const v2 = this.expr(p2.value, env);
-            vals.push(v2);
+            const key = p2.key?.type === "Identifier" ? String(p2.key.name) : p2.key?.type === "StringLiteral" ? String(p2.key.value) : void 0;
+            vals.push(key && !p2.computed ? v2.map((f3) => ({ ...f3, field: key })) : v2);
             if (p2.key?.type === "Identifier" && p2.key.name === "__html") this.sink("xss", v2, p2, "dangerouslySetInnerHTML");
             if (p2.key?.name === "$where" || p2.key?.value === "$where") this.sink("nosql", v2, p2, "$where");
           } else if (p2.type === "SpreadElement") vals.push(this.expr(p2.argument, env));
@@ -117482,14 +117506,23 @@ var Ctx4 = class _Ctx3 {
       return [{ src: `${recv}.${method}(${argNodes[0]?.type === "StringLiteral" ? `'${argNodes[0].value}'` : ""})`, safe: /* @__PURE__ */ new Set(), steps: [line], client: false }];
     if (/(?:^|\.)useSearchParams$/.test(ct2) || /(?:^|\.)useParams$/.test(ct2)) return [{ src: `${ct2}()`, safe: /* @__PURE__ */ new Set(), steps: [line], client: true }];
     if (CLEAN_FUNCS2.test(ct2)) return [];
+    if (/(?:^|\.)(?:slugify|slug|safe\w*|\w*Within\w*|sanitize\w*|normali[sz]e\w*Name|clean\w*)$/i.test(ct2))
+      return withStep4(makeSafe4(merge4(...args, recvVal), ["file", "cmd", "xss", "redirect"]), line);
     for (const [re2, kinds] of SANITIZE2) {
       if (re2.test(ct2)) {
         if (kinds[0] === "sql" && !/(?:SqlString|mysql|connection|conn|pool|db|pg|sqlstring|format)\b/i.test(ct2)) continue;
         return withStep4(makeSafe4(merge4(...args, recvVal), kinds), line);
       }
     }
-    if (isNew && /^(?:URL|URLSearchParams|String|Buffer)$/.test(ct2)) return withStep4(merge4(...args), line);
+    if (isNew && ct2 === "URL") return withStep4(argNodes[0]?.type === "StringLiteral" || argNodes[0]?.type === "TemplateLiteral" && literalLead2(argNodes[0]).startsWith("/") ? [] : args[0] ?? [], line);
+    if (isNew && /^(?:URLSearchParams|String|Buffer)$/.test(ct2)) return withStep4(merge4(...args), line);
     if (PASS_FUNCS2.has(ct2) || PASS_FUNCS2.has(method) && /^(?:path|util|JSON|Buffer|Object|Array|querystring|qs|url)$/.test(recv)) return withStep4(merge4(...args), line);
+    const lines = this.content.split(/\r?\n/).slice(Math.max(0, lineOf12(n) - 9), lineOf12(n)).join("\n");
+    for (const [i, a] of argNodes.entries()) {
+      if (a?.type !== "Identifier" || !args[i]?.length) continue;
+      const id = String(a.name).replace(/[^\w$]/g, "");
+      if (new RegExp(`\\.(?:has|includes)\\(\\s*${id}\\s*\\)|\\b${id}\\s*===?\\s*['"\`]`).test(lines)) args[i] = makeSafe4(args[i], ["file", "redirect", "ssrf", "cmd", "code", "sql", "xss", "nosql"]);
+    }
     const def = !isNew && !recvVal.length ? this.project.lookup(method) : void 0;
     if (def && this.depth < MAX_DEPTH2 && !this.callStack.has(def.node) && args.some((a) => a.length)) {
       const fnNode = def.node.type === "VariableDeclarator" ? def.node.init : def.node;
@@ -117513,7 +117546,7 @@ var Ctx4 = class _Ctx3 {
         this.sink("sql", a0, n, `${recv ? `${recv}.` : ""}${method}()`);
       }
     }
-    if (/^(?:find|findOne|findOneAndUpdate|findOneAndDelete|updateOne|updateMany|deleteOne|deleteMany|countDocuments|exists|where)$/.test(method) && node0 && (node0.type === "MemberExpression" || node0.type === "Identifier") && a0.some((f3) => /\.(?:body|query)$/.test(f3.src)))
+    if (/^(?:find|findOne|findOneAndUpdate|findOneAndDelete|updateOne|updateMany|deleteOne|deleteMany|countDocuments|exists|where)$/.test(method) && node0 && (node0.type === "MemberExpression" || node0.type === "Identifier") && a0.some((f3) => /\.(?:body|query)$/.test(f3.src)) && /(?:collection|Collection|model|Model|db\.|^[A-Z]\w*$)/.test(recv))
       this.sink("nosql", a0, n, `${method}()`);
     if (/^(?:find|findOne|findOneAndUpdate|findOneAndDelete|update|updateOne|updateMany|deleteOne|deleteMany|remove|countDocuments|exists)$/.test(method) && node0?.type === "ObjectExpression" && /(?:collection|Collection|model|Model|db\.|\bUser|\bProduct|\bReview)/.test(recv) && (node0.properties ?? []).some((p2) => /^(?:MemberExpression|Identifier)$/.test(String(p2.value?.type)) && /\.(?:body|query)\./.test(text4(p2.value))))
       this.sink("nosql", a0.filter((f3) => /\.(?:body|query)\./.test(f3.src)), n, `${recv}.${method}({ field: request value })`);
@@ -117542,7 +117575,7 @@ var Ctx4 = class _Ctx3 {
       const i = argNodes.length > 1 && /^(?:NumericLiteral|Identifier)$/.test(String(argNodes[0]?.type)) && !args[0]?.length ? 1 : 0;
       if (args[i]?.length && this.leavesSite(argNodes[i])) this.sink("redirect", args[i], n, `${recv ? `${recv}.` : ""}${method}()`);
     }
-    if (/^(?:location\.assign|location\.replace|window\.location\.assign|window\.location\.replace|window\.open|router\.push|navigate)$/.test(ct2) && a0.length && this.leavesSite(node0))
+    if (/^(?:location\.assign|location\.replace|window\.location\.assign|window\.location\.replace|window\.open)$/.test(ct2) && a0.length && this.leavesSite(node0))
       this.sink("redirect", a0, n, `${ct2}()`);
     if (/^bypassSecurityTrust(?:Html|Script|Url|ResourceUrl|Style)$/.test(method) && a0.length) this.sink("xss", a0, n, `${method}()`);
     if (/^(?:document\.write|document\.writeln)$/.test(ct2) && any2) this.sink("xss", merge4(...args), n, ct2);
@@ -117571,12 +117604,14 @@ var Ctx4 = class _Ctx3 {
     for (const f3 of v2) {
       if (f3.safe.has(kind)) continue;
       if (f3.client && !(kind === "xss" || kind === "redirect" || kind === "code")) continue;
-      this.project.report({ kind, file: this.file, line, sink: label, fact: { ...f3, steps: [...f3.steps, { line, text: label, file: this.file }] }, guarded: guardedNear2(this.content, line, f3.src, kind) });
+      if ((kind === "redirect" || kind === "ssrf") && WHOLE_URL2.test(f3.src) && !f3.steps.some((s) => /\.get\(\)$|\.getAll\(\)$|\[\]$/.test(s.text))) continue;
+      this.project.report({ kind, file: this.file, line, sink: label, fact: { ...f3, steps: [...f3.steps, { line, text: label, file: this.file }] }, guarded: guardedNear2(this.content, line, f3.src, kind, f3.steps[0]?.file === this.file ? f3.steps[0].line : void 0) });
     }
   }
 };
-function guardedNear2(content, line, src, kind) {
-  const window2 = content.split(/\r?\n/).slice(Math.max(0, line - 9), line).join("\n");
+function guardedNear2(content, line, src, kind, from) {
+  const start = from && from <= line && line - from <= 200 ? from - 1 : Math.max(0, line - 41);
+  const window2 = content.split(/\r?\n/).slice(start, line).join("\n");
   const key = src.split(".").pop()?.replace(/\(.*$/, "") ?? "";
   if (kind === "nosql" && key && new RegExp(`typeof\\s+[\\w.]*\\b${key.replace(/[^\w]/g, "")}\\b\\s*!==?\\s*['"]string`).test(window2)) return true;
   if (kind === "file" && /\.startsWith\s*\(|path\.relative\s*\(|includes\s*\(\s*['"]\.\.['"]|isPathInside|isSubPath|realpath/.test(window2)) return true;

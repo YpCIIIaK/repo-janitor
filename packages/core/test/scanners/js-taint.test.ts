@@ -88,3 +88,25 @@ describe("js-taint — Angular and Mongo shapes (juice-shop)", () => {
     expect(await rules({ "routes/updateProductReviews.ts": src })).toContain("js-taint-nosqli@routes/updateProductReviews.ts:3")
   })
 })
+
+describe("js-taint — corpus false-positive shapes (review 2026-11-22)", () => {
+  it("redirects to our own URL and in-app navigation are not open redirects", async () => {
+    const mw = `export function middleware(request) {\n  return NextResponse.redirect(new URL('/login', request.url))\n}\n`
+    expect(await rules({ "src/middleware.ts": mw })).toEqual([])
+    const page = `const q = location.search\nwindow.location.href = '/list' + q\n`
+    expect(await rules({ "web/a.js": page })).toEqual([])
+  })
+  it("a proxy that forwards the request path to a fixed upstream is not SSRF", async () => {
+    const proxy = `export async function GET(request) {\n  const url = \`\${API}/v1\${new URL(request.url).pathname}\`\n  return fetch(url)\n}\n`
+    expect(await rules({ "app/api/[...p]/route.ts": proxy })).toEqual([])
+  })
+  it("only the object field that holds request data stays tainted", async () => {
+    const src = `const fs = require('fs')\napp.post('/x', (req, res) => {\n  const opts = { name: req.body.name, root: '/srv/data' }\n  fs.readFile(opts.root + '/index.json', () => {})\n})\n`
+    expect(await rules({ "app.js": src })).toEqual([])
+  })
+  it("a regex check on the value earlier in the handler guards the path", async () => {
+    const src = `const fs = require('fs')\napp.get('/f/:name', (req, res) => {\n  const name = req.params.name\n  if (!/^[0-9a-f]{16}$/.test(name)) return res.sendStatus(404)\n${"  log()\\n".repeat(30)}  res.sendFile(path.join(dir, name))\n})\n`
+    const out = await run({ "srv.js": src })
+    expect(out.every((i) => i.confidence === "low")).toBe(true)
+  })
+})

@@ -21,7 +21,14 @@ import { looksGenerated, type Node } from "../../ast"
 type Kind = "sql" | "nosql" | "cmd" | "code" | "file" | "ssrf" | "redirect" | "xss"
 
 interface Step { line: number; text: string; file: string }
-interface Fact { src: string; safe: Set<Kind>; steps: Step[]; client: boolean }
+interface Fact {
+  src: string
+  safe: Set<Kind>
+  steps: Step[]
+  client: boolean
+  /** Set while the value sits in a field of an object literal: reading another field does not get it. */
+  field?: string
+}
 type Value = Fact[]
 type Env = Map<string, Value>
 
@@ -78,8 +85,10 @@ const RULES: Record<Kind, { id: string; title: string; detail: string; severity:
   },
 }
 
+const WHOLE_URL = /(?:^|\.)(?:req|request|ctx|context|c|r|event)\.(?:url|originalUrl|path|nextUrl(?:\.searchParams)?|search|searchParams)$|location\.(?:href|search|hash|pathname)$|^searchParams$/
+
 const JS_FILE = /\.(?:[cm]?[jt]sx?)$/i
-const SKIP_PATH = /(?:^|\/)(?:node_modules|dist|build|out|coverage|\.next|\.nuxt|vendor|third[-_]?party|tests?|__tests__|specs?|e2e|cypress|fixtures?|__mocks__|mocks?|examples?|demos?|docs?|stories|storybook|benchmarks?|scripts)\/|\.(?:test|spec|stories|d)\.[cm]?[jt]sx?$|\.min\.js$/i
+const SKIP_PATH = /(?:^|\/)(?:node_modules|dist|build|out|coverage|\.next|\.nuxt|vendor|third[-_]?party|tests?|__tests__|specs?|e2e|cypress|fixtures?|__mocks__|mocks?|examples?|demos?|docs?|stories|storybook|benchmarks?|scripts)\/|\.(?:test|spec|stories|d|config)\.[cm]?[jt]sx?$|\.min\.js$/i
 const MAX_FILES = 4000
 const MAX_BYTES = 300_000
 const MAX_DEPTH = 4
@@ -183,6 +192,10 @@ function merge(...vals: Value[]): Value {
   return out
 }
 
+/** Reading `.prop` of a value: facts held in other fields of an object literal stay behind. */
+const pick = (v: Value, prop: string | undefined): Value =>
+  v.filter((f) => f.field === undefined || prop === undefined || f.field === prop).map((f) => (f.field === undefined ? f : { ...f, field: undefined }))
+
 const withStep = (v: Value, s: Step): Value => v.map((f) => ({ ...f, steps: f.steps.length > 12 ? [...f.steps.slice(0, 4), ...f.steps.slice(-7), s] : [...f.steps, s] }))
 const makeSafe = (v: Value, kinds: Kind[]): Value => v.map((f) => ({ ...f, safe: new Set([...f.safe, ...kinds]) }))
 
@@ -272,7 +285,10 @@ class Ctx {
       case "ObjectPattern":
         for (const p of (pattern.properties as Node[]) ?? []) {
           if (p.type === "RestElement") this.bind(p.argument as Node, v, env, at)
-          else this.bind((p.value as Node) ?? (p.key as Node), v, env, at)
+          else {
+            const key = (p.key as Node)?.type === "Identifier" && !p.computed ? String((p.key as Node).name) : undefined
+            this.bind((p.value as Node) ?? (p.key as Node), pick(v, key), env, at)
+          }
         }
         return
       case "ArrayPattern":
@@ -402,9 +418,9 @@ class Ctx {
         // `.length` and friends carry no text.
         const prop = !n.computed ? String((n.property as Node)?.name ?? "") : ""
         if (/^(?:length|size|byteLength)$/.test(prop)) return []
-        return obj
+        return pick(obj, prop || undefined)
       }
-      case "TemplateLiteral": return withStep(merge(...((n.expressions as Node[]) ?? []).map((e) => this.expr(e, env))), this.step(n, "`…${}`"))
+      case "TemplateLiteral": return withStep(pick(merge(...((n.expressions as Node[]) ?? []).map((e) => this.expr(e, env))), undefined), this.step(n, "`…${}`"))
       case "TaggedTemplateExpression": {
         // sql`…${x}` and Prisma.sql bind their values: safe for SQL.
         const tag = text(n.tag as Node)
@@ -441,7 +457,8 @@ class Ctx {
         for (const p of (n.properties as Node[]) ?? []) {
           if (p.type === "ObjectProperty") {
             const v = this.expr(p.value as Node, env)
-            vals.push(v)
+            const key = (p.key as Node)?.type === "Identifier" ? String((p.key as Node).name) : (p.key as Node)?.type === "StringLiteral" ? String((p.key as Node).value) : undefined
+            vals.push(key && !p.computed ? v.map((f) => ({ ...f, field: key })) : v)
             if ((p.key as Node)?.type === "Identifier" && (p.key as Node).name === "__html") this.sink("xss", v, p, "dangerouslySetInnerHTML")
             if (((p.key as Node)?.name === "$where" || (p.key as Node)?.value === "$where")) this.sink("nosql", v, p, "$where")
           } else if (p.type === "SpreadElement") vals.push(this.expr(p.argument as Node, env))
@@ -510,6 +527,9 @@ class Ctx {
     if (/(?:^|\.)useSearchParams$/.test(ct) || /(?:^|\.)useParams$/.test(ct)) return [{ src: `${ct}()`, safe: new Set(), steps: [line], client: true }]
 
     if (CLEAN_FUNCS.test(ct)) return []
+    // The project's own confining helpers: slugify(), safeJoin(), resolveWithin(), sanitizeFilename().
+    if (/(?:^|\.)(?:slugify|slug|safe\w*|\w*Within\w*|sanitize\w*|normali[sz]e\w*Name|clean\w*)$/i.test(ct))
+      return withStep(makeSafe(merge(...args, recvVal), ["file", "cmd", "xss", "redirect"]), line)
     for (const [re, kinds] of SANITIZE) {
       if (re.test(ct)) {
         // `.format()` is only a SQL escaper on a SQL helper; `escape()` only when it is a global or a DB/SqlString.
@@ -517,9 +537,18 @@ class Ctx {
         return withStep(makeSafe(merge(...args, recvVal), kinds), line)
       }
     }
-    if (isNew && /^(?:URL|URLSearchParams|String|Buffer)$/.test(ct)) return withStep(merge(...args), line)
+    // new URL('/login', request.url): the base only supplies our own origin.
+    if (isNew && ct === "URL") return withStep(argNodes[0]?.type === "StringLiteral" || argNodes[0]?.type === "TemplateLiteral" && literalLead(argNodes[0]).startsWith("/") ? [] : args[0] ?? [], line)
+    if (isNew && /^(?:URLSearchParams|String|Buffer)$/.test(ct)) return withStep(merge(...args), line)
     if (PASS_FUNCS.has(ct) || PASS_FUNCS.has(method) && /^(?:path|util|JSON|Buffer|Object|Array|querystring|qs|url)$/.test(recv)) return withStep(merge(...args), line)
 
+    // An argument checked against an allowlist just before the call (`if (CLIENT_FILES.has(f)) serve(f)`).
+    const lines = this.content.split(/\r?\n/).slice(Math.max(0, lineOf(n) - 9), lineOf(n)).join("\n")
+    for (const [i, a] of argNodes.entries()) {
+      if (a?.type !== "Identifier" || !args[i]?.length) continue
+      const id = String(a.name).replace(/[^\w$]/g, "")
+      if (new RegExp(`\\.(?:has|includes)\\(\\s*${id}\\s*\\)|\\b${id}\\s*===?\\s*['"\`]`).test(lines)) args[i] = makeSafe(args[i], ["file", "redirect", "ssrf", "cmd", "code", "sql", "xss", "nosql"])
+    }
     // The project's own functions: analysed with these arguments.
     const def = !isNew && !recvVal.length ? this.project.lookup(method) : undefined
     if (def && this.depth < MAX_DEPTH && !this.callStack.has(def.node) && args.some((a) => a.length)) {
@@ -552,7 +581,8 @@ class Ctx {
     }
     // NoSQL: the whole request object as the filter
     if (/^(?:find|findOne|findOneAndUpdate|findOneAndDelete|updateOne|updateMany|deleteOne|deleteMany|countDocuments|exists|where)$/.test(method) &&
-      node0 && (node0.type === "MemberExpression" || node0.type === "Identifier") && a0.some((f) => /\.(?:body|query)$/.test(f.src)))
+      node0 && (node0.type === "MemberExpression" || node0.type === "Identifier") && a0.some((f) => /\.(?:body|query)$/.test(f.src)) &&
+      /(?:collection|Collection|model|Model|db\.|^[A-Z]\w*$)/.test(recv))
       this.sink("nosql", a0, n, `${method}()`)
     // A filter object whose field is a raw request value: the client can send { "$ne": null } in its place.
     if (/^(?:find|findOne|findOneAndUpdate|findOneAndDelete|update|updateOne|updateMany|deleteOne|deleteMany|remove|countDocuments|exists)$/.test(method) &&
@@ -595,7 +625,7 @@ class Ctx {
       const i = argNodes.length > 1 && /^(?:NumericLiteral|Identifier)$/.test(String(argNodes[0]?.type)) && !args[0]?.length ? 1 : 0
       if (args[i]?.length && this.leavesSite(argNodes[i])) this.sink("redirect", args[i], n, `${recv ? `${recv}.` : ""}${method}()`)
     }
-    if (/^(?:location\.assign|location\.replace|window\.location\.assign|window\.location\.replace|window\.open|router\.push|navigate)$/.test(ct) && a0.length && this.leavesSite(node0))
+    if (/^(?:location\.assign|location\.replace|window\.location\.assign|window\.location\.replace|window\.open)$/.test(ct) && a0.length && this.leavesSite(node0))
       this.sink("redirect", a0, n, `${ct}()`)
 
     // HTML
@@ -631,14 +661,20 @@ class Ctx {
       if (f.safe.has(kind)) continue
       // A browser source only matters for browser sinks; the server never sees location.hash.
       if (f.client && !(kind === "xss" || kind === "redirect" || kind === "code")) continue
-      this.project.report({ kind, file: this.file, line, sink: label, fact: { ...f, steps: [...f.steps, { line, text: label, file: this.file }] }, guarded: guardedNear(this.content, line, f.src, kind) })
+      // The page's own URL, whole (request.url, location.href, req.path): forwarding or rebuilding it
+      // stays on our site / our upstream. Only a parameter taken out of it chooses a target.
+      if ((kind === "redirect" || kind === "ssrf") && WHOLE_URL.test(f.src) && !f.steps.some((s) => /\.get\(\)$|\.getAll\(\)$|\[\]$/.test(s.text))) continue
+      this.project.report({ kind, file: this.file, line, sink: label, fact: { ...f, steps: [...f.steps, { line, text: label, file: this.file }] }, guarded: guardedNear(this.content, line, f.src, kind, f.steps[0]?.file === this.file ? f.steps[0].line : undefined) })
     }
   }
 }
 
 /** A check just above the sink on the same value: allowlist, prefix check, path containment, host check. */
-export function guardedNear(content: string, line: number, src: string, kind: Kind): boolean {
-  const window = content.split(/\r?\n/).slice(Math.max(0, line - 9), line).join("\n")
+export function guardedNear(content: string, line: number, src: string, kind: Kind, from?: number): boolean {
+  // Up to 40 lines: handlers validate first and use the value further down (thelounge's name regex).
+  // From where the value was read (same file, up to 200 lines), else the 40 lines above.
+  const start = from && from <= line && line - from <= 200 ? from - 1 : Math.max(0, line - 41)
+  const window = content.split(/\r?\n/).slice(start, line).join("\n")
   const key = src.split(".").pop()?.replace(/\(.*$/, "") ?? ""
   // `if (typeof req.body.id !== 'string')`: an operator object cannot get past a type check.
   if (kind === "nosql" && key && new RegExp(`typeof\\s+[\\w.]*\\b${key.replace(/[^\w]/g, "")}\\b\\s*!==?\\s*['"]string`).test(window)) return true
