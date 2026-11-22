@@ -223,6 +223,10 @@ export const PASSTHROUGH = new Set([
   "fread", "fgets", "gzuncompress", "gzinflate", "hex2bin", "str_word_count", "nl2br", "addcslashes",
   "quotemeta", "trim", "mb_strimwidth", "number_format", "wp_unslash", "stripslashes_deep", "urlencode_deep",
   "get_user_by", "get_userdata", "get_user_by_email", "get_user", "wp_get_current_user_by",
+  // Result sets carry what the query read (stored XSS: rows of a table request data was written into).
+  "mysqli_fetch_row", "mysqli_fetch_assoc", "mysqli_fetch_array", "mysqli_fetch_object", "mysqli_fetch_all",
+  "mysql_fetch_row", "mysql_fetch_assoc", "mysql_fetch_array", "mysql_fetch_object", "mysql_result",
+  "pg_fetch_row", "pg_fetch_assoc", "pg_fetch_array", "pg_fetch_object", "pg_fetch_all", "sqlite_fetch_array",
 ])
 
 /** Sinks called as plain functions: argument index → kind. */

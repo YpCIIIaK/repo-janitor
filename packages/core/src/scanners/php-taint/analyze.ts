@@ -148,6 +148,9 @@ function merge(...vals: Value[]): Value {
   const seen = new Set<string>()
   for (const v of vals) {
     for (const f of v) {
+      // Safe for every sink: carries nothing, and would only take a slot from a live fact
+      // (DVWA's guestbook: the escaped branch's rows crowded out medium.php's stored name).
+      if (f.safe.size >= ALL_SAFE.length && ALL_SAFE.every((k) => f.safe.has(k))) continue
       // The file a path starts in is part of its identity: the same $_GET key read in
       // low.php and in high.php are two places to fix, not one (bounded by MAX_FACTS).
       // Steps inside the current file carry no file name, so the first steps themselves identify the start.
@@ -262,6 +265,10 @@ function leadingLiteral(n: Node): string {
 }
 
 export class Project {
+  /** Request data written to a table: table → the facts that reached the INSERT/UPDATE (pass 1). */
+  readonly storedWrites = new Map<string, Fact[]>()
+  /** Seeded for pass 2: reading these tables yields what pass 1 saw written into them. */
+  storedSources?: Map<string, Fact[]>
   private fns = new Map<string, FnDef[]>()
   private methods = new Map<string, FnDef[]>()
   readonly findings: Finding[] = []
@@ -810,6 +817,53 @@ class Ctx {
     return n
   }
 
+  /** SQL text of a query argument: the literal itself, or the last literal assigned to the variable. */
+  private sqlText(argNode: Node, at: Node): string {
+    const lit = literalText(argNode)
+    if (lit.trim()) return lit
+    if (argNode?.kind !== "variable" || typeof argNode.name !== "string") return ""
+    const end = at?.loc?.start?.offset ?? 0
+    const before = this.content.slice(Math.max(0, end - 4000), end)
+    const name = argNode.name.replace(/[^\w]/g, "")
+    const all = [...before.matchAll(new RegExp(`\\$${name}\\s*\\.?=\\s*(["'])([\\s\\S]*?)\\1\\s*;`, "g"))]
+    return all.length ? all[all.length - 1][2] : ""
+  }
+
+  /** Stored XSS, write side: request data not escaped for HTML going into a table. */
+  private recordStoredWrite(v: Value, argNode: Node, at: Node) {
+    const table = this.sqlText(argNode, at).match(/^\s*(?:INSERT\s+(?:IGNORE\s+)?INTO|REPLACE\s+INTO|UPDATE)\s+[`"]?(\w+)/i)?.[1]?.toLowerCase()
+    if (!table) return
+    for (const f of v) {
+      if (!f.src || f.safe.has("xss")) continue
+      const list = this.project.storedWrites.get(table) ?? []
+      const put = this.step(at, `INSERT INTO ${table}`)
+      // The same write is seen once per analysed call context; keep one fact per source and write site.
+      const key = (x: Fact) => `${x.src}|${x.steps[x.steps.length - 1]?.file}:${x.steps[x.steps.length - 1]?.line}`
+      const fact = { ...f, steps: [...f.steps, put] }
+      if (list.some((x) => key(x) === key(fact))) continue
+      if (list.length >= 12) return
+      list.push(fact)
+      this.project.storedWrites.set(table, list)
+    }
+  }
+
+  /** Stored XSS, read side (pass 2): a SELECT from a table request data was written into. */
+  private storedRead(argNode: Node, at: Node): Value {
+    const stored = this.project.storedSources
+    if (!stored?.size) return []
+    const table = this.sqlText(argNode, at).match(/\bSELECT\b[\s\S]*?\bFROM\s+[`"]?(\w+)/i)?.[1]?.toLowerCase()
+    const writes = table ? stored.get(table) : undefined
+    if (!writes) return []
+    // Only HTML output can be hurt by what comes back: every other sink treats it as clean.
+    const notXss = ALL_SAFE.filter((k) => k !== "xss")
+    // The source names its write site: DVWA's low, medium and high.php all store $_POST['txtName'],
+    // and facts with one src collapse into one, losing two places to fix.
+    return writes.map((w) => {
+      const put = w.steps[w.steps.length - 1]
+      return { ...w, src: `${w.src} stored in ${table} at ${put?.file ?? this.file}:${put?.line ?? 0}`, safe: new Set([...w.safe, ...notXss]), steps: [...w.steps, this.step(at, `SELECT … FROM ${table}`)] }
+    })
+  }
+
   private step(n: Node, text: string): Step {
     return { line: lineOf(n), text, file: this.file }
   }
@@ -1189,7 +1243,7 @@ class Ctx {
         const dbLike = DB_RECEIVER.test(recv) || /^(?:DB|\\?Illuminate\\Support\\Facades\\DB)$/i.test(recv)
         if ((sqlLike || dbLike) && (!SQL_METHOD_NEEDS_DB.has(method) || dbLike || sqlLike)) {
           this.sink("sql", args[0] ?? [], argNodes[0], n, `${recv}->${nameOf(what.offset)}()`)
-          return []
+          return this.storedRead(argNodes[0], n)
         }
       }
       // WP_Filesystem: the WordPress way to read and write files.
@@ -1197,6 +1251,11 @@ class Ctx {
         const fsArg: Record<string, number[]> = { get_contents: [0], get_contents_array: [0], put_contents: [0], delete: [0], move: [0, 1], copy: [0, 1], mkdir: [0], rmdir: [0], chmod: [0], touch: [0] }
         for (const i of fsArg[method] ?? []) this.sink("file", args[i] ?? [], argNodes[i], n, `${recv}->${method}()`)
         if (method === "get_contents" || method === "get_contents_array") return []
+      }
+      // A result set hands out the rows it was read with ($result->fetch_assoc()).
+      if (/^fetch(?:_?(?:assoc|array|row|object|all|column|one))?$|^fetchall(?:associative)?$|^row_array$|^result_array$/i.test(method)) {
+        const recvVal = this.expr(what.what, env).filter((f) => f.src)
+        if (recvVal.length) return withStep(recvVal, { line, text: `${recv}->${method}()`, file: this.file })
       }
       // Any object that carries request data hands it out through its getters ($data->get_param('x')).
       if (SOURCE_METHODS.has(method)) {
@@ -1291,6 +1350,12 @@ class Ctx {
       }
       if (fn === "file_get_contents" || fn === "fread" || fn === "file") return []
       if (fn === "shell_exec" || fn === "exec" || fn === "system" || fn === "passthru") return []
+      const sqlArg = sinks.find((s) => s.kind === "sql")
+      if (sqlArg) {
+        const i = sqlArg.arg === "last" ? args.length - 1 : sqlArg.arg
+        const st = this.storedRead(argNodes[i], n)
+        if (st.length) return st
+      }
     }
     if (fn === "header") {
       const lead = leadingLiteral(argNodes[0])
@@ -1369,6 +1434,7 @@ class Ctx {
   /** Reach a sink: report request data, or record a parameter use for the summary. */
   private sink(kind: SinkKind, v: Value, argNode: Node, at: Node, sink: string) {
     if (!v.length) return
+    if (kind === "sql") this.recordStoredWrite(v, argNode, at)
     if (kind === "upload") {
       // An extension / type check shortly before the move (WordPress or by hand) is the fix for this rule.
       // From the start of the enclosing function to the move itself.

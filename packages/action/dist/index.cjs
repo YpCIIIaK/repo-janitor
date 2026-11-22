@@ -36050,7 +36050,7 @@ var require_src4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-ZQN24WQB.js
+// ../cli/dist/chunk-NDWP73JG.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -59984,7 +59984,7 @@ function date4(params) {
   return _coercedDate(ZodDate, params);
 }
 
-// ../cli/dist/chunk-ZQN24WQB.js
+// ../cli/dist/chunk-NDWP73JG.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -102353,7 +102353,24 @@ var PASSTHROUGH = /* @__PURE__ */ new Set([
   "get_userdata",
   "get_user_by_email",
   "get_user",
-  "wp_get_current_user_by"
+  "wp_get_current_user_by",
+  // Result sets carry what the query read (stored XSS: rows of a table request data was written into).
+  "mysqli_fetch_row",
+  "mysqli_fetch_assoc",
+  "mysqli_fetch_array",
+  "mysqli_fetch_object",
+  "mysqli_fetch_all",
+  "mysql_fetch_row",
+  "mysql_fetch_assoc",
+  "mysql_fetch_array",
+  "mysql_fetch_object",
+  "mysql_result",
+  "pg_fetch_row",
+  "pg_fetch_assoc",
+  "pg_fetch_array",
+  "pg_fetch_object",
+  "pg_fetch_all",
+  "sqlite_fetch_array"
 ]);
 var FUNCTION_SINKS = {
   mysql_query: [{ arg: 0, kind: "sql" }],
@@ -102545,6 +102562,7 @@ function merge2(...vals) {
   const seen = /* @__PURE__ */ new Set();
   for (const v2 of vals) {
     for (const f3 of v2) {
+      if (f3.safe.size >= ALL_SAFE.length && ALL_SAFE.every((k2) => f3.safe.has(k2))) continue;
       const from = f3.steps.slice(0, 2).map((x3) => {
         var _a32;
         return `${(_a32 = x3.file) != null ? _a32 : ""}:${x3.line}:${x3.text}`;
@@ -102656,6 +102674,7 @@ function leadingLiteral(n) {
 }
 var Project = class {
   constructor() {
+    this.storedWrites = /* @__PURE__ */ new Map();
     this.fns = /* @__PURE__ */ new Map();
     this.methods = /* @__PURE__ */ new Map();
     this.findings = [];
@@ -103172,6 +103191,53 @@ var Ctx = class _Ctx {
     }
     return n;
   }
+  /** SQL text of a query argument: the literal itself, or the last literal assigned to the variable. */
+  sqlText(argNode, at2) {
+    var _a22, _b, _c;
+    const lit = literalText(argNode);
+    if (lit.trim()) return lit;
+    if ((argNode == null ? void 0 : argNode.kind) !== "variable" || typeof argNode.name !== "string") return "";
+    const end = (_c = (_b = (_a22 = at2 == null ? void 0 : at2.loc) == null ? void 0 : _a22.start) == null ? void 0 : _b.offset) != null ? _c : 0;
+    const before = this.content.slice(Math.max(0, end - 4e3), end);
+    const name = argNode.name.replace(/[^\w]/g, "");
+    const all = [...before.matchAll(new RegExp(`\\$${name}\\s*\\.?=\\s*(["'])([\\s\\S]*?)\\1\\s*;`, "g"))];
+    return all.length ? all[all.length - 1][2] : "";
+  }
+  /** Stored XSS, write side: request data not escaped for HTML going into a table. */
+  recordStoredWrite(v2, argNode, at2) {
+    var _a22, _b, _c;
+    const table = (_b = (_a22 = this.sqlText(argNode, at2).match(/^\s*(?:INSERT\s+(?:IGNORE\s+)?INTO|REPLACE\s+INTO|UPDATE)\s+[`"]?(\w+)/i)) == null ? void 0 : _a22[1]) == null ? void 0 : _b.toLowerCase();
+    if (!table) return;
+    for (const f3 of v2) {
+      if (!f3.src || f3.safe.has("xss")) continue;
+      const list = (_c = this.project.storedWrites.get(table)) != null ? _c : [];
+      const put = this.step(at2, `INSERT INTO ${table}`);
+      const key = (x3) => {
+        var _a32, _b2;
+        return `${x3.src}|${(_a32 = x3.steps[x3.steps.length - 1]) == null ? void 0 : _a32.file}:${(_b2 = x3.steps[x3.steps.length - 1]) == null ? void 0 : _b2.line}`;
+      };
+      const fact = __spreadProps(__spreadValues({}, f3), { steps: [...f3.steps, put] });
+      if (list.some((x3) => key(x3) === key(fact))) continue;
+      if (list.length >= 12) return;
+      list.push(fact);
+      this.project.storedWrites.set(table, list);
+    }
+  }
+  /** Stored XSS, read side (pass 2): a SELECT from a table request data was written into. */
+  storedRead(argNode, at2) {
+    var _a22, _b;
+    const stored = this.project.storedSources;
+    if (!(stored == null ? void 0 : stored.size)) return [];
+    const table = (_b = (_a22 = this.sqlText(argNode, at2).match(/\bSELECT\b[\s\S]*?\bFROM\s+[`"]?(\w+)/i)) == null ? void 0 : _a22[1]) == null ? void 0 : _b.toLowerCase();
+    const writes = table ? stored.get(table) : void 0;
+    if (!writes) return [];
+    const notXss = ALL_SAFE.filter((k2) => k2 !== "xss");
+    return writes.map((w2) => {
+      var _a32, _b2;
+      const put = w2.steps[w2.steps.length - 1];
+      return __spreadProps(__spreadValues({}, w2), { src: `${w2.src} stored in ${table} at ${(_a32 = put == null ? void 0 : put.file) != null ? _a32 : this.file}:${(_b2 = put == null ? void 0 : put.line) != null ? _b2 : 0}`, safe: /* @__PURE__ */ new Set([...w2.safe, ...notXss]), steps: [...w2.steps, this.step(at2, `SELECT \u2026 FROM ${table}`)] });
+    });
+  }
   step(n, text22) {
     return { line: lineOf5(n), text: text22, file: this.file };
   }
@@ -103529,13 +103595,17 @@ var Ctx = class _Ctx {
         const dbLike = DB_RECEIVER.test(recv) || /^(?:DB|\\?Illuminate\\Support\\Facades\\DB)$/i.test(recv);
         if ((sqlLike || dbLike) && (!SQL_METHOD_NEEDS_DB.has(method) || dbLike || sqlLike)) {
           this.sink("sql", (_j = args[0]) != null ? _j : [], argNodes[0], n, `${recv}->${nameOf(what.offset)}()`);
-          return [];
+          return this.storedRead(argNodes[0], n);
         }
       }
       if (/filesystem|wp_fs|\$fs$/i.test(recv)) {
         const fsArg = { get_contents: [0], get_contents_array: [0], put_contents: [0], delete: [0], move: [0, 1], copy: [0, 1], mkdir: [0], rmdir: [0], chmod: [0], touch: [0] };
         for (const i of (_k = fsArg[method]) != null ? _k : []) this.sink("file", (_l = args[i]) != null ? _l : [], argNodes[i], n, `${recv}->${method}()`);
         if (method === "get_contents" || method === "get_contents_array") return [];
+      }
+      if (/^fetch(?:_?(?:assoc|array|row|object|all|column|one))?$|^fetchall(?:associative)?$|^row_array$|^result_array$/i.test(method)) {
+        const recvVal = this.expr(what.what, env).filter((f3) => f3.src);
+        if (recvVal.length) return withStep(recvVal, { line, text: `${recv}->${method}()`, file: this.file });
       }
       if (SOURCE_METHODS.has(method)) {
         const recvVal = this.expr(what.what, env).filter((f3) => f3.src);
@@ -103614,6 +103684,12 @@ var Ctx = class _Ctx {
       }
       if (fn2 === "file_get_contents" || fn2 === "fread" || fn2 === "file") return [];
       if (fn2 === "shell_exec" || fn2 === "exec" || fn2 === "system" || fn2 === "passthru") return [];
+      const sqlArg = sinks.find((s) => s.kind === "sql");
+      if (sqlArg) {
+        const i = sqlArg.arg === "last" ? args.length - 1 : sqlArg.arg;
+        const st2 = this.storedRead(argNodes[i], n);
+        if (st2.length) return st2;
+      }
     }
     if (fn2 === "header") {
       const lead = leadingLiteral(argNodes[0]);
@@ -103683,6 +103759,7 @@ var Ctx = class _Ctx {
   sink(kind, v2, argNode, at2, sink) {
     var _a22, _b, _c, _d, _e2;
     if (!v2.length) return;
+    if (kind === "sql") this.recordStoredWrite(v2, argNode, at2);
     if (kind === "upload") {
       const end = (_c = (_b = (_a22 = at2 == null ? void 0 : at2.loc) == null ? void 0 : _a22.start) == null ? void 0 : _b.offset) != null ? _c : 0;
       const start = Math.max(this.content.lastIndexOf("function", end), end - 12e3, 0);
@@ -104279,7 +104356,7 @@ var phpTaintScanner = {
   run(ctx) {
     return __async(this, null, function* () {
       var _a22, _b, _c, _d, _e2, _f, _g, _h, _i, _j, _k, _l, _m, _n2, _o, _p, _q;
-      const project = new Project();
+      let project = new Project();
       const contents = /* @__PURE__ */ new Map();
       let files = 0;
       for (const file2 of ctx.files) {
@@ -104297,6 +104374,17 @@ var phpTaintScanner = {
       }
       if (!files) return [];
       project.run();
+      if (project.storedWrites.size) {
+        const tables = [...project.storedWrites.keys()];
+        const readsBack = [...contents.values()].some((c3) => tables.some((t2) => new RegExp(`\\bFROM\\s+[\`"]?${t2}\\b`, "i").test(c3)));
+        if (readsBack) {
+          const second = new Project();
+          second.storedSources = project.storedWrites;
+          for (const [norm, content] of contents) second.add(norm, content);
+          second.run();
+          project = second;
+        }
+      }
       const issues = [];
       const seen = /* @__PURE__ */ new Set();
       const byId = /* @__PURE__ */ new Map();
@@ -104333,6 +104421,7 @@ var phpTaintScanner = {
         if (/HTTP_HOST|^\$_SERVER$/.test(f3.source) && f3.kind !== "sql" && f3.kind !== "cmd") confidence = confidence === "high" ? "medium" : "low";
         if (/REQUEST_URI|PHP_SELF|PATH_INFO|QUERY_STRING|DOCUMENT_ROOT|SCRIPT_NAME/.test(f3.source) && f3.kind !== "sql" && f3.kind !== "cmd") confidence = "low";
         if (guardedNearby((_l = contents.get(f3.file)) != null ? _l : "", f3.line, f3.source, f3.kind)) confidence = "low";
+        if (/ stored in \w+ at (?:[^ ]*\/)?(?:admin|administrator|backend|dashboard)\//i.test(f3.source)) confidence = "low";
         if (f3.kind === "redirect" && f3.steps.some((s) => /http_build_query/.test(s.text))) confidence = "low";
         const where = entry ? ` Reachable from ${entry}.` : adminOnly ? " Reachable from admin screens only (or after a capability check): an administrator would have to be the attacker or be tricked into it." : "";
         issues.push(__spreadValues(__spreadProps(__spreadValues({
@@ -113950,7 +114039,24 @@ var PASSTHROUGH2 = /* @__PURE__ */ new Set([
   "get_userdata",
   "get_user_by_email",
   "get_user",
-  "wp_get_current_user_by"
+  "wp_get_current_user_by",
+  // Result sets carry what the query read (stored XSS: rows of a table request data was written into).
+  "mysqli_fetch_row",
+  "mysqli_fetch_assoc",
+  "mysqli_fetch_array",
+  "mysqli_fetch_object",
+  "mysqli_fetch_all",
+  "mysql_fetch_row",
+  "mysql_fetch_assoc",
+  "mysql_fetch_array",
+  "mysql_fetch_object",
+  "mysql_result",
+  "pg_fetch_row",
+  "pg_fetch_assoc",
+  "pg_fetch_array",
+  "pg_fetch_object",
+  "pg_fetch_all",
+  "sqlite_fetch_array"
 ]);
 var FUNCTION_SINKS2 = {
   mysql_query: [{ arg: 0, kind: "sql" }],
@@ -114135,6 +114241,7 @@ function merge3(...vals) {
   const seen = /* @__PURE__ */ new Set();
   for (const v2 of vals) {
     for (const f3 of v2) {
+      if (f3.safe.size >= ALL_SAFE2.length && ALL_SAFE2.every((k2) => f3.safe.has(k2))) continue;
       const from = f3.steps.slice(0, 2).map((x3) => `${x3.file ?? ""}:${x3.line}:${x3.text}`).join(">");
       const key = `${f3.src ?? ""}|${f3.param ?? ""}|${[...f3.safe].sort().join(",")}|${f3.weak}|${from}`;
       if (seen.has(key)) continue;
@@ -114232,6 +114339,8 @@ function leadingLiteral2(n) {
 }
 var Project2 = class {
   constructor() {
+    /** Request data written to a table: table → the facts that reached the INSERT/UPDATE (pass 1). */
+    this.storedWrites = /* @__PURE__ */ new Map();
     this.fns = /* @__PURE__ */ new Map();
     this.methods = /* @__PURE__ */ new Map();
     this.findings = [];
@@ -114735,6 +114844,46 @@ var Ctx2 = class _Ctx2 {
     }
     return n;
   }
+  /** SQL text of a query argument: the literal itself, or the last literal assigned to the variable. */
+  sqlText(argNode, at2) {
+    const lit = literalText2(argNode);
+    if (lit.trim()) return lit;
+    if (argNode?.kind !== "variable" || typeof argNode.name !== "string") return "";
+    const end = at2?.loc?.start?.offset ?? 0;
+    const before = this.content.slice(Math.max(0, end - 4e3), end);
+    const name = argNode.name.replace(/[^\w]/g, "");
+    const all = [...before.matchAll(new RegExp(`\\$${name}\\s*\\.?=\\s*(["'])([\\s\\S]*?)\\1\\s*;`, "g"))];
+    return all.length ? all[all.length - 1][2] : "";
+  }
+  /** Stored XSS, write side: request data not escaped for HTML going into a table. */
+  recordStoredWrite(v2, argNode, at2) {
+    const table = this.sqlText(argNode, at2).match(/^\s*(?:INSERT\s+(?:IGNORE\s+)?INTO|REPLACE\s+INTO|UPDATE)\s+[`"]?(\w+)/i)?.[1]?.toLowerCase();
+    if (!table) return;
+    for (const f3 of v2) {
+      if (!f3.src || f3.safe.has("xss")) continue;
+      const list = this.project.storedWrites.get(table) ?? [];
+      const put = this.step(at2, `INSERT INTO ${table}`);
+      const key = (x3) => `${x3.src}|${x3.steps[x3.steps.length - 1]?.file}:${x3.steps[x3.steps.length - 1]?.line}`;
+      const fact = { ...f3, steps: [...f3.steps, put] };
+      if (list.some((x3) => key(x3) === key(fact))) continue;
+      if (list.length >= 12) return;
+      list.push(fact);
+      this.project.storedWrites.set(table, list);
+    }
+  }
+  /** Stored XSS, read side (pass 2): a SELECT from a table request data was written into. */
+  storedRead(argNode, at2) {
+    const stored = this.project.storedSources;
+    if (!stored?.size) return [];
+    const table = this.sqlText(argNode, at2).match(/\bSELECT\b[\s\S]*?\bFROM\s+[`"]?(\w+)/i)?.[1]?.toLowerCase();
+    const writes = table ? stored.get(table) : void 0;
+    if (!writes) return [];
+    const notXss = ALL_SAFE2.filter((k2) => k2 !== "xss");
+    return writes.map((w2) => {
+      const put = w2.steps[w2.steps.length - 1];
+      return { ...w2, src: `${w2.src} stored in ${table} at ${put?.file ?? this.file}:${put?.line ?? 0}`, safe: /* @__PURE__ */ new Set([...w2.safe, ...notXss]), steps: [...w2.steps, this.step(at2, `SELECT \u2026 FROM ${table}`)] };
+    });
+  }
   step(n, text3) {
     return { line: lineOf10(n), text: text3, file: this.file };
   }
@@ -115079,13 +115228,17 @@ var Ctx2 = class _Ctx2 {
         const dbLike = DB_RECEIVER2.test(recv) || /^(?:DB|\\?Illuminate\\Support\\Facades\\DB)$/i.test(recv);
         if ((sqlLike || dbLike) && (!SQL_METHOD_NEEDS_DB2.has(method) || dbLike || sqlLike)) {
           this.sink("sql", args[0] ?? [], argNodes[0], n, `${recv}->${nameOf2(what.offset)}()`);
-          return [];
+          return this.storedRead(argNodes[0], n);
         }
       }
       if (/filesystem|wp_fs|\$fs$/i.test(recv)) {
         const fsArg = { get_contents: [0], get_contents_array: [0], put_contents: [0], delete: [0], move: [0, 1], copy: [0, 1], mkdir: [0], rmdir: [0], chmod: [0], touch: [0] };
         for (const i of fsArg[method] ?? []) this.sink("file", args[i] ?? [], argNodes[i], n, `${recv}->${method}()`);
         if (method === "get_contents" || method === "get_contents_array") return [];
+      }
+      if (/^fetch(?:_?(?:assoc|array|row|object|all|column|one))?$|^fetchall(?:associative)?$|^row_array$|^result_array$/i.test(method)) {
+        const recvVal = this.expr(what.what, env).filter((f3) => f3.src);
+        if (recvVal.length) return withStep2(recvVal, { line, text: `${recv}->${method}()`, file: this.file });
       }
       if (SOURCE_METHODS2.has(method)) {
         const recvVal = this.expr(what.what, env).filter((f3) => f3.src);
@@ -115161,6 +115314,12 @@ var Ctx2 = class _Ctx2 {
       }
       if (fn2 === "file_get_contents" || fn2 === "fread" || fn2 === "file") return [];
       if (fn2 === "shell_exec" || fn2 === "exec" || fn2 === "system" || fn2 === "passthru") return [];
+      const sqlArg = sinks.find((s) => s.kind === "sql");
+      if (sqlArg) {
+        const i = sqlArg.arg === "last" ? args.length - 1 : sqlArg.arg;
+        const st2 = this.storedRead(argNodes[i], n);
+        if (st2.length) return st2;
+      }
     }
     if (fn2 === "header") {
       const lead = leadingLiteral2(argNodes[0]);
@@ -115228,6 +115387,7 @@ var Ctx2 = class _Ctx2 {
   /** Reach a sink: report request data, or record a parameter use for the summary. */
   sink(kind, v2, argNode, at2, sink) {
     if (!v2.length) return;
+    if (kind === "sql") this.recordStoredWrite(v2, argNode, at2);
     if (kind === "upload") {
       const end = at2?.loc?.start?.offset ?? 0;
       const start = Math.max(this.content.lastIndexOf("function", end), end - 12e3, 0);
@@ -115798,7 +115958,7 @@ var phpTaintScanner2 = {
   id: "php-taint",
   category: "security",
   async run(ctx) {
-    const project = new Project2();
+    let project = new Project2();
     const contents = /* @__PURE__ */ new Map();
     let files = 0;
     for (const file2 of ctx.files) {
@@ -115816,6 +115976,17 @@ var phpTaintScanner2 = {
     }
     if (!files) return [];
     project.run();
+    if (project.storedWrites.size) {
+      const tables = [...project.storedWrites.keys()];
+      const readsBack = [...contents.values()].some((c3) => tables.some((t2) => new RegExp(`\\bFROM\\s+[\`"]?${t2}\\b`, "i").test(c3)));
+      if (readsBack) {
+        const second = new Project2();
+        second.storedSources = project.storedWrites;
+        for (const [norm, content] of contents) second.add(norm, content);
+        second.run();
+        project = second;
+      }
+    }
     const issues = [];
     const seen = /* @__PURE__ */ new Set();
     const byId = /* @__PURE__ */ new Map();
@@ -115849,6 +116020,7 @@ var phpTaintScanner2 = {
       if (/HTTP_HOST|^\$_SERVER$/.test(f3.source) && f3.kind !== "sql" && f3.kind !== "cmd") confidence = confidence === "high" ? "medium" : "low";
       if (/REQUEST_URI|PHP_SELF|PATH_INFO|QUERY_STRING|DOCUMENT_ROOT|SCRIPT_NAME/.test(f3.source) && f3.kind !== "sql" && f3.kind !== "cmd") confidence = "low";
       if (guardedNearby2(contents.get(f3.file) ?? "", f3.line, f3.source, f3.kind)) confidence = "low";
+      if (/ stored in \w+ at (?:[^ ]*\/)?(?:admin|administrator|backend|dashboard)\//i.test(f3.source)) confidence = "low";
       if (f3.kind === "redirect" && f3.steps.some((s) => /http_build_query/.test(s.text))) confidence = "low";
       const where = entry ? ` Reachable from ${entry}.` : adminOnly ? " Reachable from admin screens only (or after a capability check): an administrator would have to be the attacker or be tricked into it." : "";
       issues.push({
