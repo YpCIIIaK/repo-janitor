@@ -36050,7 +36050,7 @@ var require_src4 = __commonJS({
 // src/index.ts
 var import_fs3 = require("fs");
 
-// ../cli/dist/chunk-W26SZCTC.js
+// ../cli/dist/chunk-GLMGEHLE.js
 var import_fs2 = require("fs");
 var import_child_process = require("child_process");
 
@@ -59984,7 +59984,7 @@ function date4(params) {
   return _coercedDate(ZodDate, params);
 }
 
-// ../cli/dist/chunk-W26SZCTC.js
+// ../cli/dist/chunk-GLMGEHLE.js
 var import_path3 = require("path");
 var import_promises = require("dns/promises");
 var import_net = require("net");
@@ -104917,7 +104917,8 @@ var Ctx2 = class _Ctx2 {
         this.branch([s.consequent, s.alternate], env);
         return;
       case "ForStatement":
-        if (s.init) s.init.type === "VariableDeclaration" ? this.stmt(s.init, env) : this.expr(s.init, env);
+        if (s.init && s.init.type === "VariableDeclaration") this.stmt(s.init, env);
+        else if (s.init) this.expr(s.init, env);
         this.stmt(s.body, env);
         return;
       case "ForInStatement":
@@ -105214,7 +105215,6 @@ var Ctx2 = class _Ctx2 {
     if (/^(?:html|append|prepend|after|before|replaceWith)$/.test(method) && /^\$|jQuery/.test(recv) && a0.length && method === "html") this.sink("xss", a0, n, `$().${method}()`);
     if (/^(?:send|write|end)$/.test(method) && /^(?:res|response|reply|ctx\.res|this\.res)$/.test(recv) && a0.length && /<[a-zA-Z!/]/.test(literalAll(node0)))
       this.sink("xss", a0, n, `${recv}.${method}(html)`);
-    if (/^(?:body)$/.test(method) === false && recv === "ctx" && method === "body") ;
   }
   /** The URL's host is chosen by the input: it starts with the value, or with only a scheme. */
   hostFromInput(n) {
@@ -117260,7 +117260,8 @@ var Ctx4 = class _Ctx3 {
         this.branch([s.consequent, s.alternate], env);
         return;
       case "ForStatement":
-        if (s.init) s.init.type === "VariableDeclaration" ? this.stmt(s.init, env) : this.expr(s.init, env);
+        if (s.init && s.init.type === "VariableDeclaration") this.stmt(s.init, env);
+        else if (s.init) this.expr(s.init, env);
         this.stmt(s.body, env);
         return;
       case "ForInStatement":
@@ -117549,7 +117550,6 @@ var Ctx4 = class _Ctx3 {
     if (/^(?:html|append|prepend|after|before|replaceWith)$/.test(method) && /^\$|jQuery/.test(recv) && a0.length && method === "html") this.sink("xss", a0, n, `$().${method}()`);
     if (/^(?:send|write|end)$/.test(method) && /^(?:res|response|reply|ctx\.res|this\.res)$/.test(recv) && a0.length && /<[a-zA-Z!/]/.test(literalAll2(node0)))
       this.sink("xss", a0, n, `${recv}.${method}(html)`);
-    if (/^(?:body)$/.test(method) === false && recv === "ctx" && method === "body") ;
   }
   /** The URL's host is chosen by the input: it starts with the value, or with only a scheme. */
   hostFromInput(n) {
