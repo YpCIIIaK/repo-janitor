@@ -37,7 +37,7 @@ export default tseslint.config(
       "packages/*/dist/**",
       "datamine/**",
       // Third-party trees the benchmark clones for recall cases.
-      "benchmark/.recall-cache/**",
+      "benchmark/.recall-cache/**", "packages/cli/.dist-*/**",
       "benchmark/.replay/**",
       "sample-repo/**",
       "reports/**",
