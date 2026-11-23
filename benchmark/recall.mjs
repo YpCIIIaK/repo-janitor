@@ -37,6 +37,7 @@ import { tmpdir } from "node:os"
 import { dirname, join, relative, resolve } from "node:path"
 import { fileURLToPath } from "node:url"
 import { inShard } from "./shard.mjs"
+import { materialize, readMeta } from "./case-cache.mjs"
 
 const here = dirname(fileURLToPath(import.meta.url))
 const root = resolve(here, "..")
@@ -263,8 +264,8 @@ export function loadCases(dir) {
 export function summarise(results) {
   const rows = new Map()
   for (const r of results) {
-    const key = `${r.engine}|${r.language}|${r.class}`
-    const row = rows.get(key) ?? { engine: r.engine, language: r.language, class: r.class, cases: 0, hit: 0, near: 0, miss: 0, error: 0, clean: 0, fp: 0 }
+    const key = `${r.engine}|${r.language}|${r.class}|${r.kind ?? ""}`
+    const row = rows.get(key) ?? { engine: r.engine, language: r.language, class: r.class, ...(r.kind ? { kind: r.kind } : {}), cases: 0, hit: 0, near: 0, miss: 0, error: 0, clean: 0, fp: 0 }
     row.cases++
     row[r.verdict]++
     rows.set(key, row)
@@ -283,7 +284,7 @@ export function summarise(results) {
  * whose results are reused on the next run — a long run that hits a time limit
  * or a container restart picks up where it stopped.
  */
-export function run(cases, engines, journal) {
+export function run(cases, engines, journal, useCache = false) {
   const results = []
   const done = new Map()
   if (journal && existsSync(journal)) {
@@ -293,7 +294,7 @@ export function run(cases, engines, journal) {
   }
   for (const c of cases) {
     if (!CLASSES[c.class]) throw new Error(`${c.id}: unknown class "${c.class}"`)
-    const base = { id: c.id, set: c._set, language: c.language, class: c.class }
+    const base = { id: c.id, set: c._set, language: c.language, class: c.class, ...(c.kind ? { kind: c.kind } : {}) }
     const todo = engines.filter((engine) => {
       const prev = done.get(`${c.id}|${engine}`)
       if (prev) results.push(prev)
@@ -306,8 +307,14 @@ export function run(cases, engines, journal) {
           if (!c.files?.length) throw new Error("expect cases need files")
           results.push({ ...base, engine, ...judgeExpected(c, scan(engine, tree(c, "tree"), c.files)) })
         } else {
-          const v = tree(c, "vulnerable"), x = tree(c, "fixed")
-          const files = c.files ?? sourceFiles(changedFiles(v, x), c.language)
+          // --cached: the case comes from the local snapshot cache (case-cache.mjs), built on first use.
+          const cached = useCache && c.source?.type === "git" && c.source.vulnerable === "parent"
+          const meta = cached ? (readMeta(c.id) ?? (materialize(c, "vulnerable", cacheDir), readMeta(c.id))) : null
+          if (meta?.skip) throw new Error(meta.skip)
+          const v = cached ? materialize(c, "vulnerable", cacheDir) : tree(c, "vulnerable")
+          const x = cached ? materialize(c, "fixed", cacheDir) : tree(c, "fixed")
+          if (cached) usedTrees.add(v).add(x)
+          const files = c.files ?? (meta ? meta.langChanged : sourceFiles(changedFiles(v, x), c.language))
           if (!files.length) throw new Error("fix touches no source files of the case's language")
           results.push({ ...base, engine, ...judge(c, scan(engine, v, files), scan(engine, x, files), files) })
         }
@@ -347,12 +354,12 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     console.log("no recall cases found (private data: node benchmark/private.mjs pull)")
     process.exit(0)
   }
-  const results = run(cases, engines, arg("journal", null))
+  const results = run(cases, engines, arg("journal", null), process.argv.includes("--cached"))
   const summary = summarise(results)
   const out = resolve(arg("out", join(here, "recall-report.json")))
   writeFileSync(out, JSON.stringify({ generatedAt: new Date().toISOString(), engines, cases: cases.length, summary, results }, null, 1) + "\n")
   console.log("| engine | language | class | cases | hit | near | miss | recall | clean | fp | error |\n|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|")
   for (const r of summary)
-    console.log(`| ${r.engine} | ${r.language} | ${r.class} | ${r.cases} | ${r.hit} | ${r.near} | ${r.miss} | ${r.recall == null ? "—" : `${Math.round(r.recall * 100)}%`} | ${r.clean} | ${r.fp} | ${r.error} |`)
+    console.log(`| ${r.engine} | ${r.language} | ${r.class}${r.kind ? ` (${r.kind})` : ""} | ${r.cases} | ${r.hit} | ${r.near} | ${r.miss} | ${r.recall == null ? "—" : `${Math.round(r.recall * 100)}%`} | ${r.clean} | ${r.fp} | ${r.error} |`)
   console.log(`\n${results.filter((r) => r.verdict === "error").length} errors · report: ${relative(root, out)}`)
 }
