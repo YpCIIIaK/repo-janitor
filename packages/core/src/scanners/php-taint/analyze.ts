@@ -210,8 +210,17 @@ function cloneEnv(env: Env): Env {
 function mergeEnvs(envs: Env[]): Env {
   const live = envs.filter(Boolean)
   if (!live.length) return new Map()
-  const out = new Map<string, Value>()
-  for (const env of live) for (const [k, v] of env) out.set(k, merge(out.get(k) ?? [], v))
+  // Branches share every value they did not assign: only the keys that differ need merging.
+  // Merging all of them made each if/else cost the whole env (Dolibarr: thousands of keys
+  // from main.inc.php × hundreds of branches per page, past the 15-minute limit).
+  const out = new Map<string, Value>(live[0])
+  for (const env of live.slice(1)) {
+    for (const [k, v] of env) {
+      const cur = out.get(k)
+      if (cur === v || !v.length) continue
+      out.set(k, cur?.length ? merge(cur, v) : v)
+    }
+  }
   return out
 }
 
