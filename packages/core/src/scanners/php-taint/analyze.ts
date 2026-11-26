@@ -278,6 +278,12 @@ const NON_TEXT_FIELD = /(?:id|ids|count|total|num|number|size|(?:created|updated
 const GENERIC_FIELD = /^(?:id|uid|pk|key|type|status|state|count|page|limit|offset|order|sort|lang|locale|token|action|mode|format|password|hash|salt|created|updated|createdat|updatedat|deletedat|date|time|version|position|enabled|active|visible|data|value|values|options|params|config|attributes|item|items|result|response|request)$/
 const MODEL_ARRAY_WRITE = /^(?:fill|forcefill|update|create|insert|save|updateorcreate|firstorcreate|firstornew|make|setattributes|setdata|setvalues|assign)$/
 const KEYED_SET = /^(?:set|setvalue|setattribute|setfield|setdata|setparam|setmeta|setoption|setsetting|put)$/
+/** Objects that hold values for one request, not records: config, session, cache, views, responses. */
+const RUNTIME_HOLDER = /(?:config|conf|cfg|settings?|options?|prefs|session|cache|registry|container|view|template|tpl|smarty|twig|response|request|helper|context|ctx|params?|args?|env)$/i
+/** Sources a visitor sets for their own request only. */
+const OWN_REQUEST = /REQUEST_URI|PHP_SELF|PATH_INFO|QUERY_STRING|HTTP_HOST|SERVER_NAME|getCurrentUrl/i
+/** ORM calls that save the array they are given. */
+const PERSIST_ARRAY = /^(?:update|create|insert|save|updateorcreate|firstorcreate)$/
 const KEYED_GET = /^(?:get|getvalue|getattribute|getfield|getdata|getparam|getmeta|getoption|getsetting)$/
 
 export class Project {
@@ -913,11 +919,18 @@ class Ctx {
    * ($site->setSiteName($_POST['n']), $m->title = $request->input('t'), Post::create(['title' => …])).
    * Keyed `field:<name>` next to the tables, so pass 2 links any read of that field back to the write.
    */
-  private recordFieldWrite(name: string, v: Value, at: Node, recv: string) {
+  private recordFieldWrite(name: string, v: Value, at: Node, recv: string, persists = false) {
+    // Not a model: static calls (AmpConfig::set), and runtime holders — config, session, cache, views, responses.
+    if (/::/.test(recv) && !persists) return
+    if (RUNTIME_HOLDER.test(recv.replace(/[^A-Za-z0-9]/g, ""))) return
+    // Stored means saved: a create/insert/update call, or the same object saved near the write.
+    if (!persists && !this.savedNear(recv, lineOf(at))) return
     const key = this.fieldKey(name, recv)
     if (!key) return
     for (const f of v) {
       if (!f.src || f.safe.has("xss") || f.src.includes(" stored in ")) continue
+      // The request's own URL or host: what a visitor sends affects only their own page.
+      if (OWN_REQUEST.test(f.src)) continue
       const list = this.project.storedWrites.get(key) ?? []
       const fact = { ...f, steps: [...f.steps, this.step(at, `->${name} = …`)] }
       const id = (x: Fact) => `${x.src}|${x.steps[x.steps.length - 1]?.file}:${x.steps[x.steps.length - 1]?.line}`
@@ -929,6 +942,16 @@ class Ctx {
   }
 
   /** Stored XSS through models, read side (pass 2): a read of a field request data was set on. */
+  /** `$obj->save()`, `$em->persist($obj)`, `$obj->store()`… within 40 lines of a write to `$obj`. */
+  private savedNear(recv: string, line: number): boolean {
+    const v = /^\$(\w+)$/.exec(recv)?.[1]
+    if (!v) return false
+    const near = this.content.split("\n").slice(Math.max(0, line - 5), line + 40).join("\n")
+    const own = new RegExp(`\\$${v}\\s*->\\s*(?:save|store|persist|update|insert|commit|create|flush|saveOrFail|push)\\s*\\(`, "i")
+    const handed = new RegExp(`->\\s*(?:persist|save|store|insert|update|add)\\s*\\(\\s*\\$${v}\\b`, "i")
+    return own.test(near) || handed.test(near)
+  }
+
   /**
    * `field:<name>` for compound names (siteName); `field:<name>@<owner>` for one-word names, which only
    * link the same kind of object ($post->title written, $post->title read — not $user->name to $tag->name).
@@ -1348,7 +1371,7 @@ class Ctx {
         if (KEYED_SET.test(method) && keyArg && args[1]?.length) this.recordFieldWrite(keyArg, args[1], n, recv)
         else if (/^set[A-Z_]/.test(raw) && args[0]?.length) this.recordFieldWrite(raw.slice(3), args[0], n, recv)
         if (MODEL_ARRAY_WRITE.test(method) && argNodes[0]?.kind === "array")
-          for (const item of argNodes[0].items ?? []) if (item?.kind === "entry" && item.key?.kind === "string") this.recordFieldWrite(String(item.key.value), this.expr(item.value, env), n, recv)
+          for (const item of argNodes[0].items ?? []) if (item?.kind === "entry" && item.key?.kind === "string") this.recordFieldWrite(String(item.key.value), this.expr(item.value, env), n, recv, PERSIST_ARRAY.test(method))
         const read = KEYED_GET.test(method) && keyArg ? this.fieldRead(keyArg, n, recv) : /^get[A-Z_]/.test(raw) && !argNodes.length ? this.fieldRead(raw.slice(3), n, recv) : []
         if (read.length) return read
       }

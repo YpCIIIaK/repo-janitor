@@ -35,7 +35,7 @@ describe("php-taint — stored XSS through model fields", () => {
   })
 
   it("keyed set/getValue and an ORM create with an array, read as a property", async () => {
-    const save = `<?php\n$album->setValue('pho_name', $_POST['name']);\nPost::create(['title' => $request->input('title'), 'id' => $_GET['id']]);\n`
+    const save = `<?php\n$album->setValue('pho_name', $_POST['name']);\n$album->save();\nPost::create(['title' => $request->input('title'), 'id' => $_GET['id']]);\n`
     const show = `<?php\necho "<td>" . $album->getValue('pho_name') . "</td>";\necho "<h2>{$post->title}</h2>";\necho $post->id;\n`
     const found = await xssIn({ "save.php": save, "list.php": show }, "list.php")
     expect(found.map((i) => i.location).sort()).toEqual(["list.php:2", "list.php:3"])
@@ -44,6 +44,17 @@ describe("php-taint — stored XSS through model fields", () => {
   it("escaped on output, escaped before storing, or never from the request: nothing", async () => {
     const save = `<?php\n$site->setSiteName($_POST['n']);\n$page->setHeading(htmlspecialchars($_POST['h']));\n$page->setFooter('static text');\n`
     const show = `<?php\necho htmlspecialchars($site->getSiteName());\necho $page->getHeading();\necho $page->getFooter();\n`
+    expect(await xssIn({ "save.php": save, "show.php": show }, "show.php")).toEqual([])
+  })
+})
+
+describe("php-taint — model fields: only what is saved, only on models", () => {
+  const xssIn = async (files: Record<string, string>, file: string) =>
+    (await phpTaintScanner.run(makeContext({ files }))).filter((i) => i.rule === "php-taint-xss" && i.location.startsWith(file))
+
+  it("runtime config, view objects and unsaved objects are not storage", async () => {
+    const save = `<?php\nAmpConfig::set('site_charset', $_GET['c'], true);\n$view->pageTitle = $_GET['t'];\n$draft->setDraftTitle($_POST['d']);\n`
+    const show = `<?php\necho AmpConfig::get('site_charset');\necho $view->pageTitle;\necho $draft->getDraftTitle();\n`
     expect(await xssIn({ "save.php": save, "show.php": show }, "show.php")).toEqual([])
   })
 })
