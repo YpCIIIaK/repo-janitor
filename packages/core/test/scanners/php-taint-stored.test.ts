@@ -20,3 +20,30 @@ describe("php-taint — stored XSS (DVWA xss_s)", () => {
     expect(issues.some((i) => i.rule === "php-taint-xss" && i.location.startsWith("book.php"))).toBe(false)
   })
 })
+
+describe("php-taint — stored XSS through model fields", () => {
+  const xssIn = async (files: Record<string, string>, file: string) =>
+    (await phpTaintScanner.run(makeContext({ files }))).filter((i) => i.rule === "php-taint-xss" && i.location.startsWith(file))
+
+  it("a setter fed from the request, a getter echoed elsewhere", async () => {
+    const save = `<?php\n$site = Site::current();\n$site->setSiteName($_POST['site_name']);\n$site->save();\n`
+    const show = `<?php\n$site = Site::current();\necho '<h1>' . $site->getSiteName() . '</h1>';\n`
+    const found = await xssIn({ "settings/save.php": save, "views/header.php": show }, "views/header.php")
+    expect(found).toHaveLength(1)
+    expect(found[0].confidence).toBe("medium")
+    expect((found[0].flow ?? []).some((s) => /setSiteName|->SiteName/i.test(s.text))).toBe(true)
+  })
+
+  it("keyed set/getValue and an ORM create with an array, read as a property", async () => {
+    const save = `<?php\n$album->setValue('pho_name', $_POST['name']);\nPost::create(['title' => $request->input('title'), 'id' => $_GET['id']]);\n`
+    const show = `<?php\necho "<td>" . $album->getValue('pho_name') . "</td>";\necho "<h2>{$post->title}</h2>";\necho $post->id;\n`
+    const found = await xssIn({ "save.php": save, "list.php": show }, "list.php")
+    expect(found.map((i) => i.location).sort()).toEqual(["list.php:2", "list.php:3"])
+  })
+
+  it("escaped on output, escaped before storing, or never from the request: nothing", async () => {
+    const save = `<?php\n$site->setSiteName($_POST['n']);\n$page->setHeading(htmlspecialchars($_POST['h']));\n$page->setFooter('static text');\n`
+    const show = `<?php\necho htmlspecialchars($site->getSiteName());\necho $page->getHeading();\necho $page->getFooter();\n`
+    expect(await xssIn({ "save.php": save, "show.php": show }, "show.php")).toEqual([])
+  })
+})

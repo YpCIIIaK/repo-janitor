@@ -46,7 +46,7 @@ export const phpTaintScanner: Scanner = {
     // Stored XSS: pass 1 saw request data written into tables; pass 2 reads them back as sources.
     if (project.storedWrites.size) {
       const tables = [...project.storedWrites.keys()]
-      const readsBack = [...contents.values()].some((c) => tables.some((t) => new RegExp(`\\bFROM\\s+[\`"]?${t}\\b`, "i").test(c)))
+      const readsBack = tables.some((t) => t.startsWith("field:")) || [...contents.values()].some((c) => tables.some((t) => new RegExp(`\\bFROM\\s+[\`"]?${t}\\b`, "i").test(c)))
       if (readsBack) {
         const second = new Project()
         second.storedSources = project.storedWrites
@@ -97,6 +97,8 @@ export const phpTaintScanner: Scanner = {
       if (guardedNearby(contents.get(f.file) ?? "", f.line, f.source, f.kind)) confidence = "low"
       // Stored data an administrator wrote (settings screens): they would be attacking themselves.
       if (/ stored in \w+ at (?:[^ ]*\/)?(?:admin|administrator|backend|dashboard)\//i.test(f.source)) confidence = "low"
+      // A model field linked by name only: the read may be another model's field of the same name.
+      if (/ stored in field \w+ at (?:[^ ]*\/)?(?:admin|administrator|backend|dashboard)\//i.test(f.source)) confidence = "low"
       // Request values packed into a query string behind a fixed URL (http_build_query) choose
       // parameters, not where the browser goes: 2 of 2 reviewed "open redirects".
       if (f.kind === "redirect" && f.steps.some((s) => /http_build_query/.test(s.text))) confidence = "low"

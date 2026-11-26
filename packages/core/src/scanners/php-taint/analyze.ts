@@ -266,6 +266,20 @@ function leadingLiteral(n: Node): string {
   return ""
 }
 
+/** A model field's name as both sides spell it: setSiteName / getSiteName / site_name / siteName. */
+const fieldName = (name: string) => name.replace(/_/g, "").toLowerCase()
+/** Two or more words (siteName, pho_name, page-path): specific enough to link across the project. */
+const compoundField = (name: string) => /[a-z0-9][A-Z]|[A-Za-z0-9][_-][A-Za-z]/.test(name)
+/** The object a field belongs to, as its variable or class is named: `$photoAlbum` → photoalbum, `Post` → post. */
+const ownerHint = (recv: string) => recv.replace(/^.*(?:->|::|\\)/, "").replace(/[^A-Za-z0-9]/g, "").toLowerCase().replace(/(?:model|entity|obj|object|record|row|item|instance)$/, "") || null
+/** Never HTML: identifiers, flags, counters, timestamps. */
+const NON_TEXT_FIELD = /(?:id|ids|count|total|num|number|size|(?:created|updated|deleted|published|modified|expires?)at|date|time|timestamp|order|weight|priority|level|flag)$|^(?:is|has|can|should|display|include|show|enable|enabled|use|allow|hide|visible)/
+/** Field names too generic to link a write in one model to a read in another, or never HTML. */
+const GENERIC_FIELD = /^(?:id|uid|pk|key|type|status|state|count|page|limit|offset|order|sort|lang|locale|token|action|mode|format|password|hash|salt|created|updated|createdat|updatedat|deletedat|date|time|version|position|enabled|active|visible|data|value|values|options|params|config|attributes|item|items|result|response|request)$/
+const MODEL_ARRAY_WRITE = /^(?:fill|forcefill|update|create|insert|save|updateorcreate|firstorcreate|firstornew|make|setattributes|setdata|setvalues|assign)$/
+const KEYED_SET = /^(?:set|setvalue|setattribute|setfield|setdata|setparam|setmeta|setoption|setsetting|put)$/
+const KEYED_GET = /^(?:get|getvalue|getattribute|getfield|getdata|getparam|getmeta|getoption|getsetting)$/
+
 export class Project {
   /** Request data written to a table: table → the facts that reached the INSERT/UPDATE (pass 1). */
   readonly storedWrites = new Map<string, Fact[]>()
@@ -891,6 +905,50 @@ class Ctx {
     }
   }
 
+  /**
+   * Stored XSS through models, write side: request data set on a model field
+   * ($site->setSiteName($_POST['n']), $m->title = $request->input('t'), Post::create(['title' => …])).
+   * Keyed `field:<name>` next to the tables, so pass 2 links any read of that field back to the write.
+   */
+  private recordFieldWrite(name: string, v: Value, at: Node, recv: string) {
+    const key = this.fieldKey(name, recv)
+    if (!key) return
+    for (const f of v) {
+      if (!f.src || f.safe.has("xss") || f.src.includes(" stored in ")) continue
+      const list = this.project.storedWrites.get(key) ?? []
+      const fact = { ...f, steps: [...f.steps, this.step(at, `->${name} = …`)] }
+      const id = (x: Fact) => `${x.src}|${x.steps[x.steps.length - 1]?.file}:${x.steps[x.steps.length - 1]?.line}`
+      if (list.some((x) => id(x) === id(fact))) continue
+      if (list.length >= 12) return
+      list.push(fact)
+      this.project.storedWrites.set(key, list)
+    }
+  }
+
+  /** Stored XSS through models, read side (pass 2): a read of a field request data was set on. */
+  /**
+   * `field:<name>` for compound names (siteName); `field:<name>@<owner>` for one-word names, which only
+   * link the same kind of object ($post->title written, $post->title read — not $user->name to $tag->name).
+   */
+  private fieldKey(name: string, recv: string): string | null {
+    const field = fieldName(name)
+    if (field.length < 3 || GENERIC_FIELD.test(field) || NON_TEXT_FIELD.test(field)) return null
+    if (compoundField(name)) return `field:${field}`
+    const owner = ownerHint(recv)
+    return owner && owner.length >= 3 ? `field:${field}@${owner}` : null
+  }
+
+  private fieldRead(name: string, at: Node, recv: string): Value {
+    const key = this.fieldKey(name, recv)
+    const writes = key ? this.project.storedSources?.get(key) : undefined
+    if (!writes) return []
+    const notXss = ALL_SAFE.filter((k) => k !== "xss")
+    return writes.map((w) => {
+      const put = w.steps[w.steps.length - 1]
+      return { ...w, src: `${w.src} stored in field ${fieldName(name)} at ${put?.file ?? this.file}:${put?.line ?? 0}`, safe: new Set([...w.safe, ...notXss]), weak: true, steps: [...w.steps, this.step(at, `->${name}`)] }
+    })
+  }
+
   /** Stored XSS, read side (pass 2): a SELECT from a table request data was written into. */
   private storedRead(argNode: Node, at: Node): Value {
     const stored = this.project.storedSources
@@ -936,6 +994,9 @@ class Ctx {
       const owner = this.fieldOwner(target)
       const src = v.find((f) => f.src)
       if (owner && src) this.project.taintField(owner.cls, owner.prop, { ...src, steps: [...src.steps, this.step(target, exprText(target))].slice(-MAX_STEPS) })
+      // Another object's property: a model field ($post->title = $_POST['t']; $user->name = …).
+      if (!owner && target.kind !== "staticlookup" && !(target.what?.kind === "variable" && target.what.name === "this") && typeof target.offset?.name === "string")
+        this.recordFieldWrite(target.offset.name, v, target, exprText(target.what))
       const key = exprText(target).toLowerCase()
       const val = withStep(v, this.step(target, exprText(target)))
       env.set(key, append ? merge(env.get(key) ?? [], val) : val)
@@ -993,6 +1054,11 @@ class Ctx {
         if (owner) {
           const stored = this.project.field(owner.cls, owner.prop)
           if (stored) return [{ ...stored, steps: [...stored.steps, this.step(n, exprText(n))].slice(-MAX_STEPS) }]
+        }
+        // Another object's property that request data was set on somewhere (pass 2).
+        if (!owner && n.kind !== "staticlookup" && !(n.what?.kind === "variable" && n.what.name === "this") && typeof n.offset?.name === "string") {
+          const read = this.fieldRead(n.offset.name, n, exprText(n.what))
+          if (read.length) return read
         }
         // `$obj->a` of a tainted object (`$data = (object) $_POST; $data->name`).
         if (n.kind !== "staticlookup" && n.what?.kind !== "variable" || (n.what?.kind === "variable" && n.what.name !== "this")) {
@@ -1257,6 +1323,17 @@ class Ctx {
       if (SOURCE_METHODS.has(method) && /->(?:query|request|attributes|cookies|headers)$/i.test(recv) && /request/i.test(recv)) {
         const label = `${recv}->${nameOf(what.offset)}()`
         return [{ src: label, safe: new Set(), steps: [{ line, text: label, file: this.file }], weak: false }]
+      }
+      // Model fields: setters write, getters read (stored XSS across the project, see recordFieldWrite).
+      if (recv !== "$this" && !REQUEST_RECEIVER.test(recv)) {
+        const raw = String(nameOf(what.offset))
+        const keyArg = argNodes[0]?.kind === "string" ? String(argNodes[0].value) : null
+        if (KEYED_SET.test(method) && keyArg && args[1]?.length) this.recordFieldWrite(keyArg, args[1], n, recv)
+        else if (/^set[A-Z_]/.test(raw) && args[0]?.length) this.recordFieldWrite(raw.slice(3), args[0], n, recv)
+        if (MODEL_ARRAY_WRITE.test(method) && argNodes[0]?.kind === "array")
+          for (const item of argNodes[0].items ?? []) if (item?.kind === "entry" && item.key?.kind === "string") this.recordFieldWrite(String(item.key.value), this.expr(item.value, env), n, recv)
+        const read = KEYED_GET.test(method) && keyArg ? this.fieldRead(keyArg, n, recv) : /^get[A-Z_]/.test(raw) && !argNodes.length ? this.fieldRead(raw.slice(3), n, recv) : []
+        if (read.length) return read
       }
       // Sanitizers as methods: $pdo->quote(), $db->escape(), $wpdb->prepare(), $mysqli->real_escape_string()
       // esc_like() only escapes % _ and \: the result still needs prepare() / esc_sql().
