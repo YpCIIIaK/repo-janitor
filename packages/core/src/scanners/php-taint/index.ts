@@ -8,7 +8,8 @@ import { RULES, SKIP_PATH } from "./model"
 const PHP_FILE = /\.(?:php|phtml|php[3-8]|inc)$/i
 const MAX_BYTES = 1_000_000
 const MAX_FILES = 8000
-const MAX_FINDINGS = 400
+/** A safety net, not a sample: an application is reported in full (AVideo has ~500 findings). */
+const MAX_FINDINGS = 20_000
 
 /**
  * php-taint — an optional, deeper PHP vulnerability scanner (off by default).
@@ -171,6 +172,7 @@ export const phpTaintScanner: Scanner = {
         confidence: l.kind === "public-sensitive-file" ? "low" : l.weak ? "medium" : "high",
       })
     }
+    if (issues.length >= MAX_FINDINGS) ctx.log(`[php-taint] stopped at ${MAX_FINDINGS} findings: the report is incomplete`)
     return issues
   },
 }

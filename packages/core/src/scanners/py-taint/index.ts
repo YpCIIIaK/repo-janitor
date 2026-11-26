@@ -102,7 +102,8 @@ const MAX_FILES = 4000
 const MAX_BYTES = 300_000
 const MAX_DEPTH = 4
 const MAX_FACTS = 6
-const MAX_FINDINGS = 200
+/** A safety net, not a sample: an application is reported in full (AVideo has ~500 findings). */
+const MAX_FINDINGS = 20_000
 const MAX_WORK = 600_000
 
 /** request.<member> that carries client data (Flask, Django, DRF, Starlette, aiohttp, Bottle, Tornado). */
@@ -985,6 +986,7 @@ export const pyTaintScanner: Scanner = {
       byId.set(id, issue)
       issues.push(issue)
     }
+    if (issues.length >= MAX_FINDINGS) ctx.log(`[py-taint] stopped at ${MAX_FINDINGS} findings: the report is incomplete`)
     return issues
   },
 }
