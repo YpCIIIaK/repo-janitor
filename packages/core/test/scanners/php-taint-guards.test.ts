@@ -21,3 +21,18 @@ describe("php-taint — precision levers (deep-PHP review 2026-11-17)", () => {
     expect(DB_RECEIVER.test("$this->emailRepository")).toBe(false)
   })
 })
+
+describe("php-taint — numbers by declaration", () => {
+  const run = async (src: string) => (await (await import("../../src/scanners/php-taint")).phpTaintScanner.run((await import("../helpers")).makeContext({ files: { "a.php": src } }))).map((i) => `${i.rule}@${i.location}`)
+
+  it("an int-typed parameter is a number inside the function", async () => {
+    const src = `<?php\nfunction del(int $id, string $name) {\n  global $db;\n  $db->query("DELETE FROM t WHERE id = " . $id);\n  $db->query("DELETE FROM t WHERE name = '" . $name . "'");\n}\ndel($_GET['id'], $_GET['name']);\n`
+    const out = await run(src)
+    expect(out.filter((r) => r.startsWith("php-taint-sqli"))).toHaveLength(1)
+  })
+
+  it("sprintf: %d and %2$u print numbers, %s keeps text", async () => {
+    const src = `<?php\n$q = sprintf('SELECT * FROM t WHERE id = %d AND u = %2$u', $_GET['id'], $_GET['u']);\nmysqli_query($c, $q);\n$r = sprintf("SELECT * FROM t WHERE n = '%s' AND id = %d", $_GET['n'], $_GET['id']);\nmysqli_query($c, $r);\n`
+    expect(await run(src)).toEqual(["php-taint-sqli@a.php:5"])
+  })
+})

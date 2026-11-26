@@ -590,7 +590,10 @@ export class Project {
     ctx.cls = def.cls
     const env: Env = new EnvMap()
     def.params.forEach((p, i) => {
-      const param: Fact = { param: i, safe: new Set(), steps: [{ line: lineOf(def.node), text: `$${p}`, file: def.file }], weak: false }
+      // A scalar type declaration (int $id, ?float $x, bool $f) converts or rejects anything else.
+      const typed = def.node.arguments?.[i]?.type
+      const scalar = /^(?:int|float|bool|false|true)$/i.test(String(typed?.name ?? typed?.raw ?? ""))
+      const param: Fact = { param: i, safe: new Set(scalar ? ALL_SAFE : []), steps: [{ line: lineOf(def.node), text: `$${p}`, file: def.file }], weak: false }
       const author: Fact[] = def.shortcode && i < 2 ? [{ src: `shortcode ${i ? "content" : "attributes"} ($${p})`, safe: new Set(), steps: [{ line: lineOf(def.node), text: `$${p}`, file: def.file }], weak: true }]
         : def.rest && i === 0 ? [{ src: `REST request ($${p})`, safe: new Set(), steps: [{ line: lineOf(def.node), text: `$${p}`, file: def.file }], weak: false }] : []
       env.set(p, [param, ...author])
@@ -1299,7 +1302,21 @@ class Ctx {
     return []
   }
 
+  /**
+   * A filter constant handed to any call decides what comes back, whoever implements it:
+   * phpMyFAQ's Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT) wraps filter_input with the
+   * filter in a parameter, so the wrapper's own body cannot tell an integer from raw text.
+   */
   private call(n: Node, env: Env): Value {
+    const v = this.callInner(n, env)
+    if (!v.length) return v
+    const filters = (n.arguments ?? []).map((a: Node) => exprText(a) + nameOf(a)).join(" ")
+    if (/FILTER_VALIDATE_(?:INT|FLOAT|BOOL|BOOLEAN|IP|EMAIL|MAC)\b|FILTER_SANITIZE_NUMBER_(?:INT|FLOAT)\b/.test(filters)) return []
+    if (/FILTER_SANITIZE_(?:SPECIAL_CHARS|FULL_SPECIAL_CHARS|ENCODED)\b/.test(filters)) return makeSafe(v, ["xss"])
+    return v
+  }
+
+  private callInner(n: Node, env: Env): Value {
     const what = n.what
     const args = this.args(n, env)
     const line = lineOf(n)
@@ -1514,6 +1531,17 @@ class Ctx {
     }
     if (CLEAN_FUNCTIONS.has(fn)) return []
     if (fn in SANITIZERS) return withStep(makeSafe(merge(...args), SANITIZERS[fn]), { line, text: label, file: this.file })
+    // sprintf: only arguments that land in a text conversion (%s) carry text; %d, %u, %f, %x… print a number.
+    if (fn === "sprintf" && argNodes[0]?.kind === "string") {
+      const numeric = new Set<number>(), text = new Set<number>()
+      let next = 1
+      for (const m of String(argNodes[0].value).matchAll(/%(?:(\d+)\$)?[-+ 0]*(?:'.)?\d*(?:\.\d+)?([bcdeEfFgGosuxX%])/g)) {
+        if (m[2] === "%") continue
+        const i = m[1] ? Number(m[1]) : next++
+        ;(/[bcdeEfFgGouxX]/.test(m[2]) ? numeric : text).add(i)
+      }
+      return withStep(merge(...args.map((a, i) => (i > 0 && numeric.has(i) && !text.has(i) ? [] : a))), { line, text: label, file: this.file })
+    }
     if (PASSTHROUGH.has(fn)) return withStep(merge(...args), { line, text: label, file: this.file })
     return []
   }
