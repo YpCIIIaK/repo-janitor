@@ -14,9 +14,13 @@
  *
  * Calls to unknown functions and methods return clean values: precision first.
  */
+import { Env as EnvMap } from "./env"
 import { Engine } from "php-parser"
 /** Forward-slash path helpers (the core also runs in the browser: no node:path). */
 const posix = {
+  basename(p: string): string {
+    return p.slice(p.lastIndexOf("/") + 1)
+  },
   dirname(p: string): string {
     const i = p.lastIndexOf("/")
     return i < 0 ? "." : i === 0 ? "/" : p.slice(0, i)
@@ -62,7 +66,7 @@ interface Fact {
 }
 
 type Value = Fact[]
-type Env = Map<string, Value>
+type Env = EnvMap<Value>
 
 export interface Finding {
   kind: SinkKind
@@ -204,24 +208,13 @@ function flattenConcat(n: Node): Node[] {
 }
 
 function cloneEnv(env: Env): Env {
-  return new Map(env)
+  return env.fork()
 }
 
 function mergeEnvs(envs: Env[]): Env {
   const live = envs.filter(Boolean)
-  if (!live.length) return new Map()
-  // Branches share every value they did not assign: only the keys that differ need merging.
-  // Merging all of them made each if/else cost the whole env (Dolibarr: thousands of keys
-  // from main.inc.php × hundreds of branches per page, past the 15-minute limit).
-  const out = new Map<string, Value>(live[0])
-  for (const env of live.slice(1)) {
-    for (const [k, v] of env) {
-      const cur = out.get(k)
-      if (cur === v || !v.length) continue
-      out.set(k, cur?.length ? merge(cur, v) : v)
-    }
-  }
-  return out
+  if (live.length === 1) return live[0].fork()
+  return EnvMap.join(live, (a, b) => merge(a, b))
 }
 
 /** Stable text for a receiver such as `$this->db` or `DB` (for heuristics only). */
@@ -357,13 +350,47 @@ export class Project {
         if (hit) return [hit]
       }
       const tail = raw.replace(/^(?:\.\.?\/)+/, "")
-      const hits = [...this.byPath.values()].filter((f) => f.file === tail || f.file.endsWith(`/${tail}`))
-      return hits.length === 1 ? hits : []
+      return this.cachedInclude(`tail:${tail}`, () => {
+        const hits = this.byBase(tail).filter((f) => f.file === tail || f.file.endsWith(`/${tail}`))
+        return hits.length === 1 ? hits : []
+      })
     }
     const esc = (t: string) => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
-    const re = new RegExp(`(?:^|/)${parts.map((p) => (p === null ? "[^]*" : esc(p.replace(/\\/g, "/").replace(/^(?:\.\.?\/)+/, "")))).join("")}$`)
-    const hits = [...this.byPath.values()].filter((f) => re.test(f.file))
-    return hits.length >= 1 && hits.length <= 6 ? hits : []
+    const source = `(?:^|/)${parts.map((p) => (p === null ? "[^]*" : esc(p.replace(/\\/g, "/").replace(/^(?:\.\.?\/)+/, "")))).join("")}$`
+    // Every page of a large app includes the same files (DOL_DOCUMENT_ROOT.'/core/…'): match each pattern once.
+    return this.cachedInclude(`re:${source}`, () => {
+      const re = new RegExp(source)
+      const last = parts.at(-1)
+      // A literal file name at the end narrows the files to try to those with that name.
+      const name = last != null && /[^/]\.\w+$/.test(last) ? posix.basename(last.replace(/\\/g, "/")) : null
+      const hits = (name ? this.byBase(name) : [...this.byPath.values()]).filter((f) => re.test(f.file))
+      return hits.length >= 1 && hits.length <= 6 ? hits : []
+    })
+  }
+
+  private includeCache = new Map<string, { file: string; content: string; ast: Node }[]>()
+  /** Files that answer with JSON or another non-HTML type, tested once per file. */
+  readonly jsonFiles = new Map<string, boolean>()
+  private baseIndex: Map<string, { file: string; content: string; ast: Node }[]> | null = null
+
+  private cachedInclude(key: string, run: () => { file: string; content: string; ast: Node }[]) {
+    let hit = this.includeCache.get(key)
+    if (!hit) this.includeCache.set(key, (hit = run()))
+    return hit
+  }
+
+  /** Project files whose name is the last segment of `path`. */
+  private byBase(path: string) {
+    if (!this.baseIndex) {
+      this.baseIndex = new Map()
+      for (const f of this.byPath.values()) {
+        const b = posix.basename(f.file)
+        const list = this.baseIndex.get(b) ?? []
+        list.push(f)
+        this.baseIndex.set(b, list)
+      }
+    }
+    return this.baseIndex.get(posix.basename(path)) ?? []
   }
 
   add(file: string, content: string): boolean {
@@ -371,6 +398,8 @@ export class Project {
     if (!ast) return false
     this.files.push({ file, content, ast })
     this.byPath.set(file, { file, content, ast })
+    this.baseIndex = null
+    this.includeCache.clear()
     this.index(ast, file, content, "")
     return true
   }
@@ -444,7 +473,7 @@ export class Project {
     for (const { file, content, ast } of this.files) {
       try {
         const ctx = new Ctx(this, file, content, null)
-        ctx.block(ast.children ?? [], new Map())
+        ctx.block(ast.children ?? [], new EnvMap())
       } catch {
         this.failed.add(file)
       }
@@ -545,7 +574,7 @@ export class Project {
     def.busy = true
     const ctx = new Ctx(this, def.file, def.content, { returns: [], sinks: [] })
     ctx.cls = def.cls
-    const env: Env = new Map()
+    const env: Env = new EnvMap()
     def.params.forEach((p, i) => {
       const param: Fact = { param: i, safe: new Set(), steps: [{ line: lineOf(def.node), text: `$${p}`, file: def.file }], weak: false }
       const author: Fact[] = def.shortcode && i < 2 ? [{ src: `shortcode ${i ? "content" : "attributes"} ($${p})`, safe: new Set(), steps: [{ line: lineOf(def.node), text: `$${p}`, file: def.file }], weak: true }]
@@ -579,8 +608,14 @@ class Ctx {
     private includeDepth = 0,
     private including: Set<string> = new Set(),
   ) {
-    this.jsonResponse = /content-type\s*:\s*(?:application\/(?:json|xml|octet-stream)|text\/(?:plain|csv|xml))/i.test(content) ||
-      /->json\s*\(|wp_send_json|JsonResponse/.test(content)
+    // Once per file: a context is built for every call and include, and the test reads the whole file.
+    let json = this.project.jsonFiles.get(file)
+    if (json === undefined) {
+      json = /content-type\s*:\s*(?:application\/(?:json|xml|octet-stream)|text\/(?:plain|csv|xml))/i.test(content) ||
+        /->json\s*\(|wp_send_json|JsonResponse/.test(content)
+      this.project.jsonFiles.set(file, json)
+    }
+    this.jsonResponse = json
   }
 
   /** Runs statements; returns the env after them, or null when every path exits. */
@@ -1029,14 +1064,14 @@ class Ctx {
         // `$x = ['type' => 'a', 'text' => $input]`: remember each literal key.
         const target = keyOf(n.left)
         if (n.operator === "=" && target && n.right?.kind === "array") {
-          for (const [k] of env) if (k.startsWith(`${target}[`) || k.startsWith(`${target}->`)) env.delete(k)
+          for (const k of env.keysUnder(target)) if (k.startsWith(`${target}[`) || k.startsWith(`${target}->`)) env.delete(k)
           for (const item of n.right.items ?? []) {
             if (item?.kind === "entry" && (item.key?.kind === "string" || item.key?.kind === "number")) {
               env.set(`${target}[${String(item.key.value).toLowerCase()}]`, this.expr(item.value, env))
             }
           }
         } else if (n.operator === "=" && target) {
-          for (const [k] of env) if (k.startsWith(`${target}[`)) env.delete(k)
+          for (const k of env.keysUnder(target)) if (k.startsWith(`${target}[`)) env.delete(k)
         }
         else if (n.operator === ".=") {
           this.assignTo(n.left, this.concat([n.left, n.right], env, n), env)
@@ -1103,7 +1138,7 @@ class Ctx {
       case "closure":
       case "arrowfunc": {
         // Captured variables carry their data into the closure body.
-        const inner: Env = new Map()
+        const inner: Env = new EnvMap()
         for (const u of n.uses ?? []) if (typeof u.name === "string") inner.set(u.name.toLowerCase(), env.get(u.name.toLowerCase()) ?? [])
         if (n.kind === "arrowfunc") for (const [k, v] of env) inner.set(k, v)
         const ctx = new Ctx(this.project, this.file, this.content, null)
