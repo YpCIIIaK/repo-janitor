@@ -33,6 +33,7 @@ import { ciHealthScanner } from "./scanners/ci-health"
 import { duplicateCodeScanner } from "./scanners/duplicate-code"
 import { phpTaintScanner } from "./scanners/php-taint"
 import { jsTaintScanner } from "./scanners/js-taint"
+import { profileRepo } from "./repo-profile"
 import { pyTaintScanner } from "./scanners/py-taint"
 import { supplyChainScanner } from "./scanners/supply-chain"
 
@@ -266,6 +267,19 @@ export async function runScan(
   const completedScanners: string[] = []
   const failedScanners: string[] = []
   const durations: Record<string, number> = {}
+  const skippedScanners: { id: string; reason: string }[] = []
+  // Deep engines analyse applications in full; a generated, copied or dumped
+  // repository gets the fast scanners only (see repo-profile.ts).
+  const deep = new Set<Scanner>(addonScanners)
+  if (scanners.some((s) => deep.has(s))) {
+    const profile = await profileRepo(ctx)
+    if (profile.junk) {
+      const reason = `not an application to analyse in depth: ${profile.reasons.join("; ")}`
+      for (const s of scanners) if (deep.has(s)) skippedScanners.push({ id: s.id, reason })
+      scanners = scanners.filter((s) => !deep.has(s))
+      ctx.log(`[repo-anti-rot] deep analysis skipped — ${reason}`)
+    }
+  }
   const total = scanners.length
   onProgress?.({ completed: 0, total })
   let completed = 0
@@ -310,7 +324,7 @@ export async function runScan(
     grade: scoreToGrade(score),
     issues: confident,
     ...(lowConfidence.length ? { lowConfidence } : {}),
-    diagnostics: { completedScanners, failedScanners, history: ctx.history ?? "unavailable", durations },
+    diagnostics: { completedScanners, failedScanners, history: ctx.history ?? "unavailable", durations, ...(skippedScanners.length ? { skippedScanners } : {}) },
     // Echo effective weights so the dashboard recomputes the score identically.
     config: { weights },
     metrics: { linesOfCode },

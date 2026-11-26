@@ -169,6 +169,8 @@ export const scanReportSchema = z.object({
     history: z.enum(["shallow", "available", "unavailable"]),
     /** Wall time of each scanner in milliseconds, to find the slow ones. */
     durations: z.record(z.string(), z.number()).optional(),
+    /** Scanners not run on purpose, with the reason (deep analysis of a generated or dumped repository). */
+    skippedScanners: z.array(z.object({ id: z.string(), reason: z.string() })).optional(),
   }).optional(),
   /**
    * Effective scan configuration echoed into the report. Lets the dashboard
